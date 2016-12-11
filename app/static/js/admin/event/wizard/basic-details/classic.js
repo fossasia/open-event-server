@@ -13,7 +13,7 @@ function geocodeAddress(geocoder, address, callback) {
             fillInAddress(callback, results[0].geometry.location.lat(), results[0].geometry.location.lng());
         } else {
             if (status === 'ZERO_RESULTS') {
-                callback(0.0, 0.0)
+                callback(0.0, 0.0);
             }
             console.error('Geocode was not successful for the following reason: ' + status);
         }

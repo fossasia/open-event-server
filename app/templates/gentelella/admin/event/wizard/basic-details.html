@@ -156,13 +156,14 @@
     <div class="col-md-8 col-md-push-2">
         <div class="row">
             <div class="col-md-12 col-xs-12">
-                <div class="item form-group">
+                <div class="item form-group" v-bind:class="{ 'has-error': event.name.trim().length <= 0 }">
                     <label for="name">{{ _("Name") }} <span class="required">*</span></label>
                     <input required="required"
                            data-error="Event name is required"
                            id="name"
                            v-model="event.name"
                            name="name" class="form-control"/>
+                    <span class="help-block" v-show="event.name.trim().length <= 0">Event name is required</span>
                 </div>
             </div>
         </div>
@@ -209,7 +210,8 @@
                     </div>
                     <div class="col-md-4">
                         <a id="reset_addr"
-                           style="cursor:pointer;" v-on:click="event.location_name= ''; addressShown = false;">{{ _("Reset Location") }}</a>
+                           style="cursor:pointer;"
+                           v-on:click="event.location_name= ''; addressShown = false;">{{ _("Reset Location") }}</a>
                     </div>
                     <div class="col-md-8">
                         <div class="checkbox" style="padding-top:0;">
@@ -222,7 +224,8 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <google-map class="hidden-xs" style="width:100%; height:300px" ref="gmap" :center="location" :zoom="zoom">
+                    <google-map class="hidden-xs" style="width:100%; height:300px" ref="gmap" :center="location"
+                                :zoom="zoom">
                         <map-marker :position="location" :clickable="false" :draggable="false"></map-marker>
                     </google-map>
                 </div>
@@ -234,7 +237,8 @@
 
         <div class="row event-date-picker">
             <div class="col-md-4 col-xs-12">
-                <div class="item form-group">
+                <div class="item form-group"
+                     v-bind:class="{ 'has-error': event.start_time_date.trim().length <= 0 || event.start_time_time.trim().length <= 0 }">
                     <label>{{ _("Starts") }} <span class="required">*</span></label>
                     <br>
                     <div class="col-xs-8" style="padding-left: 0;">
@@ -252,10 +256,15 @@
 
                     </div>
                 </div>
+                <div class="help-block text-danger"
+                     v-show="event.start_time_date.trim().length <= 0 || event.start_time_time.trim().length <= 0">Start
+                    date/time is required
+                </div>
 
             </div>
             <div class="col-md-4 col-xs-12">
-                <div class="item form-group">
+                <div class="item form-group"
+                     v-bind:class="{ 'has-error': event.end_time_date.trim().length <= 0 || event.end_time_time.trim().length <= 0 }">
                     <label>{{ _("Ends") }} <span class="required">*</span></label>
                     <br>
                     <div class="col-xs-8" style="padding-left: 0;">
@@ -274,7 +283,10 @@
                     </div>
 
                 </div>
-
+                <div class="help-block text-danger"
+                     v-show="event.end_time_date.trim().length <= 0 || event.end_time_time.trim().length <= 0">End
+                    date/time is required
+                </div>
             </div>
             <div class="col-md-4 col-xs-12">
                 <div class="form-group">
@@ -296,16 +308,12 @@
         </div>
         <div class="row">
             <div class="col-md-7 col-xs-12">
-                <input type="hidden" name="background_url" id="background_url">
-                <div class="item form-group" id="image-upload-group"
-                     {% if event and event.background_url and event.background_url != '' %}style="display: none;"{% endif %}>
+                <div class="item form-group" v-if="!event.background_url || event.background_url == ''">
                     <label>{{ _("Event Image") }}</label><br>
                     <div class="image-box">
-                        <input type="file" id="event-image-upload" name="event-image-upload"
-                               class="image-upload-btn no-js"
-                               accept="image/*"/>
+                        <input type="file" class="image-upload-btn no-js" accept="image/*"/>
                         <label class="file-label" for="event-image-upload" id="event-image-upload-label">
-                            <i class="fa fa-4x fa-camera-retro" aria-hidden="true"></i> <br>
+                            <i class="fa fa-4x fa-camera-retro"></i> <br>
                             <h3>{{ _("Select Event Image") }}</h3>
                         </label><br>
                     </div>
@@ -313,19 +321,10 @@
                         {{ _("We recommend using at least a 2160x1080px (2:1 ratio) image") }}<br>{{ _("that's no larger than 10MB.") }}
                     </span>
                 </div>
-                <div class="item form-group" id="image-view-group"
-                     {% if not event or not event.background_url or event.background_url == '' %}style="display: none;"{% endif %}>
+                <div class="item form-group" v-if="event.background_url && event.background_url != ''">
                     <label>{{ _("Event Image") }}</label><br>
-                    <img src="{{ event.background_url | default('', true) }}"
-                         style="width: 350px; height: 175px;"><br><br>
-                    {% if not event %}
-                        <button type="button" class="btn btn-sm btn-default" data-target="#cropper-modal"
-                                data-toggle="modal">
-                            <i class="fa fa-arrows" aria-hidden="true"></i>
-                            {{ _("Adjust") }}
-                        </button>
-                    {% endif %}
-                    <button type="button" class="btn btn-sm btn-default" id="remove-image-btn">
+                    <img v-bind:src="event.background_url" style="width: 350px; height: 175px;"><br><br>
+                    <button type="button" class="btn btn-sm btn-default" v-on:click="event.background_url = ''">
                         <i class="fa fa-trash-o" aria-hidden="true"></i>
                         {{ _("Remove") }}
                     </button>
@@ -335,20 +334,12 @@
         </div>
         <div class="row">
             <div class="col-md-7 col-xs-12">
-                {% if event %}
-                    <input type="hidden" id="logo">
-                {% else %}
-                    <input type="hidden" name="logo" id="logo">
-                {% endif %}
-
-                <div class="item form-group" id="logo-upload-group"
-                     {% if event and event.logo and event.logo != '' %}style="display: none;"{% endif %}>
+                <div class="item form-group" v-if="!event.logo || event.logo == ''">
                     <label>{{ _("Logo") }}</label><br>
                     <div class="image-box">
-                        <input type="file" id="logo-upload" name="logo-upload" class="image-upload-btn no-js"
-                               accept="image/*"/>
+                        <input type="file" class="image-upload-btn no-js" accept="image/*"/>
                         <label class="file-label" for="logo-upload" id="logo-upload-label">
-                            <i class="fa fa-4x fa-file-image-o" aria-hidden="true"></i> <br>
+                            <i class="fa fa-4x fa-file-image-o"></i> <br>
                             <h3>{{ _("Select Logo") }}</h3>
                         </label><br>
                     </div>
@@ -357,11 +348,11 @@
                     </span>
                 </div>
 
-                <div class="item form-group" id="logo-view-group"
-                     {% if not event or not event.logo or event.logo == '' %}style="display: none;"{% endif %}>
+                <div class="item form-group" id="logo-view-group" v-if="event.logo && event.logo != ''">
                     <label>{{ _("Logo") }}</label><br>
-                    <img src="{{ event.logo | default('', true) }}" style="width: 350px;"><br><br>
-                    <button type="button" class="btn btn-sm btn-default" id="remove-logo-btn">
+                    <img v-bind:src="event.logo" style="width: 350px;"><br><br>
+                    <button type="button" class="btn btn-sm btn-default" id="remove-logo-btn"
+                            v-on:click="event.logo = ''">
                         <i class="fa fa-trash-o" aria-hidden="true"></i>
                         {{ _("Remove") }}
                     </button>
@@ -440,7 +431,7 @@
                 </h2>
 
                 <!-- TicketsSegment -->
-                <div class="tickets-segment">
+                <div class="tickets-segment" v-show="event.tickets.length > 0">
                     <div class="row">
                         <div class="col-xs-4">
                             <h3 style="font-size: 15px;">{{ _("Ticket Name") }} <span class="required">*</span></h3>
@@ -495,201 +486,205 @@
                 <div class="help-block with-errors"></div>
             </div>
         </div>
-
-        <div id="payment-system-holder" class="item form-group"
-             {% if not event or ('paid' not in ticket_types and 'donation' not in ticket_types) %}style="display:none;"{% endif %}>
-            <h2 class="underlined-heading">
-                <i class="fa fa-percent"></i>
-                {{ _("Redeem Discount Code") }}
-                <hr>
-            </h2>
-            <div class="row">
-                <div class="col-xs-6">
-                    <div class="item form-group">
-                        <label for="discount-code-entry">{{ _("Enter Discount Code") }}</label>
-                        <input type="hidden" name="discount_code_id" value="" v-model="event.discount_code_id">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="" id="discount-code-entry"
-                                   v-model="event.discount_code">
-                            <span class="input-group-btn">
+        <transition name="fade">
+            <div v-show="_.filter(event.tickets, ['type', 'paid']).length > 0">
+                <div id="payment-system-holder" class="item form-group">
+                    <h2 class="underlined-heading">
+                        <i class="fa fa-percent"></i>
+                        {{ _("Redeem Discount Code") }}
+                        <hr>
+                    </h2>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="item form-group">
+                                <label for="discount-code-entry">{{ _("Enter Discount Code") }}</label>
+                                <input type="hidden" name="discount_code_id" value="" v-model="event.discount_code_id">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="" id="discount-code-entry"
+                                           v-model="event.discount_code">
+                                    <span class="input-group-btn">
                                 <button class="btn btn-success" id="discount-code-entry-apply"
                                         type="button">{{ _("Apply Discount") }}</button>
                             </span>
+                                </div>
+                                <span class="help-text"
+                                      style="display: none;"><strong>{{ _("Code applied !") }}</strong> {{ _("10 percent off on monthly payments for 3 months") }}</span>
+                            </div>
                         </div>
-                        <span class="help-text"
-                              style="display: none;"><strong>{{ _("Code applied !") }}</strong> {{ _("10 percent off on monthly payments for 3 months") }}</span>
                     </div>
-                </div>
-            </div>
 
-            <h2 class="underlined-heading">
-                <i class="fa fa-money"></i>
-                {{ _("Add Payment details") }}
-                <hr>
-            </h2>
-            <div class="row">
-                <div class="col-xs-6">
+                    <h2 class="underlined-heading">
+                        <i class="fa fa-money"></i>
+                        {{ _("Add Payment details") }}
+                        <hr>
+                    </h2>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="item form-group">
+                                <label>{{ _("Choose Country") }} <span class="required">*</span></label>
+                                <select name="payment_country" id="payment_country_name" class="form-control"
+                                        v-model="event.payment_country"
+                                        title="payment country">
+                                    {% if not event or not event.payment_country %}
+                                        <option value="">{{ _("Choose a country for your payment") }}</option>
+                                    {% endif %}
+                                    {% for country in payment_countries %}
+                                        <option value="{{ country }}">{{ country }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="item form-group">
+                                <label>{{ _("Choose Currency") }} <span class="required">*</span></label>
+                                <select name="payment_currency" id="payment_currency_name" class="form-control"
+                                        v-model="event.payment_currency"
+                                        title="currency">
+                                    {% if not event or not event.payment_currency %}
+                                        <option value="">{{ _("Please select a currency") }}</option>
+                                    {% endif %}
+                                    {% for code, has_paypal, has_stripe in payment_currencies %}
+                                        <option value="{{ code }}">{{ code }}
+                                            - {{ code | currency_name }} ({{ code | currency_symbol }})
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="item form-group">
-                        <label>{{ _("Choose Country") }} <span class="required">*</span></label>
-                        <select name="payment_country" id="payment_country_name" class="form-control"
-                                v-model="event.payment_country"
-                                title="payment country">
-                            {% if not event or not event.payment_country %}
-                                <option value="">{{ _("Choose a country for your payment") }}</option>
-                            {% endif %}
-                            {% for country in payment_countries %}
-                                <option value="{{ country }}">{{ country }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="item form-group">
-                        <label>{{ _("Choose Currency") }} <span class="required">*</span></label>
-                        <select name="payment_currency" id="payment_currency_name" class="form-control"
-                                v-model="event.payment_currency"
-                                title="currency">
-                            {% if not event or not event.payment_currency %}
-                                <option value="">{{ _("Please select a currency") }}</option>
-                            {% endif %}
-                            {% for code, has_paypal, has_stripe in payment_currencies %}
-                                <option value="{{ code }}">{{ code }}
-                                    - {{ code | currency_name }} ({{ code | currency_symbol }})
-                                </option>
-                            {% endfor %}
-                        </select>
+                        <h2 class="underlined-heading">
+                            <i class="fa fa-credit-card"></i>
+                            {{ _("Choose Payment Methods") }}
+                            <hr>
+                        </h2>
+                        <div id="paypal-gateway">
+                            <label class="control-label" style="font-size: 20px;">{{ _("Online Payments") }}</label>
+                            <div class="col-sm-12 input-group">
+                                <label class="control-label">{{ _("Payment by PayPal") }}</label>
+                                <div class="checkbox">
+                                    <label style="font-weight: 300;">
+                                        <input type="checkbox" name="pay_by_paypal" v-model="event.pay_by_paypal">
+                                        <strong style="font-weight: 400;">{{ _("YES, accept payment through PayPal ") }}</strong><br>
+                                        {{ _("Paypal accepts credit card, debit card and PayPal payments. To learn how it works click") }}
+                                        <a href="">{{ _("here.") }}</a>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="item form-group" v-show="event.pay_by_paypal">
+                                <label>PayPal Email <span class="required">*</span></label>
+                                <input type="email" placeholder="PayPal Email" name="paypal_email" class="form-control"
+                                       v-model="event.paypal_email">
+                                <strong style="font-weight: 400;">{{ _("Don't have a PayPal account?") }} </strong><a
+                                    href="https://www.paypal.com/us/webapps/mpp/referral/paypal-express-checkout?partner_id=W9QW5TKUA246E"
+                                    target="_blank">{{ _("Create a free PayPal merchant account.") }}</a>
+                            </div>
+
+                        </div>
+                        <div id="stripe-gateway">
+                            <div class="col-sm-12 input-group">
+                                <label class="control-label">{{ _("Payment by Stripe") }}</label>
+                                <div class="checkbox">
+                                    <label style="font-weight: 300;">
+                                        <input type="checkbox" name="pay_by_stripe" v-model="event.pay_by_stripe">
+                                        <strong style="font-weight: 400;">{{ _("YES, accept payment through Stripe") }} </strong><br>
+                                        {{ _("Stripe accepts Visa, Master and Amex. To learn how it works click") }} <a
+                                            href="">{{ _("here.") }}</a>
+                                        {{ _("Find out more about Stripe") }} <a href="">{{ _("here.") }}</a>
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="stripe-holder" class="item form-group" v-show="event.pay_by_stripe">
+                                <label>{{ _("Use Stripe for payments") }} <span class="required">*</span></label><br>
+                                <div id="stripe-connected-message" v-show="event.stripe">
+                                    <input type="hidden" name="stripe_secret_key"
+                                           value="{{ event.stripe.stripe_secret_key | default('', true) }}">
+                                    <input type="hidden" name="stripe_refresh_token"
+                                           value="{{ event.stripe.stripe_refresh_token | default('', true) }}">
+                                    <input type="hidden" name="stripe_publishable_key"
+                                           value="{{ event.stripe.stripe_publishable_key | default('', true) }}">
+                                    <input type="hidden" name="stripe_user_id"
+                                           value="{{ event.stripe.stripe_user_id | default('', true) }}">
+                                    <input type="hidden" name="stripe_email"
+                                           value="{{ event.stripe.stripe_email | default('', true) }}">
+                                    {{ _("The stripe account") }} <strong
+                                        class="stripe-email">{{ event.stripe.stripe_email | default('', true) }}</strong> {{ _("has been connected.") }}
+                                    <a href="#"
+                                       class="stripe-delink">{{ _("Click to De-link the account.") }}</a><br><br>
+                                </div>
+                                <a href="#" class="stripe-connect"
+                                   style="{% if event.stripe %}display:none;{% endif %}"><span>{{ _("Connect with Stripe") }}</span></a>
+                            </div>
+                        </div>
+                        <br>
+                        <div id="offline-gateway">
+                            <label class="control-label" style="font-size: 20px;">{{ _("Offline Payments") }}</label>
+                            <div class="col-sm-12 input-group">
+                                <div class="checkbox">
+                                    <label style="font-weight: 300;">
+                                        <input type="checkbox" name="pay_by_cheque" v-model="event.pay_by_cheque">
+                                        <strong style="font-weight: 400;">{{ _("YES, accept payment by Cheque") }} </strong><br>
+                                    </label>
+                                </div>
+                                <div class="item form-group" v-show="event.pay_by_cheque">
+                                    <label>{{ _("Enter your PayPal account name and payment details instructions to ticket buyers") }}
+                                        [See an
+                                        <a href='#' data-toggle="modal" data-target="#chequeModal"
+                                           title="Show cheque instructions"><strong
+                                                style="font-weight: 400;">{{ _("example") }}</strong></a> {{ _("here") }}]
+                                    </label>
+                                    <textarea placeholder="Enter account details and instructions for cheque payment"
+                                              name="cheque-details"
+                                              class="form-control" rows="6"
+                                              v-model="event.cheque_details"
+                                              cols="15"></textarea>
+                                </div>
+
+                                <div class="checkbox">
+                                    <label style="font-weight: 300;">
+                                        <input type="checkbox" name="pay_by_bank" v-model="event.pay_by_bank">
+                                        <strong style="font-weight: 400;">{{ _("YES, accept payment by Telegraphic Transfer(TT) / Bank Transfer") }} </strong><br>
+                                    </label>
+                                </div>
+                                <div class="item form-group" v-show="event.pay_by_bank">
+                                    <label>{{ _("Enter your bank details and instructions to ticket buyers") }}
+                                        [{{ _("See an") }}
+                                        <a href='#' data-toggle="modal" data-target="#bankModal"
+                                           title="Show bank details instructions"><strong
+                                                style="font-weight: 400;">{{ _("example") }}</strong></a> {{ _("here") }}]
+                                    </label>
+                                    <textarea
+                                            placeholder="Enter account details and instructions for Telegraphic Transfer(TT) / Bank Transfer payment"
+                                            name="bank-details"
+                                            class="form-control" rows="6"
+                                            v-model="event.bank_details"
+                                            cols="15"></textarea>
+                                </div>
+
+                                <div class="checkbox">
+                                    <label style="font-weight: 300;">
+                                        <input type="checkbox" name="pay_onsite" v-model="event.pay_onsite">
+                                        <strong style="font-weight: 400;">{{ _("YES, accept payment at the event(on site)") }} </strong><br>
+                                    </label>
+                                </div>
+                                <div class="item form-group" v-show="event.pay_onsite">
+                                    <label>{{ _("Enter payment instructions to ticket buyers to make payments onsite") }}</label>
+                                    <textarea placeholder="Enter instructions for payment at door" name="onsite-details"
+                                              v-model="event.onsite_details" class="form-control" rows="6"
+                                              cols="15"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="">
+                            <a href='#' data-toggle="modal" data-target="#taxModal" title="Add tax option">
+                                <h5>+ {{ _("Add Tax") }}</h5>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="item form-group">
-                <h2 class="underlined-heading">
-                    <i class="fa fa-credit-card"></i>
-                    {{ _("Choose Payment Methods") }}
-                    <hr>
-                </h2>
-                <div id="paypal-gateway">
-                    <label class="control-label" style="font-size: 20px;">{{ _("Online Payments") }}</label>
-                    <div class="col-sm-12 input-group">
-                        <label class="control-label">{{ _("Payment by PayPal") }}</label>
-                        <div class="checkbox">
-                            <label style="font-weight: 300;">
-                                <input type="checkbox" name="pay_by_paypal" v-model="event.pay_by_paypal">
-                                <strong style="font-weight: 400;">{{ _("YES, accept payment through PayPal ") }}</strong><br>
-                                {{ _("Paypal accepts credit card, debit card and PayPal payments. To learn how it works click") }}
-                                <a href="">{{ _("here.") }}</a>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="item form-group" v-show="event.pay_by_paypal">
-                        <label>PayPal Email <span class="required">*</span></label>
-                        <input type="email" placeholder="PayPal Email" name="paypal_email" class="form-control"
-                               v-model="event.paypal_email">
-                        <strong style="font-weight: 400;">{{ _("Don't have a PayPal account?") }} </strong><a
-                            href="https://www.paypal.com/us/webapps/mpp/referral/paypal-express-checkout?partner_id=W9QW5TKUA246E"
-                            target="_blank">{{ _("Create a free PayPal merchant account.") }}</a>
-                    </div>
-
-                </div>
-                <div id="stripe-gateway">
-                    <div class="col-sm-12 input-group">
-                        <label class="control-label">{{ _("Payment by Stripe") }}</label>
-                        <div class="checkbox">
-                            <label style="font-weight: 300;">
-                                <input type="checkbox" name="pay_by_stripe" v-model="event.pay_by_stripe">
-                                <strong style="font-weight: 400;">{{ _("YES, accept payment through Stripe") }} </strong><br>
-                                {{ _("Stripe accepts Visa, Master and Amex. To learn how it works click") }} <a
-                                    href="">{{ _("here.") }}</a>
-                                {{ _("Find out more about Stripe") }} <a href="">{{ _("here.") }}</a>
-                            </label>
-                        </div>
-                    </div>
-                    <div id="stripe-holder" class="item form-group" v-show="event.pay_by_stripe">
-                        <label>{{ _("Use Stripe for payments") }} <span class="required">*</span></label><br>
-                        <div id="stripe-connected-message" v-show="event.stripe">
-                            <input type="hidden" name="stripe_secret_key"
-                                   value="{{ event.stripe.stripe_secret_key | default('', true) }}">
-                            <input type="hidden" name="stripe_refresh_token"
-                                   value="{{ event.stripe.stripe_refresh_token | default('', true) }}">
-                            <input type="hidden" name="stripe_publishable_key"
-                                   value="{{ event.stripe.stripe_publishable_key | default('', true) }}">
-                            <input type="hidden" name="stripe_user_id"
-                                   value="{{ event.stripe.stripe_user_id | default('', true) }}">
-                            <input type="hidden" name="stripe_email"
-                                   value="{{ event.stripe.stripe_email | default('', true) }}">
-                            {{ _("The stripe account") }} <strong
-                                class="stripe-email">{{ event.stripe.stripe_email | default('', true) }}</strong> {{ _("has been connected.") }}
-                            <a href="#" class="stripe-delink">{{ _("Click to De-link the account.") }}</a><br><br>
-                        </div>
-                        <a href="#" class="stripe-connect"
-                           style="{% if event.stripe %}display:none;{% endif %}"><span>{{ _("Connect with Stripe") }}</span></a>
-                    </div>
-                </div>
-                <br>
-                <div id="offline-gateway">
-                    <label class="control-label" style="font-size: 20px;">{{ _("Offline Payments") }}</label>
-                    <div class="col-sm-12 input-group">
-                        <div class="checkbox">
-                            <label style="font-weight: 300;">
-                                <input type="checkbox" name="pay_by_cheque" v-model="event.pay_by_cheque">
-                                <strong style="font-weight: 400;">{{ _("YES, accept payment by Cheque") }} </strong><br>
-                            </label>
-                        </div>
-                        <div class="item form-group" v-show="event.pay_by_cheque">
-                            <label>{{ _("Enter your PayPal account name and payment details instructions to ticket buyers") }}
-                                [See an
-                                <a href='#' data-toggle="modal" data-target="#chequeModal"
-                                   title="Show cheque instructions"><strong
-                                        style="font-weight: 400;">{{ _("example") }}</strong></a> {{ _("here") }}]
-                            </label>
-                            <textarea placeholder="Enter account details and instructions for cheque payment"
-                                      name="cheque-details"
-                                      class="form-control" rows="6"
-                                      v-model="event.cheque_details"
-                                      cols="15"></textarea>
-                        </div>
-
-                        <div class="checkbox">
-                            <label style="font-weight: 300;">
-                                <input type="checkbox" name="pay_by_bank" v-model="event.pay_by_bank">
-                                <strong style="font-weight: 400;">{{ _("YES, accept payment by Telegraphic Transfer(TT) / Bank Transfer") }} </strong><br>
-                            </label>
-                        </div>
-                        <div class="item form-group" v-show="event.pay_by_bank">
-                            <label>{{ _("Enter your bank details and instructions to ticket buyers") }}
-                                [{{ _("See an") }}
-                                <a href='#' data-toggle="modal" data-target="#bankModal"
-                                   title="Show bank details instructions"><strong
-                                        style="font-weight: 400;">{{ _("example") }}</strong></a> {{ _("here") }}]
-                            </label>
-                            <textarea
-                                    placeholder="Enter account details and instructions for Telegraphic Transfer(TT) / Bank Transfer payment"
-                                    name="bank-details"
-                                    class="form-control" rows="6"
-                                    v-model="event.bank_details"
-                                    cols="15"></textarea>
-                        </div>
-
-                        <div class="checkbox">
-                            <label style="font-weight: 300;">
-                                <input type="checkbox" name="pay_onsite" v-model="event.pay_onsite">
-                                <strong style="font-weight: 400;">{{ _("YES, accept payment at the event(on site)") }} </strong><br>
-                            </label>
-                        </div>
-                        <div class="item form-group" v-show="event.pay_onsite">
-                            <label>{{ _("Enter payment instructions to ticket buyers to make payments onsite") }}</label>
-                            <textarea placeholder="Enter instructions for payment at door" name="onsite-details"
-                                      v-model="event.onsite_details" class="form-control" rows="6" cols="15"></textarea>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <div class="">
-                    <a href='#' data-toggle="modal" data-target="#taxModal" title="Add tax option">
-                        <h5>+ {{ _("Add Tax") }}</h5>
-                    </a>
-                </div>
-            </div>
-        </div>
+        </transition>
         <h2 class="underlined-heading">
             <i class="fa fa-plus-circle"></i>
             {{ _("Additional Details") }}
@@ -752,8 +747,8 @@
             </div>
         </div>
         <div class="item form-group">
-            <label><span class="coc-state">{{ _("Add") }}</span> {{ _("Code of Conduct") }}
-            </label>
+            <label><span v-show="event.has_code_of_conduct">{{ _("Remove") }}</span><span
+                    v-show="!event.has_code_of_conduct">{{ _("Add") }}</span> {{ _("Code of Conduct") }}</label>
             <input type="checkbox" class="toggle-switch" name="coc_state" id="coc-switch"
                    v-model="event.has_code_of_conduct"/>
             <label for="coc-switch" style="margin-left:0;"></label>

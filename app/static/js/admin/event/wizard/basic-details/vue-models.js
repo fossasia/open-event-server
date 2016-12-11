@@ -10,6 +10,7 @@ TWITTER_LINK = _.clone(SOCIAL_LINK);
 TWITTER_LINK.name = 'Twitter';
 
 var EVENT = {
+    id: null,
     name: '',
     location_name: '',
     show_map: true,
@@ -72,6 +73,7 @@ var EVENT = {
 };
 
 var TICKET = {
+    id: null,
     name: '',
     type: '',
     has_orders: false,

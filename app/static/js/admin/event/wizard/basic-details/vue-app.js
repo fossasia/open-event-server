@@ -104,10 +104,10 @@ var app = new Vue({
         }
     },
     watch: {
-        'event.topic': function (val) {
+        'event.topic': function () {
             this.event.sub_topic = '';
         },
-        'event.ticket_include': function (val) {
+        'event.ticket_include': function () {
             this.event.tickets = [];
         },
         'addressShown': function (val) {
@@ -121,7 +121,9 @@ var app = new Vue({
         'event.location_name': function (val) {
             var $this = this;
             geocodeAddress(window.geocoder, val, function (lat, lng) {
-                $this.addressShown = true;
+                if (val.trim() != "") {
+                    $this.addressShown = true;
+                }
                 $this.event.latitude = lat;
                 $this.event.longitude = lng;
             });
@@ -144,7 +146,7 @@ var app = new Vue({
         addTicket: function (ticketType) {
             var ticket = _.cloneDeep(TICKET);
             ticket.type = ticketType;
-            this.event.tickets.push(ticket)
+            this.event.tickets.push(ticket);
         },
         recenterMap: function () {
             var center = window.map.getCenter();
@@ -161,37 +163,38 @@ var app = new Vue({
         }
     },
     compiled: function () {
-        this.upload = this.$refs.upload;
-        this.files = this.$refs.upload.files;
+
     }
 });
 
 app.$nextTick(function () {
     var $eventDiv = $(this.$el);
-    var event = new Event('input');
     /* Bind datepicker to dates */
     $eventDiv.find("input.date").datepicker({
         'format': 'mm/dd/yyyy',
         'autoclose': true,
         'startDate': new Date()
     }).on('changeDate', function (e) {
-        this.dispatchEvent(event);
+        this.dispatchEvent(new Event('input'));
     });
     $eventDiv.find("input.time").timepicker({
         'showDuration': true,
         'timeFormat': 'H:i',
         'scrollDefault': 'now'
     }).on('changeTime', function () {
-        this.dispatchEvent(event);
+        this.dispatchEvent(new Event('input'));
     });
     $eventDiv.find("textarea.event-textarea").summernote(summernoteConfig);
     $eventDiv.find(".event-date-picker").datepair({
         'defaultTimeDelta': 3600000
+    }).on('rangeSelected', function () {
+        _.each($(this).find('input.date, input.time'), function (element) {
+            element.dispatchEvent(new Event('input'));
+        });
     });
     $eventDiv.find(".licence-help").click(function () {
         $("#licence-list").slideToggle();
     });
-
 });
 
 
@@ -202,7 +205,6 @@ VueGoogleMap.loaded.then(function () {
     window.autocomplete.addListener('place_changed', function () {
         locationInput.dispatchEvent(new Event('input'));
     });
-
 
     var intervalID = setInterval(function () {
         if (!_.isUndefined(app.$refs.gmap.$mapObject)) {
