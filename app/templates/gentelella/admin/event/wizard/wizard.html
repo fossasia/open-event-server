@@ -111,9 +111,7 @@
                         </div>
                         <div class="tab-pane fade {% if step == 'sessions-tracks-rooms' or step == 'call-for-speakers' or step == 'form-customization' %}in active{% endif %}"
                              id="step3">
-                            {% include 'gentelella/admin/event/wizard/sessions-tracks-microlocations.html' %}
-                            {% include 'gentelella/admin/event/wizard/call-for-speakers.html' %}
-                            {% include 'gentelella/admin/event/wizard/custom-form.html' %}
+                            {% include 'gentelella/admin/event/wizard/session-speakers.html' %}
                             <div class="col-md-10 col-md-push-1">
                                 {{ button_bar(show_next=false) }}
                             </div>
@@ -148,9 +146,13 @@
 
     <script src="{{ url_for('static', filename='js/admin/event/wizard/basic-details/classic.js') }}"></script>
     <script src="{{ url_for('static', filename='js/admin/event/wizard/basic-details/vue-models.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin/event/wizard/basic-details/vue-components.js') }}"></script>
     <script src="{{ url_for('static', filename='js/admin/event/wizard/basic-details/vue-app.js') }}"></script>
 
     <script src="{{ url_for('static', filename='js/admin/event/wizard/sponsors/vue-models.js') }}"></script>
     <script src="{{ url_for('static', filename='js/admin/event/wizard/sponsors/vue-app.js') }}"></script>
 
+    <script src="{{ url_for('static', filename='js/admin/event/wizard/sessions-speakers/vue-models.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin/event/wizard/sessions-speakers/vue-components.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin/event/wizard/sessions-speakers/vue-app.js') }}"></script>
 {% endblock %}

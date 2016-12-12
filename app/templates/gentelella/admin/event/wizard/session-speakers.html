@@ -1,0 +1,149 @@
+<script type="text/x-template" id="track-template">
+    <div class="track-holder">
+        <div class="clearfix"></div>
+        <div class=" col-xs-5 form-group">
+            <input type="text" class="form-control" v-model="track.name" placeholder="Name" required="required">
+        </div>
+        <div class="col-xs-7 input-group form-group">
+            <div class="input-group colorpicker-component" id="color">
+                <input type="text" class="form-control color-picker-input" placeholder="Color" required="required"
+                       v-model="track.color" title="track-color"/>
+                <span class="input-group-addon"><i></i></span>
+            </div>
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-danger" v-on:click="remove">-</button>
+                <button type="button" class="btn btn-primary" v-on:click="add">+</button>
+            </span>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/x-template" id="microlocation-template">
+    <div class="microlocation-holder">
+        <div class="clearfix"></div>
+        <div class="col-xs-5 form-group">
+            <input type="text" class="form-control" required="required" name="rooms[name]" placeholder="Name"
+                   v-model="microlocation.name">
+        </div>
+        <div class="col-xs-6 input-group form-group">
+            <div class="input-group">
+                <input type="number" class="form-control" placeholder="Floor" title="rooms-floor"
+                       v-model="microlocation.floor"/>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-danger" v-on:click="remove">-</button>
+                    <button type="button" class="btn btn-primary" v-on:click="add">+</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-template" id="session-type-template">
+    <div class="session-type-holder">
+        <div class="clearfix"></div>
+        <div class="col-xs-5 form-group">
+            <input type="text" class="form-control" required="required" v-model="sessionType.name" placeholder="Name">
+        </div>
+        <div class="col-xs-6 input-group form-group">
+            <input type="text" required="required" class="form-control session-length" v-model="sessionType.length"
+                   placeholder="Length (HH.MM)">
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-danger" v-on:click="remove">-</button>
+                <button type="button" class="btn btn-primary" v-on:click="add">+</button>
+            </span>
+        </div>
+    </div>
+</script>
+
+<div id="event-wizard-sessions-speakers">
+    <div class="col-md-8 col-md-push-2">
+        <br>
+        <div style="width: 100%; text-align: center">
+            <h2 style="font-weight: 300;">{{ _("Turn") }}
+                <span v-show="!sessions_speakers_enabled">{{ _("on") }}</span>
+                <span v-show="sessions_speakers_enabled">{{ _("off") }}</span> {{ _("Sessions and Speakers") }}</h2>
+            <input type="checkbox" class="toggle-switch" name="has_session_speakers"
+                   id="session-tracks-rooms-switch" v-model="sessions_speakers_enabled"/>
+            <label for="session-tracks-rooms-switch"></label>
+        </div>
+    </div>
+    <transition name="fade">
+        <div v-show="sessions_speakers_enabled">
+            {% include 'gentelella/admin/event/wizard/session-speakers/sessions-tracks-microlocations.html' %}
+            {% include 'gentelella/admin/event/wizard/session-speakers/call-for-speakers.html' %}
+            {% include 'gentelella/admin/event/wizard/session-speakers/custom-form.html' %}
+        </div>
+    </transition>
+</div>
+
+<script>
+    var cfsHash = "{{ cfs_hash if not call_for_speakers or not call_for_speakers.hash else call_for_speakers.hash }}";
+</script>
+
+<script type="text/javascript">
+    window.sessionForm = [{}];
+    window.speakerForm = [{}];
+
+    Array.prototype.setIncluded = function (field, state) {
+        this[0][field].include = state ? 1 : 0;
+    };
+
+    Array.prototype.setRequired = function (field, state) {
+        this[0][field].require = state ? 1 : 0;
+    };
+
+    function includeClick(button) {
+        var $row = $(button).closest("tr");
+        var $button = $(button);
+        var $requireSwitch = $row.find(".require-switch");
+        if (!button.checked) {
+            if ($requireSwitch[0].checked) {
+                $requireSwitch.click();
+            }
+        }
+
+        if ($button.data('group') === 'session') {
+            sessionForm.setIncluded($row.data('identifier'), button.checked);
+        } else if ($button.data('group') === 'speaker') {
+            speakerForm.setIncluded($row.data('identifier'), button.checked);
+        }
+        persistData();
+    }
+
+    function requireClick(button) {
+        var $row = $(button).closest("tr");
+        var $button = $(button);
+        var $includeSwitch = $row.find(".include-switch");
+        if (!$includeSwitch[0].checked) {
+            $includeSwitch.click();
+        }
+        if ($button.data('group') === 'session') {
+            sessionForm.setRequired($row.data('identifier'), button.checked);
+        } else if ($button.data('group') === 'speaker') {
+            speakerForm.setRequired($row.data('identifier'), button.checked);
+        }
+        persistData();
+    }
+
+    $(function () {
+        $.each($(".session-options-table").find('tr[data-identifier]'), function (key, row) {
+            var $row = $(row);
+            sessionForm[0][$row.data('identifier')] = {
+                include: $row.find('.include-switch')[0].checked ? 1 : 0,
+                require: $row.find('.require-switch')[0].checked ? 1 : 0
+            }
+        });
+
+        $.each($(".speaker-options-table").find('tr[data-identifier]'), function (key, row) {
+            var $row = $(row);
+            speakerForm[0][$row.data('identifier')] = {
+                include: $row.find('.include-switch')[0].checked ? 1 : 0,
+                require: $row.find('.require-switch')[0].checked ? 1 : 0
+            }
+        });
+
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+</script>

@@ -1,80 +1,6 @@
-Vue.config.silent = false;
-
-Vue.component('ticket', {
-    props: ['ticket'],
-    data: function () {
-        return {
-            show_settings: false
-        }
-    },
-    template: '#ticket-template',
-    methods: {
-        remove: function () {
-            this.$emit('remove');
-        }
-    },
-    mounted: function () {
-        this.$nextTick(function () {
-            var $ticket = $(this.$el);
-            var event = new Event('input');
-            /* Bind datepicker to dates */
-            $ticket.find("input.date").datepicker().on('changeDate', function (e) {
-                this.dispatchEvent(event);
-            });
-            $ticket.find("input.time").timepicker({
-                'showDuration': true,
-                'timeFormat': 'H:i',
-                'scrollDefault': 'now'
-            }).on('changeTime', function () {
-                this.dispatchEvent(event);
-            });
-            /* iCheck for Ticket description toggle checkbox */
-            $ticket.find("input.checkbox.flat").iCheck({
-                checkboxClass: 'icheckbox_flat-green',
-                radioClass: 'iradio_flat-green'
-            });
-            $ticket.find(".ticket-tags").selectize({
-                plugins: ['remove_button'],
-                persist: false,
-                createOnBlur: true,
-                create: true,
-                onChange: function () {
-                    $ticket.find(".ticket-tags")[0].dispatchEvent(event);
-                }
-            });
-            /* Enable tooltips */
-            $ticket.find(".edit-ticket-button").tooltip();
-        })
-    }
-});
-
-Vue.component('social-link', {
-    props: ['socialLink'],
-    template: '#social-link-template',
-    methods: {
-        add: function (event) {
-            this.$emit('add');
-        },
-        remove: function (event) {
-            this.$emit('remove');
-        }
-    }
-});
-
-Vue.use(VueGoogleMap, {
-    load: {
-        key: 'AIzaSyAHdXg0Y_zk-wCNpslbBqcezLdHniaEwkI',
-        v: '3',
-        libraries: 'places'
-    },
-    installComponents: false
-});
-
-Vue.component('google-map', VueGoogleMap.Map);
-Vue.component('map-marker', VueGoogleMap.Marker);
 
 //noinspection JSUnusedGlobalSymbols
-var app = new Vue({
+var basicDetailsApp = new Vue({
     el: '#event-wizard-basic-details',
     data: {
         event: EVENT,
@@ -187,7 +113,7 @@ var app = new Vue({
     }
 });
 
-app.$nextTick(function () {
+basicDetailsApp.$nextTick(function () {
     var $eventDiv = $(this.$el);
     /* Bind datepicker to dates */
     $eventDiv.find("input.date").datepicker({
@@ -204,7 +130,6 @@ app.$nextTick(function () {
     }).on('changeTime', function () {
         this.dispatchEvent(new Event('input'));
     });
-    $eventDiv.find("textarea.event-textarea").summernote(summernoteConfig);
     $eventDiv.find(".event-date-picker").datepair({
         'defaultTimeDelta': 3600000
     }).on('rangeSelected', function () {
@@ -212,6 +137,7 @@ app.$nextTick(function () {
             element.dispatchEvent(new Event('input'));
         });
     });
+    $eventDiv.find("textarea.event-textarea").summernote(summernoteConfig);
     $eventDiv.find(".licence-help").click(function () {
         $("#licence-list").slideToggle();
     });
@@ -229,8 +155,8 @@ VueGoogleMap.loaded.then(function () {
     var intervalID = setInterval(function () {
         try {
             if (!_.isUndefined(app.$refs.gmap.$mapObject)) {
-                window.map = app.$refs.gmap.$mapObject;
                 clearInterval(intervalID);
+                window.map = app.$refs.gmap.$mapObject;
                 app.recenterMap();
                 app.mapLoaded = true;
             }

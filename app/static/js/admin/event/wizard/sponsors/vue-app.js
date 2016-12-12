@@ -1,5 +1,5 @@
 //noinspection JSUnusedGlobalSymbols
-var app = new Vue({
+var sponsorsApp = new Vue({
     el: '#event-wizard-sponsors',
     data: {
         sponsors: [],
