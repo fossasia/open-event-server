@@ -94,8 +94,14 @@ var createSnackbar = (function () {
         snackbar.dismiss = function () {
             this.style.opacity = 0;
         };
-        var text = document.createTextNode(message);
-        snackbar.appendChild(text);
+        if(message.startsWith("HTML>")) {
+             snackbar.innerHTML = message.replace('HTML>', '');
+        } else {
+            var text = document.createTextNode(message);
+            snackbar.appendChild(text);
+        }
+
+
         if (actionText) {
             var hasAction = true;
             if (!action) {
@@ -141,6 +147,10 @@ var createSnackbar = (function () {
         snackbar.style.opacity = 1;
     };
 })();
+
+function createHtmlSnackbar(message, actionText, action, delay) {
+    createSnackbar('HTML>' + message, actionText, action, delay)
+}
 
 
 $.oauthpopup = function (options) {

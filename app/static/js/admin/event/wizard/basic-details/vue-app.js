@@ -160,6 +160,27 @@ var app = new Vue({
                 locationName += $('#' + component).get(0).value + " ";
             }
             this.event.location_name = locationName;
+        },
+        connectToStripe: function () {
+            var $this = this;
+            stripeConnect(function (status, response) {
+                $this.event.stripe.linked = status;
+                if (status) {
+                    $this.event.stripe.stripe_secret_key = response.access_token;
+                    $this.event.stripe.stripe_refresh_token = response.refresh_token;
+                    $this.event.stripe.stripe_publishable_key = response.stripe_publishable_key;
+                    $this.event.stripe.stripe_user_id = response.stripe_user_id;
+                    $this.event.stripe.stripe_email = response.email;
+                }
+            });
+        },
+        disconnectFromStripe: function () {
+            $this.event.stripe.linked = false;
+            $this.event.stripe.stripe_secret_key = '';
+            $this.event.stripe.stripe_refresh_token = '';
+            $this.event.stripe.stripe_publishable_key = '';
+            $this.event.stripe.stripe_user_id = '';
+            $this.event.stripe.stripe_email = '';
         }
     },
     compiled: function () {

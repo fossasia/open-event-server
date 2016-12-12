@@ -362,7 +362,9 @@
         </div>
 
         <div class="item form-group">
-            <label><span class="organizer-state">Add</span> {{ _("Organizer Information") }}
+            <label>
+                <span v-show="event.has_organizer_info">{{ _("Remove") }}</span><span
+                    v-show="!event.has_organizer_info">{{ _("Add") }}</span> {{ _("Organizer Information") }}
             </label>
             <input type="checkbox" class="toggle-switch" name="organizer_state"
                    value="on" id="organizer-switch"
@@ -596,24 +598,16 @@
                             </div>
                             <div id="stripe-holder" class="item form-group" v-show="event.pay_by_stripe">
                                 <label>{{ _("Use Stripe for payments") }} <span class="required">*</span></label><br>
-                                <div id="stripe-connected-message" v-show="event.stripe">
-                                    <input type="hidden" name="stripe_secret_key"
-                                           value="{{ event.stripe.stripe_secret_key | default('', true) }}">
-                                    <input type="hidden" name="stripe_refresh_token"
-                                           value="{{ event.stripe.stripe_refresh_token | default('', true) }}">
-                                    <input type="hidden" name="stripe_publishable_key"
-                                           value="{{ event.stripe.stripe_publishable_key | default('', true) }}">
-                                    <input type="hidden" name="stripe_user_id"
-                                           value="{{ event.stripe.stripe_user_id | default('', true) }}">
-                                    <input type="hidden" name="stripe_email"
-                                           value="{{ event.stripe.stripe_email | default('', true) }}">
-                                    {{ _("The stripe account") }} <strong
-                                        class="stripe-email">{{ event.stripe.stripe_email | default('', true) }}</strong> {{ _("has been connected.") }}
+                                <div id="stripe-connected-message" v-show="event.stripe.linked">
+                                    {{ _("The stripe account") }}
+                                    <strong>{{ '{{ event.stripe.stripe_email }}' }}</strong> {{ _("has been connected.") }}
                                     <a href="#"
-                                       class="stripe-delink">{{ _("Click to De-link the account.") }}</a><br><br>
+                                       v-on:click.prevent="disconnectFromStripe">{{ _("Click to De-link the account.") }}</a><br><br>
                                 </div>
-                                <a href="#" class="stripe-connect"
-                                   style="{% if event.stripe %}display:none;{% endif %}"><span>{{ _("Connect with Stripe") }}</span></a>
+                                <a href="#" class="stripe-connect" v-show="!event.stripe.linked"
+                                   v-on:click.prevent="connectToStripe">
+                                    <span>{{ _("Connect with Stripe") }}</span>
+                                </a>
                             </div>
                         </div>
                         <br>
@@ -803,30 +797,32 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div id="tax-charge-holder">
-                                <h3>{{ _("Do you need to charge tax for this event ?") }}
-                                    <a href="#" data-toggle="tooltip"
-                                       title="Some event organizers need to charge tax on their tickets.
+                                <div class="col-sm-12 form-group">
+                                    <label>{{ _("Do you need to charge tax for this event ?") }}
+                                        <a href="#" data-toggle="tooltip"
+                                           title="Some event organizers need to charge tax on their tickets.
                                    Please check with your tax advisor about your own situation"
-                                       class="fa fa-info-circle"></a>
-                                </h3>
-                                <div class="radio">
-                                    <label style="font-weight: 300;">
-                                        <input type="radio" value="1" v-model.number="event.tax_allow">
-                                        <strong>Yes</strong>
-                                    </label>
-                                </div>
-                                <div class="radio">
-                                    <label style="font-weight: 300;">
-                                        <input type="radio" value="0" v-model.number="event.tax_allow">
-                                        <strong>No</strong>
-                                    </label>
+                                           class="fa fa-info-circle"></a></label>
+                                    <div class="radio">
+                                        <label style="font-weight: 300;">
+                                            <input type="radio" value="1" name='tax-radio'
+                                                   v-model.number="event.tax_allow">
+                                            <strong>Yes</strong>
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label style="font-weight: 300;">
+                                            <input type="radio" value="0" name='tax-radio'
+                                                   v-model.number="event.tax_allow">
+                                            <strong>No</strong>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
-                            <div id="tax-form-holder" v-if="event.tax_allow">
-                                <div class="col-sm-12 input-group">
-                                    <label>{{ _("Country") }}<span class="required">*</span></label>
-                                    <select name="tax_country" id="tax_country_name" class="form-control"
-                                            v-model="event.tax.country" title="tax country">
+                            <div id="tax-form-holder" v-show="event.tax_allow">
+                                <div class="col-sm-12 form-group">
+                                    <label>{{ _("Country") }} <span class="required">*</span></label>
+                                    <select class="form-control" v-model="event.tax.country" title="tax country">
                                         <option value="">{{ _("Choose a country for your tax payment") }}</option>
                                         {% for country in payment_countries %}
                                             <option value="{{ country | default('', true) }}">{{ country }}</option>
@@ -834,25 +830,24 @@
                                     </select>
                                 </div>
 
-                                <div class="col-sm-12 input-group">
-                                    <label for="tax_name">{{ _("Tax Name") }}<span class="required">*</span></label>
-                                    <input type="text" id="tax_name" name="tax_name" class="form-control"
-                                           v-model="event.tax.tax_name">
+                                <div class="col-sm-12 form-group">
+                                    <label for="tax_name">{{ _("Tax Name") }} <span class="required">*</span></label>
+                                    <input type="text" id="tax_name" class="form-control" v-model="event.tax.tax_name">
                                 </div>
 
-                                <div class="col-sm-12 input-group">
-                                    <label for="tax_rate">{{ _("Tax Rate") }}<span class="required">*</span></label>
+                                <div class="col-sm-12 form-group">
+                                    <label for="tax_rate">{{ _("Tax Rate") }} <span class="required">*</span></label>
                                     <input type="text" class="form-control" name="tax_rate" id="tax_rate"
                                            v-model="event.tax.tax_rate" placeholder="Enter Tax Rate">
                                 </div>
 
-                                <div class="col-sm-12 input-group">
-                                    <label for="tax_id">{{ _("Tax ID") }}<span class="required">*</span></label>
+                                <div class="col-sm-12 form-group">
+                                    <label for="tax_id">{{ _("Tax ID") }} <span class="required">*</span></label>
                                     <input v-model="event.tax.tax_id" type="text" class="form-control"
                                            name="tax_id" id="tax_id" placeholder="Enter Tax ID">
                                 </div>
 
-                                <div class="col-sm-12 input-group">
+                                <div class="col-sm-12 form-group">
                                     <label class="control-label">{{ _("Tax Invoices") }}:</label>
                                     <div class="checkbox">
                                         <label style="font-weight: 300;">
@@ -863,66 +858,66 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div id="tax-invoice-holder" v-show="tax.send_invoice">
-                                    <div class="col-sm-12 input-group">
-                                        <label for="registered_company">{{ _("Registered Company") }}<span
+                                <div id="tax-invoice-holder" v-show="event.tax.send_invoice">
+                                    <div class="col-sm-12 form-group">
+                                        <label for="registered_company">{{ _("Registered Company") }} <span
                                                 class="required">*</span></label>
                                         <input v-model="event.tax.registered_company" type="text"
                                                class="form-control" name="registered_company" id="registered_company"
                                                placeholder="Enter Company Name">
                                     </div>
 
-                                    <div class="col-sm-12 input-group">
-                                        <label for="buisness_address">{{ _("Business Address") }}<span
+                                    <div class="col-sm-12 form-group">
+                                        <label for="buisness_address">{{ _("Business Address") }} <span
                                                 class="required">*</span></label>
                                         <input v-model="event.tax.address" type="text"
                                                class="form-control" name="buisness_address" id="buisness_address"
                                                placeholder="Enter Business Address">
                                     </div>
 
-                                    <div class="col-sm-12 input-group">
-                                        <label for="invoice_city">{{ _("City") }}<span class="required">*</span></label>
+                                    <div class="col-sm-12 form-group">
+                                        <label for="invoice_city">{{ _("City") }} <span class="required">*</span></label>
                                         <input v-model="event.tax.city" type="text"
                                                class="form-control" name="invoice_city" id="invoice_city"
                                                placeholder="City">
                                     </div>
 
-                                    <div class="col-sm-12 input-group">
-                                        <label for="invoice_state">{{ _("State") }}<span
+                                    <div class="col-sm-12 form-group">
+                                        <label for="invoice_state">{{ _("State") }} <span
                                                 class="required">*</span></label>
                                         <input v-model="event.tax.state" type="text"
                                                class="form-control" name="invoice_state" id="invoice_state"
                                                placeholder="State">
                                     </div>
 
-                                    <div class="col-sm-12 input-group">
-                                        <label for="invoice_zip">Zip<span class="required">*</span></label>
+                                    <div class="col-sm-12 form-group">
+                                        <label for="invoice_zip">Zip <span class="required">*</span></label>
                                         <input v-model="event.tax.zip" type="text" class="form-control"
                                                name="invoice_zip" id="invoice_zip"
                                                placeholder="Zip">
                                     </div>
 
-                                    <div class="col-sm-12 input-group">
-                                        <label for="invoice_footer">{{ _("Optional Text for Invoice Footer") }}<span
+                                    <div class="col-sm-12 form-group">
+                                        <label for="invoice_footer">{{ _("Optional Text for Invoice Footer") }} <span
                                                 class="required">*</span></label>
                                         <textarea class="form-control" name="invoice_footer"
                                                   v-model="event.tax.invoice_footer" id="invoice_footer"></textarea>
                                     </div>
                                 </div>
 
-                                <div class="col-sm-12 input-group">
+                                <div class="col-sm-12 form-group">
                                     <label class="control-label">{{ _("Add or Include") }}:</label>
                                     <div class="radio">
                                         <label style="font-weight: 300;">
                                             <input type="radio" name="tax_options" value="0"
-                                                   v-model.number="tax.tax_include_in_price">
+                                                   v-model.number="event.tax.tax_include_in_price">
                                             <strong style="font-weight: 400;">{{ _("Add tax as separate fee on top of the price") }}</strong>
                                         </label>
                                     </div>
                                     <div class="radio">
                                         <label style="font-weight: 300;">
                                             <input type="radio" name="tax_options" value="1"
-                                                   v-model.number="tax.tax_include_in_price">
+                                                   v-model.number="event.tax.tax_include_in_price">
                                             <strong style="font-weight: 400;">{{ _("Include tax in ticket price") }}</strong>
                                         </label>
                                     </div>
@@ -970,14 +965,15 @@
 
 <!--suppress JSUnusedLocalSymbols, BadExpressionStatementJS, UnterminatedStatementJS -->
 <script>
-    var isEdit = {% if event %} true {% else %} false {% endif %};
-    var sub_topics = {{event_sub_topics|safe}};
-    var loadingImage = '<img src="' + "{{ url_for('static', filename='img/loading.gif') }}" + '" style="width: 50px;"> <h3>Uploading</h3>';
-    var logoUploadUrl = "{{ url_for('events.logo_upload', event_id=event.id) if event else url_for('events.create_event_logo_upload') }}";
-    var backgroundUploadUrl = "{{ url_for('events.bgimage_upload', event_id=event.id) if event else url_for('events.create_event_bgimage_upload') }}";
-    var discountCodeApplyUrl = "{{ url_for('events.apply_discount_code')  }}";
-    var $form = $("#form");
-    var included_settings = {{ included_settings | safe }};
-    var current_timezone = "{{ current_timezone | safe }}"
+    window.isEdit = {% if event %} true {% else %} false {% endif %};
+    window.sub_topics = {{event_sub_topics|safe}};
+    window.loadingImage = '<img src="' + "{{ url_for('static', filename='img/loading.gif') }}" + '" style="width: 50px;"> <h3>Uploading</h3>';
+    window.logoUploadUrl = "{{ url_for('events.logo_upload', event_id=event.id) if event else url_for('events.create_event_logo_upload') }}";
+    window.backgroundUploadUrl = "{{ url_for('events.bgimage_upload', event_id=event.id) if event else url_for('events.create_event_bgimage_upload') }}";
+    window.discountCodeApplyUrl = "{{ url_for('events.apply_discount_code')  }}";
+    window.$form = $("#form");
+    window.included_settings = {{ included_settings | safe }};
+    window.current_timezone = "{{ current_timezone | safe }}"
+    window.stripeConnectUrl = "https://connect.stripe.com/oauth/authorize?response_type=code&client_id={{ key_settings.stripe_client_id }}&scope=read_write&redirect_uri={{ url_for('ticketing.stripe_callback', _external=true) }}";
 </script>
 

@@ -69,7 +69,15 @@ var EVENT = {
         tax_include_in_price: 1
     },
     latitude: 0.0,
-    longitude: 0.0
+    longitude: 0.0,
+    stripe: {
+        linked: false,
+        stripe_secret_key: '',
+        stripe_refresh_token: '',
+        stripe_publishable_key: '',
+        stripe_user_id: '',
+        stripe_email: ''
+    }
 };
 
 var TICKET = {

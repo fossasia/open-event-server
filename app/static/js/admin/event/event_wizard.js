@@ -1,35 +1,10 @@
 var $wizardForm = $("#event-wizard-form");
 
 $(document).ready(function () {
-    var $wizard = $("#wizard");
-    var state = $wizard.data("state");
-    var eventId = $wizard.data("id");
 
-    $("a[data-toggle=tab]").on("show.bs.tab", function () {
-        return !validate();
-    }).on("shown.bs.tab", function (event) {
+    $("a[data-toggle=tab]").on("shown.bs.tab", function (event) {
         var activatedTab = $(event.target);
         history.replaceState(null, null, activatedTab.data("href"));
-    });
-
-    $(document).on("click", ".save-event", function () {
-        if (!validate()) {
-            $wizardForm.submit();
-        }
-    });
-
-    $(document).on("click", ".publish-unpublish-event", function () {
-        if (!validate()) {
-            if (state === "Published") {
-                location.href = "/events/" + eventId + "/unpublish/";
-            } else {
-                var input = $("<input>")
-                    .attr("type", "hidden")
-                    .attr("name", "state").val("Published");
-                $wizardForm.append($(input));
-                $wizardForm.submit();
-            }
-        }
     });
 
     $(document).on("click", ".next-step", function (e) {

@@ -7,6 +7,13 @@ window.componentForm = {
     postal_code: 'short_name'
 };
 
+/**
+ * Convert address to latitude and longitude
+ *
+ * @param geocoder
+ * @param address
+ * @param callback
+ */
 function geocodeAddress(geocoder, address, callback) {
     geocoder.geocode({'address': address}, function (results, status) {
         if (status === google.maps.GeocoderStatus.OK) {
@@ -20,6 +27,13 @@ function geocodeAddress(geocoder, address, callback) {
     });
 }
 
+/**
+ * Fill in address components
+ *
+ * @param callback
+ * @param lat
+ * @param lng
+ */
 function fillInAddress(callback, lat, lng) {
     var place = window.autocomplete.getPlace();
     if (!_.isUndefined(place) && place) {
@@ -32,3 +46,29 @@ function fillInAddress(callback, lat, lng) {
     }
     callback(lat, lng);
 }
+
+/**
+ * Start stripe OAuth flow
+ *
+ * @param callback
+ */
+function stripeConnect(callback) {
+    $.oauthpopup({
+        path: window.stripeConnectUrl,
+        callback: function () {
+            // Disallow test accounts. Only accept live accounts.
+            if (_.isUndefined(window.oauth_response)) {
+                callback(false);
+            } else {
+                if (window.oauth_response.live_mode) {
+                    callback(true, window.oauth_response);
+                } else {
+                    createSnackbar('Your stripe account is not live. Only live accounts can be used for collecting payments.');
+                    callback(false);
+                }
+            }
+        }
+    });
+}
+
+
