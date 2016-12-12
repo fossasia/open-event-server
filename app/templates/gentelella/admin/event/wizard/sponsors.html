@@ -1,261 +1,100 @@
-{% macro sponsor_row(sponsor=None, count=1) %}
-    <tr class="row-sponsor">
-        <td rowspan="2">{{ count | default(1) }}</td>
-        <td><input title="Sponsor name" value="{{ sponsor.name | default('') }}" name="sponsors[name]"
-                   class="form-control col-md-7 col-xs-12"/>
-        </td>
-        <td><input title="sponsor level" type="number" value="{{ sponsor.level | default('') }}" name="sponsors[level]"
-                   class="form-control col-md-7 col-xs-12"/></td>
-        <td><input title="sponsor type" name="sponsors[type]" class="form-control col-md-7 col-xs-12"
-                   value="{{ sponsor.sponsor_type | default('', true) }}"/></td>
-        <td>
-            <div class="form-group">
-                <input title="URL" type="url" value="{{ sponsor.url | default('') }}" name="sponsors[url]"
-                       class="form-control col-md-7 col-xs-12" data-error="Please enter a valid URL"/>
-                <div class="help-block with-errors"></div>
-            </div>
-        </td>
-        <td><span class="glyphicon glyphicon-remove remove-sponsor" style="display:none;cursor: pointer;"></span></td>
-    </tr>
-    <tr class="row-sponsor-addon">
-
-        <td>
-            <div class="form-group">
-                <label>{{ _("Description") }}</label>
-                <textarea title="description" name="sponsors[description]"
-                          class="form-control sponsor-textarea col-md-7 col-xs-12">{{ sponsor.description }}</textarea>
-            </div>
-        </td>
-        <td colspan="5">
-            <input type="hidden" class="spnsrs_logo_inp" name="sponsors[logo]"
-                   id="sponsors-logo-{{ sponsor.id | default(1) }}" value="{{ sponsor.logo | default('') }}">
-
-            <div class="item form-group" id="sponsor-logo-upload-group"
-                 {% if sponsor.logo and sponsor.logo != '' %}style="display: none;"{% endif %}>
-                <label>{{ _("Logo") }}</label><br>
-                <div class="image-box">
-                    <input type="file" data-id="{{ sponsor.id | default(0) }}"
-                           id="sponsor-logo-upload-{{ sponsor.id | default(1) }}" name="logo-upload"
-                           class="spnsr-image-upload-btn no-js"
-                           accept="image/*"/>
-                    <label class="spnsr-file-label" for="sponsor-logo-upload-{{ sponsor.id | default(1) }}"
-                           id="logo-upload-label-{{ sponsor.id | default(1) }}">
-                        <i class="fa fa-4x fa-file-image-o" aria-hidden="true"></i> <br>
-                        <h3>{{ _("Select Logo") }}</h3>
-                    </label><br>
-                </div>
-                <span class="text-muted" style="color: #a2a2a2;">
-                        {{ _("Logo size must be less than 1MB.") }}
-                    </span>
-            </div>
-
-            <div class="item form-group" id="sponsor-logo-view-group"
-                 {% if not sponsor.logo or sponsor.logo == '' %}style="display: none;"{% endif %}>
-                <label>{{ _("Logo") }}</label><br>
-                <img src="{{ sponsor.logo | default('', true) }}" style="max-width: 200px;"><br><br>
-                <button type="button" class="btn btn-sm btn-default remove-spnsr-logo" id="remove-logo-btn">
-                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                    {{ _("Remove") }}
-                </button>
-                <br>
-            </div>
-        </td>
-    </tr>
-    <script type="text/javascript">
-
-    </script>
-{% endmacro %}
-
-<div id="step-2" class="wizard_content">
+<div id="event-wizard-sponsors" class="wizard_content">
     <div class="col-md-8 col-md-push-2">
         <div style="width: 100%; text-align: center">
-            {% if sponsors and sponsors.count() > 0 %}
-                <h2 style="font-weight: 300;">Turn <span class="state">{{ _("off") }}</span> {{ _("sponsors") }}</h2>
-                <input type="checkbox" class="toggle-switch" name="sponsors_state"
-                       value="on" id="sponsors-switch" checked/>
-            {% else %}
-                <h2 style="font-weight: 300;">Turn <span class="state">{{ _("on") }}</span> {{ _("sponsors") }}</h2>
-                <input type="checkbox" class="toggle-switch" name="sponsors_state"
-                       value="on" id="sponsors-switch"/>
-            {% endif %}
+            <h2 style="font-weight: 300;">Turn <span class="state" v-show="sponsors_enabled">{{ _("off") }}</span> <span
+                    class="state" v-show="!sponsors_enabled">{{ _("on") }}</span> {{ _("sponsors") }}</h2>
+            <input type="checkbox" class="toggle-switch" name="sponsors_state"
+                   v-model="sponsors_enabled" id="sponsors-switch"/>
             <label for="sponsors-switch"></label>
         </div>
-        <div id="sponsors-section-holder"
-             {% if not sponsors or sponsors.count() <= 0 %}style="display: none;"{% endif %}>
-            <table class="table sponsor-table">
-                <thead>
-                <tr>
-                    <th>Sl.</th>
-                    <th>{{ _("Name") }}</th>
-                    <th>{{ _("Level") }}</th>
-                    <th>{{ _("Type") }}</th>
-                    <th>URL</th>
-                </tr>
-                </thead>
-                <tbody class="sponsors">
-                {% if sponsors and sponsors.count() > 0 %}
-                    {% for sponsor in sponsors %}
-                        {{ sponsor_row(sponsor, loop.index) }}
-                    {% endfor %}
-                {% else %}
-                    {{ sponsor_row() }}
-                {% endif %}
-                </tbody>
-            </table>
-            <span class='input-group-btn'>
-            <button type='button' class='btn btn-success add-sponsor'>{{ _("Add Another Sponsor") }}</button>
-        </span>
+        <transition name="fade">
+            <div id="sponsors-section-holder" v-show="sponsors_enabled">
+                <table class="table sponsor-table">
+                    <thead>
+                    <tr>
+                        <th>Sl.</th>
+                        <th>{{ _("Name") }}</th>
+                        <th>{{ _("Level") }}</th>
+                        <th>{{ _("Type") }}</th>
+                        <th>URL</th>
+                    </tr>
+                    </thead>
+                    <tbody class="sponsors">
+                    <template v-for="(sponsor, index) in sponsors">
 
-        </div>
+                        <tr class="row-sponsor" v-bind:key="sponsor" :key="index">
+                            <td rowspan="2">{{ '{{ index + 1 }}' }}</td>
+                            <td>
+                                <input title="Sponsor name" v-model="sponsor.name" class="form-control"/>
+                            </td>
+                            <td>
+                                <input title="sponsor level" type="number" v-model.number="sponsor.level"
+                                       class="form-control"/>
+                            </td>
+                            <td>
+                                <input title="sponsor type" class="form-control"
+                                       v-model="sponsor.sponsor_type"/>
+                            </td>
+                            <td>
+                                <input title="URL" type="url" v-model="sponsor.url"
+                                       class="form-control"/>
+                            </td>
+                            <td>
+                                <transition name="fade">
+                                <span class="fa fa-trash fa-fw" v-show="sponsors.length > 1"
+                                      style="cursor: pointer;"
+                                      v-on:click="removeSponsor(sponsor)"></span>
+                                </transition>
+                            </td>
+                        </tr>
+
+                        <tr class="row-sponsor-addon" v-bind:key="sponsor">
+                            <td>
+                                <div class="form-group">
+                                    <label>{{ _("Description") }}</label>
+                                    <textarea title="description" v-model="sponsor.description"
+                                              style="height: 150px;"
+                                              class="form-control sponsor-textarea"></textarea>
+                                </div>
+                            </td>
+                            <td colspan="3">
+                                <div class="form-group" v-show="!sponsor.logo || sponsor.logo == ''">
+                                    <label>{{ _("Logo") }}</label><br>
+                                    <div class="image-box">
+                                        <input type="file" class="image-upload-btn no-js" v-bind:id="'sponsor-' + index"
+                                               accept="image/*"/>
+                                        <label class="spnsr-file-label" v-bind:for="'sponsor-' + index">
+                                            <i class="fa fa-4x fa-file-image-o" aria-hidden="true"></i> <br>
+                                            <h3>{{ _("Select Logo") }}</h3>
+                                        </label><br>
+                                    </div>
+                                    <span class="text-muted"
+                                          style="color: #a2a2a2;">{{ _("Logo size must be less than 1MB.") }}</span>
+                                </div>
+                                <div class="form-group" v-show="sponsor.logo && sponsor.logo != ''">
+                                    <label>{{ _("Logo") }}</label><br>
+                                    <img v-bind:src="sponsor.logo" style="max-width: 200px;"><br><br>
+                                    <button type="button" class="btn btn-sm btn-default">
+                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                        {{ _("Remove") }}
+                                    </button>
+                                    <br>
+                                </div>
+                            </td>
+                        </tr>
+                    </template>
+                    </tbody>
+
+                </table>
+                <button type='button' class='btn btn-success'
+                        v-on:click="addSponsor">{{ _("Add Another Sponsor") }}</button>
+            </div>
+        </transition>
+
     </div>
 </div>
+
 <script type="text/javascript">
-    $(document).ready(function () {
-        var summernoteConfigSponsors = {
-            toolbar: [
-                ['style', ['bold', 'italic', 'underline', 'clear']],
-                ['insert', ['link']]
-            ],
-            popover: {
-                link: [
-                    ['link', ['linkDialogShow', 'unlink']]
-                ]
-            },
-            height: 150,
-            width: 300,
-            disableDragAndDrop: true,
-            styleWithSpan: false
-        };
-        $("textarea.sponsor-textarea").summernote(summernoteConfigSponsors);
-    });
-
-    var $sponsorsSectionHolder = $("#sponsors-section-holder");
-    var $state = $(".cfs-state");
-
-    var onOffSwitch = document.getElementById('sponsors-switch');
-
-    onOffSwitch.onchange = function () {
-        if (onOffSwitch.checked) {
-            $sponsorsSectionHolder.fadeIn();
-            $state.text("off");
-
-        } else {
-            $sponsorsSectionHolder.fadeOut();
-            $state.text("on");
-        }
-    };
 
 
-    var sponsor_counter = 1;
-    $(document).on("click", ".add-sponsor", function () {
-        sponsor_counter += 1;
-        var $element = $($(".row-sponsor")[0]).clone();
-        var $addOnElement = $($(".row-sponsor-addon")[0]).clone();
-        $element.find("td:nth-child(1)").text(sponsor_counter);
-        $element.find("input").val("").attr("value", "");
-        $addOnElement.find("textarea").val("").attr("value", "");
-        $addOnElement.find("p").html("");
-        $addOnElement.find('.spnsrs_logo_inp').val("").attr("value", "").attr("id", "sponsors-logo-" + sponsor_counter);
-        $addOnElement.find('.spnsr-image-upload-btn').val("").attr("value", "").attr("id", "sponsor-logo-upload-" + sponsor_counter).attr("data-id", "0");
-        $addOnElement.find('.spnsr-file-label').val('<i class="fa fa-4x fa-file-image-o" aria-hidden="true"></i> <br><h3>Select Logo</h3>').attr("id", "logo-upload-label-" + sponsor_counter).attr("for", "sponsor-logo-upload-" + sponsor_counter);
-        $addOnElement.find('#sponsor-logo-upload-group').show();
-        $addOnElement.find('#sponsor-logo-view-group').hide();
-        $('.sponsors').append($element).append($addOnElement);
-        $('.remove-sponsor').show();
-    });
-
-    $(document).on("click", ".remove-sponsor", function () {
-        sponsor_counter -= 1;
-        var $row = $(this).closest("tr");
-        $row.next().remove();
-        $row.remove();
-        var ctr = 1;
-        $('.sponsors').find('.row-sponsor td:nth-child(1)').each(function () {
-            $(this).text(ctr);
-            ctr += 1;
-        });
-        if (sponsor_counter == 1) {
-            $('.remove-sponsor').hide();
-        }
-    });
-
-    $(function () {
-        superFileUploadButton();
-    });
-
-    function resetFormElement(e) {
-        e = $(e);
-        e.wrap('<form>').closest('form').get(0).reset();
-        e.unwrap();
-    }
-
-    $(document).on('change', ".spnsr-image-upload-btn", function () {
-        var input = this;
-        var sponsor_id = $(this).attr('data-id');
-        if (input.files && input.files[0]) {
-            if (input.files[0].size > 1048576) {
-                createSnackbar("Image must be less than 1 MB in size");
-                resetFormElement(input);
-            } else {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $(input).parent().find('.spnsr-file-label').html(loadingImage);
-                    $(".save-event").prop("disabled", true);
-                    $(".publish-unpublish-event").prop("disabled", true);
-                    var url = "";
-                    if (sponsor_id == '0') {
-                        url = "{{ url_for('events.create_sponsor_logo_upload') }}"
-                    } else {
-                        url = "/events/{{ event.id }}/sponsor/" + sponsor_id + "/editfiles/sponsor_logo"
-                    }
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        data: {logo: e.target.result},
-                        dataType: 'json'
-                    }).done(function (data) {
-                        resetFormElement(input);
-                        $(input).parent().parent().parent().find('.spnsrs_logo_inp').val(data.logo);
-                        $(input).parent().parent().hide();
-                        $(input).parent().parent().parent().find('#sponsor-logo-view-group').show().find("img").attr("src", e.target.result);
-                    }).fail(function (data) {
-                        alert("Something went wrong. Please try again.");
-                    }).always(function () {
-                        $(input).parent().find('.spnsr-file-label').html('<i class="fa fa-4x fa-file-image-o" aria-hidden="true"></i> <br> <h3>Select Logo</h3>');
-                        /* Enable Save Event buttons */
-                        $(".save-event").prop("disabled", false);
-                        $(".publish-unpublish-event").prop("disabled", false);
-                    });
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-        else {
-            logError("No FileReader support");
-        }
-
-    });
-    var loadingImage = '<img src="' + "{{ url_for('static', filename='img/loading.gif') }}" + '" style="width: 50px;"> <h3>Uploading</h3>';
-
-    $(".remove-spnsr-logo").click(function () {
-        var sponsor_id = $(this).parent().parent().find(".spnsr-image-upload-btn").attr("data-id");
-        var remove = this;
-        if (sponsor_id != '0') {
-            $.ajax({
-                type: 'DELETE',
-                url: "/events/{{ event.id }}/sponsor/" + sponsor_id + "/editfiles/sponsor_logo",
-                dataType: 'json'
-            }).done(function (data) {
-                $(remove).parent().hide();
-                $(remove).parent().parent().find("#sponsor-logo-upload-group").show();
-                $(remove).parent().parent().find(".spnsrs_logo_inp").val('');
-            }).fail(function (data) {
-                alert("Something went wrong. Please try again.");
-            });
-        } else {
-            $(remove).parent().hide();
-            $(remove).parent().parent().find("#sponsor-logo-upload-group").show();
-            $(remove).parent().parent().find(".spnsrs_logo_inp").val('');
-        }
-    });
 </script>

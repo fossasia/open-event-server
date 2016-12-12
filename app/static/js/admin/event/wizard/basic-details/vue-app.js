@@ -75,8 +75,7 @@ Vue.component('map-marker', VueGoogleMap.Marker);
 
 //noinspection JSUnusedGlobalSymbols
 var app = new Vue({
-    el: '#event-wizard-step-one',
-    components: {},
+    el: '#event-wizard-basic-details',
     data: {
         event: EVENT,
         included_items: included_settings,
@@ -228,11 +227,13 @@ VueGoogleMap.loaded.then(function () {
     });
 
     var intervalID = setInterval(function () {
-        if (!_.isUndefined(app.$refs.gmap.$mapObject)) {
-            window.map = app.$refs.gmap.$mapObject;
-            clearInterval(intervalID);
-            app.recenterMap();
-            app.mapLoaded = true;
-        }
+        try {
+            if (!_.isUndefined(app.$refs.gmap.$mapObject)) {
+                window.map = app.$refs.gmap.$mapObject;
+                clearInterval(intervalID);
+                app.recenterMap();
+                app.mapLoaded = true;
+            }
+        } catch (ignored) { }
     }, 100);
 });
