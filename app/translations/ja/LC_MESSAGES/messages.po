@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2016-12-07 10:57+0530\n"
-"PO-Revision-Date: 2016-12-10 14:46+0000\n"
+"PO-Revision-Date: 2016-12-13 08:20+0000\n"
 "Last-Translator: naofum <naofum@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/open-event"
 "/organizer-server/ja/>\n"
@@ -86,92 +86,92 @@ msgstr "今後のイベント"
 
 #: app/templates/gentelella/index.html:215
 msgid "No upcoming events available at this time"
-msgstr ""
+msgstr "現時点では表示可能な直近のイベントはありません"
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:116
 #: app/templates/gentelella/guest/event/cfs.html:16
 #: app/templates/gentelella/index.html:221
 msgid "Call for Speakers"
-msgstr ""
+msgstr "スピーカー募集"
 
 #: app/templates/gentelella/index.html:227
 msgid "No call for speakers open at this time"
-msgstr ""
+msgstr "現時点でスピーカー募集は行っていません"
 
 #: app/templates/gentelella/guest/search/results.html:109
 #: app/templates/gentelella/index.html:242
 msgid "Share this event"
-msgstr ""
+msgstr "このイベントを共有"
 
 #: app/templates/gentelella/admin/footer.html:8
 #: app/templates/gentelella/guest/sitemap.html:33
 msgid "Sitemap"
-msgstr ""
+msgstr "サイトマップ"
 
 #: app/templates/gentelella/admin/footer.html:17
 #: app/templates/gentelella/guest/search/_collapse_search.html:14
 msgid "Categories"
-msgstr ""
+msgstr "カテゴリー"
 
 #: app/templates/gentelella/admin/footer.html:25
 msgid "Locations"
-msgstr ""
+msgstr "場所"
 
 #: app/templates/gentelella/admin/footer.html:33
 msgid "Connect With Us"
-msgstr ""
+msgstr "私たちに接続"
 
 #: app/templates/gentelella/admin/footer.html:37
 #: app/templates/gentelella/admin/super_admin/content/_social.html:5
 #: app/templates/gentelella/admin/super_admin/content/_social.html:7
 msgid "Support"
-msgstr ""
+msgstr "サポート"
 
 #: app/templates/gentelella/admin/footer.html:41
 msgid "Twitter"
-msgstr ""
+msgstr "Twitter"
 
 #: app/templates/gentelella/admin/footer.html:45
 msgid "Facebook"
-msgstr ""
+msgstr "Facebook"
 
 #: app/templates/gentelella/admin/footer.html:49
 msgid "Google"
-msgstr ""
+msgstr "Google"
 
 #: app/templates/gentelella/admin/footer.html:53
 msgid "Youtube"
-msgstr ""
+msgstr "YouTube"
 
 #: app/templates/gentelella/admin/footer.html:57
 msgid "Github"
-msgstr ""
+msgstr "GitHub"
 
 #: app/templates/gentelella/admin/forbidden.html:10
 msgid "Access denied"
-msgstr ""
+msgstr "アクセスが拒否されました"
 
 #: app/templates/gentelella/admin/forbidden.html:11
 msgid "Sorry, but you don't have permission access to this page."
-msgstr ""
+msgstr "申し訳ありません。このページへのアクセス許可がありません。"
 
 #: app/templates/gentelella/admin/menu.html:65
 msgid "My Tickets"
-msgstr ""
+msgstr "マイ チケット"
 
 #: app/templates/gentelella/admin/menu.html:66
 msgid "My Sessions"
-msgstr ""
+msgstr "マイ セッション"
 
 #: app/templates/gentelella/admin/event/index.html:16
 #: app/templates/gentelella/admin/menu.html:67
 msgid "Manage Events"
-msgstr ""
+msgstr "イベントを管理"
 
 #: app/templates/gentelella/admin/menu.html:69
 #: app/templates/gentelella/admin/profile/index.html:11
 msgid "Profile"
-msgstr ""
+msgstr "プロフィール"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:151
 #: app/templates/gentelella/admin/menu.html:70
@@ -179,21 +179,21 @@ msgstr ""
 #: app/templates/gentelella/admin/settings/base.html:25
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:4
 msgid "Settings"
-msgstr ""
+msgstr "設定"
 
 #: app/templates/gentelella/admin/menu.html:72
 #: app/templates/gentelella/admin/super_admin/users/users.html:58
 msgid "Admin"
-msgstr ""
+msgstr "管理者"
 
 #: app/templates/gentelella/admin/menu.html:75
 #: app/templates/gentelella/admin/menu.html:122
 msgid "Browse Events"
-msgstr ""
+msgstr "イベントを参照"
 
 #: app/templates/gentelella/admin/menu.html:76
 msgid "Logout"
-msgstr ""
+msgstr "ログアウト"
 
 #: app/templates/gentelella/admin/menu.html:91
 #: app/templates/gentelella/admin/profile/notifications.html:4
@@ -202,31 +202,31 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:18
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:19
 msgid "Notifications"
-msgstr ""
+msgstr "通知"
 
 #: app/templates/gentelella/admin/menu.html:97
 msgid "Mark All as Read"
-msgstr ""
+msgstr "すべて既読にする"
 
 #: app/templates/gentelella/admin/menu.html:108
 msgid "Mark as read"
-msgstr ""
+msgstr "既読にする"
 
 #: app/templates/gentelella/admin/menu.html:114
 msgid "No new notifications"
-msgstr ""
+msgstr "新しい通知はありません"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:6
 msgid "Import Event"
-msgstr ""
+msgstr "イベントのインポート"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:10
 msgid "Select event"
-msgstr ""
+msgstr "イベントを選択"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:28
 msgid "Previous Imports"
-msgstr ""
+msgstr "以前のインポート"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:36
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:61
@@ -238,28 +238,28 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:262
 #: app/templates/gentelella/admin/super_admin/events/events.html:284
 msgid "State"
-msgstr ""
+msgstr "状態"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:37
 #: app/templates/gentelella/admin/profile/notifications.html:45
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:58
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:91
 msgid "Message"
-msgstr ""
+msgstr "メッセージ"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:38
 msgid "Started"
-msgstr ""
+msgstr "開始"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:46
 msgid "Success"
-msgstr ""
+msgstr "成功"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:50
 #: app/templates/gentelella/guest/ticketing/stripe_oauth_callback.html:5
 #: app/templates/gentelella/guest/ticketing/stripe_oauth_callback.html:21
 msgid "Processing"
-msgstr ""
+msgstr "処理中"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:55
 #: app/templates/gentelella/admin/event/wizard/step-1.html:544
@@ -275,7 +275,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:142
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:256
 msgid "here"
-msgstr ""
+msgstr "ここ"
 
 #: app/templates/gentelella/admin/event/_table.html:6
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:16
@@ -292,13 +292,13 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/users/users.html:221
 #: app/templates/gentelella/admin/super_admin/users/users.html:241
 msgid "Name"
-msgstr ""
+msgstr "名前"
 
 #: app/templates/gentelella/admin/event/_table.html:7
 #: app/templates/gentelella/guest/search/_collapse_search.html:71
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:27
 msgid "Date"
-msgstr ""
+msgstr "日付"
 
 #: app/templates/gentelella/admin/event/_table.html:8
 #: app/templates/gentelella/admin/super_admin/events/events.html:200
@@ -307,7 +307,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:266
 #: app/templates/gentelella/admin/super_admin/events/events.html:288
 msgid "Roles"
-msgstr ""
+msgstr "ロール"
 
 #: app/templates/gentelella/admin/event/_table.html:9
 #: app/templates/gentelella/admin/event/export/export.html:136
@@ -323,7 +323,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:3
 #: app/templates/gentelella/guest/event/sessions.html:14
 msgid "Sessions"
-msgstr ""
+msgstr "セッション"
 
 #: app/templates/gentelella/admin/event/_table.html:10
 #: app/templates/gentelella/admin/event/export/export.html:149
@@ -342,7 +342,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:178
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:196
 msgid "Speakers"
-msgstr ""
+msgstr "スピーカー"
 
 #: app/templates/gentelella/admin/event/_table.html:11
 #: app/templates/gentelella/admin/event/export/export.html:157
@@ -360,7 +360,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:78
 #: app/templates/gentelella/guest/event/tickets.html:7
 msgid "Tickets"
-msgstr ""
+msgstr "チケット"
 
 #: app/templates/gentelella/admin/event/_table.html:12
 #: app/templates/gentelella/admin/super_admin/events/events.html:197
@@ -368,17 +368,17 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:241
 #: app/templates/gentelella/admin/super_admin/events/events.html:263
 msgid "Public"
-msgstr ""
+msgstr "公開"
 
 #: app/templates/gentelella/admin/event/_table.html:56
 #: app/templates/gentelella/admin/super_admin/events/events.html:65
 msgid "Drafts"
-msgstr ""
+msgstr "下書き"
 
 #: app/templates/gentelella/admin/event/_table.html:57
 #: app/templates/gentelella/admin/super_admin/events/events.html:66
 msgid "Submitted"
-msgstr ""
+msgstr "提出済"
 
 #: app/templates/gentelella/admin/event/_table.html:58
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:18
@@ -389,7 +389,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:67
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:12
 msgid "Accepted"
-msgstr ""
+msgstr "受付"
 
 #: app/templates/gentelella/admin/event/_table.html:59
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:40
@@ -399,7 +399,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:68
 #: app/templates/gentelella/admin/super_admin/sales/fees_status.html:62
 msgid "Pending"
-msgstr ""
+msgstr "保留"
 
 #: app/templates/gentelella/admin/event/_table.html:60
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:46
@@ -409,47 +409,47 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:69
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:14
 msgid "Rejected"
-msgstr ""
+msgstr "拒否"
 
 #: app/templates/gentelella/admin/event/_table.html:67
 msgid "No Ticket Information"
-msgstr ""
+msgstr "チケット情報はありません"
 
 #: app/templates/gentelella/admin/event/_table.html:71
 #: app/templates/gentelella/admin/super_admin/events/events.html:81
 msgid "Paid"
-msgstr ""
+msgstr "有料"
 
 #: app/templates/gentelella/admin/event/_table.html:81
 #: app/templates/gentelella/admin/super_admin/events/events.html:91
 msgid "Free"
-msgstr ""
+msgstr "無料"
 
 #: app/templates/gentelella/admin/event/_table.html:91
 #: app/templates/gentelella/admin/event/wizard/step-1.html:355
 #: app/templates/gentelella/admin/super_admin/events/events.html:101
 msgid "Donation"
-msgstr ""
+msgstr "寄付"
 
 #: app/templates/gentelella/admin/event/event_base.html:51
 msgid "Unpublish"
-msgstr ""
+msgstr "非公開"
 
 #: app/templates/gentelella/admin/event/event_base.html:54
 msgid "Publish"
-msgstr ""
+msgstr "公開"
 
 #: app/templates/gentelella/admin/event/event_base.html:56
 msgid "Copy"
-msgstr ""
+msgstr "コピー"
 
 #: app/templates/gentelella/admin/event/event_base.html:60
 msgid "Delete"
-msgstr ""
+msgstr "削除"
 
 #: app/templates/gentelella/admin/event/event_base.html:109
 msgid "Are you sure you would like to delete this event"
-msgstr ""
+msgstr "このイベントを削除してもよろしいですか"
 
 #: app/templates/gentelella/admin/event/event_base.html:112
 #: app/templates/gentelella/admin/event/sessions/components/_speaker_croppie.html:17
@@ -459,25 +459,25 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:111
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:128
 msgid "Cancel"
-msgstr ""
+msgstr "キャンセル"
 
 #: app/templates/gentelella/admin/event/event_base.html:114
 msgid "Confirm Delete"
-msgstr ""
+msgstr "削除の確認"
 
 #: app/templates/gentelella/admin/event/index.html:11
 #: app/templates/gentelella/admin/super_admin/events/events.html:4
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:3
 #: app/templates/gentelella/guest/search/results.html:75
 msgid "Events"
-msgstr ""
+msgstr "イベント"
 
 #: app/templates/gentelella/admin/event/index.html:28
 #: app/templates/gentelella/admin/event/index.html:42
 #: app/templates/gentelella/admin/event/index.html:47
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:11
 msgid "Live"
-msgstr ""
+msgstr "ライブ"
 
 #: app/templates/gentelella/admin/event/index.html:31
 #: app/templates/gentelella/admin/event/index.html:52
@@ -486,49 +486,49 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:12
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:13
 msgid "Draft"
-msgstr ""
+msgstr "下書き"
 
 #: app/templates/gentelella/admin/event/index.html:34
 #: app/templates/gentelella/admin/event/index.html:57
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:13
 msgid "Past"
-msgstr ""
+msgstr "過去"
 
 #: app/templates/gentelella/admin/event/index.html:37
 #: app/templates/gentelella/admin/event/index.html:62
 #: app/templates/gentelella/admin/super_admin/events/events.html:162
 #: app/templates/gentelella/admin/super_admin/events/events.html:185
 msgid "Import"
-msgstr ""
+msgstr "インポート"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:9
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:9
 msgid "Edit Role"
-msgstr ""
+msgstr "ロールを編集"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:24
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:131
 #: app/templates/gentelella/admin/event/roles/roles.html:62
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:20
 msgid "Track Organizer"
-msgstr ""
+msgstr "トラック主催者"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:25
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:132
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:21
 msgid "Co-organizer"
-msgstr ""
+msgstr "共同主催者"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:26
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:133
 #: app/templates/gentelella/admin/event/roles/roles.html:64
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:22
 msgid "Moderator"
-msgstr ""
+msgstr "司会者"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:31
 msgid "Update Role"
-msgstr ""
+msgstr "ロールを更新"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:32
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:139
@@ -538,28 +538,28 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:137
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:177
 msgid "Close"
-msgstr ""
+msgstr "閉じる"
 
 #: app/templates/gentelella/admin/event/details/widgets/microservices.html:12
 msgid "Generate Android App"
-msgstr ""
+msgstr "Android アプリを生成"
 
 #: app/templates/gentelella/admin/event/details/widgets/microservices.html:17
 msgid "Generate Web App"
-msgstr ""
+msgstr "Web アプリを生成"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:4
 #: app/templates/gentelella/admin/event/roles/roles.html:4
 msgid "Manage Roles"
-msgstr ""
+msgstr "ロールの管理"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:8
 msgid "Add Peopl"
-msgstr ""
+msgstr "人を追加"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:21
 msgid "Invited"
-msgstr ""
+msgstr "招待"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:28
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:51
@@ -573,22 +573,22 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/users/users.html:223
 #: app/templates/gentelella/admin/super_admin/users/users.html:243
 msgid "Status"
-msgstr ""
+msgstr "ステータス"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:29
 #: app/templates/gentelella/admin/event/roles/roles.html:13
 msgid "User Email"
-msgstr ""
+msgstr "ユーザーのメール"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:30
 msgid "User (Email)"
-msgstr ""
+msgstr "ユーザー (メールアドレス)"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:31
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:128
 #: app/templates/gentelella/admin/event/roles/roles.html:14
 msgid "Role"
-msgstr ""
+msgstr "ロール"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:32
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:19
@@ -610,33 +610,33 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/users/users.html:228
 #: app/templates/gentelella/admin/super_admin/users/users.html:248
 msgid "Options"
-msgstr ""
+msgstr "オプション"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:39
 msgid "accepted"
-msgstr ""
+msgstr "受付"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:68
 msgid "invited"
-msgstr ""
+msgstr "招待"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:77
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:84
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:90
 msgid "Invitation Link"
-msgstr ""
+msgstr "招待状のリンク"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:114
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:138
 #: app/templates/gentelella/admin/event/roles/roles.html:51
 msgid "Add Role"
-msgstr ""
+msgstr "ロールを追加"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:125
 #: app/templates/gentelella/admin/event/roles/roles.html:56
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:14
 msgid "User email"
-msgstr ""
+msgstr "ユーザーのメール"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:130
 #: app/templates/gentelella/admin/event/roles/roles.html:61
@@ -644,15 +644,15 @@ msgstr ""
 #: app/templates/gentelella/admin/event/wizard/step-1.html:643
 #: app/templates/gentelella/admin/event/wizard/step-1.html:660
 msgid "Choose"
-msgstr ""
+msgstr "選択"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:3
 msgid "Event Sponsors"
-msgstr ""
+msgstr "イベントのスポンサー"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:8
 msgid "Add Sponsor"
-msgstr ""
+msgstr "スポンサーを追加"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:15
 #: app/templates/gentelella/admin/event/wizard/step-1.html:213
@@ -660,49 +660,49 @@ msgstr ""
 #: app/templates/gentelella/admin/event/wizard/step-2.html:35
 #: app/templates/gentelella/admin/event/wizard/step-2.html:54
 msgid "Logo"
-msgstr ""
+msgstr "ロゴ"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:17
 #: app/templates/gentelella/admin/event/wizard/step-2.html:91
 #: app/templates/gentelella/admin/event/wizard/step-4.html:91
 #: app/templates/gentelella/guest/ticketing/pdf/ticket.html:54
 msgid "Type"
-msgstr ""
+msgstr "種類"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:18
 #: app/templates/gentelella/admin/event/wizard/step-2.html:90
 msgid "Level"
-msgstr ""
+msgstr "レベル"
 
 #: app/templates/gentelella/admin/event/export/export.html:4
 msgid "Export"
-msgstr ""
+msgstr "エクスポート"
 
 #: app/templates/gentelella/admin/event/export/export.html:64
 msgid "Export and Download Event as zip"
-msgstr ""
+msgstr "イベントを ZIP としてエクスポートおよびダウンロード"
 
 #: app/templates/gentelella/admin/event/export/export.html:65
 msgid "Select which media files you want in the zip"
-msgstr ""
+msgstr "ZIP にするメディア ファイルを選択"
 
 #: app/templates/gentelella/admin/event/export/export.html:69
 msgid "Image"
-msgstr ""
+msgstr "画像"
 
 #: app/templates/gentelella/admin/event/export/export.html:78
 #: app/templates/gentelella/admin/event/sessions/display.html:45
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:107
 msgid "Audio"
-msgstr ""
+msgstr "オーディオ"
 
 #: app/templates/gentelella/admin/event/export/export.html:82
 msgid "Document"
-msgstr ""
+msgstr "ドキュメント"
 
 #: app/templates/gentelella/admin/event/export/export.html:89
 msgid "Start"
-msgstr ""
+msgstr "開始"
 
 #: app/templates/gentelella/admin/event/export/export.html:92
 #: app/templates/gentelella/admin/event/sessions/display.html:35
@@ -713,188 +713,188 @@ msgstr ""
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:108
 #: app/templates/gentelella/admin/super_admin/content/_translations.html:21
 msgid "Download"
-msgstr ""
+msgstr "ダウンロード"
 
 #: app/templates/gentelella/admin/event/export/export.html:96
 msgid "Started by"
-msgstr ""
+msgstr "開始"
 
 #: app/templates/gentelella/admin/event/export/export.html:97
 msgid "datetime"
-msgstr ""
+msgstr "日時"
 
 #: app/templates/gentelella/admin/event/export/export.html:126
 msgid "Access event information via REST API"
-msgstr ""
+msgstr "REST API 経由でイベント情報にアクセス"
 
 #: app/templates/gentelella/admin/event/export/export.html:132
 msgid "Basic Event Details"
-msgstr ""
+msgstr "基本的なイベントの詳細"
 
 #: app/templates/gentelella/admin/event/export/export.html:141
 #: app/templates/gentelella/admin/event/wizard/step-3.html:115
 msgid "Microlocations"
-msgstr ""
+msgstr "マイクロロケーション"
 
 #: app/templates/gentelella/admin/event/export/export.html:145
 #: app/templates/gentelella/admin/event/wizard/step-3.html:104
 msgid "Tracks"
-msgstr ""
+msgstr "トラック"
 
 #: app/templates/gentelella/admin/event/export/export.html:153
 #: app/templates/gentelella/admin/event/wizard/wizard.html:85
 msgid "Sponsors"
-msgstr ""
+msgstr "スポンサー"
 
 #: app/templates/gentelella/admin/event/export/export.html:161
 msgid "You can make a"
-msgstr ""
+msgstr "できることは"
 
 #: app/templates/gentelella/admin/event/export/export.html:162
 msgid "request to the following endpoint to access the selected information"
-msgstr ""
+msgstr "次のエンドポイントにリクエストして、選択した情報にアクセス"
 
 #: app/templates/gentelella/admin/event/export/export.html:165
 msgid "Response"
-msgstr ""
+msgstr "レスポンス"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:15
 msgid "In order to use this feature activate"
-msgstr ""
+msgstr "この機能を有効に使用するため"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:15
 #: app/templates/gentelella/admin/event/wizard/step-3.html:79
 #: app/templates/gentelella/admin/event/wizard/step-3.html:84
 msgid "Sessions and Speakers"
-msgstr ""
+msgstr "セッションとスピーカー"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:15
 msgid "for the event"
-msgstr ""
+msgstr "イベントの"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:15
 msgid "Please"
-msgstr ""
+msgstr "どうぞ"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:17
 msgid "click here"
-msgstr ""
+msgstr "ここをクリックしてください"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:17
 msgid "to activate this module."
-msgstr ""
+msgstr "このモジュールをアクティブにします。"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:3
 msgid "General Info"
-msgstr ""
+msgstr "全般の情報"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:9
 msgid "Event ID"
-msgstr ""
+msgstr "イベント ID"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:13
 msgid "Event Url"
-msgstr ""
+msgstr "イベント URL"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:17
 msgid "Event Start Time"
-msgstr ""
+msgstr "イベントの開始時刻"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:21
 msgid "Event End Time"
-msgstr ""
+msgstr "イベントの終了時刻"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:25
 msgid "Event Session Types"
-msgstr ""
+msgstr "イベント セッションの種類"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:33
 msgid "Event Links and Social media"
-msgstr ""
+msgstr "イベントのリンクとソーシャル メディア"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:40
 msgid "'Do you want to edit this record?'"
-msgstr ""
+msgstr "「このレコードを編集しますか？」"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:41
 msgid "Edit Event"
-msgstr ""
+msgstr "イベントを編集"
 
 #: app/templates/gentelella/admin/event/roles/roles.html:9
 msgid "Permissions List"
-msgstr ""
+msgstr "アクセス許可の一覧"
 
 #: app/templates/gentelella/admin/event/roles/roles.html:59
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:18
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:4
 msgid "Permissions"
-msgstr ""
+msgstr "アクセス許可"
 
 #: app/templates/gentelella/admin/event/roles/roles.html:63
 msgid "Co-Organizer"
-msgstr ""
+msgstr "共同主催者"
 
 #: app/templates/gentelella/admin/event/roles/roles.html:67
 #: app/templates/gentelella/admin/event/wizard/step-1.html:670
 msgid "Add"
-msgstr ""
+msgstr "追加"
 
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:25
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:110
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:135
 msgid "Update"
-msgstr ""
+msgstr "更新"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:4
 msgid "Scheduler"
-msgstr ""
+msgstr "スケジューラー"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:21
 #: app/templates/gentelella/guest/event/schedule.html:44
 msgid "Sessions loading"
-msgstr ""
+msgstr "セッションの読み込み中"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:23
 msgid "Error loading sessions"
-msgstr ""
+msgstr "セッションの読み込みエラー"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:35
 msgid "Unpublish Schedule"
-msgstr ""
+msgstr "スケジュールの公開を取り下げ"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:39
 msgid "Publish Schedule"
-msgstr ""
+msgstr "スケジュールを公開"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:43
 msgid "Unscheduled Sessions"
-msgstr ""
+msgstr "スケジュールされていないセッション"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:57
 msgid "No Unscheduled sessions"
-msgstr ""
+msgstr "スケジュールされていないセッションはありません"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:61
 msgid "Schedule last published on"
-msgstr ""
+msgstr "スケジュールの最終公開"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:72
 msgid "Clear Overlaps"
-msgstr ""
+msgstr "重複をクリア"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:75
 msgid "Add New Microlocation"
-msgstr ""
+msgstr "新しいマイクロロケーションを追加"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:80
 msgid "Export as"
-msgstr ""
+msgstr "エクスポート..."
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:102
 #: app/templates/gentelella/admin/event/sessions/edit.html:3
 #: app/templates/gentelella/admin/event/sessions/edit.html:20
 msgid "Edit Session"
-msgstr ""
+msgstr "セッションを編集"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:108
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:62
@@ -904,58 +904,58 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:177
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:195
 msgid "Title"
-msgstr ""
+msgstr "タイトル"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:114
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:68
 msgid "Long Abstract"
-msgstr ""
+msgstr "長い要約"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:119
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:65
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:61
 msgid "Short Abstract"
-msgstr ""
+msgstr "短い要約"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:125
 msgid "Start Time"
-msgstr ""
+msgstr "開始時刻"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:131
 msgid "End Time"
-msgstr ""
+msgstr "終了時刻"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:142
 msgid "Update Session"
-msgstr ""
+msgstr "セッションを更新"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:157
 msgid "New Microlocation"
-msgstr ""
+msgstr "新しいマイクロロケーション"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:169
 msgid "Latitude"
-msgstr ""
+msgstr "緯度"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:175
 msgid "Longitude"
-msgstr ""
+msgstr "経度"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:181
 msgid "Floor"
-msgstr ""
+msgstr "フロア"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:187
 msgid "Room"
-msgstr ""
+msgstr "部屋"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:198
 msgid "Add Microlocation"
-msgstr ""
+msgstr "マイクロロケーションを追加"
 
 #: app/templates/gentelella/admin/event/scheduler/components/timeline.html:33
 msgid "All the timings are in"
-msgstr ""
+msgstr "すべてのタイミングは"
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:37
 #: app/templates/gentelella/admin/event/speakers/base_speaker_table.html:56
@@ -965,117 +965,117 @@ msgstr ""
 #: app/templates/gentelella/admin/profile/notifications.html:31
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:36
 msgid "All"
-msgstr ""
+msgstr "すべて"
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:52
 #: app/templates/gentelella/admin/event/sessions/new.html:3
 #: app/templates/gentelella/admin/event/sessions/new.html:19
 msgid "Create Session"
-msgstr ""
+msgstr "セッションを作成"
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:64
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:83
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:261
 msgid "Track"
-msgstr ""
+msgstr "トラック"
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:66
 msgid "Submission Date"
-msgstr ""
+msgstr "提出日"
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:67
 msgid "Last Changed Date"
-msgstr ""
+msgstr "最終更新日"
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:68
 msgid "Email Sent"
-msgstr ""
+msgstr "メールを送信済"
 
 #: app/templates/gentelella/admin/event/sessions/display.html:31
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:91
 msgid "Media"
-msgstr ""
+msgstr "メディア"
 
 #: app/templates/gentelella/admin/event/sessions/display.html:35
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:95
 msgid "Slide"
-msgstr ""
+msgstr "スライド"
 
 #: app/templates/gentelella/admin/event/sessions/display.html:40
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:101
 msgid "Video"
-msgstr ""
+msgstr "ビデオ"
 
 #: app/templates/gentelella/admin/event/sessions/invited.html:3
 msgid "Session Invitation"
-msgstr ""
+msgstr "セッションへの招待"
 
 #: app/templates/gentelella/admin/event/sessions/invited.html:8
 msgid "Invitation Pag"
-msgstr ""
+msgstr "招待ページ"
 
 #: app/templates/gentelella/admin/event/sessions/invited.html:15
 msgid "You have been invited for session"
-msgstr ""
+msgstr "セッションに招待されました"
 
 #: app/templates/gentelella/admin/event/sessions/invited.html:23
 msgid "Accept"
-msgstr ""
+msgstr "承諾"
 
 #: app/templates/gentelella/admin/event/sessions/invited.html:24
 msgid "Reject"
-msgstr ""
+msgstr "謝絶"
 
 #: app/templates/gentelella/admin/event/sessions/components/_speaker_component.html:39
 #: app/templates/gentelella/admin/profile/index.html:36
 msgid "Select Avatar"
-msgstr ""
+msgstr "アバターを選択"
 
 #: app/templates/gentelella/admin/event/sessions/components/_speaker_component.html:43
 msgid "Avatar size must be less than 1MB."
-msgstr ""
+msgstr "アバターのサイズは、1 MB 未満にする必要があります。"
 
 #: app/templates/gentelella/admin/event/sessions/components/_speaker_croppie.html:8
 #: app/templates/gentelella/admin/event/wizard/step-1.html:720
 #: app/templates/gentelella/admin/profile/index.html:114
 msgid "Crop your image"
-msgstr ""
+msgstr "画像をトリミング"
 
 #: app/templates/gentelella/admin/event/sessions/components/_speaker_croppie.html:18
 #: app/templates/gentelella/admin/event/wizard/step-1.html:730
 #: app/templates/gentelella/admin/profile/index.html:124
 msgid "Done"
-msgstr ""
+msgstr "完了"
 
 #: app/templates/gentelella/admin/event/sessions/components/session_form.html:17
 #: app/templates/gentelella/admin/event/sessions/components/session_form.html:18
 msgid "Modify Speakers"
-msgstr ""
+msgstr "スピーカーを変更"
 
 #: app/templates/gentelella/admin/event/sessions/components/session_form.html:21
 msgid "selected"
-msgstr ""
+msgstr "選択済"
 
 #: app/templates/gentelella/admin/event/sessions/components/session_form.html:30
 msgid "Save Session"
-msgstr ""
+msgstr "セッションを保存"
 
 #: app/templates/gentelella/admin/event/sessions/components/session_form.html:33
 #: app/templates/gentelella/admin/event/sessions/components/session_speaker_form.html:59
 msgid "Submit Session"
-msgstr ""
+msgstr "セッションを提出"
 
 #: app/templates/gentelella/admin/event/sessions/components/session_speaker_form.html:10
 msgid "Session Details"
-msgstr ""
+msgstr "セッションの詳細"
 
 #: app/templates/gentelella/admin/event/sessions/components/session_speaker_form.html:30
 msgid "Speaker Details"
-msgstr ""
+msgstr "スピーカーの詳細"
 
 #: app/templates/gentelella/admin/event/sessions/components/session_speaker_form.html:38
 msgid "Invite Speakers"
-msgstr ""
+msgstr "スピーカーを招待"
 
 #: app/templates/gentelella/admin/event/sessions/components/session_speaker_form.html:40
 #: app/templates/gentelella/admin/event/speakers/base_speaker_table.html:81
@@ -1090,150 +1090,150 @@ msgstr ""
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:66
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:134
 msgid "Email"
-msgstr ""
+msgstr "メール"
 
 #: app/templates/gentelella/admin/event/sessions/components/session_speaker_form.html:57
 msgid "Save as Draft"
-msgstr ""
+msgstr "下書きとして保存"
 
 #: app/templates/gentelella/admin/event/sessions/components/speaker_form.html:17
 msgid "Featured Speaker"
-msgstr ""
+msgstr "注目のスピーカー"
 
 #: app/templates/gentelella/admin/event/sessions/components/speaker_form.html:19
 msgid "checked"
-msgstr ""
+msgstr "チェック済"
 
 #: app/templates/gentelella/admin/event/sessions/components/speaker_form.html:24
 msgid "Save Speaker"
-msgstr ""
+msgstr "スピーカーを保存"
 
 #: app/templates/gentelella/admin/event/speakers/base_speaker_table.html:70
 msgid "Add Speaker"
-msgstr ""
+msgstr "スピーカーを追加"
 
 #: app/templates/gentelella/admin/event/speakers/base_speaker_table.html:82
 #: app/templates/gentelella/admin/settings/pages/contact_info.html:24
 msgid "Phone"
-msgstr ""
+msgstr "電話"
 
 #: app/templates/gentelella/admin/event/speakers/base_speaker_table.html:83
 msgid "Submitted Sessions"
-msgstr ""
+msgstr "提出済のセッション"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:28
 msgid "Add Order"
-msgstr ""
+msgstr "注文を追加"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:36
 #: app/templates/gentelella/admin/event/tickets/tickets.html:172
 msgid "Ticket Type"
-msgstr ""
+msgstr "チケットの種類"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:37
 #: app/templates/gentelella/admin/event/wizard/step-1.html:323
 #: app/templates/gentelella/guest/event/_ticketing_box.html:31
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:11
 msgid "Price"
-msgstr ""
+msgstr "価格"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:38
 #: app/templates/gentelella/admin/event/wizard/step-1.html:326
 #: app/templates/gentelella/guest/event/_ticketing_box.html:33
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:13
 msgid "Quantity"
-msgstr ""
+msgstr "数量"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:39
 msgid "Item Total"
-msgstr ""
+msgstr "アイテム合計"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:67
 msgid "Grand Total"
-msgstr ""
+msgstr "総合計"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:74
 msgid "Payment Type"
-msgstr ""
+msgstr "支払い方法"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:76
 msgid "Select payment type"
-msgstr ""
+msgstr "支払い方法を選択"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:77
 msgid "Cheque"
-msgstr ""
+msgstr "小切手"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:78
 msgid "Telegraphic Transfer (TT) / Bank Transfer"
-msgstr ""
+msgstr "電信送金 (TT) / 銀行振込"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:79
 msgid "Onsite / Cash"
-msgstr ""
+msgstr "オンサイト / 現金"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:81
 msgid "Stripe"
-msgstr ""
+msgstr "Stripe"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:82
 msgid "Free Order"
-msgstr ""
+msgstr "無料注文"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:86
 msgid "Continue"
-msgstr ""
+msgstr "続行"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:52
 #: app/templates/gentelella/admin/event/tickets/orders.html:47
 msgid "Completed"
-msgstr ""
+msgstr "完了"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:58
 #: app/templates/gentelella/admin/event/tickets/orders.html:53
 msgid "Expired"
-msgstr ""
+msgstr "期限切れ"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:61
 msgid "Checked In"
-msgstr ""
+msgstr "チェックイン"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:65
 msgid "Not Checked In"
-msgstr ""
+msgstr "チェックインしていません"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:71
 msgid "View Attendees"
-msgstr ""
+msgstr "参加者の表示"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:80
 #: app/templates/gentelella/admin/event/tickets/orders.html:67
 msgid "Order"
-msgstr ""
+msgstr "注文"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:83
 #: app/templates/gentelella/admin/event/tickets/orders.html:70
 #: app/templates/gentelella/admin/event/tickets/tickets.html:122
 msgid "Order Status"
-msgstr ""
+msgstr "注文のステータス"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:86
 #: app/templates/gentelella/admin/event/wizard/step-1.html:320
 msgid "Ticket Name"
-msgstr ""
+msgstr "チケット名"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:89
 msgid "Ticket Price"
-msgstr ""
+msgstr "チケット価格"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:92
 #: app/templates/gentelella/admin/profile/_form.html:8
 msgid "First Name"
-msgstr ""
+msgstr "名"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:95
 msgid "Last Name"
-msgstr ""
+msgstr "姓"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:101
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:52
@@ -1242,25 +1242,25 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:90
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:55
 msgid "Action"
-msgstr ""
+msgstr "操作"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:142
 msgid "Undo"
-msgstr ""
+msgstr "元に戻す"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:146
 msgid "Check In"
-msgstr ""
+msgstr "チェックイン"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:23
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:26
 msgid "Discount Codes"
-msgstr ""
+msgstr "割引コード"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:26
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:29
 msgid "Create a discount"
-msgstr ""
+msgstr "割引を作成"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:36
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:77
@@ -1270,14 +1270,14 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:82
 #: app/templates/gentelella/admin/super_admin/users/users.html:48
 msgid "Active"
-msgstr ""
+msgstr "有効"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:39
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:79
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:42
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:82
 msgid "Inactive"
-msgstr ""
+msgstr "無効"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:48
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:21
@@ -1285,97 +1285,97 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:30
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:57
 msgid "Discount Code"
-msgstr ""
+msgstr "割引コード"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:49
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:52
 msgid "Discount Per Ticket"
-msgstr ""
+msgstr "チケットあたりの割引"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:50
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:53
 msgid "Validity"
-msgstr ""
+msgstr "妥当性"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:35
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:44
 msgid "Enter Discount"
-msgstr ""
+msgstr "割引を入力してください"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:76
 msgid "Number of discount tickets"
-msgstr ""
+msgstr "割引チケットの数"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:98
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:89
 msgid "Not Active"
-msgstr ""
+msgstr "有効ではありません"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:105
 msgid "Select Ticket(s) applied to the discount code"
-msgstr ""
+msgstr "割引コードに適用されるチケットを選択"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:111
 msgid "Select all Tickets Type"
-msgstr ""
+msgstr "すべてのチケットの種類を選択"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:131
 msgid "Show other options"
-msgstr ""
+msgstr "その他のオプションを表示"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:135
 msgid "Set the min. and max. quantity allowed to purchase per order (optional)"
-msgstr ""
+msgstr "最小と最大を設定します。注文ごとに購入できる数量 (省略可)"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:139
 msgid "Min"
-msgstr ""
+msgstr "最小"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:146
 msgid "Max"
-msgstr ""
+msgstr "最大"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:156
 msgid "Validity period (optional)"
-msgstr ""
+msgstr "有効期限 (省略可)"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:160
 msgid "Valid from"
-msgstr ""
+msgstr "有効期限開始"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:180
 msgid "Expires on"
-msgstr ""
+msgstr "有効期限"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:208
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:129
 msgid "Save Discount"
-msgstr ""
+msgstr "割引を保存"
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:58
 msgid "View Orders"
-msgstr ""
+msgstr "注文を表示"
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:73
 msgid "Total Amount"
-msgstr ""
+msgstr "合計金額"
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:76
 msgid "Qty"
-msgstr ""
+msgstr "数量"
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:79
 msgid "Buyer / Registration Contact"
-msgstr ""
+msgstr "購入者 / 登録お問い合わせ"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:75
 msgid "Orders"
-msgstr ""
+msgstr "注文"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:81
 #: app/templates/gentelella/admin/event/tickets/tickets.html:154
 msgid "View orders"
-msgstr ""
+msgstr "注文を表示"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:88
 #: app/templates/gentelella/admin/event/tickets/tickets.html:190
@@ -1385,127 +1385,127 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:75
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:81
 msgid "Sales"
-msgstr ""
+msgstr "販売"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:102
 msgid "Tickets sold"
-msgstr ""
+msgstr "チケット販売"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:108
 #: app/templates/gentelella/admin/event/tickets/tickets.html:155
 msgid "View attendees"
-msgstr ""
+msgstr "参加者の表示"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:114
 msgid "Orders Summary"
-msgstr ""
+msgstr "注文概要"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:115
 #: app/templates/gentelella/admin/event/tickets/tickets.html:165
 msgid "by order status"
-msgstr ""
+msgstr "注文ステータス別"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:125
 msgid "Total Tickets"
-msgstr ""
+msgstr "合計チケット数"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:128
 msgid "Total Orders"
-msgstr ""
+msgstr "合計注文数"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:131
 msgid "Total Sales"
-msgstr ""
+msgstr "合計販売"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:134
 msgid "View Reports"
-msgstr ""
+msgstr "レポートを表示"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:164
 msgid "Tickets Summary"
-msgstr ""
+msgstr "チケット概要"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:175
 msgid "Tickets Capacity Set"
-msgstr ""
+msgstr "チケット供給量設定"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:179
 #: app/templates/gentelella/admin/super_admin/sales/by_marketer.html:65
 #: app/templates/gentelella/admin/super_admin/sales/fees.html:56
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:64
 msgid "Completed Orders"
-msgstr ""
+msgstr "完了した注文"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:182
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:67
 msgid "Pending Orders"
-msgstr ""
+msgstr "保留中の注文"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:229
 #: app/templates/gentelella/admin/super_admin/sales/fees.html:95
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:119
 #: app/templates/gentelella/guest/event/_ticketing_box.html:83
 msgid "Total"
-msgstr ""
+msgstr "合計"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:34
 #: app/templates/gentelella/guest/ticketing/pdf/ticket.html:47
 msgid "Location"
-msgstr ""
+msgstr "場所"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:39
 msgid "Enter Address"
-msgstr ""
+msgstr "住所を入力してください"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:69
 msgid "Reset Location"
-msgstr ""
+msgstr "場所をリセット"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:80
 msgid "Show map on event page"
-msgstr ""
+msgstr "イベント ページに地図を表示"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:96
 #: app/templates/gentelella/admin/event/wizard/step-4.html:10
 msgid "Starts"
-msgstr ""
+msgstr "開始"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:118
 #: app/templates/gentelella/admin/event/wizard/step-4.html:35
 msgid "Ends"
-msgstr ""
+msgstr "終了"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:141
 #: app/templates/gentelella/admin/event/wizard/step-4.html:57
 msgid "Timezone"
-msgstr ""
+msgstr "タイムゾーン"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:157
 #: app/templates/gentelella/admin/event/wizard/step-2.html:24
 msgid "Description"
-msgstr ""
+msgstr "説明"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:167
 #: app/templates/gentelella/admin/event/wizard/step-1.html:184
 msgid "Event Image"
-msgstr ""
+msgstr "イベント画像"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:174
 msgid "Select Event Image"
-msgstr ""
+msgstr "イベント画像を選択"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:178
 msgid "We recommend using at least a 2160x1080px (2:1 ratio) image"
-msgstr ""
+msgstr "少なくとも 2160x1080px (2:1 レシオ) の画像を使用することをお勧めします"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:178
 msgid "that's no larger than 10MB."
-msgstr ""
+msgstr "10MB 以下。"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:191
 #: app/templates/gentelella/admin/profile/index.html:52
 msgid "Adjust"
-msgstr ""
+msgstr "調整"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:196
 #: app/templates/gentelella/admin/event/wizard/step-1.html:233
@@ -1513,332 +1513,332 @@ msgstr ""
 #: app/templates/gentelella/admin/profile/index.html:57
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:90
 msgid "Remove"
-msgstr ""
+msgstr "削除"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:219
 #: app/templates/gentelella/admin/event/wizard/step-2.html:44
 msgid "Select Logo"
-msgstr ""
+msgstr "ロゴを選択"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:223
 #: app/templates/gentelella/admin/event/wizard/step-2.html:48
 msgid "Logo size must be less than 1MB."
-msgstr ""
+msgstr "ロゴのサイズは、1 MB 未満にする必要があります。"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:241
 msgid "Organizer Information"
-msgstr ""
+msgstr "主催者情報"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:251
 msgid "Organizer name"
-msgstr ""
+msgstr "主催者名"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:256
 msgid "Organizer Description"
-msgstr ""
+msgstr "主催者の説明"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:264
 msgid "Links and Social Media"
-msgstr ""
+msgstr "リンクとソーシャル メディア"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:300
 msgid "Use Ticketing System"
-msgstr ""
+msgstr "チケット システムを使用する"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:312
 msgid "Ticket Details"
-msgstr ""
+msgstr "チケットの詳細"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:346
 msgid "Free Ticket"
-msgstr ""
+msgstr "無料チケット"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:350
 msgid "Paid Ticket"
-msgstr ""
+msgstr "有料チケット"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:367
 #: app/templates/gentelella/admin/event/wizard/step-1.html:382
 msgid "Add Ticket URL"
-msgstr ""
+msgstr "チケットの URL を追加"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:371
 #: app/templates/gentelella/admin/event/wizard/step-1.html:386
 msgid "Ticket URL"
-msgstr ""
+msgstr "チケット URL"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:398
 msgid "Redeem Discount Code"
-msgstr ""
+msgstr "割引コードの交換"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:404
 msgid "Enter Discount Code"
-msgstr ""
+msgstr "割引コードを入力してください"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:410
 msgid "Apply Discount"
-msgstr ""
+msgstr "割引を適用"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:414
 msgid "Code applied !"
-msgstr ""
+msgstr "コードを適用しました !"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:414
 msgid "10 percent off on monthly payments for 3 months"
-msgstr ""
+msgstr "3 ヶ月間、毎月の支払額を 10% 割引"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:421
 msgid "Add Payment details"
-msgstr ""
+msgstr "支払いの詳細を追加"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:427
 msgid "Choose Country"
-msgstr ""
+msgstr "国を選択"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:430
 msgid "Choose a country for your payment"
-msgstr ""
+msgstr "支払いの国を選択してください"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:440
 msgid "Choose Currency"
-msgstr ""
+msgstr "通貨を選択"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:443
 msgid "Please select a currency"
-msgstr ""
+msgstr "通貨を選択してください"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:458
 msgid "Choose Payment Methods"
-msgstr ""
+msgstr "支払い方法を選択"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:462
 msgid "Online Payments"
-msgstr ""
+msgstr "オンラインでの支払い"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:464
 msgid "Payment by PayPal"
-msgstr ""
+msgstr "PayPal で支払い"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:470
 msgid "YES, accept payment through PayPal "
-msgstr ""
+msgstr "はい、PayPal を通じて支払いを受け付けます "
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:471
 msgid ""
 "Paypal accepts credit card, debit card and PayPal payments. To learn how "
 "it works click"
-msgstr ""
+msgstr "Paypal は、クレジットカード、デビットカード、PayPal 支払いを受け付けます。仕組みを学ぶにはクリック"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:472
 #: app/templates/gentelella/admin/event/wizard/step-1.html:497
 #: app/templates/gentelella/admin/event/wizard/step-1.html:498
 msgid "here."
-msgstr ""
+msgstr "ここ。"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:481
 msgid "Don't have a PayPal account?"
-msgstr ""
+msgstr "PayPal アカウントをお持ちではありませんか?"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:483
 msgid "Create a free PayPal merchant account."
-msgstr ""
+msgstr "無料の PayPal のマーチャント アカウントを作成します。"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:489
 msgid "Payment by Stripe"
-msgstr ""
+msgstr "Stripe で支払い"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:495
 msgid "YES, accept payment through Stripe"
-msgstr ""
+msgstr "はい、Stripe による支払いを受け付けます"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:496
 msgid "Stripe accepts Visa, Master and Amex. To learn how it works click"
-msgstr ""
+msgstr "Stripe は、Visa、マスター、アメックスを受け付けます。仕組みを学ぶにはクリック"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:498
 msgid "Find out more about Stripe"
-msgstr ""
+msgstr "Stripe についてもっとを知る"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:504
 msgid "Use Stripe for payments"
-msgstr ""
+msgstr "Stripe を使用して支払い"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:518
 msgid "The stripe account"
-msgstr ""
+msgstr "Stripe アカウント"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:519
 msgid "has been connected."
-msgstr ""
+msgstr "接続されています。"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:520
 msgid "Click to De-link the account."
-msgstr ""
+msgstr "クリックするとアカウントのリンクを解除します。"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:523
 msgid "Connect with Stripe"
-msgstr ""
+msgstr "Stripe と接続"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:528
 msgid "Offline Payments"
-msgstr ""
+msgstr "オフラインの支払い"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:535
 msgid "YES, accept payment by Cheque"
-msgstr ""
+msgstr "はい、小切手による支払いを受け付けます"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:540
 msgid ""
 "Enter your PayPal account name and payment details instructions to ticket"
 " buyers"
-msgstr ""
+msgstr "チケット購入者に対するあなたの PayPal アカウント名と支払いの詳細指示を入力してください"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:544
 #: app/templates/gentelella/admin/event/wizard/step-1.html:566
 msgid "example"
-msgstr ""
+msgstr "例"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:557
 msgid "YES, accept payment by Telegraphic Transfer(TT) / Bank Transfer"
-msgstr ""
+msgstr "はい、電信振替 (TT) / 銀行振込による支払いを受け付けます"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:562
 msgid "Enter your bank details and instructions to ticket buyers"
-msgstr ""
+msgstr "チケット購入者に対するあなたの銀行口座情報と指示を入力してください"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:563
 msgid "See an"
-msgstr ""
+msgstr "ご覧ください"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:580
 msgid "YES, accept payment at the event(on site)"
-msgstr ""
+msgstr "はい、イベント (現地) での支払いを受け付けます"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:585
 msgid "Enter payment instructions to ticket buyers to make payments onsite"
-msgstr ""
+msgstr "チケット購入者に対する現地での支払い方法を入力してください"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:596
 msgid "Add Tax"
-msgstr ""
+msgstr "税を追加"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:603
 msgid "Additional Details"
-msgstr ""
+msgstr "その他の詳細"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:607
 msgid "Listing Privacy"
-msgstr ""
+msgstr "プライバシーの一覧"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:613
 msgid "list this event on Open Event and search engines"
-msgstr ""
+msgstr "Open Event と検索エンジンでこのイベントを一覧します"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:620
 msgid "Private page"
-msgstr ""
+msgstr "プライベート ページ"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:620
 msgid "do not list this event publicly"
-msgstr ""
+msgstr "このイベントは公開表示されません"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:626
 #: app/templates/gentelella/guest/search/_collapse_search.html:52
 msgid "Event Type"
-msgstr ""
+msgstr "イベントの種類"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:656
 msgid "Event Sub-Topic"
-msgstr ""
+msgstr "イベントのサブ トピック"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:670
 #: app/templates/gentelella/guest/event/code_of_conduct.html:7
 msgid "Code of Conduct"
-msgstr ""
+msgstr "行動規範"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:681
 msgid "License of Event Data and Content"
-msgstr ""
+msgstr "イベント データとコンテンツのライセンス"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:694
 msgid "Choose Licence"
-msgstr ""
+msgstr "ライセンスを選択"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:745
 msgid "Tax Options"
-msgstr ""
+msgstr "税のオプション"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:751
 msgid "Do you need to charge tax for this event ?"
-msgstr ""
+msgstr "このイベントに課税が必要ですか?"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:774
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:155
 msgid "Country"
-msgstr ""
+msgstr "国"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:777
 msgid "Choose a country for your tax payment"
-msgstr ""
+msgstr "税金の支払い国を選択してください"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:786
 msgid "Tax Name"
-msgstr ""
+msgstr "税の名称"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:792
 msgid "Tax Rate"
-msgstr ""
+msgstr "税率"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:799
 msgid "Tax ID"
-msgstr ""
+msgstr "納税者番号"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:806
 msgid "Tax Invoices"
-msgstr ""
+msgstr "税のインボイス"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:812
 msgid "Send tax invoice to attendees"
-msgstr ""
+msgstr "税務インボイスを出席者に送信"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:813
 msgid "Tax Invoices are sent to your attendees when you select this feature."
-msgstr ""
+msgstr "この機能を選択すると、税務インボイスが参加者に送信されます。"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:814
 msgid ""
 "Enter your registered business company name and address to be included on"
 " the tax invoice"
-msgstr ""
+msgstr "税務インボイスに含まれる登記された会社名と住所を入力してください"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:821
 msgid "Registered Company"
-msgstr ""
+msgstr "登記された会社"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:829
 msgid "Business Address"
-msgstr ""
+msgstr "会社の住所"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:837
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:177
 msgid "City"
-msgstr ""
+msgstr "市区町村"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:859
 msgid "Optional Text for Invoice Footer"
-msgstr ""
+msgstr "インボイスのフッターに記載するオプションのテキスト"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:867
 msgid "Add or Include"
-msgstr ""
+msgstr "追加または含める"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:872
 msgid "Add tax as separate fee on top of the price"
-msgstr ""
+msgstr "価格の上に別途手数料として税を追加 (外税)"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:879
 msgid "Include tax in ticket price"
-msgstr ""
+msgstr "チケット料金に税を含む (内税)"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:891
 #: app/templates/gentelella/admin/event/wizard/step-1.html:921
@@ -1857,35 +1857,35 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/settings/_ticket-fees.html:39
 #: app/templates/gentelella/admin/super_admin/users/users.html:159
 msgid "Save"
-msgstr ""
+msgstr "保存"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:906
 msgid "Cheque Instructions"
-msgstr ""
+msgstr "小切手の指示"
 
 #: app/templates/gentelella/admin/event/wizard/step-1.html:936
 msgid "Bank Instructions"
-msgstr ""
+msgstr "銀行の指示"
 
 #: app/templates/gentelella/admin/event/wizard/step-2.html:73
 #: app/templates/gentelella/admin/event/wizard/step-3.html:79
 msgid "off"
-msgstr ""
+msgstr "オフ"
 
 #: app/templates/gentelella/admin/event/wizard/step-2.html:73
 #: app/templates/gentelella/admin/event/wizard/step-2.html:77
 msgid "sponsors"
-msgstr ""
+msgstr "スポンサー"
 
 #: app/templates/gentelella/admin/event/wizard/step-2.html:77
 #: app/templates/gentelella/admin/event/wizard/step-3.html:84
 #: app/templates/gentelella/guest/event/_ticketing_box.html:74
 msgid "on"
-msgstr ""
+msgstr "オン"
 
 #: app/templates/gentelella/admin/event/wizard/step-2.html:106
 msgid "Add Another Sponsor"
-msgstr ""
+msgstr "別のスポンサーを追加"
 
 #: app/templates/gentelella/admin/event/wizard/step-3.html:78
 #: app/templates/gentelella/admin/event/wizard/step-3.html:83
@@ -1894,81 +1894,81 @@ msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/step-3.html:97
 msgid "Session, Microlocations, Session types"
-msgstr ""
+msgstr "セッション、マイクロロケーション、セッションの種類"
 
 #: app/templates/gentelella/admin/event/wizard/step-3.html:126
 msgid "Session Types"
-msgstr ""
+msgstr "セッションの種類"
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:3
 msgid "Announcement"
-msgstr ""
+msgstr "お知らせ"
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:72
 msgid "Private link"
-msgstr ""
+msgstr "プライベート リンク"
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:85
 msgid ""
 "Share this link to get private submission independently of open/closed "
 "Call for Speakers at any time."
-msgstr ""
+msgstr "このリンクを共有して、スピーカーの呼び出しのオープン/クローズとは関係なくいつでもプライベートな提出を取得します。"
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:85
 msgid "the link will be active once the event is saved"
-msgstr ""
+msgstr "イベントを保存すると、リンクが有効になります"
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:96
 msgid ""
 "Display this publicly. Anybody will be able to submit a proposal within "
 "the dates chosen, once the event is published."
-msgstr ""
+msgstr "これを公開して表示します。イベントが公開されると、誰でも選択した日付に提案を提出することができます。"
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:103
 msgid "Private"
-msgstr ""
+msgstr "プライベート"
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:103
 msgid ""
 "Do not display this publicly. Proposals can be submitted only using the "
 "private link."
-msgstr ""
+msgstr "公開で表示しません。プライベート リンクを使用して提案を提出することができます。"
 
 #: app/templates/gentelella/admin/event/wizard/step-5.html:45
 msgid "Collect"
-msgstr ""
+msgstr "収集"
 
 #: app/templates/gentelella/admin/event/wizard/step-5.html:45
 msgid "Details"
-msgstr ""
+msgstr "詳細"
 
 #: app/templates/gentelella/admin/event/wizard/step-5.html:51
 msgid "Option"
-msgstr ""
+msgstr "オプション"
 
 #: app/templates/gentelella/admin/event/wizard/step-5.html:52
 msgid "Include"
-msgstr ""
+msgstr "含む"
 
 #: app/templates/gentelella/admin/event/wizard/step-5.html:53
 msgid "Require"
-msgstr ""
+msgstr "必要"
 
 #: app/templates/gentelella/admin/event/wizard/step-5.html:71
 msgid "Customize Registration Form"
-msgstr ""
+msgstr "登録フォームをカスタマイズ"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:31
 msgid "Previous"
-msgstr ""
+msgstr "前"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:35
 msgid "Next"
-msgstr ""
+msgstr "次"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:42
 msgid "Unpublish event"
-msgstr ""
+msgstr "イベントを非公開"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:45
 msgid "Make your event live"
@@ -3602,7 +3602,7 @@ msgstr ""
 
 #: app/templates/gentelella/guest/search/results.html:87
 msgid "Loading"
-msgstr ""
+msgstr "読み込み中"
 
 #: app/templates/gentelella/guest/search/results.html:96
 msgid "No events found for the selected parameters."
