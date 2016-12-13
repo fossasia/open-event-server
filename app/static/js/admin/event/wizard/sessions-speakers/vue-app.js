@@ -7,9 +7,9 @@ var sessionsSpeakersApp = new Vue({
         microlocations: [],
         call_for_speakers: getCallForSpeakers(),
         sessions_speakers_enabled: false,
-        custom_form: {
-            speaker: [],
-            session: []
+        custom_forms: {
+            session: [],
+            speaker: []
         }
     },
     watch: {
@@ -112,6 +112,6 @@ sessionsSpeakersApp.$nextTick(function () {
 });
 
 function persistData() {
-    Vue.set(sessionsSpeakersApp, 'custom_form.session', sessionForm[0]);
-    Vue.set(sessionsSpeakersApp, 'custom_form.speaker', speakerForm[0]);
+    Vue.set(sessionsSpeakersApp.custom_forms, 'session', sessionForm[0]);
+    Vue.set(sessionsSpeakersApp.custom_forms, 'speaker', speakerForm[0]);
 }
