@@ -59,11 +59,12 @@ Vue.component('image-upload', {
         return {
             isUploading: false,
             errorMessage: '',
-            componentId: 'upload-component-' + _.random(1000, 9999)
+            componentId: 'upload-component-' + _.random(1000, 9999),
+            internalImageUrl: ''
         };
     },
     watch: {
-        imageUrl: function (value) {
+        internalImageUrl: function (value) {
             this.$emit('input', String(value));
         }
     },
@@ -125,7 +126,7 @@ Vue.component('image-upload', {
                 },
                 dataType: 'json'
             }).done(function (data) {
-                $this.imageUrl = data.image_url;
+                $this.internalImageUrl = data.image_url;
                 callback();
             }).fail(function () {
                 $this.errorMessage = "Something went wrong. Please try again.";
@@ -137,6 +138,7 @@ Vue.component('image-upload', {
     },
     mounted: function () {
         this.$nextTick(function () {
+            this.internalImageUrl = _.clone(this.imageUrl);
             var $div = $(this.$el);
             if (this.cropRequired) {
                 this.$uploadCropperModal = $div.find('.cropper-modal');

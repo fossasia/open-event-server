@@ -1,6 +1,6 @@
 <script type="text/x-template" id="image-upload-template">
     <div>
-        <div class="item form-group" v-if="!imageUrl || imageUrl == ''">
+        <div class="item form-group" v-if="!internalImageUrl || internalImageUrl == ''">
             <label>{{ '{{ title }}' }}</label><br>
             <div class="image-box">
                 <input type="file" v-bind:id="componentId" class="image-upload-btn no-js" accept="image/*"
@@ -26,10 +26,10 @@
         </span>
 
         </div>
-        <div class="item form-group" v-if="imageUrl && imageUrl != ''">
+        <div class="item form-group" v-if="internalImageUrl && internalImageUrl != ''">
             <label>{{ '{{ title }}' }}</label><br>
-            <img v-bind:src="imageUrl" style="max-width: 450px;"><br><br>
-            <button type="button" class="btn btn-sm btn-default" v-on:click="imageUrl = ''">
+            <img v-bind:src="internalImageUrl" style="max-width: 450px;"><br><br>
+            <button type="button" class="btn btn-sm btn-default" v-on:click="internalImageUrl = ''">
                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                 {{ _("Remove") }}
             </button>

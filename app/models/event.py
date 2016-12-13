@@ -178,7 +178,6 @@ class Event(db.Model):
         self.sub_topic = sub_topic
         self.ticket_url = ticket_url
         self.creator = creator
-        self.copyright = copyright
         self.code_of_conduct = code_of_conduct
         self.schedule_published_on = schedule_published_on
         self.in_trash = in_trash

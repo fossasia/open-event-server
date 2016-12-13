@@ -1,11 +1,31 @@
-import json
+import os
+import time
+from datetime import datetime
 
+import PIL
+from PIL import Image
+from flask import url_for, current_app as app
+from flask.ext import login
+
+from app.helpers.data import DataManager, save_to_db, record_activity
 from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import represents_int
+from app.helpers.static import EVENT_LICENCES
+from app.helpers.storage import UploadedFile, upload, UPLOAD_PATHS
+from app.models import db
+from app.models.email_notifications import EmailNotification
+from app.models.event import Event
+from app.models.event_copyright import EventCopyright
+from app.models.image_sizes import ImageSizes
+from app.models.role import Role
+from app.models.stripe_authorization import StripeAuthorization
+from app.models.tax import Tax
+from app.models.ticket import Ticket, ticket_tags_table, TicketTag
+from app.models.user import ORGANIZER
+from app.models.users_events_roles import UsersEventsRoles
 
 
 def get_event_json(event_id):
-
     if represents_int(event_id):
         event = DataGetter.get_event(event_id)
     else:
@@ -72,4 +92,273 @@ def get_event_json(event_id):
 
 
 def save_event_from_json(json):
-    pass
+    event_data = json['event']
+    state = json['state']
+
+    if represents_int(event_data['id']):
+        event = DataGetter.get_event(event_data['id'])
+    else:
+        event = Event()
+
+    event.name = event_data['name']
+    event.location_name = event_data['location_name']
+    event.show_map = 1 if event_data['show_map'] else 0
+    event.start_time = DataManager.get_event_time_field_format(event_data, 'start_time')
+    event.end_time = DataManager.get_event_time_field_format(event_data, 'end_time')
+    event.timezone = event_data['timezone']
+    event.description = event_data['description']
+    event.privacy = event_data['privacy']
+    event.type = event_data['type']
+    event.topic = event_data['topic']
+    event.sub_topic = event_data['sub_topic']
+    event.latitude = event_data['latitude']
+    event.longitude = event_data['longitude']
+    event.searchable_location_name = DataManager.get_searchable_location_name(event)
+    event.state = state
+
+    event.organizer_description = event_data['organizer_description'] if event_data['has_organizer_info'] else ''
+    event.organizer_name = event_data['organizer_name'] if event_data['has_organizer_info'] else ''
+    event.code_of_conduct = event_data['code_of_conduct'] if event_data['has_code_of_conduct'] else ''
+
+    save_to_db(event, "Event Saved")
+    record_activity('create_event', event_id=event.id)
+    db.session.add(event)
+    db.session.flush()
+    db.session.refresh(event)
+
+    copyright = event.copyright
+    if not event.copyright:
+        copyright = EventCopyright(event=event)
+
+    year = datetime.now().year
+    copyright.licence = event_data['copyright']['licence']
+    _, _, licence_url, logo, _ = EVENT_LICENCES.get(copyright.licence, ('',) * 5)
+    copyright.holder = event.organizer_name
+    copyright.year = year
+    copyright.logo = logo
+    copyright.licence_url = licence_url
+
+    event.ticket_include = event_data['ticket_include']
+
+    if event.ticket_include:
+        event.ticket_url = url_for('event_detail.display_event_tickets', identifier=event.identifier,
+                                   _external=True)
+        save_tickets(event_data['tickets'], event)
+    else:
+        event.ticket_url = event_data['ticket_url']
+
+    event.discount_code_id = event_data['discount_code_id']
+    event.payment_country = event_data['payment_country']
+    event.payment_currency = event_data['payment_currency']
+    event.pay_by_paypal = event_data['pay_by_paypal']
+    event.pay_by_cheque = event_data['pay_by_cheque']
+    event.pay_by_bank = event_data['pay_by_bank']
+    event.pay_onsite = event_data['pay_onsite']
+    event.pay_by_stripe = event_data['pay_by_stripe']
+
+    if event.pay_by_stripe and event_data['stripe']['linked']:
+        stripe_data = event_data['stripe']
+        stripe = event.stripe
+        if not stripe:
+            stripe = StripeAuthorization(event_id=event.id)
+
+        stripe.stripe_secret_key = stripe_data['stripe_secret_key']
+        stripe.stripe_refresh_token = stripe_data['stripe_refresh_token']
+        stripe.stripe_publishable_key = stripe_data['stripe_publishable_key']
+        stripe.stripe_user_id = stripe_data['stripe_user_id']
+        stripe.stripe_email = stripe_data['stripe_email']
+
+        db.session.add(stripe)
+    else:
+        if event.stripe:
+            db.session.delete(event.stripe)
+
+    event.tax_allow = event_data['tax_allow']
+
+    if event.tax_allow:
+        tax_data = event_data['tax']
+        tax = event.tax
+        if not tax:
+            tax = Tax(event_id=event.id)
+
+        tax.country = tax_data['country']
+        tax.tax_name = tax_data['tax_name']
+        tax.send_invoice = tax_data['send_invoice']
+        tax.tax_id = tax_data['tax_id']
+        tax.registered_company = tax_data['registered_company']
+        tax.address = tax_data['address']
+        tax.state = tax_data['state']
+        tax.zip = tax_data['zip']
+        tax.tax_include_in_price = tax_data['tax_include_in_price']
+        tax.invoice_footer = tax_data['invoice_footer']
+        db.session.add(tax)
+    else:
+        if event.tax:
+            db.session.delete(event.tax)
+
+    if event_data['logo'] and event_data['logo'].strip() != '':
+        event.logo = save_logo(event_data['logo'], event.id)
+
+    save_to_db(event)
+
+    image_sizes = DataGetter.get_image_sizes_by_type(type='event')
+    if not image_sizes:
+        image_sizes = ImageSizes(full_width=1300,
+                                 full_height=500,
+                                 full_aspect='on',
+                                 icon_width=75,
+                                 icon_height=30,
+                                 icon_aspect='on',
+                                 thumbnail_width=500,
+                                 thumbnail_height=200,
+                                 thumbnail_aspect='on',
+                                 type='event')
+        save_to_db(image_sizes, "Image Sizes Saved")
+
+    if event_data['background_url'] and event_data['background_url'].strip() != '':
+        background_url = event_data['background_url']
+
+        jpg_image = convert_background_to_jpg(background_url)
+        event.background_url = save_untouched_background(background_url, event.id)
+        event.large = save_resized_background(jpg_image, event.id, 'large', image_sizes)
+        event.thumbnail = save_resized_background(jpg_image, event.id, 'thumbnail', image_sizes)
+        event.icon = save_resized_background(jpg_image, event.id, 'icon', image_sizes)
+        os.remove(jpg_image)
+        save_to_db(event)
+
+    role = Role.query.filter_by(name=ORGANIZER).first()
+    uer = UsersEventsRoles(login.current_user, event, role)
+
+    if save_to_db(uer, "Event saved"):
+        new_email_notification_setting = EmailNotification(next_event=1,
+                                                           new_paper=1,
+                                                           session_schedule=1,
+                                                           session_accept_reject=1,
+                                                           user_id=login.current_user.id,
+                                                           event_id=event.id)
+        save_to_db(new_email_notification_setting, "EmailSetting Saved")
+
+    return {
+        'event_id': event.id
+    }
+
+
+def save_tickets(tickets_data, event):
+    ticket_ids = []
+    for ticket_data in tickets_data:
+        if ticket_data['id']:
+            with db.session.no_autoflush:
+                ticket = Ticket.query.filter_by(id=ticket_data['id'], event_id=event.id).first()
+                db.session.query(ticket_tags_table).filter_by(ticket_id=ticket.id).delete()
+        else:
+            ticket = Ticket(event=event)
+
+        ticket.name = ticket_data['name']
+        ticket.quantity = ticket_data['quantity'] if ticket_data['quantity'] != '' else 100
+        ticket.type = ticket_data['type']
+        ticket.description_toggle = ticket_data['description_visibility']
+        ticket.description = ticket_data['description']
+        ticket.price = ticket_data['price'] if ticket_data['price'] != '' and ticket.type == 'paid' else 0
+        ticket.hide = ticket_data['ticket_visibility']
+        ticket.min_order = ticket_data['min_order'] if ticket_data['min_order'] != '' else 1
+        ticket.max_order = ticket_data['max_order'] if ticket_data['max_order'] != '' else 10
+        ticket.sales_start = DataManager.get_event_time_field_format(ticket_data, 'sales_start')
+        ticket.sales_end = DataManager.get_event_time_field_format(ticket_data, 'sales_end')
+
+        if ticket_data['tags_string'].strip() != '':
+            tag_names = ticket_data['tags_string'].split(',')
+            for tag_name in tag_names:
+                tag = TicketTag(name=tag_name, event_id=event.id)
+                db.session.add(tag)
+
+        db.session.add(ticket)
+        ticket_ids.append(ticket.id)
+
+    with db.session.no_autoflush:
+        unwanted_tickets = Ticket.query.filter(~Ticket.id.in_(ticket_ids)).filter_by(event_id=event.id).all()
+    for unwanted_ticket in unwanted_tickets:
+        if not unwanted_ticket.has_order_tickets():
+            db.session.delete(unwanted_ticket)
+
+
+def get_path_of_temp_url(url):
+    return '{}/static/{}'.format(app.config['BASE_DIR'], url[len('/serve_static/'):])
+
+
+def save_logo(logo_url, event_id):
+    filename = '{}.png'.format(time.time())
+    file_path = get_path_of_temp_url(logo_url)
+    logo_file = UploadedFile(file_path, filename)
+    url = upload(
+        logo_file,
+        UPLOAD_PATHS['event']['logo'].format(
+            event_id=event_id
+        ))
+    os.remove(file_path)
+    return url if url else ''
+
+
+def convert_background_to_jpg(background_url):
+    file_path = get_path_of_temp_url(background_url)
+    im = Image.open(file_path)
+    out_im = file_path.replace('png', 'jpg')
+    bg = Image.new("RGB", im.size, (255, 255, 255))
+    bg.paste(im, (0, 0), im)
+    bg.save(out_im, quality=55)
+    return out_im
+
+
+def save_untouched_background(background_url, event_id):
+    filename = '{}.png'.format(time.time())
+    file_path = get_path_of_temp_url(background_url)
+    background_file = UploadedFile(file_path, filename)
+    url = upload(
+        background_file,
+        UPLOAD_PATHS['event']['background_url'].format(
+            event_id=event_id
+        ))
+    os.remove(file_path)
+    return url if url else ''
+
+
+def save_resized_background(background_image_file, event_id, size, image_sizes):
+    filename = '{}.jpg'.format(time.time())
+
+    width_ = 1300
+    height_ = 500
+    basewidth = image_sizes.full_width
+    aspect = image_sizes.full_aspect
+    height_size = image_sizes.full_height
+
+    if size == 'large':
+        width_ = 1300
+        height_ = 500
+        aspect = image_sizes.full_aspect
+        basewidth = image_sizes.full_width
+        height_size = image_sizes.full_height
+    elif size == 'thumbnail':
+        width_ = 500
+        height_ = 200
+        aspect = image_sizes.full_aspect
+        basewidth = image_sizes.thumbnail_width
+        height_size = image_sizes.thumbnail_height
+    elif size == 'icon':
+        width_ = 75
+        height_ = 30
+        aspect = image_sizes.icon_aspect
+        basewidth = image_sizes.icon_width
+        height_size = image_sizes.icon_height
+
+    img = Image.open(background_image_file)
+    if aspect == 'on':
+        width_percent = (basewidth / float(width_))
+        height_size = int((float(height_) * float(width_percent)))
+
+    img = img.resize((basewidth, height_size), PIL.Image.ANTIALIAS)
+    img.save(background_image_file)
+    large_file = UploadedFile(file_path=background_image_file, filename=filename)
+    return upload(
+        large_file,
+        UPLOAD_PATHS['event'][size].format(
+            event_id=int(event_id)
+        ))

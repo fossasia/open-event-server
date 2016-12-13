@@ -878,7 +878,8 @@ class DataManager(object):
         return datetime.strptime(form[field + '_date'] + ' ' + form[field + '_time'], '%m/%d/%Y %H:%M')
 
     @staticmethod
-    def update_searchable_location_name(event):
+    def get_searchable_location_name(event):
+        searchable_location_name = None
         if event.latitude and event.longitude:
             url = 'https://maps.googleapis.com/maps/api/geocode/json'
             latlng = '{},{}'.format(event.latitude, event.longitude)
@@ -893,8 +894,8 @@ class DataManager(object):
             if response['status'] == u'OK':
                 for addr in response['results'][0]['address_components']:
                     if addr['types'] == ['locality', 'political']:
-                        event.searchable_location_name = addr['short_name']
-        return event
+                        searchable_location_name = addr['short_name']
+        return searchable_location_name
 
     @staticmethod
     def create_event_copy(event_id):

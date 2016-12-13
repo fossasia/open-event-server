@@ -150,8 +150,8 @@ var app = new Vue({
         },
         updateAddress: function () {
             var locationName = "";
-            _.each(window.componentForm, function (component) {
-                locationName += $('#' + component).get(0).value + " ";
+            _.each(window.componentForm, function (value, key) {
+                locationName += $('#' + key).get(0).value + " ";
             });
             this.event.location_name = locationName;
         },

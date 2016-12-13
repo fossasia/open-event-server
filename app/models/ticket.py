@@ -1,3 +1,4 @@
+from app.models.order import OrderTicket
 from . import db
 
 ticket_tags_table = db.Table('association', db.Model.metadata,
@@ -31,7 +32,7 @@ class Ticket(db.Model):
     tags = db.relationship('TicketTag', secondary=ticket_tags_table, backref='tickets')
 
     def __init__(self,
-                 name,
+                 name=None,
                  event=None,
                  type=None,
                  sales_start=None,
@@ -43,7 +44,10 @@ class Ticket(db.Model):
                  price=0,
                  min_order=1,
                  max_order=10,
-                 tags=[]):
+                 tags=None):
+
+        if tags is None:
+            tags = []
         self.name = name
         self.quantity = quantity
         self.type = type
@@ -62,7 +66,9 @@ class Ticket(db.Model):
         """Returns True if ticket has already placed orders.
         Else False.
         """
-        return bool(len(self.order_tickets) > 0)
+        from app.helpers.helpers import get_count
+        count = get_count(OrderTicket.query.filter_by(ticket_id=self.id))
+        return bool(count > 0)
 
     def tags_csv(self):
         """Return list of Tags in CSV.
@@ -87,17 +93,18 @@ class Ticket(db.Model):
             'name': self.name,
             'quantity': self.quantity,
             'type': self.type,
-            'description_toggle': self.description_toggle,
+            'description_visibility': self.description_toggle,
             'description': self.description,
             'price': self.price,
             'sales_start_date': self.sales_start.strftime('%m/%d/%Y') if self.sales_start else '',
             'sales_start_time': self.sales_start.strftime('%H:%M') if self.sales_start else '',
             'sales_end_date': self.sales_end.strftime('%m/%d/%Y') if self.sales_end else '',
             'sales_end_time': self.sales_end.strftime('%H:%M') if self.sales_end else '',
-            'hide': self.hide,
+            'ticket_visibility': self.hide,
             'min_order': self.min_order,
             'max_order': self.max_order,
-            'tags': '',
+            'tags_string': '',
+            'has_orders': self.has_order_tickets()
         }
 
         tags = []

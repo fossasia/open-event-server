@@ -90,7 +90,7 @@ var TICKET = {
     quantity: 100,
     description: '',
     description_visibility: false,
-    ticket_visibility: true,
+    ticket_visibility: false,
     sales_start_date: moment().format('MM/DD/YYYY'),
     sales_start_time: moment().format('HH:mm'),
     sales_end_date: moment().add(10, 'days').format('MM/DD/YYYY'),
