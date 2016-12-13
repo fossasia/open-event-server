@@ -43,6 +43,7 @@ var EVENT = {
     type: '',
     topic: '',
     sub_topic: '',
+    state: 'Draft',
     has_code_of_conduct: false,
     code_of_conduct: '',
     copyright: {

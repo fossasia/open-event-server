@@ -1,0 +1,21 @@
+<script type="text/x-template" id="button-bar-template">
+    <div class="col-md-10 col-md-push-1">
+        <div class="clearfix"></div>
+        <div class="btn-toolbar pull-right" style="margin-top: 25px;">
+            <div class="btn-group btn-group-lg">
+                <button type="button" class="btn btn-default prev-step" v-on:click="move" v-show="showPrev">
+                    <i class="fa fa-chevron-left"></i> {{ _("Previous") }}
+                </button>
+                <button type="button" class="btn btn-default next-step" v-on:click="move">
+                    {{ _("Save and Proceed") }} <i class="fa fa-chevron-right"></i>
+                </button>
+                <button type="button" class="btn btn-lg btn-danger" v-on:click="unpublish" v-show="state == 'Published' || state == 'Completed'">
+                    {{ _("Unpublish event") }}
+                </button>
+                <button type="button" class="btn btn-lg btn-success" v-show="state == 'Draft'" v-on:click="publish">
+                    {{ _("Make your event live") }}
+                </button>
+            </div>
+        </div>
+    </div>
+</script>

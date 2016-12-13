@@ -1,23 +1,27 @@
-if(!_.isUndefined(window.seed) && !_.isNull(window.seed.event)) {
-    _.mergeWith(EVENT, window.seed.event, function (objectValue, sourceValue) {
-        if(_.isUndefined(sourceValue) || _.isNull(sourceValue)) {
-            return objectValue;
-        }
-    });
-}
-
 //noinspection JSUnusedGlobalSymbols
-var basicDetailsApp = new Vue({
-    el: '#event-wizard-basic-details',
+var app = new Vue({
+    el: '#wizard',
     data: {
+        step: step,
         event: EVENT,
-        included_items: included_settings,
+        included_settings: included_settings,
         addressShown: false,
         mapLoaded: false,
         discountMessage: {
             success: '',
             error: '',
             loading: false
+        },
+        sponsors: (sponsorsSeed && sponsorsSeed.length > 0) ? sponsorsSeed : [],
+        sponsors_enabled: (sponsorsSeed && sponsorsSeed.length > 0),
+        tracks: (tracksSeed && tracksSeed.length > 0) ? tracksSeed : [],
+        sessionTypes: (sessionTypesSeed && sessionTypesSeed.length > 0) ? sessionTypesSeed : [],
+        microlocations: (microlocationsSeed && microlocationsSeed.length > 0) ? microlocationsSeed : [],
+        call_for_speakers: callForSpeakersSeed ? callForSpeakersSeed : getCallForSpeakers(EVENT),
+        sessions_speakers_enabled: enabled,
+        custom_forms: {
+            session: [],
+            speaker: []
         }
     },
     computed: {
@@ -69,6 +73,48 @@ var basicDetailsApp = new Vue({
         'event.discount_code': function () {
             this.discountMessage.success = '';
             this.discountMessage.error = '';
+        },
+        'sponsors_enabled': function (value) {
+            if (value) {
+                this.sponsors = [_.clone(SPONSOR)];
+            } else {
+                this.sponsors = [];
+            }
+            this.$nextTick(function () {
+                bindSummerNote(this);
+            });
+        },
+        'sponsors': function (sponsors) {
+            if (sponsors.length <= 0) {
+                this.sponsors_enabled = false;
+            }
+        },
+        'sessions_speakers_enabled': function (value) {
+            if (value) {
+                this.tracks = [getNewTrack('Main Track')];
+                this.sessionTypes = [getNewSessionType('Talks')];
+                this.microlocations = [getNewMicrolocation('Room 1')];
+                this.call_for_speakers = getCallForSpeakers(this.event);
+            } else {
+                this.tracks = [];
+                this.sessionTypes = [];
+                this.microlocations = [];
+            }
+        },
+        'tracks': function (value) {
+            if (value.length <= 0) {
+                this.tracks = [getNewTrack('Main Track')];
+            }
+        },
+        'microlocations': function (value) {
+            if (value.length <= 0) {
+                this.microlocations = [getNewMicrolocation('Room 1')];
+            }
+        },
+        'sessionTypes': function (value) {
+            if (value.length <= 0) {
+                this.sessionTypes = [getNewSessionType('Talks')];
+            }
         }
     },
     methods: {
@@ -138,61 +184,54 @@ var basicDetailsApp = new Vue({
                     $this.event.discount_code_id = discountCodeId;
                 }
             });
+        },
+        addSponsor: function () {
+            this.sponsors.push(_.clone(SPONSOR));
+            this.$nextTick(function () {
+                bindSummerNote(this);
+            });
+        },
+        removeSponsor: function (sponsor) {
+            var index = this.sponsors.indexOf(sponsor);
+            this.sponsors.splice(index, 1);
+        },
+        addTrack: function () {
+            this.tracks.push(getNewTrack());
+        },
+        removeTrack: function (track) {
+            var index = this.tracks.indexOf(track);
+            this.tracks.splice(index, 1);
+        },
+        addMicrolocation: function () {
+            this.microlocations.push(getNewTrack());
+        },
+        removeMicrolocation: function (microlocation) {
+            var index = this.microlocations.indexOf(microlocation);
+            this.microlocations.splice(index, 1);
+        },
+        addSessionType: function () {
+            this.sessionTypes.push(getNewTrack());
+        },
+        removeSessionType: function (sessionType) {
+            var index = this.sessionTypes.indexOf(sessionType);
+            this.sessionTypes.splice(index, 1);
+        },
+        moveToStep: function (step) {
+            console.log(step);
+            this.step = step;
+            history.replaceState(null, '', "./" + step);
         }
+
     },
     compiled: function () {
 
     }
 });
 
-basicDetailsApp.$nextTick(function () {
+app.$nextTick(function () {
     var $eventDiv = $(this.$el);
-    /* Bind datepicker to dates */
-    $eventDiv.find("input.date").datepicker({
-        'format': 'mm/dd/yyyy',
-        'autoclose': true,
-        'startDate': new Date()
-    }).on('changeDate', function () {
-        this.dispatchEvent(new Event('input'));
-    });
-    $eventDiv.find("input.time").timepicker({
-        'showDuration': true,
-        'timeFormat': 'H:i',
-        'scrollDefault': 'now'
-    }).on('changeTime', function () {
-        this.dispatchEvent(new Event('input'));
-    });
-    $eventDiv.find(".event-date-picker").datepair({
-        'defaultTimeDelta': 3600000
-    }).on('rangeSelected', function () {
-        _.each($(this).find('input.date, input.time'), function (element) {
-            element.dispatchEvent(new Event('input'));
-        });
-    });
-    $eventDiv.find("textarea.event-textarea").summernote(summernoteConfig);
-    $eventDiv.find(".licence-help").click(function () {
-        $("#licence-list").slideToggle();
-    });
+    basicDetailsInit($eventDiv);
+    sessionSpeakersInit($eventDiv);
 });
 
 
-VueGoogleMap.loaded.then(function () {
-    window.geocoder = new google.maps.Geocoder();
-    var locationInput = $("#location_name")[0];
-    window.autocomplete = new google.maps.places.Autocomplete(locationInput, {types: ['geocode']});
-    window.autocomplete.addListener('place_changed', function () {
-        locationInput.dispatchEvent(new Event('input'));
-    });
-
-    var intervalID = setInterval(function () {
-        try {
-            if (!_.isUndefined(basicDetailsApp.$refs.gmap.$mapObject)) {
-                clearInterval(intervalID);
-                window.map = basicDetailsApp.$refs.gmap.$mapObject;
-                basicDetailsApp.recenterMap();
-                basicDetailsApp.mapLoaded = true;
-            }
-        } catch (ignored) {
-        }
-    }, 100);
-});

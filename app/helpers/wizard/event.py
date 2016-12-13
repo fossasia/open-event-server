@@ -52,7 +52,8 @@ def get_event_json(event_id):
         "tax": event.tax.serialize if event.tax else None,
         "latitude": event.latitude,
         "longitude": event.longitude,
-        "stripe": event.stripe.serialize if event.stripe else None
+        "stripe": event.stripe.serialize if event.stripe else None,
+        "state": event.state
     }
 
     for social_link in event.social_link:

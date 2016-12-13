@@ -1,0 +1,58 @@
+<script type="text/x-template" id="track-template">
+    <div class="track-holder">
+        <div class="clearfix"></div>
+        <div class=" col-xs-5 form-group">
+            <input type="text" class="form-control" v-model="track.name" placeholder="Name" required="required">
+        </div>
+        <div class="col-xs-7 input-group form-group">
+            <div class="input-group colorpicker-component" id="color">
+                <input type="text" class="form-control color-picker-input" placeholder="Color" required="required"
+                       v-model="track.color" title="track-color"/>
+                <span class="input-group-addon"><i></i></span>
+            </div>
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-danger" v-on:click="remove">-</button>
+                <button type="button" class="btn btn-primary" v-on:click="add">+</button>
+            </span>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/x-template" id="microlocation-template">
+    <div class="microlocation-holder">
+        <div class="clearfix"></div>
+        <div class="col-xs-5 form-group">
+            <input type="text" class="form-control" required="required" name="rooms[name]" placeholder="Name"
+                   v-model="microlocation.name">
+        </div>
+        <div class="col-xs-6 input-group form-group">
+            <div class="input-group">
+                <input type="number" class="form-control" placeholder="Floor" title="rooms-floor"
+                       v-model="microlocation.floor"/>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-danger" v-on:click="remove">-</button>
+                    <button type="button" class="btn btn-primary" v-on:click="add">+</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-template" id="session-type-template">
+    <div class="session-type-holder">
+        <div class="clearfix"></div>
+        <div class="col-xs-5 form-group">
+            <input type="text" class="form-control" required="required" v-model="sessionType.name" placeholder="Name">
+        </div>
+        <div class="col-xs-6 input-group form-group">
+            <input type="text" required="required" class="form-control session-length" v-model="sessionType.length"
+                   placeholder="Length (HH.MM)">
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-danger" v-on:click="remove">-</button>
+                <button type="button" class="btn btn-primary" v-on:click="add">+</button>
+            </span>
+        </div>
+    </div>
+</script>
+

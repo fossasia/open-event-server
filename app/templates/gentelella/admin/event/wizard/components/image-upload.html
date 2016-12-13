@@ -5,11 +5,13 @@
             <div class="image-box">
                 <input type="file" v-bind:id="componentId" class="image-upload-btn no-js" accept="image/*"
                        v-on:change="uploadImage"/>
-                <label class="file-label" v-bind:for="componentId" id="event-image-upload-label-pre" v-if="!isUploading">
+                <label class="file-label" v-bind:for="componentId" id="event-image-upload-label-pre"
+                       v-if="!isUploading">
                     <i v-bind:class="'fa fa-4x ' + icon"></i> <br>
                     <h3>{{ _("Select") }} {{ '{{ title }}' }}</h3>
                 </label>
-                <label class="file-label" v-bind:for="componentId" id="event-image-upload-label-uploading" v-if="isUploading">
+                <label class="file-label" v-bind:for="componentId" id="event-image-upload-label-uploading"
+                       v-if="isUploading">
                     <i class="fa fa-4x fa-spin fa-spinner"></i> <br>
                     <h3>{{ '{{ title }}' }} {{ _("is uploading") }}</h3>
                 </label>
@@ -52,33 +54,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</script>
-
-
-<script type="text/x-template" id="button-bar-template">
-    <div>
-        <div class="clearfix"></div>
-        <div class="btn-toolbar pull-right" style="margin-top: 25px;">
-            <div class="btn-group btn-group-lg">
-                {% if show_prev %}
-                    <button type="button" class="btn btn-default prev-step"><i
-                            class="fa fa-chevron-left"></i> {{ _("Previous") }}</button>
-                {% endif %}
-                {% if show_next %}
-                    <button type="button" class="btn btn-default next-step">{{ _("Next") }} <i
-                            class="fa fa-chevron-right"></i></button>
-                {% endif %}
-                <button type="button" class="btn btn-default save-event">{{ _("Save") }}</button>
-                {% if event and event.state == 'Published' and not is_copy %}
-                    <button type="button"
-                            class="btn btn-lg btn-danger publish-unpublish-event">{{ _("Unpublish event") }}</button>
-                {% else %}
-                    <button type="button"
-                            class="btn btn-lg btn-success publish-unpublish-event">{{ _("Make your event live") }}</button>
-                {% endif %}
             </div>
         </div>
     </div>

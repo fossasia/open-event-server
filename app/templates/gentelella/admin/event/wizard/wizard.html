@@ -3,12 +3,15 @@
 
 {% block head_css %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/green.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/jt.timepicker/jquery.timepicker.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/switchery/dist/switchery.min.css') }}"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/selectize/dist/css/selectize.bootstrap3.css') }}"/>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/selectize/dist/css/selectize.bootstrap3.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/Croppie/croppie.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
 {% endblock %}
@@ -17,7 +20,12 @@
 
 {% block body %}
 
-    {% include 'gentelella/admin/event/wizard/components.html' %}
+    {% include 'gentelella/admin/event/wizard/components/image-upload.html' %}
+    {% include 'gentelella/admin/event/wizard/components/tabs.html' %}
+    {% include 'gentelella/admin/event/wizard/components/button-bar.html' %}
+    {% include 'gentelella/admin/event/wizard/components/social-link.html' %}
+    {% include 'gentelella/admin/event/wizard/components/ticket.html' %}
+    {% include 'gentelella/admin/event/wizard/components/tracks-microlocations-sessions.html' %}
 
     {% if event %}
         <!-- {{ event.name }} -->
@@ -32,61 +40,29 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="wizard" id="wizard" data-state="{{ event.state | default('', true) }}"
+                     style="min-height: 400px;"
                      data-id="{{ event.id | default('', true) }}">
                     <div class="wizard-inner">
-                        <div class="connecting-line"></div>
-                        <ul class="nav nav-tabs">
-                            <li {% if step == '' %}class="active"{% endif %}>
-                                <a href="#step1" data-toggle="tab" title="Basic Details" data-href="./">
-                                    <span class="round-tab">
-                                        <i class="fa fa-info"></i>
-                                    </span>
-                                </a>
-                                <span class="description hidden-xs hidden-sm">{{ _("Basic Details") }}</span>
-                            </li>
-
-                            <li {% if step == 'sponsors' %}class="active"{% endif %}>
-                                <a href="#step2" data-toggle="tab" title="Sponsors" data-href="./sponsors">
-                                    <span class="round-tab">
-                                        <i class="fa fa-usd"></i>
-                                    </span>
-                                </a>
-                                <span class="description hidden-xs hidden-sm">{{ _("Sponsors") }}</span>
-                            </li>
-                            <li {% if step == 'sessions-tracks-rooms' or step == 'call-for-speakers' or step == 'form-customization' %}class="active"{% endif %}>
-                                <a href="#step3" data-toggle="tab" title="Session, Tracks, Rooms"
-                                   data-href="./sessions-tracks-rooms">
-                                    <span class="round-tab">
-                                        <i class="fa fa-list-ol"></i>
-                                    </span>
-                                </a>
-                                <span class="description hidden-xs hidden-sm">{{ _("Sessions") }} & {{ _("Speakers") }}</span>
-                            </li>
-                        </ul>
+                        <tabs v-bind:step="step" v-on:move="moveToStep"></tabs>
                     </div>
-
+                    <div class="text-center col-md-12" v-show="step == null" style="margin-top: 30px; color: #b5b5b5">
+                        <i class="fa fa-circle-o-notch fa-spin fa-4x"></i>
+                    </div>
                     <div class="tab-content">
-                        <div class="tab-pane fade {% if step == '' %}in active{% endif %}" id="step1">
+                        <div class="tab-pane fade" v-bind:class="{ 'in active': step == '' }" v-show="step == ''">
                             {% include 'gentelella/admin/event/wizard/basic-details.html' %}
-                            <div class="col-md-7 col-sm-7 step-1">
-
-                            </div>
                         </div>
-                        <div class="tab-pane fade {% if step == 'sponsors' %}in active{% endif %}" id="step2">
+                        <div class="tab-pane fade" v-bind:class="{ 'in active': step == 'sponsors' }"
+                             v-show="step == 'sponsors'">
                             {% include 'gentelella/admin/event/wizard/sponsors.html' %}
-                            <div class="col-md-10 col-md-push-1">
-
-                            </div>
                         </div>
-                        <div class="tab-pane fade {% if step == 'sessions-tracks-rooms' or step == 'call-for-speakers' or step == 'form-customization' %}in active{% endif %}"
-                             id="step3">
+                        <div class="tab-pane fade"
+                             v-bind:class="{ 'in active': step == 'sessions-tracks-rooms' || step == 'call-for-speakers' || step == 'form-customization' }">
                             {% include 'gentelella/admin/event/wizard/session-speakers.html' %}
-                            <div class="col-md-10 col-md-push-1">
-
-                            </div>
                         </div>
                         <div class="clearfix"></div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -103,6 +79,16 @@
             window.seed = {{ seed | safe | default('null', true) }};
         </script>
     {% endif %}
+
+    <script>
+        window.step = "{{ step }}";
+        window.cfsHash = "{{ cfs_hash if not call_for_speakers or not call_for_speakers.hash else call_for_speakers.hash }}";
+        window.sub_topics = {{ event_sub_topics | safe | default('null', true) }};
+        window.discountCodeApplyUrl = "{{ url_for('events.apply_discount_code')  }}";
+        window.included_settings = {{ included_settings | safe | default('null', true) }};
+        window.current_timezone = "{{ current_timezone | safe }}";
+        window.stripeConnectUrl = "https://connect.stripe.com/oauth/authorize?response_type=code&client_id={{ key_settings.stripe_client_id }}&scope=read_write&redirect_uri={{ url_for('ticketing.stripe_callback', _external=true) }}";
+    </script>
 
     {# Core libraries #}
     <script src="{{ url_for('static', filename='admin/lib/lodash/dist/lodash.min.js') }}"></script>
@@ -122,26 +108,27 @@
     <script src="{{ url_for('static', filename='admin/lib/selectize/dist/js/standalone/selectize.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/Croppie/croppie.min.js') }}"></script>
 
-    {# Wizard #}
-    <script src="{{ url_for('static', filename='js/admin/event/event_wizard.js') }}"></script>
-
     {# Common wizard Vue components #}
     <script src="{{ url_for('static', filename='js/admin/event/wizard/button-component.js') }}"></script>
     <script src="{{ url_for('static', filename='js/admin/event/wizard/upload-component.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin/event/wizard/tabs-component.js') }}"></script>
 
-    {# Vue models, root, components for basic details #}
+    {# Vue models, components for basic details #}
     <script src="{{ url_for('static', filename='js/admin/event/wizard/basic-details/classic.js') }}"></script>
     <script src="{{ url_for('static', filename='js/admin/event/wizard/basic-details/vue-models.js') }}"></script>
     <script src="{{ url_for('static', filename='js/admin/event/wizard/basic-details/vue-components.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/admin/event/wizard/basic-details/vue-app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin/event/wizard/basic-details/initializer.js') }}"></script>
 
-    {# Vue models, root, components for sponsors #}
+    {# Vue models, components for sponsors #}
     <script src="{{ url_for('static', filename='js/admin/event/wizard/sponsors/vue-models.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/admin/event/wizard/sponsors/vue-app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin/event/wizard/sponsors/initializer.js') }}"></script>
 
-    {# Vue models, root, components for session & speakers #}
+    {# Vue models, components for session & speakers #}
+    <script src="{{ url_for('static', filename='js/admin/event/wizard/sessions-speakers/classic.js') }}"></script>
     <script src="{{ url_for('static', filename='js/admin/event/wizard/sessions-speakers/vue-models.js') }}"></script>
     <script src="{{ url_for('static', filename='js/admin/event/wizard/sessions-speakers/vue-components.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/admin/event/wizard/sessions-speakers/vue-app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin/event/wizard/sessions-speakers/initializer.js') }}"></script>
 
+    {# Vue app #}
+    <script src="{{ url_for('static', filename='js/admin/event/wizard/vue-app.js') }}"></script>
 {% endblock %}

@@ -51,11 +51,10 @@ function getNewMicrolocation(name) {
 }
 
 
-function getCallForSpeakers() {
+function getCallForSpeakers(event) {
     var callForSpeakers = _.clone(CALL_FOR_SPEAKERS);
-    callForSpeakers.end_date = basicDetailsApp.event.end_time_date;
-    callForSpeakers.end_time = basicDetailsApp.event.end_time_time;
-    callForSpeakers.timezone = basicDetailsApp.event.timezone;
-
+    callForSpeakers.end_date = event.end_time_date;
+    callForSpeakers.end_time = event.end_time_time;
+    callForSpeakers.timezone = event.timezone;
     return callForSpeakers;
 }
