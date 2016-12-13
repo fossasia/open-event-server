@@ -23,9 +23,10 @@ from app.helpers.microservices import AndroidAppCreator, WebAppCreator
 from app.helpers.permission_decorators import is_organizer, is_super_admin, can_access
 from app.helpers.storage import upload_local, UPLOAD_PATHS
 from app.helpers.ticketing import TicketingManager
-from app.helpers.wizard.event import get_event_json
-from app.helpers.wizard.sessions_speakers import get_microlocations_json, get_session_types_json, get_tracks_json
-from app.helpers.wizard.sponsors import get_sponsors_json
+from app.helpers.wizard.event import get_event_json, save_event_from_json
+from app.helpers.wizard.sessions_speakers import get_microlocations_json, get_session_types_json, get_tracks_json, \
+    save_session_speakers
+from app.helpers.wizard.sponsors import get_sponsors_json, save_sponsors_from_json
 from app.models.call_for_papers import CallForPaper
 from app.settings import get_settings
 
@@ -484,6 +485,24 @@ def apply_discount_code():
             return jsonify({'status': 'error', 'message': 'Expired discount code'})
     else:
         return jsonify({'status': 'error', 'message': 'Invalid discount code'})
+
+
+@events.route('/save/<string:what>/', methods=('POST',))
+def save_event_from_wizard(what):
+    data = request.get_json()
+    if what == 'event':
+        return jsonify(save_event_from_json(data))
+    elif what == 'sponsors':
+        return jsonify(save_sponsors_from_json(data))
+    elif what == 'sessions-tracks-rooms':
+        return jsonify(save_session_speakers(data))
+    elif what == 'all':
+        response = save_event_from_json(data['event'])
+        save_sponsors_from_json(data['sponsors'], response['event_id'])
+        save_session_speakers(data['session_speakers'], response['event_id'])
+        return jsonify(response)
+    else:
+        abort()
 
 
 def get_module_settings():

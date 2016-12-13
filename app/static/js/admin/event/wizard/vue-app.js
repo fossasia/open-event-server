@@ -1,3 +1,5 @@
+var steps = ['', 'sponsors', 'sessions-tracks-rooms'];
+
 //noinspection JSUnusedGlobalSymbols
 var app = new Vue({
     el: '#wizard',
@@ -22,7 +24,8 @@ var app = new Vue({
         custom_forms: {
             session: [],
             speaker: []
-        }
+        },
+        networkRequestRunning: false
     },
     computed: {
         _: function () {
@@ -115,6 +118,9 @@ var app = new Vue({
             if (value.length <= 0) {
                 this.sessionTypes = [getNewSessionType('Talks')];
             }
+        },
+        'step': function (step) {
+            history.replaceState(null, '', "./" + step);
         }
     },
     methods: {
@@ -217,11 +223,47 @@ var app = new Vue({
             this.sessionTypes.splice(index, 1);
         },
         moveToStep: function (step) {
-            console.log(step);
-            this.step = step;
-            history.replaceState(null, '', "./" + step);
-        }
+            var $this = this;
+            if (_.isNull(this.event.id)) {
+                showLoading("Saving the event");
+            } else {
+                showLoading("Saving changes");
+            }
+            save($this.step, this.event.state, function () {
+                $this.step = step;
+            });
 
+        },
+        move: function (direction) {
+            var $this = this;
+            if (_.isNull(this.event.id)) {
+                showLoading("Saving the event");
+            } else {
+                showLoading("Saving changes");
+            }
+            save(this.step, this.event.state, function () {
+                var index = _.indexOf(steps, $this.step);
+                index = direction === 'forward' ? index + 1 : index - 1;
+                if (index < steps.length && index >= 0) {
+                    $this.step = steps[index];
+                }
+            });
+        },
+        publish: function () {
+            var $this = this;
+            showLoading("Publishing the event");
+            save('all', 'Published', function () {
+                 $this.event.state = 'Published';
+            });
+        },
+        unpublish: function () {
+            var $this = this;
+            showLoading("Un-publishing the event");
+            save('all', 'Draft', function () {
+                 $this.event.state = 'Draft';
+            });
+
+        }
     },
     compiled: function () {
 
@@ -234,4 +276,85 @@ app.$nextTick(function () {
     sessionSpeakersInit($eventDiv);
 });
 
+function showLoading(text) {
+    if (_.isUndefined(text)) {
+        text = "Saving";
+    }
+    createHtmlSnackbar("<i class='fa fa-circle-o-notch fa-lg fa-spin fa-fw'></i>" + text + ' ...', '  ', null, 60000);
+}
 
+function save(stepToSave, state, callback) {
+    stepToSave = stepToSave == '' ? 'event' : stepToSave;
+
+    var eventsData = {
+        event: app.event,
+        state: state
+    };
+
+    var sponsorsData = {
+        event_id: app.event.id,
+        sponsors_enabled: app.sponsors_enabled,
+        sponsors: app.sponsors,
+        state: state
+    };
+
+    var sessionsSpeakersData = {
+        event_id: app.event.id,
+        tracks: app.tracks,
+        microlocations: app.microlocations,
+        sessionTypes: app.sessionTypes,
+        call_for_speakers: app.call_for_speakers,
+        sessions_speakers_enabled: app.sessions_speakers_enabled,
+        custom_forms: app.custom_forms,
+        state: state
+    };
+
+    switch (stepToSave) {
+        case 'event':
+            makePost(stepToSave, eventsData, callback);
+            break;
+        case 'sponsors':
+            makePost(stepToSave, sponsorsData, callback);
+            break;
+        case 'sessions-tracks-rooms':
+            makePost(stepToSave, sessionsSpeakersData, callback);
+            break;
+        case 'all':
+            var data = {
+                sponsors: sponsorsData,
+                session_speakers: sessionsSpeakersData,
+                event: eventsData
+            };
+            makePost('all', data, callback);
+            break;
+    }
+}
+
+
+function makePost(stepToSave, data, callback) {
+    app.networkRequestRunning = true;
+    $.ajax({
+        type: 'POST',
+        url: '/events/save/' + stepToSave + '/',
+        data: JSON.stringify(data),
+        success: function (response) {
+            if (response && response.hasOwnProperty('event_id')) {
+                createSnackbar("The changes have been saved successfully.");
+                if (_.includes(location.pathname, 'create')) {
+                    history.replaceState(null, '', location.pathname.replace('create', response.event_id + '/edit'));
+                }
+                callback();
+            } else {
+                createSnackbar("An error occurred while saving. Please try again later ...");
+            }
+        },
+        error: function () {
+            createSnackbar("An error occurred while saving. Please try again later ...");
+        },
+        complete: function () {
+            app.networkRequestRunning = false;
+        },
+        contentType: "application/json",
+        dataType: 'json'
+    });
+}

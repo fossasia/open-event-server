@@ -1,15 +1,15 @@
 Vue.component('button-bar', {
     template: '#button-bar-template',
-    props: ['showPrev', 'state'],
+    props: ['state', 'step', 'disable'],
     methods: {
-        move: function (e) {
-            this.$emit('move', e.target);
+        move: function (direction) {
+            this.$emit('move', direction);
         },
         publish: function () {
-            this.$emit('publish', e.target);
+            this.$emit('publish');
         },
         unpublish: function () {
-            this.$emit('unpublish', e.target);
+            this.$emit('unpublish');
         }
     }
 });

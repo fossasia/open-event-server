@@ -1,9 +1,8 @@
 Vue.component('tabs', {
     template: '#tabs-template',
-    props: ['step'],
+    props: ['step', 'disable'],
     methods: {
         moveToStep: function (toStep) {
-            console.log(toStep);
             this.$emit('move', toStep);
         }
     }

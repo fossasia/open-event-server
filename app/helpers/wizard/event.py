@@ -70,3 +70,6 @@ def get_event_json(event_id):
 
     return result
 
+
+def save_event_from_json(json):
+    pass

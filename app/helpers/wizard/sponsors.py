@@ -16,4 +16,6 @@ def get_sponsors_json(event_id_or_sponsors):
     return data
 
 
+def save_sponsors_from_json(json, event_id=None):
+    pass
 

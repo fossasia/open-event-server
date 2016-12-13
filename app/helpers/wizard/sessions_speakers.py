@@ -24,3 +24,6 @@ def get_microlocations_json(event_id):
         data.append(microlocation.serialize)
     return data
 
+
+def save_session_speakers(json, event_id=None):
+    pass
