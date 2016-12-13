@@ -1,5 +1,5 @@
 Vue.component('save', {
-    template: '#social-link-template',
+    template: '#button-bar-template',
     methods: {
         add: function (event) {
             this.$emit('add');

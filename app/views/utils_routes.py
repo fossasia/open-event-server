@@ -1,3 +1,4 @@
+from __future__ import print_function
 import json
 import os
 
@@ -246,7 +247,7 @@ def run_migrations():
     try:
         upgrade()
     except:
-        print "Migrations have been run"
+        print("Migrations have been run")
     return jsonify({'status': 'ok'})
 
 

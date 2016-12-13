@@ -80,51 +80,6 @@ def create_view_stepped(step):
     return redirect(url_for('.create_view'))
 
 
-@events.route('/create/files/bgimage', methods=('POST',))
-def create_event_bgimage_upload():
-    if request.method == 'POST':
-        background_image = request.form['bgimage']
-        if background_image:
-            background_file = uploaded_file(file_content=background_image)
-            background_url = upload_local(
-                background_file,
-                UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
-            )
-            return jsonify({'status': 'ok', 'background_url': background_url})
-        else:
-            return jsonify({'status': 'no bgimage'})
-
-
-@events.route('/create/files/logo', methods=('POST',))
-def create_event_logo_upload():
-    if request.method == 'POST':
-        logo_image = request.form['logo']
-        if logo_image:
-            logo_file = uploaded_file(file_content=logo_image)
-            logo = upload_local(
-                logo_file,
-                UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
-            )
-            return jsonify({'status': 'ok', 'logo': logo})
-        else:
-            return jsonify({'status': 'no logo'})
-
-
-@events.route('/create/files/sponsor_logo', methods=('POST',))
-def create_sponsor_logo_upload():
-    if request.method == 'POST':
-        logo_image = request.form['logo']
-        if logo_image:
-            logo_file = uploaded_file(file_content=logo_image)
-            logo = upload_local(
-                logo_file,
-                UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
-            )
-            return jsonify({'status': 'ok', 'logo': logo})
-        else:
-            return jsonify({'status': 'no logo'})
-
-
 @events.route('/create/', methods=('GET', 'POST'))
 def create_view():
     if request.method == 'POST':
@@ -166,6 +121,21 @@ def create_view():
         payment_countries=DataGetter.get_payment_countries(),
         payment_currencies=DataGetter.get_payment_currencies(),
         included_settings=get_module_settings())
+
+
+@events.route('/create/files/image/', methods=('POST',))
+def create_image_upload():
+    if request.method == 'POST':
+        image = request.form['image']
+        if image:
+            image_file = uploaded_file(file_content=image)
+            image_url = upload_local(
+                image_file,
+                UPLOAD_PATHS['temp']['image'].format(uuid=uuid4())
+            )
+            return jsonify({'status': 'ok', 'image_url': image_url})
+        else:
+            return jsonify({'status': 'no_image'})
 
 
 @events.route('/<event_id>/', methods=('GET', 'POST'))
@@ -257,78 +227,6 @@ def details_view(event_id):
                            checklist=checklist,
                            sessions=sessions,
                            settings=get_settings())
-
-
-@events.route('/<int:event_id>/editfiles/bgimage', methods=('POST', 'DELETE'))
-def bgimage_upload(event_id):
-    if request.method == 'POST':
-        background_image = request.form['bgimage']
-        if background_image:
-            background_file = uploaded_file(file_content=background_image)
-            background_url = upload(
-                background_file,
-                UPLOAD_PATHS['event']['background_url'].format(
-                    event_id=event_id
-                ))
-            event = DataGetter.get_event(event_id)
-            event.background_url = background_url
-            save_to_db(event)
-            return jsonify({'status': 'ok', 'background_url': background_url})
-        else:
-            return jsonify({'status': 'no bgimage'})
-    elif request.method == 'DELETE':
-        event = DataGetter.get_event(event_id)
-        event.background_url = ''
-        save_to_db(event)
-        return jsonify({'status': 'ok'})
-
-
-@events.route('/<int:event_id>/editfiles/logo', methods=('POST', 'DELETE'))
-def logo_upload(event_id):
-    if request.method == 'POST':
-        logo_image = request.form['logo']
-        if logo_image:
-            logo_file = uploaded_file(file_content=logo_image)
-            logo = upload(
-                logo_file,
-                UPLOAD_PATHS['event']['logo'].format(
-                    event_id=event_id
-                ))
-            event = DataGetter.get_event(event_id)
-            event.logo = logo
-            save_to_db(event)
-            return jsonify({'status': 'ok', 'logo': logo})
-        else:
-            return jsonify({'status': 'no logo'})
-    elif request.method == 'DELETE':
-        event = DataGetter.get_event(event_id)
-        event.logo = ''
-        save_to_db(event)
-        return jsonify({'status': 'ok'})
-
-
-@events.route('/<int:event_id>/sponsor/<int:sponsor_id>/editfiles/sponsor_logo', methods=('POST', 'DELETE'))
-def sponsor_logo_upload(event_id, sponsor_id):
-    if request.method == 'POST':
-        logo_image = request.form['logo']
-        if logo_image:
-            logo_file = uploaded_file(file_content=logo_image)
-            logo = upload(
-                logo_file,
-                UPLOAD_PATHS['sponsors']['logo'].format(
-                    event_id=event_id, id=sponsor_id
-                ))
-            sponsor = DataGetter.get_sponsor(sponsor_id)
-            sponsor.logo = logo
-            save_to_db(sponsor)
-            return jsonify({'status': 'ok', 'logo': logo})
-        else:
-            return jsonify({'status': 'no logo'})
-    elif request.method == 'DELETE':
-        sponsor = DataGetter.get_sponsor(sponsor_id)
-        sponsor.logo = ''
-        save_to_db(sponsor)
-        return jsonify({'status': 'ok'})
 
 
 @events.route('/<event_id>/edit/', methods=('GET', 'POST'))

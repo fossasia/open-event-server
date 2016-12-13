@@ -22,33 +22,15 @@
 
 
 {% macro button_bar(show_prev=true, show_next=true) %}
-    <div class="clearfix"></div>
-    <div class="btn-toolbar pull-right" style="margin-top: 25px;">
-        <div class="btn-group btn-group-lg">
-            {% if show_prev %}
-                <button type="button" class="btn btn-default prev-step"><i
-                        class="fa fa-chevron-left"></i> {{ _("Previous") }}</button>
-            {% endif %}
-            {% if show_next %}
-                <button type="button" class="btn btn-default next-step">{{ _("Next") }} <i
-                        class="fa fa-chevron-right"></i></button>
-            {% endif %}
-            <button type="button" class="btn btn-default save-event">{{ _("Save") }}</button>
-            {% if event and event.state == 'Published' and not is_copy %}
-                <button type="button"
-                        class="btn btn-lg btn-danger publish-unpublish-event">{{ _("Unpublish event") }}</button>
-            {% else %}
-                <button type="button"
-                        class="btn btn-lg btn-success publish-unpublish-event">{{ _("Make your event live") }}</button>
-            {% endif %}
-        </div>
-    </div>
+
 {% endmacro %}
 
 {% set step = step if step else '' %}
 
 
 {% block body %}
+
+    {% include 'gentelella/admin/event/wizard/components.html' %}
 
     {% if event %}
         <!-- {{ event.name }} -->
@@ -143,6 +125,9 @@
     <script src="{{ url_for('static', filename='admin/lib/selectize/dist/js/standalone/selectize.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/Croppie/croppie.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/admin/event/event_wizard.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/admin/event/wizard/button-component.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin/event/wizard/upload-component.js') }}"></script>
 
     <script src="{{ url_for('static', filename='js/admin/event/wizard/basic-details/classic.js') }}"></script>
     <script src="{{ url_for('static', filename='js/admin/event/wizard/basic-details/vue-models.js') }}"></script>
