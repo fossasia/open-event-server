@@ -1,12 +1,37 @@
+var tracksSeed = null;
+var sessionTypesSeed = null;
+var microlocationsSeed = null;
+var callForSpeakersSeed = null;
+var enabled = false;
+
+if (!_.isUndefined(window.seed)) {
+    if (!_.isNull(window.seed.tracks)) {
+        tracksSeed = window.seed.tracks;
+        enabled = enabled || tracksSeed.length > 0;
+    }
+    if (!_.isNull(window.seed.sessionTypes)) {
+        sessionTypesSeed = window.seed.sessionTypes;
+        enabled = enabled || sessionTypesSeed.length > 0;
+    }
+    if (!_.isNull(window.seed.microlocations)) {
+        microlocationsSeed = window.seed.microlocations;
+        enabled = enabled || microlocationsSeed.length > 0;
+    }
+    if (!_.isNull(window.seed.callForSpeakers)) {
+        callForSpeakersSeed = window.seed.callForSpeakers;
+        enabled = enabled || callForSpeakersSeed;
+    }
+}
+
 //noinspection JSUnusedGlobalSymbols
 var sessionsSpeakersApp = new Vue({
     el: '#event-wizard-sessions-speakers',
     data: {
-        tracks: [],
-        sessionTypes: [],
-        microlocations: [],
-        call_for_speakers: getCallForSpeakers(),
-        sessions_speakers_enabled: false,
+        tracks: (tracksSeed && tracksSeed.length > 0) ? tracksSeed : [],
+        sessionTypes: (sessionTypesSeed && sessionTypesSeed.length > 0) ? sessionTypesSeed : [],
+        microlocations: (microlocationsSeed && microlocationsSeed.length > 0) ? microlocationsSeed : [],
+        call_for_speakers: callForSpeakersSeed ? callForSpeakersSeed : getCallForSpeakers(),
+        sessions_speakers_enabled: enabled,
         custom_forms: {
             session: [],
             speaker: []

@@ -41,3 +41,15 @@ class StripeAuthorization(db.Model):
 
     def __unicode__(self):
         return self.stripe_user_id
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializable format"""
+        return {
+            'id': self.id,
+            'stripe_secret_key': self.stripe_secret_key,
+            'stripe_refresh_token': self.stripe_refresh_token,
+            'stripe_publishable_key': self.stripe_publishable_key,
+            'stripe_user_id': self.stripe_user_id,
+            'stripe_email': self.stripe_email
+        }

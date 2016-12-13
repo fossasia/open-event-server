@@ -109,6 +109,13 @@
 {% endblock %}
 {% block tail_js %}
     {{ super() }}
+
+    {% if event and seed %}
+        <script>
+            window.seed = {{ seed | safe | default('null', true) }};
+        </script>
+    {% endif %}
+
     <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/lodash/dist/lodash.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/vue/dist/vue.js') }}"></script>

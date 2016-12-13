@@ -1,3 +1,11 @@
+if(!_.isUndefined(window.seed) && !_.isNull(window.seed.event)) {
+    _.mergeWith(EVENT, window.seed.event, function (objectValue, sourceValue) {
+        if(_.isUndefined(sourceValue) || _.isNull(sourceValue)) {
+            return objectValue;
+        }
+    });
+}
+
 //noinspection JSUnusedGlobalSymbols
 var basicDetailsApp = new Vue({
     el: '#event-wizard-basic-details',

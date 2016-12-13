@@ -16,6 +16,12 @@ Vue.component('image-upload', {
                 return '';
             }
         },
+        imageUrl: {
+            type: String,
+            default: function () {
+                return '';
+            }
+        },
         uploadUrl: {
             type: String,
             default: function () {
@@ -53,7 +59,6 @@ Vue.component('image-upload', {
         return {
             isUploading: false,
             errorMessage: '',
-            imageUrl: '',
             componentId: 'upload-component-' + _.random(1000, 9999)
         }
     },

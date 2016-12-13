@@ -51,5 +51,8 @@ class Sponsor(db.Model):
             'id': self.id,
             'name': self.name,
             'url': self.url,
-            'logo': self.logo
+            'logo': self.logo,
+            'level': self.level,
+            'type': self.sponsor_type,
+            'description': self.description,
         }

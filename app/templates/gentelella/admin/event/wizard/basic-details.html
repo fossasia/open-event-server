@@ -311,6 +311,7 @@
                 <image-upload title="Event Image"
                               help-text="We recommend using at least a 2160x1080px (2:1 ratio) image"
                               icon="fa-camera-retro"
+                              v-bind:image-url="event.background_url"
                               v-bind:crop-required="true"
                               v-model="event.background_url" v-bind:max-size-in-mb="10"></image-upload>
             </div>
@@ -319,6 +320,7 @@
             <div class="col-md-7 col-xs-12">
                 <image-upload title="Logo" icon="fa-file-image-o"
                               v-model="event.logo"
+                              v-bind:image-url="event.logo"
                               v-bind:max-size-in-mb="1"></image-upload>
             </div>
         </div>
@@ -337,8 +339,7 @@
              v-show="event.has_organizer_info">
             <div class="item form-group">
                 <label>{{ _("Organizer name") }}</label>
-                <input name="organizer_name" title="organizer_name" class="form-control"
-                       :checked="event.organizer_name"/>
+                <input name="organizer_name" title="organizer_name" class="form-control" v-model="event.organizer_name"/>
             </div>
             <div class="item form-group">
                 <label>{{ _("Organizer Description") }}

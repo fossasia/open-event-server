@@ -22,8 +22,11 @@ from app.helpers.helpers import uploaded_file
 from app.helpers.invoicing import InvoicingManager
 from app.helpers.microservices import AndroidAppCreator, WebAppCreator
 from app.helpers.permission_decorators import is_organizer, is_super_admin, can_access
-from app.helpers.storage import upload, upload_local, UPLOAD_PATHS
+from app.helpers.storage import upload_local, UPLOAD_PATHS
 from app.helpers.ticketing import TicketingManager
+from app.helpers.wizard.event import get_event_json
+from app.helpers.wizard.sessions_speakers import get_microlocations_json, get_session_types_json, get_tracks_json
+from app.helpers.wizard.sponsors import get_sponsors_json
 from app.models.call_for_papers import CallForPaper
 from app.settings import get_settings
 
@@ -80,23 +83,8 @@ def create_view_stepped(step):
     return redirect(url_for('.create_view'))
 
 
-@events.route('/create/', methods=('GET', 'POST'))
+@events.route('/create/', methods=('GET',))
 def create_view():
-    if request.method == 'POST':
-        if not current_user.can_create_event():
-            flash("You don't have permission to create event.")
-            return redirect(url_for('.index_view'))
-        event = DataManager.create_event(request.form)
-        if request.form.get('state', u'Draft') == u'Published' and string_empty(event.location_name):
-            flash(
-                "Your event was saved. To publish your event please review the highlighted fields below.",
-                "warning")
-            return redirect(url_for(
-                '.edit_view', event_id=event.id) + "#step=location_name")
-        if event:
-            return redirect(url_for('.details_view', event_id=event.id))
-        return redirect(url_for('.index_view'))
-
     hash = get_random_hash()
     if CallForPaper.query.filter_by(hash=hash).all():
         hash = get_random_hash()
@@ -110,7 +98,6 @@ def create_view():
     return render_template(
         'gentelella/admin/event/new/new.html',
         current_date=datetime.datetime.now(),
-        start_date=datetime.datetime.now() + datetime.timedelta(days=10),
         event_types=DataGetter.get_event_types(),
         event_licences=DataGetter.get_event_licences(),
         event_topics=DataGetter.get_event_topics(),
@@ -235,22 +222,14 @@ def edit_view(event_id):
     return edit_view_stepped(event_id=event_id, step='')
 
 
-@events.route('/<event_id>/edit/<step>', methods=('GET', 'POST'))
+@events.route('/<event_id>/edit/<step>', methods=('GET',))
 @can_access
 def edit_view_stepped(event_id, step):
     event = DataGetter.get_event(event_id)
-    session_types = DataGetter.get_session_types_by_event_id(event_id).all(
-    )
-    tracks = DataGetter.get_tracks(event_id).all()
-    social_links = DataGetter.get_social_links_by_event_id(event_id)
-    microlocations = DataGetter.get_microlocations(event_id).all()
-    call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
-    sponsors = DataGetter.get_sponsors(event_id)
     custom_forms = DataGetter.get_custom_form_elements(event_id)
     speaker_form = json.loads(custom_forms.speaker_form)
     session_form = json.loads(custom_forms.session_form)
-    tax = DataGetter.get_tax_options(event_id)
-    ticket_types = DataGetter.get_ticket_types(event_id)
+    call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
 
     preselect = []
     required = []
@@ -265,67 +244,43 @@ def edit_view_stepped(event_id, step):
             if speaker_form[speaker_field]['require'] == 1:
                 required.append(speaker_field)
 
-    if request.method == 'GET':
-
+    hash = get_random_hash()
+    if CallForPaper.query.filter_by(hash=hash).all():
         hash = get_random_hash()
-        if CallForPaper.query.filter_by(hash=hash).all():
-            hash = get_random_hash()
 
-        match = geolite2.lookup(get_real_ip(True) or '127.0.0.1')
-        if match is not None:
-            current_timezone = match.timezone
-        else:
-            current_timezone = 'UTC'
+    match = geolite2.lookup(get_real_ip(True) or '127.0.0.1')
+    if match is not None:
+        current_timezone = match.timezone
+    else:
+        current_timezone = 'UTC'
 
-        return render_template('gentelella/admin/event/edit/edit.html',
-                               event=event,
-                               session_types=session_types,
-                               tracks=tracks,
-                               social_links=social_links,
-                               microlocations=microlocations,
-                               call_for_speakers=call_for_speakers,
-                               sponsors=sponsors,
-                               event_types=DataGetter.get_event_types(),
-                               event_licences=DataGetter.get_event_licences(),
-                               event_topics=DataGetter.get_event_topics(),
-                               event_sub_topics=DataGetter.get_event_subtopics(),
-                               preselect=preselect,
-                               current_timezone=current_timezone,
-                               timezones=DataGetter.get_all_timezones(),
-                               cfs_hash=hash,
-                               step=step,
-                               required=required,
-                               included_settings=get_module_settings(),
-                               tax=tax,
-                               payment_countries=DataGetter.get_payment_countries(),
-                               current_date=datetime.datetime.now(),
-                               start_date=datetime.datetime.now() + datetime.timedelta(days=10),
-                               payment_currencies=DataGetter.get_payment_currencies(),
-                               ticket_types=ticket_types)
+    seed = {
+        'event': get_event_json(event),
+        'sponsors': get_sponsors_json(event_id),
+        'microlocations': get_microlocations_json(event_id),
+        'sessionTypes': get_session_types_json(event_id),
+        'tracks': get_tracks_json(event_id),
+        'callForSpeakers': call_for_speakers.serialize
+    }
 
-    if request.method == "POST":
-
-        old_sponsor_logos = []
-        old_sponsor_names = []
-        for sponsor in sponsors:
-            old_sponsor_logos.append(sponsor.logo)
-            old_sponsor_names.append(sponsor.name)
-
-        try:
-            event = DataManager.edit_event(
-                request, event, session_types, tracks, social_links,
-                microlocations, call_for_speakers, sponsors, old_sponsor_logos,
-                old_sponsor_names, tax)
-        except Exception:
-            traceback.print_exc()
-
-        if (request.form.get('state', u'Draft') == u'Published') and string_empty(event.location_name):
-            flash(
-                "Your event was saved. To publish your event please review the highlighted fields below.",
-                "warning")
-            return redirect(url_for('.edit_view', event_id=event.id) + "#highlight=location_name")
-
-        return redirect(url_for('.details_view', event_id=event_id))
+    return render_template('gentelella/admin/event/edit/edit.html',
+                           event=event,
+                           step=step,
+                           seed=json.dumps(seed),
+                           required=required,
+                           preselect=preselect,
+                           current_date=datetime.datetime.now(),
+                           event_types=DataGetter.get_event_types(),
+                           event_licences=DataGetter.get_event_licences(),
+                           event_topics=DataGetter.get_event_topics(),
+                           event_sub_topics=DataGetter.get_event_subtopics(),
+                           timezones=DataGetter.get_all_timezones(),
+                           call_for_speakers=call_for_speakers,
+                           cfs_hash=hash,
+                           current_timezone=current_timezone,
+                           payment_countries=DataGetter.get_payment_countries(),
+                           payment_currencies=DataGetter.get_payment_currencies(),
+                           included_settings=get_module_settings())
 
 
 @events.route('/<event_id>/trash/', methods=('GET',))

@@ -79,6 +79,34 @@ class Ticket(db.Model):
     def __unicode__(self):
         return self.name
 
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        data = {
+            'id': self.id,
+            'name': self.name,
+            'quantity': self.quantity,
+            'type': self.type,
+            'description_toggle': self.description_toggle,
+            'description': self.description,
+            'price': self.price,
+            'sales_start_date': self.sales_start.strftime('%m/%d/%Y') if self.sales_start else '',
+            'sales_start_time': self.sales_start.strftime('%H:%M') if self.sales_start else '',
+            'sales_end_date': self.sales_end.strftime('%m/%d/%Y') if self.sales_end else '',
+            'sales_end_time': self.sales_end.strftime('%H:%M') if self.sales_end else '',
+            'hide': self.hide,
+            'min_order': self.min_order,
+            'max_order': self.max_order,
+            'tags': '',
+        }
+
+        tags = []
+        for tag in self.tags:
+            tags.append(tag.name)
+
+        data['tags'] = ",".join(tags)
+        return data
+
 
 class TicketTag(db.Model):
     """Tags to group tickets

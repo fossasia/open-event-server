@@ -44,3 +44,15 @@ class EventCopyright(db.Model):
 
     def __unicode__(self):
         return self.holder
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializable format"""
+        return {
+            'id': self.id,
+            'holder': self.holder,
+            'holder_url': self.holder_url,
+            'license': self.licence_url,
+            'year': self.year,
+            'logo': self.logo
+        }
