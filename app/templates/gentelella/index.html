@@ -36,8 +36,30 @@
             text-overflow: ellipsis;
         }
 
-        .event-holder .location_name {
+        .event-holder .location_name { 
+            white-space: nowrap; 
+            width: 12em; 
+            overflow: hidden;
+            text-overflow: ellipsis; 
+            position: relative;
+            display: inline-block;
+        }
 
+        .event-holder .caption .locate{
+            visibility: hidden;
+            overflow: visible;
+            width: 180px;
+            border-radius: 6px;
+            padding: 5px 0;
+            background-color: #444444;
+            color: white;
+            text-align: center;
+            position: absolute;
+            z-index: 1;           
+        }
+
+        .event-holder:hover .caption .locate {
+            visibility: visible;
         }
 
         .event-holder .tags {
@@ -141,7 +163,8 @@
                 <div class="caption">
                     <small class="time">{{ event.start_time.strftime('%a, %B %d %I:%M %p') }}</small>
                     <h4 class="name">{{ event.name }}</h4>
-                    <small class="location_name">{{ event.location_name.split(",")[0] }}</small>
+                    <div class="location_name">{{ event.location_name.split(",")[0] }}</div>
+                    <span class="locate">{{ event.location_name }}</span>
                     <hr>
                     <p class="tags">
                         {% if event.type %}
