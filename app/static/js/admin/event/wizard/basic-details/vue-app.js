@@ -26,18 +26,18 @@ var basicDetailsApp = new Vue({
         },
         subTopics: function () {
             if (_.isNull(this.event.topic)) {
-                return []
+                return [];
             }
-            return sub_topics[this.event.topic]
+            return sub_topics[this.event.topic];
         },
         location: function () {
             return {
                 lat: this.event.latitude,
                 lng: this.event.longitude
-            }
+            };
         },
         zoom: function () {
-            return this.event.latitude == 0.0 && this.event.longitude == 0.0 ? 1 : 15
+            return this.event.latitude === 0.0 && this.event.longitude === 0.0 ? 1 : 15;
         }
     },
     watch: {
@@ -46,6 +46,7 @@ var basicDetailsApp = new Vue({
         },
         'event.ticket_include': function () {
             this.event.tickets = [];
+            this.ticket_url = '';
         },
         'addressShown': function (val) {
             if (val) {
@@ -58,14 +59,14 @@ var basicDetailsApp = new Vue({
         'event.location_name': function (val) {
             var $this = this;
             geocodeAddress(window.geocoder, val, function (lat, lng) {
-                if (val.trim() != "") {
+                if (val.trim() !== "") {
                     $this.addressShown = true;
                 }
                 $this.event.latitude = lat;
                 $this.event.longitude = lng;
             });
         },
-        'event.discount_code': function (val) {
+        'event.discount_code': function () {
             this.discountMessage.success = '';
             this.discountMessage.error = '';
         }
@@ -97,9 +98,9 @@ var basicDetailsApp = new Vue({
         },
         updateAddress: function () {
             var locationName = "";
-            for (var component in window.componentForm) {
+            _.each(window.componentForm, function (component) {
                 locationName += $('#' + component).get(0).value + " ";
-            }
+            });
             this.event.location_name = locationName;
         },
         connectToStripe: function () {
@@ -151,7 +152,7 @@ basicDetailsApp.$nextTick(function () {
         'format': 'mm/dd/yyyy',
         'autoclose': true,
         'startDate': new Date()
-    }).on('changeDate', function (e) {
+    }).on('changeDate', function () {
         this.dispatchEvent(new Event('input'));
     });
     $eventDiv.find("input.time").timepicker({

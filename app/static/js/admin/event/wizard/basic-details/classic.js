@@ -90,7 +90,7 @@ function applyDiscountCode(discountCodeValue, callback) {
             }
             callback(null, message);
         }
-    }).fail(function (data) {
+    }).fail(function () {
         callback(null, "An error occurred while trying to apply the discount code.");
     });
 }

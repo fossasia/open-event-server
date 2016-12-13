@@ -3,7 +3,7 @@ Vue.component('ticket', {
     data: function () {
         return {
             show_settings: false
-        }
+        };
     },
     template: '#ticket-template',
     methods: {
@@ -16,7 +16,7 @@ Vue.component('ticket', {
             var $ticket = $(this.$el);
             var event = new Event('input');
             /* Bind datepicker to dates */
-            $ticket.find("input.date").datepicker().on('changeDate', function (e) {
+            $ticket.find("input.date").datepicker().on('changeDate', function () {
                 this.dispatchEvent(event);
             });
             $ticket.find("input.time").timepicker({
@@ -42,7 +42,7 @@ Vue.component('ticket', {
             });
             /* Enable tooltips */
             $ticket.find(".edit-ticket-button").tooltip();
-        })
+        });
     }
 });
 
@@ -50,10 +50,10 @@ Vue.component('social-link', {
     props: ['socialLink'],
     template: '#social-link-template',
     methods: {
-        add: function (event) {
+        add: function () {
             this.$emit('add');
         },
-        remove: function (event) {
+        remove: function () {
             this.$emit('remove');
         }
     }

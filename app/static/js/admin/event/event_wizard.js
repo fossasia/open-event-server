@@ -7,13 +7,13 @@ $(document).ready(function () {
         history.replaceState(null, null, activatedTab.data("href"));
     });
 
-    $(document).on("click", ".next-step", function (e) {
+    $(document).on("click", ".next-step", function () {
         var $active = $(".wizard .nav-tabs li.active");
         $active.next().removeClass("disabled");
         nextTab($active);
     });
 
-    $(document).on("click", ".prev-step", function (e) {
+    $(document).on("click", ".prev-step", function () {
         var $active = $(".wizard .nav-tabs li.active");
         prevTab($active);
     });

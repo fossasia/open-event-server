@@ -15,7 +15,7 @@ Vue.component('session-track', {
             $div.find('.colorpicker-component').colorpicker().on('changeColor', function () {
                 $div.find('input')[0].dispatchEvent(new Event('input'));
             });
-        })
+        });
     }
 });
 
@@ -51,6 +51,6 @@ Vue.component('session-type', {
             }).on('changeTime', function () {
                 this.dispatchEvent(new Event('input'));
             });
-        })
+        });
     }
 });

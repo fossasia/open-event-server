@@ -22,7 +22,7 @@
                     <tbody class="sponsors">
                     <template v-for="(sponsor, index) in sponsors">
 
-                        <tr class="row-sponsor" v-bind:key="sponsor" :key="index">
+                        <tr class="row-sponsor" v-bind:key="index">
                             <td rowspan="2">{{ '{{ index + 1 }}' }}</td>
                             <td>
                                 <input title="Sponsor name" v-model="sponsor.name" class="form-control"/>
@@ -48,7 +48,7 @@
                             </td>
                         </tr>
 
-                        <tr class="row-sponsor-addon" v-bind:key="sponsor">
+                        <tr class="row-sponsor-addon" v-bind:key="index">
                             <td>
                                 <div class="form-group">
                                     <label>{{ _("Description") }}</label>

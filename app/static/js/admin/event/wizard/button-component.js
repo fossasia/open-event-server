@@ -1,10 +1,10 @@
 Vue.component('save', {
     template: '#button-bar-template',
     methods: {
-        add: function (event) {
+        add: function () {
             this.$emit('add');
         },
-        remove: function (event) {
+        remove: function () {
             this.$emit('remove');
         }
     }

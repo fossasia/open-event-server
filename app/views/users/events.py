@@ -2,7 +2,6 @@ import binascii
 import datetime
 import json
 import os
-import traceback
 from uuid import uuid4
 
 from flask import Blueprint
@@ -260,7 +259,7 @@ def edit_view_stepped(event_id, step):
         'microlocations': get_microlocations_json(event_id),
         'sessionTypes': get_session_types_json(event_id),
         'tracks': get_tracks_json(event_id),
-        'callForSpeakers': call_for_speakers.serialize
+        'callForSpeakers': call_for_speakers.serialize if call_for_speakers else None
     }
 
     return render_template('gentelella/admin/event/edit/edit.html',

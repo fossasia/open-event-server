@@ -56,7 +56,10 @@ def get_event_json(event_id):
     }
 
     for social_link in event.social_link:
-        result["social_links"].append(social_link.serialize)
+        if social_link.name == 'External Event URL':
+            result["event_url"] = social_link.link
+        else:
+            result["social_links"].append(social_link.serialize)
 
     for ticket in event.tickets:
         result["tickets"].append(ticket.serialize)

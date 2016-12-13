@@ -60,7 +60,7 @@ Vue.component('image-upload', {
             isUploading: false,
             errorMessage: '',
             componentId: 'upload-component-' + _.random(1000, 9999)
-        }
+        };
     },
     watch: {
         imageUrl: function (value) {
@@ -127,7 +127,7 @@ Vue.component('image-upload', {
             }).done(function (data) {
                 $this.imageUrl = data.image_url;
                 callback();
-            }).fail(function (data) {
+            }).fail(function () {
                 $this.errorMessage = "Something went wrong. Please try again.";
                 $this.$emit("error");
             }).always(function () {
@@ -143,6 +143,6 @@ Vue.component('image-upload', {
                 this.$uploadCropper = $div.find('.upload-cropper');
                 this.$uploadCropper.croppie(this.cropperConfig);
             }
-        })
+        });
     }
 });

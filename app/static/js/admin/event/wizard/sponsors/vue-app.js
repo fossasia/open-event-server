@@ -21,7 +21,7 @@ var sponsorsApp = new Vue({
             }
             this.$nextTick(function () {
                 bindSummerNote(this);
-            })
+            });
         }
     },
     methods: {

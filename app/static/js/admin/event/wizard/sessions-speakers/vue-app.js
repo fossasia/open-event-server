@@ -19,7 +19,6 @@ if (!_.isUndefined(window.seed)) {
     }
     if (!_.isNull(window.seed.callForSpeakers)) {
         callForSpeakersSeed = window.seed.callForSpeakers;
-        enabled = enabled || callForSpeakersSeed;
     }
 }
 
@@ -98,7 +97,7 @@ sessionsSpeakersApp.$nextTick(function () {
     $eventDiv.find('[data-toggle="tooltip"]').tooltip();
 
     var clipboard = new Clipboard('.btn-copy');
-    clipboard.on('success', function (e) {
+    clipboard.on('success', function () {
         $eventDiv.find(".btn-copy")
             .attr("title", "Copied")
             .attr("data-original-title", "Copied")
@@ -111,7 +110,7 @@ sessionsSpeakersApp.$nextTick(function () {
         'format': 'mm/dd/yyyy',
         'autoclose': true,
         'startDate': new Date()
-    }).on('changeDate', function (e) {
+    }).on('changeDate', function () {
         this.dispatchEvent(new Event('input'));
     });
 
