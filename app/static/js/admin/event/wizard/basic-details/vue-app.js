@@ -1,4 +1,3 @@
-
 //noinspection JSUnusedGlobalSymbols
 var basicDetailsApp = new Vue({
     el: '#event-wizard-basic-details',
@@ -6,7 +5,12 @@ var basicDetailsApp = new Vue({
         event: EVENT,
         included_items: included_settings,
         addressShown: false,
-        mapLoaded: false
+        mapLoaded: false,
+        discountMessage: {
+            success: '',
+            error: '',
+            loading: false
+        }
     },
     computed: {
         _: function () {
@@ -52,6 +56,10 @@ var basicDetailsApp = new Vue({
                 $this.event.latitude = lat;
                 $this.event.longitude = lng;
             });
+        },
+        'event.discount_code': function (val) {
+            this.discountMessage.success = '';
+            this.discountMessage.error = '';
         }
     },
     methods: {
@@ -106,6 +114,21 @@ var basicDetailsApp = new Vue({
             $this.event.stripe.stripe_publishable_key = '';
             $this.event.stripe.stripe_user_id = '';
             $this.event.stripe.stripe_email = '';
+        },
+        applyDiscount: function () {
+            var $this = this;
+            $this.discountMessage.loading = true;
+            applyDiscountCode($this.event.discount_code, function (discountCodeId, message) {
+                $this.discountMessage.loading = false;
+                if (_.isNull(discountCodeId)) {
+                    $this.discountMessage.success = '';
+                    $this.discountMessage.error = message;
+                } else {
+                    $this.discountMessage.success = message;
+                    $this.discountMessage.error = '';
+                    $this.event.discount_code_id = discountCodeId;
+                }
+            });
         }
     },
     compiled: function () {
@@ -154,12 +177,13 @@ VueGoogleMap.loaded.then(function () {
 
     var intervalID = setInterval(function () {
         try {
-            if (!_.isUndefined(app.$refs.gmap.$mapObject)) {
+            if (!_.isUndefined(basicDetailsApp.$refs.gmap.$mapObject)) {
                 clearInterval(intervalID);
-                window.map = app.$refs.gmap.$mapObject;
-                app.recenterMap();
-                app.mapLoaded = true;
+                window.map = basicDetailsApp.$refs.gmap.$mapObject;
+                basicDetailsApp.recenterMap();
+                basicDetailsApp.mapLoaded = true;
             }
-        } catch (ignored) { }
+        } catch (ignored) {
+        }
     }, 100);
 });

@@ -71,4 +71,28 @@ function stripeConnect(callback) {
     });
 }
 
+/**
+ * Apply a discount code
+ *
+ * @param discountCodeValue
+ * @param callback
+ */
+function applyDiscountCode(discountCodeValue, callback) {
+    $.post("/events/discount/apply", {
+        discount_code: discountCodeValue
+    }).done(function (data) {
+        if (data.status === 'ok') {
+            callback(data.discount_code.id, data.discount_code.value + "% over a period of " + data.discount_code.max_quantity + " month(s)");
+        } else {
+            var message = "An error occurred while trying to apply the discount code.";
+            if (data.hasOwnProperty('message')) {
+                message = data.message;
+            }
+            callback(null, message);
+        }
+    }).fail(function (data) {
+        callback(null, "An error occurred while trying to apply the discount code.");
+    });
+}
+
 

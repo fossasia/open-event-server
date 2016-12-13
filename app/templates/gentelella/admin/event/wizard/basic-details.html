@@ -460,19 +460,18 @@
                     </h2>
                     <div class="row">
                         <div class="col-xs-6">
-                            <div class="item form-group">
+                            <div class="item form-group" v-bind:class="{ 'has-error': discountMessage.error != '', 'has-success': discountMessage.success != '' }">
                                 <label for="discount-code-entry">{{ _("Enter Discount Code") }}</label>
-                                <input type="hidden" name="discount_code_id" value="" v-model="event.discount_code_id">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="" id="discount-code-entry"
+                                    <input type="text" class="form-control" id="discount-code-entry"
                                            v-model="event.discount_code">
                                     <span class="input-group-btn">
-                                <button class="btn btn-success" id="discount-code-entry-apply"
-                                        type="button">{{ _("Apply Discount") }}</button>
-                            </span>
+                                        <button class="btn btn-success" v-on:click="applyDiscount"
+                                                type="button" v-bind:disabled="discountMessage.loading">{{ _("Apply Discount") }}</button>
+                                    </span>
                                 </div>
-                                <span class="help-text"
-                                      style="display: none;"><strong>{{ _("Code applied !") }}</strong> {{ _("10 percent off on monthly payments for 3 months") }}</span>
+                                <span class="help-text text-success" v-if="discountMessage.success != ''"><strong>{{ _("Code applied !") }}</strong> {{ '{{ discountMessage.success }}' }}</span>
+                                <span class="help-text text-danger" v-if="discountMessage.error != ''">{{ '{{ discountMessage.error }}' }}</span>
                             </div>
                         </div>
                     </div>
