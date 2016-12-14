@@ -175,6 +175,7 @@ class Event(db.Model):
         self.privacy = privacy
         self.type = type
         self.topic = topic
+        self.copyright = copyright
         self.sub_topic = sub_topic
         self.ticket_url = ticket_url
         self.creator = creator
