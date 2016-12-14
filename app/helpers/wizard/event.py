@@ -1,17 +1,17 @@
 import os
-import time
 from datetime import datetime
 
-import PIL
 from PIL import Image
-from flask import url_for, current_app as app
+from flask import url_for, abort
 from flask.ext import login
 
-from app.helpers.data import DataManager, save_to_db, record_activity
+from app.helpers.data import save_to_db, record_activity
 from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import represents_int
 from app.helpers.static import EVENT_LICENCES
-from app.helpers.storage import UploadedFile, upload, UPLOAD_PATHS
+from app.helpers.storage import UPLOAD_PATHS
+from app.helpers.wizard.helpers import save_resized_image, save_event_image, get_path_of_temp_url, \
+    get_searchable_location_name, get_event_time_field_format
 from app.models import db
 from app.models.email_notifications import EmailNotification
 from app.models.event import Event
@@ -26,6 +26,11 @@ from app.models.users_events_roles import UsersEventsRoles
 
 
 def get_event_json(event_id):
+    """
+    Generate a json to seed the wizard with from an exisiting event
+    :param event_id:
+    :return:
+    """
     if represents_int(event_id):
         event = DataGetter.get_event(event_id)
     else:
@@ -68,7 +73,7 @@ def get_event_json(event_id):
         "has_code_of_conduct": event.code_of_conduct != '',
         "code_of_conduct": event.code_of_conduct,
         "copyright": event.copyright.serialize if event.copyright else None,
-        "tax_allow": event.tax_allow,
+        "tax_allow": 1 if event.tax_allow else 0,
         "tax": event.tax.serialize if event.tax else None,
         "latitude": event.latitude,
         "longitude": event.longitude,
@@ -92,19 +97,35 @@ def get_event_json(event_id):
 
 
 def save_event_from_json(json):
+    """
+    Save an event from a wizard json
+    :param json:
+    :return:
+    """
     event_data = json['event']
     state = json['state']
 
     if represents_int(event_data['id']):
         event = DataGetter.get_event(event_data['id'])
+        is_edit = True
     else:
         event = Event()
+        is_edit = False
+
+    start_time = get_event_time_field_format(event_data, 'start_time')
+    end_time = get_event_time_field_format(event_data, 'end_time')
+
+    if event_data['name'].strip() == '' or not start_time or not end_time:
+        abort(400)
+
+    if start_time > end_time:
+        abort(400)
 
     event.name = event_data['name']
     event.location_name = event_data['location_name']
     event.show_map = 1 if event_data['show_map'] else 0
-    event.start_time = DataManager.get_event_time_field_format(event_data, 'start_time')
-    event.end_time = DataManager.get_event_time_field_format(event_data, 'end_time')
+    event.start_time = start_time
+    event.end_time = end_time
     event.timezone = event_data['timezone']
     event.description = event_data['description']
     event.privacy = event_data['privacy']
@@ -113,8 +134,8 @@ def save_event_from_json(json):
     event.sub_topic = event_data['sub_topic']
     event.latitude = event_data['latitude']
     event.longitude = event_data['longitude']
-    event.searchable_location_name = DataManager.get_searchable_location_name(event)
-    event.state = state
+    event.searchable_location_name = get_searchable_location_name(event)
+    event.state = state if event_data['location_name'].strip() != '' else 'Draft'
 
     event.organizer_description = event_data['organizer_description'] if event_data['has_organizer_info'] else ''
     event.organizer_name = event_data['organizer_name'] if event_data['has_organizer_info'] else ''
@@ -141,8 +162,7 @@ def save_event_from_json(json):
     event.ticket_include = event_data['ticket_include']
 
     if event.ticket_include:
-        event.ticket_url = url_for('event_detail.display_event_tickets', identifier=event.identifier,
-                                   _external=True)
+        event.ticket_url = url_for('event_detail.display_event_tickets', identifier=event.identifier, _external=True)
         save_tickets(event_data['tickets'], event)
     else:
         event.ticket_url = event_data['ticket_url']
@@ -155,6 +175,10 @@ def save_event_from_json(json):
     event.pay_by_bank = event_data['pay_by_bank']
     event.pay_onsite = event_data['pay_onsite']
     event.pay_by_stripe = event_data['pay_by_stripe']
+
+    event.cheque_details = event_data['cheque_details'] if event.pay_by_cheque else ''
+    event.bank_details = event_data['bank_details'] if event.pay_by_bank else ''
+    event.onsite_details = event_data['onsite_details'] if event.pay_onsite else ''
 
     if event.pay_by_stripe and event_data['stripe']['linked']:
         stripe_data = event_data['stripe']
@@ -173,7 +197,7 @@ def save_event_from_json(json):
         if event.stripe:
             db.session.delete(event.stripe)
 
-    event.tax_allow = event_data['tax_allow']
+    event.tax_allow = bool(event_data['tax_allow'] == 1)
 
     if event.tax_allow:
         tax_data = event_data['tax']
@@ -215,28 +239,34 @@ def save_event_from_json(json):
                                  type='event')
         save_to_db(image_sizes, "Image Sizes Saved")
 
-    if event_data['background_url'] and event_data['background_url'].strip() != '':
-        background_url = event_data['background_url']
+    if event.background_url != event_data['background_url']:
+        if event_data['background_url'] and event_data['background_url'].strip() != '':
+            background_url = event_data['background_url']
+            jpg_image = convert_background_to_jpg(background_url)
+            event.background_url = save_untouched_background(background_url, event.id)
+            event.large = save_resized_background(jpg_image, event.id, 'large', image_sizes)
+            event.thumbnail = save_resized_background(jpg_image, event.id, 'thumbnail', image_sizes)
+            event.icon = save_resized_background(jpg_image, event.id, 'icon', image_sizes)
+            os.remove(jpg_image)
+            save_to_db(event)
+        elif event.background_url != '':
+            event.background_url = ''
+            event.large = ''
+            event.thumbnail = ''
+            event.icon = ''
+            save_to_db(event)
 
-        jpg_image = convert_background_to_jpg(background_url)
-        event.background_url = save_untouched_background(background_url, event.id)
-        event.large = save_resized_background(jpg_image, event.id, 'large', image_sizes)
-        event.thumbnail = save_resized_background(jpg_image, event.id, 'thumbnail', image_sizes)
-        event.icon = save_resized_background(jpg_image, event.id, 'icon', image_sizes)
-        os.remove(jpg_image)
-        save_to_db(event)
-
-    role = Role.query.filter_by(name=ORGANIZER).first()
-    uer = UsersEventsRoles(login.current_user, event, role)
-
-    if save_to_db(uer, "Event saved"):
-        new_email_notification_setting = EmailNotification(next_event=1,
-                                                           new_paper=1,
-                                                           session_schedule=1,
-                                                           session_accept_reject=1,
-                                                           user_id=login.current_user.id,
-                                                           event_id=event.id)
-        save_to_db(new_email_notification_setting, "EmailSetting Saved")
+    if not is_edit:
+        role = Role.query.filter_by(name=ORGANIZER).first()
+        uer = UsersEventsRoles(login.current_user, event, role)
+        if save_to_db(uer, "Event saved"):
+            new_email_notification_setting = EmailNotification(next_event=1,
+                                                               new_paper=1,
+                                                               session_schedule=1,
+                                                               session_accept_reject=1,
+                                                               user_id=login.current_user.id,
+                                                               event_id=event.id)
+            save_to_db(new_email_notification_setting, "EmailSetting Saved")
 
     return {
         'event_id': event.id
@@ -244,6 +274,12 @@ def save_event_from_json(json):
 
 
 def save_tickets(tickets_data, event):
+    """
+    Save all tickets
+    :param tickets_data:
+    :param event:
+    :return:
+    """
     ticket_ids = []
     for ticket_data in tickets_data:
         if ticket_data['id']:
@@ -262,8 +298,8 @@ def save_tickets(tickets_data, event):
         ticket.hide = ticket_data['ticket_visibility']
         ticket.min_order = ticket_data['min_order'] if ticket_data['min_order'] != '' else 1
         ticket.max_order = ticket_data['max_order'] if ticket_data['max_order'] != '' else 10
-        ticket.sales_start = DataManager.get_event_time_field_format(ticket_data, 'sales_start')
-        ticket.sales_end = DataManager.get_event_time_field_format(ticket_data, 'sales_end')
+        ticket.sales_start = get_event_time_field_format(ticket_data, 'sales_start')
+        ticket.sales_end = get_event_time_field_format(ticket_data, 'sales_end')
 
         if ticket_data['tags_string'].strip() != '':
             tag_names = ticket_data['tags_string'].split(',')
@@ -281,24 +317,25 @@ def save_tickets(tickets_data, event):
             db.session.delete(unwanted_ticket)
 
 
-def get_path_of_temp_url(url):
-    return '{}/static/{}'.format(app.config['BASE_DIR'], url[len('/serve_static/'):])
-
-
 def save_logo(logo_url, event_id):
-    filename = '{}.png'.format(time.time())
-    file_path = get_path_of_temp_url(logo_url)
-    logo_file = UploadedFile(file_path, filename)
-    url = upload(
-        logo_file,
-        UPLOAD_PATHS['event']['logo'].format(
-            event_id=event_id
-        ))
-    os.remove(file_path)
-    return url if url else ''
+    """
+    Save the logo
+    :param logo_url:
+    :param event_id:
+    :return:
+    """
+    upload_path = UPLOAD_PATHS['event']['logo'].format(
+        event_id=event_id
+    )
+    return save_event_image(logo_url, upload_path)
 
 
 def convert_background_to_jpg(background_url):
+    """
+    Convert the background image to JPG to reduce the file size
+    :param background_url:
+    :return:
+    """
     file_path = get_path_of_temp_url(background_url)
     im = Image.open(file_path)
     out_im = file_path.replace('png', 'jpg')
@@ -309,20 +346,27 @@ def convert_background_to_jpg(background_url):
 
 
 def save_untouched_background(background_url, event_id):
-    filename = '{}.png'.format(time.time())
-    file_path = get_path_of_temp_url(background_url)
-    background_file = UploadedFile(file_path, filename)
-    url = upload(
-        background_file,
-        UPLOAD_PATHS['event']['background_url'].format(
-            event_id=event_id
-        ))
-    os.remove(file_path)
-    return url if url else ''
+    """
+    Save the untouched background image
+    :param background_url:
+    :param event_id:
+    :return:
+    """
+    upload_path = UPLOAD_PATHS['event']['background_url'].format(
+        event_id=event_id
+    )
+    return save_event_image(background_url, upload_path)
 
 
 def save_resized_background(background_image_file, event_id, size, image_sizes):
-    filename = '{}.jpg'.format(time.time())
+    """
+    Save the resized version of the background image
+    :param background_image_file:
+    :param event_id:
+    :param size:
+    :param image_sizes:
+    :return:
+    """
 
     width_ = 1300
     height_ = 500
@@ -349,16 +393,8 @@ def save_resized_background(background_image_file, event_id, size, image_sizes):
         basewidth = image_sizes.icon_width
         height_size = image_sizes.icon_height
 
-    img = Image.open(background_image_file)
-    if aspect == 'on':
-        width_percent = (basewidth / float(width_))
-        height_size = int((float(height_) * float(width_percent)))
+    upload_path = UPLOAD_PATHS['event'][size].format(
+        event_id=int(event_id)
+    )
 
-    img = img.resize((basewidth, height_size), PIL.Image.ANTIALIAS)
-    img.save(background_image_file)
-    large_file = UploadedFile(file_path=background_image_file, filename=filename)
-    return upload(
-        large_file,
-        UPLOAD_PATHS['event'][size].format(
-            event_id=int(event_id)
-        ))
+    return save_resized_image(background_image_file, width_, height_, basewidth, aspect, height_size, upload_path)

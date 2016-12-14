@@ -94,4 +94,12 @@ function applyDiscountCode(discountCodeValue, callback) {
     });
 }
 
-
+/**
+ * Check if a string is a link
+ *
+ * @param link
+ * @returns {boolean}
+ */
+function isLink(link) {
+    return /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(link);
+}

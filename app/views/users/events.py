@@ -498,8 +498,8 @@ def save_event_from_wizard(what):
         return jsonify(save_session_speakers(data))
     elif what == 'all':
         response = save_event_from_json(data['event'])
-        save_sponsors_from_json(data['sponsors'], response['event_id'])
-        save_session_speakers(data['session_speakers'], response['event_id'])
+        save_sponsors_from_json(data['sponsors'])
+        save_session_speakers(data['session_speakers'])
         return jsonify(response)
     else:
         abort()

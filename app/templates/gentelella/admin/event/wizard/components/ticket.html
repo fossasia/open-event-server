@@ -62,16 +62,14 @@
                     </div>
                     <div class="item form-group">
                         <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1; margin-top: 0;">
-                            <input type="checkbox" class="checkbox flat form-control"
-                                   name="tickets[description_visibility]" v-model="ticket.description_visibility">
+                            <input type="checkbox" class="checkbox flat form-control" v-model="ticket.description_visibility">
                             {{ _("Display Ticket description on Public Events page") }}
                         </label>
                     </div>
                     <div class="item form-group">
                         <div style="font-size: 15px;margin-bottom: 5px;">{{ _("Ticket visibility") }}</div>
                         <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1;  margin-top: 0;">
-                            <input type="checkbox" class="checkbox flat form-control"
-                                   name="tickets[ticket_visibility]" v-model="ticket.ticket_visibility">
+                            <input type="checkbox" class="checkbox flat form-control" v-model="ticket.ticket_visibility">
                             {{ _("Hide Ticket") }}
                         </label>
                         <div style="font-size: 13px;">

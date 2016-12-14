@@ -28,40 +28,6 @@ class TestEvents(OpenEventViewTestCase):
             rv = self.app.get(url, follow_redirects=True)
             self.assertTrue("Create Event" in rv.data, msg=rv.data)
 
-    def test_events_edit(self):
-        with app.test_request_context():
-            event = ObjectMother.get_event()
-            save_to_db(event, "Event saved")
-            custom_forms = ObjectMother.get_custom_form(event.id)
-            save_to_db(custom_forms, "Custom forms saved")
-            url = url_for('events.edit_view', event_id=event.id)
-            data = fix_attribute_names(POST_EVENT_DATA.copy(), EVENT_POST)
-            del data['copyright']
-            del data['call_for_papers']
-            data['payment_country'] = 'United States'
-            data['payment_currency'] = 'USD United States Dollars $'
-            data['sponsors_state'] = 'on'
-            data['sponsors[name]'] = ['Sponsor 1', 'Sponsor 2']
-            data['sponsors[type]'] = ['Gold', 'Silver']
-            data['sponsors[url]'] = ["", ""]
-            data['sponsors[logo]'] = ["", ""]
-            data['sponsors[description]'] = ["", ""]
-            data['sponsors[level]'] = ["", ""]
-            data['name'] = 'EditTestName'
-            data['start_date'] = '07/04/2016'
-            data['start_time'] = '19:00'
-            data['has_session_speakers'] = 'yes'
-            data['end_date'] = '07/04/2016'
-            data['end_time'] = '22:00'
-            data['has_session_speakers'] = 'no'
-            data['custom_form[name]'] = ['session_form', 'speaker_form']
-            data['custom_form[value]'] = [custom_forms.session_form, custom_forms.speaker_form]
-            data = ImmutableMultiDict(data)
-            rv = self.app.post(url, follow_redirects=True, buffered=True, content_type='multipart/form-data',
-                               data=data)
-            self.assertTrue('EditTestName' in rv.data, msg=rv.data)
-            self.assertTrue(data['sponsors[name]'] in rv.data, msg=rv.data)
-
     def test_event_view(self):
         with app.test_request_context():
             event = ObjectMother.get_event()

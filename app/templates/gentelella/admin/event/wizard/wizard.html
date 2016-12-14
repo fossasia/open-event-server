@@ -43,7 +43,7 @@
                      style="min-height: 300px; "
                      data-id="{{ event.id | default('', true) }}">
                     <div class="wizard-inner">
-                        <tabs v-bind:step="step" v-bind:disable="networkRequestRunning" v-on:move="moveToStep"></tabs>
+                        <tabs v-bind:step="step" v-bind:disable="networkRequestRunning || disableMove" v-on:move="moveToStep"></tabs>
                     </div>
                     <div class="text-center col-md-12" v-show="step == null" style="margin-top: 30px; color: #b5b5b5">
                         <i class="fa fa-circle-o-notch fa-spin fa-4x"></i>
@@ -63,9 +63,11 @@
                         <div class="clearfix"></div>
                     </div>
                     <button-bar v-bind:step="step"
-                                v-bind:disable="networkRequestRunning"
+                                v-bind:disable="networkRequestRunning || disableMove"
                                 v-bind:state="event.state"
+                                v-bind:location-name="event.location_name"
                                 v-on:move="move"
+                                v-on:save="saveAsDraft"
                                 v-on:publish="publish"
                                 v-on:unpublish="unpublish"></button-bar>
                     <div class="clearfix"></div>

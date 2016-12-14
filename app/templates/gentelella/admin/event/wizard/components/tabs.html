@@ -3,7 +3,7 @@
 <script type="text/x-template" id="tabs-template">
     <div style="margin-top: -40px;">
         <div class="connecting-line"></div>
-        <ul class="nav nav-tabs">
+        <ul class="nav nav-tabs" v-bind:style="{'cursor': disable ? 'not-allowed' : 'default' }">
             <li v-bind:class="{ active: step == '', blocked: disable }">
                 <a href="#" title="Basic Details" v-on:click.prevent="moveToStep('')">
                 <span class="round-tab">

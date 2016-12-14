@@ -25,7 +25,8 @@ var app = new Vue({
             session: [],
             speaker: []
         },
-        networkRequestRunning: false
+        networkRequestRunning: false,
+        disableMove: false
     },
     computed: {
         _: function () {
@@ -62,6 +63,21 @@ var app = new Vue({
                     $this.recenterMap();
                 }, 500);
             }
+        },
+        'event.name': function () {
+            this.disableMove = shouldDisableMove(this);
+        },
+        'event.start_time_time': function () {
+            this.disableMove = shouldDisableMove(this);
+        },
+        'event.start_time_date': function () {
+            this.disableMove = shouldDisableMove(this);
+        },
+        'event.end_time_time': function () {
+            this.disableMove = shouldDisableMove(this);
+        },
+        'event.end_time_date': function () {
+            this.disableMove = shouldDisableMove(this);
         },
         'event.location_name': function (val) {
             var $this = this;
@@ -131,8 +147,11 @@ var app = new Vue({
             var index = this.event.social_links.indexOf(socialLink);
             this.event.social_links.splice(index, 1);
         },
-        removeTicket: function (ticket) {
-            if (confirm("Are you sure you want to remove this ticket ?")) {
+        removeTicket: function (ticket, force) {
+            if (_.isUndefined(force)) {
+                force = false;
+            }
+            if (force || confirm("Are you sure you want to remove this ticket ?")) {
                 var index = this.event.tickets.indexOf(ticket);
                 this.event.tickets.splice(index, 1);
             }
@@ -209,7 +228,7 @@ var app = new Vue({
             this.tracks.splice(index, 1);
         },
         addMicrolocation: function () {
-            this.microlocations.push(getNewTrack());
+            this.microlocations.push(getNewMicrolocation());
         },
         removeMicrolocation: function (microlocation) {
             var index = this.microlocations.indexOf(microlocation);
@@ -246,6 +265,8 @@ var app = new Vue({
                 index = direction === 'forward' ? index + 1 : index - 1;
                 if (index < steps.length && index >= 0) {
                     $this.step = steps[index];
+                } else {
+                    location.href = "/events/" + $this.event.id + "/";
                 }
             });
         },
@@ -254,6 +275,7 @@ var app = new Vue({
             showLoading("Publishing the event");
             save('all', 'Published', function () {
                 $this.event.state = 'Published';
+                location.href = "/events/" + $this.event.id + "/";
             });
         },
         unpublish: function () {
@@ -262,7 +284,14 @@ var app = new Vue({
             save('all', 'Draft', function () {
                 $this.event.state = 'Draft';
             });
-
+        },
+        saveAsDraft: function () {
+            var $this = this;
+            showLoading("Saving the event");
+            save('all', 'Draft', function () {
+                $this.event.state = 'Draft';
+                location.href = "/events/" + $this.event.id + "/";
+            });
         }
     },
     compiled: function () {
@@ -272,9 +301,21 @@ var app = new Vue({
 
 app.$nextTick(function () {
     var $eventDiv = $(this.$el);
+    this.disableMove = shouldDisableMove(this);
     basicDetailsInit($eventDiv);
     sessionSpeakersInit($eventDiv);
+    bindSummerNote(this);
 });
+
+function shouldDisableMove($this) {
+    return (
+        $this.event.name.trim() == '' ||
+        $this.event.start_time_time.trim() == '' ||
+        $this.event.start_time_date.trim() == '' ||
+        $this.event.end_time_time.trim() == '' ||
+        $this.event.end_time_date.trim() == ''
+    );
+}
 
 function showLoading(text) {
     if (_.isUndefined(text)) {
@@ -285,6 +326,8 @@ function showLoading(text) {
 
 function save(stepToSave, state, callback) {
     stepToSave = stepToSave === '' ? 'event' : stepToSave;
+
+    cleanData();
 
     var eventsData = {
         event: app.event,
@@ -302,7 +345,7 @@ function save(stepToSave, state, callback) {
         event_id: app.event.id,
         tracks: app.tracks,
         microlocations: app.microlocations,
-        sessionTypes: app.sessionTypes,
+        session_types: app.sessionTypes,
         call_for_speakers: app.call_for_speakers,
         sessions_speakers_enabled: app.sessions_speakers_enabled,
         custom_forms: app.custom_forms,
@@ -339,6 +382,59 @@ function save(stepToSave, state, callback) {
     }
 }
 
+function cleanData() {
+    _.each(app.event.tickets, function (ticket) {
+        if (!_.isUndefined(ticket) && !_.isNull(ticket)) {
+            if (!ticket.name || ticket.name.trim() == '') {
+                app.removeTicket(ticket, true);
+            }
+        }
+    });
+
+    _.each(app.event.social_links, function (social_link) {
+        if (!_.isUndefined(social_link) && !_.isNull(social_link)) {
+            if (social_link.name.trim() == '' || social_link.link.trim() == '' || !isLink(social_link.link)) {
+                app.removeSocialLink(social_link);
+            }
+        }
+    });
+
+    _.each(app.sponsors, function (sponsor) {
+        if (!_.isUndefined(sponsor) && !_.isNull(sponsor)) {
+            if (sponsor.name.trim() == '') {
+                app.removeSponsor(sponsor);
+            }
+            if (sponsor.url.trim() != '' && !isLink(sponsor.url)) {
+                sponsor.url = '';
+            }
+        }
+    });
+
+    _.each(app.tracks, function (track) {
+        if (!_.isUndefined(track) && !_.isNull(track)) {
+            if (track.name.trim() == '' || track.color.trim() == '') {
+                app.removeTrack(track);
+            }
+        }
+    });
+
+    _.each(app.sessionTypes, function (sessionType) {
+        if (!_.isUndefined(sessionType) && !_.isNull(sessionType)) {
+            if (sessionType.name.trim() == '') {
+                app.removeSessionType(sessionType);
+            }
+        }
+    });
+
+    _.each(app.microlocations, function (microlocation) {
+        if (!_.isUndefined(microlocation) && !_.isNull(microlocation)) {
+            if (microlocation.name.trim() == '') {
+                app.removeMicrolocation(microlocation);
+            }
+        }
+    });
+}
+
 
 function makePost(stepToSave, data, callback) {
     app.networkRequestRunning = true;
@@ -349,6 +445,11 @@ function makePost(stepToSave, data, callback) {
         success: function (response) {
             if (response && response.hasOwnProperty('event_id')) {
                 createSnackbar("The changes have been saved successfully.");
+
+                if (_.isNull(app.event.id)) {
+                    app.event.id = response.event_id;
+                }
+
                 if (_.includes(location.pathname, 'create')) {
                     history.replaceState(null, '', location.pathname.replace('create', response.event_id + '/edit'));
                 }

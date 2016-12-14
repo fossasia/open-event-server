@@ -1,6 +1,6 @@
 Vue.component('button-bar', {
     template: '#button-bar-template',
-    props: ['state', 'step', 'disable'],
+    props: ['state', 'step', 'disable', 'locationName'],
     methods: {
         move: function (direction) {
             this.$emit('move', direction);
@@ -10,6 +10,15 @@ Vue.component('button-bar', {
         },
         unpublish: function () {
             this.$emit('unpublish');
+        },
+        saveAsDraft: function () {
+            this.$emit('save');
         }
+    },
+    mounted: function () {
+        this.$nextTick(function () {
+            var $div = $(this.$el);
+            $div.find('[data-toggle=tooltip]').tooltip();
+        });
     }
 });

@@ -11,13 +11,11 @@ from urllib2 import urlopen
 
 import PIL
 import oauth2
-import requests
 from PIL import Image
 from flask import flash, url_for, g, current_app
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from flask_socketio import emit
-from requests.exceptions import ConnectionError
 from requests_oauthlib import OAuth2Session
 
 from app.helpers.cache import cache
@@ -52,7 +50,6 @@ from app.models.social_link import SocialLink
 from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
 from app.models.system_role import CustomSysRole, UserSystemRole
-from app.models.ticket import TicketTag
 from app.models.track import Track
 from app.models.user import User, ATTENDEE
 from app.models.user_detail import UserDetail
@@ -861,41 +858,6 @@ class DataManager(object):
                         setattr(perm, oper[v], False)
 
                 save_to_db(perm, 'Permission saved')
-
-    @staticmethod
-    def create_ticket_tags(tagnames_csv, event_id):
-        """Returns list of `TicketTag` objects.
-        """
-        tag_list = []
-        for tagname in tagnames_csv.split(','):
-            tag, _ = get_or_create(TicketTag, name=tagname, event_id=event_id)
-            tag_list.append(tag)
-
-        return tag_list
-
-    @staticmethod
-    def get_event_time_field_format(form, field):
-        return datetime.strptime(form[field + '_date'] + ' ' + form[field + '_time'], '%m/%d/%Y %H:%M')
-
-    @staticmethod
-    def get_searchable_location_name(event):
-        searchable_location_name = None
-        if event.latitude and event.longitude:
-            url = 'https://maps.googleapis.com/maps/api/geocode/json'
-            latlng = '{},{}'.format(event.latitude, event.longitude)
-            params = {'latlng': latlng}
-            response = dict()
-
-            try:
-                response = requests.get(url, params).json()
-            except ConnectionError:
-                response['status'] = u'Error'
-
-            if response['status'] == u'OK':
-                for addr in response['results'][0]['address_components']:
-                    if addr['types'] == ['locality', 'political']:
-                        searchable_location_name = addr['short_name']
-        return searchable_location_name
 
     @staticmethod
     def create_event_copy(event_id):
