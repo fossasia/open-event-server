@@ -8,34 +8,37 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2016-12-07 10:57+0530\n"
-"PO-Revision-Date: 2016-12-07 11:13+0530\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2016-12-14 03:02+0000\n"
+"Last-Translator: pipix51 <koh.pirong@dhs.sg>\n"
+"Language-Team: Chinese (China) <https://hosted.weblate.org/projects/open-"
+"event/organizer-server/zh_CN/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2.10-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 #: app/templates/404.html:8 app/templates/404.html:26
 msgid "You got"
-msgstr ""
+msgstr "你有"
 
 #: app/templates/404.html:8
 msgid "Page Not Found"
-msgstr ""
+msgstr "找不到网页"
 
 #: app/templates/404.html:27
 msgid "Sorry but we couldn't find this page"
-msgstr ""
+msgstr "很抱歉，我们找不到此网页"
 
 #: app/templates/404.html:28
 msgid "This page you are looking for does not exist"
-msgstr ""
+msgstr "您正在查找的此页不存在"
 
 #: app/templates/gentelella/index.html:171
 msgid "The simplest way to create events."
-msgstr ""
+msgstr "创建事件的最简单的方法。"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:18
 #: app/templates/gentelella/admin/menu.html:34
@@ -43,132 +46,132 @@ msgstr ""
 #: app/templates/gentelella/guest/sitemap.html:76
 #: app/templates/gentelella/index.html:174
 msgid "Create Event"
-msgstr ""
+msgstr "创建事件"
 
 #: app/templates/gentelella/index.html:194
 msgid "All Dates"
-msgstr ""
+msgstr "所有日期"
 
 #: app/templates/gentelella/index.html:195
 msgid "Today"
-msgstr ""
+msgstr "今天"
 
 #: app/templates/gentelella/index.html:196
 msgid "Tomorrow"
-msgstr ""
+msgstr "明天"
 
 #: app/templates/gentelella/index.html:197
 msgid "This Week"
-msgstr ""
+msgstr "这个星期"
 
 #: app/templates/gentelella/index.html:198
 msgid "This Weekend"
-msgstr ""
+msgstr "这个周末"
 
 #: app/templates/gentelella/index.html:199
 msgid "Next Week"
-msgstr ""
+msgstr "下周"
 
 #: app/templates/gentelella/index.html:200
 msgid "This Month"
-msgstr ""
+msgstr "这个月"
 
 #: app/templates/gentelella/index.html:205
 msgid "Search"
-msgstr ""
+msgstr "寻找"
 
 #: app/templates/gentelella/index.html:209
 msgid "Upcoming Events"
-msgstr ""
+msgstr "即将举行的活动"
 
 #: app/templates/gentelella/index.html:215
 msgid "No upcoming events available at this time"
-msgstr ""
+msgstr "目前没有即将举行的活动"
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:116
 #: app/templates/gentelella/guest/event/cfs.html:16
 #: app/templates/gentelella/index.html:221
 msgid "Call for Speakers"
-msgstr ""
+msgstr "呼吁演讲者"
 
 #: app/templates/gentelella/index.html:227
 msgid "No call for speakers open at this time"
-msgstr ""
+msgstr "此时没有人呼吁演讲者"
 
 #: app/templates/gentelella/guest/search/results.html:109
 #: app/templates/gentelella/index.html:242
 msgid "Share this event"
-msgstr ""
+msgstr "分享此活动"
 
 #: app/templates/gentelella/admin/footer.html:8
 #: app/templates/gentelella/guest/sitemap.html:33
 msgid "Sitemap"
-msgstr ""
+msgstr "网站地图"
 
 #: app/templates/gentelella/admin/footer.html:17
 #: app/templates/gentelella/guest/search/_collapse_search.html:14
 msgid "Categories"
-msgstr ""
+msgstr "分类"
 
 #: app/templates/gentelella/admin/footer.html:25
 msgid "Locations"
-msgstr ""
+msgstr "地点"
 
 #: app/templates/gentelella/admin/footer.html:33
 msgid "Connect With Us"
-msgstr ""
+msgstr "联系我们"
 
 #: app/templates/gentelella/admin/footer.html:37
 #: app/templates/gentelella/admin/super_admin/content/_social.html:5
 #: app/templates/gentelella/admin/super_admin/content/_social.html:7
 msgid "Support"
-msgstr ""
+msgstr "支援"
 
 #: app/templates/gentelella/admin/footer.html:41
 msgid "Twitter"
-msgstr ""
+msgstr "推特"
 
 #: app/templates/gentelella/admin/footer.html:45
 msgid "Facebook"
-msgstr ""
+msgstr "面簿"
 
 #: app/templates/gentelella/admin/footer.html:49
 msgid "Google"
-msgstr ""
+msgstr "谷歌"
 
 #: app/templates/gentelella/admin/footer.html:53
 msgid "Youtube"
-msgstr ""
+msgstr "YouTube"
 
 #: app/templates/gentelella/admin/footer.html:57
 msgid "Github"
-msgstr ""
+msgstr "GitHub"
 
 #: app/templates/gentelella/admin/forbidden.html:10
 msgid "Access denied"
-msgstr ""
+msgstr "进入被拒绝"
 
 #: app/templates/gentelella/admin/forbidden.html:11
 msgid "Sorry, but you don't have permission access to this page."
-msgstr ""
+msgstr "很抱歉，您没有此网页的存取权限。"
 
 #: app/templates/gentelella/admin/menu.html:65
 msgid "My Tickets"
-msgstr ""
+msgstr "我的票"
 
 #: app/templates/gentelella/admin/menu.html:66
 msgid "My Sessions"
-msgstr ""
+msgstr "我的会话"
 
 #: app/templates/gentelella/admin/event/index.html:16
 #: app/templates/gentelella/admin/menu.html:67
 msgid "Manage Events"
-msgstr ""
+msgstr "管理事件"
 
 #: app/templates/gentelella/admin/menu.html:69
 #: app/templates/gentelella/admin/profile/index.html:11
 msgid "Profile"
-msgstr ""
+msgstr "个人资料"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:151
 #: app/templates/gentelella/admin/menu.html:70
@@ -176,21 +179,21 @@ msgstr ""
 #: app/templates/gentelella/admin/settings/base.html:25
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:4
 msgid "Settings"
-msgstr ""
+msgstr "设置"
 
 #: app/templates/gentelella/admin/menu.html:72
 #: app/templates/gentelella/admin/super_admin/users/users.html:58
 msgid "Admin"
-msgstr ""
+msgstr "管理员"
 
 #: app/templates/gentelella/admin/menu.html:75
 #: app/templates/gentelella/admin/menu.html:122
 msgid "Browse Events"
-msgstr ""
+msgstr "浏览事件"
 
 #: app/templates/gentelella/admin/menu.html:76
 msgid "Logout"
-msgstr ""
+msgstr "登出"
 
 #: app/templates/gentelella/admin/menu.html:91
 #: app/templates/gentelella/admin/profile/notifications.html:4
@@ -199,31 +202,31 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:18
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:19
 msgid "Notifications"
-msgstr ""
+msgstr "通知"
 
 #: app/templates/gentelella/admin/menu.html:97
 msgid "Mark All as Read"
-msgstr ""
+msgstr "标记为已读"
 
 #: app/templates/gentelella/admin/menu.html:108
 msgid "Mark as read"
-msgstr ""
+msgstr "标记为已读"
 
 #: app/templates/gentelella/admin/menu.html:114
 msgid "No new notifications"
-msgstr ""
+msgstr "没有新通知"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:6
 msgid "Import Event"
-msgstr ""
+msgstr "导入事件"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:10
 msgid "Select event"
-msgstr ""
+msgstr "选择事件"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:28
 msgid "Previous Imports"
-msgstr ""
+msgstr "以前的输入"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:36
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:61
@@ -235,28 +238,28 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:262
 #: app/templates/gentelella/admin/super_admin/events/events.html:284
 msgid "State"
-msgstr ""
+msgstr "状况"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:37
 #: app/templates/gentelella/admin/profile/notifications.html:45
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:58
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:91
 msgid "Message"
-msgstr ""
+msgstr "信息"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:38
 msgid "Started"
-msgstr ""
+msgstr "开始"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:46
 msgid "Success"
-msgstr ""
+msgstr "成功"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:50
 #: app/templates/gentelella/guest/ticketing/stripe_oauth_callback.html:5
 #: app/templates/gentelella/guest/ticketing/stripe_oauth_callback.html:21
 msgid "Processing"
-msgstr ""
+msgstr "处理"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:55
 #: app/templates/gentelella/admin/event/wizard/step-1.html:544
@@ -272,7 +275,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:142
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:256
 msgid "here"
-msgstr ""
+msgstr "这里"
 
 #: app/templates/gentelella/admin/event/_table.html:6
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:16
@@ -289,13 +292,13 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/users/users.html:221
 #: app/templates/gentelella/admin/super_admin/users/users.html:241
 msgid "Name"
-msgstr ""
+msgstr "名称"
 
 #: app/templates/gentelella/admin/event/_table.html:7
 #: app/templates/gentelella/guest/search/_collapse_search.html:71
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:27
 msgid "Date"
-msgstr ""
+msgstr "日期"
 
 #: app/templates/gentelella/admin/event/_table.html:8
 #: app/templates/gentelella/admin/super_admin/events/events.html:200
@@ -304,7 +307,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:266
 #: app/templates/gentelella/admin/super_admin/events/events.html:288
 msgid "Roles"
-msgstr ""
+msgstr "角色"
 
 #: app/templates/gentelella/admin/event/_table.html:9
 #: app/templates/gentelella/admin/event/export/export.html:136
@@ -320,7 +323,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:3
 #: app/templates/gentelella/guest/event/sessions.html:14
 msgid "Sessions"
-msgstr ""
+msgstr "会话"
 
 #: app/templates/gentelella/admin/event/_table.html:10
 #: app/templates/gentelella/admin/event/export/export.html:149
@@ -339,7 +342,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:178
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:196
 msgid "Speakers"
-msgstr ""
+msgstr "演讲者"
 
 #: app/templates/gentelella/admin/event/_table.html:11
 #: app/templates/gentelella/admin/event/export/export.html:157
@@ -357,7 +360,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:78
 #: app/templates/gentelella/guest/event/tickets.html:7
 msgid "Tickets"
-msgstr ""
+msgstr "门票"
 
 #: app/templates/gentelella/admin/event/_table.html:12
 #: app/templates/gentelella/admin/super_admin/events/events.html:197
@@ -365,17 +368,17 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:241
 #: app/templates/gentelella/admin/super_admin/events/events.html:263
 msgid "Public"
-msgstr ""
+msgstr "公共"
 
 #: app/templates/gentelella/admin/event/_table.html:56
 #: app/templates/gentelella/admin/super_admin/events/events.html:65
 msgid "Drafts"
-msgstr ""
+msgstr "草稿"
 
 #: app/templates/gentelella/admin/event/_table.html:57
 #: app/templates/gentelella/admin/super_admin/events/events.html:66
 msgid "Submitted"
-msgstr ""
+msgstr "提交"
 
 #: app/templates/gentelella/admin/event/_table.html:58
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:18
@@ -386,7 +389,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:67
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:12
 msgid "Accepted"
-msgstr ""
+msgstr "公认"
 
 #: app/templates/gentelella/admin/event/_table.html:59
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:40
@@ -396,7 +399,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:68
 #: app/templates/gentelella/admin/super_admin/sales/fees_status.html:62
 msgid "Pending"
-msgstr ""
+msgstr "未决定"
 
 #: app/templates/gentelella/admin/event/_table.html:60
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:46
@@ -406,47 +409,47 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:69
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:14
 msgid "Rejected"
-msgstr ""
+msgstr "拒绝"
 
 #: app/templates/gentelella/admin/event/_table.html:67
 msgid "No Ticket Information"
-msgstr ""
+msgstr "无票信息"
 
 #: app/templates/gentelella/admin/event/_table.html:71
 #: app/templates/gentelella/admin/super_admin/events/events.html:81
 msgid "Paid"
-msgstr ""
+msgstr "付费"
 
 #: app/templates/gentelella/admin/event/_table.html:81
 #: app/templates/gentelella/admin/super_admin/events/events.html:91
 msgid "Free"
-msgstr ""
+msgstr "免费"
 
 #: app/templates/gentelella/admin/event/_table.html:91
 #: app/templates/gentelella/admin/event/wizard/step-1.html:355
 #: app/templates/gentelella/admin/super_admin/events/events.html:101
 msgid "Donation"
-msgstr ""
+msgstr "捐款"
 
 #: app/templates/gentelella/admin/event/event_base.html:51
 msgid "Unpublish"
-msgstr ""
+msgstr "取消发布"
 
 #: app/templates/gentelella/admin/event/event_base.html:54
 msgid "Publish"
-msgstr ""
+msgstr "公布"
 
 #: app/templates/gentelella/admin/event/event_base.html:56
 msgid "Copy"
-msgstr ""
+msgstr "复制"
 
 #: app/templates/gentelella/admin/event/event_base.html:60
 msgid "Delete"
-msgstr ""
+msgstr "删除"
 
 #: app/templates/gentelella/admin/event/event_base.html:109
 msgid "Are you sure you would like to delete this event"
-msgstr ""
+msgstr "您确定要删除此活动吗"
 
 #: app/templates/gentelella/admin/event/event_base.html:112
 #: app/templates/gentelella/admin/event/sessions/components/_speaker_croppie.html:17
@@ -456,25 +459,25 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:111
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:128
 msgid "Cancel"
-msgstr ""
+msgstr "取消"
 
 #: app/templates/gentelella/admin/event/event_base.html:114
 msgid "Confirm Delete"
-msgstr ""
+msgstr "确认删除"
 
 #: app/templates/gentelella/admin/event/index.html:11
 #: app/templates/gentelella/admin/super_admin/events/events.html:4
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:3
 #: app/templates/gentelella/guest/search/results.html:75
 msgid "Events"
-msgstr ""
+msgstr "事件"
 
 #: app/templates/gentelella/admin/event/index.html:28
 #: app/templates/gentelella/admin/event/index.html:42
 #: app/templates/gentelella/admin/event/index.html:47
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:11
 msgid "Live"
-msgstr ""
+msgstr "线上"
 
 #: app/templates/gentelella/admin/event/index.html:31
 #: app/templates/gentelella/admin/event/index.html:52
@@ -483,49 +486,49 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:12
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:13
 msgid "Draft"
-msgstr ""
+msgstr "草案"
 
 #: app/templates/gentelella/admin/event/index.html:34
 #: app/templates/gentelella/admin/event/index.html:57
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:13
 msgid "Past"
-msgstr ""
+msgstr "过去"
 
 #: app/templates/gentelella/admin/event/index.html:37
 #: app/templates/gentelella/admin/event/index.html:62
 #: app/templates/gentelella/admin/super_admin/events/events.html:162
 #: app/templates/gentelella/admin/super_admin/events/events.html:185
 msgid "Import"
-msgstr ""
+msgstr "进口"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:9
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:9
 msgid "Edit Role"
-msgstr ""
+msgstr "编辑角色"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:24
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:131
 #: app/templates/gentelella/admin/event/roles/roles.html:62
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:20
 msgid "Track Organizer"
-msgstr ""
+msgstr "轨道组织"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:25
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:132
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:21
 msgid "Co-organizer"
-msgstr ""
+msgstr "联合组织者"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:26
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:133
 #: app/templates/gentelella/admin/event/roles/roles.html:64
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:22
 msgid "Moderator"
-msgstr ""
+msgstr "管理员"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:31
 msgid "Update Role"
-msgstr ""
+msgstr "更新角色"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:32
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:139
@@ -535,28 +538,28 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:137
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:177
 msgid "Close"
-msgstr ""
+msgstr "关"
 
 #: app/templates/gentelella/admin/event/details/widgets/microservices.html:12
 msgid "Generate Android App"
-msgstr ""
+msgstr "生成Android应用程序"
 
 #: app/templates/gentelella/admin/event/details/widgets/microservices.html:17
 msgid "Generate Web App"
-msgstr ""
+msgstr "生成网络应用程序"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:4
 #: app/templates/gentelella/admin/event/roles/roles.html:4
 msgid "Manage Roles"
-msgstr ""
+msgstr "管理角色"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:8
 msgid "Add Peopl"
-msgstr ""
+msgstr "加人"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:21
 msgid "Invited"
-msgstr ""
+msgstr "邀请"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:28
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:51
@@ -570,22 +573,22 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/users/users.html:223
 #: app/templates/gentelella/admin/super_admin/users/users.html:243
 msgid "Status"
-msgstr ""
+msgstr "状态"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:29
 #: app/templates/gentelella/admin/event/roles/roles.html:13
 msgid "User Email"
-msgstr ""
+msgstr "用户电子邮件"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:30
 msgid "User (Email)"
-msgstr ""
+msgstr "用户 (电子邮件)"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:31
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:128
 #: app/templates/gentelella/admin/event/roles/roles.html:14
 msgid "Role"
-msgstr ""
+msgstr "角色"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:32
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:19
@@ -607,33 +610,33 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/users/users.html:228
 #: app/templates/gentelella/admin/super_admin/users/users.html:248
 msgid "Options"
-msgstr ""
+msgstr "选项"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:39
 msgid "accepted"
-msgstr ""
+msgstr "接受"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:68
 msgid "invited"
-msgstr ""
+msgstr "邀请"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:77
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:84
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:90
 msgid "Invitation Link"
-msgstr ""
+msgstr "邀请链接"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:114
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:138
 #: app/templates/gentelella/admin/event/roles/roles.html:51
 msgid "Add Role"
-msgstr ""
+msgstr "加角色"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:125
 #: app/templates/gentelella/admin/event/roles/roles.html:56
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:14
 msgid "User email"
-msgstr ""
+msgstr "用户电子邮件"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:130
 #: app/templates/gentelella/admin/event/roles/roles.html:61
@@ -641,15 +644,15 @@ msgstr ""
 #: app/templates/gentelella/admin/event/wizard/step-1.html:643
 #: app/templates/gentelella/admin/event/wizard/step-1.html:660
 msgid "Choose"
-msgstr ""
+msgstr "选择"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:3
 msgid "Event Sponsors"
-msgstr ""
+msgstr "事件赞助商"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:8
 msgid "Add Sponsor"
-msgstr ""
+msgstr "加赞助商"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:15
 #: app/templates/gentelella/admin/event/wizard/step-1.html:213
@@ -657,49 +660,49 @@ msgstr ""
 #: app/templates/gentelella/admin/event/wizard/step-2.html:35
 #: app/templates/gentelella/admin/event/wizard/step-2.html:54
 msgid "Logo"
-msgstr ""
+msgstr "商标"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:17
 #: app/templates/gentelella/admin/event/wizard/step-2.html:91
 #: app/templates/gentelella/admin/event/wizard/step-4.html:91
 #: app/templates/gentelella/guest/ticketing/pdf/ticket.html:54
 msgid "Type"
-msgstr ""
+msgstr "类型"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:18
 #: app/templates/gentelella/admin/event/wizard/step-2.html:90
 msgid "Level"
-msgstr ""
+msgstr "水平"
 
 #: app/templates/gentelella/admin/event/export/export.html:4
 msgid "Export"
-msgstr ""
+msgstr "出口"
 
 #: app/templates/gentelella/admin/event/export/export.html:64
 msgid "Export and Download Event as zip"
-msgstr ""
+msgstr "导出和下载事件为ZIP"
 
 #: app/templates/gentelella/admin/event/export/export.html:65
 msgid "Select which media files you want in the zip"
-msgstr ""
+msgstr "在ZIP中选择所需的媒体文件"
 
 #: app/templates/gentelella/admin/event/export/export.html:69
 msgid "Image"
-msgstr ""
+msgstr "图片"
 
 #: app/templates/gentelella/admin/event/export/export.html:78
 #: app/templates/gentelella/admin/event/sessions/display.html:45
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:107
 msgid "Audio"
-msgstr ""
+msgstr "音频"
 
 #: app/templates/gentelella/admin/event/export/export.html:82
 msgid "Document"
-msgstr ""
+msgstr "文件"
 
 #: app/templates/gentelella/admin/event/export/export.html:89
 msgid "Start"
-msgstr ""
+msgstr "开始"
 
 #: app/templates/gentelella/admin/event/export/export.html:92
 #: app/templates/gentelella/admin/event/sessions/display.html:35
@@ -710,104 +713,104 @@ msgstr ""
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:108
 #: app/templates/gentelella/admin/super_admin/content/_translations.html:21
 msgid "Download"
-msgstr ""
+msgstr "下载"
 
 #: app/templates/gentelella/admin/event/export/export.html:96
 msgid "Started by"
-msgstr ""
+msgstr "开始"
 
 #: app/templates/gentelella/admin/event/export/export.html:97
 msgid "datetime"
-msgstr ""
+msgstr "时间"
 
 #: app/templates/gentelella/admin/event/export/export.html:126
 msgid "Access event information via REST API"
-msgstr ""
+msgstr "通过REST API访问事件信息"
 
 #: app/templates/gentelella/admin/event/export/export.html:132
 msgid "Basic Event Details"
-msgstr ""
+msgstr "基本事件详细信息"
 
 #: app/templates/gentelella/admin/event/export/export.html:141
 #: app/templates/gentelella/admin/event/wizard/step-3.html:115
 msgid "Microlocations"
-msgstr ""
+msgstr "微型位置"
 
 #: app/templates/gentelella/admin/event/export/export.html:145
 #: app/templates/gentelella/admin/event/wizard/step-3.html:104
 msgid "Tracks"
-msgstr ""
+msgstr "轨道"
 
 #: app/templates/gentelella/admin/event/export/export.html:153
 #: app/templates/gentelella/admin/event/wizard/wizard.html:85
 msgid "Sponsors"
-msgstr ""
+msgstr "赞助商"
 
 #: app/templates/gentelella/admin/event/export/export.html:161
 msgid "You can make a"
-msgstr ""
+msgstr "你可以做一个"
 
 #: app/templates/gentelella/admin/event/export/export.html:162
 msgid "request to the following endpoint to access the selected information"
-msgstr ""
+msgstr "请求以下端点访问所选信息"
 
 #: app/templates/gentelella/admin/event/export/export.html:165
 msgid "Response"
-msgstr ""
+msgstr "反应"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:15
 msgid "In order to use this feature activate"
-msgstr ""
+msgstr "为了使用此功能激活"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:15
 #: app/templates/gentelella/admin/event/wizard/step-3.html:79
 #: app/templates/gentelella/admin/event/wizard/step-3.html:84
 msgid "Sessions and Speakers"
-msgstr ""
+msgstr "会议和演讲者"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:15
 msgid "for the event"
-msgstr ""
+msgstr "为事件"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:15
 msgid "Please"
-msgstr ""
+msgstr "请"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:17
 msgid "click here"
-msgstr ""
+msgstr "点击这里"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:17
 msgid "to activate this module."
-msgstr ""
+msgstr "以激活此模块。"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:3
 msgid "General Info"
-msgstr ""
+msgstr "基本信息"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:9
 msgid "Event ID"
-msgstr ""
+msgstr "事件ID"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:13
 msgid "Event Url"
-msgstr ""
+msgstr "事件网址"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:17
 msgid "Event Start Time"
-msgstr ""
+msgstr "事件开始时间"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:21
 msgid "Event End Time"
-msgstr ""
+msgstr "事件结束时间"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:25
 msgid "Event Session Types"
-msgstr ""
+msgstr "事件会话类型"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:33
 msgid "Event Links and Social media"
-msgstr ""
+msgstr "事件链接和社交媒体"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:40
 msgid "'Do you want to edit this record?'"
