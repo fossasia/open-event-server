@@ -253,14 +253,14 @@ var app = new Vue({
             var $this = this;
             showLoading("Publishing the event");
             save('all', 'Published', function () {
-                 $this.event.state = 'Published';
+                $this.event.state = 'Published';
             });
         },
         unpublish: function () {
             var $this = this;
             showLoading("Un-publishing the event");
             save('all', 'Draft', function () {
-                 $this.event.state = 'Draft';
+                $this.event.state = 'Draft';
             });
 
         }
@@ -284,7 +284,7 @@ function showLoading(text) {
 }
 
 function save(stepToSave, state, callback) {
-    stepToSave = stepToSave == '' ? 'event' : stepToSave;
+    stepToSave = stepToSave === '' ? 'event' : stepToSave;
 
     var eventsData = {
         event: app.event,
@@ -309,6 +309,11 @@ function save(stepToSave, state, callback) {
         state: state
     };
 
+    if (!_.isUndefined(app.event.id) && !_.isNull(app.event.id) && _.isNumber(app.event.id)) {
+        callback();
+        callback = null;
+    }
+
     switch (stepToSave) {
         case 'event':
             makePost(stepToSave, eventsData, callback);
@@ -327,6 +332,10 @@ function save(stepToSave, state, callback) {
             };
             makePost('all', data, callback);
             break;
+        default:
+            if (!_.isUndefined(callback) && !_.isNull(callback)) {
+                callback();
+            }
     }
 }
 
@@ -343,7 +352,9 @@ function makePost(stepToSave, data, callback) {
                 if (_.includes(location.pathname, 'create')) {
                     history.replaceState(null, '', location.pathname.replace('create', response.event_id + '/edit'));
                 }
-                callback();
+                if (!_.isUndefined(callback) && !_.isNull(callback)) {
+                    callback();
+                }
             } else {
                 createSnackbar("An error occurred while saving. Please try again later ...");
             }

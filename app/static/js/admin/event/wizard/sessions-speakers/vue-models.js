@@ -32,7 +32,7 @@ function getNewTrack(name) {
     track.name = _.isUndefined(name) ? '' : name;
     track.color = palette.random("800");
     track.color = palette.random("800");
-    if(!track.color || track.color == '') {
+    if(!track.color || track.color === '') {
         track.color = palette.random("800");
     }
     return track;

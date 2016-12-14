@@ -17,24 +17,24 @@ var summernoteConfig = {
     disableDragAndDrop: true,
     styleWithSpan: false,
     callbacks: {
-        onChange: function (contents, $editable) {
-            if (contents == '<p><br></p>' || contents == " " || contents == "&nbsp;") {
+        onChange: function (contents) {
+            if (contents === '<p><br></p>' || contents === " " || contents === "&nbsp;") {
                 contents = '';
             }
             $(this).html(contents);
             this.dispatchEvent(new Event('input'));
         },
-        onPaste: function (e) {
+        onPaste: function () {
             var contents = $(this).summernote('code');
-            if (contents == '<p><br></p>' || contents == " " || contents == "&nbsp;") {
+            if (contents === '<p><br></p>' || contents === " " || contents === "&nbsp;") {
                 contents = '';
             }
             $(this).html(contents);
             this.dispatchEvent(new Event('input'));
         },
-        onKeyup: function (e) {
+        onKeyup: function () {
             var contents = $(this).summernote('code');
-            if (contents == '<p><br></p>' || contents == " " || contents == "&nbsp;") {
+            if (contents === '<p><br></p>' || contents === " " || contents === "&nbsp;") {
                 contents = '';
             }
             $(this).html(contents);
@@ -149,7 +149,7 @@ var createSnackbar = (function () {
 })();
 
 function createHtmlSnackbar(message, actionText, action, delay) {
-    createSnackbar('HTML>' + message, actionText, action, delay)
+    createSnackbar('HTML>' + message, actionText, action, delay);
 }
 
 

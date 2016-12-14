@@ -22,7 +22,6 @@ function geocodeAddress(geocoder, address, callback) {
             if (status === 'ZERO_RESULTS') {
                 callback(0.0, 0.0);
             }
-            console.error('Geocode was not successful for the following reason: ' + status);
         }
     });
 }
