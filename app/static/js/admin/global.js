@@ -1,6 +1,7 @@
 /**
  * Created by Niranjan on 14-Jun-16.
  */
+
 var summernoteConfig = {
     toolbar: [
         ['style', ['bold', 'italic', 'underline', 'clear']],
@@ -14,7 +15,32 @@ var summernoteConfig = {
     },
     height: 150,
     disableDragAndDrop: true,
-    styleWithSpan: false
+    styleWithSpan: false,
+    callbacks: {
+        onChange: function (contents) {
+            if (contents === '<p><br></p>' || contents === " " || contents === "&nbsp;") {
+                contents = '';
+            }
+            $(this).html(contents);
+            this.dispatchEvent(new Event('input'));
+        },
+        onPaste: function () {
+            var contents = $(this).summernote('code');
+            if (contents === '<p><br></p>' || contents === " " || contents === "&nbsp;") {
+                contents = '';
+            }
+            $(this).html(contents);
+            this.dispatchEvent(new Event('input'));
+        },
+        onKeyup: function () {
+            var contents = $(this).summernote('code');
+            if (contents === '<p><br></p>' || contents === " " || contents === "&nbsp;") {
+                contents = '';
+            }
+            $(this).html(contents);
+            this.dispatchEvent(new Event('input'));
+        }
+    }
 };
 
 function imgError(image, transparent) {
@@ -68,8 +94,14 @@ var createSnackbar = (function () {
         snackbar.dismiss = function () {
             this.style.opacity = 0;
         };
-        var text = document.createTextNode(message);
-        snackbar.appendChild(text);
+        if(message.startsWith("HTML>")) {
+             snackbar.innerHTML = message.replace('HTML>', '');
+        } else {
+            var text = document.createTextNode(message);
+            snackbar.appendChild(text);
+        }
+
+
         if (actionText) {
             var hasAction = true;
             if (!action) {
@@ -115,6 +147,10 @@ var createSnackbar = (function () {
         snackbar.style.opacity = 1;
     };
 })();
+
+function createHtmlSnackbar(message, actionText, action, delay) {
+    createSnackbar('HTML>' + message, actionText, action, delay);
+}
 
 
 $.oauthpopup = function (options) {

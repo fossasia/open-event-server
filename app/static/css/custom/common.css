@@ -83,7 +83,7 @@ ul.msg_list li:last-child a {
     width: 100%;
     height: 100%;
     text-align: center;
-    padding-top: 10%;
+    padding-top: 8%;
     cursor: pointer;
 }
 
@@ -423,4 +423,24 @@ span.twitter-typeahead {
     border-color: #cccccc !important;
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
+}
+
+.underlined-heading {
+  font-weight:300;
+  text-transform: uppercase;
+  margin-top: 35px;
+  color:#5bc0de;
+}
+
+.underlined-heading > hr {
+  margin:0;
+  border: solid 1px #5bc0de;
+}
+
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0
 }

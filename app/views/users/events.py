@@ -2,7 +2,6 @@ import binascii
 import datetime
 import json
 import os
-import traceback
 from uuid import uuid4
 
 from flask import Blueprint
@@ -22,8 +21,12 @@ from app.helpers.helpers import uploaded_file
 from app.helpers.invoicing import InvoicingManager
 from app.helpers.microservices import AndroidAppCreator, WebAppCreator
 from app.helpers.permission_decorators import is_organizer, is_super_admin, can_access
-from app.helpers.storage import upload, upload_local, UPLOAD_PATHS
+from app.helpers.storage import upload_local, UPLOAD_PATHS
 from app.helpers.ticketing import TicketingManager
+from app.helpers.wizard.event import get_event_json, save_event_from_json
+from app.helpers.wizard.sessions_speakers import get_microlocations_json, get_session_types_json, get_tracks_json, \
+    save_session_speakers
+from app.helpers.wizard.sponsors import get_sponsors_json, save_sponsors_from_json
 from app.models.call_for_papers import CallForPaper
 from app.settings import get_settings
 
@@ -80,68 +83,8 @@ def create_view_stepped(step):
     return redirect(url_for('.create_view'))
 
 
-@events.route('/create/files/bgimage', methods=('POST',))
-def create_event_bgimage_upload():
-    if request.method == 'POST':
-        background_image = request.form['bgimage']
-        if background_image:
-            background_file = uploaded_file(file_content=background_image)
-            background_url = upload_local(
-                background_file,
-                UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
-            )
-            return jsonify({'status': 'ok', 'background_url': background_url})
-        else:
-            return jsonify({'status': 'no bgimage'})
-
-
-@events.route('/create/files/logo', methods=('POST',))
-def create_event_logo_upload():
-    if request.method == 'POST':
-        logo_image = request.form['logo']
-        if logo_image:
-            logo_file = uploaded_file(file_content=logo_image)
-            logo = upload_local(
-                logo_file,
-                UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
-            )
-            return jsonify({'status': 'ok', 'logo': logo})
-        else:
-            return jsonify({'status': 'no logo'})
-
-
-@events.route('/create/files/sponsor_logo', methods=('POST',))
-def create_sponsor_logo_upload():
-    if request.method == 'POST':
-        logo_image = request.form['logo']
-        if logo_image:
-            logo_file = uploaded_file(file_content=logo_image)
-            logo = upload_local(
-                logo_file,
-                UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
-            )
-            return jsonify({'status': 'ok', 'logo': logo})
-        else:
-            return jsonify({'status': 'no logo'})
-
-
-@events.route('/create/', methods=('GET', 'POST'))
+@events.route('/create/', methods=('GET',))
 def create_view():
-    if request.method == 'POST':
-        if not current_user.can_create_event():
-            flash("You don't have permission to create event.")
-            return redirect(url_for('.index_view'))
-        event = DataManager.create_event(request.form)
-        if request.form.get('state', u'Draft') == u'Published' and string_empty(event.location_name):
-            flash(
-                "Your event was saved. To publish your event please review the highlighted fields below.",
-                "warning")
-            return redirect(url_for(
-                '.edit_view', event_id=event.id) + "#step=location_name")
-        if event:
-            return redirect(url_for('.details_view', event_id=event.id))
-        return redirect(url_for('.index_view'))
-
     hash = get_random_hash()
     if CallForPaper.query.filter_by(hash=hash).all():
         hash = get_random_hash()
@@ -155,7 +98,6 @@ def create_view():
     return render_template(
         'gentelella/admin/event/new/new.html',
         current_date=datetime.datetime.now(),
-        start_date=datetime.datetime.now() + datetime.timedelta(days=10),
         event_types=DataGetter.get_event_types(),
         event_licences=DataGetter.get_event_licences(),
         event_topics=DataGetter.get_event_topics(),
@@ -166,6 +108,21 @@ def create_view():
         payment_countries=DataGetter.get_payment_countries(),
         payment_currencies=DataGetter.get_payment_currencies(),
         included_settings=get_module_settings())
+
+
+@events.route('/create/files/image/', methods=('POST',))
+def create_image_upload():
+    if request.method == 'POST':
+        image = request.form['image']
+        if image:
+            image_file = uploaded_file(file_content=image)
+            image_url = upload_local(
+                image_file,
+                UPLOAD_PATHS['temp']['image'].format(uuid=uuid4())
+            )
+            return jsonify({'status': 'ok', 'image_url': image_url})
+        else:
+            return jsonify({'status': 'no_image'})
 
 
 @events.route('/<event_id>/', methods=('GET', 'POST'))
@@ -259,100 +216,20 @@ def details_view(event_id):
                            settings=get_settings())
 
 
-@events.route('/<int:event_id>/editfiles/bgimage', methods=('POST', 'DELETE'))
-def bgimage_upload(event_id):
-    if request.method == 'POST':
-        background_image = request.form['bgimage']
-        if background_image:
-            background_file = uploaded_file(file_content=background_image)
-            background_url = upload(
-                background_file,
-                UPLOAD_PATHS['event']['background_url'].format(
-                    event_id=event_id
-                ))
-            event = DataGetter.get_event(event_id)
-            event.background_url = background_url
-            save_to_db(event)
-            return jsonify({'status': 'ok', 'background_url': background_url})
-        else:
-            return jsonify({'status': 'no bgimage'})
-    elif request.method == 'DELETE':
-        event = DataGetter.get_event(event_id)
-        event.background_url = ''
-        save_to_db(event)
-        return jsonify({'status': 'ok'})
-
-
-@events.route('/<int:event_id>/editfiles/logo', methods=('POST', 'DELETE'))
-def logo_upload(event_id):
-    if request.method == 'POST':
-        logo_image = request.form['logo']
-        if logo_image:
-            logo_file = uploaded_file(file_content=logo_image)
-            logo = upload(
-                logo_file,
-                UPLOAD_PATHS['event']['logo'].format(
-                    event_id=event_id
-                ))
-            event = DataGetter.get_event(event_id)
-            event.logo = logo
-            save_to_db(event)
-            return jsonify({'status': 'ok', 'logo': logo})
-        else:
-            return jsonify({'status': 'no logo'})
-    elif request.method == 'DELETE':
-        event = DataGetter.get_event(event_id)
-        event.logo = ''
-        save_to_db(event)
-        return jsonify({'status': 'ok'})
-
-
-@events.route('/<int:event_id>/sponsor/<int:sponsor_id>/editfiles/sponsor_logo', methods=('POST', 'DELETE'))
-def sponsor_logo_upload(event_id, sponsor_id):
-    if request.method == 'POST':
-        logo_image = request.form['logo']
-        if logo_image:
-            logo_file = uploaded_file(file_content=logo_image)
-            logo = upload(
-                logo_file,
-                UPLOAD_PATHS['sponsors']['logo'].format(
-                    event_id=event_id, id=sponsor_id
-                ))
-            sponsor = DataGetter.get_sponsor(sponsor_id)
-            sponsor.logo = logo
-            save_to_db(sponsor)
-            return jsonify({'status': 'ok', 'logo': logo})
-        else:
-            return jsonify({'status': 'no logo'})
-    elif request.method == 'DELETE':
-        sponsor = DataGetter.get_sponsor(sponsor_id)
-        sponsor.logo = ''
-        save_to_db(sponsor)
-        return jsonify({'status': 'ok'})
-
-
 @events.route('/<event_id>/edit/', methods=('GET', 'POST'))
 @can_access
 def edit_view(event_id):
     return edit_view_stepped(event_id=event_id, step='')
 
 
-@events.route('/<event_id>/edit/<step>', methods=('GET', 'POST'))
+@events.route('/<event_id>/edit/<step>', methods=('GET',))
 @can_access
 def edit_view_stepped(event_id, step):
     event = DataGetter.get_event(event_id)
-    session_types = DataGetter.get_session_types_by_event_id(event_id).all(
-    )
-    tracks = DataGetter.get_tracks(event_id).all()
-    social_links = DataGetter.get_social_links_by_event_id(event_id)
-    microlocations = DataGetter.get_microlocations(event_id).all()
-    call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
-    sponsors = DataGetter.get_sponsors(event_id)
     custom_forms = DataGetter.get_custom_form_elements(event_id)
     speaker_form = json.loads(custom_forms.speaker_form)
     session_form = json.loads(custom_forms.session_form)
-    tax = DataGetter.get_tax_options(event_id)
-    ticket_types = DataGetter.get_ticket_types(event_id)
+    call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
 
     preselect = []
     required = []
@@ -367,67 +244,43 @@ def edit_view_stepped(event_id, step):
             if speaker_form[speaker_field]['require'] == 1:
                 required.append(speaker_field)
 
-    if request.method == 'GET':
-
+    hash = get_random_hash()
+    if CallForPaper.query.filter_by(hash=hash).all():
         hash = get_random_hash()
-        if CallForPaper.query.filter_by(hash=hash).all():
-            hash = get_random_hash()
 
-        match = geolite2.lookup(get_real_ip(True) or '127.0.0.1')
-        if match is not None:
-            current_timezone = match.timezone
-        else:
-            current_timezone = 'UTC'
+    match = geolite2.lookup(get_real_ip(True) or '127.0.0.1')
+    if match is not None:
+        current_timezone = match.timezone
+    else:
+        current_timezone = 'UTC'
 
-        return render_template('gentelella/admin/event/edit/edit.html',
-                               event=event,
-                               session_types=session_types,
-                               tracks=tracks,
-                               social_links=social_links,
-                               microlocations=microlocations,
-                               call_for_speakers=call_for_speakers,
-                               sponsors=sponsors,
-                               event_types=DataGetter.get_event_types(),
-                               event_licences=DataGetter.get_event_licences(),
-                               event_topics=DataGetter.get_event_topics(),
-                               event_sub_topics=DataGetter.get_event_subtopics(),
-                               preselect=preselect,
-                               current_timezone=current_timezone,
-                               timezones=DataGetter.get_all_timezones(),
-                               cfs_hash=hash,
-                               step=step,
-                               required=required,
-                               included_settings=get_module_settings(),
-                               tax=tax,
-                               payment_countries=DataGetter.get_payment_countries(),
-                               current_date=datetime.datetime.now(),
-                               start_date=datetime.datetime.now() + datetime.timedelta(days=10),
-                               payment_currencies=DataGetter.get_payment_currencies(),
-                               ticket_types=ticket_types)
+    seed = {
+        'event': get_event_json(event),
+        'sponsors': get_sponsors_json(event_id),
+        'microlocations': get_microlocations_json(event_id),
+        'sessionTypes': get_session_types_json(event_id),
+        'tracks': get_tracks_json(event_id),
+        'callForSpeakers': call_for_speakers.serialize if call_for_speakers else None
+    }
 
-    if request.method == "POST":
-
-        old_sponsor_logos = []
-        old_sponsor_names = []
-        for sponsor in sponsors:
-            old_sponsor_logos.append(sponsor.logo)
-            old_sponsor_names.append(sponsor.name)
-
-        try:
-            event = DataManager.edit_event(
-                request, event, session_types, tracks, social_links,
-                microlocations, call_for_speakers, sponsors, old_sponsor_logos,
-                old_sponsor_names, tax)
-        except Exception:
-            traceback.print_exc()
-
-        if (request.form.get('state', u'Draft') == u'Published') and string_empty(event.location_name):
-            flash(
-                "Your event was saved. To publish your event please review the highlighted fields below.",
-                "warning")
-            return redirect(url_for('.edit_view', event_id=event.id) + "#highlight=location_name")
-
-        return redirect(url_for('.details_view', event_id=event_id))
+    return render_template('gentelella/admin/event/edit/edit.html',
+                           event=event,
+                           step=step,
+                           seed=json.dumps(seed),
+                           required=required,
+                           preselect=preselect,
+                           current_date=datetime.datetime.now(),
+                           event_types=DataGetter.get_event_types(),
+                           event_licences=DataGetter.get_event_licences(),
+                           event_topics=DataGetter.get_event_topics(),
+                           event_sub_topics=DataGetter.get_event_subtopics(),
+                           timezones=DataGetter.get_all_timezones(),
+                           call_for_speakers=call_for_speakers,
+                           cfs_hash=hash,
+                           current_timezone=current_timezone,
+                           payment_countries=DataGetter.get_payment_countries(),
+                           payment_currencies=DataGetter.get_payment_currencies(),
+                           included_settings=get_module_settings())
 
 
 @events.route('/<event_id>/trash/', methods=('GET',))
@@ -632,6 +485,24 @@ def apply_discount_code():
             return jsonify({'status': 'error', 'message': 'Expired discount code'})
     else:
         return jsonify({'status': 'error', 'message': 'Invalid discount code'})
+
+
+@events.route('/save/<string:what>/', methods=('POST',))
+def save_event_from_wizard(what):
+    data = request.get_json()
+    if what == 'event':
+        return jsonify(save_event_from_json(data))
+    elif what == 'sponsors':
+        return jsonify(save_sponsors_from_json(data))
+    elif what == 'sessions-tracks-rooms':
+        return jsonify(save_session_speakers(data))
+    elif what == 'all':
+        response = save_event_from_json(data['event'])
+        save_sponsors_from_json(data['sponsors'])
+        save_session_speakers(data['session_speakers'])
+        return jsonify(response)
+    else:
+        abort()
 
 
 def get_module_settings():

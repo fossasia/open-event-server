@@ -1,0 +1,38 @@
+<div id="step-3" class="wizard_content">
+    <div class="col-md-8 col-md-push-2">
+        <h2 class="underlined-heading">
+            <i class="fa fa-list-ol"></i>
+            {{ _("Session, Microlocations, Session types") }}
+            <hr>
+        </h2>
+        <div class="row" id="session-tracks-rooms-holder">
+            <div class="col-md-7 tracks">
+                <h2 class="label-header">{{ _("Tracks") }}</h2>
+                <session-track v-for="(track, index) in tracks"
+                               v-bind:track="track"
+                               v-bind:key="index"
+                               v-on:add="addTrack()"
+                               v-on:remove="removeTrack(track)"></session-track>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-7 rooms">
+                <h2 class="label-header">{{ _("Microlocations") }}</h2>
+                <microlocation v-for="(microlocation, index) in microlocations"
+                               v-bind:microlocation="microlocation"
+                               v-on:add="addMicrolocation()"
+                               v-bind:key="index"
+                               v-on:remove="removeMicrolocation(microlocation)"></microlocation>
+
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-7 session-types">
+                <h2 class="label-header">{{ _("Session Types") }}</h2>
+                <session-type v-for="(sessionType, index) in sessionTypes"
+                              v-bind:session-type="sessionType"
+                              v-on:add="addSessionType()"
+                              v-bind:key="index"
+                              v-on:remove="removeSessionType(sessionType)"></session-type>
+            </div>
+        </div>
+    </div>
+</div>

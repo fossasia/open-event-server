@@ -1,0 +1,95 @@
+<div id="step-4" class="wizard_content">
+    <div class="col-md-8 col-md-push-2">
+        <h2 class="underlined-heading">
+            <i class="fa fa-bullhorn"></i>
+            {{ _("Call for Speakers") }}
+            <hr>
+        </h2>
+        <div class="item form-group">
+            <label for="announcement" class="control-label">{{ _("Announcement") }}</label>
+            <textarea id="announcement" v-model="call_for_speakers.announcement"
+                      class="announcement form-control"></textarea>
+        </div>
+        <div class="row event-date-picker">
+            <div class="col-md-4 col-xs-6">
+                <div class="item form-group">
+                    <label>{{ _("Starts") }}<span class="required">*</span></label>
+                    <br>
+                    <div class="col-xs-8" style="padding-left: 0;">
+                        <input required="required" name="cfs_start_date" v-model="call_for_speakers.start_date"
+                                class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY"/>
+
+                    </div>
+                    <div class="col-xs-4" style="padding-left: 0;">
+                        <input v-model="call_for_speakers.start_time" required="required" name="cfs_start_time"
+                               class="form-control col-xs-6 time start" placeholder="HH:MM"/>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-4 col-xs-6">
+                <div class="item form-group">
+                    <label>{{ _("Ends") }}<span class="required">*</span></label>
+                    <br>
+                    <div class="col-xs-8" style="padding-left: 0;">
+                        <input name="cfs_end_date"
+                               required="required"
+                               data-error="End date & time is required"
+                               v-model="call_for_speakers.end_date"
+                               class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY"/>
+
+                    </div>
+                    <div class="col-xs-4" style="padding-left: 0;">
+                        <input name="cfs_end_time"
+                               required="required"
+                               v-model="call_for_speakers.end_time"
+                               class="form-control col-xs-6 time end" placeholder="HH:MM"/>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-4 col-xs-8">
+                <div class="form-group">
+                    <label for="cfs_timezone">{{ _("Timezone") }} <span class="required">*</span></label>
+                    <select id="cfs_timezone" class="form-control" v-model="call_for_speakers.timezone">
+                        {% for value, text in timezones %}
+                            <option value="{{ value }}">{{ text }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="item form-group">
+            <label>{{ _("Private link") }}</label>
+            <div class="input-group col-md-7 col-xs-12">
+                <input title="private cfs link" type="text"
+                       id="cfs_private_link"
+                       name="cfs_private_link" class="nt form-control"
+                       readonly="readonly"
+                       value="{{ url_for('event_detail.display_event_cfs_via_hash', hash=cfs_hash if not call_for_speakers or not call_for_speakers.hash else call_for_speakers.hash, _external=True ) }}"/>
+                <span class="input-group-btn">
+            <button class="btn btn-default btn-copy" type="button" data-clipboard-target="#cfs_private_link"
+                    data-toggle="tooltip" data-container="body" data-placement="top" title="Click to copy"><i
+                    class="fa fa-clipboard"></i></button>
+          </span>
+            </div>
+            <span style="font-weight: 300;">{{ _("Share this link to get private submission independently of open/closed Call for Speakers at any time.") }} <em>({{ _("the link will be active once the event is saved") }})</em></span>
+        </div>
+
+        <div class="item form-group">
+            <label class="control-label">{{ _("Type") }}</label>
+            <div class="radio">
+                <label style="font-weight: 300;">
+                    <input type="radio" name="cfs_privacy" value="public" v-model="call_for_speakers.privacy">
+                    <strong style="font-weight: 400;">Public:</strong> {{ _("Display this publicly. Anybody will be able to submit a proposal within the dates chosen, once the event is published.") }}
+                </label>
+            </div>
+            <div class="radio">
+                <label style="font-weight: 300;">
+                    <input type="radio" name="cfs_privacy" value="private" v-model="call_for_speakers.privacy">
+                    <strong style="font-weight: 400;">{{ _("Private") }}:</strong> {{ _("Do not display this publicly. Proposals can be submitted only using the private link.") }}
+                </label>
+            </div>
+        </div>
+    </div>
+</div>

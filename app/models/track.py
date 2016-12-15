@@ -39,14 +39,8 @@ class Track(db.Model):
 
     @property
     def serialize(self):
-        """Return object data in easily serializeable format"""
-        sessions = [{'id': session.id, 'title': session.title}
-                    for session in self.sessions]
         return {
             'id': self.id,
             'name': self.name,
-            'description': self.description,
-            'sessions': sessions,
-            'track_image_url': self.track_image_url,
             'color': self.color
         }
