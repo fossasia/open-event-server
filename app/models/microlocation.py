@@ -46,8 +46,5 @@ class Microlocation(db.Model):
         return {
             'id': self.id,
             'name': self.name,
-            'latitude': self.latitude,
-            'longitude': self.longitude,
-            'floor': self.floor,
-            'room': self.room
+            'floor': self.floor
         }

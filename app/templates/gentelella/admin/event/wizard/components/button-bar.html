@@ -1,0 +1,29 @@
+<script type="text/x-template" id="button-bar-template">
+    <div class="col-md-10">
+        <div class="clearfix"></div>
+        <div class="btn-toolbar pull-right" style="margin-top: 25px;">
+            <div class="btn-group btn-group-lg">
+                <button type="button" class="btn btn-default" v-on:click="move('backward')" v-bind:disabled="disable" v-show="step != ''">
+                    <i class="fa fa-chevron-left"></i> {{ _("Previous") }}
+                </button>
+                <button type="button" class="btn btn-default" v-on:click="move('forward')" v-bind:disabled="disable">
+                    {{ _("Save and Proceed") }} <i class="fa fa-chevron-right"></i>
+                </button>
+                <button type="button" class="btn btn-lg btn-danger" v-bind:disabled="disable" v-on:click="unpublish" v-show="state == 'Published' || state == 'Completed'">
+                    {{ _("Unpublish event") }}
+                </button>
+                <button type="button" class="btn btn-lg btn-success" v-bind:disabled="disable" v-show="state == 'Draft' && locationName.trim() != ''" v-on:click="publish">
+                    {{ _("Make your event live") }}
+                </button>
+                <button type="button" class="btn btn-lg btn-info"
+                        title="Event location is required to publish your event"
+                        data-toggle="tooltip"
+                        v-bind:disabled="disable"
+                        v-on:click="saveAsDraft"
+                        v-show="state == 'Draft' && locationName.trim() == ''" >
+                    {{ _("Save as Draft") }}
+                </button>
+            </div>
+        </div>
+    </div>
+</script>

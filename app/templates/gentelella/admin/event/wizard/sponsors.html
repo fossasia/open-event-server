@@ -1,0 +1,75 @@
+<div class="col-md-8 col-md-push-2">
+    <br>
+    <div style="width: 100%; text-align: center">
+        <h2 style="font-weight: 300;">Turn <span class="state" v-show="sponsors_enabled">{{ _("off") }}</span> <span
+                class="state" v-show="!sponsors_enabled">{{ _("on") }}</span> {{ _("sponsors") }}</h2>
+        <input type="checkbox" class="toggle-switch" name="sponsors_state"
+               v-model="sponsors_enabled" id="sponsors-switch"/>
+        <label for="sponsors-switch"></label>
+    </div>
+    <transition name="fade">
+        <div id="sponsors-section-holder" v-show="sponsors_enabled">
+            <table class="table sponsor-table">
+                <thead>
+                <tr>
+                    <th>Sl.</th>
+                    <th>{{ _("Name") }}</th>
+                    <th>{{ _("Level") }}</th>
+                    <th>{{ _("Type") }}</th>
+                    <th>URL</th>
+                </tr>
+                </thead>
+                <tbody class="sponsors">
+                <template v-for="(sponsor, index) in sponsors">
+
+                    <tr class="row-sponsor" v-bind:key="index">
+                        <td rowspan="2">{{ '{{ index + 1 }}' }}</td>
+                        <td>
+                            <input title="Sponsor name" v-model="sponsor.name" class="form-control"/>
+                        </td>
+                        <td>
+                            <input title="sponsor level" type="number" v-model.number="sponsor.level"
+                                   class="form-control"/>
+                        </td>
+                        <td>
+                            <input title="sponsor type" class="form-control"
+                                   v-model="sponsor.sponsor_type"/>
+                        </td>
+                        <td>
+                            <input title="URL" type="url" v-model="sponsor.url"
+                                   class="form-control"/>
+                        </td>
+                        <td>
+                            <transition name="fade">
+                                <span class="fa fa-trash fa-fw" v-show="sponsors.length > 1"
+                                      style="cursor: pointer;"
+                                      v-on:click="removeSponsor(sponsor)"></span>
+                            </transition>
+                        </td>
+                    </tr>
+
+                    <tr class="row-sponsor-addon" v-bind:key="index">
+                        <td>
+                            <div class="form-group">
+                                <label>{{ _("Description") }}</label>
+                                <textarea title="description" v-model="sponsor.description"
+                                          style="height: 150px;"
+                                          class="form-control sponsor-textarea"></textarea>
+                            </div>
+                        </td>
+                        <td colspan="3">
+                            <image-upload title="Logo" icon="fa-file-image-o"
+                                          v-model="sponsor.logo"
+                                          v-bind:image-url="sponsor.logo"
+                                          v-bind:max-size-in-mb="1"></image-upload>
+                        </td>
+                    </tr>
+                </template>
+                </tbody>
+            </table>
+            <button type='button' class='btn btn-success'
+                    v-on:click="addSponsor">{{ _("Add Another Sponsor") }}</button>
+        </div>
+    </transition>
+
+</div>

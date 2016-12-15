@@ -9,6 +9,7 @@ from boto.s3.connection import S3Connection, OrdinaryCallingFormat
 from boto.s3.key import Key
 from flask.ext.scrypt import generate_password_hash
 from werkzeug.utils import secure_filename
+from flask import current_app as app
 
 from app.settings import get_settings
 
@@ -48,7 +49,8 @@ UPLOAD_PATHS = {
         'icon': 'users/{user_id}/icon'
     },
     'temp': {
-        'event': 'events/temp/{uuid}'
+        'event': 'events/temp/{uuid}',
+        'image': 'temp/images/{uuid}'
     }
 }
 
@@ -129,7 +131,8 @@ def upload_local(uploaded_file, key, **kwargs):
     Uploads file locally. Base dir - static/media/
     """
     filename = secure_filename(uploaded_file.filename)
-    file_path = 'static/media/' + key + '/' + generate_hash(key) + '/' + filename
+    file_relative_path = 'static/media/' + key + '/' + generate_hash(key) + '/' + filename
+    file_path = app.config['BASE_DIR'] + '/' + file_relative_path
     dir_path = file_path.rsplit('/', 1)[0]
     # delete current
     try:
@@ -140,7 +143,7 @@ def upload_local(uploaded_file, key, **kwargs):
     if not os.path.isdir(dir_path):
         os.makedirs(dir_path)
     uploaded_file.save(file_path)
-    return '/serve_' + file_path
+    return '/serve_' + file_relative_path
 
 
 def upload_to_aws(bucket_name, aws_region, aws_key, aws_secret, file, key, acl='public-read'):

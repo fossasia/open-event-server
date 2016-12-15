@@ -19,8 +19,12 @@
     "url": "https://github.com/fossasia/open-event-orga-server/issues"
   },
   "homepage": "https://github.com/fossasia/open-event-orga-server#readme",
-  "cacheDirectories": ["node_modules", "app/static/admin/lib" ],
+  "cacheDirectories": [
+    "node_modules",
+    "app/static/admin/lib"
+  ],
   "dependencies": {
+    "axios": "^0.15.3",
     "bower": "^1.7.9"
   }
 }

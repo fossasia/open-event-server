@@ -347,6 +347,8 @@ class DataGetter(object):
     def get_event(event_id_or_identifier, should_abort=True):
         """Returns an Event given its id/identifier.
         Aborts with a 404 if event not found.
+        :returns Event
+        :rtype: Event
         """
         if represents_int(event_id_or_identifier):
             event = Event.query.get(event_id_or_identifier)
