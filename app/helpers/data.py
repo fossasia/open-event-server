@@ -17,6 +17,7 @@ from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from flask_socketio import emit
 from requests_oauthlib import OAuth2Session
+from sqlalchemy.orm import make_transient
 
 from app.helpers.cache import cache
 from app.helpers.helpers import string_empty, string_not_empty
@@ -859,61 +860,6 @@ class DataManager(object):
 
                 save_to_db(perm, 'Permission saved')
 
-    @staticmethod
-    def create_event_copy(event_id):
-
-        event_old = DataGetter.get_event(event_id)
-        event = Event(name='Copy of ' + event_old.name,
-                      start_time=event_old.start_time,
-                      end_time=event_old.end_time,
-                      timezone=event_old.timezone,
-                      latitude=event_old.latitude,
-                      longitude=event_old.longitude,
-                      location_name=event_old.location_name,
-                      description=event_old.description,
-                      event_url=event_old.event_url,
-                      type=event_old.type,
-                      topic=event_old.topic,
-                      sub_topic=event_old.sub_topic,
-                      privacy=event_old.privacy,
-                      ticket_url=None,
-                      show_map=event_old.show_map,
-                      organizer_name=event_old.organizer_name,
-                      organizer_description=event_old.organizer_description)
-
-        event.state = u'Draft'
-        save_to_db(event, "Event copy saved")
-
-        sponsors_old = DataGetter.get_sponsors(event_id)
-        tracks_old = DataGetter.get_tracks(event_id)
-        rooms_old = DataGetter.get_microlocations(event_id)
-        call_for_papers_old = DataGetter.get_call_for_papers(event_id)
-
-        for sponsor in sponsors_old:
-            sponsor_new = Sponsor(name=sponsor.name, url=sponsor.url,
-                                  level=sponsor.level, description=sponsor.description,
-                                  event_id=event.id)
-            save_to_db(sponsor_new, "Sponsor copy saved")
-
-        for track in tracks_old:
-            track_new = Track(name=track.name, description="", track_image_url="", color=track.color,
-                              event_id=event.id)
-            save_to_db(track_new, "Track copy saved")
-
-        for room in rooms_old:
-            room_new = Microlocation(name=room.name, floor=room.floor, event_id=event.id)
-            save_to_db(room_new, "Room copy saved")
-
-        if call_for_papers_old:
-            for call_for_paper in call_for_papers_old:
-                call_for_paper_new = CallForPaper(announcement=call_for_paper.announcement,
-                                                  start_date=call_for_paper.start_date,
-                                                  end_date=call_for_paper.end_date,
-                                                  timezone=call_for_paper.timezone,
-                                                  event_id=event.id)
-                save_to_db(call_for_paper_new, "Call for speaker copy saved")
-
-        return event
 
     @staticmethod
     def delete_event(e_id):
