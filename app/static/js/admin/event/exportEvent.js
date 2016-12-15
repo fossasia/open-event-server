@@ -5,7 +5,7 @@ function exportEvent(event_id, current_user_email) {
     var fields = ['image', 'video', 'audio', 'document'];
     var payload = {};
     for (var i = 0; i < 4; i++) {
-        payload[fields[i]] = $('#exportForm').find('[name=' + fields[i] + ']').is(':checked') ? true : false;
+        payload[fields[i]] = !!$('#exportForm').find('[name=' + fields[i] + ']').is(':checked');
     }
     $('#btnExportEvent').unbind('click').prop('disabled', true); // in case of second export
     $('#btnStartExport').prop('disabled', true);

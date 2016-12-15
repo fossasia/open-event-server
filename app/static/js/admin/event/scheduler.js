@@ -1,8 +1,4 @@
 /**
- * Created by Niranjan (@niranjan94) on 23-May-16.
- */
-
-/**
  *
  * The Scheduler UI.
  * ================
@@ -15,6 +11,7 @@
  *      window.scheduler_readonly = true;
  * Before including this file.
  *
+ * -@niranjan94
  */
 
 /**
@@ -65,7 +62,7 @@ window.mainEvent = {};
  * @returns {boolean}
  */
 function isReadOnly() {
-    return !(_.isUndefined(window.scheduler_readonly) || _.isNull(window.scheduler_readonly) || window.scheduler_readonly !== true)
+    return !(_.isUndefined(window.scheduler_readonly) || _.isNull(window.scheduler_readonly) || window.scheduler_readonly !== true);
 }
 
 /**
@@ -124,8 +121,6 @@ var $unscheduledSessionsHolder = $unscheduledSessionsList;
 var $noSessionsInfoBox = $("#no-sessions-info");
 var $dayButtonsHolder = $("#date-change-btn-holder");
 var $addMicrolocationForm = $('#add-microlocation-form');
-var $editSessionModal = $('#edit-session-modal');
-var $editSessionForm = $("#edit-session-form");
 
 var $mobileTimeline = $("#mobile-timeline");
 var $tracksTimeline = $("#tracks-timeline");
@@ -170,7 +165,6 @@ function getSessionFromReference(sessionRef, $searchTarget) {
             $sessionElement.attr("data-original-text", sessionRef.title);
             $sessionElement.data("session", sessionRef);
             newElement = true;
-            session = sessionRef;
         }
         session = sessionRef;
     } else if (_.isNumber(sessionRef)) {
@@ -184,7 +178,7 @@ function getSessionFromReference(sessionRef, $searchTarget) {
         $sessionElement: $sessionElement,
         session: session,
         newElement: newElement
-    }
+    };
 
 }
 
@@ -280,7 +274,7 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     }
 
     _.remove(unscheduledStore, function (sessionTemp) {
-        return sessionTemp.id === sessionRefObject.session.id
+        return sessionTemp.id === sessionRefObject.session.id;
     });
 
     addInfoBox(sessionRefObject.$sessionElement, sessionRefObject.session);
@@ -313,7 +307,7 @@ function addSessionToUnscheduled(sessionRef, isFiltering, shouldBroadcast) {
     sessionRefObject.session.start_time.isReset = true;
     sessionRefObject.session.end_time.isReset = true;
 
-    sessionRefObject.$sessionElement.data("session", session);
+    sessionRefObject.$sessionElement.data("session", sessionRefObject.session);
     $unscheduledSessionsHolder.append(sessionRefObject.$sessionElement);
 
     sessionRefObject.$sessionElement.addClass('unscheduled').removeClass('scheduled');
@@ -527,7 +521,7 @@ function addInfoBox($sessionElement, session) {
     var speakers = _.map(session.speakers, 'name');
     var content = "";
     if(speakers.length > 0) {
-        content += "By " + _.join(speakers, ', ') + "<br><br>"
+        content += "By " + _.join(speakers, ', ') + "<br><br>";
     }
     if(!_.isNull(session.track)) {
         content += "<strong>Track:</strong> " + session.track.name + "<br>";
@@ -644,7 +638,7 @@ function initializeInteractables() {
                     y = (parseFloat(target.getAttribute("data-y")) || 0);
 
                 if(roundOffToMultiple(event.rect.height) < time.unit.pixels) {
-                    target.style.height = time.unit.pixels + "px"
+                    target.style.height = time.unit.pixels + "px";
                 } else {
                     target.style.height = roundOffToMultiple(event.rect.height) + "px";
                 }
@@ -799,7 +793,7 @@ function loadDateButtons() {
             $dayButton.addClass("active");
         }
         $dayButton.text(day);
-        $dayButtonsHolder.append($dayButton)
+        $dayButtonsHolder.append($dayButton);
     });
     loadMicrolocationsToTimeline(sortedDays[0]);
 }
@@ -855,14 +849,14 @@ function loadMicrolocationsToTimeline(day) {
 
     _.each($mobileTimeline.find('.mobile-microlocation'), function ($mobileMicrolocation) {
         $mobileMicrolocation = $($mobileMicrolocation);
-        if ($mobileMicrolocation.find(".mobile-sessions-holder").children().length == 0) {
+        if ($mobileMicrolocation.find(".mobile-sessions-holder").children().length === 0) {
             $mobileMicrolocation.remove();
         }
     });
 
     _.each($tracksTimeline.find('.mobile-microlocation'), function ($mobileMicrolocation) {
         $mobileMicrolocation = $($mobileMicrolocation);
-        if ($mobileMicrolocation.find(".mobile-sessions-holder").children().length == 0) {
+        if ($mobileMicrolocation.find(".mobile-sessions-holder").children().length === 0) {
             $mobileMicrolocation.remove();
         }
     });
@@ -1082,7 +1076,7 @@ $(document).on("scheduling:change", function (e) {
             event_id: mainEvent.id,
             session_id: session_id,
             payload: session
-        }, function (success) {
+        }, function () {
             createSnackbar("Changes have been saved.", "Dismiss", null, 1000);
         }, function (error) {
             logError('failed with the following: ' + error.statusText, error);
