@@ -55,6 +55,7 @@ var app = new Vue({
         'event.ticket_include': function () {
             this.event.tickets = [];
             this.ticket_url = '';
+            save(this.step);
         },
         'addressShown': function (val) {
             if (val) {
@@ -102,6 +103,7 @@ var app = new Vue({
             this.$nextTick(function () {
                 bindSummerNote(this);
             });
+            save(this.step);
         },
         'sponsors': function (sponsors) {
             if (sponsors.length <= 0) {
@@ -119,6 +121,7 @@ var app = new Vue({
                 this.sessionTypes = [];
                 this.microlocations = [];
             }
+            save(this.step);
         },
         'tracks': function (value) {
             if (value.length <= 0) {
@@ -325,9 +328,18 @@ function showLoading(text) {
 }
 
 function save(stepToSave, state, callback) {
+
+    if(shouldDisableMove(app)) {
+        return;
+    }
+
     stepToSave = stepToSave === '' ? 'event' : stepToSave;
 
     cleanData();
+
+    if(_.isUndefined(state)) {
+        state = app.event.state;
+    }
 
     var eventsData = {
         event: app.event,
@@ -452,6 +464,8 @@ function makePost(stepToSave, data, callback) {
 
                 if (_.includes(location.pathname, 'create')) {
                     history.replaceState(null, '', location.pathname.replace('create', response.event_id + '/edit'));
+                    $("#page-title").text('Edit Event');
+                    document.title =  'Edit Event - ' + $("meta[name=app-name]").attr('content');
                 }
                 if (!_.isUndefined(callback) && !_.isNull(callback)) {
                     callback();

@@ -1,6 +1,12 @@
 {% extends 'gentelella/admin/base.html' %}
 <!--suppress HtmlUnknownAnchorTarget -->
-
+{% block title %}
+    {% if event %}
+        Edit Event
+    {% else %}
+        Create an Event
+    {% endif %}
+{% endblock %}
 {% block head_css %}
     {{ super() }}
     <link rel="stylesheet"
@@ -33,7 +39,7 @@
 
     <div class="page-title">
         <div class="text-center">
-            <h1 style="font-weight: 100; margin-top: 0;">{{ self.title() }}</h1>
+            <h1 style="font-weight: 100; margin-top: 0;" id="page-title">{{ self.title() }}</h1>
         </div>
     </div>
     <div class="row">
