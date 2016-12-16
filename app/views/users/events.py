@@ -91,7 +91,7 @@ def create_view(step):
     current_timezone = get_current_timezone()
 
     return render_template(
-        'gentelella/admin/event/new/new.html',
+        'gentelella/admin/event/wizard/wizard.html',
         current_date=datetime.datetime.now(),
         event_types=DataGetter.get_event_types(),
         event_licences=DataGetter.get_event_licences(),
@@ -249,7 +249,7 @@ def edit_view(event_id, step=''):
         'callForSpeakers': call_for_speakers.serialize if call_for_speakers else None
     }
 
-    return render_template('gentelella/admin/event/edit/edit.html',
+    return render_template('gentelella/admin/event/wizard/wizard.html',
                            event=event,
                            step=step,
                            seed=json.dumps(seed),
