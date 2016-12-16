@@ -82,11 +82,11 @@ var createSnackbar = (function () {
             previous.dismiss();
         }
 
-        if (typeof actionText === 'undefined' || actionText == null) {
+        if (typeof actionText === 'undefined' || actionText === null) {
             actionText = "Dismiss";
         }
 
-        if (typeof delay === 'undefined' || delay == null) {
+        if (typeof delay === 'undefined' || delay === null) {
             delay = 5000;
         }
         var snackbar = document.createElement('div');
@@ -130,7 +130,7 @@ var createSnackbar = (function () {
         }.bind(snackbar), delay);
 
         snackbar.addEventListener('transitionend', function (event, elapsed) {
-            if (event.propertyName === 'opacity' && this.style.opacity == 0) {
+            if (event.propertyName === 'opacity' && parseInt(this.style.opacity) === 0) {
                 window.snackbar_elapsed = elapsed;
                 this.parentElement.removeChild(this);
                 if (previous === this) {

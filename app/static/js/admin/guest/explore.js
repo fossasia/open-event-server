@@ -27,7 +27,7 @@ window.queryString = (function (a) {
  * @returns {boolean}
  */
 function queryHas(param) {
-    return window.queryString.hasOwnProperty(param)
+    return window.queryString.hasOwnProperty(param);
 }
 
 /**
@@ -43,7 +43,7 @@ function getQuery(param, defaultVal) {
     return window.queryString[param];
 }
 
-if (queryHas('query') && getQuery('query') == '') {
+if (queryHas('query') && getQuery('query') === '') {
     delete window.queryString['query'];
 }
 
@@ -130,7 +130,7 @@ $customDateCollapse.find('.date').datepicker({
     'autoclose': true
 });
 
-var datePair = new Datepair($customDateCollapse[0], {
+new Datepair($customDateCollapse[0], {
     'defaultDateDelta': 1
 });
 
@@ -159,7 +159,7 @@ function runFilter(type, value) {
     }
     var baseUrl = window.location.href.split('?')[0];
     if (type === 'location' && value != "") {
-        baseUrl = '/explore/' + slugify(value) + '/events'
+        baseUrl = '/explore/' + slugify(value) + '/events';
     }
     baseUrl = baseUrl + '?' + $.param(window.queryString);
     history.replaceState(null, null, baseUrl);
@@ -193,7 +193,7 @@ function isImageInvalid(url) {
         return true;
     }
     url = trimText(url);
-    return !!(url === 'null' || url === '' || url === ' ');
+    return (url === 'null' || url === '' || url === ' ');
 }
 
 /**
@@ -229,7 +229,7 @@ function loadResults(start) {
     $eventsHolder.hide();
     $noEvents.hide();
     if (isUndefinedOrNull(start)) {
-        start = 1
+        start = 1;
     }
 
     $filterTagsHolder.html('');
@@ -245,21 +245,21 @@ function loadResults(start) {
 
         if (queryHas('period')) {
             params['time_period'] = getQuery('period');
-            addFilterTag('period', getQuery('period'))
+            addFilterTag('period', getQuery('period'));
         }
 
         if (queryHas('page')) {
-            params['start'] = ((parseInt(getQuery('page', 1)) - 1) * LIMIT_PER_PAGE) + 1
+            params['start'] = ((parseInt(getQuery('page', 1)) - 1) * LIMIT_PER_PAGE) + 1;
         }
 
         if (queryHas('type')) {
             params['type'] = getQuery('type');
-            addFilterTag('type', getQuery('type'))
+            addFilterTag('type', getQuery('type'));
         }
 
         if (queryHas('category')) {
             params['topic'] = getQuery('category');
-            addFilterTag('category', getQuery('category'))
+            addFilterTag('category', getQuery('category'));
         }
 
         if (queryHas('query')) {
@@ -268,14 +268,13 @@ function loadResults(start) {
 
         if (queryHas('sub-category')) {
             params['sub_topic'] = getQuery('sub-category');
-            addFilterTag('sub-category', getQuery('sub-category'))
+            addFilterTag('sub-category', getQuery('sub-category'));
         }
 
         api.events.get_event_list_paginated(params, function (response) {
             $eventsHolder.html("");
             response = response.obj;
             _(response.results).forEach(function (event) {
-                console.log(event)
                 addEvent(event);
             });
             $loader.hide();
@@ -291,6 +290,6 @@ function loadResults(start) {
                 $loader.hide();
                 $pagination.hide();
             }
-        })
+        });
     });
 }

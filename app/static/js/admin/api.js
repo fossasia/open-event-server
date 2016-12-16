@@ -1,8 +1,4 @@
 /**
- * Created by Niranjan on 09-Jun-16.
- */
-
-/**
  * A Swagger Client to access the API.
  * @doc https://github.com/swagger-api/swagger-js
  */
@@ -18,7 +14,6 @@ function initializeSwaggerClient(callback) {
                 if (callback) {
                     callback();
                 }
-
             }
         });
     } else {
