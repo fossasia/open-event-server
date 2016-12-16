@@ -309,11 +309,11 @@ app.$nextTick(function () {
 
 function shouldDisableMove($this) {
     return (
-        $this.event.name.trim() == '' ||
-        $this.event.start_time_time.trim() == '' ||
-        $this.event.start_time_date.trim() == '' ||
-        $this.event.end_time_time.trim() == '' ||
-        $this.event.end_time_date.trim() == ''
+        $this.event.name.trim() === '' ||
+        $this.event.start_time_time.trim() === '' ||
+        $this.event.start_time_date.trim() === '' ||
+        $this.event.end_time_time.trim() ==='' ||
+        $this.event.end_time_date.trim() === ''
     );
 }
 
@@ -385,7 +385,7 @@ function save(stepToSave, state, callback) {
 function cleanData() {
     _.each(app.event.tickets, function (ticket) {
         if (!_.isUndefined(ticket) && !_.isNull(ticket)) {
-            if (!ticket.name || ticket.name.trim() == '') {
+            if (!ticket.name || ticket.name.trim() === '') {
                 app.removeTicket(ticket, true);
             }
         }
@@ -393,7 +393,7 @@ function cleanData() {
 
     _.each(app.event.social_links, function (social_link) {
         if (!_.isUndefined(social_link) && !_.isNull(social_link)) {
-            if (social_link.name.trim() == '' || social_link.link.trim() == '' || !isLink(social_link.link)) {
+            if (social_link.name.trim() === '' || social_link.link.trim() === '' || !isLink(social_link.link)) {
                 app.removeSocialLink(social_link);
             }
         }
@@ -401,10 +401,10 @@ function cleanData() {
 
     _.each(app.sponsors, function (sponsor) {
         if (!_.isUndefined(sponsor) && !_.isNull(sponsor)) {
-            if (sponsor.name.trim() == '') {
+            if (sponsor.name.trim() === '') {
                 app.removeSponsor(sponsor);
             }
-            if (sponsor.url.trim() != '' && !isLink(sponsor.url)) {
+            if (sponsor.url.trim() !== '' && !isLink(sponsor.url)) {
                 sponsor.url = '';
             }
         }
@@ -412,7 +412,7 @@ function cleanData() {
 
     _.each(app.tracks, function (track) {
         if (!_.isUndefined(track) && !_.isNull(track)) {
-            if (track.name.trim() == '' || track.color.trim() == '') {
+            if (track.name.trim() === '' || track.color.trim() === '') {
                 app.removeTrack(track);
             }
         }
@@ -420,7 +420,7 @@ function cleanData() {
 
     _.each(app.sessionTypes, function (sessionType) {
         if (!_.isUndefined(sessionType) && !_.isNull(sessionType)) {
-            if (sessionType.name.trim() == '') {
+            if (sessionType.name.trim() === '') {
                 app.removeSessionType(sessionType);
             }
         }
@@ -428,7 +428,7 @@ function cleanData() {
 
     _.each(app.microlocations, function (microlocation) {
         if (!_.isUndefined(microlocation) && !_.isNull(microlocation)) {
-            if (microlocation.name.trim() == '') {
+            if (microlocation.name.trim() === '') {
                 app.removeMicrolocation(microlocation);
             }
         }

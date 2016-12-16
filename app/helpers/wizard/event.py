@@ -220,8 +220,11 @@ def save_event_from_json(json):
         if event.tax:
             db.session.delete(event.tax)
 
-    if event_data['logo'] and event_data['logo'].strip() != '':
-        event.logo = save_logo(event_data['logo'], event.id)
+    if event.logo != event_data['logo']:
+        if event_data['logo'] and event_data['logo'].strip() != '':
+            event.logo = save_logo(event_data['logo'], event.id)
+        elif event.logo != '':
+            event.logo = ''
 
     save_to_db(event)
 

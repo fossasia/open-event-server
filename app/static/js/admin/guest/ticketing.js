@@ -83,7 +83,7 @@ $orderPaymentForm.submit(function (e) {
         dataType: 'json',
         data: data,
         success: function (json) {
-            $('html,body').animate({scrollTop: 0}, 'slow');
+            $('html, body').animate({scrollTop: 0}, 'slow');
             if (json.status === "ok") {
                 if (json.hasOwnProperty('email')) {
                     userEmail = json.email;

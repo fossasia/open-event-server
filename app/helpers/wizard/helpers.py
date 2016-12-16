@@ -6,9 +6,19 @@ import PIL
 import requests
 from PIL import Image
 from flask import current_app as app
+from geoip import geolite2
 from requests import ConnectionError
 
+from app.helpers.flask_helpers import get_real_ip
 from app.helpers.storage import upload, UploadedFile
+
+
+def get_current_timezone():
+    match = geolite2.lookup(get_real_ip(True) or '127.0.0.1')
+    if match is not None:
+        return match.timezone
+    else:
+        return 'UTC'
 
 
 def get_path_of_temp_url(url):

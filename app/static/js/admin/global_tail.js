@@ -1,10 +1,8 @@
-/**
- * Created by Niranjan on 14-Jun-16.
- */
 var $eventBrowseForm = $("#event_browse");
 var $searchTextBox = $eventBrowseForm.find('#search-text');
 var $locationField = $eventBrowseForm.find('input[name=location]');
 var $categoryField = $eventBrowseForm.find('input[name=category]');
+
 $(document).ready(function () {
     $('.search-button').click(function (e) {
         if (window.innerWidth <= 711 && ($searchTextBox.val() == "")) {
@@ -107,7 +105,7 @@ function handleDataTablePagination($table) {
 $(function () {
     var $tables = $("table.dataTable");
     $tables.on('draw.dt', function () {
-        handleDataTablePagination($(this))
+        handleDataTablePagination($(this));
     });
     handleDataTablePagination($tables);
 });

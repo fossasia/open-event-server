@@ -8,13 +8,11 @@ from flask import Blueprint
 from flask import flash, url_for, redirect, request, jsonify, Markup, render_template
 from flask.ext.login import current_user
 from flask.ext.restplus import abort
-from geoip import geolite2
 
 from app import db
 from app.helpers.auth import AuthManager
 from app.helpers.data import DataManager, save_to_db, record_activity, delete_from_db, restore_event
 from app.helpers.data_getter import DataGetter
-from app.helpers.flask_helpers import get_real_ip
 from app.helpers.helpers import fields_not_empty, string_empty, get_count
 from app.helpers.helpers import send_event_publish
 from app.helpers.helpers import uploaded_file
@@ -23,7 +21,9 @@ from app.helpers.microservices import AndroidAppCreator, WebAppCreator
 from app.helpers.permission_decorators import is_organizer, is_super_admin, can_access
 from app.helpers.storage import upload_local, UPLOAD_PATHS
 from app.helpers.ticketing import TicketingManager
+from app.helpers.wizard.clone import create_event_copy
 from app.helpers.wizard.event import get_event_json, save_event_from_json
+from app.helpers.wizard.helpers import get_current_timezone
 from app.helpers.wizard.sessions_speakers import get_microlocations_json, get_session_types_json, get_tracks_json, \
     save_session_speakers
 from app.helpers.wizard.sponsors import get_sponsors_json, save_sponsors_from_json
@@ -78,22 +78,17 @@ def index_view():
                            imported_events=imported_events)
 
 
-@events.route('/create/<step>', methods=('GET', 'POST'))
-def create_view_stepped(step):
-    return redirect(url_for('.create_view'))
+@events.route('/create/', defaults={'step': ''})
+@events.route('/create/<step>')
+def create_view(step):
+    if step != '':
+        return redirect(url_for('.create_view', step=''))
 
-
-@events.route('/create/', methods=('GET',))
-def create_view():
     hash = get_random_hash()
     if CallForPaper.query.filter_by(hash=hash).all():
         hash = get_random_hash()
 
-    match = geolite2.lookup(get_real_ip(True) or '127.0.0.1')
-    if match is not None:
-        current_timezone = match.timezone
-    else:
-        current_timezone = 'UTC'
+    current_timezone = get_current_timezone()
 
     return render_template(
         'gentelella/admin/event/new/new.html',
@@ -110,7 +105,7 @@ def create_view():
         included_settings=get_module_settings())
 
 
-@events.route('/create/files/image/', methods=('POST',))
+@events.route('/create/files/image/', methods=['POST'])
 def create_image_upload():
     if request.method == 'POST':
         image = request.form['image']
@@ -125,7 +120,7 @@ def create_image_upload():
             return jsonify({'status': 'no_image'})
 
 
-@events.route('/<event_id>/', methods=('GET', 'POST'))
+@events.route('/<event_id>/', methods=['GET', 'POST'])
 @can_access
 def details_view(event_id):
     event = DataGetter.get_event(event_id)
@@ -216,15 +211,10 @@ def details_view(event_id):
                            settings=get_settings())
 
 
-@events.route('/<event_id>/edit/', methods=('GET', 'POST'))
+@events.route('/<event_id>/edit/', defaults={'step': ''})
+@events.route('/<event_id>/edit/<step>')
 @can_access
-def edit_view(event_id):
-    return edit_view_stepped(event_id=event_id, step='')
-
-
-@events.route('/<event_id>/edit/<step>', methods=('GET',))
-@can_access
-def edit_view_stepped(event_id, step):
+def edit_view(event_id, step=''):
     event = DataGetter.get_event(event_id)
     custom_forms = DataGetter.get_custom_form_elements(event_id)
     speaker_form = json.loads(custom_forms.speaker_form)
@@ -248,11 +238,7 @@ def edit_view_stepped(event_id, step):
     if CallForPaper.query.filter_by(hash=hash).all():
         hash = get_random_hash()
 
-    match = geolite2.lookup(get_real_ip(True) or '127.0.0.1')
-    if match is not None:
-        current_timezone = match.timezone
-    else:
-        current_timezone = 'UTC'
+    current_timezone = get_current_timezone()
 
     seed = {
         'event': get_event_json(event),
@@ -311,7 +297,7 @@ def restore_event_view(event_id):
     return redirect(url_for('sadmin_events.index_view'))
 
 
-@events.route('/<int:event_id>/publish/', methods=('GET',))
+@events.route('/<int:event_id>/publish/')
 def publish_event(event_id):
     event = DataGetter.get_event(event_id)
     if string_empty(event.location_name):
@@ -339,7 +325,7 @@ def publish_event(event_id):
     return redirect(url_for('.details_view', event_id=event_id))
 
 
-@events.route('/<int:event_id>/unpublish/', methods=('GET',))
+@events.route('/<int:event_id>/unpublish/')
 def unpublish_event(event_id):
     event = DataGetter.get_event(event_id)
     event.state = 'Draft'
@@ -349,19 +335,19 @@ def unpublish_event(event_id):
     return redirect(url_for('.details_view', event_id=event_id))
 
 
-@events.route('/<int:event_id>/generate_android_app/', methods=('POST',))
+@events.route('/<int:event_id>/generate_android_app/', methods=['POST'])
 def generate_android_app(event_id):
     AndroidAppCreator(event_id).create()
     return redirect(url_for('.details_view', event_id=event_id))
 
 
-@events.route('/<int:event_id>/generate_web_app/', methods=('POST',))
+@events.route('/<int:event_id>/generate_web_app/', methods=['POST'])
 def generate_web_app(event_id):
     WebAppCreator(event_id).create()
     return redirect(url_for('.details_view', event_id=event_id))
 
 
-@events.route('/<int:event_id>/restore/<int:version_id>', methods=('GET',))
+@events.route('/<int:event_id>/restore/<int:version_id>')
 def restore_event_revision(event_id, version_id):
     event = DataGetter.get_event(event_id)
     version = event.versions[version_id]
@@ -371,34 +357,13 @@ def restore_event_revision(event_id, version_id):
     return redirect(url_for('.details_view', event_id=event_id))
 
 
-@events.route('/<int:event_id>/copy/', methods=('GET',))
+@events.route('/<int:event_id>/copy/')
 def copy_event(event_id):
-    event = DataManager.create_event_copy(event_id)
-    session_types = DataGetter.get_session_types_by_event_id(event_id).all(
-    )
-    tracks = DataGetter.get_tracks(event_id).all()
-    social_links = DataGetter.get_social_links_by_event_id(event_id)
-    microlocations = DataGetter.get_microlocations(event_id).all()
-    call_for_speakers = DataGetter.get_call_for_papers(event_id).first()
-    sponsors = DataGetter.get_sponsors(event_id)
-    return render_template('gentelella/admin/event/copy/copy.html',
-                           event=event,
-                           is_copy=1,
-                           session_types=session_types,
-                           tracks=tracks,
-                           social_links=social_links,
-                           microlocations=microlocations,
-                           call_for_speakers=call_for_speakers,
-                           sponsors=sponsors,
-                           event_types=DataGetter.get_event_types(),
-                           event_licences=DataGetter.get_event_licences(),
-                           event_topics=DataGetter.get_event_topics(),
-                           start_date=datetime.datetime.now() + datetime.timedelta(days=10),
-                           event_sub_topics=DataGetter.get_event_subtopics(),
-                           timezones=DataGetter.get_all_timezones())
+    event = create_event_copy(event_id)
+    return redirect(url_for('.edit_view', event_id=event.id))
 
 
-@events.route('/<int:event_id>/role-invite/<hash>', methods=('GET', 'POST'))
+@events.route('/<int:event_id>/role-invite/<hash>', methods=['GET', 'POST'])
 def user_role_invite(event_id, hash):
     """Accept User-Role invite for the event.
     """
@@ -433,7 +398,7 @@ def user_role_invite(event_id, hash):
         abort(404)
 
 
-@events.route('/<int:event_id>/role-invite/decline/<hash>', methods=('GET', 'POST'))
+@events.route('/<int:event_id>/role-invite/decline/<hash>', methods=['GET', 'POST'])
 def user_role_invite_decline(event_id, hash):
     """Decline User-Role invite for the event.
     """
@@ -457,7 +422,7 @@ def user_role_invite_decline(event_id, hash):
         abort(404)
 
 
-@events.route('/<int:event_id>/role-invite/delete/<hash>', methods=('GET', 'POST'))
+@events.route('/<int:event_id>/role-invite/delete/<hash>', methods=['GET', 'POST'])
 @is_organizer
 def delete_user_role_invite(event_id, hash):
     event = DataGetter.get_event(event_id)
@@ -472,7 +437,7 @@ def delete_user_role_invite(event_id, hash):
         abort(404)
 
 
-@events.route('/discount/apply', methods=('POST',))
+@events.route('/discount/apply', methods=['POST'])
 def apply_discount_code():
     discount_code = request.form['discount_code']
     discount_code = InvoicingManager.get_discount_code(discount_code)
@@ -487,7 +452,7 @@ def apply_discount_code():
         return jsonify({'status': 'error', 'message': 'Invalid discount code'})
 
 
-@events.route('/save/<string:what>/', methods=('POST',))
+@events.route('/save/<string:what>/', methods=['POST'])
 def save_event_from_wizard(what):
     data = request.get_json()
     if what == 'event':
