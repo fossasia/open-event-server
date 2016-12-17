@@ -67,6 +67,14 @@
 
 {% block tail_js %}
 
+    <script>
+
+
+        window.count = {{ count | safe }};
+        window.events = {{ results | safe }};
+        window.filters = {{ query_args | safe }};
+    </script>
+
     {{ super() }}
     {# Core libraries #}
     <script src="{{ url_for('static', filename='admin/lib/lodash/dist/lodash.min.js') }}"></script>

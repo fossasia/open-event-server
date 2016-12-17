@@ -1,10 +1,12 @@
+import json
+
 from flask import Blueprint
 from flask import render_template
 from flask import request, redirect, url_for, jsonify
 from flask.ext.restplus import abort
 from flask_restplus import marshal
 
-from app.api.events import EVENT
+from app.api.events import EVENT, EVENT_PAGINATED
 from app.api.helpers.helpers import get_paginated_list, get_object_list
 from app.helpers.data import DataGetter
 from app.helpers.flask_helpers import deslugify
@@ -43,6 +45,10 @@ def erase_from_dict(d, k):
             d.pop(k)
 
 
+def clean_dict(d):
+    return dict((k, v) for k, v in d.iteritems() if v)
+
+
 explore = Blueprint('explore', __name__, url_prefix='/explore')
 
 
@@ -78,6 +84,7 @@ def explore_view(location):
     location = deslugify(location)
     current_page = request.args.get('page')
     query = request.args.get('query', '')
+
     if not current_page:
         current_page = 1
     else:
@@ -107,15 +114,15 @@ def explore_view(location):
         filtering['__event_start_time_gt'] = start
     if end:
         filtering['__event_end_time_lt'] = end
-    filters = request.args.items()
-    erase_from_dict(filters, 'page')
-    results = get_paginated(**filtering)
+    
+    filters = clean_dict(request.args.items())
+    results = marshal(get_paginated(**filtering), EVENT_PAGINATED)
 
     return render_template('gentelella/guest/explore/results.html',
-                           results=results,
+                           results=json.dumps(results['results']),
                            location=location,
-                           filters=filters,
-                           current_page=current_page,
+                           count=results['count'],
+                           query_args=json.dumps(filters),
                            placeholder_images=placeholder_images,
                            custom_placeholder=custom_placeholder,
                            categories=CATEGORIES, query=query)
