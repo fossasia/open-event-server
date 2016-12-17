@@ -14,22 +14,23 @@ Vue.filter('camel', function (value) {
     return _.camelCase(value);
 });
 
+_.merge(window.placeholders, window.customPlaceholders);
+
 //noinspection JSUnusedGlobalSymbols
 var app = new Vue({
     el: '#explore',
     data: {
-        location: '',
-        events: [],
-        filters: {},
-        currentPage: 1,
-        total: 10,
+        LIMIT_PER_PAGE: 10,
+        location: window.locationName,
+        events: window.events,
+        filters: window.filters,
+        currentPage: window.filters.hasOwnProperty('page') ? window.filters.page : 1,
+        total: window.count,
         position: {
             lat: 0.0,
             lng: 0.0
         },
-        LIMIT_PER_PAGE: 10,
         networkRequest: true
-
     },
     computed: {
         _: function () {

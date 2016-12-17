@@ -11,6 +11,7 @@ from app.api.helpers.helpers import get_paginated_list, get_object_list
 from app.helpers.data import DataGetter
 from app.helpers.flask_helpers import deslugify
 from app.helpers.helpers import get_date_range
+from app.helpers.static import EVENT_TOPICS
 from app.models.event import Event
 
 RESULTS_PER_PAGE = 10
@@ -46,6 +47,7 @@ def erase_from_dict(d, k):
 
 
 def clean_dict(d):
+    d = dict(d)
     return dict((k, v) for k, v in d.iteritems() if v)
 
 
@@ -65,7 +67,7 @@ def locations_autocomplete():
 
 @explore.route('/autocomplete/categories.json', methods=('GET', 'POST'))
 def categories_autocomplete():
-    categories = CATEGORIES.keys()
+    categories = EVENT_TOPICS.keys()
     return jsonify([{'value': category, 'type': 'category'} for category in categories])
 
 
@@ -82,13 +84,7 @@ def explore_view(location):
     placeholder_images = DataGetter.get_event_default_images()
     custom_placeholder = DataGetter.get_custom_placeholders()
     location = deslugify(location)
-    current_page = request.args.get('page')
     query = request.args.get('query', '')
-
-    if not current_page:
-        current_page = 1
-    else:
-        current_page = int(current_page)
 
     filtering = {'privacy': 'public', 'state': 'Published'}
     start, end = None, None
@@ -114,55 +110,20 @@ def explore_view(location):
         filtering['__event_start_time_gt'] = start
     if end:
         filtering['__event_end_time_lt'] = end
-    
-    filters = clean_dict(request.args.items())
+
     results = marshal(get_paginated(**filtering), EVENT_PAGINATED)
+    filters = clean_dict(request.args.items())
+
+    custom_placeholder_serializable = {}
+    for custom_placeholder_item in custom_placeholder:
+        custom_placeholder_serializable[custom_placeholder_item.name] = custom_placeholder_item.thumbnail
 
     return render_template('gentelella/guest/explore/results.html',
                            results=json.dumps(results['results']),
                            location=location,
                            count=results['count'],
                            query_args=json.dumps(filters),
-                           placeholder_images=placeholder_images,
-                           custom_placeholder=custom_placeholder,
-                           categories=CATEGORIES, query=query)
-
-
-CATEGORIES = {'Auto, Boat & Air': ['Air', 'Auto', 'Boat', 'Motorcycle/ATV', 'Other'],
-              'Business & Professional':
-                  ['Career', 'Design', 'Educators', 'Environment &amp; Sustainability', 'Finance', 'Media',
-                   'Non Profit &amp; NGOs', 'Other', 'Real Estate', 'Sales &amp; Marketing',
-                   'Startups &amp; Small Business'],
-              'Charity & Causes': ['Animal Welfare', 'Disaster Relief', 'Education', 'Environment', 'Healthcare',
-                                   'Human Rights', 'International Aid', 'Other', 'Poverty'],
-              'Community & Culture': ['City/Town', 'County', 'Heritage', 'LGBT', 'Language', 'Medieval', 'Nationality',
-                                      'Other', 'Renaissance', 'State'],
-              'Family & Education': ['Alumni', 'Baby', 'Children &amp; Youth', 'Education', 'Other', 'Parenting',
-                                     'Parents Association', 'Reunion'],
-              'Fashion & Beauty': ['Accessories', 'Beauty', 'Bridal', 'Fashion', 'Other'],
-              'Film, Media & Entertainment': ['Adult', 'Anime', 'Comedy', 'Comics', 'Film', 'Gaming', 'Other', 'TV'],
-              'Food & Drink': ["Beer", "Food", "Other", "Spirits", "Wine"],
-              'Government & Politics': ["County/Municipal Government ", "Democratic Party", "Federal Government",
-                                        "Non-partisan", "Other", "Other Party", "Republican Party", "State Government"],
-              'Health & Wellness': ["Medical", "Mental health", "Other", "Personal health", "Spa", "Yoga"],
-              'Hobbies & Special Interest': ["Adult", "Anime/Comics", "Books", "DIY", "Drawing & Painting",
-                                             "Gaming", "Knitting", "Other", "Photography"],
-              'Home & Lifestyle': ["Dating", "Home & Garden", "Other", "Pets & Animals"],
-              'Music': ["Alternative", "Blues & Jazz", "Classical", "Country", "Cultural", "EDM / Electronic",
-                        "Folk", "Hip Hop / Rap", "Indie", "Latin", "Metal", "Opera", "Other", "Pop", "R&B", "Reggae",
-                        "Religious/Spiritual", "Rock", "Top 40"],
-              'Other': [],
-              'Performing & Visual Arts': ["Ballet", "Comedy", "Craft", "Dance", "Fine Art", "Literary Arts", "Musical",
-                                           "Opera", "Orchestra", "Other", "Theatre"],
-              'Religion & Spirituality': ["Buddhism", "Christianity", "Eastern Religion", "Islam", "Judaism",
-                                          "Mormonism", "Mysticism and Occult", "New Age", "Other", "Sikhism"],
-              'Science & Technology': ["Biotech", "High Tech", "Medicine", "Mobile", "Other", "Robotics",
-                                       "Science", "Social Media"],
-              'Seasonal & Holiday': ["Channukah", "Christmas", "Easter", "Fall events", "Halloween/Haunt",
-                                     "Independence Day", "New Years Eve", "Other", "St Patricks Day", "Thanksgiving"],
-              'Sports & Fitness': ["Baseball", "Basketball", "Cycling", "Exercise", "Fighting & Martial Arts",
-                                   "Football", "Golf", "Hockey", "Motorsports", "Mountain Biking", "Obstacles",
-                                   "Other", "Rugby", "Running", "Snow Sports", "Soccer", "Swimming & Water Sports",
-                                   "Tennis", "Volleyball", "Walking", "Yoga"],
-              'Travel & Outdoor': ["Canoeing", "Climbing", "Hiking", "Kayaking", "Other", "Rafting", "Travel"]
-              }
+                           placeholder_images=json.dumps(placeholder_images),
+                           custom_placeholder=json.dumps(custom_placeholder_serializable),
+                           categories=EVENT_TOPICS,
+                           query=query)
