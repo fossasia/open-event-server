@@ -1,0 +1,22 @@
+<script type="application/x-template" id="event-box-template">
+    <a v-bind:href="'/e/' + event.identifier" :key="event.id">
+        <div class="col-xs-12 event-holder">
+            <div class="thumbnail row">
+                <div class="img-box col-md-3 col-sm-3 col-xs-3">
+                    <img class="event-image" v-bind:src="backgroundImage" onerror="imgError(this, true);">
+                </div>
+                <div class="caption col-md-9 col-sm-9 col-xs-9">
+                    <small class="time">{{ '{{ start_time_formatted }}' }}</small>
+                    <h4 class="name">{{ '{{ event.name }}' }}</h4>
+                    <small class="location_name">{{ '{{ location_name }}' }}</small>
+                    <hr>
+                    <p class="tags">
+                        <span class="filter-hashtag" v-on:click="eventTagFilter('type', event.type)">#{{ '{{ event.type | camel' }}</span>
+                        <span class="filter-hashtag" v-on:click="eventTagFilter('category', event.topic)">#{{ '{{ event.topic | camel' }}</span>
+                        <i class="share-btn fa fa-share-alt pull-right" v-on:click="share"></i>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </a>
+</script>

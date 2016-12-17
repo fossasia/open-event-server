@@ -6,10 +6,6 @@ Vue.component('pagination', {
         };
     },
     props: {
-        for: {
-            type: String,
-            required: true
-        },
         records: {
             type: Number,
             required: true
@@ -63,7 +59,7 @@ Vue.component('pagination', {
         setPage: function (page) {
             if (this.allowedPage(page)) {
                 this.page = page;
-                this.$emit('page-change', page);
+                this.$emit('change', 'page', page);
                 return true;
             }
             return false;

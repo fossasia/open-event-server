@@ -111,7 +111,7 @@ def explore_view(location):
     erase_from_dict(filters, 'page')
     results = get_paginated(**filtering)
 
-    return render_template('gentelella/guest/search/results.html',
+    return render_template('gentelella/guest/explore/results.html',
                            results=results,
                            location=location,
                            filters=filters,
