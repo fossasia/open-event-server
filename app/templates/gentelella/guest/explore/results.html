@@ -3,7 +3,8 @@
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/explore/explore.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/explore/filters.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}">
 {% endblock %}
 
 {% block head_js %}
@@ -25,25 +26,33 @@
             {% include 'gentelella/guest/explore/_collapse_search.html' %}
         </div>
         <div class="col-md-8 col-md-push-1">
-            <h1 style="font-weight: 300;"><span class="location-name" style="text-transform: capitalize;">{{ '{{ location }}' }}</span> {{ _("Events") }}
+            <h1 style="font-weight: 300;">
+                <template>
+                    <span class="location-name"
+                          style="text-transform: capitalize;">{{ '{{ location }}' }}</span> {{ _("Events") }}
+                </template>
             </h1>
             <div>
                 <ul class="list-inline prod_size filtering">
-                    <filter-tag v-for="(value, name) in filterTags" v-bind:name="name" v-bind:value="value" v-on:remove="removeTag(name)"></filter-tag>
+                    <filter-tag v-for="(value, name) in filterTags" v-bind:name="name" v-bind:value="value"
+                                v-on:remove="removeTag(name)"></filter-tag>
                 </ul>
             </div>
             <div style="overflow: hidden" v-show="networkRequest">
                 <div class="loader">{{ _("Loading") }}...</div>
             </div>
             <div v-show="!networkRequest && events.length > 0">
-                <event-box v-for="event in events" v-bind:event="event" v-on:share="shareEvent(event)" v-on:filter="runFilter"></event-box>
+                <event-box v-for="event in events" v-bind:event="event" v-on:share="shareEvent(event)"
+                           v-on:filter="runFilter"></event-box>
             </div>
             <div v-show="!networkRequest && events.length <= 0">
-                <h2 style="font-weight: 300; font-size: 26px;">{{ _("No events found for the selected parameters.") }}</h2>
+                <template>
+                    <h2 style="font-weight: 300; font-size: 26px;">{{ _("No events found for the selected parameters.") }}</h2>
+                </template>
             </div>
             <br>
             <div id="pagination" v-show="!networkRequest && events.length > 0">
-                <pagination v-bind:records="total" count-text="" v-on:change="runFilter"></pagination>
+                <pagination v-bind:records="total" count-text="" v-bind:per-page="resultsPerPage" v-on:change="runFilter"></pagination>
             </div>
         </div>
     </div>
@@ -57,7 +66,8 @@
                 </div>
                 <div class="modal-body" style="text-align: center;">
                     {% include 'gentelella/components/social_buttons.html' %}
-                    <input id="share-url-box" type="text" class="form-control" onClick="this.select();" v-bind:value="shareUrl" title="share URL">
+                    <input id="share-url-box" type="text" class="form-control" onClick="this.select();"
+                           v-bind:value="shareUrl" title="share URL">
                 </div>
             </div>
         </div>
@@ -74,6 +84,7 @@
         window.customPlaceholders = {{ custom_placeholder | safe }};
         window.locationName = '{{ location }}';
         window.position = {{ position | safe }};
+        window.resultsPerPage = {{ results_per_page }};
     </script>
     {{ super() }}
     {# Core libraries #}
@@ -81,11 +92,13 @@
     <script src="{{ url_for('static', filename='admin/lib/vue/dist/vue.js') }}"></script>
     <script src="{{ url_for('static', filename='js/vue/vue-google-maps.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/admin/commons/geo.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
 
     {# Additional js functionality #}
     <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/datepair.js/dist/datepair.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/datepair.js/dist/jquery.datepair.min.js') }}"></script>
 
     <script src="{{ url_for('static', filename='js/admin/guest/explore/classic.js') }}"></script>
     <script src="{{ url_for('static', filename='js/admin/guest/explore/initializer.js') }}"></script>

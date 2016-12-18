@@ -41,7 +41,7 @@ function loadResults(callback, start, page) {
 
         var params = {
             start: start,
-            limit: app.LIMIT_PER_PAGE,
+            limit: window.resultsPerPage,
             privacy: 'public',
             state: 'Published',
             location: app.location
@@ -52,7 +52,7 @@ function loadResults(callback, start, page) {
         }
 
         if (filterHas('page')) {
-            params['start'] = ((parseInt(getFilter('page', 1)) - 1) * app.LIMIT_PER_PAGE) + 1;
+            params['start'] = ((parseInt(getFilter('page', 1)) - 1) * window.resultsPerPage) + 1;
         }
 
         if (filterHas('type')) {

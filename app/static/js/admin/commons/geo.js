@@ -21,8 +21,10 @@ function geocodeAddress(geocoder, address, callback, fillAddress) {
     }
     geocoder.geocode({'address': address}, function (results, status) {
         if (status === google.maps.GeocoderStatus.OK) {
+            var lat = results[0].geometry.location.lat(),
+                lng = results[0].geometry.location.lng();
             if(fillAddress) {
-                fillInAddress(callback, results[0].geometry.location.lat(), results[0].geometry.location.lng());
+                fillInAddress(callback, lat, lng);
             } else {
                 callback(lat, lng);
             }

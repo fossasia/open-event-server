@@ -120,7 +120,7 @@ def explore_view(location):
 
     if day_filter:
         start, end = get_date_range(day_filter)
-    if location:
+    if location and location != 'world':
         filtering['__event_search_location'] = location
     if word:
         filtering['__event_contains'] = word
@@ -144,11 +144,12 @@ def explore_view(location):
 
     return render_template('gentelella/guest/explore/results.html',
                            results=json.dumps(results['results']),
-                           location=location,
+                           location=location if location != 'world' else '',
                            position=json.dumps(get_coordinates(location)),
                            count=results['count'],
                            query_args=json.dumps(filters),
                            placeholder_images=json.dumps(placeholder_images),
                            custom_placeholder=json.dumps(custom_placeholder_serializable),
                            categories=EVENT_TOPICS,
+                           results_per_page=RESULTS_PER_PAGE,
                            query=query)

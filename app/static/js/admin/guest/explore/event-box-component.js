@@ -38,7 +38,7 @@ Vue.component('event-box', {
             }
 
             var placeholder;
-            if(!_.isNull(this.event.sub_topic) && !_.isEmpty(this.event.sub_topic.trim)) {
+            if(!_.isNull(this.event.sub_topic) && !_.isEmpty(this.event.sub_topic.trim) && this.event.sub_topic.trim().toLowerCase() != 'other'  && this.event.sub_topic.trim().toLowerCase() != 'others') {
                 placeholder = _.get(window.placeholders, this.event.sub_topic, 'sativa.png');
             } else {
                 placeholder = _.get(window.placeholders, this.event.topic, 'sativa.png');
