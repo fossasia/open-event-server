@@ -74,6 +74,10 @@
     cursor: pointer;
 }
 
+.list-group.categories .panel-heading {
+  padding-left: 0;
+}
+
 .panel-heading {
     padding: 5px 15px;
 }
@@ -82,8 +86,12 @@
     padding: 10px 15px;
 }
 
+.list-group {
+  padding-left: 20px;
+}
+
 .list-group-item {
-    border: 1px solid #f3f3f3 !important;
+    border: none !important;
 }
 
 .list-group-item.active {

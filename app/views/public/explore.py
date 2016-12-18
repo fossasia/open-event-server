@@ -1,10 +1,12 @@
 import json
 
+import requests
 from flask import Blueprint
 from flask import render_template
 from flask import request, redirect, url_for, jsonify
 from flask.ext.restplus import abort
 from flask_restplus import marshal
+from requests import ConnectionError
 
 from app.api.events import EVENT, EVENT_PAGINATED
 from app.api.helpers.helpers import get_paginated_list, get_object_list
@@ -49,6 +51,28 @@ def erase_from_dict(d, k):
 def clean_dict(d):
     d = dict(d)
     return dict((k, v) for k, v in d.iteritems() if v)
+
+
+def get_coordinates(location_name):
+
+    location = {
+        'lat': 0.0,
+        'lng': 0.0
+    }
+
+    url = 'https://maps.googleapis.com/maps/api/geocode/json'
+    params = {'address': location_name}
+    response = dict()
+
+    try:
+        response = requests.get(url, params).json()
+    except ConnectionError:
+        response['status'] = u'Error'
+
+    if response['status'] == u'OK':
+        location = response['results'][0]['geometry']['location']
+
+    return location
 
 
 explore = Blueprint('explore', __name__, url_prefix='/explore')
@@ -121,6 +145,7 @@ def explore_view(location):
     return render_template('gentelella/guest/explore/results.html',
                            results=json.dumps(results['results']),
                            location=location,
+                           position=json.dumps(get_coordinates(location)),
                            count=results['count'],
                            query_args=json.dumps(filters),
                            placeholder_images=json.dumps(placeholder_images),

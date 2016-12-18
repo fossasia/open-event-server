@@ -10,7 +10,7 @@ function isImageInvalid(url) {
     if (_.isUndefined(url) || _.isNull(url) || _.isEmpty(url)) {
         return true;
     }
-    url = trimText(url);
+    url = _.trim(url);
     return (url === 'null' || url === '' || url === ' ');
 }
 
@@ -28,12 +28,12 @@ function getFilter(what) {
  * @param page
  * @param callback
  */
-function loadResults(start, page, callback) {
-    if (isUndefinedOrNull(start)) {
+function loadResults(callback, start, page) {
+    if (_.isUndefined(start) || _.isNull(start)) {
         start = 1;
     }
 
-    if (isUndefinedOrNull(page)) {
+    if (_.isUndefined(page) || _.isNull(page)) {
         page = 1;
     }
 

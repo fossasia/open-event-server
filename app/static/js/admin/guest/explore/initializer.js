@@ -1,12 +1,12 @@
 function explorerInit($div) {
-    /*var $customDateCollapse = $div.find('#custom-date-collapse');
-     $customDateCollapse.find('.date').datepicker({
-     'format': 'mm-dd-yyyy',
-     'autoclose': true
-     });
-     new Datepair($customDateCollapse[0], {
-     'defaultDateDelta': 1
-     });*/
+    var $customDateCollapse = $div.find('#custom-date-collapse');
+    $customDateCollapse.find('.date').datepicker({
+        'format': 'mm-dd-yyyy',
+        'autoclose': true
+    });
+    new Datepair($customDateCollapse[0], {
+        'defaultDateDelta': 1
+    });
     $("#event_browse").submit(function (e) {
         e.preventDefault();
         app.runFilter('query', $('#search-text').val());
@@ -26,8 +26,8 @@ function explorerInit($div) {
 }
 
 VueGoogleMap.loaded.then(function () {
-/*    window.geocoder = new google.maps.Geocoder();
-    var locationInput = $("#location_name")[0];
+    window.geocoder = new google.maps.Geocoder();
+    var locationInput = $("#location")[0];
     window.autocomplete = new google.maps.places.Autocomplete(locationInput, {types: ['geocode']});
     window.autocomplete.addListener('place_changed', function () {
         locationInput.dispatchEvent(new Event('input'));
@@ -42,5 +42,5 @@ VueGoogleMap.loaded.then(function () {
             }
         } catch (ignored) {
         }
-    }, 100);*/
+    }, 100);
 });

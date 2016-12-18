@@ -3,8 +3,7 @@
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/explore/explore.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/explore/filters.css') }}">
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}">
 {% endblock %}
 
 {% block head_js %}
@@ -23,13 +22,14 @@
             <google-map class="hidden-xs" style="width:100%; height:250px" ref="gmap" :center="position" :zoom="zoom">
                 <map-marker :position="position" :clickable="false" :draggable="false"></map-marker>
             </google-map>
+            {% include 'gentelella/guest/explore/_collapse_search.html' %}
         </div>
         <div class="col-md-8 col-md-push-1">
             <h1 style="font-weight: 300;"><span class="location-name" style="text-transform: capitalize;">{{ '{{ location }}' }}</span> {{ _("Events") }}
             </h1>
             <div>
                 <ul class="list-inline prod_size filtering">
-                    <filter-tag v-for="(value, name) in filterTags" v-bind:name="name" v-bind:value="value" v-on="removeTag(name)"></filter-tag>
+                    <filter-tag v-for="(value, name) in filterTags" v-bind:name="name" v-bind:value="value" v-on:remove="removeTag(name)"></filter-tag>
                 </ul>
             </div>
             <div style="overflow: hidden" v-show="networkRequest">
@@ -43,7 +43,7 @@
             </div>
             <br>
             <div id="pagination" v-show="!networkRequest && events.length > 0">
-                <pagination :records="500" count-text="" v-on:change="runFilter"></pagination>
+                <pagination v-bind:records="total" count-text="" v-on:change="runFilter"></pagination>
             </div>
         </div>
     </div>
@@ -73,6 +73,7 @@
         window.placeholders = {{ placeholder_images | safe }};
         window.customPlaceholders = {{ custom_placeholder | safe }};
         window.locationName = '{{ location }}';
+        window.position = {{ position | safe }};
     </script>
     {{ super() }}
     {# Core libraries #}

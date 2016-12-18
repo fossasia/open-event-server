@@ -10,8 +10,8 @@ Vue.use(VueGoogleMap, {
 Vue.component('google-map', VueGoogleMap.Map);
 Vue.component('map-marker', VueGoogleMap.Marker);
 
-Vue.filter('camel', function (value) {
-    return _.camelCase(value);
+Vue.filter('tagCase', function (value) {
+    return _.upperFirst(_.camelCase(value));
 });
 
 _.merge(window.placeholders, window.customPlaceholders);
@@ -26,10 +26,7 @@ var app = new Vue({
         filters: window.filters,
         currentPage: window.filters.hasOwnProperty('page') ? window.filters.page : 1,
         total: window.count,
-        position: {
-            lat: 0.0,
-            lng: 0.0
-        },
+        position: window.position,
         networkRequest: true
     },
     computed: {
@@ -41,18 +38,16 @@ var app = new Vue({
         },
         filterTags: function () {
             var filters = _.clone(this.filters);
-            if(_.has(filters, 'query')) {
+            if (_.has(filters, 'query')) {
                 delete filters['query'];
             }
-            if(_.has(filters, 'page')) {
+            if (_.has(filters, 'page')) {
                 delete filters['page'];
             }
             return filters;
         }
     },
-    watch: {
-
-    },
+    watch: {},
     methods: {
         runFilter: function (type, value) {
             app.networkRequest = true;
@@ -76,13 +71,16 @@ var app = new Vue({
             baseUrl = baseUrl + '?' + $.param(this.filters);
             history.replaceState(null, null, baseUrl);
             loadResults(function (events) {
-                if( !_.isUndefined(events) && !_.isNull(events)) {
+                if (!_.isUndefined(events) && !_.isNull(events)) {
                     app.events = events;
                 } else {
                     app.events = [];
                 }
                 app.networkRequest = false;
             });
+        },
+        removeTag: function (name) {
+            this.runFilter(name, '');
         }
     },
     compiled: function () {
@@ -93,4 +91,5 @@ var app = new Vue({
 app.$nextTick(function () {
     var $div = $(this.$el);
     explorerInit($div);
+    this.networkRequest = false;
 });
