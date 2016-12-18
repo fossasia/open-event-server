@@ -31,7 +31,8 @@ var app = new Vue({
         period: {
             from: moment().format('MM-DD-YYYY'),
             to: moment().format('MM-DD-YYYY')
-        }
+        },
+        shareUrl: ''
     },
     computed: {
         _: function () {
@@ -78,8 +79,8 @@ var app = new Vue({
         runFilter: function (type, value, query) {
             app.networkRequest = true;
             value = _.trim(value);
-            if(!_.isUndefined(query) && type != 'query') {
-                if(query !== '') {
+            if (!_.isUndefined(query) && type != 'query') {
+                if (query !== '') {
                     Vue.set(this.filters, 'query', query);
                 } else {
                     Vue.delete(this.filters, 'query');
@@ -87,7 +88,7 @@ var app = new Vue({
             }
             if (type !== 'location' && value !== 'All Categories' && value !== 'All Event Types' && value !== 'All Dates' && value !== '') {
                 Vue.set(this.filters, type, value);
-                if(type == 'category') {
+                if (type == 'category') {
                     Vue.delete(this.filters, 'sub-category');
                 }
             } else {
@@ -101,7 +102,7 @@ var app = new Vue({
                 Vue.delete(this.filters, type);
             }
 
-            if(type == 'period' && value == 'custom') {
+            if (type == 'period' && value == 'custom') {
                 value = this.period.from + ' to ' + this.period.to;
                 Vue.set(this.filters, 'period', value);
             }
@@ -134,6 +135,15 @@ var app = new Vue({
             google.maps.event.trigger(window.map, 'resize');
             window.map.setZoom(window.map.getZoom());
             window.map.setCenter(center);
+        },
+        shareEvent: function (event) {
+            var pathArray = location.href.split('/');
+            var protocol = pathArray[0];
+            var host = pathArray[2];
+            var url = protocol + '//' + host;
+            this.shareUrl = url + "/e/" + event.identifier + "/" + slugify(event.name);
+            $("#share-modal").modal('show');
+            setSocialLinks(this.shareUrl, event.name + ' - Powered by ' + window.appName);
         }
     },
     compiled: function () {
