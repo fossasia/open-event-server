@@ -7,7 +7,6 @@
             cursor: pointer;
 
         }
-
         .event-holder:hover > .thumbnail > .caption {
             background-color: #f7f7f7;
         }
@@ -36,30 +35,13 @@
             text-overflow: ellipsis;
         }
 
-        .event-holder .location_name { 
-            white-space: nowrap; 
-            width: 12em; 
+        .event-holder .location_name {
+            white-space: nowrap;
+            max-widows:;: 12em;
             overflow: hidden;
-            text-overflow: ellipsis; 
+            text-overflow: ellipsis;
             position: relative;
             display: inline-block;
-        }
-
-        .event-holder .caption .locate{
-            visibility: hidden;
-            overflow: visible;
-            width: 180px;
-            border-radius: 6px;
-            padding: 5px 0;
-            background-color: #444444;
-            color: white;
-            text-align: center;
-            position: absolute;
-            z-index: 1;           
-        }
-
-        .event-holder:hover .caption .locate {
-            visibility: visible;
         }
 
         .event-holder .tags {
@@ -159,12 +141,11 @@
                                     {{ url_for("static", filename="placeholders/" + placeholder_images["Other"]) }}
                                 {% endif %}
                             {% endif %}
-                            ' onerror="imgError(this, true)">
+                            ' onerror="imgError(this, true);">
                 <div class="caption">
                     <small class="time">{{ event.start_time.strftime('%a, %B %d %I:%M %p') }}</small>
                     <h4 class="name">{{ event.name }}</h4>
-                    <div class="location_name">{{ event.location_name.split(",")[0] }}</div>
-                    <span class="locate">{{ event.location_name }}</span>
+                    <div class="location_name" title="{{ event.location_name }}" data-toggle="tooltip" data-placement="right">{{ event.location_name.split(",")[0] }}</div>
                     <hr>
                     <p class="tags">
                         {% if event.type %}
@@ -193,8 +174,7 @@
                     <div class="carousel-caption">
                         <h1>{{ _("The simplest way to create events.") }}</h1>
                         <p></p>
-                        <p><a class="btn btn-info btn-lg" href="/events/create/"
-                              role="button">{{ _("Create Event") }}</a>
+                        <p><a class="btn btn-info btn-lg" href="/events/create/">{{ _("Create Event") }}</a>
                         </p>
                     </div>
                 </div>
@@ -205,12 +185,10 @@
         <div class="col-md-10 col-md-push-1">
             <form class="form-inline row home-search" method="get" action="/browse">
                 <div class="form-group col-sm-4 col-xs-10">
-                    <input type="text" name="query" class="form-control input-lg" style="width: 100%;"
-                           placeholder="Search for events">
+                    <input type="text" name="query" class="form-control input-lg" style="width: 100%;" placeholder="Search for events">
                 </div>
                 <div class="form-group col-sm-3 hidden-xs">
-                    <input type="text" name="location" id="location" class="form-control input-lg" style="width: 100%;"
-                           placeholder="Location">
+                    <input type="text" name="location" id="location" class="form-control input-lg" style="width: 100%;" placeholder="Location">
                 </div>
                 <div class="form-group col-sm-3 hidden-xs">
                     <select class="form-control input-lg" name="period" style="width: 100%;" title="Period">
@@ -266,8 +244,7 @@
                 </div>
                 <div class="modal-body" style="text-align: center;">
                     {% include 'gentelella/components/social_buttons.html' %}
-                    <input id="share-url-box" type="text" class="form-control" onClick="this.select();"
-                           value="{{ request.url }}">
+                    <input id="share-url-box" type="text" class="form-control" onClick="this.select();" value="{{ request.url }}" title="Share URL">
                 </div>
             </div>
         </div>
@@ -278,29 +255,6 @@
 {% block tail_js %}
     {{ super() }}
 
-    <script type="text/javascript">
-        var $locationInput = $("#location");
-        var autocomplete;
-        var componentForm = {
-            street_number: 'short_name',
-            route: 'long_name',
-            locality: 'long_name',
-            administrative_area_level_1: 'short_name',
-            country: 'long_name',
-            postal_code: 'short_name'
-        };
-
-        function initPlacesApi() {
-            autocomplete = new google.maps.places.Autocomplete(($locationInput[0]), {types: ['geocode']});
-            autocomplete.addListener('place_changed', geocodeHandler);
-            var geocodeHandler = function () {
-
-            };
-
-        }
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHdXg0Y_zk-wCNpslbBqcezLdHniaEwkI&callback=initPlacesApi&libraries=places"
-            async defer></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
     <script type="text/javascript">
         var pathArray = location.href.split('/');
