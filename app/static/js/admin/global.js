@@ -54,7 +54,7 @@ function imgError(image, transparent) {
 }
 
 function setSocialLinks(url, title) {
-    var $socialLinks = $(".social-links").find("a");
+    var $socialLinks = $("#social-link-buttons").find("a");
     $.each($socialLinks, function (index, $link) {
         $link = $($link);
         var linkUrl = $link.attr("data-href");
