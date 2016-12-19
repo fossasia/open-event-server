@@ -1,0 +1,8 @@
+<script type="application/x-template" id="filter-tag-template">
+    <li :key="name">
+        <a class="filter-tag-btn btn btn-default btn-xs" href="#" v-on:click.prevent="remove">
+            <span>{{ '{{ value }}' }}</span>
+            <i class="fa fa-close" style="margin-left:3px"></i>
+        </a>
+    </li>
+</script>

@@ -1,0 +1,106 @@
+<div id="accordion" class="panel panel-primary filter-panel">
+    <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback" style="margin-top:10px">
+        <input type="text" class="form-control" id="location-search" placeholder="Location" v-model="location">
+        <span class="fa fa-map-marker form-control-feedback right"></span>
+    </div>
+    <div class="panel-body" style="margin-top: 55px;">
+        <div class="panel-heading ">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" href="#category-collapse">
+                    {{ _("Categories") }} <i class="indicator fa fa-caret-right" style="float:right"></i>
+                </a>
+            </h4>
+        </div>
+        <div id="category-collapse" class="panel-collapse collapse" v-bind:class="{ in: shouldExpand('category') }">
+            <ul class="list-group categories" data-filter-type="sub-category">
+                <li class="list-group-item filter-item all-filter" v-bind:class="{ active: isActive('category','') }" v-on:click="runFilter('category','')">
+                    {{ _("All Categories") }}
+                </li>
+                {% for category, sub_categories in categories.iteritems() %}
+                    <li class="list-group-item">
+                        <div class="panel-heading ">
+                            <h4 class="panel-title" data-filter-type="category">
+                                <a data-toggle="collapse" class="filter-item parent" v-on:click="runFilter('category','{{ category }}')"
+                                   href="#category-{{ category | slugify }}-collapse">
+                                    {{ category }} <i class="indicator fa fa-caret-right" style="float:right"></i>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="category-{{ category | slugify }}-collapse" class="panel-collapse collapse" v-bind:class="{ in: isActive('category','{{ category }}') }">
+                            <ul class="list-group sub-categories" data-filter-type="sub-category"
+                                data-parent-filter-type="category">
+                                {% for sub_category in sub_categories %}
+                                    <li class="list-group-item filter-item child" v-bind:class="{ active: isActive('sub-category','{{ sub_category }}') }" v-on:click="runFilter('sub-category','{{ sub_category }}')">
+                                        {{ sub_category }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="panel-heading ">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" href="#type-collapse">
+                    {{ _("Event Type") }} <i class="indicator fa fa-caret-right" style="float:right"></i>
+                </a>
+            </h4>
+        </div>
+        <div id="type-collapse" class="panel-collapse collapse" v-bind:class="{ in: shouldExpand('type') }">
+            <ul class="list-group types">
+                <li class="list-group-item filter-item all-filter" v-on:click="runFilter('type','')">
+                    {{ _("All Event Types") }}
+                </li>
+                {% for event_type in event_typo %}
+                    <li class="list-group-item filter-item" v-on:click="runFilter('type','{{ event_type }}')"  v-bind:class="{ active: isActive('type','{{ event_type }}') }">
+                        {{ event_type }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" href="#days-collapse">
+                    {{ _("Date") }}<i class="indicator fa fa-caret-right" style="float:right"></i>
+                </a>
+            </h4>
+        </div>
+        <div id="days-collapse" class="panel-collapse collapse" v-bind:class="{ in: shouldExpand('period') }">
+            <ul class="list-group days">
+                {% for day_item in ['All Dates', 'Today', 'Tomorrow', 'This Week', 'This Weekend', 'Next Week', 'This Month'] %}
+                    <li class="list-group-item filter-item" v-on:click="runFilter('period','{{ day_item }}')" v-bind:class="{ active: isActive('period','{{ day_item }}') }">
+                        {{ day_item }}
+                    </li>
+                {% endfor %}
+                <li class="list-group-item filter-item no-click" data-toggle="collapse" href="#custom-date-collapse" v-bind:class="{ active: isActive('period','custom') }">
+                    {{ _("Custom Dates") }}
+                </li>
+                <li id="custom-date-collapse" class="collapse filter-item no-click"
+                    style="padding-right: 20px;padding-left: 32px;">
+                    <div class="form-group" style="margin-top: 6px;">
+                        <label for="custom-start" style="font-weight: 300;">{{ _("Start Date") }}</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input type="text" class="form-control input-sm date start" id="custom-start"
+                                   v-model="period.from" placeholder="DD-MM-YYYY">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="custom-end" style="font-weight: 300;">{{ _("End Date") }}</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input type="text" class="form-control input-sm date end" id="custom-end"
+                                   v-model="period.to" placeholder="DD-MM-YYYY">
+                        </div>
+                    </div>
+                    <button type="button" id="custom-date-filter-btn" class="btn btn-default" v-on:click="runFilter('period','custom')">{{ _("Filter") }}</button>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
