@@ -1,6 +1,7 @@
 import copy
 import os
 import shutil
+import errno
 
 import PIL
 from PIL import Image
@@ -71,7 +72,12 @@ def placeholder_upload():
             wpercent = (basewidth / float(img.size[0]))
             hsize = int((float(img.size[1]) * float(wpercent)))
             img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
-            os.mkdir(app.config['TEMP_UPLOADS_FOLDER'])
+            try:
+                os.mkdir(app.config['TEMP_UPLOADS_FOLDER'])
+            except OSError as exc:
+                if exc.errno != errno.EEXIST:
+                    raise exc
+                pass
             img.save(app.config['TEMP_UPLOADS_FOLDER'] + '/temp.png')
             file_name = temp_img_file.rsplit('/', 1)[1]
             thumbnail_file = UploadedFile(file_path=temp_img_file, filename=file_name)
@@ -79,7 +85,7 @@ def placeholder_upload():
                 thumbnail_file,
                 'placeholders/thumbnail/' + filename
             )
-            shutil.rmtree(path=app.config['TEMP_UPLOADS_FOLDER'] + '/temp/')
+            shutil.rmtree(path=app.config['TEMP_UPLOADS_FOLDER'])
             placeholder_db = DataGetter.get_custom_placeholder_by_name(request.form['name'])
             if placeholder_db:
                 placeholder_db.url = placeholder
