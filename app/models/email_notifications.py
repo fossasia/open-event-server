@@ -10,8 +10,8 @@ class EmailNotification(db.Model):
     new_paper = db.Column(db.Integer)
     session_accept_reject = db.Column(db.Integer)
     session_schedule = db.Column(db.Integer)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
 
     def __init__(self,
                  next_event=0,
