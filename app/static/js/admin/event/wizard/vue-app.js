@@ -95,6 +95,7 @@ var app = new Vue({
             this.discountMessage.error = '';
         },
         'sponsors_enabled': function (value) {
+            save(this.step);
             if (value) {
                 this.sponsors = [_.clone(SPONSOR)];
             } else {
@@ -103,7 +104,6 @@ var app = new Vue({
             this.$nextTick(function () {
                 bindSummerNote(this);
             });
-            save(this.step);
         },
         'sponsors': function (sponsors) {
             if (sponsors.length <= 0) {
@@ -364,7 +364,7 @@ function save(stepToSave, state, callback) {
         state: state
     };
 
-    if (!_.isUndefined(app.event.id) && !_.isNull(app.event.id) && _.isNumber(app.event.id)) {
+    if (!_.isUndefined(app.event.id) && !_.isNull(app.event.id) && _.isNumber(app.event.id) && !_.isUndefined(callback)) {
         callback();
         callback = null;
     }
