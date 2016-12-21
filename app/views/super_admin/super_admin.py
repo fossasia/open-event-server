@@ -1,6 +1,6 @@
 import os
 
-from flask import Blueprint
+from flask import Blueprint, current_app as app
 from flask import render_template
 
 from app.helpers.data_getter import DataGetter
@@ -72,6 +72,7 @@ def index_view():
                            commit_number=commit_number,
                            on_heroku=on_heroku,
                            on_kubernetes=on_kubernetes,
+                           version=app.config['VERSION'],
                            pods_info=pods_info,
                            number_live_events=number_live_events,
                            number_draft_events=number_draft_events,

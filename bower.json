@@ -1,10 +1,7 @@
 {
   "name": "open-event-orga-server",
-  "version": "0.0.0",
   "homepage": "https://github.com/fossasia/open-event-orga-server",
-  "authors": [],
   "description": "Open Event Orga Server",
-  "main": "",
   "moduleType": [
     "globals"
   ],
