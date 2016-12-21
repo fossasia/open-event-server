@@ -3,6 +3,8 @@ import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+VERSION_NAME = '1.0.0-alpha'
+
 # available languages
 LANGUAGES = {
     'en': 'English',
@@ -20,6 +22,7 @@ LANGUAGES = {
 
 
 class Config(object):
+    VERSION = VERSION_NAME
     DEBUG = False
     TESTING = False
     CSRF_ENABLED = True
