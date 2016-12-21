@@ -6,38 +6,41 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
+"Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2016-12-07 10:57+0530\n"
-"PO-Revision-Date: 2016-12-21 13:05+0530\n"
-"Last-Translator: FOSSASIA <open-event@googlegroups.com>\n"
+"PO-Revision-Date: 2016-12-21 14:28+0000\n"
+"Last-Translator: Adarsh Kumar <ideal.ak1308@gmail.com>\n"
+"Language-Team: Hindi <https://hosted.weblate.org/projects/open-event"
+"/organizer-server/hi/>\n"
 "Language: hi\n"
-"Language-Team: hi <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.10\n"
 "Generated-By: Babel 2.3.4\n"
 
 #: app/templates/404.html:8 app/templates/404.html:26
 msgid "You got"
-msgstr ""
+msgstr "आपको मिला"
 
 #: app/templates/404.html:8
 msgid "Page Not Found"
-msgstr ""
+msgstr "पृष्ठ नहीं मिला"
 
 #: app/templates/404.html:27
 msgid "Sorry but we couldn't find this page"
-msgstr ""
+msgstr "क्षमा करें, लेकिन हम इस पृष्ठ नहीं खोज सकते हैं"
 
 #: app/templates/404.html:28
 msgid "This page you are looking for does not exist"
 msgstr ""
 
 #: app/templates/gentelella/index.html:171
+#, fuzzy
 msgid "The simplest way to create events."
-msgstr ""
+msgstr "घटनाओं बनाने के लिए सबसे आसान तरीका है"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:18
 #: app/templates/gentelella/admin/menu.html:34
@@ -45,102 +48,104 @@ msgstr ""
 #: app/templates/gentelella/guest/sitemap.html:76
 #: app/templates/gentelella/index.html:174
 msgid "Create Event"
-msgstr ""
+msgstr "कार्यक्रम बनाएँ"
 
 #: app/templates/gentelella/index.html:194
 msgid "All Dates"
-msgstr ""
+msgstr "सभी तारीखें"
 
 #: app/templates/gentelella/index.html:195
 msgid "Today"
-msgstr ""
+msgstr "आज"
 
 #: app/templates/gentelella/index.html:196
 msgid "Tomorrow"
-msgstr ""
+msgstr "आने वाला कल"
 
 #: app/templates/gentelella/index.html:197
 msgid "This Week"
-msgstr ""
+msgstr "इस सप्ताह"
 
 #: app/templates/gentelella/index.html:198
 msgid "This Weekend"
-msgstr ""
+msgstr "इस सप्ताहांत"
 
 #: app/templates/gentelella/index.html:199
 msgid "Next Week"
-msgstr ""
+msgstr "अगले सप्ताह"
 
 #: app/templates/gentelella/index.html:200
 msgid "This Month"
-msgstr ""
+msgstr "इस महीने"
 
 #: app/templates/gentelella/index.html:205
 msgid "Search"
-msgstr ""
+msgstr "खोज"
 
 #: app/templates/gentelella/index.html:209
 msgid "Upcoming Events"
-msgstr ""
+msgstr "आने वाले कार्यक्रम"
 
 #: app/templates/gentelella/index.html:215
 msgid "No upcoming events available at this time"
-msgstr ""
+msgstr "कोई आगामी कार्यक्रम इस समय उपलब्ध नहीं है"
 
 #: app/templates/gentelella/admin/event/wizard/step-4.html:116
 #: app/templates/gentelella/guest/event/cfs.html:16
 #: app/templates/gentelella/index.html:221
+#, fuzzy
 msgid "Call for Speakers"
-msgstr ""
+msgstr "वक्ता के लिए कॉल करें"
 
 #: app/templates/gentelella/index.html:227
 msgid "No call for speakers open at this time"
-msgstr ""
+msgstr "वक्ताओं के लिए इस समय कोई कॉल नहीं है"
 
 #: app/templates/gentelella/guest/search/results.html:109
 #: app/templates/gentelella/index.html:242
 msgid "Share this event"
-msgstr ""
+msgstr "इस घटना को साझा करें"
 
 #: app/templates/gentelella/admin/footer.html:8
 #: app/templates/gentelella/guest/sitemap.html:33
+#, fuzzy
 msgid "Sitemap"
-msgstr ""
+msgstr "साइट का नक्शा"
 
 #: app/templates/gentelella/admin/footer.html:17
 #: app/templates/gentelella/guest/search/_collapse_search.html:14
 msgid "Categories"
-msgstr ""
+msgstr "श्रेणियाँ"
 
 #: app/templates/gentelella/admin/footer.html:25
 msgid "Locations"
-msgstr ""
+msgstr "स्थान"
 
 #: app/templates/gentelella/admin/footer.html:33
 msgid "Connect With Us"
-msgstr ""
+msgstr "हमसे जुडे"
 
 #: app/templates/gentelella/admin/footer.html:37
 #: app/templates/gentelella/admin/super_admin/content/_social.html:5
 #: app/templates/gentelella/admin/super_admin/content/_social.html:7
 msgid "Support"
-msgstr ""
+msgstr "समर्थन"
 
 #: app/templates/gentelella/admin/footer.html:41
 msgid "Twitter"
-msgstr ""
+msgstr "ट्विटर"
 
 #: app/templates/gentelella/admin/footer.html:45
 msgid "Facebook"
-msgstr ""
+msgstr "फेसबुक"
 
 #: app/templates/gentelella/admin/footer.html:49
 msgid "Google"
-msgstr ""
+msgstr "गूगल"
 
 #: app/templates/gentelella/admin/footer.html:53
 msgid "Youtube"
-msgstr ""
+msgstr "यूट्यूब"
 
 #: app/templates/gentelella/admin/footer.html:57
 msgid "Github"
@@ -148,24 +153,24 @@ msgstr ""
 
 #: app/templates/gentelella/admin/forbidden.html:10
 msgid "Access denied"
-msgstr ""
+msgstr "पहुंच अस्वीकृत"
 
 #: app/templates/gentelella/admin/forbidden.html:11
 msgid "Sorry, but you don't have permission access to this page."
-msgstr ""
+msgstr "क्षमा करें, लेकिन आप के लिए इस पेज के पहुँच की अनुमति नहीं है।"
 
 #: app/templates/gentelella/admin/menu.html:65
 msgid "My Tickets"
-msgstr ""
+msgstr "मेरा टिकट"
 
 #: app/templates/gentelella/admin/menu.html:66
 msgid "My Sessions"
-msgstr ""
+msgstr "मेरे सत्र"
 
 #: app/templates/gentelella/admin/event/index.html:16
 #: app/templates/gentelella/admin/menu.html:67
 msgid "Manage Events"
-msgstr ""
+msgstr "घटनाओं का प्रबंधन"
 
 #: app/templates/gentelella/admin/menu.html:69
 #: app/templates/gentelella/admin/profile/index.html:11
@@ -183,7 +188,7 @@ msgstr ""
 #: app/templates/gentelella/admin/menu.html:72
 #: app/templates/gentelella/admin/super_admin/users/users.html:58
 msgid "Admin"
-msgstr ""
+msgstr "व्यवस्थापक"
 
 #: app/templates/gentelella/admin/menu.html:75
 #: app/templates/gentelella/admin/menu.html:122
@@ -201,31 +206,32 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:18
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:19
 msgid "Notifications"
-msgstr ""
+msgstr "सूचनाएं"
 
 #: app/templates/gentelella/admin/menu.html:97
 msgid "Mark All as Read"
-msgstr ""
+msgstr "सभी को पढ़ा हुआ मार्क करें"
 
 #: app/templates/gentelella/admin/menu.html:108
 msgid "Mark as read"
-msgstr ""
+msgstr "पढ़ा हुआ मार्क करें"
 
 #: app/templates/gentelella/admin/menu.html:114
 msgid "No new notifications"
-msgstr ""
+msgstr "कोई नए संदेश नहीं"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:6
+#, fuzzy
 msgid "Import Event"
-msgstr ""
+msgstr "आयात घटना"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:10
 msgid "Select event"
-msgstr ""
+msgstr "घटना का चयन करें"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:28
 msgid "Previous Imports"
-msgstr ""
+msgstr "पिछला आयात"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:36
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:61
@@ -237,28 +243,28 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:262
 #: app/templates/gentelella/admin/super_admin/events/events.html:284
 msgid "State"
-msgstr ""
+msgstr "राज्य"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:37
 #: app/templates/gentelella/admin/profile/notifications.html:45
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:58
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:91
 msgid "Message"
-msgstr ""
+msgstr "संदेश"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:38
 msgid "Started"
-msgstr ""
+msgstr "शुरू कर दिया है"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:46
 msgid "Success"
-msgstr ""
+msgstr "सफलता"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:50
 #: app/templates/gentelella/guest/ticketing/stripe_oauth_callback.html:5
 #: app/templates/gentelella/guest/ticketing/stripe_oauth_callback.html:21
 msgid "Processing"
-msgstr ""
+msgstr "प्रसंस्करण"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:55
 #: app/templates/gentelella/admin/event/wizard/step-1.html:544
@@ -274,7 +280,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:142
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:256
 msgid "here"
-msgstr ""
+msgstr "यहाँ"
 
 #: app/templates/gentelella/admin/event/_table.html:6
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:16
@@ -291,13 +297,13 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/users/users.html:221
 #: app/templates/gentelella/admin/super_admin/users/users.html:241
 msgid "Name"
-msgstr ""
+msgstr "नाम"
 
 #: app/templates/gentelella/admin/event/_table.html:7
 #: app/templates/gentelella/guest/search/_collapse_search.html:71
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:27
 msgid "Date"
-msgstr ""
+msgstr "तारीख"
 
 #: app/templates/gentelella/admin/event/_table.html:8
 #: app/templates/gentelella/admin/super_admin/events/events.html:200
@@ -306,7 +312,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:266
 #: app/templates/gentelella/admin/super_admin/events/events.html:288
 msgid "Roles"
-msgstr ""
+msgstr "भूमिकाओं"
 
 #: app/templates/gentelella/admin/event/_table.html:9
 #: app/templates/gentelella/admin/event/export/export.html:136
@@ -322,7 +328,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:3
 #: app/templates/gentelella/guest/event/sessions.html:14
 msgid "Sessions"
-msgstr ""
+msgstr "सत्र"
 
 #: app/templates/gentelella/admin/event/_table.html:10
 #: app/templates/gentelella/admin/event/export/export.html:149
@@ -341,7 +347,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:178
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:196
 msgid "Speakers"
-msgstr ""
+msgstr "वक्ता"
 
 #: app/templates/gentelella/admin/event/_table.html:11
 #: app/templates/gentelella/admin/event/export/export.html:157
@@ -359,7 +365,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:78
 #: app/templates/gentelella/guest/event/tickets.html:7
 msgid "Tickets"
-msgstr ""
+msgstr "टिकट"
 
 #: app/templates/gentelella/admin/event/_table.html:12
 #: app/templates/gentelella/admin/super_admin/events/events.html:197
@@ -367,17 +373,18 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:241
 #: app/templates/gentelella/admin/super_admin/events/events.html:263
 msgid "Public"
-msgstr ""
+msgstr "सार्वजनिक"
 
 #: app/templates/gentelella/admin/event/_table.html:56
 #: app/templates/gentelella/admin/super_admin/events/events.html:65
 msgid "Drafts"
-msgstr ""
+msgstr "ड्राफ्ट"
 
 #: app/templates/gentelella/admin/event/_table.html:57
 #: app/templates/gentelella/admin/super_admin/events/events.html:66
+#, fuzzy
 msgid "Submitted"
-msgstr ""
+msgstr "प्रस्तुत"
 
 #: app/templates/gentelella/admin/event/_table.html:58
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:18
@@ -388,7 +395,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:67
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:12
 msgid "Accepted"
-msgstr ""
+msgstr "स्वीकृत"
 
 #: app/templates/gentelella/admin/event/_table.html:59
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:40
@@ -398,7 +405,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:68
 #: app/templates/gentelella/admin/super_admin/sales/fees_status.html:62
 msgid "Pending"
-msgstr ""
+msgstr "अपूर्ण"
 
 #: app/templates/gentelella/admin/event/_table.html:60
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:46
@@ -408,7 +415,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:69
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:14
 msgid "Rejected"
-msgstr ""
+msgstr "अस्वीकृत"
 
 #: app/templates/gentelella/admin/event/_table.html:67
 msgid "No Ticket Information"
@@ -417,7 +424,7 @@ msgstr ""
 #: app/templates/gentelella/admin/event/_table.html:71
 #: app/templates/gentelella/admin/super_admin/events/events.html:81
 msgid "Paid"
-msgstr ""
+msgstr "भुगतान किया है"
 
 #: app/templates/gentelella/admin/event/_table.html:81
 #: app/templates/gentelella/admin/super_admin/events/events.html:91
@@ -428,23 +435,23 @@ msgstr ""
 #: app/templates/gentelella/admin/event/wizard/step-1.html:355
 #: app/templates/gentelella/admin/super_admin/events/events.html:101
 msgid "Donation"
-msgstr ""
+msgstr "दान"
 
 #: app/templates/gentelella/admin/event/event_base.html:51
 msgid "Unpublish"
-msgstr ""
+msgstr "अप्रकाशित"
 
 #: app/templates/gentelella/admin/event/event_base.html:54
 msgid "Publish"
-msgstr ""
+msgstr "प्रकाशित करना"
 
 #: app/templates/gentelella/admin/event/event_base.html:56
 msgid "Copy"
-msgstr ""
+msgstr "प्रतिलिपि"
 
 #: app/templates/gentelella/admin/event/event_base.html:60
 msgid "Delete"
-msgstr ""
+msgstr "मिटाना"
 
 #: app/templates/gentelella/admin/event/event_base.html:109
 msgid "Are you sure you would like to delete this event"
@@ -458,18 +465,18 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:111
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:128
 msgid "Cancel"
-msgstr ""
+msgstr "रद्द करना"
 
 #: app/templates/gentelella/admin/event/event_base.html:114
 msgid "Confirm Delete"
-msgstr ""
+msgstr "हटाने की पुष्टि करें"
 
 #: app/templates/gentelella/admin/event/index.html:11
 #: app/templates/gentelella/admin/super_admin/events/events.html:4
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:3
 #: app/templates/gentelella/guest/search/results.html:75
 msgid "Events"
-msgstr ""
+msgstr "आयोजन"
 
 #: app/templates/gentelella/admin/event/index.html:28
 #: app/templates/gentelella/admin/event/index.html:42
@@ -485,25 +492,25 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:12
 #: app/templates/gentelella/admin/super_admin/widgets/_sessions.html:13
 msgid "Draft"
-msgstr ""
+msgstr "प्रारूप"
 
 #: app/templates/gentelella/admin/event/index.html:34
 #: app/templates/gentelella/admin/event/index.html:57
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:13
 msgid "Past"
-msgstr ""
+msgstr "अतीत"
 
 #: app/templates/gentelella/admin/event/index.html:37
 #: app/templates/gentelella/admin/event/index.html:62
 #: app/templates/gentelella/admin/super_admin/events/events.html:162
 #: app/templates/gentelella/admin/super_admin/events/events.html:185
 msgid "Import"
-msgstr ""
+msgstr "आयात"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:9
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:9
 msgid "Edit Role"
-msgstr ""
+msgstr "भूमिका संपादित करें"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:24
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:131
@@ -516,14 +523,14 @@ msgstr ""
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:132
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:21
 msgid "Co-organizer"
-msgstr ""
+msgstr "सह-आयोजक"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:26
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:133
 #: app/templates/gentelella/admin/event/roles/roles.html:64
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:22
 msgid "Moderator"
-msgstr ""
+msgstr "मध्यस्थ"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:31
 msgid "Update Role"
@@ -537,15 +544,15 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:137
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:177
 msgid "Close"
-msgstr ""
+msgstr "बंद करे"
 
 #: app/templates/gentelella/admin/event/details/widgets/microservices.html:12
 msgid "Generate Android App"
-msgstr ""
+msgstr "एंड्रॉयड ऐप उत्पन्न"
 
 #: app/templates/gentelella/admin/event/details/widgets/microservices.html:17
 msgid "Generate Web App"
-msgstr ""
+msgstr "वेब अनुप्रयोग उत्पन्न"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:4
 #: app/templates/gentelella/admin/event/roles/roles.html:4
@@ -558,7 +565,7 @@ msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:21
 msgid "Invited"
-msgstr ""
+msgstr "आमंत्रित"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:28
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:51
@@ -572,22 +579,22 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/users/users.html:223
 #: app/templates/gentelella/admin/super_admin/users/users.html:243
 msgid "Status"
-msgstr ""
+msgstr "स्थिति"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:29
 #: app/templates/gentelella/admin/event/roles/roles.html:13
 msgid "User Email"
-msgstr ""
+msgstr "उपयोगकर्ता ईमेल"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:30
 msgid "User (Email)"
-msgstr ""
+msgstr "उपयोगकर्ता (ईमेल)"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:31
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:128
 #: app/templates/gentelella/admin/event/roles/roles.html:14
 msgid "Role"
-msgstr ""
+msgstr "भूमिका"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:32
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:19
@@ -609,15 +616,15 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/users/users.html:228
 #: app/templates/gentelella/admin/super_admin/users/users.html:248
 msgid "Options"
-msgstr ""
+msgstr "विकल्प"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:39
 msgid "accepted"
-msgstr ""
+msgstr "स्वीकृत"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:68
 msgid "invited"
-msgstr ""
+msgstr "आमंत्रित"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:77
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:84
@@ -629,13 +636,13 @@ msgstr ""
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:138
 #: app/templates/gentelella/admin/event/roles/roles.html:51
 msgid "Add Role"
-msgstr ""
+msgstr "भूमिका जोड़े"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:125
 #: app/templates/gentelella/admin/event/roles/roles.html:56
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:14
 msgid "User email"
-msgstr ""
+msgstr "उपयोगकर्ता ई-मेल"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:130
 #: app/templates/gentelella/admin/event/roles/roles.html:61
@@ -643,15 +650,15 @@ msgstr ""
 #: app/templates/gentelella/admin/event/wizard/step-1.html:643
 #: app/templates/gentelella/admin/event/wizard/step-1.html:660
 msgid "Choose"
-msgstr ""
+msgstr "चुनें"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:3
 msgid "Event Sponsors"
-msgstr ""
+msgstr "घटना प्रायोजकों"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:8
 msgid "Add Sponsor"
-msgstr ""
+msgstr "प्रायोजक जोड़े"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:15
 #: app/templates/gentelella/admin/event/wizard/step-1.html:213
@@ -659,14 +666,14 @@ msgstr ""
 #: app/templates/gentelella/admin/event/wizard/step-2.html:35
 #: app/templates/gentelella/admin/event/wizard/step-2.html:54
 msgid "Logo"
-msgstr ""
+msgstr "प्रतीक चिन्ह"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:17
 #: app/templates/gentelella/admin/event/wizard/step-2.html:91
 #: app/templates/gentelella/admin/event/wizard/step-4.html:91
 #: app/templates/gentelella/guest/ticketing/pdf/ticket.html:54
 msgid "Type"
-msgstr ""
+msgstr "प्रकार"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:18
 #: app/templates/gentelella/admin/event/wizard/step-2.html:90
@@ -675,7 +682,7 @@ msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:4
 msgid "Export"
-msgstr ""
+msgstr "निर्यात"
 
 #: app/templates/gentelella/admin/event/export/export.html:64
 msgid "Export and Download Event as zip"
@@ -687,21 +694,21 @@ msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:69
 msgid "Image"
-msgstr ""
+msgstr "छवि"
 
 #: app/templates/gentelella/admin/event/export/export.html:78
 #: app/templates/gentelella/admin/event/sessions/display.html:45
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:107
 msgid "Audio"
-msgstr ""
+msgstr "ऑडियो"
 
 #: app/templates/gentelella/admin/event/export/export.html:82
 msgid "Document"
-msgstr ""
+msgstr "दस्तावेज़"
 
 #: app/templates/gentelella/admin/event/export/export.html:89
 msgid "Start"
-msgstr ""
+msgstr "प्रारंभ"
 
 #: app/templates/gentelella/admin/event/export/export.html:92
 #: app/templates/gentelella/admin/event/sessions/display.html:35
@@ -3766,4 +3773,3 @@ msgstr ""
 #: app/templates/swagger/user-info.html:11
 msgid "Logged in as"
 msgstr ""
-
