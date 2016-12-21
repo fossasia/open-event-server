@@ -257,6 +257,10 @@ def social_settings():
     settings = get_setts()
     return dict(settes=settings)
 
+@app.context_processor
+def app_logo():
+    logo = DataGetter.get_custom_placeholder_by_name('Logo')
+    return dict(logo=logo)
 
 @app.template_filter('pretty_name')
 def pretty_name_filter(string):
