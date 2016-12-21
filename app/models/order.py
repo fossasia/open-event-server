@@ -6,8 +6,8 @@ from . import db
 
 class OrderTicket(db.Model):
     __tablename__ = 'orders_tickets'
-    order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), primary_key=True)
-    ticket_id = db.Column(db.Integer, db.ForeignKey('ticket.id'), primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.id', ondelete='CASCADE'), primary_key=True)
+    ticket_id = db.Column(db.Integer, db.ForeignKey('ticket.id', ondelete='CASCADE'), primary_key=True)
     quantity = db.Column(db.Integer)
     ticket = db.relationship('Ticket', backref='order_tickets')
 
@@ -23,9 +23,9 @@ class Order(db.Model):
     state = db.Column(db.String)
     country = db.Column(db.String)
     zipcode = db.Column(db.String)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
-    marketer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='SET NULL'))
+    marketer_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'))
     created_at = db.Column(db.DateTime)
     completed_at = db.Column(db.DateTime, nullable=True, default=None)
     transaction_id = db.Column(db.String)

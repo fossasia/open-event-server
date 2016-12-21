@@ -2,8 +2,8 @@ from app.models.order import OrderTicket
 from . import db
 
 ticket_tags_table = db.Table('association', db.Model.metadata,
-                             db.Column('ticket_id', db.Integer, db.ForeignKey('ticket.id')),
-                             db.Column('ticket_tag_id', db.Integer, db.ForeignKey('ticket_tag.id'))
+                             db.Column('ticket_id', db.Integer, db.ForeignKey('ticket.id', ondelete='CASCADE')),
+                             db.Column('ticket_tag_id', db.Integer, db.ForeignKey('ticket_tag.id', ondelete='CASCADE'))
                              )
 
 
@@ -123,7 +123,7 @@ class TicketTag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
 
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref='ticket_tags')
 
     def __init__(self, name, event_id):
@@ -147,9 +147,9 @@ class BookedTicket(db.Model):
                                           name='user_ticket_uc'),)
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
     user = db.relationship('User', backref='booked_tickets')
-    ticket_id = db.Column(db.Integer, db.ForeignKey('ticket.id'))
+    ticket_id = db.Column(db.Integer, db.ForeignKey('ticket.id', ondelete='CASCADE'))
     ticket = db.relationship('Ticket', backref='booked_tickets')
     quantity = db.Column(db.Integer)
 
