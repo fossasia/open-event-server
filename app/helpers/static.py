@@ -123,7 +123,7 @@ EVENT_TOPICS = {
         "Opera", "Other", "Pop", "R&B", "Reggae", "Religious/Spiritual", "Rock",
         "Top 40"
     ],
-    'Other': ["Avatar"],
+    'Other': ["Avatar","Logo"],
     'Performing & Visual Arts': [
         "Ballet", "Comedy", "Craft", "Dance", "Fine Art", "Literary Arts",
         "Musical", "Opera", "Orchestra", "Other", "Theatre"
@@ -325,6 +325,7 @@ DEFAULT_EVENT_IMAGES = {
     'Language': 'Language.jpg',
     'Latin': 'Latin.jpg',
     'Literary Arts': 'LiteraryArts.jpg',
+    'Logo': 'Logo.png',
     'Media': 'Media.jpg',
     'Medical': 'Medical.jpg',
     'Medicine': 'Medicine.jpg',

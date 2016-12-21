@@ -4,10 +4,15 @@
             <nav>
                 <ul class="nav navbar-nav">
                     <li style="margin-left: 10px;">
+                    {% if logo == None %}
                         <a href="/" style="font-size: 26px; font-weight: 300;">
                             {{ app_name }}
                         </a>
-
+                    {% else %}
+                        <a href="/" style="font-size: 26px; font-weight: 300;padding: 0">
+                            <img height="57px" src="{{ logo.url }}"></img>
+                        </a>
+                    {% endif %}
                     </li>
                     <li style="margin-left: 10px; line-height:32px;" class="search_bar">
                         <form action="/browse" method="GET" role="form" id="event_browse">
