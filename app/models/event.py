@@ -79,7 +79,7 @@ class Event(db.Model):
     topic = db.Column(db.String)
     sub_topic = db.Column(db.String)
     ticket_url = db.Column(db.String)
-    creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    creator_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
     creator = db.relationship('User')
     db.UniqueConstraint('track.name')
     code_of_conduct = db.Column(db.String)
