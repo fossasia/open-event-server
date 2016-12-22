@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2016-12-07 10:57+0530\n"
-"PO-Revision-Date: 2016-12-22 20:12+0000\n"
-"Last-Translator: Adarsh Kumar <ideal.ak1308@gmail.com>\n"
+"PO-Revision-Date: 2016-12-22 20:13+0000\n"
+"Last-Translator: sanchit mishra <sanchitmishra1999@gmail.com>\n"
 "Language-Team: Hindi <https://hosted.weblate.org/projects/open-event"
 "/organizer-server/hi/>\n"
 "Language: hi\n"
@@ -718,15 +718,15 @@ msgstr "प्रारंभ"
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:108
 #: app/templates/gentelella/admin/super_admin/content/_translations.html:21
 msgid "Download"
-msgstr ""
+msgstr "डाउनलोड"
 
 #: app/templates/gentelella/admin/event/export/export.html:96
 msgid "Started by"
-msgstr ""
+msgstr "द्वारा शुरू किया गया"
 
 #: app/templates/gentelella/admin/event/export/export.html:97
 msgid "datetime"
-msgstr ""
+msgstr "दिनांक समय"
 
 #: app/templates/gentelella/admin/event/export/export.html:126
 msgid "Access event information via REST API"
