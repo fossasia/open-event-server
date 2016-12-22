@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2016-12-07 10:57+0530\n"
-"PO-Revision-Date: 2016-12-21 14:28+0000\n"
-"Last-Translator: Adarsh Kumar <ideal.ak1308@gmail.com>\n"
+"PO-Revision-Date: 2016-12-22 20:12+0000\n"
+"Last-Translator: sanchit mishra <sanchitmishra1999@gmail.com>\n"
 "Language-Team: Hindi <https://hosted.weblate.org/projects/open-event"
 "/organizer-server/hi/>\n"
 "Language: hi\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.10\n"
+"X-Generator: Weblate 2.11-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 #: app/templates/404.html:8 app/templates/404.html:26
@@ -35,12 +35,11 @@ msgstr "क्षमा करें, लेकिन हम इस पृष्
 
 #: app/templates/404.html:28
 msgid "This page you are looking for does not exist"
-msgstr ""
+msgstr "यह पृष्ट जो आप देखना चाहते है वह अभी उपलब्ध नही है"
 
 #: app/templates/gentelella/index.html:171
-#, fuzzy
 msgid "The simplest way to create events."
-msgstr "घटनाओं बनाने के लिए सबसे आसान तरीका है"
+msgstr "घटनाओ  का आयोजन करने के लिए सबसे आसान तरीका है"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:18
 #: app/templates/gentelella/admin/menu.html:34
@@ -149,7 +148,7 @@ msgstr "यूट्यूब"
 
 #: app/templates/gentelella/admin/footer.html:57
 msgid "Github"
-msgstr ""
+msgstr "गिटहब"
 
 #: app/templates/gentelella/admin/forbidden.html:10
 msgid "Access denied"
@@ -175,7 +174,7 @@ msgstr "घटनाओं का प्रबंधन"
 #: app/templates/gentelella/admin/menu.html:69
 #: app/templates/gentelella/admin/profile/index.html:11
 msgid "Profile"
-msgstr ""
+msgstr "प्रोफाइल"
 
 #: app/templates/gentelella/admin/event/wizard/wizard.html:151
 #: app/templates/gentelella/admin/menu.html:70
@@ -183,7 +182,7 @@ msgstr ""
 #: app/templates/gentelella/admin/settings/base.html:25
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:4
 msgid "Settings"
-msgstr ""
+msgstr "सेटिंग्स"
 
 #: app/templates/gentelella/admin/menu.html:72
 #: app/templates/gentelella/admin/super_admin/users/users.html:58
@@ -193,11 +192,11 @@ msgstr "व्यवस्थापक"
 #: app/templates/gentelella/admin/menu.html:75
 #: app/templates/gentelella/admin/menu.html:122
 msgid "Browse Events"
-msgstr ""
+msgstr "ब्राउज़ आयोजन"
 
 #: app/templates/gentelella/admin/menu.html:76
 msgid "Logout"
-msgstr ""
+msgstr "लोग आउट"
 
 #: app/templates/gentelella/admin/menu.html:91
 #: app/templates/gentelella/admin/profile/notifications.html:4
@@ -419,7 +418,7 @@ msgstr "अस्वीकृत"
 
 #: app/templates/gentelella/admin/event/_table.html:67
 msgid "No Ticket Information"
-msgstr ""
+msgstr "टिकट की जानकारी नही"
 
 #: app/templates/gentelella/admin/event/_table.html:71
 #: app/templates/gentelella/admin/super_admin/events/events.html:81
@@ -429,7 +428,7 @@ msgstr "भुगतान किया है"
 #: app/templates/gentelella/admin/event/_table.html:81
 #: app/templates/gentelella/admin/super_admin/events/events.html:91
 msgid "Free"
-msgstr ""
+msgstr "मुफ्त"
 
 #: app/templates/gentelella/admin/event/_table.html:91
 #: app/templates/gentelella/admin/event/wizard/step-1.html:355
@@ -455,7 +454,7 @@ msgstr "मिटाना"
 
 #: app/templates/gentelella/admin/event/event_base.html:109
 msgid "Are you sure you would like to delete this event"
-msgstr ""
+msgstr "आप इस घटना को नष्ट करना चाहते हैं तो आप यकीन कर रहे हैं"
 
 #: app/templates/gentelella/admin/event/event_base.html:112
 #: app/templates/gentelella/admin/event/sessions/components/_speaker_croppie.html:17
@@ -483,7 +482,7 @@ msgstr "आयोजन"
 #: app/templates/gentelella/admin/event/index.html:47
 #: app/templates/gentelella/admin/super_admin/widgets/_events.html:11
 msgid "Live"
-msgstr ""
+msgstr "जीना"
 
 #: app/templates/gentelella/admin/event/index.html:31
 #: app/templates/gentelella/admin/event/index.html:52
@@ -517,7 +516,7 @@ msgstr "भूमिका संपादित करें"
 #: app/templates/gentelella/admin/event/roles/roles.html:62
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:20
 msgid "Track Organizer"
-msgstr ""
+msgstr "ट्रैक आयोजक"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:25
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:132
@@ -534,7 +533,7 @@ msgstr "मध्यस्थ"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:31
 msgid "Update Role"
-msgstr ""
+msgstr "अद्यतन भूमिका"
 
 #: app/templates/gentelella/admin/event/details/roles/_edit.html:32
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:139
@@ -557,11 +556,11 @@ msgstr "वेब अनुप्रयोग उत्पन्न"
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:4
 #: app/templates/gentelella/admin/event/roles/roles.html:4
 msgid "Manage Roles"
-msgstr ""
+msgstr "भूमिकाएं प्रबंधित"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:8
 msgid "Add Peopl"
-msgstr ""
+msgstr "लोगों को जोड़ो"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:21
 msgid "Invited"
@@ -630,7 +629,7 @@ msgstr "आमंत्रित"
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:84
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:90
 msgid "Invitation Link"
-msgstr ""
+msgstr "आमंत्रण लिंक"
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:114
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:138
