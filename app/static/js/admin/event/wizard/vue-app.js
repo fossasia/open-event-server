@@ -295,6 +295,12 @@ var app = new Vue({
                 $this.event.state = 'Draft';
                 location.href = "/events/" + $this.event.id + "/";
             });
+        },
+        isValidLinkEntry: function (link) {
+            if(link.trim() === '') {
+                return true;
+            }
+            return isLink(link);
         }
     },
     compiled: function () {
