@@ -2,8 +2,10 @@
 {% block head %}
     {{ super() }}
 {% endblock %}
+{% block title %}
+    {{ _("Profile") }}
+{% endblock %}
 {% block body %}
-
 
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/Croppie/croppie.css') }}"/>
     <div class="page-title col-md-offset-1" style="width: auto;">
@@ -31,7 +33,7 @@
                                 <input type="file" id="event-image-upload" name="event-image-upload"
                                        class="image-upload-btn no-js"
                                        accept="image/*"/>
-                                <label class="file-label" for="event-image-upload" id="event-image-upload-label">
+                                <label class="file-label" for="event-image-upload" id="event-image-upload-label" style="margin-top: 5vh;">
                                     <i class="fa fa-4x fa-camera-retro" aria-hidden="true"></i> <br>
                                     <h3>{{ _("Select Avatar") }}</h3>
                                 </label><br>
