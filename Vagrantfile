@@ -71,5 +71,7 @@ Vagrant.configure(2) do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision :shell, :path => "scripts/install.sh"
-
+  config.proxy.http     = "http://proxy.iiit.ac.in:8080"
+  config.proxy.https    = "http://proxy.iiit.ac.in:8080"
+  config.proxy.no_proxy = "localhost,127.0.0.1,*.iiit.ac.in"
 end
