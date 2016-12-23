@@ -26,7 +26,7 @@
                 <div class="profile_img">
 
                     <div id="crop-avatar">
-                        <input type="hidden" name="logo" id="logo">
+                        <input type="hidden" name="avatar-img" id="avatar-img">
                         <div class="item form-group" id="image-upload-group"
                              {% if profile and profile.user_detail.avatar_uploaded and profile.user_detail.avatar_uploaded != '' %}style="display: none;"{% endif %}>
                             <div class="image-box">
@@ -198,7 +198,7 @@
                     dataType: 'json'
                 }).done(function (data) {
                     console.log(data);
-                    $("#logo").val(data.background_url);
+                    $("#avatar-img").val(data.background_url);
                     $("#image-view-group").show().find("img").attr("src", resp);
                     $("#image-upload-group").hide();
                 }).fail(function (data) {
@@ -222,7 +222,7 @@
                     console.log(data);
                     $("#image-view-group").hide();
                     $("#image-upload-group").show();
-                    $("#logo").val('');
+                    $("#avatar-img").val('');
                 }).fail(function (data) {
                     alert("Something went wrong. Please try again.");
                 });
@@ -233,7 +233,7 @@
             $("#remove-image-btn").click(function () {
                 $("#image-view-group").hide();
                 $("#image-upload-group").show();
-                $("#logo").val('');
+                $("#avatar-img").val('');
             });
         {% endif %}
 
