@@ -4,11 +4,15 @@ from flask import request
 from flask.ext import login
 from flask.ext.restplus import abort
 
+from app.helpers.helpers import get_count
+from app.models.discount_code import DiscountCode
 from app.models.microlocation import Microlocation
 from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
+from app.models.ticket import Ticket
 from app.models.track import Track
+from app.models.users_events_roles import UsersEventsRoles
 
 
 def is_super_admin(f):
@@ -103,12 +107,38 @@ def can_accept_and_reject(f):
     return decorated_function
 
 
+def does_not_exist(model, id, event_id):
+    return get_count(model.query.filter_by(id=id, event_id=event_id)) == 0
+
+
 def can_access(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         user = login.current_user
         event_id = kwargs['event_id']
         url = request.url
+
+        if 'session_id' in kwargs and does_not_exist(Session, kwargs['session_id'], event_id):
+            abort(404)
+
+        if 'microlocation_id' in kwargs and does_not_exist(Microlocation, kwargs['microlocation_id'], event_id):
+            abort(404)
+
+        if 'sponsor_id' in kwargs and does_not_exist(Sponsor, kwargs['sponsor_id'], event_id):
+            abort(404)
+
+        if 'speaker_id' in kwargs and does_not_exist(Speaker, kwargs['speaker_id'], event_id):
+            abort(404)
+
+        if 'discount_code_id' in kwargs and does_not_exist(DiscountCode, kwargs['discount_code_id'], event_id):
+            abort(404)
+
+        if 'ticket_id' in kwargs and does_not_exist(Ticket, kwargs['ticket_id'], event_id):
+            abort(404)
+
+        if 'uer_id' in kwargs and does_not_exist(UsersEventsRoles, kwargs['uer_id'], event_id):
+            abort(404)
+
         if user.is_staff:
             return f(*args, **kwargs)
         if 'events/' + str(event_id) + '/' in url:
