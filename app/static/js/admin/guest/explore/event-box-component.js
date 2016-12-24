@@ -22,11 +22,8 @@ Vue.component('event-box', {
             return moment(this.event.start_time).format('ddd, MMM DD HH:mm A');
         },
         locationName: function () {
-            if(this.event.location_name){
+            if (this.event.location_name) {
                 return this.event.location_name.split(",")[0];
-            }
-            else{
-                return "";
             }
         },
         backgroundImage: function () {
