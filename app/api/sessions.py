@@ -46,7 +46,7 @@ SESSION_MICROLOCATION = api.model('SessionMicrolocation', {
 SESSION_TYPE = api.model('SessionType', {
     'id': fields.Integer(required=True),
     'name': fields.String(required=True),
-    'length': fields.Float(required=True)
+    'length': fields.String(required=True)
 })
 
 SESSION_TYPE_POST = api.clone('SessionTypePost', SESSION_TYPE)
