@@ -2,8 +2,10 @@
 {% block head %}
     {{ super() }}
 {% endblock %}
+{% block title %}
+    {{ _("Profile") }}
+{% endblock %}
 {% block body %}
-
 
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/Croppie/croppie.css') }}"/>
     <div class="page-title col-md-offset-1" style="width: auto;">
@@ -24,14 +26,14 @@
                 <div class="profile_img">
 
                     <div id="crop-avatar">
-                        <input type="hidden" name="logo" id="logo">
+                        <input type="hidden" name="avatar-img" id="avatar-img">
                         <div class="item form-group" id="image-upload-group"
                              {% if profile and profile.user_detail.avatar_uploaded and profile.user_detail.avatar_uploaded != '' %}style="display: none;"{% endif %}>
                             <div class="image-box">
                                 <input type="file" id="event-image-upload" name="event-image-upload"
                                        class="image-upload-btn no-js"
                                        accept="image/*"/>
-                                <label class="file-label" for="event-image-upload" id="event-image-upload-label">
+                                <label class="file-label" for="event-image-upload" id="event-image-upload-label" style="margin-top: 5vh;">
                                     <i class="fa fa-4x fa-camera-retro" aria-hidden="true"></i> <br>
                                     <h3>{{ _("Select Avatar") }}</h3>
                                 </label><br>
@@ -171,34 +173,6 @@
 
             });
 
-            $("#logo-upload").unbind("change").on('change', function () {
-                var input = this;
-                if (input.files && input.files[0]) {
-                    if (input.files[0].size > 1048576) {
-                        createSnackbar("Image must be less than 1 MB in size");
-                        resetFormElement(input);
-                    } else {
-                        var reader = new FileReader();
-                        reader.onload = function (e) {
-                            resetFormElement(input);
-                            $("#logo").val(e.target.result);
-                            $("#logo-view-group").show().find("img").attr("src", e.target.result);
-                            $("#logo-upload-group").hide();
-                        };
-                        reader.readAsDataURL(input.files[0]);
-                    }
-                }
-                else {
-                    logError("No FileReader support");
-                }
-            });
-
-            $("#remove-logo-btn").click(function () {
-                $("#logo-view-group").hide();
-                $("#logo-upload-group").show();
-                $("#logo").val('');
-            });
-
             function resetFormElement(e) {
                 e = $(e);
                 e.wrap('<form>').closest('form').get(0).reset();
@@ -224,7 +198,7 @@
                     dataType: 'json'
                 }).done(function (data) {
                     console.log(data);
-                    $("#logo").val(data.background_url);
+                    $("#avatar-img").val(data.background_url);
                     $("#image-view-group").show().find("img").attr("src", resp);
                     $("#image-upload-group").hide();
                 }).fail(function (data) {
@@ -248,37 +222,18 @@
                     console.log(data);
                     $("#image-view-group").hide();
                     $("#image-upload-group").show();
-                    $("#logo").val('');
+                    $("#avatar-img").val('');
                 }).fail(function (data) {
                     alert("Something went wrong. Please try again.");
                 });
             });
 
-            $("#remove-logo-btn").click(function () {
-                $.ajax({
-                    type: 'DELETE',
-                    url: "{{ url_for('events.logo_upload', event_id=event.id) }}",
-                    dataType: 'json'
-                }).done(function (data) {
-                    console.log(data);
-                    $("#logo-view-group").hide();
-                    $("#logo-upload-group").show();
-                    $("#logo").val('');
-                }).fail(function (data) {
-                    alert("Something went wrong. Please try again.");
-                });
-            });
+            
         {% else %}
             $("#remove-image-btn").click(function () {
                 $("#image-view-group").hide();
                 $("#image-upload-group").show();
-                $("#logo").val('');
-            });
-
-            $("#remove-logo-btn").click(function () {
-                $("#logo-view-group").hide();
-                $("#logo-upload-group").show();
-                $("#logo").val('');
+                $("#avatar-img").val('');
             });
         {% endif %}
 

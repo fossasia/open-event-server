@@ -96,17 +96,18 @@ def get_event_json(event_id):
     return result
 
 
-def save_event_from_json(json):
+def save_event_from_json(json, event_id=None):
     """
     Save an event from a wizard json
+    :param event_id:
     :param json:
     :return:
     """
     event_data = json['event']
     state = json['state']
 
-    if represents_int(event_data['id']):
-        event = DataGetter.get_event(event_data['id'])
+    if event_id and represents_int(event_id):
+        event = DataGetter.get_event(event_id)
         is_edit = True
     else:
         event = Event()
