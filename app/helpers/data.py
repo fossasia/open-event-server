@@ -701,16 +701,19 @@ class DataManager(object):
                 user_detail.twitter = ''
 
             user_detail.details = form['details']
-            logo = form.get('logo', None)
-            # print logo
-            if string_not_empty(logo) and logo:
+            avatar_img = form.get('avatar-img', None)
+            user_detail.avatar_uploaded = ""
+            user_detail.thumbnail = ""
+            user_detail.small = ""
+            user_detail.icon = ""
+            if string_not_empty(avatar_img) and avatar_img:
                 filename = '{}.png'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
-                                                 logo[len('/serve_static/'):])
+                                                 avatar_img[len('/serve_static/'):])
                 # print "File path 1", filepath
-                logo_file = UploadedFile(filepath, filename)
-                logo_temp = upload(logo_file, 'users/%d/avatar' % int(user_id))
-                user_detail.avatar_uploaded = logo_temp
+                avatar_img_file = UploadedFile(filepath, filename)
+                avatar_img_temp = upload(avatar_img_file, 'users/%d/avatar' % int(user_id))
+                user_detail.avatar_uploaded = avatar_img_temp
                 image_sizes = DataGetter.get_image_sizes_by_type(type='profile')
                 if not image_sizes:
                     image_sizes = ImageSizes(full_width=150,
@@ -723,11 +726,11 @@ class DataManager(object):
                 save_to_db(image_sizes, "Image Sizes Saved")
                 filename = '{}.jpg'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
-                                                 logo[len('/serve_static/'):])
+                                                 avatar_img[len('/serve_static/'):])
                 # print "File path 1", filepath
-                logo_file = UploadedFile(filepath, filename)
+                avatar_img_file = UploadedFile(filepath, filename)
 
-                temp_img_file = upload_local(logo_file,
+                temp_img_file = upload_local(avatar_img_file,
                                              'users/{user_id}/temp'.format(user_id=int(user_id)))
                 temp_img_file = temp_img_file.replace('/serve_', '')
 
