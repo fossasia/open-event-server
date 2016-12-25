@@ -281,6 +281,12 @@ def app_logo():
     return dict(logo=logo)
 
 
+@app.context_processor
+def app_avatar():
+    avatar = DataGetter.get_custom_placeholder_by_name('Avatar')
+    return dict(avatar=avatar)
+
+
 @app.template_filter('pretty_name')
 def pretty_name_filter(string):
     string = str(string)
