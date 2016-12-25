@@ -349,7 +349,8 @@ function save(stepToSave, state, callback) {
 
     var eventsData = {
         event: app.event,
-        state: state
+        state: state,
+        event_id: app.event.id
     };
 
     var sponsorsData = {
@@ -389,7 +390,8 @@ function save(stepToSave, state, callback) {
             var data = {
                 sponsors: sponsorsData,
                 session_speakers: sessionsSpeakersData,
-                event: eventsData
+                event: eventsData,
+                event_id: app.event.id
             };
             makePost('all', data, callback);
             break;

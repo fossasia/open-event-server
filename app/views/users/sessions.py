@@ -33,6 +33,7 @@ def index_view(event_id):
 
 
 @event_sessions.route('/<int:session_id>/', methods=('GET', 'POST'))
+@belongs_to_event
 @can_access
 def session_display_view(event_id, session_id):
     session = get_session_or_throw(session_id)
@@ -85,6 +86,7 @@ def create_view(event_id):
 
 
 @event_sessions.route('/<int:session_id>/edit/', methods=('GET', 'POST'))
+@belongs_to_event
 @can_access
 def edit_view(event_id, session_id):
     event = DataGetter.get_event(event_id)
@@ -109,6 +111,7 @@ def edit_view(event_id, session_id):
 
 
 @event_sessions.route('/<int:session_id>/invited/', methods=('GET', 'POST'))
+@belongs_to_event
 def invited_view(event_id, session_id):
     session = DataGetter.get_session(session_id)
     event = DataGetter.get_event(event_id)
@@ -117,6 +120,7 @@ def invited_view(event_id, session_id):
 
 
 @event_sessions.route('/<int:session_id>/add_speaker/', methods=('GET', 'POST'))
+@belongs_to_event
 @can_access
 def add_speaker_view(event_id, session_id):
     event = DataGetter.get_event(event_id)
@@ -138,7 +142,7 @@ def add_speaker_view(event_id, session_id):
 
 
 @event_sessions.route('/<int:session_id>/accept/', methods=('GET',))
-@can_access
+@belongs_to_event
 @can_accept_and_reject
 def accept_session(event_id, session_id):
     session = get_session_or_throw(session_id)
@@ -151,7 +155,7 @@ def accept_session(event_id, session_id):
 
 
 @event_sessions.route('/<int:session_id>/reject/', methods=('GET',))
-@can_access
+@belongs_to_event
 @can_accept_and_reject
 def reject_session(event_id, session_id):
     session = get_session_or_throw(session_id)
@@ -164,7 +168,7 @@ def reject_session(event_id, session_id):
 
 
 @event_sessions.route('/<int:session_id>/send-emails/', methods=('GET',))
-@can_access
+@belongs_to_event
 @can_accept_and_reject
 def send_emails_session(event_id, session_id):
     session = get_session_or_throw(session_id)
@@ -173,6 +177,7 @@ def send_emails_session(event_id, session_id):
 
 
 @event_sessions.route('/<int:session_id>/trash/', methods=('GET',))
+@belongs_to_event
 @can_access
 def trash_session(event_id, session_id):
     get_session_or_throw(session_id)
@@ -184,6 +189,7 @@ def trash_session(event_id, session_id):
 
 
 @event_sessions.route('/<int:session_id>/restore_trash', methods=('GET',))
+@belongs_to_event
 @can_access
 def restore_session(event_id, session_id):
     _restore_session(session_id)
@@ -192,6 +198,7 @@ def restore_session(event_id, session_id):
 
 
 @event_sessions.route('/<int:session_id>/delete', methods=('GET',))
+@belongs_to_event
 @can_access
 def delete_session(event_id, session_id):
     session = get_session_or_throw(session_id)
@@ -201,6 +208,7 @@ def delete_session(event_id, session_id):
 
 
 @event_sessions.route('/<int:session_id>/restore/', methods=('GET',))
+@belongs_to_event
 @can_access
 def restore_session_view(event_id, session_id):
     session = get_session_or_throw(session_id)
@@ -210,6 +218,7 @@ def restore_session_view(event_id, session_id):
 
 
 @event_sessions.route('/<int:session_id>/restore/<int:version_id>', methods=('GET',))
+@belongs_to_event
 @can_access
 def restore_session_revision(event_id, session_id, version_id):
     session = get_session_or_throw(session_id)

@@ -111,12 +111,10 @@ def does_not_exist(model, id, event_id):
     return get_count(model.query.filter_by(id=id, event_id=event_id)) == 0
 
 
-def can_access(f):
+def belongs_to_event(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user = login.current_user
         event_id = kwargs['event_id']
-        url = request.url
 
         if 'session_id' in kwargs and does_not_exist(Session, kwargs['session_id'], event_id):
             abort(404)
@@ -138,6 +136,18 @@ def can_access(f):
 
         if 'uer_id' in kwargs and does_not_exist(UsersEventsRoles, kwargs['uer_id'], event_id):
             abort(404)
+
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
+def can_access(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        user = login.current_user
+        event_id = kwargs['event_id']
+        url = request.url
 
         if user.is_staff:
             return f(*args, **kwargs)
