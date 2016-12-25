@@ -8,6 +8,7 @@ from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from app.helpers.data import DataManager, save_to_db
 from app.helpers.data_getter import DataGetter
 from app.models.email_notifications import EmailNotification
+from app.views.home import record_user_login_logout
 
 
 def get_or_create_notification_settings(event_id):
@@ -43,7 +44,10 @@ def password_view():
                 user.password = generate_password_hash(request.form['new_password'], salt)
                 user.salt = salt
                 save_to_db(user, "password changed")
-                flash('Password changed successfully.', 'success')
+                record_user_login_logout('user_logout', login.current_user)
+                login.logout_user()
+                flash('Your password has been changed. Please login with your new password now.', 'success')
+                return redirect(url_for('admin.login_view'))
             else:
                 flash('The new password and the repeat don\'t match.', 'danger')
         else:
