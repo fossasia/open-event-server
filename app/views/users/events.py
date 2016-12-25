@@ -298,6 +298,7 @@ def restore_event_view(event_id):
 
 
 @events.route('/<int:event_id>/publish/')
+@can_access
 def publish_event(event_id):
     event = DataGetter.get_event(event_id)
     if string_empty(event.location_name):
@@ -326,6 +327,7 @@ def publish_event(event_id):
 
 
 @events.route('/<int:event_id>/unpublish/')
+@can_access
 def unpublish_event(event_id):
     event = DataGetter.get_event(event_id)
     event.state = 'Draft'
@@ -336,18 +338,21 @@ def unpublish_event(event_id):
 
 
 @events.route('/<int:event_id>/generate_android_app/', methods=['POST'])
+@can_access
 def generate_android_app(event_id):
     AndroidAppCreator(event_id).create()
     return redirect(url_for('.details_view', event_id=event_id))
 
 
 @events.route('/<int:event_id>/generate_web_app/', methods=['POST'])
+@can_access
 def generate_web_app(event_id):
     WebAppCreator(event_id).create()
     return redirect(url_for('.details_view', event_id=event_id))
 
 
 @events.route('/<int:event_id>/restore/<int:version_id>')
+@can_access
 def restore_event_revision(event_id, version_id):
     event = DataGetter.get_event(event_id)
     version = event.versions[version_id]
@@ -358,6 +363,7 @@ def restore_event_revision(event_id, version_id):
 
 
 @events.route('/<int:event_id>/copy/')
+@can_access
 def copy_event(event_id):
     event = create_event_copy(event_id)
     return redirect(url_for('.edit_view', event_id=event.id))
@@ -455,19 +461,25 @@ def apply_discount_code():
 @events.route('/save/<string:what>/', methods=['POST'])
 def save_event_from_wizard(what):
     data = request.get_json()
+    if 'event_id' not in data or not data['event_id']:
+        event_id = None
+    else:
+        event_id = data['event_id']
+        if not current_user.is_staff and not current_user.is_organizer(event_id):
+            abort(403)
     if what == 'event':
-        return jsonify(save_event_from_json(data))
+        return jsonify(save_event_from_json(data, event_id))
     elif what == 'sponsors':
         return jsonify(save_sponsors_from_json(data))
     elif what == 'sessions-tracks-rooms':
         return jsonify(save_session_speakers(data))
     elif what == 'all':
-        response = save_event_from_json(data['event'])
+        response = save_event_from_json(data['event'], event_id)
         save_sponsors_from_json(data['sponsors'])
         save_session_speakers(data['session_speakers'])
         return jsonify(response)
     else:
-        abort()
+        abort(404)
 
 
 def get_module_settings():
