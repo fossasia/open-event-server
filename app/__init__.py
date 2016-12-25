@@ -53,7 +53,7 @@ from app.models.session import Session
 from helpers.jwt import jwt_authenticate, jwt_identity
 from helpers.formatter import operation_name
 from app.helpers.data_getter import DataGetter
-from app.api.helpers.errors import NotFoundError
+from app.api.helpers.errors import NotFoundError, PermissionDeniedError, ServerError, ValidationError
 from apscheduler.schedulers.background import BackgroundScheduler
 from app.helpers.data import DataManager, delete_from_db
 from app.helpers.helpers import send_after_event
@@ -154,14 +154,31 @@ def page_not_found(e):
     if request_wants_json():
         error = NotFoundError()
         return json.dumps(error.to_dict()), getattr(error, 'code', 404)
-    return render_template('404.html'), 404
+    return render_template('gentelella/errors/404.html'), 404
 
 
 @app.errorhandler(403)
 def forbidden(e):
     if request_wants_json():
-        return json.dumps({"error": "forbidden"}), 403
-    return render_template('gentelella/admin/forbidden.html'), 403
+        error = PermissionDeniedError()
+        return json.dumps(error.to_dict()), getattr(error, 'code', 403)
+    return render_template('gentelella/errors/403.html'), 403
+
+
+@app.errorhandler(500)
+def server_error(e):
+    if request_wants_json():
+        error = ServerError()
+        return json.dumps(error.to_dict()), getattr(error, 'code', 500)
+    return render_template('gentelella/errors/500.html'), 500
+
+
+@app.errorhandler(400)
+def bad_request(e):
+    if request_wants_json():
+        error = ValidationError(field='unknown')
+        return json.dumps(error.to_dict()), getattr(error, 'code', 400)
+    return render_template('gentelella/errors/400.html'), 400
 
 
 # taken from http://flask.pocoo.org/snippets/45/
@@ -257,15 +274,18 @@ def social_settings():
     settings = get_setts()
     return dict(settes=settings)
 
+
 @app.context_processor
 def app_logo():
     logo = DataGetter.get_custom_placeholder_by_name('Logo')
     return dict(logo=logo)
 
+
 @app.context_processor
 def app_avatar():
     avatar = DataGetter.get_custom_placeholder_by_name('Avatar')
     return dict(avatar=avatar)
+
 
 @app.template_filter('pretty_name')
 def pretty_name_filter(string):

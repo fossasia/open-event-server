@@ -10,6 +10,7 @@ from flask import Blueprint
 from flask import abort, render_template
 from flask import url_for, redirect, request, session, flash
 from flask.ext import login
+from flask.ext.login import login_required
 from flask.ext.scrypt import generate_password_hash
 
 from app.helpers.data import DataManager, save_to_db, get_google_auth, get_facebook_auth, create_user_password, \
@@ -100,9 +101,6 @@ def login_view():
 
 @home_routes.route('/register/', methods=('GET', 'POST'))
 def register_view():
-    if login.current_user.is_authenticated:
-        return redirect(url_for('.index'))
-
     if request.method == 'GET':
         return render_template('gentelella/admin/login/register.html')
     if request.method == 'POST':
@@ -121,6 +119,7 @@ def register_view():
 
 
 @home_routes.route('/resend/', methods=('GET',))
+@login_required
 def resend_email_confirmation():
     user = login.current_user
     if not user.is_verified:
@@ -178,6 +177,7 @@ def password_reset_view():
         user = DataGetter.get_user_by_email(email)
         if user:
             link = request.host + url_for(".change_password_view", hash=user.reset_password)
+            return link
             send_email_with_reset_password_hash(email, link)
             flash('Please go to the link sent to your email to reset your password')
         return redirect(url_for('.login_view'))
@@ -194,6 +194,7 @@ def change_password_view(hash):
 
 
 @home_routes.route('/logout/')
+@login_required
 def logout_view():
     """Logout method which redirect to index"""
     record_user_login_logout('user_logout', login.current_user)
@@ -202,6 +203,7 @@ def logout_view():
 
 
 @home_routes.route('/set_role', methods=('GET', 'POST'))
+@login_required
 def set_role():
     """Set user role method"""
     id = request.args['id']
@@ -214,7 +216,7 @@ def set_role():
 
 @home_routes.route('/forbidden/', methods=('GET',))
 def forbidden_view():
-    return render_template('gentelella/admin/forbidden.html')
+    return render_template('gentelella/errors/403.html')
 
 
 @home_routes.route('/browse/', methods=('GET',))
