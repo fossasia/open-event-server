@@ -178,6 +178,7 @@ def password_reset_view():
         user = DataGetter.get_user_by_email(email)
         if user:
             link = request.host + url_for(".change_password_view", hash=user.reset_password)
+            return link
             send_email_with_reset_password_hash(email, link)
             flash('Please go to the link sent to your email to reset your password')
         return redirect(url_for('.login_view'))
