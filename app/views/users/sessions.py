@@ -2,7 +2,7 @@ import json
 
 from flask import Blueprint
 from flask import url_for, redirect, flash, render_template
-
+from flask.ext import login
 from app import db
 from app.helpers.data import DataManager, delete_from_db, trash_session as _trash_session, \
     restore_session as _restore_session
@@ -21,6 +21,7 @@ def get_session_or_throw(session_id):
 
 
 @event_sessions.route('/')
+@can_access
 def index_view(event_id):
     sessions = DataGetter.get_sessions_by_event_id(event_id)
     event = DataGetter.get_event(event_id)
@@ -32,6 +33,8 @@ def index_view(event_id):
 
 
 @event_sessions.route('/<int:session_id>/', methods=('GET', 'POST'))
+@belongs_to_event
+@can_access
 def session_display_view(event_id, session_id):
     session = get_session_or_throw(session_id)
     if request.method == 'POST':
@@ -83,6 +86,7 @@ def create_view(event_id):
 
 
 @event_sessions.route('/<int:session_id>/edit/', methods=('GET', 'POST'))
+@belongs_to_event
 @can_access
 def edit_view(event_id, session_id):
     event = DataGetter.get_event(event_id)
@@ -106,18 +110,8 @@ def edit_view(event_id, session_id):
                            session_form=session_form, event=event, speakers=speakers)
 
 
-@event_sessions.route('/new/<user_id>/<hash>/', methods=('GET', 'POST'))
-def new_view(event_id, user_id, hash):
-    invite = DataGetter.get_invite_by_user_id(user_id)
-    event = DataGetter.get_event(event_id)
-    if invite and invite.hash == hash:
-        if request.method == 'POST':
-            DataManager.add_session_to_event(request, event_id)
-            return redirect(url_for('.index_view', event_id=event_id))
-        return render_template('gentelella/admin/sessions/new.html', event=event)
-
-
 @event_sessions.route('/<int:session_id>/invited/', methods=('GET', 'POST'))
+@belongs_to_event
 def invited_view(event_id, session_id):
     session = DataGetter.get_session(session_id)
     event = DataGetter.get_event(event_id)
@@ -126,6 +120,8 @@ def invited_view(event_id, session_id):
 
 
 @event_sessions.route('/<int:session_id>/add_speaker/', methods=('GET', 'POST'))
+@belongs_to_event
+@can_access
 def add_speaker_view(event_id, session_id):
     event = DataGetter.get_event(event_id)
     if not event.has_session_speakers:
@@ -146,6 +142,7 @@ def add_speaker_view(event_id, session_id):
 
 
 @event_sessions.route('/<int:session_id>/accept/', methods=('GET',))
+@belongs_to_event
 @can_accept_and_reject
 def accept_session(event_id, session_id):
     session = get_session_or_throw(session_id)
@@ -158,6 +155,7 @@ def accept_session(event_id, session_id):
 
 
 @event_sessions.route('/<int:session_id>/reject/', methods=('GET',))
+@belongs_to_event
 @can_accept_and_reject
 def reject_session(event_id, session_id):
     session = get_session_or_throw(session_id)
@@ -170,6 +168,7 @@ def reject_session(event_id, session_id):
 
 
 @event_sessions.route('/<int:session_id>/send-emails/', methods=('GET',))
+@belongs_to_event
 @can_accept_and_reject
 def send_emails_session(event_id, session_id):
     session = get_session_or_throw(session_id)
@@ -178,6 +177,8 @@ def send_emails_session(event_id, session_id):
 
 
 @event_sessions.route('/<int:session_id>/trash/', methods=('GET',))
+@belongs_to_event
+@can_access
 def trash_session(event_id, session_id):
     get_session_or_throw(session_id)
     _trash_session(session_id)
@@ -188,6 +189,8 @@ def trash_session(event_id, session_id):
 
 
 @event_sessions.route('/<int:session_id>/restore_trash', methods=('GET',))
+@belongs_to_event
+@can_access
 def restore_session(event_id, session_id):
     _restore_session(session_id)
     flash("The session has been restored", "success")
@@ -195,6 +198,8 @@ def restore_session(event_id, session_id):
 
 
 @event_sessions.route('/<int:session_id>/delete', methods=('GET',))
+@belongs_to_event
+@can_access
 def delete_session(event_id, session_id):
     session = get_session_or_throw(session_id)
     delete_from_db(session, 'Session Deleted')
@@ -203,6 +208,8 @@ def delete_session(event_id, session_id):
 
 
 @event_sessions.route('/<int:session_id>/restore/', methods=('GET',))
+@belongs_to_event
+@can_access
 def restore_session_view(event_id, session_id):
     session = get_session_or_throw(session_id)
     event = DataGetter.get_event(event_id)
@@ -211,6 +218,8 @@ def restore_session_view(event_id, session_id):
 
 
 @event_sessions.route('/<int:session_id>/restore/<int:version_id>', methods=('GET',))
+@belongs_to_event
+@can_access
 def restore_session_revision(event_id, session_id, version_id):
     session = get_session_or_throw(session_id)
     version = session.versions[version_id]
