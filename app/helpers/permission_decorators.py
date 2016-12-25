@@ -114,6 +114,10 @@ def does_not_exist(model, id, event_id):
 def belongs_to_event(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
+
+        if 'event_id' not in kwargs:
+            return f(*args, **kwargs)
+
         event_id = kwargs['event_id']
 
         if 'session_id' in kwargs and does_not_exist(Session, kwargs['session_id'], event_id):

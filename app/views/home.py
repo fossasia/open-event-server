@@ -100,7 +100,6 @@ def login_view():
 
 
 @home_routes.route('/register/', methods=('GET', 'POST'))
-@login_required
 def register_view():
     if request.method == 'GET':
         return render_template('gentelella/admin/login/register.html')
@@ -216,7 +215,7 @@ def set_role():
 
 @home_routes.route('/forbidden/', methods=('GET',))
 def forbidden_view():
-    return render_template('gentelella/admin/forbidden.html')
+    return render_template('gentelella/errors/403.html')
 
 
 @home_routes.route('/browse/', methods=('GET',))

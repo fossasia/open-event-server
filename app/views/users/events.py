@@ -461,19 +461,20 @@ def apply_discount_code():
 @events.route('/save/<string:what>/', methods=['POST'])
 def save_event_from_wizard(what):
     data = request.get_json()
-    if 'event_id' not in data:
-        abort(400)
-    event_id = data['event_id']
-    if not current_user.is_staff and not current_user.is_organizer(event_id):
-        abort(403)
+    if 'event_id' not in data or not data['event_id']:
+        event_id = None
+    else:
+        event_id = data['event_id']
+        if not current_user.is_staff and not current_user.is_organizer(event_id):
+            abort(403)
     if what == 'event':
-        return jsonify(save_event_from_json(data))
+        return jsonify(save_event_from_json(data, event_id))
     elif what == 'sponsors':
         return jsonify(save_sponsors_from_json(data))
     elif what == 'sessions-tracks-rooms':
         return jsonify(save_session_speakers(data))
     elif what == 'all':
-        response = save_event_from_json(data['event'])
+        response = save_event_from_json(data['event'], event_id)
         save_sponsors_from_json(data['sponsors'])
         save_session_speakers(data['session_speakers'])
         return jsonify(response)
