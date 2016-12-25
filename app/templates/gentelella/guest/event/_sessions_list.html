@@ -127,14 +127,22 @@
     </li>
 {% endmacro %}
 
-<nav id="track-navbar" class="navbar navbar-default track-navbar">
+<div id='current-track-navbar' class="navbar navbar-default track-navbar" style="font-size: 1.25em">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav" id="active-track"></ul>
+        </div>
+    </div>
+</div>
+
+<nav id="track-navbar" class="navbar navbar-default track-navbar" style="display: none">
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
+                <li><i class="fa fa-angle-up " aria-hidden="true" onclick = "nav_contract()" style="cursor: pointer;margin-right: 20px;margin-top: 10px;font-size: 1.8em"></i></li>
                 {% for track in tracks %}
                     <li class="track-link"><a href="#track-{{ track.id }}">{{ track.name }}</a></li>
                 {% endfor %}
-
             </ul>
         </div>
     </div>
@@ -153,11 +161,34 @@
 
 <script src="{{ url_for('static', filename='admin/lib/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
 <script type="text/javascript">
+    var nav_expand = function(){
+        $('#current-track-navbar').hide();
+        $('#track-navbar').show();
+        $("#track-navbar").stick_in_parent({});
+    };
+    var nav_contract = function(){
+        $('#current-track-navbar').show();
+        $('#track-navbar').hide();
+    };
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
+        $("#current-track-navbar").stick_in_parent({});
         $("#track-navbar").stick_in_parent({});
         $('body').scrollspy({target: '#track-navbar'});
-
+        $('#track-navbar').on('activate.bs.scrollspy', function () {
+            var active = $(this).find("li.active");
+            var drop = $.parseHTML('<li><i class="fa fa-angle-down " aria-hidden="true" onclick = "nav_expand()" style="cursor: pointer;margin-right: 20px;margin-top: 10px;font-size: 1.8em"></i></li>');
+            $('#active-track').html(drop);
+            $('#active-track').append(active.clone());
+            var temp = active.next();
+            for(var i = 0;i < 6;i++){
+                if(temp.innerHTML == ""){
+                    break;
+                }
+                $('#active-track').append(temp.clone());
+                temp = temp.next();
+            }
+        });
     });
 
     $('a[href*="#"]:not([href="#"])').click(function () {
