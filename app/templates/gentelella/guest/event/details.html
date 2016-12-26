@@ -43,13 +43,13 @@
             <h3 id="speakers">Speakers</h3>
             <div class="row">
                 <div class="col-sm-12">
-                    {% for session in accepted_sessions %}
-                        {% for speaker in session.speakers %}
+                    {% if accepted_sessions %}
+                        {% for speaker in speakers %}
                             {{ speaker_info(speaker) }}
                         {% endfor %}
                     {% else %}
                         {{ _("No sessions have been published yet") }}
-                    {% endfor %}
+                    {% endif %}
                 </div>
             </div>
             <br>

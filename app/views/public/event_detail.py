@@ -59,6 +59,12 @@ def display_event_detail_home(identifier):
     else:
         licence_details = None
 
+    speakers = []
+    for session in accepted_sessions:
+        for speaker in session.speakers:
+            if speaker not in speakers:
+                speakers.append(speaker)
+
     module = DataGetter.get_module()
     tickets = DataGetter.get_sales_open_tickets(event.id, True)
     return render_template('gentelella/guest/event/details.html',
@@ -69,6 +75,7 @@ def display_event_detail_home(identifier):
                            accepted_sessions_count=len(accepted_sessions),
                            call_for_speakers=call_for_speakers,
                            licence_details=licence_details,
+                           speakers=speakers,
                            module=module,
                            tickets=tickets if tickets else [])
 
