@@ -9,48 +9,46 @@
 {% macro session_element(session) -%}
     <div class="session row"
          onclick="window.location.href='{{ url_for('my_sessions.display_session_view',session_id=session.id) }}'">
-        <div class="col col-md-4 col-sm-4 col-xs-12" style="line-height:155px;">
             {% if session.event.logo %}
-                <img src="{{ session.event.logo }}" style="height: 88%">
+                {% set bg = session.event.logo %}
             {% elif session.event.background_url %}
-                <img src="{{ session.event.thumbnail }}" style="height: 88%">
+                {% set bg = session.event.thumbnail  %}
             {% elif session.event.sub_topic %}
-                {% set event_image = {'status': False} %}
+                {% set event_image = {'status': False,'img': ''} %}
                 {% for custom_image in custom_placeholder %}
                     {% if custom_image.name == session.event.sub_topic %}
-                        <img src='{{ custom_image.url }}' style="height: 88%">
-                        {% if event_image.update({'status': True}) %} {% endif %}
+                        {% if event_image.update({'status': True,'img': custom_image.url}) %} {% endif %}
                     {% endif %}
                 {% endfor %}
+                {% set bg = event_image.img %}
                 {% if not event_image.status %}
-                    <img src='{{ url_for("static", filename="placeholders/thumbnails/" + placeholder_images[session.event.sub_topic]) }}'
-                         style="height: 88%">
+                    {% set bg = url_for("static", filename="placeholders/thumbnails/" + placeholder_images[session.event.sub_topic])  %}
                 {% endif %}
             {% elif session.event.topic %}
-                {% set event_image = {'status': False} %}
+                {% set event_image = {'status': False,'img': ''} %}
                 {% for custom_image in custom_placeholder %}
                     {% if custom_image.name == session.event.topic %}
-                        <img src='{{ custom_image.url }}' style="height: 88%">
-                        {% if event_image.update({'status': True}) %} {% endif %}
+                        {% if event_image.update({'status': True,'img': custom_image.url}) %} {% endif %}
                     {% endif %}
                 {% endfor %}
+                {% set bg = event_image.img %}
                 {% if not event_image.status %}
-                    <img src='{{ url_for("static", filename="placeholders/thumbnails/" + placeholder_images[session.event.topic]) }}'
-                         style="height: 88%">
+                    {% set bg = url_for("static", filename="placeholders/thumbnails/" + placeholder_images[session.event.topic]) %}
                 {% endif %}
             {% else %}
                 {% set event_image = {'status': False} %}
                 {% for custom_image in custom_placeholder %}
                     {% if custom_image.name == "Other" %}
-                        <img src='{{ custom_image.url }}' style="height: 88%">
+                        {% set bg = custom_image.url %}
                         {% if event_image.update({'status': True}) %} {% endif %}
                     {% endif %}
                 {% endfor %}
                 {% if not event_image.status %}
-                    <img src='{{ url_for("static", filename="placeholders/thumbnails/" + placeholder_images["Other"]) }}'
-                         style="height: 88%">
+                    {% set bg = url_for("static", filename="placeholders/thumbnails/" + placeholder_images["Other"]) %}
                 {% endif %}
             {% endif %}
+
+        <div class="col col-md-4 col-sm-4 col-xs-12" style="line-height:155px;background: url('{{ bg }}'); background-size: cover">
         </div>
         <div class="col col-md-5 col-sm-5  col-xs-12" style="position: relative;">
             <h3 class="title">{{ session.title }}</h3>
