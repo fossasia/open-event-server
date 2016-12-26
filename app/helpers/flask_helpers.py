@@ -56,5 +56,5 @@ def deslugify(text):
 
 
 def camel_case(text):
-    text = deslugify(slugify(text))
+    text = slugify(text).replace('-', " ")
     return ''.join(x for x in text.title() if not x.isspace())

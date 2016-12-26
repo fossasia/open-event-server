@@ -225,7 +225,7 @@ def browse_view():
     params = dict((k, v) for k, v in params if v)
 
     def test_and_remove(key):
-        if request.args.get(key):
+        if request.args.get(key) and request.args.get("query"):
             if request.args.get(key).lower() == request.args.get("query").lower():
                 erase_from_dict(params, 'query')
 
@@ -246,8 +246,7 @@ def browse_view():
     test_and_remove("category")
     erase_from_dict(params, 'location')
 
-    return redirect(url_for('explore.explore_view', location=slugify(country)) + '?' +
-                    urllib.urlencode(params))
+    return redirect(url_for('explore.explore_view', location=slugify(country)) + '?' + urllib.urlencode(params))
 
 
 @home_routes.route('/check_email/', methods=('POST', 'GET'))

@@ -286,7 +286,7 @@
             e.stopPropagation();
             var name = $(this).data('name');
             var value = $(this).data('value');
-            location.href = "{{ url_for("admin.browse_view") }}?" + name + "=" + encodeURI(value);
+            location.href = "{{ url_for("admin.browse_view") }}?" + name + "=" + encodeURIComponent(value);
         });
 
         $(".location_name").ellipsis();
