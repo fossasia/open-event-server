@@ -153,13 +153,13 @@
 
     <div>
         <ul id="event-tabs" class="nav nav-tabs bar_tabs admin_event_tabs" role="tablist">
-            <li class=""><a href="#tab_content4" id="all-tab" data-toggle="tab">{{ _("All Events") }}</a></li>
-            <li class="active"><a href="#tab_content1" id="home-tab" data-toggle="tab">{{ _("All Live") }}</a></li>
-            <li class=""><a href="#tab_content2" id="profile-tab" data-toggle="tab">{{ _("All Drafts") }}</a></li>
-            <li class=""><a href="#tab_content3" id="profile-tab2" data-toggle="tab">{{ _("All Past") }}</a></li>
-            <li class=""><a href="#tab_content5" id="profile-tab3" data-toggle="tab">{{ _("All Deleted Events") }}</a>
+            <li class=""><a href="#allevents" id="all-tab" data-toggle="tab">{{ _("All Events") }}</a></li>
+            <li class="active"><a href="#alllive" id="home-tab" data-toggle="tab">{{ _("All Live") }}</a></li>
+            <li class=""><a href="#alldrafts" id="profile-tab" data-toggle="tab">{{ _("All Drafts") }}</a></li>
+            <li class=""><a href="#allpast" id="profile-tab2" data-toggle="tab">{{ _("All Past") }}</a></li>
+            <li class=""><a href="#alldeleted" id="profile-tab3" data-toggle="tab">{{ _("All Deleted Events") }}</a>
             </li>
-            <li class=""><a href="#tab_content7" id="profile-tab7" data-toggle="tab">{{ _("Import") }}</a></li>
+            <li class=""><a href="#import" id="profile-tab7" data-toggle="tab">{{ _("Import") }}</a></li>
         </ul>
         <div class="dropdown tabs_small">
             <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
@@ -167,27 +167,27 @@
                 <span class="caret"></span></button>
             <ul class="dropdown-menu">
                 <li value="All Events" class="small_tab_list">
-                    <a href="#tab_content4" id="all-tab" data-toggle="tab">{{ _("All Events") }}</a>
+                    <a href="#allevents" id="all-tab" data-toggle="tab">{{ _("All Events") }}</a>
                 </li>
                 <li value="All Live" class="small_tab_list active">
-                    <a href="#tab_content1" id="home-tab" data-toggle="tab">{{ _("All Live") }}</a>
+                    <a href="#alllive" id="home-tab" data-toggle="tab">{{ _("All Live") }}</a>
                 </li>
                 <li value="All Drafts" class="small_tab_list">
-                    <a href="#tab_content2" id="profile-tab" data-toggle="tab">{{ _("All Drafts") }}</a>
+                    <a href="#alldrafts" id="profile-tab" data-toggle="tab">{{ _("All Drafts") }}</a>
                 </li>
                 <li value="All Past" class="small_tab_list">
-                    <a href="#tab_content3" id="profile-tab2" data-toggle="tab">{{ _("All Past") }}</a>
+                    <a href="#allpast" id="profile-tab2" data-toggle="tab">{{ _("All Past") }}</a>
                 </li>
                 <li value="All Deleted Events" class="small_tab_list">
-                    <a href="#tab_content5" id="profile-tab3" data-toggle="tab">{{ _("All Deleted Events") }}</a>
+                    <a href="#alldeleted" id="profile-tab3" data-toggle="tab">{{ _("All Deleted Events") }}</a>
                 </li>
                 <li value="Import" class="small_tab_list">
-                    <a href="#tab_content7" id="profile-tab7" data-toggle="tab">{{ _("Import") }}</a>
+                    <a href="#import" id="profile-tab7" data-toggle="tab">{{ _("Import") }}</a>
                 </li>
             </ul>
         </div>
         <div id="myTabContent" class="tab-content">
-            <div role="tabpanel" class="tab-pane fade" id="tab_content4"
+            <div role="tabpanel" class="tab-pane fade" id="allevents"
                  aria-labelledby="all-tab">
                 <table class="table table-striped no-global-dt">
                     <thead>
@@ -209,7 +209,7 @@
                     </tbody>
                 </table>
             </div>
-            <div role="tabpanel" class="tab-pane fade active in" id="tab_content1"
+            <div role="tabpanel" class="tab-pane fade active in" id="alllive"
                  aria-labelledby="home-tab">
                 <table class="table table-striped no-global-dt">
                     <thead>
@@ -232,7 +232,7 @@
                     </tbody>
                 </table>
             </div>
-            <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+            <div role="tabpanel" class="tab-pane fade" id="alldrafts" aria-labelledby="profile-tab">
                 <table class="table table-striped no-global-dt">
                     <thead>
                     <tr>
@@ -254,7 +254,7 @@
                     </tbody>
                 </table>
             </div>
-            <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
+            <div role="tabpanel" class="tab-pane fade" id="allpast" aria-labelledby="profile-tab">
                 <table class="table table-striped no-global-dt">
                     <thead>
                     <tr>
@@ -276,7 +276,7 @@
                     </tbody>
                 </table>
             </div>
-            <div role="tabpanel" class="tab-pane fade" id="tab_content5" aria-labelledby="profile-tab">
+            <div role="tabpanel" class="tab-pane fade" id="alldeleted" aria-labelledby="profile-tab">
                 <table class="table table-striped no-global-dt">
                     <thead>
                     <tr>
@@ -298,7 +298,7 @@
                     </tbody>
                 </table>
             </div>
-            <div role="tabpanel" class="tab-pane fade" id="tab_content7" aria-labelledby="profile-tab">
+            <div role="tabpanel" class="tab-pane fade" id="import" aria-labelledby="profile-tab">
                 <div style="margin-top: 50px;">
                     {% include 'gentelella/admin/event/_import_modal.html' %}
                 </div>
