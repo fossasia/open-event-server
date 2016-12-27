@@ -8,32 +8,16 @@
 {# Set `event_image` to use inside template #}
 {% if event.background_url %}
     {% set event_image = event.background_url %}
-{% elif event.sub_topic %}
-    {% set event_image = {'status': False,'img': event_image} %}
-    {% for custom_image in custom_placeholder %}
-        {% if custom_image.name == event.sub_topic %}
-            {% if event_image.update({'status': True,'img': custom_image.url}) %} {% endif %}
-        {% endif %}
-    {% endfor %}
-    {% set event_image_status = event_image.status %}
-    {% set event_image = event_image.img %}
-    {% if not event_image_status %}
-        {% set event_image = url_for("static", filename="placeholders/" + placeholder_images[event.sub_topic], _external=True) %}
-    {% endif %}
-{% elif event.topic %}
-    {% set event_image = {'status': False,'img': event_image} %}
-    {% for custom_image in custom_placeholder %}
-        {% if custom_image.name == event.topic %}
-            {% if event_image.update({'status': True,'img': custom_image.url}) %} {% endif %}
-        {% endif %}
-    {% endfor %}
-    {% set event_image_status = event_image.status %}
-    {% set event_image = event_image.img %}
-    {% if not event_image_status %}
-        {% set event_image = url_for("static", filename="placeholders/" + placeholder_images[event.topic], _external=True) %}
-    {% endif %}
+{% elif custom_placeholder != None %}
+    {% set event_image = custom_placeholder.url %}
 {% else %}
-    {% set event_image = url_for("static", filename="placeholders/" + placeholder_images["Other"], _external=True) %}
+    {% if event.sub_topic %}
+        {% set event_image = url_for("static", filename="placeholders/" + placeholder_images[event.sub_topic], _external=True) %}
+    {% elif event.topic %}
+        {% set event_image = url_for("static", filename="placeholders/" + placeholder_images[event.topic], _external=True) %}
+    {% else %}
+        {% set event_image = url_for("static", filename="placeholders/" + placeholder_images["Other"], _external=True) %}
+    {% endif %}
 {% endif %}
 
 {% block head_meta %}
@@ -173,7 +157,6 @@
         <div class="col-md-8 col-sm-8 col-xs-12 col-md-push-1 col-sm-push-2 event-info-container-holder"
              style="min-height: 600px;">
             {% block content %}
-
             {% endblock %}
         </div>
         <div class="col-md-2 col-md-push-1 hidden-xs hidden-sm">

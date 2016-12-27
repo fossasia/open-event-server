@@ -55,6 +55,12 @@ Vue.component('social-link', {
         },
         remove: function () {
             this.$emit('remove');
+        },
+        isValidLinkEntry: function (link) {
+            if (link.trim() === '') {
+                return true;
+            }
+            return isLink(link);
         }
     }
 });

@@ -5,7 +5,7 @@ class SessionType(db.Model):
     __tablename__ = "session_type"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    length = db.Column(db.Float, nullable=False)
+    length = db.Column(db.String, nullable=False)
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     events = db.relationship("Event", backref="session_type")

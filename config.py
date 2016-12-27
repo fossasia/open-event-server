@@ -3,13 +3,15 @@ import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-VERSION_NAME = '1.0.0-alpha'
+VERSION_NAME = '1.0.0-alpha.2'
 
 # available languages
 LANGUAGES = {
     'en': 'English',
     'bn': 'Bengali/Bangla',
-    'zh': 'Chinese',
+    'zh_CN': 'Chinese (China)',
+    'zh_Hant': 'Chinese (Traditional)',
+    'zh_TW': 'Chinese (Taiwan)',
     'fr': 'French',
     'de': 'German',
     'id': 'Indonesian',
@@ -18,6 +20,9 @@ LANGUAGES = {
     'es': 'Spanish',
     'th': 'Thai',
     'vi': 'Vietnamese',
+    'hi': 'Hindi',
+    'ja': 'Japanese',
+    'ru': 'Russian',
 }
 
 

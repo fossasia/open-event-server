@@ -23,6 +23,7 @@ from app.models.tax import Tax
 from app.models.ticket import Ticket, ticket_tags_table, TicketTag
 from app.models.user import ORGANIZER
 from app.models.users_events_roles import UsersEventsRoles
+from app.models.social_link import SocialLink
 
 
 def get_event_json(event_id):
@@ -96,17 +97,18 @@ def get_event_json(event_id):
     return result
 
 
-def save_event_from_json(json):
+def save_event_from_json(json, event_id=None):
     """
     Save an event from a wizard json
+    :param event_id:
     :param json:
     :return:
     """
     event_data = json['event']
     state = json['state']
 
-    if represents_int(event_data['id']):
-        event = DataGetter.get_event(event_data['id'])
+    if event_id and represents_int(event_id):
+        event = DataGetter.get_event(event_id)
         is_edit = True
     else:
         event = Event()
@@ -158,6 +160,8 @@ def save_event_from_json(json):
     copyright.year = year
     copyright.logo = logo
     copyright.licence_url = licence_url
+
+    save_social_links(event_data['social_links'], event)
 
     event.ticket_include = event_data['ticket_include']
 
@@ -401,3 +405,14 @@ def save_resized_background(background_image_file, event_id, size, image_sizes):
     )
 
     return save_resized_image(background_image_file, width_, height_, basewidth, aspect, height_size, upload_path)
+
+
+def save_social_links(social_links, event):
+
+    for social_link in social_links:
+        social_exists = SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).scalar()
+        if social_exists:
+            SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).update({'link': social_link['link']})
+        else:
+            social = SocialLink(social_link['name'], social_link['link'], event.id)
+            db.session.add(social)
