@@ -139,6 +139,8 @@
             dataType: 'json'
         }).done(function (data) {
             console.log(data);
+            $("#system-image-modal").modal("hide");
+            location.reload();
         }).fail(function (data) {
             alert("Something went wrong. Please try again.");
         });
