@@ -164,17 +164,30 @@
     var nav_expand = function(){
         $('#current-track-navbar').hide();
         $('#track-navbar').show();
-        $("#track-navbar").stick_in_parent({});
+        $(document.body).trigger("sticky_kit:recalc");
     };
     var nav_contract = function(){
-        $('#current-track-navbar').show();
         $('#track-navbar').hide();
+        $('#current-track-navbar').show();
+        $(document.body).trigger("sticky_kit:recalc");
     };
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
         $("#current-track-navbar").stick_in_parent({});
         $("#track-navbar").stick_in_parent({});
         $('body').scrollspy({target: '#track-navbar'});
+        var initial = $('#track-navbar').find("li").first().next();
+        var drop = $.parseHTML('<li><i class="fa fa-angle-down " aria-hidden="true" onclick = "nav_expand()" style="cursor: pointer;margin-right: 20px;margin-top: 10px;font-size: 1.8em"></i></li>');
+        $('#active-track').html(drop);
+        $('#active-track').append(initial.clone());
+        var temp = initial.next();
+        for(var i = 0;i < 6;i++){
+            if(temp.innerHTML == ""){
+                break;
+            }
+            $('#active-track').append(temp.clone());
+            temp = temp.next();
+        }
         $('#track-navbar').on('activate.bs.scrollspy', function () {
             var active = $(this).find("li.active");
             var drop = $.parseHTML('<li><i class="fa fa-angle-down " aria-hidden="true" onclick = "nav_expand()" style="cursor: pointer;margin-right: 20px;margin-top: 10px;font-size: 1.8em"></i></li>');
