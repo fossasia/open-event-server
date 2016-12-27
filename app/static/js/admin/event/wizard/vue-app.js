@@ -295,6 +295,12 @@ var app = new Vue({
                 $this.event.state = 'Draft';
                 location.href = "/events/" + $this.event.id + "/";
             });
+        },
+        isValidLinkEntry: function (link) {
+            if(link.trim() === '') {
+                return true;
+            }
+            return isLink(link);
         }
     },
     compiled: function () {
@@ -343,7 +349,8 @@ function save(stepToSave, state, callback) {
 
     var eventsData = {
         event: app.event,
-        state: state
+        state: state,
+        event_id: app.event.id
     };
 
     var sponsorsData = {
@@ -383,7 +390,8 @@ function save(stepToSave, state, callback) {
             var data = {
                 sponsors: sponsorsData,
                 session_speakers: sessionsSpeakersData,
-                event: eventsData
+                event: eventsData,
+                event_id: app.event.id
             };
             makePost('all', data, callback);
             break;

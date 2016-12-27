@@ -34,7 +34,7 @@
                           <input type="file" id="event-image-upload" name="event-image-upload"
                                  class="image-upload-btn no-js"
                                  accept="image/*"/>
-                          <label class="file-label" for="event-image-upload" id="event-image-upload-label">
+                          <label class="file-label" for="event-image-upload" id="event-image-upload-label" style="margin-top: 3vh">
                               <i class="fa fa-4x fa-camera-retro" aria-hidden="true"></i> <br>
                               <h3>{{_("Select Avatar")}}</h3>
                           </label><br>
@@ -88,7 +88,7 @@
                         {% endif %}
                         type="email"
                     {% else %}
-                        value="{% if speaker %}{{ speaker[identifier] }}{% elif session.speakers %}{{ session.speakers[0][identifier] }}{% endif %}"
+                        value="{% if speaker and speaker[identifier]%}{{ speaker[identifier] }}{% elif session.speakers and session.speakers[0][identifier]%}{{ session.speakers[0][identifier] }}{% else %}{{""}}{% endif %}"
                     {% endif %}
                 class="form-control col-md-7 col-xs-12"/>
             {% if identifier=="email" %}
