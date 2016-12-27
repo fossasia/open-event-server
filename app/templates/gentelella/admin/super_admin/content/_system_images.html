@@ -63,6 +63,7 @@
                 <form>
                     <input type="hidden" name="placeholder" id="placeholder">
                     <input type="hidden" name="file_name" id="file_name">
+                    <input type="hidden" name="image-id" id="image-id">
 
                     <div class="item form-group" id="placeholder-upload-group"
                          {% if event and event.placeholder and event.placeholder != '' %}style="display: none;"{% endif %}>
@@ -131,6 +132,7 @@
         var origin_info = $('#origin').val();
         var copyright_info = $('#copyright').val();
         var placeholder_id = $('#placeholder_id').val();
+        console.log(placeholder_id)
         console.log(origin_info + "," + copyright_info);
         $.ajax({
             type: 'POST',
@@ -139,8 +141,11 @@
             dataType: 'json'
         }).done(function (data) {
             console.log(data);
+            console.log($("#placeholder").val(data.placeholder))
+            id = '#image-' + placeholder_id;
+            $($('#image-id').val()).attr('src',$("#placeholder-view-group").show().find("img").attr("src"));
             $("#system-image-modal").modal("hide");
-            location.reload();
+            
         }).fail(function (data) {
             alert("Something went wrong. Please try again.");
         });
@@ -150,6 +155,7 @@
         $('#system-image-modal').modal();
         var id = $(this).attr("id").replace('sys-', '');
         id = '#image-' + id;
+        $('#image-id').val(id);
         name = $(this).parent().attr('data-name');
         var filename = $(id).attr('src');
         filename = filename.substring(filename.lastIndexOf('/') + 1);
