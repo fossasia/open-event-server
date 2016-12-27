@@ -43,6 +43,8 @@
 
 .track-link > a {
     font-weight: 300 !important;
+    padding: 12px !important;
+    line-height: 16px !important;
 }
 
 .track-navbar {
