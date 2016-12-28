@@ -124,6 +124,7 @@ def save_event_from_json(json, event_id=None):
         abort(400)
 
     event.name = event_data['name']
+    event.event_url = event_data['event_url']
     event.location_name = event_data['location_name']
     event.show_map = 1 if event_data['show_map'] else 0
     event.start_time = start_time

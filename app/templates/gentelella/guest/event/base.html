@@ -161,6 +161,8 @@
         </div>
         <div class="col-md-2 col-md-push-1 hidden-xs hidden-sm">
             <div>
+                <i class="fa fa-external-link-square fa-fw" style="color: #8d8d8d"></i>
+                <a class="social-link" href="{{ event.event_url }}">External Event URL</a><br>
                 {% set twitter = [] %}
                 {% for social_link in event.social_link %}
                     {% set social_name = social_link.name.strip().lower() %}
