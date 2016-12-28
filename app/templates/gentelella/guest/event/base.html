@@ -21,6 +21,7 @@
 {% endif %}
 
 {% block head_meta %}
+    {{ super() }}
     {# Facebook Open Graph Tags #}
     <meta property="fb:app_id" content="{{ fb_app_id | default('', true) }}"/>
 
