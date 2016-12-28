@@ -20,8 +20,8 @@ def get_sponsors_json(event_id_or_sponsors):
     return data
 
 
-def save_sponsors_from_json(json):
-    event_id = json['event_id']
+def save_sponsors_from_json(json, event_id=None):
+    event_id = event_id if event_id else json['event_id']
     event = DataGetter.get_event(event_id)
     sponsors_enabled = json['sponsors_enabled']
 
