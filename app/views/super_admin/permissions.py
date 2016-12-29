@@ -6,7 +6,7 @@ from app.helpers.data import DataManager
 from app.helpers.data_getter import DataGetter
 from app.models.system_role import CustomSysRole
 from app.models.user import SYS_ROLES_LIST
-from app.views.super_admin import PERMISSIONS, check_accessible, PANEL_LIST
+from app.views.super_admin import PERMISSIONS, check_accessible, PANEL_LIST, list_navbar
 
 sadmin_permissions = Blueprint('sadmin_permissions', __name__, url_prefix='/admin/permissions')
 
@@ -61,7 +61,8 @@ def index_view():
         custom_sys_perms=custom_sys_perms,
         builtin_sys_perms=builtin_sys_perms,
         user_perms=user_perms,
-        panel_list=PANEL_LIST)
+        panel_list=PANEL_LIST,
+        navigation_bar=list_navbar())
 
 
 @sadmin_permissions.route('/event-roles', methods=('POST', 'GET'))

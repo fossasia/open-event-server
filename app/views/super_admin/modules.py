@@ -5,7 +5,7 @@ from flask import request
 from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
 from app.models.modules import Module
-from app.views.super_admin import MODULES, check_accessible
+from app.views.super_admin import MODULES, check_accessible, list_navbar
 
 sadmin_modules = Blueprint('sadmin_modules', __name__, url_prefix='/admin/modules')
 
@@ -29,4 +29,4 @@ def index_view():
         module.donation_include = True if form.get('donations') == 'on' else False
         save_to_db(module)
 
-    return render_template('gentelella/admin/super_admin/modules/modules.html', module=module)
+    return render_template('gentelella/admin/super_admin/modules/modules.html', module=module,navigation_bar=list_navbar())

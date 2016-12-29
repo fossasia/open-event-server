@@ -18,19 +18,6 @@
         }
     </style>
 {% endblock %}
-{% set navigation_bar = [
-    ('/admin/', 'home', 'Admin', 'Dashboard'),
-    ('/admin/events/', 'events', 'Events', 'Manage All Events'),
-    ('/admin/sales/', 'sales', 'Sales', 'View all Sales'),
-    ('/admin/sessions/', 'sessions', 'Sessions', 'Manage All Sessions'),
-    ('/admin/users/', 'users', 'Users', 'Users'),
-    ('/admin/permissions/', 'permissions', 'Permissions', 'Permissions'),
-    ('/admin/messages/', 'messages', 'Messages', 'System Messages'),
-    ('/admin/reports/', 'reports', 'Reports', 'Reports'),
-    ('/admin/settings/', 'settings', 'Settings', 'Settings'),
-    ('/admin/modules/', 'modules', 'Modules', 'Modules'),
-    ('/admin/content/', 'content', 'Content', 'Content')
-    ] -%}
 {% set active_page = active_page|default('home') -%}
 {% macro tabs() %}
     <ul class="nav nav-tabs bar_tabs right admin_tabs" role="tablist"

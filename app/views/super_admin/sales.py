@@ -19,7 +19,7 @@ from app.helpers.ticketing import TicketingManager
 from app.models.system_role import CustomSysRole, UserSystemRole
 from app.models.user import User
 from app.views.super_admin import SALES
-from app.views.super_admin import check_accessible
+from app.views.super_admin import check_accessible, list_navbar
 
 display_currency = 'USD'
 
@@ -214,7 +214,8 @@ def sales_by_marketer_view(by_discount_code=False):
                            from_date=from_date,
                            to_date=to_date,
                            key_name='marketers' if not by_discount_code else 'discount codes',
-                           orders_summary=orders_summary)
+                           orders_summary=orders_summary,
+                           navigation_bar=list_navbar())
 
 
 @sadmin_sales.route('/discount_code/')
@@ -345,7 +346,8 @@ def sales_by_events_view(path):
                                from_date=from_date,
                                to_date=to_date,
                                path=path,
-                               orders_summary=orders_summary)
+                               orders_summary=orders_summary,
+                               navigation_bar=list_navbar())
     elif path == 'organizers':
         return render_template('gentelella/admin/super_admin/sales/by_organizer.html',
                                tickets_summary=tickets_summary_organizer_wise,
@@ -353,7 +355,8 @@ def sales_by_events_view(path):
                                from_date=from_date,
                                to_date=to_date,
                                path=path,
-                               orders_summary=orders_summary)
+                               orders_summary=orders_summary,
+                               navigation_bar=list_navbar())
     elif path == 'locations':
         return render_template('gentelella/admin/super_admin/sales/by_location.html',
                                tickets_summary=tickets_summary_location_wise,
@@ -361,7 +364,8 @@ def sales_by_events_view(path):
                                from_date=from_date,
                                to_date=to_date,
                                path=path,
-                               orders_summary=orders_summary)
+                               orders_summary=orders_summary,
+                               navigation_bar=list_navbar())
 
     else:
         abort(404)
