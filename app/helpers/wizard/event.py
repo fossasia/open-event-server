@@ -414,6 +414,10 @@ def save_resized_background(background_image_file, event_id, size, image_sizes):
 def save_social_links(social_links, event):
     for social_link in social_links:
         if social_link['link'].strip() != "":
+            if not social_link['link'].startswith("http"):
+                social_link['link'] = "https://" + social_link['link']
+            else:
+                social_link['link'] = social_link['link']
             social_exists = SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).scalar()            
             if social_exists:
                 SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).update({'link': social_link['link']})
