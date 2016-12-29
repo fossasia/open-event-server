@@ -220,8 +220,8 @@ class User(db.Model):
             return True
 
         custom_sys_roles = UserSystemRole.query.filter_by(user=self)
-        for role in custom_sys_roles:
-            if role.can_access(panel_name):
+        for custom_role in custom_sys_roles:
+            if custom_role.role.can_access(panel_name):
                 return True
 
         return False
