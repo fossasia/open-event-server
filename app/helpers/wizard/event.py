@@ -124,7 +124,6 @@ def save_event_from_json(json, event_id=None):
         abort(400)
 
     event.name = event_data['name']
-    if social_link['link'].strip() != "":
     if not event_data['event_url'].startswith("http"):
         event.event_url = "https://" + event_data['event_url']
     else:
@@ -425,4 +424,3 @@ def save_social_links(social_links, event):
             else:
                 social = SocialLink(social_link['name'], social_link['link'], event.id)
                 db.session.add(social)
-                
