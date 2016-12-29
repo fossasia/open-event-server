@@ -35,5 +35,5 @@ def check_accessible(panel_name):
     if not AuthManager.is_accessible():
         return redirect(url_for('admin.login_view', next=request.url))
     else:
-        if not current_user.can_access_panel(panel_name) or not current_user.is_staff:
+        if not current_user.can_access_panel(panel_name) and not current_user.is_staff:
             abort(403)
