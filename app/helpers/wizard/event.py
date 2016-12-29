@@ -124,7 +124,11 @@ def save_event_from_json(json, event_id=None):
         abort(400)
 
     event.name = event_data['name']
-    event.event_url = event_data['event_url']
+    if event_data['event_url'].strip() != "":
+        if not event_data['event_url'].startswith("http"):
+            event.event_url = "https://" + event_data['event_url']
+        else:
+            event.event_url = event_data['event_url']
     event.location_name = event_data['location_name']
     event.show_map = 1 if event_data['show_map'] else 0
     event.start_time = start_time
@@ -409,11 +413,15 @@ def save_resized_background(background_image_file, event_id, size, image_sizes):
 
 
 def save_social_links(social_links, event):
-
     for social_link in social_links:
-        social_exists = SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).scalar()
-        if social_exists:
-            SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).update({'link': social_link['link']})
-        else:
-            social = SocialLink(social_link['name'], social_link['link'], event.id)
-            db.session.add(social)
+        if social_link['link'].strip() != "":
+            if not social_link['link'].startswith("http"):
+                social_link['link'] = "https://" + social_link['link']
+            else:
+                social_link['link'] = social_link['link']
+            social_exists = SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).scalar()            
+            if social_exists:
+                SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).update({'link': social_link['link']})
+            else:
+                social = SocialLink(social_link['name'], social_link['link'], event.id)
+                db.session.add(social)
