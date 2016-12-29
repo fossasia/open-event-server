@@ -30,6 +30,20 @@ PANEL_LIST = [
     CONTENT,
 ]
 
+NAVIGATION_BAR = {
+    'admin': ('/admin/', 'home', 'Admin', 'Dashboard'),
+    'events': ('/admin/events/', 'events', 'Events', 'Manage All Events'),
+    'sales': ('/admin/sales/', 'sales', 'Sales', 'View all Sales'),
+    'sessions': ('/admin/sessions/', 'sessions', 'Sessions', 'Manage All Sessions'),
+    'users': ('/admin/users/', 'users', 'Users', 'Users'),
+    'permissions': ('/admin/permissions/', 'permissions', 'Permissions', 'Permissions'),
+    'messages': ('/admin/messages/', 'messages', 'Messages', 'System Messages'),
+    'reports': ('/admin/reports/', 'reports', 'Reports', 'Reports'),
+    'settings': ('/admin/settings/', 'settings', 'Settings', 'Settings'),
+    'modules': ('/admin/modules/', 'modules', 'Modules', 'Modules'),
+    'content': ('/admin/content/', 'content', 'Content', 'Content')
+}
+
 
 def check_accessible(panel_name):
     if not AuthManager.is_accessible():
@@ -37,3 +51,13 @@ def check_accessible(panel_name):
     else:
         if not current_user.can_access_panel(panel_name) and not current_user.is_staff:
             abort(403)
+
+
+def list_navbar():
+    navigation_bar = []
+    for panel_name in PANEL_LIST:
+        if current_user.can_access_panel(panel_name) or current_user.is_staff:
+            navigation_bar.append(NAVIGATION_BAR[panel_name])
+
+    return navigation_bar
+

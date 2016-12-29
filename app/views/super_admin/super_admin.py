@@ -8,7 +8,7 @@ from app.helpers.deployment.kubernetes import KubernetesApi
 from app.helpers.deployment.heroku import HerokuApi
 from app.helpers.helpers import get_commit_info, get_count
 from app.models.user import ATTENDEE, TRACK_ORGANIZER, COORGANIZER, ORGANIZER
-from app.views.super_admin import BASE, check_accessible
+from app.views.super_admin import BASE, check_accessible, list_navbar
 
 sadmin = Blueprint('sadmin', __name__, url_prefix='/admin')
 
@@ -89,4 +89,5 @@ def index_view():
                            accepted_sessions=accepted_sessions,
                            rejected_sessions=rejected_sessions,
                            draft_sessions=draft_sessions,
-                           email_times=email_times)
+                           email_times=email_times,
+                           navigation_bar=list_navbar())

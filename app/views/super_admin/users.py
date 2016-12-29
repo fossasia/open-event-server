@@ -7,7 +7,7 @@ from app.helpers.data import delete_from_db, DataManager, save_to_db
 from app.helpers.data import trash_user, restore_user
 from app.helpers.data_getter import DataGetter
 from app.models.event import Event
-from app.views.super_admin import USERS, check_accessible
+from app.views.super_admin import USERS, check_accessible, list_navbar
 
 sadmin_users = Blueprint('sadmin_users', __name__, url_prefix='/admin/users')
 
@@ -48,7 +48,8 @@ def index_view():
                            active_user_list=active_user_list,
                            trash_user_list=trash_user_list,
                            all_user_list=all_user_list,
-                           custom_sys_roles=custom_sys_roles)
+                           custom_sys_roles=custom_sys_roles,
+                           navigation_bar=list_navbar())
 
 
 @sadmin_users.route('/<user_id>/edit/', methods=('GET', 'POST'))
