@@ -129,6 +129,8 @@ def save_event_from_json(json, event_id=None):
             event.event_url = "https://" + event_data['event_url']
         else:
             event.event_url = event_data['event_url']
+    else:
+        event.event_url = ""
     event.location_name = event_data['location_name']
     event.show_map = 1 if event_data['show_map'] else 0
     event.start_time = start_time
@@ -413,6 +415,17 @@ def save_resized_background(background_image_file, event_id, size, image_sizes):
 
 
 def save_social_links(social_links, event):
+    old_social_links = SocialLink.query.filter_by(event_id=event.id)
+    for old_social_link in old_social_links:
+        flag = 0
+        for new_social_link in social_links:
+            if old_social_link.name == new_social_link['name'] and new_social_link['link'] != "":
+                flag = 1
+                break
+            else:
+                flag = 0
+        if flag == 0:
+            db.session.delete(old_social_link)
     for social_link in social_links:
         if social_link['link'].strip() != "":
             if not social_link['link'].startswith("http"):
