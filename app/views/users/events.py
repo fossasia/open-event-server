@@ -266,7 +266,9 @@ def edit_view(event_id, step=''):
                            current_timezone=current_timezone,
                            payment_countries=DataGetter.get_payment_countries(),
                            payment_currencies=DataGetter.get_payment_currencies(),
-                           included_settings=get_module_settings())
+                           included_settings=get_module_settings(),
+                           session_types=get_session_types_json(event_id),
+                           microlocations=get_microlocations_json(event_id))
 
 
 @events.route('/<event_id>/trash/', methods=('GET',))
