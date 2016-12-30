@@ -6,39 +6,41 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
+"Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2016-12-30 15:01+0530\n"
-"PO-Revision-Date: 2016-12-08 11:31+0530\n"
-"Last-Translator: FOSSASIA <open-event@googlegroups.com>\n"
+"PO-Revision-Date: 2016-12-30 12:42+0000\n"
+"Last-Translator: Alejandro Heredia <alex.heredia.barbosa@gmail.com>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/open-event"
+"/organizer-server/es/>\n"
 "Language: es\n"
-"Language-Team: es <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.11-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 #: app/templates/404.html:8 app/templates/404.html:26
 #: app/templates/gentelella/errors/404.html:9
 msgid "You got"
-msgstr ""
+msgstr "Usted tiene"
 
 #: app/templates/404.html:8
 msgid "Page Not Found"
-msgstr ""
+msgstr "Página no encontrada"
 
 #: app/templates/404.html:27
 msgid "Sorry but we couldn't find this page"
-msgstr ""
+msgstr "Lo lamentamos, pero no pudimos encontrar esta página"
 
 #: app/templates/404.html:28
 msgid "This page you are looking for does not exist"
-msgstr ""
+msgstr "La página que estás buscando, no existe"
 
 #: app/templates/gentelella/index.html:181
 msgid "The simplest way to create events."
-msgstr ""
+msgstr "La manera más fácil para crear eventos."
 
 #: app/templates/gentelella/admin/event/_import_modal.html:21
 #: app/templates/gentelella/admin/menu.html:39
@@ -46,125 +48,125 @@ msgstr ""
 #: app/templates/gentelella/guest/sitemap.html:76
 #: app/templates/gentelella/index.html:183
 msgid "Create Event"
-msgstr ""
+msgstr "Crear Evento"
 
 #: app/templates/gentelella/index.html:203
 msgid "All Dates"
-msgstr ""
+msgstr "Todas las Fechas"
 
 #: app/templates/gentelella/index.html:204
 msgid "Today"
-msgstr ""
+msgstr "Hoy"
 
 #: app/templates/gentelella/index.html:205
 msgid "Tomorrow"
-msgstr ""
+msgstr "Mañana"
 
 #: app/templates/gentelella/index.html:206
 msgid "This Week"
-msgstr ""
+msgstr "Esta Semana"
 
 #: app/templates/gentelella/index.html:207
 msgid "This Weekend"
-msgstr ""
+msgstr "Este Fin de Semana"
 
 #: app/templates/gentelella/index.html:208
 msgid "Next Week"
-msgstr ""
+msgstr "Próxima Semana"
 
 #: app/templates/gentelella/index.html:209
 msgid "This Month"
-msgstr ""
+msgstr "Este Mes"
 
 #: app/templates/gentelella/index.html:214
 msgid "Search"
-msgstr ""
+msgstr "Buscar"
 
 #: app/templates/gentelella/index.html:218
 msgid "Upcoming Events"
-msgstr ""
+msgstr "Próximos Eventos"
 
 #: app/templates/gentelella/index.html:224
 msgid "No upcoming events available at this time"
-msgstr ""
+msgstr "No hay eventos próximos disponibles en este momento"
 
 #: app/templates/gentelella/admin/event/wizard/session-speakers/call-for-speakers.html:5
 #: app/templates/gentelella/guest/event/cfs.html:16
 #: app/templates/gentelella/index.html:230
 msgid "Call for Speakers"
-msgstr ""
+msgstr "Llamado para Oradores"
 
 #: app/templates/gentelella/index.html:236
 msgid "No call for speakers open at this time"
-msgstr ""
+msgstr "No hay llamado para oradores por el momento"
 
 #: app/templates/gentelella/guest/explore/results.html:64
 #: app/templates/gentelella/index.html:251
 msgid "Share this event"
-msgstr ""
+msgstr "Comparte este evento"
 
 #: app/templates/gentelella/admin/footer.html:8
 #: app/templates/gentelella/guest/sitemap.html:33
 msgid "Sitemap"
-msgstr ""
+msgstr "Mapa del sitio"
 
 #: app/templates/gentelella/admin/footer.html:17
 #: app/templates/gentelella/guest/explore/_collapse_search.html:10
 msgid "Categories"
-msgstr ""
+msgstr "Categorías"
 
 #: app/templates/gentelella/admin/footer.html:25
 msgid "Locations"
-msgstr ""
+msgstr "Ubicaciones"
 
 #: app/templates/gentelella/admin/footer.html:33
 msgid "Connect With Us"
-msgstr ""
+msgstr "Conéctate con Nosotros"
 
 #: app/templates/gentelella/admin/footer.html:37
 #: app/templates/gentelella/admin/super_admin/content/_social.html:5
 #: app/templates/gentelella/admin/super_admin/content/_social.html:7
 msgid "Support"
-msgstr ""
+msgstr "Soporte"
 
 #: app/templates/gentelella/admin/footer.html:41
 msgid "Twitter"
-msgstr ""
+msgstr "Twitter"
 
 #: app/templates/gentelella/admin/footer.html:45
 msgid "Facebook"
-msgstr ""
+msgstr "Facebook"
 
 #: app/templates/gentelella/admin/footer.html:49
 msgid "Google"
-msgstr ""
+msgstr "Google"
 
 #: app/templates/gentelella/admin/footer.html:53
 msgid "Youtube"
-msgstr ""
+msgstr "Youtube"
 
 #: app/templates/gentelella/admin/footer.html:57
 msgid "Github"
-msgstr ""
+msgstr "Github"
 
 #: app/templates/gentelella/admin/menu.html:63
 msgid "My Tickets"
-msgstr ""
+msgstr "Mis tiquetes"
 
 #: app/templates/gentelella/admin/menu.html:64
 msgid "My Sessions"
-msgstr ""
+msgstr "Mis Sesiones"
 
 #: app/templates/gentelella/admin/event/index.html:16
 #: app/templates/gentelella/admin/menu.html:65
 msgid "Manage Events"
-msgstr ""
+msgstr "Administrar Eventos"
 
 #: app/templates/gentelella/admin/menu.html:67
 #: app/templates/gentelella/admin/profile/index.html:6
 #: app/templates/gentelella/admin/profile/index.html:13
 msgid "Profile"
-msgstr ""
+msgstr "Perfil"
 
 #: app/templates/gentelella/admin/event/wizard/components/ticket.html:53
 #: app/templates/gentelella/admin/menu.html:68
@@ -172,23 +174,23 @@ msgstr ""
 #: app/templates/gentelella/admin/settings/base.html:25
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:4
 msgid "Settings"
-msgstr ""
+msgstr "Ajustes"
 
 #: app/templates/gentelella/admin/menu.html:70
 #: app/templates/gentelella/admin/menu.html:73
 #: app/templates/gentelella/admin/menu.html:75
 #: app/templates/gentelella/admin/super_admin/users/users.html:58
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 #: app/templates/gentelella/admin/menu.html:79
 #: app/templates/gentelella/admin/menu.html:126
 msgid "Browse Events"
-msgstr ""
+msgstr "Buscar Eventos"
 
 #: app/templates/gentelella/admin/menu.html:80
 msgid "Logout"
-msgstr ""
+msgstr "Salir"
 
 #: app/templates/gentelella/admin/menu.html:95
 #: app/templates/gentelella/admin/profile/notifications.html:4
@@ -197,31 +199,31 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:18
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:19
 msgid "Notifications"
-msgstr ""
+msgstr "Notificaciones"
 
 #: app/templates/gentelella/admin/menu.html:101
 msgid "Mark All as Read"
-msgstr ""
+msgstr "Marcar como leído"
 
 #: app/templates/gentelella/admin/menu.html:112
 msgid "Mark as read"
-msgstr ""
+msgstr "Marcar como leído"
 
 #: app/templates/gentelella/admin/menu.html:118
 msgid "No new notifications"
-msgstr ""
+msgstr "No tiene notificaciones nuevas"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:6
 msgid "Import Event"
-msgstr ""
+msgstr "Importar Evento"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:10
 msgid "Select event source file to import"
-msgstr ""
+msgstr "Importar archivo fuente del evento"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:31
 msgid "Previous Imports"
-msgstr ""
+msgstr "Importaciones Previas"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:38
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:61
@@ -233,28 +235,28 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/events/events.html:262
 #: app/templates/gentelella/admin/super_admin/events/events.html:284
 msgid "State"
-msgstr ""
+msgstr "Estado"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:39
 #: app/templates/gentelella/admin/profile/notifications.html:45
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:58
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:91
 msgid "Message"
-msgstr ""
+msgstr "Mensaje"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:40
 msgid "Started"
-msgstr ""
+msgstr "Iniciado"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:48
 msgid "Success"
-msgstr ""
+msgstr "Éxito"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:52
 #: app/templates/gentelella/guest/ticketing/stripe_oauth_callback.html:5
 #: app/templates/gentelella/guest/ticketing/stripe_oauth_callback.html:21
 msgid "Processing"
-msgstr ""
+msgstr "Procesando"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:57
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:443
@@ -270,7 +272,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:142
 #: app/templates/gentelella/admin/super_admin/settings/_system.html:256
 msgid "here"
-msgstr ""
+msgstr "aquí"
 
 #: app/templates/gentelella/admin/event/_table.html:6
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:16
@@ -3792,4 +3794,3 @@ msgstr ""
 
 #~ msgid "Next"
 #~ msgstr ""
-
