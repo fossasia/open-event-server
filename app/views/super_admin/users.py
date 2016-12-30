@@ -88,6 +88,9 @@ def details_view(user_id):
 
 @sadmin_users.route('/<user_id>/trash/', methods=('GET',))
 def trash_view(user_id):
+    profile = DataGetter.get_user(user_id)
+    if profile.is_super_admin:
+        abort(403)
     trash_user(user_id)
     flash("User" + user_id + " has been deleted.", "danger")
     return redirect(url_for('.index_view'))
@@ -103,6 +106,8 @@ def restore_view(user_id):
 @sadmin_users.route('/<user_id>/delete/', methods=('GET',))
 def delete_view(user_id):
     profile = DataGetter.get_user(user_id)
+    if profile.is_super_admin:
+        abort(403)
     if request.method == "GET":
         transaction = transaction_class(Event)
         transaction.query.filter_by(user_id=user_id).delete()
