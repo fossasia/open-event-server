@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
-"POT-Creation-Date: 2016-12-26 19:16+0530\n"
-"PO-Revision-Date: 2016-12-14 12:12+0000\n"
+"POT-Creation-Date: 2016-12-30 15:01+0530\n"
+"PO-Revision-Date: 2016-12-26 16:38+0000\n"
 "Last-Translator: naofum <naofum@gmail.com>\n"
 "Language: ja\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/open-event"
@@ -176,20 +176,22 @@ msgid "Settings"
 msgstr "設定"
 
 #: app/templates/gentelella/admin/menu.html:70
+#: app/templates/gentelella/admin/menu.html:73
+#: app/templates/gentelella/admin/menu.html:75
 #: app/templates/gentelella/admin/super_admin/users/users.html:58
 msgid "Admin"
 msgstr "管理者"
 
-#: app/templates/gentelella/admin/menu.html:73
-#: app/templates/gentelella/admin/menu.html:120
+#: app/templates/gentelella/admin/menu.html:79
+#: app/templates/gentelella/admin/menu.html:126
 msgid "Browse Events"
 msgstr "イベントを参照"
 
-#: app/templates/gentelella/admin/menu.html:74
+#: app/templates/gentelella/admin/menu.html:80
 msgid "Logout"
 msgstr "ログアウト"
 
-#: app/templates/gentelella/admin/menu.html:89
+#: app/templates/gentelella/admin/menu.html:95
 #: app/templates/gentelella/admin/profile/notifications.html:4
 #: app/templates/gentelella/admin/profile/notifications.html:16
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:5
@@ -198,15 +200,15 @@ msgstr "ログアウト"
 msgid "Notifications"
 msgstr "通知"
 
-#: app/templates/gentelella/admin/menu.html:95
+#: app/templates/gentelella/admin/menu.html:101
 msgid "Mark All as Read"
 msgstr "すべて既読にする"
 
-#: app/templates/gentelella/admin/menu.html:106
+#: app/templates/gentelella/admin/menu.html:112
 msgid "Mark as read"
 msgstr "既読にする"
 
-#: app/templates/gentelella/admin/menu.html:112
+#: app/templates/gentelella/admin/menu.html:118
 msgid "No new notifications"
 msgstr "新しい通知はありません"
 
@@ -216,7 +218,7 @@ msgstr "イベントのインポート"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:10
 msgid "Select event source file to import"
-msgstr ""
+msgstr "インポートするイベント ソース ファイルを選択"
 
 #: app/templates/gentelella/admin/event/_import_modal.html:31
 msgid "Previous Imports"
@@ -449,7 +451,7 @@ msgstr "このイベントを削除してもよろしいですか"
 #: app/templates/gentelella/admin/event/sessions/components/_speaker_croppie.html:17
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:207
 #: app/templates/gentelella/admin/profile/index.html:125
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:111
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:112
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:128
 msgid "Cancel"
 msgstr "キャンセル"
@@ -835,7 +837,7 @@ msgid "Add"
 msgstr "追加"
 
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:25
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:110
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:111
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:135
 msgid "Update"
 msgstr "更新"
@@ -1478,7 +1480,7 @@ msgstr "説明"
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:559
 #: app/templates/gentelella/admin/event/wizard/components/image-upload.html:34
 #: app/templates/gentelella/admin/profile/index.html:59
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:90
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:91
 msgid "Remove"
 msgstr "削除"
 
@@ -1704,7 +1706,7 @@ msgstr "イベントのサブ トピック"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:552
 msgid "Choose a topic first"
-msgstr ""
+msgstr "最初にトピックを選択します"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:560
 #: app/templates/gentelella/guest/event/code_of_conduct.html:7
@@ -1840,7 +1842,7 @@ msgstr "前"
 
 #: app/templates/gentelella/admin/event/wizard/components/button-bar.html:10
 msgid "Save and Proceed"
-msgstr ""
+msgstr "保存して続行"
 
 #: app/templates/gentelella/admin/event/wizard/components/button-bar.html:13
 msgid "Unpublish event"
@@ -1852,15 +1854,15 @@ msgstr "イベントを活動中にする"
 
 #: app/templates/gentelella/admin/event/wizard/components/image-upload.html:11
 msgid "Select"
-msgstr ""
+msgstr "選択"
 
 #: app/templates/gentelella/admin/event/wizard/components/image-upload.html:16
 msgid "is uploading"
-msgstr ""
+msgstr "はアップロード中"
 
 #: app/templates/gentelella/admin/event/wizard/components/image-upload.html:25
 msgid "No larger than "
-msgstr ""
+msgstr "以下 "
 
 #: app/templates/gentelella/admin/event/wizard/components/tabs.html:13
 msgid "Basic Details"
@@ -2181,38 +2183,38 @@ msgstr "変更"
 msgid "Update Image"
 msgstr "画像を更新"
 
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:69
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:86
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:70
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:87
 msgid "Placeholder"
 msgstr "プレースホルダー"
 
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:76
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:77
 msgid "Select Placeholder"
 msgstr "プレースホルダーを選択"
 
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:80
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:81
 msgid ""
 "For Cover Photos : We recommend using at least a 1300x550px (2:1 ratio) "
 "image"
 msgstr "表紙写真 : 少なくとも 1300x550px (2:1 レシオ) 画像の使用をお勧めします"
 
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:80
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:81
 msgid ""
 "For Avatar Photos : We recommend using at least a 360x360px (1:1 ratio) "
 "image"
 msgstr "アバター写真 : 少なくとも 360x360px (1:1 レシオ) 画像の使用をお勧めします"
 
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:80
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:81
 msgid "The images should be no larger than 10MB"
 msgstr "画像は 10 MB 以下にする必要があります"
 
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:97
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:98
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:99
 msgid "Copyright Information"
 msgstr "著作権情報"
 
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:102
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:103
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:104
 msgid "Origin Information"
 msgstr "オリジナル情報"
 
@@ -3336,7 +3338,7 @@ msgstr "参加者"
 
 #: app/templates/gentelella/errors/400.html:9
 msgid "We are not able to understand what you require"
-msgstr ""
+msgstr "あなたが必要とするものを理解できません"
 
 #: app/templates/gentelella/errors/400.html:10
 msgid ""
@@ -3344,6 +3346,8 @@ msgid ""
 "frequently, drop in an email at our support address so that we can see "
 "what's the issue."
 msgstr ""
+"私たちが共通の言語を話すようには思われません。 "
+"この問題が頻繁に発生している場合は、問題の原因を確認できるようにサポートアドレスにメールをお送りください。"
 
 #: app/templates/gentelella/errors/403.html:10
 msgid "Access denied"
@@ -3357,15 +3361,15 @@ msgstr "申し訳ありません。このページへのアクセス許可があ
 msgid ""
 "Sorry but we couldn't find this page since the page you are looking for "
 "does not exist."
-msgstr ""
+msgstr "申し訳ありません。探しているページが存在しないため、このページを見つけることができませんでした。"
 
 #: app/templates/gentelella/errors/500.html:9
 msgid "We seem to be having some issues on our side."
-msgstr ""
+msgstr "私たちの側にいくつかの問題を抱えているようです。"
 
 #: app/templates/gentelella/errors/500.html:10
 msgid "Inconvince is regretted. We'll fix this as soon as possible."
-msgstr ""
+msgstr "ご不便をお掛け致しますが、できるだけ早く修正します。"
 
 #: app/templates/gentelella/guest/sitemap.html:40
 msgid "General Information"

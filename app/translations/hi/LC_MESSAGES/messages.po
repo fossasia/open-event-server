@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
-"POT-Creation-Date: 2016-12-26 19:16+0530\n"
+"POT-Creation-Date: 2016-12-30 15:01+0530\n"
 "PO-Revision-Date: 2016-12-22 20:13+0000\n"
 "Last-Translator: sanchit mishra <sanchitmishra1999@gmail.com>\n"
 "Language: hi\n"
@@ -178,20 +178,22 @@ msgid "Settings"
 msgstr "सेटिंग्स"
 
 #: app/templates/gentelella/admin/menu.html:70
+#: app/templates/gentelella/admin/menu.html:73
+#: app/templates/gentelella/admin/menu.html:75
 #: app/templates/gentelella/admin/super_admin/users/users.html:58
 msgid "Admin"
 msgstr "व्यवस्थापक"
 
-#: app/templates/gentelella/admin/menu.html:73
-#: app/templates/gentelella/admin/menu.html:120
+#: app/templates/gentelella/admin/menu.html:79
+#: app/templates/gentelella/admin/menu.html:126
 msgid "Browse Events"
 msgstr "ब्राउज़ आयोजन"
 
-#: app/templates/gentelella/admin/menu.html:74
+#: app/templates/gentelella/admin/menu.html:80
 msgid "Logout"
 msgstr "लोग आउट"
 
-#: app/templates/gentelella/admin/menu.html:89
+#: app/templates/gentelella/admin/menu.html:95
 #: app/templates/gentelella/admin/profile/notifications.html:4
 #: app/templates/gentelella/admin/profile/notifications.html:16
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:5
@@ -200,15 +202,15 @@ msgstr "लोग आउट"
 msgid "Notifications"
 msgstr "सूचनाएं"
 
-#: app/templates/gentelella/admin/menu.html:95
+#: app/templates/gentelella/admin/menu.html:101
 msgid "Mark All as Read"
 msgstr "सभी को पढ़ा हुआ मार्क करें"
 
-#: app/templates/gentelella/admin/menu.html:106
+#: app/templates/gentelella/admin/menu.html:112
 msgid "Mark as read"
 msgstr "पढ़ा हुआ मार्क करें"
 
-#: app/templates/gentelella/admin/menu.html:112
+#: app/templates/gentelella/admin/menu.html:118
 msgid "No new notifications"
 msgstr "कोई नए संदेश नहीं"
 
@@ -453,7 +455,7 @@ msgstr "आप इस घटना को नष्ट करना चाहत
 #: app/templates/gentelella/admin/event/sessions/components/_speaker_croppie.html:17
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:207
 #: app/templates/gentelella/admin/profile/index.html:125
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:111
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:112
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:128
 msgid "Cancel"
 msgstr "रद्द करना"
@@ -839,7 +841,7 @@ msgid "Add"
 msgstr ""
 
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:25
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:110
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:111
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:135
 msgid "Update"
 msgstr ""
@@ -1482,7 +1484,7 @@ msgstr ""
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:559
 #: app/templates/gentelella/admin/event/wizard/components/image-upload.html:34
 #: app/templates/gentelella/admin/profile/index.html:59
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:90
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:91
 msgid "Remove"
 msgstr ""
 
@@ -2185,38 +2187,38 @@ msgstr ""
 msgid "Update Image"
 msgstr ""
 
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:69
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:86
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:70
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:87
 msgid "Placeholder"
 msgstr ""
 
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:76
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:77
 msgid "Select Placeholder"
 msgstr ""
 
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:80
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:81
 msgid ""
 "For Cover Photos : We recommend using at least a 1300x550px (2:1 ratio) "
 "image"
 msgstr ""
 
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:80
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:81
 msgid ""
 "For Avatar Photos : We recommend using at least a 360x360px (1:1 ratio) "
 "image"
 msgstr ""
 
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:80
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:81
 msgid "The images should be no larger than 10MB"
 msgstr ""
 
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:97
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:98
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:99
 msgid "Copyright Information"
 msgstr ""
 
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:102
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:103
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:104
 msgid "Origin Information"
 msgstr ""
 
