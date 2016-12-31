@@ -14,6 +14,7 @@ class Speaker(db.Model):
     icon = db.Column(db.String)
     short_biography = db.Column(db.Text)
     long_biography = db.Column(db.Text)
+    speaking_experience = db.Column(db.Text)
     email = db.Column(db.String, nullable=False)
     mobile = db.Column(db.String)
     website = db.Column(db.String)
@@ -39,6 +40,7 @@ class Speaker(db.Model):
                  icon=None,
                  short_biography=None,
                  long_biography=None,
+                 speaking_experience=None,
                  email=None,
                  mobile=None,
                  website=None,
@@ -61,6 +63,7 @@ class Speaker(db.Model):
         self.icon = icon
         self.short_biography = short_biography
         self.long_biography = long_biography
+        self.speaking_experience = speaking_experience
         self.email = email
         self.mobile = mobile
         self.website = website
@@ -93,7 +96,7 @@ class Speaker(db.Model):
         return self.name
 
     def __setattr__(self, name, value):
-        if name == 'short_biography' or name == 'long_biography':
+        if name == 'short_biography' or name == 'long_biography' or name == 'speaking_experience':
             super(Speaker, self).__setattr__(name, clean_html(clean_up_string(value)))
         else:
             super(Speaker, self).__setattr__(name, value)
@@ -114,6 +117,7 @@ class Speaker(db.Model):
             'icon': self.icon,
             'short_biography': self.short_biography,
             'long_biography': self.long_biography,
+            'speaking_experience': self.speaking_experience,
             'email': self.email,
             'mobile': self.mobile,
             'website': self.website,
