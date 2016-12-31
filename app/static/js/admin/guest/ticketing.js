@@ -3,28 +3,31 @@
  */
 
 window.token_recieved = false;
-var handler = StripeCheckout.configure({
-    key: window.stripe_publishable_key,
-    locale: 'auto',
-    name: 'Open Event',
-    amount: window.order_amount,
-    currency: window.currency,
-    description: window.event_name + ' tickets',
-    token: function (token) {
-        window.token_recieved = true;
-        chargeOrderPayment(token.id);
-    },
-    closed: function () {
-        if (window.token_recieved) {
-            window.token_recieved = false;
-        } else {
-            createSnackbar("The payment was cancelled. Processing ...");
-            setTimeout(function () {
-                location.reload(true);
-            }, 1000);
+if(window.pay_by_stripe == "True" && window.order_amount > 0){
+   var handler = StripeCheckout.configure({
+        key: window.stripe_publishable_key,
+        locale: 'auto',
+        name: 'Open Event',
+        amount: window.order_amount,
+        currency: window.currency,
+        description: window.event_name + ' tickets',
+        token: function (token) {
+            window.token_recieved = true;
+            chargeOrderPayment(token.id);
+        },
+        closed: function () {
+            if (window.token_recieved) {
+                window.token_recieved = false;
+            } else {
+                createSnackbar("The payment was cancelled. Processing ...");
+                setTimeout(function () {
+                    location.reload(true);
+                }, 1000);
+            }
         }
-    }
-});
+    });
+}
+
 
 window.order_created_at = moment.utc(window.order_created_at);
 window.order_expires_at = window.order_created_at.clone();
