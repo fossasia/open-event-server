@@ -27,7 +27,7 @@ class Speaker(db.Model):
     position = db.Column(db.String)
     country = db.Column(db.String, nullable=False)
     city = db.Column(db.String)
-    sponsorship_required = db.Column(db.String)
+    sponsorship_required = db.Column(db.Text)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'))
     user = db.relationship('User', backref='speakers')
@@ -96,7 +96,7 @@ class Speaker(db.Model):
         return self.name
 
     def __setattr__(self, name, value):
-        if name == 'short_biography' or name == 'long_biography' or name == 'speaking_experience':
+        if name == 'short_biography' or name == 'long_biography' or name == 'speaking_experience' or name == 'sponsorship_required':
             super(Speaker, self).__setattr__(name, clean_html(clean_up_string(value)))
         else:
             super(Speaker, self).__setattr__(name, value)
