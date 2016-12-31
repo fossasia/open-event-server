@@ -4,7 +4,7 @@
 {% set media_speaker_fields = ['photo'] %}
 {% set url_speaker_fields = ['website', 'facebook', 'twitter', 'github', 'linkedin'] %}
 
-{% set speaker_fields = ['name', 'email','photo', 'organisation', 'position', 'country', 'short_biography', 'long_biography', 'mobile', 'website', 'facebook', 'twitter', 'github', 'linkedin'] %}
+{% set speaker_fields = ['name', 'email','photo', 'organisation', 'position', 'country', 'city', 'short_biography', 'long_biography', 'sponsorship_required', 'mobile', 'website', 'facebook', 'twitter', 'github', 'linkedin'] %}
 
 {% macro speaker_form_field(identifier, require=0) %}
     {% set name = identifier | replace('_id','') %}

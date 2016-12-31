@@ -25,6 +25,8 @@ class Speaker(db.Model):
     featured = db.Column(db.Boolean, default=False)
     position = db.Column(db.String)
     country = db.Column(db.String, nullable=False)
+    city = db.Column(db.String)
+    sponsorship_required = db.Column(db.String)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'))
     user = db.relationship('User', backref='speakers')
@@ -48,6 +50,8 @@ class Speaker(db.Model):
                  featured=False,
                  position=None,
                  country=None,
+                 city=None,
+                 sponsorship_required=None,
                  event_id=None,
                  user=None):
         self.name = name
@@ -68,6 +72,8 @@ class Speaker(db.Model):
         self.organisation = organisation
         self.position = position
         self.country = country
+        self.city = city
+        self.sponsorship_required = sponsorship_required
         self.event_id = event_id
         # ensure links are in social fields
         self.ensure_social_links()
@@ -118,6 +124,8 @@ class Speaker(db.Model):
             'organisation': self.organisation,
             'position': self.position,
             'country': self.country,
+            'city': self.city,
+            'sponsorship_required': sponsorship_required,
             'sessions': session_data
         }
 
