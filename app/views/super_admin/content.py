@@ -17,7 +17,7 @@ from app.helpers.helpers import uploaded_file
 from app.helpers.storage import upload, UploadedFile
 from app.models.custom_placeholder import CustomPlaceholder
 from app.settings import get_settings, set_settings
-from app.views.super_admin import check_accessible, CONTENT
+from app.views.super_admin import check_accessible, CONTENT, list_navbar
 from config import basedir, LANGUAGES
 
 BASE_TRANSLATIONS_DIR = str(basedir) + "/app/translations"
@@ -50,7 +50,7 @@ def index_view():
     return render_template(
         'gentelella/admin/super_admin/content/content.html', pages=pages, settings=settings,
         placeholder_images=placeholder_images, subtopics=subtopics, custom_placeholder=custom_placeholder,
-        languages=languages_copy
+        languages=languages_copy, navigation_bar=list_navbar()
     )
 
 
@@ -130,7 +130,7 @@ def details_view(page_id):
     pages = DataGetter.get_all_pages()
     return render_template('gentelella/admin/super_admin/content/content.html',
                            pages=pages,
-                           current_page=page)
+                           current_page=page, navigation_bar=list_navbar())
 
 
 @sadmin_content.route('/pages/<page_id>/trash/', methods=['GET'])

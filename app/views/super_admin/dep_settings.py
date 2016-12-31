@@ -8,7 +8,7 @@ from app.helpers.data import save_to_db, delete_from_db
 from app.helpers.data_getter import DataGetter
 from app.models.image_sizes import ImageSizes
 from app.settings import get_settings, set_settings
-from app.views.super_admin import SETTINGS, check_accessible
+from app.views.super_admin import SETTINGS, check_accessible, list_navbar
 from app.views.users.events import get_module_settings
 
 sadmin_settings = Blueprint('sadmin_settings', __name__, url_prefix='/admin/settings')
@@ -126,5 +126,6 @@ def index_view():
         image_config=image_config,
         super_admin_email=DataGetter.get_super_admin_user().email,
         event_image_sizes=event_image_sizes,
-        profile_image_sizes=profile_image_sizes
+        profile_image_sizes=profile_image_sizes,
+        navigation_bar=list_navbar()
     )

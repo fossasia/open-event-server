@@ -3,7 +3,7 @@ from flask import render_template
 
 from app.helpers.data_getter import DataGetter
 from app.helpers.ticketing import TicketingManager
-from app.views.super_admin import EVENTS, check_accessible
+from app.views.super_admin import EVENTS, check_accessible, list_navbar
 
 sadmin_events = Blueprint('sadmin_events', __name__, url_prefix='/admin/events')
 
@@ -44,4 +44,5 @@ def index_view():
                            donation_ticket_count=donation_ticket_count,
                            max_free_ticket=max_free_ticket,
                            max_paid_ticket=max_paid_ticket,
-                           max_donation_ticket=max_donation_ticket)
+                           max_donation_ticket=max_donation_ticket,
+                           navigation_bar=list_navbar())

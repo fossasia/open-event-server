@@ -82,7 +82,7 @@
             <td>{{ user['user'].last_access_time.strftime("%Y-%m-%d %H:%M")|time_format }}</td>
             <td>
                 <div class="btn-group btn-group-sm">
-                    {% if not user['user'].is_super_admin %}
+                    {% if not user['user'].is_super_admin and current_user.is_super_admin %}
                         <a class="btn btn-default" href='#' data-toggle="modal"
                            data-target="#update-sys-role-{{ user['user'].id }}" title="Edit role"
                            data-user-id="{{ user['user'].id }}">
@@ -170,10 +170,10 @@
 {% block content %}
     <div>
         <ul id="event-tabs" class="nav nav-tabs bar_tabs large_tab_list" role="tablist">
-            <li class="active"><a href="#tab_content1" id="all-users-tab" data-toggle="tab">{{ _("All Users") }}</a>
+            <li class="active"><a href="#allusers" id="all-users-tab" data-toggle="tab">{{ _("All Users") }}</a>
             </li>
-            <li class=""><a href="#tab_content1" id="live-users-tab" data-toggle="tab">{{ _("Active Users") }}</a></li>
-            <li class=""><a href="#tab_content2" id="deleted-users-tab" data-toggle="tab">{{ _("Deleted Users") }}</a>
+            <li class=""><a href="#activeusers" id="live-users-tab" data-toggle="tab">{{ _("Active Users") }}</a></li>
+            <li class=""><a href="#deletedusers" id="deleted-users-tab" data-toggle="tab">{{ _("Deleted Users") }}</a>
             </li>
         </ul>
         <div class="dropdown tabs_small">
@@ -182,13 +182,13 @@
                 <span class="caret"></span></button>
             <ul class="dropdown-menu">
                 <li value="All Users" class="small_tab_list active">
-                    <a href="#tab_content1" id="all-users-tab" data-toggle="tab">{{ _("All Users") }}</a>
+                    <a href="#allusers" id="all-users-tab" data-toggle="tab">{{ _("All Users") }}</a>
                 </li>
                 <li value="Active Users" class="small_tab_list active">
-                    <a href="#tab_content1" id="live-users-tab" data-toggle="tab">{{ _("Active Users") }}</a>
+                    <a href="#activeusers" id="live-users-tab" data-toggle="tab">{{ _("Active Users") }}</a>
                 </li>
                 <li value="Deleted Users" class="small_tab_list">
-                    <a href="#tab_content2" id="deleted-users-tab" data-toggle="tab">{{ _("Deleted Users") }}</a>
+                    <a href="#deletedusers" id="deleted-users-tab" data-toggle="tab">{{ _("Deleted Users") }}</a>
                 </li>
             </ul>
         </div>
@@ -213,7 +213,7 @@
                     </tbody>
                 </table>
             </div>
-            <div role="tabpanel" class="tab-pane fade" id="tab_content1"
+            <div role="tabpanel" class="tab-pane fade" id="activeusers"
                  aria-labelledby="live-users-tab">
                 <table class="table table-striped no-global-dt" id="active_users_table">
                     <thead>
@@ -233,7 +233,7 @@
                     </tbody>
                 </table>
             </div>
-            <div role="tabpanel" class="tab-pane fade" id="tab_content2"
+            <div role="tabpanel" class="tab-pane fade" id="deletedusers"
                  aria-labelledby="deleted-users-tab">
                 <table class="table table-striped no-global-dt" id="deleted_users_table">
                     <thead>

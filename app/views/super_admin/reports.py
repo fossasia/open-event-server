@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask import render_template
 
 from app.helpers.data_getter import DataGetter
-from app.views.super_admin import REPORTS, check_accessible
+from app.views.super_admin import REPORTS, check_accessible, list_navbar
 from app.helpers.deployment.heroku import HerokuApi
 from app.helpers.deployment.kubernetes import KubernetesApi
 
@@ -40,7 +40,8 @@ def index_view():
         logplex_url=logplex_url,
         on_kubernetes=on_kubernetes,
         pods_info=pods_info,
-        activities=activities
+        activities=activities,
+        navigation_bar=list_navbar()
     )
 
 

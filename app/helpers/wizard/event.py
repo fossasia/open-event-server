@@ -23,6 +23,7 @@ from app.models.tax import Tax
 from app.models.ticket import Ticket, ticket_tags_table, TicketTag
 from app.models.user import ORGANIZER
 from app.models.users_events_roles import UsersEventsRoles
+from app.models.social_link import SocialLink
 
 
 def get_event_json(event_id):
@@ -96,17 +97,18 @@ def get_event_json(event_id):
     return result
 
 
-def save_event_from_json(json):
+def save_event_from_json(json, event_id=None):
     """
     Save an event from a wizard json
+    :param event_id:
     :param json:
     :return:
     """
     event_data = json['event']
     state = json['state']
 
-    if represents_int(event_data['id']):
-        event = DataGetter.get_event(event_data['id'])
+    if event_id and represents_int(event_id):
+        event = DataGetter.get_event(event_id)
         is_edit = True
     else:
         event = Event()
@@ -122,6 +124,13 @@ def save_event_from_json(json):
         abort(400)
 
     event.name = event_data['name']
+    if event_data['event_url'].strip() != "":
+        if not event_data['event_url'].startswith("http"):
+            event.event_url = "https://" + event_data['event_url']
+        else:
+            event.event_url = event_data['event_url']
+    else:
+        event.event_url = ""
     event.location_name = event_data['location_name']
     event.show_map = 1 if event_data['show_map'] else 0
     event.start_time = start_time
@@ -158,6 +167,8 @@ def save_event_from_json(json):
     copyright.year = year
     copyright.logo = logo
     copyright.licence_url = licence_url
+
+    save_social_links(event_data['social_links'], event)
 
     event.ticket_include = event_data['ticket_include']
 
@@ -401,3 +412,29 @@ def save_resized_background(background_image_file, event_id, size, image_sizes):
     )
 
     return save_resized_image(background_image_file, width_, height_, basewidth, aspect, height_size, upload_path)
+
+
+def save_social_links(social_links, event):
+    old_social_links = SocialLink.query.filter_by(event_id=event.id)
+    for old_social_link in old_social_links:
+        flag = 0
+        for new_social_link in social_links:
+            if old_social_link.name == new_social_link['name'] and new_social_link['link'] != "":
+                flag = 1
+                break
+            else:
+                flag = 0
+        if flag == 0:
+            db.session.delete(old_social_link)
+    for social_link in social_links:
+        if social_link['link'].strip() != "":
+            if not social_link['link'].startswith("http"):
+                social_link['link'] = "https://" + social_link['link']
+            else:
+                social_link['link'] = social_link['link']
+            social_exists = SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).scalar()            
+            if social_exists:
+                SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).update({'link': social_link['link']})
+            else:
+                social = SocialLink(social_link['name'], social_link['link'], event.id)
+                db.session.add(social)

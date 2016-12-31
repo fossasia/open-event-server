@@ -6,7 +6,7 @@ from app.helpers.data import DataManager
 from app.helpers.data_getter import DataGetter
 from app.helpers.system_mails import MAILS
 from app.helpers.system_notifications import NOTIFS
-from app.views.super_admin import MESSAGES, check_accessible
+from app.views.super_admin import MESSAGES, check_accessible, list_navbar
 
 sadmin_messages = Blueprint('sadmin_messages', __name__, url_prefix='/admin/messages')
 
@@ -23,7 +23,8 @@ def index_view():
         'gentelella/admin/super_admin/messages/messages.html',
         mails=MAILS,
         notifications=NOTIFS,
-        message_settings=message_settings
+        message_settings=message_settings,
+        navigation_bar=list_navbar()
     )
 
 

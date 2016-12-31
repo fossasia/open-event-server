@@ -27,10 +27,10 @@
 {% block content %}
     <ul id="perm-tabs" class="nav nav-tabs bar_tabs large_tab_list" role="tablist">
         <li class="active">
-            <a href="#tab_content0" id="system-roles-tab" data-toggle="tab">{{ _("System Roles") }}</a>
+            <a href="#systemroles" id="system-roles-tab" data-toggle="tab">{{ _("System Roles") }}</a>
         </li>
         <li class="">
-            <a href="#tab_content1" id="event-roles-tab" data-toggle="tab">{{ _("Event Roles") }}</a>
+            <a href="#eventroles" id="event-roles-tab" data-toggle="tab">{{ _("Event Roles") }}</a>
         </li>
     </ul>
     <div class="dropdown tabs_small">
@@ -39,15 +39,15 @@
             <span class="caret"></span></button>
         <ul class="dropdown-menu">
             <li value="System Roles" class="small_tab_list active">
-                <a href="#tab_content0" id="system-roles-tab" data-toggle="tab">{{ _("System Roles") }}</a>
+                <a href="#systemroles" id="system-roles-tab" data-toggle="tab">{{ _("System Roles") }}</a>
             </li>
             <li value="Event Roles" class="small_tab_list">
-                <a href="#tab_content1" id="event-roles-tab" data-toggle="tab">{{ _("Event Roles") }}</a>
+                <a href="#eventroles" id="event-roles-tab" data-toggle="tab">{{ _("Event Roles") }}</a>
             </li>
         </ul>
     </div>
     <div id="myTabContent" class="tab-content">
-        <div role="tabpanel" class="tab-pane fade active in" id="tab_content0" aria-labelledby="system-roles-tab">
+        <div role="tabpanel" class="tab-pane fade active in" id="systemroles" aria-labelledby="system-roles-tab">
             <h2 style="margin-top: 60px;">
                 {{ _("System Roles") }}
             </h2>
@@ -247,7 +247,7 @@
             </form>
         </div>
 
-        <div role="tabpanel" class="tab-pane fade" id="tab_content1" aria-labelledby="event-roles-tab">
+        <div role="tabpanel" class="tab-pane fade" id="eventroles" aria-labelledby="event-roles-tab">
             <form method="post" style="margin-top: 60px;" action="{{ url_for('sadmin_permissions.event_roles_view') }}">
                 <h2>
                     {{ _("Event Roles") }}

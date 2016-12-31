@@ -7,6 +7,7 @@
             cursor: pointer;
 
         }
+
         .event-holder:hover > .thumbnail > .caption {
             background-color: #f7f7f7;
         }
@@ -36,12 +37,9 @@
         }
 
         .event-holder .location_name {
-            white-space: nowrap;
-            max-widows:;: 12em;
-            overflow: hidden;
-            text-overflow: ellipsis;
             position: relative;
             display: inline-block;
+            height: 20px;
         }
 
         .event-holder .tags {
@@ -90,6 +88,11 @@
             -webkit-border-bottom-left-radius: 0;
             font-weight: 300;
             text-transform: uppercase;
+        }
+
+        div.tooltip-inner {
+            text-align: left;
+            max-width: 350px;
         }
     </style>
 {% endblock %}
@@ -145,7 +148,10 @@
                 <div class="caption">
                     <small class="time">{{ event.start_time.strftime('%a, %B %d %I:%M %p') }}</small>
                     <h4 class="name">{{ event.name }}</h4>
-                    <div class="location_name" title="{{ event.location_name }}" data-toggle="tooltip" data-placement="right">{{ event.location_name.split(",")[0] }}</div>
+                    <div class="location_name" title="{{ event.location_name }}" data-toggle="tooltip"
+                         data-placement="right" data-original-text="{{ event.location_name.split(",")[0] }}">
+                        <span class="text"></span>
+                    </div>
                     <hr>
                     <p class="tags">
                         {% if event.type %}
@@ -185,10 +191,12 @@
         <div class="col-md-10 col-md-push-1">
             <form class="form-inline row home-search" method="get" action="/browse">
                 <div class="form-group col-sm-4 col-xs-10">
-                    <input type="text" name="query" class="form-control input-lg" style="width: 100%;" placeholder="Search for events">
+                    <input type="text" name="query" class="form-control input-lg" style="width: 100%;"
+                           placeholder="Search for events">
                 </div>
                 <div class="form-group col-sm-3 hidden-xs">
-                    <input type="text" name="location" id="location" class="form-control input-lg" style="width: 100%;" placeholder="Location">
+                    <input type="text" name="location" id="location" class="form-control input-lg" style="width: 100%;"
+                           placeholder="Location">
                 </div>
                 <div class="form-group col-sm-3 hidden-xs">
                     <select class="form-control input-lg" name="period" style="width: 100%;" title="Period">
@@ -244,7 +252,8 @@
                 </div>
                 <div class="modal-body" style="text-align: center;">
                     {% include 'gentelella/components/social_buttons.html' %}
-                    <input id="share-url-box" type="text" class="form-control" onClick="this.select();" value="{{ request.url }}" title="Share URL">
+                    <input id="share-url-box" type="text" class="form-control" onClick="this.select();"
+                           value="{{ request.url }}" title="Share URL">
                 </div>
             </div>
         </div>
@@ -254,7 +263,7 @@
 
 {% block tail_js %}
     {{ super() }}
-
+    <script src="{{ url_for('static', filename='js/jquery/jquery.ellipsis.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
     <script type="text/javascript">
         var pathArray = location.href.split('/');
@@ -277,8 +286,10 @@
             e.stopPropagation();
             var name = $(this).data('name');
             var value = $(this).data('value');
-            location.href = "{{ url_for("admin.browse_view") }}?" + name + "=" + encodeURI(value);
+            location.href = "{{ url_for("admin.browse_view") }}?" + name + "=" + encodeURIComponent(value);
         });
+
+        $(".location_name").ellipsis();
 
     </script>
 {% endblock %}

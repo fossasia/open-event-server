@@ -38,7 +38,9 @@
 }
 
 .event-holder .location_name {
-
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .event-holder .tags {

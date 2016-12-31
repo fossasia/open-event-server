@@ -84,11 +84,11 @@
 
     <div>
         <ul id="event-tabs" class="nav nav-tabs bar_tabs large_tab_list" role="tablist">
-            <li class=""><a href="#tab_content4" id="all-tab" data-toggle="tab">{{ _("All Sessions") }}</a></li>
-            <li class="active"><a href="#tab_content1" id="home-tab" data-toggle="tab">{{ _("All Pending") }}</a></li>
-            <li class=""><a href="#tab_content2" id="profile-tab" data-toggle="tab">{{ _("All Accepted") }}</a></li>
-            <li class=""><a href="#tab_content3" id="profile-tab2" data-toggle="tab">{{ _("All Rejected") }}</a></li>
-            <li class=""><a href="#tab_content5" id="profile-tab3" data-toggle="tab">{{ _("All Deleted Sessions") }}</a>
+            <li class=""><a href="#all" id="all-tab" data-toggle="tab">{{ _("All Sessions") }}</a></li>
+            <li class="active"><a href="#pending" id="home-tab" data-toggle="tab">{{ _("All Pending") }}</a></li>
+            <li class=""><a href="#accepted" id="profile-tab" data-toggle="tab">{{ _("All Accepted") }}</a></li>
+            <li class=""><a href="#rejected" id="profile-tab2" data-toggle="tab">{{ _("All Rejected") }}</a></li>
+            <li class=""><a href="#deleted" id="profile-tab3" data-toggle="tab">{{ _("All Deleted Sessions") }}</a>
             </li>
         </ul>
         <div class="dropdown tabs_small">
@@ -97,24 +97,24 @@
                 <span class="caret"></span></button>
             <ul class="dropdown-menu">
                 <li value="All Sessions" class="small_tab_list">
-                    <a href="#tab_content4" id="all-tab" data-toggle="tab">{{ _("All Sessions") }}</a>
+                    <a href="#all" id="all-tab" data-toggle="tab">{{ _("All Sessions") }}</a>
                 </li>
                 <li value="All Pending" class="small_tab_list active">
-                    <a href="#tab_content1" id="home-tab" data-toggle="tab">{{ _("All Pending") }}</a>
+                    <a href="#pending" id="home-tab" data-toggle="tab">{{ _("All Pending") }}</a>
                 </li>
                 <li value="All Accepted" class="small_tab_list">
-                    <a href="#tab_content2" id="profile-tab" data-toggle="tab">{{ _("All Accepted") }}</a>
+                    <a href="#accepted" id="profile-tab" data-toggle="tab">{{ _("All Accepted") }}</a>
                 </li>
                 <li value="All Rejected" class="small_tab_list">
-                    <a href="#tab_content3" id="profile-tab2" data-toggle="tab">{{ _("All Rejected") }}</a>
+                    <a href="#rejected" id="profile-tab2" data-toggle="tab">{{ _("All Rejected") }}</a>
                 </li>
                 <li value="All Deleted Events" class="small_tab_list">
-                    <a href="#tab_content5" id="profile-tab3" data-toggle="tab">{{ _("All Deleted Events") }}</a>
+                    <a href="#deleted" id="profile-tab3" data-toggle="tab">{{ _("All Deleted Events") }}</a>
                 </li>
             </ul>
         </div>
         <div id="myTabContent" class="tab-content">
-            <div role="tabpanel" class="tab-pane fade" id="tab_content4"
+            <div role="tabpanel" class="tab-pane fade" id="all"
                  aria-labelledby="all-tab">
                 <table class="table table-striped no-global-dt">
                     <thead>
@@ -132,7 +132,7 @@
                     </tbody>
                 </table>
             </div>
-            <div role="tabpanel" class="tab-pane fade active in" id="tab_content1"
+            <div role="tabpanel" class="tab-pane fade active in" id="pending"
                  aria-labelledby="home-tab">
                 <table class="table table-striped no-global-dt">
                     <thead>
@@ -151,7 +151,7 @@
                     </tbody>
                 </table>
             </div>
-            <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+            <div role="tabpanel" class="tab-pane fade" id="accepted" aria-labelledby="profile-tab">
                 <table class="table table-striped no-global-dt">
                     <thead>
                     <tr>
@@ -169,7 +169,7 @@
                     </tbody>
                 </table>
             </div>
-            <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
+            <div role="tabpanel" class="tab-pane fade" id="rejected" aria-labelledby="profile-tab">
                 <table class="table table-striped no-global-dt">
                     <thead>
                     <tr>
@@ -187,7 +187,7 @@
                     </tbody>
                 </table>
             </div>
-            <div role="tabpanel" class="tab-pane fade" id="tab_content5" aria-labelledby="profile-tab">
+            <div role="tabpanel" class="tab-pane fade" id="deleted" aria-labelledby="profile-tab">
                 <table class="table table-striped no-global-dt">
                     <thead>
                     <tr>

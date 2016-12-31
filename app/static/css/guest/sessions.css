@@ -15,7 +15,6 @@
 
 .list-group-item .session-title {
     font-weight: 400;
-    padding-right: 114px;
     line-height: 24px;
 }
 
@@ -43,6 +42,8 @@
 
 .track-link > a {
     font-weight: 300 !important;
+    padding: 12px !important;
+    line-height: 16px !important;
 }
 
 .track-navbar {
