@@ -125,6 +125,7 @@ class Speaker(db.Model):
             'position': self.position,
             'country': self.country,
             'city': self.city,
+            'level': self.level,
             'sponsorship_required': sponsorship_required,
             'sessions': session_data
         }
