@@ -8,6 +8,7 @@
     {{ super() }}
     <link href="{{ url_for('static', filename='css/admin/scheduler.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/sessions.css') }}"/>
+
 {% endblock %}
 
 {% block head_js %}
@@ -67,7 +68,38 @@
     <script src="{{ url_for('static', filename='js/jquery/jquery.ellipsis.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/scheduler.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
     <script type="text/javascript">
+        var $scrollSpy = $('#scrollspy');
+        $scrollSpy.stick_in_parent({
+            offset_top: 20
+        });
+
+        $scrollSpy.on('sticky_kit:unbottom', function () {
+            $scrollSpy.parent().css("position", "static");
+        });
+
+        $scrollSpy.on('sticky_kit:bottom', function () {
+            $scrollSpy.parent().css("bottom", "16px");
+        });
+
+        $scrollSpy.on('sticky_kit:unstick', function () {
+            $scrollSpy.parent().css("position", "static");
+        });
+        $('body').scrollspy({target: '.scrollspy'});
+
+        $('a[href*="#"]:not([href="#"])').click(function () {
+            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                var target = $(this.hash);
+                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                if (target.length) {
+                    $('html, body').animate({
+                        scrollTop: target.offset().top
+                    }, 1000);
+                    return false;
+                }
+            }
+        });
         $(".audio-btn").popover({
             html: true,
             placement: 'top'
