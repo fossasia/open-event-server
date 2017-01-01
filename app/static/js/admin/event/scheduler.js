@@ -254,7 +254,6 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     $mobileSessionElement.find('.time').text(sessionRefObject.session.start_time.format('hh:mm A'));
     $mobileSessionElement.find('.event').text(sessionRefObject.session.title);
     updateColor($mobileSessionElement.find('.event'), sessionRefObject.session.track);
-    
     $mobileTimeline.find(".mobile-microlocation[data-microlocation-id=" + sessionRefObject.session.microlocation.id + "] > .mobile-sessions-holder").append($mobileSessionElement);
 
     if(sessionRefObject.session.hasOwnProperty('track') && !_.isNull(sessionRefObject.session.track)) {
