@@ -17,6 +17,7 @@ from .service import Service
 from .system_role import UserSystemRole
 from .user_permissions import UserPermission
 from .users_events_roles import UsersEventsRoles as UER
+from .panel_permissions import PanelPermission
 
 # System-wide
 ADMIN = 'admin'
@@ -213,6 +214,19 @@ class User(db.Model):
         role = UserSystemRole.query.filter_by(user=self, role_id=role_id).first()
         return bool(role)
 
+    def first_access_panel(self):
+        """Check if the user is assigned a Custom Role or not
+        This checks if there is an entry containing the current user in the `user_system_roles` table
+        returns panel name if exists otherwise false
+        """
+        custom_role = UserSystemRole.query.filter_by(user=self).first()
+        if not custom_role:
+            return False
+        perm = PanelPermission.query.filter_by(role_id=custom_role.role_id, can_access=True).first()
+        if not perm:
+            return False
+        return perm.panel_name
+
     def can_access_panel(self, panel_name):
         """Check if user can access an Admin Panel
         """
@@ -220,8 +234,8 @@ class User(db.Model):
             return True
 
         custom_sys_roles = UserSystemRole.query.filter_by(user=self)
-        for role in custom_sys_roles:
-            if role.can_access(panel_name):
+        for custom_role in custom_sys_roles:
+            if custom_role.role.can_access(panel_name):
                 return True
 
         return False

@@ -45,13 +45,25 @@ def display_default():
 def display_event_detail_home(identifier):
     event = get_published_event_or_abort(identifier)
     placeholder_images = DataGetter.get_event_default_images()
-    custom_placeholder = DataGetter.get_custom_placeholders()
+    if event.sub_topic:
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.sub_topic)
+    elif event.topic:
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.topic)
+    else:
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name('Other')
+
     call_for_speakers = DataGetter.get_call_for_papers(event.id).first()
     accepted_sessions = DataGetter.get_sessions(event.id).all()
     if event.copyright:
         licence_details = DataGetter.get_licence_details(event.copyright.licence)
     else:
         licence_details = None
+
+    speakers = []
+    for session in accepted_sessions:
+        for speaker in session.speakers:
+            if speaker not in speakers:
+                speakers.append(speaker)
 
     module = DataGetter.get_module()
     tickets = DataGetter.get_sales_open_tickets(event.id, True)
@@ -63,6 +75,7 @@ def display_event_detail_home(identifier):
                            accepted_sessions_count=len(accepted_sessions),
                            call_for_speakers=call_for_speakers,
                            licence_details=licence_details,
+                           speakers=speakers,
                            module=module,
                            tickets=tickets if tickets else [])
 
@@ -71,7 +84,12 @@ def display_event_detail_home(identifier):
 def display_event_sessions(identifier):
     event = get_published_event_or_abort(identifier)
     placeholder_images = DataGetter.get_event_default_images()
-    custom_placeholder = DataGetter.get_custom_placeholders()
+    if event.sub_topic:
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.sub_topic)
+    elif event.topic:
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.topic)
+    else:
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name('Other')
     if not event.has_session_speakers:
         abort(404)
     call_for_speakers = DataGetter.get_call_for_papers(event.id).first()
@@ -87,7 +105,12 @@ def display_event_sessions(identifier):
 def display_event_schedule(identifier):
     event = get_published_event_or_abort(identifier)
     placeholder_images = DataGetter.get_event_default_images()
-    custom_placeholder = DataGetter.get_custom_placeholders()
+    if event.sub_topic:
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.sub_topic)
+    elif event.topic:
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.topic)
+    else:
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name('Other')
     if not event.has_session_speakers:
         abort(404)
     tracks = DataGetter.get_tracks(event.id)
@@ -143,7 +166,12 @@ def display_event_schedule_xcal(identifier):
 def display_event_cfs(identifier, via_hash=False):
     event = get_published_event_or_abort(identifier)
     placeholder_images = DataGetter.get_event_default_images()
-    custom_placeholder = DataGetter.get_custom_placeholders()
+    if event.sub_topic:
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.sub_topic)
+    elif event.topic:
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.topic)
+    else:
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name('Other')
     if not event.has_session_speakers:
         abort(404)
 
@@ -179,7 +207,12 @@ def display_event_cfs_via_hash(hash):
         abort(404)
     event = DataGetter.get_event(call_for_speakers.event_id)
     placeholder_images = DataGetter.get_event_default_images()
-    custom_placeholder = DataGetter.get_custom_placeholders()
+    if event.sub_topic:
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.sub_topic)
+    elif event.topic:
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.topic)
+    else:
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name('Other')
     if not event.has_session_speakers:
         abort(404)
 
@@ -214,7 +247,12 @@ def process_event_cfs(identifier, via_hash=False):
     if request.method == 'GET':
         event = get_published_event_or_abort(identifier)
         placeholder_images = DataGetter.get_event_default_images()
-        custom_placeholder = DataGetter.get_custom_placeholders()
+        if event.sub_topic:
+            custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.sub_topic)
+        elif event.topic:
+            custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.topic)
+        else:
+            custom_placeholder = DataGetter.get_custom_placeholder_by_name('Other')
         if not event.has_session_speakers:
             abort(404)
 
@@ -262,7 +300,12 @@ def process_event_cfs(identifier, via_hash=False):
 def display_event_coc(identifier):
     event = get_published_event_or_abort(identifier)
     placeholder_images = DataGetter.get_event_default_images()
-    custom_placeholder = DataGetter.get_custom_placeholders()
+    if event.sub_topic:
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.sub_topic)
+    elif event.topic:
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.topic)
+    else:
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name('Other')
     call_for_speakers = DataGetter.get_call_for_papers(event.id).first()
     if not (event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' '):
         abort(404)
@@ -278,7 +321,12 @@ def display_event_coc(identifier):
 def display_event_tickets(identifier):
     event = get_published_event_or_abort(identifier)
     placeholder_images = DataGetter.get_event_default_images()
-    custom_placeholder = DataGetter.get_custom_placeholders()
+    if event.sub_topic:
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.sub_topic)
+    elif event.topic:
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.topic)
+    else:
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name('Other')
     if event.copyright:
         licence_details = DataGetter.get_licence_details(event.copyright.licence)
     else:

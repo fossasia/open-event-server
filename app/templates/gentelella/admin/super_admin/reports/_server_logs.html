@@ -20,7 +20,7 @@
     <iframe style="width:100%; height: 500px"
             src="https://longboard-classic.heroku.com/logs?logplexUrl={{ logplex_url }}"></iframe>
 {% else %}
-    <div>{{ _("Server logs display is supported only on Kubernetes abd Heroku deployments") }}.</div>
+    <div>{{ _("Server logs display is supported only on Kubernetes and Heroku deployments") }}.</div>
 {% endif %}
 
 {% if on_kubernetes %}

@@ -25,16 +25,16 @@
                         <div class="responsive-tabs-container accordion-xs">
                             <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
                                 <li class="active">
-                                    <a href="#tab_content1" id="home-tab" data-toggle="tab">{{ _("Live") }}</a>
+                                    <a href="#live" id="home-tab" data-toggle="tab">{{ _("Live") }}</a>
                                 </li>
                                 <li role="presentation">
-                                    <a href="#tab_content2" id="profile-tab" data-toggle="tab">{{ _("Draft") }}</a>
+                                    <a href="#draft" id="profile-tab" data-toggle="tab">{{ _("Draft") }}</a>
                                 </li>
                                 <li>
-                                    <a href="#tab_content3" id="profile-tab2" data-toggle="tab">{{ _("Past") }}</a>
+                                    <a href="#past" id="profile-tab2" data-toggle="tab">{{ _("Past") }}</a>
                                 </li>
                                 <li role="presentation" class="">
-                                    <a href="#tab_content4" id="profile-tab3" data-toggle="tab">{{ _("Import") }}</a>
+                                    <a href="#import" id="profile-tab3" data-toggle="tab">{{ _("Import") }}</a>
                                 </li>
                             </ul>
                             <div class="dropdown tabs_small">
@@ -43,38 +43,38 @@
                                     <span class="caret"></span></button>
                                 <ul class="dropdown-menu">
                                     <li value="Live" class="small_tab_list active">
-                                        <a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab">
+                                        <a href="#live" id="home-tab" role="tab" data-toggle="tab">
                                             {{ _("Live") }}
                                         </a>
                                     </li>
                                     <li value="Draft" class="small_tab_list">
-                                        <a href="#tab_content2" id="profile-tab" role="tab" data-toggle="tab">
+                                        <a href="#draft" id="profile-tab" role="tab" data-toggle="tab">
                                             {{ _("Draft") }}
                                         </a>
                                     </li>
                                     <li value="Past" class="small_tab_list">
-                                        <a href="#tab_content3" id="profile-tab2" data-toggle="tab">
+                                        <a href="#past" id="profile-tab2" data-toggle="tab">
                                             {{ _("Past") }}
                                         </a>
                                     </li>
                                     <li value="Import" class="small_tab_list">
-                                        <a href="#tab_content4" id="profile-tab3" data-toggle="tab">
+                                        <a href="#import" id="profile-tab3" data-toggle="tab">
                                             {{ _("Import") }}
                                         </a>
                                     </li>
                                 </ul>
                             </div>
                             <div id="myTabContent" class="tab-content">
-                                <div class="tab-pane fade active in" id="tab_content1">
+                                <div class="tab-pane fade active in" id="live">
                                     {{ table.events_table(live_events) }}
                                 </div>
-                                <div class="tab-pane fade in" id="tab_content2">
+                                <div class="tab-pane fade in" id="draft">
                                     {{ table.events_table(draft_events) }}
                                 </div>
-                                <div class="tab-pane fade in" id="tab_content3">
+                                <div class="tab-pane fade in" id="past">
                                     {{ table.events_table(past_events) }}
                                 </div>
-                                <div class="tab-pane fade in" id="tab_content4">
+                                <div class="tab-pane fade in" id="import">
                                     {% include 'gentelella/admin/event/_import_modal.html' %}
                                 </div>
                             </div>
@@ -100,6 +100,18 @@
         $('.accordion-link').click(function () {
             $('.accordion-link').removeClass('active');
             $(this).addClass('active');
+        });
+
+        $(document).ready(function () {
+            if (location.hash.substr(0, 2) == "#!") {
+                $("a[href='#" + location.hash.substr(2) + "']").tab("show");
+            }
+            $("a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+                var hash = $(e.target).attr("href");
+                if (hash.substr(0, 1) == "#") {
+                    location.replace("#!" + hash.substr(1));
+                }
+            });
         });
 
         $(".small_tab_list").click(function () {

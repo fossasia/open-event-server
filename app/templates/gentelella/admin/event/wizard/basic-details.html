@@ -84,7 +84,7 @@
     <div class="row event-date-picker">
         <div class="col-md-4 col-xs-12">
             <div class="item form-group"
-                 v-bind:class="{ 'has-error': event.start_time_date.trim().length <= 0 || event.start_time_time.trim().length <= 0 }">
+                 v-bind:class="{ 'has-error': event.start_time_date.trim().length <= 0 || event.start_time_time.trim().length <= 0 || invalidDateRange}">
                 <label>{{ _("Starts") }} <span class="required">*</span></label>
                 <br>
                 <div class="col-xs-8" style="padding-left: 0;">
@@ -103,14 +103,17 @@
                 </div>
             </div>
             <div class="help-block text-danger"
-                 v-show="event.start_time_date.trim().length <= 0 || event.start_time_time.trim().length <= 0">Start
-                date/time is required
+                 style="color: #a94442;"
+                 v-show="event.start_time_date.trim().length <= 0 || event.start_time_time.trim().length <= 0">
+                Start date/time is required
             </div>
-
+            <div class="help-block text-danger" style="color: #a94442;" v-show="invalidDateRange">
+                Invalid date range. End time has to be after start time.
+            </div>
         </div>
         <div class="col-md-4 col-xs-12">
             <div class="item form-group"
-                 v-bind:class="{ 'has-error': event.end_time_date.trim().length <= 0 || event.end_time_time.trim().length <= 0 }">
+                 v-bind:class="{ 'has-error': event.end_time_date.trim().length <= 0 || event.end_time_time.trim().length <= 0 || invalidDateRange }">
                 <label>{{ _("Ends") }} <span class="required">*</span></label>
                 <br>
                 <div class="col-xs-8" style="padding-left: 0;">
@@ -130,6 +133,7 @@
 
             </div>
             <div class="help-block text-danger"
+                 style="color: #a94442;"
                  v-show="event.end_time_date.trim().length <= 0 || event.end_time_time.trim().length <= 0">End
                 date/time is required
             </div>
@@ -204,7 +208,7 @@
                        value="External Event URL" readonly style="background-color: white;">
             </div>
             <div class="col-sm-5 input-group" v-bind:class="{ 'has-error': !isValidLinkEntry(event.event_url) }">
-                <input type="url" class="form-control" v-model="event.event_url" placeholder="Link">
+                <input type="url" class="form-control" v-model="event.event_url" name="event_url" placeholder="Link">
                 <transition name="fade">
                     <span class="help-block" v-show="!isValidLinkEntry(event.event_url)">This looks like an invalid URL and hence will be ignored.</span>
                 </transition>
