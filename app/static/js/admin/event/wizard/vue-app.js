@@ -46,6 +46,18 @@ var app = new Vue({
         },
         zoom: function () {
             return this.event.latitude === 0.0 && this.event.longitude === 0.0 ? 1 : 15;
+        },
+        invalidDateRange: function () {
+            if(this.event.end_time_date.trim().length <= 0
+                || this.event.end_time_time.trim().length <= 0
+                || this.event.start_time_date.trim().length <= 0
+                || this.event.start_time_time.trim().length <= 0) {
+                return false;
+            }
+            var format = 'MM/DD/YYYY HH:mm';
+            var start = moment(this.event.start_time_date.trim() + " " + this.event.start_time_time.trim(), format);
+            var end = moment(this.event.end_time_date.trim() + " " + this.event.end_time_time.trim(), format);
+            return end.isBefore(start);
         }
     },
     watch: {
@@ -64,6 +76,9 @@ var app = new Vue({
                     $this.recenterMap();
                 }, 500);
             }
+        },
+        'invalidDateRange': function (value) {
+            this.disableMove = this.disableMove ? this.disableMove : value;
         },
         'event.name': function () {
             this.disableMove = shouldDisableMove(this);
@@ -349,7 +364,8 @@ function save(stepToSave, state, callback) {
 
     var eventsData = {
         event: app.event,
-        state: state
+        state: state,
+        event_id: app.event.id
     };
 
     var sponsorsData = {
@@ -389,7 +405,8 @@ function save(stepToSave, state, callback) {
             var data = {
                 sponsors: sponsorsData,
                 session_speakers: sessionsSpeakersData,
-                event: eventsData
+                event: eventsData,
+                event_id: app.event.id
             };
             makePost('all', data, callback);
             break;

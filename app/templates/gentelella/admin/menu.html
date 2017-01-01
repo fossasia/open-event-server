@@ -46,18 +46,11 @@
                                     <img src="{{ current_user.user_detail.icon }}" onerror="imgError(this)"/>
                                 {% elif current_user.user_detail.avatar_uploaded %}
                                     <img src="{{ current_user.user_detail.avatar_uploaded }}" onerror="imgError(this)"/>
+                                {% elif avatar != None %}
+                                    <img src='{{ avatar.url }}'/>
                                 {% else %}
-                                    {% set vars = {'foo': False} %}
-                                    {% for custom_image in custom_placeholder %}
-                                        {% if custom_image.name == "Avatar" %}
-                                            <img src='{{ custom_image.url }}'/>
-                                            {% if vars.update({'foo': True}) %} {% endif %}
-                                        {% endif %}
-                                    {% endfor %}
-                                    {% if not vars.foo %}
-                                        <img src="{{ url_for('static', filename='placeholders/avatar.png') }}"
+                                    <img src="{{ url_for('static', filename='placeholders/avatar.png') }}"
                                              onerror="imgError(this)"/>
-                                    {% endif %}
                                 {% endif %}
                                 <span class="user-text">{{ current_user.user_detail.firstname | default(current_user.email, true) }}</span>
                                 <span class=" fa fa-angle-down"></span>
@@ -75,6 +68,12 @@
                                 <li><a href="/settings"> {{ _("Settings") }}</a></li>
                                 {% if current_user.is_staff %}
                                     <li><a href="/admin"> {{ _("Admin") }}</a></li>
+                                {% elif current_user.first_access_panel() %}
+                                    {% if current_user.first_access_panel() == 'admin'  %}
+                                        <li><a href="/admin/">{{ _("Admin") }}</a></li>
+                                    {% else %}
+                                        <li><a href="/admin/{{ current_user.first_access_panel() }}">{{ _("Admin") }}</a></li>
+                                    {% endif %}
                                 {% endif %}
                                 <li class="divider"></li>
                                 <li><a href="/browse" class="user-profile hide-large">{{ _("Browse Events") }}</a></li>

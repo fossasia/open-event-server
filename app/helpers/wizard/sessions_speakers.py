@@ -35,8 +35,8 @@ def get_microlocations_json(event_id):
     return data
 
 
-def save_session_speakers(json):
-    event_id = json['event_id']
+def save_session_speakers(json, event_id=None):
+    event_id = event_id if event_id else json['event_id']
     event = DataGetter.get_event(event_id)
 
     if json['sessions_speakers_enabled']:

@@ -10,8 +10,7 @@ function basicDetailsInit($eventDiv) {
     /* Bind datepicker to dates */
     $eventDiv.find("input.date").datepicker({
         'format': 'mm/dd/yyyy',
-        'autoclose': true,
-        'startDate': new Date()
+        'autoclose': true
     }).on('changeDate', function () {
         this.dispatchEvent(new Event('input'));
     });
