@@ -11,7 +11,13 @@
             <label class="control-label">
                 {{ pretty_name }}
                 {% if require==1 or identifier=='track' %}
-                    <span class="required">*</span>
+                    {% if identifier in media_session_fields %}
+                        {% if not session[identifier] %}
+                            <span class="required">*</span>
+                        {% endif %}
+                    {% else %}
+                        <span class="required">*</span>
+                    {% endif %}
                 {% endif %}
             </label>
         {% endif %}
@@ -58,7 +64,10 @@
                 {% endif %}
             {% endif %}
         {% elif identifier in media_session_fields %}
-            <br><input {% if require==1 %}
+            {% if session[identifier] %}
+                <br><a target="_blank" href="{{ session[identifier] }}">Click here to download previously uploaded file. To upload a new file, click on the button below</a>
+            {% endif %}
+            <br><input {% if (require==1) and not session[identifier] %}
             required="required"
         {% endif %}
             type="file" id="speaker-file-{{ identifier | default(1) }}" name="{{ identifier }}"
