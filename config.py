@@ -9,9 +9,8 @@ VERSION_NAME = '1.0.0-alpha.2'
 LANGUAGES = {
     'en': 'English',
     'bn': 'Bengali/Bangla',
-    'zh_CN': 'Chinese (China)',
     'zh_Hant': 'Chinese (Traditional)',
-    'zh_TW': 'Chinese (Taiwan)',
+    'zh_Hans': 'Chinese (Simplified)',
     'fr': 'French',
     'de': 'German',
     'id': 'Indonesian',
