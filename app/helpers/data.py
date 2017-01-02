@@ -219,6 +219,7 @@ class DataManager(object):
                               end_time=event.start_time + timedelta(hours=1),
                               event_id=event_id,
                               short_abstract=form.get('short_abstract', ''),
+                              level=form.get('level', ''),
                               state=state)
 
         if form.get('track', None) != "":
@@ -241,6 +242,9 @@ class DataManager(object):
                               organisation=form.get('organisation', ''),
                               position=form.get('position', ''),
                               country=form.get('country', ''),
+                              city=form.get('city', ''),
+                              sponsorship_required=form.get('sponsorship_required', ''),
+                              speaking_experience=form.get('speaking_experience', ''),
                               user=login.current_user if login and login.current_user.is_authenticated else None)
 
         new_session.speakers.append(speaker)
@@ -414,6 +418,9 @@ class DataManager(object):
                               organisation=form.get('organisation', ''),
                               position=form.get('position', ''),
                               country=form.get('country', ''),
+                              city=form.get('city', ''),
+                              sponsorship_required=form.get('sponsorship_required', ''),
+                              speaking_experience=form.get('speaking_experience', ''),
                               user=user if login and login.current_user.is_authenticated else None)
             save_to_db(speaker, "Speaker saved")
             record_activity('create_speaker', speaker=speaker, event_id=event_id)
@@ -575,6 +582,7 @@ class DataManager(object):
             session.subtitle = form.get('subtitle', '')
             session.long_abstract = form.get('long_abstract', '')
             session.short_abstract = form.get('short_abstract', '')
+            session.level = form.get('level', '')
             session.state = form_state
             session.track_id = form.get('track', None) if form.get('track', None) != "" else  None
             session.session_type_id = form.get('session_type', None) if form.get('session_type', None) != "" else None
