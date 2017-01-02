@@ -71,6 +71,34 @@
                         </p>
                         <br>
                     {% endif %}
+                    {% if session.session_type %}
+                        <h5>{{ _("Session Type") }}</h5>
+                        <p style="text-align: justify" class="session_type">
+                            {{ session.session_type.name | safe }}
+                        </p>
+                        <br>
+                    {% endif %}
+                    {% if session.level %}
+                        <h5>{{ _("Level") }}</h5>
+                        <p style="text-align: justify" class="level">
+                            {{ session.level | safe }}
+                        </p>
+                        <br>
+                    {% endif %}
+                    {% if session.comments %}
+                        <h5>{{ _("Comments") }}</h5>
+                        <p style="text-align: justify" class="comments">
+                            {{ session.comments | safe }}
+                        </p>
+                        <br>
+                    {% endif %}
+                    {% if session.language %}
+                        <h5>{{ _("Language") }}</h5>
+                        <p style="text-align: justify" class="">
+                            {{ session.language | safe }}
+                        </p>
+                        <br>
+                    {% endif %}
                     <div class="row" style="text-align: center; font-size: 16px;">
                         {% if session.microlocation %}
                             <div class="col-md-2 col-md-push-1">
