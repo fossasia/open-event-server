@@ -2,7 +2,7 @@
 {% set preselect_list = preselect | default(['short_abstract', 'comments', 'slides', 'photo', 'short_biography', 'website', 'twitter', 'organisation', 'position', 'country', 'session_type']) %}
 
 {% set session_fields = ['title', 'subtitle', 'short_abstract', 'long_abstract', 'comments', 'track', 'session_type', 'level', 'language', 'slides', 'video', 'audio'] %}
-{% set speaker_fields = ['name', 'email','photo', 'organisation', 'position', 'country', 'city', 'short_biography', 'long_biography', 'speaking_experience', 'sponsorship_required', 'mobile', 'website', 'facebook', 'twitter', 'github', 'linkedin'] %}
+{% set speaker_fields = ['name', 'email','photo', 'organisation', 'position', 'country', 'city', 'short_biography', 'long_biography', 'speaking_experience', 'sponsorship_required', 'heard_from', 'mobile', 'website', 'facebook', 'twitter', 'github', 'linkedin'] %}
 
 {% macro field_switch(name, group, include=false, require=false ) %}
     {% set identifier = name | replace(group + '.','') %}
@@ -15,8 +15,11 @@
             {% if (identifier == 'session_type') %}
         data-placement="left" title="You need to enable Session types to use this option"
             {% endif %}>
-        <td>
-            {{ pretty_name }}
+        <td>{% if name == 'heard_from' %}
+                Where did you heard about our event?
+            {% else %}
+                {{ pretty_name }}
+            {% endif %}
             {% if identifier in required_list or identifier in required %}<span class="required">*</span>{% endif %}
         </td>
         <td>
