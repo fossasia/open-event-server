@@ -1,6 +1,8 @@
 {% extends 'gentelella/guest/event/base.html' %}
 
 {% set active_page = 'cfs' %}
+{% set carousel_height = 500 if active_page == 'info' else 300 -%}
+{% set scrollspy_top = (carousel_height + 95) ~ "px" %}
 
 {% block head_css %}
     {{ super() }}
@@ -23,9 +25,9 @@
                         <span class="label label-info">{{ _("Yet to Open") }}</span>
                     {% endif %}
                 </p>
-                <p><strong>{{ call_for_speakers.start_date.strftime('%a, %B %d at %I:%M %p') }}</strong>
+                <p><strong>{{ call_for_speakers.start_date.strftime('%a, %B %d %Y at %I:%M %p') }}</strong>
                     to
-                    <strong>{{ call_for_speakers.end_date.strftime('%a, %B %d at %I:%M %p') }}</strong></p>
+                    <strong>{{ call_for_speakers.end_date.strftime('%a, %B %d %Y at %I:%M %p') }}</strong></p>
                 {{ call_for_speakers.announcement | safe }}
                 {% if state == "now" or via_hash %}
                     <a href="/e/{{ event.identifier }}/cfs/new">
@@ -44,10 +46,40 @@
     {{ super() }}
     <script src="{{ url_for('static', filename='js/jquery/jquery.multi-select.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/admin/session/new.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $("textarea").summernote(summernoteConfig);
         });
-    </script>
+    
+        var $scrollSpy = $('#scrollspy');
+        $scrollSpy.stick_in_parent({
+            offset_top: 20
+        });
 
+        $scrollSpy.on('sticky_kit:unbottom', function () {
+            $scrollSpy.parent().css("position", "static");
+        });
+
+        $scrollSpy.on('sticky_kit:bottom', function () {
+            $scrollSpy.parent().css("bottom", "16px");
+        });
+
+        $scrollSpy.on('sticky_kit:unstick', function () {
+            $scrollSpy.parent().css("position", "static");
+        });
+        $('body').scrollspy({target: '.scrollspy'});
+        $('a[href*="#"]:not([href="#"])').click(function () {
+            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                var target = $(this.hash);
+                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                if (target.length) {
+                    $('html, body').animate({
+                        scrollTop: target.offset().top
+                    }, 1000);
+                    return false;
+                }
+            }
+        });
+</script>
 {% endblock %}
