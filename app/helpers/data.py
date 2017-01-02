@@ -241,6 +241,9 @@ class DataManager(object):
                               organisation=form.get('organisation', ''),
                               position=form.get('position', ''),
                               country=form.get('country', ''),
+                              city=form.get('city', ''),
+                              sponsorship_required=form.get('sponsorship_required', ''),
+                              speaking_experience=form.get('speaking_experience', ''),
                               user=login.current_user if login and login.current_user.is_authenticated else None)
 
         new_session.speakers.append(speaker)
@@ -414,6 +417,9 @@ class DataManager(object):
                               organisation=form.get('organisation', ''),
                               position=form.get('position', ''),
                               country=form.get('country', ''),
+                              city=form.get('city', ''),
+                              sponsorship_required=form.get('sponsorship_required', ''),
+                              speaking_experience=form.get('speaking_experience', ''),
                               user=user if login and login.current_user.is_authenticated else None)
             save_to_db(speaker, "Speaker saved")
             record_activity('create_speaker', speaker=speaker, event_id=event_id)
