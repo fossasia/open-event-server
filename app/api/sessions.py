@@ -30,6 +30,7 @@ api = Namespace('sessions', description='Sessions', path='/')
 SESSION_TRACK = api.model('SessionTrack', {
     'id': fields.Integer(required=True),
     'name': fields.String(),
+    'color': fields.Color(),
 })
 
 SESSION_SPEAKER = api.model('SessionSpeaker', {
