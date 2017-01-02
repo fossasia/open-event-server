@@ -64,6 +64,7 @@ class PentabarfImporter:
                     session.title = event_object.title
                     session.short_abstract = event_object.abstract
                     session.long_abstract = event_object.description
+                    session.level = event_object.level
                     session.start_time = event_object.date + string_to_timedelta(event_object.start)
                     session.end_time = session.start_time + string_to_timedelta(event_object.duration)
                     session.slides = event_object.slides_url
