@@ -21,9 +21,14 @@
 {% macro sponsor_info(sponsor) %}
     <div class="col-md-4 col-sm-6 sponsor-column">
         <div class="sponsor text-center">
-            <a href="{{ sponsor.url }}" target="default">
-                <img alt="{{ sponsor.name }}" src="{{ sponsor.logo }}">
-            </a>
+            {% if sponsor.url %}
+                <a href="{{ sponsor.url }}" target="default">
+                    <img alt="{{ sponsor.name }}" src="{{ sponsor.logo }}">
+                </a>
+            {% else %}
+                    <img alt="{{ sponsor.name }}" src="{{ sponsor.logo }}">
+            {% endif %}
+
         </div>
     </div>
 {% endmacro %}

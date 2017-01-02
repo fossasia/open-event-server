@@ -73,7 +73,7 @@ def get_event_json(event_id):
         "sub_topic": event.sub_topic,
         "has_code_of_conduct": event.code_of_conduct != '',
         "code_of_conduct": event.code_of_conduct,
-        "copyright": event.copyright.serialize if event.copyright else None,
+        "copyright": event.copyright.serialize if event.copyright and event.copyright.licence else None,
         "tax_allow": 1 if event.tax_allow else 0,
         "tax": event.tax.serialize if event.tax else None,
         "latitude": event.latitude,
