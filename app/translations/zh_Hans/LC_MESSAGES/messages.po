@@ -1,20 +1,17 @@
-# Chinese (Traditional, Taiwan) translations for
-# fossasia/open-event-orga-server.
-# Copyright (C) 2016 fossasia
-# This file is distributed under the same license as the
-# fossasia/open-event-orga-server project.
-# FOSSASIA <open-event@googlegroups.com>, 2016.
+# Chinese (Simplified) translations for PROJECT.
+# Copyright (C) 2016 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
-"Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2016-12-30 15:01+0530\n"
-"PO-Revision-Date: 2016-12-09 15:26+0000\n"
-"Last-Translator: Chang-Chia Tseng <pswo10680@gmail.com>\n"
-"Language: zh_Hant_TW\n"
-"Language-Team: Chinese (Taiwan) <https://hosted.weblate.org/projects"
-"/open-event/organizer-server/zh_TW/>\n"
+"PO-Revision-Date: 2017-01-02 21:45+0530\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_Hans\n"
+"Language-Team: zh_Hans <LL@li.org>\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -24,23 +21,23 @@ msgstr ""
 #: app/templates/404.html:8 app/templates/404.html:26
 #: app/templates/gentelella/errors/404.html:9
 msgid "You got"
-msgstr "您有"
+msgstr ""
 
 #: app/templates/404.html:8
 msgid "Page Not Found"
-msgstr "找不到頁面"
+msgstr ""
 
 #: app/templates/404.html:27
 msgid "Sorry but we couldn't find this page"
-msgstr "很抱歉，但我們找不到這頁"
+msgstr ""
 
 #: app/templates/404.html:28
 msgid "This page you are looking for does not exist"
-msgstr "您正在尋找的這個頁面並不存在"
+msgstr ""
 
 #: app/templates/gentelella/index.html:181
 msgid "The simplest way to create events."
-msgstr "建立行程的最簡單方式。"
+msgstr ""
 
 #: app/templates/gentelella/admin/event/_import_modal.html:21
 #: app/templates/gentelella/admin/menu.html:39
@@ -48,43 +45,43 @@ msgstr "建立行程的最簡單方式。"
 #: app/templates/gentelella/guest/sitemap.html:76
 #: app/templates/gentelella/index.html:183
 msgid "Create Event"
-msgstr "建立行程"
+msgstr ""
 
 #: app/templates/gentelella/index.html:203
 msgid "All Dates"
-msgstr "所有日期"
+msgstr ""
 
 #: app/templates/gentelella/index.html:204
 msgid "Today"
-msgstr "今日"
+msgstr ""
 
 #: app/templates/gentelella/index.html:205
 msgid "Tomorrow"
-msgstr "明日"
+msgstr ""
 
 #: app/templates/gentelella/index.html:206
 msgid "This Week"
-msgstr "本週"
+msgstr ""
 
 #: app/templates/gentelella/index.html:207
 msgid "This Weekend"
-msgstr "本週末"
+msgstr ""
 
 #: app/templates/gentelella/index.html:208
 msgid "Next Week"
-msgstr "下週末"
+msgstr ""
 
 #: app/templates/gentelella/index.html:209
 msgid "This Month"
-msgstr "本月"
+msgstr ""
 
 #: app/templates/gentelella/index.html:214
 msgid "Search"
-msgstr "搜尋"
+msgstr ""
 
 #: app/templates/gentelella/index.html:218
 msgid "Upcoming Events"
-msgstr "接下來的行程"
+msgstr ""
 
 #: app/templates/gentelella/index.html:224
 msgid "No upcoming events available at this time"
@@ -3761,37 +3758,4 @@ msgstr ""
 #: app/templates/swagger/user-info.html:11
 msgid "Logged in as"
 msgstr ""
-
-#~ msgid "Select event"
-#~ msgstr ""
-
-#~ msgid "Event Image"
-#~ msgstr ""
-
-#~ msgid "Select Event Image"
-#~ msgstr ""
-
-#~ msgid "We recommend using at least a 2160x1080px (2:1 ratio) image"
-#~ msgstr ""
-
-#~ msgid "that's no larger than 10MB."
-#~ msgstr ""
-
-#~ msgid "Select Logo"
-#~ msgstr ""
-
-#~ msgid "Logo size must be less than 1MB."
-#~ msgstr ""
-
-#~ msgid "10 percent off on monthly payments for 3 months"
-#~ msgstr ""
-
-#~ msgid "Cheque Instructions"
-#~ msgstr ""
-
-#~ msgid "Bank Instructions"
-#~ msgstr ""
-
-#~ msgid "Next"
-#~ msgstr ""
 
