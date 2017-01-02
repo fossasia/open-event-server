@@ -243,6 +243,7 @@ class DataManager(object):
                               position=form.get('position', ''),
                               country=form.get('country', ''),
                               city=form.get('city', ''),
+                              heard_from=form.get('heard_from', ''),
                               sponsorship_required=form.get('sponsorship_required', ''),
                               speaking_experience=form.get('speaking_experience', ''),
                               user=login.current_user if login and login.current_user.is_authenticated else None)
@@ -419,6 +420,7 @@ class DataManager(object):
                               position=form.get('position', ''),
                               country=form.get('country', ''),
                               city=form.get('city', ''),
+                              heard_from=form.get('heard_from', ''),
                               sponsorship_required=form.get('sponsorship_required', ''),
                               speaking_experience=form.get('speaking_experience', ''),
                               user=user if login and login.current_user.is_authenticated else None)
