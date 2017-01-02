@@ -6,17 +6,19 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
+"Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2016-12-30 15:01+0530\n"
-"PO-Revision-Date: 2016-12-08 11:31+0530\n"
-"Last-Translator: FOSSASIA <open-event@googlegroups.com>\n"
+"PO-Revision-Date: 2017-01-02 17:21+0000\n"
+"Last-Translator: Gaeun Kim <gaeunkim@ohs.stanford.edu>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/open-event"
+"/organizer-server/ko/>\n"
 "Language: ko\n"
-"Language-Team: ko <LL@li.org>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2.11-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 #: app/templates/404.html:8 app/templates/404.html:26
@@ -26,19 +28,19 @@ msgstr ""
 
 #: app/templates/404.html:8
 msgid "Page Not Found"
-msgstr ""
+msgstr "페이지가 없습니다"
 
 #: app/templates/404.html:27
 msgid "Sorry but we couldn't find this page"
-msgstr ""
+msgstr "페이지를 찾을 수 없습니다"
 
 #: app/templates/404.html:28
 msgid "This page you are looking for does not exist"
-msgstr ""
+msgstr "찾으시는 페이지가 없습니다"
 
 #: app/templates/gentelella/index.html:181
 msgid "The simplest way to create events."
-msgstr ""
+msgstr "이벤트를 만드는 가장 쉬운 방법."
 
 #: app/templates/gentelella/admin/event/_import_modal.html:21
 #: app/templates/gentelella/admin/menu.html:39
@@ -46,7 +48,7 @@ msgstr ""
 #: app/templates/gentelella/guest/sitemap.html:76
 #: app/templates/gentelella/index.html:183
 msgid "Create Event"
-msgstr ""
+msgstr "이벤트 만들기"
 
 #: app/templates/gentelella/index.html:203
 msgid "All Dates"
@@ -3792,4 +3794,3 @@ msgstr ""
 
 #~ msgid "Next"
 #~ msgstr ""
-
