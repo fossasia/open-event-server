@@ -219,6 +219,7 @@ class DataManager(object):
                               end_time=event.start_time + timedelta(hours=1),
                               event_id=event_id,
                               short_abstract=form.get('short_abstract', ''),
+                              level=form.get('level', ''),
                               state=state)
 
         if form.get('track', None) != "":
@@ -581,6 +582,7 @@ class DataManager(object):
             session.subtitle = form.get('subtitle', '')
             session.long_abstract = form.get('long_abstract', '')
             session.short_abstract = form.get('short_abstract', '')
+            session.level = form.get('level', '')
             session.state = form_state
             session.track_id = form.get('track', None) if form.get('track', None) != "" else  None
             session.session_type_id = form.get('session_type', None) if form.get('session_type', None) != "" else None
