@@ -293,6 +293,7 @@
         window.expired_redirect = "{{ url_for('event_detail.display_event_detail_home', identifier=order.event.identifier, expired='yes') }}";
         window.stripe_charge_at = "{{ url_for('ticketing.charge_stripe_order_payment') }}";
         window.stripe_publishable_key = "{{ stripe_publishable_key }}";
+        window.pay_by_stripe = "{{ event.pay_by_stripe }}"
         window.event_name = "{{ order.event.name }}";
         window.order_amount = {{ order.amount }};
         window.paid_via = "{{ paid_via | default('', true) }}";
