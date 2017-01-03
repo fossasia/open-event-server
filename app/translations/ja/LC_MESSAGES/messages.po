@@ -6,18 +6,19 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
+"Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2017-01-03 11:39+0530\n"
-"PO-Revision-Date: 2016-12-26 16:38+0000\n"
+"PO-Revision-Date: 2017-01-03 09:14+0000\n"
 "Last-Translator: naofum <naofum@gmail.com>\n"
-"Language: ja\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/open-event"
 "/organizer-server/ja/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2.11-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 #: app/templates/404.html:8 app/templates/404.html:26
@@ -2056,11 +2057,11 @@ msgstr "申し込みを編集"
 
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:75
 msgid "Session Type"
-msgstr ""
+msgstr "セッションの種類"
 
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:89
 msgid "Comments"
-msgstr ""
+msgstr "コメント"
 
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:96
 #: app/templates/gentelella/admin/super_admin/content/_translations.html:14
@@ -2551,7 +2552,7 @@ msgstr "スポンサー"
 
 #: app/templates/gentelella/admin/super_admin/reports/_server_logs.html:23
 msgid "Server logs display is supported only on Kubernetes and Heroku deployments"
-msgstr ""
+msgstr "サーバー ログの表示は Kubernetes と Heroku デプロイメントでのみサポートされます"
 
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:3
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:9
@@ -3379,7 +3380,7 @@ msgstr "私たちの側にいくつかの問題を抱えているようです。
 
 #: app/templates/gentelella/errors/500.html:10
 msgid "Inconvenience is regretted. We'll fix this as soon as possible."
-msgstr ""
+msgstr "不便をお掛けして申し訳ありません。 できるだけ早くこれを修正します。"
 
 #: app/templates/gentelella/guest/sitemap.html:40
 msgid "General Information"
@@ -3813,4 +3814,3 @@ msgstr "ログイン"
 
 #~ msgid "Inconvince is regretted. We'll fix this as soon as possible."
 #~ msgstr "ご不便をお掛け致しますが、できるだけ早く修正します。"
-
