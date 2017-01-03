@@ -133,7 +133,7 @@ class Speaker(db.Model):
             'country': self.country,
             'city': self.city,
             'heard_from': self.heard_from,
-            'sponsorship_required': sponsorship_required,
+            'sponsorship_required': self.sponsorship_required,
             'sessions': session_data
         }
 

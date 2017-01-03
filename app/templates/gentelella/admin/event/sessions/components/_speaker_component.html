@@ -4,7 +4,7 @@
 {% set media_speaker_fields = ['photo'] %}
 {% set dropdown_fields = ['heard_from'] %}
 {% set url_speaker_fields = ['website', 'facebook', 'twitter', 'github', 'linkedin'] %}
-{% set speaker_fields = ['name', 'email','photo', 'organisation', 'position', 'country', 'city', 'short_biography', 'long_biography', 'speaking_experience', 'sponsorship_required', 'heard_from', 'mobile', 'website', 'facebook', 'twitter', 'github', 'linkedin'] %}
+{% set speaker_fields = ['name', 'email','photo', 'organisation', 'position', 'country', 'city', 'short_biography', 'long_biography', 'speaking_experience', 'sponsorship_required', 'other', 'heard_from', 'mobile', 'website', 'facebook', 'twitter', 'github', 'linkedin'] %}
 
 {% macro speaker_form_field(identifier, require=0) %}
     {% set name = identifier | replace('_id','') %}
@@ -27,16 +27,14 @@
                 name="{{ identifier }}" class="form-control col-md-7 col-xs-12">{% if speaker %}{{ speaker[identifier] }}{% elif session.speakers %}{{ session.speakers[0][identifier] }}{% endif %}</textarea>
         {% elif identifier in dropdown_fields %}
             {% if identifier == 'heard_from' %}
-                {% set data_set = ['Google or other search', 'Friend', 'Website', 'Advertisement', 'Article or blog', 'post', 'Social media', 'Other'] %}
+                {% set data_set = ['Google or other search', 'Friend', 'Website', 'Advertisement', 'Article or blog', 'Post', 'Social media', 'Other'] %}
                     <select title="{% if name == 'heard_from' %}{{"Where did you hear about our event?"}}{% else %}{{ pretty_name }}{% endif %}" {% if require==1 or identifier=='track' %}required="required"{% endif %} name="{{ identifier }}"
                         class="form-control col-md-7 col-xs-12">
-                        {% if name == 'heard_from' %}
+                        {% if name == 'heard_from' and not session %}
                             <option value="" {% if not session %}selected{% endif %}>Select {{ "knowledge of event" }}</option>
-                        {% else %}
-                            {{ pretty_name }}
                         {% endif %}                            
                         {% for data in data_set %}
-                            {% if session['heard_from'] and session['heard_from'] == data %}
+                            {% if (speaker and speaker['heard_from'] and speaker['heard_from'] == data) and (session or session.speakers and session.speakers[0]['heard_from'] and session.speakers[0]['heard_from'] == data) %}
                                 <option value="{{ data }}" selected>{{ data }}</option>
                             {% else %}
                                 <option value="{{ data }}">{{ data }}</option>
