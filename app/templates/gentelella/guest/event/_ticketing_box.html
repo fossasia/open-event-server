@@ -46,10 +46,10 @@
                                             {{ ticket.name }} - {{ ticket.type }}
                                         </a>
                                     </td>
-                                    <td>{{ ticket.sales_end.strftime('%a, %B %d') }}</td>
+                                    <td>{{ ((ticket.sales_end|localize_dt_obj(event.timezone))|as_timezone(current_timezone)).strftime('%a, %B %d') }}</td>
                                     <td>{{ event.payment_currency | currency_symbol }}{{ ticket.price | money }}</td>
                                     <td>{{ event.payment_currency | currency_symbol }} 0.00</td>
-                                    {% if ticket.sales_start <= datetime_now and ticket.sales_end >= datetime_now %}
+                                    {% if (ticket.sales_start|localize_dt_obj(event.timezone)) <= timenow_event_tz and (ticket.sales_end|localize_dt_obj(event.timezone)) >= timenow_event_tz %}
                                         <td>
                                             <input type="hidden" name="ticket_ids[]" value="{{ ticket.id }}">
                                             <select title="ticket quantity" name="ticket_quantities[]" class="quantity-select"
@@ -65,13 +65,13 @@
                                         <td class="subtotal">
                                             {{ event.payment_currency | currency_symbol }}{{ 0 | money }}</td>
                                     {% else %}
-                                        {% if ticket.sales_end < datetime_now %}
+                                        {% if (ticket.sales_end|localize_dt_obj(event.timezone)) < timenow_event_tz %}
                                             <td colspan="2"
                                                 style="color: #adadad;">{{ _("This ticket's sale has ended") }}</td>
-                                        {% elif ticket.sales_start >= datetime_now %}
+                                        {% elif (ticket.sales_start|localize_dt_obj(event.timezone)) >= timenow_event_tz %}
                                             <td colspan="2"
                                                 style="color: #adadad;">{{ _("This ticket's sale will start") }}
-                                                {{ _("on") }} {{ ticket.sales_start | datetime }}</td>
+                                                {{ _("on") }} {{ ((ticket.sales_start|localize_dt_obj(event.timezone))|as_timezone(current_timezone)) | datetime }}</td>
                                         {% endif %}
                                     {% endif %}
                                 </tr>
