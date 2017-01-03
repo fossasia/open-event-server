@@ -155,9 +155,6 @@ var app = new Vue({
         },
         'step': function (step) {
             history.replaceState(null, '', "./" + step);
-        },
-        'event.timezone': function (value) {
-            this.event.timezone = value;
         }
     },
     methods: {
