@@ -60,6 +60,7 @@ def view_order_after_payment(order_identifier):
     order = TicketingManager.get_and_set_expiry(order_identifier)
     if not order or (order.status != 'completed' and order.status != 'placed'):
         abort(404)
+    flash("An email with the ticket has also been sent to your email account.")
     return render_template('gentelella/guest/ticketing/order_post_payment.html', order=order, event=order.event)
 
 
