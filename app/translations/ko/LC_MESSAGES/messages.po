@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2017-01-03 11:39+0530\n"
-"PO-Revision-Date: 2017-01-03 14:51+0000\n"
+"PO-Revision-Date: 2017-01-03 14:59+0000\n"
 "Last-Translator: Gaeun Kim <gaeunkim@ohs.stanford.edu>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/open-event"
 "/organizer-server/ko/>\n"
@@ -759,52 +759,52 @@ msgstr "답변"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:15
 msgid "In order to use this feature activate"
-msgstr ""
+msgstr "이 기능을 사용하시려면"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:15
 #: app/templates/gentelella/admin/event/wizard/session-speakers.html:6
 msgid "Sessions and Speakers"
-msgstr ""
+msgstr "세션 및 연사"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:15
 msgid "for the event"
-msgstr ""
+msgstr "이벤트를 위해"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:15
 msgid "Please"
-msgstr ""
+msgstr "꼭"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:17
 msgid "click here"
-msgstr ""
+msgstr "여기를 클릭"
 
 #: app/templates/gentelella/admin/event/info/enable_module.html:17
 msgid "to activate this module."
-msgstr ""
+msgstr "모듈을 활성화 시키려면."
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:3
 msgid "General Info"
-msgstr ""
+msgstr "일반 정보"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:9
 msgid "Event ID"
-msgstr ""
+msgstr "이벤트 아이디"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:13
 msgid "Event Url"
-msgstr ""
+msgstr "이벤트 Url"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:17
 msgid "Event Start Time"
-msgstr ""
+msgstr "이벤트 시작 시간"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:21
 msgid "Event End Time"
-msgstr ""
+msgstr "이벤트 종료 시간"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:25
 msgid "Event Session Types"
-msgstr ""
+msgstr "이벤트 세션 종류"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:33
 msgid "Event Links and Social media"
