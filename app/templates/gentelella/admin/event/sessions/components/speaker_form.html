@@ -26,3 +26,15 @@
     <div style="text-align: center;">
     </div>
 </form>
+
+<script type="text/javascript">
+    $(function () {
+        $("#heard-from").change(function(){
+            if(this.value == "Other") {
+                $("#other_text").attr("type", "text");
+            } else {
+                $("#other_text").attr("type", "hidden");
+            }
+        });
+    });
+</script>
