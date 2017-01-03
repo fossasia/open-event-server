@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2017-01-03 11:39+0530\n"
-"PO-Revision-Date: 2017-01-03 14:59+0000\n"
+"PO-Revision-Date: 2017-01-03 15:05+0000\n"
 "Last-Translator: Gaeun Kim <gaeunkim@ohs.stanford.edu>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/open-event"
 "/organizer-server/ko/>\n"
@@ -808,92 +808,92 @@ msgstr "이벤트 세션 종류"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:33
 msgid "Event Links and Social media"
-msgstr ""
+msgstr "이벤트 링크 및 소셜 미디어"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:40
 msgid "'Do you want to edit this record?'"
-msgstr ""
+msgstr "'이 기록을 편집 하시겠습니까?'"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:41
 msgid "Edit Event"
-msgstr ""
+msgstr "이벤트 수정"
 
 #: app/templates/gentelella/admin/event/roles/roles.html:9
 msgid "Permissions List"
-msgstr ""
+msgstr "권한 목록"
 
 #: app/templates/gentelella/admin/event/roles/roles.html:59
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:18
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:4
 msgid "Permissions"
-msgstr ""
+msgstr "권한"
 
 #: app/templates/gentelella/admin/event/roles/roles.html:63
 msgid "Co-Organizer"
-msgstr ""
+msgstr "관리자"
 
 #: app/templates/gentelella/admin/event/roles/roles.html:67
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:181
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:564
 msgid "Add"
-msgstr ""
+msgstr "추가"
 
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:25
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:111
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:135
 msgid "Update"
-msgstr ""
+msgstr "업데이트"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:4
 msgid "Scheduler"
-msgstr ""
+msgstr "스케줄러"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:21
 #: app/templates/gentelella/guest/event/schedule.html:44
 msgid "Sessions loading"
-msgstr ""
+msgstr "세션 로드 중"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:23
 msgid "Error loading sessions"
-msgstr ""
+msgstr "세션 로드 오류"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:35
 msgid "Unpublish Schedule"
-msgstr ""
+msgstr "스케줄 게시 취소"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:39
 msgid "Publish Schedule"
-msgstr ""
+msgstr "스케줄 게시"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:43
 msgid "Unscheduled Sessions"
-msgstr ""
+msgstr "예정되지 않은 세션"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:57
 msgid "No Unscheduled sessions"
-msgstr ""
+msgstr "예정되지 않은 세션이 없습니다"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:61
 msgid "Schedule last published on"
-msgstr ""
+msgstr "마지막으로 게시 된 일정"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:72
 msgid "Clear Overlaps"
-msgstr ""
+msgstr "오버랩 지우기"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:75
 msgid "Add New Microlocation"
-msgstr ""
+msgstr "마이크로 장소 추가"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:80
 msgid "Export as"
-msgstr ""
+msgstr "다음으로 내보내기"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:102
 #: app/templates/gentelella/admin/event/sessions/edit.html:3
 #: app/templates/gentelella/admin/event/sessions/edit.html:20
 msgid "Edit Session"
-msgstr ""
+msgstr "세션 수정"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:108
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:62
@@ -903,22 +903,22 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:177
 #: app/templates/gentelella/admin/super_admin/sessions/sessions.html:195
 msgid "Title"
-msgstr ""
+msgstr "제목"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:114
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:68
 msgid "Long Abstract"
-msgstr ""
+msgstr "긴 개요"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:119
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:65
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:61
 msgid "Short Abstract"
-msgstr ""
+msgstr "짧은 개요"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:125
 msgid "Start Time"
-msgstr ""
+msgstr "시작 시간"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:131
 msgid "End Time"
