@@ -40,12 +40,12 @@
                                    {% if not discount_code or (discount_code and discount_code.type == 'amount') %}checked{% endif %}> Amount ({{ event.payment_currency | currency_symbol }})
                         </label>
                     </span>
-                        <input type="number" class="form-control" required=""
+                        <input type="number" step=any class="form-control" required=""
                                {% if discount_code and discount_code.type != 'amount' %}disabled name="__value"
                                {% else %}name="value" {% endif %}
-                               value="
-
-                                       {% if discount_code and discount_code.type == 'amount' %}{{ discount_code.value }}{% endif %}">
+                               {% if discount_code and discount_code.type == 'amount' %}
+                               value="{{ discount_code.value }}">
+                                       {% endif %}
                     </div>
                     <i class="glyphicon form-control-feedback" aria-hidden="true" style="margin-top: 14px;"></i>
                     <div class="help-block with-errors"></div>
@@ -59,12 +59,12 @@
                                     {% if discount_code and discount_code.type == 'percent' %} checked{% endif %}> Percent (%)
                         </label>
                     </span>
-                        <input type="number" class="form-control"
+                        <input type="number" step=any class="form-control"
                                {% if not discount_code or (discount_code and discount_code.type != 'percent') %}disabled
                                required name="__value"{% else %} name="value" {% endif %}
-                               value="
-
-                                       {% if discount_code and discount_code.type == 'percent' %}{{ discount_code.value }}{% endif %}">
+                               {% if discount_code and discount_code.type == 'percent' %}
+                               value="{{ discount_code.value }}">
+                                       {% endif %}
                     </div>
                     <i class="glyphicon form-control-feedback" aria-hidden="true" style="margin-top: 6px;"></i>
                     <div class="help-block with-errors"></div>
