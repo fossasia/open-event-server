@@ -395,6 +395,24 @@ def localize_dt(dt, tzname):
     return localized_dt.isoformat()
 
 
+@app.template_filter('localize_dt_obj')
+def localize_dt_obj(dt, tzname):
+    """Accepts a Datetime object and a Timezone name.
+    Returns Timezone aware Datetime Object.
+    """
+    localized_dt = timezone(tzname).localize(dt)
+    return localized_dt
+
+
+@app.template_filter('as_timezone')
+def as_timezone(dt, tzname):
+    """Accepts a Time aware Datetime object and a Timezone name.
+        Returns Converted Timezone aware Datetime Object.
+        """
+    converted_dt = dt.astimezone(timezone(tzname))
+    return converted_dt
+
+
 @app.context_processor
 def fb_app_id():
     fb_app_id = get_settings()['fb_client_id']

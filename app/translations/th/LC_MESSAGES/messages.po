@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
-"POT-Creation-Date: 2016-12-26 19:16+0530\n"
+"POT-Creation-Date: 2017-01-03 11:39+0530\n"
 "PO-Revision-Date: 2016-12-08 11:31+0530\n"
 "Last-Translator: FOSSASIA <open-event@googlegroups.com>\n"
 "Language: th\n"
@@ -89,7 +89,7 @@ msgid "No upcoming events available at this time"
 msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/session-speakers/call-for-speakers.html:5
-#: app/templates/gentelella/guest/event/cfs.html:16
+#: app/templates/gentelella/guest/event/cfs.html:18
 #: app/templates/gentelella/index.html:230
 msgid "Call for Speakers"
 msgstr ""
@@ -175,20 +175,22 @@ msgid "Settings"
 msgstr ""
 
 #: app/templates/gentelella/admin/menu.html:70
+#: app/templates/gentelella/admin/menu.html:73
+#: app/templates/gentelella/admin/menu.html:75
 #: app/templates/gentelella/admin/super_admin/users/users.html:58
 msgid "Admin"
 msgstr ""
 
-#: app/templates/gentelella/admin/menu.html:73
-#: app/templates/gentelella/admin/menu.html:120
+#: app/templates/gentelella/admin/menu.html:79
+#: app/templates/gentelella/admin/menu.html:126
 msgid "Browse Events"
 msgstr ""
 
-#: app/templates/gentelella/admin/menu.html:74
+#: app/templates/gentelella/admin/menu.html:80
 msgid "Logout"
 msgstr ""
 
-#: app/templates/gentelella/admin/menu.html:89
+#: app/templates/gentelella/admin/menu.html:95
 #: app/templates/gentelella/admin/profile/notifications.html:4
 #: app/templates/gentelella/admin/profile/notifications.html:16
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:5
@@ -197,15 +199,15 @@ msgstr ""
 msgid "Notifications"
 msgstr ""
 
-#: app/templates/gentelella/admin/menu.html:95
+#: app/templates/gentelella/admin/menu.html:101
 msgid "Mark All as Read"
 msgstr ""
 
-#: app/templates/gentelella/admin/menu.html:106
+#: app/templates/gentelella/admin/menu.html:112
 msgid "Mark as read"
 msgstr ""
 
-#: app/templates/gentelella/admin/menu.html:112
+#: app/templates/gentelella/admin/menu.html:118
 msgid "No new notifications"
 msgstr ""
 
@@ -224,7 +226,7 @@ msgstr ""
 #: app/templates/gentelella/admin/event/_import_modal.html:38
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:61
 #: app/templates/gentelella/admin/event/speakers/base_speaker_table.html:84
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:701
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:705
 #: app/templates/gentelella/admin/super_admin/events/events.html:196
 #: app/templates/gentelella/admin/super_admin/events/events.html:218
 #: app/templates/gentelella/admin/super_admin/events/events.html:240
@@ -255,8 +257,8 @@ msgid "Processing"
 msgstr ""
 
 #: app/templates/gentelella/admin/event/_import_modal.html:57
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:443
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:463
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:447
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:467
 #: app/templates/gentelella/admin/super_admin/settings/_analytics.html:5
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:6
 #: app/templates/gentelella/admin/super_admin/settings/_payment_gateway.html:31
@@ -419,7 +421,7 @@ msgid "Free"
 msgstr ""
 
 #: app/templates/gentelella/admin/event/_table.html:91
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:281
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:285
 #: app/templates/gentelella/admin/super_admin/events/events.html:101
 msgid "Donation"
 msgstr ""
@@ -448,7 +450,7 @@ msgstr ""
 #: app/templates/gentelella/admin/event/sessions/components/_speaker_croppie.html:17
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:207
 #: app/templates/gentelella/admin/profile/index.html:125
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:111
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:112
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:128
 msgid "Cancel"
 msgstr ""
@@ -585,7 +587,7 @@ msgstr ""
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:32
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:19
 #: app/templates/gentelella/admin/event/roles/roles.html:15
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:259
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:263
 #: app/templates/gentelella/admin/profile/notifications.html:48
 #: app/templates/gentelella/admin/super_admin/events/events.html:204
 #: app/templates/gentelella/admin/super_admin/events/events.html:226
@@ -632,9 +634,9 @@ msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/roles.html:130
 #: app/templates/gentelella/admin/event/roles/roles.html:61
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:522
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:534
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:550
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:526
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:538
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:554
 msgid "Choose"
 msgstr ""
 
@@ -659,6 +661,7 @@ msgstr ""
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:18
 #: app/templates/gentelella/admin/event/wizard/sponsors.html:28
+#: app/templates/gentelella/admin/mysessions/mysession_detail.html:82
 msgid "Level"
 msgstr ""
 
@@ -680,13 +683,13 @@ msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:73
 #: app/templates/gentelella/admin/event/sessions/display.html:40
-#: app/templates/gentelella/admin/mysessions/mysession_detail.html:101
+#: app/templates/gentelella/admin/mysessions/mysession_detail.html:129
 msgid "Video"
 msgstr ""
 
 #: app/templates/gentelella/admin/event/export/export.html:78
 #: app/templates/gentelella/admin/event/sessions/display.html:45
-#: app/templates/gentelella/admin/mysessions/mysession_detail.html:107
+#: app/templates/gentelella/admin/mysessions/mysession_detail.html:135
 msgid "Audio"
 msgstr ""
 
@@ -702,9 +705,9 @@ msgstr ""
 #: app/templates/gentelella/admin/event/sessions/display.html:35
 #: app/templates/gentelella/admin/event/sessions/display.html:40
 #: app/templates/gentelella/admin/event/sessions/display.html:45
-#: app/templates/gentelella/admin/mysessions/mysession_detail.html:96
-#: app/templates/gentelella/admin/mysessions/mysession_detail.html:102
-#: app/templates/gentelella/admin/mysessions/mysession_detail.html:108
+#: app/templates/gentelella/admin/mysessions/mysession_detail.html:124
+#: app/templates/gentelella/admin/mysessions/mysession_detail.html:130
+#: app/templates/gentelella/admin/mysessions/mysession_detail.html:136
 #: app/templates/gentelella/admin/super_admin/content/_translations.html:21
 msgid "Download"
 msgstr ""
@@ -828,13 +831,13 @@ msgid "Co-Organizer"
 msgstr ""
 
 #: app/templates/gentelella/admin/event/roles/roles.html:67
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:177
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:560
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:181
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:564
 msgid "Add"
 msgstr ""
 
 #: app/templates/gentelella/admin/event/roles/roles/_edit.html:25
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:110
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:111
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:135
 msgid "Update"
 msgstr ""
@@ -968,7 +971,7 @@ msgid "Create Session"
 msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:64
-#: app/templates/gentelella/admin/mysessions/mysession_detail.html:83
+#: app/templates/gentelella/admin/mysessions/mysession_detail.html:111
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:261
 msgid "Track"
 msgstr ""
@@ -986,12 +989,12 @@ msgid "Email Sent"
 msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/display.html:31
-#: app/templates/gentelella/admin/mysessions/mysession_detail.html:91
+#: app/templates/gentelella/admin/mysessions/mysession_detail.html:119
 msgid "Media"
 msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/display.html:35
-#: app/templates/gentelella/admin/mysessions/mysession_detail.html:95
+#: app/templates/gentelella/admin/mysessions/mysession_detail.html:123
 msgid "Slide"
 msgstr ""
 
@@ -1015,12 +1018,12 @@ msgstr ""
 msgid "Reject"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/sessions/components/_speaker_component.html:39
+#: app/templates/gentelella/admin/event/sessions/components/_speaker_component.html:38
 #: app/templates/gentelella/admin/profile/index.html:38
 msgid "Select Avatar"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/sessions/components/_speaker_component.html:43
+#: app/templates/gentelella/admin/event/sessions/components/_speaker_component.html:42
 msgid "Avatar size must be less than 1MB."
 msgstr ""
 
@@ -1119,14 +1122,14 @@ msgid "Ticket Type"
 msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:37
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:253
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:257
 #: app/templates/gentelella/guest/event/_ticketing_box.html:31
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:11
 msgid "Price"
 msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:38
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:256
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:260
 #: app/templates/gentelella/guest/event/_ticketing_box.html:33
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:13
 msgid "Quantity"
@@ -1206,7 +1209,7 @@ msgid "Order Status"
 msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:86
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:250
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:254
 msgid "Ticket Name"
 msgstr ""
 
@@ -1458,343 +1461,343 @@ msgstr ""
 msgid "Starts"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:114
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:117
 #: app/templates/gentelella/admin/event/wizard/session-speakers/call-for-speakers.html:32
 msgid "Ends"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:139
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:143
 #: app/templates/gentelella/admin/event/wizard/session-speakers/call-for-speakers.html:53
 msgid "Timezone"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:149
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:153
 #: app/templates/gentelella/admin/event/wizard/sponsors.html:45
 msgid "Description"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:176
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:559
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:180
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:563
 #: app/templates/gentelella/admin/event/wizard/components/image-upload.html:34
 #: app/templates/gentelella/admin/profile/index.html:59
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:90
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:91
 msgid "Remove"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:177
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:181
 msgid "Organizer Information"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:187
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:191
 msgid "Organizer name"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:192
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:196
 msgid "Organizer Description"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:200
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:204
 msgid "Links and Social Media"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:229
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:233
 msgid "Use Ticketing System"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:242
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:246
 msgid "Ticket Details"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:272
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:276
 msgid "Free Ticket"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:276
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:280
 msgid "Paid Ticket"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:291
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:295
 msgid "Add Ticket URL"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:295
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:299
 msgid "Ticket URL"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:308
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:312
 msgid "Redeem Discount Code"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:315
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:319
 msgid "Enter Discount Code"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:322
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:326
 msgid "Apply Discount"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:326
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:330
 msgid "Code applied !"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:335
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:339
 msgid "Add Payment details"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:341
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:345
 msgid "Choose Country"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:346
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:350
 msgid "Choose a country for your payment"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:356
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:360
 msgid "Choose Currency"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:361
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:365
 msgid "Please select a currency"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:375
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:379
 msgid "Choose Payment Methods"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:379
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:383
 msgid "Online Payments"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:381
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:385
 msgid "Payment by PayPal"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:385
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:389
 msgid "YES, accept payment through PayPal "
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:386
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:390
 msgid ""
 "Paypal accepts credit card, debit card and PayPal payments. To learn how "
 "it works click"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:387
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:409
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:410
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:391
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:413
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:414
 msgid "here."
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:395
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:399
 msgid "Don't have a PayPal account?"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:397
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:401
 msgid "Create a free PayPal merchant account."
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:403
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:407
 msgid "Payment by Stripe"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:407
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:411
 msgid "YES, accept payment through Stripe"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:408
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:412
 msgid "Stripe accepts Visa, Master and Amex. To learn how it works click"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:410
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:414
 msgid "Find out more about Stripe"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:415
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:419
 msgid "Use Stripe for payments"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:417
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:421
 msgid "The stripe account"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:418
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:422
 msgid "has been connected."
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:420
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:424
 msgid "Click to De-link the account."
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:424
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:428
 msgid "Connect with Stripe"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:430
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:434
 msgid "Offline Payments"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:435
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:439
 msgid "YES, accept payment by Cheque"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:439
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:443
 msgid ""
 "Enter your PayPal account name and payment details instructions to ticket"
 " buyers"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:443
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:463
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:447
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:467
 msgid "example"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:455
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:459
 msgid "YES, accept payment by Telegraphic Transfer(TT) / Bank Transfer"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:459
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:463
 msgid "Enter your bank details and instructions to ticket buyers"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:460
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:464
 msgid "See an"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:476
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:480
 msgid "YES, accept payment at the event(on site)"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:480
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:484
 msgid "Enter payment instructions to ticket buyers to make payments onsite"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:490
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:494
 msgid "Add Tax"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:499
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:503
 msgid "Additional Details"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:503
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:507
 msgid "Listing Privacy"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:508
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:512
 msgid "list this event on Open Event and search engines"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:514
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:518
 msgid "Private page"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:514
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:518
 msgid "do not list this event publicly"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:520
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:524
 #: app/templates/gentelella/guest/explore/_collapse_search.html:48
 msgid "Event Type"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:546
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:550
 msgid "Event Sub-Topic"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:552
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:556
 msgid "Choose a topic first"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:560
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:564
 #: app/templates/gentelella/guest/event/code_of_conduct.html:7
 msgid "Code of Conduct"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:571
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:575
 msgid "License of Event Data and Content"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:585
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:589
 msgid "Choose Licence"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:608
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:612
 msgid "Tax Options"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:615
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:619
 msgid "Do you need to charge tax for this event ?"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:638
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:642
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:155
 msgid "Country"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:640
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:644
 msgid "Choose a country for your tax payment"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:648
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:652
 msgid "Tax Name"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:653
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:657
 msgid "Tax Rate"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:659
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:663
 msgid "Tax ID"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:665
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:669
 msgid "Tax Invoices"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:669
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:673
 msgid "Send tax invoice to attendees"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:670
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:674
 msgid "Tax Invoices are sent to your attendees when you select this feature."
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:671
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:675
 msgid ""
 "Enter your registered business company name and address to be included on"
 " the tax invoice"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:677
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:681
 msgid "Registered Company"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:685
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:689
 msgid "Business Address"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:693
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:697
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:177
 msgid "City"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:716
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:720
 msgid "Optional Text for Invoice Footer"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:724
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:728
 msgid "Add or Include"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:729
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:733
 msgid "Add tax as separate fee on top of the price"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:736
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:740
 msgid "Include tax in ticket price"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/basic-details.html:748
+#: app/templates/gentelella/admin/event/wizard/basic-details.html:752
 #: app/templates/gentelella/admin/settings/pages/contact_info.html:33
 #: app/templates/gentelella/admin/settings/pages/password.html:37
 #: app/templates/gentelella/admin/super_admin/content/_social.html:54
@@ -2050,7 +2053,20 @@ msgstr ""
 msgid "Edit Proposal"
 msgstr ""
 
-#: app/templates/gentelella/admin/mysessions/mysession_detail.html:77
+#: app/templates/gentelella/admin/mysessions/mysession_detail.html:75
+msgid "Session Type"
+msgstr ""
+
+#: app/templates/gentelella/admin/mysessions/mysession_detail.html:89
+msgid "Comments"
+msgstr ""
+
+#: app/templates/gentelella/admin/mysessions/mysession_detail.html:96
+#: app/templates/gentelella/admin/super_admin/content/_translations.html:14
+msgid "Language"
+msgstr ""
+
+#: app/templates/gentelella/admin/mysessions/mysession_detail.html:105
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:265
 msgid "Microlocation"
 msgstr ""
@@ -2180,43 +2196,39 @@ msgstr ""
 msgid "Update Image"
 msgstr ""
 
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:69
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:86
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:70
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:87
 msgid "Placeholder"
 msgstr ""
 
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:76
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:77
 msgid "Select Placeholder"
 msgstr ""
 
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:80
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:81
 msgid ""
 "For Cover Photos : We recommend using at least a 1300x550px (2:1 ratio) "
 "image"
 msgstr ""
 
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:80
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:81
 msgid ""
 "For Avatar Photos : We recommend using at least a 360x360px (1:1 ratio) "
 "image"
 msgstr ""
 
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:80
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:81
 msgid "The images should be no larger than 10MB"
 msgstr ""
 
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:97
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:98
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:99
 msgid "Copyright Information"
 msgstr ""
 
-#: app/templates/gentelella/admin/super_admin/content/_system_images.html:102
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:103
+#: app/templates/gentelella/admin/super_admin/content/_system_images.html:104
 msgid "Origin Information"
-msgstr ""
-
-#: app/templates/gentelella/admin/super_admin/content/_translations.html:14
-msgid "Language"
 msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/content/_translations.html:15
@@ -2537,7 +2549,7 @@ msgid "Sponsor"
 msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/reports/_server_logs.html:23
-msgid "Server logs display is supported only on Kubernetes abd Heroku deployments"
+msgid "Server logs display is supported only on Kubernetes and Heroku deployments"
 msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:3
@@ -3363,7 +3375,7 @@ msgid "We seem to be having some issues on our side."
 msgstr ""
 
 #: app/templates/gentelella/errors/500.html:10
-msgid "Inconvince is regretted. We'll fix this as soon as possible."
+msgid "Inconvenience is regretted. We'll fix this as soon as possible."
 msgstr ""
 
 #: app/templates/gentelella/guest/sitemap.html:40
@@ -3450,35 +3462,35 @@ msgstr ""
 msgid "Enter promotional code"
 msgstr ""
 
-#: app/templates/gentelella/guest/event/cfs.html:19
+#: app/templates/gentelella/guest/event/cfs.html:21
 msgid "Open"
 msgstr ""
 
-#: app/templates/gentelella/guest/event/cfs.html:21
+#: app/templates/gentelella/guest/event/cfs.html:23
 msgid "Closed"
 msgstr ""
 
-#: app/templates/gentelella/guest/event/cfs.html:23
+#: app/templates/gentelella/guest/event/cfs.html:25
 msgid "Yet to Open"
 msgstr ""
 
-#: app/templates/gentelella/guest/event/cfs.html:33
+#: app/templates/gentelella/guest/event/cfs.html:35
 msgid "Submit Proposal"
 msgstr ""
 
-#: app/templates/gentelella/guest/event/details.html:51
+#: app/templates/gentelella/guest/event/details.html:56
 msgid "No sessions have been published yet"
 msgstr ""
 
-#: app/templates/gentelella/guest/event/details.html:64
+#: app/templates/gentelella/guest/event/details.html:69
 msgid "Sponsors info unavailable"
 msgstr ""
 
-#: app/templates/gentelella/guest/event/details.html:71
+#: app/templates/gentelella/guest/event/details.html:76
 msgid "Organized by"
 msgstr ""
 
-#: app/templates/gentelella/guest/event/details.html:76
+#: app/templates/gentelella/guest/event/details.html:81
 msgid "Getting Here"
 msgstr ""
 
@@ -3789,5 +3801,13 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Next"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Server logs display is supported only"
+#~ " on Kubernetes abd Heroku deployments"
+#~ msgstr ""
+
+#~ msgid "Inconvince is regretted. We'll fix this as soon as possible."
 #~ msgstr ""
 

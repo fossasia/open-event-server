@@ -16,6 +16,10 @@
                        class="form-control" id="inputPassword" placeholder="Password" required="">
                 <div class="help-block with-errors"></div>
             </div>
+            <div class="form-group has-feedback">
+                <input type="password" class="form-control" id="inputPasswordConfirm" data-match="#inputPassword" data-match-error="Both passwords don't match" placeholder="Confirm" required>
+                <div class="help-block with-errors"></div>
+            </div>
             <div>
                 <button type="submit" class="btn btn-default">{{ _("Submit") }}</button>
             </div>

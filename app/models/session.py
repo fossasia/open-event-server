@@ -31,6 +31,7 @@ class Session(db.Model):
     language = db.Column(db.String)
     microlocation_id = db.Column(db.Integer, db.ForeignKey('microlocation.id', ondelete='CASCADE'))
     session_type_id = db.Column(db.Integer, db.ForeignKey('session_type.id', ondelete='CASCADE'))
+    level = db.Column(db.String)
 
     slides = db.Column(db.String)
     video = db.Column(db.String)
@@ -66,6 +67,7 @@ class Session(db.Model):
                  audio=None,
                  signup_url=None,
                  session_type=None,
+                 level=None,
                  created_at=None,
                  state_email_sent=False,
                  in_trash=False,
@@ -92,6 +94,7 @@ class Session(db.Model):
         self.audio = audio
         self.signup_url = signup_url
         self.session_type = session_type
+        self.level = level
         self.created_at = created_at
         self.in_trash = in_trash
         self.trash_date = trash_date
@@ -122,6 +125,7 @@ class Session(db.Model):
                 {'id': speaker.id,
                  'name': speaker.name} for speaker in self.speakers
                 ],
+            'level': self.level,
             'microlocation': self.microlocation.id
             if self.microlocation else None
         }
