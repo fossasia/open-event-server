@@ -7,10 +7,10 @@ from flask.ext import login
 from markupsafe import Markup
 
 from app.helpers.auth import AuthManager
-from app.helpers.data import DataManager, get_facebook_auth, get_instagram_auth, get_twitter_auth_url, save_to_db
+from app.helpers.data import DataManager, get_facebook_auth, get_instagram_auth, get_twitter_auth_url, save_to_db, get_google_auth
 from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import uploaded_file
-from app.helpers.oauth import FbOAuth, InstagramOAuth
+from app.helpers.oauth import FbOAuth, InstagramOAuth, OAuth
 from app.helpers.storage import upload, UPLOAD_PATHS
 
 profile = Blueprint('profile', __name__, url_prefix='/profile')
@@ -63,6 +63,11 @@ def connect_instagram():
     instagram_auth_url, state = instagram.authorization_url(InstagramOAuth.get_auth_uri(), access_type='offline')
     return redirect(instagram_auth_url)
 
+@profile.route('/google_connect', methods=('GET', 'POST'))
+def connect_google():
+    google = get_google_auth()
+    google_auth_url, state = google.authorization_url(OAuth.get_auth_uri(), access_type='offline')
+    return redirect(google_auth_url)
 
 @profile.route('/<int:user_id>/editfiles/bgimage', methods=('POST', 'DELETE'))
 def bgimage_upload(user_id):

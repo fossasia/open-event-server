@@ -63,8 +63,40 @@
     <div class="row" style="margin-bottom:20px">
         <div class="col-md-6 col-xs-6">
             <label>Instagram:</label>
-            <br/>
-            <a class="btn btn-info" href="/profile/instagram_connect">{{ _("Connect Account") }}</a>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon3">instagram.com/</span>
+
+                <input type="text" name="instagram" class="form-control"
+                       value="{{ profile.user_detail.instagram|default('', true) | replace('https://instagram.com/', '') }}"
+                       style="min-width: 400px"/>
+                {% if not user_id %}
+                    <div class="input-group-btn">
+                        <a type="button" class="btn btn-info"
+                           style="margin-bottom: 0"
+                           href="{{ url_for('profile.connect_instagram') }}">{{ _("Connect") }}</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom:20px">
+        <div class="col-md-6 col-xs-6">
+            <label>Google+:</label>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon3">plus.google.com/</span>
+
+                <input type="text" name="google" class="form-control"
+                       value="{{ profile.user_detail.google|default('', true) | replace('https://plus.google.com/', '') }}"
+                       style="min-width: 400px"/>
+                {% if not user_id %}
+                    <div class="input-group-btn">
+                        <a type="button" class="btn btn-info"
+                           style="margin-bottom: 0"
+                           href="{{ url_for('profile.connect_google') }}">{{ _("Connect") }}</a>
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 

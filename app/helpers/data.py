@@ -712,6 +712,16 @@ class DataManager(object):
             else:
                 user_detail.twitter = ''
 
+            if form['instagram'].strip() != '':
+                user_detail.instagram = 'https://instagram.com/' + form['instagram'].strip()
+            else:
+                user_detail.instagram = ''
+
+            if form['google'].strip() != '':
+                user_detail.google = 'https://plus.google.com/' + form['google'].strip()
+            else:
+                user_detail.google = ''
+
             user_detail.details = form['details']
             avatar_img = form.get('avatar-img', None)
             user_detail.avatar_uploaded = ""
