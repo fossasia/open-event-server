@@ -220,6 +220,8 @@ class DataManager(object):
                               event_id=event_id,
                               short_abstract=form.get('short_abstract', ''),
                               level=form.get('level', ''),
+                              comments=form.get('comments',''),
+                              language=form.get('language',''),
                               state=state)
 
         if form.get('track', None) != "":
@@ -243,8 +245,11 @@ class DataManager(object):
                               position=form.get('position', ''),
                               country=form.get('country', ''),
                               city=form.get('city', ''),
+                              heard_from = form.get('other_text', None) if form.get('heard_from', None) == "Other" else form.get('heard_from', None),
                               sponsorship_required=form.get('sponsorship_required', ''),
                               speaking_experience=form.get('speaking_experience', ''),
+                              long_biography=form.get('long_biography',''),
+                              mobile=form.get('mobile',''),
                               user=login.current_user if login and login.current_user.is_authenticated else None)
 
         new_session.speakers.append(speaker)
@@ -419,6 +424,7 @@ class DataManager(object):
                               position=form.get('position', ''),
                               country=form.get('country', ''),
                               city=form.get('city', ''),
+                              heard_from = form.get('other_text', None) if form.get('heard_from', None) == "Other" else form.get('heard_from', None),
                               sponsorship_required=form.get('sponsorship_required', ''),
                               speaking_experience=form.get('speaking_experience', ''),
                               user=user if login and login.current_user.is_authenticated else None)

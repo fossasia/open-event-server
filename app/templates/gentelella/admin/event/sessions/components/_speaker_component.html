@@ -2,15 +2,20 @@
 
 {% set textarea_speaker_fields = ['short_biography', 'long_biography', 'speaking_experience', 'sponsorship_required'] %}
 {% set media_speaker_fields = ['photo'] %}
+{% set dropdown_fields = ['heard_from'] %}
 {% set url_speaker_fields = ['website', 'facebook', 'twitter', 'github', 'linkedin'] %}
-{% set speaker_fields = ['name', 'email','photo', 'organisation', 'position', 'country', 'city', 'short_biography', 'long_biography', 'speaking_experience', 'sponsorship_required', 'mobile', 'website', 'facebook', 'twitter', 'github', 'linkedin'] %}
+{% set speaker_fields = ['name', 'email','photo', 'organisation', 'position', 'country', 'city', 'short_biography', 'long_biography', 'speaking_experience', 'sponsorship_required', 'other', 'heard_from', 'mobile', 'website', 'facebook', 'twitter', 'github', 'linkedin'] %}
 
 {% macro speaker_form_field(identifier, require=0) %}
     {% set name = identifier | replace('_id','') %}
     {% set pretty_name = name | replace('_',' ') | capitalize %}
     <div class="item form-group speaker-fields">
         <label class="control-label">
-            {{ pretty_name }}
+            {% if name == 'heard_from' %}
+              {{ "Where did you hear about our event?" }}
+            {% else %}
+              {{ pretty_name }}
+            {% endif %}
             {% if require==1 %}
                 <span class="required">*</span>
             {% endif %}
@@ -20,6 +25,34 @@
                 required="required"
             {% endif %}
                 name="{{ identifier }}" class="form-control col-md-7 col-xs-12">{% if speaker %}{{ speaker[identifier] }}{% elif session.speakers %}{{ session.speakers[0][identifier] }}{% endif %}</textarea>
+        {% elif identifier in dropdown_fields %}
+            {% if identifier == 'heard_from' %}
+                {% set data_set = ['Google or other search', 'Friend', 'Website', 'Advertisement', 'Article or blog', 'Post', 'Social media', 'Other'] %}
+                    <select title="{% if name == 'heard_from' %}{{"Where did you hear about our event?"}}{% else %}{{ pretty_name }}{% endif %}" {% if require==1 or identifier=='track' %}required="required"{% endif %} name="{{ identifier }}"
+                        class="form-control col-md-7 col-xs-12" id="heard-from" >
+                        {% if name == 'heard_from' and not session %}
+                            <option value="" {% if not session %}selected{% endif %}>Select {{ "knowledge of event" }}</option>
+                        {% endif %}   
+                        {% if (speaker and speaker['heard_from'] in data_set) or (session and session.speakers[0]['heard_from'] in data_set) %}                         
+                          {% for data in data_set %}
+                              {% if (speaker and speaker['heard_from'] and speaker['heard_from'] == data) and (session or session.speakers and session.speakers[0]['heard_from'] and session.speakers[0]['heard_from'] == data) %}
+                                  <option value="{{ data }}" selected>{{ data }}</option>
+                              {% else %}
+                                  <option value="{{ data }}">{{ data }}</option>
+                              {% endif %}
+                          {% endfor %}
+                        {% else %}
+                          {% for data in data_set %}
+                              {% if data == "Other" %}
+                                  <option value="{{ data }}" selected>{{ data }}</option>
+                              {% else %}
+                                  <option value="{{ data }}">{{ data }}</option>
+                              {% endif %}
+                          {% endfor%}
+                        {% endif %}
+                    </select>
+                    <input class="form-control col-md-7 col-xs-12" name="other_text" id="other_text" placeholder="Enter where you heard"| required {% if (speaker and speaker['heard_from'] in data_set) or (session and session.speakers[0]['heard_from'] in data_set) %}type="hidden" {% endif %} value="{% if speaker and speaker['heard_from'] not in data_set %}{{ speaker['heard_from'] }}{% elif session.speakers and session.speakers[0]['heard_from'] not in data_set %}{{ session.speaker[0]['heard_from'] }} {% endif %}">
+            {% endif %}
           <!-- photo Selector -->
         {% elif identifier == 'photo' %}
             <!-- photo button -->
