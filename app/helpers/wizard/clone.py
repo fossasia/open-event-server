@@ -8,6 +8,7 @@ from app.models.users_events_roles import UsersEventsRoles
 from app.models.role import Role
 from app.models.email_notifications import EmailNotification
 from app.models.user import ORGANIZER
+from app.models.event import get_new_event_identifier
 
 
 def clone_row(row, event_id=None):
@@ -25,6 +26,7 @@ def create_event_copy(event_id):
     old_event = DataGetter.get_event(event_id)
     event = clone_row(old_event)
     event.name = "Copy of " + event.name
+    event.identifier = get_new_event_identifier()
     event.state = "Draft"
     save_to_db(event)
 
