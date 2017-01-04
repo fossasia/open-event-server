@@ -299,7 +299,9 @@ def save_tickets(tickets_data, event):
         if ticket_data['id']:
             with db.session.no_autoflush:
                 ticket = Ticket.query.filter_by(id=ticket_data['id'], event_id=event.id).first()
-                db.session.query(ticket_tags_table).filter_by(ticket_id=ticket.id).delete()
+                ticket_tags=db.session.query(ticket_tags_table).filter_by(ticket_id=ticket.id)
+                if ticket_tags.first():
+                    ticket_tags.delete()
         else:
             ticket = Ticket(event=event)
 
