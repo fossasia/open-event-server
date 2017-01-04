@@ -53,7 +53,6 @@ class DiscountCode(db.Model):
         self.created_at = datetime.utcnow()
         self.used_for = used_for
 
-    
     @property
     def serialize(self):
         """Return object data in easily serializable format"""
