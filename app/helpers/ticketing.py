@@ -219,7 +219,7 @@ class TicketingManager(object):
         ticket_quantity = form.getlist('ticket_quantities[]')
         ticket_discount=form.get('promo_code','')
         if ticket_discount:
-            discount=TicketingManager.get_discount_code(form.get('event_id'), "felicity")
+            discount=TicketingManager.get_discount_code(form.get('event_id'), form.get('promo_code',''))
         ticket_subtotals = []
         if from_organizer:
             ticket_subtotals = form.getlist('ticket_subtotals[]')
@@ -238,7 +238,7 @@ class TicketingManager(object):
                     else:
                         amount += (order_ticket.ticket.price * order_ticket.quantity)
         if discount.type=="amount":
-            order.amount = amount-discount.value
+            order.amount = max(amount-discount.value,0)
         else:
             order.amount=amount-(discount.value*amount/100)
 
