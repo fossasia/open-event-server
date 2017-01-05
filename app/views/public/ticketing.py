@@ -32,8 +32,6 @@ def index():
 @ticketing.route('/create/', methods=('POST',))
 def create_order():
     order = TicketingManager.create_order(request.form)
-    if request.form.get('promo_code', '') != '':
-        flash('The promotional code entered is valid. No offer has been applied to this order.', 'danger')
     return redirect(url_for('.view_order', order_identifier=order.identifier))
 
 
