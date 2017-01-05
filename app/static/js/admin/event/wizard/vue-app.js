@@ -46,6 +46,18 @@ var app = new Vue({
         },
         zoom: function () {
             return this.event.latitude === 0.0 && this.event.longitude === 0.0 ? 1 : 15;
+        },
+        invalidDateRange: function () {
+            if(this.event.end_time_date.trim().length <= 0
+                || this.event.end_time_time.trim().length <= 0
+                || this.event.start_time_date.trim().length <= 0
+                || this.event.start_time_time.trim().length <= 0) {
+                return false;
+            }
+            var format = 'MM/DD/YYYY HH:mm';
+            var start = moment(this.event.start_time_date.trim() + " " + this.event.start_time_time.trim(), format);
+            var end = moment(this.event.end_time_date.trim() + " " + this.event.end_time_time.trim(), format);
+            return end.isBefore(start);
         }
     },
     watch: {
@@ -64,6 +76,9 @@ var app = new Vue({
                     $this.recenterMap();
                 }, 500);
             }
+        },
+        'invalidDateRange': function (value) {
+            this.disableMove = this.disableMove ? this.disableMove : value;
         },
         'event.name': function () {
             this.disableMove = shouldDisableMove(this);
@@ -161,6 +176,10 @@ var app = new Vue({
         },
         addTicket: function (ticketType) {
             var ticket = _.cloneDeep(TICKET);
+            ticket.sales_start_date = moment().tz(this.event.timezone).format('MM/DD/YYYY');
+            ticket.sales_start_time = moment().tz(this.event.timezone).format('HH:mm');
+            ticket.sales_end_date = moment().tz(this.event.timezone).add(10, 'days').format('MM/DD/YYYY'),
+            ticket.sales_end_time = moment().tz(this.event.timezone).add(10, 'days').hour(22).minute(0).format('HH:mm'),
             ticket.type = ticketType;
             this.event.tickets.push(ticket);
         },

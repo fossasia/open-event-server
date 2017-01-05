@@ -84,7 +84,7 @@
     <div class="row event-date-picker">
         <div class="col-md-4 col-xs-12">
             <div class="item form-group"
-                 v-bind:class="{ 'has-error': event.start_time_date.trim().length <= 0 || event.start_time_time.trim().length <= 0 }">
+                 v-bind:class="{ 'has-error': event.start_time_date.trim().length <= 0 || event.start_time_time.trim().length <= 0 || invalidDateRange}">
                 <label>{{ _("Starts") }} <span class="required">*</span></label>
                 <br>
                 <div class="col-xs-8" style="padding-left: 0;">
@@ -103,14 +103,17 @@
                 </div>
             </div>
             <div class="help-block text-danger"
-                 v-show="event.start_time_date.trim().length <= 0 || event.start_time_time.trim().length <= 0">Start
-                date/time is required
+                 style="color: #a94442;"
+                 v-show="event.start_time_date.trim().length <= 0 || event.start_time_time.trim().length <= 0">
+                Start date/time is required
             </div>
-
+            <div class="help-block text-danger" style="color: #a94442;" v-show="invalidDateRange">
+                Invalid date range. End time has to be after start time.
+            </div>
         </div>
         <div class="col-md-4 col-xs-12">
             <div class="item form-group"
-                 v-bind:class="{ 'has-error': event.end_time_date.trim().length <= 0 || event.end_time_time.trim().length <= 0 }">
+                 v-bind:class="{ 'has-error': event.end_time_date.trim().length <= 0 || event.end_time_time.trim().length <= 0 || invalidDateRange }">
                 <label>{{ _("Ends") }} <span class="required">*</span></label>
                 <br>
                 <div class="col-xs-8" style="padding-left: 0;">
@@ -130,6 +133,7 @@
 
             </div>
             <div class="help-block text-danger"
+                 style="color: #a94442;"
                  v-show="event.end_time_date.trim().length <= 0 || event.end_time_time.trim().length <= 0">End
                 date/time is required
             </div>
@@ -384,7 +388,7 @@
                                     <input type="checkbox" name="pay_by_paypal" v-model="event.pay_by_paypal">
                                     <strong style="font-weight: 400;">{{ _("YES, accept payment through PayPal ") }}</strong><br>
                                     {{ _("Paypal accepts credit card, debit card and PayPal payments. To learn how it works click") }}
-                                    <a href="">{{ _("here.") }}</a>
+                                    <a href="https://www.paypal.com/us/webapps/mpp/popup/about-payment-methods">{{ _("here.") }}</a>
                                 </label>
                             </div>
                         </div>

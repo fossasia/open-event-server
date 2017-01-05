@@ -1,6 +1,8 @@
 from flask import Blueprint
 from flask import request
 from flask import url_for, redirect, flash, render_template
+from flask.ext.login import current_user
+from flask.ext.restplus import abort
 from sqlalchemy_continuum import transaction_class
 
 from app.helpers.data import delete_from_db, DataManager, save_to_db
@@ -59,19 +61,22 @@ def edit_view(user_id):
 
 @sadmin_users.route('/<user_id>/update-roles', methods=('GET', 'POST'))
 def update_roles_view(user_id):
-    user = DataGetter.get_user(user_id)
-    user.is_admin = request.form.get('admin') == 'yes'
-    save_to_db(user)
+    if current_user.is_super_admin:
+        user = DataGetter.get_user(user_id)
+        user.is_admin = request.form.get('admin') == 'yes'
+        save_to_db(user)
 
-    custom_sys_roles = DataGetter.get_custom_sys_roles()
-    for role in custom_sys_roles:
-        field = request.form.get('custom_role-{}'.format(role.id))
-        if field:
-            DataManager.get_or_create_user_sys_role(user, role)
-        else:
-            DataManager.delete_user_sys_role(user, role)
+        custom_sys_roles = DataGetter.get_custom_sys_roles()
+        for role in custom_sys_roles:
+            field = request.form.get('custom_role-{}'.format(role.id))
+            if field:
+                DataManager.get_or_create_user_sys_role(user, role)
+            else:
+                DataManager.delete_user_sys_role(user, role)
 
-    return redirect(url_for('.index_view'))
+        return redirect(url_for('.index_view'))
+    else:
+        abort(403)
 
 
 @sadmin_users.route('/<user_id>/', methods=('GET', 'POST'))
@@ -83,6 +88,9 @@ def details_view(user_id):
 
 @sadmin_users.route('/<user_id>/trash/', methods=('GET',))
 def trash_view(user_id):
+    profile = DataGetter.get_user(user_id)
+    if profile.is_super_admin:
+        abort(403)
     trash_user(user_id)
     flash("User" + user_id + " has been deleted.", "danger")
     return redirect(url_for('.index_view'))
@@ -98,6 +106,8 @@ def restore_view(user_id):
 @sadmin_users.route('/<user_id>/delete/', methods=('GET',))
 def delete_view(user_id):
     profile = DataGetter.get_user(user_id)
+    if profile.is_super_admin:
+        abort(403)
     if request.method == "GET":
         transaction = transaction_class(Event)
         transaction.query.filter_by(user_id=user_id).delete()

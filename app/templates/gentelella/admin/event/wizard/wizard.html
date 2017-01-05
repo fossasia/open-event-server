@@ -9,15 +9,12 @@
 {% endblock %}
 {% block head_css %}
     {{ super() }}
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/green.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/jt.timepicker/jquery.timepicker.css') }}">
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/switchery/dist/switchery.min.css') }}"/>
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='admin/lib/selectize/dist/css/selectize.bootstrap3.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/selectize/dist/css/selectize.bootstrap3.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='admin/lib/Croppie/croppie.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
 {% endblock %}
@@ -113,6 +110,7 @@
 
     {# Additional js functionality #}
     <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='admin/lib/moment-timezone/builds/moment-timezone-with-data.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap/icheck.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/clipboard/dist/clipboard.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/google-material-color/dist/palette.js') }}"></script>
@@ -146,5 +144,5 @@
     <script src="{{ url_for('static', filename='js/admin/event/wizard/sessions-speakers/initializer.js') }}"></script>
 
     {# Vue app #}
-    <script src="{{ url_for('static', filename='js/admin/event/wizard/vue-app.js') }}?timestamp=1482660899"></script>
+    <script src="{{ url_for('static', filename='js/admin/event/wizard/vue-app.js') }}?timestamp=1483089760"></script>
 {% endblock %}

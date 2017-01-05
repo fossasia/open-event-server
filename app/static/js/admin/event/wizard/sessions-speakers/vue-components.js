@@ -47,7 +47,7 @@ Vue.component('session-type', {
         this.$nextTick(function () {
             var $div = $(this.$el);
             $div.find(".session-length").timepicker({
-                'timeFormat': 'H.i'
+                'timeFormat': 'H:i'
             }).on('changeTime', function () {
                 this.dispatchEvent(new Event('input'));
             });
