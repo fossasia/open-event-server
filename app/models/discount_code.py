@@ -52,7 +52,14 @@ class DiscountCode(db.Model):
         self.is_active = is_active
         self.created_at = datetime.utcnow()
         self.used_for = used_for
+    def __repr__(self):
+        return '<DiscountCode %r>' % self.id
 
+    def __str__(self):
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
+        return self.identifier
     @property
     def serialize(self):
         """Return object data in easily serializable format"""
