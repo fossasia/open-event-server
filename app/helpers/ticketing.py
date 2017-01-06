@@ -224,6 +224,7 @@ class TicketingManager(object):
             if not discount:
                 flash('The promotional code entered is not valid. No offer has been applied to this order.', 'danger')
             else:
+                order.discount_code = discount
                 flash('The promotional code entered is valid.offer has been applied to this order.', 'success')
         ticket_subtotals = []
         if from_organizer:

@@ -16,6 +16,7 @@
                 </thead>
                 <tbody>
                 {% set costs = [] %}
+                {% set order_total_without_discount = [0] %}
                 {% for ticket_order in order.tickets %}
                     <tr>
                         <td>{{ ticket_order.ticket.name }} - {{ ticket_order.ticket.type }}</td>
@@ -27,6 +28,7 @@
                         <td>
                             {{ order.event.payment_currency | currency_symbol }}{{ (ticket_order.ticket.price*ticket_order.quantity) | money }}
                             {% if costs.append(ticket_order.ticket.price*ticket_order.quantity) %}{% endif %}
+                            {% if order_total_without_discount.append(order_total_without_discount.pop() + (ticket_order.ticket.price*ticket_order.quantity)) %} {% endif %}
                         </td>
                     </tr>
                 {% else %}
@@ -36,7 +38,15 @@
                         </td>
                     </tr>
                 {% endfor %}
-
+                {% set amount_without_discount = order_total_without_discount.pop() %}
+                {% if (amount_without_discount - order.amount) > 0 %}
+                    <tr class="total-row">
+                        <td colspan="4" align="right" class="order-total">{{ _("Discount Applied by ") }} "{{ order.discount_code.code }}":</td>
+                        <td>
+                            {{ order.event.payment_currency | currency_symbol }}{{ (order.amount - amount_without_discount) | money }}
+                        </td>
+                    </tr>
+                {% endif %}
                 <tr class="total-row">
                     <td colspan="4" align="right" class="order-total"><strong>{{ _("Order total") }}:</strong></td>
                     <td><strong>{{ order.event.payment_currency | currency_symbol }}{{ order.amount | money }}</strong>
