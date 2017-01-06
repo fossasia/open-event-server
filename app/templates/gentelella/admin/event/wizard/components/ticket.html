@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="col-xs-3">
-                <input type="number" min="0" name="tickets[price]" class="form-control" v-if="ticket.type == 'paid'"
+                <input type="number" step=".01" min="0" name="tickets[price]" class="form-control" v-if="ticket.type == 'paid'"
                        v-model.number="ticket.price" placeholder="Price" required="required"
                        :readonly="ticket.has_orders">
             </div>
