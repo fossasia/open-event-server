@@ -37,7 +37,7 @@ Make sure you have the dependencies mentioned above installed before proceeding 
 * **Step 1** - Install python requirements. You need to be present into the root directory of the project.
 
 ```sh
-pip install -r requirements.txt
+sudo -H pip install -r requirements.txt
 ```
 
 

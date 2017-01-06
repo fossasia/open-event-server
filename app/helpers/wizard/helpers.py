@@ -67,8 +67,8 @@ def save_resized_image(image_file, width_, height_, basewidth, aspect, height_si
 
     img = Image.open(image_file)
     if aspect == 'on':
-        width_percent = (basewidth / float(width_))
-        height_size = int((float(height_) * float(width_percent)))
+        width_percent = (basewidth / float(img.size[0]))
+        height_size = int((float(img.size[1]) * float(width_percent)))
 
     img = img.resize((basewidth, height_size), PIL.Image.ANTIALIAS)
     img.save(image_file)

@@ -3,7 +3,7 @@ import os
 import uuid
 from datetime import timedelta, datetime
 
-from flask import url_for
+from flask import url_for,flash
 from flask.ext import login
 from sqlalchemy import asc
 from sqlalchemy import or_
@@ -217,7 +217,14 @@ class TicketingManager(object):
 
         ticket_ids = form.getlist('ticket_ids[]')
         ticket_quantity = form.getlist('ticket_quantities[]')
-
+        ticket_discount=form.get('promo_code','')
+        discount=None
+        if ticket_discount:
+            discount=TicketingManager.get_discount_code(form.get('event_id'), form.get('promo_code',''))
+            if not discount:
+                flash('The promotional code entered is not valid. No offer has been applied to this order.', 'danger')
+            else:
+                flash('The promotional code entered is valid.offer has been applied to this order.', 'success')
         ticket_subtotals = []
         if from_organizer:
             ticket_subtotals = form.getlist('ticket_subtotals[]')
@@ -235,8 +242,12 @@ class TicketingManager(object):
                         amount += int(ticket_subtotals[index])
                     else:
                         amount += (order_ticket.ticket.price * order_ticket.quantity)
-
-        order.amount = amount
+        if discount and discount.type=="amount":
+            order.amount = max(amount-discount.value,0)
+        elif discount:
+            order.amount=amount-(discount.value*amount/100)
+        else:
+            order.amount=amount
 
         if login.current_user.is_authenticated:
             order.user_id = login.current_user.id
