@@ -12,6 +12,7 @@ from app.views.public.pages import pages
 from app.views.public.ticketing import ticketing
 from app.views.sitemap import sitemaps
 from app.views.super_admin.content import sadmin_content
+from app.views.super_admin.debug import sadmin_debug
 from app.views.super_admin.dep_settings import sadmin_settings
 from app.views.super_admin.events import sadmin_events
 from app.views.super_admin.messages import sadmin_messages
@@ -91,6 +92,7 @@ class BlueprintsManager:
         app.register_blueprint(sadmin_settings)
         app.register_blueprint(sadmin_modules)
         app.register_blueprint(sadmin_content)
+        app.register_blueprint(sadmin_debug)
 
 
 @event_speakers.before_request
