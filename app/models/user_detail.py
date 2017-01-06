@@ -12,6 +12,8 @@ class UserDetail(db.Model):
     contact = db.Column(db.String)
     facebook = db.Column(db.String)
     twitter = db.Column(db.String)
+    instagram = db.Column(db.String)
+    google = db.Column(db.String)
     avatar_uploaded = db.Column(db.String)
     thumbnail = db.Column(db.String)
     small = db.Column(db.String)
@@ -26,6 +28,8 @@ class UserDetail(db.Model):
                  user_id=None,
                  facebook=None,
                  twitter=None,
+                 instagram=None,
+                 google=None,
                  thumbnail=None,
                  small=None,
                  icon=None,
@@ -37,6 +41,8 @@ class UserDetail(db.Model):
         self.lastname = lastname
         self.facebook = facebook
         self.twitter = twitter
+        self.instagram = instagram
+        self.google = google
         self.thumbnail = thumbnail
         self.small = small
         self.icon = icon
@@ -75,6 +81,8 @@ class UserDetail(db.Model):
                 'contact': self.contact,
                 'facebook': self.facebook,
                 'twitter': self.twitter,
+                'instagram': self.instagram,
+                'google': self.google,
                 'thumbnail': self.thumbnail,
                 'small': self.small,
                 'icon': self.icon,
