@@ -1,0 +1,31 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: android-generator
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: android-generator
+    spec:
+      containers:
+      - name: web
+        image: gcr.io/eventyay/generators/android:latest
+        command: ["/bin/sh","-c"]
+        args: ["./kubernetes/run.sh"]
+        livenessProbe:
+          httpGet:
+            path: /health-check/
+            port: 8080
+          initialDelaySeconds: 15
+          timeoutSeconds: 1
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        env:
+        - name: C_FORCE_ROOT
+          value: 'true'
+        - name: PYTHONUNBUFFERED
+          value: 'TRUE'
+      restartPolicy: Always
