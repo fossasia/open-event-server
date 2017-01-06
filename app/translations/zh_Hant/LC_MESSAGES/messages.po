@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
-"POT-Creation-Date: 2017-01-03 11:39+0530\n"
+"POT-Creation-Date: 2017-01-06 10:31+0530\n"
 "PO-Revision-Date: 2016-12-09 15:26+0000\n"
 "Last-Translator: Chang-Chia Tseng <pswo10680@gmail.com>\n"
 "Language: zh_Hant\n"
@@ -1019,12 +1019,12 @@ msgstr ""
 msgid "Reject"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/sessions/components/_speaker_component.html:38
+#: app/templates/gentelella/admin/event/sessions/components/_speaker_component.html:71
 #: app/templates/gentelella/admin/profile/index.html:38
 msgid "Select Avatar"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/sessions/components/_speaker_component.html:42
+#: app/templates/gentelella/admin/event/sessions/components/_speaker_component.html:75
 msgid "Avatar size must be less than 1MB."
 msgstr ""
 
@@ -1951,27 +1951,27 @@ msgid ""
 "private link."
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/session-speakers/custom-form.html:45
+#: app/templates/gentelella/admin/event/wizard/session-speakers/custom-form.html:48
 msgid "Collect"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/session-speakers/custom-form.html:45
+#: app/templates/gentelella/admin/event/wizard/session-speakers/custom-form.html:48
 msgid "Details"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/session-speakers/custom-form.html:51
+#: app/templates/gentelella/admin/event/wizard/session-speakers/custom-form.html:54
 msgid "Option"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/session-speakers/custom-form.html:52
+#: app/templates/gentelella/admin/event/wizard/session-speakers/custom-form.html:55
 msgid "Include"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/session-speakers/custom-form.html:53
+#: app/templates/gentelella/admin/event/wizard/session-speakers/custom-form.html:56
 msgid "Require"
 msgstr ""
 
-#: app/templates/gentelella/admin/event/wizard/session-speakers/custom-form.html:70
+#: app/templates/gentelella/admin/event/wizard/session-speakers/custom-form.html:73
 msgid "Customize Registration Form"
 msgstr ""
 
@@ -1991,7 +1991,7 @@ msgstr ""
 #: app/templates/gentelella/admin/login/change_password.html:19
 #: app/templates/gentelella/admin/login/create_password.html:19
 #: app/templates/gentelella/admin/login/password_reminder.html:12
-#: app/templates/gentelella/admin/login/register.html:20
+#: app/templates/gentelella/admin/login/register.html:24
 msgid "Submit"
 msgstr ""
 
@@ -2033,11 +2033,11 @@ msgstr ""
 msgid "Registration Form"
 msgstr ""
 
-#: app/templates/gentelella/admin/login/register.html:24
+#: app/templates/gentelella/admin/login/register.html:28
 msgid "Already a member"
 msgstr ""
 
-#: app/templates/gentelella/admin/login/register.html:25
+#: app/templates/gentelella/admin/login/register.html:29
 msgid "Log in"
 msgstr ""
 
@@ -3805,8 +3805,6 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid ""
-#~ "Server logs display is supported only"
-#~ " on Kubernetes abd Heroku deployments"
 #~ msgstr ""
 
 #~ msgid "Inconvince is regretted. We'll fix this as soon as possible."
