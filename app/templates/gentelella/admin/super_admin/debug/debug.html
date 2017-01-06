@@ -1,0 +1,55 @@
+{% extends 'gentelella/admin/super_admin/dashboard.html' %}
+{% import 'gentelella/admin/mysessions/mysessions_list.html' as mysessions with context %}
+{% block title %}
+    {{ _("Debug") }}
+{% endblock %}
+
+{% set active_page = "debug" %}
+
+{% block content %}
+    <strong>Request IP Address: </strong> {{ ip }}<br>
+
+    <h4>Request Headers</h4><br>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Key</th>
+            <th>Value</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for key, value in headers|dictsort %}
+            {% if key != 'Cookie' %}
+                <tr>
+                    <td>{{ key|escape }}</td>
+                    <td>{{ value|escape }}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="clearfix"></div>
+    <hr>
+    <h4>Request Cookies</h4><br>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Key</th>
+            <th>Value</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for key, value in cookies|dictsort %}
+            <tr>
+                <td>{{ key|escape }}</td>
+                <td>{{ value|escape }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
+
+
+
