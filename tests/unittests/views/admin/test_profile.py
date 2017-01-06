@@ -20,9 +20,11 @@ class TestProfile(OpenEventViewTestCase):
                 'email': self.super_admin.email,
                 'firstname': 'Super',
                 'lastname': 'Hero',
-#'facebook': 'https://fb.me/super_hero',
+                'facebook': 'https://fb.me/super_hero',
                 'contact': '+9622100100',
-#'twitter': 'https://t.co/super_hero',
+                'twitter': 'https://t.co/super_hero',
+                'instagram': 'https://instagram.com/super_hero',
+                'google': 'https://plus.google.com/super_hero',
                 'details': 'I am a super hero',
             }
             rv = self.app.post(url_for('profile.edit_view'), follow_redirects=True, buffered=True,
