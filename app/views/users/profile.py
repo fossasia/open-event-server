@@ -56,18 +56,11 @@ def connect_twitter():
     twitter_auth_url, __ = get_twitter_auth_url()
     return redirect('https://api.twitter.com/oauth/authenticate?' + twitter_auth_url)
 
-
 @profile.route('/instagram_connect', methods=('GET', 'POST'))
 def connect_instagram():
     instagram = get_instagram_auth()
     instagram_auth_url, state = instagram.authorization_url(InstagramOAuth.get_auth_uri(), access_type='offline')
     return redirect(instagram_auth_url)
-
-@profile.route('/google_connect', methods=('GET', 'POST'))
-def connect_google():
-    google = get_google_auth()
-    google_auth_url, state = google.authorization_url(OAuth.get_auth_uri(), access_type='offline')
-    return redirect(google_auth_url)
 
 @profile.route('/<int:user_id>/editfiles/bgimage', methods=('POST', 'DELETE'))
 def bgimage_upload(user_id):
