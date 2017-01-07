@@ -28,11 +28,14 @@ def callback():
         return redirect(url_for('admin.index'))
     elif 'error' in request.args:
         if request.args.get('error') == 'access denied':
+            login.logout_user()
             flash("You denied access during login.")
             return redirect(url_for('admin.login_view'))
+        login.logout_user()
         flash("OAuth Authorization error. Please try again later.")
         return redirect(url_for('admin.login_view'))
     elif 'code' not in request.args and 'state' not in request.args:
+        login.logout_user()
         return redirect(url_for('admin.login_view'))
     else:
         google = get_google_auth()
@@ -62,6 +65,7 @@ def callback():
                 login.login_user(user)
                 user_logged_in(user)
                 return redirect(intended_url())
+        login.logout_user()
         flash("OAuth Authorization error. Please try again later.")
         return redirect(url_for('admin.login_view'))
 
@@ -85,9 +89,11 @@ def facebook_callback():
         if request.args.get('error') == 'access denied':
             flash("You denied access during login.")
             return redirect(url_for('admin.login_view'))
+        login.logout_user()
         flash("OAuth Authorization error. Please try again later.")
         return redirect(url_for('admin.login_view'))
     elif 'code' not in request.args and 'state' not in request.args:
+        login.logout_user()
         return redirect(url_for('admin.login_view'))
     else:
         facebook, token = get_fb_auth()
@@ -106,6 +112,7 @@ def facebook_callback():
                 user_logged_in(user)
                 return redirect(intended_url())
         flash("OAuth Authorization error. Please try again later.")
+        login.logout_user()
         return redirect(url_for('admin.login_view'))
 
 
