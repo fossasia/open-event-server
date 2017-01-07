@@ -239,10 +239,10 @@ class TicketingManager(object):
                     order.tickets.append(order_ticket)
 
                     if from_organizer:
-                        amount += int(ticket_subtotals[index])
+                        amount += float(ticket_subtotals[index])
                     else:
                         amount += (order_ticket.ticket.price * order_ticket.quantity)
-        if discount and discount.type=="amount":
+        if discount and discount.type == "amount":
             order.amount = max(amount-discount.value,0)
         elif discount:
             order.amount=amount-(discount.value*amount/100)
