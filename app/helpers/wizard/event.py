@@ -80,7 +80,10 @@ def get_event_json(event_id):
         "latitude": event.latitude,
         "longitude": event.longitude,
         "stripe": event.stripe.serialize if event.stripe else None,
-        "state": event.state
+        "state": event.state,
+        "cheque_details": event.cheque_details,
+        "bank_details": event.bank_details,
+        "onsite_details": event.onsite_details
     }
 
     for social_link in event.social_link:
