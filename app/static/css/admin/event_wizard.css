@@ -207,13 +207,10 @@ span.round-tab:hover {
 
 @media ( max-width: 585px ) {
     .wizard .nav-tabs > li {
-    width: 32%;
-    margin-left: 1%;
+        width: 32%;
+        margin-left: 1%;
     }
-    .connecting-line{
-      width: 90% !important;
 
-    }
     .wizard {
         width: 90%;
         height: auto !important;
@@ -252,6 +249,16 @@ span.round-tab:hover {
 
 }
 
+@media (max-width: 992px) {
+    .wizard .fa-circle-o-notch{
+        margin-left:1%;
+    }
+}
+@media (max-width: 600px) {
+    .wizard .fa-circle-o-notch{
+        margin-left:15%;
+    }
+}
 .sponsor-table > thead > tr > th {
   border-bottom: none !important;
 }
