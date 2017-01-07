@@ -23,6 +23,8 @@ class TestProfile(OpenEventViewTestCase):
                 'facebook': 'https://fb.me/super_hero',
                 'contact': '+9622100100',
                 'twitter': 'https://t.co/super_hero',
+                'instagram': 'https://instagram.com/super_hero',
+                'google': 'https://plus.google.com/super_hero',
                 'details': 'I am a super hero',
             }
             rv = self.app.post(url_for('profile.edit_view'), follow_redirects=True, buffered=True,
