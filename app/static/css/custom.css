@@ -5146,3 +5146,26 @@ ul.notifications {
 .error_content h1.internal_error:after {
   right: -80px;
 }
+
+@media screen and (max-width: 485px){
+  .error_content h1:after {
+  background: rgb(126, 126, 126);
+  background: -moz-linear-gradient(left, rgba(126, 126, 126, 0) 0%, rgba(255, 255, 255, 0) 100%);
+  background: -webkit-linear-gradient(left, rgba(126, 126, 126, 0) 0%, rgba(255, 255, 255, 0) 100%);
+  background: -o-linear-gradient(left, rgba(126, 126, 126, 0) 0%, rgba(255, 255, 255, 0) 100%);
+  background: -ms-linear-gradient(left, rgba(126, 126, 126, 0) 0%, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(left, rgba(126, 126, 126, 0) 0%, rgba(255, 255, 255, 0) 100%);
+  right: 0;
+  width: 0;
+  }
+  .error_content h1:before {
+  background: rgb(126, 126, 126);
+  background: -moz-linear-gradient(right, rgba(126, 126, 126, 0) 0%, rgba(255, 255, 255, 0) 100%);
+  background: -webkit-linear-gradient(right, rgba(126, 126, 126, 0) 0%, rgba(255, 255, 255, 0) 100%);
+  background: -o-linear-gradient(right, rgba(126, 126, 126, 0) 0%, rgba(255, 255, 255, 0) 100%);
+  background: -ms-linear-gradient(right, rgba(126, 126, 126, 0) 0%, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(right, rgba(126, 126, 126, 0) 0%, rgba(255, 255, 255, 0) 100%);
+  left: 0;
+  width: 0;
+  }
+}
