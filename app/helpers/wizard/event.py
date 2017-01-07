@@ -64,6 +64,7 @@ def get_event_json(event_id):
         "payment_currency": event.payment_currency,
         "pay_by_paypal": event.pay_by_paypal,
         "pay_by_stripe": event.pay_by_stripe,
+        "paypal_email": event.paypal_email,
         "pay_by_cheque": event.pay_by_cheque,
         "pay_by_bank": event.pay_by_bank,
         "pay_onsite": event.pay_onsite,
@@ -193,6 +194,11 @@ def save_event_from_json(json, event_id=None):
     event.cheque_details = event_data['cheque_details'] if event.pay_by_cheque else ''
     event.bank_details = event_data['bank_details'] if event.pay_by_bank else ''
     event.onsite_details = event_data['onsite_details'] if event.pay_onsite else ''
+
+    if event.pay_by_paypal:
+        event.paypal_email = event_data['paypal_email']
+    else:
+        event.paypal_email = None
 
     if event.pay_by_stripe and event_data['stripe']['linked']:
         stripe_data = event_data['stripe']
