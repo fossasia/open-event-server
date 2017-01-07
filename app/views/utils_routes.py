@@ -4,6 +4,7 @@ import os
 
 import geoip2.database
 from flask import Blueprint, current_app
+from flask import flash
 from flask import jsonify, url_for, redirect, request, send_from_directory, \
     render_template, make_response
 from flask.ext import login
@@ -27,23 +28,28 @@ def callback():
         return redirect(url_for('admin.index'))
     elif 'error' in request.args:
         if request.args.get('error') == 'access denied':
-            return 'You denied access'
-        return 'Error encountered'
+            login.logout_user()
+            flash("You denied access during login.")
+            return redirect(url_for('admin.login_view'))
+        login.logout_user()
+        flash("OAuth Authorization error. Please try again later.")
+        return redirect(url_for('admin.login_view'))
     elif 'code' not in request.args and 'state' not in request.args:
+        login.logout_user()
         return redirect(url_for('admin.login_view'))
     else:
         google = get_google_auth()
         state = google.authorization_url(OAuth.get_auth_uri(), access_type='offline')[1]
         google = get_google_auth(state=state)
-        new_code = None
-        if 'code' in request.url:
-            code_url = (((request.url.split('&'))[1]).split('='))[1]
-            new_code = (code_url.split('%2F'))[0] + '/' + (code_url.split('%2F'))[1]
+        code_url = None
+        if 'code' in request.args:
+            code_url = request.args.get('code')
         try:
             token = google.fetch_token(OAuth.get_token_uri(), authorization_url=request.url,
-                                       code=new_code, client_secret=OAuth.get_client_secret())
+                                       code=code_url, client_secret=OAuth.get_client_secret())
         except HTTPError:
-            return 'HTTP Error occurred'
+            flash("OAuth Authorization error. Please try again later.")
+            return redirect(url_for('admin.login_view'))
         google = get_google_auth(token=token)
         resp = google.get(OAuth.get_user_info())
         if resp.status_code == 200:
@@ -59,7 +65,9 @@ def callback():
                 login.login_user(user)
                 user_logged_in(user)
                 return redirect(intended_url())
-        return 'did not find user info'
+        login.logout_user()
+        flash("OAuth Authorization error. Please try again later.")
+        return redirect(url_for('admin.login_view'))
 
 
 @utils_routes.route('/fCallback/', methods=('GET', 'POST'))
@@ -79,9 +87,13 @@ def facebook_callback():
         return redirect(url_for('admin.index'))
     elif 'error' in request.args:
         if request.args.get('error') == 'access denied':
-            return 'You denied access'
-        return 'Error encountered'
+            flash("You denied access during login.")
+            return redirect(url_for('admin.login_view'))
+        login.logout_user()
+        flash("OAuth Authorization error. Please try again later.")
+        return redirect(url_for('admin.login_view'))
     elif 'code' not in request.args and 'state' not in request.args:
+        login.logout_user()
         return redirect(url_for('admin.login_view'))
     else:
         facebook, token = get_fb_auth()
@@ -99,7 +111,9 @@ def facebook_callback():
                 login.login_user(user)
                 user_logged_in(user)
                 return redirect(intended_url())
-        return 'did not find user info'
+        flash("OAuth Authorization error. Please try again later.")
+        login.logout_user()
+        return redirect(url_for('admin.login_view'))
 
 
 def update_user_details(first_name=None, last_name=None, facebook_link=None, twitter_link=None, file_url=None):
@@ -124,8 +138,8 @@ def get_fb_auth():
     state = facebook.authorization_url(FbOAuth.get_auth_uri(), access_type='offline')[1]
     facebook = get_facebook_auth(state=state)
     code_url = None
-    if 'code' in request.url:
-        code_url = (((request.url.split('&'))[0]).split('='))[1]
+    if 'code' in request.args:
+        code_url = request.args.get('code')
     try:
         token = facebook.fetch_token(FbOAuth.get_token_uri(), authorization_url=request.url,
                                      code=code_url, client_secret=FbOAuth.get_client_secret())
@@ -168,7 +182,8 @@ def instagram_callback():
             filename, uploaded_file = uploaded_file_provided_by_url(el['images']['standard_resolution']['url'])
             upload(uploaded_file, '/image/' + filename)
 
-    return 'Not implemented'
+    flash("OAuth Authorization error. Please try again later.")
+    return redirect(url_for('admin.login_view'))
 
 
 @utils_routes.route('/pic/<path:filename>')
