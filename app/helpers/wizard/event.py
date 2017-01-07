@@ -79,7 +79,10 @@ def get_event_json(event_id):
         "latitude": event.latitude,
         "longitude": event.longitude,
         "stripe": event.stripe.serialize if event.stripe else None,
-        "state": event.state
+        "state": event.state,
+        "cheque_details": event.cheque_details,
+        "bank_details": event.bank_details,
+        "onsite_details": event.onsite_details
     }
 
     for social_link in event.social_link:
@@ -434,7 +437,7 @@ def save_social_links(social_links, event):
                 social_link['link'] = "https://" + social_link['link']
             else:
                 social_link['link'] = social_link['link']
-            social_exists = SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).scalar()            
+            social_exists = SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).scalar()
             if social_exists:
                 SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).update({'link': social_link['link']})
             else:

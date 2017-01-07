@@ -26,8 +26,10 @@
                         <strong>{{ _("Card Number") }}:</strong> ***** {{ order.last4 }}<br>
                         <strong>Exp {{ _("Date") }}:</strong> {{ order.exp_month }}/{{ order.exp_year }}<br><br>
                     {% endif %}
-                    <strong>{{ _("Payment Date") }}:</strong> {{ order.completed_at.strftime('%B %d, %Y %I:%M %p') }}<br>
-                    <strong>{{ _("Invoice number") }}:</strong> {{ order.get_invoice_number() }}
+                    <strong>{{ _("Payment Due") }}:</strong> {{ order.completed_at.strftime('%B %d, %Y %I:%M %p') }}<br>
+                    <strong>{{ _("Invoice number") }}:</strong> {{ order.get_invoice_number() }}<br>
+                    <strong>{{ _("Event Date") }}:</strong> {{ order.event.start_time.strftime('%A, %B %d, %Y at %I:%M %p') }}
+                    - {{ order.event.end_time.strftime('%A, %B %d, %Y at %I:%M %p') }} ({{ order.event.timezone }})
                 </div>
             </div>
         </div>
