@@ -66,9 +66,9 @@
                     <h4>
                         {% if item[1][0].sponsor_type and item[0] != -1 %}
                             {{ item[1][0].sponsor_type | title }}
-                        {% elif item[0] == -1 and sponsors | length>1 %}
+                        {% elif item[0] == -1 and sponsors | length>1 and item[1] | length > 0 %}
                             {{ _("Other Sponsors") }}
-                        {% elif not item[1][0].sponsor_type %}
+                        {% elif not item[1][0].sponsor_type and item[1] | length > 0 %}
                             Level - {{ item[0] }}
                         {% endif %}
                     </h4>
