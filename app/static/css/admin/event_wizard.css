@@ -9,6 +9,18 @@
   margin-bottom: 0;
 }
 
+@media screen and (max-width: 650px){
+  .apply_discount{
+      width:200%;
+  }
+}
+
+@media screen and (max-width: 400px){
+  .apply_discount{
+      width:250%;
+  }
+}
+
 .label-header {
     font-size: 18px;
     margin-left: 10px;

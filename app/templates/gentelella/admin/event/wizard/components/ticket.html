@@ -25,7 +25,7 @@
             </div>
             <div class="col-xs-2">
                 <div class="btn-group">
-                    <a class="btn btn-default edit-ticket-button" data-toggle="tooltip"
+                    <a class="btn btn-default edit-ticket-button ticket-button-resp" data-toggle="tooltip"
                        v-on:click="show_settings = !show_settings"
                        title="Settings">
                         <i class="glyphicon glyphicon-cog" style="color: #46b8da;"></i>
@@ -35,7 +35,7 @@
                        title="Cannot remove ticket. Orders have been placed for it." disabled>
                         <i class="glyphicon glyphicon-trash" style="color: #46b8da;"></i>
                     </a>
-                    <a class="btn btn-default remove-ticket-button" data-toggle="tooltip"
+                    <a class="btn btn-default remove-ticket-button ticket-button-resp" data-toggle="tooltip"
                        v-if="!ticket.has_orders"
                        v-on:click="remove"
                        title="Remove">
