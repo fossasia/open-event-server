@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2017-01-06 10:31+0530\n"
-"PO-Revision-Date: 2017-01-07 06:56+0000\n"
-"Last-Translator: pipix51 <koh.pirong@dhs.sg>\n"
+"PO-Revision-Date: 2017-01-08 14:43+0000\n"
+"Last-Translator: bohjieqi <boh.jieqi@dhs.sg>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects"
 "/open-event/organizer-server/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -1083,7 +1083,7 @@ msgstr ""
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:66
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:134
 msgid "Email"
-msgstr ""
+msgstr "电子邮件"
 
 #: app/templates/gentelella/admin/event/sessions/components/session_speaker_form.html:57
 #: app/templates/gentelella/admin/event/wizard/components/button-bar.html:24
@@ -1109,7 +1109,7 @@ msgstr ""
 #: app/templates/gentelella/admin/event/speakers/base_speaker_table.html:82
 #: app/templates/gentelella/admin/settings/pages/contact_info.html:24
 msgid "Phone"
-msgstr ""
+msgstr "电话"
 
 #: app/templates/gentelella/admin/event/speakers/base_speaker_table.html:83
 msgid "Submitted Sessions"
@@ -1136,7 +1136,7 @@ msgstr "价钱"
 #: app/templates/gentelella/guest/event/_ticketing_box.html:33
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:13
 msgid "Quantity"
-msgstr "数目"
+msgstr "数量"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:39
 msgid "Item Total"
