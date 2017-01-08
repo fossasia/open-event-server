@@ -317,7 +317,7 @@
                         <div class="item form-group"
                              v-bind:class="{ 'has-error': discountMessage.error != '', 'has-success': discountMessage.success != '' }">
                             <label for="discount-code-entry">{{ _("Enter Discount Code") }}</label>
-                            <div class="input-group">
+                            <div class="input-group apply_discount">
                                 <input type="text" class="form-control" id="discount-code-entry"
                                        v-model="event.discount_code">
                                 <span class="input-group-btn">
