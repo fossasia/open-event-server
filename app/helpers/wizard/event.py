@@ -64,6 +64,7 @@ def get_event_json(event_id):
         "payment_currency": event.payment_currency,
         "pay_by_paypal": event.pay_by_paypal,
         "pay_by_stripe": event.pay_by_stripe,
+        "paypal_email": event.paypal_email,
         "pay_by_cheque": event.pay_by_cheque,
         "pay_by_bank": event.pay_by_bank,
         "pay_onsite": event.pay_onsite,
@@ -79,7 +80,10 @@ def get_event_json(event_id):
         "latitude": event.latitude,
         "longitude": event.longitude,
         "stripe": event.stripe.serialize if event.stripe else None,
-        "state": event.state
+        "state": event.state,
+        "cheque_details": event.cheque_details,
+        "bank_details": event.bank_details,
+        "onsite_details": event.onsite_details
     }
 
     for social_link in event.social_link:
@@ -190,6 +194,11 @@ def save_event_from_json(json, event_id=None):
     event.cheque_details = event_data['cheque_details'] if event.pay_by_cheque else ''
     event.bank_details = event_data['bank_details'] if event.pay_by_bank else ''
     event.onsite_details = event_data['onsite_details'] if event.pay_onsite else ''
+
+    if event.pay_by_paypal:
+        event.paypal_email = event_data['paypal_email']
+    else:
+        event.paypal_email = None
 
     if event.pay_by_stripe and event_data['stripe']['linked']:
         stripe_data = event_data['stripe']
@@ -434,7 +443,7 @@ def save_social_links(social_links, event):
                 social_link['link'] = "https://" + social_link['link']
             else:
                 social_link['link'] = social_link['link']
-            social_exists = SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).scalar()            
+            social_exists = SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).scalar()
             if social_exists:
                 SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).update({'link': social_link['link']})
             else:
