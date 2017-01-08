@@ -71,8 +71,19 @@ def display_event_detail_home(identifier):
     timenow_event_tz = datetime.now(pytz.timezone(event.timezone))
     module = DataGetter.get_module()
     tickets = DataGetter.get_sales_open_tickets(event.id, True)
+
+    '''Sponsor Levels'''
+    sponsors = {-1:[]}
+    for sponsor in event.sponsor:
+        if not sponsor.level:
+            sponsors[-1].append(sponsor)
+        elif int(sponsor.level) in sponsors.keys():
+            sponsors[int(sponsor.level)].append(sponsor)
+        else:
+            sponsors[int(sponsor.level)] = [sponsor]
     return render_template('gentelella/guest/event/details.html',
                            event=event,
+                           sponsors=sponsors,
                            placeholder_images=placeholder_images,
                            custom_placeholder=custom_placeholder,
                            accepted_sessions=accepted_sessions,
