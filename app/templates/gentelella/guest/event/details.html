@@ -20,7 +20,7 @@
 
 {% macro sponsor_info(sponsor) %}
     <div class="col-md-4 col-sm-6 sponsor-column">
-        <div class="sponsor text-center">
+        <div class="sponsor text-center" data-toggle="tooltip" title="{{ sponsor.description }}">
             {% if sponsor.url %}
                 <a href="{{ sponsor.url }}" target="default">
                     <img alt="{{ sponsor.name }}" src="{{ sponsor.logo }}">
@@ -61,12 +61,12 @@
         {% endif %}
         {% if event.sponsor[0] %}
             <h3 id="sponsors">Sponsors</h3>
-            {% for item in sponsors|dictsort|reverse %}
+            {% for item in sponsors | dictsort | reverse %}
                 <div class="row" id="level-{{ item[0] }}">
                     <h4>
                         {% if item[1][0].sponsor_type and item[0] != -1 %}
-                            {{ item[1][0].sponsor_type|title }}
-                        {% elif item[0] == -1 and sponsors|length>1 %}
+                            {{ item[1][0].sponsor_type | title }}
+                        {% elif item[0] == -1 and sponsors | length>1 %}
                             {{ _("Other Sponsors") }}
                         {% elif not item[1][0].sponsor_type %}
                             Level - {{ item[0] }}
