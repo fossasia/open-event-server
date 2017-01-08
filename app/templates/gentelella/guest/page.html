@@ -10,7 +10,7 @@
         <div class="x_content">
             <div class="row">
                 <div class="col-md-8 col-md-offset-2"
-                     style="font-size:18px; margin-top: 35px"> {{ page.description|safe }}</div>
+                     style="font-size:18px; margin-top: 35px text-align:center"> {% if page.description %}{{ page.description|safe }}{% else %}<h1>No information has been provided for this page.</h1>{% endif %}</div>
             </div>
         </div>
     </div>
