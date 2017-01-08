@@ -17,7 +17,7 @@ class Ticket(db.Model):
     description_toggle = db.Column(db.Boolean)
     type = db.Column(db.String)
     quantity = db.Column(db.Integer)
-    price = db.Column(db.Integer)
+    price = db.Column(db.Float)
 
     sales_start = db.Column(db.DateTime)
     sales_end = db.Column(db.DateTime)

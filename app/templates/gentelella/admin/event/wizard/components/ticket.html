@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="col-xs-3">
-                <input type="number" min="0" name="tickets[price]" class="form-control" v-if="ticket.type == 'paid'"
+                <input type="number" step=".01" min="0" name="tickets[price]" class="form-control" v-if="ticket.type == 'paid'"
                        v-model.number="ticket.price" placeholder="Price" required="required"
                        :readonly="ticket.has_orders">
             </div>
@@ -62,14 +62,14 @@
                     </div>
                     <div class="item form-group">
                         <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1; margin-top: 0;">
-                            <input type="checkbox" class="checkbox flat form-control" v-model="ticket.description_visibility">
+                            <input type="checkbox" class="checkbox form-control" style="display: inline-block;width: 14px;height: 14px;" v-model="ticket.description_visibility">
                             {{ _("Display Ticket description on Public Events page") }}
                         </label>
                     </div>
                     <div class="item form-group">
                         <div style="font-size: 15px;margin-bottom: 5px;">{{ _("Ticket visibility") }}</div>
                         <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1;  margin-top: 0;">
-                            <input type="checkbox" class="checkbox flat form-control" v-model="ticket.ticket_visibility">
+                            <input type="checkbox" class="checkbox form-control" style="display: inline-block;width: 14px;height: 14px;" v-model="ticket.ticket_visibility">
                             {{ _("Hide Ticket") }}
                         </label>
                         <div style="font-size: 13px;">

@@ -224,6 +224,7 @@ class TicketingManager(object):
             if not discount:
                 flash('The promotional code entered is not valid. No offer has been applied to this order.', 'danger')
             else:
+                order.discount_code = discount
                 flash('The promotional code entered is valid.offer has been applied to this order.', 'success')
         ticket_subtotals = []
         if from_organizer:
@@ -239,10 +240,10 @@ class TicketingManager(object):
                     order.tickets.append(order_ticket)
 
                     if from_organizer:
-                        amount += int(ticket_subtotals[index])
+                        amount += float(ticket_subtotals[index])
                     else:
                         amount += (order_ticket.ticket.price * order_ticket.quantity)
-        if discount and discount.type=="amount":
+        if discount and discount.type == "amount":
             order.amount = max(amount-discount.value,0)
         elif discount:
             order.amount=amount-(discount.value*amount/100)
