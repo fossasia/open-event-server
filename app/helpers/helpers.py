@@ -374,8 +374,7 @@ def send_email(to, action, subject, html):
 
         if not current_app.config['TESTING']:
             if email_service == 'smtp':
-                smtp_encryption = get_settings()['smtp_host']
-
+                smtp_encryption = get_settings()['smtp_encryption']
                 if smtp_encryption == 'tls':
                     smtp_encryption = 'required'
                 elif smtp_encryption == 'ssl':
@@ -389,13 +388,12 @@ def send_email(to, action, subject, html):
                     'host': get_settings()['smtp_host'],
                     'username': get_settings()['smtp_username'],
                     'password': get_settings()['smtp_password'],
-                    'tls': smtp_encryption,
+                    'encryption': smtp_encryption,
                     'port': get_settings()['smtp_port'],
                 }
 
                 from tasks import send_mail_via_smtp_task
                 send_mail_via_smtp_task.delay(config, payload)
-
             else:
                 key = get_settings()['sendgrid_key']
                 if not key and not current_app.config['TESTING']:
