@@ -194,6 +194,17 @@ class DataManager(object):
         return notification_ids
 
     @staticmethod
+    def get_session_accept_reject(request):
+      """
+      function to retrieve form data to send mail
+      """
+      form=request.form
+      maildata={}
+      maildata.subject=form.get('subject','')
+      maildata.message=form.get('message','')
+      return maildata
+      
+    @staticmethod
     def add_session_to_event(request, event_id, state=None):
         """
         Session will be saved to database with proper Event id

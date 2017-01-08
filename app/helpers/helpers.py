@@ -109,17 +109,31 @@ def send_session_accept_reject(email, session_name, acceptance, link):
     """Send session accepted or rejected"""
     message_settings = MessageSettings.query.filter_by(action=SESSION_ACCEPT_REJECT).first()
     if not message_settings or message_settings.mail_status == 1:
-        send_email(
-            to=email,
-            action=SESSION_ACCEPT_REJECT,
-            subject=MAILS[SESSION_ACCEPT_REJECT]['subject'].format(session_name=session_name, acceptance=acceptance),
-            html=MAILS[SESSION_ACCEPT_REJECT]['message'].format(
-                email=str(email),
-                session_name=str(session_name),
-                acceptance=str(acceptance),
-                link=link
+        if request.form:
+                form=request.form
+                subject=request.form.get('subject','')
+                message=request.form.get('message','')
+                send_email(
+                to=email,
+                action=SESSION_ACCEPT_REJECT,
+                
+                subject=subject,
+                html=message,
+            
+                )
+        else:
+            send_email(
+                to=email,
+                action=SESSION_ACCEPT_REJECT,
+                
+                subject=MAILS[SESSION_ACCEPT_REJECT]['subject'].format(session_name=session_name, acceptance=acceptance),
+                html=MAILS[SESSION_ACCEPT_REJECT]['message'].format(
+                    email=str(email),
+                    session_name=str(session_name),
+                    acceptance=str(acceptance),
+                    link=link
+                )
             )
-        )
 
 
 def send_schedule_change(email, session_name, link):
@@ -374,7 +388,7 @@ def send_email(to, action, subject, html):
 
         if not current_app.config['TESTING']:
             if email_service == 'smtp':
-                smtp_encryption = get_settings()['smtp_host']
+                smtp_encryption = get_settings()['smtp_encryption']
 
                 if smtp_encryption == 'tls':
                     smtp_encryption = 'required'
@@ -389,7 +403,7 @@ def send_email(to, action, subject, html):
                     'host': get_settings()['smtp_host'],
                     'username': get_settings()['smtp_username'],
                     'password': get_settings()['smtp_password'],
-                    'tls': smtp_encryption,
+                    'encryption': smtp_encryption,
                     'port': get_settings()['smtp_port'],
                 }
 
