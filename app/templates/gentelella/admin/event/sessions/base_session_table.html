@@ -125,11 +125,7 @@
                                            data-toggle="tooltip" title="Approve" data-placement="right">
                                             <i class="fa fa-check"></i>
                                         </a>
-                                        <a href="{{ session.id }}/accept/" class="btn btn-sm btn-success"
-                                           data-toggle="tooltip" title="Approve and send email" data-placement="right">
-                                            <i class="fa fa-check fa-fw"></i> <i class="fa fa-envelope fa-fw"></i>
-                                        </a>
-                                        <button type="button" class="btn btn-primary btn-success" data-toggle="modal" data-target="#mailModal" data-sessionid="{{session.id}}" data-sessiontitle="{{session.title}}" data-typeofmail="accept">Accept with mail</button>
+                                        <button type="button" class="btn btn-primary btn-success" data-toggle="modal" data-target="#mailModal" data-sessionid="{{session.id}}" data-sessiontitle="{{session.title}}" data-typeofmail="accept"><i class="fa fa-times fa-fw"></i> <i class="fa fa-envelope fa-fw"></i></button>
                                    
                                     {% endif %}
 
@@ -138,11 +134,7 @@
                                            data-toggle="tooltip" title="Reject" data-placement="right">
                                             <i class="fa fa-times"></i>
                                         </a>
-                                        <a href="{{ session.id }}/reject/" class="btn btn-sm btn-danger"
-                                           data-toggle="tooltip" title="Reject and send email" data-placement="right">
-                                            <i class="fa fa-times fa-fw"></i> <i class="fa fa-envelope fa-fw"></i>
-                                        </a>
-                                       <button type="button" class="btn btn-primary btn-danger" data-toggle="modal" data-target="#mailModal" data-sessionid="{{session.id}}" data-sessiontitle="{{session.title}}" data-typeofmail="reject">Reject with mail</button>
+                                       <button type="button" class="btn btn-primary btn-danger" data-toggle="modal" data-target="#mailModal" data-sessionid="{{session.id}}" data-sessiontitle="{{session.title}}" data-typeofmail="reject"><i class="fa fa-times fa-fw"></i> <i class="fa fa-envelope fa-fw"></i></button>
                                        
                                     {% endif %}
                                     {% if not session.state_email_sent and (session.state == 'accepted' or session.state == 'rejected') %}
