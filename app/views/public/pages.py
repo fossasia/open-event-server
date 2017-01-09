@@ -1,6 +1,5 @@
 from flask import Blueprint
 from flask import render_template
-from flask import abort
 
 from app.helpers.data_getter import DataGetter
 
@@ -12,7 +11,7 @@ def url_view(url):
     from app import get_locale
     page = DataGetter.get_page_by_url('/' + url, get_locale())
     if page == None:
-		return abort(404)
+		return render_template('gentelella/errors/404.html'), 404
     return render_template('gentelella/guest/page.html', page=page)
 
 
