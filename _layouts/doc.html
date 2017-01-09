@@ -1,0 +1,12 @@
+---
+layout: default
+---
+<h1 class="post-headline">{{page.title}}</h1>
+{{content}}
+
+<!-- Comments only for docs -->
+{% if page.path contains '_docs' %}
+    {% if site.disqus-shortname %}
+        {% include disqus.html %}
+    {% endif %}
+{% endif %}

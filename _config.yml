@@ -1,0 +1,54 @@
+title: eventyay Developer Guide
+email: fossasia@googlegroups.com
+
+highlighter: rouge
+markdown: kramdown
+
+# Tracker
+analytics: UA-87660966-1
+
+# Comments
+disqus-shortname: webjeda-demo
+
+#optimization
+#compress.html
+compress_html:
+  clippings: [html,div, p, ul, td, h1, h2, h3, h4,link, meta, footer, nav, img, header, hr, br, head, style, li, ul, ol, time, main, script, title]
+  comments: ["<!-- ", " -->"]
+  endings: [all]
+  ignore:
+    envs: [local]
+  blanklines: false
+  profile: false
+  startings: []
+  
+collections:
+    installation:
+        output: true
+        permalink: /docs/installation/:path/
+    docs:
+        output: true
+        permalink: /docs/:path/
+
+defaults:
+  -
+    scope:
+      path: ""
+      type: "installation"
+    values:
+      layout: "doc"
+  -
+    scope:
+      path: ""
+      type: "docs"
+    values:
+      layout: "doc"
+
+sass:
+ style: compressed
+
+exclude:
+- README.md
+
+
+gems: [jekyll-seo-tag, jekyll-paginate]

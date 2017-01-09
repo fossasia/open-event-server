@@ -15,11 +15,13 @@ test.db
 app.db
 .idea/
 .bundle/
+_site
+.sass-cache
 
 # Static files at 'app/static/admin/lib'
 lib/
 node_modules
-
+.jekyll-metadata
 # event export files
 static/exports/event*
 
@@ -39,4 +41,4 @@ dump.rdb
 
 # Negatives
 # The master's branch .gitignore is kept because without that switching branches will become a pain to develop as lots of ignored files will become untracked.
-!/api/v2/lib
+!/api/v1/lib

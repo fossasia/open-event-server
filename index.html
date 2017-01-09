@@ -1,9 +1,18 @@
-<html>
-<head>
-<meta http-equiv="refresh" content="0; URL='https://fossasia.github.io/open-event-orga-server/api/v1/'" />
-<title>Redirecting...</title>
-</head>
-<body>
-Redirecting ...
-</body>
-</html>
+---
+layout: default
+---
+
+<h2 class="headline" style="text-transform: none !important;">{{site.title}}</h2>
+<br>
+
+<h3>Installation</h3>
+{% for doc in site.installation %}
+<h4><a href="{{doc.url | prepend: site.baseurl}}">{{doc.title}}</a></h4>
+{% endfor %}
+
+<hr>
+
+<h3>Docs</h3>
+{% for doc in site.docs %}
+<h4><a href="{{doc.url | prepend: site.baseurl}}">{{doc.title}}</a></h4>
+{% endfor %}
