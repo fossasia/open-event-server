@@ -6,13 +6,15 @@ layout: default
 <br>
 
 <h3>Installation</h3>
-{% for doc in site.installation %}
+{% assign sorted = site.installation | sort:'title' %}
+{% for doc in sorted %}
 <h4><a href="{{doc.url | prepend: site.baseurl}}">{{doc.title}}</a></h4>
 {% endfor %}
 
 <hr>
 
 <h3>Docs</h3>
-{% for doc in site.docs %}
+{% assign sorted = site.docs | sort:'title' %}
+{% for doc in sorted %}
 <h4><a href="{{doc.url | prepend: site.baseurl}}">{{doc.title}}</a></h4>
 {% endfor %}
