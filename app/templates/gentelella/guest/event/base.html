@@ -211,22 +211,6 @@
                 {% for twitterLink in twitter %}
                     <a class="twitter-timeline" href="{{ twitterLink }}" data-height="500">Tweets</a>
                 {% endfor %}
-                {# Licence Info #}
-                {% if licence_details %}
-                    <div>
-                        {% if licence_details['compact_logo'] != '' %}
-                            <img src="{{ licence_details['compact_logo'] }}">
-                        {% endif %}
-                        <div style="font-size: 14px;">This event is licenced under
-                            {% if licence_details['url'] != '' %}
-                                <a href="{{ licence_details['url'] }}" target="_blank"
-                                   style="color:#1a75ff;">{{ licence_details['long_name'] }}</a>
-                            {% else %}
-                                {{ licence_details['long_name'] }}
-                            {% endif %}
-                        </div>
-                    </div>
-                {% endif %}
             </div>
         </div>
     </div>
