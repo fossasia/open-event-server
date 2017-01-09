@@ -26,9 +26,9 @@ from .tickets import api as tickets_apt
 from .tracks import api as track_api
 from .users import api as users_api
 
-api_v2 = Blueprint('api', __name__, url_prefix='/api/v2')
+api_v1 = Blueprint('api', __name__, url_prefix='/api/v1')
 
-api = Api(api_v2, version='2.0', title='Organizer Server APIs',
+api = Api(api_v1, version='1.0', title='Organizer Server APIs',
           description='Open Event Organizer APIs')
 
 api.add_namespace(event_api)

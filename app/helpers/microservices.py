@@ -23,7 +23,7 @@ class WebAppCreator(AppCreator):
         data = {
             "email": login.current_user.email,
             "name": self.app_name,
-            "apiendpoint": request.url_root + "api/v2/events/" + str(self.event.id),
+            "apiendpoint": request.url_root + "api/v1/events/" + str(self.event.id),
             "datasource": "eventapi"
         }
         headers = {
@@ -45,7 +45,7 @@ class AndroidAppCreator(AppCreator):
         data = {
             "email": login.current_user.email,
             "app_name": self.app_name,
-            "endpoint": request.url_root + "api/v2/events/" + str(self.event.id)
+            "endpoint": request.url_root + "api/v1/events/" + str(self.event.id)
         }
         r = requests.post(self.app_link, json=data)
 
