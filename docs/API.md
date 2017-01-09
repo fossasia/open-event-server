@@ -1,6 +1,6 @@
 ## API Authentication
 
-To get access token, send a POST request to `/api/v2/login` with email and password.
+To get access token, send a POST request to `/api/v1/login` with email and password.
 
 ```json
 {
@@ -22,13 +22,13 @@ Then use the `access_token` in a request by setting the header `Authorization` t
 
 ## Swagger Docs
 
-Swagger API documentation with live-testing feature is available at `/api/v2` endpoint of the server where Open Event is hosted.
-For the current dev deployement, it is at http://open-event-dev.herokuapp.com/api/v2/ and for the master deployement, it is at
-http://open-event.herokuapp.com/api/v2/
+Swagger API documentation with live-testing feature is available at `/api/v1` endpoint of the server where Open Event is hosted.
+For the current dev deployment, it is at http://open-event-dev.herokuapp.com/api/v1/ and for the master deployment, it is at
+http://open-event.herokuapp.com/api/v1/
 
 Don't forget to login into the swagger UI (through the top right link) to get access to all authorized API methods (like POST, PUT).
 
-**Note** - A static documentation with no live-testing feature is available at http://fossasia.github.io/open-event-orga-server/api/v2/. In case the above documentation links
+**Note** - A static documentation with no live-testing feature is available at http://fossasia.github.io/open-event-orga-server/api/v1/. In case the above documentation links
 are down/dead, please refer to it. It will always contain docs of latest version of Open Event Orga Server.
 
 

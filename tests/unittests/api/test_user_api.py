@@ -11,7 +11,7 @@ from utils_post_data import POST_USER_DATA, PUT_USER_DATA
 
 
 def get_path(*args):
-    url = '/api/v2/users'
+    url = '/api/v1/users'
     if args:
         url += '/' + '/'.join(map(str, args))
     return url

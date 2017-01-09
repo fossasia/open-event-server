@@ -12,7 +12,7 @@ class TestGetApiUnrelatedServices(OpenEventTestCase):
 
     e.g. A Track with id 3 exists and and Event with id 2 exists, but the
     Track doesn't belong to the Event. The following path should give a 400
-    response code: '/api/v2/events/2/tracks/3'
+    response code: '/api/v1/events/2/tracks/3'
 
     Services include Session, Track, etc. (everything except Event)
     """

@@ -139,8 +139,8 @@ def create_app():
 
     # API version 2
     with app.app_context():
-        from app.api import api_v2
-        app.register_blueprint(api_v2)
+        from app.api import api_v1
+        app.register_blueprint(api_v1)
 
     sa.orm.configure_mappers()
 
