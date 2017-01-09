@@ -16,8 +16,8 @@ def get_sponsors_json(event_id_or_sponsors):
     data = []
     for sponsor in sponsors:
         data.append(sponsor.serialize)
-
-    return data
+ 
+    return sorted(data, key=lambda x: x['id'])
 
 
 def save_sponsors_from_json(json, event_id=None):
@@ -46,6 +46,7 @@ def save_sponsors_from_json(json, event_id=None):
 
             if item.logo != sponsor['logo']:
                 if sponsor['logo'] and sponsor['logo'] != '':
+                    print sponsor['logo']
                     item.logo = save_event_image(sponsor['logo'], UPLOAD_PATHS['sponsors']['logo'].format(
                         event_id=int(event.id), id=int(item.id)
                     ))
