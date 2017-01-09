@@ -246,7 +246,7 @@ class TicketingManager(object):
         if discount and discount.type == "amount":
             order.amount = max(amount-discount.value,0)
         elif discount:
-            order.amount=amount-(discount.value*amount/100)
+            order.amount=amount-(discount.value*amount/100.0)
         else:
             order.amount=amount
 

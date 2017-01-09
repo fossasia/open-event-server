@@ -40,7 +40,7 @@
                                    {% if not discount_code or (discount_code and discount_code.type == 'amount') %}checked{% endif %}> Amount ({{ event.payment_currency | currency_symbol }})
                         </label>
                     </span>
-                        <input type="number" step=any class="form-control" required=""
+                        <input type="number" step="any" class="form-control" required=""
                                {% if discount_code and discount_code.type != 'amount' %}disabled name="__value"
                                {% else %}name="value" {% endif %}
                                {% if discount_code and discount_code.type == 'amount' %}
