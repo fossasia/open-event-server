@@ -29,7 +29,9 @@
                             <th>{{ _("Ticket type") }}</th>
                             <th>{{ _("Sales ends") }}</th>
                             <th>{{ _("Price") }}</th>
-                            <th>{{ _("Fee") }}</th>
+                            {% if fee %}
+                               <th>{{ _("Fee") }}</th>
+                            {% endif %}
                             <th>{{ _("Quantity") }}</th>
                             <th>{{ _("Subtotal") }}</th>
                         </tr>
@@ -43,12 +45,14 @@
                                         <a data-toggle="tooltip"
                                            title="{{ ticket.description if ticket.description_toggle else '' }}"
                                            style="cursor: pointer;">
-                                            {{ ticket.name }} - {{ ticket.type }}
+                                            {{ ticket.name }}
                                         </a>
                                     </td>
                                     <td>{{ ((ticket.sales_end|localize_dt_obj(event.timezone))|as_timezone(current_timezone)).strftime('%a, %B %d') }}</td>
                                     <td>{{ event.payment_currency | currency_symbol }}{{ ticket.price | money }}</td>
+                                    {% if fee %}
                                     <td>{{ event.payment_currency | currency_symbol }} 0.00</td>
+                                    {% endif %}
                                     {% if (ticket.sales_start|localize_dt_obj(event.timezone)) <= timenow_event_tz and (ticket.sales_end|localize_dt_obj(event.timezone)) >= timenow_event_tz %}
                                         <td>
                                             <input type="hidden" name="ticket_ids[]" value="{{ ticket.id }}">
