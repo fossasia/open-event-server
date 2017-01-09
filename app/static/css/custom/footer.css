@@ -52,7 +52,7 @@ footer .copyright{
 
 #footer-menu select {background: #282C35; border-color:#AAAAAA; color: #AAAAAA  }
 
-#footer-menu-options{
+#footer-menu > div > div:first-child{
     padding: 10px 10px;
 }
 
