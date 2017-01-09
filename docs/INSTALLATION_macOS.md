@@ -4,7 +4,7 @@
 
 * Python 2
 
-*Installation of 'Homebrew' would catalyze the process of installation
+* Installation of 'Homebrew' would catalyze the process of installation
 ```sh
 ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 brew update
