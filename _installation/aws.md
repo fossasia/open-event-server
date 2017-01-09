@@ -2,8 +2,6 @@
 title: Amazon Web Services
 ---
 
-# Installation of the Open Event Orga Server on AWS
-
 ## Phase 1
 
 This phase involves creating the EC2 instance which will hold your app.

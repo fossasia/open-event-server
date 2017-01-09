@@ -2,8 +2,6 @@
 title: Generic
 ---
 
-# Installation of Open Event on a Server
-
 ## Dependencies required to run Orga Server
 
 * Python 2
