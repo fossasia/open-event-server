@@ -1,14 +1,14 @@
 function importEvent() {
     var data = new FormData();
 
-    var endpoint = '/api/v2/events/import/json';
+    var endpoint = '/api/v1/events/import/json';
     jQuery.each(jQuery('#import_file')[0].files, function (i, file) {
         var ext = file.name.split(".");
         ext = ext[ext.length - 1].toLowerCase();
         if (ext == 'xml') {
-            endpoint = '/api/v2/events/import/pentabarf';
+            endpoint = '/api/v1/events/import/pentabarf';
         } else if (ext == 'ical') {
-            endpoint = '/api/v2/events/import/ical';
+            endpoint = '/api/v1/events/import/ical';
         }
         data.append('file', file);
 
@@ -71,7 +71,7 @@ function importTask(url) {
 
 
 function importTaskTable(task, field_id) {
-    var url = '/api/v2/tasks/' + task;
+    var url = '/api/v1/tasks/' + task;
     jQuery.ajax({
         url: url,
         type: 'GET',

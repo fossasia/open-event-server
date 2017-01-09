@@ -29,7 +29,7 @@ class TestTrashedItems404(OpenEventTestCase):
         if name == 'event':
             path = get_path(1)
         elif name == 'user':
-            path = '/api/v2/users/1'
+            path = '/api/v1/users/1'
         else:
             path = get_path(1, name + 's', 1)
         # check if exists

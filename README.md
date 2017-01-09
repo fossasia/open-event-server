@@ -111,8 +111,8 @@ For ticket sales the service integrates payment gateways:
 The Open Event Orga Server exposes a well documented REST API that can be used by external services (like the Open Event App generators for example) to access the data.
 
 **API Documentation:**
-- Every installation of the project includes the API docs with Swagger, (e.g. here on the test install [http://open-event-dev.herokuapp.com/api/v2](http://open-event-dev.herokuapp.com/api/v2/)).
--  A hosted version of the API docs is available in the `gh-pages` branch of the repository at [https://fossasia.github.io/open-event-orga-server/api/v2/](https://fossasia.github.io/open-event-orga-server/api/v2/).
+- Every installation of the project includes the API docs with Swagger, (e.g. here on the test install [http://open-event-dev.herokuapp.com/api/v1](http://open-event-dev.herokuapp.com/api/v1/)).
+-  A hosted version of the API docs is available in the `gh-pages` branch of the repository at [https://fossasia.github.io/open-event-orga-server/api/v1/](https://fossasia.github.io/open-event-orga-server/api/v1/).
 - The data of events is provided over API endpoints as described [here](/docs/API.md).
 
 

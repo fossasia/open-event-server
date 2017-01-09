@@ -1,6 +1,6 @@
 // export event main
 function exportEvent(event_id, current_user_email) {
-    var url = '/api/v2/events/' + event_id + '/export/json';
+    var url = '/api/v1/events/' + event_id + '/export/json';
     // generate payload
     var fields = ['image', 'video', 'audio', 'document'];
     var payload = {};

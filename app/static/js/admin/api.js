@@ -3,7 +3,7 @@
  * @doc https://github.com/swagger-api/swagger-js
  */
 // Full URL is necessary for proper port handling -@niranjan94
-var swaggerConfigUrl = window.location.protocol + "//" + window.location.host + "/api/v2/swagger.json";
+var swaggerConfigUrl = window.location.protocol + "//" + window.location.host + "/api/v1/swagger.json";
 window.swagger_loaded = false;
 function initializeSwaggerClient(callback) {
     if (!window.swagger_loaded) {

@@ -1,7 +1,7 @@
 User-agent: *
 Disallow: /serve_static
 Disallow: /api/
-Allow: /api/v2/$
+Allow: /api/v1/$
 Disallow: /fCallback
 Disallow: /gCallback
 Disallow: /iCallback

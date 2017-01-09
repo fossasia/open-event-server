@@ -42,13 +42,13 @@ tracks
 
 The data they store corresponds to the GET APIs and has the same format as them. Here is the complete list -
 
-* `event` - /api/v2/events/{event_id}
-* `microlocations` - /api/v2/events/{event_id}/microlocations
-* `sessions` - /api/v2/events/{event_id}/sessions
-* `session_types` - /api/v2/events/{event_id}/sessions/types
-* `speakers` - /api/v2/events/{event_id}/speakers
-* `sponsors` - /api/v2/events/{event_id}/sponsors
-* `tracks` - /api/v2/events/{event_id}/tracks
+* `event` - /api/v1/events/{event_id}
+* `microlocations` - /api/v1/events/{event_id}/microlocations
+* `sessions` - /api/v1/events/{event_id}/sessions
+* `session_types` - /api/v1/events/{event_id}/sessions/types
+* `speakers` - /api/v1/events/{event_id}/speakers
+* `sponsors` - /api/v1/events/{event_id}/sponsors
+* `tracks` - /api/v1/events/{event_id}/tracks
 
 The files which are not related to APIs are described as follows -
 
