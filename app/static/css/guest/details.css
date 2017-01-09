@@ -42,6 +42,11 @@ body {
   padding: 10px;
 }
 
+.license_row {
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
+
 .section-header {
   color: #2196F3;
   font-weight: 300;
