@@ -38,9 +38,9 @@ def create_order():
 @ticketing.route('/<order_identifier>/', methods=('GET',))
 def view_order(order_identifier):
     order = TicketingManager.get_and_set_expiry(order_identifier)
-    if not order or order.status == 'expired' or order.status == 'placed':
+    if not order or order.status == 'expired':
         abort(404)
-    if order.status == 'completed':
+    if order.status == 'completed' or order.status == 'placed':
         return redirect(url_for('ticketing.view_order_after_payment', order_identifier=order_identifier))
 
     if order.event.stripe:
