@@ -704,22 +704,22 @@ class DataManager(object):
             user_detail.firstname = form['firstname']
             user_detail.lastname = form['lastname']
 
-            if form['facebook'].strip() != '':
+            if form.get('facebook', '').strip() != '':
                 user_detail.facebook = 'https://facebook.com/' + form['facebook'].strip()
             else:
                 user_detail.facebook = ''
 
-            if form['twitter'].strip() != '':
+            if form.get('twitter', '').strip() != '':
                 user_detail.twitter = 'https://twitter.com/' + form['twitter'].strip()
             else:
                 user_detail.twitter = ''
 
-            if form['instagram'].strip() != '':
+            if form.get('instagram', '').strip() != '':
                 user_detail.instagram = 'https://instagram.com/' + form['instagram'].strip()
             else:
                 user_detail.instagram = ''
 
-            if form['google'].strip() != '':
+            if form.get('google', '').strip() != '':
                 user_detail.google = 'https://plus.google.com/' + form['google'].strip()
             else:
                 user_detail.google = ''
