@@ -59,7 +59,7 @@ class DiscountCode(db.Model):
         return unicode(self).encode('utf-8')
 
     def __unicode__(self):
-        return self.identifier
+        return self.code
     @property
     def serialize(self):
         """Return object data in easily serializable format"""
