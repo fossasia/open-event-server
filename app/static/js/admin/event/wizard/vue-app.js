@@ -390,10 +390,11 @@ function save(stepToSave, state, callback) {
         state: state
     };
 
+    /* Commented out for now until better condition is found
     if (!_.isUndefined(app.event.id) && !_.isNull(app.event.id) && _.isNumber(app.event.id) && !_.isUndefined(callback)) {
         callback();
         callback = null;
-    }
+    }*/
 
     switch (stepToSave) {
         case 'event':
@@ -415,9 +416,10 @@ function save(stepToSave, state, callback) {
             makePost('all', data, callback);
             break;
         default:
+            /* Commented out for now until better condition is found
             if (!_.isUndefined(callback) && !_.isNull(callback)) {
                 callback();
-            }
+            }*/
     }
 }
 
