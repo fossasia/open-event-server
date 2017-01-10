@@ -46,7 +46,6 @@ def save_sponsors_from_json(json, event_id=None):
             save_to_db(item)
             if item.logo != sponsor['logo']:
                 if sponsor['logo'] and sponsor['logo'] != '':
-                    print sponsor['logo']
                     item.logo = save_event_image(sponsor['logo'], UPLOAD_PATHS['sponsors']['logo'].format(
                         event_id=int(event.id), id=int(item.id)
                     ), remove_after_upload=False)
