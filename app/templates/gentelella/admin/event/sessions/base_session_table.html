@@ -150,42 +150,42 @@
                                           <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                             <h4 class="modal-title" id="mailModalLabel">New message</h4>
-                                          </div>
-                                          <div class="modal-body">
-                                        <form enctype="multipart/form-data" action="" method="POST" class="form-horizontal" id="session-create-form">
-                                        {% if csrf_token %}
-                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                                        {% endif %}
-                                        <div class="row">
-
-                                        <br>
-                                              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <label for="subject-name" class="control-label">Subject:</label>
-                                                <input type="text" class="form-control subject" style="min-width:100%" name="subject" id="subject-name" >
-                                              </div>
-                                              <br>
-                                              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" >
-                                                <label for="message-text" class="control-label">Message:</label>
-                                                <textarea name="message" class="form-control message"  id="message-text" style="min-height:200px;min-width:100%"></textarea>
-                                              </div>
-                                        
-                                            <br>
-                                                <button type="submit" class="btn btn-primary" >{{ _("Submit Mail") }}</button>
                                         </div>
+                                        <div class="modal-body">
+                                            <form enctype="multipart/form-data" action="" method="POST" class="form-horizontal" id="session-create-form">
+                                                {% if csrf_token %}
+                                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                                {% endif %}
+                                                <div class="row">
 
-                                    </form>
+                                                    <br>
+                                                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <label for="subject-name" class="control-label">Subject:</label>
+                                                        <input type="text" class="form-control subject" style="min-width:100%" name="subject" id="subject-name" >
+                                                    </div>
+                                                    <br>
+                                                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+                                                        <label for="message-text" class="control-label">Message:</label>
+                                                        <textarea name="message" class="form-control message"  id="message-text" style="min-height:200px;min-width:100%"></textarea>
+                                                    </div>
+                                                    
+                                                    <br>
+                                                    <button type="submit" class="btn btn-primary" >{{ _("Submit Mail") }}</button>
+                                                </div>
+
+                                            </form>
 
 
 
 
 
-                                          <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                            
-                                          </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                
+                                            </div>
                                         </div>
-                                      </div>
                                     </div>
+                                </div>
 
                                 </div>
                             </td>
