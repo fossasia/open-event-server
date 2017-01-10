@@ -84,12 +84,18 @@ def display_ticket_stats(event_id):
         orders_summary[str(order.status)]['orders_count'] += 1
         orders_summary[str(order.status)]['total_sales'] += order.amount
         for order_ticket in order.tickets:
+            discount = TicketingManager.get_discount_code(event_id, order.discount_code_id)
             orders_summary[str(order.status)]['tickets_count'] += order_ticket.quantity
             ticket = get_ticket(order_ticket.ticket_id)
             tickets_summary[str(ticket.id)][str(order.status)]['tickets_count'] += order_ticket.quantity
             if order.paid_via != 'free' and order.amount > 0:
-                tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * ticket.price
-
+                if discount and str(ticket.id) in discount.tickets.split(","):
+                    if discount.type == "amount":
+                        tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * (ticket.price - discount.value)
+                    else:
+                        tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * (ticket.price -  discount.value * ticket.price / 100.0)
+                else:
+                    tickets_summary[str(ticket.id)][str(order.status)]['sales']  += order_ticket.quantity * ticket.price
     return render_template('gentelella/admin/event/tickets/tickets.html', event=event, event_id=event_id,
                            orders_summary=orders_summary, tickets_summary=tickets_summary)
 
