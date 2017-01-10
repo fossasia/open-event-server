@@ -2,10 +2,9 @@ from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import represents_int
 from app.helpers.storage import UPLOAD_PATHS
-from app.helpers.wizard.helpers import save_event_image, get_path_of_temp_url
+from app.helpers.wizard.helpers import save_event_image
 from app.models import db
 from app.models.sponsor import Sponsor
-import os
 
 
 def get_sponsors_json(event_id_or_sponsors):
