@@ -33,6 +33,12 @@ def display_ticket_stats(event_id):
             'orders_count': 0,
             'total_sales': 0
         },
+        'placed': {
+            'class': 'info',
+            'tickets_count': 0,
+            'orders_count': 0,
+            'total_sales': 0
+        },
         'pending': {
             'class': 'warning',
             'tickets_count': 0,
@@ -54,6 +60,10 @@ def display_ticket_stats(event_id):
             'name': ticket.name,
             'quantity': ticket.quantity,
             'completed': {
+                'tickets_count': 0,
+                'sales': 0
+            },
+            'placed': {
                 'tickets_count': 0,
                 'sales': 0
             },
