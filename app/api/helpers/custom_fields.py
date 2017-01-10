@@ -26,12 +26,6 @@ class CustomField(Raw):
         format the text in database for output
         works only for GET requests
         """
-        if not self.validate(value):
-            print 'Validation of field with value \"%s\" (%s) failed' % (
-                value, str(self.__class__.__name__))
-            # raise MarshallingError
-            # disabling for development purposes as the server crashes when
-            # exception is raised. can be enabled when the project is mature
         if self.__schema_type__ == 'string':
             return unicode(value)
         else:
