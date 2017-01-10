@@ -380,6 +380,15 @@ body .container.body .right_col {
   }
 }
 
+@media (max-width: 400px) {
+  .btn-group {
+    margin-left: -10px;
+  }
+  .ticket-button-resp{
+    margin-left: 0px!important;
+  }
+}
+
 @media (min-width: 769px) and (max-width: 992px) {
   .btn-responsive {
     font-size:90%;
@@ -2041,7 +2050,7 @@ a.star {
 }
 
 .btn-group-vertical .btn, .btn-group .btn {
-  margin-bottom: 0;
+  margin-bottom: 10px;
   margin-right: 0;
 }
 

@@ -9,6 +9,18 @@
   margin-bottom: 0;
 }
 
+@media screen and (max-width: 650px){
+  .apply_discount{
+      width:200%;
+  }
+}
+
+@media screen and (max-width: 400px){
+  .apply_discount{
+      width:250%;
+  }
+}
+
 .label-header {
     font-size: 18px;
     margin-left: 10px;
@@ -206,6 +218,10 @@ span.round-tab:hover {
 }
 
 @media ( max-width: 585px ) {
+    .wizard .nav-tabs > li {
+        width: 32%;
+        margin-left: 1%;
+    }
 
     .wizard {
         width: 90%;
@@ -217,6 +233,8 @@ span.round-tab:hover {
         width: 50px;
         height: 50px;
         line-height: 50px;
+        padding-left:10px;
+        padding-right: 10px;
     }
 
     .wizard .nav-tabs > li a {
@@ -243,6 +261,16 @@ span.round-tab:hover {
 
 }
 
+@media (max-width: 992px) {
+    .wizard .fa-circle-o-notch{
+        margin-left:1%;
+    }
+}
+@media (max-width: 600px) {
+    .wizard .fa-circle-o-notch{
+        margin-left:15%;
+    }
+}
 .sponsor-table > thead > tr > th {
   border-bottom: none !important;
 }

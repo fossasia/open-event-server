@@ -130,6 +130,9 @@ body {
   border-right: 2px solid #e4e4e4;
   border-left: 2px solid #e4e4e4;
   border-top: 2px solid #e4e4e4;
+  border-bottom: 2px solid #e4e4e4;
+  height: 37px;
+
 }
 
 .img-circle {
