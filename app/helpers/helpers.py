@@ -116,7 +116,6 @@ def send_session_accept_reject(email, session_name, acceptance, link):
                 send_email(
                 to=email,
                 action=SESSION_ACCEPT_REJECT,
-                
                 subject=subject,
                 html=message,
             
