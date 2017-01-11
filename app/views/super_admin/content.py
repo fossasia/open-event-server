@@ -48,7 +48,7 @@ def index_view():
         for key, value in dic.items():
             settings[key] = value[0]
             set_settings(**settings)
-        flash("Changes Saved Successfully!!!")
+        flash("Changes have been saved.")
     return render_template(
         'gentelella/admin/super_admin/content/content.html', pages=pages, settings=settings,
         placeholder_images=placeholder_images, subtopics=subtopics, custom_placeholder=custom_placeholder,

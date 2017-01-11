@@ -23,13 +23,13 @@ def index_view():
         if not module:
             module = Module()
             save_to_db(module)
-            flash("Changes Saved Successfully!!!")
+            flash("Changes have been saved.")
     elif request.method == 'POST':
         form = request.form
         module.ticket_include = True if form.get('ticketing') == 'on' else False
         module.payment_include = True if form.get('payments') == 'on' else False
         module.donation_include = True if form.get('donations') == 'on' else False
         save_to_db(module)
-        flash("Changes Saved Successfully!!!")
+        flash("Changes have been saved.")
 
     return render_template('gentelella/admin/super_admin/modules/modules.html', module=module,navigation_bar=list_navbar())
