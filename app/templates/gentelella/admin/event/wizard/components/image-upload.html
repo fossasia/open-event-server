@@ -28,7 +28,7 @@
         </div>
         <div class="item form-group" v-if="internalImageUrl && internalImageUrl != ''">
             <label>{{ '{{ title }}' }}</label><br>
-            <img v-bind:src="internalImageUrl" style="max-width: 450px;"><br><br>
+            <img v-bind:src="internalImageUrl" style="max-width: 300px; max-height: 300px"><br><br>
             <button type="button" class="btn btn-sm btn-default" v-on:click="internalImageUrl = ''">
                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                 {{ _("Remove") }}

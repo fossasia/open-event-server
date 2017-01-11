@@ -1,5 +1,5 @@
 {% if (not tickets or tickets.count() == 0) and event.ticket_url and event.ticket_url != "" and event.identifier not in event.ticket_url %}
-    <div class="col-md-10 col-sm-10 col-xs-12">
+    <div class="col-xs-12">
         <div class="panel panel-default">
             <div class="panel-heading" style="background-color: #ffffff;">
                 <h3 class="panel-title">{{ _("Ticket Information") }}</h3>
@@ -15,8 +15,8 @@
     </div>
 {% endif %}
 {% if tickets and tickets.count() > 0 %}
-    <div id="ticketing-holder" class="col-md-10 col-sm-10 col-xs-12">
-        <form method="POST" action="{{ url_for('ticketing.create_order') }}" enctype="multipart/form-data">
+    <div id="ticketing-holder" class="col-xs-12">
+        <form method="POST" action="{{ url_for('ticketing.create_order') }}" enctype="multipart/form-data" id="ticketing-box-form">
             <input type="hidden" name="event_id" value="{{ event.id }}">
             <div class="panel panel-default">
                 <div class="panel-heading" style="background-color: #ffffff;">
@@ -29,7 +29,9 @@
                             <th>{{ _("Ticket type") }}</th>
                             <th>{{ _("Sales ends") }}</th>
                             <th>{{ _("Price") }}</th>
-                            <th>{{ _("Fee") }}</th>
+                            {% if fee %}
+                               <th>{{ _("Fee") }}</th>
+                            {% endif %}
                             <th>{{ _("Quantity") }}</th>
                             <th>{{ _("Subtotal") }}</th>
                         </tr>
@@ -43,12 +45,14 @@
                                         <a data-toggle="tooltip"
                                            title="{{ ticket.description if ticket.description_toggle else '' }}"
                                            style="cursor: pointer;">
-                                            {{ ticket.name }} - {{ ticket.type }}
+                                            {{ ticket.name }}
                                         </a>
                                     </td>
                                     <td>{{ ((ticket.sales_end|localize_dt_obj(event.timezone))|as_timezone(current_timezone)).strftime('%a, %B %d') }}</td>
                                     <td>{{ event.payment_currency | currency_symbol }}{{ ticket.price | money }}</td>
+                                    {% if fee %}
                                     <td>{{ event.payment_currency | currency_symbol }} 0.00</td>
+                                    {% endif %}
                                     {% if (ticket.sales_start|localize_dt_obj(event.timezone)) <= timenow_event_tz and (ticket.sales_end|localize_dt_obj(event.timezone)) >= timenow_event_tz %}
                                         <td>
                                             <input type="hidden" name="ticket_ids[]" value="{{ ticket.id }}">
@@ -77,6 +81,20 @@
                                 </tr>
                             {% endif %}
                             {% if loop.last %}
+                                <tr id="discount-row" style="display: none">
+                                    <td colspan="5" class="text-right">
+                                        <div style="font-weight: 300; font-size: 16px;line-height: 39px;text-transform: uppercase;">
+                                            {{ _("Discount") }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div id="discount-holder"
+                                             style="font-weight: 300; font-size: 16px;line-height: 39px;text-transform: uppercase;">
+                                            <span style="font-weight: 500;" id="total-discount">$00.00</span>
+                                        </div>
+
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td colspan="5" class="text-right">
                                         <div style="font-weight: 300; font-size: 16px;line-height: 39px;text-transform: uppercase;">
@@ -91,6 +109,7 @@
 
                                     </td>
                                 </tr>
+
                             {% endif %}
 
                         {% else %}
@@ -111,10 +130,13 @@
                                 <input type="text" name="promo_code" class="form-control" placeholder="Promotional code"
                                        value="">
                                 <span class="input-group-btn">
-                                        <button class="btn btn-default promo-close-btn" type="button"><i
+                                        <button class="btn btn-default " type="button" id="apply-discount"><i
+                                                class="fa fa-check"></i></button>
+                                        <button class="btn btn-default promo-close-btn" type="button" id="apply-discount"><i
                                                 class="fa fa-times"></i></button>
                                       </span>
                             </div>
+                            <span id="discount-error">Enter a promocode</span>
                         </div>
                     </div>
                     <div class="clearfix"></div>
@@ -150,18 +172,45 @@
             $(".promo-code-open").show();
         });
 
+        var discount_status = false;
+        var discount_type = "";
+        var discount_amount = -1;
+        $('#apply-discount').click(function (e) {
+            var form_data = $('#ticketing-box-form').serialize();
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: "{{ url_for('ticketing.apply_discount') }}",
+                data: form_data
+            }).done(function (data) {
+                discount_status = data.discount_status;
+                if(discount_status){
+                    discount_type = data.discount_type;
+                    discount_amount = data.discount_amount;
+                }else{
+                    discount_type = "";
+                    discount_amount = -1;
+                    $('#discount-error').text("Invalid Promo Code");
+                }
+                $quantitySelects.trigger("change");
+            });
+        });
+
         var $quantitySelects = $(".quantity-select");
         var $orderNowBtn = $("#order-now-btn");
         var $totalHolder = $("#total-holder");
         var $totalAmount = $("#total-amount");
-
         $quantitySelects.change(function () {
+            var discount_total = 0;
             var hasMoreThenZero = false;
             var total = 0;
             $.each($quantitySelects, function (index, $quantitySelect) {
                 $quantitySelect = $($quantitySelect);
                 if ($quantitySelect.val() !== "0") {
                     total += (parseFloat($quantitySelect.data('rate')) + parseFloat($quantitySelect.data('fee'))) * parseFloat($quantitySelect.val());
+                    if(discount_status && discount_type == "amount"){
+                        discount_total += (parseFloat($quantitySelect.data('rate')) + parseFloat($quantitySelect.data('fee')) - discount_amount) * parseFloat($quantitySelect.val());
+                    }
                     hasMoreThenZero = true;
                 }
             });
@@ -169,8 +218,20 @@
             var subtotal = (parseFloat($(this).data('rate')) + parseFloat($(this).data('fee'))) * parseFloat($(this).val());
             $(this).closest("tr").find(".subtotal").text("{{ event.payment_currency | currency_symbol }} " + subtotal.toFixed(2));
 
-            $totalHolder.show();
-            $totalAmount.text("{{ event.payment_currency | currency_symbol }} " + total.toFixed(2));
+            if (discount_status){
+                if(discount_type != "amount"){
+                    discount_total = ((discount_amount * total)/100)
+                }
+                $('#discount-error').text("Discount Applied");
+                $('#discount-row').show();
+                $('#total-discount').text("{{ event.payment_currency | currency_symbol }} " + discount_total.toFixed(2));
+                $totalHolder.show();
+                $totalAmount.text("{{ event.payment_currency | currency_symbol }} " + (Math.abs(total - discount_total)).toFixed(2));
+            }else{
+                $('#discount-row').hide();
+                $totalHolder.show();
+                $totalAmount.text("{{ event.payment_currency | currency_symbol }} " + (Math.abs(total)).toFixed(2));
+            }
 
             if (hasMoreThenZero) {
                 $orderNowBtn.removeAttr("disabled");

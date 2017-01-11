@@ -178,11 +178,20 @@
                 <th colspan="2" class="success">
                     {{ _("Completed Orders") }}
                 </th>
+                <th colspan="2" class="info">
+                    {{ _("Placed Orders") }}
+                </th>
                 <th colspan="2" class="warning">
                     {{ _("Pending Orders") }}
                 </th>
             </tr>
             <tr class="active">
+                <th>
+                    {{ _("Tickets") }}
+                </th>
+                <th>
+                    {{ _("Sales") }}
+                </th>
                 <th>
                     {{ _("Tickets") }}
                 </th>
@@ -214,6 +223,12 @@
                         {{ event.payment_currency | currency_symbol }}{{ item.completed.sales | money }}
                     </td>
                     <td>
+                        {{ item.placed.tickets_count }}
+                    </td>
+                    <td>
+                        {{ event.payment_currency | currency_symbol }}{{ item.placed.sales | money }}
+                    </td>
+                    <td>
                         {{ item.pending.tickets_count }}
                     </td>
                     <td>
@@ -236,6 +251,12 @@
                 </th>
                 <th>
                     {{ event.payment_currency | currency_symbol }}{{ orders_summary.completed.total_sales | money }}
+                </th>
+                <th>
+                    {{ orders_summary.placed.tickets_count }}
+                </th>
+                <th>
+                    {{ event.payment_currency | currency_symbol }}{{ orders_summary.placed.total_sales | money }}
                 </th>
                 <th>
                     {{ orders_summary.pending.tickets_count }}
