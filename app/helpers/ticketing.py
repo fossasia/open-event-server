@@ -248,7 +248,8 @@ class TicketingManager(object):
                             if discount.type == "amount":
                                 total_discount += discount.value * order_ticket.quantity
                             else:
-                                total_discount += discount.value * order_ticket.quantity/100.0
+                                total_discount += discount.value * order_ticket.ticket.price *\
+                                                 order_ticket.quantity/100.0
 
         if discount:
             order.amount = max(amount - total_discount,0)
