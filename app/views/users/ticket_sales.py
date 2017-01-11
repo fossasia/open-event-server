@@ -91,9 +91,11 @@ def display_ticket_stats(event_id):
             if order.paid_via != 'free' and order.amount > 0:
                 if discount and str(ticket.id) in discount.tickets.split(","):
                     if discount.type == "amount":
-                        tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * (ticket.price - discount.value)
+                        tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * (ticket.price - \
+                                                                                        discount.value)
                     else:
-                        tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * (ticket.price -  discount.value * ticket.price / 100.0)
+                        tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * (ticket.price - \
+                                                                                        discount.value * ticket.price / 100.0)
                 else:
                     tickets_summary[str(ticket.id)][str(order.status)]['sales']  += order_ticket.quantity * ticket.price
     return render_template('gentelella/admin/event/tickets/tickets.html', event=event, event_id=event_id,
@@ -108,11 +110,38 @@ def display_orders(event_id):
 
 
 @event_ticket_sales.route('/attendees/')
-def display_attendees(event_id):
+def display_attendees(event_id,):
     event = DataGetter.get_event(event_id)
-    orders = TicketingManager.get_orders(event_id, status='completed')
+    orders = TicketingManager.get_orders(event_id)
+    holders = []
+    for order in orders:
+        for holder in order.ticket_holders:
+            discount = TicketingManager.get_discount_code(event_id, order.discount_code_id)
+            order_holder={}
+            order_holder['order_invoice'] = order.get_invoice_number()
+            order_holder['order_url'] = url_for('ticketing.view_order_after_payment', order_identifier=order.identifier) \
+                                        if order.status == 'completed' else url_for('ticketing.show_transaction_error', \
+                                        order_identifier=order.identifier)
+            order_holder['paid_via'] = order.paid_via
+            order_holder['status'] = order.status
+            order_holder['completed_at'] = order.completed_at
+            order_holder['created_at'] = order.created_at
+            order_holder['ticket_name'] = holder.ticket.name 
+            order_holder['firstname'] = holder.firstname
+            order_holder['lastname'] = holder.lastname
+            order_holder['email'] = holder.email
+            order_holder['ticket_name'] = holder.ticket.name
+            order_holder['ticket_price'] = holder.ticket.price
+            if discount and str(holder.ticket.id) in discount.tickets.split(","):
+                if discount.type == "amount" : 
+                    order_holder['ticket_price'] = order_holder['ticket_price'] - discount.value
+                else:
+                    order_holder['ticket_price'] = order_holder['ticket_price'] - (order_holder['ticket_price'] \
+                                                    * discount.value / 100.0 )
+            order_holder['checked_in'] = holder.checked_in
+            holders.append(order_holder)
     return render_template('gentelella/admin/event/tickets/attendees.html', event=event,
-                           event_id=event_id, orders=orders)
+                           event_id=event_id, holders=holders)
 
 
 @event_ticket_sales.route('/add-order/', methods=('GET', 'POST'))
