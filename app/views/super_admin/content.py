@@ -10,6 +10,7 @@ from flask import Blueprint
 from flask import current_app as app
 from flask import redirect, request, url_for, jsonify, render_template
 from flask import send_from_directory
+from flask import flash
 
 from app.helpers.data import DataManager, delete_from_db, save_to_db
 from app.helpers.data_getter import DataGetter
@@ -47,6 +48,7 @@ def index_view():
         for key, value in dic.items():
             settings[key] = value[0]
             set_settings(**settings)
+        flash("Changes Saved Successfully!!!")
     return render_template(
         'gentelella/admin/super_admin/content/content.html', pages=pages, settings=settings,
         placeholder_images=placeholder_images, subtopics=subtopics, custom_placeholder=custom_placeholder,
