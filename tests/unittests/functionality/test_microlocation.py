@@ -13,8 +13,12 @@ class TestMicrolocationApi(OpenEventTestCase):
         self.app = Setup.create_app()
 
     def test_add_microlocation_to_db(self):
-        microlocation = ObjectMother.get_microlocation()
         with app.test_request_context():
+            # create event
+            event = ObjectMother.get_event()
+            save_to_db(event, 'Event saved')
+            # test
+            microlocation = ObjectMother.get_microlocation()
             save_to_db(microlocation, "Microlocation saved")
             self.assertEqual(microlocation.id, 1)
             self.assertEqual(microlocation.event_id, 1)
