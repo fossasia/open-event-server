@@ -87,7 +87,7 @@ def send_event_fee_notification():
                 for order_ticket in order.tickets:
                     ticket = TicketingManager.get_ticket(order_ticket.ticket_id)
                     if order.paid_via != 'free' and order.amount > 0 and ticket.price > 0:
-                        fee = ticket.price * (get_fee(order.event.payment_currency) / 100)
+                        fee = ticket.price * (get_fee(order.event.payment_currency) / 100.0)
                         fee_total += fee
 
             if fee_total > 0:
@@ -96,7 +96,7 @@ def send_event_fee_notification():
                 if event.discount_code_id and event.discount_code:
                     r = relativedelta(datetime.utcnow(), event.created_at)
                     if r <= event.discount_code.max_quantity:
-                        new_invoice.amount = fee_total - (fee_total * (event.discount_code.value / 100))
+                        new_invoice.amount = fee_total - (fee_total * (event.discount_code.value / 100.0))
                         new_invoice.discount_code_id = event.discount_code_id
 
                 save_to_db(new_invoice)
