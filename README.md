@@ -62,13 +62,13 @@ OAuth is used to get information from Facebook and Google accounts, that enables
 
 #### Twitter
 
-Twitter feed integration is provided in the public event pages. 
+Twitter feed integration is provided in the public event pages.
 
 Required keys can be obtained from [https://dev.twitter.com/overview/documentation](https://dev.twitter.com/overview/documentation)
 
 #### Instagram
 
-It is possible to extend the functionality and offer images from Instagram in the event service. 
+It is possible to extend the functionality and offer images from Instagram in the event service.
 
 Required keys can be obtained from [https://www.instagram.com/developer/authentication/](https://www.instagram.com/developer/authentication/).
 
@@ -81,7 +81,7 @@ Required keys can be obtained from [https://maps.googleapis.com/maps/api](https:
 #### Media Storage - Local/Amazon S3/Google Cloud
 
 Media (like audio, avatars and logos) can be stored either Locally or on Amazon S3 or on Google Storage.
- 
+
 1. [Amazon S3 Setup Instructions](/docs/AMAZON_S3.md)
 1. [Google Cloud Setup Instructions](https://cloud.google.com/storage/docs/migrating#defaultproj)
 
@@ -137,10 +137,10 @@ The event data and the sessions can be exported in various formats.
 
 ## Roles
 
-The system has two kind of role type. 
+The system has two kind of role type.
 
-1. System roles are related to the Open Event organization and operator of the application. 
-2. Event Roles are related to the users of the system with their different permissions. 
+1. System roles are related to the Open Event organization and operator of the application.
+2. Event Roles are related to the users of the system with their different permissions.
 
 Read more [here](/docs/ROLES.md).
 
@@ -181,13 +181,21 @@ pip install -r requirements/tests.txt
 
 #### Running unit tests
 
-* Go to the project directory and run the following command:
+* Open Event uses Postgres database for testing. So set `DATABASE_URL` as a postgres database. Here is an example.
+
+```sh
+export DATABASE_URL=postgresql://test_user:test@127.0.0.1:5432/opev_test
+# format is postgresql://USERNAME:PASSWORD@ADDRESS/DATABASE_NAME
+export APP_CONFIG=config.TestingConfig
+```
+
+* Then go to the project directory and run the following command:
 ```
 python -m unittest discover tests/unittests/
 ```
 * It will run each test one by one.
 
-* You can also use the following command to run tests using nosetests :
+* You can also use the following command to run tests using nosetests:
 ```
 nosetests tests/unittests/
 ```
@@ -219,7 +227,7 @@ Open Event is being translated using Weblate, a web tool designed to ease transl
 
 If you would like to contribute to translation of Open Event, you need to [register on this server](https://hosted.weblate.org/accounts/register/).
 
-Once you have activated your account just proceed to the [translation section](https://hosted.weblate.org/projects/open-event/).   
+Once you have activated your account just proceed to the [translation section](https://hosted.weblate.org/projects/open-event/).
 
 
 ## Contributions, Bug Reports, Feature Requests
