@@ -110,7 +110,7 @@ def display_orders(event_id):
 
 
 @event_ticket_sales.route('/attendees/')
-def display_attendees(event_id,):
+def display_attendees(event_id):
     event = DataGetter.get_event(event_id)
     orders = TicketingManager.get_orders(event_id)
     holders = []

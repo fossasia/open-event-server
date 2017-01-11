@@ -129,7 +129,7 @@
                         {% elif order.status == 'pending' %}
                             <span class="label label-warning">{{ holder.status | capitalize }}</span>
                         {% elif order.status == 'placed' %}
-                            <span class="label label-warning">{{ holder.status | capitalize }}</span>
+                            <span class="label label-info">{{ holder.status | capitalize }}</span>
                         {% else %}
                             <span class="label label-danger">{{ holder.status | capitalize }}</span>
                         {% endif %}
