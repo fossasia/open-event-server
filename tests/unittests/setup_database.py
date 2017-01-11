@@ -23,7 +23,7 @@ class Setup(object):
         app.config['BROKER_BACKEND'] = 'memory'
         # app.config['CELERY_BROKER_URL'] = ''
         # app.config['CELERY_RESULT_BACKEND'] = ''
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(_basedir, 'test.db')
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///' + os.path.join(_basedir, 'test.db'))
         app.secret_key = 'super secret key'
         app.logger.addHandler(logging.StreamHandler(sys.stdout))
         app.logger.setLevel(logging.ERROR)
@@ -39,4 +39,10 @@ class Setup(object):
     def drop_db():
         with app.test_request_context():
             db.session.remove()
-            db.drop_all()
+            if app.config['SQLALCHEMY_DATABASE_URI'].find('postgresql://') > -1:
+                # drop_all has problems with foreign keys in postgres database
+                db.engine.execute("drop schema if exists public cascade")
+                db.engine.execute("create schema public")
+            else:
+                # drop all works for SQLite and should work for other DBMS like MySQL, Mongo etc
+                db.drop_all()

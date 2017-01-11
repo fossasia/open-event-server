@@ -83,10 +83,6 @@ class TestEvents(OpenEventViewTestCase):
                             query.statement, query.parameters, query.duration, query.context))
                         text_file.write("\n")
 
-    def tearDown(self):
-        with app.test_request_context():
-            db.drop_all()
-
 
 if __name__ == '__main__':
     unittest.main()
