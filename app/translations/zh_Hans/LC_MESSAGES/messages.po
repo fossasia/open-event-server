@@ -7,18 +7,19 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
+"Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2017-01-09 23:35+0530\n"
-"PO-Revision-Date: 2017-01-08 14:43+0000\n"
-"Last-Translator: bohjieqi <boh.jieqi@dhs.sg>\n"
-"Language: zh_Hans\n"
+"PO-Revision-Date: 2017-01-11 11:31+0000\n"
+"Last-Translator: Chong Chi Hsuan <chong.chihsuan@dhs.sg>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects"
 "/open-event/organizer-server/zh_Hans/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2.11-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 #: app/templates/404.html:8 app/templates/404.html:26
@@ -1046,11 +1047,11 @@ msgstr ""
 
 #: app/templates/gentelella/admin/event/sessions/components/session_form.html:21
 msgid "selected"
-msgstr ""
+msgstr "选择"
 
 #: app/templates/gentelella/admin/event/sessions/components/session_form.html:30
 msgid "Save Session"
-msgstr ""
+msgstr "保存"
 
 #: app/templates/gentelella/admin/event/sessions/components/session_form.html:33
 #: app/templates/gentelella/admin/event/sessions/components/session_speaker_form.html:59
@@ -3760,7 +3761,7 @@ msgstr ""
 
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:4
 msgid "Order Summary"
-msgstr ""
+msgstr "总订单"
 
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:37
 msgid "No tickets selected."
@@ -3780,7 +3781,7 @@ msgstr "日期与时间"
 
 #: app/templates/swagger/user-info.html:11
 msgid "Logged in as"
-msgstr ""
+msgstr "登录为"
 
 #~ msgid "Select event"
 #~ msgstr "选择事件"
@@ -3816,6 +3817,8 @@ msgstr ""
 #~ msgstr "下一个"
 
 #~ msgid ""
+#~ "_: \n"
+#~ ""
 #~ msgstr ""
 
 #~ msgid "Inconvince is regretted. We'll fix this as soon as possible."
@@ -3832,4 +3835,3 @@ msgstr ""
 
 #~ msgid "Sponsors info unavailable"
 #~ msgstr ""
-
