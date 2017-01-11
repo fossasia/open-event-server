@@ -52,6 +52,9 @@
                 <input type="radio" name="show_state" autocomplete="off" value="Completed"> {{ _("Completed") }}
             </label>
             <label class="btn btn-default btn-responsive">
+                <input type="radio" name="show_state" autocomplete="off" value="Placed"> {{ _("Placed") }}
+            </label>
+            <label class="btn btn-default btn-responsive">
                 <input type="radio" name="show_state" autocomplete="off" value="Pending"> {{ _("Pending") }}
             </label>
             <label class="btn btn-default btn-responsive">
@@ -124,6 +127,8 @@
                         {% if order.status == 'completed' %}
                             <span class="label label-success">{{ holder.status | capitalize }}</span>
                         {% elif order.status == 'pending' %}
+                            <span class="label label-warning">{{ holder.status | capitalize }}</span>
+                        {% elif order.status == 'placed' %}
                             <span class="label label-warning">{{ holder.status | capitalize }}</span>
                         {% else %}
                             <span class="label label-danger">{{ holder.status | capitalize }}</span>
