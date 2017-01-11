@@ -21,6 +21,7 @@ Our chat channel is on Gitter here: [gitter.im/fossasia/open-event-orga-server](
 A demo version is automatically deployed from our repositories:
 * Deployment from the master branch - [open-event.herokuapp.com](http://open-event.herokuapp.com/)
 * Deployment from the development branch - [open-event-dev.herokuapp.com](http://open-event-dev.herokuapp.com/)
+* Developer documentation gh-pages - [dev.eventyay.com](http://dev.eventyay.com/)
 
 ## Installation
 
@@ -62,13 +63,13 @@ OAuth is used to get information from Facebook and Google accounts, that enables
 
 #### Twitter
 
-Twitter feed integration is provided in the public event pages. 
+Twitter feed integration is provided in the public event pages.
 
 Required keys can be obtained from [https://dev.twitter.com/overview/documentation](https://dev.twitter.com/overview/documentation)
 
 #### Instagram
 
-It is possible to extend the functionality and offer images from Instagram in the event service. 
+It is possible to extend the functionality and offer images from Instagram in the event service.
 
 Required keys can be obtained from [https://www.instagram.com/developer/authentication/](https://www.instagram.com/developer/authentication/).
 
@@ -81,7 +82,7 @@ Required keys can be obtained from [https://maps.googleapis.com/maps/api](https:
 #### Media Storage - Local/Amazon S3/Google Cloud
 
 Media (like audio, avatars and logos) can be stored either Locally or on Amazon S3 or on Google Storage.
- 
+
 1. [Amazon S3 Setup Instructions](/docs/AMAZON_S3.md)
 1. [Google Cloud Setup Instructions](https://cloud.google.com/storage/docs/migrating#defaultproj)
 
@@ -137,10 +138,10 @@ The event data and the sessions can be exported in various formats.
 
 ## Roles
 
-The system has two kind of role type. 
+The system has two kind of role type.
 
-1. System roles are related to the Open Event organization and operator of the application. 
-2. Event Roles are related to the users of the system with their different permissions. 
+1. System roles are related to the Open Event organization and operator of the application.
+2. Event Roles are related to the users of the system with their different permissions.
 
 Read more [here](/docs/ROLES.md).
 
@@ -181,13 +182,21 @@ pip install -r requirements/tests.txt
 
 #### Running unit tests
 
-* Go to the project directory and run the following command:
+* Open Event uses Postgres database for testing. So set `DATABASE_URL` as a postgres database. Here is an example.
+
+```sh
+export DATABASE_URL=postgresql://test_user:test@127.0.0.1:5432/opev_test
+# format is postgresql://USERNAME:PASSWORD@ADDRESS/DATABASE_NAME
+export APP_CONFIG=config.TestingConfig
+```
+
+* Then go to the project directory and run the following command:
 ```
 python -m unittest discover tests/unittests/
 ```
 * It will run each test one by one.
 
-* You can also use the following command to run tests using nosetests :
+* You can also use the following command to run tests using nosetests:
 ```
 nosetests tests/unittests/
 ```
@@ -219,7 +228,7 @@ Open Event is being translated using Weblate, a web tool designed to ease transl
 
 If you would like to contribute to translation of Open Event, you need to [register on this server](https://hosted.weblate.org/accounts/register/).
 
-Once you have activated your account just proceed to the [translation section](https://hosted.weblate.org/projects/open-event/).   
+Once you have activated your account just proceed to the [translation section](https://hosted.weblate.org/projects/open-event/).
 
 
 ## Contributions, Bug Reports, Feature Requests
@@ -230,15 +239,33 @@ This is an Open Source project and we would be happy to see contributors who rep
 
 We have the following branches
  * **development**
-	 All development goes on in this branch. If you're making a contribution,
-	 you are supposed to make a pull request to _development_.
-	 PRs to master must pass a build check and a unit-test check on Travis
+	 All development goes on in this branch. If you're making a contribution, please make a pull request to _development_.
+	 PRs to must pass a build check and a unit-test check on Travis (https://open-event-dev.herokuapp.com - Is running off the development branch. It is hosted on Heroku.)
  * **master**
-   This contains shipped code. After significant features/bug-fixes are accumulated on development, we make a version update, and make a release.
+   This contains shipped code. After significant features/bug-fixes are accumulated on development, we make a version update, and make a release. (https://eventyay.com - Is running off the master branch. (whichever is the latest release.) Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
+ * **gh-pages**
+   This contains the documentation website on http://dev.eventyay.com. The site is build automatically on each commit in the development branch through a script and using travis. It includes the md files of the Readme and /docs folder. It also includes javadocs.
+   
+## Release Policy
 
+The tentative release policy for now is, (since there is a lot of activity and a lot of bugs), an alpha release every monday and friday (since we see more activity on weekends). So, any bug-fixes will not be reflected at eventyay.com until a new release is made in the master branch.
+
+## Contributions Best Practices
+
+**Commits**
+* Write clear meaningful git commit messages (Do read http://chris.beams.io/posts/git-commit/)
+* Make sure your PR's description contains GitHub's special keyword references that automatically close the related issue when the PR is merged. (More info at https://github.com/blog/1506-closing-issues-via-pull-requests )
+* When you make very very minor changes to a PR of yours (like for example fixing a failing travis build or some small style corrections or minor changes requested by reviewers) make sure you squash your commits afterwards so that you don't have an absurd number of commits for a very small fix. (Learn how to squash at https://davidwalsh.name/squash-commits-git )
+* When you're submitting a PR for a UI-related issue, it would be really awesome if you add a screenshot of your change or a link to a deployment where it can be tested out along with your PR. It makes it very easy for the reviewers and you'll also get reviews quicker.
+
+**Feature Requests and Bug Reports**
+* When you file a feature request or when you are submitting a bug report to the [issue tracker](https://github.com/fossasia/open-event-orga-server/issues), make sure you add steps to reproduce it. Especially if that bug is some weird/rare one.
+
+**Join the development**
+* Before you join development, please set up the system on your local machine and go through the application completely. Press on any link/button you can find and see where it leads to. Explore. (Don't worry ... Nothing will happen to the app or to you due to the exploring :wink: Only thing that will happen is, you'll be more familiar with what is where and might even get some cool ideas on how to improve various aspects of the app.) 
+* Test the application on your machine and explore the admin area. The test deployment on Heroku will not give you access to the admin section, where you can switch on/off modules, e.g. ticketing and add keys for services, e.g. storage on S3.
+* If you would like to work on an issue, drop in a comment at the issue. If it is already assigned to someone, but there is no sign of any work being done, please free to drop in a comment so that the issue can be assigned to you if the previous assignee has dropped it entirely.
 
 ## License
 
-This project is currently licensed under the GNU General Public License v3. A
-copy of LICENSE.md should be present along with the source code. To obtain the
-software under a different license, please contact [FOSSASIA](http://blog.fossasia.org/contact/).
+This project is currently licensed under the GNU General Public License v3. A copy of LICENSE.md should be present along with the source code. To obtain the software under a different license, please contact [FOSSASIA](http://blog.fossasia.org/contact/).
