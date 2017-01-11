@@ -40,7 +40,7 @@ class Setup(object):
         with app.test_request_context():
             db.session.remove()
             if app.config['SQLALCHEMY_DATABASE_URI'].find('postgresql://') > -1:
-                # drop_all has problems with foreign keys in postgres database
+                # drop_all has problems with foreign keys in postgres database (cyclic dependency)
                 db.engine.execute("drop schema if exists public cascade")
                 db.engine.execute("create schema public")
             else:

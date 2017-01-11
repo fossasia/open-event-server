@@ -49,6 +49,11 @@ class TestEvents(OpenEventViewTestCase):
 
     def test_db_sessions(self):
         with app.test_request_context():
+            # create event
+            event = ObjectMother.get_event()
+            db.session.add(event)
+            db.session.commit()
+            # test
             for i in range(1, 10000):
                 session = ObjectMother.get_session()
                 session.name = 'Session' + str(i)
