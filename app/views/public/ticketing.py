@@ -35,12 +35,26 @@ def create_order():
     return redirect(url_for('.view_order', order_identifier=order.identifier))
 
 
+@ticketing.route('/apply_discount/', methods=('POST',))
+def apply_discount():
+    discount = TicketingManager.get_discount_code(request.form.get('event_id'), request.form.get('promo_code', ''))
+    if discount:
+        return jsonify({
+            'discount_type': discount.type,
+            'discount_amount': discount.value,
+            'discount_status': True
+        })
+    else:
+        return jsonify({
+            'discount_status': False
+        })
+
 @ticketing.route('/<order_identifier>/', methods=('GET',))
 def view_order(order_identifier):
     order = TicketingManager.get_and_set_expiry(order_identifier)
-    if not order or order.status == 'expired' or order.status == 'placed':
+    if not order or order.status == 'expired':
         abort(404)
-    if order.status == 'completed':
+    if order.status == 'completed' or order.status == 'placed':
         return redirect(url_for('ticketing.view_order_after_payment', order_identifier=order_identifier))
 
     if order.event.stripe:

@@ -74,7 +74,8 @@ POST_SESSION_DATA = {
     "video": "http://example.com/video",
     "audio": "http://example.com/audio",
     "signup_url": "http://example.com/signup",
-    "session_type_id": None
+    "session_type_id": None,
+    "level": "TestSessionLevel"
 }
 
 POST_SESSION_TYPE_DATA = {
@@ -97,7 +98,11 @@ POST_SPEAKER_DATA = {
     "photo": "http://imgur.com/skds.png",
     "position": "TestSession",
     "twitter": "http://twitter.com/user",
-    "website": "http://website.com"
+    "website": "http://website.com",
+    "city": "TestCity",
+    "heard_from": "TestSource",
+    "speaking_experience": "TestExperience",
+    "sponsorship_required": "Yes"
 }
 
 POST_SPONSOR_DATA = {

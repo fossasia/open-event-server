@@ -91,7 +91,8 @@ def fees_by_events_view():
                            from_date=from_date,
                            to_date=to_date,
                            tickets_total=tickets_total,
-                           fee_total=fee_total)
+                           fee_total=fee_total,
+                           navigation_bar=list_navbar())
 
 
 @sadmin_sales.route('/fees/status/')
@@ -118,7 +119,8 @@ def fees_status_view():
                            current_date=datetime.now(),
                            overdue_date=datetime.now() + timedelta(days=15),
                            invoices=invoices,
-                           to_date=to_date)
+                           to_date=to_date,
+                           navigation_bar=list_navbar())
 
 
 @sadmin_sales.route('/marketer/')
@@ -374,7 +376,7 @@ def sales_by_events_view(path):
 @sadmin_sales.route('/discounts/', methods=('GET',))
 def discount_codes_view():
     discount_codes = InvoicingManager.get_discount_codes()
-    return render_template('gentelella/admin/super_admin/sales/discount_codes.html', discount_codes=discount_codes)
+    return render_template('gentelella/admin/super_admin/sales/discount_codes.html', discount_codes=discount_codes, navigation_bar=list_navbar())
 
 
 @sadmin_sales.route('/discounts/create/', methods=('GET', 'POST'))
@@ -394,7 +396,7 @@ def discount_codes_create(discount_code_id=None):
     marketers = User.query.filter(User.id.in_(active_users_ids)).all()
 
     return render_template('gentelella/admin/super_admin/sales/discount_codes_create.html',
-                           discount_code=discount_code, marketers=marketers)
+                           discount_code=discount_code, marketers=marketers, navigation_bar=list_navbar())
 
 
 @sadmin_sales.route('/discounts/check/duplicate/', methods=('GET',))

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
-"POT-Creation-Date: 2017-01-06 10:31+0530\n"
+"POT-Creation-Date: 2017-01-09 23:35+0530\n"
 "PO-Revision-Date: 2017-01-03 09:14+0000\n"
 "Last-Translator: naofum <naofum@gmail.com>\n"
 "Language: ja\n"
@@ -170,7 +170,7 @@ msgstr "プロフィール"
 #: app/templates/gentelella/admin/event/wizard/components/ticket.html:53
 #: app/templates/gentelella/admin/menu.html:68
 #: app/templates/gentelella/admin/settings/base.html:4
-#: app/templates/gentelella/admin/settings/base.html:25
+#: app/templates/gentelella/admin/settings/base.html:26
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:4
 msgid "Settings"
 msgstr "設定"
@@ -2096,19 +2096,6 @@ msgstr "姓"
 msgid "Details about User"
 msgstr "ユーザーに関する詳細情報"
 
-#: app/templates/gentelella/admin/profile/_form.html:21
-msgid "Integrate Social Networks"
-msgstr "ソーシャル ネットワークを統合"
-
-#: app/templates/gentelella/admin/profile/_form.html:35
-#: app/templates/gentelella/admin/profile/_form.html:57
-msgid "Connect"
-msgstr "接続"
-
-#: app/templates/gentelella/admin/profile/_form.html:67
-msgid "Connect Account"
-msgstr "接続アカウント"
-
 #: app/templates/gentelella/admin/profile/index.html:42
 msgid "Avatar size must be less than 1MB"
 msgstr "アバターのサイズは 1 MB 未満にする必要があります"
@@ -2141,9 +2128,17 @@ msgstr "マーク"
 msgid "as Read"
 msgstr "既読"
 
+#: app/templates/gentelella/admin/settings/pages/applications.html:4
 #: app/templates/gentelella/admin/settings/pages/contact_info.html:4
 msgid "Contact Info - Settings"
 msgstr "連絡先情報 - 設定"
+
+#: app/templates/gentelella/admin/settings/pages/applications.html:31
+#: app/templates/gentelella/admin/settings/pages/applications.html:55
+#: app/templates/gentelella/admin/settings/pages/applications.html:74
+#: app/templates/gentelella/admin/settings/pages/applications.html:94
+msgid "Connected"
+msgstr ""
 
 #: app/templates/gentelella/admin/settings/pages/email_preferences.html:4
 msgid "Email Preferences - Settings"
@@ -2277,6 +2272,10 @@ msgstr "システム イメージ"
 #: app/templates/gentelella/admin/super_admin/content/content.html:41
 msgid "Translations"
 msgstr "翻訳"
+
+#: app/templates/gentelella/admin/super_admin/debug/debug.html:4
+msgid "Debug"
+msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/events/events.html:143
 msgid "Restore Event"
@@ -3485,15 +3484,15 @@ msgstr "申し込みを提出"
 msgid "No sessions have been published yet"
 msgstr "セッションがまだ公開されていません"
 
-#: app/templates/gentelella/guest/event/details.html:69
-msgid "Sponsors info unavailable"
-msgstr "スポンサー情報は利用できません"
+#: app/templates/gentelella/guest/event/details.html:70
+msgid "Other Sponsors"
+msgstr ""
 
-#: app/templates/gentelella/guest/event/details.html:76
+#: app/templates/gentelella/guest/event/details.html:82
 msgid "Organized by"
 msgstr "主催者"
 
-#: app/templates/gentelella/guest/event/details.html:81
+#: app/templates/gentelella/guest/event/details.html:87
 msgid "Getting Here"
 msgstr "ここで取得"
 
@@ -3588,7 +3587,6 @@ msgid "Exp Date"
 msgstr "有効期限"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:29
-#: app/templates/gentelella/guest/ticketing/components/_invoice.html:29
 msgid "Payment Date"
 msgstr "支払日"
 
@@ -3753,15 +3751,27 @@ msgstr "今すぐ注文"
 msgid "Card Nam"
 msgstr "カードの名前"
 
+#: app/templates/gentelella/guest/ticketing/components/_invoice.html:29
+msgid "Payment Due"
+msgstr ""
+
+#: app/templates/gentelella/guest/ticketing/components/_invoice.html:31
+msgid "Event Date"
+msgstr ""
+
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:4
 msgid "Order Summary"
 msgstr "注文内容"
 
-#: app/templates/gentelella/guest/ticketing/components/_order_summary.html:35
+#: app/templates/gentelella/guest/ticketing/components/_order_summary.html:37
 msgid "No tickets selected."
 msgstr "チケットが選択されていません。"
 
-#: app/templates/gentelella/guest/ticketing/components/_order_summary.html:41
+#: app/templates/gentelella/guest/ticketing/components/_order_summary.html:44
+msgid "Discount Applied by "
+msgstr ""
+
+#: app/templates/gentelella/guest/ticketing/components/_order_summary.html:51
 msgid "Order total"
 msgstr "注文の合計"
 
@@ -3811,4 +3821,16 @@ msgstr "ログイン"
 
 #~ msgid "Inconvince is regretted. We'll fix this as soon as possible."
 #~ msgstr "ご不便をお掛け致しますが、できるだけ早く修正します。"
+
+#~ msgid "Integrate Social Networks"
+#~ msgstr "ソーシャル ネットワークを統合"
+
+#~ msgid "Connect"
+#~ msgstr "接続"
+
+#~ msgid "Connect Account"
+#~ msgstr "接続アカウント"
+
+#~ msgid "Sponsors info unavailable"
+#~ msgstr "スポンサー情報は利用できません"
 

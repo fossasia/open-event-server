@@ -12,7 +12,7 @@
         <div class="col-xs-12 event-holder">
             <div class="thumbnail row">
                 <div class="img-box col-md-3 col-sm-3 col-xs-3">
-                    <img class="event-image" src='
+                    <img class="event-image" style="width:100%" src='
                             {% if order.event.logo %}{{ order.event.logo }}{% elif order.event.background_url %}{{ order.event.thumbnail }}{% elif order.event.sub_topic %}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == order.event.sub_topic %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{{ url_for("static", filename="placeholders/" + placeholder_images[order.event.sub_topic]) }}{% endif %}{% elif order.event.topic %}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == order.event.topic %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{ url_for("static", filename="placeholders/" + placeholder_images[order.event.topic])}}{% endif %}{% else %}{% set vars = {"foo": False} %}{% for custom_image in custom_placeholder %}{% if custom_image.name == "Other" %}{{ custom_image.url }}{% if vars.update({"foo": True}) %} {% endif %}{% endif %}{% endfor %}{% if not vars.foo %}{{ url_for("static", filename="placeholders/" + placeholder_images["Other"]) }}{% endif %}{% endif %}'
                          onerror="imgError(this, true)">
                 </div>

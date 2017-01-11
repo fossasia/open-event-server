@@ -202,16 +202,16 @@
                     $apiCheckbox = $($apiCheckbox);
                     var name = $apiCheckbox.attr('name');
                     if (name != 'basic_event_details' && $apiCheckbox[0].checked) {
-                        includes.push(name.replace("event_", ""))
+                        includes.push(name.replace("event_", ""));
                     }
                 });
                 var oldText = $endpointUrlHolder.text();
                 if (includes.length > 0) {
                     includes = includes.join(',');
-                    var url = location.protocol + "//" + location.host + "/api/v2/events/" + eventId + "?include=" + includes;
+                    var url = location.protocol + "//" + location.host + "/api/v1/events/" + eventId + "?include=" + includes;
                     $endpointUrlHolder.text(url);
                 } else {
-                    $endpointUrlHolder.text(location.protocol + "//" + location.host + "/api/v2/events/" + eventId);
+                    $endpointUrlHolder.text(location.protocol + "//" + location.host + "/api/v1/events/" + eventId);
                 }
                 if ($endpointUrlHolder.text() != oldText) {
                     reloadSample($endpointUrlHolder.text());

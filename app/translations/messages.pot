@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-01-06 10:31+0530\n"
+"POT-Creation-Date: 2017-01-09 23:35+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -167,7 +167,7 @@ msgstr ""
 #: app/templates/gentelella/admin/event/wizard/components/ticket.html:53
 #: app/templates/gentelella/admin/menu.html:68
 #: app/templates/gentelella/admin/settings/base.html:4
-#: app/templates/gentelella/admin/settings/base.html:25
+#: app/templates/gentelella/admin/settings/base.html:26
 #: app/templates/gentelella/admin/super_admin/settings/settings.html:4
 msgid "Settings"
 msgstr ""
@@ -2093,19 +2093,6 @@ msgstr ""
 msgid "Details about User"
 msgstr ""
 
-#: app/templates/gentelella/admin/profile/_form.html:21
-msgid "Integrate Social Networks"
-msgstr ""
-
-#: app/templates/gentelella/admin/profile/_form.html:35
-#: app/templates/gentelella/admin/profile/_form.html:57
-msgid "Connect"
-msgstr ""
-
-#: app/templates/gentelella/admin/profile/_form.html:67
-msgid "Connect Account"
-msgstr ""
-
 #: app/templates/gentelella/admin/profile/index.html:42
 msgid "Avatar size must be less than 1MB"
 msgstr ""
@@ -2138,8 +2125,16 @@ msgstr ""
 msgid "as Read"
 msgstr ""
 
+#: app/templates/gentelella/admin/settings/pages/applications.html:4
 #: app/templates/gentelella/admin/settings/pages/contact_info.html:4
 msgid "Contact Info - Settings"
+msgstr ""
+
+#: app/templates/gentelella/admin/settings/pages/applications.html:31
+#: app/templates/gentelella/admin/settings/pages/applications.html:55
+#: app/templates/gentelella/admin/settings/pages/applications.html:74
+#: app/templates/gentelella/admin/settings/pages/applications.html:94
+msgid "Connected"
 msgstr ""
 
 #: app/templates/gentelella/admin/settings/pages/email_preferences.html:4
@@ -2273,6 +2268,10 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/content/content.html:40
 #: app/templates/gentelella/admin/super_admin/content/content.html:41
 msgid "Translations"
+msgstr ""
+
+#: app/templates/gentelella/admin/super_admin/debug/debug.html:4
+msgid "Debug"
 msgstr ""
 
 #: app/templates/gentelella/admin/super_admin/events/events.html:143
@@ -3480,15 +3479,15 @@ msgstr ""
 msgid "No sessions have been published yet"
 msgstr ""
 
-#: app/templates/gentelella/guest/event/details.html:69
-msgid "Sponsors info unavailable"
+#: app/templates/gentelella/guest/event/details.html:70
+msgid "Other Sponsors"
 msgstr ""
 
-#: app/templates/gentelella/guest/event/details.html:76
+#: app/templates/gentelella/guest/event/details.html:82
 msgid "Organized by"
 msgstr ""
 
-#: app/templates/gentelella/guest/event/details.html:81
+#: app/templates/gentelella/guest/event/details.html:87
 msgid "Getting Here"
 msgstr ""
 
@@ -3583,7 +3582,6 @@ msgid "Exp Date"
 msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:29
-#: app/templates/gentelella/guest/ticketing/components/_invoice.html:29
 msgid "Payment Date"
 msgstr ""
 
@@ -3748,15 +3746,27 @@ msgstr ""
 msgid "Card Nam"
 msgstr ""
 
+#: app/templates/gentelella/guest/ticketing/components/_invoice.html:29
+msgid "Payment Due"
+msgstr ""
+
+#: app/templates/gentelella/guest/ticketing/components/_invoice.html:31
+msgid "Event Date"
+msgstr ""
+
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:4
 msgid "Order Summary"
 msgstr ""
 
-#: app/templates/gentelella/guest/ticketing/components/_order_summary.html:35
+#: app/templates/gentelella/guest/ticketing/components/_order_summary.html:37
 msgid "No tickets selected."
 msgstr ""
 
-#: app/templates/gentelella/guest/ticketing/components/_order_summary.html:41
+#: app/templates/gentelella/guest/ticketing/components/_order_summary.html:44
+msgid "Discount Applied by "
+msgstr ""
+
+#: app/templates/gentelella/guest/ticketing/components/_order_summary.html:51
 msgid "Order total"
 msgstr ""
 
