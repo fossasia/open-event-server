@@ -1,4 +1,7 @@
-# Open Event Orga Server Setup
+---
+title: Vagrant
+---
+
 * Navigate to [Vagrant Download Page](http://www.vagrantup.com/downloads.html)
 * Click on the proper package for your operating system and architecture, we will be using MAC OSX
 
