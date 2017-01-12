@@ -27,7 +27,6 @@ def own_event(event, user_id):
 
 
 def get_valid_event_name(value):
-    value = value.lower()
     name = None
     stop_words = ['ical', 'caldesc', 'calname', 'pentabarf']
     if value and value != '' and all(word not in value for word in stop_words):

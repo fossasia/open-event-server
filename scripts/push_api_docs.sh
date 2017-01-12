@@ -7,8 +7,10 @@ set -e
 git config --global user.name "Travis CI"
 git config --global user.email "noreply+travis@fossasia.org"
 
-if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/open-event-orga-server" ]; then
-    echo "Just a PR. No push"
+export DEPLOY_BRANCH = ${DEPLOY_BRANCH:-master}
+
+if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/open-event-orga-server" -o  "$TRAVIS_BRANCH" != "$DEPLOY_BRANCH" ]; then
+    echo "We update docs only from master. So, let's skip this shall we ? :)"
     exit 0
 fi
 
@@ -24,11 +26,11 @@ cp static/temp/swagger.json gh-pages/api/v1/swagger.json
 cp report.html gh-pages/robot/report.html
 cp log.html gh-pages/robot/log.html
 cp output.xml gh-pages/robot/output.xml
+cp -R docs/general/* gh-pages/_docs/
+cp -R docs/installation/* gh-pages/_installation/
+cp -R docs/kubernetes/* gh-pages/_kubernetes/
 cd gh-pages
-git add robot/log.html
-git add robot/output.xml
-git add robot/report.html
-git add api/v1/swagger.json
+git add .
 git commit -m '[Auto] Updated API docs and robot test results'
 git push origin gh-pages
 

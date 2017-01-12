@@ -1,4 +1,6 @@
-# Installation of Open Event on a Server
+---
+title: Generic
+---
 
 ## Dependencies required to run Orga Server
 
