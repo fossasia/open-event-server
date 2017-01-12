@@ -29,7 +29,7 @@
                             <th>{{ _("Ticket type") }}</th>
                             <th>{{ _("Sales ends") }}</th>
                             <th>{{ _("Price") }}</th>
-                            {% if fee %}
+                            {% if fees %}
                                <th>{{ _("Fee") }}</th>
                             {% endif %}
                             <th>{{ _("Quantity") }}</th>
@@ -50,14 +50,35 @@
                                     </td>
                                     <td>{{ ((ticket.sales_end|localize_dt_obj(event.timezone))|as_timezone(current_timezone)).strftime('%a, %B %d') }}</td>
                                     <td>{{ event.payment_currency | currency_symbol }}{{ ticket.price | money }}</td>
-                                    {% if fee %}
-                                    <td>{{ event.payment_currency | currency_symbol }} 0.00</td>
+                                    {% if fees %}
+                                    <td>
+                                        {{ event.payment_currency | currency_symbol }}
+                                        {% set fee = ticket.price * fees.service_fee / 100 %}
+                                        {% if not ticket.absorb_fees %}
+                                            {% if fee < fees.maximum_fee %}
+                                                {{ ticket.price * fees.service_fee / 100}}
+                                            {% else %}
+                                                {{ ticket.price * fees.maximum_fee / 100}}
+                                            {% endif %}
+                                        {% else %}
+                                            0.00
+                                        {% endif %}
+
+                                    </td>
                                     {% endif %}
                                     {% if (ticket.sales_start|localize_dt_obj(event.timezone)) <= timenow_event_tz and (ticket.sales_end|localize_dt_obj(event.timezone)) >= timenow_event_tz %}
                                         <td>
                                             <input type="hidden" name="ticket_ids[]" value="{{ ticket.id }}">
                                             <select title="ticket quantity" name="ticket_quantities[]" class="quantity-select"
-                                                    data-rate="{{ ticket.price }}" data-fee="0">
+                                                    data-rate="{{ ticket.price }}" data-fee="{% if not ticket.absorb_fees %}
+                                            {% if fee < fees.maximum_fee %}
+                                                {{ ticket.price * fees.service_fee / 100}}
+                                            {% else %}
+                                                {{ ticket.price * fees.maximum_fee / 100}}
+                                            {% endif %}
+                                        {% else %}
+                                            0.00
+                                        {% endif %}">
                                                 {% if ticket.min_order > 1 %}
                                                     <option value="0" selected>0</option>
                                                 {% endif %}
