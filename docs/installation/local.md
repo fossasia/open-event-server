@@ -1,7 +1,6 @@
-# Running the Orga Server
-
-This is a step-by-step guide on how to run orga-server in your computer.
-
+---
+title: Local
+---
 
 ## Dependencies required to run Orga Server
 

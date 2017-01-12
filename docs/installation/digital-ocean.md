@@ -1,4 +1,6 @@
-## Deploying Open Event on Digital Ocean
+---
+title: Digital Ocean
+---
 
 This guide will show you how to deploy Open Event on Digital Ocean. The basic idea is installing Docker on Digital Ocean droplet and then running Open Event in it.
 

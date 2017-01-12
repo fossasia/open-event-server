@@ -1,4 +1,6 @@
-# ROLES
+---
+title: Roles
+---
 
 The system has two kind of role types: System Roles and Event Roles.
 
