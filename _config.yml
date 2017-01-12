@@ -26,6 +26,9 @@ collections:
     installation:
         output: true
         permalink: /docs/installation/:path/
+    kubernetes:
+        output: true
+        permalink: /docs/kubernetes/:path/
     docs:
         output: true
         permalink: /docs/:path/
@@ -41,6 +44,12 @@ defaults:
     scope:
       path: ""
       type: "docs"
+    values:
+      layout: "doc"
+  -
+    scope:
+      path: ""
+      type: "kubernetes"
     values:
       layout: "doc"
 

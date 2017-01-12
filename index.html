@@ -18,3 +18,13 @@ layout: default
 {% for doc in sorted %}
 <h4><a href="{{doc.url | prepend: site.baseurl}}">{{doc.title}}</a></h4>
 {% endfor %}
+
+<hr>
+
+<h3>Kubernetes</h3>
+{% assign sorted = site.kubernetes | sort:'title' %}
+{% for doc in sorted %}
+<h4><a href="{{doc.url | prepend: site.baseurl}}">{{doc.title}}</a></h4>
+{% endfor %}
+
+<br>
