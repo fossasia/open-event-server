@@ -52,6 +52,9 @@
                 <input type="radio" name="show_state" autocomplete="off" value="Completed"> {{ _("Completed") }}
             </label>
             <label class="btn btn-default btn-responsive">
+                <input type="radio" name="show_state" autocomplete="off" value="Placed"> {{ _("Placed") }}
+            </label>
+            <label class="btn btn-default btn-responsive">
                 <input type="radio" name="show_state" autocomplete="off" value="Pending"> {{ _("Pending") }}
             </label>
             <label class="btn btn-default btn-responsive">
@@ -103,35 +106,36 @@
         </tr>
         </thead>
         <tbody>
-        {% for order in orders %}
-            {% for holder in order.ticket_holders %}
+        {% for holder in holders %}
                 <tr>
                     <td></td>
                     <td>
                         <a href="{{ url_for('ticketing.view_order_after_payment', order_identifier=order.identifier) if order.status == 'completed' else url_for('ticketing.show_transaction_error', order_identifier=order.identifier) }}"
-                           class="order-link">{{ order.get_invoice_number() }}</a> -
+                           class="order-link">{{ holder.order_invoice }}</a> -
                         by {{ order.user.user_detail.fullname if order.user.user_detail and order.user.user_detail.fullname else order.user.email }}
                         <br>
                         {% if order.status == 'completed' %}
-                            <span class="payment-via">Payment via {{ order.paid_via | capitalize }}</span>
+                            <span class="payment-via">Payment via {{ holder.paid_via | capitalize }}</span>
                         {% endif %}
                         {% if order.status == 'completed' %}
-                            <span class="datetime">{{ order.completed_at | datetime }} - {{ order.completed_at | humanize }}</span>
+                            <span class="datetime">{{ holder.completed_at | datetime }} - {{ holder.completed_at | humanize }}</span>
                         {% else %}
-                            <span class="datetime">{{ order.created_at | datetime }} - {{ order.created_at | humanize }}</span>
+                            <span class="datetime">{{ holder.created_at | datetime }} - {{ holder.created_at | humanize }}</span>
                         {% endif %}
                     </td>
                     <td>
                         {% if order.status == 'completed' %}
-                            <span class="label label-success">{{ order.status | capitalize }}</span>
+                            <span class="label label-success">{{ holder.status | capitalize }}</span>
                         {% elif order.status == 'pending' %}
-                            <span class="label label-warning">{{ order.status | capitalize }}</span>
+                            <span class="label label-warning">{{ holder.status | capitalize }}</span>
+                        {% elif order.status == 'placed' %}
+                            <span class="label label-info">{{ holder.status | capitalize }}</span>
                         {% else %}
-                            <span class="label label-danger">{{ order.status | capitalize }}</span>
+                            <span class="label label-danger">{{ holder.status | capitalize }}</span>
                         {% endif %}
                     </td>
-                    <td>{{ holder.ticket.name }}</td>
-                    <td>{{ event.payment_currency | currency_symbol }}{{ holder.ticket.price | money }}</td>
+                    <td>{{ holder.ticket_name }}</td>
+                    <td>{{ event.payment_currency | currency_symbol }}{{ holder.ticket_price | money }}</td>
                     <td>{{ holder.firstname }}</td>
                     <td>{{ holder.lastname }}</td>
                     <td>{{ holder.email }}</td>
@@ -149,7 +153,6 @@
                         {% endif %}
                     </td>
                 </tr>
-            {% endfor %}
         {% endfor %}
         </tbody>
     </table>

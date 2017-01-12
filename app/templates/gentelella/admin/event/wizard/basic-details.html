@@ -345,7 +345,8 @@
                             <label>{{ _("Choose Country") }} <span class="required">*</span></label>
                             <select name="payment_country" id="payment_country_name" class="form-control"
                                     v-model="event.payment_country"
-                                    title="payment country">
+                                    title="payment country"
+                                    required="required">
                                 {% if not event or not event.payment_country %}
                                     <option value="">{{ _("Choose a country for your payment") }}</option>
                                 {% endif %}
@@ -360,7 +361,8 @@
                             <label>{{ _("Choose Currency") }} <span class="required">*</span></label>
                             <select name="payment_currency" id="payment_currency_name" class="form-control"
                                     v-model="event.payment_currency"
-                                    title="currency">
+                                    title="currency"
+                                    required="required">
                                 {% if not event or not event.payment_currency %}
                                     <option value="">{{ _("Please select a currency") }}</option>
                                 {% endif %}
@@ -394,7 +396,7 @@
                         </div>
                         <div class="item form-group" v-show="event.pay_by_paypal">
                             <label>PayPal Email <span class="required">*</span></label>
-                            <input type="email" placeholder="PayPal Email" name="paypal_email" class="form-control"
+                            <input type="email" placeholder="PayPal Email" name="paypal_email" class="form-control" required="required"
                                    v-model="event.paypal_email">
                             <strong style="font-weight: 400;">{{ _("Don't have a PayPal account?") }} </strong><a
                                 href="https://www.paypal.com/us/webapps/mpp/referral/paypal-express-checkout?partner_id=W9QW5TKUA246E"
@@ -445,9 +447,10 @@
                                     <a href='#' data-toggle="modal" data-target="#chequeModal"
                                        title="Show cheque instructions"><strong
                                             style="font-weight: 400;">{{ _("example") }}</strong></a> {{ _("here") }}]
-                                </label>
+                                <span class="required">*</span></label>
                                 <textarea placeholder="Enter account details and instructions for cheque payment"
                                           name="cheque-details"
+                                          required="required"
                                           class="form-control" rows="6"
                                           v-model="event.cheque_details"
                                           cols="15"></textarea>
@@ -465,7 +468,7 @@
                                     <a href='#' data-toggle="modal" data-target="#bankModal"
                                        title="Show bank details instructions"><strong
                                             style="font-weight: 400;">{{ _("example") }}</strong></a> {{ _("here") }}]
-                                </label>
+                                <span class="required">*</span></label>
                                 <textarea
                                         placeholder="Enter account details and instructions for Telegraphic Transfer(TT) / Bank Transfer payment"
                                         name="bank-details"
@@ -481,10 +484,11 @@
                                 </label>
                             </div>
                             <div class="item form-group" v-show="event.pay_onsite">
-                                <label>{{ _("Enter payment instructions to ticket buyers to make payments onsite") }}</label>
+                                <label>{{ _("Enter payment instructions to ticket buyers to make payments onsite") }}<span class="required">*</span></label>
                                 <textarea placeholder="Enter instructions for payment at door" name="onsite-details"
-                                          v-model="event.onsite_details" class="form-control" rows="6"
-                                          cols="15"></textarea>
+                                      required="required"
+                                      v-model="event.onsite_details" class="form-control" rows="6"
+                                      cols="15"></textarea>
                             </div>
                         </div>
                     </div>

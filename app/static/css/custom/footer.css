@@ -38,7 +38,6 @@ footer .row {
     height: auto;
     border-top: 1px solid #AAAAAA;
     border-bottom: 1px solid #AAAAAA;
-
 }
 
 #footer-menu select {margin-top: 10px}
@@ -53,6 +52,10 @@ footer .copyright{
 
 #footer-menu select {background: #282C35; border-color:#AAAAAA; color: #AAAAAA  }
 
+#footer-menu > div > div:first-child{
+    padding: 10px 10px;
+}
+
 .footer-dropdown {
     border: 1px solid #AAAAAA;
     border-radius: 5px;
@@ -61,7 +64,6 @@ footer .copyright{
     padding: 10px 16px;
     background: #282C35;
     color: #AAAAAA;
-    margin-top: 5px;
     text-align: left;
 }
 

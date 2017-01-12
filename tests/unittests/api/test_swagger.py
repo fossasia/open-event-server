@@ -10,7 +10,7 @@ class TestSwagger(OpenEventTestCase):
     """
 
     def test_swagger_ui(self):
-        resp = self.app.get('/api/v2', follow_redirects=True)
+        resp = self.app.get('/api/v1', follow_redirects=True)
         self.assertIn('API', resp.data)
 
     def test_swagger_json(self):
@@ -18,7 +18,7 @@ class TestSwagger(OpenEventTestCase):
         tests swagger.json. Also writes the file so that auto-build
         of gh-pages can run
         """
-        resp = self.app.get('/api/v2/swagger.json')
+        resp = self.app.get('/api/v1/swagger.json')
         self.assertIn('event', resp.data)
         data = json.loads(resp.data)
         fp = open('static/uploads/swagger.json', 'w')

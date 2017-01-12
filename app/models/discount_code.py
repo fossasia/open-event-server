@@ -11,7 +11,7 @@ class DiscountCode(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String)
-    value = db.Column(db.Integer)
+    value = db.Column(db.Float)
     type = db.Column(db.String)
     is_active = db.Column(db.Boolean)
     tickets_number = db.Column(db.Integer)  # For event level discount this holds the max. uses
@@ -59,7 +59,7 @@ class DiscountCode(db.Model):
         return unicode(self).encode('utf-8')
 
     def __unicode__(self):
-        return self.identifier
+        return self.code
     @property
     def serialize(self):
         """Return object data in easily serializable format"""
