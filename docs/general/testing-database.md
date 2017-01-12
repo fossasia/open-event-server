@@ -1,4 +1,6 @@
-# Testing the database
+---
+title: Testing the database
+---
 
 Our project Open-Event has grown into a big, working application with a huge database set up in postgresql. It consists
 of large number of tables and relations hence it becomes extremely important to test the database if there are any slow components

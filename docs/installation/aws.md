@@ -1,4 +1,6 @@
-# Installation of the Open Event Orga Server on AWS
+---
+title: Amazon Web Services
+---
 
 ## Phase 1
 
