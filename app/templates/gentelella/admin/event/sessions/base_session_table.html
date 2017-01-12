@@ -157,7 +157,6 @@
                                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                                                 {% endif %}
                                                 <div class="row">
-
                                                     <br>
                                                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                         <label for="subject-name" class="control-label">Subject:</label>
@@ -168,20 +167,12 @@
                                                         <label for="message-text" class="control-label">Message:</label>
                                                         <textarea name="message" class="form-control message"  id="message-text" style="min-height:200px;min-width:100%"></textarea>
                                                     </div>
-                                                    
                                                     <br>
                                                     <button type="submit" class="btn btn-primary" >{{ _("Submit Mail") }}</button>
                                                 </div>
-
                                             </form>
-
-
-
-
-
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                
                                             </div>
                                         </div>
                                     </div>
@@ -215,8 +206,7 @@
                     return true;
                 }
                 return false;
-            }
-            );
+            });
 
         var table = $('.with-datatable').DataTable({
             "dom": '<"row"<"toolbar col-md-7"<"pull-left"l>><"col-md-3 pull-right"f>>tip',
@@ -237,24 +227,25 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
         $('#mailModal').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget) // Button that triggered the modal
-  var sessionid = button.data('sessionid') // Extract info from data-* attributes
-  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-  var emailtype=button.data('typeofmail');
-  var sessiontitle=button.data('sessiontitle');
-  var modal = $(this);
-  if(emailtype == "accept"){
-    modal.find('.subject').val("Session "+sessiontitle+" has been accepted");
-    modal.find('.message').val("Hello,The session "+sessiontitle+" has been "+emailtype+"ed by the organizer.  Visit this link to view the session: http://localhost:8001/events/4/sessions/1/");
-    modal.find('.form-horizontal').attr('action',sessionid+'/accept');
-}else{
-    modal.find('.subject').val("Session "+sessiontitle+" has been rejected");
-    modal.find('.message').val("Hello,The session "+sessiontitle+" has been "+emailtype+"ed by the organizer.  Visit this link to view the session: http://localhost:8001/events/4/sessions/1/");
-    modal.find('.form-horizontal').attr('action',sessionid+'/reject');
-}
+              var button = $(event.relatedTarget) // Button that triggered the modal
+              var sessionid = button.data('sessionid') // Extract info from data-* attributes
+              // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+              // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+              var emailtype=button.data('typeofmail');
+              var sessiontitle=button.data('sessiontitle');
+              var modal = $(this);
+              if(emailtype == "accept"){
+                modal.find('.subject').val("Session "+sessiontitle+" has been accepted");
+                modal.find('.message').val("Hello,The session "+sessiontitle+" has been "+emailtype+"ed by the organizer.  Visit this link to view the session: http://localhost:8001/events/4/sessions/1/");
+                modal.find('.form-horizontal').attr('action',sessionid+'/accept');
+            }
+            else{
+                modal.find('.subject').val("Session "+sessiontitle+" has been rejected");
+                modal.find('.message').val("Hello,The session "+sessiontitle+" has been "+emailtype+"ed by the organizer.  Visit this link to view the session: http://localhost:8001/events/4/sessions/1/");
+                modal.find('.form-horizontal').attr('action',sessionid+'/reject');
+            }
 
-});
+        });
 
     </script>
 {% endblock %}

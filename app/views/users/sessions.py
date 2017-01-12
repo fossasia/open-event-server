@@ -141,7 +141,7 @@ def add_speaker_view(event_id, session_id):
         return redirect(url_for('.index_view', event_id=event_id))
 
 
-@event_sessions.route('/<int:session_id>/accept/', methods=('GET','POST',))
+@event_sessions.route('/<int:session_id>/accept/', methods=('GET', 'POST',))
 @belongs_to_event
 @can_accept_and_reject
 def accept_session(event_id, session_id):
@@ -154,7 +154,7 @@ def accept_session(event_id, session_id):
     return redirect(url_for('.index_view', event_id=event_id))
 
 
-@event_sessions.route('/<int:session_id>/reject/', methods=('POST','GET',))
+@event_sessions.route('/<int:session_id>/reject/', methods=('POST', 'GET',))
 @belongs_to_event
 @can_accept_and_reject
 def reject_session(event_id, session_id):
@@ -167,7 +167,7 @@ def reject_session(event_id, session_id):
     return redirect(url_for('.index_view', event_id=event_id))
 
 
-@event_sessions.route('/<int:session_id>/send-emails/', methods=('GET','POST'))
+@event_sessions.route('/<int:session_id>/send-emails/', methods=('GET', 'POST'))
 @belongs_to_event
 @can_accept_and_reject
 def send_emails_session(event_id, session_id):

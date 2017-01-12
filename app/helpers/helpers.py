@@ -117,13 +117,11 @@ def send_session_accept_reject(email, session_name, acceptance, link):
                 action=SESSION_ACCEPT_REJECT,
                 subject=subject,
                 html=message,
-            
                 )
         else:
             send_email(
                 to=email,
                 action=SESSION_ACCEPT_REJECT,
-                
                 subject=MAILS[SESSION_ACCEPT_REJECT]['subject'].format(session_name=session_name, acceptance=acceptance),
                 html=MAILS[SESSION_ACCEPT_REJECT]['message'].format(
                     email=str(email),
