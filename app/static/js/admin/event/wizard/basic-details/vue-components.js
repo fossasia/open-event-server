@@ -1,5 +1,5 @@
 Vue.component('ticket', {
-    props: ['ticket'],
+    props: ['ticket', 'service_fee'],
     data: function () {
         return {
             show_settings: false

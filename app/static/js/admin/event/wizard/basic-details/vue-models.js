@@ -32,8 +32,8 @@ var EVENT = {
     ticket_url: '',
     discount_code_id: null,
     discount_code: '',
-    payment_country: '',
-    payment_currency: '',
+    payment_country: 'United States',
+    payment_currency: 'USD',
     pay_by_paypal: false,
     pay_by_stripe: false,
     pay_by_cheque: false,
@@ -97,5 +97,6 @@ var TICKET = {
     sales_end_time: moment().add(10, 'days').hour(22).minute(0).format('HH:mm'),
     min_order: 1,
     max_order: 10,
-    tags_string: ''
+    tags_string: '',
+    absorb_fees: false
 };
