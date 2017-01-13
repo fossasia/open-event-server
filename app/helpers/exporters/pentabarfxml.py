@@ -31,7 +31,8 @@ class PentabarfExporter:
 
         conference = Conference(title=event.name, start=tz.localize(event.start_time), end=tz.localize(event.end_time),
                                 days=diff.days if diff.days > 0 else 1,
-                                day_change="00:00", timeslot_duration="00:15")
+                                day_change="00:00", timeslot_duration="00:15",
+                                venue=event.location_name)
         dates = (db.session.query(cast(Session.start_time, DATE))
                  .filter_by(event_id=event_id)
                  .filter_by(state='accepted')

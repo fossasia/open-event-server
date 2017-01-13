@@ -1,4 +1,6 @@
-## Docker instructions
+---
+title: Docker
+---
 
 * Get the latest version of docker. See the [offical site](https://docs.docker.com/engine/installation/) for installation info for your platform.
 

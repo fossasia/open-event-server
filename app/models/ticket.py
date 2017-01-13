@@ -18,6 +18,7 @@ class Ticket(db.Model):
     type = db.Column(db.String)
     quantity = db.Column(db.Integer)
     price = db.Column(db.Float)
+    absorb_fees = db.Column(db.Boolean)
 
     sales_start = db.Column(db.DateTime)
     sales_end = db.Column(db.DateTime)
@@ -44,6 +45,7 @@ class Ticket(db.Model):
                  price=0,
                  min_order=1,
                  max_order=10,
+                 absorb_fees=False,
                  tags=None):
 
         if tags is None:
@@ -61,6 +63,7 @@ class Ticket(db.Model):
         self.min_order = min_order
         self.max_order = max_order
         self.tags = tags
+        self.absorb_fees = absorb_fees
 
     def has_order_tickets(self):
         """Returns True if ticket has already placed orders.
@@ -104,7 +107,8 @@ class Ticket(db.Model):
             'min_order': self.min_order,
             'max_order': self.max_order,
             'tags_string': '',
-            'has_orders': self.has_order_tickets()
+            'has_orders': self.has_order_tickets(),
+            'absorb_fees': self.absorb_fees
         }
 
         tags = []

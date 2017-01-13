@@ -28,9 +28,9 @@ class XCalExporter:
         prod_id_node = SubElement(v_calendar_node, 'prodid')
         prod_id_node.text = '-//fossasia//open-event//EN'
         cal_desc_node = SubElement(v_calendar_node, 'x-wr-caldesc')
-        cal_desc_node.text = event.name
+        cal_desc_node.text = "Schedule for sessions at " + event.name
         cal_name_node = SubElement(v_calendar_node, 'x-wr-calname')
-        cal_name_node.text = "Schedule for sessions at " + event.name
+        cal_name_node.text = event.name
 
         sessions = Session.query \
             .filter_by(event_id=event_id) \

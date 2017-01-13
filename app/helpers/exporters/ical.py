@@ -1,7 +1,7 @@
 import icalendar
 import pytz
 from flask import url_for
-from icalendar import Calendar
+from icalendar import Calendar, vCalAddress, vText
 from sqlalchemy import asc
 
 from app.models.event import Event as EventModel
@@ -21,8 +21,8 @@ class ICalExporter:
         cal = Calendar()
         cal.add('prodid', '-//fossasia//open-event//EN')
         cal.add('version', '2.0')
-        cal.add('x-wr-caldesc', event.name)
-        cal.add('x-wr-calname', "Schedule for sessions at " + event.name)
+        cal.add('x-wr-calname', event.name)
+        cal.add('x-wr-caldesc', "Schedule for sessions at " + event.name)
 
         tz = event.timezone or 'UTC'
         tz = pytz.timezone(tz)
@@ -48,10 +48,12 @@ class ICalExporter:
                 event_component.add('url', url_for('event_detail.display_event_detail_home',
                                                    identifier=event.identifier, _external=True))
 
-                attendees = []
                 for speaker in session.speakers:
-                    attendees.append(speaker.name)
-                    event_component.add('attendee', attendees)
+                    # Ref: http://icalendar.readthedocs.io/en/latest/usage.html#file-structure
+                    # can use speaker.email below but privacy reasons
+                    attendee = vCalAddress('MAILTO:' + event.email if event.email else 'undefined@email.com')
+                    attendee.params['cn'] = vText(speaker.name)
+                    event_component.add('attendee', attendee)
 
                 cal.add_component(event_component)
 

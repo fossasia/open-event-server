@@ -49,6 +49,11 @@ class TestEvents(OpenEventViewTestCase):
 
     def test_db_sessions(self):
         with app.test_request_context():
+            # create event
+            event = ObjectMother.get_event()
+            db.session.add(event)
+            db.session.commit()
+            # test
             for i in range(1, 10000):
                 session = ObjectMother.get_session()
                 session.name = 'Session' + str(i)
@@ -82,10 +87,6 @@ class TestEvents(OpenEventViewTestCase):
                         text_file.write("SLOW QUERY: %s\nParameters: %s\nDuration: %fs\nContext: %s\n" % (
                             query.statement, query.parameters, query.duration, query.context))
                         text_file.write("\n")
-
-    def tearDown(self):
-        with app.test_request_context():
-            db.drop_all()
 
 
 if __name__ == '__main__':
