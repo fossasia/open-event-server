@@ -264,7 +264,7 @@
                     </div>
                 </div>
                 <div class="tickets-holder" style="margin-bottom: 10px;">
-                    <ticket v-for="(ticket, index) in event.tickets" v-bind:ticket="ticket" v-bind:event="event" v-bind:service_fee="{{ (event.payment_currency | fees_by_currency).service_fee }}"
+                    <ticket v-for="(ticket, index) in event.tickets" v-bind:ticket="ticket" v-bind:event="event" v-bind:service_fee="{{ (event.payment_currency | fees_by_currency).service_fee | default(0, true) }}"
                             v-bind:key="index"
                             v-on:remove="removeTicket(ticket)"></ticket>
                 </div>
