@@ -84,5 +84,25 @@ class TestIcal(ImportExportOtherBase):
         self.assertIn('TestSpeaker', data)
 
 
+class TestXcal(ImportExportOtherBase):
+    """
+    Test xcal import/exports
+    """
+    def test_export_import(self):
+        """
+        test export and import of xcal
+        """
+        self._publishEvent(1)
+        resp = self.app.get('/api/v1/events/1')
+        identifier = json.loads(resp.data).get('identifier')
+        # export
+        resp = self.app.get('/e/%s/schedule/calendar.xcs' % identifier)
+        self.assertEqual(resp.status_code, 200)
+        self.assertIn('TestSpeaker', resp.data)
+        self.assertIn('TestSession', resp.data)
+        print resp.data
+        # import not made yet
+
+
 if __name__ == '__main__':
     unittest.main()
