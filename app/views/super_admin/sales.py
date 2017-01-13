@@ -220,10 +220,10 @@ def sales_by_marketer_view(by_discount_code=False):
                            navigation_bar=list_navbar())
 
 
-@sadmin_sales.route('/discount_code/')
+'''@sadmin_sales.route('/discount_code/')
 def sales_by_discount_code_view():
     return sales_by_marketer_view(True)
-
+'''
 
 @sadmin_sales.route('/<path>/')
 def sales_by_events_view(path):
@@ -372,7 +372,7 @@ def sales_by_events_view(path):
     else:
         abort(404)
 
-
+'''
 @sadmin_sales.route('/discounts/', methods=('GET',))
 def discount_codes_view():
     discount_codes = InvoicingManager.get_discount_codes()
@@ -447,3 +447,4 @@ def discount_codes_delete(discount_code_id=None):
     delete_from_db(discount_code, "Discount code deleted")
     flash("The discount code has been deleted.", "warning")
     return redirect(url_for('.discount_codes_view'))
+'''

@@ -13,6 +13,7 @@ from app import get_settings
 from app.helpers.data import save_to_db
 from app.helpers.payment import PayPalPaymentsManager
 from app.helpers.ticketing import TicketingManager
+from app.helpers.data_getter import DataGetter
 
 
 def create_pdf(pdf_data):
@@ -61,10 +62,11 @@ def view_order(order_identifier):
         stripe_publishable_key = order.event.stripe.stripe_publishable_key
     else:
         stripe_publishable_key = "No Key Set"
-
+    fees = DataGetter.get_fee_settings_by_currency(order.event.payment_currency)
     return render_template('gentelella/guest/ticketing/order_pre_payment.html', order=order, event=order.event,
                            countries=list(pycountry.countries),
-                           stripe_publishable_key=stripe_publishable_key)
+                           stripe_publishable_key=stripe_publishable_key,
+                           fees=fees)
 
 
 @ticketing.route('/<order_identifier>/view/', methods=('GET',))
@@ -73,7 +75,11 @@ def view_order_after_payment(order_identifier):
     if not order or (order.status != 'completed' and order.status != 'placed'):
         abort(404)
     flash("An email with the ticket has also been sent to your email account.")
-    return render_template('gentelella/guest/ticketing/order_post_payment.html', order=order, event=order.event)
+    fees = DataGetter.get_fee_settings_by_currency(order.event.payment_currency)
+    return render_template('gentelella/guest/ticketing/order_post_payment.html',
+                           order=order,
+                           event=order.event,
+                           fees=fees)
 
 
 @ticketing.route('/<order_identifier>/view/pdf/', methods=('GET',))

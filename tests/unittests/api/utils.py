@@ -13,14 +13,15 @@ from app.models.track import Track
 from app.models.user import User, ORGANIZER
 
 
-def create_event(name='TestEvent', creator_email=None):
+def create_event(name='TestEvent', creator_email=None, **kwargs):
     """Creates Event and returns its `id`.
     :param creator_email:
     :param name Name of Event
     """
     event = Event(name=name,
                   start_time=datetime(2016, 4, 8, 12, 30, 45),
-                  end_time=datetime(2016, 4, 9, 12, 30, 45))
+                  end_time=datetime(2016, 4, 9, 12, 30, 45),
+                  **kwargs)
     if creator_email:
         event.creator = User.query.filter_by(email=creator_email).first()
 
@@ -53,8 +54,8 @@ def create_session(event_id, serial_no='', **kwargs):
     session = Session(
         title='TestSession%d_%s' % (event_id, serial_no),
         long_abstract='descp',
-        start_time=datetime(2014, 8, 4, 12, 30, 45),
-        end_time=datetime(2015, 9, 4, 12, 30, 45),
+        start_time=kwargs.get('start_time', datetime(2014, 8, 4, 12, 45, 00)),
+        end_time=datetime(2014, 8, 4, 13, 00, 00),
         event_id=event_id,
         **kwargs
     )
@@ -89,7 +90,7 @@ def create_services(event_id, serial_no=''):
     session = Session(title=test_session,
                       long_abstract='descp',
                       start_time=datetime(2014, 8, 4, 12, 30, 45),
-                      end_time=datetime(2015, 9, 4, 12, 30, 45),
+                      end_time=datetime(2014, 8, 4, 13, 00, 00),
                       event_id=event_id,
                       session_type=session_type)
     speaker = Speaker(name=test_speaker,

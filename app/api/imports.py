@@ -25,7 +25,7 @@ class EventImportJson(Resource):
         elif source_type == 'pentabarf':
             file_path = get_file_from_request(['xml'])
         elif source_type == 'ical':
-            file_path = get_file_from_request(['ical'])
+            file_path = get_file_from_request(['ical', 'ics'])
         else:
             file_path = None
             abort(404)
