@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2017-01-09 23:35+0530\n"
-"PO-Revision-Date: 2017-01-11 02:29+0000\n"
+"PO-Revision-Date: 2017-01-13 03:49+0000\n"
 "Last-Translator: thuyle2890 <wildcat2890@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/open-event"
 "/organizer-server/vi/>\n"
@@ -546,7 +546,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:137
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:177
 msgid "Close"
-msgstr ""
+msgstr "Đóng"
 
 #: app/templates/gentelella/admin/event/details/widgets/microservices.html:12
 msgid "Generate Android App"
