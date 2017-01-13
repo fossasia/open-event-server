@@ -1,5 +1,6 @@
-# Installation of the Open Event Orga Server on the Google Container Engine with Kubernetes
-
+---
+title: GCE Kubernetes
+---
 
 ## Setup and Requirements
 

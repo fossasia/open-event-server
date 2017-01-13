@@ -122,6 +122,8 @@ def display_attendees(event_id):
             order_holder['order_url'] = url_for('ticketing.view_order_after_payment', order_identifier=order.identifier) \
                                         if order.status == 'completed' else url_for('ticketing.show_transaction_error', \
                                         order_identifier=order.identifier)
+            order_holder['by_whom'] = order.user.user_detail.fullname if order.user.user_detail \
+                                        and order.user.user_detail.fullname else order.user.email
             order_holder['paid_via'] = order.paid_via
             order_holder['status'] = order.status
             order_holder['completed_at'] = order.completed_at
@@ -139,6 +141,7 @@ def display_attendees(event_id):
                     order_holder['ticket_price'] = order_holder['ticket_price'] - (order_holder['ticket_price'] \
                                                     * discount.value / 100.0 )
             order_holder['checked_in'] = holder.checked_in
+            order_holder['id'] = holder.id
             holders.append(order_holder)
     return render_template('gentelella/admin/event/tickets/attendees.html', event=event,
                            event_id=event_id, holders=holders)

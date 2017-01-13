@@ -325,6 +325,7 @@ def save_tickets(tickets_data, event):
         ticket.max_order = ticket_data['max_order'] if ticket_data['max_order'] != '' else 10
         ticket.sales_start = get_event_time_field_format(ticket_data, 'sales_start')
         ticket.sales_end = get_event_time_field_format(ticket_data, 'sales_end')
+        ticket.absorb_fees = ticket_data['absorb_fees']
 
         if ticket_data['tags_string'].strip() != '':
             tag_names = ticket_data['tags_string'].split(',')

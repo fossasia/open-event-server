@@ -736,6 +736,13 @@ class DataGetter(object):
         return TicketFees.query.all()
 
     @staticmethod
+    def get_fee_settings_by_currency(currency):
+        if currency:
+            return TicketFees.query.filter_by(currency=currency).first()
+        else:
+            return False
+
+    @staticmethod
     def get_expired_orders():
         return Order.query.filter(Order.status != 'completed')
 
