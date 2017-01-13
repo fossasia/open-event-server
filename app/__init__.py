@@ -219,6 +219,11 @@ def get_app_name():
 
 
 @app.context_processor
+def get_tagline():
+    return dict(tagline=get_settings()['tagline'])
+
+
+@app.context_processor
 def fee_helpers():
     def get_fee(currency):
         from app.helpers.payment import get_fee
