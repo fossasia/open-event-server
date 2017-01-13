@@ -97,7 +97,11 @@
     </style>
 {% endblock %}
 {% block title %}
-    Home
+    {% if tagline %}
+        {{ tagline }}
+    {% else %}
+        Event Management and Ticketing
+    {% endif %}
 {% endblock %}
 {% macro event_box(event) %}
     <a href="/e/{{ event.identifier }}">
