@@ -20,13 +20,15 @@
                 <input name="location_name" id="location_name"
                        v-model="event.location_name"
                        placeholder="Location is required to make event live"
-                       class="form-control"/>
+                       class="form-control"
+                       v-show="!addressShown"
+                       v-on:gmap="fillInAddress"/>
             </div>
         </div>
 
     </div>
     <a id="show_addr" style="cursor:pointer;" v-on:click="addressShown = !addressShown"
-       v-show="mapLoaded && !addressShown">{{ _("Enter Address") }}</a>
+       v-show="mapLoaded && !addressShown">{{ _("Enter New Address") }}</a>
     <transition name="fade">
         <div class="row" id="map-holder" v-show="addressShown">
             <div class="col-md-6 col-xs-12">
@@ -57,7 +59,7 @@
                 <div class="col-md-4">
                     <a id="reset_addr"
                        style="cursor:pointer;"
-                       v-on:click="event.location_name= ''; addressShown = false;">{{ _("Reset Location") }}</a>
+                       v-on:click="resetAddress">{{ _("Reset Location") }}</a>
                 </div>
                 <div class="col-md-8">
                     <div class="checkbox" style="padding-top:0;">

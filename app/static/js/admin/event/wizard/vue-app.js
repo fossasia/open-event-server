@@ -95,7 +95,7 @@ var app = new Vue({
         'event.end_time_date': function () {
             this.disableMove = shouldDisableMove(this);
         },
-        'event.location_name': function (val) {
+        /*'event.location_name': function (val) {
             var $this = this;
             geocodeAddress(window.geocoder, val, function (lat, lng) {
                 if (val.trim() !== "") {
@@ -104,7 +104,7 @@ var app = new Vue({
                 $this.event.latitude = lat;
                 $this.event.longitude = lng;
             });
-        },
+        },*/
         'event.discount_code': function () {
             this.discountMessage.success = '';
             this.discountMessage.error = '';
@@ -195,6 +195,24 @@ var app = new Vue({
                 locationName += $('#' + key).get(0).value + " ";
             });
             this.event.location_name = locationName;
+        },
+        fillInAddress: function(){
+            var $this = this;
+            var val = this.event.location_name;
+            geocodeAddress(window.geocoder, val, function (lat, lng) {
+                if (val.trim() !== "") {
+                    $this.addressShown = true;
+                }
+                $this.event.latitude = lat;
+                $this.event.longitude = lng;
+            });
+        },
+        resetAddress: function () {
+          this.event.location_name= '';
+          this.addressShown = false;
+          _.each(window.componentForm, function (value, key) {
+              $('#' + key).val('');
+          });
         },
         connectToStripe: function () {
             var $this = this;
