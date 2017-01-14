@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-
+"""
+Tests for core JSON import/export
+"""
 import json
 import logging
 import os

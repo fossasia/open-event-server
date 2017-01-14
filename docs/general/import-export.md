@@ -1,4 +1,6 @@
-# Import/Export Feature
+---
+title: Import/Export
+---
 
 Import/Export feature of Open Event allows you to export an event with all its data in a zip file.
 You can then use the zip to import back the event on an another system.
@@ -65,7 +67,7 @@ The following is the directory structure of the media files in the zip.
 For example, videos of sessions will have a location in zip like `/videos/session_ID` where session_ID is the id of the session.
 The filename might be followed by an extension. Example - /videos/session_4.mp4
 
-```js
+```json
 {
     'sessions': {
         'video': '/videos/session_ID',

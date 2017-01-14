@@ -45,7 +45,7 @@ Flask-Babel>=0.11.1,<1
 python-geoip>=1.2,<2
 marrow.mailer>=4.0.2,<5
 defusedxml>=0.4.1,<1
-python-pentabarf-xml==0.18  # leave versions untouched.
+python-pentabarf-xml==0.19  # leave versions untouched.
 Flask-SocketIO==2.5  # leave versions untouched.
 python-geoip-geolite2
 pycountry

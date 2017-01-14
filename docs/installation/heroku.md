@@ -1,4 +1,6 @@
-# How to deploy server to Heroku
+---
+title: Heroku
+---
 
 One-click Heroku deployment is available:
 

@@ -11,7 +11,7 @@ from app.helpers.data import DataManager, get_facebook_auth, get_instagram_auth,
 from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import uploaded_file
 from app.helpers.oauth import FbOAuth, InstagramOAuth, OAuth
-from app.helpers.storage import upload, UPLOAD_PATHS
+from app.helpers.storage import upload, UPLOAD_PATHS, upload_local
 
 profile = Blueprint('profile', __name__, url_prefix='/profile')
 
@@ -89,7 +89,7 @@ def create_event_bgimage_upload():
         background_image = request.form['bgimage']
         if background_image:
             background_file = uploaded_file(file_content=background_image)
-            background_url = upload(
+            background_url = upload_local(
                 background_file,
                 UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
             )
