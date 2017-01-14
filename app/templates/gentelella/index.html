@@ -96,11 +96,12 @@
         }
     </style>
 {% endblock %}
+{% set is_home_page = true %}
 {% block title %}
     {% if tagline %}
-        {{ tagline }}
+        {{ app_name }} - {{ tagline }}
     {% else %}
-        Event Management and Ticketing
+        {{ app_name }} - Event Management and Ticketing
     {% endif %}
 {% endblock %}
 {% macro event_box(event) %}
