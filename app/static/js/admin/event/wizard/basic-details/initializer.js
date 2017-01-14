@@ -41,6 +41,7 @@ VueGoogleMap.loaded.then(function () {
     window.autocomplete = new google.maps.places.Autocomplete(locationInput, {types: ['geocode']});
     window.autocomplete.addListener('place_changed', function () {
         locationInput.dispatchEvent(new Event('input'));
+        locationInput.dispatchEvent(new Event('gmap'));
     });
 
     var intervalID = setInterval(function () {
