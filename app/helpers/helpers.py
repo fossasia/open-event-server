@@ -109,17 +109,27 @@ def send_session_accept_reject(email, session_name, acceptance, link):
     """Send session accepted or rejected"""
     message_settings = MessageSettings.query.filter_by(action=SESSION_ACCEPT_REJECT).first()
     if not message_settings or message_settings.mail_status == 1:
-        send_email(
-            to=email,
-            action=SESSION_ACCEPT_REJECT,
-            subject=MAILS[SESSION_ACCEPT_REJECT]['subject'].format(session_name=session_name, acceptance=acceptance),
-            html=MAILS[SESSION_ACCEPT_REJECT]['message'].format(
-                email=str(email),
-                session_name=str(session_name),
-                acceptance=str(acceptance),
-                link=link
+        if request.form:
+            subject = request.form.get('subject', '')
+            message = request.form.get('message', '')
+            send_email(
+                to=email,
+                action=SESSION_ACCEPT_REJECT,
+                subject=subject,
+                html=message,
             )
-        )
+        else:
+            send_email(
+                to=email,
+                action=SESSION_ACCEPT_REJECT,
+                subject=MAILS[SESSION_ACCEPT_REJECT]['subject'].format(session_name=session_name, acceptance=acceptance),
+                html=MAILS[SESSION_ACCEPT_REJECT]['message'].format(
+                    email=str(email),
+                    session_name=str(session_name),
+                    acceptance=str(acceptance),
+                    link=link
+                )
+            )
 
 
 def send_schedule_change(email, session_name, link):
