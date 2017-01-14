@@ -17,7 +17,7 @@ ${WELCOME URL}     http://${SERVER}/
 
 *** Keywords ***
 Login Page Should Be Open
-    Title Should Be    Open Event - Login
+    Title Should Be    Login - Open Event
 
 Open Browser To Login Page
     Open Browser    ${LOGIN URL}    ${BROWSER}
