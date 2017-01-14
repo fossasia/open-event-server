@@ -126,7 +126,7 @@
                                             <i class="fa fa-check"></i>
                                         </a>
                                         <button type="button" class="btn btn-primary btn-success" data-toggle="modal" data-target="#mailModal" data-sessionid="{{session.id}}" data-sessiontitle="{{session.title}}" data-typeofmail="accept"><i class="fa fa-times fa-fw"></i> <i class="fa fa-envelope fa-fw"></i></button>
-                                   
+
                                     {% endif %}
 
                                     {% if session.state != 'rejected' %}
@@ -134,8 +134,8 @@
                                            data-toggle="tooltip" title="Reject" data-placement="right">
                                             <i class="fa fa-times"></i>
                                         </a>
-                                       <button type="button" class="btn btn-primary btn-danger" data-toggle="modal" data-target="#mailModal" data-sessionid="{{session.id}}" data-sessiontitle="{{session.title}}" data-typeofmail="reject"><i class="fa fa-times fa-fw"></i> <i class="fa fa-envelope fa-fw"></i></button>
-                                       
+                                        <button type="button" class="btn btn-primary btn-danger" data-toggle="modal" data-target="#mailModal" data-sessionid="{{session.id}}" data-sessiontitle="{{session.title}}" data-typeofmail="reject"><i class="fa fa-times fa-fw"></i> <i class="fa fa-envelope fa-fw"></i></button>
+
                                     {% endif %}
                                     {% if not session.state_email_sent and (session.state == 'accepted' or session.state == 'rejected') %}
                                         <a href="{{ session.id }}/send-emails/" class="btn btn-sm btn-info"
@@ -143,41 +143,41 @@
                                             <i class="fa fa-envelope"></i>
                                         </a>
                                     {% endif %}
-                                    
+
                                     <div class="modal fade" id="mailModal" tabindex="-1" role="dialog" aria-labelledby="mailModalLabel">
-                                      <div class="modal-dialog modal-lg" role="document">
-                                        <div class="modal-content">
-                                          <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                            <h4 class="modal-title" id="mailModalLabel">New message</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form enctype="multipart/form-data" action="" method="POST" class="form-horizontal" id="session-create-form">
-                                                {% if csrf_token %}
-                                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                                                {% endif %}
-                                                <div class="row">
-                                                    <br>
-                                                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                        <label for="subject-name" class="control-label">Subject:</label>
-                                                        <input type="text" class="form-control subject" style="min-width:100%" name="subject" id="subject-name" >
-                                                    </div>
-                                                    <br>
-                                                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" >
-                                                        <label for="message-text" class="control-label">Message:</label>
-                                                        <textarea name="message" class="form-control message"  id="message-text" style="min-height:200px;min-width:100%"></textarea>
-                                                    </div>
-                                                    <br>
-                                                    <button type="submit" class="btn btn-primary" >{{ _("Submit Mail") }}</button>
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="mailModalLabel">New message</h4>
                                                 </div>
-                                            </form>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                <div class="modal-body">
+                                                    <form enctype="multipart/form-data" action="" method="POST" class="form-horizontal" id="session-create-form">
+                                                        {% if csrf_token %}
+                                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                                        {% endif %}
+                                                        <div class="row">
+                                                            <br>
+                                                            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <label for="subject-name" class="control-label">Subject:</label>
+                                                                <input type="text" class="form-control subject" style="min-width:100%" name="subject" id="subject-name" >
+                                                            </div>
+                                                            <br>
+                                                            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+                                                                <label for="message-text" class="control-label">Message:</label>
+                                                                <textarea name="message" class="form-control message"  id="message-text" style="min-height:200px;min-width:100%"></textarea>
+                                                            </div>
+                                                            <br>
+                                                            <button type="submit" class="btn btn-primary" >{{ _("Submit Mail") }}</button>
+                                                        </div>
+                                                    </form>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-
                                 </div>
                             </td>
                         </tr>
@@ -211,8 +211,8 @@
         var table = $('.with-datatable').DataTable({
             "dom": '<"row"<"toolbar col-md-7"<"pull-left"l>><"col-md-3 pull-right"f>>tip',
             "columnDefs": [
-            {"width": "20%", "targets": 1},
-            {"width": "5%", "targets": 3}
+                {"width": "20%", "targets": 1},
+                {"width": "5%", "targets": 3}
             ],
             "scrollX": true
         });
@@ -227,22 +227,21 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
         $('#mailModal').on('show.bs.modal', function (event) {
-              var button = $(event.relatedTarget) // Button that triggered the modal
-              var sessionid = button.data('sessionid') // Extract info from data-* attributes
-              // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-              // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-              var emailtype=button.data('typeofmail');
-              var sessiontitle=button.data('sessiontitle');
-              var modal = $(this);
-              if(emailtype == "accept"){
-                modal.find('.subject').val("Session "+sessiontitle+" has been accepted");
-                modal.find('.message').val("Hello,The session "+sessiontitle+" has been "+emailtype+"ed by the organizer.  Visit this link to view the session: http://localhost:8001/events/4/sessions/1/");
-                modal.find('.form-horizontal').attr('action',sessionid+'/accept');
-            }
-            else{
-                modal.find('.subject').val("Session "+sessiontitle+" has been rejected");
-                modal.find('.message').val("Hello,The session "+sessiontitle+" has been "+emailtype+"ed by the organizer.  Visit this link to view the session: http://localhost:8001/events/4/sessions/1/");
-                modal.find('.form-horizontal').attr('action',sessionid+'/reject');
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var sessionid = button.data('sessionid'); // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var emailtype = button.data('typeofmail');
+            var sessiontitle = button.data('sessiontitle');
+            var modal = $(this);
+            if (emailtype === "accept") {
+                modal.find('.subject').val("Session " + sessiontitle + " has been accepted");
+                modal.find('.message').val("Hello,The session " + sessiontitle + " has been " + emailtype + "ed by the organizer.  Visit this link to view the session: http://localhost:8001/events/4/sessions/1/");
+                modal.find('.form-horizontal').attr('action', sessionid + '/accept');
+            } else {
+                modal.find('.subject').val("Session " + sessiontitle + " has been rejected");
+                modal.find('.message').val("Hello,The session " + sessiontitle + " has been " + emailtype + "ed by the organizer.  Visit this link to view the session: http://localhost:8001/events/4/sessions/1/");
+                modal.find('.form-horizontal').attr('action' , sessionid + '/reject');
             }
 
         });
