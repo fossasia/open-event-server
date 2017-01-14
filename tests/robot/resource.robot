@@ -17,7 +17,7 @@ ${WELCOME URL}     http://${SERVER}/
 
 *** Keywords ***
 Login Page Should Be Open
-    Title Should Be    Login - Open Event
+    Title Should Be    Open Event - Login
 
 Open Browser To Login Page
     Open Browser    ${LOGIN URL}    ${BROWSER}
@@ -42,7 +42,7 @@ Submit Credentials
 
 Welcome Page Should Be Open
     Location Should Be    ${WELCOME URL}
-    Title Should Be    Home - Open Event
+    Title Should Be    Open Event - Event Management and Ticketing
 
 Login to Open Event
     Open Browser To Login Page
