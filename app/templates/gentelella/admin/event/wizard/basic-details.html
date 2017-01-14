@@ -28,7 +28,7 @@
 
     </div>
     <a id="show_addr" style="cursor:pointer;" v-on:click="addressShown = !addressShown"
-       v-show="mapLoaded && !addressShown">{{ _("Enter New Address") }}</a>
+       v-show="mapLoaded && !addressShown">{{ _("Enter Address") }}</a>
     <transition name="fade">
         <div class="row" id="map-holder" v-show="addressShown">
             <div class="col-md-6 col-xs-12">
@@ -74,7 +74,7 @@
             <div class="col-md-6">
                 <google-map class="hidden-xs" style="width:100%; height:300px" ref="gmap" :center="location"
                             :zoom="zoom">
-                    <map-marker :position="location" :clickable="false" :draggable="false"></map-marker>
+                    <map-marker :position="location" :clickable="false" :draggable="true"></map-marker>
                 </google-map>
             </div>
             <br>
