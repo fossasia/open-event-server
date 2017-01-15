@@ -1,0 +1,24 @@
+
+OpenJPEG NEWS - user visible changes
+====================================
+
+Changes from OpenJPEG 2.0.0 to OpenJPEG 2.0.1
+----------------------------------------------
+
+New Features:
+
+    * Digital Cinema profiles have been fixed and updated
+    * New option to disable MCT if needed
+    * extended RAW support: it is now possible to input raw images
+      with subsampled color components (422, 420, etc)
+
+API/ABI modifications: (see abi_compat_report_2.0.1.html in dev-utils/scripts)
+
+    * No changes, API/ABI fully compatible with 2.0.0
+    
+Misc:
+
+    * OpenJPEG is now officialy conformant with JPEG 2000 Part-1
+      and will soon become official reference software at the 
+      JPEG committee.
+    * Huge amount of bug fixes. See CHANGES for details.
