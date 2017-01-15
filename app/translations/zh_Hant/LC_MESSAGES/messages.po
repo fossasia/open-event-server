@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2017-01-09 23:35+0530\n"
-"PO-Revision-Date: 2017-01-15 06:22+0000\n"
-"Last-Translator: Chang-Chia Tseng <pswo10680@gmail.com>\n"
+"PO-Revision-Date: 2017-01-15 07:52+0000\n"
+"Last-Translator: 楊嘉哲 <ms06895178@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects"
 "/open-event/organizer-server/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -1226,11 +1226,11 @@ msgstr ""
 #: app/templates/gentelella/admin/event/tickets/attendees.html:92
 #: app/templates/gentelella/admin/profile/_form.html:8
 msgid "First Name"
-msgstr ""
+msgstr "名字"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:95
 msgid "Last Name"
-msgstr ""
+msgstr "姓氏"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:101
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:52
@@ -1239,20 +1239,20 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/reports/_system_logs.html:90
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:55
 msgid "Action"
-msgstr ""
+msgstr "行動"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:142
 msgid "Undo"
-msgstr ""
+msgstr "上位動作"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:146
 msgid "Check In"
-msgstr ""
+msgstr "報到"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:23
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:26
 msgid "Discount Codes"
-msgstr ""
+msgstr "折扣碼"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:26
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:29
@@ -1267,14 +1267,14 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:82
 #: app/templates/gentelella/admin/super_admin/users/users.html:48
 msgid "Active"
-msgstr ""
+msgstr "啟動"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:39
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:79
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:42
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:82
 msgid "Inactive"
-msgstr ""
+msgstr "反啟動"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:48
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:21
@@ -1282,7 +1282,7 @@ msgstr ""
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:30
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:57
 msgid "Discount Code"
-msgstr ""
+msgstr "折扣碼"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:49
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:52
@@ -1292,7 +1292,7 @@ msgstr ""
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:50
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:53
 msgid "Validity"
-msgstr ""
+msgstr "有效性"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:35
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:44
@@ -1301,12 +1301,12 @@ msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:76
 msgid "Number of discount tickets"
-msgstr ""
+msgstr "折價券數量"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:98
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:89
 msgid "Not Active"
-msgstr ""
+msgstr "不活躍"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:105
 msgid "Select Ticket(s) applied to the discount code"
@@ -1318,7 +1318,7 @@ msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:131
 msgid "Show other options"
-msgstr ""
+msgstr "顯示其他選項"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:135
 msgid "Set the min. and max. quantity allowed to purchase per order (optional)"
@@ -1326,11 +1326,11 @@ msgstr "設定每次下訂的最小和最大數量限制（選填）"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:139
 msgid "Min"
-msgstr ""
+msgstr "最小值"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:146
 msgid "Max"
-msgstr ""
+msgstr "最大值"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:156
 msgid "Validity period (optional)"
@@ -1355,7 +1355,7 @@ msgstr "檢視訂單"
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:73
 msgid "Total Amount"
-msgstr ""
+msgstr "總數量"
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:76
 msgid "Qty"
@@ -1382,7 +1382,7 @@ msgstr "檢視訂單"
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:75
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:81
 msgid "Sales"
-msgstr ""
+msgstr "特價"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:102
 msgid "Tickets sold"
@@ -1404,7 +1404,7 @@ msgstr "依據訂單狀態"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:125
 msgid "Total Tickets"
-msgstr ""
+msgstr "票券總數"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:128
 msgid "Total Orders"
@@ -1416,11 +1416,11 @@ msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:134
 msgid "View Reports"
-msgstr ""
+msgstr "查看報導"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:164
 msgid "Tickets Summary"
-msgstr ""
+msgstr "票券摘要"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:175
 msgid "Tickets Capacity Set"
@@ -1443,44 +1443,44 @@ msgstr "擱置中的訂單"
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:119
 #: app/templates/gentelella/guest/event/_ticketing_box.html:83
 msgid "Total"
-msgstr ""
+msgstr "總數"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:19
 #: app/templates/gentelella/guest/ticketing/pdf/ticket.html:47
 msgid "Location"
-msgstr ""
+msgstr "位置"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:29
 msgid "Enter Address"
-msgstr ""
+msgstr "輸入地址"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:60
 msgid "Reset Location"
-msgstr ""
+msgstr "重設地址"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:67
 msgid "Show map on event page"
-msgstr ""
+msgstr "在活動頁面上顯示地圖"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:88
 #: app/templates/gentelella/admin/event/wizard/session-speakers/call-for-speakers.html:16
 msgid "Starts"
-msgstr ""
+msgstr "開始"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:117
 #: app/templates/gentelella/admin/event/wizard/session-speakers/call-for-speakers.html:32
 msgid "Ends"
-msgstr ""
+msgstr "結束"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:143
 #: app/templates/gentelella/admin/event/wizard/session-speakers/call-for-speakers.html:53
 msgid "Timezone"
-msgstr ""
+msgstr "時區"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:153
 #: app/templates/gentelella/admin/event/wizard/sponsors.html:45
 msgid "Description"
-msgstr ""
+msgstr "描述"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:180
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:563
@@ -1488,15 +1488,15 @@ msgstr ""
 #: app/templates/gentelella/admin/profile/index.html:59
 #: app/templates/gentelella/admin/super_admin/content/_system_images.html:91
 msgid "Remove"
-msgstr ""
+msgstr "去掉"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:181
 msgid "Organizer Information"
-msgstr ""
+msgstr "組織者信息"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:191
 msgid "Organizer name"
-msgstr ""
+msgstr "組織者姓名"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:196
 msgid "Organizer Description"
