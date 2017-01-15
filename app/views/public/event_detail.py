@@ -20,6 +20,7 @@ from app.models.call_for_papers import CallForPaper
 from app.helpers.wizard.helpers import get_current_timezone
 
 
+
 def get_published_event_or_abort(identifier):
     event = DataGetter.get_event_by_identifier(identifier=identifier)
     if not event or event.state != u'Published':
@@ -81,6 +82,8 @@ def display_event_detail_home(identifier):
             sponsors[int(sponsor.level)].append(sponsor)
         else:
             sponsors[int(sponsor.level)] = [sponsor]
+
+    fees = DataGetter.get_fee_settings_by_currency(event.payment_currency)
     return render_template('gentelella/guest/event/details.html',
                            event=event,
                            sponsors=sponsors,
@@ -94,7 +97,8 @@ def display_event_detail_home(identifier):
                            module=module,
                            timenow_event_tz=timenow_event_tz,
                            current_timezone=get_current_timezone(),
-                           tickets=tickets if tickets else [])
+                           tickets=tickets if tickets else [],
+                           fees=fees)
 
 
 @event_detail.route('/<identifier>/sessions/')
@@ -352,6 +356,7 @@ def display_event_tickets(identifier):
     tickets = DataGetter.get_sales_open_tickets(event.id, True)
     accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
     timenow_event_tz = datetime.now(pytz.timezone(event.timezone))
+    fees = DataGetter.get_fee_settings_by_currency(event.payment_currency)
     return render_template('gentelella/guest/event/details.html',
                            event=event,
                            placeholder_images=placeholder_images,
@@ -361,7 +366,8 @@ def display_event_tickets(identifier):
                            module=module,
                            timenow_event_tz=timenow_event_tz,
                            current_timezone=get_current_timezone(),
-                           tickets=tickets if tickets else [])
+                           tickets=tickets if tickets else [],
+                           fees=fees)
 
 
 # SLUGGED PATHS

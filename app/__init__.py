@@ -219,6 +219,11 @@ def get_app_name():
 
 
 @app.context_processor
+def get_tagline():
+    return dict(tagline=get_settings()['tagline'])
+
+
+@app.context_processor
 def fee_helpers():
     def get_fee(currency):
         from app.helpers.payment import get_fee
@@ -412,6 +417,13 @@ def as_timezone(dt, tzname):
         """
     converted_dt = dt.astimezone(timezone(tzname))
     return converted_dt
+
+
+@app.template_filter('fees_by_currency')
+def fees_by_currency(currency):
+    """Returns a fees object according to the currency input"""
+    fees = DataGetter.get_fee_settings_by_currency(currency)
+    return fees
 
 
 @app.context_processor

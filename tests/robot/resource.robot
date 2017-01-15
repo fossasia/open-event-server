@@ -42,7 +42,7 @@ Submit Credentials
 
 Welcome Page Should Be Open
     Location Should Be    ${WELCOME URL}
-    Title Should Be    Home - Open Event
+    Title Should Be    Open Event - Event Management and Ticketing
 
 Login to Open Event
     Open Browser To Login Page
