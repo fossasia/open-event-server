@@ -5,7 +5,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %} - {{ app_name }}</title>
+    <title>
+    {% block title %}{% endblock %}
+    {% if not is_home_page %}
+    - {{ app_name }}
+    {% endif %}
+    </title>
     {% block head_meta %}
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">

@@ -64,7 +64,16 @@ CREATE DATABASE oevent WITH OWNER john;
 npm install bower -g
 bower install
 ```
+<<<<<<< HEAD
 
+=======
+if error
+```sh
+sudo npm install bower -g
+sudo ln -s /usr/bin/nodejs /usr/bin/node
+sudo bower install
+```
+>>>>>>> eac7e83ba0dbd3aece0216e0565aa4d0838020cf
 for mac user:
 ```sh
 sudo npm install bower -g

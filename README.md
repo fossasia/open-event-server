@@ -3,6 +3,7 @@
 The Open Event Orga Server enables organizers to manage events from concerts to conferences and meet-ups. It offers features for events with several tracks and venues. Event managers can create invitation forms for speakers and build schedules in a drag and drop interface. The event information is stored in a database. The system provides API endpoints to fetch the data, and to modify and update it. Organizers can import and export event data in a standard compressed file format that includes the event data in JSON and binary media files like images and audio.
 
 [![GitHub release](https://img.shields.io/badge/release-v1.0.0--alpha.4-blue.svg?style=flat-square)](https://github.com/fossasia/open-event-orga-server/releases/latest)
+[![Build Status](https://travis-ci.org/fossasia/open-event-orga-server.svg?branch=development)](https://travis-ci.org/fossasia/open-event-orga-server)
 [![Travis branch](https://img.shields.io/travis/fossasia/open-event-orga-server/master.svg?style=flat-square)](https://travis-ci.org/fossasia/open-event-orga-server)
 [![Gemnasium](https://img.shields.io/gemnasium/fossasia/open-event-orga-server.svg?style=flat-square)](https://gemnasium.com/github.com/fossasia/open-event-orga-server)
 [![Coveralls branch](https://img.shields.io/coveralls/fossasia/open-event-orga-server/master.svg?style=flat-square&label=Coveralls+Coverage)](https://coveralls.io/github/fossasia/open-event-orga-server?branch=master)
@@ -27,15 +28,15 @@ A demo version is automatically deployed from our repositories:
 
 The Open Event Orga Server can be easily deployed on a variety of platforms. Detailed platform specific installation instructions have been provided below.
 
-1. [Generic Installation Instructions](/docs/INSTALLATION.md)
-1. [Local Installation](/docs/INSTALLATION_LOCAL.md)
-1. [Vagrant Installation](/docs/INSTALLATION_VAGRANT.md)
-1. [Deployment on Google Compute Engine](/docs/INSTALLATION_GOOGLE.md)
-1. [Deployment on Google Container Engine (Kubernetes)](/docs/INSTALLATION_GCE_KUBERNETES.md)
-1. [Deployment on AWS EC2](/docs/INSTALLATION_AWS.md)
-1. [Deployment on Digital Ocean](/docs/INSTALLATION_DIGITALOCEAN.md)
-1. [Deployment with Docker](/docs/INSTALLATION_DOCKER.md)
-1. [Deployment on Heroku](/docs/INSTALLATION_HEROKU.md)
+1. [Generic Installation Instructions](/docs/installation/basic.md)
+1. [Local Installation](/docs/installation/local.md)
+1. [Vagrant Installation](/docs/installation/vagrant.md)
+1. [Deployment on Google Compute Engine](/docs/installation/google.md)
+1. [Deployment on Google Container Engine (Kubernetes)](/docs/installation/gce-kubernetes.md)
+1. [Deployment on AWS EC2](/docs/installation/aws.md)
+1. [Deployment on Digital Ocean](/docs/installation/digital-ocean.md)
+1. [Deployment with Docker](/docs/installation/docker.md)
+1. [Deployment on Heroku](/docs/installation/heroku.md)
 
 One-click Heroku deployment is also available:
 
@@ -83,7 +84,7 @@ Required keys can be obtained from [https://maps.googleapis.com/maps/api](https:
 
 Media (like audio, avatars and logos) can be stored either Locally or on Amazon S3 or on Google Storage.
 
-1. [Amazon S3 Setup Instructions](/docs/AMAZON_S3.md)
+1. [Amazon S3 Setup Instructions](/docs/general/amazon-s3.md)
 1. [Google Cloud Setup Instructions](https://cloud.google.com/storage/docs/migrating#defaultproj)
 
 #### Emails - SMTP/Sendgrid
@@ -114,7 +115,7 @@ The Open Event Orga Server exposes a well documented REST API that can be used b
 **API Documentation:**
 - Every installation of the project includes the API docs with Swagger, (e.g. here on the test install [http://open-event-dev.herokuapp.com/api/v1](http://open-event-dev.herokuapp.com/api/v1/)).
 -  A hosted version of the API docs is available in the `gh-pages` branch of the repository at [https://fossasia.github.io/open-event-orga-server/api/v1/](https://fossasia.github.io/open-event-orga-server/api/v1/).
-- The data of events is provided over API endpoints as described [here](/docs/API.md).
+- The data of events is provided over API endpoints as described [here](/docs/general/api.md).
 
 
 
@@ -124,13 +125,13 @@ The Open Event Orga Server exposes a well documented REST API that can be used b
 
 Open Event Orga server supports multiple formats as a valid source for import.
 
-- A **zip archive** with JSON (matching the API structure) and binary media files. Read more about this [here](/docs/IMPORT_EXPORT.md).
+- A **zip archive** with JSON (matching the API structure) and binary media files. Read more about this [here](/docs/general/import-export.md).
 - The **Pentabarf XML** format is also supported as a valid import source. ([Sample file](https://archive.fosdem.org/2016/schedule/xml)).
 
 **Export:**
 
 The event data and the sessions can be exported in various formats.
-- A **zip archive** with JSON (matching the API structure) and binary media files. Read more about this [here](/docs/IMPORT_EXPORT.md).
+- A **zip archive** with JSON (matching the API structure) and binary media files. Read more about this [here](/docs/general/import-export.md).
 - The **Pentabarf XML** format. ([Sample file](https://archive.fosdem.org/2016/schedule/xml)).
 - The **iCal** format. ([Sample file](https://archive.fosdem.org/2016/schedule/ical)).
 - The **xCal** format. ([Sample file](https://archive.fosdem.org/2016/schedule/xcal)).
@@ -143,7 +144,7 @@ The system has two kind of role type.
 1. System roles are related to the Open Event organization and operator of the application.
 2. Event Roles are related to the users of the system with their different permissions.
 
-Read more [here](/docs/ROLES.md).
+Read more [here](/docs/general/roles.md).
 
 ## Development
 
@@ -218,7 +219,7 @@ robot -v SERVER:localhost:5000 -v SUPERUSER_USERNAME:test@opev.net -v SUPERUSER_
 
 ## Logging
 
-Certain information is being logged and stored in the database for future reference, resolving conflicts in case of hacks and for maintaining an overview of the system. Read more about [logging here](/docs/LOGS.md).
+Certain information is being logged and stored in the database for future reference, resolving conflicts in case of hacks and for maintaining an overview of the system. Read more about [logging here](/docs/general/logs.md).
 
 ## Internalization (i18n)
 
@@ -245,7 +246,7 @@ We have the following branches
    This contains shipped code. After significant features/bug-fixes are accumulated on development, we make a version update, and make a release. (https://eventyay.com - Is running off the master branch. (whichever is the latest release.) Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
  * **gh-pages**
    This contains the documentation website on http://dev.eventyay.com. The site is build automatically on each commit in the development branch through a script and using travis. It includes the md files of the Readme and /docs folder. It also includes javadocs.
-   
+
 ## Release Policy
 
 The tentative release policy for now is, (since there is a lot of activity and a lot of bugs), an alpha release every monday and friday (since we see more activity on weekends). So, any bug-fixes will not be reflected at eventyay.com until a new release is made in the master branch.
@@ -262,7 +263,7 @@ The tentative release policy for now is, (since there is a lot of activity and a
 * When you file a feature request or when you are submitting a bug report to the [issue tracker](https://github.com/fossasia/open-event-orga-server/issues), make sure you add steps to reproduce it. Especially if that bug is some weird/rare one.
 
 **Join the development**
-* Before you join development, please set up the system on your local machine and go through the application completely. Press on any link/button you can find and see where it leads to. Explore. (Don't worry ... Nothing will happen to the app or to you due to the exploring :wink: Only thing that will happen is, you'll be more familiar with what is where and might even get some cool ideas on how to improve various aspects of the app.) 
+* Before you join development, please set up the system on your local machine and go through the application completely. Press on any link/button you can find and see where it leads to. Explore. (Don't worry ... Nothing will happen to the app or to you due to the exploring :wink: Only thing that will happen is, you'll be more familiar with what is where and might even get some cool ideas on how to improve various aspects of the app.)
 * Test the application on your machine and explore the admin area. The test deployment on Heroku will not give you access to the admin section, where you can switch on/off modules, e.g. ticketing and add keys for services, e.g. storage on S3.
 * If you would like to work on an issue, drop in a comment at the issue. If it is already assigned to someone, but there is no sign of any work being done, please free to drop in a comment so that the issue can be assigned to you if the previous assignee has dropped it entirely.
 
