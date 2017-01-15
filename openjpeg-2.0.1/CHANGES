@@ -1,0 +1,313 @@
+2012-12-07  Rex Dieter
+
+	* [r2261] doc/Doxyfile.dox.cmake.in: backport r2259
+	  
+	  Doxyfile: HTML_TIMESTAMP = NO
+	  
+	  helps when comparing the output of multiple runs,
+	  and distros will appreciate avoiding multilib conflicts.
+
+2013-02-02  Mickaël Savinaud
+
+	* [r2273] src/lib/openjp2/j2k.c,
+	  tests/nonregression/test_suite.ctest.in: [b2.x.x] backport into
+	  2.x.x the rev 2235
+	* [r2274] src/lib/openjp2/j2k.c: [b2.x.x] backport into 2.x.x the
+	  rev 2237 of trunk
+	* [r2275] tests/nonregression/test_suite.ctest.in: [b2.x.x]
+	  backport into 2.x.x the rev 2238 of trunk
+	* [r2276] src/lib/openjp2/j2k.c,
+	  tests/nonregression/test_suite.ctest.in: [b2.x.x] backport into
+	  2.x.x the rev 2239 of trunk
+	* [r2277] src/lib/openjp2/j2k.c,
+	  tests/nonregression/test_suite.ctest.in: [b2.x.x] backport into
+	  2.x.x the rev 2240 of trunk
+	* [r2278] tests/unit/CMakeLists.txt, tests/unit/testempty0.c:
+	  [b2.x.x] backport into 2.x.x the rev 2241 of trunk
+	* [r2279] tests/nonregression/CMakeLists.txt: [b2.x.x] backport
+	  into 2.x.x the rev 2242 of trunk
+	* [r2280] CMakeLists.txt, src/lib/openjp2/libopenjp2.pc.cmake.in:
+	  [b2.x.x] backport into 2.x.x the rev 2250 of trunk
+	* [r2281] src/lib/openjp2/jp2.c: [b2.x.x] backport into 2.x.x the
+	  rev 2251 of trunk
+	* [r2282] CMakeLists.txt, src/lib/openjp2/openjpeg.h,
+	  src/lib/openjp2/opj_stdint.h: [b2.x.x] backport into 2.x.x the
+	  rev 2252 of trunk
+	* [r2283] src/lib/openjpip/boxheader_manager.h,
+	  src/lib/openjpip/byte_manager.h: [b2.x.x] backport into 2.x.x the
+	  rev 2253 of trunk
+	* [r2284] CMakeLists.txt, src/lib/openjp2/opj_config.h.cmake.in,
+	  src/lib/openjp2/opj_stdint.h: [b2.x.x] backport into 2.x.x the
+	  rev 2254 of trunk
+
+2013-02-03  Mickaël Savinaud
+
+	* [r2288] src/lib/openjp2/j2k.h, src/lib/openjp2/t2.c,
+	  src/lib/openjp2/tcd.c, src/lib/openjp2/tcd.h,
+	  tests/nonregression/test_suite.ctest.in: [b2.x.x] backport into
+	  2.x.x the rev 2266 and 2285 of trunk
+	* [r2289] tests/nonregression/test_suite.ctest.in: [b2.x.x]
+	  backport into 2.x.x the rev 2287 of trunk
+	* [r2291] src/bin/jp2/convert.c: [b2.x.x] backport into 2.x.x the
+	  rev 2290 of trunk
+
+2013-10-28  Rex Dieter
+
+	* [r2349] CMakeLists.txt, src/lib/openjp3d/libopenjp3d.pc.cmake.in,
+	  src/lib/openjpip/libopenjpip.pc.cmake.in,
+	  src/lib/openjpwl/libopenjpwl.pc.cmake.in: [b2.x.x] backport into
+	  2.x.x the rev 2348 of trunk
+	  
+	  flesh out pkgconfig support for optional libs
+
+2014-03-25  Mathieu Malaterre
+
+	* [r2794] ., CMakeLists.txt, cmake/CTestCustom.cmake.in,
+	  cmake/EnsureFileInclude.cmake[CPY], cmake/FindKAKADU.cmake,
+	  cmake/TestLargeFiles.cmake, src/CMakeLists.txt,
+	  src/bin/common/CMakeLists.txt, src/bin/common/color.c,
+	  src/bin/common/format_defs.h,
+	  src/bin/common/opj_apps_config.h.cmake.in[CPY],
+	  src/bin/common/opj_getopt.c, src/bin/jp2/CMakeLists.txt,
+	  src/bin/jp2/convert.c, src/bin/jp2/opj_compress.c,
+	  src/bin/jp2/opj_decompress.c, src/bin/jp2/opj_dump.c,
+	  src/bin/jp3d/opj_jp3d_compress.c,
+	  src/bin/jp3d/opj_jp3d_decompress.c, src/bin/jpip/CMakeLists.txt,
+	  src/bin/jpip/opj_jpip_transcode.c, src/bin/jpip/opj_server.c,
+	  src/bin/jpwl/CMakeLists.txt, src/bin/jpwl/convert.c,
+	  src/bin/jpwl/opj_jpwl_compress.c,
+	  src/bin/jpwl/opj_jpwl_decompress.c, src/bin/mj2/CMakeLists.txt,
+	  src/bin/mj2/opj_mj2_compress.c, src/bin/mj2/opj_mj2_decompress.c,
+	  src/bin/wx/OPJViewer/CMakeLists.txt,
+	  src/lib/openjp2/CMakeLists.txt, src/lib/openjp2/bio.c,
+	  src/lib/openjp2/cidx_manager.c, src/lib/openjp2/cio.c,
+	  src/lib/openjp2/dwt.c, src/lib/openjp2/event.c,
+	  src/lib/openjp2/image.c, src/lib/openjp2/invert.c,
+	  src/lib/openjp2/j2k.c, src/lib/openjp2/jp2.c,
+	  src/lib/openjp2/libopenjp2.pc.cmake.in, src/lib/openjp2/mct.c,
+	  src/lib/openjp2/mqc.c, src/lib/openjp2/openjpeg.c,
+	  src/lib/openjp2/openjpeg.h, src/lib/openjp2/opj_clock.c,
+	  src/lib/openjp2/opj_codec.h[CPY],
+	  src/lib/openjp2/opj_config.h.cmake.in,
+	  src/lib/openjp2/opj_config_private.h.cmake.in[CPY],
+	  src/lib/openjp2/opj_includes.h, src/lib/openjp2/opj_intmath.h,
+	  src/lib/openjp2/opj_inttypes.h, src/lib/openjp2/opj_malloc.h,
+	  src/lib/openjp2/phix_manager.c, src/lib/openjp2/pi.c,
+	  src/lib/openjp2/ppix_manager.c, src/lib/openjp2/raw.c,
+	  src/lib/openjp2/t1.c, src/lib/openjp2/t1_generate_luts.c,
+	  src/lib/openjp2/t2.c, src/lib/openjp2/tcd.c,
+	  src/lib/openjp2/tgt.c, src/lib/openjp2/thix_manager.c,
+	  src/lib/openjp2/tpix_manager.c, src/lib/openjp3d/bio.c,
+	  src/lib/openjp3d/bio.h, src/lib/openjp3d/cio.c,
+	  src/lib/openjp3d/cio.h, src/lib/openjp3d/dwt.c,
+	  src/lib/openjp3d/dwt.h, src/lib/openjp3d/event.c,
+	  src/lib/openjp3d/event.h, src/lib/openjp3d/fix.h,
+	  src/lib/openjp3d/int.h, src/lib/openjp3d/jp3d.c,
+	  src/lib/openjp3d/jp3d.h, src/lib/openjp3d/jp3d_lib.c,
+	  src/lib/openjp3d/jp3d_lib.h, src/lib/openjp3d/mct.c,
+	  src/lib/openjp3d/mct.h, src/lib/openjp3d/mqc.c,
+	  src/lib/openjp3d/mqc.h, src/lib/openjp3d/openjp3d.c,
+	  src/lib/openjp3d/openjp3d.h, src/lib/openjp3d/opj_includes.h,
+	  src/lib/openjp3d/pi.c, src/lib/openjp3d/pi.h,
+	  src/lib/openjp3d/raw.c, src/lib/openjp3d/raw.h,
+	  src/lib/openjp3d/t1.c, src/lib/openjp3d/t1.h,
+	  src/lib/openjp3d/t1_3d.c, src/lib/openjp3d/t1_3d.h,
+	  src/lib/openjp3d/t2.c, src/lib/openjp3d/t2.h,
+	  src/lib/openjp3d/tcd.c, src/lib/openjp3d/tcd.h,
+	  src/lib/openjp3d/tgt.c, src/lib/openjp3d/tgt.h,
+	  src/lib/openjp3d/volume.c, src/lib/openjp3d/volume.h,
+	  src/lib/openjpip/index_manager.c,
+	  src/lib/openjpip/j2kheader_manager.c,
+	  src/lib/openjpip/jp2k_decoder.c, src/lib/openjpip/jp2k_encoder.c,
+	  src/lib/openjpip/msgqueue_manager.c, src/lib/openmj2/j2k.c,
+	  src/lib/openmj2/openjpeg.c, tests/CMakeLists.txt,
+	  tests/comparePGXimages.c[DEL], tests/compareRAWimages.c[DEL],
+	  tests/compare_dump_files.c, tests/compare_images.c[CPY],
+	  tests/compare_raw_files.c[CPY], tests/conformance/CMakeLists.txt,
+	  tests/j2k_random_tile_access.c,
+	  tests/nonregression/CMakeLists.txt,
+	  tests/nonregression/checkmd5refs.cmake[CPY],
+	  tests/nonregression/md5refs.txt[CPY],
+	  tests/nonregression/test_suite.ctest.in, tests/ppm2rgb3.c[CPY],
+	  tests/test_tile_decoder.c, tests/test_tile_encoder.c,
+	  tests/unit/CMakeLists.txt, tests/unit/testempty0.c,
+	  tests/unit/testempty1.c, tests/unit/testempty2.c,
+	  thirdparty/CMakeLists.txt, thirdparty/libtiff/test_inline.c:
+	  [2.0] Backport all changes from trunk
+	  We only backport change that do not affect API or ABI
+	  Update issue 313
+	* [r2797] ., tests/nonregression/CMakeLists.txt: [2.0] Backport
+	  from trunk
+	  Make sure to have a non empty list
+
+2014-04-10  Antonin Descampe
+
+	* [r2836] ., AUTHORS, LICENSE, NEWS, cmake/TestFileOffsetBits.c,
+	  doc/mainpage.dox.in, doc/man/man1/opj_compress.1,
+	  doc/man/man1/opj_decompress.1, doc/man/man3/libopenjp2.3,
+	  doc/openjpip.dox.in, src/bin/common/color.c,
+	  src/bin/common/color.h, src/bin/common/format_defs.h,
+	  src/bin/common/opj_getopt.c, src/bin/jp2/convert.c,
+	  src/bin/jp2/convert.h, src/bin/jp2/index.c, src/bin/jp2/index.h,
+	  src/bin/jp2/opj_compress.c, src/bin/jp2/opj_decompress.c,
+	  src/bin/jp2/opj_dump.c, src/bin/jp3d/convert.c,
+	  src/bin/jpip/opj_dec_server.c, src/bin/jpip/opj_jpip_addxml.c,
+	  src/bin/jpip/opj_jpip_test.c, src/bin/jpip/opj_jpip_transcode.c,
+	  src/bin/jpip/opj_server.c,
+	  src/bin/jpip/opj_viewer/src/ImageManager.java,
+	  src/bin/jpip/opj_viewer/src/ImageViewer.java,
+	  src/bin/jpip/opj_viewer/src/ImageWindow.java,
+	  src/bin/jpip/opj_viewer/src/ImgdecClient.java,
+	  src/bin/jpip/opj_viewer/src/JPIPHttpClient.java,
+	  src/bin/jpip/opj_viewer/src/MML.java,
+	  src/bin/jpip/opj_viewer/src/PnmImage.java,
+	  src/bin/jpip/opj_viewer/src/RegimViewer.java,
+	  src/bin/jpip/opj_viewer/src/ResizeListener.java,
+	  src/bin/jpip/opj_viewer_xerces/src/ImageViewer.java,
+	  src/bin/jpip/opj_viewer_xerces/src/ImageWindow.java,
+	  src/bin/jpip/opj_viewer_xerces/src/JP2XMLparser.java,
+	  src/bin/jpip/opj_viewer_xerces/src/OptionPanel.java,
+	  src/bin/jpwl/convert.c, src/bin/jpwl/convert.h,
+	  src/bin/jpwl/index.c, src/bin/jpwl/index.h,
+	  src/bin/jpwl/opj_jpwl_compress.c,
+	  src/bin/jpwl/opj_jpwl_decompress.c,
+	  src/bin/mj2/opj_mj2_extract.c, src/bin/mj2/opj_mj2_wrap.c,
+	  src/bin/wx/OPJViewer/source/OPJAbout.cpp,
+	  src/bin/wx/OPJViewer/source/OPJDialogs.cpp,
+	  src/bin/wx/OPJViewer/source/OPJThreads.cpp,
+	  src/bin/wx/OPJViewer/source/OPJViewer.cpp,
+	  src/bin/wx/OPJViewer/source/OPJViewer.h,
+	  src/bin/wx/OPJViewer/source/imagjpeg2000.cpp,
+	  src/bin/wx/OPJViewer/source/imagjpeg2000.h,
+	  src/bin/wx/OPJViewer/source/imagmxf.cpp,
+	  src/bin/wx/OPJViewer/source/imagmxf.h,
+	  src/bin/wx/OPJViewer/source/license.txt,
+	  src/bin/wx/OPJViewer/source/wxj2kparser.cpp,
+	  src/bin/wx/OPJViewer/source/wxjp2parser.cpp,
+	  src/lib/openjp2/bio.c, src/lib/openjp2/bio.h,
+	  src/lib/openjp2/cidx_manager.c, src/lib/openjp2/cidx_manager.h,
+	  src/lib/openjp2/cio.c, src/lib/openjp2/cio.h,
+	  src/lib/openjp2/dwt.c, src/lib/openjp2/dwt.h,
+	  src/lib/openjp2/event.c, src/lib/openjp2/event.h,
+	  src/lib/openjp2/function_list.c, src/lib/openjp2/function_list.h,
+	  src/lib/openjp2/image.c, src/lib/openjp2/image.h,
+	  src/lib/openjp2/indexbox_manager.h, src/lib/openjp2/invert.c,
+	  src/lib/openjp2/invert.h, src/lib/openjp2/j2k.c,
+	  src/lib/openjp2/j2k.h, src/lib/openjp2/jp2.c,
+	  src/lib/openjp2/jp2.h, src/lib/openjp2/mct.c,
+	  src/lib/openjp2/mct.h, src/lib/openjp2/mqc.c,
+	  src/lib/openjp2/mqc.h, src/lib/openjp2/openjpeg.c,
+	  src/lib/openjp2/openjpeg.h, src/lib/openjp2/opj_clock.c,
+	  src/lib/openjp2/opj_clock.h, src/lib/openjp2/opj_codec.h,
+	  src/lib/openjp2/opj_includes.h, src/lib/openjp2/opj_intmath.h,
+	  src/lib/openjp2/opj_inttypes.h, src/lib/openjp2/opj_malloc.h,
+	  src/lib/openjp2/opj_stdint.h, src/lib/openjp2/phix_manager.c,
+	  src/lib/openjp2/pi.c, src/lib/openjp2/pi.h,
+	  src/lib/openjp2/ppix_manager.c, src/lib/openjp2/raw.c,
+	  src/lib/openjp2/raw.h, src/lib/openjp2/t1.c,
+	  src/lib/openjp2/t1.h, src/lib/openjp2/t1_generate_luts.c,
+	  src/lib/openjp2/t2.c, src/lib/openjp2/t2.h,
+	  src/lib/openjp2/tcd.c, src/lib/openjp2/tcd.h,
+	  src/lib/openjp2/tgt.c, src/lib/openjp2/tgt.h,
+	  src/lib/openjp2/thix_manager.c, src/lib/openjp2/tpix_manager.c,
+	  src/lib/openjp3d/bio.c, src/lib/openjp3d/bio.h,
+	  src/lib/openjp3d/cio.c, src/lib/openjp3d/cio.h,
+	  src/lib/openjp3d/dwt.c, src/lib/openjp3d/dwt.h,
+	  src/lib/openjp3d/event.c, src/lib/openjp3d/event.h,
+	  src/lib/openjp3d/fix.h, src/lib/openjp3d/int.h,
+	  src/lib/openjp3d/jp3d.c, src/lib/openjp3d/jp3d.h,
+	  src/lib/openjp3d/jp3d_lib.c, src/lib/openjp3d/jp3d_lib.h,
+	  src/lib/openjp3d/mct.c, src/lib/openjp3d/mct.h,
+	  src/lib/openjp3d/mqc.c, src/lib/openjp3d/mqc.h,
+	  src/lib/openjp3d/openjp3d.c, src/lib/openjp3d/openjp3d.h,
+	  src/lib/openjp3d/opj_includes.h, src/lib/openjp3d/pi.c,
+	  src/lib/openjp3d/pi.h, src/lib/openjp3d/raw.c,
+	  src/lib/openjp3d/raw.h, src/lib/openjp3d/t1.c,
+	  src/lib/openjp3d/t1.h, src/lib/openjp3d/t2.c,
+	  src/lib/openjp3d/t2.h, src/lib/openjp3d/tcd.c,
+	  src/lib/openjp3d/tcd.h, src/lib/openjp3d/tgt.c,
+	  src/lib/openjp3d/tgt.h, src/lib/openjp3d/volume.c,
+	  src/lib/openjp3d/volume.h, src/lib/openjpip/auxtrans_manager.c,
+	  src/lib/openjpip/auxtrans_manager.h,
+	  src/lib/openjpip/box_manager.c, src/lib/openjpip/box_manager.h,
+	  src/lib/openjpip/boxheader_manager.c,
+	  src/lib/openjpip/boxheader_manager.h,
+	  src/lib/openjpip/byte_manager.c, src/lib/openjpip/byte_manager.h,
+	  src/lib/openjpip/cache_manager.c,
+	  src/lib/openjpip/cache_manager.h,
+	  src/lib/openjpip/cachemodel_manager.c,
+	  src/lib/openjpip/cachemodel_manager.h,
+	  src/lib/openjpip/channel_manager.c,
+	  src/lib/openjpip/channel_manager.h,
+	  src/lib/openjpip/codestream_manager.c,
+	  src/lib/openjpip/codestream_manager.h,
+	  src/lib/openjpip/dec_clientmsg_handler.c,
+	  src/lib/openjpip/dec_clientmsg_handler.h,
+	  src/lib/openjpip/faixbox_manager.c,
+	  src/lib/openjpip/faixbox_manager.h,
+	  src/lib/openjpip/ihdrbox_manager.c,
+	  src/lib/openjpip/ihdrbox_manager.h,
+	  src/lib/openjpip/imgreg_manager.c,
+	  src/lib/openjpip/imgreg_manager.h,
+	  src/lib/openjpip/imgsock_manager.c,
+	  src/lib/openjpip/imgsock_manager.h,
+	  src/lib/openjpip/index_manager.c,
+	  src/lib/openjpip/index_manager.h,
+	  src/lib/openjpip/j2kheader_manager.c,
+	  src/lib/openjpip/j2kheader_manager.h,
+	  src/lib/openjpip/jp2k_decoder.c, src/lib/openjpip/jp2k_decoder.h,
+	  src/lib/openjpip/jp2k_encoder.c, src/lib/openjpip/jp2k_encoder.h,
+	  src/lib/openjpip/jpip_parser.c, src/lib/openjpip/jpip_parser.h,
+	  src/lib/openjpip/jpipstream_manager.c,
+	  src/lib/openjpip/jpipstream_manager.h,
+	  src/lib/openjpip/manfbox_manager.c,
+	  src/lib/openjpip/manfbox_manager.h,
+	  src/lib/openjpip/marker_manager.c,
+	  src/lib/openjpip/marker_manager.h,
+	  src/lib/openjpip/metadata_manager.c,
+	  src/lib/openjpip/metadata_manager.h,
+	  src/lib/openjpip/mhixbox_manager.c,
+	  src/lib/openjpip/mhixbox_manager.h,
+	  src/lib/openjpip/msgqueue_manager.c,
+	  src/lib/openjpip/msgqueue_manager.h, src/lib/openjpip/openjpip.c,
+	  src/lib/openjpip/openjpip.h,
+	  src/lib/openjpip/placeholder_manager.c,
+	  src/lib/openjpip/placeholder_manager.h,
+	  src/lib/openjpip/query_parser.c, src/lib/openjpip/query_parser.h,
+	  src/lib/openjpip/session_manager.c,
+	  src/lib/openjpip/session_manager.h,
+	  src/lib/openjpip/sock_manager.c, src/lib/openjpip/sock_manager.h,
+	  src/lib/openjpip/target_manager.c,
+	  src/lib/openjpip/target_manager.h, src/lib/openjpwl/crc.c,
+	  src/lib/openjpwl/crc.h, src/lib/openjpwl/jpwl.c,
+	  src/lib/openjpwl/jpwl.h, src/lib/openjpwl/jpwl_lib.c,
+	  src/lib/openjpwl/rs.c, src/lib/openjpwl/rs.h,
+	  src/lib/openmj2/bio.c, src/lib/openmj2/bio.h,
+	  src/lib/openmj2/cio.c, src/lib/openmj2/cio.h,
+	  src/lib/openmj2/dwt.c, src/lib/openmj2/dwt.h,
+	  src/lib/openmj2/event.c, src/lib/openmj2/event.h,
+	  src/lib/openmj2/fix.h, src/lib/openmj2/image.c,
+	  src/lib/openmj2/image.h, src/lib/openmj2/int.h,
+	  src/lib/openmj2/j2k.c, src/lib/openmj2/j2k.h,
+	  src/lib/openmj2/j2k_lib.c, src/lib/openmj2/j2k_lib.h,
+	  src/lib/openmj2/jp2.c, src/lib/openmj2/jp2.h,
+	  src/lib/openmj2/jpt.c, src/lib/openmj2/jpt.h,
+	  src/lib/openmj2/mct.c, src/lib/openmj2/mct.h,
+	  src/lib/openmj2/mj2.c, src/lib/openmj2/mj2_convert.c,
+	  src/lib/openmj2/mqc.c, src/lib/openmj2/mqc.h,
+	  src/lib/openmj2/openjpeg.c, src/lib/openmj2/openjpeg.h,
+	  src/lib/openmj2/opj_includes.h, src/lib/openmj2/pi.c,
+	  src/lib/openmj2/pi.h, src/lib/openmj2/raw.c,
+	  src/lib/openmj2/raw.h, src/lib/openmj2/t1.c,
+	  src/lib/openmj2/t1.h, src/lib/openmj2/t2.c, src/lib/openmj2/t2.h,
+	  src/lib/openmj2/tcd.c, src/lib/openmj2/tcd.h,
+	  src/lib/openmj2/tgt.c, src/lib/openmj2/tgt.h,
+	  tests/CMakeLists.txt, tests/nonregression/test_suite.ctest.in,
+	  tests/pdf2jp2.c[CPY], thirdparty/CMakeLists.txt,
+	  wrapping/java/openjp2/JavaOpenJPEG.c,
+	  wrapping/java/openjp2/JavaOpenJPEGDecoder.c,
+	  wrapping/java/openjp2/index.c, wrapping/java/openjp2/index.h,
+	  wrapping/java/openjp2/java-sources/org/openJpeg/OpenJPEGJavaDecoder.java,
+	  wrapping/java/openjp2/java-sources/org/openJpeg/OpenJPEGJavaEncoder.java:
+	  [2.0] Backport all changes since r2798 (included) from trunk
+
