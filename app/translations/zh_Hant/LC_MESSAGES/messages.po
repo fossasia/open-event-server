@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2017-01-09 23:35+0530\n"
-"PO-Revision-Date: 2017-01-15 02:41+0000\n"
-"Last-Translator: Chen Hsin Chang <vbn515282@yahoo.com.tw>\n"
+"PO-Revision-Date: 2017-01-15 02:54+0000\n"
+"Last-Translator: chanchion <chanchion1996@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects"
 "/open-event/organizer-server/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -644,11 +644,11 @@ msgstr "選擇"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:3
 msgid "Event Sponsors"
-msgstr ""
+msgstr "活動贊助"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:8
 msgid "Add Sponsor"
-msgstr ""
+msgstr "添加贊助商"
 
 #: app/templates/gentelella/admin/event/details/widgets/sponsors_list.html:15
 msgid "Logo"
@@ -716,11 +716,11 @@ msgstr "下載"
 
 #: app/templates/gentelella/admin/event/export/export.html:96
 msgid "Started by"
-msgstr ""
+msgstr "開始於"
 
 #: app/templates/gentelella/admin/event/export/export.html:97
 msgid "datetime"
-msgstr ""
+msgstr "日期時間"
 
 #: app/templates/gentelella/admin/event/export/export.html:126
 #, fuzzy
@@ -735,12 +735,12 @@ msgstr "事件基本細節"
 #: app/templates/gentelella/admin/event/export/export.html:141
 #: app/templates/gentelella/admin/event/wizard/session-speakers/sessions-tracks-microlocations.html:19
 msgid "Microlocations"
-msgstr ""
+msgstr "微定位"
 
 #: app/templates/gentelella/admin/event/export/export.html:145
 #: app/templates/gentelella/admin/event/wizard/session-speakers/sessions-tracks-microlocations.html:10
 msgid "Tracks"
-msgstr ""
+msgstr "跟蹤"
 
 #: app/templates/gentelella/admin/event/export/export.html:153
 #: app/templates/gentelella/admin/event/wizard/components/tabs.html:21
@@ -755,7 +755,7 @@ msgstr "你可以做一個"
 
 #: app/templates/gentelella/admin/event/export/export.html:162
 msgid "request to the following endpoint to access the selected information"
-msgstr ""
+msgstr "請求到以下端點來接駁所選擇的信息"
 
 #: app/templates/gentelella/admin/event/export/export.html:165
 #, fuzzy
@@ -796,7 +796,7 @@ msgstr "一般訊息"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:9
 msgid "Event ID"
-msgstr ""
+msgstr "事件ID"
 
 #: app/templates/gentelella/admin/event/roles/general_info.html:13
 msgid "Event Url"
@@ -842,7 +842,7 @@ msgstr "允許"
 
 #: app/templates/gentelella/admin/event/roles/roles.html:63
 msgid "Co-Organizer"
-msgstr ""
+msgstr "協辦單位"
 
 #: app/templates/gentelella/admin/event/roles/roles.html:67
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:181
@@ -863,11 +863,11 @@ msgstr "時間表"
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:21
 #: app/templates/gentelella/guest/event/schedule.html:44
 msgid "Sessions loading"
-msgstr ""
+msgstr "會話加載中"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:23
 msgid "Error loading sessions"
-msgstr ""
+msgstr "加載會話時出錯"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:35
 #, fuzzy
@@ -893,11 +893,11 @@ msgstr ""
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:72
 msgid "Clear Overlaps"
-msgstr ""
+msgstr "清除重疊"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:75
 msgid "Add New Microlocation"
-msgstr ""
+msgstr "添加新微定位"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:80
 #, fuzzy
@@ -923,13 +923,13 @@ msgstr "標題"
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:114
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:68
 msgid "Long Abstract"
-msgstr ""
+msgstr "長的摘要"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:119
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:65
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:61
 msgid "Short Abstract"
-msgstr ""
+msgstr "短的摘要"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:125
 msgid "Start Time"
