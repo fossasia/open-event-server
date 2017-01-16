@@ -1,0 +1,14 @@
+prefix=/usr/local
+bindir=${prefix}/bin
+mandir=${prefix}/share/man/
+docdir=${prefix}/share/doc/openjpeg-2.0
+libdir=${prefix}/lib
+includedir=${prefix}/include/openjpeg-2.0
+
+Name: openjp2
+Description: JPEG2000 library (Part 1 and 2)
+URL: http://www.openjpeg.org/
+Version: 2.0.1
+Libs: -L${libdir} -lopenjp2
+Libs.private: -lm
+Cflags: -I${includedir}
