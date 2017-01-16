@@ -274,6 +274,25 @@ class TicketingManager(object):
 
         if order:
 
+            holders_firstnames = form.getlist('holders[firstname]')
+            holders_lastnames = form.getlist('holders[lastname]')
+            holders_ticket_ids = form.getlist('holders[ticket_id]')
+            holders_emails = form.getlist('holders[email]')
+
+            for i, firstname in enumerate(holders_firstnames):
+                data = {
+                    'firstname': firstname,
+                    'lastname': holders_lastnames[i]
+                }
+                holder_user = TicketingManager.get_or_create_user_by_email(holders_emails[i], data)
+                ticket_holder = TicketHolder(firstname=data['firstname'],
+                                             lastname=data['lastname'],
+                                             ticket_id=int(holders_ticket_ids[i]),
+                                             email=holder_user.email,
+                                             order_id=order.id)
+                DataManager.add_attendee_role_to_event(holder_user, order.event_id)
+                db.session.add(ticket_holder)
+
             user = TicketingManager.get_or_create_user_by_email(email, form)
             order.user_id = user.id
 
@@ -307,24 +326,6 @@ class TicketingManager(object):
                 order.completed_at = datetime.utcnow()
                 if not order.paid_via:
                     order.paid_via = 'free'
-
-            holders_firstnames = form.getlist('holders[firstname]')
-            holders_lastnames = form.getlist('holders[lastname]')
-            holders_ticket_ids = form.getlist('holders[ticket_id]')
-            holders_emails = form.getlist('holders[email]')
-
-            for i, firstname in enumerate(holders_firstnames):
-                data = {
-                    'firstname': firstname,
-                    'lastname': holders_lastnames[i]
-                }
-                holder_user = TicketingManager.get_or_create_user_by_email(holders_emails[i], data)
-                ticket_holder = TicketHolder(firstname=data['firstname'],
-                                             lastname=data['lastname'],
-                                             ticket_id=int(holders_ticket_ids[i]),
-                                             email=holder_user.email, order_id=order.id)
-                DataManager.add_attendee_role_to_event(holder_user, order.event_id)
-                db.session.add(ticket_holder)
 
             # add attendee role to user
             DataManager.add_attendee_role_to_event(user, order.event_id)
