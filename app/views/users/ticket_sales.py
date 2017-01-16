@@ -260,6 +260,79 @@ def discount_codes_delete(event_id, discount_code_id=None):
     return redirect(url_for('.discount_codes_view', event_id=event_id))
 
 
+@event_ticket_sales.route('/access/', methods=('GET',))
+def access_codes_view(event_id):
+    event = DataGetter.get_event(event_id)
+    access_codes = TicketingManager.get_access_codes(event_id)
+    return render_template('gentelella/admin/event/tickets/access_codes.html', event=event,
+                           access_codes=access_codes,
+                           event_id=event_id)
+
+
+@event_ticket_sales.route('/access/create/', methods=('GET', 'POST'))
+def access_codes_create(event_id, access_code_id=None):
+    event = DataGetter.get_event(event_id)
+    if request.method == 'POST':
+        TicketingManager.create_edit_access_code(request.form, event_id)
+        flash("The access code has been added.", "success")
+        return redirect(url_for('.access_codes_view', event_id=event_id))
+    access_code = None
+    if access_code_id:
+        access_code = TicketingManager.get_access_code(event_id, access_code_id)
+    return render_template('gentelella/admin/event/tickets/access_codes_create.html', event=event, event_id=event_id,
+                           access_code=access_code)
+
+
+@event_ticket_sales.route('/access/check/duplicate/', methods=('GET',))
+def check_duplicate_access_code(event_id):
+    code = request.args.get('code')
+    current = request.args.get('current')
+    if not current:
+        current = ''
+    access_code = TicketingManager.get_access_code(event_id, code)
+    if (current == "" and access_code) or (current != "" and access_code and access_code.id != int(current)):
+        return jsonify({
+            "status": "invalid"
+        }), 404
+
+    return jsonify({
+        "status": "valid"
+    }), 200
+
+
+@event_ticket_sales.route('/access/<int:access_code_id>/edit/', methods=('GET', 'POST'))
+def access_codes_edit(event_id, access_code_id=None):
+    if not TicketingManager.get_access_code(event_id, access_code_id):
+        abort(404)
+    if request.method == 'POST':
+        TicketingManager.create_edit_access_code(request.form, event_id, access_code_id)
+        flash("The access code has been edited.", "success")
+        return redirect(url_for('.access_codes_view', event_id=event_id))
+    return access_codes_create(event_id, access_code_id)
+
+
+@event_ticket_sales.route('/access/<int:access_code_id>/toggle/', methods=('GET',))
+def access_codes_toggle(event_id, access_code_id=None):
+    access_code = TicketingManager.get_access_code(event_id, access_code_id)
+    if not access_code:
+        abort(404)
+    access_code.is_active = not access_code.is_active
+    save_to_db(access_code)
+    message = "Activated." if access_code.is_active else "Deactivated."
+    flash("The access code has been " + message, "success")
+    return redirect(url_for('.access_codes_view', event_id=event_id))
+
+
+@event_ticket_sales.route('/access/<int:access_code_id>/delete/', methods=('GET',))
+def access_codes_delete(event_id, access_code_id=None):
+    access_code = TicketingManager.get_access_code(event_id, access_code_id)
+    if not access_code:
+        abort(404)
+    delete_from_db(access_code, "Access code deleted")
+    flash("The access code has been deleted.", "warning")
+    return redirect(url_for('.access_codes_view', event_id=event_id))
+
+
 @event_ticket_sales.route('/attendees/check_in_toggle/<holder_id>/', methods=('POST',))
 def attendee_check_in_toggle(event_id, holder_id):
     holder = TicketingManager.attendee_check_in_out(holder_id)

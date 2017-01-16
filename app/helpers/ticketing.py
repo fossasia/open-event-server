@@ -18,6 +18,7 @@ from app.helpers.helpers import string_empty, send_email_for_after_purchase, get
 from app.helpers.payment import StripePaymentsManager, represents_int, PayPalPaymentsManager
 from app.models import db
 from app.models.discount_code import DiscountCode, TICKET
+from app.models.access_code import AccessCode, TICKET
 from app.models.event import Event
 from app.models.order import Order
 from app.models.order import OrderTicket
@@ -165,6 +166,23 @@ class TicketingManager(object):
         else:
             return DiscountCode.query \
                 .filter_by(code=discount_code) \
+                .filter_by(event_id=event_id) \
+                .filter_by(used_for=TICKET).first()
+
+    @staticmethod
+    def get_access_codes(event_id):
+        return AccessCode.query.filter_by(event_id=event_id).filter_by(used_for=TICKET).all()
+
+    @staticmethod
+    def get_access_code(event_id, access_code):
+        if represents_int(access_code):
+            return AccessCode.query \
+                .filter_by(id=access_code) \
+                .filter_by(event_id=event_id) \
+                .filter_by(used_for=TICKET).first()
+        else:
+            return AccessCode.query \
+                .filter_by(code=access_code) \
                 .filter_by(event_id=event_id) \
                 .filter_by(used_for=TICKET).first()
 
@@ -432,3 +450,42 @@ class TicketingManager(object):
         save_to_db(discount_code)
 
         return discount_code
+
+    @staticmethod
+    def create_edit_access_code(form, event_id, access_code_id=None):
+        if not access_code_id:
+            access_code = AccessCode()
+        else:
+            access_code = TicketingManager.get_access_code(event_id, access_code_id)
+        access_code.code = form.get('code')
+        access_code.min_quantity = form.get('min_quantity', None)
+        access_code.max_quantity = form.get('max_quantity', None)
+        access_code.tickets_number = form.get('tickets_number')
+        access_code.event_id = event_id
+        access_code.used_for = TICKET
+        access_code.is_active = form.get('status', 'in_active') == 'active'
+
+        if access_code.min_quantity == "":
+            access_code.min_quantity = None
+        if access_code.max_quantity == "":
+            access_code.max_quantity = None
+        if access_code.tickets_number == "":
+            access_code.tickets_number = None
+
+        try:
+            access_code.valid_from = datetime.strptime(form.get('start_date', None) + ' ' +
+                                                         form.get('start_time', None), '%m/%d/%Y %H:%M')
+        except:
+            access_code.valid_from = None
+
+        try:
+            access_code.valid_till = datetime.strptime(form.get('end_date', None) + ' ' +
+                                                         form.get('end_time', None), '%m/%d/%Y %H:%M')
+        except:
+            access_code.valid_till = None
+
+        access_code.tickets = ",".join(form.getlist('tickets[]'))
+
+        save_to_db(access_code)
+
+        return access_code
