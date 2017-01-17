@@ -192,10 +192,11 @@
             $('.promo-code-box').hide().find('input').val('');
             $(".promo-code-open").show();
         });
-        function show_hidden_ticket() {
+        function show_hidden_ticket(access_code) {
             {% for ticket in tickets %}
                 {% if ticket.hide %}
-                    $("#discount-row").before("<tr>\
+                    if (access_code.split(",").indexOf("{{ticket.id}}") != -1){
+                        $("#discount-row").before("<tr>\
                                     <td>\
                                         <a data-toggle=\"tooltip\"\
                                            title=\"{{ ticket.description if ticket.description_toggle else '' }}\"\
@@ -252,7 +253,8 @@
                                                 style=\"color: #adadad;\">This ticket's sale will start on {{ ((ticket.sales_start|localize_dt_obj(event.timezone))|as_timezone(current_timezone)) | datetime }}</td>\
                                         {% endif %}\
                                     {% endif %}\
-                                </tr>"); 
+                                </tr>");
+                    }
                 {% endif %}
             {% endfor %}       
         }
@@ -271,17 +273,18 @@
                 }).done(function (data) {
                     discount_status = data.discount_status;
                     access_status = data.access_status;
+                    access_code = data.access_code_ticket;
                     if(discount_status && access_status){
                         discount_type = data.discount_type;
                         discount_amount = data.discount_amount;
-                        show_hidden_ticket();
+                        show_hidden_ticket(access_code);
                         promo_code_status = 1;
                     }else if(discount_status){
                         discount_type = data.discount_type;
                         discount_amount = data.discount_amount;
                         promo_code_status = 1;
                     }else if(access_status){
-                        show_hidden_ticket();
+                        show_hidden_ticket(access_code);
                         promo_code_status = 1;
                     }else{
                         discount_type = "";
@@ -306,7 +309,7 @@
                 if ($quantitySelect.val() !== "0") {
                     total += (parseFloat($quantitySelect.data('rate')) + parseFloat($quantitySelect.data('fee'))) * parseFloat($quantitySelect.val());
                     if(discount_status && discount_type == "amount"){
-                        discount_total += (parseFloat($quantitySelect.data('rate')) + parseFloat($quantitySelect.data('fee')) - discount_amount) * parseFloat($quantitySelect.val());
+                        discount_total += discount_amount * parseFloat($quantitySelect.val());
                     }
                     hasMoreThenZero = true;
                 }
