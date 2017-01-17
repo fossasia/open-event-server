@@ -274,13 +274,13 @@ def send_email_for_event_role_invite(email, role, event, link):
         )
 
 
-def send_email_for_after_purchase(email, invoice_id, order_url):
+def send_email_for_after_purchase(email, invoice_id, order_url, event_name, event_organiser):
     """Send email with order invoice link after purchase"""
     send_email(
         to=email,
         action=TICKET_PURCHASED,
-        subject=MAILS[TICKET_PURCHASED]['subject'].format(invoice_id=invoice_id),
-        html=MAILS[TICKET_PURCHASED]['message'].format(order_url=order_url)
+        subject=MAILS[TICKET_PURCHASED]['subject'].format(invoice_id=invoice_id, event_name=event_name),
+        html=MAILS[TICKET_PURCHASED]['message'].format(order_url=order_url, event_name=event_name, event_organiser=event_organiser)
     )
 
 

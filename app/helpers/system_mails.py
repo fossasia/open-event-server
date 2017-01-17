@@ -125,11 +125,14 @@ MAILS = {
     },
     TICKET_PURCHASED: {
         'recipient': 'User',
-        'subject': u'Your order invoice and tickets ({invoice_id})',
+        'subject': u'Your order invoice and tickets for {event_name} ({invoice_id}) ',
         'message': (
-            u"Your order has been processed successfully." +
+            u"Hi, this is a confirmation mail for your tickets for the event {event_name}"
+            u"<br/>The event is organised by {event_organiser}"
+            u"<br/>Your order has been processed successfully." +
             u"<br/> <a href='{order_url}'>Click here</a> to view/download your invoice."
-            u"<br><br><em>Looking forward to seeing you at the event.</em>"
+            u"<br><br><em>Looking forward to seeing you at the event."
+            u"<br/>Login to manage your orders at https://eventyay.com </em>"
         )
     },
     EVENT_EXPORTED: {

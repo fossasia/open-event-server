@@ -291,26 +291,6 @@ class TicketingManager(object):
         order = TicketingManager.get_and_set_expiry(identifier)
 
         if order:
-
-            holders_firstnames = form.getlist('holders[firstname]')
-            holders_lastnames = form.getlist('holders[lastname]')
-            holders_ticket_ids = form.getlist('holders[ticket_id]')
-            holders_emails = form.getlist('holders[email]')
-
-            for i, firstname in enumerate(holders_firstnames):
-                data = {
-                    'firstname': firstname,
-                    'lastname': holders_lastnames[i]
-                }
-                holder_user = TicketingManager.get_or_create_user_by_email(holders_emails[i], data)
-                ticket_holder = TicketHolder(firstname=data['firstname'],
-                                             lastname=data['lastname'],
-                                             ticket_id=int(holders_ticket_ids[i]),
-                                             email=holder_user.email,
-                                             order_id=order.id)
-                DataManager.add_attendee_role_to_event(holder_user, order.event_id)
-                db.session.add(ticket_holder)
-
             user = TicketingManager.get_or_create_user_by_email(email, form)
             order.user_id = user.id
 
@@ -341,11 +321,40 @@ class TicketingManager(object):
 
             else:
                 order.status = 'completed'
+                invoice_id = order.get_invoice_number()
+                order_url = url_for('ticketing.view_order_after_payment',
+                                    order_identifier=order.identifier,
+                                    _external=True)
                 order.completed_at = datetime.utcnow()
                 if not order.paid_via:
                     order.paid_via = 'free'
 
+            #add holders to user
+            holders_firstnames = form.getlist('holders[firstname]')
+            holders_lastnames = form.getlist('holders[lastname]')
+            holders_ticket_ids = form.getlist('holders[ticket_id]')
+            holders_emails = form.getlist('holders[email]')
+
+            for i, firstname in enumerate(holders_firstnames):
+                data = {
+                    'firstname': firstname,
+                    'lastname': holders_lastnames[i]
+                }
+                holder_user = TicketingManager.get_or_create_user_by_email(holders_emails[i], data)
+                ticket_holder = TicketHolder(firstname=data['firstname'],
+                                             lastname=data['lastname'],
+                                             ticket_id=int(holders_ticket_ids[i]),
+                                             email=holder_user.email,
+                                             order_id=order.id)
+                if order.status == "completed":
+                    send_email_for_after_purchase(holder_user.email, invoice_id, order_url, order.event.name,
+                                                  order.event.organizer_name)
+                DataManager.add_attendee_role_to_event(holder_user, order.event_id)
+                db.session.add(ticket_holder)
+
             # add attendee role to user
+            if order.status == "completed":
+                send_email_for_after_purchase(email, invoice_id, order_url, order.event.name, order.event.organizer_name)
             DataManager.add_attendee_role_to_event(user, order.event_id)
             # save items
             save_to_db(order)
@@ -377,7 +386,7 @@ class TicketingManager(object):
                                 order_identifier=order.identifier,
                                 _external=True)
 
-            send_email_for_after_purchase(order.user.email, invoice_id, order_url)
+            send_email_for_after_purchase(order.user.email, invoice_id, order_url, order.event.name, order.event.organizer_name)
             send_notif_for_after_purchase(order.user, invoice_id, order_url)
 
             return True, order
@@ -401,7 +410,8 @@ class TicketingManager(object):
                                     order_identifier=order.identifier,
                                     _external=True)
 
-                send_email_for_after_purchase(order.user.email, invoice_id, order_url)
+                send_email_for_after_purchase(order.user.email, invoice_id, order_url, order.event.name,
+                                              order.event.organizer_name)
                 send_notif_for_after_purchase(order.user, invoice_id, order_url)
 
                 return True, order
