@@ -236,11 +236,11 @@
             var modal = $(this);
             if (emailtype === "accept") {
                 modal.find('.subject').val("Session " + sessiontitle + " has been accepted");
-                modal.find('.message').val("Hello,The session " + sessiontitle + " has been " + emailtype + "ed by the organizer.  Visit this link to view the session: http://localhost:8001/events/4/sessions/1/");
+                modal.find('.message').val("Hello,The session " + sessiontitle + " has been " + emailtype + "ed by the organizer.  Visit this link to view the session: http://"+window.location.hostname+"/events/4/sessions/1/");
                 modal.find('.form-horizontal').attr('action', sessionid + '/accept');
             } else {
                 modal.find('.subject').val("Session " + sessiontitle + " has been rejected");
-                modal.find('.message').val("Hello,The session " + sessiontitle + " has been " + emailtype + "ed by the organizer.  Visit this link to view the session: http://localhost:8001/events/4/sessions/1/");
+                modal.find('.message').val("Hello,The session " + sessiontitle + " has been " + emailtype + "ed by the organizer.  Visit this link to view the session: http://"+window.location.hostname+"/events/4/sessions/1/");
                 modal.find('.form-horizontal').attr('action' , sessionid + '/reject');
             }
 
