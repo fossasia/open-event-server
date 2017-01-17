@@ -287,6 +287,7 @@ def save_event_from_json(json, event_id=None):
                                                                new_paper=1,
                                                                session_schedule=1,
                                                                session_accept_reject=1,
+                                                               after_ticket_purchase=1,
                                                                user_id=login.current_user.id,
                                                                event_id=event.id)
             save_to_db(new_email_notification_setting, "EmailSetting Saved")

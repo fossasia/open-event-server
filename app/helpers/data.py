@@ -180,6 +180,7 @@ class DataManager(object):
                     email_notification.new_paper = value
                     email_notification.session_schedule = value
                     email_notification.session_accept_reject = value
+                    email_notification.after_ticket_purchase = value
                     save_to_db(email_notification, "EmailSettings Toggled")
                     notification_ids.append(email_notification.id)
                 else:
@@ -187,6 +188,7 @@ class DataManager(object):
                                                                        new_paper=value,
                                                                        session_schedule=value,
                                                                        session_accept_reject=value,
+                                                                       after_ticket_purchase=value,
                                                                        user_id=user_id,
                                                                        event_id=event.id)
                     save_to_db(new_email_notification_setting, "EmailSetting Toggled")
