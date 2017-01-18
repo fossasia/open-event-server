@@ -26,7 +26,7 @@
                     <hr>
                     <p class="tags">
                     <span class="filter-hashtag">
-                        {% if order.amount == 0 %}Free{% else %} {% if order.event.payment_currency %} {{ order.event.payment_currency | currency_symbol }} {% else %} $ {% endif %} {{ order.amount | money }}{% endif %}
+                        {% if order.amount == 0 %}Free{% else %} {{ order.event.payment_currency | currency_symbol }} {{ order.amount | money }}{% endif %}
                         order #{{ order.get_invoice_number() }} on {{ order.completed_at.strftime('%B %d, %Y %I:%M %p') }}
                     </span>
                     </p>
