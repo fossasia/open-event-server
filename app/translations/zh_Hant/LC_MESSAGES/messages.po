@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2017-01-09 23:35+0530\n"
-"PO-Revision-Date: 2017-01-18 10:16+0000\n"
-"Last-Translator: 王詣昕 <simon70828@yahoo.com.tw>\n"
+"PO-Revision-Date: 2017-01-18 16:43+0000\n"
+"Last-Translator: Chang-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects"
 "/open-event/organizer-server/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -933,6 +933,7 @@ msgid "Update Session"
 msgstr "更新議程"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:157
+#, fuzzy
 msgid "New Microlocation"
 msgstr "新微觀區"
 
@@ -953,12 +954,13 @@ msgid "Room"
 msgstr "房間"
 
 #: app/templates/gentelella/admin/event/scheduler/scheduler.html:198
+#, fuzzy
 msgid "Add Microlocation"
 msgstr "增加微觀區"
 
 #: app/templates/gentelella/admin/event/scheduler/components/timeline.html:33
 msgid "All the timings are in"
-msgstr "所有時間點都在裡面"
+msgstr "所有時間點都在"
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:37
 #: app/templates/gentelella/admin/event/speakers/base_speaker_table.html:56
@@ -980,7 +982,7 @@ msgstr "建立議程"
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:111
 #: app/templates/gentelella/admin/super_admin/permissions/permissions.html:261
 msgid "Track"
-msgstr "路徑"
+msgstr "追蹤"
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:66
 msgid "Submission Date"
@@ -1159,7 +1161,7 @@ msgstr "選取支付類型"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:77
 msgid "Cheque"
-msgstr "檢查"
+msgstr "支票"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:78
 msgid "Telegraphic Transfer (TT) / Bank Transfer"
@@ -1167,11 +1169,11 @@ msgstr ""
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:79
 msgid "Onsite / Cash"
-msgstr "在現場/現金"
+msgstr "線上付款 / 現金"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:81
 msgid "Stripe"
-msgstr "條紋"
+msgstr "Stripe"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:82
 msgid "Free Order"
@@ -1193,15 +1195,15 @@ msgstr "過期"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:61
 msgid "Checked In"
-msgstr "入住"
+msgstr "已報到"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:65
 msgid "Not Checked In"
-msgstr "不入住"
+msgstr "未報到"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:71
 msgid "View Attendees"
-msgstr "檢視出席者"
+msgstr "檢視與會者"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:80
 #: app/templates/gentelella/admin/event/tickets/orders.html:67
@@ -1221,7 +1223,7 @@ msgstr "票券名稱"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:89
 msgid "Ticket Price"
-msgstr "票券價錢"
+msgstr "票券價格"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:92
 #: app/templates/gentelella/admin/profile/_form.html:8
@@ -1257,7 +1259,7 @@ msgstr "折扣碼"
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:26
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:29
 msgid "Create a discount"
-msgstr "創造折扣"
+msgstr "新定折扣"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:36
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:77
@@ -1287,7 +1289,7 @@ msgstr "折扣碼"
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:49
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:52
 msgid "Discount Per Ticket"
-msgstr ""
+msgstr "每票券折扣"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:50
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes.html:53
@@ -1297,11 +1299,11 @@ msgstr "有效性"
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:35
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:44
 msgid "Enter Discount"
-msgstr "進入折扣"
+msgstr "輸入折扣"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:76
 msgid "Number of discount tickets"
-msgstr "享有折扣門票數"
+msgstr "折扣票券數量"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:98
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:89
@@ -1310,7 +1312,7 @@ msgstr "未啟用"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:105
 msgid "Select Ticket(s) applied to the discount code"
-msgstr ""
+msgstr "選取要套用折扣碼的票券"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:111
 msgid "Select all Tickets Type"
@@ -1334,20 +1336,20 @@ msgstr "最大值"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:156
 msgid "Validity period (optional)"
-msgstr ""
+msgstr "有效期限（選填）"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:160
 msgid "Valid from"
-msgstr ""
+msgstr "有效起"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:180
 msgid "Expires on"
-msgstr ""
+msgstr "有效迄"
 
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:208
 #: app/templates/gentelella/admin/super_admin/sales/discount_codes_create.html:129
 msgid "Save Discount"
-msgstr "保存折扣"
+msgstr "儲存折扣"
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:58
 msgid "View Orders"
@@ -1359,11 +1361,11 @@ msgstr "總數量"
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:76
 msgid "Qty"
-msgstr ""
+msgstr "數量"
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:79
 msgid "Buyer / Registration Contact"
-msgstr "買家/聯繫註冊"
+msgstr "買家 / 註冊聯絡方式"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:75
 msgid "Orders"
@@ -1386,12 +1388,12 @@ msgstr "特價"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:102
 msgid "Tickets sold"
-msgstr "賣票"
+msgstr "售出票券"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:108
 #: app/templates/gentelella/admin/event/tickets/tickets.html:155
 msgid "View attendees"
-msgstr "觀察出席者"
+msgstr "檢視與會者"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:114
 msgid "Orders Summary"
@@ -1404,7 +1406,7 @@ msgstr "依據訂單狀態"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:125
 msgid "Total Tickets"
-msgstr "票券總數"
+msgstr "總票券數"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:128
 msgid "Total Orders"
@@ -1424,7 +1426,7 @@ msgstr "票券摘要"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:175
 msgid "Tickets Capacity Set"
-msgstr ""
+msgstr "票券容量設定"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:179
 #: app/templates/gentelella/admin/super_admin/sales/by_marketer.html:65
@@ -1436,7 +1438,7 @@ msgstr "完成的訂單數"
 #: app/templates/gentelella/admin/event/tickets/tickets.html:182
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:67
 msgid "Pending Orders"
-msgstr "擱置中的訂單"
+msgstr "待定的訂單"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:229
 #: app/templates/gentelella/admin/super_admin/sales/fees.html:95
@@ -1500,11 +1502,11 @@ msgstr "主辦者名稱"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:196
 msgid "Organizer Description"
-msgstr "組織者描述"
+msgstr "主辦者描述說明"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:204
 msgid "Links and Social Media"
-msgstr ""
+msgstr "連結和社交媒體"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:233
 msgid "Use Ticketing System"
@@ -1512,7 +1514,7 @@ msgstr "使用票券系統"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:246
 msgid "Ticket Details"
-msgstr ""
+msgstr "票券細節"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:276
 msgid "Free Ticket"
@@ -1520,35 +1522,35 @@ msgstr "免費票券"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:280
 msgid "Paid Ticket"
-msgstr ""
+msgstr "付費票券"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:295
 msgid "Add Ticket URL"
-msgstr "增加票券URL"
+msgstr "加入票券網址"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:299
 msgid "Ticket URL"
-msgstr "票券URL"
+msgstr "票券網址"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:312
 msgid "Redeem Discount Code"
-msgstr ""
+msgstr "兌換折扣碼"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:319
 msgid "Enter Discount Code"
-msgstr ""
+msgstr "輸入折扣碼"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:326
 msgid "Apply Discount"
-msgstr "應用折扣"
+msgstr "套用折扣"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:330
 msgid "Code applied !"
-msgstr ""
+msgstr "折扣碼已套用！"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:339
 msgid "Add Payment details"
-msgstr "增加支付細節"
+msgstr "加入支付細節"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:345
 msgid "Choose Country"
@@ -1556,7 +1558,7 @@ msgstr "選擇國家"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:350
 msgid "Choose a country for your payment"
-msgstr "為你的支付選擇國家"
+msgstr "為您的支付選擇國家"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:360
 msgid "Choose Currency"
@@ -1572,79 +1574,79 @@ msgstr "選擇支付管道"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:383
 msgid "Online Payments"
-msgstr ""
+msgstr "線上支付"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:385
 msgid "Payment by PayPal"
-msgstr ""
+msgstr "使用 PayPal 支付"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:389
 msgid "YES, accept payment through PayPal "
-msgstr ""
+msgstr "是的，接受用 PayPal 支付 "
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:390
 msgid ""
 "Paypal accepts credit card, debit card and PayPal payments. To learn how "
 "it works click"
-msgstr ""
+msgstr "PayPal 接受信用卡、金融卡和 PayPal 支付。若要深入瞭解其細節請點按"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:391
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:413
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:414
 msgid "here."
-msgstr ""
+msgstr "這裡。"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:399
 msgid "Don't have a PayPal account?"
-msgstr ""
+msgstr "還沒有 PayPal 帳號？"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:401
 msgid "Create a free PayPal merchant account."
-msgstr ""
+msgstr "建立免費的 PayPal 銷售帳號。"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:407
 msgid "Payment by Stripe"
-msgstr ""
+msgstr "使用 Stripe 支付"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:411
 msgid "YES, accept payment through Stripe"
-msgstr ""
+msgstr "是的，接受用 Stripe 支付"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:412
 msgid "Stripe accepts Visa, Master and Amex. To learn how it works click"
-msgstr ""
+msgstr "Stripe 接受 Visa、Master 和 Amex 卡。若要瞭解細節請點按"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:414
 msgid "Find out more about Stripe"
-msgstr ""
+msgstr "深入瞭解 Stripe"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:419
 msgid "Use Stripe for payments"
-msgstr ""
+msgstr "使用 Stripe 作支付"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:421
 msgid "The stripe account"
-msgstr ""
+msgstr "Stripe 帳號"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:422
 msgid "has been connected."
-msgstr ""
+msgstr "已經連結。"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:424
 msgid "Click to De-link the account."
-msgstr ""
+msgstr "點按可取消帳號連結。"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:428
 msgid "Connect with Stripe"
-msgstr ""
+msgstr "連結 Stripe"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:434
 msgid "Offline Payments"
-msgstr ""
+msgstr "離線支付"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:439
 msgid "YES, accept payment by Cheque"
-msgstr ""
+msgstr "是的，接受用支票支付"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:443
 msgid ""
