@@ -126,8 +126,8 @@
                     <td>
                         {% if holder.status == 'completed' %}
                             <span class="label label-success">{{ holder.status | capitalize }}</span>
-                        {% elif holder.status == 'pending' %}
-                            <span class="label label-warning">{{ holder.status | capitalize }}</span>
+                        {% elif holder.status == 'pending' or holder.status == 'initialized' %}
+                            <span class="label label-warning">{{ _("Pending") }}</span>
                         {% elif holder.status == 'placed' %}
                             <span class="label label-info">{{ holder.status | capitalize }}</span>
                         {% else %}
@@ -135,7 +135,7 @@
                         {% endif %}
                     </td>
                     <td>{{ holder.ticket_name }}</td>
-                    <td>{{ event.payment_currency | currency_symbol }}{{ holder.ticket_price | money }}</td>
+                    <td>{% if holder.ticket_price %}{{ event.payment_currency | currency_symbol }}{{ holder.ticket_price | money }}{% endif %}</td>
                     <td>{{ holder.firstname }}</td>
                     <td>{{ holder.lastname }}</td>
                     <td>{{ holder.email }}</td>

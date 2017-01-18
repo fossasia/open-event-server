@@ -415,9 +415,9 @@ def as_timezone(dt, tzname):
     """Accepts a Time aware Datetime object and a Timezone name.
         Returns Converted Timezone aware Datetime Object.
         """
-    converted_dt = dt.astimezone(timezone(tzname))
-    return converted_dt
-
+    if tzname:
+        return dt.astimezone(timezone(tzname))
+    return dt
 
 @app.template_filter('fees_by_currency')
 def fees_by_currency(currency):

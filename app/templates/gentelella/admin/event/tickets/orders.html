@@ -104,8 +104,8 @@
                 <td>
                     {% if order.status == 'completed' %}
                         <span class="label label-success">{{ order.status | capitalize }}</span>
-                    {% elif order.status == 'pending' %}
-                        <span class="label label-warning">{{ order.status | capitalize }}</span>
+                    {% elif order.status == 'pending' or order.status == 'initialized' %}
+                        <span class="label label-warning">{{ _("Pending") }}</span>
                     {% elif order.status == 'placed' %}
                         <span class="label label-info">{{ order.status | capitalize }}</span>
                     {% else %}
