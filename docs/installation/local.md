@@ -10,8 +10,8 @@ title: Local
 sudo apt-get update
 sudo apt-get install postgresql postgresql-contrib
 ```
-* NodeJS  
-if nvm(Node Version Manager)  is not installed:  
+* NodeJS
+if nvm(Node Version Manager)  is not installed:
 using cURL:
 ```sh
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash
@@ -58,12 +58,20 @@ CREATE DATABASE oevent WITH OWNER john;
 * Once database is created, exit the psql shell with `\q` followed by ENTER.
 
 
-* **Step 3** - Install bower and frontend requirements. Learn more at [BOWER.md](../README.md#how-to-configure-bower). For this you need to be present in the root directory of the project. The root directory contains the file ```bower.json```. When you write ```bower install```, it finds bower.json and installs the libraries on the system.
+* **Step 3** - Install bower and frontend requirements. For this you need to be present in the root directory of the project. The root directory contains the file ```bower.json```. When you write ```bower install```, it finds bower.json and installs the libraries on the system.
 
 ```sh
 npm install bower -g
 bower install
 ```
+
+if error
+```sh
+sudo npm install bower -g
+sudo ln -s /usr/bin/nodejs /usr/bin/node
+sudo bower install
+```
+
 for mac user:
 ```sh
 sudo npm install bower -g
