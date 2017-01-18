@@ -415,7 +415,7 @@ def as_timezone(dt, tzname):
     """Accepts a Time aware Datetime object and a Timezone name.
         Returns Converted Timezone aware Datetime Object.
         """
-    if tzname:
+    if timezone(tzname):
         return dt.astimezone(timezone(tzname))
     return dt
 
