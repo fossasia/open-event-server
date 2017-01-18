@@ -20,7 +20,9 @@
                 <input name="location_name" id="location_name"
                        v-model="event.location_name"
                        placeholder="Location is required to make event live"
-                       class="form-control"/>
+                       class="form-control"
+                       v-show="!addressShown"
+                       v-on:gmap="fillInAddress"/>
             </div>
         </div>
 
@@ -57,7 +59,7 @@
                 <div class="col-md-4">
                     <a id="reset_addr"
                        style="cursor:pointer;"
-                       v-on:click="event.location_name= ''; addressShown = false;">{{ _("Reset Location") }}</a>
+                       v-on:click="resetAddress">{{ _("Reset Location") }}</a>
                 </div>
                 <div class="col-md-8">
                     <div class="checkbox" style="padding-top:0;">
@@ -72,7 +74,7 @@
             <div class="col-md-6">
                 <google-map class="hidden-xs" style="width:100%; height:300px" ref="gmap" :center="location"
                             :zoom="zoom">
-                    <map-marker :position="location" :clickable="false" :draggable="false"></map-marker>
+                    <map-marker :position="location" :clickable="false" :draggable="true"></map-marker>
                 </google-map>
             </div>
             <br>
@@ -264,7 +266,7 @@
                     </div>
                 </div>
                 <div class="tickets-holder" style="margin-bottom: 10px;">
-                    <ticket v-for="(ticket, index) in event.tickets" v-bind:ticket="ticket"
+                    <ticket v-for="(ticket, index) in event.tickets" v-bind:ticket="ticket" v-bind:event="event" v-bind:service_fee="{{ (event.payment_currency | fees_by_currency).service_fee | default(0, true) }}"
                             v-bind:key="index"
                             v-on:remove="removeTicket(ticket)"></ticket>
                 </div>

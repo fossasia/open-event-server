@@ -13,6 +13,7 @@ from app import get_settings
 from app.helpers.data import save_to_db
 from app.helpers.payment import PayPalPaymentsManager
 from app.helpers.ticketing import TicketingManager
+from app.helpers.data_getter import DataGetter
 
 
 def create_pdf(pdf_data):
@@ -35,18 +36,35 @@ def create_order():
     return redirect(url_for('.view_order', order_identifier=order.identifier))
 
 
-@ticketing.route('/apply_discount/', methods=('POST',))
-def apply_discount():
+@ticketing.route('/apply_promo/', methods=('POST',))
+def apply_promo():
     discount = TicketingManager.get_discount_code(request.form.get('event_id'), request.form.get('promo_code', ''))
-    if discount:
+    access_code = TicketingManager.get_access_code(request.form.get('event_id'), request.form.get('promo_code', ''))
+    if discount and access_code:
         return jsonify({
             'discount_type': discount.type,
             'discount_amount': discount.value,
-            'discount_status': True
+            'discount_status': True,
+            'access_status': True,
+            'access_code_ticket': access_code.tickets,
+        })
+    elif discount:
+        return jsonify({
+            'discount_type': discount.type,
+            'discount_amount': discount.value,
+            'discount_status': True,
+            'access_status': False,
+        })
+    elif access_code:
+        return jsonify({
+            'access_status': True,
+            'discount_status': False,
+            'access_code_ticket': access_code.tickets,
         })
     else:
         return jsonify({
-            'discount_status': False
+            'discount_status': False,
+            'access_status': False,
         })
 
 @ticketing.route('/<order_identifier>/', methods=('GET',))
@@ -61,10 +79,11 @@ def view_order(order_identifier):
         stripe_publishable_key = order.event.stripe.stripe_publishable_key
     else:
         stripe_publishable_key = "No Key Set"
-
+    fees = DataGetter.get_fee_settings_by_currency(order.event.payment_currency)
     return render_template('gentelella/guest/ticketing/order_pre_payment.html', order=order, event=order.event,
                            countries=list(pycountry.countries),
-                           stripe_publishable_key=stripe_publishable_key)
+                           stripe_publishable_key=stripe_publishable_key,
+                           fees=fees)
 
 
 @ticketing.route('/<order_identifier>/view/', methods=('GET',))
@@ -73,7 +92,11 @@ def view_order_after_payment(order_identifier):
     if not order or (order.status != 'completed' and order.status != 'placed'):
         abort(404)
     flash("An email with the ticket has also been sent to your email account.")
-    return render_template('gentelella/guest/ticketing/order_post_payment.html', order=order, event=order.event)
+    fees = DataGetter.get_fee_settings_by_currency(order.event.payment_currency)
+    return render_template('gentelella/guest/ticketing/order_post_payment.html',
+                           order=order,
+                           event=order.event,
+                           fees=fees)
 
 
 @ticketing.route('/<order_identifier>/view/pdf/', methods=('GET',))

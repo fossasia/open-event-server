@@ -86,14 +86,12 @@ class ICalImporter:
                 attendees_dirty = session_block['attendee']
                 if hasattr(attendees_dirty, '__iter__'):
                     for attendee in attendees_dirty:
-                        attendees.append(attendee.params['CN'])
+                        attendees.append((attendee.params['CN'], attendee))
                 else:
-                    attendees.append(attendees_dirty.params['CN'])
+                    attendees.append((attendees_dirty.params['CN'], attendees_dirty))
 
             for attendee in attendees:
-                name_mix = attendee + ' ' + event.name
-                email = ''.join(x for x in name_mix.title() if not x.isspace()) + '@example.com'
-                speaker = Speaker(name=attendee, event_id=event.id, email=email,
+                speaker = Speaker(name=attendee[0], event_id=event.id, email=attendee[1].replace('MAILTO:', ''),
                                   country='Earth',
                                   organisation='')
                 db.session.add(speaker)
