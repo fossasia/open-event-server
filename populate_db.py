@@ -2,6 +2,10 @@ from app import current_app
 from app.models import db
 from app.helpers.data import get_or_create  # , save_to_db
 
+#Admin message settings
+from app.helpers.system_mails import MAILS
+from app.models.message_settings import MessageSettings
+
 # Event Role-Service Permissions
 from app.models.role import Role
 from app.models.service import Service
@@ -127,6 +131,26 @@ def create_user_permissions():
     db.session.add(user_perm)
 
 
+def create_admin_message_settings():
+    default_mails = ["Next Event",
+                     "Session Schedule Change",
+                     "User email",
+                     "Invitation For Papers",
+                     "After Event",
+                     "Ticket(s) Purchased",
+                     "Session Accept or Reject",
+                     "Event Published",
+                     "Event Export Failed",
+                     "Event Exported",
+                     "Event Role Invitation",
+                     "New Session Proposal"]
+    for mail in MAILS:
+        if mail in default_mails:
+            get_or_create(MessageSettings, action=mail, mail_status=1, notif_status=1, user_control_status=1)
+        else:
+            get_or_create(MessageSettings, action=mail, mail_status=0, notif_status=0, user_control_status=0)
+
+
 def populate():
     """
     Create defined Roles, Services and Permissions.
@@ -144,6 +168,8 @@ def populate():
     create_panel_permissions()
     print 'Creating user permissions...'
     create_user_permissions()
+    print 'Creating admin message settings...'
+    create_admin_message_settings()
 
     db.session.commit()
 
