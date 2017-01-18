@@ -12,6 +12,7 @@ SESSION_ACCEPT_REJECT = 'Session Accept or Reject'
 INVITE_PAPERS = 'Invitation For Papers'
 AFTER_EVENT = 'After Event'
 EVENT_PUBLISH = 'Event Published'
+TICKET_PURCHASED_ORGANIZER = 'Ticket(s) Purchased to Organizer'
 
 
 class Notification(db.Model):

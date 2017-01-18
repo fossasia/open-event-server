@@ -378,7 +378,8 @@ class DataGetter(object):
 
     @staticmethod
     def get_user_event_roles_by_role_name(event_id, role_name):
-        return UsersEventsRoles.query.filter_by(event_id=event_id).filter(Role.name == role_name)
+        role = Role.query.filter_by(name=role_name).first()
+        return UsersEventsRoles.query.filter_by(event_id=event_id).filter(UsersEventsRoles.role == role)
 
     @staticmethod
     def get_user_events(user_id=None):
