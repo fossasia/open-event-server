@@ -240,16 +240,24 @@ class TicketingManager(object):
         discount=None
         if ticket_discount:
             discount=TicketingManager.get_discount_code(form.get('event_id'), form.get('promo_code',''))
-            if not discount:
-                flash('The promotional code entered is not valid. No offer has been applied to this order.', 'danger')
-            else:
+            access_code = TicketingManager.get_access_code(form.get('event_id'), form.get('promo_code', ''))
+            if access_code and discount:
                 order.discount_code = discount
-                flash('The promotional code entered is valid.offer has been applied to this order.', 'success')
+                flash('Both access code and discount code have been applied. You can make this order now.', 'success')
+            elif discount:
+                order.discount_code = discount
+                flash('The promotional code entered is valid. Offer has been applied to this order.', 'success')
+            elif access_code:
+                flash('Your access code is applied and you can make this order now.', 'success')
+            else:
+                flash('The promotional code entered is not valid. No offer has been applied to this order.', 'danger')
+                
         ticket_subtotals = []
         if from_organizer:
             ticket_subtotals = form.getlist('ticket_subtotals[]')
 
         amount = 0
+        total_discount = 0
         fees = DataGetter.get_fee_settings_by_currency(DataGetter.get_event(order.event_id).payment_currency)
         for index, id in enumerate(ticket_ids):
             if not string_empty(id) and int(ticket_quantity[index]) > 0:
@@ -262,6 +270,13 @@ class TicketingManager(object):
                     if from_organizer:
                         amount += float(ticket_subtotals[index])
                     else:
+                        if discount and str(order_ticket.ticket.id) in discount.tickets.split(","):
+                            if discount.type == "amount":
+                                total_discount += discount.value * order_ticket.quantity
+                            else:
+                                total_discount += discount.value * order_ticket.ticket.price *\
+                                                 order_ticket.quantity/100.0
+
                         if order_ticket.ticket.absorb_fees or not fees:
                             amount += (order_ticket.ticket.price * order_ticket.quantity)
                         else:
@@ -271,8 +286,8 @@ class TicketingManager(object):
                             else:
                                 amount += (order_ticket.ticket.price * order_ticket.quantity) + order_fee
 
-        if discount and discount.type == "amount":
-            order.amount = max(amount-discount.value, 0)
+        if discount:
+            order.amount = max(amount - total_discount,0)
         elif discount:
             order.amount = amount-(discount.value*amount/100.0)
         else:

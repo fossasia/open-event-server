@@ -1,3 +1,5 @@
+# encoding=utf8
+
 import copy
 from datetime import datetime, timedelta
 
@@ -326,7 +328,7 @@ def sales_by_events_view(path):
                 += order_ticket.quantity
             tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)]['tickets_count'] \
                 += order_ticket.quantity
-            tickets_summary_location_wise[str(order
+            tickets_summary_location_wise[unicode(order
                                               .event.searchable_location_name)][str(order
                                                                                     .status)]['tickets_count'] \
                 += order_ticket.quantity
