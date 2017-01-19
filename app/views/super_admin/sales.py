@@ -237,7 +237,7 @@ def sales_by_events_view(path):
         ('to_date' in request.args and 'from_date' not in request.args):
         return redirect(url_for('.sales_by_events_view', path=path))
 
-    promoted_events = path == 'promoted-events'
+    promoted_events = path == 'discounted-events'
 
     if from_date and to_date:
         orders = TicketingManager.get_orders(
@@ -343,7 +343,7 @@ def sales_by_events_view(path):
                                                                                  status)]['sales'] += \
                     order_ticket.quantity * ticket.price
 
-    if path == 'events' or path == 'promoted-events':
+    if path == 'events' or path == 'discounted-events':
         return render_template('gentelella/admin/super_admin/sales/by_events.html',
                                tickets_summary=tickets_summary_event_wise,
                                display_currency=display_currency,
