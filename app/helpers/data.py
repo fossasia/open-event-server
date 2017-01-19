@@ -728,11 +728,11 @@ class DataManager(object):
 
             user_detail.details = form['details']
             avatar_img = form.get('avatar-img', None)
-            user_detail.avatar_uploaded = ""
-            user_detail.thumbnail = ""
-            user_detail.small = ""
-            user_detail.icon = ""
-            if string_not_empty(avatar_img) and avatar_img:
+            if string_not_empty(avatar_img) and avatar_img:                
+                user_detail.avatar_uploaded = ""
+                user_detail.thumbnail = ""
+                user_detail.small = ""
+                user_detail.icon = ""
                 filename = '{}.png'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
                                                  avatar_img[len('/serve_static/'):])
