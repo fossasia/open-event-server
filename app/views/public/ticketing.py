@@ -47,6 +47,7 @@ def apply_promo():
             'discount_status': True,
             'access_status': True,
             'access_code_ticket': access_code.tickets,
+            'discount_code_ticket': discount.tickets,
         })
     elif discount:
         return jsonify({
@@ -54,6 +55,7 @@ def apply_promo():
             'discount_amount': discount.value,
             'discount_status': True,
             'access_status': False,
+            'discount_code_ticket': discount.tickets,
         })
     elif access_code:
         return jsonify({
