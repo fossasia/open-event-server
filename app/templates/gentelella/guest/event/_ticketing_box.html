@@ -311,11 +311,11 @@
                 var ticket_id = $quantitySelect.data('id');
                 if ($quantitySelect.val() !== "0") {
                     total += (parseFloat($quantitySelect.data('rate')) + parseFloat($quantitySelect.data('fee'))) * parseFloat($quantitySelect.val());
-                    if (discount_code.split(",").indexOf(""+ticket_id) != -1){
-                        if(discount_status && discount_type == "amount"){                      
+                    if (discount_status && discount_code.split(",").indexOf(""+ticket_id) != -1){
+                        if(discount_type == "amount"){                      
                             discount_total += discount_amount * parseFloat($quantitySelect.val());
                         }
-                        else if(discount_status && discount_type != "amount"){
+                        else if(discount_type != "amount"){
                             discount_total += (discount_amount * parseFloat($quantitySelect.val())* parseFloat($quantitySelect.data('rate'))/100.0)
                         }
                     }
