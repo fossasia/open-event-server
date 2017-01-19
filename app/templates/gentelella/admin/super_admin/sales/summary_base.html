@@ -52,7 +52,7 @@
             <th rowspan="2">
                 {{ key_name | capitalize }}
             </th>
-            {% if path and path == 'promoted-events' %}
+            {% if path and path == 'discounted-events' %}
                 <th rowspan="2" style="border-left: none !important; border-top: none!important; ">
                     {{ _("Discount Code") }}
                 </th>
@@ -89,7 +89,7 @@
                 <td>
                     {{ item.name }}
                 </td>
-                {% if path and path == 'promoted-events' %}
+                {% if path and path == 'discounted-events' %}
                     <td>
                         {{ item.discount_code }}
                     </td>
