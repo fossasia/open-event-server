@@ -243,7 +243,7 @@ class TicketingManager(object):
             access_code = TicketingManager.get_access_code(form.get('event_id'), form.get('promo_code', ''))
             if access_code and discount:
                 order.discount_code = discount
-                flash('Both access code and discount code has been applied. You can make this order now.', 'success')
+                flash('Both access code and discount code have been applied. You can make this order now.', 'success')
             elif discount:
                 order.discount_code = discount
                 flash('The promotional code entered is valid. Offer has been applied to this order.', 'success')
