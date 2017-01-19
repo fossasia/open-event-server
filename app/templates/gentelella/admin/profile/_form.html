@@ -13,7 +13,7 @@
            value="{{ profile.user_detail.lastname | default('', true) }}"/>
 
     <label>{{ _("Details about User") }}:</label>
-    <textarea name="details" id="summernote">{{ profile.user_detail.details | default('', true) }}</textarea>
+    <textarea name="details" id="summernote" >{{ profile.user_detail.details | default('', true) }}</textarea>
 
     <input name="email" type="hidden" value="{{ profile.email }}"/>
     <input name="contact" type="hidden" value="{{ profile.user_detail.contact | default('', true) }}"/>
@@ -30,8 +30,6 @@
 <script>
     $(document).ready(function () {
         $('#summernote').summernote(summernoteConfig);
-        $('#summernote').val("");
-
     });
 
 </script>
