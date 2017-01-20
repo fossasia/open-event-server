@@ -6,6 +6,7 @@ data:
   hsts-include-subdomains: "false"
   body-size: "64m"
   server-name-hash-bucket-size: "256"
+  use-proxy-protocol: "true"
 kind: ConfigMap
 metadata:
   namespace: nginx-ingress
