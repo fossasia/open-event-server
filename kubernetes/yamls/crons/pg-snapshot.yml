@@ -1,0 +1,17 @@
+apiVersion: batch/v2alpha1
+kind: CronJob
+metadata:
+  name: pg-snapshot
+spec:
+  schedule: "0 * * * 0-6"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: pg-snapshot
+            image: gcr.io/eventyay/utils/gcloud:latest
+            command:
+            - /usr/bin/gcloud
+            - compute disks snapshot pg-data-disk --zone us-west1-a
+          restartPolicy: OnFailure
