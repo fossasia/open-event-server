@@ -46,6 +46,7 @@
         <tr>
             <th>#</th>
             <th>{{ _("Discount Code") }}</th>
+            <th>{{ _("Discount Code URL") }}</th>
             <th>{{ _("Discount Per Ticket") }}</th>
             <th>{{ _("Validity") }}</th>
             <th>{{ _("Status") }}</th>
@@ -56,7 +57,8 @@
         {% for discount_code in discount_codes %}
             <tr>
                 <td></td>
-                <td>{{ discount_code.code }}</td>
+                <td><a href="{{ discount_code.discount_url }}">{{ discount_code.code }}</a></td>
+                <td>{{ discount_code.discount_url }}</td>
                 <td>
                     {% if discount_code.type == 'amount' %}
                         {{ event.payment_currency | currency_symbol }}{{ discount_code.value | money }}

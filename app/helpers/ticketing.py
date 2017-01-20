@@ -447,6 +447,7 @@ class TicketingManager(object):
         discount_code.code = form.get('code')
         discount_code.value = form.get('value')
         discount_code.type = form.get('value_type')
+        discount_code.discount_url = form.get('discount_url')
         discount_code.min_quantity = form.get('min_quantity', None)
         discount_code.max_quantity = form.get('max_quantity', None)
         discount_code.tickets_number = form.get('tickets_number')
@@ -486,6 +487,7 @@ class TicketingManager(object):
         else:
             access_code = TicketingManager.get_access_code(event_id, access_code_id)
         access_code.code = form.get('code')
+        access_code.access_url = form.get('access_url')
         access_code.min_quantity = form.get('min_quantity', None)
         access_code.max_quantity = form.get('max_quantity', None)
         access_code.tickets_number = form.get('tickets_number')

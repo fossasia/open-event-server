@@ -157,6 +157,11 @@
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
+            <hr>
+            <div class="form-group">
+                <label for="code">{{ _("Access Link") }}</label>
+                <input type="text" name="access_url" class="form-control" id="link" placeholder="Access Link" value="{{ access_code.access_url | default('', true) }}" readonly>
+            </div>
             <br>
             <br>
             <div class="clearfix"></div>
@@ -218,6 +223,11 @@
             $newAccessForm.validator('destroy');
             $newAccessForm.validator('update');
             $newAccessForm.validator('validate');
+        });
+
+        var host = (document.URL.split("//")[1].split("/"))[0];
+        $("#code").change(function(){
+            $("#link").val("http://"+host+"/e/"+"{{ event.identifier }}"+"/?code="+$(this).val());
         });
 
     </script>

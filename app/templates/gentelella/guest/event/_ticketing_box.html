@@ -149,7 +149,7 @@
                         <div class="col-md-5 pull-right promo-code-box" style="padding-right:0;display:none;">
                             <div class="input-group" style="margin-bottom: 0;">
                                 <input type="text" name="promo_code" class="form-control" placeholder="Promotional code"
-                                       value="">
+                                       value="{{ code | default('', true) }}">
                                 <span class="input-group-btn">
                                         <button class="btn btn-default " type="button" id="apply-discount"><i
                                                 class="fa fa-check"></i></button>
@@ -263,6 +263,43 @@
         var discount_amount = -1;
         var promo_code_status = 0;
         var discount_code = "";
+        {% if code %}
+                if (promo_code_status == 0) {
+                    var form_data = {"event_id": {{ event.id }}, "promo_code": "{{ code }}" }
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ url_for('ticketing.apply_promo') }}",
+                        data: form_data
+                    }).done(function (data) {
+                        discount_status = data.discount_status;
+                        access_status = data.access_status;
+                        access_code = data.access_code_ticket;
+                        discount_code = data.discount_code_ticket;
+                        if(discount_status && access_status){
+                            discount_type = data.discount_type;
+                            discount_amount = data.discount_amount;
+                            show_hidden_ticket(access_code);
+                            promo_code_status = 1;
+                        }else if(discount_status){
+                            discount_type = data.discount_type;
+                            discount_amount = data.discount_amount;
+                            promo_code_status = 1;
+                        }else if(access_status){
+                            show_hidden_ticket(access_code);
+                            promo_code_status = 1;
+                        }else{
+                            discount_type = "";
+                            discount_amount = -1;
+                            $('#discount-error').text("Invalid Promo Code");
+                        }
+                        $quantitySelects = $(".quantity-select");
+                        $quantitySelects.trigger('change');
+                        $quantitySelects.change(function () {
+                            quantity_select_compute($quantitySelects, $(this));
+                        })
+                    });
+                };
+        {% endif %}
         $('#apply-discount').click(function (e) {
             if (promo_code_status == 0) {
                 var form_data = $('#ticketing-box-form').serialize();
