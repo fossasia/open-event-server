@@ -6,18 +6,19 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
+"Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2017-01-19 22:04+0530\n"
-"PO-Revision-Date: 2017-01-18 16:43+0000\n"
-"Last-Translator: Chang-Chia Tseng <pswo10680@gmail.com>\n"
-"Language: zh_Hant\n"
+"PO-Revision-Date: 2017-01-20 15:01+0000\n"
+"Last-Translator: nienzu <ibqqz0602@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects"
 "/open-event/organizer-server/zh_Hant/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2.11-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 #: app/templates/404.html:8 app/templates/404.html:26
@@ -1018,7 +1019,7 @@ msgstr "議程邀請"
 
 #: app/templates/gentelella/admin/event/sessions/invited.html:8
 msgid "Invitation Pag"
-msgstr ""
+msgstr "邀請頁面"
 
 #: app/templates/gentelella/admin/event/sessions/invited.html:15
 msgid "You have been invited for session"
@@ -1128,11 +1129,11 @@ msgstr "已提交的議程"
 
 #: app/templates/gentelella/admin/event/tickets/access_codes.html:23
 msgid "Access Codes"
-msgstr ""
+msgstr "取用之金鑰"
 
 #: app/templates/gentelella/admin/event/tickets/access_codes.html:26
 msgid "Create an Access Code"
-msgstr ""
+msgstr "創建取用金鑰"
 
 #: app/templates/gentelella/admin/event/tickets/access_codes.html:36
 #: app/templates/gentelella/admin/event/tickets/access_codes.html:77
@@ -1159,11 +1160,11 @@ msgstr "未啟用"
 #: app/templates/gentelella/admin/event/tickets/access_codes.html:48
 #: app/templates/gentelella/admin/event/tickets/access_codes_create.html:21
 msgid "Access Code"
-msgstr ""
+msgstr "取用金鑰"
 
 #: app/templates/gentelella/admin/event/tickets/access_codes.html:49
 msgid "Accessible Ticket"
-msgstr ""
+msgstr "可取用的票券"
 
 #: app/templates/gentelella/admin/event/tickets/access_codes.html:50
 #: app/templates/gentelella/admin/event/tickets/discount_codes.html:50
@@ -1183,7 +1184,7 @@ msgstr "動作"
 
 #: app/templates/gentelella/admin/event/tickets/access_codes_create.html:34
 msgid "Number of access tickets"
-msgstr ""
+msgstr "取用票卷的數量"
 
 #: app/templates/gentelella/admin/event/tickets/access_codes_create.html:55
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:94
@@ -1193,7 +1194,7 @@ msgstr "未啟用"
 
 #: app/templates/gentelella/admin/event/tickets/access_codes_create.html:61
 msgid "Select Ticket(s) applied to the access code"
-msgstr ""
+msgstr "選擇具備取用金鑰的票券"
 
 #: app/templates/gentelella/admin/event/tickets/access_codes_create.html:67
 #: app/templates/gentelella/admin/event/tickets/discount_codes_create.html:106
@@ -1237,7 +1238,7 @@ msgstr "有效迄"
 
 #: app/templates/gentelella/admin/event/tickets/access_codes_create.html:166
 msgid "Save Access"
-msgstr ""
+msgstr "儲存取用紀錄"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:28
 msgid "Add Order"
@@ -1284,7 +1285,7 @@ msgstr "支票"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:78
 msgid "Telegraphic Transfer (TT) / Bank Transfer"
-msgstr ""
+msgstr "電匯 / 銀行轉帳"
 
 #: app/templates/gentelella/admin/event/tickets/add_order.html:79
 msgid "Onsite / Cash"
@@ -1310,7 +1311,7 @@ msgstr "完成"
 #: app/templates/gentelella/admin/event/tickets/attendees.html:55
 #: app/templates/gentelella/admin/event/tickets/orders.html:50
 msgid "Placed"
-msgstr ""
+msgstr "放置"
 
 #: app/templates/gentelella/admin/event/tickets/attendees.html:61
 #: app/templates/gentelella/admin/event/tickets/orders.html:56
@@ -1494,7 +1495,7 @@ msgstr "完成的訂單數"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:182
 msgid "Placed Orders"
-msgstr ""
+msgstr "放置順序"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:185
 #: app/templates/gentelella/admin/super_admin/sales/summary_base.html:67
@@ -1713,20 +1714,20 @@ msgstr "是的，接受用支票支付"
 msgid ""
 "Enter your PayPal account name and payment details instructions to ticket"
 " buyers"
-msgstr ""
+msgstr "輸入你的 PayPal 帳戶名稱以及給購票者的付款詳細說明"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:451
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:472
 msgid "example"
-msgstr ""
+msgstr "範例"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:464
 msgid "YES, accept payment by Telegraphic Transfer(TT) / Bank Transfer"
-msgstr ""
+msgstr "是的, 接受付款方式為：電匯(TT) / 銀行轉帳"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:468
 msgid "Enter your bank details and instructions to ticket buyers"
-msgstr ""
+msgstr "輸入你的詳細銀行資訊以及給購票者的說明"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:469
 msgid "See an"
@@ -1734,7 +1735,7 @@ msgstr ""
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:485
 msgid "YES, accept payment at the event(on site)"
-msgstr ""
+msgstr "是的，接受付款方式為現場付款"
 
 #: app/templates/gentelella/admin/event/wizard/basic-details.html:489
 msgid "Enter payment instructions to ticket buyers to make payments onsite"
@@ -3900,6 +3901,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid ""
+#~ "_: \n"
+#~ ""
 #~ msgstr ""
 
 #~ msgid "Inconvince is regretted. We'll fix this as soon as possible."
@@ -3916,4 +3919,3 @@ msgstr ""
 
 #~ msgid "Sponsors info unavailable"
 #~ msgstr ""
-
