@@ -260,6 +260,12 @@ def sales_by_events_view(path):
             'orders_count': 0,
             'total_sales': 0
         },
+        'placed': {
+            'class': 'info',
+            'tickets_count': 0,
+            'orders_count': 0,
+            'total_sales': 0
+        },
         'pending': {
             'class': 'warning',
             'tickets_count': 0,
@@ -285,6 +291,10 @@ def sales_by_events_view(path):
             'marketer': '',
             'discount_code': '',
             'completed': {
+                'tickets_count': 0,
+                'sales': 0
+            },
+            'placed': {
                 'tickets_count': 0,
                 'sales': 0
             },

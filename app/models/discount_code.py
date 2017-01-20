@@ -11,6 +11,7 @@ class DiscountCode(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String)
+    discount_url = db.Column(db.String)
     value = db.Column(db.Float)
     type = db.Column(db.String)
     is_active = db.Column(db.Boolean)
@@ -30,6 +31,7 @@ class DiscountCode(db.Model):
 
     def __init__(self,
                  code=None,
+                 discount_url=None,
                  value=None,
                  type=None,
                  tickets_number=None,
@@ -41,6 +43,7 @@ class DiscountCode(db.Model):
                  used_for=None,
                  event_id=None):
         self.code = code
+        self.discount_url = discount_url
         self.type = type
         self.value = value
         self.tickets_number = tickets_number
@@ -65,6 +68,7 @@ class DiscountCode(db.Model):
         """Return object data in easily serializable format"""
         return {'id': self.id,
                 'code': self.code,
+                'discount_url': self.discount_url,
                 'value': self.value,
                 'type': self.type,
                 'tickets_number': self.tickets_number,
