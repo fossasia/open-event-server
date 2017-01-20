@@ -51,14 +51,14 @@
                                     <td>{{ ((ticket.sales_end|localize_dt_obj(event.timezone))|as_timezone(current_timezone)).strftime('%a, %B %d') }}</td>
                                     <td class="individual-price">{{ event.payment_currency | currency_symbol }}{{ ticket.price | money }}</td>
                                     {% if fees %}
-                                    <td>
+                                    <td class="individual-fee">
                                         {{ event.payment_currency | currency_symbol }}
                                         {% set fee = ticket.price * fees.service_fee / 100 %}
                                         {% if not ticket.absorb_fees %}
                                             {% if fee < fees.maximum_fee %}
-                                                {{ ticket.price * fees.service_fee / 100}}
+                                                {{ (ticket.price * fees.service_fee / 100) | money}}
                                             {% else %}
-                                                {{ ticket.price * fees.maximum_fee / 100}}
+                                                {{ (ticket.price * fees.maximum_fee / 100) | money}}
                                             {% endif %}
                                         {% else %}
                                             0.00
@@ -72,9 +72,9 @@
                                             <select title="ticket quantity" name="ticket_quantities[]" class="quantity-select"
                                                     data-rate="{{ ticket.price }}" data-id="{{ticket.id}}" data-fee="{% if not ticket.absorb_fees %}
                                             {% if fee < fees.maximum_fee %}
-                                                {{ ticket.price * fees.service_fee / 100}}
+                                                {{ ticket.price * fees.service_fee / 100 }}
                                             {% else %}
-                                                {{ ticket.price * fees.maximum_fee / 100}}
+                                                {{ ticket.price * fees.maximum_fee / 100 }}
                                             {% endif %}
                                         {% else %}
                                             0.00
@@ -191,9 +191,9 @@
                                         </a>\
                                     </td>\
                                     <td>{{ ((ticket.sales_end|localize_dt_obj(event.timezone))|as_timezone(current_timezone)).strftime('%a, %B %d') }}</td>\
-                                    <td>{{ event.payment_currency | currency_symbol }}{{ ticket.price | money }}</td>\
+                                    <td class=\"individual-price\">{{ event.payment_currency | currency_symbol }}{{ ticket.price | money }}</td>\
                                     {% if fees %}\
-                                    <td>\
+                                    <td class=\"individual-fee\">\
                                         {{ event.payment_currency | currency_symbol }}\
                                         {% set fee = ticket.price * fees.service_fee / 100 %}\
                                         {% if not ticket.absorb_fees %}\
@@ -213,9 +213,9 @@
                                             <select title=\"ticket quantity\" name=\"ticket_quantities[]\" class=\"quantity-select\"\
                                                     data-rate=\"{{ ticket.price }}\" data-id=\"{{ticket.id}}\" data-fee=\"{% if not ticket.absorb_fees %}\
                                             {% if fee < fees.maximum_fee %}\
-                                                {{ ticket.price * fees.service_fee / 100}}\
+                                                {{ (ticket.price * fees.service_fee / 100) | money}}\
                                             {% else %}\
-                                                {{ ticket.price * fees.maximum_fee / 100}}\
+                                                {{ (ticket.price * fees.maximum_fee / 100) | money}}\
                                             {% endif %}\
                                         {% else %}\
                                             0.00\
@@ -339,7 +339,7 @@
                             discount_total += discount_amount * parseFloat($quantitySelect.val());
                         }
                         else if(discount_type != "amount"){
-                            discount_total += (discount_amount * parseFloat($quantitySelect.val())* parseFloat($quantitySelect.data('rate'))/100.0)
+                            discount_total += (discount_amount * parseFloat($quantitySelect.val())* (parseFloat($quantitySelect.data('rate')) + parseFloat($quantitySelect.data('fee'))))/100.0;
                         }
                     }
                     hasMoreThenZero = true;
@@ -349,20 +349,26 @@
             var subtotal = (parseFloat($this.data('rate')) + parseFloat($this.data('fee'))) * parseFloat($this.val());
             var discount_individual = 0;
             var price_individual_new = 0;
+            var fee_individual_new = $this.data('fee');
             if (discount_status && discount_code.split(",").indexOf(""+$this.data('id')) != -1){
                 if(discount_type == "amount"){
                     discount_individual = discount_amount * parseFloat($this.val());
                     price_individual_new = $this.data('rate') - discount_amount;
                 }
                 else if(discount_type != "amount"){
-                    discount_individual = (discount_amount * parseFloat($this.val()) * parseFloat($this.data('rate'))/100.0);
+                    discount_individual = (discount_amount * parseFloat($this.val()) * (parseFloat($this.data('rate')) + parseFloat($this.data('fee')))/100.0);
                     price_individual_new = $this.data('rate') - (discount_amount * parseFloat($this.data('rate'))/100.0);
+                    fee_individual_new = Math.abs($this.data('fee') - (discount_amount * $this.data('fee') / 100));
                 }
             }
             subtotal -= discount_individual;
+            subtotal = Math.abs(subtotal);
             if(discount_individual > 0){
                 $this.closest("tr").find(".individual-price").html("<table><tr><td> {{ event.payment_currency | currency_symbol }} " + price_individual_new.toFixed(2) + "</td></tr><tr><td style='text-decoration: line-through'>{{ event.payment_currency | currency_symbol }} " + $this.data('rate') + "</td></tr></table>" );
                 $this.closest("tr").find(".subtotal").html("<table><tr><td> {{ event.payment_currency | currency_symbol }} " + subtotal.toFixed(2) + "</td></tr><tr><td style='text-decoration: line-through'>{{ event.payment_currency | currency_symbol }} " + (subtotal + discount_individual).toFixed(2) + "</td></tr></table>" );
+                {% if fees %}
+                    $this.closest("tr").find(".individual-fee").text("{{ event.payment_currency | currency_symbol }} " + fee_individual_new.toFixed(2));
+                {% endif %}
             }else{
                 $this.closest("tr").find(".subtotal").text("{{ event.payment_currency | currency_symbol }} " + subtotal.toFixed(2));
             }

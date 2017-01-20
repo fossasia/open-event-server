@@ -251,7 +251,7 @@ class TicketingManager(object):
                 flash('Your access code is applied and you can make this order now.', 'success')
             else:
                 flash('The promotional code entered is not valid. No offer has been applied to this order.', 'danger')
-                
+
         ticket_subtotals = []
         if from_organizer:
             ticket_subtotals = form.getlist('ticket_subtotals[]')
@@ -267,6 +267,18 @@ class TicketingManager(object):
                     order_ticket.quantity = int(ticket_quantity[index])
                     order.tickets.append(order_ticket)
 
+                    if order_ticket.ticket.absorb_fees or not fees:
+                        ticket_amount = (order_ticket.ticket.price * order_ticket.quantity)
+                        amount += (order_ticket.ticket.price * order_ticket.quantity)
+                    else:
+                        order_fee = fees.service_fee * (order_ticket.ticket.price * order_ticket.quantity) / 100
+                        if order_fee > fees.maximum_fee:
+                            ticket_amount = (order_ticket.ticket.price * order_ticket.quantity) + fees.maximum_fee
+                            amount += (order_ticket.ticket.price * order_ticket.quantity) + fees.maximum_fee
+                        else:
+                            ticket_amount = (order_ticket.ticket.price * order_ticket.quantity) + order_fee
+                            amount += (order_ticket.ticket.price * order_ticket.quantity) + order_fee
+
                     if from_organizer:
                         amount += float(ticket_subtotals[index])
                     else:
@@ -274,20 +286,10 @@ class TicketingManager(object):
                             if discount.type == "amount":
                                 total_discount += discount.value * order_ticket.quantity
                             else:
-                                total_discount += discount.value * order_ticket.ticket.price *\
-                                                 order_ticket.quantity/100.0
-
-                        if order_ticket.ticket.absorb_fees or not fees:
-                            amount += (order_ticket.ticket.price * order_ticket.quantity)
-                        else:
-                            order_fee = fees.service_fee * (order_ticket.ticket.price * order_ticket.quantity) / 100
-                            if order_fee > fees.maximum_fee:
-                                amount += (order_ticket.ticket.price * order_ticket.quantity) + fees.maximum_fee
-                            else:
-                                amount += (order_ticket.ticket.price * order_ticket.quantity) + order_fee
+                                total_discount += discount.value * ticket_amount / 100
 
         if discount:
-            order.amount = max(amount - total_discount,0)
+            order.amount = max(amount - total_discount, 0)
         elif discount:
             order.amount = amount-(discount.value*amount/100.0)
         else:
