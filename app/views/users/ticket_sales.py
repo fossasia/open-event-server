@@ -92,11 +92,11 @@ def display_ticket_stats(event_id):
             tickets_summary[str(ticket.id)][str(order.status)]['tickets_count'] += order_ticket.quantity
             ticket_price = ticket.price
             if fees and not ticket.absorb_fees:
-                order_fee = fees.service_fee * (ticket.price * order_ticket.quantity) / 100
+                order_fee = fees.service_fee * (ticket.price * order_ticket.quantity) / 100.0
                 if order_fee > fees.maximum_fee:
                     ticket_price = ticket.price + fees.maximum_fee / order_ticket.quantity
                 else:
-                    ticket_price = ticket.price + fees.service_fee * ticket.price / 100
+                    ticket_price = ticket.price + fees.service_fee * ticket.price / 100.0
 
             if order.paid_via != 'free' and order.amount > 0:
                 if discount and str(ticket.id) in discount.tickets.split(","):
