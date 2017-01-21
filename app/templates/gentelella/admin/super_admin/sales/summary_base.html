@@ -60,6 +60,11 @@
                     {{ _("Marketer") }}
                 </th>
             {% endif %}
+            {% if path and path == 'events' %}
+                <th rowspan="2">
+                    {{ _("Event Date") }}
+                </th>
+            {% endif %}
             <th colspan="2" class="success">
                 {{ _("Completed Orders") }}
             </th>
@@ -96,7 +101,15 @@
 
             <tr>
                 <td>
-                    {{ item.name }}
+                    {% if path and path == 'events' %}
+                        {% if item.event_url and item.live_url %}
+                            <a href={{ item.event_url }}>{{ item.name }}</a><a href={{ item.live_url }}>(View Live Site)<a>
+                        {% else %}
+                            {{ item.name }}
+                        {% endif%}
+                    {% else %}
+                        {{ item.name }}
+                    {% endif%}
                 </td>
                 {% if path and path == 'discounted-events' %}
                     <td>
@@ -104,6 +117,15 @@
                     </td>
                     <td>
                         {{ item.marketer }}
+                    </td>
+                {% endif %}
+                {% if path and path == 'events' %}
+                    <td style="font-size:13px">
+                        {% if item.start_time and item.end_time %}
+                            {{ item.start_time }}<br>to</font>  {{ item.end_time }}
+                        {% else %}
+                            {{ _("-") }}
+                        {% endif %}
                     </td>
                 {% endif %}
                 <td>
@@ -133,6 +155,11 @@
             <th colspan="{% if path and path == 'discounted-events' %}3{% else %}1{% endif %}">
                 {{ _("Total") }}
             </th>
+            {% if path and path == 'events' %}
+                <th >
+                {{ _("") }}
+                </th>
+            {% endif %}
             <th>
                 {{ orders_summary.completed.tickets_count }}
             </th>

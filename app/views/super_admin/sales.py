@@ -290,6 +290,10 @@ def sales_by_events_view(path):
             'payment_currency': event.payment_currency,
             'marketer': '',
             'discount_code': '',
+            'live_url': url_for('event_detail.display_event_detail_home', identifier=event.identifier).replace('events', 'e'),
+            'event_url': url_for('events.details_view', event_id=event.id),
+            'start_time': event.start_time,
+            'end_time': event.end_time,
             'completed': {
                 'tickets_count': 0,
                 'sales': 0
@@ -362,7 +366,6 @@ def sales_by_events_view(path):
                     tickets_summary_event_wise[str(order.event_id)][str(order.status)]['sales']  += order_ticket.quantity * ticket.price
                     tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)]['sales']  += order_ticket.quantity * ticket.price
                     tickets_summary_location_wise[str(order.event.searchable_location_name)][str(order.status)]['sales']  += order_ticket.quantity * ticket.price
-
     if path == 'events' or path == 'discounted-events':
         return render_template('gentelella/admin/super_admin/sales/by_events.html',
                                tickets_summary=tickets_summary_event_wise,
