@@ -244,6 +244,8 @@ We have the following branches
 	 PRs to must pass a build check and a unit-test check on Travis (https://open-event-dev.herokuapp.com - Is running off the development branch. It is hosted on Heroku.)
  * **master**
    This contains shipped code. After significant features/bug-fixes are accumulated on development, we make a version update, and make a release. (https://eventyay.com - Is running off the master branch. (whichever is the latest release.) Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
+ * **staging**
+   This branch is mainly for testing eventyay server configurations on a staging server without affecting the production environment. Push access is restricted to the devops team.
  * **gh-pages**
    This contains the documentation website on http://dev.eventyay.com. The site is build automatically on each commit in the development branch through a script and using travis. It includes the md files of the Readme and /docs folder. It also includes javadocs.
 
