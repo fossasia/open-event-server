@@ -8,18 +8,18 @@ metadata:
 spec:
   tls:
   - hosts:
-    - eventyay.com
-    - www.eventyay.com
+    - staging.eventyay.com
+    - www.staging.eventyay.com
     secretName: eventyay-tls
   rules:
-  - host: www.eventyay.com
+  - host: www.staging.eventyay.com
     http:
       paths:
       - path: /
         backend:
           serviceName: redirector
           servicePort: 8080
-  - host: eventyay.com
+  - host: staging.eventyay.com
     http:
       paths:
       - path: /

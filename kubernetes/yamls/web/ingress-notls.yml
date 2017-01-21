@@ -6,17 +6,17 @@ metadata:
     kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
-  - host: www.eventyay.com
+  - host: www.staging.eventyay.com
     http:
       paths:
       - path: /
         backend:
           serviceName: redirector
           servicePort: 8080
-  - host: eventyay.com
+  - host: staging.eventyay.com
     http:
       paths:
       - path: /
         backend:
-          serviceName: web
+          serviceName: redirector
           servicePort: 8080

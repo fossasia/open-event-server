@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: celery
-        image: gcr.io/eventyay/web:latest
+        image: gcr.io/eventyay/staging/web:latest
         command: ["/bin/sh","-c"]
         args: ["./kubernetes/run.sh"]
         env:
