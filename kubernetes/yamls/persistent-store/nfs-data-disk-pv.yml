@@ -10,5 +10,5 @@ spec:
   accessModes:
     - ReadWriteOnce
   gcePersistentDisk:
-    pdName: "nfs-data-disk"
+    pdName: "staging-nfs-data-disk"
     fsType: "ext4"
