@@ -81,23 +81,33 @@ def display_ticket_stats(event_id):
     for order in orders:
         if order.status == 'initialized':
             order.status = 'pending'
+        fees = DataGetter.get_fee_settings_by_currency(DataGetter.get_event(order.event_id).payment_currency)
         orders_summary[str(order.status)]['orders_count'] += 1
         orders_summary[str(order.status)]['total_sales'] += order.amount
+
         for order_ticket in order.tickets:
             discount = TicketingManager.get_discount_code(event_id, order.discount_code_id)
             orders_summary[str(order.status)]['tickets_count'] += order_ticket.quantity
             ticket = get_ticket(order_ticket.ticket_id)
             tickets_summary[str(ticket.id)][str(order.status)]['tickets_count'] += order_ticket.quantity
+            ticket_price = ticket.price
+            if fees and not ticket.absorb_fees:
+                order_fee = fees.service_fee * (ticket.price * order_ticket.quantity) / 100.0
+                if order_fee > fees.maximum_fee:
+                    ticket_price = ticket.price + fees.maximum_fee / order_ticket.quantity
+                else:
+                    ticket_price = ticket.price + fees.service_fee * ticket.price / 100.0
+
             if order.paid_via != 'free' and order.amount > 0:
                 if discount and str(ticket.id) in discount.tickets.split(","):
                     if discount.type == "amount":
-                        tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * (ticket.price - \
+                        tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * (ticket_price - \
                                                                                         discount.value)
                     else:
-                        tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * (ticket.price - \
-                                                                                        discount.value * ticket.price / 100.0)
+                        tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * (ticket_price - \
+                                                                                        discount.value * ticket_price / 100.0)
                 else:
-                    tickets_summary[str(ticket.id)][str(order.status)]['sales']  += order_ticket.quantity * ticket.price
+                    tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * ticket_price
     return render_template('gentelella/admin/event/tickets/tickets.html', event=event, event_id=event_id,
                            orders_summary=orders_summary, tickets_summary=tickets_summary)
 
@@ -128,14 +138,14 @@ def display_attendees(event_id):
             order_holder['status'] = order.status
             order_holder['completed_at'] = order.completed_at
             order_holder['created_at'] = order.created_at
-            order_holder['ticket_name'] = holder.ticket.name 
+            order_holder['ticket_name'] = holder.ticket.name
             order_holder['firstname'] = holder.firstname
             order_holder['lastname'] = holder.lastname
             order_holder['email'] = holder.email
             order_holder['ticket_name'] = holder.ticket.name
             order_holder['ticket_price'] = holder.ticket.price
             if discount and str(holder.ticket.id) in discount.tickets.split(","):
-                if discount.type == "amount" : 
+                if discount.type == "amount" :
                     order_holder['ticket_price'] = order_holder['ticket_price'] - discount.value
                 else:
                     order_holder['ticket_price'] = order_holder['ticket_price'] - (order_holder['ticket_price'] \
