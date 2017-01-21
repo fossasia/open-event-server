@@ -9,14 +9,14 @@
                            v-model="ticket.name"
                            placeholder="Ticket Name"
                            required="required"
-                           data-uniqueticket="true" :disabled="ticket.has_orders">
+                           data-uniqueticket="true">
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
             <div class="col-xs-3">
                 <input type="number" step=".01" min="0" name="tickets[price]" class="form-control" v-if="ticket.type == 'paid'"
                        v-model.number="ticket.price" placeholder="Price" required="required"
-                       :readonly="ticket.has_orders">
+                       :readonly="ticket.has_completed_orders">
             </div>
             <div class="col-xs-3">
                 <input type="number" min="0" name="tickets[quantity]" class="form-control"
@@ -31,12 +31,12 @@
                         <i class="glyphicon glyphicon-cog" style="color: #46b8da;"></i>
                     </a>
                     <a class="btn btn-default" data-toggle="tooltip" data-container="body"
-                       v-if="ticket.has_orders"
+                       v-if="ticket.has_completed_orders"
                        title="Cannot remove ticket. Orders have been placed for it." disabled>
                         <i class="glyphicon glyphicon-trash" style="color: #46b8da;"></i>
                     </a>
                     <a class="btn btn-default remove-ticket-button ticket-button-resp" data-toggle="tooltip"
-                       v-if="!ticket.has_orders"
+                       v-if="!ticket.has_completed_orders"
                        v-on:click="remove"
                        title="Remove">
                         <i class="glyphicon glyphicon-trash" style="color: #46b8da;"></i>

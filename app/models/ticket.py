@@ -1,4 +1,4 @@
-from app.models.order import OrderTicket
+from app.models.order import OrderTicket, Order
 from . import db
 
 ticket_tags_table = db.Table('association', db.Model.metadata,
@@ -73,6 +73,21 @@ class Ticket(db.Model):
         count = get_count(OrderTicket.query.filter_by(ticket_id=self.id))
         return bool(count > 0)
 
+    def has_completed_order_tickets(self):
+        """Returns True if ticket has already placed orders.
+        Else False.
+        """
+        from app.helpers.helpers import get_count
+        order_tickets = OrderTicket.query.filter_by(ticket_id=self.id)
+
+        count = 0
+        for order_ticket in order_tickets:
+            order = Order.query.filter_by(id=order_ticket.order_id).first()
+            if order.status == "completed" or order.status == "placed":
+                count += 1
+
+        return bool(count > 0)
+
     def tags_csv(self):
         """Return list of Tags in CSV.
         """
@@ -108,6 +123,7 @@ class Ticket(db.Model):
             'max_order': self.max_order,
             'tags_string': '',
             'has_orders': self.has_order_tickets(),
+            'has_completed_orders': self.has_completed_order_tickets(),
             'absorb_fees': self.absorb_fees
         }
 
