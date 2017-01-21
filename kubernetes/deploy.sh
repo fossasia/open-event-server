@@ -1,4 +1,6 @@
 #!/bin/bash
+echo "Getting credentials for staging cluster"
+gcloud container clusters get-credentials staging-cluster
 echo "Deploying the project to kubernetes cluster"
 export DIR=${BASH_SOURCE%/*}
 # Start KubeLego deployment
