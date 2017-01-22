@@ -932,6 +932,12 @@ h2 {
   font-size: 18px;
   font-weight: 400;
 }
+#ticket_type {
+  max-width: 30vw!important;
+}
+td {
+  min-width: 6vw;
+}
 #left, #right {
   display: table;
 }
