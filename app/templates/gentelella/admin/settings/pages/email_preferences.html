@@ -20,18 +20,18 @@
                                                        'message': 'Order alert email (receive a notification email when there is a completed order)'}}%}
 
 {% macro event_item(event) %}
-
-    {% set notification_settings = event.notification_settings() %}
+    
+    {% set notification_settings = event.notification_settings(user.id) %}
     {% if notification_settings %}
         {% set event_notifications_val={'email': 'off'} %}
-        {% if current_user.is_speaker_at_event(event.id) %}
+        {% if user.is_speaker_at_event(event.id) %}
             {% for key,value in email_speaker_fields.iteritems() %}
                 {% if notification_settings[key] == 1 %}
                     {% if event_notifications_val.update({'email': 'on'}) %} {% endif %}
                 {% endif %}
             {% endfor %}
         {% endif %}
-        {% if current_user.is_organizer(event.id) %}
+        {% if user.is_organizer(event.id) %}
             {% for key,value in email_organizer_fields.iteritems() %}
                 {% if notification_settings[key] == 1 %}
                     {% if event_notifications_val.update({'email': 'on'}) %} {% endif %}
@@ -56,7 +56,7 @@
         </div>
         <div id="event-{{ event.id }}" class="panel-collapse collapse">
             <div class="panel-body" style="overflow: hidden;">
-                {% if current_user.is_speaker_at_event(event.id) %}
+                {% if user.is_speaker_at_event(event.id) %}
                     <h4 style="font-weight: 400;">{{ _("Speaker Notifications") }}</h4>
                     <hr style="margin-top: 0;">
                     {% for key,value in email_speaker_fields.iteritems() %}
@@ -72,7 +72,7 @@
                     {% endfor %}
                     <br>
                 {% endif %}
-                {% if current_user.is_organizer(event.id) %}
+                {% if user.is_organizer(event.id) %}
                     <h4 style="font-weight: 400;">{{ _("Organizer Notifications") }}</h4>
                     <hr style="margin-top: 0;">
                     {% for key,value in email_organizer_fields.iteritems() %}
@@ -96,14 +96,14 @@
 
     {% set settings_notifications={'email': 'off'} %}
     {% for setting in settings %}
-        {% if current_user.is_speaker_at_event(setting.event_id) %}
+        {% if user.is_speaker_at_event(setting.event_id) %}
             {% for key,value in email_speaker_fields.iteritems() %}
                 {% if setting[key] == 1 %}
                     {% if settings_notifications.update({'email': 'on'}) %} {% endif %}
                 {% endif %}
             {% endfor %}
         {% endif %}
-        {% if current_user.is_organizer(setting.event_id) %}
+        {% if user.is_organizer(setting.event_id) %}
             {% for key,value in email_organizer_fields.iteritems() %}
                 {% if setting[key] == 1 %}
                     {% if settings_notifications.update({'email': 'on'}) %} {% endif %}
@@ -127,7 +127,7 @@
     <div class="row">
         <div class="panel-group" id="events-accordion">
             {% for event in events %}
-                {% if current_user.is_speaker_at_event(event.id) or current_user.is_organizer(event.id) %}
+                {% if user.is_speaker_at_event(event.id) or user.is_organizer(event.id) %}
                     {{ event_item(event) }}
                 {% endif %}
             {% endfor %}
@@ -212,7 +212,11 @@
             }
 
             $.ajax({
-                url: "{{ url_for('settings.email_toggle_view') }}",
+                {% if user.admin_access %}
+                    url: "{{ url_for('sadmin_users.email_toggle_view', user_id=user.id) }}"
+                {% else %}
+                    url: "{{ url_for('settings.email_toggle_view') }}"
+                {% endif %},
                 type: 'POST',
                 data: payload,
                 success: function (json) {

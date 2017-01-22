@@ -217,17 +217,17 @@ class Event(db.Model):
         else:
             super(Event, self).__setattr__(name, value)
 
-    def notification_settings(self):
+    def notification_settings(self, user_id):
         try:
-            return EmailNotification.query.filter_by(user_id=login.current_user.id).filter_by(event_id=self.id).first()
+            return EmailNotification.query.filter_by(user_id=(login.current_user.id if not user_id else int(user_id))).filter_by(event_id=self.id).first()
         except:
             return None
 
-    def has_staff_access(self):
+    def has_staff_access(self, user_id):
         """does user have role other than attendee"""
         access = False
         for _ in self.roles:
-            if _.user_id == login.current_user.id:
+            if _.user_id == (login.current_user.id if not user_id else int(user_id)):
                 if _.role.name != ATTENDEE:
                     access = True
         return access
