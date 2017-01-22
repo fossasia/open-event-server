@@ -13,13 +13,6 @@ kubectl create -f ${DIR}/yamls/redirector
 kubectl create -f ${DIR}/yamls/redis
 # Starting nfs deployment for persistent storage. Tricky. So, we'll go file by file.
 # create the persistent volume using a GCE persistent disk
-kubectl create -f ${DIR}/yamls/persistent-store/nfs-data-disk-pv.yml
-sleep 10
-# create the persistent volume claim
-kubectl create -f ${DIR}/yamls/persistent-store/nfs-data-disk-pv-claim.yml
-echo "Waiting for the NFS disk to initialize"
-sleep 40
-# create the NFS Server deployment
 kubectl create -f ${DIR}/yamls/persistent-store/nfs-server.yml
 # Let us give the NFS server ample amount of time to start up
 echo "Waiting for NFS server to start up"
