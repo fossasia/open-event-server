@@ -3,7 +3,7 @@ from flask import current_app
 from sqlalchemy import desc
 
 from app.models.fees import TicketFees
-from app.models.setting import Setting
+from app.models.setting import Setting, Environment
 
 
 def get_settings():
@@ -65,6 +65,19 @@ def set_settings(**kwargs):
         save_to_db(setting, 'Setting saved')
         current_app.secret_key = setting.secret
         stripe.api_key = setting.stripe_secret_key
+
+        if setting.app_environment == Environment.DEVELOPMENT and not current_app.config['DEVELOPMENT']:
+            current_app.config.from_object('config.DevelopmentConfig')
+
+        if setting.app_environment == Environment.STAGING and not current_app.config['STAGING']:
+            current_app.config.from_object('config.StagingConfig')
+
+        if setting.app_environment == Environment.PRODUCTION and not current_app.config['PRODUCTION']:
+            current_app.config.from_object('config.ProductionConfig')
+
+        if setting.app_environment == Environment.TESTING and not current_app.config['TESTING']:
+            current_app.config.from_object('config.TestingConfig')
+
         current_app.config['custom_settings'] = make_dict(setting)
 
 
