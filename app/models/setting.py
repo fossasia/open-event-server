@@ -1,6 +1,16 @@
 from . import db
 
 
+class Environment:
+    def __init__(self):
+        pass
+
+    DEVELOPMENT = 'development'
+    STAGING = 'staging'
+    PRODUCTION = 'production'
+    TESTING = 'testing'
+
+
 class Setting(db.Model):
     __tablename__ = 'settings'
     id = db.Column(db.Integer, primary_key=True)
@@ -9,9 +19,10 @@ class Setting(db.Model):
     # General
     #
 
+    app_environment = db.Column(db.String, default=Environment.PRODUCTION)
     # Name of the application. (Eg. Event Yay!, Open Event)
     app_name = db.Column(db.String)
-    # Tagline for the application. (Eg. Event Management and Ticketing, Home) 
+    # Tagline for the application. (Eg. Event Management and Ticketing, Home)
     tagline = db.Column(db.String)
     # App secret
     secret = db.Column(db.String)
@@ -102,6 +113,7 @@ class Setting(db.Model):
     web_app_url = db.Column(db.String)
 
     def __init__(self,
+                 app_environment=Environment.PRODUCTION,
                  aws_key=None,
                  aws_secret=None,
                  aws_bucket_name=None,
@@ -136,6 +148,8 @@ class Setting(db.Model):
                  smtp_port=None,
                  smtp_encryption=None,
                  facebook_url=None, youtube_url=None, android_app_url=None, web_app_url=None):
+
+        self.app_environment = app_environment
         self.aws_key = aws_key
         self.aws_secret = aws_secret
         self.aws_bucket_name = aws_bucket_name

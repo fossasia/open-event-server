@@ -3,8 +3,10 @@ from math import ceil
 from flask import url_for, render_template, make_response, request, \
     Blueprint, abort
 
+from app.settings import get_settings
 from app.helpers.data_getter import DataGetter
 from app.models.event import Event
+from app.models.setting import Environment
 
 sitemaps = Blueprint('sitemaps', __name__)
 
@@ -23,16 +25,19 @@ event_details_pages = [
 
 @sitemaps.route('/sitemap.xml', methods=('GET', 'POST'))
 def render_sitemap():
-    urls = [full_url(url_for('sitemaps.render_pages_sitemap'))]
-    # pages sitemap
-    # get events pages
-    events = get_indexable_events()
-    pages = int(ceil(len(events) / (PER_PAGE_EVENTS * 1.0)))
-    for num in range(1, pages + 1):
-        urls.append(
-            full_url(url_for('sitemaps.render_event_pages', num=num))
-        )
-    # make sitemap
+    if get_settings()['app_environment'] == Environment.STAGING:
+        urls = []
+    else:
+        urls = [full_url(url_for('sitemaps.render_pages_sitemap'))]
+        # pages sitemap
+        # get events pages
+        events = get_indexable_events()
+        pages = int(ceil(len(events) / (PER_PAGE_EVENTS * 1.0)))
+        for num in range(1, pages + 1):
+            urls.append(
+                full_url(url_for('sitemaps.render_event_pages', num=num))
+            )
+        # make sitemap
     sitemap = render_template('sitemap/sitemap_index.xml', sitemaps=urls)
     resp = make_response(sitemap)
     resp.headers['Content-Type'] = 'application/xml'
@@ -41,6 +46,8 @@ def render_sitemap():
 
 @sitemaps.route('/sitemaps/pages.xml.gz', methods=('GET', 'POST'))
 def render_pages_sitemap():
+    if get_settings()['app_environment'] == Environment.STAGING:
+        abort(404)
     urls = [
         page.url if page.url.find('://') > -1 else
         full_url(url_for('basicpagesview.url_view', url=page.url))
@@ -51,6 +58,8 @@ def render_pages_sitemap():
 
 @sitemaps.route('/sitemaps/events/<int:num>.xml.gz', methods=('GET', 'POST'))
 def render_event_pages(num):
+    if get_settings()['app_environment'] == Environment.STAGING:
+        abort(404)
     main_urls = []
     start = (num - 1) * PER_PAGE_EVENTS
     end = PER_PAGE_EVENTS * num
