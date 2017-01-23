@@ -107,6 +107,7 @@
         </thead>
         <tbody>
         {% for holder in holders %}
+            {% if holder.status != "deleted" %}
                 <tr>
                     <td></td>
                     <td>
@@ -153,6 +154,7 @@
                         {% endif %}
                     </td>
                 </tr>
+            {% endif %}
         {% endfor %}
         </tbody>
     </table>

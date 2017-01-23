@@ -277,6 +277,18 @@ def sales_by_events_view(path):
             'tickets_count': 0,
             'orders_count': 0,
             'total_sales': 0
+        },
+        'deleted': {
+            'class': 'danger',
+            'tickets_count': 0,
+            'orders_count': 0,
+            'total_sales': 0
+        },
+        'cancelled': {
+            'class': 'danger',
+            'tickets_count': 0,
+            'orders_count': 0,
+            'total_sales': 0
         }
     }
 
@@ -310,7 +322,15 @@ def sales_by_events_view(path):
                 'class': 'danger',
                 'tickets_count': 0,
                 'sales': 0
-            }
+            },
+            'cancelled': {
+                'tickets_count': 0,
+                'sales': 0
+            },
+            'deleted': {
+                'tickets_count': 0,
+                'sales': 0
+            },
         }
 
         if promoted_events:
