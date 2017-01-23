@@ -220,3 +220,19 @@ def paypal_callback(order_identifier, function):
             flash("An error occurred while processing your transaction. " + str(result), "danger")
             return redirect(url_for('.show_transaction_error', order_identifier=order_identifier))
     abort(404)
+
+
+@ticketing.route('/cancel/<order_identifier>/', methods=('POST',))
+def cancel_order(order_identifier):
+    return_status = TicketingManager.cancel_order(order_identifier)
+    return jsonify({
+        "status": return_status
+    }), 200
+
+
+@ticketing.route('/delete/<order_identifier>/', methods=('POST',))
+def delete_order(order_identifier):
+    return_status = TicketingManager.delete_order(order_identifier)
+    return jsonify({
+        "status": return_status
+    }), 200

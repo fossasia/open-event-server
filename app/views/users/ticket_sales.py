@@ -50,6 +50,18 @@ def display_ticket_stats(event_id):
             'tickets_count': 0,
             'orders_count': 0,
             'total_sales': 0
+        },
+        'deleted': {
+            'class': 'danger',
+            'tickets_count': 0,
+            'orders_count': 0,
+            'total_sales': 0
+        },
+        'cancelled': {
+            'class': 'danger',
+            'tickets_count': 0,
+            'orders_count': 0,
+            'total_sales': 0
         }
     }
 
@@ -75,7 +87,15 @@ def display_ticket_stats(event_id):
                 'class': 'danger',
                 'tickets_count': 0,
                 'sales': 0
-            }
+            },
+            'deleted': {
+                'tickets_count': 0,
+                'sales': 0
+            },
+            'cancelled': {
+                'tickets_count': 0,
+                'sales': 0
+            },
         }
 
     for order in orders:

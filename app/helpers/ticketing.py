@@ -521,3 +521,25 @@ class TicketingManager(object):
         save_to_db(access_code)
 
         return access_code
+
+    @staticmethod
+    def cancel_order(identifier):
+        order = TicketingManager.get_and_set_expiry(identifier)
+        event_id = order.event_id
+        if login.current_user.is_organizer(event_id):
+            order.status = "cancelled"
+            save_to_db(order)
+            return True
+        return False
+
+    @staticmethod
+    def delete_order(identifier):
+        order = TicketingManager.get_and_set_expiry(identifier)
+        event_id = order.event_id
+        if login.current_user.is_organizer(event_id):
+            if order.status != "deleted":
+                order.trashed_at = datetime.now();
+                order.status = "deleted"
+                save_to_db(order)
+            return True
+        return False

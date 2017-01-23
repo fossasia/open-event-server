@@ -23,6 +23,7 @@ def empty_trash():
         events = Event.query.filter_by(in_trash=True)
         users = User.query.filter_by(in_trash=True)
         sessions = Session.query.filter_by(in_trash=True)
+        orders = Order.query.filter_by(status="deleted")
         for event in events:
             if datetime.now() - event.trash_date >= timedelta(days=30):
                 DataManager.delete_event(event.id)
@@ -36,6 +37,10 @@ def empty_trash():
         for session_ in sessions:
             if datetime.now() - session_.trash_date >= timedelta(days=30):
                 delete_from_db(session_, "Session deleted permanently")
+
+        for order in orders:
+            if datetime.now() - order.trashed_at >= timedelta(days=30):
+                delete_from_db(order, "Order deleted permanently")
 
 
 def send_after_event_mail():

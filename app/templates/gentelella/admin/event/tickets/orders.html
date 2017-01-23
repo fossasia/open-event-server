@@ -81,42 +81,55 @@
             <th>
                 {{ _("Buyer / Registration Contact") }}
             </th>
+            <th>
+                {{ _("Action") }}
+            </th>
         </tr>
         </thead>
         <tbody>
         {% for order in orders %}
-            <tr>
-                <td></td>
-                <td>
-                    <a href="{{ url_for('ticketing.view_order_after_payment', order_identifier=order.identifier) if order.status == 'completed' else url_for('ticketing.show_transaction_error', order_identifier=order.identifier) }}"
-                       class="order-link">{{ order.get_invoice_number() }}</a> -
-                    by {{ order.user.user_detail.fullname if order.user.user_detail and order.user.user_detail.fullname else order.user.email }}
-                    <br>
-                    {% if order.status == 'completed' %}
-                        <span class="payment-via">Payment via {{ order.paid_via | capitalize }}</span>
-                    {% endif %}
-                    {% if order.status == 'completed' %}
-                        <span class="datetime">{{ order.completed_at | datetime }} - {{ order.completed_at | humanize }}</span>
-                    {% else %}
-                        <span class="datetime">{{ order.created_at | datetime }} - {{ order.created_at | humanize }}</span>
-                    {% endif %}
-                </td>
-                <td>
-                    {% if order.status == 'completed' %}
-                        <span class="label label-success">{{ order.status | capitalize }}</span>
-                    {% elif order.status == 'pending' or order.status == 'initialized' %}
-                        <span class="label label-warning">{{ _("Pending") }}</span>
-                    {% elif order.status == 'placed' %}
-                        <span class="label label-info">{{ order.status | capitalize }}</span>
-                    {% else %}
-                        <span class="label label-danger">{{ order.status | capitalize }}</span>
-                    {% endif %}
+            {% if order.status != "deleted" %}
+                <tr>
+                    <td></td>
+                    <td>
+                        <a href="{{ url_for('ticketing.view_order_after_payment', order_identifier=order.identifier) if order.status == 'completed' else url_for('ticketing.show_transaction_error', order_identifier=order.identifier) }}"
+                           class="order-link">{{ order.get_invoice_number() }}</a> -
+                        by {{ order.user.user_detail.fullname if order.user.user_detail and order.user.user_detail.fullname else order.user.email }}
+                        <br>
+                        {% if order.status == 'completed' %}
+                            <span class="payment-via">Payment via {{ order.paid_via | capitalize }}</span>
+                        {% endif %}
+                        {% if order.status == 'completed' %}
+                            <span class="datetime">{{ order.completed_at | datetime }} - {{ order.completed_at | humanize }}</span>
+                        {% else %}
+                            <span class="datetime">{{ order.created_at | datetime }} - {{ order.created_at | humanize }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if order.status == 'completed' %}
+                            <span id="label-{{ order.identifier }}" class="label label-success">{{ order.status | capitalize }}</span>
+                        {% elif order.status == 'pending' or order.status == 'initialized' %}
+                            <span id="label-{{ order.identifier }}" class="label label-warning">{{ _("Pending") }}</span>
+                        {% elif order.status == 'placed' %}
+                            <span id="label-{{ order.identifier }}" class="label label-info">{{ order.status | capitalize }}</span>
+                        {% else %}
+                            <span id="label-{{ order.identifier }}" class="label label-danger">{{ order.status | capitalize }}</span>
+                        {% endif %}
 
-                </td>
-                <td>{{ event.payment_currency | currency_symbol }}{{ order.amount | money }}</td>
-                <td>{{ order.get_tickets_count() }}</td>
-                <td>{{ order.user.email }}</td>
-            </tr>
+                    </td>
+                    <td>{{ event.payment_currency | currency_symbol }}{{ order.amount | money }}</td>
+                    <td>{{ order.get_tickets_count() }}</td>
+                    <td>{{ order.user.email }}</td>
+                    <td>
+                        <div class="btn-group btn-group-xs" role="group">
+                            {% if order.status != "cancelled" %}
+                            <button data-toggle="tooltip" title="Cancel" data-url="{{ url_for('ticketing.cancel_order',order_identifier = order.identifier) }}" data-identifier="{{ order.identifier }}" class="btn btn-default cancel-order"><i class="fa fa-times fa-fw"></i></button>
+                            {% endif %}
+                            <button data-toggle="tooltip" title="Delete" data-url="{{ url_for('ticketing.delete_order',order_identifier = order.identifier) }}" data-identifier="{{ order.identifier }}" class="btn btn-default delete-order"><i class="fa fa-trash fa-fw"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            {% endif %}
         {% endfor %}
         </tbody>
     </table>
@@ -172,6 +185,36 @@
             });
         }).draw();
 
+        $('.cancel-order').click(function(){
+            var this_elem = $(this);
+            var identifier = $(this).data('identifier');
+            $.ajax({
+                type: 'POST',
+                url: $(this).data('url'),
+                dataType: 'json'
+            }).done(function (data) {
+                if(data.status){
+                    var prev_label = $('#label-' + identifier);
+                    prev_label.attr('class','label label-danger');
+                    prev_label.text('Cancelled');
+                    this_elem.remove();
+                }
+            })
+        });
+
+        $('.delete-order').click(function(){
+            var this_elem = $(this);
+            $.ajax({
+                type: 'POST',
+                url: $(this).data('url'),
+                dataType: 'json'
+            }).done(function (data) {
+                if(data.status){
+                    this_elem.closest('tr').remove();
+                    this_elem.remove();
+                }
+            })
+        });
 
     </script>
 

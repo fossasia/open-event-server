@@ -28,6 +28,7 @@ class Order(db.Model):
     marketer_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'))
     created_at = db.Column(db.DateTime)
     completed_at = db.Column(db.DateTime, nullable=True, default=None)
+    trashed_at = db.Column(db.DateTime, nullable=True, default=None)
     transaction_id = db.Column(db.String)
     paid_via = db.Column(db.String)
     payment_mode = db.Column(db.String)
