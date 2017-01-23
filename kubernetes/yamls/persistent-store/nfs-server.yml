@@ -22,10 +22,10 @@ spec:
             containerPort: 111
         securityContext:
           privileged: true
-        volumeMounts:
-          - mountPath: /data
-            name: data-pvc
-      volumes:
-        - name: data-pvc
-          persistentVolumeClaim:
-            claimName: nfs-data-claim
+#        volumeMounts:
+#          - mountPath: /data
+#            name: data-pvc
+#      volumes:
+#        - name: data-pvc
+#          persistentVolumeClaim:
+#            claimName: nfs-data-claim

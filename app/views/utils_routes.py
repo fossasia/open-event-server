@@ -11,6 +11,8 @@ from flask.ext import login
 from flask.ext.migrate import upgrade
 from requests.exceptions import HTTPError
 
+from app.models.setting import Environment
+from app.settings import get_settings
 from app.helpers.flask_helpers import get_real_ip, slugify
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
 from app.helpers.storage import upload
@@ -272,6 +274,9 @@ def intended_url():
 
 @utils_routes.route('/robots.txt', methods=('GET', 'POST'))
 def robots_txt():
-    resp = make_response(render_template('robots.txt'))
+    if get_settings()['app_environment'] == Environment.STAGING:
+        resp = make_response(render_template('staging-robots.txt'))
+    else:
+        resp = make_response(render_template('robots.txt'))
     resp.headers['Content-type'] = 'text/plain'
     return resp

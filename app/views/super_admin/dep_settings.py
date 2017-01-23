@@ -1,12 +1,13 @@
 import boto
 from flask import Blueprint
 from flask import render_template
-from flask import request
+from flask import request, current_app
 from werkzeug.datastructures import ImmutableMultiDict
 
 from app.helpers.data import save_to_db, delete_from_db
 from app.helpers.data_getter import DataGetter
 from app.models.image_sizes import ImageSizes
+from app.models.setting import Environment
 from app.settings import get_settings, set_settings
 from app.views.super_admin import SETTINGS, check_accessible, list_navbar
 from app.views.users.events import get_module_settings
@@ -115,6 +116,13 @@ def index_view():
     image_config = DataGetter.get_image_configs()
     event_image_sizes = DataGetter.get_image_sizes_by_type(type='event')
     profile_image_sizes = DataGetter.get_image_sizes_by_type(type='profile')
+
+    if current_app.config['PRODUCTION']:
+        settings['app_environment'] = Environment.PRODUCTION
+    elif current_app.config['STAGING']:
+        settings['app_environment'] = Environment.STAGING
+    elif current_app.config['DEVELOPMENT']:
+        settings['app_environment'] = Environment.DEVELOPMENT
 
     return render_template(
         'gentelella/admin/super_admin/settings/settings.html',

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-export DEPLOY_BRANCH=staging
+export STAGING_DEPLOY_BRANCH=${STAGING_DEPLOY_BRANCH:-staging}
 
-if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/open-event-orga-server" -o  "$TRAVIS_BRANCH" != "$DEPLOY_BRANCH" ]; then
+if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/open-event-orga-server" -o  "$TRAVIS_BRANCH" != "$STAGING_DEPLOY_BRANCH" ]; then
     echo "Skip staging deployment for a very good reason."
     exit 0
 fi
@@ -27,7 +27,7 @@ export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/eventyay-8245fde7ab8a.json
 gcloud config set project eventyay
 gcloud container clusters get-credentials staging-cluster
 cd kubernetes/images/web
-docker build --build-arg COMMIT_HASH=$TRAVIS_COMMIT --build-arg BRANCH=$DEPLOY_BRANCH --build-arg REPOSITORY=$REPOSITORY --no-cache -t gcr.io/eventyay/staging/web:$TRAVIS_COMMIT .
+docker build --build-arg COMMIT_HASH=$TRAVIS_COMMIT --build-arg BRANCH=$STAGING_DEPLOY_BRANCH --build-arg REPOSITORY=$REPOSITORY --no-cache -t gcr.io/eventyay/staging/web:$TRAVIS_COMMIT .
 docker tag gcr.io/eventyay/staging/web:$TRAVIS_COMMIT gcr.io/eventyay/staging/web:latest
 gcloud docker -- push gcr.io/eventyay/staging/web
 kubectl set image deployment/web web=gcr.io/eventyay/staging/web:$TRAVIS_COMMIT
