@@ -45,8 +45,6 @@ sudo apt-get install libpq-dev
 sudo apt-get install libffi6 libffi-dev
 ```
 
-
-
 * **Step 2** - Create the database. For that we first open the psql shell. Go the directory where your postgres file is stored.
 
 ```sh
