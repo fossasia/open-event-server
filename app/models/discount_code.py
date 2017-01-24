@@ -11,7 +11,8 @@ class DiscountCode(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String)
-    value = db.Column(db.Integer)
+    discount_url = db.Column(db.String)
+    value = db.Column(db.Float)
     type = db.Column(db.String)
     is_active = db.Column(db.Boolean)
     tickets_number = db.Column(db.Integer)  # For event level discount this holds the max. uses
@@ -30,6 +31,7 @@ class DiscountCode(db.Model):
 
     def __init__(self,
                  code=None,
+                 discount_url=None,
                  value=None,
                  type=None,
                  tickets_number=None,
@@ -41,6 +43,7 @@ class DiscountCode(db.Model):
                  used_for=None,
                  event_id=None):
         self.code = code
+        self.discount_url = discount_url
         self.type = type
         self.value = value
         self.tickets_number = tickets_number
@@ -52,7 +55,6 @@ class DiscountCode(db.Model):
         self.is_active = is_active
         self.created_at = datetime.utcnow()
         self.used_for = used_for
-
     def __repr__(self):
         return '<DiscountCode %r>' % self.id
 
@@ -60,13 +62,13 @@ class DiscountCode(db.Model):
         return unicode(self).encode('utf-8')
 
     def __unicode__(self):
-        return self.identifier
-
+        return self.code
     @property
     def serialize(self):
         """Return object data in easily serializable format"""
         return {'id': self.id,
                 'code': self.code,
+                'discount_url': self.discount_url,
                 'value': self.value,
                 'type': self.type,
                 'tickets_number': self.tickets_number,

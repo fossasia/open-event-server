@@ -30,12 +30,17 @@ api = Namespace('sessions', description='Sessions', path='/')
 SESSION_TRACK = api.model('SessionTrack', {
     'id': fields.Integer(required=True),
     'name': fields.String(),
+    'color': fields.Color(),
 })
 
 SESSION_SPEAKER = api.model('SessionSpeaker', {
     'id': fields.Integer(required=True),
     'name': fields.String(),
-    'organisation': fields.String()
+    'organisation': fields.String(),
+    'city': fields.String(),
+    'heard_from': fields.String(),
+    'speaking_experience': fields.String(),
+    'sponsorship_required': fields.String()
 })
 
 SESSION_MICROLOCATION = api.model('SessionMicrolocation', {
@@ -56,6 +61,7 @@ SESSION = api.model('Session', {
     'id': fields.Integer(required=True),
     'title': fields.String(required=True),
     'subtitle': fields.String(),
+    'level': fields.String(),
     'short_abstract': fields.String(),
     'long_abstract': fields.String(),
     'comments': fields.String(),

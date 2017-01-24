@@ -24,6 +24,7 @@ from app.models.notifications import (
     TICKET_PURCHASED as NOTIF_TICKET_PURCHASED,
     EVENT_EXPORT_FAIL as NOTIF_EVENT_EXPORT_FAIL,
     EVENT_EXPORTED as NOTIF_EVENT_EXPORTED,
+    TICKET_PURCHASED_ORGANIZER as NOTIF_TICKET_PURCHASED_ORGANIZER
 
 )
 from app.settings import get_settings
@@ -33,7 +34,7 @@ from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, 
     USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail, \
     AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, TICKET_PURCHASED, EVENT_EXPORTED, \
     EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, MONTHLY_PAYMENT_EMAIL, \
-    EVENT_IMPORTED, EVENT_IMPORT_FAIL
+    EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER
 from ..models.message_settings import MessageSettings
 from ..models.track import Track
 
@@ -274,13 +275,23 @@ def send_email_for_event_role_invite(email, role, event, link):
         )
 
 
-def send_email_for_after_purchase(email, invoice_id, order_url):
+def send_email_for_after_purchase(email, invoice_id, order_url, event_name, event_organiser):
     """Send email with order invoice link after purchase"""
     send_email(
         to=email,
         action=TICKET_PURCHASED,
-        subject=MAILS[TICKET_PURCHASED]['subject'].format(invoice_id=invoice_id),
-        html=MAILS[TICKET_PURCHASED]['message'].format(order_url=order_url)
+        subject=MAILS[TICKET_PURCHASED]['subject'].format(invoice_id=invoice_id, event_name=event_name),
+        html=MAILS[TICKET_PURCHASED]['message'].format(order_url=order_url, event_name=event_name, event_organiser=event_organiser)
+    )
+
+def send_email_for_after_purchase_organizers(email, buyer_email, invoice_id, order_url, event_name, event_organiser):
+    """Send email with order invoice link after purchase"""
+    send_email(
+        to=email,
+        action=TICKET_PURCHASED_ORGANIZER,
+        subject=MAILS[TICKET_PURCHASED_ORGANIZER]['subject'].format(invoice_id=invoice_id, event_name=event_name, buyer_email=buyer_email),
+        html=MAILS[TICKET_PURCHASED_ORGANIZER]['message'].format(order_url=order_url, buyer_email=buyer_email, event_name=event_name,
+                                                                 event_organiser=event_organiser)
     )
 
 
@@ -374,8 +385,7 @@ def send_email(to, action, subject, html):
 
         if not current_app.config['TESTING']:
             if email_service == 'smtp':
-                smtp_encryption = get_settings()['smtp_host']
-
+                smtp_encryption = get_settings()['smtp_encryption']
                 if smtp_encryption == 'tls':
                     smtp_encryption = 'required'
                 elif smtp_encryption == 'ssl':
@@ -389,13 +399,12 @@ def send_email(to, action, subject, html):
                     'host': get_settings()['smtp_host'],
                     'username': get_settings()['smtp_username'],
                     'password': get_settings()['smtp_password'],
-                    'tls': smtp_encryption,
+                    'encryption': smtp_encryption,
                     'port': get_settings()['smtp_port'],
                 }
 
                 from tasks import send_mail_via_smtp_task
                 send_mail_via_smtp_task.delay(config, payload)
-
             else:
                 key = get_settings()['sendgrid_key']
                 if not key and not current_app.config['TESTING']:
@@ -456,6 +465,16 @@ def send_notif_for_after_purchase(user, invoice_id, order_url):
         action=NOTIF_TICKET_PURCHASED,
         title=NOTIFS[NOTIF_TICKET_PURCHASED]['title'].format(invoice_id=invoice_id),
         message=NOTIFS[NOTIF_TICKET_PURCHASED]['message'].format(order_url=order_url)
+    )
+
+
+def send_notif_for_after_purchase_organizer(user, invoice_id, order_url, event_name, buyer_email):
+    """Send notification with order invoice link after purchase"""
+    send_notification(
+        user=user,
+        action=NOTIF_TICKET_PURCHASED_ORGANIZER,
+        title=NOTIFS[NOTIF_TICKET_PURCHASED_ORGANIZER]['title'].format(invoice_id=invoice_id, event_name=event_name, buyer_email=buyer_email),
+        message=NOTIFS[NOTIF_TICKET_PURCHASED_ORGANIZER]['message'].format(order_url=order_url)
     )
 
 

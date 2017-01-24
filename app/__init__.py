@@ -63,13 +63,14 @@ from helpers.helpers import send_email_for_expired_orders
 from werkzeug.contrib.profiler import ProfilerMiddleware
 
 from flask.ext.sqlalchemy import get_debug_queries
-from config import ProductionConfig, LANGUAGES
+from config import LANGUAGES
 from app.helpers.auth import AuthManager
 from app.views import BlueprintsManager
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
+
 
 class ReverseProxied(object):
     """
@@ -138,8 +139,8 @@ def create_app():
 
     # API version 2
     with app.app_context():
-        from app.api import api_v2
-        app.register_blueprint(api_v2)
+        from app.api import api_v1
+        app.register_blueprint(api_v1)
 
     sa.orm.configure_mappers()
 
@@ -215,6 +216,11 @@ def get_key_settings():
 @app.context_processor
 def get_app_name():
     return dict(app_name=get_settings()['app_name'])
+
+
+@app.context_processor
+def get_tagline():
+    return dict(tagline=get_settings()['tagline'])
 
 
 @app.context_processor
@@ -395,6 +401,32 @@ def localize_dt(dt, tzname):
     return localized_dt.isoformat()
 
 
+@app.template_filter('localize_dt_obj')
+def localize_dt_obj(dt, tzname):
+    """Accepts a Datetime object and a Timezone name.
+    Returns Timezone aware Datetime Object.
+    """
+    localized_dt = timezone(tzname).localize(dt)
+    return localized_dt
+
+
+@app.template_filter('as_timezone')
+def as_timezone(dt, tzname):
+    """Accepts a Time aware Datetime object and a Timezone name.
+        Returns Converted Timezone aware Datetime Object.
+        """
+    if tzname and timezone(tzname):
+        return dt.astimezone(timezone(tzname))
+    return dt
+
+
+@app.template_filter('fees_by_currency')
+def fees_by_currency(currency):
+    """Returns a fees object according to the currency input"""
+    fees = DataGetter.get_fee_settings_by_currency(currency)
+    return fees
+
+
 @app.context_processor
 def fb_app_id():
     fb_app_id = get_settings()['fb_client_id']
@@ -513,12 +545,13 @@ scheduler.start()
 # Testing database performance
 @app.after_request
 def after_request(response):
-    for query in get_debug_queries():
-        if query.duration >= ProductionConfig.DATABASE_QUERY_TIMEOUT:
-            app.logger.warning("SLOW QUERY: %s\nParameters: %s\nDuration: %fs\nContext: %s\n" % (query.statement,
-                                                                                                 query.parameters,
-                                                                                                 query.duration,
-                                                                                                 query.context))
+    if app.config['SQLALCHEMY_RECORD_QUERIES']:
+        for query in get_debug_queries():
+            if query.duration >= app.config['DATABASE_QUERY_TIMEOUT']:
+                app.logger.warning("SLOW QUERY: %s\nParameters: %s\nDuration: %fs\nContext: %s\n" % (query.statement,
+                                                                                                     query.parameters,
+                                                                                                     query.duration,
+                                                                                                     query.context))
     return response
 
 

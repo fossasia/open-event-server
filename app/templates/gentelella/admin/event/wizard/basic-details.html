@@ -20,7 +20,9 @@
                 <input name="location_name" id="location_name"
                        v-model="event.location_name"
                        placeholder="Location is required to make event live"
-                       class="form-control"/>
+                       class="form-control"
+                       v-show="!addressShown"
+                       v-on:gmap="fillInAddress"/>
             </div>
         </div>
 
@@ -57,7 +59,7 @@
                 <div class="col-md-4">
                     <a id="reset_addr"
                        style="cursor:pointer;"
-                       v-on:click="event.location_name= ''; addressShown = false;">{{ _("Reset Location") }}</a>
+                       v-on:click="resetAddress">{{ _("Reset Location") }}</a>
                 </div>
                 <div class="col-md-8">
                     <div class="checkbox" style="padding-top:0;">
@@ -72,7 +74,7 @@
             <div class="col-md-6">
                 <google-map class="hidden-xs" style="width:100%; height:300px" ref="gmap" :center="location"
                             :zoom="zoom">
-                    <map-marker :position="location" :clickable="false" :draggable="false"></map-marker>
+                    <map-marker :position="location" :clickable="false" :draggable="true"></map-marker>
                 </google-map>
             </div>
             <br>
@@ -84,7 +86,7 @@
     <div class="row event-date-picker">
         <div class="col-md-4 col-xs-12">
             <div class="item form-group"
-                 v-bind:class="{ 'has-error': event.start_time_date.trim().length <= 0 || event.start_time_time.trim().length <= 0 }">
+                 v-bind:class="{ 'has-error': event.start_time_date.trim().length <= 0 || event.start_time_time.trim().length <= 0 || invalidDateRange}">
                 <label>{{ _("Starts") }} <span class="required">*</span></label>
                 <br>
                 <div class="col-xs-8" style="padding-left: 0;">
@@ -103,14 +105,17 @@
                 </div>
             </div>
             <div class="help-block text-danger"
-                 v-show="event.start_time_date.trim().length <= 0 || event.start_time_time.trim().length <= 0">Start
-                date/time is required
+                 style="color: #a94442;"
+                 v-show="event.start_time_date.trim().length <= 0 || event.start_time_time.trim().length <= 0">
+                Start date/time is required
             </div>
-
+            <div class="help-block text-danger" style="color: #a94442;" v-show="invalidDateRange">
+                Invalid date range. End time has to be after start time.
+            </div>
         </div>
         <div class="col-md-4 col-xs-12">
             <div class="item form-group"
-                 v-bind:class="{ 'has-error': event.end_time_date.trim().length <= 0 || event.end_time_time.trim().length <= 0 }">
+                 v-bind:class="{ 'has-error': event.end_time_date.trim().length <= 0 || event.end_time_time.trim().length <= 0 || invalidDateRange }">
                 <label>{{ _("Ends") }} <span class="required">*</span></label>
                 <br>
                 <div class="col-xs-8" style="padding-left: 0;">
@@ -130,6 +135,7 @@
 
             </div>
             <div class="help-block text-danger"
+                 style="color: #a94442;"
                  v-show="event.end_time_date.trim().length <= 0 || event.end_time_time.trim().length <= 0">End
                 date/time is required
             </div>
@@ -260,7 +266,7 @@
                     </div>
                 </div>
                 <div class="tickets-holder" style="margin-bottom: 10px;">
-                    <ticket v-for="(ticket, index) in event.tickets" v-bind:ticket="ticket"
+                    <ticket v-for="(ticket, index) in event.tickets" v-bind:ticket="ticket" v-bind:event="event" v-bind:service_fee="{{ (event.payment_currency | fees_by_currency).service_fee | default(0, true) }}"
                             v-bind:key="index"
                             v-on:remove="removeTicket(ticket)"></ticket>
                 </div>
@@ -313,7 +319,7 @@
                         <div class="item form-group"
                              v-bind:class="{ 'has-error': discountMessage.error != '', 'has-success': discountMessage.success != '' }">
                             <label for="discount-code-entry">{{ _("Enter Discount Code") }}</label>
-                            <div class="input-group">
+                            <div class="input-group apply_discount">
                                 <input type="text" class="form-control" id="discount-code-entry"
                                        v-model="event.discount_code">
                                 <span class="input-group-btn">
@@ -341,7 +347,8 @@
                             <label>{{ _("Choose Country") }} <span class="required">*</span></label>
                             <select name="payment_country" id="payment_country_name" class="form-control"
                                     v-model="event.payment_country"
-                                    title="payment country">
+                                    title="payment country"
+                                    required="required">
                                 {% if not event or not event.payment_country %}
                                     <option value="">{{ _("Choose a country for your payment") }}</option>
                                 {% endif %}
@@ -356,7 +363,8 @@
                             <label>{{ _("Choose Currency") }} <span class="required">*</span></label>
                             <select name="payment_currency" id="payment_currency_name" class="form-control"
                                     v-model="event.payment_currency"
-                                    title="currency">
+                                    title="currency"
+                                    required="required">
                                 {% if not event or not event.payment_currency %}
                                     <option value="">{{ _("Please select a currency") }}</option>
                                 {% endif %}
@@ -384,13 +392,13 @@
                                     <input type="checkbox" name="pay_by_paypal" v-model="event.pay_by_paypal">
                                     <strong style="font-weight: 400;">{{ _("YES, accept payment through PayPal ") }}</strong><br>
                                     {{ _("Paypal accepts credit card, debit card and PayPal payments. To learn how it works click") }}
-                                    <a href="">{{ _("here.") }}</a>
+                                    <a href="https://www.paypal.com/us/webapps/mpp/popup/about-payment-methods">{{ _("here.") }}</a>
                                 </label>
                             </div>
                         </div>
                         <div class="item form-group" v-show="event.pay_by_paypal">
                             <label>PayPal Email <span class="required">*</span></label>
-                            <input type="email" placeholder="PayPal Email" name="paypal_email" class="form-control"
+                            <input type="email" placeholder="PayPal Email" name="paypal_email" class="form-control" required="required"
                                    v-model="event.paypal_email">
                             <strong style="font-weight: 400;">{{ _("Don't have a PayPal account?") }} </strong><a
                                 href="https://www.paypal.com/us/webapps/mpp/referral/paypal-express-checkout?partner_id=W9QW5TKUA246E"
@@ -441,9 +449,10 @@
                                     <a href='#' data-toggle="modal" data-target="#chequeModal"
                                        title="Show cheque instructions"><strong
                                             style="font-weight: 400;">{{ _("example") }}</strong></a> {{ _("here") }}]
-                                </label>
+                                <span class="required">*</span></label>
                                 <textarea placeholder="Enter account details and instructions for cheque payment"
                                           name="cheque-details"
+                                          required="required"
                                           class="form-control" rows="6"
                                           v-model="event.cheque_details"
                                           cols="15"></textarea>
@@ -461,7 +470,7 @@
                                     <a href='#' data-toggle="modal" data-target="#bankModal"
                                        title="Show bank details instructions"><strong
                                             style="font-weight: 400;">{{ _("example") }}</strong></a> {{ _("here") }}]
-                                </label>
+                                <span class="required">*</span></label>
                                 <textarea
                                         placeholder="Enter account details and instructions for Telegraphic Transfer(TT) / Bank Transfer payment"
                                         name="bank-details"
@@ -477,10 +486,11 @@
                                 </label>
                             </div>
                             <div class="item form-group" v-show="event.pay_onsite">
-                                <label>{{ _("Enter payment instructions to ticket buyers to make payments onsite") }}</label>
+                                <label>{{ _("Enter payment instructions to ticket buyers to make payments onsite") }}<span class="required">*</span></label>
                                 <textarea placeholder="Enter instructions for payment at door" name="onsite-details"
-                                          v-model="event.onsite_details" class="form-control" rows="6"
-                                          cols="15"></textarea>
+                                      required="required"
+                                      v-model="event.onsite_details" class="form-control" rows="6"
+                                      cols="15"></textarea>
                             </div>
                         </div>
                     </div>

@@ -380,6 +380,15 @@ body .container.body .right_col {
   }
 }
 
+@media (max-width: 400px) {
+  .btn-group {
+    margin-left: -10px;
+  }
+  .ticket-button-resp{
+    margin-left: 0px!important;
+  }
+}
+
 @media (min-width: 769px) and (max-width: 992px) {
   .btn-responsive {
     font-size:90%;
@@ -922,6 +931,12 @@ article.media {
 h2 {
   font-size: 18px;
   font-weight: 400;
+}
+#ticket_type {
+  max-width: 30vw!important;
+}
+td {
+  min-width: 6vw;
 }
 #left, #right {
   display: table;
@@ -2041,7 +2056,7 @@ a.star {
 }
 
 .btn-group-vertical .btn, .btn-group .btn {
-  margin-bottom: 0;
+  margin-bottom: 10px;
   margin-right: 0;
 }
 
@@ -2221,6 +2236,7 @@ span.section {
 .form-control {
   border-radius: 0;
   width: 100%;
+  padding-right: 5px!important;
 }
 .form-horizontal .control-label {
   padding-top: 8px
@@ -5084,4 +5100,88 @@ ul.notifications {
     margin: 0 0 0 24px;
     padding: 0;
     min-width: min-content;
+}
+
+.error_content {
+  margin: 0 auto;
+  padding: 0px 0 0;
+  position: relative;
+  text-align: center;
+  text-shadow: 0 1px 0 #fff;
+  min-width: 280px;
+}
+.error_content a,
+.error_content .btn-default:hover {
+  text-decoration: none;
+}
+.error_content a:hover {
+  text-decoration: underline;
+}
+.error_content h1 {
+  font: normal 25px Helvetica, Arial, sans-serif;
+  letter-spacing: -0.05em;
+  line-height: 20px;
+  margin: 10px 0 30px;
+}
+.error_content h1:before{
+  content: "";
+  height: 1px;
+  position: absolute;
+  top: 10px;
+  width: 27%;
+  right: -80px;
+}
+.error_content h1:after {
+  content: "";
+  height: 1px;
+  position: absolute;
+  top: 10px;
+  width: 27%;
+}
+.error_content h1:after {
+  background: rgb(126, 126, 126);
+  background: -moz-linear-gradient(left, rgba(126, 126, 126, 1) 0%, rgba(255, 255, 255, 1) 100%);
+  background: -webkit-linear-gradient(left, rgba(126, 126, 126, 1) 0%, rgba(255, 255, 255, 1) 100%);
+  background: -o-linear-gradient(left, rgba(126, 126, 126, 1) 0%, rgba(255, 255, 255, 1) 100%);
+  background: -ms-linear-gradient(left, rgba(126, 126, 126, 1) 0%, rgba(255, 255, 255, 1) 100%);
+  background: linear-gradient(left, rgba(126, 126, 126, 1) 0%, rgba(255, 255, 255, 1) 100%);
+  right: 0;
+}
+.error_content h1:before {
+  background: rgb(126, 126, 126);
+  background: -moz-linear-gradient(right, rgba(126, 126, 126, 1) 0%, rgba(255, 255, 255, 1) 100%);
+  background: -webkit-linear-gradient(right, rgba(126, 126, 126, 1) 0%, rgba(255, 255, 255, 1) 100%);
+  background: -o-linear-gradient(right, rgba(126, 126, 126, 1) 0%, rgba(255, 255, 255, 1) 100%);
+  background: -ms-linear-gradient(right, rgba(126, 126, 126, 1) 0%, rgba(255, 255, 255, 1) 100%);
+  background: linear-gradient(right, rgba(126, 126, 126, 1) 0%, rgba(255, 255, 255, 1) 100%);
+  left: 0;
+}
+.error_content h1.internal_error:before {
+  left: -80px;
+}
+.error_content h1.internal_error:after {
+  right: -80px;
+}
+
+@media screen and (max-width: 485px){
+  .error_content h1:after {
+  background: rgb(126, 126, 126);
+  background: -moz-linear-gradient(left, rgba(126, 126, 126, 0) 0%, rgba(255, 255, 255, 0) 100%);
+  background: -webkit-linear-gradient(left, rgba(126, 126, 126, 0) 0%, rgba(255, 255, 255, 0) 100%);
+  background: -o-linear-gradient(left, rgba(126, 126, 126, 0) 0%, rgba(255, 255, 255, 0) 100%);
+  background: -ms-linear-gradient(left, rgba(126, 126, 126, 0) 0%, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(left, rgba(126, 126, 126, 0) 0%, rgba(255, 255, 255, 0) 100%);
+  right: 0;
+  width: 0;
+  }
+  .error_content h1:before {
+  background: rgb(126, 126, 126);
+  background: -moz-linear-gradient(right, rgba(126, 126, 126, 0) 0%, rgba(255, 255, 255, 0) 100%);
+  background: -webkit-linear-gradient(right, rgba(126, 126, 126, 0) 0%, rgba(255, 255, 255, 0) 100%);
+  background: -o-linear-gradient(right, rgba(126, 126, 126, 0) 0%, rgba(255, 255, 255, 0) 100%);
+  background: -ms-linear-gradient(right, rgba(126, 126, 126, 0) 0%, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(right, rgba(126, 126, 126, 0) 0%, rgba(255, 255, 255, 0) 100%);
+  left: 0;
+  width: 0;
+  }
 }

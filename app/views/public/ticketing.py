@@ -13,6 +13,7 @@ from app import get_settings
 from app.helpers.data import save_to_db
 from app.helpers.payment import PayPalPaymentsManager
 from app.helpers.ticketing import TicketingManager
+from app.helpers.data_getter import DataGetter
 
 
 def create_pdf(pdf_data):
@@ -32,27 +33,59 @@ def index():
 @ticketing.route('/create/', methods=('POST',))
 def create_order():
     order = TicketingManager.create_order(request.form)
-    if request.form.get('promo_code', '') != '':
-        flash('The promotional code entered is valid. No offer has been applied to this order.', 'danger')
     return redirect(url_for('.view_order', order_identifier=order.identifier))
 
+
+@ticketing.route('/apply_promo/', methods=('POST',))
+def apply_promo():
+    discount = TicketingManager.get_discount_code(request.form.get('event_id'), request.form.get('promo_code', ''))
+    access_code = TicketingManager.get_access_code(request.form.get('event_id'), request.form.get('promo_code', ''))
+    if discount and access_code:
+        return jsonify({
+            'discount_type': discount.type,
+            'discount_amount': discount.value,
+            'discount_status': True,
+            'access_status': True,
+            'access_code_ticket': access_code.tickets,
+            'discount_code_ticket': discount.tickets,
+        })
+    elif discount:
+        return jsonify({
+            'discount_type': discount.type,
+            'discount_amount': discount.value,
+            'discount_status': True,
+            'access_status': False,
+            'discount_code_ticket': discount.tickets,
+        })
+    elif access_code:
+        return jsonify({
+            'access_status': True,
+            'discount_status': False,
+            'access_code_ticket': access_code.tickets,
+        })
+    else:
+        return jsonify({
+            'discount_status': False,
+            'access_status': False,
+        })
 
 @ticketing.route('/<order_identifier>/', methods=('GET',))
 def view_order(order_identifier):
     order = TicketingManager.get_and_set_expiry(order_identifier)
-    if not order or order.status == 'expired' or order.status == 'placed':
+    if not order or order.status == 'expired':
         abort(404)
-    if order.status == 'completed':
+    if order.status == 'completed' or order.status == 'placed':
         return redirect(url_for('ticketing.view_order_after_payment', order_identifier=order_identifier))
 
     if order.event.stripe:
         stripe_publishable_key = order.event.stripe.stripe_publishable_key
     else:
         stripe_publishable_key = "No Key Set"
-
+    fees = DataGetter.get_fee_settings_by_currency(order.event.payment_currency)
     return render_template('gentelella/guest/ticketing/order_pre_payment.html', order=order, event=order.event,
                            countries=list(pycountry.countries),
-                           stripe_publishable_key=stripe_publishable_key)
+                           stripe_publishable_key=stripe_publishable_key,
+                           fees=fees)
 
 
 @ticketing.route('/<order_identifier>/view/', methods=('GET',))
@@ -60,7 +93,12 @@ def view_order_after_payment(order_identifier):
     order = TicketingManager.get_and_set_expiry(order_identifier)
     if not order or (order.status != 'completed' and order.status != 'placed'):
         abort(404)
-    return render_template('gentelella/guest/ticketing/order_post_payment.html', order=order, event=order.event)
+    flash("An email with the ticket has also been sent to your email account.")
+    fees = DataGetter.get_fee_settings_by_currency(order.event.payment_currency)
+    return render_template('gentelella/guest/ticketing/order_post_payment.html',
+                           order=order,
+                           event=order.event,
+                           fees=fees)
 
 
 @ticketing.route('/<order_identifier>/view/pdf/', methods=('GET',))

@@ -10,6 +10,7 @@
     {% if order.amount > 0 %}
         {% include 'gentelella/guest/ticketing/components/_invoice.html' %}
     {% endif %}
+    <span class="label {% if order.status == 'placed' %}label-info{% elif order.status == 'completed' %}label-success{% endif %}" style="font-size: 1.2em;">{{ order.status }}</span>
     {% include 'gentelella/guest/ticketing/components/_order_summary.html' %}
     {% if order.event.tax and order.amount > 0 %}
         <div class="col-xs-12 col-md-6 col-lg-6 pull-left" style="padding-left: 0;">

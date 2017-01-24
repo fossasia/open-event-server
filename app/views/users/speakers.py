@@ -150,6 +150,13 @@ def edit_view(event_id, speaker_id):
         speaker.featured = True if request.form.get('featured', 'false') == 'true' else False
         speaker.position = request.form.get('position', None)
         speaker.country = request.form.get('country', None)
+        speaker.city = request.form.get('city', None)
+        if request.form.get('heard_from', None) == "Other":
+            speaker.heard_from =  request.form.get('other_text', None)
+        else:
+            speaker.heard_from =  request.form.get('heard_from', None)
+        speaker.sponsorship_required = request.form.get('sponsorship_required', None)
+        speaker.speaking_experience = request.form.get('speaking_experience', None)
         save_to_db(speaker, "Speaker has been updated")
         flash("Speaker has been saved", "success")
 

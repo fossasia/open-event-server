@@ -64,6 +64,7 @@ def get_event_json(event_id):
         "payment_currency": event.payment_currency,
         "pay_by_paypal": event.pay_by_paypal,
         "pay_by_stripe": event.pay_by_stripe,
+        "paypal_email": event.paypal_email,
         "pay_by_cheque": event.pay_by_cheque,
         "pay_by_bank": event.pay_by_bank,
         "pay_onsite": event.pay_onsite,
@@ -73,13 +74,16 @@ def get_event_json(event_id):
         "sub_topic": event.sub_topic,
         "has_code_of_conduct": event.code_of_conduct != '',
         "code_of_conduct": event.code_of_conduct,
-        "copyright": event.copyright.serialize if event.copyright else None,
+        "copyright": event.copyright.serialize if event.copyright and event.copyright.licence else None,
         "tax_allow": 1 if event.tax_allow else 0,
         "tax": event.tax.serialize if event.tax else None,
         "latitude": event.latitude,
         "longitude": event.longitude,
         "stripe": event.stripe.serialize if event.stripe else None,
-        "state": event.state
+        "state": event.state,
+        "cheque_details": event.cheque_details,
+        "bank_details": event.bank_details,
+        "onsite_details": event.onsite_details
     }
 
     for social_link in event.social_link:
@@ -129,6 +133,8 @@ def save_event_from_json(json, event_id=None):
             event.event_url = "https://" + event_data['event_url']
         else:
             event.event_url = event_data['event_url']
+    else:
+        event.event_url = ""
     event.location_name = event_data['location_name']
     event.show_map = 1 if event_data['show_map'] else 0
     event.start_time = start_time
@@ -188,6 +194,11 @@ def save_event_from_json(json, event_id=None):
     event.cheque_details = event_data['cheque_details'] if event.pay_by_cheque else ''
     event.bank_details = event_data['bank_details'] if event.pay_by_bank else ''
     event.onsite_details = event_data['onsite_details'] if event.pay_onsite else ''
+
+    if event.pay_by_paypal:
+        event.paypal_email = event_data['paypal_email']
+    else:
+        event.paypal_email = None
 
     if event.pay_by_stripe and event_data['stripe']['linked']:
         stripe_data = event_data['stripe']
@@ -276,6 +287,7 @@ def save_event_from_json(json, event_id=None):
                                                                new_paper=1,
                                                                session_schedule=1,
                                                                session_accept_reject=1,
+                                                               after_ticket_purchase=1,
                                                                user_id=login.current_user.id,
                                                                event_id=event.id)
             save_to_db(new_email_notification_setting, "EmailSetting Saved")
@@ -297,7 +309,9 @@ def save_tickets(tickets_data, event):
         if ticket_data['id']:
             with db.session.no_autoflush:
                 ticket = Ticket.query.filter_by(id=ticket_data['id'], event_id=event.id).first()
-                db.session.query(ticket_tags_table).filter_by(ticket_id=ticket.id).delete()
+                ticket_tags=db.session.query(ticket_tags_table).filter_by(ticket_id=ticket.id)
+                if ticket_tags.first():
+                    ticket_tags.delete()
         else:
             ticket = Ticket(event=event)
 
@@ -312,6 +326,7 @@ def save_tickets(tickets_data, event):
         ticket.max_order = ticket_data['max_order'] if ticket_data['max_order'] != '' else 10
         ticket.sales_start = get_event_time_field_format(ticket_data, 'sales_start')
         ticket.sales_end = get_event_time_field_format(ticket_data, 'sales_end')
+        ticket.absorb_fees = ticket_data['absorb_fees']
 
         if ticket_data['tags_string'].strip() != '':
             tag_names = ticket_data['tags_string'].split(',')
@@ -413,13 +428,24 @@ def save_resized_background(background_image_file, event_id, size, image_sizes):
 
 
 def save_social_links(social_links, event):
+    old_social_links = SocialLink.query.filter_by(event_id=event.id)
+    for old_social_link in old_social_links:
+        flag = 0
+        for new_social_link in social_links:
+            if old_social_link.name == new_social_link['name'] and new_social_link['link'] != "":
+                flag = 1
+                break
+            else:
+                flag = 0
+        if flag == 0:
+            db.session.delete(old_social_link)
     for social_link in social_links:
         if social_link['link'].strip() != "":
             if not social_link['link'].startswith("http"):
                 social_link['link'] = "https://" + social_link['link']
             else:
                 social_link['link'] = social_link['link']
-            social_exists = SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).scalar()            
+            social_exists = SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).scalar()
             if social_exists:
                 SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).update({'link': social_link['link']})
             else:

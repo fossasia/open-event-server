@@ -41,12 +41,13 @@ class TestGoogleOauth(OpenEventTestCase):
     def test_error_return(self):
         """This tests the various errors returned by callback function"""
         with app.test_request_context():
-            self.assertTrue("You denied access" in self.app.get(
-                "/gCallback/?state=dummy_state&code=dummy_code&error=access denied").data)
-            self.assertTrue("Error encountered" in self.app.get(
-                "/gCallback/?state=dummy_state&code=dummy_code&error=12234").data)
-            self.assertTrue("/login" in self.app.get("/gCallback/?no_code_and_state").data)
-            self.assertEqual(self.app.get("/gCallback/1234").status_code, 404)
+            response = self.app.get("/gCallback/?state=dummy_state&code=dummy_code&error=access denied",
+                                    follow_redirects=True)
+            self.assertTrue("denied" in response.data, msg=response.data)
+            response = self.app.get("/gCallback/?state=dummy_state&code=dummy_code&error=12234", follow_redirects=True)
+            self.assertTrue("error" in response.data, msg=response.data)
+            self.assertTrue("/login" in self.app.get("/gCallback/?no_code_and_state", follow_redirects=True).data)
+            self.assertEqual(self.app.get("/gCallback/1234", follow_redirects=True).status_code, 404)
 
 
 if __name__ == '__main__':

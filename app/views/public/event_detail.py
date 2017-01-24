@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+import pytz
 
 from flask import Blueprint
 from flask import make_response
@@ -16,6 +17,8 @@ from app.helpers.exporters.pentabarfxml import PentabarfExporter
 from app.helpers.exporters.xcal import XCalExporter
 from app.helpers.helpers import get_count
 from app.models.call_for_papers import CallForPaper
+from app.helpers.wizard.helpers import get_current_timezone
+
 
 
 def get_published_event_or_abort(identifier):
@@ -65,10 +68,26 @@ def display_event_detail_home(identifier):
             if speaker not in speakers:
                 speakers.append(speaker)
 
+    '''Timezone aware current datetime object according to event timezone'''
+    timenow_event_tz = datetime.now(pytz.timezone(event.timezone))
     module = DataGetter.get_module()
     tickets = DataGetter.get_sales_open_tickets(event.id, True)
+
+    '''Sponsor Levels'''
+    sponsors = {-1:[]}
+    for sponsor in event.sponsor:
+        if not sponsor.level:
+            sponsors[-1].append(sponsor)
+        elif int(sponsor.level) in sponsors.keys():
+            sponsors[int(sponsor.level)].append(sponsor)
+        else:
+            sponsors[int(sponsor.level)] = [sponsor]
+
+    fees = DataGetter.get_fee_settings_by_currency(event.payment_currency)
+    code = request.args.get("code")
     return render_template('gentelella/guest/event/details.html',
                            event=event,
+                           sponsors=sponsors,
                            placeholder_images=placeholder_images,
                            custom_placeholder=custom_placeholder,
                            accepted_sessions=accepted_sessions,
@@ -77,7 +96,11 @@ def display_event_detail_home(identifier):
                            licence_details=licence_details,
                            speakers=speakers,
                            module=module,
-                           tickets=tickets if tickets else [])
+                           timenow_event_tz=timenow_event_tz,
+                           current_timezone=get_current_timezone(),
+                           tickets=tickets if tickets else [],
+                           fees=fees,
+                           code=code)
 
 
 @event_detail.route('/<identifier>/sessions/')
@@ -334,6 +357,8 @@ def display_event_tickets(identifier):
     module = DataGetter.get_module()
     tickets = DataGetter.get_sales_open_tickets(event.id, True)
     accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
+    timenow_event_tz = datetime.now(pytz.timezone(event.timezone))
+    fees = DataGetter.get_fee_settings_by_currency(event.payment_currency)
     return render_template('gentelella/guest/event/details.html',
                            event=event,
                            placeholder_images=placeholder_images,
@@ -341,7 +366,10 @@ def display_event_tickets(identifier):
                            accepted_sessions_count=accepted_sessions_count,
                            licence_details=licence_details,
                            module=module,
-                           tickets=tickets if tickets else [])
+                           timenow_event_tz=timenow_event_tz,
+                           current_timezone=get_current_timezone(),
+                           tickets=tickets if tickets else [],
+                           fees=fees)
 
 
 # SLUGGED PATHS

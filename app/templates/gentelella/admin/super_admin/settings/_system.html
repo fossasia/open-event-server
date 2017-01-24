@@ -1,5 +1,31 @@
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
+        <h4>{{ _("App Environment") }}</h4>
+        {{ _("Where is the application running") }} ?
+        <div class="form-group col-md-offset-1">
+            <div class="radio">
+                <label>
+                    <input type="radio" name="app_environment" class="radio_env" value="development"
+                           {% if settings.app_environment == "development" %}checked{% endif %}>
+                    {{ _("Development") }}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="app_environment" class="radio_env" value="staging"
+                           {% if settings.app_environment == "staging" %}checked{% endif %}>
+                    {{ _("Staging") }}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="app_environment" class="radio_env" value="production"
+                           {% if settings.app_environment == "production" %}checked{% endif %}>
+                    {{ _("Production") }}
+                </label>
+            </div>
+        </div>
+        <br>
         <h4>App Name</h4>
         The name of your deployment. This will be used throughout this application.<br><br>
         <div class="form-group">
@@ -8,6 +34,14 @@
                 <input name="app_name" class="form-control"
                        required
                        value="{{ settings.app_name|default('Open Event', True) }}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-3 col-sm-3 col-xs-12">Tagline</label>
+            <div class=" col-md-9 col-xs-12">
+                <input name="tagline" class="form-control"
+                       required
+                       value="{{ settings.tagline|default('Event Management and Ticketing', True) }}"/>
             </div>
         </div>
         <h4>{{ _("Google Tokens") }}</h4>
@@ -151,9 +185,12 @@
                 <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Region") }}</label>
                 <div class=" col-md-9 col-xs-12">
                     <select class="form-control col-md-6 col-xs-6" name="aws_region">
-                        <option value="" {% if not settings.aws_region or settings.aws_region == '' %} selected {% endif %}>Select S3 region</option>
+                        <option value="" {% if not settings.aws_region or settings.aws_region == '' %}
+                                selected {% endif %}>Select S3 region
+                        </option>
                         {% for region in s3_regions %}
-                            <option value="{{ region.name }}" {% if settings.aws_region == region.name %} selected {% endif %}>{{ region.name }}</option>
+                            <option value="{{ region.name }}" {% if settings.aws_region == region.name %}
+                                    selected {% endif %}>{{ region.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -240,7 +277,7 @@
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("Password") }}</label>
                 <div class=" col-md-9 col-xs-12">
-                    <input name="smtp_password" class="form-control col-md-6 col-xs-6"
+                    <input name="smtp_password" type="password" class="form-control col-md-6 col-xs-6"
                            value="{{ settings.smtp_password|default('', True) }}">
                 </div>
             </div>

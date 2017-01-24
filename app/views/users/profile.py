@@ -7,11 +7,11 @@ from flask.ext import login
 from markupsafe import Markup
 
 from app.helpers.auth import AuthManager
-from app.helpers.data import DataManager, get_facebook_auth, get_instagram_auth, get_twitter_auth_url, save_to_db
+from app.helpers.data import DataManager, get_facebook_auth, get_instagram_auth, get_twitter_auth_url, save_to_db, get_google_auth
 from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import uploaded_file
-from app.helpers.oauth import FbOAuth, InstagramOAuth
-from app.helpers.storage import upload, UPLOAD_PATHS
+from app.helpers.oauth import FbOAuth, InstagramOAuth, OAuth
+from app.helpers.storage import upload, UPLOAD_PATHS, upload_local
 
 profile = Blueprint('profile', __name__, url_prefix='/profile')
 
@@ -56,13 +56,11 @@ def connect_twitter():
     twitter_auth_url, __ = get_twitter_auth_url()
     return redirect('https://api.twitter.com/oauth/authenticate?' + twitter_auth_url)
 
-
 @profile.route('/instagram_connect', methods=('GET', 'POST'))
 def connect_instagram():
     instagram = get_instagram_auth()
     instagram_auth_url, state = instagram.authorization_url(InstagramOAuth.get_auth_uri(), access_type='offline')
     return redirect(instagram_auth_url)
-
 
 @profile.route('/<int:user_id>/editfiles/bgimage', methods=('POST', 'DELETE'))
 def bgimage_upload(user_id):
@@ -91,7 +89,7 @@ def create_event_bgimage_upload():
         background_image = request.form['bgimage']
         if background_image:
             background_file = uploaded_file(file_content=background_image)
-            background_url = upload(
+            background_url = upload_local(
                 background_file,
                 UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
             )

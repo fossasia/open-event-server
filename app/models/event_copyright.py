@@ -52,7 +52,8 @@ class EventCopyright(db.Model):
             'id': self.id,
             'holder': self.holder,
             'holder_url': self.holder_url,
-            'license': self.licence_url,
+            'licence': self.licence,
+            'licence_url': self.licence_url,
             'year': self.year,
             'logo': self.logo
         }

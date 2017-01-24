@@ -79,9 +79,9 @@
                             <span class="fa fa-chevron-down"></span>
                         </div>
                         <ul class="dropdown-menu lang-list">
-                            {% for code in all_languages %}
+                            {% for code in all_languages|dictsort(false, 'value') %}
                                 <li><a href='#' style='color:#969191;' class='translate'
-                                       id='{{ code }}'>{{ all_languages[code] }}</a></li>
+                                       id='{{ code[0] }}'>{{ all_languages[code[0]] }}</a></li>
                             {% endfor %}
                         </ul>
                     </div>

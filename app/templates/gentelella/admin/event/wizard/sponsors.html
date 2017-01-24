@@ -1,4 +1,4 @@
-<div class="col-md-8 col-md-push-2">
+<div class="col-md-8 col-sm-8 col-xs-8 col-md-push-2 col-sm-push-2 col-xs-push-2">
     <br>
     <div style="width: 100%; text-align: center">
         <h2 style="font-weight: 300;">Turn <span class="state" v-show="sponsors_enabled">{{ _("off") }}</span> <span
@@ -30,7 +30,7 @@
                     </div>
                     <div class="col-md-2 form-group col-sm-12 col-xs-12">
                         <label>{{ _("Type") }}</label>
-                        <input title="sponsor type" class="form-control" v-model="sponsor.sponsor_type"/>
+                        <input title="sponsor type" class="form-control" v-model="sponsor.type"/>
                     </div>
                     <div class="col-md-5 form-group col-sm-12 col-xs-12"
                          v-bind:class="{ 'has-error': !isValidLinkEntry(sponsor.url) }">

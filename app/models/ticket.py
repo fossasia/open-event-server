@@ -1,4 +1,4 @@
-from app.models.order import OrderTicket
+from app.models.order import OrderTicket, Order
 from . import db
 
 ticket_tags_table = db.Table('association', db.Model.metadata,
@@ -17,7 +17,8 @@ class Ticket(db.Model):
     description_toggle = db.Column(db.Boolean)
     type = db.Column(db.String)
     quantity = db.Column(db.Integer)
-    price = db.Column(db.Integer)
+    price = db.Column(db.Float)
+    absorb_fees = db.Column(db.Boolean)
 
     sales_start = db.Column(db.DateTime)
     sales_end = db.Column(db.DateTime)
@@ -44,6 +45,7 @@ class Ticket(db.Model):
                  price=0,
                  min_order=1,
                  max_order=10,
+                 absorb_fees=False,
                  tags=None):
 
         if tags is None:
@@ -61,6 +63,7 @@ class Ticket(db.Model):
         self.min_order = min_order
         self.max_order = max_order
         self.tags = tags
+        self.absorb_fees = absorb_fees
 
     def has_order_tickets(self):
         """Returns True if ticket has already placed orders.
@@ -68,6 +71,21 @@ class Ticket(db.Model):
         """
         from app.helpers.helpers import get_count
         count = get_count(OrderTicket.query.filter_by(ticket_id=self.id))
+        return bool(count > 0)
+
+    def has_completed_order_tickets(self):
+        """Returns True if ticket has already placed orders.
+        Else False.
+        """
+        from app.helpers.helpers import get_count
+        order_tickets = OrderTicket.query.filter_by(ticket_id=self.id)
+
+        count = 0
+        for order_ticket in order_tickets:
+            order = Order.query.filter_by(id=order_ticket.order_id).first()
+            if order.status == "completed" or order.status == "placed":
+                count += 1
+
         return bool(count > 0)
 
     def tags_csv(self):
@@ -104,7 +122,9 @@ class Ticket(db.Model):
             'min_order': self.min_order,
             'max_order': self.max_order,
             'tags_string': '',
-            'has_orders': self.has_order_tickets()
+            'has_orders': self.has_order_tickets(),
+            'has_completed_orders': self.has_completed_order_tickets(),
+            'absorb_fees': self.absorb_fees
         }
 
         tags = []

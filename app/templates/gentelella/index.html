@@ -96,8 +96,13 @@
         }
     </style>
 {% endblock %}
+{% set is_home_page = true %}
 {% block title %}
-    Home
+    {% if tagline %}
+        {{ app_name }} - {{ tagline }}
+    {% else %}
+        {{ app_name }} - Event Management and Ticketing
+    {% endif %}
 {% endblock %}
 {% macro event_box(event) %}
     <a href="/e/{{ event.identifier }}">

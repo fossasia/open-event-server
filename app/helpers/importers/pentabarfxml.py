@@ -1,6 +1,5 @@
 import random
 
-from flask.ext.login import current_user
 from pentabarf.PentabarfParser import PentabarfParser
 
 from app.helpers.data import get_or_create, save_to_db
@@ -32,7 +31,7 @@ class PentabarfImporter:
         event.end_time = conference_object.end
         event.has_session_speakers = True
         event.name = conference_object.title
-        event.location_name = conference_object.venue + ', ' + conference_object.city
+        event.location_name = conference_object.venue  # + ', ' + conference_object.city
         event.searchable_location_name = conference_object.city
         event.state = 'Published'
         event.privacy = 'public'
@@ -46,7 +45,7 @@ class PentabarfImporter:
                     session_type_id = None
                     if event_object.type:
                         session_type, _ = get_or_create(SessionType, event_id=event.id,
-                                                        name=event_object.type, length=30)
+                                                        name=event_object.type, length=str(30))  # TODO: hardcoded here
                         session_type_id = session_type.id
                     track_id = None
                     if event_object.track:
@@ -64,6 +63,7 @@ class PentabarfImporter:
                     session.title = event_object.title
                     session.short_abstract = event_object.abstract
                     session.long_abstract = event_object.description
+                    session.level = getattr(event_object, 'level', None)  # https://github.com/niranjan94/python-pentabarf-xml/issues/3
                     session.start_time = event_object.date + string_to_timedelta(event_object.start)
                     session.end_time = session.start_time + string_to_timedelta(event_object.duration)
                     session.slides = event_object.slides_url

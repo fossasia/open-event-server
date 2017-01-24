@@ -21,6 +21,7 @@ def get_or_create_notification_settings(event_id):
                                                new_paper=1,
                                                session_schedule=1,
                                                session_accept_reject=1,
+                                               after_ticket_purchase=1,
                                                user_id=login.current_user.id,
                                                event_id=event_id)
         return email_notification
@@ -64,6 +65,12 @@ def email_preferences_view():
     return render_template('gentelella/admin/settings/pages/email_preferences.html',
                            settings=settings, events=events, message_settings=message_settings)
 
+@settings.route('/applications/')
+def applications_view():
+    profile = DataGetter.get_user(login.current_user.id)
+    return render_template('gentelella/admin/settings/pages/applications.html',
+                           profile=profile)
+    # ...
 
 @settings.route('/contact-info/', methods=('POST', 'GET'))
 def contact_info_view():

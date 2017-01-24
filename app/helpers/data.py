@@ -180,6 +180,7 @@ class DataManager(object):
                     email_notification.new_paper = value
                     email_notification.session_schedule = value
                     email_notification.session_accept_reject = value
+                    email_notification.after_ticket_purchase = value
                     save_to_db(email_notification, "EmailSettings Toggled")
                     notification_ids.append(email_notification.id)
                 else:
@@ -187,6 +188,7 @@ class DataManager(object):
                                                                        new_paper=value,
                                                                        session_schedule=value,
                                                                        session_accept_reject=value,
+                                                                       after_ticket_purchase=value,
                                                                        user_id=user_id,
                                                                        event_id=event.id)
                     save_to_db(new_email_notification_setting, "EmailSetting Toggled")
@@ -219,6 +221,9 @@ class DataManager(object):
                               end_time=event.start_time + timedelta(hours=1),
                               event_id=event_id,
                               short_abstract=form.get('short_abstract', ''),
+                              level=form.get('level', ''),
+                              comments=form.get('comments',''),
+                              language=form.get('language',''),
                               state=state)
 
         if form.get('track', None) != "":
@@ -241,6 +246,12 @@ class DataManager(object):
                               organisation=form.get('organisation', ''),
                               position=form.get('position', ''),
                               country=form.get('country', ''),
+                              city=form.get('city', ''),
+                              heard_from = form.get('other_text', None) if form.get('heard_from', None) == "Other" else form.get('heard_from', None),
+                              sponsorship_required=form.get('sponsorship_required', ''),
+                              speaking_experience=form.get('speaking_experience', ''),
+                              long_biography=form.get('long_biography',''),
+                              mobile=form.get('mobile',''),
                               user=login.current_user if login and login.current_user.is_authenticated else None)
 
         new_session.speakers.append(speaker)
@@ -414,6 +425,10 @@ class DataManager(object):
                               organisation=form.get('organisation', ''),
                               position=form.get('position', ''),
                               country=form.get('country', ''),
+                              city=form.get('city', ''),
+                              heard_from = form.get('other_text', None) if form.get('heard_from', None) == "Other" else form.get('heard_from', None),
+                              sponsorship_required=form.get('sponsorship_required', ''),
+                              speaking_experience=form.get('speaking_experience', ''),
                               user=user if login and login.current_user.is_authenticated else None)
             save_to_db(speaker, "Speaker saved")
             record_activity('create_speaker', speaker=speaker, event_id=event_id)
@@ -575,6 +590,7 @@ class DataManager(object):
             session.subtitle = form.get('subtitle', '')
             session.long_abstract = form.get('long_abstract', '')
             session.short_abstract = form.get('short_abstract', '')
+            session.level = form.get('level', '')
             session.state = form_state
             session.track_id = form.get('track', None) if form.get('track', None) != "" else  None
             session.session_type_id = form.get('session_type', None) if form.get('session_type', None) != "" else None
@@ -690,23 +706,33 @@ class DataManager(object):
             user_detail.firstname = form['firstname']
             user_detail.lastname = form['lastname']
 
-            if form['facebook'].strip() != '':
+            if form.get('facebook', '').strip() != '':
                 user_detail.facebook = 'https://facebook.com/' + form['facebook'].strip()
             else:
                 user_detail.facebook = ''
 
-            if form['twitter'].strip() != '':
+            if form.get('twitter', '').strip() != '':
                 user_detail.twitter = 'https://twitter.com/' + form['twitter'].strip()
             else:
                 user_detail.twitter = ''
 
+            if form.get('instagram', '').strip() != '':
+                user_detail.instagram = 'https://instagram.com/' + form['instagram'].strip()
+            else:
+                user_detail.instagram = ''
+
+            if form.get('google', '').strip() != '':
+                user_detail.google = 'https://plus.google.com/' + form['google'].strip()
+            else:
+                user_detail.google = ''
+
             user_detail.details = form['details']
             avatar_img = form.get('avatar-img', None)
-            user_detail.avatar_uploaded = ""
-            user_detail.thumbnail = ""
-            user_detail.small = ""
-            user_detail.icon = ""
-            if string_not_empty(avatar_img) and avatar_img:
+            if string_not_empty(avatar_img) and avatar_img:                
+                user_detail.avatar_uploaded = ""
+                user_detail.thumbnail = ""
+                user_detail.small = ""
+                user_detail.icon = ""
                 filename = '{}.png'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
                                                  avatar_img[len('/serve_static/'):])

@@ -69,7 +69,7 @@ class TestPostApiJWTAuth(PostApiAuthTestCase, OpenEventTestCase):
         sends a login request and returns the response
         """
         response = self.app.post(
-            '/api/v2/login',
+            '/api/v1/login',
             data=json.dumps({
                 'email': 'myemail@gmail.com',
                 'password': password

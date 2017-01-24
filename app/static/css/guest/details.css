@@ -42,6 +42,11 @@ body {
   padding: 10px;
 }
 
+.license_row {
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
+
 .section-header {
   color: #2196F3;
   font-weight: 300;
@@ -130,6 +135,9 @@ body {
   border-right: 2px solid #e4e4e4;
   border-left: 2px solid #e4e4e4;
   border-top: 2px solid #e4e4e4;
+  border-bottom: 2px solid #e4e4e4;
+  height: 37px;
+
 }
 
 .img-circle {

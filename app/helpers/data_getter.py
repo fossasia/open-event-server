@@ -378,7 +378,8 @@ class DataGetter(object):
 
     @staticmethod
     def get_user_event_roles_by_role_name(event_id, role_name):
-        return UsersEventsRoles.query.filter_by(event_id=event_id).filter(Role.name == role_name)
+        role = Role.query.filter_by(name=role_name).first()
+        return UsersEventsRoles.query.filter_by(event_id=event_id).filter(UsersEventsRoles.role == role)
 
     @staticmethod
     def get_user_events(user_id=None):
@@ -734,6 +735,13 @@ class DataGetter(object):
     @staticmethod
     def get_fee_settings():
         return TicketFees.query.all()
+
+    @staticmethod
+    def get_fee_settings_by_currency(currency):
+        if currency:
+            return TicketFees.query.filter_by(currency=currency).first()
+        else:
+            return False
 
     @staticmethod
     def get_expired_orders():

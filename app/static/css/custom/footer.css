@@ -38,13 +38,12 @@ footer .row {
     height: auto;
     border-top: 1px solid #AAAAAA;
     border-bottom: 1px solid #AAAAAA;
-
 }
 
 #footer-menu select {margin-top: 10px}
 
 
-#footer-menu a{color: white; font-size: 16px; margin: 10px; line-height: 55px}
+#footer-menu a{color: white; font-size: 16px; margin: 10px; line-height: 1.5}
 
 footer .copyright{
     text-align: center;
@@ -52,6 +51,10 @@ footer .copyright{
     margin-top: 10px}
 
 #footer-menu select {background: #282C35; border-color:#AAAAAA; color: #AAAAAA  }
+
+#footer-menu > div > div:first-child{
+    padding: 10px 10px;
+}
 
 .footer-dropdown {
     border: 1px solid #AAAAAA;
@@ -61,7 +64,6 @@ footer .copyright{
     padding: 10px 16px;
     background: #282C35;
     color: #AAAAAA;
-    margin-top: 5px;
     text-align: left;
 }
 
@@ -89,8 +91,5 @@ footer .dropdown-menu {
     #footer-menu .dropup {
         min-width:180px;
         margin-top: 25px;
-    }
-    #footer-menu a{
-        line-height: 1.9;
     }
 }

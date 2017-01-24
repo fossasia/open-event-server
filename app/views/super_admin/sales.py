@@ -1,3 +1,5 @@
+# encoding=utf8
+
 import copy
 from datetime import datetime, timedelta
 
@@ -91,7 +93,8 @@ def fees_by_events_view():
                            from_date=from_date,
                            to_date=to_date,
                            tickets_total=tickets_total,
-                           fee_total=fee_total)
+                           fee_total=fee_total,
+                           navigation_bar=list_navbar())
 
 
 @sadmin_sales.route('/fees/status/')
@@ -118,7 +121,8 @@ def fees_status_view():
                            current_date=datetime.now(),
                            overdue_date=datetime.now() + timedelta(days=15),
                            invoices=invoices,
-                           to_date=to_date)
+                           to_date=to_date,
+                           navigation_bar=list_navbar())
 
 
 @sadmin_sales.route('/marketer/')
@@ -218,10 +222,10 @@ def sales_by_marketer_view(by_discount_code=False):
                            navigation_bar=list_navbar())
 
 
-@sadmin_sales.route('/discount_code/')
+'''@sadmin_sales.route('/discount_code/')
 def sales_by_discount_code_view():
     return sales_by_marketer_view(True)
-
+'''
 
 @sadmin_sales.route('/<path>/')
 def sales_by_events_view(path):
@@ -233,7 +237,7 @@ def sales_by_events_view(path):
         ('to_date' in request.args and 'from_date' not in request.args):
         return redirect(url_for('.sales_by_events_view', path=path))
 
-    promoted_events = path == 'promoted-events'
+    promoted_events = path == 'discounted-events'
 
     if from_date and to_date:
         orders = TicketingManager.get_orders(
@@ -252,6 +256,12 @@ def sales_by_events_view(path):
     orders_summary = {
         'completed': {
             'class': 'success',
+            'tickets_count': 0,
+            'orders_count': 0,
+            'total_sales': 0
+        },
+        'placed': {
+            'class': 'info',
             'tickets_count': 0,
             'orders_count': 0,
             'total_sales': 0
@@ -280,7 +290,15 @@ def sales_by_events_view(path):
             'payment_currency': event.payment_currency,
             'marketer': '',
             'discount_code': '',
+            'live_url': url_for('event_detail.display_event_detail_home', identifier=event.identifier).replace('events', 'e'),
+            'event_url': url_for('events.details_view', event_id=event.id),
+            'start_time': event.start_time,
+            'end_time': event.end_time,
             'completed': {
+                'tickets_count': 0,
+                'sales': 0
+            },
+            'placed': {
                 'tickets_count': 0,
                 'sales': 0
             },
@@ -318,28 +336,37 @@ def sales_by_events_view(path):
         orders_summary[str(order.status)]['total_sales'] += forex(order.event.payment_currency,
                                                                   display_currency, order.amount)
         for order_ticket in order.tickets:
+            discount = TicketingManager.get_discount_code(order.event_id, order.discount_code_id)
             orders_summary[str(order.status)]['tickets_count'] += order_ticket.quantity
             ticket = CachedGetter.get_ticket(order_ticket.ticket_id)
             tickets_summary_event_wise[str(order.event_id)][str(order.status)]['tickets_count'] \
                 += order_ticket.quantity
             tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)]['tickets_count'] \
                 += order_ticket.quantity
-            tickets_summary_location_wise[str(order
-                                              .event.searchable_location_name)][str(order
-                                                                                    .status)]['tickets_count'] \
+            tickets_summary_location_wise[unicode(order.event.searchable_location_name)][str(order.status)]['tickets_count'] \
                 += order_ticket.quantity
 
             if order.paid_via != 'free' and order.amount > 0:
-                tickets_summary_event_wise[str(order.event_id)][str(order.status)]['sales'] += \
-                    order_ticket.quantity * ticket.price
-                tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)]['sales'] += \
-                    order_ticket.quantity * ticket.price
-                tickets_summary_location_wise[str(order.event.
-                                                  searchable_location_name)][str(order.
-                                                                                 status)]['sales'] += \
-                    order_ticket.quantity * ticket.price
-
-    if path == 'events' or path == 'promoted-events':
+                if discount and str(ticket.id) in discount.tickets.split(","):
+                    if discount.type == "amount":
+                        tickets_summary_event_wise[str(order.event_id)][str(order.status)]['sales'] += order_ticket.quantity * (ticket.price - \
+                                                                                        discount.value)
+                        tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)]['sales'] += order_ticket.quantity * (ticket.price - \
+                                                                                        discount.value)
+                        tickets_summary_location_wise[str(order.event.searchable_location_name)][str(order.status)]['sales'] += order_ticket.quantity * (ticket.price - \
+                                                                                        discount.value)
+                    else:
+                        tickets_summary_event_wise[str(order.event_id)][str(order.status)]['sales'] += order_ticket.quantity * (ticket.price - \
+                                                                                        discount.value * ticket.price / 100.0)
+                        tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)]['sales'] += order_ticket.quantity * (ticket.price - \
+                                                                                        discount.value * ticket.price / 100.0)
+                        tickets_summary_location_wise[str(order.event.searchable_location_name)][str(order.status)]['sales'] += order_ticket.quantity * (ticket.price - \
+                                                                                        discount.value * ticket.price / 100.0)
+                else:
+                    tickets_summary_event_wise[str(order.event_id)][str(order.status)]['sales']  += order_ticket.quantity * ticket.price
+                    tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)]['sales']  += order_ticket.quantity * ticket.price
+                    tickets_summary_location_wise[str(order.event.searchable_location_name)][str(order.status)]['sales']  += order_ticket.quantity * ticket.price
+    if path == 'events' or path == 'discounted-events':
         return render_template('gentelella/admin/super_admin/sales/by_events.html',
                                tickets_summary=tickets_summary_event_wise,
                                display_currency=display_currency,
@@ -370,11 +397,11 @@ def sales_by_events_view(path):
     else:
         abort(404)
 
-
+'''
 @sadmin_sales.route('/discounts/', methods=('GET',))
 def discount_codes_view():
     discount_codes = InvoicingManager.get_discount_codes()
-    return render_template('gentelella/admin/super_admin/sales/discount_codes.html', discount_codes=discount_codes)
+    return render_template('gentelella/admin/super_admin/sales/discount_codes.html', discount_codes=discount_codes, navigation_bar=list_navbar())
 
 
 @sadmin_sales.route('/discounts/create/', methods=('GET', 'POST'))
@@ -394,7 +421,7 @@ def discount_codes_create(discount_code_id=None):
     marketers = User.query.filter(User.id.in_(active_users_ids)).all()
 
     return render_template('gentelella/admin/super_admin/sales/discount_codes_create.html',
-                           discount_code=discount_code, marketers=marketers)
+                           discount_code=discount_code, marketers=marketers, navigation_bar=list_navbar())
 
 
 @sadmin_sales.route('/discounts/check/duplicate/', methods=('GET',))
@@ -445,3 +472,4 @@ def discount_codes_delete(discount_code_id=None):
     delete_from_db(discount_code, "Discount code deleted")
     flash("The discount code has been deleted.", "warning")
     return redirect(url_for('.discount_codes_view'))
+'''

@@ -46,6 +46,18 @@ var app = new Vue({
         },
         zoom: function () {
             return this.event.latitude === 0.0 && this.event.longitude === 0.0 ? 1 : 15;
+        },
+        invalidDateRange: function () {
+            if(this.event.end_time_date.trim().length <= 0
+                || this.event.end_time_time.trim().length <= 0
+                || this.event.start_time_date.trim().length <= 0
+                || this.event.start_time_time.trim().length <= 0) {
+                return false;
+            }
+            var format = 'MM/DD/YYYY HH:mm';
+            var start = moment(this.event.start_time_date.trim() + " " + this.event.start_time_time.trim(), format);
+            var end = moment(this.event.end_time_date.trim() + " " + this.event.end_time_time.trim(), format);
+            return end.isBefore(start);
         }
     },
     watch: {
@@ -65,6 +77,9 @@ var app = new Vue({
                 }, 500);
             }
         },
+        'invalidDateRange': function (value) {
+            this.disableMove = this.disableMove ? this.disableMove : value;
+        },
         'event.name': function () {
             this.disableMove = shouldDisableMove(this);
         },
@@ -79,16 +94,6 @@ var app = new Vue({
         },
         'event.end_time_date': function () {
             this.disableMove = shouldDisableMove(this);
-        },
-        'event.location_name': function (val) {
-            var $this = this;
-            geocodeAddress(window.geocoder, val, function (lat, lng) {
-                if (val.trim() !== "") {
-                    $this.addressShown = true;
-                }
-                $this.event.latitude = lat;
-                $this.event.longitude = lng;
-            });
         },
         'event.discount_code': function () {
             this.discountMessage.success = '';
@@ -161,6 +166,10 @@ var app = new Vue({
         },
         addTicket: function (ticketType) {
             var ticket = _.cloneDeep(TICKET);
+            ticket.sales_start_date = moment().tz(this.event.timezone).format('MM/DD/YYYY');
+            ticket.sales_start_time = moment().tz(this.event.timezone).format('HH:mm');
+            ticket.sales_end_date = moment().tz(this.event.timezone).add(10, 'days').format('MM/DD/YYYY'),
+            ticket.sales_end_time = moment().tz(this.event.timezone).add(10, 'days').hour(22).minute(0).format('HH:mm'),
             ticket.type = ticketType;
             this.event.tickets.push(ticket);
         },
@@ -176,6 +185,24 @@ var app = new Vue({
                 locationName += $('#' + key).get(0).value + " ";
             });
             this.event.location_name = locationName;
+        },
+        fillInAddress: function(){
+            var $this = this;
+            var val = this.event.location_name;
+                _.each(window.componentForm, function (value, key) {
+                $('#' + key).val('');
+            });
+            geocodeAddress(window.geocoder, val, function (lat, lng) {
+                if (val.trim() !== "") {
+                    $this.addressShown = true;
+                }
+                $this.event.latitude = lat;
+                $this.event.longitude = lng;
+            });
+        },
+        resetAddress: function () {
+            this.event.location_name= '';
+            this.addressShown = false;
         },
         connectToStripe: function () {
             var $this = this;
@@ -371,10 +398,11 @@ function save(stepToSave, state, callback) {
         state: state
     };
 
+    /* Commented out for now until better condition is found
     if (!_.isUndefined(app.event.id) && !_.isNull(app.event.id) && _.isNumber(app.event.id) && !_.isUndefined(callback)) {
         callback();
         callback = null;
-    }
+    }*/
 
     switch (stepToSave) {
         case 'event':
@@ -396,9 +424,10 @@ function save(stepToSave, state, callback) {
             makePost('all', data, callback);
             break;
         default:
+            /* Commented out for now until better condition is found
             if (!_.isUndefined(callback) && !_.isNull(callback)) {
                 callback();
-            }
+            }*/
     }
 }
 
