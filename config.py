@@ -3,9 +3,8 @@ import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-VERSION_NAME = '1.0.0-alpha.4'
+VERSION_NAME = '1.0.0-alpha.6'
 
-# available languages
 LANGUAGES = {
     'en': 'English',
     'bn': 'Bengali/Bangla',
@@ -26,20 +25,37 @@ LANGUAGES = {
 
 
 class Config(object):
-    VERSION = VERSION_NAME
+    """
+    The base configuration option. Contains the defaults.
+    """
+
     DEBUG = False
+
+    DEVELOPMENT = False
+    STAGING = False
+    PRODUCTION = False
     TESTING = False
-    CSRF_ENABLED = True
+
+    CACHING = False
     PROFILE = False
-    SERVER_NAME = os.getenv('SERVER_NAME')
-    CORS_HEADERS = 'Content-Type'
+    SQLALCHEMY_RECORD_QUERIES = False
+    INTEGRATE_SOCKETIO = False
+
+    VERSION = VERSION_NAME
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     ERROR_404_HELP = False
-    CACHING = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///../app.db')
+    CSRF_ENABLED = True
+    SERVER_NAME = os.getenv('SERVER_NAME')
+    CORS_HEADERS = 'Content-Type'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', None)
+    DATABASE_QUERY_TIMEOUT = 0.1
+
+    if not SQLALCHEMY_DATABASE_URI:
+        print '`DATABASE_URL` either not exported or empty'
+        exit()
+
     BASE_DIR = basedir
     FORCE_SSL = os.getenv('FORCE_SSL', 'no') == 'yes'
-    SQLALCHEMY_RECORD_QUERIES = False
 
     UPLOADS_FOLDER = BASE_DIR + '/static/uploads/'
     TEMP_UPLOADS_FOLDER = BASE_DIR + '/static/uploads/temp/'
@@ -53,63 +69,55 @@ class Config(object):
 
 
 class ProductionConfig(Config):
-    DEBUG = False
+    """
+    The configuration for a production environment
+    """
+
     MINIFY_PAGE = True
     PRODUCTION = True
     INTEGRATE_SOCKETIO = True
-
-    # Test database performance
-    SQLALCHEMY_RECORD_QUERIES = False
-    DATABASE_QUERY_TIMEOUT = 0.1
+    CACHING = True
 
     # if force off
     socketio_integration = os.environ.get('INTEGRATE_SOCKETIO')
     if socketio_integration == 'false':
         INTEGRATE_SOCKETIO = False
-    # you don't want production on default db
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '')
-    if not SQLALCHEMY_DATABASE_URI:
-        print '`DATABASE_URL` either not exported or empty'
 
 
-class StagingConfig(Config):
-    DEVELOPMENT = True
-    DEBUG = True
+class StagingConfig(ProductionConfig):
+    """
+    The configuration for a staging environment
+    """
+
+    PRODUCTION = False
+    STAGING = True
 
 
 class DevelopmentConfig(Config):
+    """
+    The configuration for a development environment
+    """
+
     DEVELOPMENT = True
     DEBUG = True
-    MINIFY_PAGE = False
+    CACHING = True
 
     # Test database performance
     SQLALCHEMY_RECORD_QUERIES = True
-    DATABASE_QUERY_TIMEOUT = 0.1
 
     # If Env Var `INTEGRATE_SOCKETIO` is set to 'true', then integrate SocketIO
     socketio_integration = os.environ.get('INTEGRATE_SOCKETIO')
     INTEGRATE_SOCKETIO = bool(socketio_integration == 'true')
 
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '')
-    if not SQLALCHEMY_DATABASE_URI:
-        print '`DATABASE_URL` either not exported or empty'
-
 
 class TestingConfig(Config):
+    """
+    The configuration for a test suit
+    """
+    INTEGRATE_SOCKETIO = False
     TESTING = True
-    CACHING = False
     CELERY_ALWAYS_EAGER = True
     CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
     SQLALCHEMY_RECORD_QUERIES = True
-
-
-class LocalPSQLConfig(Config):
-    DEVELOPMENT = True
-    DEBUG = True
-    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:start@localhost/test"
-
-
-class LocalSQLITEConfig(Config):
-    DEVELOPMENT = True
-    DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
+    DEBUG_TB_ENABLED = False
+    BROKER_BACKEND = 'memory'

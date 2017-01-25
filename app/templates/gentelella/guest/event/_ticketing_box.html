@@ -41,24 +41,29 @@
                             {% if not ticket.hide %}
                                 <tr>
 
-                                    <td>
+                                    <td id="ticket_type">
                                         <a data-toggle="tooltip"
-                                           title="{{ ticket.description if ticket.description_toggle else '' }}"
-                                           style="cursor: pointer;">
-                                            {{ ticket.name }}
+                                           style="cursor: pointer; font-size:15px">
+                                            {{ ticket.name }}<br>
                                         </a>
+                                        {% if not ticket.description_toggle and ticket.description%}
+                                            <u><a class="show" style="cursor: pointer; font-size:10px; color:#2aa9dd;">show details</a></u>
+                                            <font color="#696969"><p class="ticket_description" style="display:none;">{{ ticket.description }}</p></font>
+                                        {% elif ticket.description_toggle and ticket.description %}
+                                            <font color="#696969"><p style="visibility: visible;">{{ ticket.description }}</p></font>
+                                        {% endif %}
                                     </td>
                                     <td>{{ ((ticket.sales_end|localize_dt_obj(event.timezone))|as_timezone(current_timezone)).strftime('%a, %B %d') }}</td>
-                                    <td>{{ event.payment_currency | currency_symbol }}{{ ticket.price | money }}</td>
+                                    <td class="individual-price">{{ event.payment_currency | currency_symbol }}{{ ticket.price | money }}</td>
                                     {% if fees %}
-                                    <td>
+                                    <td class="individual-fee">
                                         {{ event.payment_currency | currency_symbol }}
                                         {% set fee = ticket.price * fees.service_fee / 100 %}
                                         {% if not ticket.absorb_fees %}
                                             {% if fee < fees.maximum_fee %}
-                                                {{ ticket.price * fees.service_fee / 100}}
+                                                {{ (ticket.price * fees.service_fee / 100) | money}}
                                             {% else %}
-                                                {{ ticket.price * fees.maximum_fee / 100}}
+                                                {{ (ticket.price * fees.maximum_fee / 100) | money}}
                                             {% endif %}
                                         {% else %}
                                             0.00
@@ -70,11 +75,11 @@
                                         <td>
                                             <input type="hidden" name="ticket_ids[]" value="{{ ticket.id }}">
                                             <select title="ticket quantity" name="ticket_quantities[]" class="quantity-select"
-                                                    data-rate="{{ ticket.price }}" data-fee="{% if not ticket.absorb_fees %}
+                                                    data-rate="{{ ticket.price }}" data-id="{{ticket.id}}" data-fee="{% if not ticket.absorb_fees %}
                                             {% if fee < fees.maximum_fee %}
-                                                {{ ticket.price * fees.service_fee / 100}}
+                                                {{ ticket.price * fees.service_fee / 100 }}
                                             {% else %}
-                                                {{ ticket.price * fees.maximum_fee / 100}}
+                                                {{ ticket.price * fees.maximum_fee / 100 }}
                                             {% endif %}
                                         {% else %}
                                             0.00
@@ -102,22 +107,8 @@
                                 </tr>
                             {% endif %}
                             {% if loop.last %}
-                                <tr id="discount-row" style="display: none">
-                                    <td colspan="5" class="text-right">
-                                        <div style="font-weight: 300; font-size: 16px;line-height: 39px;text-transform: uppercase;">
-                                            {{ _("Discount") }}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div id="discount-holder"
-                                             style="font-weight: 300; font-size: 16px;line-height: 39px;text-transform: uppercase;">
-                                            <span style="font-weight: 500;" id="total-discount">$00.00</span>
-                                        </div>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="5" class="text-right">
+                                <tr id="total-holder-row">
+                                    <td colspan="4" class="text-right">
                                         <div style="font-weight: 300; font-size: 16px;line-height: 39px;text-transform: uppercase;">
                                             {{ _("Total") }}
                                         </div>
@@ -135,7 +126,7 @@
 
                         {% else %}
                             <tr>
-                                <td colspan="5" style="text-align: center">
+                                <td colspan="4" style="text-align: center">
                                     {{ _("No tickets available right now.") }}
                                 </td>
                             </tr>
@@ -143,13 +134,13 @@
                         </tbody>
                     </table>
                     <hr style="margin-top: 0;margin-bottom: 10px;">
-                    <div class="" style="width: 100%; text-align: right;">
+                    <div class="" style="width: 100%; text-align: right; padding-right:30px">
                         <a href="#" class="promo-code-open"
                            style="color: #2aa9dd;">{{ _("Enter promotional code") }}</a>
                         <div class="col-md-5 pull-right promo-code-box" style="padding-right:0;display:none;">
                             <div class="input-group" style="margin-bottom: 0;">
                                 <input type="text" name="promo_code" class="form-control" placeholder="Promotional code"
-                                       value="">
+                                       value="{{ code | default('', true) }}">
                                 <span class="input-group-btn">
                                         <button class="btn btn-default " type="button" id="apply-discount"><i
                                                 class="fa fa-check"></i></button>
@@ -162,7 +153,7 @@
                     </div>
                     <div class="clearfix"></div>
                 </div>
-                <div class="panel-footer" style="background-color: #ffffff;">
+                <div class="panel-footer" style="background-color: #ffffff; padding-right:40px;">
                     <div class="pull-right">
                         {% if event.pay_by_paypal or event.pay_by_stripe %}
                             <img src="{{ url_for('static', filename='img/paymentlogoshorizontal.png') }}">
@@ -192,22 +183,38 @@
             $('.promo-code-box').hide().find('input').val('');
             $(".promo-code-open").show();
         });
+
+        $(".show").click(function () {
+            if($(this).text() == "show details"){
+                $(".show").text("hide details");
+                $(".ticket_description").show();
+            }
+            else if($(this).text() == "hide details"){
+                $(".show").text("show details");
+                $(".ticket_description").hide();
+            }
+        });
         function show_hidden_ticket(access_code) {
             {% for ticket in tickets %}
                 {% if ticket.hide %}
                     if (access_code.split(",").indexOf("{{ticket.id}}") != -1){
-                        $("#discount-row").before("<tr>\
-                                    <td>\
+                        $("#total-holder-row").before("<tr>\
+                                   <td>\
                                         <a data-toggle=\"tooltip\"\
-                                           title=\"{{ ticket.description if ticket.description_toggle else '' }}\"\
-                                           style=\"cursor: pointer;\">\
-                                            {{ ticket.name }}\
+                                           style=\"cursor: pointer; font-size:15px;\">\
+                                            {{ ticket.name }}<br>\
                                         </a>\
+                                        {% if not ticket.description_toggle and ticket.description%}\
+                                            <u><a class=\"show\" style=\"cursor: pointer; font-size:10px;\ color:#2aa9dd;\">show details</a></u>\
+                                            <font color=\"#696969\"><p class=\"ticket_description\" style=\"display:none;\">{{ ticket.description }}</p></font>\
+                                        {% elif ticket.description_toggle and ticket.description %}\
+                                            <font color=\"#696969\"><p style=\"visibility: visible;\">{{ ticket.description }}</p></font>\
+                                        {% endif %}\
                                     </td>\
                                     <td>{{ ((ticket.sales_end|localize_dt_obj(event.timezone))|as_timezone(current_timezone)).strftime('%a, %B %d') }}</td>\
-                                    <td>{{ event.payment_currency | currency_symbol }}{{ ticket.price | money }}</td>\
+                                    <td class=\"individual-price\">{{ event.payment_currency | currency_symbol }}{{ ticket.price | money }}</td>\
                                     {% if fees %}\
-                                    <td>\
+                                    <td class=\"individual-fee\">\
                                         {{ event.payment_currency | currency_symbol }}\
                                         {% set fee = ticket.price * fees.service_fee / 100 %}\
                                         {% if not ticket.absorb_fees %}\
@@ -225,11 +232,11 @@
                                         <td>\
                                             <input type=\"hidden\" name=\"ticket_ids[]\" value=\"{{ ticket.id }}\">\
                                             <select title=\"ticket quantity\" name=\"ticket_quantities[]\" class=\"quantity-select\"\
-                                                    data-rate=\"{{ ticket.price }}\" data-fee=\"{% if not ticket.absorb_fees %}\
+                                                    data-rate=\"{{ ticket.price }}\" data-id=\"{{ticket.id}}\" data-fee=\"{% if not ticket.absorb_fees %}\
                                             {% if fee < fees.maximum_fee %}\
-                                                {{ ticket.price * fees.service_fee / 100}}\
+                                                {{ (ticket.price * fees.service_fee / 100) | money}}\
                                             {% else %}\
-                                                {{ ticket.price * fees.maximum_fee / 100}}\
+                                                {{ (ticket.price * fees.maximum_fee / 100) | money}}\
                                             {% endif %}\
                                         {% else %}\
                                             0.00\
@@ -256,12 +263,50 @@
                                 </tr>");
                     }
                 {% endif %}
-            {% endfor %}       
+            {% endfor %}
         }
         var discount_status = false;
         var discount_type = "";
         var discount_amount = -1;
         var promo_code_status = 0;
+        var discount_code = "";
+        {% if code %}
+                if (promo_code_status == 0) {
+                    var form_data = {"event_id": {{ event.id }}, "promo_code": "{{ code }}" }
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ url_for('ticketing.apply_promo') }}",
+                        data: form_data
+                    }).done(function (data) {
+                        discount_status = data.discount_status;
+                        access_status = data.access_status;
+                        access_code = data.access_code_ticket;
+                        discount_code = data.discount_code_ticket;
+                        if(discount_status && access_status){
+                            discount_type = data.discount_type;
+                            discount_amount = data.discount_amount;
+                            show_hidden_ticket(access_code);
+                            promo_code_status = 1;
+                        }else if(discount_status){
+                            discount_type = data.discount_type;
+                            discount_amount = data.discount_amount;
+                            promo_code_status = 1;
+                        }else if(access_status){
+                            show_hidden_ticket(access_code);
+                            promo_code_status = 1;
+                        }else{
+                            discount_type = "";
+                            discount_amount = -1;
+                            $('#discount-error').text("Invalid Promo Code");
+                        }
+                        $quantitySelects = $(".quantity-select");
+                        $quantitySelects.trigger('change');
+                        $quantitySelects.change(function () {
+                            quantity_select_compute($quantitySelects, $(this));
+                        })
+                    });
+                };
+        {% endif %}
         $('#apply-discount').click(function (e) {
             if (promo_code_status == 0) {
                 var form_data = $('#ticketing-box-form').serialize();
@@ -274,6 +319,7 @@
                     discount_status = data.discount_status;
                     access_status = data.access_status;
                     access_code = data.access_code_ticket;
+                    discount_code = data.discount_code_ticket;
                     if(discount_status && access_status){
                         discount_type = data.discount_type;
                         discount_amount = data.discount_amount;
@@ -306,29 +352,55 @@
             var total = 0;
             $.each($quantitySelects, function (index, $quantitySelect) {
                 $quantitySelect = $($quantitySelect);
+                var ticket_id = $quantitySelect.data('id');
                 if ($quantitySelect.val() !== "0") {
                     total += (parseFloat($quantitySelect.data('rate')) + parseFloat($quantitySelect.data('fee'))) * parseFloat($quantitySelect.val());
-                    if(discount_status && discount_type == "amount"){
-                        discount_total += discount_amount * parseFloat($quantitySelect.val());
+                    if (discount_status && discount_code.split(",").indexOf(""+ticket_id) != -1){
+                        if(discount_type == "amount"){
+                            discount_total += discount_amount * parseFloat($quantitySelect.val());
+                        }
+                        else if(discount_type != "amount"){
+                            discount_total += (discount_amount * parseFloat($quantitySelect.val())* (parseFloat($quantitySelect.data('rate')) + parseFloat($quantitySelect.data('fee'))))/100.0;
+                        }
                     }
                     hasMoreThenZero = true;
                 }
             });
 
             var subtotal = (parseFloat($this.data('rate')) + parseFloat($this.data('fee'))) * parseFloat($this.val());
-            $this.closest("tr").find(".subtotal").text("{{ event.payment_currency | currency_symbol }} " + subtotal.toFixed(2));
+            var discount_individual = 0;
+            var price_individual_new = 0;
+            var fee_individual_new = $this.data('fee');
+            if (discount_status && discount_code.split(",").indexOf(""+$this.data('id')) != -1){
+                if(discount_type == "amount"){
+                    discount_individual = discount_amount * parseFloat($this.val());
+                    price_individual_new = $this.data('rate') - discount_amount;
+                }
+                else if(discount_type != "amount"){
+                    discount_individual = (discount_amount * parseFloat($this.val()) * (parseFloat($this.data('rate')) + parseFloat($this.data('fee')))/100.0);
+                    price_individual_new = $this.data('rate') - (discount_amount * parseFloat($this.data('rate'))/100.0);
+                    fee_individual_new = Math.abs($this.data('fee') - (discount_amount * $this.data('fee') / 100));
+                }
+            }
+            subtotal -= discount_individual;
+            subtotal = Math.abs(subtotal);
+            if(discount_individual > 0){
+                $this.closest("tr").find(".individual-price").html("<table><tr><td> {{ event.payment_currency | currency_symbol }} " + price_individual_new.toFixed(2) + "</td></tr><tr><td style='text-decoration: line-through'>{{ event.payment_currency | currency_symbol }} " + $this.data('rate') + "</td></tr></table>" );
+                $this.closest("tr").find(".subtotal").html("<table><tr><td> {{ event.payment_currency | currency_symbol }} " + subtotal.toFixed(2) + "</td></tr><tr><td style='text-decoration: line-through'>{{ event.payment_currency | currency_symbol }} " + (subtotal + discount_individual).toFixed(2) + "</td></tr></table>" );
+                {% if fees %}
+                    $this.closest("tr").find(".individual-fee").text("{{ event.payment_currency | currency_symbol }} " + fee_individual_new.toFixed(2));
+                {% endif %}
+            }else{
+                $this.closest("tr").find(".subtotal").text("{{ event.payment_currency | currency_symbol }} " + subtotal.toFixed(2));
+            }
 
             if (discount_status || (discount_status && access_status)){
-                if(discount_type != "amount"){
-                    discount_total = ((discount_amount * total)/100)
-                }
+
                 $('#discount-error').text("Discount Applied");
-                $('#discount-row').show();
                 $('#total-discount').text("{{ event.payment_currency | currency_symbol }} " + discount_total.toFixed(2));
                 $totalHolder.show();
                 $totalAmount.text("{{ event.payment_currency | currency_symbol }} " + (Math.abs(total - discount_total)).toFixed(2));
             }else{
-                $('#discount-row').hide();
                 $totalHolder.show();
                 $totalAmount.text("{{ event.payment_currency | currency_symbol }} " + (Math.abs(total)).toFixed(2));
             }

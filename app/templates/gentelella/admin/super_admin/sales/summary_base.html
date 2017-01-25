@@ -52,7 +52,7 @@
             <th rowspan="2">
                 {{ key_name | capitalize }}
             </th>
-            {% if path and path == 'promoted-events' %}
+            {% if path and path == 'discounted-events' %}
                 <th rowspan="2" style="border-left: none !important; border-top: none!important; ">
                     {{ _("Discount Code") }}
                 </th>
@@ -60,14 +60,28 @@
                     {{ _("Marketer") }}
                 </th>
             {% endif %}
+            {% if path and path == 'events' %}
+                <th rowspan="2">
+                    {{ _("Event Date") }}
+                </th>
+            {% endif %}
             <th colspan="2" class="success">
                 {{ _("Completed Orders") }}
+            </th>
+            <th colspan="2" class="info">
+                {{ _("Placed Orders") }}
             </th>
             <th colspan="2" class="warning">
                 {{ _("Pending Orders") }}
             </th>
         </tr>
         <tr class="active">
+            <th>
+                {{ _("Tickets") }}
+            </th>
+            <th>
+                {{ _("Sales") }}
+            </th>
             <th>
                 {{ _("Tickets") }}
             </th>
@@ -87,9 +101,17 @@
 
             <tr>
                 <td>
-                    {{ item.name }}
+                    {% if path and path == 'events' %}
+                        {% if item.event_url and item.live_url %}
+                            <a href={{ item.event_url }}>{{ item.name }}</a><a href={{ item.live_url }}>(View Live Site)<a>
+                        {% else %}
+                            {{ item.name }}
+                        {% endif%}
+                    {% else %}
+                        {{ item.name }}
+                    {% endif%}
                 </td>
-                {% if path and path == 'promoted-events' %}
+                {% if path and path == 'discounted-events' %}
                     <td>
                         {{ item.discount_code }}
                     </td>
@@ -97,11 +119,26 @@
                         {{ item.marketer }}
                     </td>
                 {% endif %}
+                {% if path and path == 'events' %}
+                    <td style="font-size:13px">
+                        {% if item.start_time and item.end_time %}
+                            {{ item.start_time }}<br>to</font>  {{ item.end_time }}
+                        {% else %}
+                            {{ _("-") }}
+                        {% endif %}
+                    </td>
+                {% endif %}
                 <td>
                     {{ item.completed.tickets_count }}
                 </td>
                 <td>
                     {{ display_currency | currency_symbol }}{{ forex(item.payment_currency, display_currency, item.completed.sales) | money }}
+                </td>
+                <td>
+                    {{ item.placed.tickets_count }}
+                </td>
+                <td>
+                    {{ display_currency | currency_symbol }}{{ forex(item.payment_currency, display_currency, item.placed.sales) | money }}
                 </td>
                 <td>
                     {{ item.pending.tickets_count }}
@@ -115,14 +152,25 @@
         </tbody>
         <tfoot>
         <tr>
-            <th colspan="3">
+            <th colspan="{% if path and path == 'discounted-events' %}3{% else %}1{% endif %}">
                 {{ _("Total") }}
             </th>
+            {% if path and path == 'events' %}
+                <th >
+                {{ _("") }}
+                </th>
+            {% endif %}
             <th>
                 {{ orders_summary.completed.tickets_count }}
             </th>
             <th>
                 {{ display_currency | currency_symbol }}{{ orders_summary.completed.total_sales | money }}
+            </th>
+            <th>
+                {{ orders_summary.placed.tickets_count }}
+            </th>
+            <th>
+                {{ display_currency | currency_symbol }}{{ orders_summary.placed.total_sales | money }}
             </th>
             <th>
                 {{ orders_summary.pending.tickets_count }}

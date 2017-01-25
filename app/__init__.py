@@ -63,7 +63,7 @@ from helpers.helpers import send_email_for_expired_orders
 from werkzeug.contrib.profiler import ProfilerMiddleware
 
 from flask.ext.sqlalchemy import get_debug_queries
-from config import ProductionConfig, LANGUAGES
+from config import LANGUAGES
 from app.helpers.auth import AuthManager
 from app.views import BlueprintsManager
 
@@ -415,9 +415,10 @@ def as_timezone(dt, tzname):
     """Accepts a Time aware Datetime object and a Timezone name.
         Returns Converted Timezone aware Datetime Object.
         """
-    if tzname:
+    if tzname and timezone(tzname):
         return dt.astimezone(timezone(tzname))
     return dt
+
 
 @app.template_filter('fees_by_currency')
 def fees_by_currency(currency):
@@ -544,12 +545,13 @@ scheduler.start()
 # Testing database performance
 @app.after_request
 def after_request(response):
-    for query in get_debug_queries():
-        if query.duration >= ProductionConfig.DATABASE_QUERY_TIMEOUT:
-            app.logger.warning("SLOW QUERY: %s\nParameters: %s\nDuration: %fs\nContext: %s\n" % (query.statement,
-                                                                                                 query.parameters,
-                                                                                                 query.duration,
-                                                                                                 query.context))
+    if app.config['SQLALCHEMY_RECORD_QUERIES']:
+        for query in get_debug_queries():
+            if query.duration >= app.config['DATABASE_QUERY_TIMEOUT']:
+                app.logger.warning("SLOW QUERY: %s\nParameters: %s\nDuration: %fs\nContext: %s\n" % (query.statement,
+                                                                                                     query.parameters,
+                                                                                                     query.duration,
+                                                                                                     query.context))
     return response
 
 

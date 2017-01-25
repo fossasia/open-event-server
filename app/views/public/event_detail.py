@@ -84,6 +84,7 @@ def display_event_detail_home(identifier):
             sponsors[int(sponsor.level)] = [sponsor]
 
     fees = DataGetter.get_fee_settings_by_currency(event.payment_currency)
+    code = request.args.get("code")
     return render_template('gentelella/guest/event/details.html',
                            event=event,
                            sponsors=sponsors,
@@ -98,7 +99,8 @@ def display_event_detail_home(identifier):
                            timenow_event_tz=timenow_event_tz,
                            current_timezone=get_current_timezone(),
                            tickets=tickets if tickets else [],
-                           fees=fees)
+                           fees=fees,
+                           code=code)
 
 
 @event_detail.route('/<identifier>/sessions/')

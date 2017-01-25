@@ -14,6 +14,7 @@ from app.models.notifications import (
     TICKET_PURCHASED,
     EVENT_EXPORT_FAIL,
     EVENT_EXPORTED,
+    TICKET_PURCHASED_ORGANIZER
 )
 
 NOTIFS = {
@@ -38,6 +39,14 @@ NOTIFS = {
         'title': u'Your order invoice and tickets ({invoice_id})',
         'message': (
             u"Your order has been processed successfully."
+            u"<br><br><a href='{order_url}' class='btn btn-info btn-sm'>View Invoice</a>"
+        )
+    },
+    TICKET_PURCHASED_ORGANIZER: {
+        'recipient': 'Organizer',
+        'title': u'New ticket purchase for {event_name} by {buyer_email} ({invoice_id}) ',
+        'message': (
+            u"The order has been processed successfully."
             u"<br><br><a href='{order_url}' class='btn btn-info btn-sm'>View Invoice</a>"
         )
     },

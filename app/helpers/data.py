@@ -180,6 +180,7 @@ class DataManager(object):
                     email_notification.new_paper = value
                     email_notification.session_schedule = value
                     email_notification.session_accept_reject = value
+                    email_notification.after_ticket_purchase = value
                     save_to_db(email_notification, "EmailSettings Toggled")
                     notification_ids.append(email_notification.id)
                 else:
@@ -187,6 +188,7 @@ class DataManager(object):
                                                                        new_paper=value,
                                                                        session_schedule=value,
                                                                        session_accept_reject=value,
+                                                                       after_ticket_purchase=value,
                                                                        user_id=user_id,
                                                                        event_id=event.id)
                     save_to_db(new_email_notification_setting, "EmailSetting Toggled")
@@ -726,11 +728,11 @@ class DataManager(object):
 
             user_detail.details = form['details']
             avatar_img = form.get('avatar-img', None)
-            user_detail.avatar_uploaded = ""
-            user_detail.thumbnail = ""
-            user_detail.small = ""
-            user_detail.icon = ""
-            if string_not_empty(avatar_img) and avatar_img:
+            if string_not_empty(avatar_img) and avatar_img:                
+                user_detail.avatar_uploaded = ""
+                user_detail.thumbnail = ""
+                user_detail.small = ""
+                user_detail.icon = ""
                 filename = '{}.png'.format(time.time())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
                                                  avatar_img[len('/serve_static/'):])

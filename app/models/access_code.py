@@ -11,6 +11,7 @@ class AccessCode(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String)
+    access_url = db.Column(db.String)
     is_active = db.Column(db.Boolean)
     tickets_number = db.Column(db.Integer)  # For event level access this holds the max. uses
     min_quantity = db.Column(db.Integer)
@@ -28,6 +29,7 @@ class AccessCode(db.Model):
 
     def __init__(self,
                  code=None,
+                 access_url=None,
                  tickets_number=None,
                  min_quantity=None,
                  max_quantity=None,
@@ -37,6 +39,7 @@ class AccessCode(db.Model):
                  used_for=None,
                  event_id=None):
         self.code = code
+        self.access_url = access_url
         self.tickets_number = tickets_number
         self.min_quantity = min_quantity
         self.max_quantity = max_quantity
@@ -59,6 +62,7 @@ class AccessCode(db.Model):
         """Return object data in easily serializable format"""
         return {'id': self.id,
                 'code': self.code,
+                'access_url': access_url,
                 'tickets_number': self.tickets_number,
                 'min_quantity': self.min_quantity,
                 'max_quantity': self.max_quantity,
