@@ -64,7 +64,7 @@ class TestRoles(OpenEventViewTestCase):
                 'user_email': user.email,
                 'user_role': 'track_organizer'
             }
-            rv = self.app.post(url_for('event_roles.edit_view', uer_id=uer.id, event_id=event.id, data=data),
+            rv = self.app.post(url_for('event_roles.edit_view', uer_id=uer.id, event_id=event.id), data=data,
                                follow_redirects=True)
             uer = DataGetter.get_user_event_roles_by_role_name(event.id, 'track_organizer').first()
             self.assertTrue(uer is not None, msg=rv.data)

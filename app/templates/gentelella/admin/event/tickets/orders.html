@@ -41,10 +41,7 @@
     <div id="toolbar-holder" style="display: none;">
         <div class="btn-group pull-left" data-toggle="buttons">
             <label class="btn btn-default active btn-responsive">
-                <input type="radio" name="show_state" autocomplete="off" value="all" checked> {{ _("All") }}
-            </label>
-            <label class="btn btn-default btn-responsive">
-                <input type="radio" name="show_state" autocomplete="off" value="Completed"> {{ _("Completed") }}
+                <input type="radio" name="show_state" autocomplete="off" value="Completed" checked> {{ _("Completed") }}
             </label>
             <label class="btn btn-default btn-responsive">
                 <input type="radio" name="show_state" autocomplete="off" value="Placed"> {{ _("Placed") }}
@@ -54,6 +51,9 @@
             </label>
             <label class="btn btn-default btn-responsive">
                 <input type="radio" name="show_state" autocomplete="off" value="Expired"> {{ _("Expired") }}
+            </label>
+            <label class="btn btn-default btn-responsive">
+                <input type="radio" name="show_state" autocomplete="off" value="all"> {{ _("All") }}
             </label>
         </div>
     </div>
@@ -104,8 +104,8 @@
                 <td>
                     {% if order.status == 'completed' %}
                         <span class="label label-success">{{ order.status | capitalize }}</span>
-                    {% elif order.status == 'pending' %}
-                        <span class="label label-warning">{{ order.status | capitalize }}</span>
+                    {% elif order.status == 'pending' or order.status == 'initialized' %}
+                        <span class="label label-warning">{{ _("Pending") }}</span>
                     {% elif order.status == 'placed' %}
                         <span class="label label-info">{{ order.status | capitalize }}</span>
                     {% else %}
@@ -130,7 +130,6 @@
         $.fn.dataTable.ext.search.push(
             function (settings, data, dataIndex) {
                 var user_option = $("input[name=show_state]:checked").val();
-                console.log(data);
                 var state = data[2].trim() || 'pending';
                 if (user_option === "all") {
                     return true;

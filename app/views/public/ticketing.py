@@ -36,18 +36,37 @@ def create_order():
     return redirect(url_for('.view_order', order_identifier=order.identifier))
 
 
-@ticketing.route('/apply_discount/', methods=('POST',))
-def apply_discount():
+@ticketing.route('/apply_promo/', methods=('POST',))
+def apply_promo():
     discount = TicketingManager.get_discount_code(request.form.get('event_id'), request.form.get('promo_code', ''))
-    if discount:
+    access_code = TicketingManager.get_access_code(request.form.get('event_id'), request.form.get('promo_code', ''))
+    if discount and access_code:
         return jsonify({
             'discount_type': discount.type,
             'discount_amount': discount.value,
-            'discount_status': True
+            'discount_status': True,
+            'access_status': True,
+            'access_code_ticket': access_code.tickets,
+            'discount_code_ticket': discount.tickets,
+        })
+    elif discount:
+        return jsonify({
+            'discount_type': discount.type,
+            'discount_amount': discount.value,
+            'discount_status': True,
+            'access_status': False,
+            'discount_code_ticket': discount.tickets,
+        })
+    elif access_code:
+        return jsonify({
+            'access_status': True,
+            'discount_status': False,
+            'access_code_ticket': access_code.tickets,
         })
     else:
         return jsonify({
-            'discount_status': False
+            'discount_status': False,
+            'access_status': False,
         })
 
 @ticketing.route('/<order_identifier>/', methods=('GET',))

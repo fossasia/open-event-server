@@ -10,8 +10,8 @@ title: Generic
 sudo apt-get update
 sudo apt-get install postgresql postgresql-contrib
 ```
-* NodeJS  
-if nvm(Node Version Manager)  is not installed:  
+* NodeJS
+if nvm(Node Version Manager)  is not installed:
 using cURL:
 ```sh
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash
@@ -59,7 +59,7 @@ create database test with owner=open_event_user;
 * Once database is created, exit the psql shell with `\q` followed by ENTER.
 
 
-* **Step 3** - Install bower and frontend requirements. Learn more at [BOWER.md](BOWER.md)
+* **Step 3** - Install bower and frontend requirements.
 
 ```sh
 npm install bower -g
@@ -91,7 +91,7 @@ python manage.py db stamp head
 
 
 * **Step 7** - Start the application along with the needed services.
-The `&` at the end of the commands below make them run in background so that they don't hold the terminal. See [REDIS.md](REDIS.md) for more info.
+The `&` at the end of the commands below make them run in background so that they don't hold the terminal.
 
 ```sh
 # download and run redis

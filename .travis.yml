@@ -36,6 +36,7 @@ after_success:
   - coveralls
   - codeclimate-test-reporter
   - bash kubernetes/travis/deploy.sh
+  - bash kubernetes/travis/deploy-staging.sh
   - bash scripts/push_api_docs.sh
 addons:
   code_climate:
