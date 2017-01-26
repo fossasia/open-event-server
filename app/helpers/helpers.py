@@ -34,7 +34,7 @@ from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, 
     USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail, \
     AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, TICKET_PURCHASED, EVENT_EXPORTED, \
     EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, MONTHLY_PAYMENT_EMAIL, \
-    EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER
+    EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER, TICKET_CANCELLED
 from ..models.message_settings import MessageSettings
 from ..models.track import Track
 
@@ -283,6 +283,17 @@ def send_email_for_after_purchase(email, invoice_id, order_url, event_name, even
         subject=MAILS[TICKET_PURCHASED]['subject'].format(invoice_id=invoice_id, event_name=event_name),
         html=MAILS[TICKET_PURCHASED]['message'].format(order_url=order_url, event_name=event_name, event_organiser=event_organiser)
     )
+
+
+def send_email_after_cancel_ticket(email, invoice_id, order_url, event_name, cancel_note):
+    """Send email with order invoice link after purchase"""
+    send_email(
+        to=email,
+        action=TICKET_CANCELLED,
+        subject=MAILS[TICKET_CANCELLED]['subject'].format(invoice_id=invoice_id, event_name=event_name),
+        html=MAILS[TICKET_CANCELLED]['message'].format(order_url=order_url, event_name=event_name, cancel_note=cancel_note)
+    )
+
 
 def send_email_for_after_purchase_organizers(email, buyer_email, invoice_id, order_url, event_name, event_organiser):
     """Send email with order invoice link after purchase"""

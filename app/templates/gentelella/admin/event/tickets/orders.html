@@ -112,6 +112,8 @@
                             <span id="label-{{ order.identifier }}" class="label label-warning">{{ _("Pending") }}</span>
                         {% elif order.status == 'placed' %}
                             <span id="label-{{ order.identifier }}" class="label label-info">{{ order.status | capitalize }}</span>
+                        {% elif order.status == 'cancelled' %}
+                            <span id="label-{{ order.identifier }}" class="label label-default">{{ order.status | capitalize }}</span>
                         {% else %}
                             <span id="label-{{ order.identifier }}" class="label label-danger">{{ order.status | capitalize }}</span>
                         {% endif %}
@@ -123,9 +125,52 @@
                     <td>
                         <div class="btn-group btn-group-xs" role="group">
                             {% if order.status != "cancelled" %}
-                            <button data-toggle="tooltip" title="Cancel" data-url="{{ url_for('ticketing.cancel_order',order_identifier = order.identifier) }}" data-identifier="{{ order.identifier }}" class="btn btn-default cancel-order"><i class="fa fa-times fa-fw"></i></button>
+                            <button data-toggle="modal" data-target="#cancel-order-{{ order.identifier }}" title="Cancel" class="btn btn-default cancel-order"><i class="fa fa-times fa-fw"></i></button>
+                            <div class="modal fade" id="cancel-order-{{ order.identifier }}" role="dialog">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                        aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title">{{ _("Are you sure you want to cancel the ticket") }}</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{{ url_for('event_ticket_sales.cancel_order', event_id=event_id) }}" method="post">
+                                                    <input type="hidden" name="identifier" value="{{ order.identifier }}">
+                                                    <div class="textarea">
+                                                        <label>
+                                                            {{ _("Enter a note to ticket buyer(optional): ") }}
+                                                        </label>
+                                                            <textarea name="note" rows="7">Your ticket has been cancelled, please contact the organizer for more</textarea>
+                                                        <br>
+                                                        <button type="submit" class="btn btn-success ">{{ _("Cancel Ticket") }}</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
                             {% endif %}
-                            <button data-toggle="tooltip" title="Delete" data-url="{{ url_for('ticketing.delete_order',order_identifier = order.identifier) }}" data-identifier="{{ order.identifier }}" class="btn btn-default delete-order"><i class="fa fa-trash fa-fw"></i></button>
+                            {% if order.amount == 0 or order.status != "completed" %}
+                                <button data-toggle="modal" data-target="#delete-order-{{ order.identifier }}" title="Delete" class="btn btn-default delete-order"><i class="fa fa-trash fa-fw"></i></button>
+                                <div class="modal fade" id="delete-order-{{ order.identifier }}" role="dialog">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                            aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title">{{ _("Are you sure you want to delete the ticket") }}</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{{ url_for('event_ticket_sales.delete_order', event_id=event_id) }}" method="post">
+                                                        <input type="hidden" name="identifier" value="{{ order.identifier }}">
+                                                        <button type="submit" class="btn btn-success ">{{ _("Delete Ticket") }}</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                            {% endif %}
                         </div>
                     </td>
                 </tr>
@@ -184,37 +229,6 @@
                 cell.innerHTML = i + 1;
             });
         }).draw();
-
-        $('.cancel-order').click(function(){
-            var this_elem = $(this);
-            var identifier = $(this).data('identifier');
-            $.ajax({
-                type: 'POST',
-                url: $(this).data('url'),
-                dataType: 'json'
-            }).done(function (data) {
-                if(data.status){
-                    var prev_label = $('#label-' + identifier);
-                    prev_label.attr('class','label label-danger');
-                    prev_label.text('Cancelled');
-                    this_elem.remove();
-                }
-            })
-        });
-
-        $('.delete-order').click(function(){
-            var this_elem = $(this);
-            $.ajax({
-                type: 'POST',
-                url: $(this).data('url'),
-                dataType: 'json'
-            }).done(function (data) {
-                if(data.status){
-                    this_elem.closest('tr').remove();
-                    this_elem.remove();
-                }
-            })
-        });
 
     </script>
 
