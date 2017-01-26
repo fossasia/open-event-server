@@ -38,7 +38,12 @@ Make sure you have the dependencies mentioned above installed before proceeding 
 ```sh
 sudo -H pip install -r requirements.txt
 ```
-
+hint: You may need to upgrade your pip version and install following packages if you encounter errors while installing the requirements.
+```sh
+sudo apt-get install python-dev
+sudo apt-get install libpq-dev
+sudo apt-get install libffi6 libffi-dev
+```
 
 * **Step 2** - Create the database. For that we first open the psql shell. Go the directory where your postgres file is stored.
 
