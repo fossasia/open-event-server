@@ -52,13 +52,13 @@ def display_ticket_stats(event_id):
             'total_sales': 0
         },
         'deleted': {
-            'class': 'danger',
+            'class': 'primary',
             'tickets_count': 0,
             'orders_count': 0,
             'total_sales': 0
         },
         'cancelled': {
-            'class': 'danger',
+            'class': 'default',
             'tickets_count': 0,
             'orders_count': 0,
             'total_sales': 0
@@ -375,3 +375,21 @@ def attendee_check_in_toggle(event_id, holder_id):
     return jsonify({
         'status': 'invalid_holder_id'
     })
+
+
+@event_ticket_sales.route('/cancel/', methods=('POST',))
+def cancel_order(event_id):
+    return_status = TicketingManager.cancel_order(request.form)
+    if return_status:
+        return redirect(url_for('.display_orders', event_id=event_id))
+    else:
+        abort(403)
+
+
+@event_ticket_sales.route('/delete/', methods=('POST',))
+def delete_order(event_id):
+    return_status = TicketingManager.delete_order(request.form)
+    if return_status:
+        return redirect(url_for('.display_orders', event_id=event_id))
+    else:
+        abort(403)

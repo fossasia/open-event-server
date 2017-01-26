@@ -279,13 +279,13 @@ def sales_by_events_view(path):
             'total_sales': 0
         },
         'deleted': {
-            'class': 'danger',
+            'class': 'primary',
             'tickets_count': 0,
             'orders_count': 0,
             'total_sales': 0
         },
         'cancelled': {
-            'class': 'danger',
+            'class': 'default',
             'tickets_count': 0,
             'orders_count': 0,
             'total_sales': 0
