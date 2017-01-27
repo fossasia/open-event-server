@@ -77,15 +77,16 @@ def fees_by_events_view():
     tickets_total = 0
 
     for order in orders:
-        for order_ticket in order.tickets:
-            fee_summary[str(order.event.id)]['tickets_count'] += order_ticket.quantity
-            tickets_total += order_ticket.quantity
-            ticket = CachedGetter.get_ticket(order_ticket.ticket_id)
-            if order.paid_via != 'free' and order.amount > 0 and ticket.price > 0:
-                fee = ticket.price * (get_fee(order.event.payment_currency) / 100)
-                fee = forex(order.event.payment_currency, display_currency, fee)
-                fee_summary[str(order.event.id)]['fee_amount'] += fee
-                fee_total += fee
+        if order.event:
+            for order_ticket in order.tickets:
+                fee_summary[str(order.event.id)]['tickets_count'] += order_ticket.quantity
+                tickets_total += order_ticket.quantity
+                ticket = CachedGetter.get_ticket(order_ticket.ticket_id)
+                if order.paid_via != 'free' and order.amount > 0 and ticket.price > 0:
+                    fee = ticket.price * (get_fee(order.event.payment_currency) / 100)
+                    fee = forex(order.event.payment_currency, display_currency, fee)
+                    fee_summary[str(order.event.id)]['fee_amount'] += fee
+                    fee_total += fee
 
     return render_template('gentelella/admin/super_admin/sales/fees.html',
                            fee_summary=fee_summary,
@@ -227,6 +228,7 @@ def sales_by_discount_code_view():
     return sales_by_marketer_view(True)
 '''
 
+
 @sadmin_sales.route('/<path>/')
 def sales_by_events_view(path):
     from_date = request.args.get('from_date')
@@ -302,7 +304,8 @@ def sales_by_events_view(path):
             'payment_currency': event.payment_currency,
             'marketer': '',
             'discount_code': '',
-            'live_url': url_for('event_detail.display_event_detail_home', identifier=event.identifier).replace('events', 'e'),
+            'live_url': url_for('event_detail.display_event_detail_home', identifier=event.identifier).replace('events',
+                                                                                                               'e'),
             'event_url': url_for('events.details_view', event_id=event.id),
             'start_time': event.start_time,
             'end_time': event.end_time,
@@ -350,42 +353,47 @@ def sales_by_events_view(path):
             event.searchable_location_name
 
     for order in orders:
-        if order.status == 'initialized':
-            order.status = 'pending'
-        orders_summary[str(order.status)]['orders_count'] += 1
-        orders_summary[str(order.status)]['total_sales'] += forex(order.event.payment_currency,
-                                                                  display_currency, order.amount)
-        for order_ticket in order.tickets:
-            discount = TicketingManager.get_discount_code(order.event_id, order.discount_code_id)
-            orders_summary[str(order.status)]['tickets_count'] += order_ticket.quantity
-            ticket = CachedGetter.get_ticket(order_ticket.ticket_id)
-            tickets_summary_event_wise[str(order.event_id)][str(order.status)]['tickets_count'] \
-                += order_ticket.quantity
-            tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)]['tickets_count'] \
-                += order_ticket.quantity
-            tickets_summary_location_wise[unicode(order.event.searchable_location_name)][str(order.status)]['tickets_count'] \
-                += order_ticket.quantity
+        if order.event:
+            if order.status == 'initialized':
+                order.status = 'pending'
+            orders_summary[str(order.status)]['orders_count'] += 1
+            orders_summary[str(order.status)]['total_sales'] += forex(order.event.payment_currency,
+                                                                      display_currency, order.amount)
+            for order_ticket in order.tickets:
+                discount = TicketingManager.get_discount_code(order.event_id, order.discount_code_id)
+                orders_summary[str(order.status)]['tickets_count'] += order_ticket.quantity
+                ticket = CachedGetter.get_ticket(order_ticket.ticket_id)
+                tickets_summary_event_wise[str(order.event_id)][str(order.status)]['tickets_count'] \
+                    += order_ticket.quantity
+                tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)]['tickets_count'] \
+                    += order_ticket.quantity
+                tickets_summary_location_wise[unicode(order.event.searchable_location_name)][str(order.status)][
+                    'tickets_count'] \
+                    += order_ticket.quantity
 
-            if order.paid_via != 'free' and order.amount > 0:
-                if discount and str(ticket.id) in discount.tickets.split(","):
-                    if discount.type == "amount":
-                        tickets_summary_event_wise[str(order.event_id)][str(order.status)]['sales'] += order_ticket.quantity * (ticket.price - \
-                                                                                        discount.value)
-                        tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)]['sales'] += order_ticket.quantity * (ticket.price - \
-                                                                                        discount.value)
-                        tickets_summary_location_wise[str(order.event.searchable_location_name)][str(order.status)]['sales'] += order_ticket.quantity * (ticket.price - \
-                                                                                        discount.value)
+                if order.paid_via != 'free' and order.amount > 0:
+                    if discount and str(ticket.id) in discount.tickets.split(","):
+                        if discount.type == "amount":
+                            tickets_summary_event_wise[str(order.event_id)][str(order.status)][
+                                'sales'] += order_ticket.quantity * (ticket.price - discount.value)
+                            tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)][
+                                'sales'] += order_ticket.quantity * (ticket.price - discount.value)
+                            tickets_summary_location_wise[str(order.event.searchable_location_name)][str(order.status)][
+                                'sales'] += order_ticket.quantity * (ticket.price - discount.value)
+                        else:
+                            tickets_summary_event_wise[str(order.event_id)][str(order.status)]['sales'] += \
+                                order_ticket.quantity * (ticket.price - discount.value * ticket.price / 100.0)
+                            tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)]['sales'] += \
+                                order_ticket.quantity * (ticket.price - discount.value * ticket.price / 100.0)
+                            tickets_summary_location_wise[str(order.event.searchable_location_name)][str(order.status)]['sales'] += \
+                                order_ticket.quantity * (ticket.price - discount.value * ticket.price / 100.0)
                     else:
-                        tickets_summary_event_wise[str(order.event_id)][str(order.status)]['sales'] += order_ticket.quantity * (ticket.price - \
-                                                                                        discount.value * ticket.price / 100.0)
-                        tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)]['sales'] += order_ticket.quantity * (ticket.price - \
-                                                                                        discount.value * ticket.price / 100.0)
-                        tickets_summary_location_wise[str(order.event.searchable_location_name)][str(order.status)]['sales'] += order_ticket.quantity * (ticket.price - \
-                                                                                        discount.value * ticket.price / 100.0)
-                else:
-                    tickets_summary_event_wise[str(order.event_id)][str(order.status)]['sales']  += order_ticket.quantity * ticket.price
-                    tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)]['sales']  += order_ticket.quantity * ticket.price
-                    tickets_summary_location_wise[str(order.event.searchable_location_name)][str(order.status)]['sales']  += order_ticket.quantity * ticket.price
+                        tickets_summary_event_wise[str(order.event_id)][str(order.status)][
+                            'sales'] += order_ticket.quantity * ticket.price
+                        tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)][
+                            'sales'] += order_ticket.quantity * ticket.price
+                        tickets_summary_location_wise[str(order.event.searchable_location_name)][str(order.status)][
+                            'sales'] += order_ticket.quantity * ticket.price
     if path == 'events' or path == 'discounted-events':
         return render_template('gentelella/admin/super_admin/sales/by_events.html',
                                tickets_summary=tickets_summary_event_wise,
@@ -416,6 +424,7 @@ def sales_by_events_view(path):
 
     else:
         abort(404)
+
 
 '''
 @sadmin_sales.route('/discounts/', methods=('GET',))
