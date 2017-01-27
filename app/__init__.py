@@ -535,8 +535,8 @@ def integrate_socketio():
 
 scheduler = BackgroundScheduler(timezone=utc)
 scheduler.add_job(send_mail_to_expired_orders, 'interval', hours=5)
-scheduler.add_job(empty_trash, 'cron', day_of_week='mon-fri', hour=5, minute=30)
-scheduler.add_job(send_after_event_mail, 'cron', day_of_week='mon-fri', hour=5, minute=30)
+scheduler.add_job(empty_trash, 'cron', hour=5, minute=30)
+scheduler.add_job(send_after_event_mail, 'cron', hour=5, minute=30)
 scheduler.add_job(send_event_fee_notification, 'cron', day=1)
 scheduler.add_job(send_event_fee_notification_followup, 'cron', day=15)
 scheduler.start()
