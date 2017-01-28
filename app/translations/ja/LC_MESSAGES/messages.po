@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2017-01-25 17:06+0530\n"
-"PO-Revision-Date: 2017-01-25 15:09+0000\n"
+"PO-Revision-Date: 2017-01-28 10:38+0000\n"
 "Last-Translator: naofum <naofum@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/open-event"
 "/organizer-server/ja/>\n"
@@ -1000,7 +1000,7 @@ msgstr "メールを送信済"
 
 #: app/templates/gentelella/admin/event/sessions/base_session_table.html:171
 msgid "Submit Mail"
-msgstr ""
+msgstr "メールを送信"
 
 #: app/templates/gentelella/admin/event/sessions/display.html:31
 #: app/templates/gentelella/admin/mysessions/mysession_detail.html:119
@@ -1442,23 +1442,23 @@ msgstr "購入者 / 登録お問い合わせ"
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:135
 msgid "Are you sure you want to cancel the ticket"
-msgstr ""
+msgstr "チケットをキャンセルしてもよろしいですか"
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:142
 msgid "Enter a note to ticket buyer(optional): "
-msgstr ""
+msgstr "チケット購入者へのメモを入力してください (オプション): "
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:146
 msgid "Cancel Ticket"
-msgstr ""
+msgstr "チケットをキャンセル"
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:162
 msgid "Are you sure you want to delete the ticket"
-msgstr ""
+msgstr "チケットを削除してもよろしいですか"
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:167
 msgid "Delete Ticket"
-msgstr ""
+msgstr "チケットを削除"
 
 #: app/templates/gentelella/admin/event/tickets/tickets.html:75
 msgid "Orders"
@@ -3387,7 +3387,7 @@ msgstr "削除されたユーザー"
 #: app/templates/gentelella/admin/super_admin/users/users.html:241
 #: app/templates/gentelella/admin/super_admin/users/users.html:262
 msgid "User Links"
-msgstr ""
+msgstr "ユーザー リンク"
 
 #: app/templates/gentelella/admin/super_admin/users/users.html:221
 #: app/templates/gentelella/admin/super_admin/users/users.html:242
