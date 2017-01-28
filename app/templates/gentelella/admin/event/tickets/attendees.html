@@ -58,6 +58,9 @@
                 <input type="radio" name="show_state" autocomplete="off" value="Expired"> {{ _("Expired") }}
             </label>
             <label class="btn btn-default btn-responsive">
+                <input type="radio" name="show_state" autocomplete="off" value="Cancelled"> {{ _("Cancelled") }}
+            </label>
+            <label class="btn btn-default btn-responsive">
                 <input type="radio" name="show_state" autocomplete="off" value="checked_in"> {{ _("Checked In") }}
             </label>
             <label class="btn btn-default btn-responsive">
@@ -99,9 +102,6 @@
             </th>
             <th>
                 {{ _("Email") }}
-            </th>
-            <th>
-                {{ _("Action") }}
             </th>
         </tr>
         </thead>
