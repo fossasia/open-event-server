@@ -1,6 +1,4 @@
 import json
-import os
-import os.path
 import re
 import time
 from datetime import datetime, timedelta
@@ -36,7 +34,6 @@ from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, 
     EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, MONTHLY_PAYMENT_EMAIL, \
     EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER, TICKET_CANCELLED
 from ..models.message_settings import MessageSettings
-from ..models.track import Track
 
 
 def represents_int(string):
@@ -106,29 +103,27 @@ def send_new_session_organizer(email, event_name, link):
         )
 
 
-def send_session_accept_reject(email, session_name, acceptance, link):
+def send_session_accept_reject(email, session_name, acceptance, link, subject=None, message=None):
     """Send session accepted or rejected"""
     message_settings = MessageSettings.query.filter_by(action=SESSION_ACCEPT_REJECT).first()
     if not message_settings or message_settings.mail_status == 1:
-        if request.form:
-            subject = request.form.get('subject', '')
-            message = request.form.get('message', '')
-            action = SESSION_ACCEPT_REJECT
-        else:
-            action = SESSION_ACCEPT_REJECT
-            subject = MAILS[SESSION_ACCEPT_REJECT]['subject'].format(session_name=session_name, acceptance=acceptance),
-            message = MAILS[SESSION_ACCEPT_REJECT]['message'].format(
-                email=str(email),
-                session_name=str(session_name),
-                acceptance=str(acceptance),
-                link=link)
+        action = SESSION_ACCEPT_REJECT
+        subject = subject if subject else MAILS[SESSION_ACCEPT_REJECT]['subject'].format(session_name=session_name,
+                                                                                         acceptance=acceptance),
+        message = message if message else MAILS[SESSION_ACCEPT_REJECT]['message'].format(
+            email=str(email),
+            session_name=str(session_name),
+            acceptance=str(acceptance),
+            link=link)
 
         send_email(
             to=email,
             action=action,
             subject=subject,
             html=message
-            )
+        )
+
+
 def send_schedule_change(email, session_name, link):
     """Send schedule change in session"""
     message_settings = MessageSettings.query.filter_by(action=SESSION_SCHEDULE).first()
@@ -287,7 +282,8 @@ def send_email_for_after_purchase(email, invoice_id, order_url, event_name, even
         to=email,
         action=TICKET_PURCHASED,
         subject=MAILS[TICKET_PURCHASED]['subject'].format(invoice_id=invoice_id, event_name=event_name),
-        html=MAILS[TICKET_PURCHASED]['message'].format(order_url=order_url, event_name=event_name, event_organiser=event_organiser)
+        html=MAILS[TICKET_PURCHASED]['message'].format(order_url=order_url, event_name=event_name,
+                                                       event_organiser=event_organiser)
     )
 
 
@@ -297,7 +293,8 @@ def send_email_after_cancel_ticket(email, invoice_id, order_url, event_name, can
         to=email,
         action=TICKET_CANCELLED,
         subject=MAILS[TICKET_CANCELLED]['subject'].format(invoice_id=invoice_id, event_name=event_name),
-        html=MAILS[TICKET_CANCELLED]['message'].format(order_url=order_url, event_name=event_name, cancel_note=cancel_note)
+        html=MAILS[TICKET_CANCELLED]['message'].format(order_url=order_url, event_name=event_name,
+                                                       cancel_note=cancel_note)
     )
 
 
@@ -306,8 +303,10 @@ def send_email_for_after_purchase_organizers(email, buyer_email, invoice_id, ord
     send_email(
         to=email,
         action=TICKET_PURCHASED_ORGANIZER,
-        subject=MAILS[TICKET_PURCHASED_ORGANIZER]['subject'].format(invoice_id=invoice_id, event_name=event_name, buyer_email=buyer_email),
-        html=MAILS[TICKET_PURCHASED_ORGANIZER]['message'].format(order_url=order_url, buyer_email=buyer_email, event_name=event_name,
+        subject=MAILS[TICKET_PURCHASED_ORGANIZER]['subject'].format(invoice_id=invoice_id, event_name=event_name,
+                                                                    buyer_email=buyer_email),
+        html=MAILS[TICKET_PURCHASED_ORGANIZER]['message'].format(order_url=order_url, buyer_email=buyer_email,
+                                                                 event_name=event_name,
                                                                  event_organiser=event_organiser)
     )
 
@@ -490,7 +489,8 @@ def send_notif_for_after_purchase_organizer(user, invoice_id, order_url, event_n
     send_notification(
         user=user,
         action=NOTIF_TICKET_PURCHASED_ORGANIZER,
-        title=NOTIFS[NOTIF_TICKET_PURCHASED_ORGANIZER]['title'].format(invoice_id=invoice_id, event_name=event_name, buyer_email=buyer_email),
+        title=NOTIFS[NOTIF_TICKET_PURCHASED_ORGANIZER]['title'].format(invoice_id=invoice_id, event_name=event_name,
+                                                                       buyer_email=buyer_email),
         message=NOTIFS[NOTIF_TICKET_PURCHASED_ORGANIZER]['message'].format(order_url=order_url)
     )
 

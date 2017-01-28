@@ -2056,7 +2056,7 @@ a.star {
 }
 
 .btn-group-vertical .btn, .btn-group .btn {
-  margin-bottom: 10px;
+  margin-bottom: 0;
   margin-right: 0;
 }
 
