@@ -60,7 +60,7 @@
                             {% include 'gentelella/admin/event/wizard/sponsors.html' %}
                         </div>
                         <div class="tab-pane fade"
-                             v-bind:class="{ 'in active': step == 'sessions-tracks-rooms' || step == 'call-for-speakers' || step == 'form-customization' }">
+                             v-bind:class="{ 'in active': step == 'sessions-tracks-rooms' }">
                             {% include 'gentelella/admin/event/wizard/session-speakers.html' %}
                         </div>
                         <div class="clearfix"></div>
@@ -121,6 +121,7 @@
     <script src="{{ url_for('static', filename='admin/lib/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/selectize/dist/js/standalone/selectize.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/Croppie/croppie.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin/event/event_wizard.js') }}"></script>
 
     {# Common wizard Vue components #}
     <script src="{{ url_for('static', filename='js/admin/event/wizard/button-component.js') }}"></script>
