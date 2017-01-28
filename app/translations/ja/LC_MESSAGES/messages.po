@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2017-01-25 17:06+0530\n"
-"PO-Revision-Date: 2017-01-28 10:38+0000\n"
+"PO-Revision-Date: 2017-01-28 10:39+0000\n"
 "Last-Translator: naofum <naofum@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/open-event"
 "/organizer-server/ja/>\n"
@@ -1446,7 +1446,7 @@ msgstr "チケットをキャンセルしてもよろしいですか"
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:142
 msgid "Enter a note to ticket buyer(optional): "
-msgstr "チケット購入者へのメモを入力してください (オプション): "
+msgstr "チケット購入者への注意を入力してください (オプション): "
 
 #: app/templates/gentelella/admin/event/tickets/orders.html:146
 msgid "Cancel Ticket"
