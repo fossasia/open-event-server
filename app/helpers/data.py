@@ -536,14 +536,14 @@ class DataManager(object):
         update_version(event_id, False, "sessions_ver")
 
     @staticmethod
-    def session_accept_reject(session, event_id, state, send_email=True):
+    def session_accept_reject(session, event_id, state, send_email=True, message=None, subject=None):
         session.state = state
         session.submission_date = datetime.now()
         session.submission_modifier = login.current_user.email
         session.state_email_sent = False
         save_to_db(session, 'Session State Updated')
         if send_email:
-            trigger_session_state_change_notifications(session, event_id)
+            trigger_session_state_change_notifications(session, event_id, message=message, subject=subject)
         flash("The session has been %s" % state)
 
     @staticmethod
@@ -728,7 +728,7 @@ class DataManager(object):
 
             user_detail.details = form['details']
             avatar_img = form.get('avatar-img', None)
-            if string_not_empty(avatar_img) and avatar_img:                
+            if string_not_empty(avatar_img) and avatar_img:
                 user_detail.avatar_uploaded = ""
                 user_detail.thumbnail = ""
                 user_detail.small = ""

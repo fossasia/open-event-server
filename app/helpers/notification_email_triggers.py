@@ -29,7 +29,7 @@ def trigger_new_session_notifications(session_id, event_id=None, event=None):
         send_notif_new_session_organizer(organizer.user, event.name, link)
 
 
-def trigger_session_state_change_notifications(session, event_id, state=None):
+def trigger_session_state_change_notifications(session, event_id, state=None, message=None, subject=None):
     if not state:
         state = session.state
     link = url_for('event_sessions.session_display_view', event_id=event_id, session_id=session.id, _external=True)
@@ -41,7 +41,7 @@ def trigger_session_state_change_notifications(session, event_id, state=None):
              admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
 
             if speaker.email:
-                send_session_accept_reject(speaker.email, session.title, state, link)
+                send_session_accept_reject(speaker.email, session.title, state, link, subject=subject, message=message)
             # Send notification
         if speaker.user:
             send_notif_session_accept_reject(speaker.user, session.title, state, link)
