@@ -369,7 +369,7 @@
 
             var subtotal = (parseFloat($this.data('rate')) + parseFloat($this.data('fee'))) * parseFloat($this.val());
             var discount_individual = 0;
-            var price_individual_new = 0;
+            var price_individual_new = $this.data('rate');
             var fee_individual_new = $this.data('fee');
             if (discount_status && discount_code.split(",").indexOf(""+$this.data('id')) != -1){
                 if(discount_type == "amount"){
@@ -396,7 +396,7 @@
                 $('#total-discount').text("{{ event.payment_currency | currency_symbol }} " + discount_total.toFixed(2));
                 $totalHolder.show();
                 $totalAmount.text("{{ event.payment_currency | currency_symbol }} " + (Math.abs(total - discount_total)).toFixed(2));
-                if($this.data('fee') > 0){
+                if($this.data('rate') - price_individual_new != 0){
                     $this.closest("tr").find(".individual-price").html("<table><tr><td> {{ event.payment_currency | currency_symbol }} " + price_individual_new.toFixed(2) + "</td></tr><tr><td style='text-decoration: line-through'>{{ event.payment_currency | currency_symbol }} " + $this.data('rate') + "</td></tr></table>" );
                 {% if fees %}
                     $this.closest("tr").find(".individual-fee").text("{{ event.payment_currency | currency_symbol }} " + fee_individual_new.toFixed(2));
