@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(window).on('load', function () {
     var $wizard = $("#wizard");
     var highlight = "";
     try {
@@ -9,11 +9,11 @@ $(document).ready(function () {
         $wizard.find("input[name=location_name]").closest(".form-group").addClass("has-warning");
     }
 
-    if (location.href.indexOf("call-for-speakers") > -1) {
+    if (location.hash.indexOf("call-for-speakers") > -1) {
         $("#step-4").find("div")[0].scrollIntoView();
     }
 
-    if (location.href.indexOf("form-customization") > -1) {
+    if (location.hash.indexOf("form-customization") > -1) {
         $("#step-5").find("div")[0].scrollIntoView();
     }
 });
