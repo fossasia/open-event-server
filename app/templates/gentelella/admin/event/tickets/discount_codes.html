@@ -58,7 +58,7 @@
             <tr>
                 <td></td>
                 <td><a href="{{ discount_code.discount_url }}">{{ discount_code.code }}</a></td>
-                <td>{{ discount_code.discount_url }}</td>
+                <td><a href="{{ discount_code.discount_url }}" target="_blank">{{ discount_code.discount_url }}</td>
                 <td>
                     {% if discount_code.type == 'amount' %}
                         {{ event.payment_currency | currency_symbol }}{{ discount_code.value | money }}

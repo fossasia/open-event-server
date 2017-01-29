@@ -58,7 +58,7 @@
             <tr>
                 <td></td>
                 <td><a href="{{ access_code.access_url }}">{{ access_code.code }}</a></td>
-                <td>{{ access_code.access_url }}</td>
+                <td><a href="{{ access_code.access_url }}" target="_blank">{{ access_code.access_url }}</a></td>
                 <td>
                     {% for ticket in event.tickets %}
                         {% if ticket.hide and ticket.id|string in access_code.tickets.split(',') %}
