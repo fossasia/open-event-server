@@ -33,8 +33,8 @@
                 <select title="{% if name == 'heard_from' %}{{ "Where did you hear about our event?" }}{% else %}{{ pretty_name }}{% endif %}"
                         {% if require==1 or identifier=='track' %}required="required"{% endif %} name="{{ identifier }}"
                         class="form-control col-md-7 col-xs-12" id="heard-from">
-                    {% if name == 'heard_from' and not session %}
-                        <option value="" {% if not session %}selected{% endif %}>
+                    {% if name == 'heard_from' and not speaker and not session.speakers[0] %}
+                        <option value="" {% if not speaker and not session.speakers[0] %}selected{% endif %}>
                             Select {{ "knowledge of event" }}</option>
                     {% endif %}
                     {% if (speaker and speaker['heard_from'] in data_set) or (session and session.speakers[0]['heard_from'] in data_set) %}
@@ -45,19 +45,24 @@
                                 <option value="{{ data }}">{{ data }}</option>
                             {% endif %}
                         {% endfor %}
-                    {% else %}
+                    {% elif (speaker and speaker['heard_from'] not in data_set) or (session and session.speakers[0]['heard_from'] and session.speakers[0]['heard_from'] not in data_set) %}
                         {% for data in data_set %}
                             {% if data == "Other" %}
                                 <option value="{{ data }}" selected>{{ data }}</option>
+
                             {% else %}
                                 <option value="{{ data }}">{{ data }}</option>
                             {% endif %}
                         {% endfor %}
+                    {% else %}
+                        {% for data in data_set %}
+                            <option value="{{ data }}">{{ data }}</option>
+                        {% endfor %}
                     {% endif %}
                 </select>
                 <input class="form-control col-md-7 col-xs-12" name="other_text" id="other_text"
-                       placeholder="Enter where you heard" | required
-                       {% if (speaker and speaker['heard_from'] in data_set) or (session and session.speakers[0]['heard_from'] in data_set) %}type="hidden" {% endif %}
+                       placeholder="Enter where you heard"
+                       {% if not (speaker and speaker['heard_from'] in data_set) and not (session and session.speakers[0]['heard_from'] and session.speakers[0]['heard_from]'] in data_set) and (speaker or session.speakers[0]) %}type="text" {% else %}type="hidden"{% endif %}
                        value="{% if speaker and speaker['heard_from'] not in data_set %}{{ speaker['heard_from'] }}{% elif session.speakers and session.speakers[0]['heard_from'] not in data_set %}{{ session.speaker[0]['heard_from'] }} {% endif %}">
             {% elif identifier == 'gender' %}
                 {% set data_set = ['Male', 'Female', 'Other'] %}
