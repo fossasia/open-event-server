@@ -125,7 +125,7 @@ def index_view():
         settings['app_environment'] = Environment.DEVELOPMENT
 
     return render_template(
-        'gentelella/admin/super_admin/settings/settings.html',
+        'gentelella/super_admin/settings/settings.html',
         settings=settings,
         fees=fees,
         s3_regions=boto.s3.regions(),

@@ -1,0 +1,146 @@
+{% extends 'gentelella/super_admin/dashboard.html' %}
+
+{% block title %}
+    {{ _("Settings") }}
+{% endblock %}
+
+{% set active_page = "settings" %}
+
+{% block head_css %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div>
+
+        <form id="settings_form" method="post" class="form-horizontal form-label-left">
+            <ul id="settings-tabs" class="nav nav-tabs bar_tabs large_tab_list" role="tablist"
+                style="background: #FFFFFF;">
+                <li class="active">
+                    <a href="#system" id="profile-tab" data-toggle="tab">{{ _("System") }}</a>
+                </li>
+                <li>
+                    <a href="#microservices" id="microservice-tab" data-toggle="tab">{{ _("Microservices") }}</a>
+                </li>
+                <li>
+                    <a href="#images" id="image-config-tab" data-toggle="tab">{{ _("Images") }}</a>
+                </li>
+                <li>
+                    <a href="#analytics" id="analytics-tab" data-toggle="tab">{{ _("Analytics") }}</a>
+                </li>
+                <li>
+                    <a href="#microservices" id="payment-gateway-tab" data-toggle="tab">{{ _("Payment Gateways") }}</a>
+                </li>
+
+                {% if 'ticketing' in included_settings and 'payments' in included_settings %}
+                    <li>
+                        <a href="#ticketfees" id="ticket-fees-tab" data-toggle="tab">{{ _("Ticket Fees") }}</a>
+                    </li>
+                {% endif %}
+            </ul>
+            <div class="dropdown tabs_small">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                    <span class="drop_header">{{ _("All Pending") }}</span>
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li value="{{ _("System Tokens") }}" class="small_tab_list active">
+                        <a href="#system" id="profile-tab" data-toggle="tab">{{ _("System") }}</a>
+                    </li>
+                    <li value="{{ _("Microservices") }}" class="small_tab_list">
+                        <a href="#tab_content2" id="microservice-tab" data-toggle="tab">{{ _("Microservices") }}</a>
+                    </li>
+                    <li value="{{ _("Images") }}" class="small_tab_list">
+                        <a href="#images" id="image-config-tab" data-toggle="tab">{{ _("Images") }}</a>
+                    </li>
+                    <li value="{{ _("Analytics") }}" class="small_tab_list">
+                        <a href="#analytics" id="analytics-tab" data-toggle="tab">{{ _("Analytics") }}</a>
+                    </li>
+                    <li value="{{ _("Payment Gateways") }}" class="small_tab_list">
+                        <a href="#microservices" id="payment-gateway-tab"
+                           data-toggle="tab">P{{ _("ayment Gateways") }}</a>
+                    </li>
+                    {% if 'ticketing' in included_settings and 'payments' in included_settings %}
+                        <li value="{{ _("Ticket Fees") }}" class="small_tab_list">
+                            <a href="#ticketfees" id="ticket-fees-tab" data-toggle="tab">{{ _("Ticket Fees") }}</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div id="myTabContent" class="tab-content">
+                <div role="tabpanel" class="tab-pane fade active in" id="system" aria-labelledby="profile-tab">
+                    {% include 'gentelella/super_admin/settings/_system.html' %}
+                </div>
+                <div role="tabpanel" class="tab-pane fade in" id="microservices" aria-labelledby="payment-gateway-tab">
+                    {% include 'gentelella/super_admin/settings/_payment_gateway.html' %}
+                </div>
+                <div role="tabpanel" class="tab-pane fade in" id="tab_content2" aria-labelledby="microservice-tab">
+                    {% include 'gentelella/super_admin/settings/_microservices.html' %}
+                </div>
+                <div role="tabpanel" class="tab-pane fade in" id="images" aria-labelledby="image-config-tab">
+                    {% include 'gentelella/super_admin/settings/_image_config.html' %}
+                </div>
+                <div role="tabpanel" class="tab-pane fade in" id="analytics" aria-labelledby="analytics-tab">
+                    {% include 'gentelella/super_admin/settings/_analytics.html' %}
+                </div>
+                {% if 'ticketing' in included_settings and 'payments' in included_settings %}
+                    <div role="tabpanel" class="tab-pane fade in" id="ticketfees" aria-labelledby="ticket-fees-tab">
+                        {% include 'gentelella/super_admin/settings/_ticket-fees.html' %}
+                    </div>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    <script type="text/javascript">
+        // manage the storage form events
+        function storage_form() {
+            var sel_opt = $('input[name=storage_place]:checked', '#settings_form').val();
+            var aws_disable = sel_opt != 's3';
+            var gs_disable = sel_opt != 'gs';
+
+            $('[name^=aws_]').prop("disabled", aws_disable).prop("required", ~aws_disable);
+            $('[name^=gs_]').prop("disabled", gs_disable).prop("required", ~gs_disable);
+        }
+
+        $('.radio_storage').click(function (event) {
+            storage_form();
+        });
+
+        $(document).ready(function () {
+            storage_form();
+            email_form();
+        });
+
+        function email_form() {
+            var sel_opt = $('input[name=email_service]:checked').val();
+            var disable = sel_opt != 'smtp';
+            $('[name^=smtp_]').prop("disabled", disable).prop("required", ~disable);
+            $('[name=sendgrid_key]').prop("disabled", !disable).prop("required", disable);
+            if (!sel_opt) {
+                $('[name=sendgrid_key]').prop("disabled", disable).prop("required", ~disable);
+            }
+        }
+
+        $('.radio_email').click(function (event) {
+            email_form();
+        });
+
+        $(".small_tab_list").click(function () {
+            $(".small_tab_list").removeClass("active");
+            $(this).addClass("active");
+            var clicked_link = $(this).attr("value");
+            $(".drop_header").text(clicked_link);
+        });
+        $('.tabs_small a').click(function () {
+            $(this).tab('show');
+        });
+    </script>
+
+{% endblock %}

@@ -25,7 +25,7 @@ def create_pdf(pdf_data):
 ticketing = Blueprint('ticketing', __name__, url_prefix='/orders')
 
 
-@ticketing.route('/', methods=('GET',))
+@ticketing.route('/')
 def index():
     return redirect("/")
 
@@ -69,7 +69,8 @@ def apply_promo():
             'access_status': False,
         })
 
-@ticketing.route('/<order_identifier>/', methods=('GET',))
+
+@ticketing.route('/<order_identifier>/')
 def view_order(order_identifier):
     order = TicketingManager.get_and_set_expiry(order_identifier)
     if not order or order.status == 'expired':
@@ -88,7 +89,7 @@ def view_order(order_identifier):
                            fees=fees)
 
 
-@ticketing.route('/<order_identifier>/view/', methods=('GET',))
+@ticketing.route('/<order_identifier>/view/')
 def view_order_after_payment(order_identifier):
     order = TicketingManager.get_and_set_expiry(order_identifier)
     if not order or (order.status != 'completed' and order.status != 'placed'):
@@ -101,7 +102,7 @@ def view_order_after_payment(order_identifier):
                            fees=fees)
 
 
-@ticketing.route('/<order_identifier>/view/pdf/', methods=('GET',))
+@ticketing.route('/<order_identifier>/view/pdf/')
 def view_order_after_payment_pdf(order_identifier):
     order = TicketingManager.get_and_set_expiry(order_identifier)
     if not order or order.status != 'completed':
@@ -115,7 +116,7 @@ def view_order_after_payment_pdf(order_identifier):
     return response
 
 
-@ticketing.route('/<order_identifier>/view/tickets/pdf/', methods=('GET',))
+@ticketing.route('/<order_identifier>/view/tickets/pdf/')
 def view_order_tickets_after_payment_pdf(order_identifier):
     order = TicketingManager.get_and_set_expiry(order_identifier)
     if not order or order.status != 'completed':
@@ -177,7 +178,7 @@ def expire_order(order_identifier):
     })
 
 
-@ticketing.route('/stripe/callback/', methods=('GET',))
+@ticketing.route('/stripe/callback/')
 def stripe_callback():
     code = request.args.get('code')
     if code and code != "":
@@ -203,7 +204,7 @@ def show_transaction_error(order_identifier):
                            event=order.event)
 
 
-@ticketing.route('/<order_identifier>/paypal/<function>/', methods=('GET',))
+@ticketing.route('/<order_identifier>/paypal/<function>/')
 def paypal_callback(order_identifier, function):
     order = TicketingManager.get_order_by_identifier(order_identifier)
     if not order or order.status == 'expired':

@@ -1,10 +1,10 @@
-{% extends 'gentelella/admin/base.html' %}
+{% extends 'gentelella/base.html' %}
 {% block head_css %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/explore/explore.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/explore/filters.css') }}">
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}">
+          href="{{ url_for('static', filename='vendor/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}">
 {% endblock %}
 
 {% block head_js %}
@@ -90,22 +90,22 @@
     </script>
     {{ super() }}
     {# Core libraries #}
-    <script src="{{ url_for('static', filename='admin/lib/lodash/dist/lodash.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin/lib/vue/dist/vue.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/vue/vue-google-maps.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/admin/commons/geo.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/lodash/dist/lodash.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/vue/dist/vue.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/vue/vue-google-maps.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/commons/geo.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/jquery/jquery.codezero.js') }}"></script>
 
     {# Additional js functionality #}
-    <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin/lib/datepair.js/dist/datepair.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin/lib/datepair.js/dist/jquery.datepair.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/moment/min/moment.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/datepair.js/dist/datepair.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/datepair.js/dist/jquery.datepair.min.js') }}"></script>
 
-    <script src="{{ url_for('static', filename='js/admin/guest/explore/classic.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/admin/guest/explore/initializer.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/admin/guest/explore/pagination-component.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/admin/guest/explore/event-box-component.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/admin/guest/explore/filter-tag-component.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/admin/guest/explore/vue-app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/guest/explore/classic.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/guest/explore/initializer.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/guest/explore/pagination-component.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/guest/explore/event-box-component.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/guest/explore/filter-tag-component.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/guest/explore/vue-app.js') }}"></script>
 {% endblock %}

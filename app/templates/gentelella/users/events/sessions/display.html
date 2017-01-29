@@ -1,0 +1,62 @@
+{% extends 'gentelella/users/events/event_base.html' %}
+
+{% block title %}
+    {{ session.title }} - {{ _("Sessions") }}
+{% endblock %}
+
+{% block head_css %}
+    {{ super() }}
+    <link href="{{ url_for('static', filename='css/events/my-sessions.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% set active_page = "sessions" %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <br>
+            <div class="btn-group" role="group" aria-label="...">
+                <a href="{{ session.id }}/accept/" class="btn btn-success">
+                    <i class="fa fa-check"></i>
+                </a>
+                <a href="{{ session.id }}/reject/" class="btn btn-danger">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
+            {% include 'gentelella/users/events/sessions/components/session_form.html' %}
+            {% if session.slides or session.video or session.audio %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>{{ _("Media") }}</h4>
+                    </div>
+                    {% if session.slides %}
+                        <div class="col-md-4">
+                            <h5>{{ _("Slide") }}</h5><a href="{{ session.slides }}" download>{{ _("Download") }}</a>
+                        </div>
+                    {% endif %}
+                    {% if session.video %}
+                        <div class="col-md-4">
+                            <h5>{{ _("Video") }}</h5><a href="{{ session.video }}" download>{{ _("Download") }}</a>
+                        </div>
+                    {% endif %}
+                    {% if session.audio %}
+                        <div class="col-md-4">
+                            <h5>{{ _("Audio") }}</h5><a href="{{ session.audio }}" download>{{ _("Download") }}</a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/jquery/jquery.codezero.js') }}"></script>
+    <script type="text/javascript">
+        $('[data-toggle="tooltip"]').tooltip();
+        $("textarea").summernote(summernoteConfig);
+        $("form").lockForm();
+    </script>
+{% endblock %}

@@ -54,7 +54,7 @@ def password_view():
         else:
             flash('The current password is incorrect.', 'danger')
 
-    return render_template('gentelella/admin/settings/pages/password.html')
+    return render_template('gentelella/users/settings/pages/password.html')
 
 
 @settings.route('/email-preferences/')
@@ -63,15 +63,16 @@ def email_preferences_view():
     message_settings = DataGetter.get_all_message_setting()
     settings = DataGetter.get_email_notification_settings(login.current_user.id)
     user = DataGetter.get_user(login.current_user.id)
-    return render_template('gentelella/admin/settings/pages/email_preferences.html',
+    return render_template('gentelella/users/settings/pages/email_preferences.html',
                            settings=settings, events=events, message_settings=message_settings, user=user)
+
 
 @settings.route('/applications/')
 def applications_view():
     user = DataGetter.get_user(login.current_user.id)
-    return render_template('gentelella/admin/settings/pages/applications.html',
+    return render_template('gentelella/users/settings/pages/applications.html',
                            user=user)
-    # ...
+
 
 @settings.route('/contact-info/', methods=('POST', 'GET'))
 def contact_info_view():
@@ -82,8 +83,7 @@ def contact_info_view():
         return redirect(url_for('.contact_info_view'))
     profile = DataGetter.get_user(int(user_id))
 
-    return render_template('gentelella/admin/settings/pages/contact_info.html',
-                           user=login.current_user)
+    return render_template('gentelella/users/settings/pages/contact_info.html', user=login.current_user)
 
 
 @settings.route('/email/toggle/', methods=('POST',))

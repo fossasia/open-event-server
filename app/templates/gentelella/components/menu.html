@@ -1,0 +1,131 @@
+{% macro render_menu(test='') %}
+    <div class="top_nav hidden-print" style="margin-left:0">
+        <div class="nav_menu" style="background-color: #FFFFFF;">
+            <nav>
+                <ul class="nav navbar-nav">
+                    <li style="margin-left: 10px;">
+                    {% if logo == None %}
+                        <a href="/" style="font-size: 26px; font-weight: 300;">
+                            {{ app_name }}
+                        </a>
+                    {% else %}
+                        <a href="/" style="font-size: 26px; font-weight: 300;padding: 0">
+                            <img height="57px" src="{{ logo.url }}" />
+                        </a>
+                    {% endif %}
+                    </li>
+                    <li style="margin-left: 10px; line-height:32px;" class="search_bar">
+                        <form action="/browse/" method="GET" role="form" id="event_browse">
+                            {% if csrf_token %}
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            {% endif %}
+                            <input type="hidden" name="location" value="">
+                            <input type="hidden" name="category" value="">
+                            <div class="input-group" style="margin-top:12px; margin-bottom:6px">
+                                <input type="text" id="search-text" class="form-control" name="query"
+                                       placeholder="Search for..."/>
+                                <span class="input-group-btn">
+                                <button class="btn btn-default search-button" type="submit">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                </button>
+                              </span>
+                            </div>
+                        </form>
+                    </li>
+
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/events/create/" class="hide-small" aria-expanded="false"
+                           style="color: #46b8da!important;">{{ _("Create Event") }}</a></li>
+                    {% if current_user.is_authenticated %}
+
+                        <li>
+                            <a href="#" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                               aria-expanded="false">
+                                {% if current_user.user_detail.icon %}
+                                    <img src="{{ current_user.user_detail.icon }}" onerror="imgError(this)"/>
+                                {% elif current_user.user_detail.avatar_uploaded %}
+                                    <img src="{{ current_user.user_detail.avatar_uploaded }}" onerror="imgError(this)"/>
+                                {% elif avatar != None %}
+                                    <img src='{{ avatar.url }}'/>
+                                {% else %}
+                                    <img src="{{ url_for('static', filename='placeholders/avatar.png') }}"
+                                             onerror="imgError(this);"/>
+                                {% endif %}
+                                <span class="user-text">{{ current_user.user_detail.firstname | default(current_user.email, true) }}</span>
+                                <span class=" fa fa-angle-down"></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                <li><a href="/events/create/" class="hide-large"
+                                       style="color: #46b8da!important; font-weight:bold">{{ _("Create Event") }}</a>
+                                </li>
+                                <li class="divider hide-large"></li>
+                                <li><a href="/mytickets/">{{ _("My Tickets") }}</a></li>
+                                <li><a href="/events/mysessions/">{{ _("My Sessions") }}</a></li>
+                                <li><a href="/events/">{{ _("Manage Events") }}</a></li>
+                                <li class="divider"></li>
+                                <li><a href="/profile/"> {{ _("Profile") }}</a></li>
+                                <li><a href="/settings/"> {{ _("Settings") }}</a></li>
+                                {% if current_user.is_staff %}
+                                    <li><a href="/admin/"> {{ _("Admin") }}</a></li>
+                                {% elif current_user.first_access_panel() %}
+                                    {% if current_user.first_access_panel() == 'admin'  %}
+                                        <li><a href="/admin/">{{ _("Admin") }}</a></li>
+                                    {% else %}
+                                        <li><a href="/admin/{{ current_user.first_access_panel() }}/">{{ _("Admin") }}</a></li>
+                                    {% endif %}
+                                {% endif %}
+                                <li class="divider"></li>
+                                <li><a href="/browse/" class="user-profile hide-large">{{ _("Browse Events") }}</a></li>
+                                <li><a href="/logout/"><i class="fa fa-sign-out pull-right"></i> {{ _("Logout") }}</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown mega-dropdown">
+                            <a href="#" class="dropdown-toggle info-number">
+                                <i class="fa fa-envelope-o"></i>
+                                <span class="badge bg-green"
+                                      id="notif_count">{{ current_user.get_unread_notif_count() | default('', true) }}</span>
+                            </a>
+                            <ul id="notif-menu" class="dropdown-menu list-unstyled menu msg_list">
+                                <li style="border: 0;">
+                                    <span>
+                                        <a href="{{ url_for('notifications.index_view') }}" style="font-size: 12px;"
+                                           title="See all Notifications">
+                                            <strong>{{ _("Notifications") }}</strong>
+                                        </a>
+                                    </span>
+                                    <span class="pull-right">
+                                        <a class="notif-mark-all-read"
+                                           data-markallread="{{ url_for('notifications.mark_all_read') }}">
+                                            {{ _("Mark All as Read") }}
+                                        </a>
+                                    </span>
+                                </li>
+                                {% if current_user.get_unread_notifs() %}
+                                    {% for notif in current_user.get_unread_notifs() %}
+                                        <li class="notif-menu-li">
+                                            <a>
+                                                <span class="message">{{ notif.title }}</span>
+                                                <span class="time">{{ notif.received_at }}</span>
+                                                <span class="mark-as-read btn btn-default btn-xs"
+                                                      data-markread="{{ notif.mark_read }}">{{ _("Mark as read") }}</span>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li>
+                                        <div class="text-center">{{ _("No new notifications") }}</div>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li><a href="/login/" class="user-profile">Login</a></li>
+                    {% endif %}
+                    <li><a href="/browse/" class="user-profile hide-small">{{ _("Browse Events") }}</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+{% endmacro %}

@@ -8,7 +8,7 @@ from app.helpers.permission_decorators import *
 event_sponsors = Blueprint('event_sponsors', __name__, url_prefix='/events/<int:event_id>/sponsors')
 
 
-@event_sponsors.route('/<sponsor_id>/delete/', methods=('GET',))
+@event_sponsors.route('/<sponsor_id>/delete/')
 @can_access
 def delete_view(event_id, sponsor_id):
     sponsor = DataGetter.get_sponsor(sponsor_id)

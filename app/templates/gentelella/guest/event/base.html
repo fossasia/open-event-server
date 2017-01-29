@@ -1,4 +1,4 @@
-{% extends 'gentelella/admin/base.html' %}
+{% extends 'gentelella/base.html' %}
 
 {% set active_page = active_page|default('info') -%}
 
@@ -135,7 +135,7 @@
             {% endif %}
             {% if event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' ' %}
                 <li {% if active_page == 'coc' %}class="active"{% endif %}><a
-                        href="/e/{{ event.identifier }}/coc">{{ _("Code of") }}
+                        href="/e/{{ event.identifier }}/coc/">{{ _("Code of") }}
                     {{ _("Conduct") }}</a></li>
             {% endif %}
         </ul>
@@ -235,7 +235,7 @@
         $(document).ready(function () {
             var url = document.URL;
             var id = url.split('#')[1];
-            if (id != undefined) {
+            if (id !== undefined) {
                 $('.preview-menu li').removeClass('active');
                 $('#' + id + '-menu').addClass('active');
             }

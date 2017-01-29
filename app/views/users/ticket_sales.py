@@ -121,14 +121,14 @@ def display_ticket_stats(event_id):
             if order.paid_via != 'free' and order.amount > 0:
                 if discount and str(ticket.id) in discount.tickets.split(","):
                     if discount.type == "amount":
-                        tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * (ticket_price - \
-                                                                                        discount.value)
+                        tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * (
+                            ticket_price - discount.value)
                     else:
-                        tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * (ticket_price - \
-                                                                                        discount.value * ticket_price / 100.0)
+                        tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * (
+                            ticket_price - discount.value * ticket_price / 100.0)
                 else:
                     tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * ticket_price
-    return render_template('gentelella/admin/event/tickets/tickets.html', event=event, event_id=event_id,
+    return render_template('gentelella/users/events/tickets/tickets.html', event=event, event_id=event_id,
                            orders_summary=orders_summary, tickets_summary=tickets_summary)
 
 
@@ -136,7 +136,7 @@ def display_ticket_stats(event_id):
 def display_orders(event_id):
     event = DataGetter.get_event(event_id)
     orders = TicketingManager.get_orders(event_id)
-    return render_template('gentelella/admin/event/tickets/orders.html', event=event, event_id=event_id, orders=orders)
+    return render_template('gentelella/users/events/tickets/orders.html', event=event, event_id=event_id, orders=orders)
 
 
 @event_ticket_sales.route('/attendees/')
@@ -147,47 +147,59 @@ def display_attendees(event_id):
     for order in orders:
         for holder in order.ticket_holders:
             discount = TicketingManager.get_discount_code(event_id, order.discount_code_id)
-            order_holder={}
-            order_holder['order_invoice'] = order.get_invoice_number()
-            order_holder['order_url'] = url_for('ticketing.view_order_after_payment', order_identifier=order.identifier) \
-                                        if order.status == 'completed' else url_for('ticketing.show_transaction_error', \
-                                        order_identifier=order.identifier)
-            order_holder['by_whom'] = order.user.user_detail.fullname if order.user.user_detail \
-                                        and order.user.user_detail.fullname else order.user.email
-            order_holder['paid_via'] = order.paid_via
-            order_holder['status'] = order.status
-            order_holder['completed_at'] = order.completed_at
-            order_holder['created_at'] = order.created_at
-            order_holder['ticket_name'] = holder.ticket.name
-            order_holder['firstname'] = holder.firstname
-            order_holder['lastname'] = holder.lastname
-            order_holder['email'] = holder.email
-            order_holder['ticket_name'] = holder.ticket.name
-            order_holder['ticket_price'] = holder.ticket.price
+            order_holder = {
+                'order_invoice': order.get_invoice_number(),
+                'paid_via': order.paid_via,
+                'status': order.status,
+                'completed_at': order.completed_at,
+                'created_at': order.created_at,
+                'ticket_name': holder.ticket.name,
+                'firstname': holder.firstname,
+                'lastname': holder.lastname,
+                'email': holder.email,
+                'ticket_price': holder.ticket.price
+            }
+
+            if order.status == 'completed':
+                order_holder['order_url'] = url_for('ticketing.view_order_after_payment',
+                                                    order_identifier=order.identifier)
+            else:
+                order_holder['order_url'] = url_for('ticketing.show_transaction_error',
+                                                    order_identifier=order.identifier)
+
+            order_holder['by_whom'] = order.user.user_detail.fullname \
+                if order.user.user_detail and order.user.user_detail.fullname else order.user.email
             if discount and str(holder.ticket.id) in discount.tickets.split(","):
-                if discount.type == "amount" :
+                if discount.type == "amount":
                     order_holder['ticket_price'] = order_holder['ticket_price'] - discount.value
                 else:
-                    order_holder['ticket_price'] = order_holder['ticket_price'] - (order_holder['ticket_price'] \
-                                                    * discount.value / 100.0 )
+                    order_holder['ticket_price'] -= order_holder['ticket_price'] * discount.value / 100.0
             order_holder['checked_in'] = holder.checked_in
             order_holder['id'] = holder.id
             holders.append(order_holder)
         if len(order.ticket_holders) == 0:
-            order_holder={}
-            order_holder['order_invoice'] = order.get_invoice_number()
-            order_holder['order_url'] = url_for('ticketing.view_order_after_payment', order_identifier=order.identifier) \
-                                        if order.status == 'completed' else url_for('ticketing.show_transaction_error', \
-                                        order_identifier=order.identifier)
-            order_holder['by_whom'] = order.user.user_detail.fullname if order.user.user_detail \
-                                        and order.user.user_detail.fullname else order.user.email
-            order_holder['paid_via'] = order.paid_via
-            order_holder['status'] = order.status
-            order_holder['completed_at'] = order.completed_at
-            order_holder['created_at'] = order.created_at
+
+            order_holder = {
+                'order_invoice': order.get_invoice_number(),
+                'paid_via': order.paid_via,
+                'status': order.status,
+                'completed_at': order.completed_at,
+                'created_at': order.created_at
+            }
+
+            if order.status == 'completed':
+                order_holder['order_url'] = url_for('ticketing.view_order_after_payment',
+                                                    order_identifier=order.identifier)
+            else:
+                order_holder['order_url'] = url_for('ticketing.show_transaction_error',
+                                                    order_identifier=order.identifier)
+
+            order_holder['by_whom'] = order.user.user_detail.fullname \
+                if order.user.user_detail and order.user.user_detail.fullname else order.user.email
+
             holders.append(order_holder)
 
-    return render_template('gentelella/admin/event/tickets/attendees.html', event=event,
+    return render_template('gentelella/users/events/tickets/attendees.html', event=event,
                            event_id=event_id, holders=holders)
 
 
@@ -198,10 +210,10 @@ def add_order(event_id):
         return redirect(url_for('.proceed_order', event_id=event_id, order_identifier=order.identifier))
 
     event = DataGetter.get_event(event_id)
-    return render_template('gentelella/admin/event/tickets/add_order.html', event=event, event_id=event_id)
+    return render_template('gentelella/users/events/tickets/add_order.html', event=event, event_id=event_id)
 
 
-@event_ticket_sales.route('/<order_identifier>/', methods=('GET',))
+@event_ticket_sales.route('/<order_identifier>/')
 def proceed_order(event_id, order_identifier):
     order = TicketingManager.get_order_by_identifier(order_identifier)
     if order:
@@ -217,11 +229,11 @@ def proceed_order(event_id, order_identifier):
     return redirect(url_for('.display_ticket_stats', event_id=event_id))
 
 
-@event_ticket_sales.route('/discounts/', methods=('GET',))
+@event_ticket_sales.route('/discounts/')
 def discount_codes_view(event_id):
     event = DataGetter.get_event(event_id)
     discount_codes = TicketingManager.get_discount_codes(event_id)
-    return render_template('gentelella/admin/event/tickets/discount_codes.html', event=event,
+    return render_template('gentelella/users/events/tickets/discount_codes.html', event=event,
                            discount_codes=discount_codes,
                            event_id=event_id)
 
@@ -236,11 +248,11 @@ def discount_codes_create(event_id, discount_code_id=None):
     discount_code = None
     if discount_code_id:
         discount_code = TicketingManager.get_discount_code(event_id, discount_code_id)
-    return render_template('gentelella/admin/event/tickets/discount_codes_create.html', event=event, event_id=event_id,
+    return render_template('gentelella/users/events/tickets/discount_codes_create.html', event=event, event_id=event_id,
                            discount_code=discount_code)
 
 
-@event_ticket_sales.route('/discounts/check/duplicate/', methods=('GET',))
+@event_ticket_sales.route('/discounts/check/duplicate/')
 def check_duplicate_discount_code(event_id):
     code = request.args.get('code')
     current = request.args.get('current')
@@ -268,7 +280,7 @@ def discount_codes_edit(event_id, discount_code_id=None):
     return discount_codes_create(event_id, discount_code_id)
 
 
-@event_ticket_sales.route('/discounts/<int:discount_code_id>/toggle/', methods=('GET',))
+@event_ticket_sales.route('/discounts/<int:discount_code_id>/toggle/')
 def discount_codes_toggle(event_id, discount_code_id=None):
     discount_code = TicketingManager.get_discount_code(event_id, discount_code_id)
     if not discount_code:
@@ -280,7 +292,7 @@ def discount_codes_toggle(event_id, discount_code_id=None):
     return redirect(url_for('.discount_codes_view', event_id=event_id))
 
 
-@event_ticket_sales.route('/discounts/<int:discount_code_id>/delete/', methods=('GET',))
+@event_ticket_sales.route('/discounts/<int:discount_code_id>/delete/')
 def discount_codes_delete(event_id, discount_code_id=None):
     discount_code = TicketingManager.get_discount_code(event_id, discount_code_id)
     if not discount_code:
@@ -290,11 +302,11 @@ def discount_codes_delete(event_id, discount_code_id=None):
     return redirect(url_for('.discount_codes_view', event_id=event_id))
 
 
-@event_ticket_sales.route('/access/', methods=('GET',))
+@event_ticket_sales.route('/access/')
 def access_codes_view(event_id):
     event = DataGetter.get_event(event_id)
     access_codes = TicketingManager.get_access_codes(event_id)
-    return render_template('gentelella/admin/event/tickets/access_codes.html', event=event,
+    return render_template('gentelella/users/events/tickets/access_codes.html', event=event,
                            access_codes=access_codes,
                            event_id=event_id)
 
@@ -309,11 +321,11 @@ def access_codes_create(event_id, access_code_id=None):
     access_code = None
     if access_code_id:
         access_code = TicketingManager.get_access_code(event_id, access_code_id)
-    return render_template('gentelella/admin/event/tickets/access_codes_create.html', event=event, event_id=event_id,
+    return render_template('gentelella/users/events/tickets/access_codes_create.html', event=event, event_id=event_id,
                            access_code=access_code)
 
 
-@event_ticket_sales.route('/access/check/duplicate/', methods=('GET',))
+@event_ticket_sales.route('/access/check/duplicate/')
 def check_duplicate_access_code(event_id):
     code = request.args.get('code')
     current = request.args.get('current')
@@ -341,7 +353,7 @@ def access_codes_edit(event_id, access_code_id=None):
     return access_codes_create(event_id, access_code_id)
 
 
-@event_ticket_sales.route('/access/<int:access_code_id>/toggle/', methods=('GET',))
+@event_ticket_sales.route('/access/<int:access_code_id>/toggle/')
 def access_codes_toggle(event_id, access_code_id=None):
     access_code = TicketingManager.get_access_code(event_id, access_code_id)
     if not access_code:
@@ -353,7 +365,7 @@ def access_codes_toggle(event_id, access_code_id=None):
     return redirect(url_for('.access_codes_view', event_id=event_id))
 
 
-@event_ticket_sales.route('/access/<int:access_code_id>/delete/', methods=('GET',))
+@event_ticket_sales.route('/access/<int:access_code_id>/delete/')
 def access_codes_delete(event_id, access_code_id=None):
     access_code = TicketingManager.get_access_code(event_id, access_code_id)
     if not access_code:

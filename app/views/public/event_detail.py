@@ -20,7 +20,6 @@ from app.models.call_for_papers import CallForPaper
 from app.helpers.wizard.helpers import get_current_timezone
 
 
-
 def get_published_event_or_abort(identifier):
     event = DataGetter.get_event_by_identifier(identifier=identifier)
     if not event or event.state != u'Published':
@@ -41,7 +40,7 @@ event_detail = Blueprint('event_detail', __name__, url_prefix='/e')
 
 @event_detail.route('/')
 def display_default():
-    return redirect("/browse")
+    return redirect("/browse/")
 
 
 @event_detail.route('/<identifier>/')
@@ -69,12 +68,13 @@ def display_event_detail_home(identifier):
                 speakers.append(speaker)
 
     '''Timezone aware current datetime object according to event timezone'''
-    timenow_event_tz = datetime.now(pytz.timezone(event.timezone))
+    timenow_event_tz = datetime.now(pytz.timezone(event.timezone
+                                                  if (event.timezone and event.timezone != '') else 'UTC'))
     module = DataGetter.get_module()
     tickets = DataGetter.get_sales_open_tickets(event.id, True)
 
     '''Sponsor Levels'''
-    sponsors = {-1:[]}
+    sponsors = {-1: []}
     for sponsor in event.sponsor:
         if not sponsor.level:
             sponsors[-1].append(sponsor)
@@ -185,7 +185,7 @@ def display_event_schedule_xcal(identifier):
     return response
 
 
-@event_detail.route('/<identifier>/cfs/', methods=('GET',))
+@event_detail.route('/<identifier>/cfs/')
 def display_event_cfs(identifier, via_hash=False):
     event = get_published_event_or_abort(identifier)
     placeholder_images = DataGetter.get_event_default_images()
@@ -319,7 +319,7 @@ def process_event_cfs(identifier, via_hash=False):
             return redirect(url_for('admin.login_view', next=url_for('my_sessions.display_my_sessions_view')))
 
 
-@event_detail.route('/<identifier>/coc/', methods=('GET',))
+@event_detail.route('/<identifier>/coc/')
 def display_event_coc(identifier):
     event = get_published_event_or_abort(identifier)
     placeholder_images = DataGetter.get_event_default_images()

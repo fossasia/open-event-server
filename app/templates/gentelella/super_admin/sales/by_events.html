@@ -1,0 +1,4 @@
+{% extends 'gentelella/super_admin/sales/summary_base.html' %}
+
+{% set active_side_page = "by_events" if path == 'events' else 'discounted-events' %}
+{% set key_name = 'events' %}

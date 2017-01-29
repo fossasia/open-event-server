@@ -24,7 +24,7 @@ def index_view():
     all_ticket_stats = {}
     for event in all_events_include_trash:
         all_ticket_stats[event.id] = TicketingManager.get_ticket_stats(event)
-    return render_template('gentelella/admin/super_admin/events/events.html',
+    return render_template('gentelella/super_admin/events/events.html',
                            live_events=live_events,
                            draft_events=draft_events,
                            past_events=past_events,

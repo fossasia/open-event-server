@@ -1,0 +1,164 @@
+{% extends 'gentelella/users/events/tickets/tickets_base.html' %}
+
+{% set active_side_page = "access_codes" %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='vendor/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
+
+    <style type="text/css">
+        .label {
+            font-size: 13px;
+            font-weight: 300;
+        }
+
+        .dataTables_filter input {
+            margin-right: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block inner_content %}
+    <h3 class="pull-left">{{ _("Access Codes") }} </h3>
+    <a class="btn btn-info pull-right"
+       href="{{ url_for('event_ticket_sales.access_codes_create', event_id=event.id) }}"><i
+            class="fa fa-plus fa-fw"></i> {{ _("Create an Access Code") }}</a>
+    <br>
+    <br>
+    <br>
+    <div id="toolbar-holder" style="display: none;">
+        <div class="btn-group pull-left" data-toggle="buttons">
+            <label class="btn btn-default active btn-responsive">
+                <input type="radio" name="show_state" autocomplete="off" value="all" checked> {{ _("All") }}
+            </label>
+            <label class="btn btn-default btn-responsive">
+                <input type="radio" name="show_state" autocomplete="off" value="active"> {{ _("Active") }}
+            </label>
+            <label class="btn btn-default btn-responsive">
+                <input type="radio" name="show_state" autocomplete="off" value="inactive"> {{ _("Inactive") }}
+            </label>
+        </div>
+    </div>
+
+    <table class="table with-datatable" width="100%">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>{{ _("Access Code") }}</th>
+            <th>{{ _("Access Code URL") }}</th>
+            <th>{{ _("Accessible Ticket") }}</th>
+            <th>{{ _("Validity") }}</th>
+            <th>{{ _("Status") }}</th>
+            <th>{{ _("Action") }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for access_code in access_codes %}
+            <tr>
+                <td></td>
+                <td><a href="{{ access_code.access_url }}">{{ access_code.code }}</a></td>
+                <td><a href="{{ access_code.access_url }}" target="_blank">{{ access_code.access_url }}</a></td>
+                <td>
+                    {% for ticket in event.tickets %}
+                        {% if ticket.hide and ticket.id|string in access_code.tickets.split(',') %}
+                            {{ ticket.name }}<br>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% if access_code.valid_from %}Valid from {% endif %}
+                    {% if access_code.valid_from %}{{ access_code.valid_from | datetime }}{% endif %}
+                    {% if access_code.valid_from and access_code.valid_till %} to {% endif %}
+                    {% if not access_code.valid_from and access_code.valid_till %}Valid till {% endif %}
+                    {% if access_code.valid_till %}{{ access_code.valid_till | datetime }}{% endif %}
+                    {% if not access_code.valid_from and not access_code.valid_till %}N/A{% endif %}
+                </td>
+                <td>
+                    {% if access_code.is_active %}
+                        <span class="label label-success">{{ _("Active") }}</span>
+                    {% else %}
+                        <span class="label label-warning">{{ _("Inactive") }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="btn-group btn-group-xs" role="group">
+                        <a class="btn btn-default" data-toggle="tooltip" title="Edit"
+                           href="{{ url_for('event_ticket_sales.access_codes_edit', event_id=event.id, access_code_id=access_code.id) }}"><i
+                                class="fa fa-pencil fa-fw"></i></a>
+                        {% if access_code.is_active %}
+                            <a class="btn btn-default" data-toggle="tooltip" title="Deactivate"
+                               href="{{ url_for('event_ticket_sales.access_codes_toggle', event_id=event.id, access_code_id=access_code.id) }}">
+                                <i class="fa fa-times fa-fw"></i></a>
+                        {% else %}
+                            <a class="btn btn-default" data-toggle="tooltip" title="Activate"
+                               href="{{ url_for('event_ticket_sales.access_codes_toggle', event_id=event.id, access_code_id=access_code.id) }}">
+                                <i class="fa fa-check fa-fw"></i></a>
+                        {% endif %}
+                        <a class="btn btn-default" data-toggle="tooltip" title="Delete"
+                           href="{{ url_for('event_ticket_sales.access_codes_delete', event_id=event.id, access_code_id=access_code.id) }}"><i
+                                class="fa fa-trash fa-fw"></i></a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/vendor/jquery/jquery.codezero.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script type="text/javascript">
+
+        $.fn.dataTable.ext.search.push(
+            function (settings, data) {
+                var user_option = $("input[name=show_state]:checked").val();
+                var state = data[4].trim().toLowerCase() || 'inactive';
+                if (user_option === "all") {
+                    return true;
+                } else if (user_option === state) {
+                    return true;
+                }
+                return false;
+            }
+        );
+
+        var table = $('.with-datatable').DataTable({
+            "dom": '<"row"<"toolbar col-md-12"<"pull-right"l>f>>tip',
+            width: '100%',
+            "columnDefs": [
+                {
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0
+                }
+            ],
+            "order": [[1, 'asc']],
+            "scrollX": true
+        });
+
+        $("div.toolbar").prepend($("#toolbar-holder").html());
+
+        $("input[name=show_state]").change(function () {
+            table.draw();
+        });
+
+        table.on('draw', function () {
+            $("[data-toggle=tooltip]").tooltip({
+                container: 'body'
+            });
+        });
+
+        table.on("order.dt search.dt", function () {
+            table.column(0, {search: "applied", order: "applied"}).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+
+
+    </script>
+{% endblock %}
+

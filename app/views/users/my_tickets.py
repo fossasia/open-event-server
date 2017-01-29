@@ -23,7 +23,7 @@ def display_my_tickets():
         if config.page == 'mysession':
             im_size = config.size
 
-    return render_template('gentelella/admin/mytickets/mytickets_list.html',
+    return render_template('gentelella/users/mytickets/mytickets_list.html',
                            page_content=page_content,
                            upcoming_events_orders=upcoming_events_orders,
                            past_events_orders=past_events_orders,
