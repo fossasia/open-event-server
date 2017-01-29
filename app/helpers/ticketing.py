@@ -88,6 +88,22 @@ class TicketingManager(object):
                          .filter(Ticket.type == type))
 
     @staticmethod
+    def get_ticket_stats(event):
+        tickets_summary={}
+        for ticket in event.tickets:
+            tickets_summary[str(ticket.id)] = {
+                'name': ticket.name,
+                'total': ticket.quantity,
+                'completed': 0
+                }
+        orders = Order.query.filter_by(event_id=event.id).filter_by(status='completed').all()
+        for order in orders:
+            for order_ticket in order.tickets:
+                tickets_summary[str(order_ticket.ticket_id)]['completed'] += order_ticket.quantity
+        return tickets_summary
+
+
+    @staticmethod
     def get_all_orders_count_by_type(type='free'):
         return get_count(Order.query.filter_by(status='completed').filter(Ticket.type == type))
 
