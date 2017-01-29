@@ -23,6 +23,14 @@ def speaker_image_sizes():
     return image_sizes
 
 
+def trim_get_form(form, key, default=None):
+    value = form.get(key, default)
+    if not value:
+        return value
+
+    return value.strip()
+
+
 def save_speaker(request, event_id=None, speaker=None, user=None):
     if not speaker and not event_id:
         raise Exception('event_id or speaker is required')
@@ -41,7 +49,7 @@ def save_speaker(request, event_id=None, speaker=None, user=None):
 
     image_sizes = speaker_image_sizes()
 
-    photo = request.form.get('photo', None)
+    photo = trim_get_form(request.form, 'photo', None)
     if photo and photo.strip() != '':
         if speaker.photo != photo:
             file_path = get_path_of_temp_url(photo)
@@ -55,27 +63,27 @@ def save_speaker(request, event_id=None, speaker=None, user=None):
         speaker.thumbnail = ''
         speaker.icon = ''
 
-    speaker.name = request.form.get('name', None)
-    speaker.short_biography = request.form.get('short_biography', None)
-    speaker.long_biography = request.form.get('long_biography', None)
-    speaker.email = request.form.get('email', None)
-    speaker.mobile = request.form.get('mobile', None)
-    speaker.website = request.form.get('website', None)
-    speaker.twitter = request.form.get('twitter', None)
-    speaker.facebook = request.form.get('facebook', None)
-    speaker.github = request.form.get('github', None)
-    speaker.linkedin = request.form.get('linkedin', None)
-    speaker.organisation = request.form.get('organisation', None)
-    speaker.featured = True if request.form.get('featured', 'false') == 'true' else False
-    speaker.position = request.form.get('position', None)
-    speaker.country = request.form.get('country', None)
-    speaker.city = request.form.get('city', None)
-    if request.form.get('heard_from', None) == "Other":
-        speaker.heard_from = request.form.get('other_text', None)
+    speaker.name = trim_get_form(request.form, 'name', None)
+    speaker.short_biography = trim_get_form(request.form, 'short_biography', None)
+    speaker.long_biography = trim_get_form(request.form, 'long_biography', None)
+    speaker.email = trim_get_form(request.form, 'email', None)
+    speaker.mobile = trim_get_form(request.form, 'mobile', None)
+    speaker.website = trim_get_form(request.form, 'website', None)
+    speaker.twitter = trim_get_form(request.form, 'twitter', None)
+    speaker.facebook = trim_get_form(request.form, 'facebook', None)
+    speaker.github = trim_get_form(request.form, 'github', None)
+    speaker.linkedin = trim_get_form(request.form, 'linkedin', None)
+    speaker.organisation = trim_get_form(request.form, 'organisation', None)
+    speaker.featured = True if trim_get_form(request.form, 'featured', 'false') == 'true' else False
+    speaker.position = trim_get_form(request.form, 'position', None)
+    speaker.country = trim_get_form(request.form, 'country', None)
+    speaker.city = trim_get_form(request.form, 'city', None)
+    if trim_get_form(request.form, 'heard_from', None) == "Other":
+        speaker.heard_from = trim_get_form(request.form, 'other_text', None)
     else:
-        speaker.heard_from = request.form.get('heard_from', None)
-    speaker.sponsorship_required = request.form.get('sponsorship_required', None)
-    speaker.speaking_experience = request.form.get('speaking_experience', None)
+        speaker.heard_from = trim_get_form(request.form, 'heard_from', None)
+    speaker.sponsorship_required = trim_get_form(request.form, 'sponsorship_required', None)
+    speaker.speaking_experience = trim_get_form(request.form, 'speaking_experience', None)
     save_to_db(speaker, "Speaker has been updated")
     record_activity('update_speaker', speaker=speaker, event_id=event_id)
     return speaker

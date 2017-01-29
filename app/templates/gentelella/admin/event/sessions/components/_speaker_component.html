@@ -132,15 +132,11 @@
                         {% if email_disabled %}
                    value="{{ current_user.email }}" disabled
                         {% else %}
-                   value="
-                           {% if speaker %}{{ speaker[identifier] }}{% elif session.speakers %}{{ session.speakers[0][identifier] }}{% endif %} "
+                   value="{% if speaker %}{{ speaker[identifier] }}{% elif session.speakers %}{{ session.speakers[0][identifier] }}{% endif %}"
                         {% endif %}
                    type="email"
                     {% else %}
-                   value="
-
-
-                           {% if speaker and speaker[identifier] %}{{ speaker[identifier] }}{% elif session.speakers and session.speakers[0][identifier] %}{{ session.speakers[0][identifier] }}{% else %}{{ "" }}{% endif %}"
+                   value="{% if speaker and speaker[identifier] %}{{ speaker[identifier] }}{% elif session.speakers and session.speakers[0][identifier] %}{{ session.speakers[0][identifier] }}{% else %}{{ "" }}{% endif %}"
                     {% endif %}
                    class="form-control col-md-7 col-xs-12"/>
             {% if identifier=="email" %}
