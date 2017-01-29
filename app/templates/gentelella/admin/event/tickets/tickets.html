@@ -139,7 +139,13 @@
             {% for name , item in orders_summary.iteritems() %}
                 <tr>
                     <th>
-                        <span class="label label-{{ item.class }}">{{ name | capitalize }}</span>
+                        {% if name!="deleted" %}
+                            <a href="{{ url_for('event_ticket_sales.display_orders',event_id=event_id) + '#' + (name | capitalize) }}">
+                                <span class="label label-{{ item.class }}">{{ name | capitalize }}</span>
+                            </a>
+                        {% else %}
+                            <span class="label label-{{ item.class }}">{{ name | capitalize }}</span>
+                        {% endif %}
                     </th>
                     <td>
                         {{ item.tickets_count }}
@@ -272,4 +278,3 @@
 {% block tail_js %}
     {{ super() }}
 {% endblock %}
-

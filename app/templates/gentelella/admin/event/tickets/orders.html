@@ -40,22 +40,22 @@
 {% block inner_content %}
     <div id="toolbar-holder" style="display: none;">
         <div class="btn-group pull-left" data-toggle="buttons">
-            <label class="btn btn-default active btn-responsive">
-                <input type="radio" name="show_state" autocomplete="off" value="Completed" checked> {{ _("Completed") }}
+            <label id="Completed" class="btn btn-default btn-responsive">
+                <input type="radio" name="show_state" autocomplete="off" value="Completed"> {{ _("Completed") }}
             </label>
-            <label class="btn btn-default btn-responsive">
+            <label id="Placed" class="btn btn-default btn-responsive">
                 <input type="radio" name="show_state" autocomplete="off" value="Placed"> {{ _("Placed") }}
             </label>
-            <label class="btn btn-default btn-responsive">
+            <label id="Pending" class="btn btn-default btn-responsive">
                 <input type="radio" name="show_state" autocomplete="off" value="Pending"> {{ _("Pending") }}
             </label>
-            <label class="btn btn-default btn-responsive">
+            <label id="Expired" class="btn btn-default btn-responsive">
                 <input type="radio" name="show_state" autocomplete="off" value="Expired"> {{ _("Expired") }}
             </label>
-            <label class="btn btn-default btn-responsive">
+            <label id="Cancelled" class="btn btn-default btn-responsive">
                 <input type="radio" name="show_state" autocomplete="off" value="Cancelled"> {{ _("Cancelled") }}
             </label>
-            <label class="btn btn-default btn-responsive">
+            <label id="all" class="btn btn-default btn-responsive">
                 <input type="radio" name="show_state" autocomplete="off" value="all"> {{ _("All") }}
             </label>
         </div>
@@ -120,7 +120,6 @@
                         {% else %}
                             <span id="label-{{ order.identifier }}" class="label label-danger">{{ order.status | capitalize }}</span>
                         {% endif %}
-
                     </td>
                     <td>{{ event.payment_currency | currency_symbol }}{{ order.amount | money }}</td>
                     <td>{{ order.get_tickets_count() }}</td>
@@ -187,6 +186,7 @@
     <script src="{{ url_for('static', filename='admin/lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='admin/lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script type="text/javascript">
+        var options = ['#Completed', '#Placed', '#Pending', '#Expired', '#Cancelled', '#all'];
 
         $.fn.dataTable.ext.search.push(
             function (settings, data, dataIndex) {
@@ -217,10 +217,17 @@
             "scrollX": true
         });
 
-        $("div.toolbar").prepend($("#toolbar-holder").html());
+        if($.inArray(window.location.hash, options) != -1){
+            $(window.location.hash).button('toggle');
+            $("div.toolbar").prepend($("#toolbar-holder").html());
+        }else{
+            $('#Completed').button('toggle');
+            $("div.toolbar").prepend($("#toolbar-holder").html());
+        };
 
         $("input[name=show_state]").change(function () {
             table.draw();
+            window.location.hash = $("input[name=show_state]:checked").val();
         });
 
         table.on('draw', function () {
@@ -236,4 +243,3 @@
     </script>
 
 {% endblock %}
-
