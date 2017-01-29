@@ -125,10 +125,16 @@
                                            data-toggle="tooltip" title="Approve" data-placement="right">
                                             <i class="fa fa-check"></i>
                                         </a>
-                                        <a href="{{ session.id }}/accept/" class="btn btn-sm btn-success"
-                                           data-toggle="tooltip" title="Approve and send email" data-placement="right">
+                                        <a type="button" class="btn btn-primary btn-success with-email-modal"
+                                           data-toggle="tooltip"
+                                           title="Approve & send acceptance email"
+                                           data-placement="right"
+                                           data-session-id="{{ session.id }}"
+                                           data-session-title="{{ session.title }}"
+                                           data-email-type="accept">
                                             <i class="fa fa-check fa-fw"></i> <i class="fa fa-envelope fa-fw"></i>
                                         </a>
+
                                     {% endif %}
 
                                     {% if session.state != 'rejected' %}
@@ -136,8 +142,13 @@
                                            data-toggle="tooltip" title="Reject" data-placement="right">
                                             <i class="fa fa-times"></i>
                                         </a>
-                                        <a href="{{ session.id }}/reject/" class="btn btn-sm btn-danger"
-                                           data-toggle="tooltip" title="Reject and send email" data-placement="right">
+                                        <a type="button" class="btn btn-primary btn-danger with-email-modal"
+                                           data-toggle="tooltip"
+                                           title="Reject & send rejectance email"
+                                           data-placement="right"
+                                           data-session-id="{{ session.id }}"
+                                           data-session-title="{{ session.title }}"
+                                           data-email-type="reject">
                                             <i class="fa fa-times fa-fw"></i> <i class="fa fa-envelope fa-fw"></i>
                                         </a>
                                     {% endif %}
@@ -147,6 +158,50 @@
                                             <i class="fa fa-envelope"></i>
                                         </a>
                                     {% endif %}
+                                    <form enctype="multipart/form-data" action="" method="POST" class="form-horizontal"
+                                          id="session-create-form">
+
+                                        <div class="modal fade" id="mailModal" tabindex="-1" role="dialog"
+                                             aria-labelledby="mailModalLabel">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close"><span
+                                                                aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title" id="mailModalLabel">Customize
+                                                            Message</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <label for="subject-name"
+                                                                       class="control-label">Subject:</label>
+                                                                <input type="text" class="form-control subject"
+                                                                       style="min-width:100%" name="subject"
+                                                                       id="subject-name">
+                                                            </div>
+                                                            <br>
+                                                            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <label for="message-text"
+                                                                       class="control-label">Message:</label>
+                                                                <textarea name="message" class="form-control message"
+                                                                          id="message-text"
+                                                                          style="min-height:200px;min-width:100%"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit"
+                                                                    class="btn btn-primary">{{ _("Send email") }}</button>
+                                                            <button type="reset" class="btn btn-default"
+                                                                    data-dismiss="modal">Close
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
@@ -175,14 +230,15 @@
                     return true;
                 }
                 return false;
-            }
-        );
+            });
 
         var table = $('.with-datatable').DataTable({
             "dom": '<"row"<"toolbar col-md-7"<"pull-left"l>><"col-md-3 pull-right"f>>tip',
             "columnDefs": [
                 {"width": "20%", "targets": 1},
-                {"width": "5%", "targets": 3}
+                {"width": "5%", "targets": 3},
+                {"width": "20px", "targets": 8},
+                {"width": "20px", "targets": 9}
             ],
             "scrollX": true
         });
@@ -197,6 +253,24 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
 
+        var $mailModal = $('#mailModal');
+        $(document).on('click', 'a.with-email-modal', function () {
+            var button = $(this);
+            var sessionId = button.data('session-id');
+            var emailType = button.data('email-type');
+            var sessionTitle = button.data('session-title');
+            if (emailType === "accept") {
+                $mailModal.find('.subject').val("Your Session '" + sessionTitle + "' has been accepted");
+                $mailModal.find('.message').val("Hello,\n\nYour session '" + sessionTitle + "' has been " + emailType + "ed.\n\nVisit this link to view the session: http://" + window.location.hostname + "/events/mysessions/1/.");
+                $mailModal.find('.form-horizontal').attr('action', sessionId + '/accept');
+            } else {
+                $mailModal.find('.subject').val("Your Session '" + sessiontitle + "' has been rejected");
+                $mailModal.find('.message').val("Hello,\n\nYour session '" + sessionTitle + "' has been " + emailType + "ed.\n\nVisit this link to view the session: http://" + window.location.hostname + "/events/mysessions/1/.");
+                $mailModal.find('.form-horizontal').attr('action', sessionId + '/reject');
+            }
+
+            $mailModal.modal('show');
+        });
 
     </script>
 {% endblock %}

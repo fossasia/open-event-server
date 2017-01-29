@@ -78,6 +78,20 @@
                     {% endfor %}
                 </ul>
             </td>
+            <td>
+                <li>
+                    <a href="{{url_for('sadmin_users.user_sessions', user_id=user['user'].id)}}"> Sessions </a>
+                </li>
+                <li>
+                    <a href="{{url_for('sadmin_users.user_events', user_id=user['user'].id)}}"> Events </a>
+                </li>
+                <li>
+                    <a href="{{url_for('sadmin_users.user_tickets', user_id=user['user'].id)}}"> Tickets </a>
+                </li>
+                <li>
+                    <a href="{{url_for('sadmin_users.settings_view', user_id=user['user'].id)}}"> Settings </a>
+                </li>
+            </td>
             <td>{{ user['user'].last_access_time.strftime("%Y-%m-%d %H:%M")|time_format }}</td>
             <td>{{ user['user'].last_access_time.strftime("%Y-%m-%d %H:%M")|time_format }}</td>
             <td>
@@ -203,6 +217,7 @@
                         <th>{{ _("Status") }}</th>
                         <th>{{ _("System Roles") }}</th>
                         <th>{{ _("Event Roles") }}</th>
+                        <th>{{_("User Links") }}</th>
                         <th>{{ _("Member Since") }}</th>
                         <th>{{ _("Last Access") }}</th>
                         <th>{{ _("Options") }}</th>
@@ -223,6 +238,7 @@
                         <th>{{ _("Status") }}</th>
                         <th>{{ _("System Roles") }}</th>
                         <th>{{ _("Event Roles") }}</th>
+                        <th>{{_("User Links") }}</th>
                         <th>{{ _("Member Since") }}</th>
                         <th>{{ _("Last Access") }}</th>
                         <th>{{ _("Options") }}</th>
@@ -243,6 +259,7 @@
                         <th>{{ _("Status") }}</th>
                         <th>{{ _("System Roles") }}</th>
                         <th>{{ _("Event Roles") }}</th>
+                        <th>{{_("User Links") }}</th>
                         <th>{{ _("Member Since") }}</th>
                         <th>{{ _("Last Access") }}</th>
                         <th>{{ _("Options") }}</th>

@@ -141,7 +141,7 @@ def add_speaker_view(event_id, session_id):
         return redirect(url_for('.index_view', event_id=event_id))
 
 
-@event_sessions.route('/<int:session_id>/accept/', methods=('GET',))
+@event_sessions.route('/<int:session_id>/accept/', methods=('POST', 'GET'))
 @belongs_to_event
 @can_accept_and_reject
 def accept_session(event_id, session_id):
@@ -150,11 +150,13 @@ def accept_session(event_id, session_id):
     send_email = True
     if skip and skip == 'email':
         send_email = False
-    DataManager.session_accept_reject(session, event_id, 'accepted', send_email)
+    message = request.form.get('message', None) if request.form else None
+    subject = request.form.get('subject', None) if request.form else None
+    DataManager.session_accept_reject(session, event_id, 'accepted', send_email, message=message, subject=subject)
     return redirect(url_for('.index_view', event_id=event_id))
 
 
-@event_sessions.route('/<int:session_id>/reject/', methods=('GET',))
+@event_sessions.route('/<int:session_id>/reject/', methods=('POST', 'GET'))
 @belongs_to_event
 @can_accept_and_reject
 def reject_session(event_id, session_id):
@@ -163,7 +165,9 @@ def reject_session(event_id, session_id):
     send_email = True
     if skip and skip == 'email':
         send_email = False
-    DataManager.session_accept_reject(session, event_id, 'rejected', send_email)
+    message = request.form.get('message', None) if request.form else None
+    subject = request.form.get('subject', None) if request.form else None
+    DataManager.session_accept_reject(session, event_id, 'rejected', send_email, message=message, subject=subject)
     return redirect(url_for('.index_view', event_id=event_id))
 
 

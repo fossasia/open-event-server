@@ -14,7 +14,7 @@ from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import send_email_after_account_create_with_password
 from app.helpers.helpers import string_empty, send_email_for_after_purchase, get_count, \
-    send_notif_for_after_purchase
+    send_notif_for_after_purchase, send_email_after_cancel_ticket
 from app.helpers.payment import StripePaymentsManager, represents_int, PayPalPaymentsManager
 from app.helpers.notification_email_triggers import trigger_after_purchase_notifications
 from app.models import db
@@ -521,3 +521,30 @@ class TicketingManager(object):
         save_to_db(access_code)
 
         return access_code
+
+    @staticmethod
+    def cancel_order(form):
+        order = TicketingManager.get_and_set_expiry(form.get('identifier'))
+        event_id = order.event_id
+        event_name = order.event.name
+        invoice_id = order.get_invoice_number()
+        order_url = url_for('ticketing.view_order_after_payment', order_identifier=order.identifier, _external=True)
+        user = DataGetter.get_user(order.user_id)
+        if login.current_user.is_organizer(event_id):
+            order.status = "cancelled"
+            save_to_db(order)
+            send_email_after_cancel_ticket(user.email, invoice_id, order_url, event_name, form.get('note'))
+            return True
+        return False
+
+    @staticmethod
+    def delete_order(form):
+        order = TicketingManager.get_and_set_expiry(form.get('identifier'))
+        event_id = order.event_id
+        if login.current_user.is_organizer(event_id):
+            if order.status != "deleted" and (order.amount == 0 or order.status != "completed"):
+                order.trashed_at = datetime.now()
+                order.status = "deleted"
+                save_to_db(order)
+            return True
+        return False

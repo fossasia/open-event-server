@@ -20,7 +20,7 @@
                 </a>
                 <span class="description hidden-xs hidden-sm">{{ _("Sponsors") }}</span>
             </li>
-            <li v-bind:class="{ active: step == 'sessions-tracks-rooms' || step == 'call-for-speakers' || step == 'form-customization', blocked: disable }">
+            <li v-bind:class="{ active: step == 'sessions-tracks-rooms', blocked: disable }">
                 <a href="#" title="Session, Tracks, Rooms"
                    v-on:click.prevent="moveToStep('sessions-tracks-rooms')">
                 <span class="round-tab">

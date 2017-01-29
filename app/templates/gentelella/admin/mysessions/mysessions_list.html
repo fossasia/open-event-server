@@ -8,7 +8,12 @@
 {% endblock %}
 {% macro session_element(session) -%}
     <div class="session row"
-         onclick="window.location.href='{{ url_for('my_sessions.display_session_view',session_id=session.id) }}'">
+         {% if admin_access %}
+            onclick="window.location.href='{{ url_for('event_sessions.session_display_view',session_id=session.id, event_id=session.event_id ) }}'"
+         {% else %}
+            onclick="window.location.href='{{ url_for('my_sessions.display_session_view',session_id=session.id) }}'"
+         {% endif %}
+            >
             {% if session.event.logo %}
                 {% set bg = session.event.logo %}
             {% elif session.event.background_url %}

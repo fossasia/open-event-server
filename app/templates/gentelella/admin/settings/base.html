@@ -11,12 +11,21 @@
     {{ super() }}
 {% endblock %}
 
+{% if user.admin_access %}
+{% set navigation_bar = [
+(url_for('sadmin_users.contact_info_view', user_id = user.id), 'contact_info', 'Contact Info', 'Contact Info'),
+(url_for('sadmin_users.password_view', user_id = user.id), 'password', 'Password', 'Your Password'),
+(url_for('sadmin_users.email_preferences_view', user_id = user.id), 'email_preferences', 'Email Preferences', 'Email Preferences'),
+(url_for('sadmin_users.applications_view', user_id = user.id), 'applications', 'Applications', 'Applications'),
+] -%}
+{% else %}
 {% set navigation_bar = [
     ('/settings/contact-info', 'contact_info', 'Contact Info', 'Contact Info'),
     ('/settings/password/', 'password', 'Password', 'Your Password'),
     ('/settings/email-preferences/', 'email_preferences', 'Email Preferences', 'Email Preferences'),
     ('/settings/applications/', 'applications', 'Applications', 'Applications'),
 ] -%}
+{% endif %}
 
 {% set active_page = active_page|default('account_info') -%}
 
