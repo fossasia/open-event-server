@@ -32,4 +32,4 @@ def index_view():
         save_to_db(module)
         flash("Changes have been saved.")
 
-    return render_template('gentelella/admin/super_admin/modules/modules.html', module=module,navigation_bar=list_navbar())
+    return render_template('gentelella/super_admin/modules/modules.html', module=module, navigation_bar=list_navbar())

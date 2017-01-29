@@ -65,7 +65,7 @@ def index_view():
             commit_number = heroku_release['description'].split(' ')[1]
             commit_info = get_commit_info(commit_number)
 
-    return render_template('gentelella/admin/super_admin/widgets/index.html',
+    return render_template('gentelella/super_admin/widgets/index.html',
                            events=events,
                            heroku_release=heroku_release,
                            commit_info=commit_info,

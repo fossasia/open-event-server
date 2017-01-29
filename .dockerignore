@@ -23,8 +23,8 @@ app.db
 .idea/
 .bundle/
 
-# Static files at 'app/static/admin/lib'
-lib/
+# Static files at 'app/static/vendor'
+app/static/vendor
 node_modules
 
 # event export files

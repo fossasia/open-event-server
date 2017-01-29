@@ -16,7 +16,7 @@ def verify_accessible():
     return check_accessible(PERMISSIONS)
 
 
-@sadmin_permissions.route('/', methods=('GET',))
+@sadmin_permissions.route('/')
 def index_view():
     # System-Role (Panel) Permissions
     builtin_sys_perms = dict()
@@ -55,7 +55,7 @@ def index_view():
             event_perms[role][service.name]['d'] = False if not p else p.can_delete
 
     return render_template(
-        'gentelella/admin/super_admin/permissions/permissions.html',
+        'gentelella/super_admin/permissions/permissions.html',
         event_perms=sorted(event_perms.iteritems(),
                            key=lambda (k, v): k.name),
         custom_sys_perms=custom_sys_perms,
@@ -65,14 +65,14 @@ def index_view():
         navigation_bar=list_navbar())
 
 
-@sadmin_permissions.route('/event-roles', methods=('POST', 'GET'))
+@sadmin_permissions.route('/event-roles/', methods=('POST',))
 def event_roles_view():
     if request.method == 'POST':
         DataManager.update_permissions(request.form)
     return redirect(url_for('.index_view'))
 
 
-@sadmin_permissions.route('/system-roles/new', methods=('POST', 'GET'))
+@sadmin_permissions.route('/system-roles/new/', methods=('POST', 'GET'))
 def create_custom_sys_role():
     if request.method == 'POST':
         role_name = request.form.get('role_name')
@@ -84,7 +84,7 @@ def create_custom_sys_role():
     return redirect(url_for('.index_view'))
 
 
-@sadmin_permissions.route('/system-roles', methods=('POST', 'GET'))
+@sadmin_permissions.route('/system-roles/', methods=('POST', 'GET'))
 def update_custom_sys_role():
     if request.method == 'POST':
         role_name = request.form.get('role_name')
@@ -96,13 +96,13 @@ def update_custom_sys_role():
     return redirect(url_for('.index_view'))
 
 
-@sadmin_permissions.route('/system-roles/delete/<int:role_id>', methods=('POST', 'GET'))
+@sadmin_permissions.route('/system-roles/delete/<int:role_id>/', methods=('POST', 'GET'))
 def delete_custom_sys_role(role_id):
     DataManager.delete_custom_sys_role(role_id)
     return redirect(url_for('.index_view'))
 
 
-@sadmin_permissions.route('/user-roles', methods=('POST', 'GET'))
+@sadmin_permissions.route('/user-roles/', methods=('POST', 'GET'))
 def user_roles_view():
     if request.method == 'POST':
         DataManager.update_user_permissions(request.form)

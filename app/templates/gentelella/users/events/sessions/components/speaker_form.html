@@ -1,0 +1,40 @@
+{% import "gentelella/users/events/sessions/components/_speaker_component.html" as _speaker_component with context %}
+
+<form enctype="multipart/form-data" action="" method="POST" class="form-horizontal" id="session-create-form">
+    {% if csrf_token %}
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    {% endif %}
+    <div class="col-md-2 col-sm-2 col-xs-12">
+
+    </div>
+    <div class="col-md-8 col-sm-8 col-xs-12 speaker_form">
+        {% for elem in _speaker_component.speaker_fields %}
+            {% if speaker_form[elem].include==1 %}
+                {{ _speaker_component.speaker_form_field(elem, speaker_form[elem].require) }}
+            {% endif %}
+        {% endfor %}
+        <div class="item form-group speaker-fields featured-toggle-holder" style="display: none;">
+            <label class="control-label">{{ _("Featured Speaker") }}</label>
+            <input type="checkbox" class="toggle-switch include-switch" name="featured" value="true"
+                   id="featured-switch" {% if speaker.featured %}{{ _("checked") }}{% endif %}/>
+            <label for="featured-switch" style="margin-left: 0;"> </label>
+        </div>
+        <br>
+
+        <button type="submit" class="btn btn-success">{{ _("Save Speaker") }}</button>
+    </div>
+    <div style="text-align: center;">
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(function () {
+        $("#heard-from").change(function(){
+            if(this.value == "Other") {
+                $("#other_text").attr("type", "text");
+            } else {
+                $("#other_text").attr("type", "hidden");
+            }
+        });
+    });
+</script>

@@ -1,0 +1,76 @@
+{% extends 'gentelella/super_admin/sales/filter_table_base.html' %}
+
+{% set active_side_page = 'invoices' -%}
+{% set title = "Invoices" -%}
+
+{% block head_css %}
+    {{ super() }}
+{% endblock %}
+
+{% block inner_table %}
+    <br><br>
+    <table class="table" style="margin-top: 50px;">
+        <thead>
+        <tr>
+            <th>
+                {{ _("Invoice") }}#
+            </th>
+            <th>
+                {{ _("Event") }}
+            </th>
+            <th>
+                {{ _("Dated") }}
+            </th>
+            <th>
+                {{ _("Amount") }}
+            </th>
+            <th>
+                {{ _("Sent to") }}
+            </th>
+            <th>
+                {{ _("Status") }}
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for invoice in invoices %}
+
+            <tr>
+                <td>
+                    {{ invoice.get_invoice_number() }}
+                </td>
+                <td>
+                    {{ invoice.event.name }}
+                </td>
+                <td>
+                    {{ invoice.created_at.strftime("%b %Y") }}%
+                </td>
+                <td>
+                    {{ display_currency | currency_symbol }}{{ forex(invoice.event.payment_currency, display_currency, invoice.amount) | money }}
+                </td>
+                <th>
+                    {{ invoice.user.email }}{% if invoice.user.user_detail and invoice.user.user_detail.firstname %} -
+                        {{ invoice.user.user_detail.firstname }} {% endif %}
+                </th>
+                <th>
+                    {% if invoice.status == 'completed' %}
+                        <span class="label label-success">Paid</span>
+                    {% else %}
+                        {% if current_date > overdue_date %}
+                            <span class="label label-danger">{{ _("Overdue") }}</span>
+                        {% else %}
+                            <span class="label label-success">{{ _("Pending") }}</span>
+                        {% endif %}
+                    {% endif %}
+                </th>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+{% endblock %}
+

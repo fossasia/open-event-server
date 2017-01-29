@@ -119,7 +119,7 @@
 
 {% block tail_js %}
     {{ super() }}
-    <script src="{{ url_for('static', filename='admin/lib/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
     <script type="text/javascript">
         var map;
         var eventLocation = {lat: {{ event.latitude }}, lng: {{ event.longitude }}};

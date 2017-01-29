@@ -7,7 +7,7 @@ from urllib2 import urlopen
 
 import geoip2.database
 from flask import Blueprint
-from flask import abort, render_template
+from flask import abort, render_template, current_app
 from flask import url_for, redirect, request, session, flash
 from flask.ext import login
 from flask.ext.login import login_required
@@ -55,7 +55,7 @@ def index():
     for config in im_config:
         if config.page == 'front':
             im_size = config.size
-    return render_template('gentelella/index.html',
+    return render_template('gentelella/guest/home.html',
                            call_for_speakers_events=call_for_speakers_events,
                            upcoming_events=upcoming_events,
                            placeholder_images=placeholder_images,
@@ -77,7 +77,7 @@ def login_view():
         facebook = get_facebook_auth()
         fb_auth_url, state = facebook.authorization_url(FbOAuth.get_auth_uri(), access_type='offline')
         session['fb_oauth_state'] = state
-        return render_template('gentelella/admin/login/login.html', auth_url=auth_url, fb_auth_url=fb_auth_url)
+        return render_template('gentelella/users/login/login.html', auth_url=auth_url, fb_auth_url=fb_auth_url)
     if request.method == 'POST':
         email = request.form['email']
         user = DataGetter.get_user_by_email(email)
@@ -102,7 +102,7 @@ def login_view():
 @home_routes.route('/register/', methods=('GET', 'POST'))
 def register_view():
     if request.method == 'GET':
-        return render_template('gentelella/admin/login/register.html')
+        return render_template('gentelella/users/login/register.html')
     if request.method == 'POST':
         logging.info("Registration under process")
         s = get_serializer()
@@ -137,7 +137,7 @@ def resend_email_confirmation():
     return redirect(url_for('events.index_view'))
 
 
-@home_routes.route('/account/create/<hash>', methods=('GET',))
+@home_routes.route('/account/create/<hash>/')
 def create_account_after_confirmation_view(hash):
     s = get_serializer()
     data = s.loads(hash)
@@ -151,13 +151,13 @@ def create_account_after_confirmation_view(hash):
     return redirect(url_for('settings.contact_info_view'))
 
 
-@home_routes.route('/password/new/<email>', methods=('GET', 'POST'))
+@home_routes.route('/password/new/<email>/', methods=('GET', 'POST'))
 def create_password_after_oauth_login(email):
     s = get_serializer()
     email = s.loads(email)
     user = DataGetter.get_user_by_email(email)
     if request.method == 'GET':
-        return render_template('gentelella/admin/login/create_password.html')
+        return render_template('gentelella/users/login/create_password.html')
     if request.method == 'POST':
         user = create_user_password(request.form, user)
         if user is not None:
@@ -167,11 +167,11 @@ def create_password_after_oauth_login(email):
             return redirect(intended_url())
 
 
-@home_routes.route('/password/reset', methods=('GET', 'POST'))
+@home_routes.route('/password/reset/', methods=('GET', 'POST'))
 def password_reset_view():
     """Password reset view"""
     if request.method == 'GET':
-        return render_template('gentelella/admin/login/password_reminder.html')
+        return render_template('gentelella/users/login/password_reminder.html')
     if request.method == 'POST':
         email = request.form['email']
         user = DataGetter.get_user_by_email(email)
@@ -182,11 +182,11 @@ def password_reset_view():
         return redirect(url_for('.login_view'))
 
 
-@home_routes.route('/reset_password/<hash>', methods=('GET', 'POST'))
+@home_routes.route('/reset_password/<hash>/', methods=('GET', 'POST'))
 def change_password_view(hash):
     """Change password view"""
     if request.method == 'GET':
-        return render_template('gentelella/admin/login/change_password.html')
+        return render_template('gentelella/users/login/change_password.html')
     if request.method == 'POST':
         DataManager.reset_password(request.form, hash)
         return redirect(url_for('.index'))
@@ -201,7 +201,7 @@ def logout_view():
     return redirect(url_for('.index'))
 
 
-@home_routes.route('/set_role', methods=('GET', 'POST'))
+@home_routes.route('/set_role/', methods=('GET', 'POST'))
 @login_required
 def set_role():
     """Set user role method"""
@@ -213,12 +213,12 @@ def set_role():
     return redirect(url_for('.roles_manager'))
 
 
-@home_routes.route('/forbidden/', methods=('GET',))
+@home_routes.route('/forbidden/')
 def forbidden_view():
     return render_template('gentelella/errors/403.html')
 
 
-@home_routes.route('/browse/', methods=('GET',))
+@home_routes.route('/browse/')
 def browse_view():
     params = request.args.items()
     params = dict((k, v) for k, v in params if v)
@@ -230,7 +230,8 @@ def browse_view():
 
     if not request.args.get("location"):
         try:
-            reader = geoip2.database.Reader(os.path.realpath('.') + '/static/data/GeoLite2-Country.mmdb')
+            reader = geoip2.database.Reader(
+                os.path.abspath(current_app.config['BASE_DIR'] + '/static/data/GeoLite2-Country.mmdb'))
             ip = get_real_ip()
             if ip == '127.0.0.1' or ip == '0.0.0.0':
                 ip = urlopen('http://ip.42.pl/raw').read()  # On local test environments

@@ -11,10 +11,12 @@ from app.helpers.data import delete_from_db, DataManager, save_to_db
 from app.helpers.data import trash_user, restore_user
 from app.helpers.data_getter import DataGetter
 from app.helpers.ticketing import TicketingManager
+from app.models.email_notifications import EmailNotification
 from app.models.event import Event
 from app.views.super_admin import USERS, check_accessible, list_navbar
 
 sadmin_users = Blueprint('sadmin_users', __name__, url_prefix='/admin/users')
+
 
 def get_or_create_notification_settings(event_id, user_id):
     email_notification = DataGetter \
@@ -27,7 +29,7 @@ def get_or_create_notification_settings(event_id, user_id):
                                                session_schedule=1,
                                                session_accept_reject=1,
                                                after_ticket_purchase=1,
-                                               user_id=login.current_user.id,
+                                               user_id=current_user.id,
                                                event_id=event_id)
         return email_notification
 
@@ -64,14 +66,15 @@ def index_view():
             'user': user,
             'event_roles': event_roles, }
         )
-    return render_template('gentelella/admin/super_admin/users/users.html',
+    return render_template('gentelella/super_admin/users/users.html',
                            active_user_list=active_user_list,
                            trash_user_list=trash_user_list,
                            all_user_list=all_user_list,
                            custom_sys_roles=custom_sys_roles,
                            navigation_bar=list_navbar())
 
-@sadmin_users.route('/<user_id>/events')
+
+@sadmin_users.route('/<user_id>/events/')
 def user_events(user_id):
     live_events = DataGetter.get_live_events_of_user(user_id)
     draft_events = DataGetter.get_draft_events_of_user(user_id)
@@ -82,7 +85,7 @@ def user_events(user_id):
     for event in all_events:
         all_ticket_stats[event.id] = TicketingManager.get_ticket_stats(event)
 
-    return render_template('gentelella/admin/event/index.html',
+    return render_template('gentelella/users/events/index.html',
                            live_events=live_events,
                            draft_events=draft_events,
                            past_events=past_events,
@@ -91,7 +94,7 @@ def user_events(user_id):
                            all_ticket_stats=all_ticket_stats)
 
 
-@sadmin_users.route('/<user_id>/sessions')
+@sadmin_users.route('/<user_id>/sessions/')
 def user_sessions(user_id):
     placeholder_images = DataGetter.get_event_default_images()
     custom_placeholder = DataGetter.get_custom_placeholders()
@@ -107,13 +110,14 @@ def user_sessions(user_id):
     page_content = {"tab_upcoming_events": "Upcoming Sessions",
                     "tab_past_events": "Past Sessions",
                     "title": "My Session Proposals"}
-    return render_template('gentelella/admin/mysessions/mysessions_list.html',
+    return render_template('gentelella/users/mysessions/mysessions_list.html',
                            upcoming_events_sessions=upcoming_events_sessions, past_events_sessions=past_events_sessions,
                            page_content=page_content, placeholder_images=placeholder_images,
                            custom_placeholder=custom_placeholder, im_size=im_size, speakers = speakers,
                            admin_access=admin_access)
 
-@sadmin_users.route('/<user_id>/tickets')
+
+@sadmin_users.route('/<user_id>/tickets/')
 def user_tickets(user_id):
     page_content = {"tab_upcoming_events": "Upcoming Events",
                     "tab_past_events": "Past Events",
@@ -129,7 +133,7 @@ def user_tickets(user_id):
         if config.page == 'mysession':
             im_size = config.size
 
-    return render_template('gentelella/admin/mytickets/mytickets_list.html',
+    return render_template('gentelella/users/mytickets/mytickets_list.html',
                            page_content=page_content,
                            upcoming_events_orders=upcoming_events_orders,
                            past_events_orders=past_events_orders,
@@ -137,9 +141,11 @@ def user_tickets(user_id):
                            custom_placeholder=custom_placeholder,
                            im_size=im_size)
 
-@sadmin_users.route('/<user_id>/settings')
+
+@sadmin_users.route('/<user_id>/settings/')
 def settings_view(user_id):
     return redirect(url_for('.contact_info_view', user_id=user_id))
+
 
 @sadmin_users.route('/<user_id>/settings/contact-info/', methods=('POST', 'GET'))
 def contact_info_view(user_id):
@@ -150,25 +156,26 @@ def contact_info_view(user_id):
     user = DataGetter.get_user(int(user_id))
     user.admin_access = 1
 
-    return render_template('gentelella/admin/settings/pages/contact_info.html',
-                           user=user)
+    return render_template('gentelella/users/settings/pages/contact_info.html', user=user)
 
-@sadmin_users.route('/<user_id>/settings/email-preferences')
+
+@sadmin_users.route('/<user_id>/settings/email-preferences/')
 def email_preferences_view(user_id):
     events = DataGetter.get_all_events()
     message_settings = DataGetter.get_all_message_setting()
     settings = DataGetter.get_email_notification_settings(user_id)
     user = DataGetter.get_user(int(user_id))
     user.admin_access = 1
-    return render_template('gentelella/admin/settings/pages/email_preferences.html',
+    return render_template('gentelella/users/settings/pages/email_preferences.html',
                            settings=settings, events=events, message_settings=message_settings, user=user)
+
 
 @sadmin_users.route('/<user_id>/settings/applications/')
 def applications_view(user_id):
     user = DataGetter.get_user(int(user_id))
     user.admin_access = 1
-    return render_template('gentelella/admin/settings/pages/applications.html',
-                           user = user)
+    return render_template('gentelella/users/settings/pages/applications.html', user=user)
+
 
 @sadmin_users.route('/<user_id>/settings/email/toggle/', methods=('POST',))
 def email_toggle_view(user_id):
@@ -194,6 +201,7 @@ def email_toggle_view(user_id):
             'notification_setting_ids': ids
         })
 
+
 @sadmin_users.route('/<user_id>/settings/password/', methods=('POST', 'GET'))
 def password_view(user_id):
     user = DataGetter.get_user(int(user_id))
@@ -211,14 +219,15 @@ def password_view(user_id):
             flash('The current password is incorrect.', 'danger')
 
     user.admin_access = 1
-    return render_template('gentelella/admin/settings/pages/password.html', user=user)
+    return render_template('gentelella/users/settings/pages/password.html', user=user)
+
 
 @sadmin_users.route('/<user_id>/edit/', methods=('GET', 'POST'))
 def edit_view(user_id):
     return redirect(url_for('.index_view'))
 
 
-@sadmin_users.route('/<user_id>/update-roles', methods=('GET', 'POST'))
+@sadmin_users.route('/<user_id>/update-roles/', methods=('GET', 'POST'))
 def update_roles_view(user_id):
     if current_user.is_super_admin:
         user = DataGetter.get_user(user_id)
@@ -241,7 +250,7 @@ def update_roles_view(user_id):
 @sadmin_users.route('/<user_id>/', methods=('GET', 'POST'))
 def details_view(user_id):
     profile = DataGetter.get_user(user_id)
-    return render_template('gentelella/admin/profile/index.html',
+    return render_template('gentelella/users/profile/index.html',
                            profile=profile, user_id=user_id)
 
 

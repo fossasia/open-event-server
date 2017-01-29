@@ -23,7 +23,7 @@ def display_my_sessions_view():
     all_rejected = DataGetter.get_sessions_by_state('rejected')
     all_trashed = DataGetter.get_trash_sessions()
     page_content = {"title": "Sessions Proposals"}
-    return render_template('gentelella/admin/super_admin/sessions/sessions.html',
+    return render_template('gentelella/super_admin/sessions/sessions.html',
                            page_content=page_content,
                            all_sessions=all_sessions,
                            all_pending=all_pending,

@@ -16,12 +16,12 @@ def display_view(event_id):
     sessions = DataGetter.get_sessions_by_event_id(event_id)
     event = DataGetter.get_event(event_id)
     if not event.has_session_speakers:
-        return render_template('gentelella/admin/event/info/enable_module.html', active_page='scheduler',
+        return render_template('gentelella/users/events/info/enable_module.html', active_page='scheduler',
                                title='Scheduler', event=event)
-    return render_template('gentelella/admin/event/scheduler/scheduler.html', sessions=sessions, event=event)
+    return render_template('gentelella/users/events/scheduler/scheduler.html', sessions=sessions, event=event)
 
 
-@event_scheduler.route('/publish')
+@event_scheduler.route('/publish/')
 def publish(event_id):
     event = DataGetter.get_event(event_id)
     event.schedule_published_on = datetime.now()
@@ -30,7 +30,7 @@ def publish(event_id):
     return redirect(url_for('.display_view', event_id=event_id))
 
 
-@event_scheduler.route('/unpublish')
+@event_scheduler.route('/unpublish/')
 def unpublish(event_id):
     event = DataGetter.get_event(event_id)
     event.schedule_published_on = None

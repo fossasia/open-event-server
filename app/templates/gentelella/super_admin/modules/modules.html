@@ -1,0 +1,74 @@
+{% extends 'gentelella/super_admin/dashboard.html' %}
+
+
+{% block title %}
+    {{ _("Modules") }}
+{% endblock %}
+
+{% set active_page = "modules" %}
+
+{% block head_css %}
+    {{ super() }}
+
+{% endblock %}
+
+{% macro options_table(columns, group) %}
+
+    <h2>{{ _("Enable/Disable Modules") }}</h2>
+    <hr>
+
+    <table class="table table-bordered table-hover modules-options-table no-global-dt">
+        <thead>
+        <tr>
+            <th>{{ _("Modules") }}</th>
+            <th>{{ _("Status") }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ _("Ticketing") }}</td>
+            <td>
+                <input type="checkbox" class="toggle-switch" value="on" {{ 'checked' if module.ticket_include else '' }}
+                       name="ticketing" id="ticketing-switch">
+                <label for="ticketing-switch"></label>
+            </td>
+        </tr>
+        <tr>
+            <td>{{ _("Payments") }}</td>
+            <td>
+                <input type="checkbox" class="toggle-switch"
+                       value="on" {{ 'checked' if module.payment_include else '' }} name="payments"
+                       id="payments-switch">
+                <label for="payments-switch"></label>
+            </td>
+        </tr>
+        <tr>
+            <td>{{ _("Donations") }}</td>
+            <td>
+                <input type="checkbox" class="toggle-switch"
+                       value="on" {{ 'checked' if module.donation_include else '' }} name="donations"
+                       id="donations-switch">
+                <label for="donations-switch"></label>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <hr>
+    <input type="submit" class="btn btn-success save-modules pull-right" value="Save">
+
+{% endmacro %}
+
+{% block content %}
+    <form action="" method="POST" role="form" class="admin-form form-horizontal" id="modules-form">
+        <div id="module-settings" class="wizard_content" style="display: block;">
+
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                {{ options_table(module_fields, 'modules') }}
+            </div>
+
+            <input type="hidden" name="modules_form[name]" value="modules_form">
+
+            <input type="hidden" id="modules-value-form" name="modules_form[value]" value="[]">
+        </div>
+    </form>
+{% endblock %}

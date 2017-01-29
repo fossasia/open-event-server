@@ -54,7 +54,7 @@ def index_view():
                      '<br>Did not get the email? Please <a href="/resend_email/" class="alert-link"> '
                      'click here to resend the confirmation.</a>'))
 
-    return render_template('gentelella/admin/event/index.html',
+    return render_template('gentelella/users/events/index.html',
                            live_events=live_events,
                            draft_events=draft_events,
                            past_events=past_events,
@@ -76,7 +76,7 @@ def create_view(step):
     current_timezone = get_current_timezone()
 
     return render_template(
-        'gentelella/admin/event/wizard/wizard.html',
+        'gentelella/users/events/wizard/wizard.html',
         current_date=datetime.datetime.now(),
         event_types=DataGetter.get_event_types(),
         event_licences=DataGetter.get_event_licences(),
@@ -105,7 +105,7 @@ def create_image_upload():
             return jsonify({'status': 'no_image'})
 
 
-@events.route('/<event_id>/', methods=['GET', 'POST'])
+@events.route('/<event_id>/')
 @can_access
 def details_view(event_id):
     event = DataGetter.get_event(event_id)
@@ -189,7 +189,7 @@ def details_view(event_id):
                 'rejected': get_count(DataGetter.get_sessions_by_state_and_event_id('rejected', event_id)),
                 'draft': get_count(DataGetter.get_sessions_by_state_and_event_id('draft', event_id))}
 
-    return render_template('gentelella/admin/event/details/details.html',
+    return render_template('gentelella/users/events/details/details.html',
                            event=event,
                            checklist=checklist,
                            sessions=sessions,
@@ -197,7 +197,7 @@ def details_view(event_id):
 
 
 @events.route('/<event_id>/edit/', defaults={'step': ''})
-@events.route('/<event_id>/edit/<step>')
+@events.route('/<event_id>/edit/<step>/')
 @can_access
 def edit_view(event_id, step=''):
     event = DataGetter.get_event(event_id)
@@ -234,7 +234,7 @@ def edit_view(event_id, step=''):
         'callForSpeakers': call_for_speakers.serialize if call_for_speakers else None
     }
 
-    return render_template('gentelella/admin/event/wizard/wizard.html',
+    return render_template('gentelella/users/events/wizard/wizard.html',
                            event=event,
                            step=step,
                            seed=json.dumps(seed),
@@ -256,7 +256,7 @@ def edit_view(event_id, step=''):
                            microlocations=get_microlocations_json(event_id))
 
 
-@events.route('/<event_id>/trash/', methods=('GET',))
+@events.route('/<event_id>/trash/')
 @can_access
 def trash_view(event_id):
     if request.method == "GET":
@@ -267,7 +267,7 @@ def trash_view(event_id):
     return redirect(url_for('.index_view'))
 
 
-@events.route('/<event_id>/delete/', methods=('GET',))
+@events.route('/<event_id>/delete/')
 @is_super_admin
 def delete_view(event_id):
     if request.method == "GET":
@@ -276,7 +276,7 @@ def delete_view(event_id):
     return redirect(url_for('sadmin_events.index_view'))
 
 
-@events.route('/<event_id>/restore/', methods=('GET',))
+@events.route('/<event_id>/restore/')
 @is_super_admin
 def restore_event_view(event_id):
     restore_event(event_id)
@@ -338,7 +338,7 @@ def generate_web_app(event_id):
     return redirect(url_for('.details_view', event_id=event_id))
 
 
-@events.route('/<int:event_id>/restore/<int:version_id>')
+@events.route('/<int:event_id>/restore/<int:version_id>/')
 @can_access
 def restore_event_revision(event_id, version_id):
     event = DataGetter.get_event(event_id)
@@ -356,7 +356,7 @@ def copy_event(event_id):
     return redirect(url_for('.edit_view', event_id=event.id))
 
 
-@events.route('/<int:event_id>/role-invite/<hash>', methods=['GET', 'POST'])
+@events.route('/<int:event_id>/role-invite/<hash>/', methods=['GET', 'POST'])
 def user_role_invite(event_id, hash):
     """Accept User-Role invite for the event.
     """
@@ -391,7 +391,7 @@ def user_role_invite(event_id, hash):
         abort(404)
 
 
-@events.route('/<int:event_id>/role-invite/decline/<hash>', methods=['GET', 'POST'])
+@events.route('/<int:event_id>/role-invite/decline/<hash>/', methods=['GET', 'POST'])
 def user_role_invite_decline(event_id, hash):
     """Decline User-Role invite for the event.
     """
@@ -415,7 +415,7 @@ def user_role_invite_decline(event_id, hash):
         abort(404)
 
 
-@events.route('/<int:event_id>/role-invite/delete/<hash>', methods=['GET', 'POST'])
+@events.route('/<int:event_id>/role-invite/delete/<hash>/', methods=['GET', 'POST'])
 @is_organizer
 def delete_user_role_invite(event_id, hash):
     event = DataGetter.get_event(event_id)
@@ -430,7 +430,7 @@ def delete_user_role_invite(event_id, hash):
         abort(404)
 
 
-@events.route('/discount/apply', methods=['POST'])
+@events.route('/discount/apply/', methods=['POST'])
 def apply_discount_code():
     discount_code = request.form['discount_code']
     discount_code = InvoicingManager.get_discount_code(discount_code)

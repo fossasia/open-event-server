@@ -1,0 +1,43 @@
+{% extends 'gentelella/base.html' %}
+{% block title %}
+    {{ _("Session Invitation") }}
+{% endblock %}
+{% block body %}
+    <div class="page-title">
+        <div class="title_left">
+            <h3>{{ _("Invitation Pag") }}e</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel" style="min-height:600px;">
+                <div class="row text-center">
+                    <h3>{{ _("You have been invited for session") }}: </h3><br>
+                    <h4>{{ session.title }}</h4>
+                    <p><b>{{ session.short_abstract|striptags }}</b></p>
+                    <p>{{ session.long_abstract|striptags }}</p>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12 col-xs-12 text-center"></div>
+                    <div class="col-md-4 col-sm-12 col-xs-12">
+                        <button class="btn btn-success" onclick="accepted(1);">{{ _("Accept") }}</button>
+                        <button class="btn btn-danger" onclick="accepted(0);">{{ _("Reject") }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script type="text/javascript">
+        function accepted(value) {
+            if (value == 1) {
+                window.location = "{{ url_for('event_sessions.add_speaker_view', event_id=event_id, session_id=session.id) }}";
+            } else {
+                window.location = "/";
+            }
+        }
+    </script>
+{% endblock %}

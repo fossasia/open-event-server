@@ -6,7 +6,7 @@
 
 {% block head_css %}
     {{ super() }}
-    <link href="{{ url_for('static', filename='css/admin/scheduler.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/events/scheduler.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/sessions.css') }}"/>
 {% endblock %}
 
@@ -48,26 +48,26 @@
                         <br>
                         {% include 'gentelella/guest/event/_sessions_list.html' %}
                     </div>
-                    {% include 'gentelella/admin/event/scheduler/components/timeline.html' %}
+                    {% include 'gentelella/users/events/scheduler/components/timeline.html' %}
 
                 </div>
 
             </div>
         </div>
     </div>
-    {% include 'gentelella/admin/event/scheduler/components/timeline_templates.html' %}
+    {% include 'gentelella/users/events/scheduler/components/timeline_templates.html' %}
 {% endblock %}
 
 {% block tail_js %}
     {{ super() }}
-    <script src="{{ url_for('static', filename='admin/lib/seedrandom/seedrandom.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin/lib/google-material-color/dist/palette.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin/lib/lodash/dist/lodash.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery/jquery.ellipsis.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/admin/event/scheduler.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin/lib/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/seedrandom/seedrandom.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/moment/min/moment.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/google-material-color/dist/palette.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/lodash/dist/lodash.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/jquery/jquery.ellipsis.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/jquery/jquery.codezero.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/events/scheduler.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
     <script type="text/javascript">
         var $scrollSpy = $('#scrollspy');
         $scrollSpy.stick_in_parent({
