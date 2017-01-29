@@ -53,9 +53,9 @@
                         <option value="" {% if not session %}selected{% endif %}>Select {{ pretty_name }}</option>
                         {% for data in data_set %}
                             {% if session and session[identifier + '_id'] == data.id %}
-                                <option value="{{ data.id }}" selected>{{ data.name }}</option>
+                                <option value="{{ data.id }}" selected>{{ data.name }}{% if identifier == 'session_type' %} ({{ data.length }}) {%endif %}</option>
                             {% else %}
-                                <option value="{{ data.id }}">{{ data.name }}</option>
+                                <option value="{{ data.id }}">{{ data.name }}{% if identifier == 'session_type' %} ({{ data.length }}) {%endif %}</option>
                             {% endif %}
                         {% endfor %}
                     </select>
