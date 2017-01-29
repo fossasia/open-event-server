@@ -248,6 +248,7 @@ class DataManager(object):
                               position=form.get('position', ''),
                               country=form.get('country', ''),
                               city=form.get('city', ''),
+                              gender = form.get('gender', ''),
                               heard_from = form.get('other_text', None) if form.get('heard_from', None) == "Other" else form.get('heard_from', None),
                               sponsorship_required=form.get('sponsorship_required', ''),
                               speaking_experience=form.get('speaking_experience', ''),
