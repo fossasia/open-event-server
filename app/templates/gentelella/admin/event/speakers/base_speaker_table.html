@@ -89,7 +89,7 @@
                 {% for speaker in speakers %}
                     <tr>
                         <td>
-                            <img src="{{ speaker.small }}" class="user-photo" onerror="imgError(this);">
+                            <img src="{% if speaker.small %}{{ speaker.small }}{% else %}{{ speaker.photo }}{% endif %}" class="user-photo" onerror="imgError(this);">
                         </td>
                         <td>{{ speaker.name }}</td>
                         <td>{{ speaker.email }}</td>
