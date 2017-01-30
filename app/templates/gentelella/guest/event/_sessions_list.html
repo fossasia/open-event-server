@@ -52,6 +52,7 @@
 {% endmacro %}
 
 {% macro session_element(session = None, index=0) %}
+    {% if session.microlocation_id %}
     <li class="list-group-item" data-session-id="session-{{ session.id }}">
         <div class="row">
 
@@ -125,6 +126,7 @@
             </div>
         </div>
     </li>
+    {% endif %}
 {% endmacro %}
 
 <div id='current-track-navbar' class="navbar navbar-default track-navbar" style="font-size: 1.25em">
