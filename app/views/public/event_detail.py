@@ -65,7 +65,7 @@ def display_event_detail_home(identifier):
     speakers = []
     for session in accepted_sessions:
         for speaker in session.speakers:
-            if speaker not in speakers and session.microlocation_id:
+            if speaker not in speakers:
                 speakers.append(speaker)
 
     '''Timezone aware current datetime object according to event timezone'''
