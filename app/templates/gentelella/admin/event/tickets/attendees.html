@@ -103,6 +103,9 @@
             <th>
                 {{ _("Email") }}
             </th>
+            <th>
+                {{ _("Action") }}
+            </th>
         </tr>
         </thead>
         <tbody>
@@ -131,7 +134,7 @@
                             <span class="label label-warning">{{ _("Pending") }}</span>
                         {% elif holder.status == 'placed' %}
                             <span class="label label-info">{{ holder.status | capitalize }}</span>
-                         {% elif holder.status == 'cancelled' %}
+                        {% elif holder.status == 'cancelled' %}
                             <span class="label label-default">{{ holder.status | capitalize }}</span>
                         {% else %}
                             <span class="label label-danger">{{ holder.status | capitalize }}</span>
