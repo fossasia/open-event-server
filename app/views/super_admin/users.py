@@ -76,34 +76,19 @@ def user_events(user_id):
     live_events = DataGetter.get_live_events_of_user(user_id)
     draft_events = DataGetter.get_draft_events_of_user(user_id)
     past_events = DataGetter.get_past_events_of_user(user_id)
-    all_events = DataGetter.get_all_events()
+    all_events = DataGetter.get_all_events_of_user(user_id)
     imported_events = DataGetter.get_imports_by_user(user_id)
-    free_ticket_count = {}
-    paid_ticket_count = {}
-    donation_ticket_count = {}
-    max_free_ticket = {}
-    max_paid_ticket = {}
-    max_donation_ticket = {}
+    all_ticket_stats = {}
     for event in all_events:
-        free_ticket_count[event.id] = TicketingManager.get_orders_count_by_type(event.id, type='free')
-        max_free_ticket[event.id] = TicketingManager.get_max_orders_count(event.id, type='free')
-        paid_ticket_count[event.id] = TicketingManager.get_orders_count_by_type(event.id, type='paid')
-        max_paid_ticket[event.id] = TicketingManager.get_max_orders_count(event.id, type='paid')
-        donation_ticket_count[event.id] = TicketingManager.get_orders_count_by_type(event.id, type='donation')
-        max_donation_ticket[event.id] = TicketingManager.get_max_orders_count(event.id, type='donation')
+        all_ticket_stats[event.id] = TicketingManager.get_ticket_stats(event)
 
     return render_template('gentelella/admin/event/index.html',
                            live_events=live_events,
                            draft_events=draft_events,
                            past_events=past_events,
                            all_events=all_events,
-                           free_ticket_count=free_ticket_count,
-                           paid_ticket_count=paid_ticket_count,
-                           donation_ticket_count=donation_ticket_count,
-                           max_free_ticket=max_free_ticket,
-                           max_paid_ticket=max_paid_ticket,
-                           max_donation_ticket=max_donation_ticket,
-                           imported_events=imported_events)
+                           imported_events=imported_events,
+                           all_ticket_stats=all_ticket_stats)
 
 
 @sadmin_users.route('/<user_id>/sessions')
