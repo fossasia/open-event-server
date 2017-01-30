@@ -105,7 +105,7 @@
         $("#remove-image-btn").click(function () {
             $.ajax({
                 type: 'DELETE',
-                url: "{{ url_for('event_speakers.avatar_delete', event_id=event.id, speaker_id=speaker.id) }}",
+                url: "{{ url_for('event_speakers.avatar_delete', event_id=event.id, speaker_id=speaker.id) if not photo_delete_url else photo_delete_url }}",
                 dataType: 'json'
             }).done(function (data) {
                 if (data.hasOwnProperty('status') && data.status == 'ok') {
