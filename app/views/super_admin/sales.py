@@ -375,25 +375,31 @@ def sales_by_events_view(path):
                     if discount and str(ticket.id) in discount.tickets.split(","):
                         if discount.type == "amount":
                             tickets_summary_event_wise[str(order.event_id)][str(order.status)][
-                                'sales'] += order_ticket.quantity * (ticket.price - discount.value)
+                                'sales'] += forex(order.event.payment_currency, display_currency, \
+                                            order_ticket.quantity * (ticket.price - discount.value))
                             tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)][
-                                'sales'] += order_ticket.quantity * (ticket.price - discount.value)
+                                'sales'] += forex(order.event.payment_currency, display_currency, \
+                                            order_ticket.quantity * (ticket.price - discount.value))
                             tickets_summary_location_wise[str(order.event.searchable_location_name)][str(order.status)][
-                                'sales'] += order_ticket.quantity * (ticket.price - discount.value)
+                                'sales'] += forex(order.event.payment_currency, display_currency, \
+                                            order_ticket.quantity * (ticket.price - discount.value))
                         else:
                             tickets_summary_event_wise[str(order.event_id)][str(order.status)]['sales'] += \
-                                order_ticket.quantity * (ticket.price - discount.value * ticket.price / 100.0)
+                                forex(order.event.payment_currency, display_currency, \
+                                    order_ticket.quantity * (ticket.price - discount.value * ticket.price / 100.0))
                             tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)]['sales'] += \
-                                order_ticket.quantity * (ticket.price - discount.value * ticket.price / 100.0)
+                                forex(order.event.payment_currency, display_currency, \
+                                    order_ticket.quantity * (ticket.price - discount.value * ticket.price / 100.0))
                             tickets_summary_location_wise[str(order.event.searchable_location_name)][str(order.status)]['sales'] += \
-                                order_ticket.quantity * (ticket.price - discount.value * ticket.price / 100.0)
+                                forex(order.event.payment_currency, display_currency, \
+                                    order_ticket.quantity * (ticket.price - discount.value * ticket.price / 100.0))
                     else:
                         tickets_summary_event_wise[str(order.event_id)][str(order.status)][
-                            'sales'] += order_ticket.quantity * ticket.price
+                            'sales'] += forex(order.event.payment_currency, display_currency, order_ticket.quantity * ticket.price)
                         tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)][
-                            'sales'] += order_ticket.quantity * ticket.price
+                            'sales'] += forex(order.event.payment_currency, display_currency, order_ticket.quantity * ticket.price)
                         tickets_summary_location_wise[str(order.event.searchable_location_name)][str(order.status)][
-                            'sales'] += order_ticket.quantity * ticket.price
+                            'sales'] += forex(order.event.payment_currency, display_currency, order_ticket.quantity * ticket.price)
     if path == 'events' or path == 'discounted-events':
         return render_template('gentelella/admin/super_admin/sales/by_events.html',
                                tickets_summary=tickets_summary_event_wise,
