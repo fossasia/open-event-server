@@ -397,7 +397,7 @@
                 $totalHolder.show();
                 $totalAmount.text("{{ event.payment_currency | currency_symbol }} " + (Math.abs(total - discount_total)).toFixed(2));
                 if($this.data('rate') - price_individual_new != 0){
-                    $this.closest("tr").find(".individual-price").html("<table><tr><td> {{ event.payment_currency | currency_symbol }} " + price_individual_new.toFixed(2) + "</td></tr><tr><td style='text-decoration: line-through'>{{ event.payment_currency | currency_symbol }} " + $this.data('rate') + "</td></tr></table>" );
+                    $this.closest("tr").find(".individual-price").html("<table><tr><td> {{ event.payment_currency | currency_symbol }} " + price_individual_new.toFixed(2) + "</td></tr><tr><td style='text-decoration: line-through'>{{ event.payment_currency | currency_symbol }} " + parseFloat($this.data('rate')).toFixed(2) + "</td></tr></table>" );
                 {% if fees %}
                     $this.closest("tr").find(".individual-fee").text("{{ event.payment_currency | currency_symbol }} " + fee_individual_new.toFixed(2));
                 {% endif %}
