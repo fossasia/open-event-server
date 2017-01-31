@@ -277,7 +277,9 @@ class SessionList(Resource, SessionResource):
             self.api.payload,
             self.api.url_for(self, event_id=event_id)
         )
+	
         record_activity('create_session', session=item[0], event_id=event_id)
+	print item
         return item
 
 

@@ -1,3 +1,5 @@
 {
     "directory": "app/static/admin/lib"
+    "proxy": "http://172.22.2.2:8080",
+    "https-proxy": "http://172.22.2.2:8080"
 }

@@ -195,4 +195,3 @@ class SessionsView(BaseView):
         db.session.commit()
         flash("The session has been restored.", "success")
         return redirect(url_for('.index_view', event_id=event_id))
-

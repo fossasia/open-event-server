@@ -1,0 +1,10 @@
+#!/home/himanshi/open-event-orga-server/.venv/bin/python
+# EASY-INSTALL-ENTRY-SCRIPT: 'alembic==0.8.9','console_scripts','alembic'
+__requires__ = 'alembic==0.8.9'
+import sys
+from pkg_resources import load_entry_point
+
+if __name__ == '__main__':
+    sys.exit(
+        load_entry_point('alembic==0.8.9', 'console_scripts', 'alembic')()
+    )
