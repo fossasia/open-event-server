@@ -1,6 +1,8 @@
 import datetime
+import os
 from collections import Counter
 
+import binascii
 import humanize
 import pytz
 import requests
@@ -11,7 +13,8 @@ from sqlalchemy import desc, asc, or_
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from app.helpers.cache import cache
-from app.helpers.helpers import get_event_id, string_empty, represents_int, get_count
+from app.helpers.helpers import get_event_id, string_empty, represents_int, get_count, \
+    send_email_after_account_create_with_password
 from app.helpers.language_list import LANGUAGE_LIST
 from app.helpers.static import EVENT_TOPICS, EVENT_LICENCES, PAYMENT_COUNTRIES, PAYMENT_CURRENCIES, DEFAULT_EVENT_IMAGES
 from app.models.activity import Activity
@@ -48,6 +51,7 @@ from app.models.tax import Tax
 from app.models.ticket import Ticket
 from app.models.track import Track
 from app.models.user import User
+from app.models.user_detail import UserDetail
 from app.models.user_permissions import UserPermission
 from app.models.users_events_roles import UsersEventsRoles
 
@@ -328,6 +332,26 @@ class DataGetter(object):
                 return None
         else:
             return user
+
+    @staticmethod
+    def get_or_create_user_by_email(email, data=None):
+        user = DataGetter.get_user_by_email(email, True)
+        if not user:
+            password = binascii.b2a_hex(os.urandom(4))
+            user_data = [email, password]
+            from app.helpers.data import DataManager
+            user = DataManager.create_user(user_data)
+            send_email_after_account_create_with_password({
+                'email': email,
+                'password': password
+            })
+
+        if not user.user_detail:
+            user_detail = UserDetail(firstname=data['firstname'], lastname=data['lastname'])
+            user.user_detail = user_detail
+        from app.helpers.data import save_to_db
+        save_to_db(user)
+        return user
 
     @staticmethod
     def get_all_users():

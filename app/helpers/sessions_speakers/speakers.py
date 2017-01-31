@@ -46,8 +46,17 @@ def save_speaker(request, event_id=None, speaker=None, user=None):
         )
         save_to_db(speaker)
 
-    if user and not speaker.user:
-        speaker.user = user
+    speaker.email = trim_get_form(request.form, 'email', None)
+    speaker.name = trim_get_form(request.form, 'name', None)
+
+    if not speaker.user:
+        if user:
+            speaker.user = user
+        else:
+            speaker.user = DataGetter.get_or_create_user_by_email(speaker.email, {
+                'firstname': speaker.name,
+                'lastname': ''
+            })
 
     if not event_id:
         event_id = speaker.event_id
@@ -68,10 +77,8 @@ def save_speaker(request, event_id=None, speaker=None, user=None):
         speaker.thumbnail = ''
         speaker.icon = ''
 
-    speaker.name = trim_get_form(request.form, 'name', None)
     speaker.short_biography = trim_get_form(request.form, 'short_biography', None)
     speaker.long_biography = trim_get_form(request.form, 'long_biography', None)
-    speaker.email = trim_get_form(request.form, 'email', None)
     speaker.mobile = trim_get_form(request.form, 'mobile', None)
     speaker.website = trim_get_form(request.form, 'website', None)
     speaker.twitter = trim_get_form(request.form, 'twitter', None)

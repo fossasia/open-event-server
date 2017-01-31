@@ -3,7 +3,9 @@ from app.models.event import Event, get_new_event_identifier
 from app import manager
 from app import current_app as app
 from app.models import db
+from app.models.speaker import Speaker
 from app.helpers.data import DataManager
+from app.helpers.data_getter import DataGetter
 from populate_db import populate
 from flask.ext.migrate import stamp
 from sqlalchemy.engine import reflection
@@ -30,6 +32,20 @@ def add_event_identifier():
     for event in events:
         event.identifier = get_new_event_identifier()
         save_to_db(event)
+
+
+@manager.command
+def fix_session_owners():
+    speakers = Speaker.query.all()
+    for speaker in speakers:
+        if not speaker.user or speaker.user.email != speaker.email:
+            speaker.user = DataGetter.get_or_create_user_by_email(speaker.email, {
+                'firstname': speaker.name,
+                'lastname': ''
+            })
+            db.session.add(speaker)
+            print "Processed - " + speaker.id
+    db.session.commit()
 
 
 @manager.option('-c', '--credentials', help='Super admin credentials. Eg. username:password')
