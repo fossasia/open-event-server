@@ -1,0 +1,35 @@
+{% extends 'gentelella/users/events/event_base.html' %}
+{% block title %}
+    {{ _("Edit Session") }} - {{ event.name }}
+{% endblock %}
+
+{% set active_page = "sessions" %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/events/event-wizard.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/multiselect/css/multi-select.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/Croppie/croppie.css') }}"/>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+
+        <div class="col-md-12">
+            <div style="text-align: center">
+                <h3>{{ _("Edit Session") }}</h3>
+            </div>
+            {% include 'gentelella/users/events/sessions/components/session_form.html' %}
+        </div>
+    </div>
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/vendor/jquery/jquery.multi-select.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/events/session/new.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("textarea").summernote(summernoteConfig);
+        });
+    </script>
+{% endblock %}

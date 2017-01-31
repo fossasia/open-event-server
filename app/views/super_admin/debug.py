@@ -33,12 +33,10 @@ def verify_accessible():
 @sadmin_debug.route('/')
 @flask_login.login_required
 def display_debug_info():
-
-    return render_template('gentelella/admin/super_admin/debug/debug.html',
+    return render_template('gentelella/super_admin/debug/debug.html',
                            ip=get_real_ip(),
                            cookies=request.cookies,
                            config=json.dumps(dict(current_app.config), sort_keys=True, indent=4, default=json_serial),
                            environment=json.dumps(dict(os.environ.data), sort_keys=True, indent=4, default=json_serial),
                            navigation_bar=list_navbar(),
                            headers=request.headers)
-

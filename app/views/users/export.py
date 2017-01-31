@@ -26,7 +26,7 @@ def display_export_view(event_id):
                      '<br>Did not get the email? Please <a href="/resend_email/" class="alert-link"> '
                      'click here to resend the confirmation.</a>'))
     return render_template(
-        'gentelella/admin/event/export/export.html', event=event, export_jobs=export_jobs,
+        'gentelella/users/events/export/export.html', event=event, export_jobs=export_jobs,
         current_user=user
     )
 

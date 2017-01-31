@@ -1,0 +1,239 @@
+{% extends 'gentelella/users/events/event_base.html' %}
+
+{% block title %}
+    {{ event.name }} - {{ _("Export") }}
+{% endblock %}
+
+{% set active_page = "export" %}
+
+{% block head_css %}
+    {{ super() }}
+    <style type="text/css">
+        .checkbox > label {
+            margin-left: 0;
+            margin-right: 0;
+            display: inline-block;
+        }
+
+        .checkbox > .checkbox-label {
+            position: absolute;
+            top: 5px;
+            left: 58px;
+            font-size: 15px;
+            font-weight: 300;
+            text-transform: uppercase;
+        }
+
+        .string {
+            color: green;
+        }
+
+        .number {
+            color: darkorange;
+        }
+
+        .boolean {
+            color: blue;
+        }
+
+        .null {
+            color: magenta;
+        }
+
+        .key {
+            color: red;
+        }
+
+        #export_creator {
+            opacity: 0.8;
+        }
+
+        #export_creator_email {
+            font-weight: 600;
+        }
+
+        #json-response {
+            max-height: 650px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-5 col-md-push-1">
+            <h3 style="font-weight: 300;">{{ _("Export and Download Event as zip") }}</h3>
+            <h4 style="font-weight: 300;">{{ _("Select which media files you want in the zip") }}</h4>
+            <form id="exportForm" style="margin-top:20px;">
+                <div class="checkbox">
+                    <input type="checkbox" class="toggle-switch" name="image" id="image">
+                    <label for="image"></label> <span class="checkbox-label">{{ _("Image") }}</span>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" class="toggle-switch" name="video" id="video">
+                    <label for="video"></label> <span class="checkbox-label">{{ _("Video") }}</span>
+
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" class="toggle-switch" name="audio" id="audio">
+                    <label for="audio"></label> <span class="checkbox-label">{{ _("Audio") }}</span>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" class="toggle-switch" name="document" id="document">
+                    <label for="document"></label> <span class="checkbox-label">{{ _("Document") }}</span>
+                </div>
+            </form>
+            <br>
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary" id="btnStartExport"
+                        onclick="exportEvent({{ event.id }}, '{{ current_user.email }}')"
+                        style="margin-bottom: 0px; margin-right: 10px;" disabled="disabled">{{ _("Start") }}
+                </button>
+                <button type="button" class="btn btn-default" id="btnExportEvent"
+                        disabled="disabled">{{ _("Download") }}</button>
+            </div>
+            <br><br>
+            <span id="export_status"></span><br>
+            <span id="export_creator" style="display: none;">{{ _("Started by") }} <span id="export_creator_email">user_email</span>,
+              <span id="export_creator_datetime">{{ _("datetime") }}</span>
+            </span>
+            <hr>
+            <h3 style="font-weight: 300;">Download Event as Pentabarf XML</h3>
+            Once the event is live and the schedule is published, pentabarf XML version of the schedule will be
+            available at:<br><br>
+            <pre><code>{{ url_for('event_detail.display_event_schedule_pentabarf', identifier=event.identifier, _external=True) }}</code></pre>
+            Alternatively, you can download the pentabarf XML here<br><br>
+            <a href="{{ url_for('.pentabarf_export_view', event_id=event.id) }}" class="btn btn-info">Download
+                pentabarf.xml</a>
+            <hr>
+            <h3 style="font-weight: 300;">Download Event as iCalendar</h3>
+            Once the event is live and the schedule is published, iCalendar version of the event will be available
+            at:<br><br>
+            <pre><code>{{ url_for('event_detail.display_event_schedule_ical', identifier=event.identifier, _external=True) }}</code></pre>
+            Alternatively, you can download the iCalendar here<br><br>
+            <a href="{{ url_for('.ical_export_view', event_id=event.id) }}" class="btn btn-info">Download
+                calendar.ics</a>
+            <hr>
+            <h3 style="font-weight: 300;">Download Event as iCalendar XML (xCal)</h3>
+            Once the event is live and the schedule is published, iCalendar version of the event will be available
+            at:<br><br>
+            <pre><code>{{ url_for('event_detail.display_event_schedule_xcal', identifier=event.identifier, _external=True) }}</code></pre>
+            Alternatively, you can download the iCalendar XML (xCal) here<br><br>
+            <a href="{{ url_for('.xcal_export_view', event_id=event.id) }}" class="btn btn-info">Download
+                calendar.xcs</a>
+
+        </div>
+        <div class="col-md-5 col-md-push-1">
+            <h3 style="font-weight: 300;">{{ _("Access event information via REST API") }}</h3>
+            <form style="margin-top:20px;" id="api-form">
+                <div class="checkbox">
+                    <input type="checkbox" class="toggle-switch" name="basic_event_details" id="basic_event_details"
+                           checked disabled>
+                    <label for="basic_event_details"></label> <span
+                        class="checkbox-label">{{ _("Basic Event Details") }}</span>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" class="toggle-switch" name="event_sessions" id="event_sessions">
+                    <label for="event_sessions"></label> <span class="checkbox-label">{{ _("Sessions") }}</span>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" class="toggle-switch" name="event_microlocations" id="event_microlocations">
+                    <label for="event_microlocations"></label> <span
+                        class="checkbox-label">{{ _("Microlocations") }}</span>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" class="toggle-switch" name="event_tracks" id="event_tracks">
+                    <label for="event_tracks"></label> <span class="checkbox-label">{{ _("Tracks") }}</span>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" class="toggle-switch" name="event_speakers" id="event_speakers">
+                    <label for="event_speakers"></label> <span class="checkbox-label">{{ _("Speakers") }}</span>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" class="toggle-switch" name="event_sponsors" id="event_sponsors">
+                    <label for="event_sponsors"></label> <span class="checkbox-label">{{ _("Sponsors") }}</span>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" class="toggle-switch" name="event_tickets" id="event_tickets">
+                    <label for="event_tickets"></label> <span class="checkbox-label">{{ _("Tickets") }}</span>
+                </div>
+            </form>
+            <br>
+            <p>{{ _("You can make a") }}
+                <code>GET</code> {{ _("request to the following endpoint to access the selected information") }}</p>
+            <pre><code id="endpoint-url-holder" data-event-id="{{ event.id }}"></code></pre>
+            <br>
+            <h4>{{ _("Response") }}</h4>
+            <pre id="json-response"></pre>
+        </div>
+    </div>
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/events/export-event.js') }}"></script>
+
+    <script type="text/javascript">
+        function syntaxHighlight(json) {
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                var cls = 'number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'key';
+                    } else {
+                        cls = 'string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'null';
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        }
+
+
+        $(function () {
+            var $apiCheckboxes = $("#api-form").find("input[type=checkbox]");
+            var $endpointUrlHolder = $("#endpoint-url-holder");
+            var eventId = $endpointUrlHolder.data('event-id');
+            $apiCheckboxes.change(function () {
+                var includes = [];
+                $.each($apiCheckboxes, function (key, $apiCheckbox) {
+                    $apiCheckbox = $($apiCheckbox);
+                    var name = $apiCheckbox.attr('name');
+                    if (name != 'basic_event_details' && $apiCheckbox[0].checked) {
+                        includes.push(name.replace("event_", ""));
+                    }
+                });
+                var oldText = $endpointUrlHolder.text();
+                if (includes.length > 0) {
+                    includes = includes.join(',');
+                    var url = location.protocol + "//" + location.host + "/api/v1/events/" + eventId + "?include=" + includes;
+                    $endpointUrlHolder.text(url);
+                } else {
+                    $endpointUrlHolder.text(location.protocol + "//" + location.host + "/api/v1/events/" + eventId);
+                }
+                if ($endpointUrlHolder.text() != oldText) {
+                    reloadSample($endpointUrlHolder.text());
+                }
+
+            });
+            $apiCheckboxes.trigger('change');
+        });
+
+        function reloadSample(url) {
+            $.getJSON(url, function (data) {
+                var str = JSON.stringify(data, undefined, 4);
+                $("#json-response").html(syntaxHighlight(str));
+            });
+        }
+
+        loadPreviousJob(
+            task_url = "{{ export_jobs.task }}",
+            user_email = "{{ export_jobs.user_email }}",
+            start_time = "{{ export_jobs.start_time | humanize_alt }}"
+        );
+    </script>
+
+{% endblock %}
+

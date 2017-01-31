@@ -39,6 +39,7 @@ class TestSessionApi(OpenEventViewTestCase):
             save_to_db(custom_form, "Custom form saved")
             data = POST_SESSION_DATA
             data.update(POST_SPEAKER_DATA)
+            data['photo'] = ''
             url = url_for('event_sessions.create_view', event_id=event.id)
             rv = self.app.post(url, follow_redirects=True, buffered=True, content_type='multipart/form-data', data=data)
             self.assertTrue(data['title'] in rv.data, msg=rv.data)

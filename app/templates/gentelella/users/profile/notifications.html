@@ -1,0 +1,162 @@
+{% extends 'gentelella/base.html' %}
+
+{% block title %}
+    {{ _("Notifications") }}
+{% endblock %}
+
+{% block head_css %}
+    {{ super() }}
+{% endblock %}
+{% block body %}
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-10 col-sm-push-1 col-md-8 col-md-push-2">
+            <div class="x_panel" style="min-height: 700px;">
+                <div class="x_title">
+                    <h2>{{ _("Notifications") }}</h2>
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <div id="toolbar-holder">
+                                <div class="btn-group pull-left" data-toggle="buttons">
+                                    <label class="btn btn-default active btn-responsive">
+                                        <input type="radio" name="notif_status" autocomplete="off" value="unread"
+                                               checked> {{ _("Unread") }}
+                                    </label>
+                                    <label class="btn btn-default btn-responsive">
+                                        <input type="radio" name="notif_status" autocomplete="off"
+                                               value="all"> {{ _("All") }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <a href="{{ url_for('notifications.mark_all_read') }}"
+                               class="btn btn-default pull-right">{{ _("Mark all read") }}</a>
+                        </div>
+                        <div class="col-xs-12">
+                            <table class="notif-table table table-hover" style="margin-top: 16px;">
+                                <thead>
+                                <tr>
+                                    <th style="display:none;">{{ _("Status") }}</th>
+                                    <th>{{ _("Message") }}</th>
+                                    <th>{{ _("Received At") }}</th>
+                                    <th>{{ _("Received At (Humanized)") }}</th>
+                                    <th>{{ _("Options") }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for notif in notifications %}
+                                    <tr class="notification {{ '' if notif.has_read else 'info' }}">
+                                        <td style="display: none;">{{ 'read' if notif.has_read else 'unread' }}</td>
+                                        <td>
+                                            <h4>{{ notif.title }}</h4>
+                                            <p class="clickable-link-holder">{{ notif.message | safe }}</p>
+                                        </td>
+                                        <td style="display: none;">
+                                            <!-- Used only for sorting notifications -->
+                                            {{ notif.received_at }}
+                                        </td>
+                                        <td>{{ notif.received_at | humanize_alt }}</td>
+                                        <td>
+                                            {% if not notif.has_read %}
+                                                <a class="read-btn btn btn-default btn-xs"
+                                                   href="{{ url_for('notifications.mark_as_read', notification_id=notif.id) }}">{{ _("Mark") }}
+                                                    {{ _("as Read") }}</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/nouislider/distribute/nouislider.min.js') }}"></script>
+
+    <script type="text/javascript">
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+                var user_option = $("input[name=notif_status]:checked").val();
+                var state = data[0].trim() || 'unread';
+                if (user_option === "all") {
+                    return true;
+                }
+                return (user_option === state || state === "");
+            }
+        );
+
+        var notifTable = $('.notif-table').DataTable({
+            "bInfo": false,
+            "bPaginate": false,
+            "scrollX": false,
+            "bAutoWidth": false,
+            "language": {
+                "zeroRecords": "<span style='font-size: 20px; font-weight: 300;'>You don't have any new notifications</span>"
+            },
+            "order": [[2, "desc"]]
+        });
+
+        $("body").click(function (e) {
+            if ($(e.target).is('a.read-btn')) {
+                e.preventDefault(); // prevent href behavior
+                $.getJSON($(e.target).attr('href'), function (data) {
+                    $(e.target).parents('.notification').removeClass('info'); // show notification as read
+                    $(e.target).remove(); // delete mark as read button
+                });
+            } else if (e.target.class == "notification" || $(e.target).parents(".notification").size()) {
+                var read_button = $(e.target).parents(".notification").find('a.read-btn');
+                $.getJSON(read_button.attr('href'), function (data) { });
+                window.location = document.URL;
+            }
+        });
+
+        $(".dataTables_filter").hide();
+        $(".notif-table thead").hide();
+
+        $("input[name=notif_status]").change(function () {
+            notifTable.draw();
+        });
+
+        notifTable.on('draw', function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+        /* SocketIO Notification-Page messages
+         *
+         */
+        $(document).ready(function () {
+            var namespace = '/notifpage';
+            var socket = io.connect(location.protocol + "//" + location.host + namespace, {reconnection: false});
+
+            socket.on('notifpage-response', function (msg) {
+                if (msg.hasOwnProperty("notif")) {
+                    var notif = msg.notif;
+                    var html = '<tr class="notification info">' +
+                        '<td style="display: none;">unread</td>' +
+                        '<td><h4>' + notif.title + '</h4><p class="clickable-link-holder">' + notif.message + '</p></td>' +
+                        '<td style="display: none;">' + notif.received_at + '</td>' +
+                        '<td>' + notif.received_at_human + '</td>' +
+                        '<td><a class="read-btn btn btn-default btn-xs" href="' + notif.mark_read + '">Mark as Read</a></td>' +
+                        '</tr>';
+                    $(".notif-table tbody").prepend(html);
+                }
+            });
+        });
+
+    </script>
+
+{% endblock %}

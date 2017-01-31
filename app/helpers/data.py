@@ -17,7 +17,6 @@ from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from flask_socketio import emit
 from requests_oauthlib import OAuth2Session
-from sqlalchemy.orm import make_transient
 
 from app.helpers.cache import cache
 from app.helpers.helpers import string_empty, string_not_empty
@@ -33,13 +32,11 @@ from app.helpers.system_mails import MAILS
 from app.helpers.update_version import VersionUpdater
 from app.models import db
 from app.models.activity import Activity, ACTIVITIES
-from app.models.call_for_papers import CallForPaper
 from app.models.email_notifications import EmailNotification
 from app.models.event import Event, EventsUsers
 from app.models.image_sizes import ImageSizes
 from app.models.invite import Invite
 from app.models.message_settings import MessageSettings
-from app.models.microlocation import Microlocation
 from app.models.page import Page
 from app.models.panel_permissions import PanelPermission
 from app.models.permission import Permission
@@ -50,7 +47,6 @@ from app.models.session import Session
 from app.models.session_type import SessionType
 from app.models.social_link import SocialLink
 from app.models.speaker import Speaker
-from app.models.sponsor import Sponsor
 from app.models.system_role import CustomSysRole, UserSystemRole
 from app.models.track import Track
 from app.models.user import User, ATTENDEE
@@ -208,7 +204,6 @@ class DataManager(object):
         slide_file = DataManager.get_files_from_request(request, 'slides')
         video_file = DataManager.get_files_from_request(request, 'video')
         audio_file = DataManager.get_files_from_request(request, 'audio')
-        speaker_img_file = DataManager.get_files_from_request(request, 'photo')
 
         if not state:
             state = form.get('state', 'draft')
@@ -234,26 +229,7 @@ class DataManager(object):
             new_session.session_type_id = form.get('session_type', None)
 
         speaker = Speaker.query.filter_by(email=form.get('email', '')).filter_by(event_id=event_id).first()
-        if not speaker:
-            speaker = Speaker(name=form.get('name', ''),
-                              short_biography=form.get('short_biography', ''),
-                              email=form.get('email', ''),
-                              website=form.get('website', ''),
-                              event_id=event_id,
-                              twitter=form.get('twitter', ''),
-                              facebook=form.get('facebook', ''),
-                              github=form.get('github', ''),
-                              linkedin=form.get('linkedin', ''),
-                              organisation=form.get('organisation', ''),
-                              position=form.get('position', ''),
-                              country=form.get('country', ''),
-                              city=form.get('city', ''),
-                              heard_from = form.get('other_text', None) if form.get('heard_from', None) == "Other" else form.get('heard_from', None),
-                              sponsorship_required=form.get('sponsorship_required', ''),
-                              speaking_experience=form.get('speaking_experience', ''),
-                              long_biography=form.get('long_biography',''),
-                              mobile=form.get('mobile',''),
-                              user=login.current_user if login and login.current_user.is_authenticated else None)
+        speaker = save_speaker(request, event_id=event_id, speaker=speaker, user=login.current_user)
 
         new_session.speakers.append(speaker)
 
@@ -262,8 +238,6 @@ class DataManager(object):
         if state == 'pending':
             trigger_new_session_notifications(new_session.id, event=event)
 
-        speaker_modified = False
-        session_modified = False
         if slide_file != "":
             slide_url = upload(
                 slide_file,
@@ -271,7 +245,6 @@ class DataManager(object):
                     event_id=int(event_id), id=int(new_session.id)
                 ))
             new_session.slides = slide_url
-            session_modified = True
         if audio_file != "":
             audio_url = upload(
                 audio_file,
@@ -279,7 +252,6 @@ class DataManager(object):
                     event_id=int(event_id), id=int(new_session.id)
                 ))
             new_session.audio = audio_url
-            session_modified = True
         if video_file != "":
             video_url = upload(
                 video_file,
@@ -287,105 +259,14 @@ class DataManager(object):
                     event_id=int(event_id), id=int(new_session.id)
                 ))
             new_session.video = video_url
-            session_modified = True
-        if speaker_img_file != "":
-            speaker_img = upload(
-                speaker_img_file,
-                UPLOAD_PATHS['speakers']['photo'].format(
-                    event_id=int(event_id), id=int(speaker.id)
-                ))
-            speaker.photo = speaker_img
-            speaker_modified = True
-        logo = form.get('photo', None)
-        if string_not_empty(logo) and logo:
-            filename = '{}.png'.format(time.time())
-            filepath = '{}/static/{}'.format(path.realpath('.'),
-                                             logo[len('/serve_static/'):])
-            try:
-                logo_file = UploadedFile(filepath, filename)
-                logo = upload(logo_file, 'events/%d/speakers/%d/photo' % (int(event_id), int(speaker.id)))
-                speaker.photo = logo
-                image_sizes = DataGetter.get_image_sizes_by_type(type='profile')
-                if not image_sizes:
-                    image_sizes = ImageSizes(full_width=150,
-                                             full_height=150,
-                                             icon_width=35,
-                                             icon_height=35,
-                                             thumbnail_width=50,
-                                             thumbnail_height=50,
-                                             type='profile')
-                save_to_db(image_sizes, "Image Sizes Saved")
-                filename = '{}.jpg'.format(time.time())
-                filepath = '{}/static/{}'.format(path.realpath('.'),
-                                                 logo[len('/serve_static/'):])
-                logo_file = UploadedFile(filepath, filename)
 
-                temp_img_file = upload_local(logo_file,
-                                             'events/{event_id}/speakers/{id}/temp'.format(
-                                                 event_id=int(event_id), id=int(speaker.id)))
-                temp_img_file = temp_img_file.replace('/serve_', '')
-
-                basewidth = image_sizes.full_width
-                img = Image.open(temp_img_file)
-                hsize = image_sizes.full_height
-                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
-                img.save(temp_img_file)
-                file_name = temp_img_file.rsplit('/', 1)[1]
-                large_file = UploadedFile(file_path=temp_img_file, filename=file_name)
-                profile_thumbnail_url = upload(
-                    large_file,
-                    UPLOAD_PATHS['speakers']['thumbnail'].format(
-                        event_id=int(event_id), id=int(speaker.id)
-                    ))
-
-                basewidth = image_sizes.thumbnail_width
-                img = Image.open(temp_img_file)
-                hsize = image_sizes.thumbnail_height
-                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
-                img.save(temp_img_file)
-                file_name = temp_img_file.rsplit('/', 1)[1]
-                thumbnail_file = UploadedFile(file_path=temp_img_file, filename=file_name)
-                profile_small_url = upload(
-                    thumbnail_file,
-                    UPLOAD_PATHS['speakers']['small'].format(
-                        event_id=int(event_id), id=int(speaker.id)
-                    ))
-
-                basewidth = image_sizes.icon_width
-                img = Image.open(temp_img_file)
-                hsize = image_sizes.icon_height
-                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
-                img.save(temp_img_file)
-                file_name = temp_img_file.rsplit('/', 1)[1]
-                icon_file = UploadedFile(file_path=temp_img_file, filename=file_name)
-                profile_icon_url = upload(
-                    icon_file,
-                    UPLOAD_PATHS['speakers']['icon'].format(
-                        event_id=int(event_id), id=int(speaker.id)
-                    ))
-                shutil.rmtree(path='static/media/' + 'events/{event_id}/speakers/{id}/temp'.format(
-                    event_id=int(event_id), id=int(speaker.id)))
-                speaker.thumbnail = profile_thumbnail_url
-                speaker.small = profile_small_url
-                speaker.icon = profile_icon_url
-                save_to_db(speaker, "Speaker photo saved")
-                record_activity('update_speaker', speaker=speaker, event_id=event_id)
-            except:
-                pass
-            speaker_modified = True
-
-        if session_modified:
-            save_to_db(new_session, "Session saved")
-        if speaker_modified:
-            save_to_db(speaker, "Speaker saved")
         record_activity('create_session', session=new_session, event_id=event_id)
         update_version(event_id, False, 'sessions_ver')
 
         invite_emails = form.getlist("speakers[email]")
         for index, email in enumerate(invite_emails):
             if not string_empty(email):
-                new_invite = Invite(event_id=event_id,
-                                    session_id=new_session.id)
+                new_invite = Invite(event_id=event_id, session_id=new_session.id)
                 hash = random.getrandbits(128)
                 new_invite.hash = "%032x" % hash
                 save_to_db(new_invite, "Invite saved")
@@ -433,7 +314,7 @@ class DataManager(object):
         flash("The session has been %s" % state)
 
     @staticmethod
-    def edit_session(request, session):
+    def edit_session(request, session, speaker=None):
         with db.session.no_autoflush:
             form = request.form
             event_id = session.event_id
@@ -486,6 +367,9 @@ class DataManager(object):
             existing_speaker_ids_by_email = []
 
             save_to_db(session, 'Session Updated')
+
+            if speaker:
+                save_speaker(request, event_id=event_id, speaker=speaker)
 
             for existing_speaker in DataGetter.get_speaker_by_email(form.get("email")).all():
                 existing_speaker_ids_by_email.append(str(existing_speaker.id))

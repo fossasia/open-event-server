@@ -1,0 +1,165 @@
+{% set email_disabled = false if (current_user.is_authenticated and (current_user.is_admin or current_user.is_super_admin or current_user.is_organizer(event.id) or current_user.is_coorganizer(event.id) or current_user.is_track_organizer(event.id))) else true %}
+
+{% set textarea_speaker_fields = ['short_biography', 'long_biography', 'speaking_experience', 'sponsorship_required'] %}
+{% set media_speaker_fields = ['photo'] %}
+{% set dropdown_fields = ['gender', 'heard_from'] %}
+{% set url_speaker_fields = ['website', 'facebook', 'twitter', 'github', 'linkedin'] %}
+{% set speaker_fields = ['name', 'email', 'photo', 'organisation', 'position', 'country', 'city', 'short_biography', 'long_biography', 'speaking_experience', 'sponsorship_required', 'other', 'gender', 'heard_from', 'mobile', 'website', 'facebook', 'twitter', 'github', 'linkedin'] %}
+
+{% macro speaker_form_field(identifier, require=0) %}
+    {% set name = identifier | replace('_id','') %}
+    {% set pretty_name = name | replace('_',' ') | capitalize %}
+    <div class="item form-group speaker-fields">
+        <label class="control-label">
+            {% if name == 'heard_from' %}
+                {{ "Where did you hear about our event?" }}
+            {% else %}
+                {{ pretty_name }}
+            {% endif %}
+            {% if require==1 %}
+                <span class="required">*</span>
+            {% endif %}
+        </label>
+        {% if identifier in textarea_speaker_fields %}
+            <textarea title="{{ pretty_name }}" {% if require==1 %}
+                      required="required"
+            {% endif %}
+                      name="{{ identifier }}" class="form-control col-md-7 col-xs-12">{% if speaker %}
+                {{ speaker[identifier] }}{% elif session.speakers %}
+                {{ session.speakers[0][identifier] }}{% endif %}</textarea>
+        {% elif identifier in dropdown_fields %}
+            {% if identifier == 'heard_from' %}
+                {% set data_set = ['Google or other search', 'Friend', 'Website', 'Advertisement', 'Article or blog', 'Post', 'Social media', 'Other'] %}
+                <select title="{% if name == 'heard_from' %}{{ "Where did you hear about our event?" }}{% else %}{{ pretty_name }}{% endif %}"
+                        {% if require==1 or identifier=='track' %}required="required"{% endif %} name="{{ identifier }}"
+                        class="form-control col-md-7 col-xs-12" id="heard-from">
+                    {% if name == 'heard_from' and not speaker and not session.speakers[0] %}
+                        <option value="" {% if not speaker and not session.speakers[0] %}selected{% endif %}>
+                            Select {{ "knowledge of event" }}</option>
+                    {% endif %}
+                    {% if (speaker and speaker['heard_from'] in data_set) or (session and session.speakers[0]['heard_from'] in data_set) %}
+                        {% for data in data_set %}
+                            {% if (speaker and speaker['heard_from'] and speaker['heard_from'] == data) and (session or session.speakers and session.speakers[0]['heard_from'] and session.speakers[0]['heard_from'] == data) %}
+                                <option value="{{ data }}" selected>{{ data }}</option>
+                            {% else %}
+                                <option value="{{ data }}">{{ data }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    {% elif (speaker and speaker['heard_from'] not in data_set) or (session and session.speakers[0]['heard_from'] and session.speakers[0]['heard_from'] not in data_set) %}
+                        {% for data in data_set %}
+                            {% if data == "Other" %}
+                                <option value="{{ data }}" selected>{{ data }}</option>
+
+                            {% else %}
+                                <option value="{{ data }}">{{ data }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {% for data in data_set %}
+                            <option value="{{ data }}">{{ data }}</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+                <input class="form-control col-md-7 col-xs-12" name="other_text" id="other_text"
+                       placeholder="Enter where you heard"
+                       {% if not (speaker and speaker['heard_from'] in data_set) and not (session and session.speakers[0]['heard_from'] and session.speakers[0]['heard_from]'] in data_set) and (speaker or session.speakers[0]) %}type="text" {% else %}type="hidden"{% endif %}
+                       value="{% if speaker and speaker['heard_from'] not in data_set %}{{ speaker['heard_from'] }}{% elif session.speakers and session.speakers[0]['heard_from'] not in data_set %}{{ session.speaker[0]['heard_from'] }} {% endif %}">
+            {% elif identifier == 'gender' %}
+                {% set data_set = ['Male', 'Female', 'Other'] %}
+                <select title="{{ pretty_name }}" {% if require==1 or identifier=='track' %}required="required"{% endif %} name="{{ identifier }}"
+                        class="form-control col-md-7 col-xs-12">
+                    <option value="" {% if not session %}selected{% endif %}>Select {{ pretty_name }}</option>
+                    {% for data in data_set %}
+                        {% if speaker and speaker[identifier + '_id'] == data %}
+                            <option value="{{ data }}" selected>{{ data }}</option>
+                        {% else %}
+                            <option value="{{ data }}">{{ data }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            {% endif %}
+            <!-- photo Selector -->
+        {% elif identifier == 'photo' %}
+            <!-- photo button -->
+
+
+            {% set photo_url = speaker.photo if (speaker and speaker.photo and speaker.photo) else (session.speakers[0].photo if (session.speakers and session.speakers[0].photo and session.speakers[0].photo != '') else '') %}
+
+            <div class="row">
+                <div class="col-md-7">
+
+                    <input type="hidden" name="photo" id="photo" value="{{ photo_url }}">
+
+                    <div class="item form-group" id="image-upload-group"
+                         {% if photo_url and photo_url != '' %}style="display: none;"{% endif %}>
+                        <div class="image-box">
+                            <input type="file" id="speaker-photo-upload" name="speaker-photo-upload"
+                                   class="image-upload-btn no-js"
+                                   accept="image/*"/>
+                            <label class="file-label" for="speaker-photo-upload" id="speaker-photo-upload-label"
+                                   style="margin-top: 3vh">
+                                <i class="fa fa-4x fa-camera-retro" aria-hidden="true"></i> <br>
+                                <h3>{{ _("Select Avatar") }}</h3>
+                            </label><br>
+                        </div>
+                        <span class="text-muted" style="color: #a2a2a2;">
+                          {{ _("Avatar size must be less than 1MB.") }}
+                      </span>
+                    </div>
+
+                    <div class="item form-group" id="image-view-group"
+                         {% if not photo_url or photo_url == '' %}style="display: none;"{% endif %}>
+                        <img src="{{ photo_url }}" class="profile_avatar"><br><br>
+                        {% if not photo_url or photo_url == '' %}
+                            <button type="button" class="btn btn-sm btn-default" data-target="#cropper-modal"
+                                    data-toggle="modal">
+                                <i class="fa fa-arrows" aria-hidden="true"></i>
+                                Adjust
+                            </button>
+                        {% endif %}
+                        <button type="button" class="btn btn-sm btn-default" id="remove-image-btn">
+                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            Remove
+                        </button>
+                        <br>
+                    </div>
+                </div>
+            </div>
+            {% include 'gentelella/users/events/sessions/components/_speaker_croppie.html' %}
+
+            <!-- end photo selector -->
+        {% elif identifier in media_speaker_fields %}
+            <br><input {% if require==1 %}required="required"{% endif %}
+                       type="file" id="speaker-file-{{ identifier | default(1) }}" name="{{ identifier }}"
+                       class="upload-btn"/>
+            <label class="file-label" for="speaker-file-{{ identifier | default(1) }}">
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                Choose a file</label>
+        {% else %}
+            <input title="{{ pretty_name }}" {% if require==1 %}
+                   required="required"
+            {% endif %}
+                    {% if identifier in url_speaker_fields %}
+                   type="url" pattern="https?://.+"
+                    {% endif %}
+                   name="{{ "email-old" if identifier=="email" and email_disabled else identifier }}"
+                    {% if identifier=="email" %}
+                        {% if email_disabled %}
+                   value="{{ current_user.email }}" disabled
+                        {% else %}
+                   value="{% if speaker %}{{ speaker[identifier] }}{% elif session.speakers %}{{ session.speakers[0][identifier] }}{% endif %}"
+                        {% endif %}
+                   type="email"
+                    {% else %}
+                   value="{% if speaker and speaker[identifier] %}{{ speaker[identifier] }}{% elif session.speakers and session.speakers[0][identifier] %}{{ session.speakers[0][identifier] }}{% else %}{{ "" }}{% endif %}"
+                    {% endif %}
+                   class="form-control col-md-7 col-xs-12"/>
+            {% if identifier=="email" %}
+                {% if email_disabled %}
+                    <input type="hidden" name="email" value="{{ current_user.email }}">
+                {% endif %}
+            {% endif %}
+
+        {% endif %}
+    </div>
+{% endmacro %}

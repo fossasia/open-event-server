@@ -1,0 +1,300 @@
+{% extends 'gentelella/base.html' %}
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom/index.css') }}"/>
+    <style type="text/css">
+        .event-holder {
+            cursor: pointer;
+
+        }
+
+        .event-holder:hover > .thumbnail > .caption {
+            background-color: #f7f7f7;
+        }
+
+        .event-holder hr {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .event-holder img {
+            width: 100%;
+            height: 165px;
+            border: none;
+        }
+
+        .event-holder .thumbnail {
+            padding: 0;
+        }
+
+        .event-holder .time {
+            text-transform: uppercase;
+        }
+
+        .event-holder .name {
+            height: 40px;
+            text-overflow: ellipsis;
+        }
+
+        .event-holder .location_name {
+            position: relative;
+            display: inline-block;
+            height: 20px;
+        }
+
+        .event-holder .tags {
+            height: 18px;
+        }
+
+        .event-holder .caption {
+            background-color: #FFFFFF;
+            transition: background-color 0.5s;
+        }
+
+        .event-holder .share-btn {
+            margin-top: 5px;
+            margin-right: 1px;
+            color: #868686;
+            transition: color 0.5s;
+        }
+
+        .event-holder .share-btn:hover {
+            margin-top: 5px;
+            margin-right: 1px;
+            color: #393939;
+        }
+
+        .filter-hashtag {
+            cursor: pointer;
+        }
+
+        .filter-hashtag:hover {
+            text-decoration: underline;
+        }
+
+        .home-search {
+            padding: 0 20px;
+        }
+
+        .home-search .form-group {
+            padding: 0;
+        }
+
+        .home-search .btn {
+            margin: 0;
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+            -webkit-border-top-left-radius: 0;
+            -webkit-border-bottom-left-radius: 0;
+            font-weight: 300;
+            text-transform: uppercase;
+        }
+
+        div.tooltip-inner {
+            text-align: left;
+            max-width: 350px;
+        }
+    </style>
+{% endblock %}
+{% set is_home_page = true %}
+{% block title %}
+    {% if tagline %}
+        {{ app_name }} - {{ tagline }}
+    {% else %}
+        {{ app_name }} - Event Management and Ticketing
+    {% endif %}
+{% endblock %}
+{% macro event_box(event) %}
+    <a href="/e/{{ event.identifier }}">
+        <div class="col-md-4 col-xs-12 col-sm-6 event-holder">
+            <div class="thumbnail">
+                <img src='
+                            {% if event.background_url %}
+                                {{ event.thumbnail }}
+                            {% elif event.sub_topic %}
+
+                                {% set event_placed = {'image_placed': False } %}
+                    {# tells whether the url has image url has been placed #}
+                                {% for custom_image in custom_placeholder %}
+                                    {% if custom_image.name == event.sub_topic %}
+                                        {{ custom_image.url }}
+                                        {% if event_placed.update({'image_placed': True}) %} {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if not event_placed.image_placed %}
+                                    {{ url_for("static", filename="placeholders/" + placeholder_images[event.sub_topic]) }}
+                                {% endif %}
+                            {% elif event.topic %}
+                                {% set event_placed = {'image_placed': False } %}
+                                {% for custom_image in custom_placeholder %}
+                                    {% if custom_image.name == session.event.topic %}
+                                        {{ custom_image.url }}
+                                        {% if event_placed.update({'image_placed': True}) %} {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if not event_placed.image_placed %}
+                                    {{ url_for("static", filename="placeholders/" + placeholder_images[event.topic]) }}
+                                {% endif %}
+                            {% else %}
+                                {% set event_placed = {'image_placed': False } %}
+                                {% for custom_image in custom_placeholder %}
+                                    {% if custom_image.name == "Other" %}
+                                        {{ custom_image.url }}
+                                        {% if event_placed.update({'image_placed': True}) %} {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if not event_placed.image_placed %}
+                                    {{ url_for("static", filename="placeholders/" + placeholder_images["Other"]) }}
+                                {% endif %}
+                            {% endif %}
+                            ' onerror="imgError(this, true);">
+                <div class="caption">
+                    <small class="time">{{ event.start_time.strftime('%a, %B %d %I:%M %p') }}</small>
+                    <h4 class="name">{{ event.name }}</h4>
+                    <div class="location_name" title="{{ event.location_name }}" data-toggle="tooltip"
+                         data-placement="right" data-original-text="{{ event.location_name.split(",")[0] }}">
+                        <span class="text"></span>
+                    </div>
+                    <hr>
+                    <p class="tags">
+                        {% if event.type %}
+                            <span class="filter-hashtag" data-name="type"
+                                  data-value="{{ event.type }}">#{{ event.type | default('', true) |  camel_case }}</span>
+                        {% endif %}
+                        {% if event.topic %}
+                            <span class="filter-hashtag" data-name="category"
+                                  data-value="{{ event.topic }}">#{{ event.topic | default('', true) | camel_case }}</span>
+                        {% endif %}
+                        <i data-event-id="{{ event.id }}" data-title="{{ event.name }}"
+                           class="share-btn fa fa-share-alt pull-right"></i>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </a>
+{% endmacro %}
+
+
+{% block body %}
+    <div class="carousel slide" style="margin-bottom: 10px;">
+        <div class="carousel-inner">
+            <div class="item active">
+                <div class="container">
+                    <div class="carousel-caption">
+                        <h1>{{ _("The simplest way to create events.") }}</h1>
+                        <p></p>
+                        <p><a class="btn btn-info btn-lg" href="/events/create/">{{ _("Create Event") }}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10 col-md-push-1">
+            <form class="form-inline row home-search" method="get" action="/browse/">
+                <div class="form-group col-sm-4 col-xs-10">
+                    <input type="text" name="query" class="form-control input-lg" style="width: 100%;"
+                           placeholder="Search for events">
+                </div>
+                <div class="form-group col-sm-3 hidden-xs">
+                    <input type="text" name="location" id="location" class="form-control input-lg" style="width: 100%;"
+                           placeholder="Location">
+                </div>
+                <div class="form-group col-sm-3 hidden-xs">
+                    <select class="form-control input-lg" name="period" style="width: 100%;" title="Period">
+                        <option value="" selected="selected">{{ _("All Dates") }}</option>
+                        <option value="Today">{{ _("Today") }}</option>
+                        <option value="Tomorrow">{{ _("Tomorrow") }}</option>
+                        <option value="This Week">{{ _("This Week") }}</option>
+                        <option value="This Weekend">{{ _("This Weekend") }}</option>
+                        <option value="Next Week">{{ _("Next Week") }}</option>
+                        <option value="This Month">{{ _("This Month") }}</option>
+                    </select>
+                </div>
+                <button type="submit" class="col-sm-2 col-xs-2 btn btn-lg btn-info" style="margin-bottom: 0;">
+                    <span class="visible-xs"><i class="fa fa-search"></i> </span><span
+                        class="hidden-xs"> {{ _("Search") }}</span>
+                </button>
+            </form>
+            <div class="row">
+                <h3 class="section-header" style="margin-left: 10px; margin-bottom: 0;">{{ _("Upcoming Events") }}</h3>
+            </div>
+            <div class="row">
+                {% for upcoming_event in upcoming_events %}
+                    {{ event_box(upcoming_event) }}
+                {% else %}
+                    <div class="row no-data-message">{{ _("No upcoming events available at this time") }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="row">
+                <h3 class="section-header"
+                    style="margin-left: 10px; margin-bottom: 0;">{{ _("Call for Speakers") }}</h3>
+            </div>
+            <div class="row">
+                {% for call_for_speakers_event in call_for_speakers_events %}
+                    {{ event_box(call_for_speakers_event) }}
+                {% else %}
+                    <div class="row no-data-message">{{ _("No call for speakers open at this time") }}</div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+    </div>
+    <br>
+    <br>
+    <div class="modal fade" id="share-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4>{{ _("Share this event") }}</h4>
+                </div>
+                <div class="modal-body" style="text-align: center;">
+                    {% include 'gentelella/components/social_buttons.html' %}
+                    <input id="share-url-box" type="text" class="form-control" onClick="this.select();"
+                           value="{{ request.url }}" title="Share URL">
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/vendor/jquery/jquery.ellipsis.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/vendor/jquery/jquery.codezero.js') }}"></script>
+    <script type="text/javascript">
+        var pathArray = location.href.split('/');
+        var protocol = pathArray[0];
+        var host = pathArray[2];
+        var url = protocol + '//' + host;
+
+        $(document).on("click", ".share-btn", function (event) {
+            event.stopImmediatePropagation();
+            event.stopPropagation();
+            event.preventDefault();
+            var eventUrl = url + "/e/" + $(this).data("event-id") + "/" + slugify($(this).data("title"));
+            $("#share-url-box").val(eventUrl);
+            setSocialLinks(eventUrl, $(this).data("title"));
+            $("#share-modal").modal('show');
+        });
+
+        $(document).on('click', '.filter-hashtag', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var name = $(this).data('name');
+            var value = $(this).data('value');
+            location.href = "{{ url_for("admin.browse_view") }}?" + name + "=" + encodeURIComponent(value);
+        });
+
+        $(".location_name").ellipsis();
+
+    </script>
+{% endblock %}

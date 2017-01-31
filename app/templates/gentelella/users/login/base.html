@@ -1,0 +1,32 @@
+{% extends 'gentelella/base.html' %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/vendor/animate.min.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="row" style="min-height:500px;">
+        <a class="hiddenanchor" id="signup"></a>
+        <a class="hiddenanchor" id="signin"></a>
+        <div class="login_wrapper">
+            {% block login %}
+            {% endblock %}
+
+            {% block register %}
+            {% endblock %}
+
+            {% block password_reminder %}
+            {% endblock %}
+
+            {% block change_password %}
+            {% endblock %}
+
+            {% block create_password %}
+            {% endblock %}
+
+            {% block forbidden %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}

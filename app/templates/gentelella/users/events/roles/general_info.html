@@ -1,0 +1,45 @@
+{% extends 'gentelella/users/events/details/base_panel.html' %}
+{% block panel_title %}
+    {{ _("General Info") }}
+{% endblock %}
+{% block panel_content %}
+    <table class="table table-striped table-responsive">
+        <tbody>
+        <tr>
+            <td><b>{{ _("Event ID") }}: </b></td>
+            <td>{{ event.id }}</td>
+        </tr>
+        <tr>
+            <td><b>{{ _("Event Url") }}: </b></td>
+            <td>{{ url_for('event_detail.display_event_detail_home', identifier=event.identifier, _external=True) }}</td>
+        </tr>
+        <tr>
+            <td><b>{{ _("Event Start Time") }}: </b></td>
+            <td>{{ event.start_time }}</td>
+        </tr>
+        <tr>
+            <td><b>{{ _("Event End Time") }}: </b></td>
+            <td>{{ event.end_time }}</td>
+        </tr>
+        <tr>
+            <td><b>{{ _("Event Session Types") }}: </b></td>
+            <td>
+                {% for sessionType in event.session_type %}
+                    {{ sessionType.name }},
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td><b>{{ _("Event Links and Social media") }}: </b></td>
+            <td>
+                {% for socialLink in event.social_link %}
+                    <a href="{{ socialLink.link }}">{{ socialLink.name }}</a>,
+                {% endfor %}
+            </td>
+        </tr>
+        <a class="btn btn-default" onclick="return confirm({{ _("'Do you want to edit this record?'") }});"
+           href="{{ url_for('events.edit_view', event_id=event.id) }}" title="Edit record">{{ _("Edit Event") }}</a>
+        </tbody>
+    </table>
+
+{% endblock %}

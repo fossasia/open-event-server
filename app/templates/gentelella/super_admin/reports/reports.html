@@ -1,0 +1,92 @@
+{% extends 'gentelella/super_admin/dashboard.html' %}
+
+{% block title %}
+    {{ _("Reports") }}
+{% endblock %}
+
+{% set active_page = "reports" %}
+
+{% block head_css %}
+    {{ super() }}
+    <style type="text/css">
+        #reports_tabs {
+            background: transparent;
+            width: auto;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+
+
+    <div class="col-md-12">
+        <ul id="reports_tabs" class="nav nav-tabs bar_tabs large_tab_list" role="tablist">
+            <li class="active"><a href="#system-logs" id="all-tab" data-toggle="tab">{{ _("System Logs") }}</a></li>
+            <li>
+                <a href="#server-logs" id="home-tab" data-toggle="tab">
+                    {% if on_kubernetes %}Kubernetes {% elif on_heroku %}Heroku {% endif %}
+                    {{ _("Server Logs") }}
+                </a>
+            </li>
+        </ul>
+        <div class="dropdown tabs_small">
+            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                <span class="drop_header">{{ _("System Roles") }}</span>
+                <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li value="System Logs" class="small_tab_list active">
+                    <a href="#system-logs" id="system-logs-tab" data-toggle="tab">{{ _("System Logs") }}</a>
+                </li>
+                <li value="Server Logs" class="small_tab_list">
+                    <a href="#server-logs" id="server-logs-tab" data-toggle="tab">{{ _("Server Logs") }}</a>
+                </li>
+            </ul>
+        </div>
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="system-logs">
+                {% include 'gentelella/super_admin/reports/_system_logs.html' %}
+            </div>
+            <div class="tab-pane fade " id="server-logs">
+                {% include 'gentelella/super_admin/reports/_server_logs.html' %}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    <script>
+        $(".small_tab_list").click(function () {
+            $(".small_tab_list").removeClass("active");
+            $(this).addClass("active");
+            var clicked_link = $(this).attr("value");
+            $(".drop_header").text(clicked_link);
+        });
+        $(".small_tab_list2").click(function () {
+            $(".small_tab_list2").removeClass("active");
+            $(this).addClass("active");
+            var clicked_link = $(this).attr("value");
+            $(".drop_header2").text(clicked_link);
+        });
+        $('.tabs_small a').click(function () {
+            $(this).tab('show');
+        });
+
+        $(document).ready(function () {
+            if (location.hash.substr(0, 2) == "#!") {
+                $("a[href='#" + location.hash.substr(2) + "']").tab("show");
+            }
+            $("a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+                var hash = $(e.target).attr("href");
+                if (hash.substr(0, 1) == "#") {
+                    location.replace("#!" + hash.substr(1));
+                }
+            });
+        });
+
+    </script>
+{% endblock %}
+

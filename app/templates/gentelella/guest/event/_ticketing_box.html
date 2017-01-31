@@ -48,9 +48,9 @@
                                         </a>
                                         {% if not ticket.description_toggle and ticket.description%}
                                             <u><a class="show" style="cursor: pointer; font-size:10px; color:#2aa9dd;">show details</a></u>
-                                            <font color="#696969"><p class="ticket_description" style="display:none;">{{ ticket.description }}</p></font>
+                                            <span style="color: #696969; "><p class="ticket_description" style="display:none;">{{ ticket.description }}</p></span>
                                         {% elif ticket.description_toggle and ticket.description %}
-                                            <font color="#696969"><p style="visibility: visible;">{{ ticket.description }}</p></font>
+                                            <span style="color: #696969; "><p style="visibility: visible;">{{ ticket.description }}</p></span>
                                         {% endif %}
                                     </td>
                                     <td>{{ ((ticket.sales_end|localize_dt_obj(event.timezone))|as_timezone(current_timezone)).strftime('%a, %B %d') }}</td>
@@ -397,7 +397,7 @@
                 $totalHolder.show();
                 $totalAmount.text("{{ event.payment_currency | currency_symbol }} " + (Math.abs(total - discount_total)).toFixed(2));
                 if($this.data('rate') - price_individual_new != 0){
-                    $this.closest("tr").find(".individual-price").html("<table><tr><td> {{ event.payment_currency | currency_symbol }} " + price_individual_new.toFixed(2) + "</td></tr><tr><td style='text-decoration: line-through'>{{ event.payment_currency | currency_symbol }} " + $this.data('rate') + "</td></tr></table>" );
+                    $this.closest("tr").find(".individual-price").html("<table><tr><td> {{ event.payment_currency | currency_symbol }} " + price_individual_new.toFixed(2) + "</td></tr><tr><td style='text-decoration: line-through'>{{ event.payment_currency | currency_symbol }} " + parseFloat($this.data('rate')).toFixed(2) + "</td></tr></table>" );
                 {% if fees %}
                     $this.closest("tr").find(".individual-fee").text("{{ event.payment_currency | currency_symbol }} " + fee_individual_new.toFixed(2));
                 {% endif %}

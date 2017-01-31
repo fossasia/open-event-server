@@ -26,9 +26,9 @@ def index_view(event_id):
     speakers = DataGetter.get_speakers(event_id)
     event = DataGetter.get_event(event_id)
     if not event.has_session_speakers:
-        return render_template('gentelella/admin/event/info/enable_module.html', active_page='speakers',
+        return render_template('gentelella/users/events/info/enable_module.html', active_page='speakers',
                                title='Speakers', event=event)
-    return render_template('gentelella/admin/event/speakers/base_speaker_table.html',
+    return render_template('gentelella/users/events/speakers/base_speaker_table.html',
                            speakers=speakers, event_id=event_id, event=event)
 
 
@@ -43,7 +43,7 @@ def edit_view(event_id, speaker_id):
         return redirect(url_for('.index_view', event_id=event_id))
     speaker_form = json.loads(form_elems.speaker_form)
     if request.method == 'GET':
-        return render_template('gentelella/admin/event/speakers/edit.html',
+        return render_template('gentelella/users/events/speakers/edit.html',
                                speaker=speaker, event_id=event_id,
                                event=event, speaker_form=speaker_form)
     if request.method == 'POST':
@@ -53,7 +53,7 @@ def edit_view(event_id, speaker_id):
     return redirect(url_for('.index_view', event_id=event_id))
 
 
-@event_speakers.route('/<int:speaker_id>/delete', methods=('GET',))
+@event_speakers.route('/<int:speaker_id>/delete/')
 @belongs_to_event
 def delete(event_id, speaker_id):
     speaker = get_speaker_or_throw(speaker_id)
@@ -62,7 +62,7 @@ def delete(event_id, speaker_id):
     return redirect(url_for('.index_view', event_id=event_id))
 
 
-@event_speakers.route('/<int:speaker_id>/avatar', methods=('DELETE',))
+@event_speakers.route('/<int:speaker_id>/avatar/', methods=('DELETE',))
 @belongs_to_event
 def avatar_delete(event_id, speaker_id):
     if request.method == 'DELETE':

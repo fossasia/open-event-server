@@ -5,7 +5,6 @@ The Open Event Orga Server enables organizers to manage events from concerts to 
 [![GitHub release](https://img.shields.io/badge/release-1.0.0--alpha.7-blue.svg?style=flat-square)](https://github.com/fossasia/open-event-orga-server/releases/latest)
 [![Travis branch](https://img.shields.io/travis/fossasia/open-event-orga-server/master.svg?style=flat-square)](https://travis-ci.org/fossasia/open-event-orga-server)
 [![Gemnasium](https://img.shields.io/gemnasium/fossasia/open-event-orga-server.svg?style=flat-square)](https://gemnasium.com/github.com/fossasia/open-event-orga-server)
-[![Coveralls branch](https://img.shields.io/coveralls/fossasia/open-event-orga-server/master.svg?style=flat-square&label=Coveralls+Coverage)](https://coveralls.io/github/fossasia/open-event-orga-server?branch=master)
 [![Codacy branch grade](https://img.shields.io/codacy/grade/1ac554483fac462797ffa5a8b9adf2fa/master.svg?style=flat-square)](https://www.codacy.com/app/fossasia/open-event-orga-server)
 [![Codecov branch](https://img.shields.io/codecov/c/github/fossasia/open-event-orga-server/master.svg?style=flat-square&label=Codecov+Coverage)](https://codecov.io/gh/fossasia/open-event-orga-server)
 [![Gitter](https://img.shields.io/badge/chat-on%20gitter-ff006f.svg?style=flat-square)](https://gitter.im/fossasia/open-event-orga-server)

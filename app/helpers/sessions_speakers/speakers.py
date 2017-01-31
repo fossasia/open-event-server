@@ -38,7 +38,12 @@ def save_speaker(request, event_id=None, speaker=None, user=None):
     from app.helpers.data import save_to_db, record_activity
 
     if not speaker:
-        speaker = Speaker(event_id=event_id, user=user)
+        speaker = Speaker(
+            event_id=event_id,
+            user=user,
+            name=trim_get_form(request.form, 'name', None),
+            email=trim_get_form(request.form, 'email', None)
+        )
         save_to_db(speaker)
 
     if user and not speaker.user:
@@ -78,6 +83,7 @@ def save_speaker(request, event_id=None, speaker=None, user=None):
     speaker.position = trim_get_form(request.form, 'position', None)
     speaker.country = trim_get_form(request.form, 'country', None)
     speaker.city = trim_get_form(request.form, 'city', None)
+    speaker.gender = trim_get_form(request.form, 'gender', None)
     if trim_get_form(request.form, 'heard_from', None) == "Other":
         speaker.heard_from = trim_get_form(request.form, 'other_text', None)
     else:

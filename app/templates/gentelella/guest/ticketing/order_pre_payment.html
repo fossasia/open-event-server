@@ -4,7 +4,7 @@
 
 {% block head_css %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/events/event-wizard.css') }}"/>
 {% endblock %}
 
 {% block inner_panel %}
@@ -301,10 +301,10 @@
         window.currency = "{{ order.event.payment_currency if order.event.payment_currency and order.event.payment_currency != "" else "USD" | default('USD', true) }}"
     </script>
     <script src="https://checkout.stripe.com/checkout.js"></script>
-    <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/admin/guest/ticketing.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/moment/min/moment.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/bootstrap-validator/dist/validator.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/jquery/jquery.codezero.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/guest/ticketing.js') }}"></script>
     <script type="text/javascript">
         $("input[name=pay_via_service]").click(function () {
             $(this).closest('.form-group').find("pre").hide();

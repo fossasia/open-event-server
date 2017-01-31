@@ -433,6 +433,11 @@ class DataGetter(object):
         return DataGetter.trim_attendee_events(events, user_id)
 
     @staticmethod
+    def get_all_events_of_user(user_id=None):
+        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id = login.current_user.id if not user_id else user_id)
+        return DataGetter.trim_attendee_events(events, user_id)
+
+    @staticmethod
     def get_draft_events_of_user(user_id=None):
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id if not user_id else user_id) \
             .filter(Event.state == 'Draft').filter(Event.in_trash == False)
