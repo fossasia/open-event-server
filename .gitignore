@@ -15,7 +15,7 @@ test.db
 app.db
 .idea/
 .bundle/
-
+.venv
 # Static files at 'app/static/admin/lib'
 lib/
 node_modules
@@ -44,3 +44,4 @@ dump.rdb
 /log.html
 /selenium-screenshot-1.png
 jobs.sqlite
+
