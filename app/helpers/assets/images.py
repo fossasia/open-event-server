@@ -1,10 +1,14 @@
 import os
-import time
+import uuid
 
 import PIL
 from PIL import Image
 from flask import current_app as app
 from app.helpers.storage import upload, UploadedFile
+
+
+def get_image_file_name():
+    return str(uuid.uuid4())
 
 
 def get_path_of_temp_url(url):
@@ -25,7 +29,7 @@ def save_event_image(image_url, upload_path, ext='png', remove_after_upload=Fals
     :param image_url:
     :return:
     """
-    filename = '{filename}.{ext}'.format(filename=time.time(), ext=ext)
+    filename = '{filename}.{ext}'.format(filename=get_image_file_name(), ext=ext)
     file_path = get_path_of_temp_url(image_url)
     logo_file = UploadedFile(file_path, filename)
     url = upload(logo_file, upload_path)
@@ -47,7 +51,7 @@ def save_resized_image(image_file, basewidth, aspect, height_size, upload_path,
     :param image_file:
     :return:
     """
-    filename = '{filename}.{ext}'.format(filename=time.time(), ext=ext)
+    filename = '{filename}.{ext}'.format(filename=get_image_file_name(), ext=ext)
 
     img = Image.open(image_file)
     if aspect == 'on':

@@ -18,6 +18,7 @@ from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from flask_socketio import emit
 from requests_oauthlib import OAuth2Session
 
+from app.helpers.assets.images import get_image_file_name
 from app.helpers.cache import cache
 from app.helpers.helpers import string_empty, string_not_empty
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
@@ -503,7 +504,7 @@ class DataManager(object):
                 user_detail.thumbnail = ""
                 user_detail.small = ""
                 user_detail.icon = ""
-                filename = '{}.png'.format(time.time())
+                filename = '{}.png'.format(get_image_file_name())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
                                                  avatar_img[len('/serve_static/'):])
                 # print "File path 1", filepath
@@ -520,7 +521,7 @@ class DataManager(object):
                                              thumbnail_height=50,
                                              type='profile')
                 save_to_db(image_sizes, "Image Sizes Saved")
-                filename = '{}.jpg'.format(time.time())
+                filename = '{}.jpg'.format(get_image_file_name())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
                                                  avatar_img[len('/serve_static/'):])
                 # print "File path 1", filepath
@@ -1012,7 +1013,7 @@ def restore_session(session_id):
 
 def uploaded_file_provided_by_url(url):
     response_file = urlopen(url)
-    filename = str(time.time()) + '.jpg'
+    filename = get_image_file_name() + '.jpg'
     file_path = os.path.realpath('.') + '/static/uploads/' + filename
     fh = open(file_path, "wb")
     fh.write(response_file.read())

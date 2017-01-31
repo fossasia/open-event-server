@@ -127,12 +127,12 @@ def save_resized_photo(background_image_file, event_id, speaker_id, size, image_
 
     if size == 'small':
         aspect = image_sizes.full_aspect
-        basewidth = image_sizes.full_width
-        height_size = image_sizes.full_height
-    elif size == 'thumbnail':
-        aspect = image_sizes.full_aspect
         basewidth = image_sizes.thumbnail_width
         height_size = image_sizes.thumbnail_height
+    elif size == 'thumbnail':
+        aspect = image_sizes.full_aspect
+        basewidth = image_sizes.full_width
+        height_size = image_sizes.full_height
     elif size == 'icon':
         aspect = image_sizes.icon_aspect
         basewidth = image_sizes.icon_width

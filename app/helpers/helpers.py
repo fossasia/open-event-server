@@ -8,6 +8,7 @@ from flask import request, url_for, current_app
 from itsdangerous import Serializer
 from sqlalchemy import func
 
+from app.helpers.assets.images import get_image_file_name
 from app.helpers.flask_helpers import get_real_ip
 from app.helpers.storage import UploadedFile
 from app.models.notifications import (
@@ -720,7 +721,7 @@ def update_state(task_handle, state, result=None):
 
 
 def uploaded_file(extension='.png', file_content=None):
-    filename = str(time.time()) + extension
+    filename = get_image_file_name() + extension
     file_path = current_app.config.get('BASE_DIR') + '/static/uploads/' + filename
     file = open(file_path, "wb")
     file.write(file_content.split(",")[1].decode('base64'))
