@@ -6,18 +6,19 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
+"Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2017-01-31 21:59+0530\n"
-"PO-Revision-Date: 2017-01-28 10:39+0000\n"
+"PO-Revision-Date: 2017-02-01 13:47+0000\n"
 "Last-Translator: naofum <naofum@gmail.com>\n"
-"Language: ja\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/open-event"
 "/organizer-server/ja/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2.11\n"
 "Generated-By: Babel 2.3.4\n"
 
 #: app/templates/gentelella/components/footer.html:8
@@ -543,7 +544,7 @@ msgstr "請求書をダウンロード"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:3
 msgid "Your Invoice"
-msgstr ""
+msgstr "あなたの請求書"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:15
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:15
@@ -552,7 +553,7 @@ msgstr "登録情報"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:22
 msgid "Personal Information"
-msgstr ""
+msgstr "個人情報"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:29
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:40
@@ -561,7 +562,7 @@ msgstr "サインイン"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:29
 msgid "to your account to continue"
-msgstr ""
+msgstr "引き続きアカウントに"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:35
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:47
@@ -629,17 +630,17 @@ msgstr "都道府県/州"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:123
 msgid "Code"
-msgstr ""
+msgstr "コード"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:132
 msgid "Pay"
-msgstr ""
+msgstr "支払"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:158
 msgid ""
 "By clicking \"Pay Now\", I acknowledge that I have read and agree with "
 "our terms of service, and privacy policy."
-msgstr ""
+msgstr "「今すぐ支払う」をクリックすることで、利用規約とプライバシーポリシーを読んで、同意します。"
 
 #: app/templates/gentelella/guest/invoicing/components/_invoice.html:5
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:5
@@ -2512,7 +2513,7 @@ msgstr "ロールの管理"
 
 #: app/templates/gentelella/users/events/details/widgets/roles.html:8
 msgid "Add People"
-msgstr ""
+msgstr "人を追加"
 
 #: app/templates/gentelella/users/events/details/widgets/roles.html:21
 msgid "Invited"
@@ -2856,7 +2857,7 @@ msgstr "メールを送信済"
 
 #: app/templates/gentelella/users/events/sessions/base_session_table.html:195
 msgid "Send email"
-msgstr ""
+msgstr "メールを送信"
 
 #: app/templates/gentelella/users/events/sessions/display.html:31
 #: app/templates/gentelella/users/mysessions/mysession_detail.html:119
@@ -3111,7 +3112,7 @@ msgstr "期限切れ"
 #: app/templates/gentelella/users/events/tickets/attendees.html:61
 #: app/templates/gentelella/users/events/tickets/orders.html:56
 msgid "Cancelled"
-msgstr ""
+msgstr "キャンセル"
 
 #: app/templates/gentelella/users/events/tickets/attendees.html:64
 msgid "Checked In"
@@ -4026,4 +4027,3 @@ msgstr "ログイン"
 
 #~ msgid "Submit Mail"
 #~ msgstr "メールを送信"
-
