@@ -129,19 +129,15 @@ def save_resized_photo(background_image_file, event_id, speaker_id, size, image_
     """
 
     basewidth = image_sizes.full_width
-    aspect = image_sizes.full_aspect
     height_size = image_sizes.full_height
 
     if size == 'small':
-        aspect = image_sizes.full_aspect
         basewidth = image_sizes.thumbnail_width
         height_size = image_sizes.thumbnail_height
     elif size == 'thumbnail':
-        aspect = image_sizes.full_aspect
         basewidth = image_sizes.full_width
         height_size = image_sizes.full_height
     elif size == 'icon':
-        aspect = image_sizes.icon_aspect
         basewidth = image_sizes.icon_width
         height_size = image_sizes.icon_height
 
@@ -149,4 +145,10 @@ def save_resized_photo(background_image_file, event_id, speaker_id, size, image_
         event_id=int(event_id), id=int(speaker_id)
     )
 
-    return save_resized_image(background_image_file, basewidth, aspect, height_size, upload_path)
+    if basewidth != height_size:
+        if height_size > basewidth:
+            basewidth = height_size
+        else:
+            height_size = basewidth
+
+    return save_resized_image(background_image_file, basewidth, 'off', height_size, upload_path)
