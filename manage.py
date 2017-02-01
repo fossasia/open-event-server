@@ -51,12 +51,12 @@ def fix_session_owners():
 
 
 @manager.option('-e', '--event', help='Event ID. Eg. 1')
-def fix_speaker_images(event_id):
+def fix_speaker_images(event):
     from app.helpers.sessions_speakers.speakers import speaker_image_sizes
     from app.helpers.sessions_speakers.speakers import save_resized_photo
     import urllib
     from app.helpers.storage import generate_hash
-    event_id = int(event_id)
+    event_id = int(event)
     image_sizes = speaker_image_sizes()
     speakers = Speaker.query.filter_by(event_id=event_id).all()
     for speaker in speakers:
