@@ -3,7 +3,6 @@ import logging
 import os.path
 import random
 import shutil
-import time
 import traceback
 from datetime import datetime, timedelta
 from os import path
@@ -26,7 +25,6 @@ from app.helpers.notification_email_triggers import trigger_new_session_notifica
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
 from app.helpers.sessions_speakers.speakers import save_speaker
 from app.helpers.storage import upload, UPLOAD_PATHS, UploadedFile, upload_local
-from app.models.notifications import Notification
 from app.helpers import helpers as Helper
 from app.helpers.data_getter import DataGetter
 from app.helpers.system_mails import MAILS
@@ -38,6 +36,7 @@ from app.models.event import Event, EventsUsers
 from app.models.image_sizes import ImageSizes
 from app.models.invite import Invite
 from app.models.message_settings import MessageSettings
+from app.models.notifications import Notification
 from app.models.page import Page
 from app.models.panel_permissions import PanelPermission
 from app.models.permission import Permission
@@ -194,9 +193,10 @@ class DataManager(object):
         return notification_ids
 
     @staticmethod
-    def add_session_to_event(request, event_id, state=None):
+    def add_session_to_event(request, event_id, state=None, use_current_user=True):
         """
         Session will be saved to database with proper Event id
+        :param use_current_user:
         :param state:
         :param request: The request
         :param event_id: Session belongs to Event by event id
@@ -219,8 +219,8 @@ class DataManager(object):
                               event_id=event_id,
                               short_abstract=form.get('short_abstract', ''),
                               level=form.get('level', ''),
-                              comments=form.get('comments',''),
-                              language=form.get('language',''),
+                              comments=form.get('comments', ''),
+                              language=form.get('language', ''),
                               state=state)
 
         if form.get('track', None) != "":
@@ -230,7 +230,12 @@ class DataManager(object):
             new_session.session_type_id = form.get('session_type', None)
 
         speaker = Speaker.query.filter_by(email=form.get('email', '')).filter_by(event_id=event_id).first()
-        speaker = save_speaker(request, event_id=event_id, speaker=speaker, user=login.current_user)
+        speaker = save_speaker(
+            request,
+            event_id=event_id,
+            speaker=speaker,
+            user=login.current_user if use_current_user else None
+        )
 
         new_session.speakers.append(speaker)
 
@@ -351,7 +356,6 @@ class DataManager(object):
 
             if form_state == 'pending' and session.state != 'pending' and \
                     session.state != 'accepted' and session.state != 'rejected':
-
                 trigger_new_session_notifications(session.id, event_id=event_id)
 
             session.title = form.get('title', '')
@@ -380,8 +384,7 @@ class DataManager(object):
 
             for current_speaker_id in current_speaker_ids:
                 if current_speaker_id not in existing_speaker_ids and current_speaker_id \
-                     not in existing_speaker_ids_by_email:
-
+                    not in existing_speaker_ids_by_email:
                     current_speaker = DataGetter.get_speaker(current_speaker_id)
                     session.speakers.remove(current_speaker)
                     db.session.commit()
@@ -659,7 +662,6 @@ class DataManager(object):
                         setattr(perm, oper[v], False)
 
                 save_to_db(perm, 'Permission saved')
-
 
     @staticmethod
     def delete_event(e_id):
