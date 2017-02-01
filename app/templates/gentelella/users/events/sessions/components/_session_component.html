@@ -64,17 +64,28 @@
                 {% endif %}
             {% endif %}
         {% elif identifier in media_session_fields %}
-            {% if session[identifier] %}
-                <br><a target="_blank" href="{{ session[identifier] }}">Click here to download previously uploaded file. To upload a new file, click on the button below</a>
-            {% endif %}
-            <br><input {% if (require==1) and not session[identifier] %}
-            required="required"
-        {% endif %}
+            <input type="hidden" {% if (require==1) and not session[identifier] %} required="required" {% endif %} name="{{ identifier }}_url" value="{{ session[identifier] | default('', true) }}">
+
+            <br><input
             type="file" id="speaker-file-{{ identifier | default(1) }}" name="{{ identifier }}"
             class="upload-btn"/>
+
             <label class="file-label" for="speaker-file-{{ identifier | default(1) }}">
                 <i class="fa fa-cloud-upload" aria-hidden="true"></i>
                 Choose a file</label>
+            <br>
+            <div class="media-progress row" id="media-progress-{{ identifier }}" {% if not session[identifier] %} style="display: none" {% endif %}>
+                 <div class="col-md-6" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                     <a href="{{ session[identifier] }}" target="_blank" id="download-{{ identifier }}" download>{{ session[identifier] | filename_from_url }}</a>
+                 </div>
+                 <div class="col-md-5">
+                    <div class="progress" id="progress-{{ identifier }}" style="display: none;">
+                      <div class="progress-bar progress-bar-striped active" id="progress-bar-{{ identifier }}" role="progressbar" aria-valuenow="70"
+                      aria-valuemin="0" aria-valuemax="100" style="width: 0"></div>
+                    </div>
+                 </div>
+                 <div id="remove-{{ identifier }}" onclick="remove_url('{{ identifier }}')" style="cursor: pointer;float: right"><i class="fa fa-times" aria-hidden="true"></i></div>
+            </div>
         {% else %}
             <input title="{{ pretty_name }}" {% if require==1 %}
                 required="required"

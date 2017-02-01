@@ -436,10 +436,19 @@ span.twitter-typeahead {
   border: solid 1px #5bc0de;
 }
 
-
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s
 }
+
 .fade-enter, .fade-leave-active {
   opacity: 0
+}
+
+.media-progress{
+    width: 37vw;
+    background: #f5f5f5;
+    height: 39px;
+    border: 1px solid #dcdcdc;
+    margin-left: 1px;
+    padding: 8px;
 }

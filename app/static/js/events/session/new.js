@@ -18,3 +18,53 @@ $(document).ready(function () {
         $(this).parent().parent().parent().remove();
     });
 });
+
+var remove_url = function (name) {
+    $('input[name="' + name + '_url"]').val("");
+    $('#media-progress-' + name).hide();
+};
+
+var fileUpload = function(name, media){
+    var fd = new FormData();
+    fd.append(name, media.files[0]);
+    filename = media.files[0].name;
+    $('#download-' + name).text(filename);
+    $('#media-progress-' + name).show();
+    $('#progress-' + name).show();
+    $.ajax({
+        xhr: function(){
+            var xhr = new window.XMLHttpRequest();
+            //Upload progress
+            xhr.upload.addEventListener("progress", function(evt){
+              if (evt.lengthComputable) {
+                 var percentComplete = (evt.loaded / evt.total) * 100;
+                 $('#progress-bar-' + name).width(percentComplete + '%');
+              }
+            }, false);
+            return xhr;
+          },
+        dataType: 'json',
+        url: '/e/temp/',
+        type: 'POST',
+        data: fd,
+        success: function(data){
+            if(data.url){
+                $('input[name="' + name + '_url"]').val(data.url);
+                $('#download-' + name).attr("href", data.url);
+                $('#progress-bar-' + name).removeClass('active');
+            }
+        },
+        contentType: false,
+        processData: false
+    });
+};
+
+$('input[name="slides"]').on('change', function(){
+    fileUpload('slides', this);
+});
+$('input[name="video"]').on('change', function(){
+    fileUpload('video', this);
+});
+$('input[name="audio"]').on('change', function(){
+    fileUpload('audio', this);
+});

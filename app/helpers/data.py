@@ -7,6 +7,7 @@ import traceback
 from datetime import datetime, timedelta
 from os import path
 from urllib2 import urlopen
+from uuid import uuid4
 
 import PIL
 import oauth2
@@ -17,7 +18,7 @@ from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from flask_socketio import emit
 from requests_oauthlib import OAuth2Session
 
-from app.helpers.assets.images import get_image_file_name
+from app.helpers.assets.images import get_image_file_name, get_path_of_temp_url
 from app.helpers.cache import cache
 from app.helpers.helpers import string_empty, string_not_empty
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
@@ -202,9 +203,21 @@ class DataManager(object):
         :param event_id: Session belongs to Event by event id
         """
         form = request.form
-        slide_file = DataManager.get_files_from_request(request, 'slides')
-        video_file = DataManager.get_files_from_request(request, 'video')
-        audio_file = DataManager.get_files_from_request(request, 'audio')
+        slide_temp_url = form.get('slides_url')
+        video_temp_url = form.get('video_url')
+        audio_temp_url = form.get('audio_url')
+        slide_file = ''
+        video_file = ''
+        audio_file = ''
+
+        if slide_temp_url:
+            slide_file = UploadedFile(get_path_of_temp_url(slide_temp_url), slide_temp_url.rsplit('/', 1)[1])
+
+        if video_temp_url:
+            video_file = UploadedFile(get_path_of_temp_url(video_temp_url), video_temp_url.rsplit('/', 1)[1])
+
+        if audio_temp_url:
+            audio_file = UploadedFile(get_path_of_temp_url(audio_temp_url), audio_temp_url.rsplit('/', 1)[1])
 
         if not state:
             state = form.get('state', 'draft')
@@ -244,21 +257,21 @@ class DataManager(object):
         if state == 'pending':
             trigger_new_session_notifications(new_session.id, event=event)
 
-        if slide_file != "":
+        if slide_temp_url != "" and slide_file:
             slide_url = upload(
                 slide_file,
                 UPLOAD_PATHS['sessions']['slides'].format(
                     event_id=int(event_id), id=int(new_session.id)
                 ))
             new_session.slides = slide_url
-        if audio_file != "":
+        if audio_temp_url != "" and audio_file:
             audio_url = upload(
                 audio_file,
                 UPLOAD_PATHS['sessions']['audio'].format(
                     event_id=int(event_id), id=int(new_session.id)
                 ))
             new_session.audio = audio_url
-        if video_file != "":
+        if video_temp_url != "" and video_file:
             video_url = upload(
                 video_file,
                 UPLOAD_PATHS['sessions']['video'].format(
@@ -285,6 +298,12 @@ class DataManager(object):
                 if user:
                     cfs_link = url_for('event_detail.display_event_cfs', identifier=event.identifier)
                     Helper.send_notif_invite_papers(user, event.name, cfs_link, link)
+
+    @staticmethod
+    def add_session_media(request, media):
+        media_file = DataManager.get_files_from_request(request, media)
+        url = upload(media_file, UPLOAD_PATHS['temp']['event'].format(uuid=uuid4()))
+        return url
 
     @staticmethod
     def get_files_from_request(request, file_type):
@@ -325,34 +344,45 @@ class DataManager(object):
             form = request.form
             event_id = session.event_id
 
-            slide_file = DataManager.get_files_from_request(request, 'slides')
-            video_file = DataManager.get_files_from_request(request, 'video')
-            audio_file = DataManager.get_files_from_request(request, 'audio')
+            slide_temp_url = form.get('slides_url')
+            video_temp_url = form.get('video_url')
+            audio_temp_url = form.get('audio_url')
+            slide_file = ''
+            video_file = ''
+            audio_file = ''
+
+            if slide_temp_url and slide_temp_url!=session.slides:
+                slide_file = UploadedFile(get_path_of_temp_url(slide_temp_url), slide_temp_url.rsplit('/', 1)[1])
+
+            if video_temp_url and video_temp_url!=session.video:
+                video_file = UploadedFile(get_path_of_temp_url(video_temp_url), video_temp_url.rsplit('/', 1)[1])
+
+            if audio_temp_url and audio_temp_url!=session.audio:
+                audio_file = UploadedFile(get_path_of_temp_url(audio_temp_url), audio_temp_url.rsplit('/', 1)[1])
 
             form_state = form.get('state', 'draft')
 
-            if slide_file != "":
-                slide_url = upload(
-                    slide_file,
+            if slide_temp_url != "" and slide_temp_url!=session.slides and slide_file:
+                slide_temp_url = upload(slide_file,
                     UPLOAD_PATHS['sessions']['slides'].format(
                         event_id=int(event_id), id=int(session.id)
                     ))
-                session.slides = slide_url
-
-            if audio_file != "":
-                audio_url = upload(
+            if audio_temp_url != "" and audio_temp_url!=session.audio and audio_file:
+                audio_temp_url = upload(
                     audio_file,
                     UPLOAD_PATHS['sessions']['audio'].format(
                         event_id=int(event_id), id=int(session.id)
                     ))
-                session.audio = audio_url
-            if video_file != "":
-                video_url = upload(
+            if video_temp_url != "" and video_temp_url!=session.video and video_file:
+                video_temp_url = upload(
                     video_file,
                     UPLOAD_PATHS['sessions']['video'].format(
                         event_id=int(event_id), id=int(session.id)
                     ))
-                session.video = video_url
+
+            session.slides = slide_temp_url
+            session.audio = audio_temp_url
+            session.video = video_temp_url
 
             if form_state == 'pending' and session.state != 'pending' and \
                     session.state != 'accepted' and session.state != 'rejected':

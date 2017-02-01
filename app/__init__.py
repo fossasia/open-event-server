@@ -427,6 +427,13 @@ def fees_by_currency(currency):
     return fees
 
 
+@app.template_filter('filename_from_url')
+def filename_from_url(url):
+    if url:
+        return url.rsplit('/', 1)[1]
+    return ""
+
+
 @app.context_processor
 def fb_app_id():
     fb_app_id = get_settings()['fb_client_id']
