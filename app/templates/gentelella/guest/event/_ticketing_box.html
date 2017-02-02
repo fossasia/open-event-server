@@ -48,7 +48,7 @@
                                         </a>
                                         {% if not ticket.description_toggle and ticket.description%}
                                             <u><a class="show" style="cursor: pointer; font-size:10px; color:#2aa9dd;">show details</a></u>
-                                            <span style="color: #696969; "><p class="ticket_description" style="display:none;">{{ ticket.description }}</p></span>
+                                            <span style="color: #696969; "><p class="ticket_description" style="display:none; padding-top:10px;">{{ ticket.description }}</p></span>
                                         {% elif ticket.description_toggle and ticket.description %}
                                             <span style="color: #696969; "><p style="visibility: visible;">{{ ticket.description }}</p></span>
                                         {% endif %}
