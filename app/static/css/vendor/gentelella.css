@@ -1180,7 +1180,7 @@ table.tile_info td:first-child {
   width: 83%;
 }
 td span {
-  line-height: 28px;
+  line-height: 130%;
 }
 .sidebar-widget {
   overflow: hidden;
