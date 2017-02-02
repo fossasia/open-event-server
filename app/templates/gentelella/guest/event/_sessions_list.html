@@ -52,6 +52,7 @@
 {% endmacro %}
 
 {% macro session_element(session = None, index=0) %}
+    {% if session.microlocation_id %}
     <li class="list-group-item" data-session-id="session-{{ session.id }}">
         <div class="row">
 
@@ -125,13 +126,14 @@
             </div>
         </div>
     </li>
+    {% endif %}
 {% endmacro %}
 
 <div id='current-track-navbar' class="navbar navbar-default track-navbar" style="font-size: 1.25em">
     <div class="container-fluid">
         <div class="navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav" id="active-track" style="max-width: 100%">
-                <li><i class="fa fa-angle-down " aria-hidden="true" onclick = "nav_expand()" style="cursor: pointer;margin-right: 20px;margin-top: 10px;font-size: 1.8em"></i></li>
+                <li><i class="fa fa-angle-down " aria-hidden="true" onclick = "nav_expand();" style="cursor: pointer;margin-right: 20px;margin-top: 10px;font-size: 1.8em"></i></li>
                 {% for track in tracks %}
                     {% if loop.index < 8 %}
                         <li class="track-link"><a href="#track-{{ track.id }}">{{ track.name }}</a></li>
@@ -146,7 +148,7 @@
     <div class="container-fluid">
         <div class="navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav" style="max-width: 100%">
-                <li><i class="fa fa-angle-up " aria-hidden="true" onclick = "nav_contract()" style="cursor: pointer;margin-right: 20px;margin-top: 10px;font-size: 1.8em"></i></li>
+                <li><i class="fa fa-angle-up " aria-hidden="true" onclick = "nav_contract();" style="cursor: pointer;margin-right: 20px;margin-top: 10px;font-size: 1.8em"></i></li>
                 {% for track in tracks %}
                     <li class="track-link"><a href="#track-{{ track.id }}">{{ track.name }}</a></li>
                 {% endfor %}
@@ -166,7 +168,7 @@
     {% endfor %}
 </ul>
 
-<script src="{{ url_for('static', filename='admin/lib/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
 <script type="text/javascript">
     var nav_expand = function(){
         $('#current-track-navbar').hide();
@@ -189,8 +191,7 @@
             $('#track-navbar').on('activate.bs.scrollspy', function () {
                 var active = $(this).find("li.active");
                 var drop = $.parseHTML('<li><i class="fa fa-angle-down " aria-hidden="true" onclick = "nav_expand()" style="cursor: pointer;margin-right: 20px;margin-top: 10px;font-size: 1.8em"></i></li>');
-                $('#active-track').html(drop);
-                $('#active-track').append(active.clone());
+                $('#active-track').html(drop).append(active.clone());
                 var temp = active.next();
                 for(var i = 0;i < max_track;i++){
                     if(temp.innerHTML == ""){
@@ -202,11 +203,9 @@
             });
         }else {
             $('#current-track-navbar').hide();
-            $('#track-navbar').show();
+            $('#track-navbar').show().find("li").first().remove();
             $(document.body).trigger("sticky_kit:recalc");
-            $('#track-navbar').find("li").first().remove();
         }
-
     });
 
     $('a[href*="#"]:not([href="#"])').click(function () {

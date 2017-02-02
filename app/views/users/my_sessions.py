@@ -1,10 +1,11 @@
 import json
 from datetime import datetime
 
-from flask import Blueprint
+from flask import Blueprint, jsonify
 from flask import flash, redirect, url_for, request
 from flask import render_template
 from flask.ext.restplus import abort
+from flask.ext import login
 from markupsafe import Markup
 
 from app.helpers.data import DataManager, save_to_db
@@ -33,13 +34,13 @@ def display_my_sessions_view():
                      "Please verify by clicking on the confirmation link that has been emailed to you."
                      '<br>Did not get the email? Please <a href="/resend_email/" class="alert-link"> '
                      'click here to resend the confirmation.</a>'))
-    return render_template('gentelella/admin/mysessions/mysessions_list.html',
+    return render_template('gentelella/users/mysessions/mysessions_list.html',
                            upcoming_events_sessions=upcoming_events_sessions, past_events_sessions=past_events_sessions,
                            page_content=page_content, placeholder_images=placeholder_images,
                            custom_placeholder=custom_placeholder, im_size=im_size)
 
 
-@my_sessions.route('/<int:session_id>/', methods=('GET',))
+@my_sessions.route('/<int:session_id>/')
 def display_session_view(session_id):
     session = DataGetter.get_sessions_of_user_by_id(session_id)
     if not session:
@@ -53,7 +54,7 @@ def display_session_view(session_id):
     session_form = json.loads(form_elems.session_form)
     event = DataGetter.get_event(session.event_id)
     speakers = DataGetter.get_speakers(session.event_id).all()
-    return render_template('gentelella/admin/mysessions/mysession_detail.html', session=session,
+    return render_template('gentelella/users/mysessions/mysession_detail.html', session=session,
                            speaker_form=speaker_form, session_form=session_form, event=event, speakers=speakers)
 
 
@@ -71,18 +72,36 @@ def process_session_view(session_id):
         speaker_form = json.loads(form_elems.speaker_form)
         session_form = json.loads(form_elems.session_form)
         event = DataGetter.get_event(session.event_id)
-        speakers = DataGetter.get_speakers(session.event_id).all()
-        return render_template('gentelella/admin/mysessions/mysession_detail_edit.html', session=session,
-                               speaker_form=speaker_form, session_form=session_form, event=event, speakers=speakers)
+        speaker = DataGetter.get_speakers(session.event_id).filter_by(user_id=login.current_user.id).first()
+        return render_template(
+            'gentelella/users/mysessions/mysession_detail_edit.html', session=session,
+            photo_delete_url=url_for('.avatar_delete', event_id=event.id, speaker_id=speaker.id),
+            speaker_form=speaker_form, session_form=session_form, event=event, speaker=speaker)
 
     if request.method == 'POST':
         session = DataGetter.get_sessions_of_user_by_id(session_id)
-        DataManager.edit_session(request, session)
+        speaker = DataGetter.get_speakers(session.event_id).filter_by(user_id=login.current_user.id).first()
+        DataManager.edit_session(request, session, speaker)
         flash("The session has been updated successfully", "success")
         return redirect(url_for('.display_session_view', session_id=session_id))
 
 
-@my_sessions.route('/<int:session_id>/withdraw/', methods=('GET',))
+@my_sessions.route('/<int:event_id>/speakers/<int:speaker_id>/avatar', methods=('DELETE',))
+def avatar_delete(event_id, speaker_id):
+    if request.method == 'DELETE':
+        speaker = DataGetter.get_speakers(event_id).filter_by(user_id=login.current_user.id, id=speaker_id).first()
+        if speaker:
+            speaker.photo = ''
+            speaker.small = ''
+            speaker.thumbnail = ''
+            speaker.icon = ''
+            save_to_db(speaker)
+            return jsonify({'status': 'ok'})
+        else:
+            abort(403)
+
+
+@my_sessions.route('/<int:session_id>/withdraw/')
 def withdraw_session_view(session_id):
     session = DataGetter.get_sessions_of_user_by_id(session_id)
     session.in_trash = True

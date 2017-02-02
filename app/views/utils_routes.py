@@ -239,7 +239,8 @@ def location():
     ip = get_real_ip(True)
 
     try:
-        reader = geoip2.database.Reader(os.path.realpath('.') + '/static/data/GeoLite2-Country.mmdb')
+        reader = geoip2.database.Reader(
+            os.path.abspath(current_app.config['BASE_DIR'] + '/static/data/GeoLite2-Country.mmdb'))
         response = reader.country(ip)
         return jsonify({
             'status': 'ok',
@@ -272,7 +273,7 @@ def intended_url():
     return request.args.get('next') or url_for('admin.index')
 
 
-@utils_routes.route('/robots.txt', methods=('GET', 'POST'))
+@utils_routes.route('/robots.txt')
 def robots_txt():
     if get_settings()['app_environment'] == Environment.STAGING:
         resp = make_response(render_template('staging-robots.txt'))

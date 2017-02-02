@@ -1,6 +1,4 @@
 import json
-import os
-import os.path
 import re
 import time
 from datetime import datetime, timedelta
@@ -10,6 +8,7 @@ from flask import request, url_for, current_app
 from itsdangerous import Serializer
 from sqlalchemy import func
 
+from app.helpers.assets.images import get_image_file_name
 from app.helpers.flask_helpers import get_real_ip
 from app.helpers.storage import UploadedFile
 from app.models.notifications import (
@@ -34,9 +33,8 @@ from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, 
     USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail, \
     AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, TICKET_PURCHASED, EVENT_EXPORTED, \
     EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, MONTHLY_PAYMENT_EMAIL, \
-    EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER
+    EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER, TICKET_CANCELLED
 from ..models.message_settings import MessageSettings
-from ..models.track import Track
 
 
 def represents_int(string):
@@ -106,20 +104,24 @@ def send_new_session_organizer(email, event_name, link):
         )
 
 
-def send_session_accept_reject(email, session_name, acceptance, link):
+def send_session_accept_reject(email, session_name, acceptance, link, subject=None, message=None):
     """Send session accepted or rejected"""
     message_settings = MessageSettings.query.filter_by(action=SESSION_ACCEPT_REJECT).first()
     if not message_settings or message_settings.mail_status == 1:
+        action = SESSION_ACCEPT_REJECT
+        subject = subject if subject else MAILS[SESSION_ACCEPT_REJECT]['subject'].format(session_name=session_name,
+                                                                                         acceptance=acceptance),
+        message = message if message else MAILS[SESSION_ACCEPT_REJECT]['message'].format(
+            email=str(email),
+            session_name=str(session_name),
+            acceptance=str(acceptance),
+            link=link)
+
         send_email(
             to=email,
-            action=SESSION_ACCEPT_REJECT,
-            subject=MAILS[SESSION_ACCEPT_REJECT]['subject'].format(session_name=session_name, acceptance=acceptance),
-            html=MAILS[SESSION_ACCEPT_REJECT]['message'].format(
-                email=str(email),
-                session_name=str(session_name),
-                acceptance=str(acceptance),
-                link=link
-            )
+            action=action,
+            subject=subject,
+            html=message
         )
 
 
@@ -281,16 +283,31 @@ def send_email_for_after_purchase(email, invoice_id, order_url, event_name, even
         to=email,
         action=TICKET_PURCHASED,
         subject=MAILS[TICKET_PURCHASED]['subject'].format(invoice_id=invoice_id, event_name=event_name),
-        html=MAILS[TICKET_PURCHASED]['message'].format(order_url=order_url, event_name=event_name, event_organiser=event_organiser)
+        html=MAILS[TICKET_PURCHASED]['message'].format(order_url=order_url, event_name=event_name,
+                                                       event_organiser=event_organiser)
     )
+
+
+def send_email_after_cancel_ticket(email, invoice_id, order_url, event_name, cancel_note):
+    """Send email with order invoice link after purchase"""
+    send_email(
+        to=email,
+        action=TICKET_CANCELLED,
+        subject=MAILS[TICKET_CANCELLED]['subject'].format(invoice_id=invoice_id, event_name=event_name),
+        html=MAILS[TICKET_CANCELLED]['message'].format(order_url=order_url, event_name=event_name,
+                                                       cancel_note=cancel_note)
+    )
+
 
 def send_email_for_after_purchase_organizers(email, buyer_email, invoice_id, order_url, event_name, event_organiser):
     """Send email with order invoice link after purchase"""
     send_email(
         to=email,
         action=TICKET_PURCHASED_ORGANIZER,
-        subject=MAILS[TICKET_PURCHASED_ORGANIZER]['subject'].format(invoice_id=invoice_id, event_name=event_name, buyer_email=buyer_email),
-        html=MAILS[TICKET_PURCHASED_ORGANIZER]['message'].format(order_url=order_url, buyer_email=buyer_email, event_name=event_name,
+        subject=MAILS[TICKET_PURCHASED_ORGANIZER]['subject'].format(invoice_id=invoice_id, event_name=event_name,
+                                                                    buyer_email=buyer_email),
+        html=MAILS[TICKET_PURCHASED_ORGANIZER]['message'].format(order_url=order_url, buyer_email=buyer_email,
+                                                                 event_name=event_name,
                                                                  event_organiser=event_organiser)
     )
 
@@ -473,7 +490,8 @@ def send_notif_for_after_purchase_organizer(user, invoice_id, order_url, event_n
     send_notification(
         user=user,
         action=NOTIF_TICKET_PURCHASED_ORGANIZER,
-        title=NOTIFS[NOTIF_TICKET_PURCHASED_ORGANIZER]['title'].format(invoice_id=invoice_id, event_name=event_name, buyer_email=buyer_email),
+        title=NOTIFS[NOTIF_TICKET_PURCHASED_ORGANIZER]['title'].format(invoice_id=invoice_id, event_name=event_name,
+                                                                       buyer_email=buyer_email),
         message=NOTIFS[NOTIF_TICKET_PURCHASED_ORGANIZER]['message'].format(order_url=order_url)
     )
 
@@ -703,7 +721,7 @@ def update_state(task_handle, state, result=None):
 
 
 def uploaded_file(extension='.png', file_content=None):
-    filename = str(time.time()) + extension
+    filename = get_image_file_name() + extension
     file_path = current_app.config.get('BASE_DIR') + '/static/uploads/' + filename
     file = open(file_path, "wb")
     file.write(file_content.split(",")[1].decode('base64'))

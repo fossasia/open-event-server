@@ -23,7 +23,7 @@ event_details_pages = [
 ]
 
 
-@sitemaps.route('/sitemap.xml', methods=('GET', 'POST'))
+@sitemaps.route('/sitemap.xml')
 def render_sitemap():
     if get_settings()['app_environment'] == Environment.STAGING:
         urls = []
@@ -44,7 +44,7 @@ def render_sitemap():
     return resp
 
 
-@sitemaps.route('/sitemaps/pages.xml.gz', methods=('GET', 'POST'))
+@sitemaps.route('/sitemaps/pages.xml.gz')
 def render_pages_sitemap():
     if get_settings()['app_environment'] == Environment.STAGING:
         abort(404)
@@ -56,7 +56,7 @@ def render_pages_sitemap():
     return make_sitemap_response(urls)
 
 
-@sitemaps.route('/sitemaps/events/<int:num>.xml.gz', methods=('GET', 'POST'))
+@sitemaps.route('/sitemaps/events/<int:num>.xml.gz')
 def render_event_pages(num):
     if get_settings()['app_environment'] == Environment.STAGING:
         abort(404)

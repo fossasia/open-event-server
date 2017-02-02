@@ -1,8 +1,6 @@
 -r dev.txt
 
 coverage>=4.2,<5
-coveralls>=1.1,<2
-codeclimate-test-reporter>=0.2,<1
 beautifulsoup4>=4.5.1,<5
 robotframework>=3.0,<4
 robotframework-faker>=3.0.0,<4

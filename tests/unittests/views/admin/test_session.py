@@ -39,6 +39,7 @@ class TestSessionApi(OpenEventViewTestCase):
             save_to_db(custom_form, "Custom form saved")
             data = POST_SESSION_DATA
             data.update(POST_SPEAKER_DATA)
+            data['photo'] = ''
             url = url_for('event_sessions.create_view', event_id=event.id)
             rv = self.app.post(url, follow_redirects=True, buffered=True, content_type='multipart/form-data', data=data)
             self.assertTrue(data['title'] in rv.data, msg=rv.data)
@@ -76,7 +77,7 @@ class TestSessionApi(OpenEventViewTestCase):
             session = ObjectMother.get_session()
             save_to_db(session, "Session Saved")
             url = url_for('event_sessions.accept_session', event_id=1, session_id=session.id)
-            rv = self.app.get(url, follow_redirects=True)
+            rv = self.app.post(url, follow_redirects=True)
             self.assertTrue("The session has been accepted" in rv.data, msg=rv.data)
 
     def test_session_reject(self):
@@ -86,7 +87,7 @@ class TestSessionApi(OpenEventViewTestCase):
             session = ObjectMother.get_session()
             save_to_db(session, "Session Saved")
             url = url_for('event_sessions.reject_session', event_id=1, session_id=session.id)
-            rv = self.app.get(url, follow_redirects=True)
+            rv = self.app.post(url, follow_redirects=True)
             self.assertTrue("The session has been rejected" in rv.data, msg=rv.data)
 
     def test_session_delete(self):

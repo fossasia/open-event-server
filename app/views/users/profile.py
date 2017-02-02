@@ -24,12 +24,12 @@ def index_view():
                      '<br>Did not get the email? Please <a href="/resend_email/" class="alert-link"> '
                      'click here to resend the confirmation.</a>'))
     profile = DataGetter.get_user(login.current_user.id)
-    return render_template('gentelella/admin/profile/index.html',
+    return render_template('gentelella/users/profile/index.html',
                            profile=profile)
 
 
 @profile.route('/edit/', methods=('GET', 'POST'))
-@profile.route('/edit/<user_id>', methods=('GET', 'POST'))
+@profile.route('/edit/<user_id>/', methods=('GET', 'POST'))
 def edit_view(user_id=None):
     admin = None
     if not user_id:
@@ -44,25 +44,27 @@ def edit_view(user_id=None):
     return redirect(url_for('.index_view'))
 
 
-@profile.route('/fb_connect', methods=('GET', 'POST'))
+@profile.route('/fb_connect/', methods=('GET', 'POST'))
 def connect_facebook():
     facebook = get_facebook_auth()
     fb_auth_url, state = facebook.authorization_url(FbOAuth.get_auth_uri(), access_type='offline')
     return redirect(fb_auth_url)
 
 
-@profile.route('/tw_connect', methods=('GET', 'POST'))
+@profile.route('/tw_connect/', methods=('GET', 'POST'))
 def connect_twitter():
     twitter_auth_url, __ = get_twitter_auth_url()
     return redirect('https://api.twitter.com/oauth/authenticate?' + twitter_auth_url)
 
-@profile.route('/instagram_connect', methods=('GET', 'POST'))
+
+@profile.route('/instagram_connect/', methods=('GET', 'POST'))
 def connect_instagram():
     instagram = get_instagram_auth()
     instagram_auth_url, state = instagram.authorization_url(InstagramOAuth.get_auth_uri(), access_type='offline')
     return redirect(instagram_auth_url)
 
-@profile.route('/<int:user_id>/editfiles/bgimage', methods=('POST', 'DELETE'))
+
+@profile.route('/<int:user_id>/editfiles/bgimage/', methods=('POST', 'DELETE'))
 def bgimage_upload(user_id):
     if request.method == 'POST':
         background_image = request.form['bgimage']
@@ -83,7 +85,7 @@ def bgimage_upload(user_id):
         return jsonify({'status': 'ok'})
 
 
-@profile.route('/create/files/bgimage', methods=('POST',))
+@profile.route('/create/files/bgimage/', methods=('POST',))
 def create_event_bgimage_upload():
     if request.method == 'POST':
         background_image = request.form['bgimage']

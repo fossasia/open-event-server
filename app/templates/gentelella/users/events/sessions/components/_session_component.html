@@ -1,0 +1,97 @@
+{% set textarea_session_fields = ['short_abstract', 'long_abstract', 'comments'] %}
+{% set media_session_fields = ['slides', 'video', 'audio'] %}
+{% set dropdown_fields = ['track', 'session_type', 'level'] %}
+{% set session_fields = ['title', 'subtitle', 'short_abstract', 'long_abstract', 'track', 'session_type', 'level', 'comments', 'language', 'slides', 'video', 'audio'] %}
+
+{% macro session_form_field(identifier, require=0) %}
+    {% set name = identifier | replace('_id','') %}
+    {% set pretty_name = name | replace('_',' ') | capitalize %}
+    <div class="item form-group session-fields">
+        {% if identifier != 'track' or (identifier == 'track' and event.track[1]) %}
+            <label class="control-label">
+                {{ pretty_name }}
+                {% if require==1 or identifier=='track' %}
+                    {% if identifier in media_session_fields %}
+                        {% if not session[identifier] %}
+                            <span class="required">*</span>
+                        {% endif %}
+                    {% else %}
+                        <span class="required">*</span>
+                    {% endif %}
+                {% endif %}
+            </label>
+        {% endif %}
+        {% if identifier in textarea_session_fields %}
+            <textarea {% if require==1 %}
+                required="required"
+            {% endif %}
+                name="{{ identifier }}"
+                class="form-control col-md-7 col-xs-12" title="{{ pretty_name }}">{{ session[identifier] | default('', true) }}</textarea>
+        {% elif identifier in dropdown_fields %}
+            {% if identifier == 'track' %}
+                {% set data_set = event.track %}
+            {% elif identifier == 'level' %}
+                {% set data_set = ['Beginner', 'Intermediate', 'Advanced', 'Other'] %}
+                    <select title="{{ pretty_name }}" {% if require==1 or identifier=='track' %}required="required"{% endif %} name="{{ identifier }}"
+                        class="form-control col-md-7 col-xs-12">
+                       <option value="" {% if not session %}selected{% endif %}>Select {{ pretty_name }}</option>
+                        {% for data in data_set %}
+                            {% if session['level'] and session['level'] == data %}
+                                <option value="{{ data }}" selected>{{ data }}</option>
+                            {% else %}
+                                <option value="{{ data }}">{{ data }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+            {% else %}
+                {% set data_set = event.session_type %}
+            {% endif %}
+            {% if identifier != 'level' %}
+                {% if identifier != 'track' or (identifier == 'track' and data_set[1]) %}
+                    <select title="{{ pretty_name }}" {% if require==1 or identifier=='track' %}required="required"{% endif %} name="{{ identifier }}"
+                        class="form-control col-md-7 col-xs-12">
+                        <option value="" {% if not session %}selected{% endif %}>Select {{ pretty_name }}</option>
+                        {% for data in data_set %}
+                            {% if session and session[identifier + '_id'] == data.id %}
+                                <option value="{{ data.id }}" selected>{{ data.name }}{% if identifier == 'session_type' %} ({{ data.length }}) {%endif %}</option>
+                            {% else %}
+                                <option value="{{ data.id }}">{{ data.name }}{% if identifier == 'session_type' %} ({{ data.length }}) {%endif %}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                {% elif identifier == 'track' and not data_set[1] %}
+                    <input name="track" value="{{ data_set[0].id }}" type="hidden"/>
+                {% endif %}
+            {% endif %}
+        {% elif identifier in media_session_fields %}
+            <input type="hidden" {% if (require==1) and not session[identifier] %} required="required" {% endif %} name="{{ identifier }}_url" value="{{ session[identifier] | default('', true) }}">
+
+            <br><input
+            type="file" id="speaker-file-{{ identifier | default(1) }}" name="{{ identifier }}"
+            class="upload-btn"/>
+
+            <label class="file-label" for="speaker-file-{{ identifier | default(1) }}">
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                Choose a file</label>
+            <br>
+            <div class="media-progress row" id="media-progress-{{ identifier }}" {% if not session[identifier] %} style="display: none" {% endif %}>
+                 <div class="col-md-6" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                     <a href="{{ session[identifier] }}" target="_blank" id="download-{{ identifier }}" download>{{ session[identifier] | filename_from_url }}</a>
+                 </div>
+                 <div class="col-md-5">
+                    <div class="progress" id="progress-{{ identifier }}" style="display: none;">
+                      <div class="progress-bar progress-bar-striped active" id="progress-bar-{{ identifier }}" role="progressbar" aria-valuenow="70"
+                      aria-valuemin="0" aria-valuemax="100" style="width: 0"></div>
+                    </div>
+                 </div>
+                 <div id="remove-{{ identifier }}" onclick="remove_url('{{ identifier }}')" style="cursor: pointer;float: right"><i class="fa fa-times" aria-hidden="true"></i></div>
+            </div>
+        {% else %}
+            <input title="{{ pretty_name }}" {% if require==1 %}
+                required="required"
+            {% endif %}
+                name="{{ identifier }}" class="form-control col-md-7 col-xs-12"
+                value="{{ session[identifier] | default('', true) }}"/>
+        {% endif %}
+    </div>
+{% endmacro %}

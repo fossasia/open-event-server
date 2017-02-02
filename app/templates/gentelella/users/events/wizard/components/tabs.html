@@ -1,0 +1,34 @@
+{% set step = step if step else '' %}
+
+<script type="text/x-template" id="tabs-template">
+    <div style="margin-top: -40px;">
+        <div class="connecting-line"></div>
+        <ul class="nav nav-tabs" v-bind:style="{'cursor': disable ? 'not-allowed' : 'default' }">
+            <li v-bind:class="{ active: step == '', blocked: disable }">
+                <a href="#" title="Basic Details" v-on:click.prevent="moveToStep('')">
+                <span class="round-tab">
+                    <i class="fa fa-info"></i>
+                </span>
+                </a>
+                <span class="description hidden-xs hidden-sm">{{ _("Basic Details") }}</span>
+            </li>
+            <li v-bind:class="{ active: step == 'sponsors', blocked: disable }">
+                <a href="#" title="Sponsors" v-on:click.prevent="moveToStep('sponsors')">
+                <span class="round-tab">
+                    <i class="fa fa-usd"></i>
+                </span>
+                </a>
+                <span class="description hidden-xs hidden-sm">{{ _("Sponsors") }}</span>
+            </li>
+            <li v-bind:class="{ active: step == 'sessions-tracks-rooms', blocked: disable }">
+                <a href="#" title="Session, Tracks, Rooms"
+                   v-on:click.prevent="moveToStep('sessions-tracks-rooms')">
+                <span class="round-tab">
+                    <i class="fa fa-list-ol"></i>
+                </span>
+                </a>
+                <span class="description hidden-xs hidden-sm">{{ _("Sessions") }} & {{ _("Speakers") }}</span>
+            </li>
+        </ul>
+    </div>
+</script>

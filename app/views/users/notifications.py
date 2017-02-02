@@ -8,16 +8,15 @@ from app.helpers.data_getter import DataGetter
 notifications = Blueprint('notifications', __name__, url_prefix='/notifications')
 
 
-@notifications.route('/', methods=('GET', 'POST'))
+@notifications.route('/')
 def index_view():
     user = login.current_user
     notifications = DataGetter.get_all_user_notifications(user)
-
-    return render_template('gentelella/admin/profile/notifications.html',
+    return render_template('gentelella/users/profile/notifications.html',
                            notifications=notifications)
 
 
-@notifications.route('/read/<notification_id>/', methods=('GET', 'POST'))
+@notifications.route('/read/<notification_id>/')
 def mark_as_read(notification_id):
     user = login.current_user
     notification = DataGetter.get_user_notification(notification_id)
@@ -29,9 +28,8 @@ def mark_as_read(notification_id):
         abort(404)
 
 
-@notifications.route('/allread/', methods=('GET', 'POST'))
+@notifications.route('/allread/')
 def mark_all_read():
     user = login.current_user
     DataManager.mark_all_user_notification_as_read(user)
-
     return redirect(url_for('.index_view'))

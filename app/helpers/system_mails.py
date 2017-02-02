@@ -6,7 +6,7 @@ from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
     USER_REGISTER, PASSWORD_RESET, EVENT_ROLE, SESSION_ACCEPT_REJECT, \
     SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH, AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, \
     TICKET_PURCHASED, EVENT_EXPORTED, EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_EMAIL, \
-    MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER
+    MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER, TICKET_CANCELLED
 
 MAILS = {
     EVENT_PUBLISH: {
@@ -141,6 +141,17 @@ MAILS = {
         'message': (
             u"Hi, {buyer_email} just bought tickets for the event {event_name}"
             u"<br/>The order has been processed successfully." +
+            u"<br/> <a href='{order_url}'>Click here</a> to view/download the invoice."
+            u"<br/>Login to manage the orders at https://eventyay.com </em>"
+        )
+    },
+    TICKET_CANCELLED: {
+        'recipient': 'User',
+        'subject': u'Your order for {event_name} has been cancelled ({invoice_id})',
+        'message': (
+            u"Hi,Your order for {event_name} has been cancelled has been cancelled by the organizer"
+            u"<br/>Please contact the organizer for more info" +
+            u"<br/>Message from the organizer: {cancel_note}"
             u"<br/> <a href='{order_url}'>Click here</a> to view/download the invoice."
             u"<br/>Login to manage the orders at https://eventyay.com </em>"
         )

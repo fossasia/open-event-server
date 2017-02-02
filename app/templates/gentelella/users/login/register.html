@@ -1,0 +1,42 @@
+{% extends 'gentelella/users/login/base.html' %}
+{% block title %}Register{% endblock %}
+{% block register %}
+    <div class="login_content">
+        <form data-toggle="validator" method="post">
+            <h1>{{ _("Registration Form") }}</h1>
+            <div class="form-group has-feedback">
+                <input type="email" name="email" class="form-control" id="email" placeholder="Email"
+                       data-remote="{{ url_for('admin.check_duplicate_email') }}"
+                       data-remote-error="Email Address already exists" required="">
+                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group has-feedback">
+                <input type="password" name="password" data-minlength="6" data-error="Minimum of 6 characters"
+                       class="form-control" id="inputPassword" placeholder="Password" required="">
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group has-feedback">
+                <input type="password" class="form-control" id="inputPasswordConfirm" data-match="#inputPassword" data-match-error="Both passwords don't match" placeholder="Confirm" required>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-default">{{ _("Submit") }}</button>
+            </div>
+
+            <div class="separator">
+                <p class="change_link">{{ _("Already a member") }} ?
+                    <a href="/login/" class="to_register"> {{ _("Log in") }} </a>
+                </p>
+
+                <div class="clearfix"></div>
+                <br/>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='vendor/bootstrap-validator/dist/validator.min.js') }}"></script>
+
+{% endblock %}

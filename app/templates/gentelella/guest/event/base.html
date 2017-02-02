@@ -1,4 +1,4 @@
-{% extends 'gentelella/admin/base.html' %}
+{% extends 'gentelella/base.html' %}
 
 {% set active_page = active_page|default('info') -%}
 
@@ -82,7 +82,7 @@
         <ul class="nav nav-pills review-menu mobile">
             <li {% if active_page == 'info' %}class="active"{% endif %} id="info-menu"><a
                     href="/e/{{ event.identifier }}/#info">Info</a></li>
-            {% if accepted_sessions_count > 0 %}
+            {% if accepted_sessions_count > 0 and event.schedule_published_on %}
                 <li {% if active_page == 'sessions' %}class="active"{% endif %}><a
                         href="/e/{{ event.identifier }}/sessions">{{ _("Sessions") }}</a>
                 </li>
@@ -112,7 +112,7 @@
             {% if event.sponsor[0] %}
                 <li id="sponsors-menu"><a href="/e/{{ event.identifier }}/#sponsors">{{ _("Sponsors") }}</a></li>
             {% endif %}
-            {% if accepted_sessions_count > 0 %}
+            {% if accepted_sessions_count > 0 and event.schedule_published_on %}
                 <li {% if active_page == 'sessions' %}class="active"{% endif %}><a
                         href="/e/{{ event.identifier }}/sessions">{{ _("Sessions") }}</a>
                 </li>
@@ -135,7 +135,7 @@
             {% endif %}
             {% if event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' ' %}
                 <li {% if active_page == 'coc' %}class="active"{% endif %}><a
-                        href="/e/{{ event.identifier }}/coc">{{ _("Code of") }}
+                        href="/e/{{ event.identifier }}/coc/">{{ _("Code of") }}
                     {{ _("Conduct") }}</a></li>
             {% endif %}
         </ul>
@@ -235,7 +235,7 @@
         $(document).ready(function () {
             var url = document.URL;
             var id = url.split('#')[1];
-            if (id != undefined) {
+            if (id !== undefined) {
                 $('.preview-menu li').removeClass('active');
                 $('#' + id + '-menu').addClass('active');
             }

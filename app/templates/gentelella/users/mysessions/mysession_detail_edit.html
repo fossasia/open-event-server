@@ -1,0 +1,36 @@
+{% extends 'gentelella/base.html' %}
+{% block head_css %}
+    {{ super() }}
+    <link href="{{ url_for('static', filename='css/events/my-sessions.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/events/event-wizard.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/multiselect/css/multi-select.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/Croppie/croppie.css') }}"/>
+
+{% endblock %}
+{% block title %}
+    {{ session.title }} - My Sessions
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel" style="min-height:600px;">
+                <div class="x_content">
+                    {% include 'gentelella/users/events/sessions/components/session_speaker_form.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/vendor/jquery/jquery.multi-select.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/events/session/new.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("textarea").summernote(summernoteConfig);
+        });
+    </script>
+{% endblock %}
+

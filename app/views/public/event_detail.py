@@ -4,7 +4,7 @@ import pytz
 
 from flask import Blueprint
 from flask import make_response
-from flask import request, url_for, flash, render_template
+from flask import request, url_for, flash, render_template, jsonify
 from flask.ext import login
 from flask.ext.restplus import abort
 from markupsafe import Markup
@@ -18,7 +18,6 @@ from app.helpers.exporters.xcal import XCalExporter
 from app.helpers.helpers import get_count
 from app.models.call_for_papers import CallForPaper
 from app.helpers.wizard.helpers import get_current_timezone
-
 
 
 def get_published_event_or_abort(identifier):
@@ -41,7 +40,7 @@ event_detail = Blueprint('event_detail', __name__, url_prefix='/e')
 
 @event_detail.route('/')
 def display_default():
-    return redirect("/browse")
+    return redirect("/browse/")
 
 
 @event_detail.route('/<identifier>/')
@@ -69,12 +68,13 @@ def display_event_detail_home(identifier):
                 speakers.append(speaker)
 
     '''Timezone aware current datetime object according to event timezone'''
-    timenow_event_tz = datetime.now(pytz.timezone(event.timezone))
+    timenow_event_tz = datetime.now(pytz.timezone(event.timezone
+                                                  if (event.timezone and event.timezone != '') else 'UTC'))
     module = DataGetter.get_module()
     tickets = DataGetter.get_sales_open_tickets(event.id, True)
 
     '''Sponsor Levels'''
-    sponsors = {-1:[]}
+    sponsors = {-1: []}
     for sponsor in event.sponsor:
         if not sponsor.level:
             sponsors[-1].append(sponsor)
@@ -185,7 +185,7 @@ def display_event_schedule_xcal(identifier):
     return response
 
 
-@event_detail.route('/<identifier>/cfs/', methods=('GET',))
+@event_detail.route('/<identifier>/cfs/')
 def display_event_cfs(identifier, via_hash=False):
     event = get_published_event_or_abort(identifier)
     placeholder_images = DataGetter.get_event_default_images()
@@ -319,7 +319,35 @@ def process_event_cfs(identifier, via_hash=False):
             return redirect(url_for('admin.login_view', next=url_for('my_sessions.display_my_sessions_view')))
 
 
-@event_detail.route('/<identifier>/coc/', methods=('GET',))
+@event_detail.route('/temp/', methods=('POST',))
+def add_session_media():
+    if 'slides' in request.files and request.files['slides'].filename != '':
+        url = DataManager.add_session_media(request, 'slides')
+        return jsonify({
+            'status': 'ok',
+            'url': url
+        }), 200
+
+    if 'video' in request.files and request.files['video'].filename != '':
+        url = DataManager.add_session_media(request, 'video')
+        return jsonify({
+            'status': 'ok',
+            'url': url
+        }), 200
+
+    if 'audio' in request.files and request.files['audio'].filename != '':
+        url = DataManager.add_session_media(request, 'audio')
+        return jsonify({
+            'status': 'ok',
+            'url': url
+        }), 200
+
+    return jsonify({
+            'status': 'ok'
+        }), 200
+
+
+@event_detail.route('/<identifier>/coc/')
 def display_event_coc(identifier):
     event = get_published_event_or_abort(identifier)
     placeholder_images = DataGetter.get_event_default_images()

@@ -20,7 +20,7 @@ def verify_accessible():
 def index_view():
     message_settings = DataGetter.get_all_message_setting()
     return render_template(
-        'gentelella/admin/super_admin/messages/messages.html',
+        'gentelella/super_admin/messages/messages.html',
         mails=MAILS,
         notifications=NOTIFS,
         message_settings=message_settings,
@@ -28,7 +28,7 @@ def index_view():
     )
 
 
-@sadmin_messages.route('/update', methods=['POST'])
+@sadmin_messages.route('/update/', methods=['POST'])
 def update_view():
     if request.method == 'POST':
         DataManager.create_or_update_message_settings(request.form)
