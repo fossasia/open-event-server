@@ -98,7 +98,7 @@ class DataGetter(object):
     @staticmethod
     def get_all_events():
         """Method return all events"""
-        return Event.query.order_by(desc(Event.id)).filter_by(in_trash=False).all()
+        return Event.query.order_by(Event.timezone).filter_by(in_trash=False).all()
 
     @staticmethod
     def get_all_events_with_discounts():
