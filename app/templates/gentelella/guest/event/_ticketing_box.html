@@ -140,7 +140,7 @@
                         <div class="col-md-5 pull-right promo-code-box" style="padding-right:0;display:none;">
                             <div class="input-group" style="margin-bottom: 0;">
                                 <input type="text" name="promo_code" class="form-control" placeholder="Promotional code"
-                                       value="{{ code | default('', true) }}">
+                                       value="{{ discount_code | default('', true) }}">
                                 <span class="input-group-btn">
                                         <button class="btn btn-default " type="button" id="apply-discount"><i
                                                 class="fa fa-check"></i></button>
@@ -270,9 +270,9 @@
         var discount_amount = -1;
         var promo_code_status = 0;
         var discount_code = "";
-        {% if code %}
+        {% if discount_code %}
                 if (promo_code_status == 0) {
-                    var form_data = {"event_id": {{ event.id }}, "promo_code": "{{ code }}" }
+                    var form_data = {"event_id": {{ event.id }}, "promo_code": "{{ discount_code }}" }
                     $.ajax({
                         type: 'POST',
                         url: "{{ url_for('ticketing.apply_promo') }}",
