@@ -27,10 +27,9 @@
         </div>
 
         <br>
-        <button type="submit" class="btn btn-success">{{ _("Save Session") }}</button>
+        <button type="submit" class="btn btn-success" name="state" value="save">{{ _("Save Session") }}</button>
         {% if session.state == "draft" %}
-            <button type="submit" class="btn btn-primary" name="state"
-                    value="pending">{{ _("Submit Session") }}</button>
+            <button type="submit" class="btn btn-primary" name="state" value="pending">{{ _("Submit Session") }}</button>
         {% endif %}
     </div>
 </form>

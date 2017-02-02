@@ -351,29 +351,29 @@ class DataManager(object):
             video_file = ''
             audio_file = ''
 
-            if slide_temp_url and slide_temp_url!=session.slides:
+            if slide_temp_url and slide_temp_url != session.slides:
                 slide_file = UploadedFile(get_path_of_temp_url(slide_temp_url), slide_temp_url.rsplit('/', 1)[1])
 
-            if video_temp_url and video_temp_url!=session.video:
+            if video_temp_url and video_temp_url != session.video:
                 video_file = UploadedFile(get_path_of_temp_url(video_temp_url), video_temp_url.rsplit('/', 1)[1])
 
-            if audio_temp_url and audio_temp_url!=session.audio:
+            if audio_temp_url and audio_temp_url != session.audio:
                 audio_file = UploadedFile(get_path_of_temp_url(audio_temp_url), audio_temp_url.rsplit('/', 1)[1])
 
             form_state = form.get('state', 'draft')
 
-            if slide_temp_url != "" and slide_temp_url!=session.slides and slide_file:
+            if slide_temp_url != "" and slide_temp_url != session.slides and slide_file:
                 slide_temp_url = upload(slide_file,
-                    UPLOAD_PATHS['sessions']['slides'].format(
-                        event_id=int(event_id), id=int(session.id)
-                    ))
-            if audio_temp_url != "" and audio_temp_url!=session.audio and audio_file:
+                                        UPLOAD_PATHS['sessions']['slides'].format(
+                                            event_id=int(event_id), id=int(session.id)
+                                        ))
+            if audio_temp_url != "" and audio_temp_url != session.audio and audio_file:
                 audio_temp_url = upload(
                     audio_file,
                     UPLOAD_PATHS['sessions']['audio'].format(
                         event_id=int(event_id), id=int(session.id)
                     ))
-            if video_temp_url != "" and video_temp_url!=session.video and video_file:
+            if video_temp_url != "" and video_temp_url != session.video and video_file:
                 video_temp_url = upload(
                     video_file,
                     UPLOAD_PATHS['sessions']['video'].format(
@@ -386,6 +386,7 @@ class DataManager(object):
 
             if form_state == 'pending' and session.state != 'pending' and \
                     session.state != 'accepted' and session.state != 'rejected':
+                session.state = 'pending'
                 trigger_new_session_notifications(session.id, event_id=event_id)
 
             session.title = form.get('title', '')
@@ -393,7 +394,6 @@ class DataManager(object):
             session.long_abstract = form.get('long_abstract', '')
             session.short_abstract = form.get('short_abstract', '')
             session.level = form.get('level', '')
-            session.state = form_state
             session.track_id = form.get('track', None) if form.get('track', None) != "" else  None
             session.session_type_id = form.get('session_type', None) if form.get('session_type', None) != "" else None
 
@@ -413,8 +413,8 @@ class DataManager(object):
                 current_speaker_ids.append(str(current_speaker.id))
 
             for current_speaker_id in current_speaker_ids:
-                if current_speaker_id not in existing_speaker_ids and current_speaker_id \
-                    not in existing_speaker_ids_by_email:
+                if current_speaker_id \
+                     not in existing_speaker_ids and current_speaker_id not in existing_speaker_ids_by_email:
                     current_speaker = DataGetter.get_speaker(current_speaker_id)
                     session.speakers.remove(current_speaker)
                     db.session.commit()
