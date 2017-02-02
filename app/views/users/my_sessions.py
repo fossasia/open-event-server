@@ -75,8 +75,8 @@ def process_session_view(session_id):
         speaker = DataGetter.get_speakers(session.event_id).filter_by(user_id=login.current_user.id).first()
         return render_template(
             'gentelella/users/mysessions/mysession_detail_edit.html', session=session,
-                               photo_delete_url=url_for('.avatar_delete', event_id=event.id, speaker_id=speaker.id),
-                               speaker_form=speaker_form, session_form=session_form, event=event, speaker=speaker)
+            photo_delete_url=url_for('.avatar_delete', event_id=event.id, speaker_id=speaker.id),
+            speaker_form=speaker_form, session_form=session_form, event=event, speaker=speaker)
 
     if request.method == 'POST':
         session = DataGetter.get_sessions_of_user_by_id(session_id)
