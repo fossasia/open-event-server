@@ -55,7 +55,7 @@
             </div>
         </div>
         <div class="col-md-12 table-responsive" style="margin-top: 10px;">
-            <table class="table table-striped table-hover with-datatable">
+            <table class="table table-striped table-hover with-datatable" style="overflow:hidden;">
                 <thead>
                 <tr>
                     <th>{{ _("State") }}</th>
@@ -87,7 +87,7 @@
                                 </ol>
                             </td>
                             <td>{{ session.track.name }}</td>
-                            <td>{{ session.short_abstract|striptags }}</td>
+                            <td class="short_abstract">{{ session.short_abstract|striptags }}</td>
                             <td>{{ session.start_time }}</td>
                             <td>{{ session.end_time }}</td>
                             <td>
@@ -242,6 +242,14 @@
                 {"width": "20px", "targets": 9}
             ],
             "scrollX": true
+        });
+
+        $.each($('.short_abstract'),function() {
+            if ($(this).html().length > 200) {
+                var words = $(this).html();
+                words = words.substring(0, 200) + "...";
+                $(this).html(words);
+            }
         });
 
         $("div.toolbar").prepend($("#toolbar-holder").html());
