@@ -99,7 +99,7 @@ class DataGetter(object):
     def get_all_events():
         """Method return all events"""
         return Event.query.order_by(desc(Event.created_at)) .filter_by(in_trash=False).all()
-     
+    
     @staticmethod
     def get_all_events_with_discounts():
         """Method return all events"""
