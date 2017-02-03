@@ -2,6 +2,7 @@
 
 The Open Event Orga Server enables organizers to manage events from concerts to conferences and meet-ups. It offers features for events with several tracks and venues. Event managers can create invitation forms for speakers and build schedules in a drag and drop interface. The event information is stored in a database. The system provides API endpoints to fetch the data, and to modify and update it. Organizers can import and export event data in a standard compressed file format that includes the event data in JSON and binary media files like images and audio.
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c6a440bad576444192bf959344d997da)](https://www.codacy.com/app/Himanshi-Khandelwal/open-event-orga-server?utm_source=github.com&utm_medium=referral&utm_content=fossasia/open-event-orga-server&utm_campaign=badger)
 [![GitHub release](https://img.shields.io/badge/release-1.0.0--alpha.7-blue.svg?style=flat-square)](https://github.com/fossasia/open-event-orga-server/releases/latest)
 [![Travis branch](https://img.shields.io/travis/fossasia/open-event-orga-server/master.svg?style=flat-square)](https://travis-ci.org/fossasia/open-event-orga-server)
 [![Gemnasium](https://img.shields.io/gemnasium/fossasia/open-event-orga-server.svg?style=flat-square)](https://gemnasium.com/github.com/fossasia/open-event-orga-server)
