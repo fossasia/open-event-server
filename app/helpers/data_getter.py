@@ -756,7 +756,12 @@ class DataGetter(object):
 
     @staticmethod
     def get_all_registered_users():
-        return get_count(User.query.filter_by(is_verified=True))
+	return get_count(User.query.filter_by(is_verified=True))
+
+    @staticmethod
+    def get_all_unverified_users():
+	return get_count(User.query.filter_by(is_verified=False))
+        
 
     @staticmethod
     def get_all_user_roles(role_name):
