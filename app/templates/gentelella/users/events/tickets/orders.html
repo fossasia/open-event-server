@@ -40,19 +40,19 @@
 {% block inner_content %}
     <div id="toolbar-holder" style="display: none;">
         <div class="btn-group pull-left" data-toggle="buttons">
-            <label id="Completed" class="btn btn-default btn-responsive">
+            <label id="completed" class="btn btn-default btn-responsive">
                 <input type="radio" name="show_state" autocomplete="off" value="Completed"> {{ _("Completed") }}
             </label>
-            <label id="Placed" class="btn btn-default btn-responsive">
+            <label id="placed" class="btn btn-default btn-responsive">
                 <input type="radio" name="show_state" autocomplete="off" value="Placed"> {{ _("Placed") }}
             </label>
-            <label id="Pending" class="btn btn-default btn-responsive">
+            <label id="pending" class="btn btn-default btn-responsive">
                 <input type="radio" name="show_state" autocomplete="off" value="Pending"> {{ _("Pending") }}
             </label>
-            <label id="Expired" class="btn btn-default btn-responsive">
+            <label id="expired" class="btn btn-default btn-responsive">
                 <input type="radio" name="show_state" autocomplete="off" value="Expired"> {{ _("Expired") }}
             </label>
-            <label id="Cancelled" class="btn btn-default btn-responsive">
+            <label id="cancelled" class="btn btn-default btn-responsive">
                 <input type="radio" name="show_state" autocomplete="off" value="Cancelled"> {{ _("Cancelled") }}
             </label>
             <label id="all" class="btn btn-default btn-responsive">
@@ -186,7 +186,7 @@
     <script src="{{ url_for('static', filename='vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script type="text/javascript">
-        var options = ['#Completed', '#Placed', '#Pending', '#Expired', '#Cancelled', '#all'];
+        var options = ['#completed', '#placed', '#pending', '#expired', '#cancelled', '#all'];
 
         $.fn.dataTable.ext.search.push(
             function (settings, data, dataIndex) {
