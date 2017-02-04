@@ -759,6 +759,11 @@ class DataGetter(object):
         return get_count(User.query.filter_by(is_verified=True))
 
     @staticmethod
+    def get_all_unverified_users():
+        return get_count(User.query.filter_by(is_verified=False))
+
+
+    @staticmethod
     def get_all_user_roles(role_name):
         role = Role.query.filter_by(name=role_name).first()
         uers = UsersEventsRoles.query.join(UsersEventsRoles.event).join(UsersEventsRoles.role).filter(
