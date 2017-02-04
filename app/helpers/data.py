@@ -3,11 +3,11 @@ import logging
 import os.path
 import random
 import shutil
-import time
 import traceback
 from datetime import datetime, timedelta
 from os import path
 from urllib2 import urlopen
+from uuid import uuid4
 
 import PIL
 import oauth2
@@ -17,28 +17,27 @@ from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from flask_socketio import emit
 from requests_oauthlib import OAuth2Session
-from sqlalchemy.orm import make_transient
 
+from app.helpers.assets.images import get_image_file_name, get_path_of_temp_url
 from app.helpers.cache import cache
 from app.helpers.helpers import string_empty, string_not_empty
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
     trigger_session_state_change_notifications
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
+from app.helpers.sessions_speakers.speakers import save_speaker
 from app.helpers.storage import upload, UPLOAD_PATHS, UploadedFile, upload_local
-from app.models.notifications import Notification
 from app.helpers import helpers as Helper
 from app.helpers.data_getter import DataGetter
 from app.helpers.system_mails import MAILS
 from app.helpers.update_version import VersionUpdater
 from app.models import db
 from app.models.activity import Activity, ACTIVITIES
-from app.models.call_for_papers import CallForPaper
 from app.models.email_notifications import EmailNotification
 from app.models.event import Event, EventsUsers
 from app.models.image_sizes import ImageSizes
 from app.models.invite import Invite
 from app.models.message_settings import MessageSettings
-from app.models.microlocation import Microlocation
+from app.models.notifications import Notification
 from app.models.page import Page
 from app.models.panel_permissions import PanelPermission
 from app.models.permission import Permission
@@ -49,7 +48,6 @@ from app.models.session import Session
 from app.models.session_type import SessionType
 from app.models.social_link import SocialLink
 from app.models.speaker import Speaker
-from app.models.sponsor import Sponsor
 from app.models.system_role import CustomSysRole, UserSystemRole
 from app.models.track import Track
 from app.models.user import User, ATTENDEE
@@ -180,6 +178,7 @@ class DataManager(object):
                     email_notification.new_paper = value
                     email_notification.session_schedule = value
                     email_notification.session_accept_reject = value
+                    email_notification.after_ticket_purchase = value
                     save_to_db(email_notification, "EmailSettings Toggled")
                     notification_ids.append(email_notification.id)
                 else:
@@ -187,6 +186,7 @@ class DataManager(object):
                                                                        new_paper=value,
                                                                        session_schedule=value,
                                                                        session_accept_reject=value,
+                                                                       after_ticket_purchase=value,
                                                                        user_id=user_id,
                                                                        event_id=event.id)
                     save_to_db(new_email_notification_setting, "EmailSetting Toggled")
@@ -194,18 +194,30 @@ class DataManager(object):
         return notification_ids
 
     @staticmethod
-    def add_session_to_event(request, event_id, state=None):
+    def add_session_to_event(request, event_id, state=None, use_current_user=True):
         """
         Session will be saved to database with proper Event id
+        :param use_current_user:
         :param state:
         :param request: The request
         :param event_id: Session belongs to Event by event id
         """
         form = request.form
-        slide_file = DataManager.get_files_from_request(request, 'slides')
-        video_file = DataManager.get_files_from_request(request, 'video')
-        audio_file = DataManager.get_files_from_request(request, 'audio')
-        speaker_img_file = DataManager.get_files_from_request(request, 'photo')
+        slide_temp_url = form.get('slides_url')
+        video_temp_url = form.get('video_url')
+        audio_temp_url = form.get('audio_url')
+        slide_file = ''
+        video_file = ''
+        audio_file = ''
+
+        if slide_temp_url:
+            slide_file = UploadedFile(get_path_of_temp_url(slide_temp_url), slide_temp_url.rsplit('/', 1)[1])
+
+        if video_temp_url:
+            video_file = UploadedFile(get_path_of_temp_url(video_temp_url), video_temp_url.rsplit('/', 1)[1])
+
+        if audio_temp_url:
+            audio_file = UploadedFile(get_path_of_temp_url(audio_temp_url), audio_temp_url.rsplit('/', 1)[1])
 
         if not state:
             state = form.get('state', 'draft')
@@ -220,8 +232,8 @@ class DataManager(object):
                               event_id=event_id,
                               short_abstract=form.get('short_abstract', ''),
                               level=form.get('level', ''),
-                              comments=form.get('comments',''),
-                              language=form.get('language',''),
+                              comments=form.get('comments', ''),
+                              language=form.get('language', ''),
                               state=state)
 
         if form.get('track', None) != "":
@@ -231,26 +243,12 @@ class DataManager(object):
             new_session.session_type_id = form.get('session_type', None)
 
         speaker = Speaker.query.filter_by(email=form.get('email', '')).filter_by(event_id=event_id).first()
-        if not speaker:
-            speaker = Speaker(name=form.get('name', ''),
-                              short_biography=form.get('short_biography', ''),
-                              email=form.get('email', ''),
-                              website=form.get('website', ''),
-                              event_id=event_id,
-                              twitter=form.get('twitter', ''),
-                              facebook=form.get('facebook', ''),
-                              github=form.get('github', ''),
-                              linkedin=form.get('linkedin', ''),
-                              organisation=form.get('organisation', ''),
-                              position=form.get('position', ''),
-                              country=form.get('country', ''),
-                              city=form.get('city', ''),
-                              heard_from = form.get('other_text', None) if form.get('heard_from', None) == "Other" else form.get('heard_from', None),
-                              sponsorship_required=form.get('sponsorship_required', ''),
-                              speaking_experience=form.get('speaking_experience', ''),
-                              long_biography=form.get('long_biography',''),
-                              mobile=form.get('mobile',''),
-                              user=login.current_user if login and login.current_user.is_authenticated else None)
+        speaker = save_speaker(
+            request,
+            event_id=event_id,
+            speaker=speaker,
+            user=login.current_user if use_current_user else None
+        )
 
         new_session.speakers.append(speaker)
 
@@ -259,130 +257,35 @@ class DataManager(object):
         if state == 'pending':
             trigger_new_session_notifications(new_session.id, event=event)
 
-        speaker_modified = False
-        session_modified = False
-        if slide_file != "":
+        if slide_temp_url != "" and slide_file:
             slide_url = upload(
                 slide_file,
                 UPLOAD_PATHS['sessions']['slides'].format(
                     event_id=int(event_id), id=int(new_session.id)
                 ))
             new_session.slides = slide_url
-            session_modified = True
-        if audio_file != "":
+        if audio_temp_url != "" and audio_file:
             audio_url = upload(
                 audio_file,
                 UPLOAD_PATHS['sessions']['audio'].format(
                     event_id=int(event_id), id=int(new_session.id)
                 ))
             new_session.audio = audio_url
-            session_modified = True
-        if video_file != "":
+        if video_temp_url != "" and video_file:
             video_url = upload(
                 video_file,
                 UPLOAD_PATHS['sessions']['video'].format(
                     event_id=int(event_id), id=int(new_session.id)
                 ))
             new_session.video = video_url
-            session_modified = True
-        if speaker_img_file != "":
-            speaker_img = upload(
-                speaker_img_file,
-                UPLOAD_PATHS['speakers']['photo'].format(
-                    event_id=int(event_id), id=int(speaker.id)
-                ))
-            speaker.photo = speaker_img
-            speaker_modified = True
-        logo = form.get('photo', None)
-        if string_not_empty(logo) and logo:
-            filename = '{}.png'.format(time.time())
-            filepath = '{}/static/{}'.format(path.realpath('.'),
-                                             logo[len('/serve_static/'):])
-            try:
-                logo_file = UploadedFile(filepath, filename)
-                logo = upload(logo_file, 'events/%d/speakers/%d/photo' % (int(event_id), int(speaker.id)))
-                speaker.photo = logo
-                image_sizes = DataGetter.get_image_sizes_by_type(type='profile')
-                if not image_sizes:
-                    image_sizes = ImageSizes(full_width=150,
-                                             full_height=150,
-                                             icon_width=35,
-                                             icon_height=35,
-                                             thumbnail_width=50,
-                                             thumbnail_height=50,
-                                             type='profile')
-                save_to_db(image_sizes, "Image Sizes Saved")
-                filename = '{}.jpg'.format(time.time())
-                filepath = '{}/static/{}'.format(path.realpath('.'),
-                                                 logo[len('/serve_static/'):])
-                logo_file = UploadedFile(filepath, filename)
 
-                temp_img_file = upload_local(logo_file,
-                                             'events/{event_id}/speakers/{id}/temp'.format(
-                                                 event_id=int(event_id), id=int(speaker.id)))
-                temp_img_file = temp_img_file.replace('/serve_', '')
-
-                basewidth = image_sizes.full_width
-                img = Image.open(temp_img_file)
-                hsize = image_sizes.full_height
-                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
-                img.save(temp_img_file)
-                file_name = temp_img_file.rsplit('/', 1)[1]
-                large_file = UploadedFile(file_path=temp_img_file, filename=file_name)
-                profile_thumbnail_url = upload(
-                    large_file,
-                    UPLOAD_PATHS['speakers']['thumbnail'].format(
-                        event_id=int(event_id), id=int(speaker.id)
-                    ))
-
-                basewidth = image_sizes.thumbnail_width
-                img = Image.open(temp_img_file)
-                hsize = image_sizes.thumbnail_height
-                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
-                img.save(temp_img_file)
-                file_name = temp_img_file.rsplit('/', 1)[1]
-                thumbnail_file = UploadedFile(file_path=temp_img_file, filename=file_name)
-                profile_small_url = upload(
-                    thumbnail_file,
-                    UPLOAD_PATHS['speakers']['small'].format(
-                        event_id=int(event_id), id=int(speaker.id)
-                    ))
-
-                basewidth = image_sizes.icon_width
-                img = Image.open(temp_img_file)
-                hsize = image_sizes.icon_height
-                img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
-                img.save(temp_img_file)
-                file_name = temp_img_file.rsplit('/', 1)[1]
-                icon_file = UploadedFile(file_path=temp_img_file, filename=file_name)
-                profile_icon_url = upload(
-                    icon_file,
-                    UPLOAD_PATHS['speakers']['icon'].format(
-                        event_id=int(event_id), id=int(speaker.id)
-                    ))
-                shutil.rmtree(path='static/media/' + 'events/{event_id}/speakers/{id}/temp'.format(
-                    event_id=int(event_id), id=int(speaker.id)))
-                speaker.thumbnail = profile_thumbnail_url
-                speaker.small = profile_small_url
-                speaker.icon = profile_icon_url
-                save_to_db(speaker, "Speaker photo saved")
-                record_activity('update_speaker', speaker=speaker, event_id=event_id)
-            except:
-                pass
-            speaker_modified = True
-
-        if session_modified:
-            save_to_db(new_session, "Session saved")
-        if speaker_modified:
-            save_to_db(speaker, "Speaker saved")
         record_activity('create_session', session=new_session, event_id=event_id)
         update_version(event_id, False, 'sessions_ver')
 
         invite_emails = form.getlist("speakers[email]")
         for index, email in enumerate(invite_emails):
             if not string_empty(email):
-                new_invite = Invite(event_id=event_id,
-                                    session_id=new_session.id)
+                new_invite = Invite(event_id=event_id, session_id=new_session.id)
                 hash = random.getrandbits(128)
                 new_invite.hash = "%032x" % hash
                 save_to_db(new_invite, "Invite saved")
@@ -397,124 +300,16 @@ class DataManager(object):
                     Helper.send_notif_invite_papers(user, event.name, cfs_link, link)
 
     @staticmethod
+    def add_session_media(request, media):
+        media_file = DataManager.get_files_from_request(request, media)
+        url = upload(media_file, UPLOAD_PATHS['temp']['event'].format(uuid=uuid4()))
+        return url
+
+    @staticmethod
     def get_files_from_request(request, file_type):
         if file_type in request.files and request.files[file_type].filename != '':
             return request.files[file_type]
         return ""
-
-    @staticmethod
-    def add_speaker_to_event(request, event_id, user=login.current_user):
-        form = request.form
-        speaker_img_file = ""
-        if 'photo' in request.files and request.files['photo'].filename != '':
-            speaker_img_file = request.files['photo']
-
-        speaker = Speaker.query.filter_by(email=form.get('email', '')).filter_by(event_id=event_id).first()
-        if not speaker:
-            speaker = Speaker(name=form.get('name', ''),
-                              short_biography=form.get('short_biography', ''),
-                              email=form.get('email', ''),
-                              website=form.get('website', ''),
-                              event_id=event_id,
-                              twitter=form.get('twitter', ''),
-                              facebook=form.get('facebook', ''),
-                              github=form.get('github', ''),
-                              linkedin=form.get('linkedin', ''),
-                              organisation=form.get('organisation', ''),
-                              position=form.get('position', ''),
-                              country=form.get('country', ''),
-                              city=form.get('city', ''),
-                              heard_from = form.get('other_text', None) if form.get('heard_from', None) == "Other" else form.get('heard_from', None),
-                              sponsorship_required=form.get('sponsorship_required', ''),
-                              speaking_experience=form.get('speaking_experience', ''),
-                              user=user if login and login.current_user.is_authenticated else None)
-            save_to_db(speaker, "Speaker saved")
-            record_activity('create_speaker', speaker=speaker, event_id=event_id)
-        if speaker_img_file != "":
-            speaker_img = upload(
-                speaker_img_file,
-                UPLOAD_PATHS['speakers']['photo'].format(
-                    event_id=int(event_id), id=int(speaker.id)
-                ))
-            speaker.photo = speaker_img
-            save_to_db(speaker, "Speaker photo saved")
-            record_activity('update_speaker', speaker=speaker, event_id=event_id)
-        logo = form.get('photo', None)
-
-        if string_not_empty(logo) and logo:
-            filename = '{}.png'.format(time.time())
-            filepath = '{}/static/{}'.format(path.realpath('.'),
-                                             logo[len('/serve_static/'):])
-            logo_file = UploadedFile(filepath, filename)
-            logo = upload(logo_file, 'events/%d/speakers/%d/photo' % (int(event_id), int(speaker.id)))
-            speaker.photo = logo
-            image_sizes = DataGetter.get_image_sizes_by_type(type='profile')
-            if not image_sizes:
-                image_sizes = ImageSizes(full_width=150,
-                                         full_height=150,
-                                         icon_width=35,
-                                         icon_height=35,
-                                         thumbnail_width=50,
-                                         thumbnail_height=50,
-                                         type='profile')
-            save_to_db(image_sizes, "Image Sizes Saved")
-            filename = '{}.jpg'.format(time.time())
-            filepath = '{}/static/{}'.format(path.realpath('.'),
-                                             logo[len('/serve_static/'):])
-            logo_file = UploadedFile(filepath, filename)
-
-            temp_img_file = upload_local(logo_file,
-                                         'events/{event_id}/speakers/{id}/temp'.format(
-                                             event_id=int(event_id), id=int(speaker.id)))
-            temp_img_file = temp_img_file.replace('/serve_', '')
-
-            basewidth = image_sizes.full_width
-            img = Image.open(temp_img_file)
-            hsize = image_sizes.full_height
-            img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
-            img.save(temp_img_file)
-            file_name = temp_img_file.rsplit('/', 1)[1]
-            large_file = UploadedFile(file_path=temp_img_file, filename=file_name)
-            profile_thumbnail_url = upload(
-                large_file,
-                UPLOAD_PATHS['speakers']['thumbnail'].format(
-                    event_id=int(event_id), id=int(speaker.id)
-                ))
-
-            basewidth = image_sizes.thumbnail_width
-            img = Image.open(temp_img_file)
-            hsize = image_sizes.thumbnail_height
-            img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
-            img.save(temp_img_file)
-            file_name = temp_img_file.rsplit('/', 1)[1]
-            thumbnail_file = UploadedFile(file_path=temp_img_file, filename=file_name)
-            profile_small_url = upload(
-                thumbnail_file,
-                UPLOAD_PATHS['speakers']['small'].format(
-                    event_id=int(event_id), id=int(speaker.id)
-                ))
-
-            basewidth = image_sizes.icon_width
-            img = Image.open(temp_img_file)
-            hsize = image_sizes.icon_height
-            img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
-            img.save(temp_img_file)
-            file_name = temp_img_file.rsplit('/', 1)[1]
-            icon_file = UploadedFile(file_path=temp_img_file, filename=file_name)
-            profile_icon_url = upload(
-                icon_file,
-                UPLOAD_PATHS['speakers']['icon'].format(
-                    event_id=int(event_id), id=int(speaker.id)
-                ))
-            shutil.rmtree(path='static/media/' + 'events/{event_id}/speakers/{id}/temp'.format(
-                event_id=int(event_id), id=int(speaker.id)))
-            speaker.thumbnail = profile_thumbnail_url
-            speaker.small = profile_small_url
-            speaker.icon = profile_icon_url
-            save_to_db(speaker, "Speaker photo saved")
-            record_activity('update_speaker', speaker=speaker, event_id=event_id)
-        update_version(event_id, False, 'speakers_ver')
-        return speaker
 
     @staticmethod
     def add_speaker_to_session(request, event_id, session_id, user=login.current_user):
@@ -526,62 +321,72 @@ class DataManager(object):
         :param event_id: Session belongs to Event by event id
         """
         session = DataGetter.get_session(session_id)
-        speaker = DataManager.add_speaker_to_event(request, event_id, user)
+        speaker = save_speaker(request, event_id, user=user)
         session.speakers.append(speaker)
-        save_to_db(session, "Speaker saved")
-        record_activity('add_speaker_to_session', speaker=speaker, session=session, event_id=event_id)
+        save_to_db(session, "Session updated")
         update_version(event_id, False, "speakers_ver")
         update_version(event_id, False, "sessions_ver")
 
     @staticmethod
-    def session_accept_reject(session, event_id, state, send_email=True):
+    def session_accept_reject(session, event_id, state, send_email=True, message=None, subject=None):
         session.state = state
         session.submission_date = datetime.now()
         session.submission_modifier = login.current_user.email
         session.state_email_sent = False
         save_to_db(session, 'Session State Updated')
         if send_email:
-            trigger_session_state_change_notifications(session, event_id)
+            trigger_session_state_change_notifications(session, event_id, message=message, subject=subject)
         flash("The session has been %s" % state)
 
     @staticmethod
-    def edit_session(request, session):
+    def edit_session(request, session, speaker=None):
         with db.session.no_autoflush:
             form = request.form
             event_id = session.event_id
 
-            slide_file = DataManager.get_files_from_request(request, 'slides')
-            video_file = DataManager.get_files_from_request(request, 'video')
-            audio_file = DataManager.get_files_from_request(request, 'audio')
+            slide_temp_url = form.get('slides_url')
+            video_temp_url = form.get('video_url')
+            audio_temp_url = form.get('audio_url')
+            slide_file = ''
+            video_file = ''
+            audio_file = ''
+
+            if slide_temp_url and slide_temp_url != session.slides:
+                slide_file = UploadedFile(get_path_of_temp_url(slide_temp_url), slide_temp_url.rsplit('/', 1)[1])
+
+            if video_temp_url and video_temp_url != session.video:
+                video_file = UploadedFile(get_path_of_temp_url(video_temp_url), video_temp_url.rsplit('/', 1)[1])
+
+            if audio_temp_url and audio_temp_url != session.audio:
+                audio_file = UploadedFile(get_path_of_temp_url(audio_temp_url), audio_temp_url.rsplit('/', 1)[1])
 
             form_state = form.get('state', 'draft')
 
-            if slide_file != "":
-                slide_url = upload(
-                    slide_file,
-                    UPLOAD_PATHS['sessions']['slides'].format(
-                        event_id=int(event_id), id=int(session.id)
-                    ))
-                session.slides = slide_url
-
-            if audio_file != "":
-                audio_url = upload(
+            if slide_temp_url != "" and slide_temp_url != session.slides and slide_file:
+                slide_temp_url = upload(slide_file,
+                                        UPLOAD_PATHS['sessions']['slides'].format(
+                                            event_id=int(event_id), id=int(session.id)
+                                        ))
+            if audio_temp_url != "" and audio_temp_url != session.audio and audio_file:
+                audio_temp_url = upload(
                     audio_file,
                     UPLOAD_PATHS['sessions']['audio'].format(
                         event_id=int(event_id), id=int(session.id)
                     ))
-                session.audio = audio_url
-            if video_file != "":
-                video_url = upload(
+            if video_temp_url != "" and video_temp_url != session.video and video_file:
+                video_temp_url = upload(
                     video_file,
                     UPLOAD_PATHS['sessions']['video'].format(
                         event_id=int(event_id), id=int(session.id)
                     ))
-                session.video = video_url
+
+            session.slides = slide_temp_url
+            session.audio = audio_temp_url
+            session.video = video_temp_url
 
             if form_state == 'pending' and session.state != 'pending' and \
                     session.state != 'accepted' and session.state != 'rejected':
-
+                session.state = 'pending'
                 trigger_new_session_notifications(session.id, event_id=event_id)
 
             session.title = form.get('title', '')
@@ -589,7 +394,6 @@ class DataManager(object):
             session.long_abstract = form.get('long_abstract', '')
             session.short_abstract = form.get('short_abstract', '')
             session.level = form.get('level', '')
-            session.state = form_state
             session.track_id = form.get('track', None) if form.get('track', None) != "" else  None
             session.session_type_id = form.get('session_type', None) if form.get('session_type', None) != "" else None
 
@@ -599,6 +403,9 @@ class DataManager(object):
 
             save_to_db(session, 'Session Updated')
 
+            if speaker:
+                save_speaker(request, event_id=event_id, speaker=speaker)
+
             for existing_speaker in DataGetter.get_speaker_by_email(form.get("email")).all():
                 existing_speaker_ids_by_email.append(str(existing_speaker.id))
 
@@ -606,9 +413,8 @@ class DataManager(object):
                 current_speaker_ids.append(str(current_speaker.id))
 
             for current_speaker_id in current_speaker_ids:
-                if current_speaker_id not in existing_speaker_ids and current_speaker_id \
-                     not in existing_speaker_ids_by_email:
-
+                if current_speaker_id \
+                     not in existing_speaker_ids and current_speaker_id not in existing_speaker_ids_by_email:
                     current_speaker = DataGetter.get_speaker(current_speaker_id)
                     session.speakers.remove(current_speaker)
                     db.session.commit()
@@ -726,12 +532,12 @@ class DataManager(object):
 
             user_detail.details = form['details']
             avatar_img = form.get('avatar-img', None)
-            user_detail.avatar_uploaded = ""
-            user_detail.thumbnail = ""
-            user_detail.small = ""
-            user_detail.icon = ""
             if string_not_empty(avatar_img) and avatar_img:
-                filename = '{}.png'.format(time.time())
+                user_detail.avatar_uploaded = ""
+                user_detail.thumbnail = ""
+                user_detail.small = ""
+                user_detail.icon = ""
+                filename = '{}.png'.format(get_image_file_name())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
                                                  avatar_img[len('/serve_static/'):])
                 # print "File path 1", filepath
@@ -748,7 +554,7 @@ class DataManager(object):
                                              thumbnail_height=50,
                                              type='profile')
                 save_to_db(image_sizes, "Image Sizes Saved")
-                filename = '{}.jpg'.format(time.time())
+                filename = '{}.jpg'.format(get_image_file_name())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
                                                  avatar_img[len('/serve_static/'):])
                 # print "File path 1", filepath
@@ -886,7 +692,6 @@ class DataManager(object):
                         setattr(perm, oper[v], False)
 
                 save_to_db(perm, 'Permission saved')
-
 
     @staticmethod
     def delete_event(e_id):
@@ -1240,7 +1045,7 @@ def restore_session(session_id):
 
 def uploaded_file_provided_by_url(url):
     response_file = urlopen(url)
-    filename = str(time.time()) + '.jpg'
+    filename = get_image_file_name() + '.jpg'
     file_path = os.path.realpath('.') + '/static/uploads/' + filename
     fh = open(file_path, "wb")
     fh.write(response_file.read())

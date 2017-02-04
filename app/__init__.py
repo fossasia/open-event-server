@@ -63,7 +63,7 @@ from helpers.helpers import send_email_for_expired_orders
 from werkzeug.contrib.profiler import ProfilerMiddleware
 
 from flask.ext.sqlalchemy import get_debug_queries
-from config import ProductionConfig, LANGUAGES
+from config import LANGUAGES
 from app.helpers.auth import AuthManager
 from app.views import BlueprintsManager
 
@@ -415,8 +415,9 @@ def as_timezone(dt, tzname):
     """Accepts a Time aware Datetime object and a Timezone name.
         Returns Converted Timezone aware Datetime Object.
         """
-    converted_dt = dt.astimezone(timezone(tzname))
-    return converted_dt
+    if tzname and timezone(tzname):
+        return dt.astimezone(timezone(tzname))
+    return dt
 
 
 @app.template_filter('fees_by_currency')
@@ -424,6 +425,13 @@ def fees_by_currency(currency):
     """Returns a fees object according to the currency input"""
     fees = DataGetter.get_fee_settings_by_currency(currency)
     return fees
+
+
+@app.template_filter('filename_from_url')
+def filename_from_url(url):
+    if url:
+        return url.rsplit('/', 1)[1]
+    return ""
 
 
 @app.context_processor
@@ -534,8 +542,8 @@ def integrate_socketio():
 
 scheduler = BackgroundScheduler(timezone=utc)
 scheduler.add_job(send_mail_to_expired_orders, 'interval', hours=5)
-scheduler.add_job(empty_trash, 'cron', day_of_week='mon-fri', hour=5, minute=30)
-scheduler.add_job(send_after_event_mail, 'cron', day_of_week='mon-fri', hour=5, minute=30)
+scheduler.add_job(empty_trash, 'cron', hour=5, minute=30)
+scheduler.add_job(send_after_event_mail, 'cron', hour=5, minute=30)
 scheduler.add_job(send_event_fee_notification, 'cron', day=1)
 scheduler.add_job(send_event_fee_notification_followup, 'cron', day=15)
 scheduler.start()
@@ -544,12 +552,13 @@ scheduler.start()
 # Testing database performance
 @app.after_request
 def after_request(response):
-    for query in get_debug_queries():
-        if query.duration >= ProductionConfig.DATABASE_QUERY_TIMEOUT:
-            app.logger.warning("SLOW QUERY: %s\nParameters: %s\nDuration: %fs\nContext: %s\n" % (query.statement,
-                                                                                                 query.parameters,
-                                                                                                 query.duration,
-                                                                                                 query.context))
+    if app.config['SQLALCHEMY_RECORD_QUERIES']:
+        for query in get_debug_queries():
+            if query.duration >= app.config['DATABASE_QUERY_TIMEOUT']:
+                app.logger.warning("SLOW QUERY: %s\nParameters: %s\nDuration: %fs\nContext: %s\n" % (query.statement,
+                                                                                                     query.parameters,
+                                                                                                     query.duration,
+                                                                                                     query.context))
     return response
 
 

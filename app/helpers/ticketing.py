@@ -1,9 +1,7 @@
-import binascii
-import os
 import uuid
 from datetime import timedelta, datetime
 
-from flask import url_for,flash
+from flask import url_for, flash
 from flask.ext import login
 from sqlalchemy import asc
 from sqlalchemy import or_
@@ -12,18 +10,18 @@ from app.helpers.cache import cache
 from app.helpers.data import DataManager
 from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
-from app.helpers.helpers import send_email_after_account_create_with_password
 from app.helpers.helpers import string_empty, send_email_for_after_purchase, get_count, \
-    send_notif_for_after_purchase
+    send_notif_for_after_purchase, send_email_after_cancel_ticket
+from app.helpers.notification_email_triggers import trigger_after_purchase_notifications
 from app.helpers.payment import StripePaymentsManager, represents_int, PayPalPaymentsManager
 from app.models import db
+from app.models.access_code import AccessCode
 from app.models.discount_code import DiscountCode, TICKET
 from app.models.event import Event
 from app.models.order import Order
 from app.models.order import OrderTicket
 from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
-from app.models.user_detail import UserDetail
 
 
 class TicketingManager(object):
@@ -84,6 +82,21 @@ class TicketingManager(object):
     def get_orders_count_by_type(event_id, type='free'):
         return get_count(Order.query.filter_by(event_id=event_id).filter_by(status='completed')
                          .filter(Ticket.type == type))
+
+    @staticmethod
+    def get_ticket_stats(event):
+        tickets_summary = {}
+        for ticket in event.tickets:
+            tickets_summary[str(ticket.id)] = {
+                'name': ticket.name,
+                'total': ticket.quantity,
+                'completed': 0
+            }
+        orders = Order.query.filter_by(event_id=event.id).filter_by(status='completed').all()
+        for order in orders:
+            for order_ticket in order.tickets:
+                tickets_summary[str(order_ticket.ticket_id)]['completed'] += order_ticket.quantity
+        return tickets_summary
 
     @staticmethod
     def get_all_orders_count_by_type(type='free'):
@@ -169,23 +182,21 @@ class TicketingManager(object):
                 .filter_by(used_for=TICKET).first()
 
     @staticmethod
-    def get_or_create_user_by_email(email, data=None):
-        user = DataGetter.get_user_by_email(email, True)
-        if not user:
-            password = binascii.b2a_hex(os.urandom(4))
-            user_data = [email, password]
-            user = DataManager.create_user(user_data)
-            send_email_after_account_create_with_password({
-                'email': email,
-                'password': password
-            })
+    def get_access_codes(event_id):
+        return AccessCode.query.filter_by(event_id=event_id).filter_by(used_for=TICKET).all()
 
-        if not user.user_detail:
-            user_detail = UserDetail(firstname=data['firstname'], lastname=data['lastname'])
-            user.user_detail = user_detail
-
-        save_to_db(user)
-        return user
+    @staticmethod
+    def get_access_code(event_id, access_code):
+        if represents_int(access_code):
+            return AccessCode.query \
+                .filter_by(id=access_code) \
+                .filter_by(event_id=event_id) \
+                .filter_by(used_for=TICKET).first()
+        else:
+            return AccessCode.query \
+                .filter_by(code=access_code) \
+                .filter_by(event_id=event_id) \
+                .filter_by(used_for=TICKET).first()
 
     @staticmethod
     def get_and_set_expiry(identifier, override=False):
@@ -217,20 +228,28 @@ class TicketingManager(object):
 
         ticket_ids = form.getlist('ticket_ids[]')
         ticket_quantity = form.getlist('ticket_quantities[]')
-        ticket_discount=form.get('promo_code','')
-        discount=None
+        ticket_discount = form.get('promo_code', '')
+        discount = None
         if ticket_discount:
-            discount=TicketingManager.get_discount_code(form.get('event_id'), form.get('promo_code',''))
-            if not discount:
-                flash('The promotional code entered is not valid. No offer has been applied to this order.', 'danger')
-            else:
+            discount = TicketingManager.get_discount_code(form.get('event_id'), form.get('promo_code', ''))
+            access_code = TicketingManager.get_access_code(form.get('event_id'), form.get('promo_code', ''))
+            if access_code and discount:
                 order.discount_code = discount
-                flash('The promotional code entered is valid.offer has been applied to this order.', 'success')
+                flash('Both access code and discount code have been applied. You can make this order now.', 'success')
+            elif discount:
+                order.discount_code = discount
+                flash('The promotional code entered is valid. Offer has been applied to this order.', 'success')
+            elif access_code:
+                flash('Your access code is applied and you can make this order now.', 'success')
+            else:
+                flash('The promotional code entered is not valid. No offer has been applied to this order.', 'danger')
+
         ticket_subtotals = []
         if from_organizer:
             ticket_subtotals = form.getlist('ticket_subtotals[]')
 
         amount = 0
+        total_discount = 0
         fees = DataGetter.get_fee_settings_by_currency(DataGetter.get_event(order.event_id).payment_currency)
         for index, id in enumerate(ticket_ids):
             if not string_empty(id) and int(ticket_quantity[index]) > 0:
@@ -240,22 +259,31 @@ class TicketingManager(object):
                     order_ticket.quantity = int(ticket_quantity[index])
                     order.tickets.append(order_ticket)
 
+                    if order_ticket.ticket.absorb_fees or not fees:
+                        ticket_amount = (order_ticket.ticket.price * order_ticket.quantity)
+                        amount += (order_ticket.ticket.price * order_ticket.quantity)
+                    else:
+                        order_fee = fees.service_fee * (order_ticket.ticket.price * order_ticket.quantity) / 100
+                        if order_fee > fees.maximum_fee:
+                            ticket_amount = (order_ticket.ticket.price * order_ticket.quantity) + fees.maximum_fee
+                            amount += (order_ticket.ticket.price * order_ticket.quantity) + fees.maximum_fee
+                        else:
+                            ticket_amount = (order_ticket.ticket.price * order_ticket.quantity) + order_fee
+                            amount += (order_ticket.ticket.price * order_ticket.quantity) + order_fee
+
                     if from_organizer:
                         amount += float(ticket_subtotals[index])
                     else:
-                        if order_ticket.ticket.absorb_fees or not fees:
-                            amount += (order_ticket.ticket.price * order_ticket.quantity)
-                        else:
-                            order_fee = fees.service_fee * (order_ticket.ticket.price * order_ticket.quantity) / 100
-                            if order_fee > fees.maximum_fee:
-                                amount += (order_ticket.ticket.price * order_ticket.quantity) + fees.maximum_fee
+                        if discount and str(order_ticket.ticket.id) in discount.tickets.split(","):
+                            if discount.type == "amount":
+                                total_discount += discount.value * order_ticket.quantity
                             else:
-                                amount += (order_ticket.ticket.price * order_ticket.quantity) + order_fee
+                                total_discount += discount.value * ticket_amount / 100
 
-        if discount and discount.type == "amount":
-            order.amount = max(amount-discount.value, 0)
+        if discount:
+            order.amount = max(amount - total_discount, 0)
         elif discount:
-            order.amount = amount-(discount.value*amount/100.0)
+            order.amount = amount - (discount.value * amount / 100.0)
         else:
             order.amount = amount
 
@@ -273,8 +301,7 @@ class TicketingManager(object):
         order = TicketingManager.get_and_set_expiry(identifier)
 
         if order:
-
-            user = TicketingManager.get_or_create_user_by_email(email, form)
+            user = DataGetter.get_or_create_user_by_email(email, form)
             order.user_id = user.id
 
             if order.amount > 0 \
@@ -308,6 +335,12 @@ class TicketingManager(object):
                 if not order.paid_via:
                     order.paid_via = 'free'
 
+            invoice_id = order.get_invoice_number()
+            order_url = url_for('ticketing.view_order_after_payment',
+                                order_identifier=order.identifier,
+                                _external=True)
+
+            # add holders to user
             holders_firstnames = form.getlist('holders[firstname]')
             holders_lastnames = form.getlist('holders[lastname]')
             holders_ticket_ids = form.getlist('holders[ticket_id]')
@@ -318,15 +351,23 @@ class TicketingManager(object):
                     'firstname': firstname,
                     'lastname': holders_lastnames[i]
                 }
-                holder_user = TicketingManager.get_or_create_user_by_email(holders_emails[i], data)
+                holder_user = DataGetter.get_or_create_user_by_email(holders_emails[i], data)
                 ticket_holder = TicketHolder(firstname=data['firstname'],
                                              lastname=data['lastname'],
                                              ticket_id=int(holders_ticket_ids[i]),
-                                             email=holder_user.email, order_id=order.id)
+                                             email=holder_user.email,
+                                             order_id=order.id)
+                if order.status == "completed":
+                    send_email_for_after_purchase(holder_user.email, invoice_id, order_url, order.event.name,
+                                                  order.event.organizer_name)
                 DataManager.add_attendee_role_to_event(holder_user, order.event_id)
                 db.session.add(ticket_holder)
 
             # add attendee role to user
+            if order.status == "completed":
+                trigger_after_purchase_notifications(email, order.event_id, order.event, invoice_id, order_url)
+                send_email_for_after_purchase(email, invoice_id, order_url, order.event.name,
+                                              order.event.organizer_name)
             DataManager.add_attendee_role_to_event(user, order.event_id)
             # save items
             save_to_db(order)
@@ -357,8 +398,9 @@ class TicketingManager(object):
             order_url = url_for('ticketing.view_order_after_payment',
                                 order_identifier=order.identifier,
                                 _external=True)
-
-            send_email_for_after_purchase(order.user.email, invoice_id, order_url)
+            trigger_after_purchase_notifications(order.user.email, order.event_id, order.event, invoice_id, order_url)
+            send_email_for_after_purchase(order.user.email, invoice_id, order_url, order.event.name,
+                                          order.event.organizer_name)
             send_notif_for_after_purchase(order.user, invoice_id, order_url)
 
             return True, order
@@ -381,8 +423,10 @@ class TicketingManager(object):
                 order_url = url_for('ticketing.view_order_after_payment',
                                     order_identifier=order.identifier,
                                     _external=True)
-
-                send_email_for_after_purchase(order.user.email, invoice_id, order_url)
+                trigger_after_purchase_notifications(order.user.email, order.event_id, order.event, invoice_id,
+                                                     order_url)
+                send_email_for_after_purchase(order.user.email, invoice_id, order_url, order.event.name,
+                                              order.event.organizer_name)
                 send_notif_for_after_purchase(order.user, invoice_id, order_url)
 
                 return True, order
@@ -400,6 +444,7 @@ class TicketingManager(object):
         discount_code.code = form.get('code')
         discount_code.value = form.get('value')
         discount_code.type = form.get('value_type')
+        discount_code.discount_url = form.get('discount_url')
         discount_code.min_quantity = form.get('min_quantity', None)
         discount_code.max_quantity = form.get('max_quantity', None)
         discount_code.tickets_number = form.get('tickets_number')
@@ -431,3 +476,70 @@ class TicketingManager(object):
         save_to_db(discount_code)
 
         return discount_code
+
+    @staticmethod
+    def create_edit_access_code(form, event_id, access_code_id=None):
+        if not access_code_id:
+            access_code = AccessCode()
+        else:
+            access_code = TicketingManager.get_access_code(event_id, access_code_id)
+        access_code.code = form.get('code')
+        access_code.access_url = form.get('access_url')
+        access_code.min_quantity = form.get('min_quantity', None)
+        access_code.max_quantity = form.get('max_quantity', None)
+        access_code.tickets_number = form.get('tickets_number')
+        access_code.event_id = event_id
+        access_code.used_for = TICKET
+        access_code.is_active = form.get('status', 'in_active') == 'active'
+
+        if access_code.min_quantity == "":
+            access_code.min_quantity = None
+        if access_code.max_quantity == "":
+            access_code.max_quantity = None
+        if access_code.tickets_number == "":
+            access_code.tickets_number = None
+
+        try:
+            access_code.valid_from = datetime.strptime(form.get('start_date', None) + ' ' +
+                                                       form.get('start_time', None), '%m/%d/%Y %H:%M')
+        except:
+            access_code.valid_from = None
+
+        try:
+            access_code.valid_till = datetime.strptime(form.get('end_date', None) + ' ' +
+                                                       form.get('end_time', None), '%m/%d/%Y %H:%M')
+        except:
+            access_code.valid_till = None
+
+        access_code.tickets = ",".join(form.getlist('tickets[]'))
+
+        save_to_db(access_code)
+
+        return access_code
+
+    @staticmethod
+    def cancel_order(form):
+        order = TicketingManager.get_and_set_expiry(form.get('identifier'))
+        event_id = order.event_id
+        event_name = order.event.name
+        invoice_id = order.get_invoice_number()
+        order_url = url_for('ticketing.view_order_after_payment', order_identifier=order.identifier, _external=True)
+        user = DataGetter.get_user(order.user_id)
+        if login.current_user.is_organizer(event_id):
+            order.status = "cancelled"
+            save_to_db(order)
+            send_email_after_cancel_ticket(user.email, invoice_id, order_url, event_name, form.get('note'))
+            return True
+        return False
+
+    @staticmethod
+    def delete_order(form):
+        order = TicketingManager.get_and_set_expiry(form.get('identifier'))
+        event_id = order.event_id
+        if login.current_user.is_organizer(event_id):
+            if order.status != "deleted" and (order.amount == 0 or order.status != "completed"):
+                order.trashed_at = datetime.now()
+                order.status = "deleted"
+                save_to_db(order)
+            return True
+        return False

@@ -33,7 +33,7 @@ def index_view():
         logplex_url = heroku_api.get_logplex_url()
 
     return render_template(
-        'gentelella/admin/super_admin/reports/reports.html',
+        'gentelella/super_admin/reports/reports.html',
         mails=mails,
         notifications=notifications,
         on_heroku=on_heroku,

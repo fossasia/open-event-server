@@ -1,0 +1,62 @@
+<div class="col-md-8 col-sm-8 col-xs-8 col-md-push-2 col-sm-push-2 col-xs-push-2">
+    <br>
+    <div style="width: 100%; text-align: center">
+        <h2 style="font-weight: 300;">Turn <span class="state" v-show="sponsors_enabled">{{ _("off") }}</span> <span
+                class="state" v-show="!sponsors_enabled">{{ _("on") }}</span> {{ _("sponsors") }}</h2>
+        <input type="checkbox" class="toggle-switch" name="sponsors_state"
+               v-model="sponsors_enabled" id="sponsors-switch"/>
+        <label for="sponsors-switch"></label>
+    </div>
+    <transition name="fade">
+        <div id="sponsors-section-holder" v-show="sponsors_enabled">
+            <template v-for="(sponsor, index) in sponsors">
+                <hr v-if="index > 0">
+                <div class="row" v-bind:key="index">
+                    <div class="col-xs-12 form-group">
+                        <label style="font-weight: 600; margin: 0;">Sponsor {{ '{{ index + 1 }}' }}</label>
+                        <transition name="fade">
+                            <button type="button" class="btn btn-danger btn-xs pull-right" v-show="sponsors.length > 1"
+                                    v-on:click="removeSponsor(sponsor)"><i class="fa fa-trash"></i> Remove
+                            </button>
+                        </transition>
+                    </div>
+                    <div class="col-md-3 form-group col-sm-12 col-xs-12">
+                        <label>{{ _("Name") }}</label>
+                        <input title="Sponsor name" v-model="sponsor.name" class="form-control"/>
+                    </div>
+                    <div class="col-md-2 form-group col-sm-12 col-xs-12">
+                        <label>{{ _("Level") }}</label>
+                        <input title="sponsor level" type="number" v-model.number="sponsor.level" class="form-control"/>
+                    </div>
+                    <div class="col-md-2 form-group col-sm-12 col-xs-12">
+                        <label>{{ _("Type") }}</label>
+                        <input title="sponsor type" class="form-control" v-model="sponsor.type"/>
+                    </div>
+                    <div class="col-md-5 form-group col-sm-12 col-xs-12"
+                         v-bind:class="{ 'has-error': !isValidLinkEntry(sponsor.url) }">
+                        <label>URL</label>
+                        <input title="URL" type="text" v-model="sponsor.url" class="form-control"/>
+                        <transition name="fade">
+                            <span class="help-block" v-show="!isValidLinkEntry(sponsor.url)">This looks like an invalid URL and hence will be ignored.</span>
+                        </transition>
+                    </div>
+
+                    <div class="form-group col-md-4 col-sm-12 col-xs-12">
+                        <label>{{ _("Description") }}</label>
+                        <textarea title="description" v-model="sponsor.description"
+                                  style="height: 150px;" class="form-control sponsor-textarea"></textarea>
+                    </div>
+
+                    <div class="col-md-8 col-sm-12 col-xs-12">
+                        <image-upload title="Logo" icon="fa-file-image-o"
+                                      v-model="sponsor.logo"
+                                      v-bind:max-size-in-mb="1"></image-upload>
+                    </div>
+                </div>
+            </template>
+            <button type='button' class='btn btn-success'
+                    v-on:click="addSponsor">{{ _("Add Another Sponsor") }}</button>
+        </div>
+    </transition>
+
+</div>

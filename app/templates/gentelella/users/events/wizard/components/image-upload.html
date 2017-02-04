@@ -1,0 +1,60 @@
+<script type="text/x-template" id="image-upload-template">
+    <div>
+        <div class="item form-group" v-if="!value || value == ''">
+            <label>{{ '{{ title }}' }}</label><br>
+            <div class="image-box">
+                <input type="file" v-bind:id="componentId" class="image-upload-btn no-js" accept="image/*"
+                       v-on:change="uploadImage"/>
+                <label class="file-label" v-bind:for="componentId" id="event-image-upload-label-pre"
+                       v-if="!isUploading">
+                    <i v-bind:class="'fa fa-4x ' + icon"></i> <br>
+                    <h3>{{ _("Select") }} {{ '{{ title }}' }}</h3>
+                </label>
+                <label class="file-label" v-bind:for="componentId" id="event-image-upload-label-uploading"
+                       v-if="isUploading">
+                    <i class="fa fa-4x fa-spin fa-spinner"></i> <br>
+                    <h3>{{ '{{ title }}' }} {{ _("is uploading") }}</h3>
+                </label>
+                <br>
+            </div>
+            <span class="text-danger" v-if="errorMessage != ''">
+            {{ '{{ errorMessage }}' }}<br>
+        </span>
+            <span class="text-muted" style="color: #a2a2a2;">
+            {{ '{{ helpText }}' }}<br v-if="helpText != ''">
+            ({{ _("No larger than ") }} {{ '{{ maxSizeInMb }}' }} MB)
+        </span>
+
+        </div>
+        <div class="item form-group" v-if="value && value != ''">
+            <label>{{ '{{ title }}' }}</label><br>
+            <img v-bind:src="value" style="max-width: 300px; max-height: 300px"><br><br>
+            <button type="button" class="btn btn-sm btn-default" v-on:click="deleteImage">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                {{ _("Remove") }}
+            </button>
+            <br>
+        </div>
+
+        <div class="modal fade cropper-modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Crop your image</h4></div>
+                    <div class="modal-body">
+                        <div class="upload-cropper"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button type="button" id="save-crop" class="btn btn-success" v-on:click="saveCrop">Done
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

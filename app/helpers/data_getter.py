@@ -1,6 +1,8 @@
 import datetime
+import os
 from collections import Counter
 
+import binascii
 import humanize
 import pytz
 import requests
@@ -11,7 +13,8 @@ from sqlalchemy import desc, asc, or_
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from app.helpers.cache import cache
-from app.helpers.helpers import get_event_id, string_empty, represents_int, get_count
+from app.helpers.helpers import get_event_id, string_empty, represents_int, get_count, \
+    send_email_after_account_create_with_password
 from app.helpers.language_list import LANGUAGE_LIST
 from app.helpers.static import EVENT_TOPICS, EVENT_LICENCES, PAYMENT_COUNTRIES, PAYMENT_CURRENCIES, DEFAULT_EVENT_IMAGES
 from app.models.activity import Activity
@@ -48,6 +51,7 @@ from app.models.tax import Tax
 from app.models.ticket import Ticket
 from app.models.track import Track
 from app.models.user import User
+from app.models.user_detail import UserDetail
 from app.models.user_permissions import UserPermission
 from app.models.users_events_roles import UsersEventsRoles
 
@@ -94,7 +98,7 @@ class DataGetter(object):
     @staticmethod
     def get_all_events():
         """Method return all events"""
-        return Event.query.order_by(desc(Event.id)).filter_by(in_trash=False).all()
+        return Event.query.order_by(desc(Event.created_at)).filter_by(in_trash=False).all()
 
     @staticmethod
     def get_all_events_with_discounts():
@@ -267,15 +271,15 @@ class DataGetter(object):
             return None
 
     @staticmethod
-    def get_sessions_of_user(upcoming_events=True):
+    def get_sessions_of_user(upcoming_events=True, user_id=None):
         """
         :return: Return all Sessions objects with the current user as a speaker
         """
         if upcoming_events:
-            return Session.query.filter(Session.speakers.any(Speaker.user_id == login.current_user.id)).filter(
+            return Session.query.filter(Session.speakers.any(Speaker.user_id == (login.current_user.id if not user_id else int(user_id)))).filter(
                 Session.start_time >= datetime.datetime.now()).filter(Session.in_trash == False)
         else:
-            return Session.query.filter(Session.speakers.any(Speaker.user_id == login.current_user.id)).filter(
+            return Session.query.filter(Session.speakers.any(Speaker.user_id == (login.current_user.id if not user_id else int(user_id)))).filter(
                 Session.start_time < datetime.datetime.now()).filter(Session.in_trash == False)
 
     @staticmethod
@@ -330,6 +334,26 @@ class DataGetter(object):
             return user
 
     @staticmethod
+    def get_or_create_user_by_email(email, data=None):
+        user = DataGetter.get_user_by_email(email, True)
+        if not user:
+            password = binascii.b2a_hex(os.urandom(4))
+            user_data = [email, password]
+            from app.helpers.data import DataManager
+            user = DataManager.create_user(user_data)
+            send_email_after_account_create_with_password({
+                'email': email,
+                'password': password
+            })
+
+        if not user.user_detail:
+            user_detail = UserDetail(firstname=data['firstname'], lastname=data['lastname'])
+            user.user_detail = user_detail
+        from app.helpers.data import save_to_db
+        save_to_db(user)
+        return user
+
+    @staticmethod
     def get_all_users():
         """
         :return: All system users
@@ -378,7 +402,8 @@ class DataGetter(object):
 
     @staticmethod
     def get_user_event_roles_by_role_name(event_id, role_name):
-        return UsersEventsRoles.query.filter_by(event_id=event_id).filter(Role.name == role_name)
+        role = Role.query.filter_by(name=role_name).first()
+        return UsersEventsRoles.query.filter_by(event_id=event_id).filter(UsersEventsRoles.role == role)
 
     @staticmethod
     def get_user_events(user_id=None):
@@ -418,31 +443,36 @@ class DataGetter(object):
         return results[:12]
 
     @staticmethod
-    def trim_attendee_events(events):
+    def trim_attendee_events(events, user_id):
         """
         return only those events where current_user has non-attendee permissions access
         """
-        return [_ for _ in events if _.has_staff_access()]
+        return [_ for _ in events if _.has_staff_access(user_id)]
 
     @staticmethod
-    def get_live_events_of_user():
-        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
+    def get_live_events_of_user(user_id=None):
+        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id = login.current_user.id if not user_id else user_id) \
             .filter(Event.end_time >= datetime.datetime.now()) \
             .filter(Event.state == 'Published').filter(Event.in_trash == False)
-        return DataGetter.trim_attendee_events(events)
+        return DataGetter.trim_attendee_events(events, user_id)
 
     @staticmethod
-    def get_draft_events_of_user():
-        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
+    def get_all_events_of_user(user_id=None):
+        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id = login.current_user.id if not user_id else user_id)
+        return DataGetter.trim_attendee_events(events, user_id)
+
+    @staticmethod
+    def get_draft_events_of_user(user_id=None):
+        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id if not user_id else user_id) \
             .filter(Event.state == 'Draft').filter(Event.in_trash == False)
-        return DataGetter.trim_attendee_events(events)
+        return DataGetter.trim_attendee_events(events, user_id)
 
     @staticmethod
-    def get_past_events_of_user():
-        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id) \
+    def get_past_events_of_user(user_id=None):
+        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id if not user_id else user_id) \
             .filter(Event.end_time <= datetime.datetime.now()).filter(
             or_(Event.state == 'Completed', Event.state == 'Published')).filter(Event.in_trash == False)
-        return DataGetter.trim_attendee_events(events)
+        return DataGetter.trim_attendee_events(events, user_id)
 
     @staticmethod
     def get_all_live_events():
@@ -600,11 +630,11 @@ class DataGetter(object):
         return activities
 
     @staticmethod
-    def get_imports_by_user(count=50):
+    def get_imports_by_user(count=50, user_id=None):
         """
         Get all imports by user by recent first
         """
-        imports = ImportJob.query.filter_by(user=login.current_user) \
+        imports = ImportJob.query.filter_by(user=login.current_user if not user_id else int(user_id)) \
             .order_by(desc(ImportJob.start_time)).limit(count).all()
         return imports
 

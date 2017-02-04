@@ -10,8 +10,8 @@ from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import represents_int
 from app.helpers.static import EVENT_LICENCES
 from app.helpers.storage import UPLOAD_PATHS
-from app.helpers.wizard.helpers import save_resized_image, save_event_image, get_path_of_temp_url, \
-    get_searchable_location_name, get_event_time_field_format
+from app.helpers.wizard.helpers import get_searchable_location_name, get_event_time_field_format
+from app.helpers.assets.images import save_resized_image, save_event_image, get_path_of_temp_url
 from app.models import db
 from app.models.email_notifications import EmailNotification
 from app.models.event import Event
@@ -287,6 +287,7 @@ def save_event_from_json(json, event_id=None):
                                                                new_paper=1,
                                                                session_schedule=1,
                                                                session_accept_reject=1,
+                                                               after_ticket_purchase=1,
                                                                user_id=login.current_user.id,
                                                                event_id=event.id)
             save_to_db(new_email_notification_setting, "EmailSetting Saved")
@@ -394,27 +395,19 @@ def save_resized_background(background_image_file, event_id, size, image_sizes):
     :return:
     """
 
-    width_ = 1300
-    height_ = 500
     basewidth = image_sizes.full_width
     aspect = image_sizes.full_aspect
     height_size = image_sizes.full_height
 
     if size == 'large':
-        width_ = 1300
-        height_ = 500
         aspect = image_sizes.full_aspect
         basewidth = image_sizes.full_width
         height_size = image_sizes.full_height
     elif size == 'thumbnail':
-        width_ = 500
-        height_ = 200
         aspect = image_sizes.full_aspect
         basewidth = image_sizes.thumbnail_width
         height_size = image_sizes.thumbnail_height
     elif size == 'icon':
-        width_ = 75
-        height_ = 30
         aspect = image_sizes.icon_aspect
         basewidth = image_sizes.icon_width
         height_size = image_sizes.icon_height
@@ -423,7 +416,7 @@ def save_resized_background(background_image_file, event_id, size, image_sizes):
         event_id=int(event_id)
     )
 
-    return save_resized_image(background_image_file, width_, height_, basewidth, aspect, height_size, upload_path)
+    return save_resized_image(background_image_file, basewidth, aspect, height_size, upload_path)
 
 
 def save_social_links(social_links, event):

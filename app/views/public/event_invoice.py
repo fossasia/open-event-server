@@ -26,7 +26,7 @@ def index():
     return redirect("/")
 
 
-@event_invoicing.route('/<invoice_identifier>/', methods=('GET',))
+@event_invoicing.route('/<invoice_identifier>/')
 def view_invoice(invoice_identifier):
     invoice = InvoicingManager.get_invoice_by_identifier(invoice_identifier)
     if not invoice:
@@ -54,7 +54,7 @@ def view_invoice(invoice_identifier):
                            stripe_publishable_key=stripe_publishable_key)
 
 
-@event_invoicing.route('/<invoice_identifier>/view/', methods=('GET',))
+@event_invoicing.route('/<invoice_identifier>/view/')
 def view_invoice_after_payment(invoice_identifier):
     invoice = InvoicingManager.get_invoice_by_identifier(invoice_identifier)
     if not invoice or invoice.status != 'completed':
@@ -63,7 +63,7 @@ def view_invoice_after_payment(invoice_identifier):
                            event=invoice.event)
 
 
-@event_invoicing.route('/<invoice_identifier>/view/pdf/', methods=('GET',))
+@event_invoicing.route('/<invoice_identifier>/view/pdf/')
 def view_invoice_after_payment_pdf(invoice_identifier):
     invoice = InvoicingManager.get_invoice_by_identifier(invoice_identifier)
     if not invoice or invoice.status != 'completed':
@@ -122,7 +122,7 @@ def show_transaction_error(invoice_identifier):
                            event=invoice.event)
 
 
-@event_invoicing.route('/<invoice_identifier>/paypal/<function>/', methods=('GET',))
+@event_invoicing.route('/<invoice_identifier>/paypal/<function>/')
 def paypal_callback(invoice_identifier, function):
     invoice = InvoicingManager.get_invoice_by_identifier(invoice_identifier)
     if not invoice or invoice.status == 'expired':

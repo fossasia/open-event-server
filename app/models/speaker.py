@@ -22,11 +22,12 @@ class Speaker(db.Model):
     facebook = db.Column(db.String)
     github = db.Column(db.String)
     linkedin = db.Column(db.String)
-    organisation = db.Column(db.String, nullable=False)
+    organisation = db.Column(db.String)
     featured = db.Column(db.Boolean, default=False)
     position = db.Column(db.String)
-    country = db.Column(db.String, nullable=False)
+    country = db.Column(db.String)
     city = db.Column(db.String)
+    gender = db.Column(db.String)
     heard_from = db.Column(db.String)
     sponsorship_required = db.Column(db.Text)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
@@ -54,6 +55,7 @@ class Speaker(db.Model):
                  position=None,
                  country=None,
                  city=None,
+                 gender=None,
                  heard_from=None,
                  sponsorship_required=None,
                  event_id=None,
@@ -78,6 +80,7 @@ class Speaker(db.Model):
         self.position = position
         self.country = country
         self.city = city
+        self.gender = gender
         self.heard_from = heard_from
         self.sponsorship_required = sponsorship_required
         self.event_id = event_id
@@ -132,6 +135,7 @@ class Speaker(db.Model):
             'position': self.position,
             'country': self.country,
             'city': self.city,
+            'gender': self.gender,
             'heard_from': self.heard_from,
             'sponsorship_required': self.sponsorship_required,
             'sessions': session_data

@@ -48,7 +48,7 @@ def create_view(event_id):
     return redirect(url_for('events.details_view', event_id=event_id))
 
 
-@event_roles.route('/<int:uer_id>/delete/', methods=('GET',))
+@event_roles.route('/<int:uer_id>/delete/')
 @is_organizer
 def delete_view(event_id, uer_id):
     DataManager.remove_role(uer_id)

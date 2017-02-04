@@ -1,0 +1,145 @@
+<script type="text/x-template" id="ticket-template">
+    <div>
+        <div class="row" style="border: 1px solid #dcdcdc;padding-top: 10px;">
+            <div class="col-xs-4">
+                <input type="hidden" name="tickets[type]" v-model="ticket.type">
+                <div class="item form-group" style="margin-bottom: 0;">
+                    <input type="text" name="tickets[name]"
+                           class="form-control"
+                           v-model="ticket.name"
+                           placeholder="Ticket Name"
+                           required="required"
+                           data-uniqueticket="true">
+                    <div class="help-block with-errors"></div>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <input type="number" step=".01" min="0" name="tickets[price]" class="form-control" v-if="ticket.type == 'paid'"
+                       v-model.number="ticket.price" placeholder="Price" required="required"
+                       :readonly="ticket.has_completed_orders">
+            </div>
+            <div class="col-xs-3">
+                <input type="number" min="0" name="tickets[quantity]" class="form-control"
+                       v-model.number="ticket.quantity"
+                       placeholder="100">
+            </div>
+            <div class="col-xs-2">
+                <div class="btn-group">
+                    <a class="btn btn-default edit-ticket-button ticket-button-resp" data-toggle="tooltip"
+                       v-on:click="show_settings = !show_settings"
+                       title="Settings">
+                        <i class="glyphicon glyphicon-cog" style="color: #46b8da;"></i>
+                    </a>
+                    <a class="btn btn-default" data-toggle="tooltip" data-container="body"
+                       v-if="ticket.has_completed_orders"
+                       title="Cannot remove ticket. Orders have been placed for it." disabled>
+                        <i class="glyphicon glyphicon-trash" style="color: #46b8da;"></i>
+                    </a>
+                    <a class="btn btn-default remove-ticket-button ticket-button-resp" data-toggle="tooltip"
+                       v-if="!ticket.has_completed_orders"
+                       v-on:click="remove"
+                       title="Remove">
+                        <i class="glyphicon glyphicon-trash" style="color: #46b8da;"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <transition name="fade">
+            <div class="row"
+                 v-show="show_settings"
+                 style="background-color: #f2f2f2;border: 1px solid #dcdcdc;padding-left: 5px;padding-top: 8px;">
+                <div class="col-xs-12 col-md-8">
+                    <div style="font-size: 15px;margin-bottom: 5px;">{{ _("Settings") }}</div>
+                    <hr style="margin-bottom: 0; margin-top: 0;">
+                    <div class="item form-group">
+                        <label>{{ _("Ticket Description") }}</label>
+                        <textarea name="tickets[description]" class="form-control" rows="4"
+                                  style="height: 90px;"
+                                  v-model="ticket.description"
+                                  placeholder="This description would be available to the attendees when ordering tickets."
+                                  maxlength="160"></textarea>
+                    </div>
+                    <div class="item form-group">
+                        <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1; margin-top: 0;">
+                            <input type="checkbox" class="checkbox form-control" style="display: inline-block;width: 14px;height: 14px;" v-model="ticket.description_visibility">
+                            {{ _("Display Ticket description on Public Events page") }}
+                        </label>
+                    </div>
+                    <div class="item form-group">
+                        <div style="font-size: 15px;margin-bottom: 5px;">{{ _("Ticket visibility") }}</div>
+                        <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1;  margin-top: 0;">
+                            <input type="checkbox" class="checkbox form-control" style="display: inline-block;width: 14px;height: 14px;" v-model="ticket.ticket_visibility">
+                            {{ _("Hide Ticket") }}
+                        </label>
+                        <div style="font-size: 13px;">
+                            {{ _("Hides ticket from the Public Events page.") }}<br>
+                            {{ _("Ticket would still be available for sale to Organizers.") }}
+                        </div>
+                    </div>
+                    <div class="item form-group" v-if="ticket.type == 'paid'">
+                        <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1;  margin-top: 0;">
+                            <input type="checkbox" id="absorb_fees" v-model="ticket.absorb_fees" name="tickets[absorb_fees]" class="checkbox form-control" style="display: inline-block;width: 14px;height: 14px;">
+                            {{ _("Absorb Fees") }}
+                        </label>
+                        <div style="font-size: 13px;">
+                            {{ _("If unchecked fees will be passed on") }}
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1;  margin-top: 0;">
+                            {{ _("Fee: ") }} {{ '{{ service_fee * ticket.price / 100 }}' }} {{ _("| Buyer Total:") }}
+                            {{ '{{ ticket.absorb_fees  ? ticket.price : ticket.price + ((service_fee * ticket.price / 100)) }}' }}
+
+                    </div>
+                    <div class="item form-group">
+                        <label>{{ _("Sales Start") }}</label><br>
+                        <div class="col-xs-7" style="padding: 0;">
+                            <input v-model="ticket.sales_start_date"
+                                   class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY"
+                                   name="tickets[sales_start_date]">
+                        </div>
+                        <div class="col-xs-5">
+                            <input v-model="ticket.sales_start_time"
+                                   class="form-control col-xs-6 time start ui-timepicker-input"
+                                   placeholder="HH:MM" autocomplete="off" name="tickets[sales_start_time]">
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label>{{ _("Sales End") }}</label><br>
+                        <div class="col-xs-7" style="padding: 0;">
+                            <input v-model="ticket.sales_end_date"
+                                   class="form-control col-xs-6 date end ticket-sales"
+                                   placeholder="MM/DD/YYYY" name="tickets[sales_end_date]">
+                        </div>
+                        <div class="col-xs-5">
+                            <input v-model="ticket.sales_end_time"
+                                   class="form-control col-xs-6 ticket-sales time end ui-timepicker-input"
+                                   placeholder="HH:MM" autocomplete="off" name="tickets[sales_end_time]">
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <div style="font-size: 15px;margin-bottom: 5px;">{{ _("Number of tickets allowed per order") }}</div>
+                        <div class="col-xs-6" style="padding-left: 0;">
+                            <label style="font-weight: normal;">{{ _("Minimum Order") }}</label>
+                            <input type="number" min="1" class="form-control"
+                                   v-model.number="ticket.min_order"
+                                   placeholder="1" name="tickets[min_order]">
+                        </div>
+                        <div class="col-xs-6" style="padding-left: 0;">
+                            <label style="font-weight: normal;">{{ _("Maximum Order") }}</label>
+                            <input type="number" min="1" class="form-control"
+                                   v-model.number="ticket.max_order"
+                                   placeholder="10" name="tickets[max_order]">
+                        </div>
+                    </div>
+                    <div class="item form-group col-xs-12" style="padding-left: 0;">
+                        <label>{{ _("Ticket Code Group") }}</label>
+                        <input type="text" class="form-control ticket-tags" name="tickets[tags]"
+                               v-model="ticket.tags_string" placeholder="None specified">
+                    </div>
+                </div>
+            </div>
+        </transition>
+    </div>
+</script>

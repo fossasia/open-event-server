@@ -1,0 +1,18 @@
+<div class="col-md-8 col-sm-8 col-xs-8 col-md-push-2 col-sm-push-2 col-xs-push-2">
+    <br>
+    <div style="width: 100%; text-align: center">
+        <h2 style="font-weight: 300;">{{ _("Turn") }}
+            <span v-show="!sessions_speakers_enabled">{{ _("on") }}</span>
+            <span v-show="sessions_speakers_enabled">{{ _("off") }}</span> {{ _("Sessions and Speakers") }}</h2>
+        <input type="checkbox" class="toggle-switch" name="has_session_speakers"
+               id="session-tracks-rooms-switch" v-model="sessions_speakers_enabled"/>
+        <label for="session-tracks-rooms-switch"></label>
+    </div>
+</div>
+<transition name="fade">
+    <div v-show="sessions_speakers_enabled">
+        {% include 'gentelella/users/events/wizard/session-speakers/sessions-tracks-microlocations.html' %}
+        {% include 'gentelella/users/events/wizard/session-speakers/call-for-speakers.html' %}
+        {% include 'gentelella/users/events/wizard/session-speakers/custom-form.html' %}
+    </div>
+</transition>

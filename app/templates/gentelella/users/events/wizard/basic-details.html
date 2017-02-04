@@ -1,0 +1,761 @@
+<div class="col-md-8 col-md-push-2">
+    <div class="row">
+
+        <div class="col-md-12 col-xs-12">
+            <div class="item form-group" v-bind:class="{ 'has-error': event.name.trim().length <= 0 }">
+                <label for="name">{{ _("Name") }} <span class="required">*</span></label>
+                <input required="required"
+                       data-error="Event name is required"
+                       id="name"
+                       v-model="event.name"
+                       name="name" class="form-control"/>
+                <span class="help-block" v-show="event.name.trim().length <= 0">Event name is required</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="item form-group">
+                <label>{{ _("Location") }}</label>
+                <input name="location_name" id="location_name"
+                       v-model="event.location_name"
+                       placeholder="Location is required to make event live"
+                       class="form-control"
+                       v-show="!addressShown"
+                       v-on:gmap="fillInAddress"/>
+            </div>
+        </div>
+
+    </div>
+    <a id="show_addr" style="cursor:pointer;" v-on:click="addressShown = !addressShown"
+       v-show="mapLoaded && !addressShown">{{ _("Enter Address") }}</a>
+    <transition name="fade">
+        <div class="row" id="map-holder" v-show="addressShown">
+            <div class="col-md-6 col-xs-12">
+                <div class="item form-group">
+                    <input value="" name="street_number" id="street_number" class="form-control"
+                           placeholder="Street Address line 1" v-on:keyup="updateAddress"/>
+                </div>
+                <div class="item form-group">
+                    <input value="" name="route" id="route" class="form-control"
+                           placeholder="Street Address line 2" v-on:keyup="updateAddress"/>
+                </div>
+                <div class="item form-group">
+                    <input value="" name="locality" id="locality" class="form-control"
+                           placeholder="City" v-on:keyup="updateAddress"/>
+                </div>
+                <div class="item form-group">
+                    <input value="" name="state_area" id="administrative_area_level_1"
+                           class="form-control" placeholder="States" v-on:keyup="updateAddress"/>
+                </div>
+                <div class="item form-group">
+                    <input value="" name="postal_code" id="postal_code" class="form-control"
+                           placeholder="Zip Code" v-on:keyup="updateAddress"/>
+                </div>
+                <div class="item form-group">
+                    <input value="" name="country" id="country" class="form-control"
+                           placeholder="Country" v-on:keyup="updateAddress"/>
+                </div>
+                <div class="col-md-4">
+                    <a id="reset_addr"
+                       style="cursor:pointer;"
+                       v-on:click="resetAddress">{{ _("Reset Location") }}</a>
+                </div>
+                <div class="col-md-8">
+                    <div class="checkbox" style="padding-top:0;">
+                        <label style="padding-left:0;">
+                            <input type="checkbox" class="flat"
+                                   name="show_map" v-model="event.show_map">
+                            {{ _("Show map on event page") }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <google-map class="hidden-xs" style="width:100%; height:300px" ref="gmap" :center="location"
+                            :zoom="zoom">
+                    <map-marker :position="location" :clickable="false" :draggable="true"></map-marker>
+                </google-map>
+            </div>
+            <br>
+            <br>
+        </div>
+    </transition>
+    <br><br>
+
+    <div class="row event-date-picker">
+        <div class="col-md-4 col-xs-12">
+            <div class="item form-group"
+                 v-bind:class="{ 'has-error': event.start_time_date.trim().length <= 0 || event.start_time_time.trim().length <= 0 || invalidDateRange}">
+                <label>{{ _("Starts") }} <span class="required">*</span></label>
+                <br>
+                <div class="col-xs-8" style="padding-left: 0;">
+                    <input required="required"
+                           name="start_date"
+                           v-model="event.start_time_date"
+                           class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY"/>
+
+                </div>
+                <div class="col-xs-4" style="padding-left: 0;">
+                    <input required="required"
+                           name="start_time"
+                           v-model="event.start_time_time"
+                           class="form-control col-xs-6 time start" placeholder="HH:MM"/>
+
+                </div>
+            </div>
+            <div class="help-block text-danger"
+                 style="color: #a94442;"
+                 v-show="event.start_time_date.trim().length <= 0 || event.start_time_time.trim().length <= 0">
+                Start date/time is required
+            </div>
+            <div class="help-block text-danger" style="color: #a94442;" v-show="invalidDateRange">
+                Invalid date range. End time has to be after start time.
+            </div>
+        </div>
+        <div class="col-md-4 col-xs-12">
+            <div class="item form-group"
+                 v-bind:class="{ 'has-error': event.end_time_date.trim().length <= 0 || event.end_time_time.trim().length <= 0 || invalidDateRange }">
+                <label>{{ _("Ends") }} <span class="required">*</span></label>
+                <br>
+                <div class="col-xs-8" style="padding-left: 0;">
+                    <input required="required"
+                           name="end_date"
+                           v-model="event.end_time_date"
+                           class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY"/>
+
+                </div>
+                <div class="col-xs-4" style="padding-left: 0;">
+                    <input required="required"
+                           name="end_time"
+                           v-model="event.end_time_time"
+                           class="form-control col-xs-6 time end" placeholder="HH:MM"/>
+
+                </div>
+
+            </div>
+            <div class="help-block text-danger"
+                 style="color: #a94442;"
+                 v-show="event.end_time_date.trim().length <= 0 || event.end_time_time.trim().length <= 0">End
+                date/time is required
+            </div>
+        </div>
+        <div class="col-md-4 col-xs-12">
+            <div class="form-group">
+                <label for="timezone">{{ _("Timezone") }} <span class="required">*</span></label>
+                <select name="timezone" id="timezone" class="form-control" v-model="event.timezone">
+                    {% for value, text in timezones %}
+                        <option value="{{ value }}">{{ text }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="item form-group">
+        <label>{{ _("Description") }}</label>
+        <textarea name="description"
+                  class="form-control event-textarea"
+                  v-model="event.description"
+                  title="description"></textarea>
+    </div>
+    <div class="row">
+        <div class="col-md-7 col-xs-12">
+            <image-upload title="Event Image"
+                          help-text="We recommend using at least a 2160x1080px (2:1 ratio) image"
+                          icon="fa-camera-retro"
+                          v-bind:crop-required="true"
+                          v-model="event.background_url" v-bind:max-size-in-mb="10"></image-upload>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-7 col-xs-12">
+            <image-upload title="Logo" icon="fa-file-image-o"
+                          v-model="event.logo"
+                          v-bind:max-size-in-mb="1"></image-upload>
+        </div>
+    </div>
+
+    <div class="item form-group">
+        <label>
+            <span v-show="event.has_organizer_info">{{ _("Remove") }}</span><span
+                v-show="!event.has_organizer_info">{{ _("Add") }}</span> {{ _("Organizer Information") }}
+        </label>
+        <input type="checkbox" class="toggle-switch" name="organizer_state"
+               value="on" id="organizer-switch"
+               v-model="event.has_organizer_info"/>
+        <label for="organizer-switch" style="margin-left:0;"></label>
+    </div>
+    <div id="organizer-holder"
+         v-show="event.has_organizer_info">
+        <div class="item form-group">
+            <label>{{ _("Organizer name") }}</label>
+            <input name="organizer_name" title="organizer_name" class="form-control"
+                   v-model="event.organizer_name"/>
+        </div>
+        <div class="item form-group">
+            <label>{{ _("Organizer Description") }}
+            </label>
+            <textarea v-model="event.organizer_description" name="organizer_description"
+                      title="organizer_description" class="form-control event-textarea"></textarea>
+        </div>
+    </div>
+
+    <div class="item form-group">
+        <label>{{ _("Links and Social Media") }}</label>
+        <div>
+            <div class=" col-sm-3" style="padding-left: 0;">
+                <input type="text" class="form-control" placeholder="External Event URL"
+                       value="External Event URL" readonly style="background-color: white;">
+            </div>
+            <div class="col-sm-5 input-group" v-bind:class="{ 'has-error': !isValidLinkEntry(event.event_url) }">
+                <input type="url" class="form-control" v-model="event.event_url" name="event_url" placeholder="Link">
+                <transition name="fade">
+                    <span class="help-block" v-show="!isValidLinkEntry(event.event_url)">This looks like an invalid URL and hence will be ignored.</span>
+                </transition>
+                <span class="input-group-btn" v-bind:style="{ opacity: 1 - event.social_links.length  }">
+                        <button type="button" class="btn btn-primary add-social-links"
+                                v-on:click="addSocialLink()">+</button>
+                        <button type="button" class="btn btn-danger remove-social-links" style="opacity: 0;">-</button>
+                    </span>
+            </div>
+        </div>
+        <div class="row social-links">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <social-link v-for="(social_link, index) in event.social_links"
+                             v-bind:social-link="social_link"
+                             v-bind:key="index"
+                             v-on:add="addSocialLink()"
+                             v-on:remove="removeSocialLink(social_link)"></social-link>
+            </div>
+        </div>
+    </div>
+    <div class="item form-group" v-if="_.includes(included_settings, 'ticketing')">
+        <label><span class="ticket-state">{{ _("Use Ticketing System") }}</span>
+        </label>
+        <input type="checkbox" class="toggle-switch" name="ticket_state"
+               value="on" id="ticket-switch"
+               v-model="event.ticket_include"/>
+
+        <label for="ticket-switch" style="margin-left:0;"></label>
+    </div>
+    <div id="ticketing-system"
+         v-show="(event.ticket_include && event.tickets.length > 0) || (_.includes(included_settings, 'ticketing') && event.ticket_include)">
+        <div id="ticket-system-holder" class="item form-group">
+            <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
+                <i class="fa fa-ticket"></i>
+                {{ _("Ticket Details") }}
+                <hr style="margin:0; border: solid 1px #5bc0de;">
+            </h2>
+
+            <!-- TicketsSegment -->
+            <div class="tickets-segment" v-show="event.tickets.length > 0">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <h3 style="font-size: 15px;">{{ _("Ticket Name") }} <span class="required">*</span></h3>
+                    </div>
+                    <div class="col-xs-3">
+                        <h3 style="font-size: 15px;">{{ _("Price") }}</h3>
+                    </div>
+                    <div class="col-xs-3">
+                        <h3 style="font-size: 15px;">{{ _("Quantity") }} <span class="required">*</span></h3>
+                    </div>
+                    <div class="col-xs-2">
+                        <h3 style="font-size: 15px;">{{ _("Options") }}</h3>
+                    </div>
+                </div>
+                <div class="tickets-holder" style="margin-bottom: 10px;">
+                    <ticket v-for="(ticket, index) in event.tickets" v-bind:ticket="ticket" v-bind:event="event" v-bind:service_fee="{{ (event.payment_currency | fees_by_currency).service_fee | default(0, true) }}"
+                            v-bind:key="index"
+                            v-on:remove="removeTicket(ticket)"></ticket>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="text-center">
+                    <a class="btn btn-info" v-on:click="addTicket('free')">
+                        <i class="glyphicon glyphicon-plus-sign"></i> {{ _("Free Ticket") }}
+                    </a>
+                    {% if 'payments' in included_settings %}
+                        <a class="btn btn-info" v-on:click="addTicket('paid')">
+                            <i class="glyphicon glyphicon-plus-sign"></i> {{ _("Paid Ticket") }}
+                        </a>
+                    {% endif %}
+                    {% if 'donations' in included_settings %}
+                        <a class="btn btn-info" v-on:click="addTicket('donation')">
+                            <i class="glyphicon glyphicon-plus-sign"></i> {{ _("Donation") }}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="no-ticketing-system" v-if="!event.ticket_include || !_.includes(included_settings, 'ticketing')">
+        <h2 class="underlined-heading">
+            <i class="fa fa-ticket"></i>
+            {{ _("Add Ticket URL") }}
+            <hr>
+        </h2>
+        <div class="item form-group">
+            <label>{{ _("Ticket URL") }}
+            </label>
+            <input type="url" pattern="https?://.+" name="ticket_url" class="form-control"
+                   v-model="event.ticket_url" data-error="Please enter a valid URL"
+                   title="url"/>
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    <transition name="fade">
+        <div v-show="_.filter(event.tickets, ['type', 'paid']).length > 0">
+            <div id="payment-system-holder" class="item form-group">
+                <h2 class="underlined-heading">
+                    <i class="fa fa-percent"></i>
+                    {{ _("Redeem Discount Code") }}
+                    <hr>
+                </h2>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="item form-group"
+                             v-bind:class="{ 'has-error': discountMessage.error != '', 'has-success': discountMessage.success != '' }">
+                            <label for="discount-code-entry">{{ _("Enter Discount Code") }}</label>
+                            <div class="input-group apply_discount">
+                                <input type="text" class="form-control" id="discount-code-entry"
+                                       v-model="event.discount_code">
+                                <span class="input-group-btn">
+                                        <button class="btn btn-success" v-on:click="applyDiscount"
+                                                type="button"
+                                                v-bind:disabled="discountMessage.loading">{{ _("Apply Discount") }}</button>
+                                    </span>
+                            </div>
+                            <span class="help-text text-success"
+                                  v-if="discountMessage.success != ''"><strong>{{ _("Code applied !") }}</strong> {{ '{{ discountMessage.success }}' }}</span>
+                            <span class="help-text text-danger"
+                                  v-if="discountMessage.error != ''">{{ '{{ discountMessage.error }}' }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="underlined-heading">
+                    <i class="fa fa-money"></i>
+                    {{ _("Add Payment details") }}
+                    <hr>
+                </h2>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="item form-group">
+                            <label>{{ _("Choose Country") }} <span class="required">*</span></label>
+                            <select name="payment_country" id="payment_country_name" class="form-control"
+                                    v-model="event.payment_country"
+                                    title="payment country"
+                                    required="required">
+                                {% if not event or not event.payment_country %}
+                                    <option value="">{{ _("Choose a country for your payment") }}</option>
+                                {% endif %}
+                                {% for country in payment_countries %}
+                                    <option value="{{ country }}">{{ country }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="item form-group">
+                            <label>{{ _("Choose Currency") }} <span class="required">*</span></label>
+                            <select name="payment_currency" id="payment_currency_name" class="form-control"
+                                    v-model="event.payment_currency"
+                                    title="currency"
+                                    required="required">
+                                {% if not event or not event.payment_currency %}
+                                    <option value="">{{ _("Please select a currency") }}</option>
+                                {% endif %}
+                                {% for code, has_paypal, has_stripe in payment_currencies %}
+                                    <option value="{{ code }}">{{ code }}
+                                        - {{ code | currency_name }} ({{ code | currency_symbol }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="item form-group">
+                    <h2 class="underlined-heading">
+                        <i class="fa fa-credit-card"></i>
+                        {{ _("Choose Payment Methods") }}
+                        <hr>
+                    </h2>
+                    <div id="paypal-gateway">
+                        <label class="control-label" style="font-size: 20px;">{{ _("Online Payments") }}</label>
+                        <div class="col-sm-12 input-group">
+                            <label class="control-label">{{ _("Payment by PayPal") }}</label>
+                            <div class="checkbox">
+                                <label style="font-weight: 300;">
+                                    <input type="checkbox" name="pay_by_paypal" v-model="event.pay_by_paypal">
+                                    <strong style="font-weight: 400;">{{ _("YES, accept payment through PayPal ") }}</strong><br>
+                                    {{ _("Paypal accepts credit card, debit card and PayPal payments. To learn how it works click") }}
+                                    <a href="https://www.paypal.com/us/webapps/mpp/popup/about-payment-methods">{{ _("here.") }}</a>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="item form-group" v-show="event.pay_by_paypal">
+                            <label>PayPal Email <span class="required">*</span></label>
+                            <input type="email" placeholder="PayPal Email" name="paypal_email" class="form-control" required="required"
+                                   v-model="event.paypal_email">
+                            <strong style="font-weight: 400;">{{ _("Don't have a PayPal account?") }} </strong><a
+                                href="https://www.paypal.com/us/webapps/mpp/referral/paypal-express-checkout?partner_id=W9QW5TKUA246E"
+                                target="_blank">{{ _("Create a free PayPal merchant account.") }}</a>
+                        </div>
+
+                    </div>
+                    <div id="stripe-gateway">
+                        <div class="col-sm-12 input-group">
+                            <label class="control-label">{{ _("Payment by Stripe") }}</label>
+                            <div class="checkbox">
+                                <label style="font-weight: 300;">
+                                    <input type="checkbox" name="pay_by_stripe" v-model="event.pay_by_stripe">
+                                    <strong style="font-weight: 400;">{{ _("YES, accept payment through Stripe") }} </strong><br>
+                                    {{ _("Stripe accepts Visa, Master and Amex. To learn how it works click") }} <a
+                                        href="">{{ _("here.") }}</a>
+                                    {{ _("Find out more about Stripe") }} <a href="">{{ _("here.") }}</a>
+                                </label>
+                            </div>
+                        </div>
+                        <div id="stripe-holder" class="item form-group" v-show="event.pay_by_stripe">
+                            <label>{{ _("Use Stripe for payments") }} <span class="required">*</span></label><br>
+                            <div id="stripe-connected-message" v-show="event.stripe.linked">
+                                {{ _("The stripe account") }}
+                                <strong>{{ '{{ event.stripe.stripe_email }}' }}</strong> {{ _("has been connected.") }}
+                                <a href="#"
+                                   v-on:click.prevent="disconnectFromStripe">{{ _("Click to De-link the account.") }}</a><br><br>
+                            </div>
+                            <a href="#" class="stripe-connect" v-show="!event.stripe.linked"
+                               v-on:click.prevent="connectToStripe">
+                                <span>{{ _("Connect with Stripe") }}</span>
+                            </a>
+                        </div>
+                    </div>
+                    <br>
+                    <div id="offline-gateway">
+                        <label class="control-label" style="font-size: 20px;">{{ _("Offline Payments") }}</label>
+                        <div class="col-sm-12 input-group">
+                            <div class="checkbox">
+                                <label style="font-weight: 300;">
+                                    <input type="checkbox" name="pay_by_cheque" v-model="event.pay_by_cheque">
+                                    <strong style="font-weight: 400;">{{ _("YES, accept payment by Cheque") }} </strong><br>
+                                </label>
+                            </div>
+                            <div class="item form-group" v-show="event.pay_by_cheque">
+                                <label>{{ _("Enter your PayPal account name and payment details instructions to ticket buyers") }}
+                                    [See an
+                                    <a href='#' data-toggle="modal" data-target="#chequeModal"
+                                       title="Show cheque instructions"><strong
+                                            style="font-weight: 400;">{{ _("example") }}</strong></a> {{ _("here") }}]
+                                <span class="required">*</span></label>
+                                <textarea placeholder="Enter account details and instructions for cheque payment"
+                                          name="cheque-details"
+                                          required="required"
+                                          class="form-control" rows="6"
+                                          v-model="event.cheque_details"
+                                          cols="15"></textarea>
+                            </div>
+
+                            <div class="checkbox">
+                                <label style="font-weight: 300;">
+                                    <input type="checkbox" name="pay_by_bank" v-model="event.pay_by_bank">
+                                    <strong style="font-weight: 400;">{{ _("YES, accept payment by Telegraphic Transfer(TT) / Bank Transfer") }} </strong><br>
+                                </label>
+                            </div>
+                            <div class="item form-group" v-show="event.pay_by_bank">
+                                <label>{{ _("Enter your bank details and instructions to ticket buyers") }}
+                                    [{{ _("See an") }}
+                                    <a href='#' data-toggle="modal" data-target="#bankModal"
+                                       title="Show bank details instructions"><strong
+                                            style="font-weight: 400;">{{ _("example") }}</strong></a> {{ _("here") }}]
+                                <span class="required">*</span></label>
+                                <textarea
+                                        placeholder="Enter account details and instructions for Telegraphic Transfer(TT) / Bank Transfer payment"
+                                        name="bank-details"
+                                        class="form-control" rows="6"
+                                        v-model="event.bank_details"
+                                        cols="15"></textarea>
+                            </div>
+
+                            <div class="checkbox">
+                                <label style="font-weight: 300;">
+                                    <input type="checkbox" name="pay_onsite" v-model="event.pay_onsite">
+                                    <strong style="font-weight: 400;">{{ _("YES, accept payment at the event(on site)") }} </strong><br>
+                                </label>
+                            </div>
+                            <div class="item form-group" v-show="event.pay_onsite">
+                                <label>{{ _("Enter payment instructions to ticket buyers to make payments onsite") }}<span class="required">*</span></label>
+                                <textarea placeholder="Enter instructions for payment at door" name="onsite-details"
+                                      required="required"
+                                      v-model="event.onsite_details" class="form-control" rows="6"
+                                      cols="15"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="">
+                        <a href='#' data-toggle="modal" data-target="#taxModal" title="Add tax option">
+                            <h5>+ {{ _("Add Tax") }}</h5>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </transition>
+    <h2 class="underlined-heading">
+        <i class="fa fa-plus-circle"></i>
+        {{ _("Additional Details") }}
+        <hr>
+    </h2>
+    <div class="item form-group">
+        <label class="control-label">{{ _("Listing Privacy") }}</label>
+        <div class="radio">
+            <label style="font-weight: 300;">
+                <input type="radio" name="privacy" value="public" v-model="event.privacy">
+                <strong style="font-weight: 400;">Public
+                    page:</strong> {{ _("list this event on Open Event and search engines") }}
+            </label>
+        </div>
+        <div class="radio">
+            <label style="font-weight: 300;">
+                <input type="radio" name="privacy" value="private" v-model="event.privacy">
+                <strong style="font-weight: 400;">{{ _("Private page") }}:</strong> {{ _("do not list this event publicly") }}
+            </label>
+        </div>
+    </div>
+
+    <div class="item form-group">
+        <label class="control-label">{{ _("Event Type") }}</label>
+        <select class="form-control" name="type" title="event type" v-model="event.type">
+            <option value="">{{ _("Choose") }}..</option>
+            {% for type in event_types %}
+                <option value="{{ type }}">{{ type }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="item form-group">
+                <label class="control-label">Event Topic
+                </label>
+                <select class="form-control" id="topic" name='topic' title="event topic" v-model="event.topic">
+                    <option value="">{{ _("Choose") }}..</option>
+                    {% for topic in event_topics %}
+                        <option value="{{ topic }}">{{ topic }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="item form-group">
+                <label class="control-label">{{ _("Event Sub-Topic") }}
+                </label>
+                <select class="form-control" id="sub_topic" name='sub_topic' title="sub topic"
+                        v-model="event.sub_topic">
+                    <option value="" v-if="subTopics && subTopics.length > 0">{{ _("Choose") }}..</option>
+                    <option value=""
+                            v-if="!subTopics || subTopics.length <= 0">{{ _("Choose a topic first") }}</option>
+                    <option v-for="subTopic in subTopics" :value="subTopic">{{ '{{ subTopic }}' }}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="item form-group">
+        <label><span v-show="event.has_code_of_conduct">{{ _("Remove") }}</span><span
+                v-show="!event.has_code_of_conduct">{{ _("Add") }}</span> {{ _("Code of Conduct") }}</label>
+        <input type="checkbox" class="toggle-switch" name="coc_state" id="coc-switch"
+               v-model="event.has_code_of_conduct"/>
+        <label for="coc-switch" style="margin-left:0;"></label>
+        <div id="coc-holder" v-show="event.has_code_of_conduct">
+                <textarea title="code_of_conduct" name="code_of_conduct"
+                          v-model="event.code_of_conduct"
+                          class="form-control event-textarea"></textarea>
+        </div>
+    </div>
+    <div class="item form-group">
+        <label>{{ _("License of Event Data and Content") }} <a class="btn btn-info btn-xs licence-help"
+                                                               data-toggle="licence-modal"
+                                                               data-target="#licence_modal">?</a></label>
+        <div id="licence-list" style="display: none;">
+            <ul style="background-color: #f2f2f2; padding-left: 28px; padding-bottom: 5px; padding-top: 5px; border-radius: 1px;">
+                {% for licence_name, info in event_licences.iteritems() %}
+                    <li>
+                        <a href="{{ info.2 }}" target="_blank">{{ licence_name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <select title="copyright_licence" name="copyright_licence" class="form-control"
+                v-model="event.copyright.licence">
+            <option value="">{{ _("Choose Licence") }}</option>
+            {% for licence in event_licences %}
+                <option value="{{ licence }}">
+                    {{ licence }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+</div>
+<div class="col-md-1">
+</div>
+<div class="col-md-4">
+</div>
+<input type="hidden" name="latitude" id="latitude" v-model.number="event.latitude"/>
+<input type="hidden" name="longitude" id="longitude" v-model.number="event.longitude"/>
+
+<div class="modal fade" id="taxModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                </button>
+                <h3 class="modal-title">{{ _("Tax Options") }}</h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div id="tax-charge-holder">
+                            <div class="col-sm-12 form-group">
+                                <label>{{ _("Do you need to charge tax for this event ?") }}
+                                    <a href="#" data-toggle="tooltip"
+                                       title="Some event organizers need to charge tax on their tickets.
+                                   Please check with your tax advisor about your own situation"
+                                       class="fa fa-info-circle"></a></label>
+                                <div class="radio">
+                                    <label style="font-weight: 300;">
+                                        <input type="radio" value="1" name='tax-radio'
+                                               v-model.number="event.tax_allow">
+                                        <strong>Yes</strong>
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label style="font-weight: 300;">
+                                        <input type="radio" value="0" name='tax-radio'
+                                               v-model.number="event.tax_allow">
+                                        <strong>No</strong>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tax-form-holder" v-show="event.tax_allow">
+                            <div class="col-sm-12 form-group">
+                                <label>{{ _("Country") }} <span class="required">*</span></label>
+                                <select class="form-control" v-model="event.tax.country" title="tax country">
+                                    <option value="">{{ _("Choose a country for your tax payment") }}</option>
+                                    {% for country in payment_countries %}
+                                        <option value="{{ country | default('', true) }}">{{ country }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-sm-12 form-group">
+                                <label for="tax_name">{{ _("Tax Name") }} <span class="required">*</span></label>
+                                <input type="text" id="tax_name" class="form-control" v-model="event.tax.tax_name">
+                            </div>
+
+                            <div class="col-sm-12 form-group">
+                                <label for="tax_rate">{{ _("Tax Rate") }} <span class="required">*</span></label>
+                                <input type="text" class="form-control" name="tax_rate" id="tax_rate"
+                                       v-model="event.tax.tax_rate" placeholder="Enter Tax Rate">
+                            </div>
+
+                            <div class="col-sm-12 form-group">
+                                <label for="tax_id">{{ _("Tax ID") }} <span class="required">*</span></label>
+                                <input v-model="event.tax.tax_id" type="text" class="form-control"
+                                       name="tax_id" id="tax_id" placeholder="Enter Tax ID">
+                            </div>
+
+                            <div class="col-sm-12 form-group">
+                                <label class="control-label">{{ _("Tax Invoices") }}:</label>
+                                <div class="checkbox">
+                                    <label style="font-weight: 300;">
+                                        <input type="checkbox" name="tax_invoice" v-model="event.tax.send_invoice">
+                                        <strong style="font-weight: 400;">{{ _("Send tax invoice to attendees") }}: </strong>
+                                        {{ _("Tax Invoices are sent to your attendees when you select this feature.") }}
+                                        {{ _("Enter your registered business company name and address to be included on the tax invoice") }}
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="tax-invoice-holder" v-show="event.tax.send_invoice">
+                                <div class="col-sm-12 form-group">
+                                    <label for="registered_company">{{ _("Registered Company") }} <span
+                                            class="required">*</span></label>
+                                    <input v-model="event.tax.registered_company" type="text"
+                                           class="form-control" name="registered_company" id="registered_company"
+                                           placeholder="Enter Company Name">
+                                </div>
+
+                                <div class="col-sm-12 form-group">
+                                    <label for="buisness_address">{{ _("Business Address") }} <span
+                                            class="required">*</span></label>
+                                    <input v-model="event.tax.address" type="text"
+                                           class="form-control" name="buisness_address" id="buisness_address"
+                                           placeholder="Enter Business Address">
+                                </div>
+
+                                <div class="col-sm-12 form-group">
+                                    <label for="invoice_city">{{ _("City") }} <span
+                                            class="required">*</span></label>
+                                    <input v-model="event.tax.city" type="text"
+                                           class="form-control" name="invoice_city" id="invoice_city"
+                                           placeholder="City">
+                                </div>
+
+                                <div class="col-sm-12 form-group">
+                                    <label for="invoice_state">{{ _("State") }} <span
+                                            class="required">*</span></label>
+                                    <input v-model="event.tax.state" type="text"
+                                           class="form-control" name="invoice_state" id="invoice_state"
+                                           placeholder="State">
+                                </div>
+
+                                <div class="col-sm-12 form-group">
+                                    <label for="invoice_zip">Zip <span class="required">*</span></label>
+                                    <input v-model="event.tax.zip" type="text" class="form-control"
+                                           name="invoice_zip" id="invoice_zip"
+                                           placeholder="Zip">
+                                </div>
+
+                                <div class="col-sm-12 form-group">
+                                    <label for="invoice_footer">{{ _("Optional Text for Invoice Footer") }} <span
+                                            class="required">*</span></label>
+                                    <textarea class="form-control" name="invoice_footer"
+                                              v-model="event.tax.invoice_footer" id="invoice_footer"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 form-group">
+                                <label class="control-label">{{ _("Add or Include") }}:</label>
+                                <div class="radio">
+                                    <label style="font-weight: 300;">
+                                        <input type="radio" name="tax_options" value="0"
+                                               v-model.number="event.tax.tax_include_in_price">
+                                        <strong style="font-weight: 400;">{{ _("Add tax as separate fee on top of the price") }}</strong>
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label style="font-weight: 300;">
+                                        <input type="radio" name="tax_options" value="1"
+                                               v-model.number="event.tax.tax_include_in_price">
+                                        <strong style="font-weight: 400;">{{ _("Include tax in ticket price") }}</strong>
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="reset" id="close-tax-form" class="btn btn-default" data-dismiss="modal">
+                    {{ _("Save") }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

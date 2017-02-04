@@ -4,7 +4,7 @@
 
 {% block head_css %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/event_wizard.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/events/event-wizard.css') }}"/>
 {% endblock %}
 
 {% block inner_panel %}
@@ -26,9 +26,7 @@
                     {% if not current_user.is_authenticated and not from_organizer %}
                         <div style="width: 100%; text-align: center">
                             Have you used {{ app_name }} before ? <a
-                                href="{{ url_for('admin.login_view', next=url_for('event_invoicing.view_invoice', invoice_identifier=invoice.identifier, _external=True)) }}">{{_("Sign")}}
-                            {{_("In")}}</a> {{_("To Your Account to
-                                                                                                                                            continue")}}.
+                                href="{{ url_for('admin.login_view', next=url_for('event_invoicing.view_invoice', invoice_identifier=invoice.identifier, _external=True)) }}">{{_("Sign In")}}</a> {{_("to your account to continue")}}.
                         </div>
                         <br>
                     {% endif %}
@@ -80,7 +78,7 @@
                     <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                         <i class="fa fa-ticket"></i>
                         {{_("Billing Information")}}
-                        <hr style="margin:0;binvoice-width: 2px; binvoice-color: #5bc0de;">
+                        <hr style="margin:0;width: 2px;color: #5bc0de;">
                     </h2>
                     <br>
                     <div class="form-group">
@@ -157,7 +155,7 @@
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-4 control-label"></label>
                         <div class="col-sm-6">
-                            {{_("By clicking "Pay Now", I acknowledge that I have read and agree with our terms of service, and privacy policy.")}}<br><br>
+                            {{_("By clicking \"Pay Now\", I acknowledge that I have read and agree with our terms of service, and privacy policy.")}}<br><br>
                             <button type="submit" class="btn btn-success btn-lg">Pay Now</button>
                         </div>
                     </div>
@@ -180,11 +178,11 @@
         window.order_amount = {{ invoice.amount }};
         window.paid_via = "{{ paid_via | default('', true) }}";
         window.from_organzier = true;
-        window.currency = "{{ invoice.event.payment_currency if invoice.event.payment_currency and invoice.event.payment_currency != "" else "USD" | default('USD', true) }}"
+        window.currency = "{{ invoice.event.payment_currency if invoice.event.payment_currency and invoice.event.payment_currency != "" else "USD" | default('USD', true) }}";
     </script>
     <script src="https://checkout.stripe.com/checkout.js"></script>
-    <script src="{{ url_for('static', filename='admin/lib/moment/min/moment.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin/lib/bootstrap-validator/dist/validator.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery/jquery.codezero.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/admin/guest/ticketing.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/moment/min/moment.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/bootstrap-validator/dist/validator.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/jquery/jquery.codezero.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/guest/ticketing.js') }}"></script>
 {% endblock %}

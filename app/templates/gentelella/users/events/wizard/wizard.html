@@ -1,0 +1,149 @@
+{% extends 'gentelella/base.html' %}
+<!--suppress HtmlUnknownAnchorTarget -->
+{% block title %}
+    {% if event %}
+        Edit Event
+    {% else %}
+        Create an Event
+    {% endif %}
+{% endblock %}
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/vendor/bootstrap/green.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/jt.timepicker/jquery.timepicker.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/switchery/dist/switchery.min.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/selectize/dist/css/selectize.bootstrap3.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/Croppie/croppie.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/events/event-wizard.css') }}"/>
+{% endblock %}
+
+{% set step = step if step else '' %}
+
+{% block body %}
+
+    {% include 'gentelella/users/events/wizard/components/image-upload.html' %}
+    {% include 'gentelella/users/events/wizard/components/tabs.html' %}
+    {% include 'gentelella/users/events/wizard/components/button-bar.html' %}
+    {% include 'gentelella/users/events/wizard/components/social-link.html' %}
+    {% include 'gentelella/users/events/wizard/components/ticket.html' %}
+    {% include 'gentelella/users/events/wizard/components/tracks-microlocations-sessions.html' %}
+
+    {% if event %}
+        <!-- {{ event.name }} -->
+    {% endif %}
+
+    <div class="page-title">
+        <div class="text-center">
+            <h1 style="font-weight: 100; margin-top: 0;" id="page-title">{{ self.title() }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="wizard" id="wizard" data-state="{{ event.state | default('', true) }}"
+                     style="min-height: 300px; "
+                     data-id="{{ event.id | default('', true) }}">
+                    <div class="wizard-inner">
+                        <tabs v-bind:step="step" v-bind:disable="networkRequestRunning || disableMove" v-on:move="moveToStep"></tabs>
+                    </div>
+                    <div class="text-center col-md-12 col-sm-12 and col-xs-12" v-show="step == null" style="margin-top: 30px; color: #b5b5b5">
+                        <i class="fa fa-circle-o-notch fa-spin fa-4x"></i>
+                    </div>
+                    <div class="tab-content">
+                        <div class="tab-pane fade" v-bind:class="{ 'in active': step == '' }" v-show="step == ''">
+                            {% include 'gentelella/users/events/wizard/basic-details.html' %}
+                        </div>
+                        <div class="tab-pane fade" v-bind:class="{ 'in active': step == 'sponsors' }"
+                             v-show="step == 'sponsors'">
+                            {% include 'gentelella/users/events/wizard/sponsors.html' %}
+                        </div>
+                        <div class="tab-pane fade"
+                             v-bind:class="{ 'in active': step == 'sessions-tracks-rooms' }">
+                            {% include 'gentelella/users/events/wizard/session-speakers.html' %}
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <button-bar v-bind:step="step"
+                                v-bind:disable="networkRequestRunning || disableMove"
+                                v-bind:state="event.state"
+                                v-bind:location-name="event.location_name"
+                                v-on:move="move"
+                                v-on:save="saveAsDraft"
+                                v-on:publish="publish"
+                                v-on:unpublish="unpublish"></button-bar>
+                    <div class="clearfix"></div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+
+    {# Seed object for event edit #}
+    {% if event and seed %}
+        <script>
+            window.seed = {{ seed | safe | default('null', true) }};
+        </script>
+    {% endif %}
+
+    <script>
+        window.step = "{{ step }}";
+        window.cfsHash = "{{ cfs_hash if not call_for_speakers or not call_for_speakers.hash else call_for_speakers.hash }}";
+        window.sub_topics = {{ event_sub_topics | safe | default('null', true) }};
+        window.discountCodeApplyUrl = "{{ url_for('events.apply_discount_code')  }}";
+        window.included_settings = {{ included_settings | safe | default('null', true) }};
+        window.current_timezone = "{{ current_timezone | safe }}";
+        window.stripeConnectUrl = "https://connect.stripe.com/oauth/authorize?response_type=code&client_id={{ key_settings.stripe_client_id }}&scope=read_write&redirect_uri={{ url_for('ticketing.stripe_callback', _external=true) }}";
+    </script>
+
+    {# Core libraries #}
+    <script src="{{ url_for('static', filename='vendor/lodash/dist/lodash.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/vue/dist/vue.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/vue/vue-google-maps.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/commons/geo.js') }}"></script>
+
+    {# Additional js functionality #}
+    <script src="{{ url_for('static', filename='vendor/moment/min/moment.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/moment-timezone/builds/moment-timezone-with-data.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/bootstrap/icheck.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/clipboard/dist/clipboard.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/google-material-color/dist/palette.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/jt.timepicker/jquery.timepicker.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/datepair.js/dist/datepair.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/datepair.js/dist/jquery.datepair.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/selectize/dist/js/standalone/selectize.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/Croppie/croppie.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/events/event-wizard.js') }}"></script>
+
+    {# Common wizard Vue components #}
+    <script src="{{ url_for('static', filename='js/events/wizard/button-component.js') }}?timestamp=1486195583"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/upload-component.js') }}?timestamp=1486195583"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/tabs-component.js') }}?timestamp=1486195583"></script>
+
+    {# Vue models, components for basic details #}
+    <script src="{{ url_for('static', filename='js/events/wizard/basic-details/classic.js') }}?timestamp=1486195583"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/basic-details/vue-models.js') }}?timestamp=1486195583"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/basic-details/vue-components.js') }}?timestamp=1486195583"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/basic-details/initializer.js') }}?timestamp=1486195583"></script>
+
+    {# Vue models, components for sponsors #}
+    <script src="{{ url_for('static', filename='js/events/wizard/sponsors/vue-models.js') }}?timestamp=1486195583"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/sponsors/initializer.js') }}?timestamp=1486195583"></script>
+
+    {# Vue models, components for session & speakers #}
+    <script src="{{ url_for('static', filename='js/events/wizard/sessions-speakers/classic.js') }}?timestamp=1486195583"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/sessions-speakers/vue-models.js') }}?timestamp=1486195583"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/sessions-speakers/vue-components.js') }}?timestamp=1486195583"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/sessions-speakers/initializer.js') }}?timestamp=1486195583"></script>
+
+    {# Vue app #}
+    <script src="{{ url_for('static', filename='js/events/wizard/vue-app.js') }}?timestamp=1483801089"></script>
+{% endblock %}

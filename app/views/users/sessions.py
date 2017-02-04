@@ -26,9 +26,9 @@ def index_view(event_id):
     sessions = DataGetter.get_sessions_by_event_id(event_id)
     event = DataGetter.get_event(event_id)
     if not event.has_session_speakers:
-        return render_template('gentelella/admin/event/info/enable_module.html', active_page='sessions',
+        return render_template('gentelella/users/events/info/enable_module.html', active_page='sessions',
                                title='Sessions', event=event)
-    return render_template('gentelella/admin/event/sessions/base_session_table.html',
+    return render_template('gentelella/users/events/sessions/base_session_table.html',
                            sessions=sessions, event_id=event_id, event=event)
 
 
@@ -42,7 +42,7 @@ def session_display_view(event_id, session_id):
         return redirect(url_for('.index_view', event_id=event_id))
     event = DataGetter.get_event(event_id)
     if not event.has_session_speakers:
-        return render_template('gentelella/admin/event/info/enable_module.html', active_page='sessions',
+        return render_template('gentelella/users/events/info/enable_module.html', active_page='sessions',
                                title='Sessions', event=event)
     form_elems = DataGetter.get_custom_form_elements(event_id)
     if not form_elems:
@@ -52,7 +52,7 @@ def session_display_view(event_id, session_id):
     session_form = json.loads(form_elems.session_form)
     speakers = DataGetter.get_speakers(event_id).all()
 
-    return render_template('gentelella/admin/event/sessions/edit.html',
+    return render_template('gentelella/users/events/sessions/edit.html',
                            session=session, session_form=session_form, event_id=event_id,
                            event=event, speakers=speakers)
 
@@ -62,10 +62,10 @@ def session_display_view(event_id, session_id):
 def create_view(event_id):
     event = DataGetter.get_event(event_id)
     if not event.has_session_speakers:
-        return render_template('gentelella/admin/event/info/enable_module.html', active_page='sessions',
+        return render_template('gentelella/users/events/info/enable_module.html', active_page='sessions',
                                title='Sessions', event=event)
     if request.method == 'POST':
-        DataManager.add_session_to_event(request, event_id)
+        DataManager.add_session_to_event(request, event_id, use_current_user=False)
         flash("The session and speaker have been saved")
         get_from = request.args.get("from")
         if get_from and get_from == 'speaker':
@@ -81,7 +81,7 @@ def create_view(event_id):
     session_form = json.loads(form_elems.session_form)
     speakers = DataGetter.get_speakers(event_id).all()
 
-    return render_template('gentelella/admin/event/sessions/new.html',
+    return render_template('gentelella/users/events/sessions/new.html',
                            speaker_form=speaker_form, session_form=session_form, event=event, speakers=speakers)
 
 
@@ -91,7 +91,7 @@ def create_view(event_id):
 def edit_view(event_id, session_id):
     event = DataGetter.get_event(event_id)
     if not event.has_session_speakers:
-        return render_template('gentelella/admin/event/info/enable_module.html', active_page='sessions',
+        return render_template('gentelella/users/events/info/enable_module.html', active_page='sessions',
                                title='Sessions', event=event)
 
     session = get_session_or_throw(session_id)
@@ -106,7 +106,7 @@ def edit_view(event_id, session_id):
         return redirect(url_for('.index_view', event_id=event_id))
     session_form = json.loads(form_elems.session_form)
     speakers = DataGetter.get_speakers(event_id).all()
-    return render_template('gentelella/admin/event/sessions/edit.html', session=session,
+    return render_template('gentelella/users/events/sessions/edit.html', session=session,
                            session_form=session_form, event=event, speakers=speakers)
 
 
@@ -115,7 +115,7 @@ def edit_view(event_id, session_id):
 def invited_view(event_id, session_id):
     session = DataGetter.get_session(session_id)
     event = DataGetter.get_event(event_id)
-    return render_template('gentelella/admin/event/sessions/invited.html',
+    return render_template('gentelella/users/events/sessions/invited.html',
                            session=session, event_id=event_id, event=event)
 
 
@@ -125,7 +125,7 @@ def invited_view(event_id, session_id):
 def add_speaker_view(event_id, session_id):
     event = DataGetter.get_event(event_id)
     if not event.has_session_speakers:
-        return render_template('gentelella/admin/event/info/enable_module.html', active_page='sessions',
+        return render_template('gentelella/users/events/info/enable_module.html', active_page='sessions',
                                title='Sessions', event=event)
     form_elems = DataGetter.get_custom_form_elements(event_id)
     if not form_elems:
@@ -133,7 +133,7 @@ def add_speaker_view(event_id, session_id):
         return redirect(url_for('.index_view', event_id=event_id))
     speaker_form = json.loads(form_elems.speaker_form)
     if request.method == 'GET':
-        return render_template('gentelella/admin/event/speakers/edit.html', event_id=event_id,
+        return render_template('gentelella/users/events/speakers/edit.html', event_id=event_id,
                                event=event, speaker_form=speaker_form)
     if request.method == 'POST':
         DataManager.add_speaker_to_session(request, event_id, session_id)
@@ -141,7 +141,7 @@ def add_speaker_view(event_id, session_id):
         return redirect(url_for('.index_view', event_id=event_id))
 
 
-@event_sessions.route('/<int:session_id>/accept/', methods=('GET',))
+@event_sessions.route('/<int:session_id>/accept/', methods=('POST', 'GET'))
 @belongs_to_event
 @can_accept_and_reject
 def accept_session(event_id, session_id):
@@ -150,11 +150,13 @@ def accept_session(event_id, session_id):
     send_email = True
     if skip and skip == 'email':
         send_email = False
-    DataManager.session_accept_reject(session, event_id, 'accepted', send_email)
+    message = request.form.get('message', None) if request.form else None
+    subject = request.form.get('subject', None) if request.form else None
+    DataManager.session_accept_reject(session, event_id, 'accepted', send_email, message=message, subject=subject)
     return redirect(url_for('.index_view', event_id=event_id))
 
 
-@event_sessions.route('/<int:session_id>/reject/', methods=('GET',))
+@event_sessions.route('/<int:session_id>/reject/', methods=('POST', 'GET'))
 @belongs_to_event
 @can_accept_and_reject
 def reject_session(event_id, session_id):
@@ -163,11 +165,13 @@ def reject_session(event_id, session_id):
     send_email = True
     if skip and skip == 'email':
         send_email = False
-    DataManager.session_accept_reject(session, event_id, 'rejected', send_email)
+    message = request.form.get('message', None) if request.form else None
+    subject = request.form.get('subject', None) if request.form else None
+    DataManager.session_accept_reject(session, event_id, 'rejected', send_email, message=message, subject=subject)
     return redirect(url_for('.index_view', event_id=event_id))
 
 
-@event_sessions.route('/<int:session_id>/send-emails/', methods=('GET',))
+@event_sessions.route('/<int:session_id>/send-emails/')
 @belongs_to_event
 @can_accept_and_reject
 def send_emails_session(event_id, session_id):
@@ -176,7 +180,7 @@ def send_emails_session(event_id, session_id):
     return redirect(url_for('.index_view', event_id=event_id))
 
 
-@event_sessions.route('/<int:session_id>/trash/', methods=('GET',))
+@event_sessions.route('/<int:session_id>/trash/')
 @belongs_to_event
 @can_access
 def trash_session(event_id, session_id):
@@ -188,7 +192,7 @@ def trash_session(event_id, session_id):
     return redirect(url_for('.index_view', event_id=event_id))
 
 
-@event_sessions.route('/<int:session_id>/restore_trash', methods=('GET',))
+@event_sessions.route('/<int:session_id>/restore_trash/')
 @belongs_to_event
 @can_access
 def restore_session(event_id, session_id):
@@ -207,17 +211,17 @@ def delete_session(event_id, session_id):
     return redirect(url_for('sadmin_sessions.display_my_sessions_view', event_id=event_id))
 
 
-@event_sessions.route('/<int:session_id>/restore/', methods=('GET',))
+@event_sessions.route('/<int:session_id>/restore/')
 @belongs_to_event
 @can_access
 def restore_session_view(event_id, session_id):
     session = get_session_or_throw(session_id)
     event = DataGetter.get_event(event_id)
-    return render_template('gentelella/admin/event/sessions/browse_revisions.html',
+    return render_template('gentelella/users/events/sessions/browse_revisions.html',
                            session=session, event_id=event_id, event=event)
 
 
-@event_sessions.route('/<int:session_id>/restore/<int:version_id>', methods=('GET',))
+@event_sessions.route('/<int:session_id>/restore/<int:version_id>/')
 @belongs_to_event
 @can_access
 def restore_session_revision(event_id, session_id, version_id):

@@ -103,7 +103,7 @@ def events_autocomplete(location_slug):
     return jsonify([{'value': result['name'], 'type': 'event_name'} for result in results])
 
 
-@explore.route('/<location>/events/', methods=('GET', 'POST'))
+@explore.route('/<location>/events/')
 def explore_view(location):
     placeholder_images = DataGetter.get_event_default_images()
     custom_placeholder = DataGetter.get_custom_placeholders()

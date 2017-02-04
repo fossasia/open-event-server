@@ -1,28 +1,28 @@
 {
-  "name": "open-event-orga-server",
-  "description": "Open Event Orga Server ",
-  "scripts": {
-    "postinstall": "node node_modules/bower/bin/bower install"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/fossasia/open-event-orga-server.git"
-  },
-  "keywords": [
-    "open",
-    "event"
-  ],
-  "author": "FOSSASIA",
-  "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/fossasia/open-event-orga-server/issues"
-  },
-  "homepage": "https://github.com/fossasia/open-event-orga-server#readme",
-  "cacheDirectories": [
-    "node_modules",
-    "app/static/admin/lib"
-  ],
-  "dependencies": {
-    "bower": "^1.7.9"
-  }
+    "name": "open-event-orga-server",
+    "description": "Open Event Orga Server ",
+    "scripts": {
+        "postinstall": "node node_modules/bower/bin/bower install"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/fossasia/open-event-orga-server.git"
+    },
+    "keywords": [
+        "open",
+        "event"
+    ],
+    "author": "FOSSASIA",
+    "license": "GPL-3.0",
+    "bugs": {
+        "url": "https://github.com/fossasia/open-event-orga-server/issues"
+    },
+    "homepage": "https://github.com/fossasia/open-event-orga-server#readme",
+    "cacheDirectories": [
+        "node_modules",
+        "app/static/vendor"
+    ],
+    "dependencies": {
+        "bower": "^1.7.9"
+    }
 }

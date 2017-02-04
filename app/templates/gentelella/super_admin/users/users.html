@@ -1,0 +1,352 @@
+{% extends 'gentelella/super_admin/dashboard.html' %}
+
+{% block title %}
+    {{ _("Users") }}
+{% endblock %}
+
+{% set active_page = "users" %}
+
+{% block head_css %}
+    {{ super() }}
+    <style type="text/css">
+        #event-tabs {
+            position: absolute;
+            background: transparent;
+            top: 9px;
+            width: auto;
+        }
+
+        table.table {
+            margin-top: 20px !important;
+        }
+
+        .update-roles-form .checkbox,
+        .update-roles-form .radio {
+            display: block;
+        }
+
+        .update-roles-form .checkbox label,
+        .update-roles-form .radio label {
+            padding-left: 20px;
+        }
+
+        .update-roles-form .checkbox input[type=checkbox],
+        .update-roles-form .radio input[type=radio] {
+            position: absolute;
+            margin-left: -20px;
+        }
+    </style>
+{% endblock %}
+
+
+{% macro users_row(user_list) %}
+    {% for user in user_list %}
+        <tr>
+            <td>{{ 'Not Available' if not user['user'].user_detail.fullname else user['user'].user_detail.fullname }}</td>
+            <td>{{ user['user'].email }}</td>
+            {% if user['user'].in_trash == False %}
+                <td>{{ _("Active") }}</td>
+            {% else %}
+                <td>{{ _("Deleted") }}</td>
+            {% endif %}
+            <td>
+                <ul style="padding-left:0;">
+                    {% if user['user'].is_super_admin %}
+                        <li>{{ _("Super Admin") }}</li>
+                    {% endif %}
+                    {% if user['user'].is_admin %}
+                        <li>{{ _("Admin") }}</li>
+                    {% endif %}
+                    <li>
+                        {% if user['user'].is_verified %}
+                            {{ _("Registered User") }}
+                        {% else %}
+                            {{ _("Unverified User") }}
+                        {% endif %}
+                    </li>
+                    {% for sys_role in user['user'].sys_roles %}
+                        <li>{{ sys_role.role.name }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>
+                <ul style="padding-left:0;">
+                    {% for role in user['event_roles'] %}
+                        <li>{{ role.role.title_name }}, <a
+                                href="{{ url_for('events.details_view', event_id=role.event.id) }}" title="Go to event"
+                                target="_blank">{{ role.event.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>
+                <li>
+                    <a href="{{url_for('sadmin_users.user_sessions', user_id=user['user'].id)}}"> Sessions </a>
+                </li>
+                <li>
+                    <a href="{{url_for('sadmin_users.user_events', user_id=user['user'].id)}}"> Events </a>
+                </li>
+                <li>
+                    <a href="{{url_for('sadmin_users.user_tickets', user_id=user['user'].id)}}"> Tickets </a>
+                </li>
+                <li>
+                    <a href="{{url_for('sadmin_users.settings_view', user_id=user['user'].id)}}"> Settings </a>
+                </li>
+            </td>
+            <td>{{ user['user'].last_access_time.strftime("%Y-%m-%d %H:%M")|time_format }}</td>
+            <td>{{ user['user'].last_access_time.strftime("%Y-%m-%d %H:%M")|time_format }}</td>
+            <td>
+                <div class="btn-group btn-group-sm">
+                    {% if not user['user'].is_super_admin and current_user.is_super_admin %}
+                        <a class="btn btn-default" href='#' data-toggle="modal"
+                           data-target="#update-sys-role-{{ user['user'].id }}" title="Edit role"
+                           data-user-id="{{ user['user'].id }}">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                        </a>
+                    {% endif %}
+
+                    <a data-toggle="tooltip" data-placement="top" class="btn btn-default"
+                       href="{{ url_for('sadmin_users.details_view', user_id=user['user'].id) }}" title="View details">
+                        <i class="glyphicon glyphicon-eye-open"></i>
+                    </a>
+                    {% if user['user'].is_super_admin == False %}
+                        {% if user['user'].in_trash == False %}
+                            <a data-toggle="tooltip" data-placement="top" class="btn btn-default"
+                               onclick="return confirm('Are you sure you want to delete this record?');"
+                               href="{{ url_for('sadmin_users.trash_view', user_id=user['user'].id) }}"
+                               title="Delete record">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                    {% if user['user'].in_trash == True %}
+                        <a data-toggle="tooltip" data-placement="top" class="btn btn-default"
+                           onclick="return confirm('Are you sure you want to delete this record?');"
+                           href="{{ url_for('sadmin_users.delete_view', user_id=user['user'].id) }}"
+                           title="Delete record">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                    {% endif %}
+                    {% if user['user'].in_trash == True %}
+                        <a class="btn btn-success"
+                           href="{{ url_for('sadmin_users.restore_view', user_id=user['user'].id) }}"
+                           data-toggle="tooltip" data-placement="top"
+                           title="Restore User">
+                            <i>{{ _("Restore User") }}</i>
+                        </a>
+                    {% endif %}
+                </div>
+                <!-- Update-Roles modal -->
+                <div class="modal fade" id="update-sys-role-{{ user['user'].id }}" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">{{ _("Update System Roles") }}</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post"
+                                      action="{{ url_for('sadmin_users.update_roles_view', user_id=user['user'].id) }}"
+                                      role="form" class="update-roles-form">
+                                    <h5>{{ _("Provide Admin access") }}?</h5>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="admin"
+                                                   value="yes" {{ 'checked' if user['user'].is_admin else '' }}> Yes
+                                        </label>
+                                        &nbsp;
+                                        <label>
+                                            <input type="radio" name="admin"
+                                                   value="no" {{ '' if user['user'].is_admin else 'checked' }}> No
+                                        </label>
+                                    </div>
+
+                                    <h5>{{ _("Custom System Roles") }}</h5>
+                                    {% for role in custom_sys_roles %}
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox"
+                                                       name="custom_role-{{ role.id }}" {{ 'checked' if user['user'].is_sys_role(role.id) else '' }}> {{ role.name }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                    <button type="submit" class="btn btn-success pull-right">{{ _("Save") }}</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+{% endmacro %}
+
+{% block content %}
+    <div>
+        <ul id="event-tabs" class="nav nav-tabs bar_tabs large_tab_list" role="tablist">
+            <li class="active"><a href="#allusers" id="all-users-tab" data-toggle="tab">{{ _("All Users") }}</a>
+            </li>
+            <li class=""><a href="#activeusers" id="live-users-tab" data-toggle="tab">{{ _("Active Users") }}</a></li>
+            <li class=""><a href="#deletedusers" id="deleted-users-tab" data-toggle="tab">{{ _("Deleted Users") }}</a>
+            </li>
+        </ul>
+        <div class="dropdown tabs_small">
+            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                <span class="drop_header">All Users</span>
+                <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li value="All Users" class="small_tab_list active">
+                    <a href="#allusers" id="all-users-tab" data-toggle="tab">{{ _("All Users") }}</a>
+                </li>
+                <li value="Active Users" class="small_tab_list active">
+                    <a href="#activeusers" id="live-users-tab" data-toggle="tab">{{ _("Active Users") }}</a>
+                </li>
+                <li value="Deleted Users" class="small_tab_list">
+                    <a href="#deletedusers" id="deleted-users-tab" data-toggle="tab">{{ _("Deleted Users") }}</a>
+                </li>
+            </ul>
+        </div>
+        <div id="myTabContent" class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="tab_content0"
+                 aria-labelledby="all-users-tab">
+                <table class="table table-striped no-global-dt" id="all_users_table">
+                    <thead>
+                    <tr>
+                        <th>{{ _("Name") }}</th>
+                        <th>{{ _("Email") }}</th>
+                        <th>{{ _("Status") }}</th>
+                        <th>{{ _("System Roles") }}</th>
+                        <th>{{ _("Event Roles") }}</th>
+                        <th>{{_("User Links") }}</th>
+                        <th>{{ _("Member Since") }}</th>
+                        <th>{{ _("Last Access") }}</th>
+                        <th>{{ _("Options") }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{ users_row(all_user_list) }}
+                    </tbody>
+                </table>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="activeusers"
+                 aria-labelledby="live-users-tab">
+                <table class="table table-striped no-global-dt" id="active_users_table">
+                    <thead>
+                    <tr>
+                        <th>{{ _("Name") }}</th>
+                        <th>{{ _("Email") }}</th>
+                        <th>{{ _("Status") }}</th>
+                        <th>{{ _("System Roles") }}</th>
+                        <th>{{ _("Event Roles") }}</th>
+                        <th>{{_("User Links") }}</th>
+                        <th>{{ _("Member Since") }}</th>
+                        <th>{{ _("Last Access") }}</th>
+                        <th>{{ _("Options") }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{ users_row(active_user_list) }}
+                    </tbody>
+                </table>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="deletedusers"
+                 aria-labelledby="deleted-users-tab">
+                <table class="table table-striped no-global-dt" id="deleted_users_table">
+                    <thead>
+                    <tr>
+                        <th>{{ _("Name") }}</th>
+                        <th>{{ _("Email") }}</th>
+                        <th>{{ _("Status") }}</th>
+                        <th>{{ _("System Roles") }}</th>
+                        <th>{{ _("Event Roles") }}</th>
+                        <th>{{_("User Links") }}</th>
+                        <th>{{ _("Member Since") }}</th>
+                        <th>{{ _("Last Access") }}</th>
+                        <th>{{ _("Options") }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{ users_row(trash_user_list) }}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='vendor/moment/min/moment.min.js') }}"></script>
+    <script type="text/javascript">
+
+        $('#active_users_table').dataTable({
+            "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+            "lengthMenu": [25, 50, 100, 200],
+            "pageLength": 50,
+            "language": {
+                "lengthMenu": "Show _MENU_ Users"
+            }
+        });
+
+        change_column_time_to_humanize_format('#active_users_table tr', 5);
+        change_column_time_to_humanize_format('#active_users_table tr', 6);
+        $('#active_users_table').on('draw.dt', function () {
+            change_column_time_to_humanize_format('#active_users_table tr', 5);
+            change_column_time_to_humanize_format('#active_users_table tr', 6);
+        });
+
+        $('#deleted_users_table').dataTable({
+            "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>>tip',
+            "lengthMenu": [25, 50, 100, 200],
+            "pageLength": 50,
+            "language": {
+                "lengthMenu": "Show _MENU_ Users"
+            },
+            /* Disable initial sort */
+            "aaSorting": []
+        });
+
+        change_column_time_to_humanize_format('#deleted_users_table tr', 5);
+        change_column_time_to_humanize_format('#deleted_users_table tr', 6);
+        $('#deleted_users_table').on('draw.dt', function () {
+            change_column_time_to_humanize_format('#deleted_users_table tr', 5);
+            change_column_time_to_humanize_format('#deleted_users_table tr', 6);
+        });
+
+        $('#all_users_table').dataTable({
+            "dom": '<"row"<"toolbar col-md-7"><"col-md-2"l><"col-md-3 pull-right"f>><"table-responsive"t>ip',
+            "lengthMenu": [25, 50, 100, 200],
+            "pageLength": 50,
+            "initComplete": function (settings, json) {
+                table_width_adjust();
+                window.onresize = table_width_adjust;
+            },
+            "language": {
+                "lengthMenu": "Show _MENU_ Users",
+            },
+            /* Disable initial sort */
+            "aaSorting": []
+        });
+
+        change_column_time_to_humanize_format('#all_users_table tr', 5);
+        change_column_time_to_humanize_format('#all_users_table tr', 6);
+        $('#all_users_table').on('draw.dt', function () {
+            change_column_time_to_humanize_format('#all_users_table tr', 5);
+            change_column_time_to_humanize_format('#all_users_table tr', 6);
+        });
+
+        $(".small_tab_list").click(function () {
+            $(".small_tab_list").removeClass("active");
+            $(this).addClass("active");
+            var clicked_link = $(this).attr("value");
+            $(".drop_header").text(clicked_link);
+        });
+
+        $('.tabs_small a').click(function () {
+            $(this).tab('show');
+        });
+    </script>
+{% endblock %}
+

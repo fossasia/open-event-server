@@ -8,9 +8,10 @@
 
 {% macro speaker_info(speaker) %}
     <div class="col-md-3 col-sm-6 speaker-info" style="text-align: center; height: 250px">
-        <img src="{{ speaker.photo }}" style="width: 133px; height: 133px;" onerror="imgError(this);"><br>
+        <img src="{{ speaker.thumbnail if speaker.thumbnail and speaker.thumbnail != '' and '.' in speaker.thumbnail else speaker.photo }}" style="width: 133px; height: 133px;" onerror="imgError(this);"><br>
         <h4 style="font-weight: 500;">{{ speaker.name }}</h4>
         <h5 style="margin-top: 0;">{{ speaker.organisation }}</h5>
+        {% if speaker.website %}<a href="{{ speaker.website }}"><i class="fa fa-external-link-square"></i></a>{% endif %}
         {% if speaker.facebook %}<a href="{{ speaker.facebook }}"><i class="fa fa-facebook-square"></i></a>{% endif %}
         {% if speaker.twitter %}<a href="{{ speaker.twitter }}"><i class="fa fa-twitter-square"></i></a>{% endif %}
         {% if speaker.linkedin %}<a href="{{ speaker.linkedin }}"><i class="fa fa-linkedin-square"></i></a>{% endif %}
@@ -119,7 +120,7 @@
 
 {% block tail_js %}
     {{ super() }}
-    <script src="{{ url_for('static', filename='admin/lib/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
     <script type="text/javascript">
         var map;
         var eventLocation = {lat: {{ event.latitude }}, lng: {{ event.longitude }}};

@@ -50,7 +50,7 @@ def index_view():
             set_settings(**settings)
         flash("Changes have been saved.")
     return render_template(
-        'gentelella/admin/super_admin/content/content.html', pages=pages, settings=settings,
+        'gentelella/super_admin/content/content.html', pages=pages, settings=settings,
         placeholder_images=placeholder_images, subtopics=subtopics, custom_placeholder=custom_placeholder,
         languages=languages_copy, navigation_bar=list_navbar()
     )
@@ -130,12 +130,12 @@ def details_view(page_id):
         DataManager().update_page(page, request.form)
         return redirect(url_for('sadmin_content.details_view', page_id=page_id))
     pages = DataGetter.get_all_pages()
-    return render_template('gentelella/admin/super_admin/content/content.html',
+    return render_template('gentelella/super_admin/content/content.html',
                            pages=pages,
                            current_page=page, navigation_bar=list_navbar())
 
 
-@sadmin_content.route('/pages/<page_id>/trash/', methods=['GET'])
+@sadmin_content.route('/pages/<page_id>/trash/')
 def trash_view(page_id):
     page = DataGetter.get_page_by_id(page_id)
     delete_from_db(page, "Page has already deleted")
@@ -165,7 +165,7 @@ def upload_translation():
     return "File extension not allowed"
 
 
-@sadmin_content.route('/translation_uploads/<path:l_code>/', methods=['GET', 'POST'])
+@sadmin_content.route('/translation_uploads/<path:l_code>/')
 def download(l_code):
     file_destination = BASE_TRANSLATIONS_DIR + "/" + l_code + "/LC_MESSAGES"
     return send_from_directory(directory=file_destination, filename="messages.po")
