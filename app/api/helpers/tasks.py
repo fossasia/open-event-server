@@ -14,8 +14,8 @@ from app.helpers.request_context_task import RequestContextTask
 from errors import BaseError, ServerError
 from export_helpers import send_export_mail
 from import_helpers import update_import_job, send_import_mail
-from ..exports import event_export_task_base
-from ..imports import import_event_task_base
+from app.api.exports import event_export_task_base
+from app.api.imports import import_event_task_base
 
 
 @celery.task(base=RequestContextTask, name='import.event', bind=True, throws=(BaseError,))

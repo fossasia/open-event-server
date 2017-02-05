@@ -4,7 +4,7 @@ import requests
 from geoip import geolite2
 from requests import ConnectionError
 
-from app.helpers.flask_helpers import get_real_ip
+from app.helpers.flask_ext.helpers import get_real_ip
 
 
 def get_current_timezone():

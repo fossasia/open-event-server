@@ -1,4 +1,5 @@
 from __future__ import print_function
+
 import json
 import os
 
@@ -11,11 +12,11 @@ from flask.ext import login
 from flask.ext.migrate import upgrade
 from requests.exceptions import HTTPError
 
-from app.models.setting import Environment
-from app.settings import get_settings
-from app.helpers.flask_helpers import get_real_ip, slugify
+from app.helpers.flask_ext.helpers import get_real_ip, slugify
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
 from app.helpers.storage import upload
+from app.models.setting import Environment
+from app.settings import get_settings
 from ..helpers.data import get_google_auth, create_user_oauth, get_facebook_auth, user_logged_in, get_instagram_auth
 from ..helpers.data import save_to_db, uploaded_file_provided_by_url
 from ..helpers.data_getter import DataGetter

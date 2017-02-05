@@ -1,5 +1,5 @@
 from app.models.order import OrderTicket, Order
-from . import db
+from app.models import db
 
 ticket_tags_table = db.Table('association', db.Model.metadata,
                              db.Column('ticket_id', db.Integer, db.ForeignKey('ticket.id', ondelete='CASCADE')),

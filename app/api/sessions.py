@@ -11,18 +11,18 @@ from app.models.session import Session as SessionModel
 from app.models.session_type import SessionType as SessionTypeModel
 from app.models.speaker import Speaker as SpeakerModel
 from app.models.track import Track as TrackModel
-from .helpers import custom_fields as fields
-from .helpers.helpers import (
+from app.api.helpers import custom_fields as fields
+from app.api.helpers.helpers import (
     can_create,
     can_update,
     can_delete
 )
-from .helpers.helpers import save_db_model, get_object_in_event, \
+from app.api.helpers.helpers import save_db_model, get_object_in_event, \
     model_custom_form, requires_auth, parse_args
-from .helpers.special_fields import SessionLanguageField, SessionStateField
-from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+from app.api.helpers.special_fields import SessionLanguageField, SessionStateField
+from app.api.helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
-from .helpers.utils import Resource, ETAG_HEADER_DEFN
+from app.api.helpers.utils import Resource, ETAG_HEADER_DEFN
 
 api = Namespace('sessions', description='Sessions', path='/')
 

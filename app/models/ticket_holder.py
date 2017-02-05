@@ -3,7 +3,7 @@ from StringIO import StringIO
 
 import qrcode
 
-from . import db
+from app.models import db
 
 
 class TicketHolder(db.Model):

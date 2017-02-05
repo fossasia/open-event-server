@@ -3,13 +3,13 @@ from flask import render_template
 from flask import abort
 
 from app.helpers.data_getter import DataGetter
+from app.helpers.flask_ext.jinja.variables import get_locale
 
 pages = Blueprint('basicpagesview', __name__)
 
 
 @pages.route('/<url>/')
 def url_view(url):
-    from app import get_locale
     page = DataGetter.get_page_by_url('/' + url, get_locale())
     if page == None:
         return abort(404)

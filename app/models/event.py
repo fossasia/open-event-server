@@ -12,7 +12,7 @@ from app.models.email_notifications import EmailNotification
 from app.models.user import ATTENDEE
 from custom_forms import CustomForms, session_form_str, speaker_form_str
 from version import Version
-from . import db
+from app.models import db
 
 
 def get_new_event_identifier(length=8):

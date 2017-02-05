@@ -1,25 +1,15 @@
 # Ignore ExtDeprecationWarnings for Flask 0.11 - see http://stackoverflow.com/a/38080580
 import warnings
-
 from flask.exthook import ExtDeprecationWarning
 
 warnings.simplefilter('ignore', ExtDeprecationWarning)
 # Keep it before flask extensions are imported
 
-import re
-
-from pytz import timezone
-import base64
-from StringIO import StringIO
-
-import qrcode
-from forex_python.converter import CurrencyCodes
 from pytz import utc
 
 from app.helpers.scheduled_jobs import send_mail_to_expired_orders, empty_trash, send_after_event_mail, \
     send_event_fee_notification, send_event_fee_notification_followup
 
-import arrow
 from celery import Celery
 from celery.signals import after_task_publish
 from flask.ext.htmlmin import HTMLMIN
@@ -27,24 +17,19 @@ import logging
 import os.path
 from os import environ
 import sys
-import json
 from flask import Flask, session
 from app.settings import get_settings, get_setts
 from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.script import Manager
 from flask.ext.login import current_user
-from flask import render_template
-from flask import request
 from flask.ext.jwt import JWT
-from datetime import timedelta, datetime
-import humanize
+from datetime import timedelta
 
 import sqlalchemy as sa
 
-from nameparser import HumanName
 import stripe
 from app.settings import get_settings
-from app.helpers.flask_helpers import SilentUndefined, camel_case, slugify, MiniJSONEncoder
+from app.helpers.flask_ext.helpers import SilentUndefined, camel_case, slugify, MiniJSONEncoder
 from app.helpers.payment import forex
 from app.models import db
 from app.models.user import User
@@ -63,9 +48,14 @@ from helpers.helpers import send_email_for_expired_orders
 from werkzeug.contrib.profiler import ProfilerMiddleware
 
 from flask.ext.sqlalchemy import get_debug_queries
-from config import LANGUAGES
 from app.helpers.auth import AuthManager
 from app.views import BlueprintsManager
+
+from app.helpers.flask_ext.error_handlers import init_error_handlers
+from app.helpers.flask_ext.jinja.filters import init_filters
+from app.helpers.flask_ext.jinja.helpers import init_helpers
+from app.helpers.flask_ext.jinja.variables import init_variables
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -149,346 +139,10 @@ def create_app():
 
 current_app, manager, database, jwt = create_app()
 
-
-@app.errorhandler(404)
-def page_not_found(e):
-    if request_wants_json():
-        error = NotFoundError()
-        return json.dumps(error.to_dict()), getattr(error, 'code', 404)
-    return render_template('gentelella/errors/404.html'), 404
-
-
-@app.errorhandler(403)
-def forbidden(e):
-    if request_wants_json():
-        error = PermissionDeniedError()
-        return json.dumps(error.to_dict()), getattr(error, 'code', 403)
-    return render_template('gentelella/errors/403.html'), 403
-
-
-@app.errorhandler(500)
-def server_error(e):
-    if request_wants_json():
-        error = ServerError()
-        return json.dumps(error.to_dict()), getattr(error, 'code', 500)
-    return render_template('gentelella/errors/500.html'), 500
-
-
-@app.errorhandler(400)
-def bad_request(e):
-    if request_wants_json():
-        error = ValidationError(field='unknown')
-        return json.dumps(error.to_dict()), getattr(error, 'code', 400)
-    return render_template('gentelella/errors/400.html'), 400
-
-
-# taken from http://flask.pocoo.org/snippets/45/
-def request_wants_json():
-    best = request.accept_mimetypes.best_match(
-        ['application/json', 'text/html'])
-    return best == 'application/json' and request.accept_mimetypes[best] > request.accept_mimetypes['text/html']
-
-
-@app.context_processor
-def all_languages():
-    return dict(all_languages=LANGUAGES)
-
-
-@app.context_processor
-def selected_lang():
-    return dict(selected_lang=get_locale())
-
-
-@app.context_processor
-def locations():
-    def get_locations_of_events():
-        return DataGetter.get_locations_of_events()
-
-    return dict(locations=get_locations_of_events)
-
-
-@app.context_processor
-def get_key_settings():
-    key_settings = get_settings()
-    return dict(key_settings=key_settings)
-
-
-@app.context_processor
-def get_app_name():
-    return dict(app_name=get_settings()['app_name'])
-
-
-@app.context_processor
-def get_tagline():
-    return dict(tagline=get_settings()['tagline'])
-
-
-@app.context_processor
-def fee_helpers():
-    def get_fee(currency):
-        from app.helpers.payment import get_fee
-        return get_fee(currency)
-
-    return dict(get_fee=get_fee)
-
-
-@app.context_processor
-def qrcode_generator():
-    def generate_qr(text):
-        qr = qrcode.QRCode(
-            version=1,
-            error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=10,
-            border=0,
-        )
-        qr.add_data(text)
-        qr.make(fit=True)
-        img = qr.make_image()
-
-        buffer = StringIO()
-        img.save(buffer, format="JPEG")
-        img_str = base64.b64encode(buffer.getvalue())
-        return img_str
-
-    return dict(generate_qr=generate_qr)
-
-
-@app.context_processor
-def event_types():
-    event_types = DataGetter.get_event_types()
-    return dict(event_typo=event_types[:10])
-
-
-@app.context_processor
-def base_dir():
-    return dict(base_dir=app.config['BASE_DIR'])
-
-
-@app.context_processor
-def pages():
-    pages = DataGetter.get_all_pages(get_locale())
-    return dict(system_pages=pages)
-
-
-@app.context_processor
-def datetime_now():
-    return dict(datetime_now=datetime.now())
-
-
-@app.context_processor
-def social_settings():
-    settings = get_setts()
-    return dict(settes=settings)
-
-
-@app.context_processor
-def app_logo():
-    logo = DataGetter.get_custom_placeholder_by_name('Logo')
-    return dict(logo=logo)
-
-
-@app.context_processor
-def app_avatar():
-    avatar = DataGetter.get_custom_placeholder_by_name('Avatar')
-    return dict(avatar=avatar)
-
-
-@app.template_filter('pretty_name')
-def pretty_name_filter(string):
-    string = str(string)
-    string = string.replace('_', ' ')
-    string = string.title()
-    return string
-
-
-@app.template_filter('currency_symbol')
-def currency_symbol_filter(currency_code):
-    symbol = CurrencyCodes().get_symbol(currency_code)
-    return symbol if symbol else '$'
-
-
-@app.template_filter('currency_name')
-def currency_name_filter(currency_code):
-    name = CurrencyCodes().get_currency_name(currency_code)
-    return name if name else ''
-
-
-@app.template_filter('camel_case')
-def camel_case_filter(string):
-    return camel_case(string)
-
-
-@app.template_filter('slugify')
-def slugify_filter(string):
-    return slugify(string)
-
-
-@app.template_filter('humanize')
-def humanize_filter(time):
-    if not time:
-        return "N/A"
-    return arrow.get(time).humanize()
-
-
-@app.template_filter('humanize_alt')
-def humanize_alt_filter(time):
-    if not time:
-        return "N/A"
-    return humanize.naturaltime(datetime.now() - time)
-
-
-@app.template_filter('time_format')
-def time_filter(time):
-    if not time:
-        return "N/A"
-    return time
-
-
-@app.template_filter('firstname')
-def firstname_filter(string):
-    if string:
-        return HumanName(string).first
-    else:
-        return 'N/A'
-
-
-@app.template_filter('middlename')
-def middlename_filter(string):
-    if string:
-        return HumanName(string).middle
-    else:
-        return 'N/A'
-
-
-@app.template_filter('lastname')
-def lastname_filter(string):
-    if string:
-        return HumanName(string).last
-    else:
-        return 'N/A'
-
-
-@app.template_filter('money')
-def money_filter(string):
-    return '{:20,.2f}'.format(float(string))
-
-
-@app.template_filter('datetime')
-def simple_datetime_display(date):
-    return date.strftime('%B %d, %Y %I:%M %p')
-
-
-@app.template_filter('external_url')
-def external_url(url):
-    """Returns an external URL for the given `url`.
-    If URL is already external, it remains unchanged.
-    """
-    url_pattern = r'^(https?)://.*$'
-    scheme = re.match(url_pattern, url)
-    if not scheme:
-        url_root = request.url_root.rstrip('/')
-        return '{}{}'.format(url_root, url)
-    else:
-        return url
-
-
-@app.template_filter('localize_dt')
-def localize_dt(dt, tzname):
-    """Accepts a Datetime object and a Timezone name.
-    Returns Timezone aware Datetime.
-    """
-    localized_dt = timezone(tzname).localize(dt)
-    return localized_dt.isoformat()
-
-
-@app.template_filter('localize_dt_obj')
-def localize_dt_obj(dt, tzname):
-    """Accepts a Datetime object and a Timezone name.
-    Returns Timezone aware Datetime Object.
-    """
-    localized_dt = timezone(tzname).localize(dt)
-    return localized_dt
-
-
-@app.template_filter('as_timezone')
-def as_timezone(dt, tzname):
-    """Accepts a Time aware Datetime object and a Timezone name.
-        Returns Converted Timezone aware Datetime Object.
-        """
-    if tzname and timezone(tzname):
-        return dt.astimezone(timezone(tzname))
-    return dt
-
-
-@app.template_filter('fees_by_currency')
-def fees_by_currency(currency):
-    """Returns a fees object according to the currency input"""
-    fees = DataGetter.get_fee_settings_by_currency(currency)
-    return fees
-
-
-@app.template_filter('filename_from_url')
-def filename_from_url(url):
-    if url:
-        return url.rsplit('/', 1)[1]
-    return ""
-
-
-@app.context_processor
-def fb_app_id():
-    fb_app_id = get_settings()['fb_client_id']
-    return dict(fb_app_id=fb_app_id)
-
-
-@app.context_processor
-def flask_helpers():
-    def string_empty(string):
-        from app.helpers.helpers import string_empty
-        return string_empty(string)
-
-    def current_date(format='%a, %B %d %I:%M %p', **kwargs):
-        return (datetime.now() + timedelta(**kwargs)).strftime(format)
-
-    return dict(string_empty=string_empty, current_date=current_date, forex=forex)
-
-
-@app.context_processor
-def versioning_manager():
-    def count_versions(model_object):
-        from sqlalchemy_continuum.utils import count_versions
-        return count_versions(model_object)
-
-    def changeset(model_object):
-        from sqlalchemy_continuum import changeset
-        return changeset(model_object)
-
-    def transaction_class(version_object):
-        from sqlalchemy_continuum import transaction_class
-        transaction = transaction_class(version_object)
-        return transaction.query.get(version_object.transaction_id)
-
-    def version_class(model_object):
-        from sqlalchemy_continuum import version_class
-        return version_class(model_object)
-
-    def get_user_name(transaction_object):
-        if transaction_object and transaction_object.user_id:
-            user = DataGetter.get_user(transaction_object.user_id)
-            return user.email
-        return 'unconfigured@example.com'
-
-    def side_by_side_diff(changeset_entry):
-        from app.helpers.versioning import side_by_side_diff
-        for side_by_side_diff_entry in side_by_side_diff(changeset_entry[0],
-                                                         changeset_entry[1]):
-            yield side_by_side_diff_entry
-
-    return dict(count_versions=count_versions,
-                changeset=changeset,
-                transaction_class=transaction_class,
-                version_class=version_class,
-                side_by_side_diff=side_by_side_diff,
-                get_user_name=get_user_name)
+init_filters(app)
+init_helpers(app)
+init_variables(app)
+init_error_handlers(app)
 
 
 # http://stackoverflow.com/questions/26724623/
@@ -532,12 +186,6 @@ def update_sent_state(sender=None, body=None, **kwargs):
 # it is important to register them after celery is defined to resolve circular imports
 import api.helpers.tasks
 import helpers.tasks
-
-
-@app.context_processor
-def integrate_socketio():
-    integrate = current_app.config.get('INTEGRATE_SOCKETIO', False)
-    return dict(integrate_socketio=integrate)
 
 
 scheduler = BackgroundScheduler(timezone=utc)
@@ -594,11 +242,3 @@ if __name__ == '__main__':
         socketio.run(current_app)
     else:
         current_app.run()
-
-
-@babel.localeselector
-def get_locale():
-    try:
-        return request.cookies["selected_lang"]
-    except:
-        return request.accept_languages.best_match(LANGUAGES.keys())

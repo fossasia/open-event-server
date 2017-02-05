@@ -99,7 +99,7 @@
         window.discountCodeApplyUrl = "{{ url_for('events.apply_discount_code')  }}";
         window.included_settings = {{ included_settings | safe | default('null', true) }};
         window.current_timezone = "{{ current_timezone | safe }}";
-        window.stripeConnectUrl = "https://connect.stripe.com/oauth/authorize?response_type=code&client_id={{ key_settings.stripe_client_id }}&scope=read_write&redirect_uri={{ url_for('ticketing.stripe_callback', _external=true) }}";
+        window.stripeConnectUrl = "https://connect.stripe.com/oauth/authorize?response_type=code&client_id={{ settings.stripe_client_id }}&scope=read_write&redirect_uri={{ url_for('ticketing.stripe_callback', _external=true) }}";
     </script>
 
     {# Core libraries #}

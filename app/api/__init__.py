@@ -11,20 +11,20 @@ from helpers.errors import (
     InvalidServiceError,
     ServerError,
 )
-from .attendees import api as attendees_api
-from .events import api as event_api
-from .exports import api as exports_api
-from .extras import api as extras_api
-from .imports import api as imports_api
-from .login import api as login_api
-from .microlocations import api as microlocation_api
-from .notifications import api as notifications_api
-from .sessions import api as session_api
-from .speakers import api as speaker_api
-from .sponsors import api as sponsor_api
-from .tickets import api as tickets_apt
-from .tracks import api as track_api
-from .users import api as users_api
+from app.api.attendees import api as attendees_api
+from app.api.events import api as event_api
+from app.api.exports import api as exports_api
+from app.api.extras import api as extras_api
+from app.api.imports import api as imports_api
+from app.api.login import api as login_api
+from app.api.microlocations import api as microlocation_api
+from app.api.notifications import api as notifications_api
+from app.api.sessions import api as session_api
+from app.api.speakers import api as speaker_api
+from app.api.sponsors import api as sponsor_api
+from app.api.tickets import api as tickets_apt
+from app.api.tracks import api as track_api
+from app.api.users import api as users_api
 
 api_v1 = Blueprint('api', __name__, url_prefix='/api/v1')
 

@@ -4,8 +4,8 @@ import copy
 from datetime import datetime, timedelta
 
 from flask import Blueprint
-from flask import flash, render_template
-from flask import request, jsonify
+from flask import render_template
+from flask import request
 from flask import url_for
 from flask.ext import login
 from werkzeug.exceptions import abort
@@ -13,7 +13,6 @@ from werkzeug.utils import redirect
 
 from app import forex
 from app.helpers.cached_getter import CachedGetter
-from app.helpers.data import save_to_db, delete_from_db
 from app.helpers.data_getter import DataGetter
 from app.helpers.invoicing import InvoicingManager
 from app.helpers.payment import get_fee

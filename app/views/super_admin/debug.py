@@ -7,7 +7,7 @@ from flask import Blueprint
 from flask import render_template
 from flask import request, current_app
 
-from app.helpers.flask_helpers import get_real_ip
+from app.helpers.flask_ext.helpers import get_real_ip
 from app.views.super_admin import check_accessible, list_navbar, BASE
 
 sadmin_debug = Blueprint('sadmin_debug', __name__, url_prefix='/admin/debug')
