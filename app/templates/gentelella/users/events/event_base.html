@@ -107,11 +107,13 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">{{ _("Are you sure you would like to delete this event") }} ?</h4>
+                    <span>{{ _("Deleting the event will delete all the data associated with it.") }} <br><br>{{ _("Please enter the full name of the event to continue") }}</span><br>
+                    <input id='delete-check' type="text" data-event-name="{{ event.name }}">
                 </div>
                 <div class="modal-footer">
                     <a type="button" class="btn btn-default" data-dismiss="modal">{{ _("Cancel") }}</a>
                     <a href="/events/{{ event.id }}/trash/" type="button"
-                       class="btn btn-danger">{{ _("Confirm Delete") }}</a>
+                       class="btn btn-danger" id = "delete-event-button">{{ _("Confirm Delete") }}</a>
                 </div>
             </div>
         </div>
@@ -119,4 +121,5 @@
 {% endblock %}
 {% block tail_js %}
     {{ super() }}
+    <script type = "text/javascript" src = "{{ url_for('static', filename='js/events/event-base.js') }}"></script>
 {% endblock %}
