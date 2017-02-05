@@ -3,8 +3,8 @@ import json
 from flask.ext.restplus import Resource, Namespace
 from flask_jwt import JWTError
 
-from .helpers import custom_fields as fields
-from .helpers.errors import NotAuthorizedError
+from app.api.helpers import custom_fields as fields
+from app.api.helpers.errors import NotAuthorizedError
 
 api = Namespace('login', description='Login')
 

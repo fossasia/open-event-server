@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from . import db
+from app.models import db
 
 
 class ImportJob(db.Model):

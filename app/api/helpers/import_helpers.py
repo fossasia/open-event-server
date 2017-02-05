@@ -17,13 +17,13 @@ from app.helpers.storage import UploadedFile, upload, UploadedMemory, \
 from app.helpers.update_version import VersionUpdater
 from app.models.import_jobs import ImportJob
 from errors import BaseError, ServerError, NotFoundError
-from .non_apis import CustomFormDAO
-from ..events import DAO as EventDAO, LinkDAO as SocialLinkDAO
-from ..microlocations import DAO as MicrolocationDAO
-from ..sessions import DAO as SessionDAO, TypeDAO as SessionTypeDAO
-from ..speakers import DAO as SpeakerDAO
-from ..sponsors import DAO as SponsorDAO
-from ..tracks import DAO as TrackDAO
+from app.api.helpers.non_apis import CustomFormDAO
+from app.api.events import DAO as EventDAO, LinkDAO as SocialLinkDAO
+from app.api.microlocations import DAO as MicrolocationDAO
+from app.api.sessions import DAO as SessionDAO, TypeDAO as SessionTypeDAO
+from app.api.speakers import DAO as SpeakerDAO
+from app.api.sponsors import DAO as SponsorDAO
+from app.api.tracks import DAO as TrackDAO
 
 IMPORT_SERIES = [
     ('social_links', SocialLinkDAO),

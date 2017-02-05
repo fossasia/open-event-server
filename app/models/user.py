@@ -9,15 +9,15 @@ from app.helpers.helpers import get_count
 from app.models.session import Session
 from app.models.speaker import Speaker
 from user_detail import UserDetail
-from . import db
-from .notifications import Notification
-from .permission import Permission
-from .role import Role
-from .service import Service
-from .system_role import UserSystemRole
-from .user_permissions import UserPermission
-from .users_events_roles import UsersEventsRoles as UER
-from .panel_permissions import PanelPermission
+from app.models import db
+from app.models.notifications import Notification
+from app.models.permission import Permission
+from app.models.role import Role
+from app.models.service import Service
+from app.models.system_role import UserSystemRole
+from app.models.user_permissions import UserPermission
+from app.models.users_events_roles import UsersEventsRoles as UER
+from app.models.panel_permissions import PanelPermission
 
 # System-wide
 ADMIN = 'admin'

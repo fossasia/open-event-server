@@ -17,12 +17,12 @@ from app.models.user import ORGANIZER
 from app.models.users_events_roles import UsersEventsRoles
 from helpers.special_fields import EventTypeField, EventTopicField, \
     EventPrivacyField, EventSubTopicField, EventStateField
-from .helpers import custom_fields as fields
-from .helpers.helpers import requires_auth, parse_args, \
+from app.api.helpers import custom_fields as fields
+from app.api.helpers.helpers import requires_auth, parse_args, \
     can_access, fake_marshal_with, fake_marshal_list_with, erase_from_dict
-from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
+from app.api.helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO, ServiceDAO
-from .helpers.utils import Resource, ETAG_HEADER_DEFN
+from app.api.helpers.utils import Resource, ETAG_HEADER_DEFN
 
 api = Namespace('events', description='Events')
 

@@ -1,4 +1,3 @@
-import re
 from urllib2 import urlopen
 
 from flask import request

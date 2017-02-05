@@ -1,7 +1,7 @@
 import datetime
 import time
 
-from . import db
+from app.models import db
 
 
 class OrderTicket(db.Model):

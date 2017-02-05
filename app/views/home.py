@@ -16,7 +16,7 @@ from flask.ext.scrypt import generate_password_hash
 from app.helpers.data import DataManager, save_to_db, get_google_auth, get_facebook_auth, create_user_password, \
     user_logged_in, record_activity
 from app.helpers.data_getter import DataGetter
-from app.helpers.flask_helpers import get_real_ip, slugify
+from app.helpers.flask_ext.helpers import get_real_ip, slugify
 from app.helpers.helpers import send_email_with_reset_password_hash, send_email_confirmation, \
     get_serializer, get_request_stats
 from app.helpers.oauth import OAuth, FbOAuth

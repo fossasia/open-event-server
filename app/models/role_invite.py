@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from . import db
+from app.models import db
 
 
 class RoleInvite(db.Model):

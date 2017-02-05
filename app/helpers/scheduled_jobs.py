@@ -19,6 +19,7 @@ from app.models.user import User
 
 def empty_trash():
     from app import current_app as app
+
     with app.app_context():
         events = Event.query.filter_by(in_trash=True)
         users = User.query.filter_by(in_trash=True)

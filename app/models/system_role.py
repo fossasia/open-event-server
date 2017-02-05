@@ -1,6 +1,6 @@
-from . import db
+from app.models import db
 
-from .panel_permissions import PanelPermission
+from app.models.panel_permissions import PanelPermission
 
 
 class CustomSysRole(db.Model):

@@ -8,9 +8,9 @@ from app.models.role import Role
 from app.models.user import User as UserModel, ATTENDEE
 from app.models.user_detail import UserDetail as UserDetailModel
 from app.models.users_events_roles import UsersEventsRoles
-from .helpers import custom_fields as fields
-from .helpers.helpers import requires_auth, can_access_account, staff_only
-from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, BaseDAO, \
+from app.api.helpers import custom_fields as fields
+from app.api.helpers.helpers import requires_auth, can_access_account, staff_only
+from app.api.helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, BaseDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES
 
 api = Namespace('users', description='Users', path='/')
