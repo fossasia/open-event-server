@@ -64,7 +64,7 @@
                     <th>{{ _("Track") }}</th>
                     <th>{{ _("Short Abstract") }}</th>
                     <th>{{ _("Submission Date") }}</th>
-                    <th>{{ _("Last Changed Date") }}</th>
+                    <th>{{ _("Last Modified") }}</th>
                     <th>{{ _("Email Sent") }}</th>
                     <th></th>
                     <th></th>
@@ -88,8 +88,10 @@
                             </td>
                             <td>{{ session.track.name }}</td>
                             <td class="short_abstract">{{ session.short_abstract|striptags }}</td>
-                            <td>{{ session.start_time }}</td>
-                            <td>{{ session.end_time }}</td>
+                            <td>{{ session.created_at | datetime }}</td>
+                            {% set version = session.versions[versions_count-1] %}
+                            {% set transaction = transaction_class(version) %}
+                            <td>{{ transaction.issued_at.strftime('%B %d, %I:%M %p') }}</td>
                             <td>
                                 {{ "Yes" if session.state_email_sent else "No" }}
                             </td>
@@ -233,7 +235,7 @@
             });
 
         var table = $('.with-datatable').DataTable({
-            "dom": '<"row"<"toolbar col-md-7"<"pull-left"l>><"col-md-3 pull-right"f>>tip', 
+            "dom": '<"row"<"toolbar col-md-7"<"pull-left"l>><"col-md-3 pull-right"f>>tip',
             "pageLength": 50,
             "columnDefs": [
                 {"width": "20%", "targets": 1},
