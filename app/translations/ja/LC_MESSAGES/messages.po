@@ -6,19 +6,18 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: v1\n"
+"Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
-"POT-Creation-Date: 2017-01-31 21:59+0530\n"
+"POT-Creation-Date: 2017-02-06 09:29+0530\n"
 "PO-Revision-Date: 2017-02-01 13:47+0000\n"
 "Last-Translator: naofum <naofum@gmail.com>\n"
+"Language: ja\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/open-event"
 "/organizer-server/ja/>\n"
-"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2.11\n"
 "Generated-By: Babel 2.3.4\n"
 
 #: app/templates/gentelella/components/footer.html:8
@@ -306,7 +305,7 @@ msgstr "販売終了"
 #: app/templates/gentelella/guest/event/_ticketing_box.html:31
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:11
 #: app/templates/gentelella/users/events/tickets/add_order.html:37
-#: app/templates/gentelella/users/events/wizard/basic-details.html:259
+#: app/templates/gentelella/users/events/wizard/basic-details.html:257
 msgid "Price"
 msgstr "価格"
 
@@ -320,7 +319,7 @@ msgstr "料金"
 #: app/templates/gentelella/guest/event/_ticketing_box.html:35
 #: app/templates/gentelella/guest/ticketing/components/_order_summary.html:13
 #: app/templates/gentelella/users/events/tickets/add_order.html:38
-#: app/templates/gentelella/users/events/wizard/basic-details.html:262
+#: app/templates/gentelella/users/events/wizard/basic-details.html:260
 msgid "Quantity"
 msgstr "数量"
 
@@ -346,7 +345,7 @@ msgstr "オン"
 #: app/templates/gentelella/guest/event/_ticketing_box.html:113
 #: app/templates/gentelella/super_admin/sales/fees.html:95
 #: app/templates/gentelella/super_admin/sales/summary_base.html:156
-#: app/templates/gentelella/users/events/tickets/tickets.html:250
+#: app/templates/gentelella/users/events/tickets/tickets.html:248
 msgid "Total"
 msgstr "合計"
 
@@ -375,23 +374,23 @@ msgid "Submit Proposal"
 msgstr "申し込みを提出"
 
 #: app/templates/gentelella/guest/event/code_of_conduct.html:7
-#: app/templates/gentelella/users/events/wizard/basic-details.html:570
+#: app/templates/gentelella/users/events/wizard/basic-details.html:568
 msgid "Code of Conduct"
 msgstr "行動規範"
 
-#: app/templates/gentelella/guest/event/details.html:56
+#: app/templates/gentelella/guest/event/details.html:57
 msgid "No sessions have been published yet"
 msgstr "セッションがまだ公開されていません"
 
-#: app/templates/gentelella/guest/event/details.html:70
+#: app/templates/gentelella/guest/event/details.html:71
 msgid "Other Sponsors"
 msgstr "他のスポンサー"
 
-#: app/templates/gentelella/guest/event/details.html:82
+#: app/templates/gentelella/guest/event/details.html:83
 msgid "Organized by"
 msgstr "主催者"
 
-#: app/templates/gentelella/guest/event/details.html:87
+#: app/templates/gentelella/guest/event/details.html:88
 msgid "Getting Here"
 msgstr "ここで取得"
 
@@ -449,9 +448,9 @@ msgstr "セッション"
 #: app/templates/gentelella/super_admin/sales/summary_base.html:92
 #: app/templates/gentelella/users/events/_table.html:11
 #: app/templates/gentelella/users/events/export/export.html:157
-#: app/templates/gentelella/users/events/tickets/tickets.html:196
-#: app/templates/gentelella/users/events/tickets/tickets.html:202
-#: app/templates/gentelella/users/events/tickets/tickets.html:208
+#: app/templates/gentelella/users/events/tickets/tickets.html:194
+#: app/templates/gentelella/users/events/tickets/tickets.html:200
+#: app/templates/gentelella/users/events/tickets/tickets.html:206
 #: app/templates/gentelella/users/events/tickets/tickets_base.html:4
 msgid "Tickets"
 msgstr "チケット"
@@ -461,7 +460,7 @@ msgid "All Categories"
 msgstr "すべてのカテゴリー"
 
 #: app/templates/gentelella/guest/explore/_collapse_search.html:48
-#: app/templates/gentelella/users/events/wizard/basic-details.html:530
+#: app/templates/gentelella/users/events/wizard/basic-details.html:528
 msgid "Event Type"
 msgstr "イベントの種類"
 
@@ -603,7 +602,7 @@ msgstr "請求情報"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:85
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:155
-#: app/templates/gentelella/users/events/wizard/basic-details.html:648
+#: app/templates/gentelella/users/events/wizard/basic-details.html:646
 msgid "Country"
 msgstr "国"
 
@@ -619,7 +618,7 @@ msgstr "住所"
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:107
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:177
-#: app/templates/gentelella/users/events/wizard/basic-details.html:703
+#: app/templates/gentelella/users/events/wizard/basic-details.html:701
 msgid "City"
 msgstr "市区町村"
 
@@ -869,7 +868,7 @@ msgstr "種類"
 #: app/templates/gentelella/super_admin/settings/_system.html:330
 #: app/templates/gentelella/super_admin/settings/_ticket-fees.html:39
 #: app/templates/gentelella/super_admin/users/users.html:173
-#: app/templates/gentelella/users/events/wizard/basic-details.html:758
+#: app/templates/gentelella/users/events/wizard/basic-details.html:756
 #: app/templates/gentelella/users/settings/pages/contact_info.html:33
 #: app/templates/gentelella/users/settings/pages/password.html:37
 msgid "Save"
@@ -917,8 +916,8 @@ msgid "The images should be no larger than 10MB"
 msgstr "画像は 10 MB 以下にする必要があります"
 
 #: app/templates/gentelella/super_admin/content/_system_images.html:91
-#: app/templates/gentelella/users/events/wizard/basic-details.html:182
-#: app/templates/gentelella/users/events/wizard/basic-details.html:569
+#: app/templates/gentelella/users/events/wizard/basic-details.html:180
+#: app/templates/gentelella/users/events/wizard/basic-details.html:567
 #: app/templates/gentelella/users/events/wizard/components/image-upload.html:34
 #: app/templates/gentelella/users/profile/index.html:59
 msgid "Remove"
@@ -942,7 +941,7 @@ msgstr "更新"
 
 #: app/templates/gentelella/super_admin/content/_system_images.html:112
 #: app/templates/gentelella/super_admin/sales/discount_codes_create.html:128
-#: app/templates/gentelella/users/events/event_base.html:112
+#: app/templates/gentelella/users/events/event_base.html:114
 #: app/templates/gentelella/users/events/sessions/components/_speaker_croppie.html:17
 #: app/templates/gentelella/users/events/tickets/access_codes_create.html:170
 #: app/templates/gentelella/users/events/tickets/discount_codes_create.html:204
@@ -1127,7 +1126,7 @@ msgstr "名前"
 #: app/templates/gentelella/users/events/_import_modal.html:38
 #: app/templates/gentelella/users/events/sessions/base_session_table.html:61
 #: app/templates/gentelella/users/events/speakers/base_speaker_table.html:84
-#: app/templates/gentelella/users/events/wizard/basic-details.html:711
+#: app/templates/gentelella/users/events/wizard/basic-details.html:709
 msgid "State"
 msgstr "状態"
 
@@ -1184,7 +1183,7 @@ msgstr "スピーカー"
 #: app/templates/gentelella/users/events/details/widgets/roles.html:32
 #: app/templates/gentelella/users/events/details/widgets/sponsors_list.html:19
 #: app/templates/gentelella/users/events/roles/roles.html:15
-#: app/templates/gentelella/users/events/wizard/basic-details.html:265
+#: app/templates/gentelella/users/events/wizard/basic-details.html:263
 #: app/templates/gentelella/users/profile/notifications.html:48
 msgid "Options"
 msgstr "オプション"
@@ -1529,7 +1528,7 @@ msgstr "マーケティング担当者"
 #: app/templates/gentelella/super_admin/sales/by_marketer.html:65
 #: app/templates/gentelella/super_admin/sales/fees.html:56
 #: app/templates/gentelella/super_admin/sales/summary_base.html:69
-#: app/templates/gentelella/users/events/tickets/tickets.html:185
+#: app/templates/gentelella/users/events/tickets/tickets.html:183
 msgid "Completed Orders"
 msgstr "完了した注文"
 
@@ -1539,9 +1538,9 @@ msgstr "完了した注文"
 #: app/templates/gentelella/super_admin/sales/summary_base.html:89
 #: app/templates/gentelella/super_admin/sales/summary_base.html:95
 #: app/templates/gentelella/users/events/tickets/tickets.html:88
-#: app/templates/gentelella/users/events/tickets/tickets.html:199
-#: app/templates/gentelella/users/events/tickets/tickets.html:205
-#: app/templates/gentelella/users/events/tickets/tickets.html:211
+#: app/templates/gentelella/users/events/tickets/tickets.html:197
+#: app/templates/gentelella/users/events/tickets/tickets.html:203
+#: app/templates/gentelella/users/events/tickets/tickets.html:209
 msgid "Sales"
 msgstr "販売"
 
@@ -1696,12 +1695,12 @@ msgid "Remove Filters"
 msgstr "フィルターを削除"
 
 #: app/templates/gentelella/super_admin/sales/summary_base.html:72
-#: app/templates/gentelella/users/events/tickets/tickets.html:188
+#: app/templates/gentelella/users/events/tickets/tickets.html:186
 msgid "Placed Orders"
 msgstr "注文"
 
 #: app/templates/gentelella/super_admin/sales/summary_base.html:75
-#: app/templates/gentelella/users/events/tickets/tickets.html:191
+#: app/templates/gentelella/users/events/tickets/tickets.html:189
 msgid "Pending Orders"
 msgstr "保留中の注文"
 
@@ -1792,8 +1791,8 @@ msgstr "ご覧ください"
 #: app/templates/gentelella/super_admin/settings/_system.html:176
 #: app/templates/gentelella/super_admin/settings/_system.html:293
 #: app/templates/gentelella/users/events/_import_modal.html:57
-#: app/templates/gentelella/users/events/wizard/basic-details.html:451
-#: app/templates/gentelella/users/events/wizard/basic-details.html:472
+#: app/templates/gentelella/users/events/wizard/basic-details.html:449
+#: app/templates/gentelella/users/events/wizard/basic-details.html:470
 msgid "here"
 msgstr "ここ"
 
@@ -2465,7 +2464,15 @@ msgstr "削除"
 msgid "Are you sure you would like to delete this event"
 msgstr "このイベントを削除してもよろしいですか"
 
-#: app/templates/gentelella/users/events/event_base.html:114
+#: app/templates/gentelella/users/events/event_base.html:110
+msgid "Deleting the event will delete all the data associated with it."
+msgstr ""
+
+#: app/templates/gentelella/users/events/event_base.html:110
+msgid "Please enter the full name of the event to continue"
+msgstr ""
+
+#: app/templates/gentelella/users/events/event_base.html:116
 msgid "Confirm Delete"
 msgstr "削除の確認"
 
@@ -2562,9 +2569,9 @@ msgstr "ユーザーのメール"
 
 #: app/templates/gentelella/users/events/details/widgets/roles.html:130
 #: app/templates/gentelella/users/events/roles/roles.html:61
-#: app/templates/gentelella/users/events/wizard/basic-details.html:532
-#: app/templates/gentelella/users/events/wizard/basic-details.html:544
-#: app/templates/gentelella/users/events/wizard/basic-details.html:560
+#: app/templates/gentelella/users/events/wizard/basic-details.html:530
+#: app/templates/gentelella/users/events/wizard/basic-details.html:542
+#: app/templates/gentelella/users/events/wizard/basic-details.html:558
 msgid "Choose"
 msgstr "選択"
 
@@ -2735,8 +2742,8 @@ msgid "Co-Organizer"
 msgstr "共同主催者"
 
 #: app/templates/gentelella/users/events/roles/roles.html:67
-#: app/templates/gentelella/users/events/wizard/basic-details.html:183
-#: app/templates/gentelella/users/events/wizard/basic-details.html:570
+#: app/templates/gentelella/users/events/wizard/basic-details.html:181
+#: app/templates/gentelella/users/events/wizard/basic-details.html:568
 msgid "Add"
 msgstr "追加"
 
@@ -2921,8 +2928,8 @@ msgstr "選択済"
 msgid "Save Session"
 msgstr "セッションを保存"
 
-#: app/templates/gentelella/users/events/sessions/components/session_form.html:33
-#: app/templates/gentelella/users/events/sessions/components/session_speaker_form.html:56
+#: app/templates/gentelella/users/events/sessions/components/session_form.html:32
+#: app/templates/gentelella/users/events/sessions/components/session_speaker_form.html:57
 msgid "Submit Session"
 msgstr "セッションを提出"
 
@@ -2938,7 +2945,7 @@ msgstr "スピーカーの詳細"
 msgid "Invite Speakers"
 msgstr "スピーカーを招待"
 
-#: app/templates/gentelella/users/events/sessions/components/session_speaker_form.html:54
+#: app/templates/gentelella/users/events/sessions/components/session_speaker_form.html:55
 #: app/templates/gentelella/users/events/wizard/components/button-bar.html:24
 msgid "Save as Draft"
 msgstr "下書きとして保存"
@@ -3050,7 +3057,7 @@ msgid "Add Order"
 msgstr "注文を追加"
 
 #: app/templates/gentelella/users/events/tickets/add_order.html:36
-#: app/templates/gentelella/users/events/tickets/tickets.html:178
+#: app/templates/gentelella/users/events/tickets/tickets.html:176
 msgid "Ticket Type"
 msgstr "チケットの種類"
 
@@ -3138,7 +3145,7 @@ msgid "Order Status"
 msgstr "注文のステータス"
 
 #: app/templates/gentelella/users/events/tickets/attendees.html:92
-#: app/templates/gentelella/users/events/wizard/basic-details.html:256
+#: app/templates/gentelella/users/events/wizard/basic-details.html:254
 msgid "Ticket Name"
 msgstr "チケット名"
 
@@ -3220,7 +3227,7 @@ msgid "Orders"
 msgstr "注文"
 
 #: app/templates/gentelella/users/events/tickets/tickets.html:81
-#: app/templates/gentelella/users/events/tickets/tickets.html:160
+#: app/templates/gentelella/users/events/tickets/tickets.html:157
 msgid "View orders"
 msgstr "注文を表示"
 
@@ -3229,7 +3236,7 @@ msgid "Tickets sold"
 msgstr "チケット販売"
 
 #: app/templates/gentelella/users/events/tickets/tickets.html:108
-#: app/templates/gentelella/users/events/tickets/tickets.html:161
+#: app/templates/gentelella/users/events/tickets/tickets.html:158
 msgid "View attendees"
 msgstr "参加者の表示"
 
@@ -3238,7 +3245,7 @@ msgid "Orders Summary"
 msgstr "注文概要"
 
 #: app/templates/gentelella/users/events/tickets/tickets.html:115
-#: app/templates/gentelella/users/events/tickets/tickets.html:171
+#: app/templates/gentelella/users/events/tickets/tickets.html:169
 msgid "by order status"
 msgstr "注文ステータス別"
 
@@ -3258,11 +3265,11 @@ msgstr "合計販売"
 msgid "View Reports"
 msgstr "レポートを表示"
 
-#: app/templates/gentelella/users/events/tickets/tickets.html:170
+#: app/templates/gentelella/users/events/tickets/tickets.html:168
 msgid "Tickets Summary"
 msgstr "チケット概要"
 
-#: app/templates/gentelella/users/events/tickets/tickets.html:181
+#: app/templates/gentelella/users/events/tickets/tickets.html:179
 msgid "Tickets Capacity Set"
 msgstr "チケット供給量設定"
 
@@ -3298,300 +3305,300 @@ msgstr "タイムゾーン"
 msgid "Description"
 msgstr "説明"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:183
+#: app/templates/gentelella/users/events/wizard/basic-details.html:181
 msgid "Organizer Information"
 msgstr "主催者情報"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:193
+#: app/templates/gentelella/users/events/wizard/basic-details.html:191
 msgid "Organizer name"
 msgstr "主催者名"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:198
+#: app/templates/gentelella/users/events/wizard/basic-details.html:196
 msgid "Organizer Description"
 msgstr "主催者の説明"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:206
+#: app/templates/gentelella/users/events/wizard/basic-details.html:204
 msgid "Links and Social Media"
 msgstr "リンクとソーシャル メディア"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:235
+#: app/templates/gentelella/users/events/wizard/basic-details.html:233
 msgid "Use Ticketing System"
 msgstr "チケット システムを使用する"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:248
+#: app/templates/gentelella/users/events/wizard/basic-details.html:246
 msgid "Ticket Details"
 msgstr "チケットの詳細"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:278
+#: app/templates/gentelella/users/events/wizard/basic-details.html:276
 msgid "Free Ticket"
 msgstr "無料チケット"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:282
+#: app/templates/gentelella/users/events/wizard/basic-details.html:280
 msgid "Paid Ticket"
 msgstr "有料チケット"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:287
+#: app/templates/gentelella/users/events/wizard/basic-details.html:285
 msgid "Donation"
 msgstr "寄付"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:297
+#: app/templates/gentelella/users/events/wizard/basic-details.html:295
 msgid "Add Ticket URL"
 msgstr "チケットの URL を追加"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:301
+#: app/templates/gentelella/users/events/wizard/basic-details.html:299
 msgid "Ticket URL"
 msgstr "チケット URL"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:314
+#: app/templates/gentelella/users/events/wizard/basic-details.html:312
 msgid "Redeem Discount Code"
 msgstr "割引コードの交換"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:321
+#: app/templates/gentelella/users/events/wizard/basic-details.html:319
 msgid "Enter Discount Code"
 msgstr "割引コードを入力してください"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:328
+#: app/templates/gentelella/users/events/wizard/basic-details.html:326
 msgid "Apply Discount"
 msgstr "割引を適用"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:332
+#: app/templates/gentelella/users/events/wizard/basic-details.html:330
 msgid "Code applied !"
 msgstr "コードを適用しました !"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:341
+#: app/templates/gentelella/users/events/wizard/basic-details.html:339
 msgid "Add Payment details"
 msgstr "支払いの詳細を追加"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:347
+#: app/templates/gentelella/users/events/wizard/basic-details.html:345
 msgid "Choose Country"
 msgstr "国を選択"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:353
+#: app/templates/gentelella/users/events/wizard/basic-details.html:351
 msgid "Choose a country for your payment"
 msgstr "支払いの国を選択してください"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:363
+#: app/templates/gentelella/users/events/wizard/basic-details.html:361
 msgid "Choose Currency"
 msgstr "通貨を選択"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:369
+#: app/templates/gentelella/users/events/wizard/basic-details.html:367
 msgid "Please select a currency"
 msgstr "通貨を選択してください"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:383
+#: app/templates/gentelella/users/events/wizard/basic-details.html:381
 msgid "Choose Payment Methods"
 msgstr "支払い方法を選択"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:387
+#: app/templates/gentelella/users/events/wizard/basic-details.html:385
 msgid "Online Payments"
 msgstr "オンラインでの支払い"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:389
+#: app/templates/gentelella/users/events/wizard/basic-details.html:387
 msgid "Payment by PayPal"
 msgstr "PayPal で支払い"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:393
+#: app/templates/gentelella/users/events/wizard/basic-details.html:391
 msgid "YES, accept payment through PayPal "
 msgstr "はい、PayPal を通じて支払いを受け付けます "
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:394
+#: app/templates/gentelella/users/events/wizard/basic-details.html:392
 msgid ""
 "Paypal accepts credit card, debit card and PayPal payments. To learn how "
 "it works click"
 msgstr "Paypal は、クレジットカード、デビットカード、PayPal 支払いを受け付けます。仕組みを学ぶにはクリック"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:395
-#: app/templates/gentelella/users/events/wizard/basic-details.html:417
-#: app/templates/gentelella/users/events/wizard/basic-details.html:418
+#: app/templates/gentelella/users/events/wizard/basic-details.html:393
+#: app/templates/gentelella/users/events/wizard/basic-details.html:415
+#: app/templates/gentelella/users/events/wizard/basic-details.html:416
 msgid "here."
 msgstr "ここ。"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:403
+#: app/templates/gentelella/users/events/wizard/basic-details.html:401
 msgid "Don't have a PayPal account?"
 msgstr "PayPal アカウントをお持ちではありませんか?"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:405
+#: app/templates/gentelella/users/events/wizard/basic-details.html:403
 msgid "Create a free PayPal merchant account."
 msgstr "無料の PayPal のマーチャント アカウントを作成します。"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:411
+#: app/templates/gentelella/users/events/wizard/basic-details.html:409
 msgid "Payment by Stripe"
 msgstr "Stripe で支払い"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:415
+#: app/templates/gentelella/users/events/wizard/basic-details.html:413
 msgid "YES, accept payment through Stripe"
 msgstr "はい、Stripe による支払いを受け付けます"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:416
+#: app/templates/gentelella/users/events/wizard/basic-details.html:414
 msgid "Stripe accepts Visa, Master and Amex. To learn how it works click"
 msgstr "Stripe は、Visa、マスター、アメックスを受け付けます。仕組みを学ぶにはクリック"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:418
+#: app/templates/gentelella/users/events/wizard/basic-details.html:416
 msgid "Find out more about Stripe"
 msgstr "Stripe についてもっとを知る"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:423
+#: app/templates/gentelella/users/events/wizard/basic-details.html:421
 msgid "Use Stripe for payments"
 msgstr "Stripe を使用して支払い"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:425
+#: app/templates/gentelella/users/events/wizard/basic-details.html:423
 msgid "The stripe account"
 msgstr "Stripe アカウント"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:426
+#: app/templates/gentelella/users/events/wizard/basic-details.html:424
 msgid "has been connected."
 msgstr "接続されています。"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:428
+#: app/templates/gentelella/users/events/wizard/basic-details.html:426
 msgid "Click to De-link the account."
 msgstr "クリックするとアカウントのリンクを解除します。"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:432
+#: app/templates/gentelella/users/events/wizard/basic-details.html:430
 msgid "Connect with Stripe"
 msgstr "Stripe と接続"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:438
+#: app/templates/gentelella/users/events/wizard/basic-details.html:436
 msgid "Offline Payments"
 msgstr "オフラインの支払い"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:443
+#: app/templates/gentelella/users/events/wizard/basic-details.html:441
 msgid "YES, accept payment by Cheque"
 msgstr "はい、小切手による支払いを受け付けます"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:447
+#: app/templates/gentelella/users/events/wizard/basic-details.html:445
 msgid ""
 "Enter your PayPal account name and payment details instructions to ticket"
 " buyers"
 msgstr "チケット購入者に対するあなたの PayPal アカウント名と支払いの詳細指示を入力してください"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:451
-#: app/templates/gentelella/users/events/wizard/basic-details.html:472
+#: app/templates/gentelella/users/events/wizard/basic-details.html:449
+#: app/templates/gentelella/users/events/wizard/basic-details.html:470
 msgid "example"
 msgstr "例"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:464
+#: app/templates/gentelella/users/events/wizard/basic-details.html:462
 msgid "YES, accept payment by Telegraphic Transfer(TT) / Bank Transfer"
 msgstr "はい、電信振替 (TT) / 銀行振込による支払いを受け付けます"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:468
+#: app/templates/gentelella/users/events/wizard/basic-details.html:466
 msgid "Enter your bank details and instructions to ticket buyers"
 msgstr "チケット購入者に対するあなたの銀行口座情報と指示を入力してください"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:469
+#: app/templates/gentelella/users/events/wizard/basic-details.html:467
 msgid "See an"
 msgstr "ご覧ください"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:485
+#: app/templates/gentelella/users/events/wizard/basic-details.html:483
 msgid "YES, accept payment at the event(on site)"
 msgstr "はい、イベント (現地) での支払いを受け付けます"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:489
+#: app/templates/gentelella/users/events/wizard/basic-details.html:487
 msgid "Enter payment instructions to ticket buyers to make payments onsite"
 msgstr "チケット購入者に対する現地での支払い方法を入力してください"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:500
+#: app/templates/gentelella/users/events/wizard/basic-details.html:498
 msgid "Add Tax"
 msgstr "税を追加"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:509
+#: app/templates/gentelella/users/events/wizard/basic-details.html:507
 msgid "Additional Details"
 msgstr "その他の詳細"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:513
+#: app/templates/gentelella/users/events/wizard/basic-details.html:511
 msgid "Listing Privacy"
 msgstr "プライバシーの一覧"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:518
+#: app/templates/gentelella/users/events/wizard/basic-details.html:516
 msgid "list this event on Open Event and search engines"
 msgstr "Open Event と検索エンジンでこのイベントを一覧します"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:524
+#: app/templates/gentelella/users/events/wizard/basic-details.html:522
 msgid "Private page"
 msgstr "プライベート ページ"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:524
+#: app/templates/gentelella/users/events/wizard/basic-details.html:522
 msgid "do not list this event publicly"
 msgstr "このイベントは公開表示されません"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:556
+#: app/templates/gentelella/users/events/wizard/basic-details.html:554
 msgid "Event Sub-Topic"
 msgstr "イベントのサブ トピック"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:562
+#: app/templates/gentelella/users/events/wizard/basic-details.html:560
 msgid "Choose a topic first"
 msgstr "最初にトピックを選択します"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:581
+#: app/templates/gentelella/users/events/wizard/basic-details.html:579
 msgid "License of Event Data and Content"
 msgstr "イベント データとコンテンツのライセンス"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:595
+#: app/templates/gentelella/users/events/wizard/basic-details.html:593
 msgid "Choose Licence"
 msgstr "ライセンスを選択"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:618
+#: app/templates/gentelella/users/events/wizard/basic-details.html:616
 msgid "Tax Options"
 msgstr "税のオプション"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:625
+#: app/templates/gentelella/users/events/wizard/basic-details.html:623
 msgid "Do you need to charge tax for this event ?"
 msgstr "このイベントに課税が必要ですか?"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:650
+#: app/templates/gentelella/users/events/wizard/basic-details.html:648
 msgid "Choose a country for your tax payment"
 msgstr "税金の支払い国を選択してください"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:658
+#: app/templates/gentelella/users/events/wizard/basic-details.html:656
 msgid "Tax Name"
 msgstr "税の名称"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:663
+#: app/templates/gentelella/users/events/wizard/basic-details.html:661
 msgid "Tax Rate"
 msgstr "税率"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:669
+#: app/templates/gentelella/users/events/wizard/basic-details.html:667
 msgid "Tax ID"
 msgstr "納税者番号"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:675
+#: app/templates/gentelella/users/events/wizard/basic-details.html:673
 msgid "Tax Invoices"
 msgstr "税のインボイス"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:679
+#: app/templates/gentelella/users/events/wizard/basic-details.html:677
 msgid "Send tax invoice to attendees"
 msgstr "税務インボイスを参加者に送信"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:680
+#: app/templates/gentelella/users/events/wizard/basic-details.html:678
 msgid "Tax Invoices are sent to your attendees when you select this feature."
 msgstr "この機能を選択すると、税務インボイスが参加者に送信されます。"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:681
+#: app/templates/gentelella/users/events/wizard/basic-details.html:679
 msgid ""
 "Enter your registered business company name and address to be included on"
 " the tax invoice"
 msgstr "税務インボイスに含まれる登記された会社名と住所を入力してください"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:687
+#: app/templates/gentelella/users/events/wizard/basic-details.html:685
 msgid "Registered Company"
 msgstr "登記された会社"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:695
+#: app/templates/gentelella/users/events/wizard/basic-details.html:693
 msgid "Business Address"
 msgstr "会社の住所"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:726
+#: app/templates/gentelella/users/events/wizard/basic-details.html:724
 msgid "Optional Text for Invoice Footer"
 msgstr "インボイスのフッターに記載するオプションのテキスト"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:734
+#: app/templates/gentelella/users/events/wizard/basic-details.html:732
 msgid "Add or Include"
 msgstr "追加または含める"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:739
+#: app/templates/gentelella/users/events/wizard/basic-details.html:737
 msgid "Add tax as separate fee on top of the price"
 msgstr "価格の上に別途手数料として税を追加 (外税)"
 
-#: app/templates/gentelella/users/events/wizard/basic-details.html:746
+#: app/templates/gentelella/users/events/wizard/basic-details.html:744
 msgid "Include tax in ticket price"
 msgstr "チケット料金に税を含む (内税)"
 
@@ -3608,7 +3615,7 @@ msgstr "オフ"
 msgid "sponsors"
 msgstr "スポンサー"
 
-#: app/templates/gentelella/users/events/wizard/sponsors.html:59
+#: app/templates/gentelella/users/events/wizard/sponsors.html:58
 msgid "Add Another Sponsor"
 msgstr "別のスポンサーを追加"
 
@@ -4027,3 +4034,4 @@ msgstr "ログイン"
 
 #~ msgid "Submit Mail"
 #~ msgstr "メールを送信"
+
