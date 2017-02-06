@@ -6,7 +6,7 @@ from flask import url_for
 
 from app import current_app as app
 from app.helpers.data import save_to_db
-from app.helpers.flask_helpers import slugify
+from app.helpers.flask_ext.helpers import slugify
 from tests.unittests.object_mother import ObjectMother
 from tests.unittests.utils import OpenEventTestCase
 

@@ -1,6 +1,6 @@
 from sqlalchemy.orm import backref
 
-from . import db
+from app.models import db
 
 
 class Tax(db.Model):

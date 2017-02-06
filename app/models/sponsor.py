@@ -1,5 +1,5 @@
 from app.helpers.versioning import clean_up_string, clean_html
-from . import db
+from app.models import db
 
 
 class Sponsor(db.Model):

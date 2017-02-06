@@ -4,7 +4,7 @@ from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import send_new_session_organizer, send_notif_new_session_organizer, \
     send_notif_session_accept_reject, send_session_accept_reject, send_schedule_change, send_notif_session_schedule, \
     send_email_for_after_purchase_organizers, send_notif_for_after_purchase_organizer
-from ..models.mail import NEW_SESSION, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, TICKET_PURCHASED
+from app.models.mail import NEW_SESSION, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, TICKET_PURCHASED
 
 
 def trigger_new_session_notifications(session_id, event_id=None, event=None):

@@ -1,4 +1,4 @@
-from . import db
+from app.models import db
 
 USER_CHANGE_EMAIL = "User email"
 TICKET_PURCHASED = 'Ticket(s) Purchased'
