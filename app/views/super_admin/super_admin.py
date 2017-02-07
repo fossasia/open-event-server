@@ -27,6 +27,7 @@ def index_view():
     super_admins = DataGetter.get_all_super_admins()
     admins = DataGetter.get_all_admins()
     registered_users = DataGetter.get_all_registered_users()
+    unverified_users = DataGetter.get_all_unverified_users()
     organizers = get_count(DataGetter.get_all_user_roles(ORGANIZER))
     co_organizers = get_count(DataGetter.get_all_user_roles(COORGANIZER))
     track_organizers = get_count(DataGetter.get_all_user_roles(TRACK_ORGANIZER))
@@ -35,6 +36,7 @@ def index_view():
     rejected_sessions = get_count(DataGetter.get_all_rejected_sessions())
     draft_sessions = get_count(DataGetter.get_all_draft_sessions())
     email_times = DataGetter.get_email_by_times()
+    total_users=registered_users + unverified_users
 
     commit_info = None
     heroku_release = None
@@ -80,6 +82,8 @@ def index_view():
                            super_admins=super_admins,
                            admins=admins,
                            registered_users=registered_users,
+                           unverified_users=unverified_users,
+                           total_users=total_users,
                            repository=repository,
                            branch=branch,
                            organizers=organizers,
