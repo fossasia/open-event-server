@@ -36,7 +36,7 @@ def index_view():
     rejected_sessions = get_count(DataGetter.get_all_rejected_sessions())
     draft_sessions = get_count(DataGetter.get_all_draft_sessions())
     email_times = DataGetter.get_email_by_times()
-    total_users=registered_users + unverified_users
+
 
     commit_info = None
     heroku_release = None
@@ -83,7 +83,6 @@ def index_view():
                            admins=admins,
                            registered_users=registered_users,
                            unverified_users=unverified_users,
-                           total_users=total_users,
                            repository=repository,
                            branch=branch,
                            organizers=organizers,
