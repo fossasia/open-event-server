@@ -16,11 +16,10 @@ api = Namespace('microlocations', description='Microlocations', path='/')
 
 MICROLOCATION = api.model('Microlocation', {
     'id': fields.Integer(required=True),
-    'name': fields.String(required=True),
-    'latitude': fields.Float(),
-    'longitude': fields.Float(),
-    'floor': fields.Integer(),
-    'room': fields.String(),
+    'room_name': fields.String(required=True),
+    'floor': fields.Integer(required=False),
+    'latitude': fields.Float(required=False),
+    'longitude': fields.Float(required=False),
 })
 
 MICROLOCATION_PAGINATED = api.clone('MicrolocationPaginated', PAGINATED_MODEL, {
