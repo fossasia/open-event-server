@@ -93,6 +93,7 @@
                         {{ _("Ticket Holders' Information") }}
                         <hr style="margin:0;border-width: 2px; border-color: #5bc0de;">
                     </h2>
+                    <div id = "main-form" data-toggle="checkboxes" data-max="1">
                     {% for ticket_order in order.tickets %}
 
                         {% for i in range(0, ticket_order.quantity) %}
@@ -105,24 +106,24 @@
                             <div class="clearfix"></div>
                             <input type="hidden" name="holders[ticket_id]" value="{{ ticket_order.ticket_id }}">
                             <div class="form-group">
-                                <label for="{{ loop.index }}-holders[firstname]"
+                                <label for="{{ ticket_order.ticket.name }}-{{ loop.index }}-holders[firstname]"
                                        class="col-sm-4 control-label">{{ _("First") }}
                                     {{ _("name") }} <span
                                             class="required">*</span></label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="{{ loop.index }}-holders[firstname]"
+                                    <input type="text" class="form-control" id="{{ ticket_order.ticket.name }}-{{ loop.index }}-holders[firstname]"
                                            name="holders[firstname]"
                                            required>
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="{{ loop.index }}-holders[lastname]"
+                                <label for="{{ ticket_order.ticket.name }}-{{ loop.index }}-holders[lastname]"
                                        class="col-sm-4 control-label">{{ _("Last name") }}
                                     <span
                                             class="required">*</span></label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="{{ loop.index }}-holders[lastname]"
+                                    <input type="text" class="form-control" id="{{ ticket_order.ticket.name }}-{{ loop.index }}-holders[lastname]"
                                            name="holders[lastname]"
                                            required>
                                     <div class="help-block with-errors"></div>
@@ -130,20 +131,27 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="{{ loop.index }}-holders[email]"
+                                <label for="{{ ticket_order.ticket.name }}-{{ loop.index }}-holders[email]"
                                        class="col-sm-4 control-label">{{ _("Email") }} <span
                                         class="required">*</span></label>
                                 <div class="col-sm-6">
                                     <input type="email" class="form-control"
                                            name="holders[email]"
-                                           id="{{ loop.index }}-holders[email]" required>
+                                           id="{{ ticket_order.ticket.name }}-{{ loop.index }}-holders[email]" required>
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
-
+                         {% if loop.index == 1 %}
+                             <div class="form-group">
+                                <label for="{{ loop.index }}" class="col-sm-4 control-label"> Autofill </label>
+                                <div class = "col-sm-4 ">
+                                    <input type="checkbox"  data-ticket-type="{{ ticket_order.ticket.name }}" class="form-control autofill-checkbox" id="{{ loop.index }}">
+                                </div>
+                             </div>
+                        {% endif %}
                         {% endfor %}
                     {% endfor %}
-
+                </div>
                     {% if order.amount > 0 %}
                         <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                             <i class="fa fa-ticket"></i>
@@ -305,6 +313,8 @@
     <script src="{{ url_for('static', filename='vendor/bootstrap-validator/dist/validator.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/vendor/jquery/jquery.codezero.js') }}"></script>
     <script src="{{ url_for('static', filename='js/guest/ticketing.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/jquery/jquery.checkboxes-1.2.0.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/tickets/prepay-tickets.js') }}"></script>
     <script type="text/javascript">
         $("input[name=pay_via_service]").click(function () {
             $(this).closest('.form-group').find("pre").hide();
