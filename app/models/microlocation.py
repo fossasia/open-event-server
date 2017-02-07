@@ -8,9 +8,7 @@ class Microlocation(db.Model):
     room_name = db.Column(db.String, nullable=False)
     floor = db.Column(db.Integer)
     latitude = db.Column(db.Float)
-    longitude = db.Column(db.Float)
-    
-    
+    longitude = db.Column(db.Float)  
     session = db.relationship('Session', backref="microlocation")
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
 
