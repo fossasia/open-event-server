@@ -207,11 +207,14 @@ def display_event_cfs(identifier, via_hash=False):
     speaker_form = json.loads(form_elems.speaker_form)
     session_form = json.loads(form_elems.session_form)
 
-    now = datetime.now()
+    now = datetime.now(pytz.timezone(event.timezone
+                                                  if (event.timezone and event.timezone != '') else 'UTC'))
+    start_date = pytz.timezone(event.timezone).localize(call_for_speakers.start_date)
+    end_date = pytz.timezone(event.timezone).localize(call_for_speakers.end_date)
     state = "now"
-    if call_for_speakers.end_date < now:
+    if end_date < now:
         state = "past"
-    elif call_for_speakers.start_date > now:
+    elif start_date > now:
         state = "future"
     speakers = DataGetter.get_speakers(event.id).all()
     accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
@@ -249,11 +252,14 @@ def display_event_cfs_via_hash(hash):
     speaker_form = json.loads(form_elems.speaker_form)
     session_form = json.loads(form_elems.session_form)
 
-    now = datetime.now()
+    now = datetime.now(pytz.timezone(event.timezone
+                                                  if (event.timezone and event.timezone != '') else 'UTC'))
+    start_date = pytz.timezone(event.timezone).localize(call_for_speakers.start_date)
+    end_date = pytz.timezone(event.timezone).localize(call_for_speakers.end_date)
     state = "now"
-    if call_for_speakers.end_date < now:
+    if end_date < now:
         state = "past"
-    elif call_for_speakers.start_date > now:
+    elif start_date > now:
         state = "future"
     speakers = DataGetter.get_speakers(event.id).all()
     accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
@@ -288,11 +294,14 @@ def process_event_cfs(identifier, via_hash=False):
         speaker_form = json.loads(form_elems.speaker_form)
         session_form = json.loads(form_elems.session_form)
 
-        now = datetime.now()
+        now = datetime.now(pytz.timezone(event.timezone
+                                                  if (event.timezone and event.timezone != '') else 'UTC'))
+        start_date = pytz.timezone(event.timezone).localize(call_for_speakers.start_date)
+        end_date = pytz.timezone(event.timezone).localize(call_for_speakers.end_date)
         state = "now"
-        if call_for_speakers.end_date < now:
+        if end_date < now:
             state = "past"
-        elif call_for_speakers.start_date > now:
+        elif start_date > now:
             state = "future"
         speakers = DataGetter.get_speakers(event.id).all()
         accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
