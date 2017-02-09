@@ -3,7 +3,7 @@ from datetime import timedelta, datetime
 
 from flask import url_for, flash
 from flask.ext import login
-from sqlalchemy import asc
+from sqlalchemy import desc
 from sqlalchemy import or_
 
 from app.helpers.cache import cache
@@ -69,8 +69,7 @@ class TicketingManager(object):
         if promoted_event:
             orders = orders.join(Order.event).filter(Event.discount_code_id != None)
 
-            orders = orders.order_by(asc(Order.created_at))
-
+        orders = orders.order_by(desc(Order.id))
         return orders.all()
 
     @staticmethod
