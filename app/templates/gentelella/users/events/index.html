@@ -91,7 +91,16 @@
     <script src="{{ url_for('static', filename='vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/bootstrap-progressbar/bootstrap-progressbar.min.js') }}"></script>
     <script type="text/javascript">
-        $('.table').DataTable();
+        $('.table').DataTable({
+        "columnDefs": [
+	         { "width" : "8%", "targets" : 0 },
+	         { "width" : "15%", "targets": 1 },
+            { "width" : "23%", "targets": 2 },
+	         { "width" : "10%", "targets": 3 },
+	         { "width" : "10%", "targets": 4 },
+	         { "width" : "10%", "targets": 6 }
+	      ]
+      });
 
         $(document).ready(function () {
             $('.progress .progress-bar').progressbar({display_text: 'center', use_percentage: false});
