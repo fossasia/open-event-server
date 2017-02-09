@@ -160,11 +160,10 @@
                                             <i class="fa fa-envelope"></i>
                                         </a>
                                     {% endif %}
-                                    <form enctype="multipart/form-data" action="" method="POST" class="form-horizontal"
-                                          id="session-create-form">
-
-                                        <div class="modal fade" id="mailModal" tabindex="-1" role="dialog"
+                                    <div class="modal fade" id="mailModal" tabindex="-1" role="dialog"
                                              aria-labelledby="mailModalLabel">
+                                        <form enctype="multipart/form-data" action="" method="POST" class="form-horizontal"
+                                          id="session-create-form">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -202,8 +201,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </form>
+                                        </form>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
@@ -275,7 +274,7 @@
                 $mailModal.find('.message').val("Hello,\n\nYour session '" + sessionTitle + "' has been " + emailType + "ed.\n\nVisit this link to view the session: http://" + window.location.hostname + "/events/mysessions/1/ .");
                 $mailModal.find('.form-horizontal').attr('action', sessionId + '/accept');
             } else {
-                $mailModal.find('.subject').val("Your Session '" + sessiontitle + "' has been rejected");
+                $mailModal.find('.subject').val("Your Session '" + sessionTitle + "' has been rejected");
                 $mailModal.find('.message').val("Hello,\n\nYour session '" + sessionTitle + "' has been " + emailType + "ed.\n\nVisit this link to view the session: http://" + window.location.hostname + "/events/mysessions/1/ .");
                 $mailModal.find('.form-horizontal').attr('action', sessionId + '/reject');
             }
