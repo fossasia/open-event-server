@@ -150,7 +150,7 @@ var cachedFuzzyMatch;
  * Cache the results of a RegExp match.
  * @type {Function}
  */
-if ('undefined' === !typeof _) {
+if ('undefined' !== typeof _) {
     cachedFuzzyMatch = _.memoize(function (pattern) {
         return new RegExp(pattern.split("").reduce(function (a, b) {
             return a + '[^' + b + ']*' + b;
