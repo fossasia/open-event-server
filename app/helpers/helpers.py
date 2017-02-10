@@ -391,7 +391,11 @@ def send_email(to, action, subject, html):
     """
     if not string_empty(to):
         email_service = get_settings()['email_service']
-        email_from = get_settings()['email_from']
+        email_from_name = get_settings()['email_from_name']
+        if email_service == 'smtp':
+            email_from = email_from_name + '<' + get_settings()['email_from'] + '>'
+        else:
+            email_from = get_settings()['email_from']
         payload = {
             'to': to,
             'from': email_from,
@@ -422,6 +426,7 @@ def send_email(to, action, subject, html):
                 from tasks import send_mail_via_smtp_task
                 send_mail_via_smtp_task.delay(config, payload)
             else:
+                payload['fromname'] = email_from_name
                 key = get_settings()['sendgrid_key']
                 if not key and not current_app.config['TESTING']:
                     print 'Sendgrid key not defined'
