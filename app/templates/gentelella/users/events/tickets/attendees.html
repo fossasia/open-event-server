@@ -5,6 +5,16 @@
 {% block head_css %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/datatables.net-bs/css/dataTables.bootstrap.min.css') }}"/>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='vendor/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/jt.timepicker/jquery.timepicker.css') }}">
+
+    <style type="text/css">
+        #filter-control-btn > .dropdown-menu > li > a {
+            padding-left: 10px;
+        }
+
+    </style>
 
     <style type="text/css">
         #orders-table .order-link {
@@ -43,6 +53,74 @@
 {% endblock %}
 
 {% block inner_content %}
+    <div class="col-md-12">
+        <div id="filter-control-holder" class="pull-right" style="font-size: 16px;">
+
+            <form class="form-inline" method="get" id="date-filter-form" style="margin-bottom:15px;{% if not from_date or not to_date %}display:none;{% endif %}">
+                <input title="start time" type="text" class="time start" style="display: none;">
+                <input title="end time" type="text" class="time end" style="display: none;">
+                <div class="form-group">
+                    <input type="text" class="form-control start date" id="from_date" name="from_date"
+                           placeholder="DD/MM/YYYY" value="{{ from_date | default('', true) }}">
+                </div>
+                &nbsp;to&nbsp;
+                <div class="form-group">
+                    <input type="text" class="form-control end date" id="to_date" name="to_date"
+                           placeholder="DD/MM/YYYY" value="{{ to_date | default('', true) }}">
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default form-filter" style="margin-bottom: 0;"><i
+                            class="fa fa-filter fa-fw"></i> {{ _("Filter") }}
+                    </button>
+                    <button type="button" class="btn btn-default" id="date-filter-remove" style="margin-bottom: 0;"><i
+                            class="fa fa-times fa-fw"></i></button>
+                </div>
+
+            </form>
+            <form class="form-inline" method="get" id="ticket-filter-form" style="margin-bottom:15px;{% if not selected_ticket %} display:none;{% endif %}"> <!-- set the display to none -->
+                <div class="form-group">
+                    <label for="sel1">Select Ticket:</label>
+                    <select name="ticket_name" class="form-control" id="sel1">
+                        <option value="All"> All </option>
+                        {% for name in ticket_names %}
+                          {% if selected_ticket == name %}
+                            <option selected value="{{name}}"> {{name}} </option>
+                          {% else %}
+                            <option value="{{name}}">{{name}}</option>
+                          {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default form-filter" style="margin-bottom: 0;"><i
+                            class="fa fa-filter fa-fw"></i> {{ _("Filter") }}
+                    </button> 
+                    <button type="button" class="btn btn-default" id="ticket-filter-remove"style="margin-bottom: 0;"><i
+                            class="fa fa-times fa-fw"></i></button>
+                </div>
+            </form>
+            <div class="btn-group form-inline" id="filter-control-btn">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                    {{ _("Showing all records") }} <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" style="font-size: 14px;padding: 5px 0;">
+                    <li><a href="#" class="date-filter-open"><i
+                            class="fa fa-calendar fa-fw"></i> {{ _("Filter by Date") }}</a>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#" class="ticket-filter-open"><i
+                            class="fa fa-calendar fa-fw"></i> {{ _("Filter by Ticket") }}</a>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#" id="all-filters-remove"><i class="fa fa-minus-circle fa-fw"></i>
+                        {{ _("Remove All Filters") }}</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
     <div id="toolbar-holder" style="display: none;">
         <div class="btn-group pull-left" data-toggle="buttons">
             <label id="completed" class="btn btn-default  btn-responsive">
@@ -168,6 +246,12 @@
     {{ super() }}
     <script src="{{ url_for('static', filename='vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/jt.timepicker/jquery.timepicker.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/datepair.js/dist/datepair.min.js') }}"></script>
+    <script src="{{url_for('static', filename='js/events/ticket_sales/date_filter.js')}}"> </script>
+    <script src="{{ url_for('static', filename='js/events/ticket_sales/attendees.js')}}"></script>
+
     <script type="text/javascript">
         var options = ['#completed', '#placed', '#pending', '#expired', '#cancelled', '#all'];  
         $.fn.dataTable.ext.search.push(
