@@ -745,6 +745,13 @@ function processMicrolocationSession(microlocations, sessions, callback) {
                 minute: startTime.minutes()
             }).diff(topTime)).asMinutes(), true);
 
+            var now = window.mainEvent.start_time;
+            var end = window.mainEvent.end_time;
+            while(now.format('M/D/YYYY') <= end.format('M/D/YYYY')) {
+                days.push(now.format("Do MMMM YYYY"));
+                now.add('days', 1);
+            }
+
             var dayString = startTime.format("Do MMMM YYYY"); // formatted as eg. 2nd May 2013
 
             if (!_.includes(days, dayString)) {
