@@ -41,7 +41,7 @@
     <div id="toolbar-holder" style="display: none;">
         <div class="btn-group pull-left" data-toggle="buttons">
             <label id="completed" class="btn btn-default btn-responsive">
-                <input type="radio" name="show_state" autocomplete="off" value="Completed"> {{ _("Completed") }}
+                <input type="radio" name="show_state" autocomplete="off" value="Completed" checked> {{ _("Completed") }}
             </label>
             <label id="placed" class="btn btn-default btn-responsive">
                 <input type="radio" name="show_state" autocomplete="off" value="Placed"> {{ _("Placed") }}
@@ -221,7 +221,7 @@
             $(window.location.hash).button('toggle');
             $("div.toolbar").prepend($("#toolbar-holder").html());
         } else {
-            $('#Completed').button('toggle');
+            $('#completed').button('toggle');
             $("div.toolbar").prepend($("#toolbar-holder").html());
         }
 
