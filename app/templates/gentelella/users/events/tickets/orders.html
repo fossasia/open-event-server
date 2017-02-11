@@ -26,8 +26,8 @@
         }
 
         #orders-table .label {
-            font-size: 16px;
-            padding: 5px;
+            font-size: 11px;
+            padding: 2px 4px;
             font-weight: 400;
         }
 
@@ -73,9 +73,6 @@
                 {{ _("Order") }}
             </th>
             <th>
-                {{ _("Order Status") }}
-            </th>
-            <th>
                 {{ _("Total Amount") }}
             </th>
             <th>
@@ -98,6 +95,17 @@
                         <a href="{{ url_for('ticketing.view_order_after_payment', order_identifier=order.identifier) if order.status == 'completed' else url_for('ticketing.show_transaction_error', order_identifier=order.identifier) }}"
                            class="order-link">{{ order.get_invoice_number() }}</a> -
                         by {{ order.user.user_detail.fullname if order.user.user_detail and order.user.user_detail.fullname else order.user.email }}
+                        {% if order.status == 'completed' %}
+                            <span id="label-{{ order.identifier }}" class="label label-success label-small">{{ order.status | capitalize }}</span>
+                        {% elif order.status == 'pending' or order.status == 'initialized' %}
+                            <span id="label-{{ order.identifier }}" class="label label-warning label-small">{{ _("Pending") }}</span>
+                        {% elif order.status == 'placed' %}
+                            <span id="label-{{ order.identifier }}" class="label label-info label-small">{{ order.status | capitalize }}</span>
+                        {% elif order.status == 'cancelled' %}
+                            <span id="label-{{ order.identifier }}" class="label label-default label-small">{{ order.status | capitalize }}</span>
+                        {% else %}
+                            <span id="label-{{ order.identifier }}" class="label label-danger label-small">{{ order.status | capitalize }}</span>
+                        {% endif %}
                         <br>
                         {% if order.status == 'completed' %}
                             <span class="payment-via">Payment via {{ order.paid_via | capitalize }}</span>
@@ -106,19 +114,6 @@
                             <span class="datetime">{{ order.completed_at | datetime }} - {{ order.completed_at | humanize }}</span>
                         {% else %}
                             <span class="datetime">{{ order.created_at | datetime }} - {{ order.created_at | humanize }}</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if order.status == 'completed' %}
-                            <span id="label-{{ order.identifier }}" class="label label-success">{{ order.status | capitalize }}</span>
-                        {% elif order.status == 'pending' or order.status == 'initialized' %}
-                            <span id="label-{{ order.identifier }}" class="label label-warning">{{ _("Pending") }}</span>
-                        {% elif order.status == 'placed' %}
-                            <span id="label-{{ order.identifier }}" class="label label-info">{{ order.status | capitalize }}</span>
-                        {% elif order.status == 'cancelled' %}
-                            <span id="label-{{ order.identifier }}" class="label label-default">{{ order.status | capitalize }}</span>
-                        {% else %}
-                            <span id="label-{{ order.identifier }}" class="label label-danger">{{ order.status | capitalize }}</span>
                         {% endif %}
                     </td>
                     <td>{{ event.payment_currency | currency_symbol }}{{ order.amount | money }}</td>
@@ -191,10 +186,11 @@
         $.fn.dataTable.ext.search.push(
             function (settings, data, dataIndex) {
                 var user_option = $("input[name=show_state]:checked").val();
-                var state = data[2].trim() || 'pending';
+                var state = data[1] || 'pending';
+                console.log(state)
                 if (user_option === "all") {
                     return true;
-                } else if (user_option === state) {
+                } else if ( state.indexOf(" " + user_option + " ") != -1) {
                     return true;
                 }
                 return false;
