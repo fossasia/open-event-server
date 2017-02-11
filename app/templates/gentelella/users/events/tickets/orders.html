@@ -63,7 +63,7 @@
 
     <h3>{{ _("View Orders") }}</h3>
     <br>
-    <table class="table with-datatable" id="orders-table">
+    <table class="table with-datatable" id="orders-table" width="100%">
         <thead>
         <tr>
             <th>
@@ -187,7 +187,6 @@
             function (settings, data, dataIndex) {
                 var user_option = $("input[name=show_state]:checked").val();
                 var state = data[1] || 'pending';
-                console.log(state)
                 if (user_option === "all") {
                     return true;
                 } else if ( state.indexOf(" " + user_option + " ") != -1) {
@@ -217,7 +216,7 @@
             $(window.location.hash).button('toggle');
             $("div.toolbar").prepend($("#toolbar-holder").html());
         } else {
-            $('#Completed').button('toggle');
+            $('#completed').button('toggle');
             $("div.toolbar").prepend($("#toolbar-holder").html());
         }
 
