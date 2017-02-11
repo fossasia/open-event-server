@@ -405,3 +405,12 @@ def delete_order(event_id):
         return redirect(url_for('.display_orders', event_id=event_id))
     else:
         abort(403)
+
+
+@event_ticket_sales.route('/resend-confirmation/', methods=('POST',))
+def resend_confirmation(event_id):
+    return_status = TicketingManager.resend_confirmation(request.form)
+    if return_status:
+        return redirect(url_for('.display_orders', event_id=event_id))
+    else:
+        abort(403)
