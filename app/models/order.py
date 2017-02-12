@@ -9,8 +9,6 @@ class OrderTicket(db.Model):
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id', ondelete='CASCADE'), primary_key=True)
     ticket_id = db.Column(db.Integer, db.ForeignKey('ticket.id', ondelete='CASCADE'), primary_key=True)
     quantity = db.Column(db.Integer)
-    ticket = db.relationship('Ticket', backref='order_tickets')
-
 
 class Order(db.Model):
     __tablename__ = "orders"

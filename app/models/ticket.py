@@ -31,6 +31,7 @@ class Ticket(db.Model):
     event = db.relationship('Event', backref='tickets')
 
     tags = db.relationship('TicketTag', secondary=ticket_tags_table, backref='tickets')
+    order_ticket = db.relationship('OrderTicket', backref="ticket", passive_deletes=True)
 
     def __init__(self,
                  name=None,
@@ -70,8 +71,10 @@ class Ticket(db.Model):
         Else False.
         """
         from app.helpers.helpers import get_count
-        count = get_count(OrderTicket.query.filter_by(ticket_id=self.id))
-        return bool(count > 0)
+        orders = Order.id.in_( OrderTicket.query.with_entities(OrderTicket.order_id).filter_by(ticket_id=self.id).all() )
+        count =  get_count( Order.query.filter(orders).filter(Order.status != 'deleted') )
+        # Count is zero if no completed orders are present
+        return bool( count > 0)
 
     def has_completed_order_tickets(self):
         """Returns True if ticket has already placed orders.
