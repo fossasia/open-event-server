@@ -784,11 +784,11 @@ function processMicrolocationSession(microlocations, sessions, callback) {
                 sessionsStore[dayIndex] = [session];
             }
 
-            for (var dayIndex in days) {
-                if (_.isArray(unscheduledStore[dayIndex])) {
-                    unscheduledStore[dayIndex].push(session);
+            for (var index in days) {
+                if (_.isArray(unscheduledStore[index])) {
+                    unscheduledStore[index].push(session);
                 } else {
-                    unscheduledStore[dayIndex] = [session];
+                    unscheduledStore[index] = [session];
                 }
             }
         }
