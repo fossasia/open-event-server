@@ -3,7 +3,7 @@ from datetime import timedelta, datetime
 
 from flask import url_for, flash
 from flask.ext import login
-from sqlalchemy import asc
+from sqlalchemy import desc
 from sqlalchemy import or_
 
 from app.helpers.cache import cache
@@ -69,8 +69,7 @@ class TicketingManager(object):
         if promoted_event:
             orders = orders.join(Order.event).filter(Event.discount_code_id != None)
 
-            orders = orders.order_by(asc(Order.created_at))
-
+        orders = orders.order_by(desc(Order.id))
         return orders.all()
 
     @staticmethod
@@ -541,5 +540,18 @@ class TicketingManager(object):
                 order.trashed_at = datetime.now()
                 order.status = "deleted"
                 save_to_db(order)
+            return True
+        return False
+
+    @staticmethod
+    def resend_confirmation(form):
+        order = TicketingManager.get_and_set_expiry(form.get('identifier'))
+        email = form.get('email')
+        event_id = order.event_id
+        invoice_id = order.get_invoice_number()
+        order_url = url_for('ticketing.view_order_after_payment', order_identifier=order.identifier, _external=True)
+        if login.current_user.is_organizer(event_id):
+            trigger_after_purchase_notifications(email, order.event_id, order.event, invoice_id, order_url)
+            send_email_for_after_purchase(email, invoice_id, order_url, order.event.name, order.event.organizer_name)
             return True
         return False

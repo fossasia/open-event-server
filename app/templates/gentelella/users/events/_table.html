@@ -72,9 +72,8 @@
                         {% if flag %}
                             {% for id, item in ticket_stats.iteritems() %}
                                 <div>
-                                    <span>{{ item.name }}</span> <span> ({{item.completed}}/{{item.total}}) </span> 
+                                    <span>{{ item.name }}</span> <span> ({{item.completed}}/{{item.total}}) </span>
                                 </div>
-                                <br>
                              {% endfor %}
                         {% else %}
                             {{ _("No Ticket Information") }}

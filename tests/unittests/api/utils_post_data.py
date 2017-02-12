@@ -102,7 +102,8 @@ POST_SPEAKER_DATA = {
     "city": "TestCity",
     "heard_from": "TestSource",
     "speaking_experience": "TestExperience",
-    "sponsorship_required": "Yes"
+    "sponsorship_required": "Yes",
+    "gender": "Male"
 }
 
 POST_SPONSOR_DATA = {

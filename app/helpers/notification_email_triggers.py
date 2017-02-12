@@ -19,7 +19,7 @@ def trigger_new_session_notifications(session_id, event_id=None, event=None):
     admin_msg_setting = DataGetter.get_message_setting_by_action(NEW_SESSION)
     organizers = DataGetter.get_user_event_roles_by_role_name(event.id, 'organizer')
     for organizer in organizers:
-        email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(organizer.user.id, event_id)
+        email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(organizer.user.id, event.id)
         if not admin_msg_setting or \
             (email_notification_setting and email_notification_setting.new_paper == 1 and
              admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:

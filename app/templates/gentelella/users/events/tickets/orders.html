@@ -26,8 +26,8 @@
         }
 
         #orders-table .label {
-            font-size: 16px;
-            padding: 5px;
+            font-size: 11px;
+            padding: 2px 4px;
             font-weight: 400;
         }
 
@@ -41,7 +41,7 @@
     <div id="toolbar-holder" style="display: none;">
         <div class="btn-group pull-left" data-toggle="buttons">
             <label id="completed" class="btn btn-default btn-responsive">
-                <input type="radio" name="show_state" autocomplete="off" value="Completed"> {{ _("Completed") }}
+                <input type="radio" name="show_state" autocomplete="off" value="Completed" checked> {{ _("Completed") }}
             </label>
             <label id="placed" class="btn btn-default btn-responsive">
                 <input type="radio" name="show_state" autocomplete="off" value="Placed"> {{ _("Placed") }}
@@ -63,7 +63,7 @@
 
     <h3>{{ _("View Orders") }}</h3>
     <br>
-    <table class="table with-datatable" id="orders-table">
+    <table class="table with-datatable" id="orders-table" width="100%">
         <thead>
         <tr>
             <th>
@@ -71,9 +71,6 @@
             </th>
             <th>
                 {{ _("Order") }}
-            </th>
-            <th>
-                {{ _("Order Status") }}
             </th>
             <th>
                 {{ _("Total Amount") }}
@@ -98,6 +95,17 @@
                         <a href="{{ url_for('ticketing.view_order_after_payment', order_identifier=order.identifier) if order.status == 'completed' else url_for('ticketing.show_transaction_error', order_identifier=order.identifier) }}"
                            class="order-link">{{ order.get_invoice_number() }}</a> -
                         by {{ order.user.user_detail.fullname if order.user.user_detail and order.user.user_detail.fullname else order.user.email }}
+                        {% if order.status == 'completed' %}
+                            <span id="label-{{ order.identifier }}" class="label label-success label-small">{{ order.status | capitalize }}</span>
+                        {% elif order.status == 'pending' or order.status == 'initialized' %}
+                            <span id="label-{{ order.identifier }}" class="label label-warning label-small">{{ _("Pending") }}</span>
+                        {% elif order.status == 'placed' %}
+                            <span id="label-{{ order.identifier }}" class="label label-info label-small">{{ order.status | capitalize }}</span>
+                        {% elif order.status == 'cancelled' %}
+                            <span id="label-{{ order.identifier }}" class="label label-default label-small">{{ order.status | capitalize }}</span>
+                        {% else %}
+                            <span id="label-{{ order.identifier }}" class="label label-danger label-small">{{ order.status | capitalize }}</span>
+                        {% endif %}
                         <br>
                         {% if order.status == 'completed' %}
                             <span class="payment-via">Payment via {{ order.paid_via | capitalize }}</span>
@@ -106,19 +114,6 @@
                             <span class="datetime">{{ order.completed_at | datetime }} - {{ order.completed_at | humanize }}</span>
                         {% else %}
                             <span class="datetime">{{ order.created_at | datetime }} - {{ order.created_at | humanize }}</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if order.status == 'completed' %}
-                            <span id="label-{{ order.identifier }}" class="label label-success">{{ order.status | capitalize }}</span>
-                        {% elif order.status == 'pending' or order.status == 'initialized' %}
-                            <span id="label-{{ order.identifier }}" class="label label-warning">{{ _("Pending") }}</span>
-                        {% elif order.status == 'placed' %}
-                            <span id="label-{{ order.identifier }}" class="label label-info">{{ order.status | capitalize }}</span>
-                        {% elif order.status == 'cancelled' %}
-                            <span id="label-{{ order.identifier }}" class="label label-default">{{ order.status | capitalize }}</span>
-                        {% else %}
-                            <span id="label-{{ order.identifier }}" class="label label-danger">{{ order.status | capitalize }}</span>
                         {% endif %}
                     </td>
                     <td>{{ event.payment_currency | currency_symbol }}{{ order.amount | money }}</td>
@@ -152,6 +147,7 @@
                                         </div>
                                     </div>
                             </div>
+                            <br>
                             {% endif %}
                             {% if order.amount == 0 or order.status != "completed" %}
                                 <button data-toggle="modal" data-target="#delete-order-{{ order.identifier }}" title="Delete" class="btn btn-default delete-order"><i class="fa fa-trash fa-fw"></i></button>
@@ -167,6 +163,34 @@
                                                     <form action="{{ url_for('event_ticket_sales.delete_order', event_id=event_id) }}" method="post">
                                                         <input type="hidden" name="identifier" value="{{ order.identifier }}">
                                                         <button type="submit" class="btn btn-success ">{{ _("Delete Ticket") }}</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                                <br>
+                            {% endif %}
+                            {% if order.status == "completed" or order.status == "placed" %}
+                            <button data-toggle="modal" data-target="#resend-order-{{ order.identifier }}" title="Resend" class="btn btn-default resend-order"><i class="fa fa-envelope fa-fw"></i></button>
+                                <div class="modal fade" id="resend-order-{{ order.identifier }}" role="dialog">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                            aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title">{{ _("Resend Order Confirmation") }}</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{{ url_for('event_ticket_sales.resend_confirmation', event_id=event_id) }}" method="post">
+                                                        <input type="hidden" name="identifier" value="{{ order.identifier }}">
+                                                        <div class="email">
+                                                            <label>
+                                                                {{ _("Send confirmation email to:") }}
+                                                            </label>
+                                                                <input type="email" name="email" style="margin-top: 5px; width: 60%;">
+                                                            <br>
+                                                            <button type="submit" class="btn btn-success" style="margin-top: 12px">{{ _("Resend") }}</button>
+                                                        </div>
                                                     </form>
                                                 </div>
                                             </div>
@@ -191,10 +215,10 @@
         $.fn.dataTable.ext.search.push(
             function (settings, data, dataIndex) {
                 var user_option = $("input[name=show_state]:checked").val();
-                var state = data[2].trim() || 'pending';
+                var state = data[1] || 'pending';
                 if (user_option === "all") {
                     return true;
-                } else if (user_option === state) {
+                } else if ( state.indexOf(" " + user_option + " ") != -1) {
                     return true;
                 }
                 return false;
@@ -211,9 +235,9 @@
                     "targets": 0
                 },
                 {"width": "40%", "targets": 1},
-                {"width": "10%", "targets": 3}
+                {"width": "5%", "targets": 3}
             ],
-            "order": [[1, 'asc']],
+            "order": [[1, 'desc']],
             "scrollX": true
         });
 
@@ -221,7 +245,7 @@
             $(window.location.hash).button('toggle');
             $("div.toolbar").prepend($("#toolbar-holder").html());
         } else {
-            $('#Completed').button('toggle');
+            $('#completed').button('toggle');
             $("div.toolbar").prepend($("#toolbar-holder").html());
         }
 

@@ -45,7 +45,8 @@ SPEAKER = api.model('Speaker', {
     'city': fields.String(),
     'heard_from': fields.String(),
     'speaking_experience': fields.String(),
-    'sponsorship_required': fields.String()
+    'sponsorship_required': fields.String(),
+    'gender': fields.String()
 })
 
 SPEAKER_PAGINATED = api.clone('SpeakerPaginated', PAGINATED_MODEL, {
