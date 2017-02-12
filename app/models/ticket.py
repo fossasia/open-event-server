@@ -70,8 +70,12 @@ class Ticket(db.Model):
         Else False.
         """
         from app.helpers.helpers import get_count
-        count = get_count(OrderTicket.query.filter_by(ticket_id=self.id))
-        return bool(count > 0)
+        count =  Order.query.filter( Order.id.in_( OrderTicket.query.with_entities(OrderTicket.order_id).filter_by(ticket_id=self.id).all() ) ).filter_by(status='completed').all()
+        if not count:
+            # No order is in completed status of this ticket
+            return False
+        else:
+            return True
 
     def has_completed_order_tickets(self):
         """Returns True if ticket has already placed orders.
