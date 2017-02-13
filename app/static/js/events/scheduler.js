@@ -321,6 +321,7 @@ function addSessionToUnscheduled(sessionRef, isFiltering, shouldBroadcast) {
         "top": ""
     }).removeData("x").removeData("y");
 
+    updateColor(sessionRefObject.$sessionElement, sessionRefObject.session.track);
     sessionRefObject.$sessionElement.ellipsis().ellipsis();
     $noSessionsInfoBox.hide();
 
