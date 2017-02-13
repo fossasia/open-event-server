@@ -13,10 +13,21 @@ function make_request() {
     var prop = $ticketFilterForm.css('display');
     var fieldObjs = {};
 
-    ticket_name = (prop === "none" || ticket_name === null) ? '' : ticket_name;
-    fieldObjs['from_date'] = (from_date !== '') ? from_date : undefined;
-    fieldObjs['to_date'] = (to_date !== '') ? to_date : undefined;
-    fieldObjs['ticket_name'] = (ticket_name !== '') ? ticket_name : undefined;
+    if (prop === "none" || ticket_name === null) {
+        ticket_name = '';
+    }
+
+    if (from_date !== '') {
+        fieldObjs['from_date'] = from_date;
+    }
+
+    if (to_date !== '') {
+        fieldObjs['to_date'] = to_date;
+    }
+
+    if (ticket_name !== '') {
+        fieldObjs['ticket_name'] = ticket_name;
+    }
 
     var queryString = $.param(fieldObjs, true);
     if(queryString !== '') {
@@ -36,7 +47,7 @@ $("#date-filter-remove").click(function () {
 });
 
 $("#ticket-filter-remove").click(function () {
-    $ticketFilterForm.find("select").val("");
+    $ticketFilterForm.find("select").val('');
     $ticketFilterForm.hide();
     make_request();
 });
