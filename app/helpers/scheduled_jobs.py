@@ -99,7 +99,8 @@ def send_event_fee_notification():
                         fee_total += fee
 
             if fee_total > 0:
-                new_invoice = EventInvoice(amount=fee_total, event_id=event.id, user_id=event.creator_id)
+                organizer = DataGetter.get_user_event_roles_by_role_name(event.id, 'organizer').first()
+                new_invoice = EventInvoice(amount=fee_total, event_id=event.id, user_id=organizer.user.id)
 
                 if event.discount_code_id and event.discount_code:
                     r = relativedelta(datetime.utcnow(), event.created_at)
