@@ -1,4 +1,6 @@
 var steps = ['', 'sponsors', 'sessions-tracks-rooms'];
+var modifications = {'sessions-tracks-rooms': {sessionCreate:0, sessionRemove:0, trackCreate:0, trackRemove:0, roomCreate:0, roomRemove:0},
+    'sponsors': {create:0, remove:0}, 'event': {create:0, remove:0}};
 
 //noinspection JSUnusedGlobalSymbols
 var app = new Vue({
@@ -67,6 +69,7 @@ var app = new Vue({
         'event.ticket_include': function () {
             this.event.tickets = [];
             this.ticket_url = '';
+            modifications['event'].create = 1;
             save(this.step);
         },
         'addressShown': function (val) {
@@ -100,6 +103,7 @@ var app = new Vue({
             this.discountMessage.error = '';
         },
         'sponsors_enabled': function (value) {
+            modifications['event'].create = 1;
             save(this.step);
             if (value) {
                 this.sponsors = [_.clone(SPONSOR)];
@@ -126,6 +130,7 @@ var app = new Vue({
                 this.sessionTypes = [];
                 this.microlocations = [];
             }
+            modifications['event'].create = 1;
             save(this.step);
         },
         'tracks': function (value) {
@@ -243,6 +248,7 @@ var app = new Vue({
         },
         addSponsor: function () {
             this.sponsors.push(_.clone(SPONSOR));
+            modifications['sponsors'].create = 1;
             this.$nextTick(function () {
                 bindSummerNote(this);
             });
@@ -250,27 +256,34 @@ var app = new Vue({
         removeSponsor: function (sponsor) {
             var index = this.sponsors.indexOf(sponsor);
             this.sponsors.splice(index, 1);
+            modifications['sponsors'].remove = 1;
         },
         addTrack: function () {
             this.tracks.push(getNewTrack());
+            modifications['sessions-tracks-rooms'].trackCreate = 1;
         },
         removeTrack: function (track) {
             var index = this.tracks.indexOf(track);
             this.tracks.splice(index, 1);
+            modifications['sessions-tracks-rooms'].trackRemove = 1;
         },
         addMicrolocation: function () {
             this.microlocations.push(getNewMicrolocation());
+            modifications['sessions-tracks-rooms'].roomCreate = 1;
         },
         removeMicrolocation: function (microlocation) {
             var index = this.microlocations.indexOf(microlocation);
             this.microlocations.splice(index, 1);
+            modifications['sessions-tracks-rooms'].roomRemove = 1;
         },
         addSessionType: function () {
             this.sessionTypes.push(getNewTrack());
+            modifications['sessions-tracks-rooms'].sessionCreate = 1;
         },
         removeSessionType: function (sessionType) {
             var index = this.sessionTypes.indexOf(sessionType);
             this.sessionTypes.splice(index, 1);
+            modifications['sessions-tracks-rooms'].sessionRemove = 1;
         },
         moveToStep: function (step) {
             var $this = this;
@@ -291,7 +304,7 @@ var app = new Vue({
             } else {
                 showLoading("Saving changes");
             }
-            save(this.step, this.event.state, function () {
+            save(this.step, this.event.state, modifications, function () {
                 var index = _.indexOf(steps, $this.step);
                 index = direction === 'forward' ? index + 1 : index - 1;
                 if (index < steps.length && index >= 0) {
@@ -361,7 +374,7 @@ function showLoading(text) {
     createHtmlSnackbar("<i class='fa fa-circle-o-notch fa-lg fa-spin fa-fw'></i>" + text + ' ...', '  ', null, 60000);
 }
 
-function save(stepToSave, state, callback) {
+function save(stepToSave, state, modifications, callback) {
 
     if(shouldDisableMove(app)) {
         return;
@@ -378,14 +391,16 @@ function save(stepToSave, state, callback) {
     var eventsData = {
         event: app.event,
         state: state,
-        event_id: app.event.id
+        event_id: app.event.id,
+        permissions: modifications['event']
     };
 
     var sponsorsData = {
         event_id: app.event.id,
         sponsors_enabled: app.sponsors_enabled,
         sponsors: app.sponsors,
-        state: state
+        state: state,
+        permissions: modifications['sponsors']
     };
 
     var sessionsSpeakersData = {
@@ -396,7 +411,8 @@ function save(stepToSave, state, callback) {
         call_for_speakers: app.call_for_speakers,
         sessions_speakers_enabled: app.sessions_speakers_enabled,
         custom_forms: app.custom_forms,
-        state: state
+        state: state,
+        permissions: modifications['sessions-tracks-rooms']
     };
 
     /* Commented out for now until better condition is found
@@ -420,7 +436,8 @@ function save(stepToSave, state, callback) {
                 sponsors: sponsorsData,
                 session_speakers: sessionsSpeakersData,
                 event: eventsData,
-                event_id: app.event.id
+                event_id: app.event.id,
+                permissions: modifications
             };
             makePost('all', data, callback);
             break;
@@ -483,6 +500,7 @@ function cleanData() {
             }
         }
     });
+    // reset modifications object
 }
 
 
