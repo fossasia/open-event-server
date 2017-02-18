@@ -42,7 +42,11 @@
                         {% endif %}
                     </td>
                     <td>{{ sponsor.sponsor_type }}</td>
-                    <td>{{ sponsor.level }}</td>
+                    {% if sponsor.level %}
+                        <td>{{ sponsor.level }}</td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
                     <td>
                         <a class="icon" title="Edit Sponsor" href="/events/{{ event.id }}/edit/sponsors">
                             <span class="glyphicon glyphicon-pencil"></span>
