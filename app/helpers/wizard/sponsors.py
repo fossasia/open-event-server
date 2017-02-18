@@ -4,6 +4,7 @@ from app.helpers.helpers import represents_int
 from app.helpers.storage import UPLOAD_PATHS
 from app.helpers.assets.images import save_event_image
 from app.models.sponsor import Sponsor
+from flask.ext.login import current_user
 
 
 def get_sponsors_json(event_id_or_sponsors):
@@ -63,3 +64,12 @@ def save_sponsors_from_json(json, event_id=None):
     return {
         'event_id': event.id
     }
+
+
+def sponsor_changes_is_allowed(flags, event_id):
+    update_flag = 0 if flags['create'] or flags['remove'] else 1
+    flags['update_flag'] = update_flag
+    if (flags['create'] and not current_user.can_create(Sponsor, event_id)) or (flags['remove'] and not \
+            current_user.can_delete(Sponsor, event_id)) or (flags['update_flag'] and not current_user.can_update(Sponsor, event_id)):
+        return False 
+    return True

@@ -9,6 +9,8 @@ from app.models.track import Track
 from app.models.session_type import SessionType
 from app.models.custom_forms import CustomForms
 from app.models.call_for_papers import CallForPaper
+from app.models.session import Session
+from flask.ext.login import current_user
 
 
 def get_tracks_json(event_id):
@@ -118,3 +120,27 @@ def delete_all_sessions_speakers_data(event_id):
     SessionType.query.filter_by(event_id=event_id).delete()
     Track.query.filter_by(event_id=event_id).delete()
     CallForPaper.query.filter_by(event_id=event_id).delete()
+
+
+def session_speaker_changes_allowed(flags, event_id):
+    flags['session_update'] = 0 if flags['sessionCreate'] or flags['sessionRemove'] else 1
+    flags['track_update'] = 0 if flags['trackCreate'] or flags['trackRemove'] else 1
+    flags['room_update'] = 0 if flags['roomCreate'] or flags['roomRemove'] else 1
+
+    if flags['sessionCreate'] and not current_user.can_create(Session, event_id) or flags['sessionRemove'] and not current_user.can_delete \
+            (Session, event_id):
+                return False
+
+    if flags['trackCreate'] and not current_user.can_create(Track, event_id) or flags['trackRemove'] and not current_user.can_delete \
+            (Track, event_id):
+                return False
+
+    if flags['roomCreate'] and not current_user.can_create(Microlocation, event_id) or flags['roomRemove'] and not current_user.can_delete \
+            (Microlocation, event_id):
+                return False
+
+    if flags['session_update'] and not current_user.can_update(Session, event_id) or flags['track_update'] and not current_user.can_update \
+            (Track, event_id) or flags['room_update'] and not current_user.can_update(Microlocation, event_id):
+                return False
+    return True
+
