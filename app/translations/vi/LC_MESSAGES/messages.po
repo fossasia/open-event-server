@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
-"POT-Creation-Date: 2017-02-06 09:29+0530\n"
+"POT-Creation-Date: 2017-02-18 10:49+0530\n"
 "PO-Revision-Date: 2017-01-13 03:49+0000\n"
 "Last-Translator: thuyle2890 <wildcat2890@gmail.com>\n"
 "Language: vi\n"
@@ -367,8 +367,28 @@ msgstr ""
 msgid "Yet to Open"
 msgstr ""
 
-#: app/templates/gentelella/guest/event/cfs.html:35
+#: app/templates/gentelella/guest/event/cfs.html:36
+#: app/templates/gentelella/guest/event/cfs.html:41
 msgid "Submit Proposal"
+msgstr ""
+
+#: app/templates/gentelella/guest/event/cfs.html:49
+msgid "Please login to submit your proposal"
+msgstr ""
+
+#: app/templates/gentelella/guest/event/cfs.html:52
+#: app/templates/gentelella/super_admin/content/_system_images.html:112
+#: app/templates/gentelella/super_admin/sales/discount_codes_create.html:128
+#: app/templates/gentelella/users/events/event_base.html:114
+#: app/templates/gentelella/users/events/sessions/components/_speaker_croppie.html:17
+#: app/templates/gentelella/users/events/tickets/access_codes_create.html:170
+#: app/templates/gentelella/users/events/tickets/discount_codes_create.html:204
+#: app/templates/gentelella/users/profile/index.html:124
+msgid "Cancel"
+msgstr "Hủy"
+
+#: app/templates/gentelella/guest/event/cfs.html:53
+msgid "Login/SignUp"
 msgstr ""
 
 #: app/templates/gentelella/guest/event/code_of_conduct.html:7
@@ -496,6 +516,9 @@ msgstr ""
 
 #: app/templates/gentelella/guest/explore/_collapse_search.html:99
 #: app/templates/gentelella/super_admin/sales/filter_table_base.html:41
+#: app/templates/gentelella/users/events/tickets/attendees.html:73
+#: app/templates/gentelella/users/events/tickets/attendees.html:96
+#: app/templates/gentelella/users/events/tickets/orders.html:62
 msgid "Filter"
 msgstr ""
 
@@ -568,14 +591,14 @@ msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:44
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:56
-#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:121
+#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:122
 msgid "Last name"
 msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:54
 #: app/templates/gentelella/guest/ticketing/order_pre_payment.html:66
-#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:134
-#: app/templates/gentelella/super_admin/settings/_system.html:321
+#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:135
+#: app/templates/gentelella/super_admin/settings/_system.html:328
 #: app/templates/gentelella/super_admin/users/users.html:216
 #: app/templates/gentelella/super_admin/users/users.html:237
 #: app/templates/gentelella/super_admin/users/users.html:258
@@ -583,7 +606,7 @@ msgstr ""
 #: app/templates/gentelella/super_admin/widgets/_kubernetes.html:34
 #: app/templates/gentelella/users/events/sessions/components/session_speaker_form.html:37
 #: app/templates/gentelella/users/events/speakers/base_speaker_table.html:81
-#: app/templates/gentelella/users/events/tickets/attendees.html:104
+#: app/templates/gentelella/users/events/tickets/attendees.html:182
 #: app/templates/gentelella/users/settings/pages/contact_info.html:18
 msgid "Email"
 msgstr ""
@@ -594,34 +617,34 @@ msgid "Confirm Email"
 msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:80
-#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:150
+#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:158
 msgid "Billing Information"
 msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:85
-#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:155
+#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:163
 #: app/templates/gentelella/users/events/wizard/basic-details.html:646
 msgid "Country"
 msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:89
-#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:159
+#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:167
 msgid "Select country"
 msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:98
-#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:168
+#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:176
 msgid "Address"
 msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:107
-#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:177
+#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:185
 #: app/templates/gentelella/users/events/wizard/basic-details.html:701
 msgid "City"
 msgstr ""
 
 #: app/templates/gentelella/guest/invoicing/invoice_pre_payment.html:115
-#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:185
+#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:193
 msgid "State/Province"
 msgstr ""
 
@@ -743,55 +766,55 @@ msgstr ""
 msgid "Ticket Holders' Information"
 msgstr ""
 
-#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:103
+#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:104
 msgid "Ticket Holder"
 msgstr ""
 
-#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:109
+#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:110
 msgid "First"
 msgstr ""
 
-#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:110
+#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:111
 msgid "name"
 msgstr ""
 
-#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:193
+#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:201
 msgid "Zip Code"
 msgstr ""
 
-#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:202
+#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:210
 msgid "Pay Via"
 msgstr ""
 
-#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:244
+#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:252
 msgid "Telegraphic Transfer(TT) / Bank Transfer"
 msgstr ""
 
-#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:256
+#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:264
 msgid "Onsite/Cash"
 msgstr ""
 
-#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:270
+#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:278
 msgid "By clicking"
 msgstr ""
 
-#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:272
+#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:280
 msgid "Order Now"
 msgstr ""
 
-#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:273
+#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:281
 msgid "I acknowledge that I have read and agree with"
 msgstr ""
 
-#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:274
+#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:282
 msgid "the"
 msgstr ""
 
-#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:275
+#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:283
 msgid "Open Event terms of service, and privacy policy."
 msgstr ""
 
-#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:278
+#: app/templates/gentelella/guest/ticketing/order_pre_payment.html:286
 msgid "Order now"
 msgstr ""
 
@@ -858,12 +881,12 @@ msgstr ""
 
 #: app/templates/gentelella/super_admin/content/_social.html:54
 #: app/templates/gentelella/super_admin/permissions/permissions.html:246
-#: app/templates/gentelella/super_admin/permissions/permissions.html:327
+#: app/templates/gentelella/super_admin/permissions/permissions.html:326
 #: app/templates/gentelella/super_admin/settings/_analytics.html:16
 #: app/templates/gentelella/super_admin/settings/_image_config.html:191
 #: app/templates/gentelella/super_admin/settings/_microservices.html:24
 #: app/templates/gentelella/super_admin/settings/_payment_gateway.html:97
-#: app/templates/gentelella/super_admin/settings/_system.html:330
+#: app/templates/gentelella/super_admin/settings/_system.html:337
 #: app/templates/gentelella/super_admin/settings/_ticket-fees.html:39
 #: app/templates/gentelella/super_admin/users/users.html:173
 #: app/templates/gentelella/users/events/wizard/basic-details.html:756
@@ -936,16 +959,6 @@ msgstr ""
 #: app/templates/gentelella/users/events/roles/roles/_edit.html:25
 msgid "Update"
 msgstr ""
-
-#: app/templates/gentelella/super_admin/content/_system_images.html:112
-#: app/templates/gentelella/super_admin/sales/discount_codes_create.html:128
-#: app/templates/gentelella/users/events/event_base.html:114
-#: app/templates/gentelella/users/events/sessions/components/_speaker_croppie.html:17
-#: app/templates/gentelella/users/events/tickets/access_codes_create.html:170
-#: app/templates/gentelella/users/events/tickets/discount_codes_create.html:204
-#: app/templates/gentelella/users/profile/index.html:124
-msgid "Cancel"
-msgstr "Hủy"
 
 #: app/templates/gentelella/super_admin/content/_translations.html:14
 #: app/templates/gentelella/users/mysessions/mysession_detail.html:96
@@ -1041,10 +1054,10 @@ msgstr "Đã chấp nhận"
 #: app/templates/gentelella/users/events/_table.html:60
 #: app/templates/gentelella/users/events/sessions/base_session_table.html:40
 #: app/templates/gentelella/users/events/speakers/base_speaker_table.html:59
-#: app/templates/gentelella/users/events/tickets/attendees.html:55
-#: app/templates/gentelella/users/events/tickets/attendees.html:134
-#: app/templates/gentelella/users/events/tickets/orders.html:50
-#: app/templates/gentelella/users/events/tickets/orders.html:115
+#: app/templates/gentelella/users/events/tickets/attendees.html:133
+#: app/templates/gentelella/users/events/tickets/attendees.html:212
+#: app/templates/gentelella/users/events/tickets/orders.html:97
+#: app/templates/gentelella/users/events/tickets/orders.html:148
 #, fuzzy
 msgid "Pending"
 msgstr "Chờ"
@@ -1114,7 +1127,6 @@ msgstr "Nhập"
 #: app/templates/gentelella/super_admin/users/users.html:257
 #: app/templates/gentelella/users/events/_table.html:6
 #: app/templates/gentelella/users/events/details/widgets/sponsors_list.html:16
-#: app/templates/gentelella/users/events/scheduler/scheduler.html:163
 #: app/templates/gentelella/users/events/speakers/base_speaker_table.html:80
 #: app/templates/gentelella/users/events/wizard/basic-details.html:6
 #: app/templates/gentelella/users/events/wizard/sponsors.html:24
@@ -1343,7 +1355,7 @@ msgstr ""
 #: app/templates/gentelella/super_admin/users/users.html:219
 #: app/templates/gentelella/super_admin/users/users.html:240
 #: app/templates/gentelella/super_admin/users/users.html:261
-#: app/templates/gentelella/super_admin/widgets/_users.html:34
+#: app/templates/gentelella/super_admin/widgets/_users.html:42
 msgid "Event Roles"
 msgstr ""
 
@@ -1383,7 +1395,7 @@ msgstr ""
 #: app/templates/gentelella/users/events/details/widgets/roles.html:139
 #: app/templates/gentelella/users/events/roles/roles.html:71
 #: app/templates/gentelella/users/events/roles/roles/_edit.html:29
-#: app/templates/gentelella/users/events/scheduler/scheduler.html:196
+#: app/templates/gentelella/users/events/scheduler/scheduler.html:188
 msgid "Close"
 msgstr "Đóng"
 
@@ -1490,9 +1502,9 @@ msgstr ""
 #: app/templates/gentelella/super_admin/reports/_system_logs.html:90
 #: app/templates/gentelella/super_admin/sales/discount_codes.html:55
 #: app/templates/gentelella/users/events/tickets/access_codes.html:53
-#: app/templates/gentelella/users/events/tickets/attendees.html:107
+#: app/templates/gentelella/users/events/tickets/attendees.html:185
 #: app/templates/gentelella/users/events/tickets/discount_codes.html:53
-#: app/templates/gentelella/users/events/tickets/orders.html:88
+#: app/templates/gentelella/users/events/tickets/orders.html:132
 msgid "Action"
 msgstr ""
 
@@ -1571,9 +1583,9 @@ msgstr ""
 #: app/templates/gentelella/users/events/sessions/base_session_table.html:37
 #: app/templates/gentelella/users/events/speakers/base_speaker_table.html:56
 #: app/templates/gentelella/users/events/tickets/access_codes.html:33
-#: app/templates/gentelella/users/events/tickets/attendees.html:71
+#: app/templates/gentelella/users/events/tickets/attendees.html:149
 #: app/templates/gentelella/users/events/tickets/discount_codes.html:33
-#: app/templates/gentelella/users/events/tickets/orders.html:59
+#: app/templates/gentelella/users/events/tickets/orders.html:106
 #: app/templates/gentelella/users/profile/notifications.html:31
 msgid "All"
 msgstr ""
@@ -1688,14 +1700,19 @@ msgid "Overdue"
 msgstr ""
 
 #: app/templates/gentelella/super_admin/sales/filter_table_base.html:53
+#: app/templates/gentelella/users/events/tickets/attendees.html:106
+#: app/templates/gentelella/users/events/tickets/orders.html:74
 msgid "Showing all records"
 msgstr ""
 
 #: app/templates/gentelella/super_admin/sales/filter_table_base.html:57
+#: app/templates/gentelella/users/events/tickets/attendees.html:110
+#: app/templates/gentelella/users/events/tickets/orders.html:78
 msgid "Filter by Date"
 msgstr ""
 
 #: app/templates/gentelella/super_admin/sales/filter_table_base.html:61
+#: app/templates/gentelella/users/events/tickets/orders.html:82
 msgid "Remove Filters"
 msgstr ""
 
@@ -1781,7 +1798,7 @@ msgstr ""
 #: app/templates/gentelella/super_admin/settings/_system.html:102
 #: app/templates/gentelella/super_admin/settings/_system.html:137
 #: app/templates/gentelella/super_admin/settings/_system.html:175
-#: app/templates/gentelella/super_admin/settings/_system.html:292
+#: app/templates/gentelella/super_admin/settings/_system.html:299
 msgid "See"
 msgstr ""
 
@@ -1794,7 +1811,7 @@ msgstr ""
 #: app/templates/gentelella/super_admin/settings/_system.html:102
 #: app/templates/gentelella/super_admin/settings/_system.html:138
 #: app/templates/gentelella/super_admin/settings/_system.html:176
-#: app/templates/gentelella/super_admin/settings/_system.html:293
+#: app/templates/gentelella/super_admin/settings/_system.html:300
 #: app/templates/gentelella/users/events/_import_modal.html:57
 #: app/templates/gentelella/users/events/wizard/basic-details.html:449
 #: app/templates/gentelella/users/events/wizard/basic-details.html:470
@@ -2131,57 +2148,61 @@ msgstr ""
 msgid "From Email"
 msgstr ""
 
-#: app/templates/gentelella/super_admin/settings/_system.html:237
+#: app/templates/gentelella/super_admin/settings/_system.html:234
+msgid "From Name"
+msgstr ""
+
+#: app/templates/gentelella/super_admin/settings/_system.html:244
 msgid "SMTP"
 msgstr ""
 
-#: app/templates/gentelella/super_admin/settings/_system.html:241
+#: app/templates/gentelella/super_admin/settings/_system.html:248
 msgid "Host"
 msgstr ""
 
-#: app/templates/gentelella/super_admin/settings/_system.html:248
+#: app/templates/gentelella/super_admin/settings/_system.html:255
 msgid "Port"
 msgstr ""
 
-#: app/templates/gentelella/super_admin/settings/_system.html:255
+#: app/templates/gentelella/super_admin/settings/_system.html:262
 msgid "Encryption"
 msgstr ""
 
-#: app/templates/gentelella/super_admin/settings/_system.html:271
+#: app/templates/gentelella/super_admin/settings/_system.html:278
 msgid "Username"
 msgstr ""
 
-#: app/templates/gentelella/super_admin/settings/_system.html:278
+#: app/templates/gentelella/super_admin/settings/_system.html:285
 msgid "Password"
 msgstr ""
 
-#: app/templates/gentelella/super_admin/settings/_system.html:290
+#: app/templates/gentelella/super_admin/settings/_system.html:297
 msgid "Sendgrid API"
 msgstr ""
 
-#: app/templates/gentelella/super_admin/settings/_system.html:293
+#: app/templates/gentelella/super_admin/settings/_system.html:300
 msgid "on how to get this token"
 msgstr ""
 
-#: app/templates/gentelella/super_admin/settings/_system.html:300
+#: app/templates/gentelella/super_admin/settings/_system.html:307
 msgid "Sendgrid Token"
 msgstr ""
 
-#: app/templates/gentelella/super_admin/settings/_system.html:308
+#: app/templates/gentelella/super_admin/settings/_system.html:315
 msgid "App secret key"
 msgstr ""
 
-#: app/templates/gentelella/super_admin/settings/_system.html:309
+#: app/templates/gentelella/super_admin/settings/_system.html:316
 msgid ""
 "Secret key for the application. Recommended is a random string minimum 20"
 " characters in length."
 msgstr ""
 
-#: app/templates/gentelella/super_admin/settings/_system.html:318
+#: app/templates/gentelella/super_admin/settings/_system.html:325
 msgid "Super Admin Email ID"
 msgstr ""
 
-#: app/templates/gentelella/super_admin/settings/_system.html:319
+#: app/templates/gentelella/super_admin/settings/_system.html:326
 msgid "The email ID of the super admin user created during initial deployment."
 msgstr ""
 
@@ -2413,19 +2434,27 @@ msgstr ""
 msgid "Registered Users"
 msgstr ""
 
-#: app/templates/gentelella/super_admin/widgets/_users.html:41
-msgid "Organizers"
+#: app/templates/gentelella/super_admin/widgets/_users.html:30
+msgid "Unverified Users"
 msgstr ""
 
-#: app/templates/gentelella/super_admin/widgets/_users.html:45
-msgid "Co-Organizers"
+#: app/templates/gentelella/super_admin/widgets/_users.html:34
+msgid "Total Users"
 msgstr ""
 
 #: app/templates/gentelella/super_admin/widgets/_users.html:49
-msgid "Track Organizers"
+msgid "Organizers"
 msgstr ""
 
 #: app/templates/gentelella/super_admin/widgets/_users.html:53
+msgid "Co-Organizers"
+msgstr ""
+
+#: app/templates/gentelella/super_admin/widgets/_users.html:57
+msgid "Track Organizers"
+msgstr ""
+
+#: app/templates/gentelella/super_admin/widgets/_users.html:61
 msgid "Attendees"
 msgstr ""
 
@@ -2829,23 +2858,23 @@ msgstr ""
 msgid "New Microlocation"
 msgstr ""
 
-#: app/templates/gentelella/users/events/scheduler/scheduler.html:169
-msgid "Latitude"
+#: app/templates/gentelella/users/events/scheduler/scheduler.html:163
+msgid "Room Name"
 msgstr ""
 
-#: app/templates/gentelella/users/events/scheduler/scheduler.html:175
-msgid "Longitude"
-msgstr ""
-
-#: app/templates/gentelella/users/events/scheduler/scheduler.html:181
+#: app/templates/gentelella/users/events/scheduler/scheduler.html:168
 msgid "Floor"
 msgstr ""
 
-#: app/templates/gentelella/users/events/scheduler/scheduler.html:187
-msgid "Room"
+#: app/templates/gentelella/users/events/scheduler/scheduler.html:173
+msgid "Latitude"
 msgstr ""
 
-#: app/templates/gentelella/users/events/scheduler/scheduler.html:198
+#: app/templates/gentelella/users/events/scheduler/scheduler.html:179
+msgid "Longitude"
+msgstr ""
+
+#: app/templates/gentelella/users/events/scheduler/scheduler.html:190
 msgid "Add Microlocation"
 msgstr ""
 
@@ -2864,14 +2893,14 @@ msgid "Submission Date"
 msgstr ""
 
 #: app/templates/gentelella/users/events/sessions/base_session_table.html:67
-msgid "Last Changed Date"
+msgid "Last Modified"
 msgstr ""
 
 #: app/templates/gentelella/users/events/sessions/base_session_table.html:68
 msgid "Email Sent"
 msgstr ""
 
-#: app/templates/gentelella/users/events/sessions/base_session_table.html:195
+#: app/templates/gentelella/users/events/sessions/base_session_table.html:196
 msgid "Send email"
 msgstr ""
 
@@ -3110,72 +3139,79 @@ msgstr ""
 msgid "Continue"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:49
-#: app/templates/gentelella/users/events/tickets/orders.html:44
+#: app/templates/gentelella/users/events/tickets/attendees.html:114
+msgid "Filter by Ticket"
+msgstr ""
+
+#: app/templates/gentelella/users/events/tickets/attendees.html:118
+msgid "Remove All Filters"
+msgstr ""
+
+#: app/templates/gentelella/users/events/tickets/attendees.html:127
+#: app/templates/gentelella/users/events/tickets/orders.html:91
 msgid "Completed"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:52
-#: app/templates/gentelella/users/events/tickets/orders.html:47
+#: app/templates/gentelella/users/events/tickets/attendees.html:130
+#: app/templates/gentelella/users/events/tickets/orders.html:94
 msgid "Placed"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:58
-#: app/templates/gentelella/users/events/tickets/orders.html:53
+#: app/templates/gentelella/users/events/tickets/attendees.html:136
+#: app/templates/gentelella/users/events/tickets/orders.html:100
 msgid "Expired"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:61
-#: app/templates/gentelella/users/events/tickets/orders.html:56
+#: app/templates/gentelella/users/events/tickets/attendees.html:139
+#: app/templates/gentelella/users/events/tickets/orders.html:103
 msgid "Cancelled"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:64
+#: app/templates/gentelella/users/events/tickets/attendees.html:142
 msgid "Checked In"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:68
+#: app/templates/gentelella/users/events/tickets/attendees.html:146
 msgid "Not Checked In"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:77
+#: app/templates/gentelella/users/events/tickets/attendees.html:155
 msgid "View Attendees"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:86
-#: app/templates/gentelella/users/events/tickets/orders.html:73
+#: app/templates/gentelella/users/events/tickets/attendees.html:164
+#: app/templates/gentelella/users/events/tickets/orders.html:120
 msgid "Order"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:89
-#: app/templates/gentelella/users/events/tickets/orders.html:76
+#: app/templates/gentelella/users/events/tickets/attendees.html:167
 #: app/templates/gentelella/users/events/tickets/tickets.html:122
 msgid "Order Status"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:92
+#: app/templates/gentelella/users/events/tickets/attendees.html:170
 #: app/templates/gentelella/users/events/wizard/basic-details.html:254
 msgid "Ticket Name"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:95
+#: app/templates/gentelella/users/events/tickets/attendees.html:173
 msgid "Ticket Price"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:98
+#: app/templates/gentelella/users/events/tickets/attendees.html:176
 #: app/templates/gentelella/users/profile/_form.html:8
 msgid "First Name"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:101
+#: app/templates/gentelella/users/events/tickets/attendees.html:179
 msgid "Last Name"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:152
+#: app/templates/gentelella/users/events/tickets/attendees.html:230
 msgid "Undo"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:156
+#: app/templates/gentelella/users/events/tickets/attendees.html:234
 msgid "Check In"
 msgstr ""
 
@@ -3195,40 +3231,52 @@ msgstr ""
 msgid "Discount Link"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/orders.html:64
+#: app/templates/gentelella/users/events/tickets/orders.html:111
 msgid "View Orders"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/orders.html:79
+#: app/templates/gentelella/users/events/tickets/orders.html:123
 msgid "Total Amount"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/orders.html:82
+#: app/templates/gentelella/users/events/tickets/orders.html:126
 msgid "Qty"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/orders.html:85
+#: app/templates/gentelella/users/events/tickets/orders.html:129
 msgid "Buyer / Registration Contact"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/orders.html:137
+#: app/templates/gentelella/users/events/tickets/orders.html:179
 msgid "Are you sure you want to cancel the ticket"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/orders.html:144
+#: app/templates/gentelella/users/events/tickets/orders.html:186
 msgid "Enter a note to ticket buyer(optional): "
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/orders.html:148
+#: app/templates/gentelella/users/events/tickets/orders.html:190
 msgid "Cancel Ticket"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/orders.html:164
+#: app/templates/gentelella/users/events/tickets/orders.html:207
 msgid "Are you sure you want to delete the ticket"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/orders.html:169
+#: app/templates/gentelella/users/events/tickets/orders.html:212
 msgid "Delete Ticket"
+msgstr ""
+
+#: app/templates/gentelella/users/events/tickets/orders.html:228
+msgid "Resend Order Confirmation"
+msgstr ""
+
+#: app/templates/gentelella/users/events/tickets/orders.html:235
+msgid "Send confirmation email to:"
+msgstr ""
+
+#: app/templates/gentelella/users/events/tickets/orders.html:239
+msgid "Resend"
 msgstr ""
 
 #: app/templates/gentelella/users/events/tickets/tickets.html:75
@@ -3926,10 +3974,10 @@ msgstr ""
 msgid "Contact Info - Settings"
 msgstr ""
 
-#: app/templates/gentelella/users/settings/pages/applications.html:31
-#: app/templates/gentelella/users/settings/pages/applications.html:55
-#: app/templates/gentelella/users/settings/pages/applications.html:74
-#: app/templates/gentelella/users/settings/pages/applications.html:94
+#: app/templates/gentelella/users/settings/pages/applications.html:30
+#: app/templates/gentelella/users/settings/pages/applications.html:53
+#: app/templates/gentelella/users/settings/pages/applications.html:72
+#: app/templates/gentelella/users/settings/pages/applications.html:92
 msgid "Connected"
 msgstr ""
 
@@ -4043,5 +4091,11 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Submit Mail"
+#~ msgstr ""
+
+#~ msgid "Room"
+#~ msgstr ""
+
+#~ msgid "Last Changed Date"
 #~ msgstr ""
 
