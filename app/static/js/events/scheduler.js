@@ -969,6 +969,7 @@ $("#sessions-search").valueChange(function (value) {
     }
 
     filtered = _.sortBy(filtered, "title");
+    filtered = _.uniqBy(filtered, "id");
 
     $unscheduledSessionsHolder.html("");
 
