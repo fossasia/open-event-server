@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2017-02-18 10:49+0530\n"
-"PO-Revision-Date: 2017-02-18 11:44+0000\n"
+"PO-Revision-Date: 2017-02-18 11:46+0000\n"
 "Last-Translator: naofum <naofum@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/open-event"
 "/organizer-server/ja/>\n"
@@ -2146,7 +2146,7 @@ msgstr "メールから"
 
 #: app/templates/gentelella/super_admin/settings/_system.html:234
 msgid "From Name"
-msgstr "名前から"
+msgstr "差出人名"
 
 #: app/templates/gentelella/super_admin/settings/_system.html:244
 msgid "SMTP"
