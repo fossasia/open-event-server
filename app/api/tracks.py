@@ -1,16 +1,16 @@
 from flask.ext.restplus import Namespace
 
 from app.models.track import Track as TrackModel
-from .helpers import custom_fields as fields
-from .helpers.helpers import (
+from app.api.helpers import custom_fields as fields
+from app.api.helpers.helpers import (
     can_create,
     can_update,
     can_delete,
     requires_auth
 )
-from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+from app.api.helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
-from .helpers.utils import Resource, ETAG_HEADER_DEFN
+from app.api.helpers.utils import Resource, ETAG_HEADER_DEFN
 
 api = Namespace('tracks', description='Tracks', path='/')
 

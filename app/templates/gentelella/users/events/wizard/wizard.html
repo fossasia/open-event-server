@@ -99,7 +99,7 @@
         window.discountCodeApplyUrl = "{{ url_for('events.apply_discount_code')  }}";
         window.included_settings = {{ included_settings | safe | default('null', true) }};
         window.current_timezone = "{{ current_timezone | safe }}";
-        window.stripeConnectUrl = "https://connect.stripe.com/oauth/authorize?response_type=code&client_id={{ key_settings.stripe_client_id }}&scope=read_write&redirect_uri={{ url_for('ticketing.stripe_callback', _external=true) }}";
+        window.stripeConnectUrl = "https://connect.stripe.com/oauth/authorize?response_type=code&client_id={{ settings.stripe_client_id }}&scope=read_write&redirect_uri={{ url_for('ticketing.stripe_callback', _external=true) }}";
     </script>
 
     {# Core libraries #}
@@ -124,25 +124,25 @@
     <script src="{{ url_for('static', filename='js/events/event-wizard.js') }}"></script>
 
     {# Common wizard Vue components #}
-    <script src="{{ url_for('static', filename='js/events/wizard/button-component.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/events/wizard/upload-component.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/events/wizard/tabs-component.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/button-component.js') }}?timestamp=1486195583"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/upload-component.js') }}?timestamp=1486195583"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/tabs-component.js') }}?timestamp=1486195583"></script>
 
     {# Vue models, components for basic details #}
-    <script src="{{ url_for('static', filename='js/events/wizard/basic-details/classic.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/events/wizard/basic-details/vue-models.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/events/wizard/basic-details/vue-components.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/events/wizard/basic-details/initializer.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/basic-details/classic.js') }}?timestamp=1486195583"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/basic-details/vue-models.js') }}?timestamp=1486195583"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/basic-details/vue-components.js') }}?timestamp=1486195583"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/basic-details/initializer.js') }}?timestamp=1486195583"></script>
 
     {# Vue models, components for sponsors #}
-    <script src="{{ url_for('static', filename='js/events/wizard/sponsors/vue-models.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/events/wizard/sponsors/initializer.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/sponsors/vue-models.js') }}?timestamp=1486195583"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/sponsors/initializer.js') }}?timestamp=1486195583"></script>
 
     {# Vue models, components for session & speakers #}
-    <script src="{{ url_for('static', filename='js/events/wizard/sessions-speakers/classic.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/events/wizard/sessions-speakers/vue-models.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/events/wizard/sessions-speakers/vue-components.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/events/wizard/sessions-speakers/initializer.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/sessions-speakers/classic.js') }}?timestamp=1486195583"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/sessions-speakers/vue-models.js') }}?timestamp=1486195583"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/sessions-speakers/vue-components.js') }}?timestamp=1486195583"></script>
+    <script src="{{ url_for('static', filename='js/events/wizard/sessions-speakers/initializer.js') }}?timestamp=1486195583"></script>
 
     {# Vue app #}
     <script src="{{ url_for('static', filename='js/events/wizard/vue-app.js') }}?timestamp=1483801089"></script>

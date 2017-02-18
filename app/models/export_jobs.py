@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy.orm import backref
 
-from . import db
+from app.models import db
 
 
 class ExportJob(db.Model):

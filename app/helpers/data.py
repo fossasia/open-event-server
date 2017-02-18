@@ -3,11 +3,11 @@ import logging
 import os.path
 import random
 import shutil
-import time
 import traceback
 from datetime import datetime, timedelta
 from os import path
 from urllib2 import urlopen
+from uuid import uuid4
 
 import PIL
 import oauth2
@@ -18,6 +18,7 @@ from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from flask_socketio import emit
 from requests_oauthlib import OAuth2Session
 
+from app.helpers.assets.images import get_image_file_name, get_path_of_temp_url
 from app.helpers.cache import cache
 from app.helpers.helpers import string_empty, string_not_empty
 from app.helpers.notification_email_triggers import trigger_new_session_notifications, \
@@ -25,7 +26,6 @@ from app.helpers.notification_email_triggers import trigger_new_session_notifica
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
 from app.helpers.sessions_speakers.speakers import save_speaker
 from app.helpers.storage import upload, UPLOAD_PATHS, UploadedFile, upload_local
-from app.models.notifications import Notification
 from app.helpers import helpers as Helper
 from app.helpers.data_getter import DataGetter
 from app.helpers.system_mails import MAILS
@@ -37,6 +37,7 @@ from app.models.event import Event, EventsUsers
 from app.models.image_sizes import ImageSizes
 from app.models.invite import Invite
 from app.models.message_settings import MessageSettings
+from app.models.notifications import Notification
 from app.models.page import Page
 from app.models.panel_permissions import PanelPermission
 from app.models.permission import Permission
@@ -193,17 +194,30 @@ class DataManager(object):
         return notification_ids
 
     @staticmethod
-    def add_session_to_event(request, event_id, state=None):
+    def add_session_to_event(request, event_id, state=None, use_current_user=True):
         """
         Session will be saved to database with proper Event id
+        :param use_current_user:
         :param state:
         :param request: The request
         :param event_id: Session belongs to Event by event id
         """
         form = request.form
-        slide_file = DataManager.get_files_from_request(request, 'slides')
-        video_file = DataManager.get_files_from_request(request, 'video')
-        audio_file = DataManager.get_files_from_request(request, 'audio')
+        slide_temp_url = form.get('slides_url')
+        video_temp_url = form.get('video_url')
+        audio_temp_url = form.get('audio_url')
+        slide_file = ''
+        video_file = ''
+        audio_file = ''
+
+        if slide_temp_url:
+            slide_file = UploadedFile(get_path_of_temp_url(slide_temp_url), slide_temp_url.rsplit('/', 1)[1])
+
+        if video_temp_url:
+            video_file = UploadedFile(get_path_of_temp_url(video_temp_url), video_temp_url.rsplit('/', 1)[1])
+
+        if audio_temp_url:
+            audio_file = UploadedFile(get_path_of_temp_url(audio_temp_url), audio_temp_url.rsplit('/', 1)[1])
 
         if not state:
             state = form.get('state', 'draft')
@@ -218,8 +232,8 @@ class DataManager(object):
                               event_id=event_id,
                               short_abstract=form.get('short_abstract', ''),
                               level=form.get('level', ''),
-                              comments=form.get('comments',''),
-                              language=form.get('language',''),
+                              comments=form.get('comments', ''),
+                              language=form.get('language', ''),
                               state=state)
 
         if form.get('track', None) != "":
@@ -229,7 +243,12 @@ class DataManager(object):
             new_session.session_type_id = form.get('session_type', None)
 
         speaker = Speaker.query.filter_by(email=form.get('email', '')).filter_by(event_id=event_id).first()
-        speaker = save_speaker(request, event_id=event_id, speaker=speaker, user=login.current_user)
+        speaker = save_speaker(
+            request,
+            event_id=event_id,
+            speaker=speaker,
+            user=login.current_user if use_current_user else None
+        )
 
         new_session.speakers.append(speaker)
 
@@ -238,21 +257,21 @@ class DataManager(object):
         if state == 'pending':
             trigger_new_session_notifications(new_session.id, event=event)
 
-        if slide_file != "":
+        if slide_temp_url != "" and slide_file:
             slide_url = upload(
                 slide_file,
                 UPLOAD_PATHS['sessions']['slides'].format(
                     event_id=int(event_id), id=int(new_session.id)
                 ))
             new_session.slides = slide_url
-        if audio_file != "":
+        if audio_temp_url != "" and audio_file:
             audio_url = upload(
                 audio_file,
                 UPLOAD_PATHS['sessions']['audio'].format(
                     event_id=int(event_id), id=int(new_session.id)
                 ))
             new_session.audio = audio_url
-        if video_file != "":
+        if video_temp_url != "" and video_file:
             video_url = upload(
                 video_file,
                 UPLOAD_PATHS['sessions']['video'].format(
@@ -279,6 +298,12 @@ class DataManager(object):
                 if user:
                     cfs_link = url_for('event_detail.display_event_cfs', identifier=event.identifier)
                     Helper.send_notif_invite_papers(user, event.name, cfs_link, link)
+
+    @staticmethod
+    def add_session_media(request, media):
+        media_file = DataManager.get_files_from_request(request, media)
+        url = upload(media_file, UPLOAD_PATHS['temp']['event'].format(uuid=uuid4()))
+        return url
 
     @staticmethod
     def get_files_from_request(request, file_type):
@@ -319,38 +344,49 @@ class DataManager(object):
             form = request.form
             event_id = session.event_id
 
-            slide_file = DataManager.get_files_from_request(request, 'slides')
-            video_file = DataManager.get_files_from_request(request, 'video')
-            audio_file = DataManager.get_files_from_request(request, 'audio')
+            slide_temp_url = form.get('slides_url')
+            video_temp_url = form.get('video_url')
+            audio_temp_url = form.get('audio_url')
+            slide_file = ''
+            video_file = ''
+            audio_file = ''
+
+            if slide_temp_url and slide_temp_url != session.slides:
+                slide_file = UploadedFile(get_path_of_temp_url(slide_temp_url), slide_temp_url.rsplit('/', 1)[1])
+
+            if video_temp_url and video_temp_url != session.video:
+                video_file = UploadedFile(get_path_of_temp_url(video_temp_url), video_temp_url.rsplit('/', 1)[1])
+
+            if audio_temp_url and audio_temp_url != session.audio:
+                audio_file = UploadedFile(get_path_of_temp_url(audio_temp_url), audio_temp_url.rsplit('/', 1)[1])
 
             form_state = form.get('state', 'draft')
 
-            if slide_file != "":
-                slide_url = upload(
-                    slide_file,
-                    UPLOAD_PATHS['sessions']['slides'].format(
-                        event_id=int(event_id), id=int(session.id)
-                    ))
-                session.slides = slide_url
-
-            if audio_file != "":
-                audio_url = upload(
+            if slide_temp_url != "" and slide_temp_url != session.slides and slide_file:
+                slide_temp_url = upload(slide_file,
+                                        UPLOAD_PATHS['sessions']['slides'].format(
+                                            event_id=int(event_id), id=int(session.id)
+                                        ))
+            if audio_temp_url != "" and audio_temp_url != session.audio and audio_file:
+                audio_temp_url = upload(
                     audio_file,
                     UPLOAD_PATHS['sessions']['audio'].format(
                         event_id=int(event_id), id=int(session.id)
                     ))
-                session.audio = audio_url
-            if video_file != "":
-                video_url = upload(
+            if video_temp_url != "" and video_temp_url != session.video and video_file:
+                video_temp_url = upload(
                     video_file,
                     UPLOAD_PATHS['sessions']['video'].format(
                         event_id=int(event_id), id=int(session.id)
                     ))
-                session.video = video_url
+
+            session.slides = slide_temp_url
+            session.audio = audio_temp_url
+            session.video = video_temp_url
 
             if form_state == 'pending' and session.state != 'pending' and \
                     session.state != 'accepted' and session.state != 'rejected':
-
+                session.state = 'pending'
                 trigger_new_session_notifications(session.id, event_id=event_id)
 
             session.title = form.get('title', '')
@@ -358,7 +394,6 @@ class DataManager(object):
             session.long_abstract = form.get('long_abstract', '')
             session.short_abstract = form.get('short_abstract', '')
             session.level = form.get('level', '')
-            session.state = form_state
             session.track_id = form.get('track', None) if form.get('track', None) != "" else  None
             session.session_type_id = form.get('session_type', None) if form.get('session_type', None) != "" else None
 
@@ -378,9 +413,8 @@ class DataManager(object):
                 current_speaker_ids.append(str(current_speaker.id))
 
             for current_speaker_id in current_speaker_ids:
-                if current_speaker_id not in existing_speaker_ids and current_speaker_id \
-                     not in existing_speaker_ids_by_email:
-
+                if current_speaker_id \
+                     not in existing_speaker_ids and current_speaker_id not in existing_speaker_ids_by_email:
                     current_speaker = DataGetter.get_speaker(current_speaker_id)
                     session.speakers.remove(current_speaker)
                     db.session.commit()
@@ -503,7 +537,7 @@ class DataManager(object):
                 user_detail.thumbnail = ""
                 user_detail.small = ""
                 user_detail.icon = ""
-                filename = '{}.png'.format(time.time())
+                filename = '{}.png'.format(get_image_file_name())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
                                                  avatar_img[len('/serve_static/'):])
                 # print "File path 1", filepath
@@ -520,7 +554,7 @@ class DataManager(object):
                                              thumbnail_height=50,
                                              type='profile')
                 save_to_db(image_sizes, "Image Sizes Saved")
-                filename = '{}.jpg'.format(time.time())
+                filename = '{}.jpg'.format(get_image_file_name())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
                                                  avatar_img[len('/serve_static/'):])
                 # print "File path 1", filepath
@@ -658,7 +692,6 @@ class DataManager(object):
                         setattr(perm, oper[v], False)
 
                 save_to_db(perm, 'Permission saved')
-
 
     @staticmethod
     def delete_event(e_id):
@@ -1012,7 +1045,7 @@ def restore_session(session_id):
 
 def uploaded_file_provided_by_url(url):
     response_file = urlopen(url)
-    filename = str(time.time()) + '.jpg'
+    filename = get_image_file_name() + '.jpg'
     file_path = os.path.realpath('.') + '/static/uploads/' + filename
     fh = open(file_path, "wb")
     fh.write(response_file.read())

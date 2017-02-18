@@ -11,7 +11,7 @@ from requests import ConnectionError
 from app.api.events import EVENT, EVENT_PAGINATED
 from app.api.helpers.helpers import get_paginated_list, get_object_list
 from app.helpers.data import DataGetter
-from app.helpers.flask_helpers import deslugify
+from app.helpers.flask_ext.helpers import deslugify
 from app.helpers.helpers import get_date_range
 from app.helpers.static import EVENT_TOPICS
 from app.models.event import Event

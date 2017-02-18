@@ -1,3 +1,9 @@
+function resetFormElement(e) {
+    e = $(e);
+    e.wrap('<form>').closest('form').get(0).reset();
+    e.unwrap();
+}
+
 Vue.component('image-upload', {
     props: {
         title: {
@@ -53,20 +59,17 @@ Vue.component('image-upload', {
                     }
                 };
             }
+        },
+        value: {
+            type: String
         }
     },
     data: function () {
         return {
             isUploading: false,
             errorMessage: '',
-            componentId: 'upload-component-' + _.random(1000, 9999),
-            internalImageUrl: ''
+            componentId: 'upload-component-' + _.random(1000, 9999)
         };
-    },
-    watch: {
-        internalImageUrl: function (value) {
-            this.$emit('input', String(value));
-        }
     },
     template: '#image-upload-template',
     methods: {
@@ -114,6 +117,9 @@ Vue.component('image-upload', {
                 });
             });
         },
+        deleteImage: function () {
+            this.$emit('input', '');
+        },
         uploadImageToServer: function (imageData, callback) {
             var $this = this;
             $this.isUploading = true;
@@ -126,7 +132,7 @@ Vue.component('image-upload', {
                 },
                 dataType: 'json'
             }).done(function (data) {
-                $this.internalImageUrl = data.image_url;
+                $this.$emit('input', String(data.image_url));
                 callback();
             }).fail(function () {
                 $this.errorMessage = "Something went wrong. Please try again.";
@@ -138,7 +144,6 @@ Vue.component('image-upload', {
     },
     mounted: function () {
         this.$nextTick(function () {
-            this.internalImageUrl = _.clone(this.imageUrl);
             var $div = $(this.$el);
             if (this.cropRequired) {
                 this.$uploadCropperModal = $div.find('.cropper-modal');

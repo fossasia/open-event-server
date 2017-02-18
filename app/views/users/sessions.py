@@ -65,7 +65,7 @@ def create_view(event_id):
         return render_template('gentelella/users/events/info/enable_module.html', active_page='sessions',
                                title='Sessions', event=event)
     if request.method == 'POST':
-        DataManager.add_session_to_event(request, event_id)
+        DataManager.add_session_to_event(request, event_id, use_current_user=False)
         flash("The session and speaker have been saved")
         get_from = request.args.get("from")
         if get_from and get_from == 'speaker':

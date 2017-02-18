@@ -77,7 +77,7 @@
                             {{ _("Ticket would still be available for sale to Organizers.") }}
                         </div>
                     </div>
-                    <div class="item form-group">
+                    <div class="item form-group" v-if="ticket.type == 'paid'">
                         <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1;  margin-top: 0;">
                             <input type="checkbox" id="absorb_fees" v-model="ticket.absorb_fees" name="tickets[absorb_fees]" class="checkbox form-control" style="display: inline-block;width: 14px;height: 14px;">
                             {{ _("Absorb Fees") }}

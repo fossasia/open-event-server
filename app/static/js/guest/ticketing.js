@@ -173,3 +173,25 @@ $payViaStripe.on('click', function (e) {
 $(window).on('popstate', function () {
     handler.close();
 });
+
+var checked = false;
+var checkboxes =  $('.autofill-checkbox');
+checkboxes.click(function(){
+        var firstName = $('#firstname').val();
+        var lastname =  $('#lastname').val();
+        var email =     $('#email').val();
+        var requiredId = this.id;
+        checkboxes.prop('disabled', true);
+        $(this).prop('disabled', false);
+        if($(this).is(':checked')) {
+            $('#' + requiredId + '-holders\\[firstname\\]').val(firstName);
+            $('#' + requiredId + '-holders\\[lastname\\]').val(lastname);
+            $('#' + requiredId + '-holders\\[email\\]').val(email);
+        }
+        else {
+            $('#' + requiredId + '-holders\\[firstname\\]').val("");
+            $('#' + requiredId + '-holders\\[lastname\\]').val("");
+            $('#' + requiredId + '-holders\\[email\\]').val("");
+            checkboxes.prop('disabled', false );
+        }
+});

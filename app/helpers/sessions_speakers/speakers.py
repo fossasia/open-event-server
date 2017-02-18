@@ -46,8 +46,17 @@ def save_speaker(request, event_id=None, speaker=None, user=None):
         )
         save_to_db(speaker)
 
-    if user and not speaker.user:
-        speaker.user = user
+    speaker.email = trim_get_form(request.form, 'email', None)
+    speaker.name = trim_get_form(request.form, 'name', None)
+
+    if not speaker.user:
+        if user:
+            speaker.user = user
+        else:
+            speaker.user = DataGetter.get_or_create_user_by_email(speaker.email, {
+                'firstname': speaker.name,
+                'lastname': ''
+            })
 
     if not event_id:
         event_id = speaker.event_id
@@ -68,10 +77,8 @@ def save_speaker(request, event_id=None, speaker=None, user=None):
         speaker.thumbnail = ''
         speaker.icon = ''
 
-    speaker.name = trim_get_form(request.form, 'name', None)
     speaker.short_biography = trim_get_form(request.form, 'short_biography', None)
     speaker.long_biography = trim_get_form(request.form, 'long_biography', None)
-    speaker.email = trim_get_form(request.form, 'email', None)
     speaker.mobile = trim_get_form(request.form, 'mobile', None)
     speaker.website = trim_get_form(request.form, 'website', None)
     speaker.twitter = trim_get_form(request.form, 'twitter', None)
@@ -122,19 +129,15 @@ def save_resized_photo(background_image_file, event_id, speaker_id, size, image_
     """
 
     basewidth = image_sizes.full_width
-    aspect = image_sizes.full_aspect
     height_size = image_sizes.full_height
 
     if size == 'small':
-        aspect = image_sizes.full_aspect
-        basewidth = image_sizes.full_width
-        height_size = image_sizes.full_height
-    elif size == 'thumbnail':
-        aspect = image_sizes.full_aspect
         basewidth = image_sizes.thumbnail_width
         height_size = image_sizes.thumbnail_height
+    elif size == 'thumbnail':
+        basewidth = image_sizes.full_width
+        height_size = image_sizes.full_height
     elif size == 'icon':
-        aspect = image_sizes.icon_aspect
         basewidth = image_sizes.icon_width
         height_size = image_sizes.icon_height
 
@@ -142,4 +145,10 @@ def save_resized_photo(background_image_file, event_id, speaker_id, size, image_
         event_id=int(event_id), id=int(speaker_id)
     )
 
-    return save_resized_image(background_image_file, basewidth, aspect, height_size, upload_path)
+    if basewidth != height_size:
+        if height_size > basewidth:
+            basewidth = height_size
+        else:
+            height_size = basewidth
+
+    return save_resized_image(background_image_file, basewidth, 'off', height_size, upload_path)

@@ -1,5 +1,5 @@
-from ..models import db
-from ..models.version import Version
+from app.models import db
+from app.models.version import Version
 
 
 class VersionUpdater(object):

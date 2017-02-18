@@ -27,9 +27,8 @@ def get_event_invoice():
     event.state = 'Published'
     user = ObjectMother.get_user()
     save_to_db(user)
-    event.creator_id = user.id
     save_to_db(event, "Event Saved")
-    new_invoice = EventInvoice(amount=100, event_id=event.id, user_id=event.creator_id)
+    new_invoice = EventInvoice(amount=100, event_id=event.id, user_id=user.id)
     save_to_db(new_invoice, "Ticket Saved")
     return event, new_invoice
 

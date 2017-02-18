@@ -3,12 +3,12 @@ from flask.ext.restplus import Namespace
 from app.api.tickets import ORDER, TICKET
 from app.helpers.ticketing import TicketingManager
 
-from .helpers.helpers import (
+from app.api.helpers.helpers import (
     requires_auth,
     can_access)
-from .helpers.utils import POST_RESPONSES
-from .helpers.utils import Resource
-from .helpers import custom_fields as fields
+from app.api.helpers.utils import POST_RESPONSES
+from app.api.helpers.utils import Resource
+from app.api.helpers import custom_fields as fields
 
 api = Namespace('attendees', description='Attendees', path='/')
 

@@ -7,7 +7,7 @@ from flask_restplus import Model, fields, reqparse
 
 from app.helpers.data import update_version
 from app.models.event import Event as EventModel
-from .error_docs import (
+from app.api.helpers.error_docs import (
     notfound_error_model,
     notauthorized_error_model,
     validation_error_model,

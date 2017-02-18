@@ -1,4 +1,5 @@
 import pycountry
+from datetime import datetime
 from flask import Blueprint
 from flask import abort, jsonify
 from flask import redirect, flash
@@ -134,18 +135,53 @@ def display_ticket_stats(event_id):
 
 @event_ticket_sales.route('/orders/')
 def display_orders(event_id):
+    from_date = request.args.get('from_date')
+    to_date = request.args.get('to_date')
+    if ('from_date' in request.args and not from_date) or ('to_date' in request.args and not to_date) or \
+        ('from_date' in request.args and 'to_date' not in request.args) or \
+        ('to_date' in request.args and 'from_date' not in request.args):
+        return redirect(url_for('.display_orders', event_id=event_id))
+    if from_date and to_date:
+        orders = TicketingManager.get_orders(
+            event_id=event_id,
+            from_date=datetime.strptime(from_date, '%d/%m/%Y'),
+            to_date=datetime.strptime(to_date, '%d/%m/%Y')
+        )
+    else:
+        orders = TicketingManager.get_orders(event_id)
     event = DataGetter.get_event(event_id)
-    orders = TicketingManager.get_orders(event_id)
-    return render_template('gentelella/users/events/tickets/orders.html', event=event, event_id=event_id, orders=orders)
+    return render_template('gentelella/users/events/tickets/orders.html', event=event, event_id=event_id,
+                            orders=orders, from_date=from_date, to_date = to_date)
 
 
 @event_ticket_sales.route('/attendees/')
 def display_attendees(event_id):
     event = DataGetter.get_event(event_id)
-    orders = TicketingManager.get_orders(event_id)
+    from_date = request.args.get('from_date')
+    to_date = request.args.get('to_date')
+    selected_ticket = request.args.get('ticket_name')
+    if ('from_date' in request.args and not from_date) or ('to_date' in request.args and not to_date) or \
+        ('from_date' in request.args and 'to_date' not in request.args) or \
+        ('to_date' in request.args and 'from_date' not in request.args):
+        return redirect(url_for('.display_attendees', event_id=event_id))
+    if from_date and to_date:
+        orders = TicketingManager.get_orders(
+            event_id=event_id,
+            from_date=datetime.strptime(from_date, '%d/%m/%Y'),
+            to_date=datetime.strptime(to_date, '%d/%m/%Y')
+        )
+    else:
+        orders = TicketingManager.get_orders(event_id)
     holders = []
+    ticket_names = []
+    for ticket in event.tickets:
+        ticket_names.append(ticket.name)
     for order in orders:
         for holder in order.ticket_holders:
+            if selected_ticket is not None:
+                if selected_ticket != "All":
+                    if holder.ticket.name != selected_ticket:
+                        continue
             discount = TicketingManager.get_discount_code(event_id, order.discount_code_id)
             order_holder = {
                 'order_invoice': order.get_invoice_number(),
@@ -200,7 +236,8 @@ def display_attendees(event_id):
             holders.append(order_holder)
 
     return render_template('gentelella/users/events/tickets/attendees.html', event=event,
-                           event_id=event_id, holders=holders)
+                           event_id=event_id, holders=holders, from_date=from_date, to_date=to_date,
+                           ticket_names=ticket_names, selected_ticket=selected_ticket)
 
 
 @event_ticket_sales.route('/add-order/', methods=('GET', 'POST'))
@@ -401,6 +438,15 @@ def cancel_order(event_id):
 @event_ticket_sales.route('/delete/', methods=('POST',))
 def delete_order(event_id):
     return_status = TicketingManager.delete_order(request.form)
+    if return_status:
+        return redirect(url_for('.display_orders', event_id=event_id))
+    else:
+        abort(403)
+
+
+@event_ticket_sales.route('/resend-confirmation/', methods=('POST',))
+def resend_confirmation(event_id):
+    return_status = TicketingManager.resend_confirmation(request.form)
     if return_status:
         return redirect(url_for('.display_orders', event_id=event_id))
     else:

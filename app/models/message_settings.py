@@ -1,4 +1,4 @@
-from . import db
+from app.models import db
 
 USER_REGISTER = 'User Registration'
 USER_CONFIRM = 'User Confirmation'

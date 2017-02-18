@@ -2,7 +2,7 @@ import datetime
 
 from app.helpers.date_formatter import DateFormatter
 from app.helpers.versioning import clean_up_string, clean_html
-from . import db
+from app.models import db
 
 speakers_sessions = db.Table('speakers_sessions', db.Column(
     'speaker_id', db.Integer, db.ForeignKey('speaker.id', ondelete='CASCADE')), db.Column(

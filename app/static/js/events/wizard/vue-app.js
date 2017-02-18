@@ -144,7 +144,8 @@ var app = new Vue({
             }
         },
         'step': function (step) {
-            history.replaceState(null, '', "./" + step);
+            step = (step === "") ? step : step + "/";
+            history.replaceState(null, '', "/events/" + this.event.id + "/edit/" + step);
         }
     },
     methods: {

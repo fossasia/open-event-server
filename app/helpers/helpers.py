@@ -1,14 +1,13 @@
 import json
 import re
-import time
 from datetime import datetime, timedelta
 
 import requests
-from flask import request, url_for, current_app
 from itsdangerous import Serializer
 from sqlalchemy import func
 
-from app.helpers.flask_helpers import get_real_ip
+from app.helpers.assets.images import get_image_file_name
+from app.helpers.flask_ext.helpers import get_real_ip
 from app.helpers.storage import UploadedFile
 from app.models.notifications import (
     # Prepended with `NOTIF_` to differentiate from mails
@@ -26,14 +25,15 @@ from app.models.notifications import (
 
 )
 from app.settings import get_settings
+from flask import request, url_for, current_app
 from system_mails import MAILS
 from system_notifications import NOTIFS
-from ..models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, \
+from app.models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT, \
     USER_REGISTER, PASSWORD_RESET, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, EVENT_ROLE, EVENT_PUBLISH, Mail, \
     AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, TICKET_PURCHASED, EVENT_EXPORTED, \
     EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, MONTHLY_PAYMENT_EMAIL, \
     EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER, TICKET_CANCELLED
-from ..models.message_settings import MessageSettings
+from app.models.message_settings import MessageSettings
 
 
 def represents_int(string):
@@ -391,7 +391,11 @@ def send_email(to, action, subject, html):
     """
     if not string_empty(to):
         email_service = get_settings()['email_service']
-        email_from = get_settings()['email_from']
+        email_from_name = get_settings()['email_from_name']
+        if email_service == 'smtp':
+            email_from = email_from_name + '<' + get_settings()['email_from'] + '>'
+        else:
+            email_from = get_settings()['email_from']
         payload = {
             'to': to,
             'from': email_from,
@@ -422,6 +426,7 @@ def send_email(to, action, subject, html):
                 from tasks import send_mail_via_smtp_task
                 send_mail_via_smtp_task.delay(config, payload)
             else:
+                payload['fromname'] = email_from_name
                 key = get_settings()['sendgrid_key']
                 if not key and not current_app.config['TESTING']:
                     print 'Sendgrid key not defined'
@@ -720,7 +725,7 @@ def update_state(task_handle, state, result=None):
 
 
 def uploaded_file(extension='.png', file_content=None):
-    filename = str(time.time()) + extension
+    filename = get_image_file_name() + extension
     file_path = current_app.config.get('BASE_DIR') + '/static/uploads/' + filename
     file = open(file_path, "wb")
     file.write(file_content.split(",")[1].decode('base64'))

@@ -4,7 +4,7 @@ import pytz
 
 from flask import Blueprint
 from flask import make_response
-from flask import request, url_for, flash, render_template
+from flask import request, url_for, flash, render_template, jsonify
 from flask.ext import login
 from flask.ext.restplus import abort
 from markupsafe import Markup
@@ -207,11 +207,14 @@ def display_event_cfs(identifier, via_hash=False):
     speaker_form = json.loads(form_elems.speaker_form)
     session_form = json.loads(form_elems.session_form)
 
-    now = datetime.now()
+    now = datetime.now(pytz.timezone(event.timezone
+                                                  if (event.timezone and event.timezone != '') else 'UTC'))
+    start_date = pytz.timezone(event.timezone).localize(call_for_speakers.start_date)
+    end_date = pytz.timezone(event.timezone).localize(call_for_speakers.end_date)
     state = "now"
-    if call_for_speakers.end_date < now:
+    if end_date < now:
         state = "past"
-    elif call_for_speakers.start_date > now:
+    elif start_date > now:
         state = "future"
     speakers = DataGetter.get_speakers(event.id).all()
     accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
@@ -249,11 +252,14 @@ def display_event_cfs_via_hash(hash):
     speaker_form = json.loads(form_elems.speaker_form)
     session_form = json.loads(form_elems.session_form)
 
-    now = datetime.now()
+    now = datetime.now(pytz.timezone(event.timezone
+                                                  if (event.timezone and event.timezone != '') else 'UTC'))
+    start_date = pytz.timezone(event.timezone).localize(call_for_speakers.start_date)
+    end_date = pytz.timezone(event.timezone).localize(call_for_speakers.end_date)
     state = "now"
-    if call_for_speakers.end_date < now:
+    if end_date < now:
         state = "past"
-    elif call_for_speakers.start_date > now:
+    elif start_date > now:
         state = "future"
     speakers = DataGetter.get_speakers(event.id).all()
     accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
@@ -288,11 +294,14 @@ def process_event_cfs(identifier, via_hash=False):
         speaker_form = json.loads(form_elems.speaker_form)
         session_form = json.loads(form_elems.session_form)
 
-        now = datetime.now()
+        now = datetime.now(pytz.timezone(event.timezone
+                                                  if (event.timezone and event.timezone != '') else 'UTC'))
+        start_date = pytz.timezone(event.timezone).localize(call_for_speakers.start_date)
+        end_date = pytz.timezone(event.timezone).localize(call_for_speakers.end_date)
         state = "now"
-        if call_for_speakers.end_date < now:
+        if end_date < now:
             state = "past"
-        elif call_for_speakers.start_date > now:
+        elif start_date > now:
             state = "future"
         speakers = DataGetter.get_speakers(event.id).all()
         accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
@@ -317,6 +326,34 @@ def process_event_cfs(identifier, via_hash=False):
                 "Your session proposal has been submitted. Please login/register with <strong><u>" + email + "</u></strong> to manage it."),
                 "success")
             return redirect(url_for('admin.login_view', next=url_for('my_sessions.display_my_sessions_view')))
+
+
+@event_detail.route('/temp/', methods=('POST',))
+def add_session_media():
+    if 'slides' in request.files and request.files['slides'].filename != '':
+        url = DataManager.add_session_media(request, 'slides')
+        return jsonify({
+            'status': 'ok',
+            'url': url
+        }), 200
+
+    if 'video' in request.files and request.files['video'].filename != '':
+        url = DataManager.add_session_media(request, 'video')
+        return jsonify({
+            'status': 'ok',
+            'url': url
+        }), 200
+
+    if 'audio' in request.files and request.files['audio'].filename != '':
+        url = DataManager.add_session_media(request, 'audio')
+        return jsonify({
+            'status': 'ok',
+            'url': url
+        }), 200
+
+    return jsonify({
+            'status': 'ok'
+        }), 200
 
 
 @event_detail.route('/<identifier>/coc/')

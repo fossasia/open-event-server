@@ -6,10 +6,10 @@
 <head>
     <meta charset="UTF-8">
     <title>
-    {% block title %}{% endblock %}
-    {% if not is_home_page %}
-    - {{ app_name }}
-    {% endif %}
+        {% block title %}{% endblock %}
+        {% if not is_home_page %}
+            - {{ app_name }}
+        {% endif %}
     </title>
     {% block head_meta %}
         <meta charset="UTF-8">
@@ -29,7 +29,8 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/custom/common.css') }}"/>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/custom/footer.css') }}"/>
         <link rel="stylesheet" href="{{ url_for('static', filename='vendor/summernote/dist/summernote.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/vendor/bootstrap/bootstrap-responsive-tabs.css') }}">
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='css/vendor/bootstrap/bootstrap-responsive-tabs.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-social/bootstrap-social.css') }}">
     {% endblock %}
 
@@ -40,12 +41,12 @@
         <script src="{{ url_for('static', filename='vendor/swagger-js/browser/swagger-client.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/api.js') }}"></script>
         <script>
-        window.appName = "{{ app_name }}";
+            window.appName = "{{ app_name }}";
         </script>
     {% endblock %}
 </head>
 <body class="nav-md" style="background-color: #F7F7F7;">
-<div class="container body">
+<div class="container body" id="{{ page_id }}">
     <div class="main_container">
         {{ menu.render_menu() }}
         <div role="main" class="right_col" style="margin-left:0;">

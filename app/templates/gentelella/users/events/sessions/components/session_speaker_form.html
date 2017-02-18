@@ -51,9 +51,10 @@
     </div>
     <div class="row">
         <div style="text-align: center;">
-            <button type="submit" class="btn btn-primary" name="state" value="draft">{{ _("Save as Draft") }}</button>
-            <button type="submit" class="btn btn-success" name="state"
-                    value="pending">{{ _("Submit Session") }}</button>
+            {% if not session or (session.state != 'pending' and  session.state != 'rejected' and session.state != 'accepted') %}
+                <button type="submit" class="btn btn-primary" name="state" value="draft">{{ _("Save as Draft") }}</button>
+            {% endif %}
+            <button type="submit" class="btn btn-success" name="state" value="pending">{{ _("Submit Session") }}</button>
         </div>
     </div>
 </form>

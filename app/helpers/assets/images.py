@@ -1,10 +1,14 @@
 import os
-import time
+import uuid
 
 import PIL
 from PIL import Image
 from flask import current_app as app
-from app.helpers.storage import upload, UploadedFile
+from app.helpers.storage import upload, UploadedFile, generate_hash
+
+
+def get_image_file_name():
+    return str(uuid.uuid4())
 
 
 def get_path_of_temp_url(url):
@@ -25,7 +29,7 @@ def save_event_image(image_url, upload_path, ext='png', remove_after_upload=Fals
     :param image_url:
     :return:
     """
-    filename = '{filename}.{ext}'.format(filename=time.time(), ext=ext)
+    filename = '{filename}.{ext}'.format(filename=get_image_file_name(), ext=ext)
     file_path = get_path_of_temp_url(image_url)
     logo_file = UploadedFile(file_path, filename)
     url = upload(logo_file, upload_path)
@@ -47,7 +51,7 @@ def save_resized_image(image_file, basewidth, aspect, height_size, upload_path,
     :param image_file:
     :return:
     """
-    filename = '{filename}.{ext}'.format(filename=time.time(), ext=ext)
+    filename = '{filename}.{ext}'.format(filename=get_image_file_name(), ext=ext)
 
     img = Image.open(image_file)
     if aspect == 'on':
@@ -55,12 +59,21 @@ def save_resized_image(image_file, basewidth, aspect, height_size, upload_path,
         height_size = int((float(img.size[1]) * float(width_percent)))
 
     img = img.resize((basewidth, height_size), PIL.Image.ANTIALIAS)
-    img.save(image_file)
-    file = UploadedFile(file_path=image_file, filename=filename)
+
+    temp_file_relative_path = 'static/media/temp/' + generate_hash(str(image_file)) + get_image_file_name() + '.jpg'
+    temp_file_path = app.config['BASE_DIR'] + '/' + temp_file_relative_path
+
+    img.save(temp_file_path)
+
+    file = UploadedFile(file_path=temp_file_path, filename=filename)
 
     if remove_after_upload:
         os.remove(image_file)
 
-    return upload(file, upload_path)
+    uploaded_url = upload(file, upload_path)
+
+    os.remove(temp_file_path)
+
+    return uploaded_url
 
 

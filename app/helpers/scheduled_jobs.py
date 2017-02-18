@@ -19,13 +19,13 @@ from app.models.user import User
 
 def empty_trash():
     from app import current_app as app
+
     with app.app_context():
         events = Event.query.filter_by(in_trash=True)
         users = User.query.filter_by(in_trash=True)
         sessions = Session.query.filter_by(in_trash=True)
-        orders = Order.query.filter_by(status="deleted")
         pending_orders = Order.query.filter_by(status="pending")
-        expired_orders = Order.query.filter_by(status="expired")
+
         for event in events:
             if datetime.now() - event.trash_date >= timedelta(days=30):
                 DataManager.delete_event(event.id)
@@ -40,20 +40,10 @@ def empty_trash():
             if datetime.now() - session_.trash_date >= timedelta(days=30):
                 delete_from_db(session_, "Session deleted permanently")
 
-        for order in orders:
-            if datetime.now() - order.trashed_at >= timedelta(days=30):
-                delete_from_db(order, "Order deleted permanently")
-
         for pending_order in pending_orders:
             if datetime.now() - pending_order.created_at >= timedelta(days=3):
                 pending_order.status = "expired"
                 save_to_db(pending_order, "Pending order expired.")
-
-        for expired_order in expired_orders:
-            if datetime.now() - expired_order.created_at >= timedelta(days=6):
-                expired_order.status = "deleted"
-                expired_order.trashed_at = datetime.now()
-                save_to_db(expired_order, "Expired order deleted")
 
 
 def send_after_event_mail():
@@ -109,7 +99,8 @@ def send_event_fee_notification():
                         fee_total += fee
 
             if fee_total > 0:
-                new_invoice = EventInvoice(amount=fee_total, event_id=event.id, user_id=event.creator_id)
+                organizer = DataGetter.get_user_event_roles_by_role_name(event.id, 'organizer').first()
+                new_invoice = EventInvoice(amount=fee_total, event_id=event.id, user_id=organizer.user.id)
 
                 if event.discount_code_id and event.discount_code:
                     r = relativedelta(datetime.utcnow(), event.created_at)

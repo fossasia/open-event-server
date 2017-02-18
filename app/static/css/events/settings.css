@@ -1,3 +1,8 @@
+
+.input-group-addon.social-addon {
+	min-width: 135px;
+}
+
 #events-accordion > .panel > .panel-heading {
     background-color: #FFFFFF;
 }

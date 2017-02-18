@@ -55,7 +55,7 @@
             </div>
         </div>
         <div class="col-md-12 table-responsive" style="margin-top: 10px;">
-            <table class="table table-striped table-hover with-datatable">
+            <table class="table table-striped table-hover with-datatable" style="overflow:hidden;">
                 <thead>
                 <tr>
                     <th>{{ _("State") }}</th>
@@ -64,7 +64,7 @@
                     <th>{{ _("Track") }}</th>
                     <th>{{ _("Short Abstract") }}</th>
                     <th>{{ _("Submission Date") }}</th>
-                    <th>{{ _("Last Changed Date") }}</th>
+                    <th>{{ _("Last Modified") }}</th>
                     <th>{{ _("Email Sent") }}</th>
                     <th></th>
                     <th></th>
@@ -87,9 +87,11 @@
                                 </ol>
                             </td>
                             <td>{{ session.track.name }}</td>
-                            <td>{{ session.short_abstract|striptags }}</td>
-                            <td>{{ session.start_time }}</td>
-                            <td>{{ session.end_time }}</td>
+                            <td class="short_abstract">{{ session.short_abstract|striptags }}</td>
+                            <td>{{ session.created_at | datetime }}</td>
+                            {% set version = session.versions[versions_count-1] %}
+                            {% set transaction = transaction_class(version) %}
+                            <td>{{ transaction.issued_at.strftime('%B %d, %I:%M %p') }}</td>
                             <td>
                                 {{ "Yes" if session.state_email_sent else "No" }}
                             </td>
@@ -158,11 +160,10 @@
                                             <i class="fa fa-envelope"></i>
                                         </a>
                                     {% endif %}
-                                    <form enctype="multipart/form-data" action="" method="POST" class="form-horizontal"
-                                          id="session-create-form">
-
-                                        <div class="modal fade" id="mailModal" tabindex="-1" role="dialog"
+                                    <div class="modal fade" id="mailModal" tabindex="-1" role="dialog"
                                              aria-labelledby="mailModalLabel">
+                                        <form enctype="multipart/form-data" action="" method="POST" class="form-horizontal"
+                                          id="session-create-form">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -200,8 +201,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </form>
+                                        </form>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
@@ -234,6 +235,7 @@
 
         var table = $('.with-datatable').DataTable({
             "dom": '<"row"<"toolbar col-md-7"<"pull-left"l>><"col-md-3 pull-right"f>>tip',
+            "pageLength": 50,
             "columnDefs": [
                 {"width": "20%", "targets": 1},
                 {"width": "5%", "targets": 3},
@@ -241,6 +243,14 @@
                 {"width": "20px", "targets": 9}
             ],
             "scrollX": true
+        });
+
+        $.each($('.short_abstract'),function() {
+            if ($(this).html().length > 200) {
+                var words = $(this).html();
+                words = words.substring(0, 200) + "...";
+                $(this).html(words);
+            }
         });
 
         $("div.toolbar").prepend($("#toolbar-holder").html());
@@ -264,7 +274,7 @@
                 $mailModal.find('.message').val("Hello,\n\nYour session '" + sessionTitle + "' has been " + emailType + "ed.\n\nVisit this link to view the session: http://" + window.location.hostname + "/events/mysessions/1/ .");
                 $mailModal.find('.form-horizontal').attr('action', sessionId + '/accept');
             } else {
-                $mailModal.find('.subject').val("Your Session '" + sessiontitle + "' has been rejected");
+                $mailModal.find('.subject').val("Your Session '" + sessionTitle + "' has been rejected");
                 $mailModal.find('.message').val("Hello,\n\nYour session '" + sessionTitle + "' has been " + emailType + "ed.\n\nVisit this link to view the session: http://" + window.location.hostname + "/events/mysessions/1/ .");
                 $mailModal.find('.form-horizontal').attr('action', sessionId + '/reject');
             }

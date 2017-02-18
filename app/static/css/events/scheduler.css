@@ -28,6 +28,7 @@
 
 .unscheduled {
     margin-bottom: 3px;
+    color: white;
     cursor: all-scroll !important;
 }
 

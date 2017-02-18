@@ -3,7 +3,7 @@ import uuid
 from datetime import datetime
 
 from app.helpers.helpers import get_count
-from . import db
+from app.models import db
 
 
 def get_new_identifier():

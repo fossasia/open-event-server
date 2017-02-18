@@ -3,14 +3,14 @@ from flask.ext.restplus import Namespace
 from app.helpers.data import DataManager
 from app.helpers.data_getter import DataGetter
 from app.models.notifications import Notification as NotificationModel
-from .helpers import custom_fields as fields
-from .helpers.helpers import (
+from app.api.helpers import custom_fields as fields
+from app.api.helpers.helpers import (
     can_create,
     requires_auth
 )
-from .helpers.utils import PAGINATED_MODEL, ServiceDAO, \
+from app.api.helpers.utils import PAGINATED_MODEL, ServiceDAO, \
     POST_RESPONSES
-from .helpers.utils import Resource
+from app.api.helpers.utils import Resource
 
 api = Namespace('notifications', description='Notifications', path='/')
 

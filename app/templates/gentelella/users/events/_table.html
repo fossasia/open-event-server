@@ -72,7 +72,7 @@
                         {% if flag %}
                             {% for id, item in ticket_stats.iteritems() %}
                                 <div>
-                                    <li><span>{{ item.name }}</span> <span> ({{item.completed}}/{{item.total}}) </span> </li>
+                                    <span>{{ item.name }}</span> <span> ({{item.completed}}/{{item.total}}) </span>
                                 </div>
                              {% endfor %}
                         {% else %}

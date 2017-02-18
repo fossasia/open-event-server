@@ -321,6 +321,7 @@ function addSessionToUnscheduled(sessionRef, isFiltering, shouldBroadcast) {
         "top": ""
     }).removeData("x").removeData("y");
 
+    updateColor(sessionRefObject.$sessionElement, sessionRefObject.session.track);
     sessionRefObject.$sessionElement.ellipsis().ellipsis();
     $noSessionsInfoBox.hide();
 
@@ -483,6 +484,8 @@ function updateSessionTime($sessionElement, session) {
         session = $sessionElement.data("session");
         saveSession = true;
     }
+
+    var selectedDate = moment($('.date-change-btn.active').text(), "Do MMMM YYYY");
     var topTime = moment.utc({hour: dayLevelTime.start.hours, minute: dayLevelTime.start.minutes});
     var mins = pixelsToMinutes($sessionElement.outerHeight(false));
     var topInterval = pixelsToMinutes($sessionElement.data("temp-top"), true);
@@ -491,9 +494,15 @@ function updateSessionTime($sessionElement, session) {
     var newEndTime = topTime.add(mins, "m");
 
     session.duration = mins;
+    session.start_time.date(selectedDate.date());
+    session.start_time.month(selectedDate.month());
+    session.start_time.year(selectedDate.year());
     session.start_time.hours(newStartTime.hours());
     session.start_time.minutes(newStartTime.minutes());
 
+    session.end_time.date(selectedDate.date());
+    session.end_time.month(selectedDate.month());
+    session.end_time.year(selectedDate.year());
     session.end_time.hours(newEndTime.hours());
     session.end_time.minutes(newEndTime.minutes());
 
@@ -745,6 +754,13 @@ function processMicrolocationSession(microlocations, sessions, callback) {
                 minute: startTime.minutes()
             }).diff(topTime)).asMinutes(), true);
 
+            var now = window.mainEvent.start_time;
+            var end = window.mainEvent.end_time;
+            while(now.format('M/D/YYYY') <= end.format('M/D/YYYY')) {
+                days.push(now.format("Do MMMM YYYY"));
+                now.add('days', 1);
+            }
+
             var dayString = startTime.format("Do MMMM YYYY"); // formatted as eg. 2nd May 2013
 
             if (!_.includes(days, dayString)) {
@@ -763,11 +779,18 @@ function processMicrolocationSession(microlocations, sessions, callback) {
             session.top = top;
 
             var dayIndex = _.indexOf(days, dayString);
-
             if (_.isArray(sessionsStore[dayIndex])) {
                 sessionsStore[dayIndex].push(session);
             } else {
                 sessionsStore[dayIndex] = [session];
+            }
+
+            for (var index in days) {
+                if (_.isArray(unscheduledStore[index])) {
+                    unscheduledStore[index].push(session);
+                } else {
+                    unscheduledStore[index] = [session];
+                }
             }
         }
     });
@@ -841,6 +864,14 @@ function loadMicrolocationsToTimeline(day) {
 
         if (!_.isNull(session.top) && !_.isNull(session.microlocation) && !_.isNull(session.microlocation.id) && !_.isNull(session.start_time) && !_.isNull(session.end_time) && !session.hasOwnProperty("isReset")) {
             addSessionToTimeline(session, null, false);
+        }
+    });
+
+    _.each(unscheduledStore[dayIndex], function (session) {
+        // Add session elements, but do not broadcast.
+
+        if (!_.isNull(session.top) && !_.isNull(session.microlocation) && !_.isNull(session.microlocation.id) && !_.isNull(session.start_time) && !_.isNull(session.end_time) && !session.hasOwnProperty("isReset")) {
+            return true;
         } else {
             if (!isReadOnly()) {
                 addSessionToUnscheduled(session, false, false);

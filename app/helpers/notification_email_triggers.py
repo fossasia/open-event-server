@@ -4,7 +4,7 @@ from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import send_new_session_organizer, send_notif_new_session_organizer, \
     send_notif_session_accept_reject, send_session_accept_reject, send_schedule_change, send_notif_session_schedule, \
     send_email_for_after_purchase_organizers, send_notif_for_after_purchase_organizer
-from ..models.mail import NEW_SESSION, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, TICKET_PURCHASED
+from app.models.mail import NEW_SESSION, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, TICKET_PURCHASED
 
 
 def trigger_new_session_notifications(session_id, event_id=None, event=None):
@@ -19,7 +19,7 @@ def trigger_new_session_notifications(session_id, event_id=None, event=None):
     admin_msg_setting = DataGetter.get_message_setting_by_action(NEW_SESSION)
     organizers = DataGetter.get_user_event_roles_by_role_name(event.id, 'organizer')
     for organizer in organizers:
-        email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(organizer.user.id, event_id)
+        email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(organizer.user.id, event.id)
         if not admin_msg_setting or \
             (email_notification_setting and email_notification_setting.new_paper == 1 and
              admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:

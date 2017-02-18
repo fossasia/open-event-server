@@ -6,16 +6,16 @@ from flask_login import current_user
 
 from app.helpers.data_getter import DataGetter
 from app.models.speaker import Speaker as SpeakerModel
-from .helpers import custom_fields as fields
-from .helpers.helpers import (
+from app.api.helpers import custom_fields as fields
+from app.api.helpers.helpers import (
     can_create,
     can_update,
     can_delete
 )
-from .helpers.helpers import model_custom_form, requires_auth
-from .helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
+from app.api.helpers.helpers import model_custom_form, requires_auth
+from app.api.helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
-from .helpers.utils import Resource, ETAG_HEADER_DEFN
+from app.api.helpers.utils import Resource, ETAG_HEADER_DEFN
 
 api = Namespace('speakers', description='Speakers', path='/')
 
@@ -45,7 +45,8 @@ SPEAKER = api.model('Speaker', {
     'city': fields.String(),
     'heard_from': fields.String(),
     'speaking_experience': fields.String(),
-    'sponsorship_required': fields.String()
+    'sponsorship_required': fields.String(),
+    'gender': fields.String()
 })
 
 SPEAKER_PAGINATED = api.clone('SpeakerPaginated', PAGINATED_MODEL, {
