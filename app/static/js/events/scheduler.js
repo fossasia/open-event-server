@@ -599,7 +599,6 @@ function initializeInteractables() {
             inertia: false,
             // enable autoScroll
             autoScroll: {
-                container: $microlocationsHolder[0],
                 margin: 50,
                 distance: 5,
                 interval: 10

@@ -452,7 +452,7 @@ def save_event_from_wizard(what):
         event_id = None
     else:
         event_id = data['event_id']
-        if not current_user.is_staff and not current_user.is_organizer(event_id):
+        if not current_user.is_staff and not current_user.is_organizer(event_id) and not current_user.is_coorganizer(event_id):
             abort(403)
     if what == 'event':
         return jsonify(save_event_from_json(data, event_id))
