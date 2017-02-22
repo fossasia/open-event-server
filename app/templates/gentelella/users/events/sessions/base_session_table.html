@@ -72,7 +72,7 @@
                 </thead>
                 <tbody>
                 {% for session in sessions %}
-                    {% if session.in_trash == False %}
+                    {% if session.title and session.in_trash == False %}
                         {% set versions_count = count_versions(session) %}
                         <tr>
                             <td>
