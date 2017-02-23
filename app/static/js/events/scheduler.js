@@ -342,9 +342,11 @@ function addSessionToUnscheduled(sessionRef, isFiltering, shouldBroadcast) {
     }
 
     try {
-        sessionRefObject.$sessionElement.popover('destroy');
-    } catch(ignored) { }
-
+        setTimeout( function() {
+            $('.session.unscheduled').popover('hide');
+        }, 100);
+    }
+    catch(ignored) { }
 }
 
 /**
