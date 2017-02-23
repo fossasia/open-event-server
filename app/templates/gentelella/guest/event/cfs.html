@@ -31,11 +31,9 @@
                 {{ call_for_speakers.announcement | safe }}
                 {% if state == "now" or via_hash %}
                     {% if current_user.is_authenticated %}
-                        <a href="/e/{{ event.identifier }}/cfs/new">
-                            <button class="btn btn-success" data-toggle="modal"
-                                data-target="#session-modal">{{ _("Submit Proposal") }}
-                            </button>
-                        </a>
+                        <button class="btn btn-success" data-toggle="modal"
+                                data-target="#speaker-session-modal">{{ _("Submit Proposal") }}
+                        </button>
                     {% else %}
                         <button class="btn btn-success" data-toggle="modal"
                                 data-target="#login-user-modal">{{ _("Submit Proposal") }}
@@ -55,6 +53,51 @@
                             </div>
                         </div>
                     </div>
+                    {% if not user_speaker[0] %}
+                        <div id="speaker-session-modal" class="modal fade" tabindex="-1" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                                        <h4 class="modal-title">{{ _("Submit Proposal") }}? </h4>
+                                    </div>
+                                    <div class="modal-footer" style="padding:6px">
+                                        <a href="/e/{{ event.identifier }}/cfs/new_speaker" type="button" class="btn btn-info" id = "speaker-button">{{ _("Register as a Speaker") }}</a>
+                                        <a href="/e/{{ event.identifier }}/cfs/new/" type="button" class="btn btn-primary" id = "session-button" style="margin-top:-6px">{{ _("Propose Session") }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div id="speaker-session-modal" class="modal fade" tabindex="-1" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                                        <h4 class="modal-title">{{ _("Add Speaker Information") }} </h4>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="existing-session" style="text-align:left"> 
+                                            <h4>{{ _("Existing Sessions") }} </h4>
+                                            {% for speaker in user_speaker %}
+                                                {% for session in speaker.sessions %}
+                                                    {% if not session.in_trash %} 
+                                                        {% if session.title %}
+                                                            {{ session }} <a href="{{ url_for('my_sessions.process_session_view',session_id=session.id) }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a><br>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                                <hr>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="add_proposal">
+                                            <a href="/e/{{ event.identifier }}/cfs/new_session" type="button" class="btn btn-success" id = "session-button" style="margin-top:-6px">{{ _("Add Session Proposal") }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>

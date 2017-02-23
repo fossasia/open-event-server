@@ -36,8 +36,8 @@
         }
 
         #orders-table .label {
-            font-size: 16px;
-            padding: 5px;
+            font-size: 11px;
+            padding: 2px 4px;
             font-weight: 400;
         }
 
@@ -154,7 +154,7 @@
 
     <h3>{{ _("View Attendees") }}</h3>
     <br>
-    <table class="table with-datatable" id="orders-table">
+    <table class="table with-datatable" id="orders-table" width="100%">
         <thead>
         <tr>
             <th>
@@ -162,9 +162,6 @@
             </th>
             <th>
                 {{ _("Order") }}
-            </th>
-            <th>
-                {{ _("Order Status") }}
             </th>
             <th>
                 {{ _("Ticket Name") }}
@@ -195,17 +192,6 @@
                         <a href="{{ holder.order_url }}"
                            class="order-link">{{ holder.order_invoice }}</a> -
                         by {{ holder.by_whom }}
-                        <br>
-                        {% if holder.status == 'completed' %}
-                            <span class="payment-via">Payment via {{ holder.paid_via | capitalize }}</span>
-                        {% endif %}
-                        {% if holder.status == 'completed' %}
-                            <span class="datetime">{{ holder.completed_at | datetime }} - {{ holder.completed_at | humanize }}</span>
-                        {% else %}
-                            <span class="datetime">{{ holder.created_at | datetime }} - {{ holder.created_at | humanize }}</span>
-                        {% endif %}
-                    </td>
-                    <td>
                         {% if holder.status == 'completed' %}
                             <span class="label label-success">{{ holder.status | capitalize }}</span>
                         {% elif holder.status == 'pending' or holder.status == 'initialized' %}
@@ -216,6 +202,15 @@
                             <span class="label label-default">{{ holder.status | capitalize }}</span>
                         {% else %}
                             <span class="label label-danger">{{ holder.status | capitalize }}</span>
+                        {% endif %}
+                        <br>
+                        {% if holder.status == 'completed' %}
+                            <span class="payment-via">Payment via {{ holder.paid_via | capitalize }}</span>
+                        {% endif %}
+                        {% if holder.status == 'completed' %}
+                            <span class="datetime">{{ holder.completed_at | datetime }} - {{ holder.completed_at | humanize }}</span>
+                        {% else %}
+                            <span class="datetime">{{ holder.created_at | datetime }} - {{ holder.created_at | humanize }}</span>
                         {% endif %}
                     </td>
                     <td>{{ holder.ticket_name }}</td>
@@ -253,18 +248,19 @@
     <script src="{{ url_for('static', filename='js/events/ticket_sales/attendees.js')}}"></script>
 
     <script type="text/javascript">
-        var options = ['#completed', '#placed', '#pending', '#expired', '#cancelled', '#all'];  
+        var options = ['#completed', '#placed', '#pending', '#expired', '#cancelled', '#all']; 
         $.fn.dataTable.ext.search.push(
             function (settings, data, dataIndex) {
                 var user_option = $("input[name=show_state]:checked").val();
-                var state = data[2].trim() || 'pending';
+                var state = data[1].trim() || 'pending';
+                console.log(state);
                 if (user_option === "all") {
                     return true;
                 } else if (user_option === 'checked_in') {
-                    return data[8].trim().indexOf('Undo') !== -1;
+                    return data[7].trim().indexOf('Undo') !== -1;
                 } else if (user_option === 'not_checked_in') {
-                    return data[8].trim().indexOf('Check In') !== -1;
-                } else if (user_option === state) {
+                    return data[7].trim().indexOf('Check In') !== -1;
+                } else if ( state.indexOf(" " + user_option + " ") != -1 ) {
                     return true;
                 }
                 return false;
@@ -281,7 +277,9 @@
                     "targets": 0
                 },
                 {"width": "40%", "targets": 1},
+                {"width": "10%", "targets": 2},
                 {"width": "10%", "targets": 3},
+                {"width": "10%", "targets": 4},
                 {"width": "15%", "targets": 7}
             ],
             "order": [[1, 'desc']],
