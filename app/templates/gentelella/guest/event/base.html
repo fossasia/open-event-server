@@ -107,6 +107,7 @@
             <li {% if active_page == 'info' %}class="active"{% endif %} id="info-menu"><a
                     href="/e/{{ event.identifier }}/#info">Info</a></li>
             {% if accepted_sessions_count > 0 %}
+                <li id="feat-speakers-menu"><a href="/e/{{ event.identifier }}/#feat-speakers">{{ _("Featured Speakers") }}</a></li>
                 <li id="speakers-menu"><a href="/e/{{ event.identifier }}/#speakers">{{ _("Speakers") }}</a></li>
             {% endif %}
             {% if event.sponsor[0] %}
