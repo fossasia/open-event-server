@@ -1,6 +1,7 @@
 {% macro events_table(events) %}
-    <div class="table-responsive">
-        <table class="table table-striped">
+    <div id="table-responsive">
+        <table  class="table table-striped">
+
             <thead>
             <tr>
                 <th>{{ _("Name") }}</th>
@@ -38,7 +39,7 @@
                 {% endfor %}
 
                 <tr>
-                    <td><a href="{{ url_for('events.details_view', event_id=event.id) }}">{{ event.name }}</a></td>
+                    <td>  <img src="{{ event.logo }}"  onerror="imgError(this); " style="height:60px ; width:60px;"><a href="{{ url_for('events.details_view', event_id=event.id) }}"><br>&ensp;{{ event.name }}</a></td>
                     <td>{{ event.start_time.strftime('%B %d, %Y - %I:%M %p') }}<br>(to)<br>{{ event.end_time.strftime('%B %d, %Y - %I:%M %p') }}
                     </td>
                     <td>
@@ -53,7 +54,7 @@
 
                     </td>
                     <td>
-                        <ol style="padding-left:0;">
+                        <ol style="padding-left:10px;">
                             <li>{{ _("Drafts") }}: {{ drafts.count }}</li>
                             <li>{{ _("Submitted") }}: {{ event.session | length }}</li>
                             <li>{{ _("Accepted") }}: {{ accepted.count }}</li>
@@ -61,7 +62,7 @@
                             <li>{{ _("Rejected") }}: {{ rejected.count }}</li>
                         </ol>
                     </td>
-                    <td>{{ event.speaker | length }}</td>
+                    <td style="text-align:left;">{{ event.speaker | length }}</td>
                     <td>
                         {% set flag = []  %}
                         {% for id, item in ticket_stats.iteritems() %}
