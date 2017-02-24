@@ -81,9 +81,8 @@
         <tr>
             <td>{{ _("Number of Sessions") }}</td>
             <td>
-                <p>{{ _("All") }}: {{ event.session | length }} {{ _("Accepted") }}: {{ sessions.accepted }} {{ _("Pending") }}: {{ sessions.pending }}</p>
-                <p>{{ _("Rejected") }}: {{ sessions.rejected }}
-                    {{ _("Draft") }}: {{ sessions.draft }}</p>
+                <p>All: {{event.session | length}} | Accepted: {{sessions.accepted}} | Pending: {{sessions.pending }} 
+                    | Rejected: {{sessions.rejected}} | Draft: {{sessions.draft}}</p>
             </td>
         </tr>
         <tr>
