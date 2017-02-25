@@ -6,8 +6,8 @@
     <i class="fa fa-facebook"></i> <a href="{{ domain + username }}">{{ username }}</a><br>
 {% endmacro %}
 
-{% macro speaker_info(speaker) %}
-    <div class="col-md-3 col-sm-6 speaker-info">
+{% macro speaker_info(speaker, count) %}
+    <div class="col-sm-3 speaker-info">
         <img src="{{ speaker.thumbnail if speaker.thumbnail and speaker.thumbnail != '' and '.' in speaker.thumbnail else speaker.photo }}" width="100%" onerror="imgError(this);"><br>
         <h4 style="font-weight: 500;">{{ speaker.name }}</h4>
         <h5 style="margin-top: 0;">{{ speaker.organisation }}</h5>
@@ -19,6 +19,9 @@
             {% if speaker.github %}<a href="{{ speaker.github }}"><i class="fa fa-github-square"></i></a>{% endif %}
         </div>
     </div>
+    {% if not count%4 %}
+        <div class="clearfix"></div>
+    {% endif %}
 {% endmacro %}
 
 {% macro featured_speaker_info(speaker, count) %}
@@ -98,9 +101,11 @@
             <div class="row">
                 <div class="col-sm-12">
                     {% if accepted_sessions %}
+                        {% set count = [0] %}
                         {% for speaker in speakers %}
                             {% if not speaker.featured %}
-                                {{ speaker_info(speaker) }}
+                                {% if count.append(count.pop() + 1) %}{% endif %} {# increment count by 1 #}
+                                {{ speaker_info(speaker, count[0]) }}
                             {% endif %}
                         {% endfor %}
                     {% else %}
