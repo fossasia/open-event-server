@@ -501,39 +501,6 @@ def display_event_coc(identifier):
                            custom_placeholder=custom_placeholder,
                            call_for_speakers=call_for_speakers)
 
-
-@event_detail.route('/<identifier>/tickets/')
-def display_event_tickets(identifier):
-    event = get_published_event_or_abort(identifier)
-    placeholder_images = DataGetter.get_event_default_images()
-    if event.sub_topic:
-        custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.sub_topic)
-    elif event.topic:
-        custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.topic)
-    else:
-        custom_placeholder = DataGetter.get_custom_placeholder_by_name('Other')
-    if event.copyright:
-        licence_details = DataGetter.get_licence_details(event.copyright.licence)
-    else:
-        licence_details = None
-    module = DataGetter.get_module()
-    tickets = DataGetter.get_sales_open_tickets(event.id, True)
-    accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
-    timenow_event_tz = datetime.now(pytz.timezone(event.timezone))
-    fees = DataGetter.get_fee_settings_by_currency(event.payment_currency)
-    return render_template('gentelella/guest/event/details.html',
-                           event=event,
-                           placeholder_images=placeholder_images,
-                           custom_placeholder=custom_placeholder,
-                           accepted_sessions_count=accepted_sessions_count,
-                           licence_details=licence_details,
-                           module=module,
-                           timenow_event_tz=timenow_event_tz,
-                           current_timezone=get_current_timezone(),
-                           tickets=tickets if tickets else [],
-                           fees=fees)
-
-
 # SLUGGED PATHS
 
 @event_detail.route('/<identifier>/<slug>/')
