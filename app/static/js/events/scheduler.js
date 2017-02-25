@@ -871,6 +871,7 @@ function loadMicrolocationsToTimeline(day) {
 
     _.each(microlocationsStore, addMicrolocationToTimeline);
 
+    $tracksTimeline.html("");
     _.each(tracks, function (track) {
         if(!_.isNull(track)) {
             var $trackElement = $(mobileMicrolocationTemplate);
