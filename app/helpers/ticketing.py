@@ -91,7 +91,8 @@ class TicketingManager(object):
                 'total': ticket.quantity,
                 'completed': 0
             }
-        orders = Order.query.filter_by(event_id=event.id).filter_by(status='completed').all()
+        orders = Order.query.filter_by(event_id=event.id).filter(
+            or_(Order.status == 'completed', Order.status == 'placed')).all()
         for order in orders:
             for order_ticket in order.tickets:
                 tickets_summary[str(order_ticket.ticket_id)]['completed'] += order_ticket.quantity

@@ -98,7 +98,9 @@
                             <ol style="padding-left: 14px;">
                                 {% for session in speaker.sessions %}
                                     {% if not session.in_trash %}
-                                        <li>{{ session.title }}</li>
+                                        {% if session.title %}
+                                            <li>{{ session.title }}</li>
+                                        {% endif %}
                                     {% endif %}
                                 {% endfor %}
                             </ol>
@@ -108,9 +110,13 @@
                                 {% for session in speaker.sessions %}
                                     {% if not session.in_trash %}
                                         <li>
-                                            <span class="label label-{{ 'success' if session.state == 'accepted' else 'warning' }}">
-                                                {{ session.state }}
-                                            </span>
+                                          {% if session.state == 'accepted' %}
+                                              <span class="label label-success">{{ session.state }}</span>
+                                          {% elif session.state == 'rejected' %}
+                                              <span class="label label-danger">{{ session.state }}</span>
+                                          {% else %}
+                                              <span class="label label-warning">{{ session.state }}</span>
+                                          {% endif %}
                                         </li>
                                     {% endif %}
                                 {% endfor %}

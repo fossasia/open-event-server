@@ -342,9 +342,11 @@ function addSessionToUnscheduled(sessionRef, isFiltering, shouldBroadcast) {
     }
 
     try {
-        sessionRefObject.$sessionElement.popover('destroy');
-    } catch(ignored) { }
-
+        setTimeout( function() {
+            $('.session.unscheduled').popover('hide');
+        }, 100);
+    }
+    catch(ignored) { }
 }
 
 /**
@@ -485,6 +487,9 @@ function updateSessionTime($sessionElement, session) {
         saveSession = true;
     }
 
+    var day = session.start_time.format("Do MMMM YYYY");
+    var dayIndex = _.indexOf(days, day);
+
     var selectedDate = moment($('.date-change-btn.active').text(), "Do MMMM YYYY");
     var topTime = moment.utc({hour: dayLevelTime.start.hours, minute: dayLevelTime.start.minutes});
     var mins = pixelsToMinutes($sessionElement.outerHeight(false));
@@ -505,6 +510,23 @@ function updateSessionTime($sessionElement, session) {
     session.end_time.year(selectedDate.year());
     session.end_time.hours(newEndTime.hours());
     session.end_time.minutes(newEndTime.minutes());
+
+    _.each(sessionsStore[dayIndex], function (stored_session) {
+        if (stored_session.id === session.id) {
+            var index = sessionsStore[dayIndex].indexOf(session);
+            if (index > -1) {
+                sessionsStore[dayIndex].splice(index, 1);
+            }
+            var dayString = session.start_time.format("Do MMMM YYYY");
+
+            var dayIndex1 = _.indexOf(days, dayString);
+            if (_.isArray(sessionsStore[dayIndex1])) {
+                sessionsStore[dayIndex1].push(session);
+            } else {
+                sessionsStore[dayIndex1] = [session];
+            }
+        }
+    });
 
     if (saveSession) {
         $sessionElement.data("session", session);
@@ -599,7 +621,6 @@ function initializeInteractables() {
             inertia: false,
             // enable autoScroll
             autoScroll: {
-                container: $microlocationsHolder[0],
                 margin: 50,
                 distance: 5,
                 interval: 10
@@ -861,7 +882,6 @@ function loadMicrolocationsToTimeline(day) {
 
     _.each(sessionsStore[dayIndex], function (session) {
         // Add session elements, but do not broadcast.
-
         if (!_.isNull(session.top) && !_.isNull(session.microlocation) && !_.isNull(session.microlocation.id) && !_.isNull(session.start_time) && !_.isNull(session.end_time) && !session.hasOwnProperty("isReset")) {
             addSessionToTimeline(session, null, false);
         }
@@ -969,6 +989,7 @@ $("#sessions-search").valueChange(function (value) {
     }
 
     filtered = _.sortBy(filtered, "title");
+    filtered = _.uniqBy(filtered, "id");
 
     $unscheduledSessionsHolder.html("");
 

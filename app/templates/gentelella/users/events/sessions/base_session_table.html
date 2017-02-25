@@ -72,11 +72,18 @@
                 </thead>
                 <tbody>
                 {% for session in sessions %}
-                    {% if session.in_trash == False %}
+                    {% if session.title and session.in_trash == False %}
                         {% set versions_count = count_versions(session) %}
                         <tr>
                             <td>
-                                <span class="label label-{{ 'success' if session.state == 'accepted' else 'warning' }}">{{ session.state }}</span>
+                              {% if session.state == 'accepted' %}
+                                  <span class="label label-success">{{ session.state }}</span>
+                              {% elif session.state == 'rejected' %}
+                                  <span class="label label-danger">{{ session.state }}</span>
+                              {% else %}
+                                  <span class="label label-warning">{{ session.state }}</span>
+                              {% endif %}
+
                             </td>
                             <td>{{ session.title }}</td>
                             <td>
