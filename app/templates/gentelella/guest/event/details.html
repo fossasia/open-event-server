@@ -39,7 +39,7 @@
         <div class="col-sm-6">
             <h4 style="font-weight: 500;">{{ speaker.name }}</h4>
             <h5 style="margin-top: 0;">{{ speaker.organisation }}</h5>
-            {{ speaker.short_biography[0:120] }}
+            {{ speaker.short_biography[0:120] | safe }}
             <div class="speaker-links visible-xs" style="margin-top: 0px">
                 {% if speaker.website %}<a href="{{ speaker.website }}"><i class="fa fa-external-link-square"></i></a>{% endif %}
                 {% if speaker.facebook %}<a href="{{ speaker.facebook }}"><i class="fa fa-facebook-square"></i></a>{% endif %}
