@@ -843,12 +843,6 @@ function loadDateButtons() {
     loadMicrolocationsToTimeline(sortedDays[0]);
 }
 
-function sortByStartTime(a, b) {
-    var aTime = a.start_time;
-    var bTime = b.start_time;
-    return ((aTime < bTime) ? -1 : ((aTime > bTime) ? 1 : 0));
-}
-
 /**
  * Load all the sessions of a given day into the timeline
  * @param {string} day
