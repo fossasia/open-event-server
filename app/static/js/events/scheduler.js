@@ -886,7 +886,7 @@ function loadMicrolocationsToTimeline(day) {
         }
     });
 
-    sessionsStore[dayIndex].sort(sortByStartTime);
+    sessionsStore[dayIndex] = _.sortBy(sessionsStore[dayIndex], "start_time");
 
     _.each(sessionsStore[dayIndex], function (session) {
         // Add session elements, but do not broadcast.
