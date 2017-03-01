@@ -849,6 +849,9 @@ function loadDateButtons() {
  */
 function loadMicrolocationsToTimeline(day) {
 
+    $('table.timeline-table').show();
+    $('#no-session-message').hide();
+
     var parsedDay = moment.utc(day, "Do MMMM YYYY");
     if (parsedDay.isSame(mainEvent.start_time, "day")) {
         window.dayLevelTime.start.hours = mainEvent.start_time.hours();
@@ -859,9 +862,44 @@ function loadMicrolocationsToTimeline(day) {
         window.dayLevelTime.end.minutes = mainEvent.end_time.minutes();
     }
 
-    generateTimeUnits();
-
+    var least_hours = dayLevelTime.start.hours;
+    var least_minutes = dayLevelTime.start.minutes;
+    var max_hours = 0;
+    var max_minutes = 0;
     var dayIndex = _.indexOf(days, day);
+
+    if (/.+\/e\/.+\/schedule\//i.test(document.URL)) {
+        _.each(sessionsStore[dayIndex], function (session) {
+            // Add session elements, but do not broadcast.
+            if (!_.isNull(session.top) && !_.isNull(session.microlocation) && !_.isNull(session.microlocation.id) && !_.isNull(session.start_time) && !_.isNull(session.end_time) && !session.hasOwnProperty("isReset")) {
+                if (session.start_time.hours() < least_hours) {
+                    least_hours = session.start_time.hours();
+                    if (session.start_time.minutes() < least_minutes) {
+                        least_minutes = session.start_time.minutes();
+                    }
+                }
+                if (session.end_time.hours() > max_hours) {
+                    max_hours= session.end_time.hours();
+                    if (session.end_time.minutes() > max_minutes) {
+                        max_minutes = session.end_time.minutes();
+                    }
+                }
+            }
+        });
+
+        if (max_hours === 0) {
+            $('table.timeline-table').hide();
+            $('#no-session-message').show();
+        }
+
+        window.dayLevelTime.start.hours = least_hours;
+        window.dayLevelTime.start.minutes = least_minutes;
+
+        window.dayLevelTime.end.hours = max_hours;
+        window.dayLevelTime.end.minutes = max_minutes;
+    }
+
+    generateTimeUnits();
 
     $microlocationsHolder.empty();
     $unscheduledSessionsHolder.empty();
