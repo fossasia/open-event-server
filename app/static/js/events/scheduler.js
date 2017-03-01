@@ -864,10 +864,10 @@ function loadMicrolocationsToTimeline(day) {
         window.dayLevelTime.end.minutes = mainEvent.end_time.minutes();
     }
 
-    var least_hours = dayLevelTime.start.hours;
-    var least_minutes = dayLevelTime.start.minutes;
+    var least_hours = 24;
     var max_hours = 0;
     var max_minutes = 0;
+    var deltaPixels = 0;
     var dayIndex = _.indexOf(days, day);
 
     if (isReadOnly()) {
@@ -876,9 +876,6 @@ function loadMicrolocationsToTimeline(day) {
             if (!_.isNull(session.top) && !_.isNull(session.microlocation) && !_.isNull(session.microlocation.id) && !_.isNull(session.start_time) && !_.isNull(session.end_time) && !session.hasOwnProperty("isReset")) {
                 if (session.start_time.hours() < least_hours) {
                     least_hours = session.start_time.hours();
-                    if (session.start_time.minutes() < least_minutes) {
-                        least_minutes = session.start_time.minutes();
-                    }
                 }
                 if (session.end_time.hours() > max_hours) {
                     max_hours= session.end_time.hours();
@@ -894,8 +891,10 @@ function loadMicrolocationsToTimeline(day) {
             $noSessionMessage.show();
         }
 
+        deltaPixels = minutesToPixels((least_hours - mainEvent.start_time.hours()) * 60);
+
         window.dayLevelTime.start.hours = least_hours;
-        window.dayLevelTime.start.minutes = least_minutes;
+        window.dayLevelTime.start.minutes = 0;
 
         window.dayLevelTime.end.hours = max_hours;
         window.dayLevelTime.end.minutes = max_minutes;
@@ -924,6 +923,7 @@ function loadMicrolocationsToTimeline(day) {
 
     _.each(sessionsStore[dayIndex], function (session) {
         // Add session elements, but do not broadcast.
+        session.top = session.top - deltaPixels;
         if (!_.isNull(session.top) && !_.isNull(session.microlocation) && !_.isNull(session.microlocation.id) && !_.isNull(session.start_time) && !_.isNull(session.end_time) && !session.hasOwnProperty("isReset")) {
             addSessionToTimeline(session, null, false);
         }
