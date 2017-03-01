@@ -843,7 +843,6 @@ function loadDateButtons() {
     loadMicrolocationsToTimeline(sortedDays[0]);
 }
 
-
 /**
  * Load all the sessions of a given day into the timeline
  * @param {string} day
@@ -880,6 +879,8 @@ function loadMicrolocationsToTimeline(day) {
             $tracksTimeline.append($trackElement);
         }
     });
+
+    sessionsStore[dayIndex] = _.sortBy(sessionsStore[dayIndex], "start_time");
 
     _.each(sessionsStore[dayIndex], function (session) {
         // Add session elements, but do not broadcast.
