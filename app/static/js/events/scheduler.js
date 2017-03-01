@@ -550,10 +550,31 @@ function addInfoBox($sessionElement, session) {
         html: true,
         title: session.title
     });
-    var speakers = _.map(session.speakers, 'name');
     var content = "";
-    if(speakers.length > 0) {
-        content += "By " + _.join(speakers, ', ') + "<br><br>";
+    if(!_.isNull(session.short_abstract)) {
+        content +=  "<strong>About the session:</strong> " + session.short_abstract + "<br><br>";
+    } else {
+        session.long_abstract  = session.long_abstract.substr(0, 100);
+        content +=  "<strong>About the session:</strong> " + session.long_abstract + "<br><br>";
+    }
+    _.forEach(session.speakers, function(speaker, index) {
+        if(session.speakers.length === 1) {
+            content += "<strong>Speaker: </strong> " + speaker.name + "<br><br>";
+        } else {
+            content += "<strong>Speaker </strong> " + (parseInt(index, 10)+1) + "<strong> :</strong> " + speaker.name + "<br><br>";
+        }
+        if(speaker.short_biography) {
+            content += "<strong>About the Speaker: </strong><br>" + speaker.short_biography + "<br><br>";
+        } else {
+            session.speakers.long_biography = speaker.long_biography.substr(1, 100);
+            content += "<strong>About the Speaker: </strong><br>" + speaker.long_biography + "<br><br>";
+        }
+    });
+    if(!_.isNull(session.start_time)) {
+        content += "<strong>Start Time:</strong> " + session.start_time.format("HH:mm:ss") + "<br>";
+    }
+    if(!_.isNull(session.end_time)) {
+        content += "<strong>End Time:</strong> " + session.end_time.format("HH:mm:ss") + "<br>";
     }
     if(!_.isNull(session.track)) {
         content += "<strong>Track:</strong> " + session.track.name + "<br>";
