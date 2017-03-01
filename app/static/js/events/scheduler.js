@@ -121,6 +121,8 @@ var $unscheduledSessionsHolder = $unscheduledSessionsList;
 var $noSessionsInfoBox = $("#no-sessions-info");
 var $dayButtonsHolder = $("#date-change-btn-holder");
 var $addMicrolocationForm = $('#add-microlocation-form');
+var $timelineTable = $('table.timeline-table');
+var $noSessionMessage = $('#no-session-message');
 
 var $mobileTimeline = $("#mobile-timeline");
 var $tracksTimeline = $("#tracks-timeline");
@@ -229,7 +231,6 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
             sessionRefObject.session = updateSessionTime(sessionRefObject.$sessionElement);
         }
     }
-
 
     sessionRefObject.$sessionElement.css({
         "-webkit-transform": "",
@@ -849,8 +850,9 @@ function loadDateButtons() {
  */
 function loadMicrolocationsToTimeline(day) {
 
-    $('table.timeline-table').show();
-    $('#no-session-message').hide();
+    $timelineTable.show();
+    $noSessionMessage.hide();
+    $microlocationsHolder.find(".microlocation").show();
 
     var parsedDay = moment.utc(day, "Do MMMM YYYY");
     if (parsedDay.isSame(mainEvent.start_time, "day")) {
@@ -868,7 +870,7 @@ function loadMicrolocationsToTimeline(day) {
     var max_minutes = 0;
     var dayIndex = _.indexOf(days, day);
 
-    if (/.+\/e\/.+\/schedule\//i.test(document.URL)) {
+    if (isReadOnly()) {
         _.each(sessionsStore[dayIndex], function (session) {
             // Add session elements, but do not broadcast.
             if (!_.isNull(session.top) && !_.isNull(session.microlocation) && !_.isNull(session.microlocation.id) && !_.isNull(session.start_time) && !_.isNull(session.end_time) && !session.hasOwnProperty("isReset")) {
@@ -888,8 +890,8 @@ function loadMicrolocationsToTimeline(day) {
         });
 
         if (max_hours === 0) {
-            $('table.timeline-table').hide();
-            $('#no-session-message').show();
+            $timelineTable.hide();
+            $noSessionMessage.show();
         }
 
         window.dayLevelTime.start.hours = least_hours;
@@ -957,6 +959,12 @@ function loadMicrolocationsToTimeline(day) {
     $("[data-toggle=tooltip]").tooltip("hide");
 
     if (isReadOnly()) {
+        _.each($microlocations, function ($microlocation) {
+            $microlocation = $($microlocation);
+            if ($microlocation.find('.microlocation-inner').children().length === 0) {
+                $microlocation.hide();
+            }
+        });
         $('.edit-btn').hide();
         $('.remove-btn').hide();
     }
