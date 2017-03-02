@@ -891,7 +891,7 @@ function loadMicrolocationsToTimeline(day) {
             $noSessionMessage.show();
         }
 
-        deltaPixels = minutesToPixels((least_hours - mainEvent.start_time.hours()) * 60);
+        deltaPixels = minutesToPixels((least_hours - dayLevelTime.start_time.hours()) * 60);
 
         window.dayLevelTime.start.hours = least_hours;
         window.dayLevelTime.start.minutes = 0;
