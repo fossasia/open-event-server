@@ -862,7 +862,6 @@ function loadMicrolocationsToTimeline(day) {
     var least_hours = 24;
     var max_hours = 0;
     var max_minutes = 0;
-    var deltaPixels = 0;
     var dayIndex = _.indexOf(days, day);
 
     if (isReadOnly()) {
@@ -886,13 +885,22 @@ function loadMicrolocationsToTimeline(day) {
             $noSessionMessage.show();
         }
 
-        deltaPixels = minutesToPixels((least_hours - dayLevelTime.start.hours) * 60);
-
         window.dayLevelTime.start.hours = least_hours;
         window.dayLevelTime.start.minutes = 0;
 
         window.dayLevelTime.end.hours = max_hours;
         window.dayLevelTime.end.minutes = max_minutes;
+
+        var topTime = moment.utc({hour: dayLevelTime.start.hours, minute: dayLevelTime.start.minutes});
+
+        _.each(sessionsStore[dayIndex], function (session) {
+            var top = minutesToPixels(moment.duration(moment.utc({
+                    hour: session.start_time.hours(),
+                    minute: session.start_time.minutes()
+                }).diff(topTime)).asMinutes(), true);
+
+            session.top = top;
+        });
     }
 
     generateTimeUnits();
@@ -918,7 +926,6 @@ function loadMicrolocationsToTimeline(day) {
 
     _.each(sessionsStore[dayIndex], function (session) {
         // Add session elements, but do not broadcast.
-        session.top = session.top - deltaPixels;
         if (!_.isNull(session.top) && !_.isNull(session.microlocation) && !_.isNull(session.microlocation.id) && !_.isNull(session.start_time) && !_.isNull(session.end_time) && !session.hasOwnProperty("isReset")) {
             addSessionToTimeline(session, null, false);
         }
