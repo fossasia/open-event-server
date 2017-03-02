@@ -854,10 +854,15 @@ function loadMicrolocationsToTimeline(day) {
     $noSessionMessage.hide();
     $microlocationsHolder.find(".microlocation").show();
 
-    window.dayLevelTime.start.hours = mainEvent.start_time.hours();
-    window.dayLevelTime.start.minutes = mainEvent.start_time.minutes();
-    window.dayLevelTime.end.hours = mainEvent.end_time.hours();
-    window.dayLevelTime.end.minutes = mainEvent.end_time.minutes();
+    var parsedDay = moment.utc(day, "Do MMMM YYYY");
+    if (parsedDay.isSame(mainEvent.start_time, "day")) {
+        window.dayLevelTime.start.hours = mainEvent.start_time.hours();
+        window.dayLevelTime.start.minutes = mainEvent.start_time.minutes();
+    }
+    if (parsedDay.isSame(mainEvent.end_time, "day")) {
+        window.dayLevelTime.end.hours = mainEvent.end_time.hours();
+        window.dayLevelTime.end.minutes = mainEvent.end_time.minutes();
+    }
 
     var least_hours = 24;
     var max_hours = 0;
@@ -900,6 +905,9 @@ function loadMicrolocationsToTimeline(day) {
                 }).diff(topTime)).asMinutes(), true);
 
             session.top = top;
+
+            console.log(topTime);
+            console.log(session.top);
         });
     }
 
