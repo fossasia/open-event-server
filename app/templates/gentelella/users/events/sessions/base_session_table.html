@@ -43,6 +43,9 @@
                         <input type="radio" name="show_state" autocomplete="off" value="accepted"> {{ _("Accepted") }}
                     </label>
                     <label class="btn btn-default btn-responsive">
+                        <input type="radio" name="show_state" autocomplete="off" value="confirmed"> {{ _("Confirmed") }}
+                    </label>
+                    <label class="btn btn-default btn-responsive">
                         <input type="radio" name="show_state" autocomplete="off" value="rejected"> {{ _("Rejected") }}
                     </label>
                 </div>
@@ -76,7 +79,7 @@
                         {% set versions_count = count_versions(session) %}
                         <tr>
                             <td>
-                                <span class="label label-{{ 'success' if session.state == 'accepted' else 'warning' }}">{{ session.state }}</span>
+                                <span class="label label-{{ 'success' if session.state == 'confirmed' else 'warning' }}">{{ session.state }}</span>
                             </td>
                             <td>{{ session.title }}</td>
                             <td>
@@ -122,12 +125,12 @@
                             </td>
                             <td>
                                 <div class="btn-group-vertical" role="group" aria-label="...">
-                                    {% if session.state != 'accepted' %}
-                                        <a href="{{ session.id }}/accept/?skip=email" class="btn btn-sm btn-success"
+                                    {% if session.state != 'accepted' and session.state != 'confirmed' %}
+                                        <a href="{{ session.id }}/accept/?skip=email" class="btn btn-sm btn-warning"
                                            data-toggle="tooltip" title="Approve" data-placement="right">
                                             <i class="fa fa-check"></i>
                                         </a>
-                                        <a type="button" class="btn btn-primary btn-success with-email-modal"
+                                        <a type="button" class="btn btn-primary btn-warning with-email-modal"
                                            data-toggle="tooltip"
                                            title="Approve & send acceptance email"
                                            data-placement="right"
@@ -153,6 +156,23 @@
                                            data-email-type="reject">
                                             <i class="fa fa-times fa-fw"></i> <i class="fa fa-envelope fa-fw"></i>
                                         </a>
+                                        
+                                    {% endif %}
+                                    {% if session.state == 'accepted' %}
+                                        <a href="{{ session.id }}/confirm/?skip=email" class="btn btn-success"
+                                           data-toggle="tooltip" title="Confirm" data-placement="right">
+                                            <i class="fa fa-check fa-fw"></i>
+                                        </a>
+                                        <a type="button" class="btn btn-success with-email-modal"
+                                           data-toggle="tooltip"
+                                           title="Confirm & send confirmation email"
+                                           data-placement="right"
+                                           data-session-id="{{ session.id }}"
+                                           data-session-title="{{ session.title }}"
+                                           data-email-type="confirm">
+                                            <i class="fa fa-check fa-fw"></i><i class="fa fa-envelope fa-fw"></i>
+                                        </a>
+
                                     {% endif %}
                                     {% if not session.state_email_sent and (session.state == 'accepted' or session.state == 'rejected') %}
                                         <a href="{{ session.id }}/send-emails/" class="btn btn-sm btn-info"
@@ -273,7 +293,11 @@
                 $mailModal.find('.subject').val("Your Session '" + sessionTitle + "' has been accepted");
                 $mailModal.find('.message').val("Hello,\n\nYour session '" + sessionTitle + "' has been " + emailType + "ed.\n\nVisit this link to view the session: http://" + window.location.hostname + "/events/mysessions/1/ .");
                 $mailModal.find('.form-horizontal').attr('action', sessionId + '/accept');
-            } else {
+            } else if(emailType === "confirm"){
+                $mailModal.find('.subject').val("Confirm your availability for '" + sessionTitle + "'");
+                $mailModal.find('.message').val("Hello,\n\nYour session '" + sessionTitle + "' has been accepted. \n\nTo " + emailType + " your availability visit this link: http://" + window.location.hostname + "/events/mysessions/1/ .");
+                $mailModal.find('.form-horizontal').attr('action', sessionId + '/confirm');
+            }else {
                 $mailModal.find('.subject').val("Your Session '" + sessionTitle + "' has been rejected");
                 $mailModal.find('.message').val("Hello,\n\nYour session '" + sessionTitle + "' has been " + emailType + "ed.\n\nVisit this link to view the session: http://" + window.location.hostname + "/events/mysessions/1/ .");
                 $mailModal.find('.form-horizontal').attr('action', sessionId + '/reject');

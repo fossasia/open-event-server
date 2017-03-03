@@ -108,7 +108,7 @@
                                 {% for session in speaker.sessions %}
                                     {% if not session.in_trash %}
                                         <li>
-                                            <span class="label label-{{ 'success' if session.state == 'accepted' else 'warning' }}">
+                                            <span class="label label-{{ 'success' if session.state == 'confirmed' else 'warning' }}">
                                                 {{ session.state }}
                                             </span>
                                         </li>
