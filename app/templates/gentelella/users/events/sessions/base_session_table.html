@@ -75,11 +75,17 @@
                 </thead>
                 <tbody>
                 {% for session in sessions %}
-                    {% if session.in_trash == False %}
+                    {% if session.title and session.in_trash == False %}
                         {% set versions_count = count_versions(session) %}
                         <tr>
                             <td>
-                                <span class="label label-{{ 'success' if session.state == 'confirmed' else 'warning' }}">{{ session.state }}</span>
+                              {% if session.state == 'confirmed' %}
+                                  <span class="label label-success">{{ session.state }}</span>
+                              {% elif session.state == 'rejected' %}
+                                  <span class="label label-danger">{{ session.state }}</span>
+                              {% else %}
+                                  <span class="label label-warning">{{ session.state }}</span>
+                              {% endif %}
                             </td>
                             <td>{{ session.title }}</td>
                             <td>
@@ -175,8 +181,14 @@
 
                                     {% endif %}
                                     {% if not session.state_email_sent and (session.state == 'accepted' or session.state == 'rejected') %}
-                                        <a href="{{ session.id }}/send-emails/" class="btn btn-sm btn-info"
-                                           data-toggle="tooltip" title="Sending pending email" data-placement="right">
+                                        <a class="btn btn-sm btn-info with-email-modal"
+                                           data-toggle="tooltip" 
+                                           title="Sending pending email" 
+                                           data-placement="right"
+                                           data-session-id="{{ session.id }}"
+                                           data-session-title="{{ session.title }}"
+                                           data-email-type="send-email"
+                                           data-session-state={{session.state}}>
                                             <i class="fa fa-envelope"></i>
                                         </a>
                                     {% endif %}
@@ -297,7 +309,12 @@
                 $mailModal.find('.subject').val("Confirm your availability for '" + sessionTitle + "'");
                 $mailModal.find('.message').val("Hello,\n\nYour session '" + sessionTitle + "' has been accepted. \n\nTo " + emailType + " your availability visit this link: http://" + window.location.hostname + "/events/mysessions/1/ .");
                 $mailModal.find('.form-horizontal').attr('action', sessionId + '/confirm');
-            }else {
+            } else if (emailType === "send-email") {
+                var sessionState = button.data('session-state');
+                $mailModal.find('.subject').val("Your Session '" + sessionTitle + "' has been " + sessionState);
+                $mailModal.find('.message').val("Hello,\n\nYour session '" + sessionTitle + "' has been " + sessionState + ".\n\nVisit this link to view the session: http://" + window.location.hostname + "/events/mysessions/1/ .");
+                $mailModal.find('.form-horizontal').attr('action', sessionId + '/send-emails');
+            } else {
                 $mailModal.find('.subject').val("Your Session '" + sessionTitle + "' has been rejected");
                 $mailModal.find('.message').val("Hello,\n\nYour session '" + sessionTitle + "' has been " + emailType + "ed.\n\nVisit this link to view the session: http://" + window.location.hostname + "/events/mysessions/1/ .");
                 $mailModal.find('.form-horizontal').attr('action', sessionId + '/reject');

@@ -91,7 +91,8 @@ class TicketingManager(object):
                 'total': ticket.quantity,
                 'completed': 0
             }
-        orders = Order.query.filter_by(event_id=event.id).filter_by(status='completed').all()
+        orders = Order.query.filter_by(event_id=event.id).filter(
+            or_(Order.status == 'completed', Order.status == 'placed')).all()
         for order in orders:
             for order_ticket in order.tickets:
                 tickets_summary[str(order_ticket.ticket_id)]['completed'] += order_ticket.quantity
@@ -302,6 +303,9 @@ class TicketingManager(object):
         if order:
             user = DataGetter.get_or_create_user_by_email(email, form)
             order.user_id = user.id
+            if not order.user.user_detail.firstname and not order.user.user_detail.lastname:
+                order.user.user_detail.firstname = form['firstname']
+                order.user.user_detail.lastname = form['lastname']
 
             if order.amount > 0 \
                 and (not order.paid_via

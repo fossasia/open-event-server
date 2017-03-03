@@ -6,17 +6,52 @@
     <i class="fa fa-facebook"></i> <a href="{{ domain + username }}">{{ username }}</a><br>
 {% endmacro %}
 
-{% macro speaker_info(speaker) %}
-    <div class="col-md-3 col-sm-6 speaker-info" style="text-align: center; height: 250px">
-        <img src="{{ speaker.thumbnail if speaker.thumbnail and speaker.thumbnail != '' and '.' in speaker.thumbnail else speaker.photo }}" style="width: 133px; height: 133px;" onerror="imgError(this);"><br>
+{% macro speaker_info(speaker, count) %}
+    <div class="col-sm-3 speaker-info">
+        <img src="{{ speaker.thumbnail if speaker.thumbnail and speaker.thumbnail != '' and '.' in speaker.thumbnail else speaker.photo }}" width="100%" onerror="imgError(this);"><br>
         <h4 style="font-weight: 500;">{{ speaker.name }}</h4>
         <h5 style="margin-top: 0;">{{ speaker.organisation }}</h5>
-        {% if speaker.website %}<a href="{{ speaker.website }}"><i class="fa fa-external-link-square"></i></a>{% endif %}
-        {% if speaker.facebook %}<a href="{{ speaker.facebook }}"><i class="fa fa-facebook-square"></i></a>{% endif %}
-        {% if speaker.twitter %}<a href="{{ speaker.twitter }}"><i class="fa fa-twitter-square"></i></a>{% endif %}
-        {% if speaker.linkedin %}<a href="{{ speaker.linkedin }}"><i class="fa fa-linkedin-square"></i></a>{% endif %}
-        {% if speaker.github %}<a href="{{ speaker.github }}"><i class="fa fa-github-square"></i></a>{% endif %}
+        <div class="speaker-links" style="margin-top: -10px">
+            {% if speaker.website %}<a href="{{ speaker.website }}"><i class="fa fa-external-link-square"></i></a>{% endif %}
+            {% if speaker.facebook %}<a href="{{ speaker.facebook }}"><i class="fa fa-facebook-square"></i></a>{% endif %}
+            {% if speaker.twitter %}<a href="{{ speaker.twitter }}"><i class="fa fa-twitter-square"></i></a>{% endif %}
+            {% if speaker.linkedin %}<a href="{{ speaker.linkedin }}"><i class="fa fa-linkedin-square"></i></a>{% endif %}
+            {% if speaker.github %}<a href="{{ speaker.github }}"><i class="fa fa-github-square"></i></a>{% endif %}
+        </div>
     </div>
+    {% if not count%4 %}
+        <div class="clearfix"></div>
+    {% endif %}
+{% endmacro %}
+
+{% macro featured_speaker_info(speaker, count) %}
+    <div class="col-sm-6">
+        <div class="col-sm-6">
+            <img src="{{ speaker.thumbnail if speaker.thumbnail and speaker.thumbnail != '' and '.' in speaker.thumbnail else speaker.photo }}" style="margin-top:10px" width="100%" onerror="imgError(this);"><br>
+            <div class="text-center speaker-links hidden-xs">
+                {% if speaker.website %}<a href="{{ speaker.website }}"><i class="fa fa-external-link-square"></i></a>{% endif %}
+                {% if speaker.facebook %}<a href="{{ speaker.facebook }}"><i class="fa fa-facebook-square"></i></a>{% endif %}
+                {% if speaker.twitter %}<a href="{{ speaker.twitter }}"><i class="fa fa-twitter-square"></i></a>{% endif %}
+                {% if speaker.linkedin %}<a href="{{ speaker.linkedin }}"><i class="fa fa-linkedin-square"></i></a>{% endif %}
+                {% if speaker.github %}<a href="{{ speaker.github }}"><i class="fa fa-github-square"></i></a>{% endif %}
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <h4 style="font-weight: 500;">{{ speaker.name }}</h4>
+            <h5 style="margin-top: 0;">{{ speaker.organisation }}</h5>
+            {{ speaker.short_biography[0:120] | safe }}
+            <div class="speaker-links visible-xs" style="margin-top: 0px">
+                {% if speaker.website %}<a href="{{ speaker.website }}"><i class="fa fa-external-link-square"></i></a>{% endif %}
+                {% if speaker.facebook %}<a href="{{ speaker.facebook }}"><i class="fa fa-facebook-square"></i></a>{% endif %}
+                {% if speaker.twitter %}<a href="{{ speaker.twitter }}"><i class="fa fa-twitter-square"></i></a>{% endif %}
+                {% if speaker.linkedin %}<a href="{{ speaker.linkedin }}"><i class="fa fa-linkedin-square"></i></a>{% endif %}
+                {% if speaker.github %}<a href="{{ speaker.github }}"><i class="fa fa-github-square"></i></a>{% endif %}
+            </div>
+        </div>         
+    </div>
+    {% if not count%2 %}
+        <div class="clearfix"></div>
+    {% endif %}
 {% endmacro %}
 
 {% macro sponsor_info(sponsor) %}
@@ -46,12 +81,32 @@
             <div class="clearfix"></div>
         {% endif %}
         {% if accepted_sessions[0] %}
+            <h3 id="feat-speakers">Featured Speakers</h3>
+            <div class="row">
+                <div class="col-sm-12">
+                    {% if accepted_sessions %}
+                        {% set count = [0] %}
+                        {% for speaker in speakers %}
+                            {% if speaker.featured %}
+                                {% if count.append(count.pop() + 1) %}{% endif %} {# increment count by 1 #}
+                                {{ featured_speaker_info(speaker, count[0]) }}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <br>
+
             <h3 id="speakers">Speakers</h3>
             <div class="row">
                 <div class="col-sm-12">
                     {% if accepted_sessions %}
+                        {% set count = [0] %}
                         {% for speaker in speakers %}
-                            {{ speaker_info(speaker) }}
+                            {% if not speaker.featured %}
+                                {% if count.append(count.pop() + 1) %}{% endif %} {# increment count by 1 #}
+                                {{ speaker_info(speaker, count[0]) }}
+                            {% endif %}
                         {% endfor %}
                     {% else %}
                         {{ _("No sessions have been published yet") }}

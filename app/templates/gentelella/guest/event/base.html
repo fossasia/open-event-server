@@ -107,6 +107,7 @@
             <li {% if active_page == 'info' %}class="active"{% endif %} id="info-menu"><a
                     href="/e/{{ event.identifier }}/#info">Info</a></li>
             {% if accepted_sessions_count > 0 %}
+                <li id="feat-speakers-menu"><a href="/e/{{ event.identifier }}/#feat-speakers">{{ _("Featured Speakers") }}</a></li>
                 <li id="speakers-menu"><a href="/e/{{ event.identifier }}/#speakers">{{ _("Speakers") }}</a></li>
             {% endif %}
             {% if event.sponsor[0] %}
@@ -155,12 +156,20 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-8 col-sm-8 col-xs-12 col-md-push-1 col-sm-push-2 event-info-container-holder"
-             style="min-height: 600px;">
+        <div class = "col-xs-12 
+        {% if active_page =='sessions' or active_page == 'schedule' %}
+            col-md-10 col-sm-10 
+        {% else %}
+            col-md-8 col-sm-8
+        {% endif %}
+         col-md-push-1 col-sm-push-2 event-info-container-holder"
+        style="min-height: 600px;">
+
             {% block content %}
             {% endblock %}
         </div>
-        <div class="col-md-2 col-md-push-1 hidden-xs hidden-sm">
+        {% if active_page != 'sessions' and active_page != 'schedule' %}
+            <div class="col-md-2 col-md-push-1 hidden-xs hidden-sm">
             <div>
                 {% if event.event_url %}
                     <i class="fa fa-external-link-square fa-fw" style="color: #8d8d8d"></i>
@@ -211,9 +220,9 @@
                 {% for twitterLink in twitter %}
                     <a class="twitter-timeline" href="{{ twitterLink }}" data-height="500">Tweets</a>
                 {% endfor %}
-            </div>
         </div>
     </div>
+            {% endif %}
 {% endblock %}
 
 {% block tail_js %}

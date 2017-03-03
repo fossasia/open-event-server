@@ -1,0 +1,29 @@
+{% extends 'gentelella/guest/event/base.html' %}
+
+{% set active_page = 'cfs' %}
+
+{% block head_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/events/event-wizard.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/multiselect/css/multi-select.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/Croppie/croppie.css') }}"/>
+{% endblock %}
+
+{% block content %}
+    
+    <h4 style="text-align: center">{{ _("Speaker Details") }}</h4>
+    {% include 'gentelella/users/events/sessions/components/speaker_form.html' %}
+
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/vendor/jquery/jquery.multi-select.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/events/session/new.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("textarea").summernote(summernoteConfig);
+        });
+    </script>
+
+{% endblock %}
