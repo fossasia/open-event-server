@@ -66,6 +66,17 @@
         .scrollspy {
             top: {{ scrollspy_top }};
         }
+
+        .overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2;
+        }
     </style>
 {% endblock %}
 
@@ -78,6 +89,7 @@
 {% endblock %}
 
 {% block body %}
+    <div class="overlay"></div>
     <div class="mobile-menu hidden-sm hidden-lg hidden-md">
         <ul class="nav nav-pills review-menu mobile">
             <li {% if active_page == 'info' %}class="active"{% endif %} id="info-menu"><a
@@ -92,8 +104,8 @@
                         href="/e/{{ event.identifier }}/cfs">{{ _("Call for speakers") }}</a></li>
             {% endif %}
             {% if event.schedule_published_on %}
-                <li>
-                    <a href="/e/{{ event.identifier }}/#schedule">{{ _("Schedule") }}</a>
+                <li {% if active_page == 'schedule' %}class="active"{% endif %}><a
+                        href="/e/{{ event.identifier }}/schedule">{{ _("Schedule") }}</a>
                 </li>
             {% endif %}
             {% if event.code_of_conduct and event.code_of_conduct != '' and event.code_of_conduct != ' ' %}
@@ -123,8 +135,8 @@
                         href="/e/{{ event.identifier }}/cfs">{{ _("Call for speakers") }}</a></li>
             {% endif %}
             {% if event.schedule_published_on %}
-                <li>
-                    <a href="/e/{{ event.identifier }}/#schedule">{{ _("Schedule") }}</a>
+                <li {% if active_page == 'schedule' %}class="active"{% endif %}><a
+                        href="/e/{{ event.identifier }}/schedule">{{ _("Schedule") }}</a>
                 </li>
             {% endif %}
             {% if event.organizer_name %}

@@ -61,8 +61,6 @@ def display_event_detail_home(identifier):
     else:
         licence_details = None
 
-    tracks = DataGetter.get_tracks(event.id)
-
     speakers = []
     for session in accepted_sessions:
         for speaker in session.speakers:
@@ -102,8 +100,7 @@ def display_event_detail_home(identifier):
                            current_timezone=get_current_timezone(),
                            tickets=tickets if tickets else [],
                            fees=fees,
-                           code=code,
-                           tracks=tracks)
+                           code=code)
 
 
 @event_detail.route('/<identifier>/sessions/')
