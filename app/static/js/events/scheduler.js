@@ -127,6 +127,7 @@ var $noSessionMessage = $('#no-session-message');
 var $mobileTimeline = $("#mobile-timeline");
 var $tracksTimeline = $("#tracks-timeline");
 var $sessionViewHolder = $("#session-view-holder");
+var $sessionDetailsModalHolder = $("#session-details-tracks-modal");
 /**
  * TEMPLATE STRINGS
  * ================
@@ -254,6 +255,7 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     var $mobileSessionElement = $(mobileSessionTemplate);
     $mobileSessionElement.find('.time').text(sessionRefObject.session.start_time.format('hh:mm A'));
     $mobileSessionElement.find('.event').text(sessionRefObject.session.title);
+    $mobileSessionElement.find('.event').attr("data-session-id", sessionRefObject.session.id);
     updateColor($mobileSessionElement.find('.event'), sessionRefObject.session.track);
     $mobileTimeline.find(".mobile-microlocation[data-microlocation-id=" + sessionRefObject.session.microlocation.id + "] > .mobile-sessions-holder").append($mobileSessionElement);
 
@@ -905,9 +907,6 @@ function loadMicrolocationsToTimeline(day) {
                 }).diff(topTime)).asMinutes(), true);
 
             session.top = top;
-
-            console.log(topTime);
-            console.log(session.top);
         });
     }
 
@@ -978,6 +977,25 @@ function loadMicrolocationsToTimeline(day) {
         $('.edit-btn').hide();
         $('.remove-btn').hide();
     }
+}
+
+function addInfoToModal(sessionid) {
+    var selectedDate = moment($('.date-change-btn.active').text(), "Do MMMM YYYY").format("Do MMMM YYYY");
+    var dayIndex = _.indexOf(days, selectedDate);
+    var session = _.find(sessionsStore[dayIndex], function(elem){
+        return elem.id === sessionid;
+    });
+    $sessionDetailsModalHolder.find('.session-title').html(session.title);
+    if (session.session_type) {
+        $sessionDetailsModalHolder.find('.session-type').html(session.session_type.name);
+    }
+    $sessionDetailsModalHolder.find('.session-speakers').html("<h4>Speakers</h4>");
+    _.each(session.speakers, function(speaker){
+        $sessionDetailsModalHolder.find('.session-speakers').append('<p>'+speaker.name+'</p>');
+    });
+    $sessionDetailsModalHolder.find('.session-abstract').html(session.abstract);
+    $sessionDetailsModalHolder.find('.session-location').html(session.microlocation.name+
+                                                            '<i class="fa fa-map-marker fa-fw"></i>');
 }
 
 function loadData(eventId, callback) {
@@ -1125,7 +1143,7 @@ $(document)
         $sessionViewHolder.addClass('hidden');
         $(this).addClass("active").siblings().removeClass("active");
     })
-    .on("click", ".tracks-view", function(){
+    .on("click", ".tracks-view", function() {
         $dayButtonsHolder.show();
         $timeline.addClass('hidden');
         $mobileTimeline.addClass('hidden');
@@ -1142,7 +1160,11 @@ $(document)
         $(this).addClass("active").siblings().removeClass("active");
 
     })
-    .on("click", ".clear-overlaps-button", removeOverlaps);
+    .on("click", ".clear-overlaps-button", removeOverlaps)
+    .on("click", ".mobile-session-elements", function() {
+        addInfoToModal($(this).find('.event').data("session-id"));
+        $("#session-details-tracks-modal").modal("show");
+    });
 
 /**
  * Initialize the Scheduler UI on document ready
