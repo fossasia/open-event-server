@@ -6,19 +6,18 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: v1\n"
+"Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
-"POT-Creation-Date: 2017-02-18 10:49+0530\n"
+"POT-Creation-Date: 2017-03-05 17:06+0530\n"
 "PO-Revision-Date: 2017-02-18 11:46+0000\n"
 "Last-Translator: naofum <naofum@gmail.com>\n"
+"Language: ja\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/open-event"
 "/organizer-server/ja/>\n"
-"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2.12-dev\n"
 "Generated-By: Babel 2.3.4\n"
 
 #: app/templates/gentelella/components/footer.html:8
@@ -370,16 +369,17 @@ msgstr "クローズ済"
 msgid "Yet to Open"
 msgstr "まだオープンしていません"
 
-#: app/templates/gentelella/guest/event/cfs.html:36
-#: app/templates/gentelella/guest/event/cfs.html:41
+#: app/templates/gentelella/guest/event/cfs.html:35
+#: app/templates/gentelella/guest/event/cfs.html:39
+#: app/templates/gentelella/guest/event/cfs.html:62
 msgid "Submit Proposal"
 msgstr "申し込みを提出"
 
-#: app/templates/gentelella/guest/event/cfs.html:49
+#: app/templates/gentelella/guest/event/cfs.html:47
 msgid "Please login to submit your proposal"
 msgstr "ログインして、提案を提出してください"
 
-#: app/templates/gentelella/guest/event/cfs.html:52
+#: app/templates/gentelella/guest/event/cfs.html:50
 #: app/templates/gentelella/super_admin/content/_system_images.html:112
 #: app/templates/gentelella/super_admin/sales/discount_codes_create.html:128
 #: app/templates/gentelella/users/events/event_base.html:114
@@ -390,28 +390,58 @@ msgstr "ログインして、提案を提出してください"
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: app/templates/gentelella/guest/event/cfs.html:53
+#: app/templates/gentelella/guest/event/cfs.html:51
 msgid "Login/SignUp"
 msgstr "ログイン/サインアップ"
+
+#: app/templates/gentelella/guest/event/cfs.html:65
+msgid "Register as a Speaker"
+msgstr ""
+
+#: app/templates/gentelella/guest/event/cfs.html:66
+msgid "Propose Session"
+msgstr ""
+
+#: app/templates/gentelella/guest/event/cfs.html:77
+msgid "Add Speaker Information"
+msgstr ""
+
+#: app/templates/gentelella/guest/event/cfs.html:81
+msgid "Existing Sessions"
+msgstr ""
+
+#: app/templates/gentelella/guest/event/cfs.html:94
+msgid "Add Session Proposal"
+msgstr ""
+
+#: app/templates/gentelella/guest/event/cfs_new_session.html:14
+#: app/templates/gentelella/users/events/sessions/components/session_speaker_form.html:7
+msgid "Session Details"
+msgstr "セッションの詳細"
+
+#: app/templates/gentelella/guest/event/cfs_new_speaker.html:14
+#: app/templates/gentelella/users/events/sessions/components/session_speaker_form.html:27
+msgid "Speaker Details"
+msgstr "スピーカーの詳細"
 
 #: app/templates/gentelella/guest/event/code_of_conduct.html:7
 #: app/templates/gentelella/users/events/wizard/basic-details.html:568
 msgid "Code of Conduct"
 msgstr "行動規範"
 
-#: app/templates/gentelella/guest/event/details.html:57
+#: app/templates/gentelella/guest/event/details.html:112
 msgid "No sessions have been published yet"
 msgstr "セッションがまだ公開されていません"
 
-#: app/templates/gentelella/guest/event/details.html:71
+#: app/templates/gentelella/guest/event/details.html:126
 msgid "Other Sponsors"
 msgstr "他のスポンサー"
 
-#: app/templates/gentelella/guest/event/details.html:83
+#: app/templates/gentelella/guest/event/details.html:138
 msgid "Organized by"
 msgstr "主催者"
 
-#: app/templates/gentelella/guest/event/details.html:88
+#: app/templates/gentelella/guest/event/details.html:143
 msgid "Getting Here"
 msgstr "ここで取得"
 
@@ -448,7 +478,7 @@ msgstr "セッションの読み込み中"
 #: app/templates/gentelella/super_admin/events/events.html:271
 #: app/templates/gentelella/super_admin/sessions/sessions.html:4
 #: app/templates/gentelella/super_admin/widgets/_sessions.html:3
-#: app/templates/gentelella/users/events/_table.html:9
+#: app/templates/gentelella/users/events/_table.html:10
 #: app/templates/gentelella/users/events/export/export.html:136
 #: app/templates/gentelella/users/events/sessions/base_session_table.html:4
 #: app/templates/gentelella/users/events/sessions/display.html:4
@@ -467,7 +497,7 @@ msgstr "セッション"
 #: app/templates/gentelella/super_admin/sales/summary_base.html:80
 #: app/templates/gentelella/super_admin/sales/summary_base.html:86
 #: app/templates/gentelella/super_admin/sales/summary_base.html:92
-#: app/templates/gentelella/users/events/_table.html:11
+#: app/templates/gentelella/users/events/_table.html:12
 #: app/templates/gentelella/users/events/export/export.html:157
 #: app/templates/gentelella/users/events/tickets/tickets.html:194
 #: app/templates/gentelella/users/events/tickets/tickets.html:200
@@ -491,7 +521,7 @@ msgstr "すべてのイベントの種類"
 
 #: app/templates/gentelella/guest/explore/_collapse_search.html:67
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:27
-#: app/templates/gentelella/users/events/_table.html:7
+#: app/templates/gentelella/users/events/_table.html:8
 msgid "Date"
 msgstr "日付"
 
@@ -609,7 +639,7 @@ msgstr "姓"
 #: app/templates/gentelella/super_admin/widgets/_kubernetes.html:34
 #: app/templates/gentelella/users/events/sessions/components/session_speaker_form.html:37
 #: app/templates/gentelella/users/events/speakers/base_speaker_table.html:81
-#: app/templates/gentelella/users/events/tickets/attendees.html:182
+#: app/templates/gentelella/users/events/tickets/attendees.html:179
 #: app/templates/gentelella/users/settings/pages/contact_info.html:18
 msgid "Email"
 msgstr "メール"
@@ -1030,18 +1060,18 @@ msgid "Debug"
 msgstr "デバッグ"
 
 #: app/templates/gentelella/super_admin/events/events.html:66
-#: app/templates/gentelella/users/events/_table.html:57
+#: app/templates/gentelella/users/events/_table.html:58
 msgid "Drafts"
 msgstr "下書き"
 
 #: app/templates/gentelella/super_admin/events/events.html:67
-#: app/templates/gentelella/users/events/_table.html:58
+#: app/templates/gentelella/users/events/_table.html:59
 msgid "Submitted"
 msgstr "提出済"
 
 #: app/templates/gentelella/super_admin/events/events.html:68
 #: app/templates/gentelella/super_admin/widgets/_sessions.html:12
-#: app/templates/gentelella/users/events/_table.html:59
+#: app/templates/gentelella/users/events/_table.html:60
 #: app/templates/gentelella/users/events/details/widgets/roles.html:18
 #: app/templates/gentelella/users/events/sessions/base_session_table.html:43
 #: app/templates/gentelella/users/events/speakers/base_speaker_table.html:62
@@ -1052,11 +1082,11 @@ msgstr "受付"
 
 #: app/templates/gentelella/super_admin/events/events.html:69
 #: app/templates/gentelella/super_admin/sales/fees_status.html:62
-#: app/templates/gentelella/users/events/_table.html:60
+#: app/templates/gentelella/users/events/_table.html:61
 #: app/templates/gentelella/users/events/sessions/base_session_table.html:40
 #: app/templates/gentelella/users/events/speakers/base_speaker_table.html:59
 #: app/templates/gentelella/users/events/tickets/attendees.html:133
-#: app/templates/gentelella/users/events/tickets/attendees.html:212
+#: app/templates/gentelella/users/events/tickets/attendees.html:198
 #: app/templates/gentelella/users/events/tickets/orders.html:97
 #: app/templates/gentelella/users/events/tickets/orders.html:148
 msgid "Pending"
@@ -1064,7 +1094,7 @@ msgstr "保留"
 
 #: app/templates/gentelella/super_admin/events/events.html:70
 #: app/templates/gentelella/super_admin/widgets/_sessions.html:14
-#: app/templates/gentelella/users/events/_table.html:61
+#: app/templates/gentelella/users/events/_table.html:62
 #: app/templates/gentelella/users/events/sessions/base_session_table.html:46
 #: app/templates/gentelella/users/events/speakers/base_speaker_table.html:65
 #: app/templates/gentelella/users/mysessions/mysession_detail.html:27
@@ -1073,7 +1103,7 @@ msgid "Rejected"
 msgstr "拒否"
 
 #: app/templates/gentelella/super_admin/events/events.html:90
-#: app/templates/gentelella/users/events/_table.html:79
+#: app/templates/gentelella/users/events/_table.html:80
 msgid "No Ticket Information"
 msgstr "チケット情報はありません"
 
@@ -1123,7 +1153,7 @@ msgstr "インポート"
 #: app/templates/gentelella/super_admin/users/users.html:215
 #: app/templates/gentelella/super_admin/users/users.html:236
 #: app/templates/gentelella/super_admin/users/users.html:257
-#: app/templates/gentelella/users/events/_table.html:6
+#: app/templates/gentelella/users/events/_table.html:7
 #: app/templates/gentelella/users/events/details/widgets/sponsors_list.html:16
 #: app/templates/gentelella/users/events/speakers/base_speaker_table.html:80
 #: app/templates/gentelella/users/events/wizard/basic-details.html:6
@@ -1147,7 +1177,7 @@ msgstr "状態"
 #: app/templates/gentelella/super_admin/events/events.html:201
 #: app/templates/gentelella/super_admin/events/events.html:223
 #: app/templates/gentelella/super_admin/events/events.html:245
-#: app/templates/gentelella/users/events/_table.html:12
+#: app/templates/gentelella/users/events/_table.html:13
 msgid "Public"
 msgstr "公開"
 
@@ -1156,7 +1186,7 @@ msgstr "公開"
 #: app/templates/gentelella/super_admin/events/events.html:226
 #: app/templates/gentelella/super_admin/events/events.html:248
 #: app/templates/gentelella/super_admin/events/events.html:270
-#: app/templates/gentelella/users/events/_table.html:8
+#: app/templates/gentelella/users/events/_table.html:9
 msgid "Roles"
 msgstr "ロール"
 
@@ -1170,7 +1200,7 @@ msgstr "ロール"
 #: app/templates/gentelella/super_admin/sessions/sessions.html:160
 #: app/templates/gentelella/super_admin/sessions/sessions.html:178
 #: app/templates/gentelella/super_admin/sessions/sessions.html:196
-#: app/templates/gentelella/users/events/_table.html:10
+#: app/templates/gentelella/users/events/_table.html:11
 #: app/templates/gentelella/users/events/export/export.html:149
 #: app/templates/gentelella/users/events/sessions/base_session_table.html:63
 #: app/templates/gentelella/users/events/speakers/base_speaker_table.html:4
@@ -1498,7 +1528,7 @@ msgstr "時間"
 #: app/templates/gentelella/super_admin/reports/_system_logs.html:90
 #: app/templates/gentelella/super_admin/sales/discount_codes.html:55
 #: app/templates/gentelella/users/events/tickets/access_codes.html:53
-#: app/templates/gentelella/users/events/tickets/attendees.html:185
+#: app/templates/gentelella/users/events/tickets/attendees.html:182
 #: app/templates/gentelella/users/events/tickets/discount_codes.html:53
 #: app/templates/gentelella/users/events/tickets/orders.html:132
 msgid "Action"
@@ -2870,7 +2900,7 @@ msgstr "経度"
 msgid "Add Microlocation"
 msgstr "マイクロロケーションを追加"
 
-#: app/templates/gentelella/users/events/scheduler/components/timeline.html:33
+#: app/templates/gentelella/users/events/scheduler/components/timeline.html:34
 msgid "All the timings are in"
 msgstr "すべてのタイミングは"
 
@@ -2892,7 +2922,7 @@ msgstr "最終更新"
 msgid "Email Sent"
 msgstr "メールを送信済"
 
-#: app/templates/gentelella/users/events/sessions/base_session_table.html:196
+#: app/templates/gentelella/users/events/sessions/base_session_table.html:209
 msgid "Send email"
 msgstr "メールを送信"
 
@@ -2945,31 +2975,23 @@ msgstr "画像をトリミング"
 msgid "Done"
 msgstr "完了"
 
-#: app/templates/gentelella/users/events/sessions/components/session_form.html:17
 #: app/templates/gentelella/users/events/sessions/components/session_form.html:18
+#: app/templates/gentelella/users/events/sessions/components/session_form.html:19
 msgid "Modify Speakers"
 msgstr "スピーカーを変更"
 
-#: app/templates/gentelella/users/events/sessions/components/session_form.html:21
+#: app/templates/gentelella/users/events/sessions/components/session_form.html:22
 msgid "selected"
 msgstr "選択済"
 
-#: app/templates/gentelella/users/events/sessions/components/session_form.html:30
+#: app/templates/gentelella/users/events/sessions/components/session_form.html:35
 msgid "Save Session"
 msgstr "セッションを保存"
 
-#: app/templates/gentelella/users/events/sessions/components/session_form.html:32
+#: app/templates/gentelella/users/events/sessions/components/session_form.html:37
 #: app/templates/gentelella/users/events/sessions/components/session_speaker_form.html:57
 msgid "Submit Session"
 msgstr "セッションを提出"
-
-#: app/templates/gentelella/users/events/sessions/components/session_speaker_form.html:7
-msgid "Session Details"
-msgstr "セッションの詳細"
-
-#: app/templates/gentelella/users/events/sessions/components/session_speaker_form.html:27
-msgid "Speaker Details"
-msgstr "スピーカーの詳細"
 
 #: app/templates/gentelella/users/events/sessions/components/session_speaker_form.html:35
 msgid "Invite Speakers"
@@ -3177,33 +3199,28 @@ msgid "Order"
 msgstr "注文"
 
 #: app/templates/gentelella/users/events/tickets/attendees.html:167
-#: app/templates/gentelella/users/events/tickets/tickets.html:122
-msgid "Order Status"
-msgstr "注文のステータス"
-
-#: app/templates/gentelella/users/events/tickets/attendees.html:170
 #: app/templates/gentelella/users/events/wizard/basic-details.html:254
 msgid "Ticket Name"
 msgstr "チケット名"
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:173
+#: app/templates/gentelella/users/events/tickets/attendees.html:170
 msgid "Ticket Price"
 msgstr "チケット価格"
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:176
+#: app/templates/gentelella/users/events/tickets/attendees.html:173
 #: app/templates/gentelella/users/profile/_form.html:8
 msgid "First Name"
 msgstr "名"
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:179
+#: app/templates/gentelella/users/events/tickets/attendees.html:176
 msgid "Last Name"
 msgstr "姓"
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:230
+#: app/templates/gentelella/users/events/tickets/attendees.html:225
 msgid "Undo"
 msgstr "元に戻す"
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:234
+#: app/templates/gentelella/users/events/tickets/attendees.html:229
 msgid "Check In"
 msgstr "チェックイン"
 
@@ -3297,6 +3314,10 @@ msgstr "注文概要"
 #: app/templates/gentelella/users/events/tickets/tickets.html:169
 msgid "by order status"
 msgstr "注文ステータス別"
+
+#: app/templates/gentelella/users/events/tickets/tickets.html:122
+msgid "Order Status"
+msgstr "注文のステータス"
 
 #: app/templates/gentelella/users/events/tickets/tickets.html:125
 msgid "Total Tickets"
@@ -3904,11 +3925,15 @@ msgstr "セッションの種類"
 msgid "Comments"
 msgstr "コメント"
 
-#: app/templates/gentelella/users/mysessions/mysessions_list.html:129
+#: app/templates/gentelella/users/mysessions/mysessions_list.html:64
+msgid "Session Not Yet Scheduled"
+msgstr ""
+
+#: app/templates/gentelella/users/mysessions/mysessions_list.html:131
 msgid "No session proposals for upcoming events found"
 msgstr "予定されているイベントの、セッションの申し込みが見つかりませんでした"
 
-#: app/templates/gentelella/users/mysessions/mysessions_list.html:140
+#: app/templates/gentelella/users/mysessions/mysessions_list.html:142
 msgid "No session proposals for past events found"
 msgstr "過去のイベントの、セッションの申し込みが見つかりませんでした"
 
@@ -4089,3 +4114,4 @@ msgstr "ログイン"
 
 #~ msgid "Last Changed Date"
 #~ msgstr "最終更新日"
+
