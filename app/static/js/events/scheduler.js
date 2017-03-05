@@ -254,6 +254,14 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     var $mobileSessionElement = $(mobileSessionTemplate);
     $mobileSessionElement.find('.time').text(sessionRefObject.session.start_time.format('hh:mm A'));
     $mobileSessionElement.find('.event').text(sessionRefObject.session.title);
+    $mobileSessionElement.find('.event').attr("data-target", "#session-track-details"+sessionRefObject.session.id);
+    $mobileSessionElement.find('.session-track-details').attr("id", "session-track-details"+sessionRefObject.session.id);
+    $mobileSessionElement.find('.session-speakers').text("Speakers: ");
+    _.each(sessionRefObject.session.speakers, function(speaker) {
+        $mobileSessionElement.find('.session-speakers').append(speaker.name);
+    });
+    $mobileSessionElement.find('.session-description').html(sessionRefObject.session.short_abstract);
+    $mobileSessionElement.find('.session-location').html(sessionRefObject.session.microlocation.name+'<i class="fa fa-map-marker fa-fw"></i>');
     updateColor($mobileSessionElement.find('.event'), sessionRefObject.session.track);
     $mobileTimeline.find(".mobile-microlocation[data-microlocation-id=" + sessionRefObject.session.microlocation.id + "] > .mobile-sessions-holder").append($mobileSessionElement);
 
@@ -905,9 +913,6 @@ function loadMicrolocationsToTimeline(day) {
                 }).diff(topTime)).asMinutes(), true);
 
             session.top = top;
-
-            console.log(topTime);
-            console.log(session.top);
         });
     }
 
