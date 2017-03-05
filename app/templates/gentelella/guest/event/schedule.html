@@ -139,7 +139,9 @@
                     <div id="type-change-btn-holder" class="btn-group pull-right" role="group">
                         <button type="button" class="btn btn-default rooms-view">{{ _("Rooms View") }}</button>
                         <button type="button" class="btn btn-default tracks-view">{{ _("Tracks View") }}</button>
+                        <button type="button" class="btn btn-default export-png">{{ _("Export PNG") }}</button>
                         <button type="button" class="btn btn-default sessions-view">{{ _("Sessions View") }}</button>
+
                     </div>
                     <span class="fa fa-expand btn-pop-out"></span>
                 </div>
@@ -175,6 +177,9 @@
     <script src="{{ url_for('static', filename='js/vendor/jquery/jquery.codezero.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/events/scheduler.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/html2canvas/build/html2canvas.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/file-saver/FileSaver.min.js') }}"></script>
+
     <script type="text/javascript">
         var $scrollSpy = $('#scrollspy');
         $scrollSpy.stick_in_parent({
@@ -264,5 +269,23 @@
             e.preventDefault();
         });
 
+        $(".export-png").click(function () {
+            var $timeline = $('.event-info-container-holder');
+            $('#microlocation-container').addClass('fullwidth');
+            var width = $('#microlocation-container').width() + 400;
+            var currentStyle = $timeline.attr('style');
+            $timeline.width(width);
+            html2canvas($timeline[0], {
+                onrendered: function (canvas) {
+                    canvas.id = "generated-canvas";
+                    canvas.toBlob(function (blob) {
+                        saveAs(blob, "timeline.png");
+                        $('#microlocation-container').removeClass('fullwidth');
+                        $timeline.attr('style', currentStyle);
+                    });
+                },
+            });
+
+        });
     </script>
 {% endblock %}
