@@ -42,7 +42,7 @@ class AttendeeCheckInToggle(Resource):
     @api.marshal_with(ATTENDEE)
     def post(self, event_id, holder_identifier):
         """Toggle and Attendee's Checked in State"""
-        holder = TicketingManager.attendee_check_in_out(holder_identifier)
+        holder = TicketingManager.attendee_check_in_out(event_id, holder_identifier)
         return holder, 200
 
 
@@ -54,7 +54,7 @@ class AttendeeCheckIn(Resource):
     @api.marshal_with(ATTENDEE)
     def post(self, event_id, holder_identifier):
         """Check in attendee"""
-        holder = TicketingManager.attendee_check_in_out(holder_identifier, True)
+        holder = TicketingManager.attendee_check_in_out(event_id, holder_identifier, True)
         return holder, 200
 
 
@@ -66,5 +66,5 @@ class AttendeeCheckOut(Resource):
     @api.marshal_with(ATTENDEE)
     def post(self, event_id, holder_identifier):
         """Check out attendee"""
-        holder = TicketingManager.attendee_check_in_out(holder_identifier, False)
+        holder = TicketingManager.attendee_check_in_out(event_id, holder_identifier, False)
         return holder, 200
