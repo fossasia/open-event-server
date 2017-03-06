@@ -38,6 +38,8 @@ SESSION_SPEAKER = api.model('SessionSpeaker', {
     'name': fields.String(),
     'organisation': fields.String(),
     'city': fields.String(),
+    'short_biography': fields.String(),
+    'long_biography': fields.String(),
     'heard_from': fields.String(),
     'speaking_experience': fields.String(),
     'sponsorship_required': fields.String()
