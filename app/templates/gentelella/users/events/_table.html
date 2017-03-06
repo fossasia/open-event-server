@@ -1,6 +1,7 @@
 {% macro events_table(events) %}
-    <div class="table-responsive">
-        <table class="table table-striped">
+    <div id="table-responsive">
+        <table  class="table table-striped">
+
             <thead>
             <tr>
                 <th>{{ _("Name") }}</th>
@@ -22,6 +23,7 @@
                 {% set drafts = {'count': 0} %}
                 {% set accepted = {'count': 0} %}
                 {% set pending = {'count': 0} %}
+                {% set confirmed = {'count': 0} %}
                 {% set rejected = {'count': 0} %}
 
                 {% for session in event.session %}
@@ -31,6 +33,8 @@
                         {% if drafts.update({ 'count': drafts.count + 1 }) %} {% endif %}
                     {% elif session.state == 'pending' %}
                         {% if pending.update({ 'count': pending.count + 1 }) %} {% endif %}
+                    {% elif session.state == 'confirmed' %}
+                        {% if confirmed.update({ 'count': confirmed.count + 1 }) %} {% endif %}
                     {% elif session.state == 'rejected' %}
                         {% if rejected.update({ 'count': rejected.count + 1 }) %} {% endif %}
                     {% endif %}
@@ -38,7 +42,7 @@
                 {% endfor %}
 
                 <tr>
-                    <td><a href="{{ url_for('events.details_view', event_id=event.id) }}">{{ event.name }}</a></td>
+                    <td>  <img src="{{ event.logo }}"  onerror="imgError(this); " style="height:60px ; width:60px;"><a href="{{ url_for('events.details_view', event_id=event.id) }}"><br>&ensp;{{ event.name }}</a></td>
                     <td>{{ event.start_time.strftime('%B %d, %Y - %I:%M %p') }}<br>(to)<br>{{ event.end_time.strftime('%B %d, %Y - %I:%M %p') }}
                     </td>
                     <td>
@@ -53,15 +57,16 @@
 
                     </td>
                     <td>
-                        <ol style="padding-left:0;">
+                        <ol style="padding-left:10px;">
                             <li>{{ _("Drafts") }}: {{ drafts.count }}</li>
                             <li>{{ _("Submitted") }}: {{ event.session | length }}</li>
                             <li>{{ _("Accepted") }}: {{ accepted.count }}</li>
+                            <li>{{ _("Confirmed") }}: {{ confirmed.count }}</li>
                             <li>{{ _("Pending") }}: {{ pending.count }}</li>
                             <li>{{ _("Rejected") }}: {{ rejected.count }}</li>
                         </ol>
                     </td>
-                    <td>{{ event.speaker | length }}</td>
+                    <td style="text-align:left;">{{ event.speaker | length }}</td>
                     <td>
                         {% set flag = []  %}
                         {% for id, item in ticket_stats.iteritems() %}

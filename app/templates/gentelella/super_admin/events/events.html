@@ -27,6 +27,7 @@
         {# Calculate Session-Status counts #}
         {% set drafts = {'count': 0} %}
         {% set accepted = {'count': 0} %}
+        {% set confirmed = {'count': 0} %}
         {% set pending = {'count': 0} %}
         {% set rejected = {'count': 0} %}
         {% set ticket_stats = all_ticket_stats[event.id] %}
@@ -34,6 +35,8 @@
         {% for session in event.session %}
             {% if session.state == 'accepted' %}
                 {% if accepted.update({ 'count': accepted.count + 1 }) %} {% endif %}
+            {% elif session.state == 'confirmed'%}
+                {% if confirmed.update({ 'count': confirmed.count + 1 }) %} {% endif %}
             {% elif session.state == 'drafts' %}
                 {% if drafts.update({ 'count': drafts.count + 1 }) %} {% endif %}
             {% elif session.state == 'pending' %}
@@ -66,6 +69,7 @@
                     <li>{{ _("Drafts") }}: {{ drafts.count }}</li>
                     <li>{{ _("Submitted") }}: {{ event.session | length }}</li>
                     <li>{{ _("Accepted") }}: {{ accepted.count }}</li>
+                    <li>{{ _("Confirmed") }}: {{ confirmed.count }}</li>
                     <li>{{ _("Pending") }}: {{ pending.count }}</li>
                     <li>{{ _("Rejected") }}: {{ rejected.count }}</li>
                 </ol>

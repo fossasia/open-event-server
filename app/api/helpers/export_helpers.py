@@ -26,7 +26,6 @@ from ..tracks import DAO as TrackDAO, TRACK
 # DELETE FIELDS
 # All fields to be deleted go here
 EVENT = EVENT_MODEL.clone('EventExport')
-del EVENT['creator'].model['id']
 
 EXPORTS = [
     ('event', EventDAO, EVENT),
