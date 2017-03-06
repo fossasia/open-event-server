@@ -164,7 +164,8 @@ class SessionDAO(ServiceDAO):
                 trigger_new_session_notifications(session.id, event_id=event_id)
 
             if (data['state'] == 'accepted' and session.state != 'accepted') \
-                or (data['state'] == 'rejected' and session.state != 'rejected'):
+                or (data['state'] == 'rejected' and session.state != 'rejected') \
+                or (data['state'] == 'confirmed' and session.state != 'confirmed'):
                 trigger_session_state_change_notifications(obj, event_id=event_id, state=data['state'])
 
         if session.start_time != obj.start_time or session.end_time != obj.end_time:

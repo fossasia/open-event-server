@@ -75,6 +75,8 @@
                 <span class="status label label-success pull-right">{{ _("Accepted") }}</span>
             {% elif session.state == 'rejected' %}
                 <span class="status label label-danger pull-right">{{ _("Rejected") }}</span>
+            {% elif session.state == 'confirmed' %}
+                <span class="status label label-danger pull-right">{{ _("Confirmed") }}</span>
             {% else %}
                 <span class="status label label-info pull-right">N/A</span>
             {% endif %}
