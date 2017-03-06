@@ -42,7 +42,10 @@ SESSION_SPEAKER = api.model('SessionSpeaker', {
     'long_biography': fields.String(),
     'heard_from': fields.String(),
     'speaking_experience': fields.String(),
-    'sponsorship_required': fields.String()
+    'sponsorship_required': fields.String(),
+    'short_biography': fields.String(),
+    'long_biography' : fields.String(),
+    'photo' : fields.String()
 })
 
 SESSION_MICROLOCATION = api.model('SessionMicrolocation', {
