@@ -80,7 +80,6 @@ class Ticket(db.Model):
         """Returns True if ticket has already placed orders.
         Else False.
         """
-        from app.helpers.helpers import get_count
         order_tickets = OrderTicket.query.filter_by(ticket_id=self.id)
 
         count = 0

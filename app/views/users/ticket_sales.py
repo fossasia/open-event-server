@@ -414,7 +414,7 @@ def access_codes_delete(event_id, access_code_id=None):
 
 @event_ticket_sales.route('/attendees/check_in_toggle/<holder_id>/', methods=('POST',))
 def attendee_check_in_toggle(event_id, holder_id):
-    holder = TicketingManager.attendee_check_in_out(holder_id)
+    holder = TicketingManager.attendee_check_in_out(event_id, holder_id)
     if holder:
         return jsonify({
             'status': 'ok',
