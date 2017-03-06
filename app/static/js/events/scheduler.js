@@ -553,12 +553,6 @@ function addInfoBox($sessionElement, session) {
     if(isReadOnly()) {
         $sessionElement.css('cursor', 'pointer');
     }
-    $sessionElement.popover({
-        trigger: 'manual',
-        placement: 'bottom',
-        html: true,
-        title: session.title
-    });
     var content = "";
     if(!_.isNull(session.short_abstract)) {
         content +=  "<strong>About the session:</strong> " + session.short_abstract + "<br><br>";
@@ -591,7 +585,14 @@ function addInfoBox($sessionElement, session) {
     if(!_.isNull(session.microlocation)) {
         content += "<strong>Room:</strong> " + session.microlocation.name + "<br>";
     }
-    $sessionElement.attr("data-content", content);
+    $sessionElement.popover({
+        trigger: 'manual',
+        placement: 'bottom',
+        html: true,
+        title: session.title,
+        content: content,
+        container: 'body'
+    });
 }
 
 
@@ -922,7 +923,7 @@ function loadMicrolocationsToTimeline(day) {
         window.dayLevelTime.start.hours = least_hours;
         window.dayLevelTime.start.minutes = 0;
 
-        window.dayLevelTime.end.hours = max_hours + 2;
+        window.dayLevelTime.end.hours = max_hours + 1;
         window.dayLevelTime.end.minutes = max_minutes;
 
         var topTime = moment.utc({hour: dayLevelTime.start.hours, minute: dayLevelTime.start.minutes});
