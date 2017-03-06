@@ -6,7 +6,9 @@
 {% set scrollspy_top = (carousel_height + 95) ~ "px" %}
 
 {# Set `event_image` to use inside template #}
-{% if event.background_url %}
+{% if event.large %}
+    {% set event_image = event.large %}
+{% elif event.background_url %}
     {% set event_image = event.background_url %}
 {% elif custom_placeholder != None %}
     {% set event_image = custom_placeholder.url %}
