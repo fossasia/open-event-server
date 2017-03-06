@@ -613,7 +613,7 @@ function addMicrolocationToTimeline(microlocation) {
     var $microlocationElement = $(microlocationTemplate);
     $microlocationElement.attr("data-microlocation-id", microlocation.id);
     $microlocationElement.attr("data-microlocation-name", microlocation.name);
-    $microlocationElement.find(".microlocation-header").html(microlocation.name + "&nbsp;&nbsp;&nbsp;<span class='badge'>0</span>");
+    $microlocationElement.find(".microlocation-header").html(microlocation.name);
     $microlocationElement.find(".microlocation-inner").css("height", time.unit.count * time.unit.pixels + "px");
     $microlocationsHolder.append($microlocationElement);
 
