@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
-"POT-Creation-Date: 2017-02-18 10:49+0530\n"
+"POT-Creation-Date: 2017-03-05 17:06+0530\n"
 "PO-Revision-Date: 2016-12-09 05:23+0000\n"
 "Last-Translator: Ridhwanul Haque <rhemon19@gmail.com>\n"
 "Language: fr\n"
@@ -367,16 +367,17 @@ msgstr ""
 msgid "Yet to Open"
 msgstr ""
 
-#: app/templates/gentelella/guest/event/cfs.html:36
-#: app/templates/gentelella/guest/event/cfs.html:41
+#: app/templates/gentelella/guest/event/cfs.html:35
+#: app/templates/gentelella/guest/event/cfs.html:39
+#: app/templates/gentelella/guest/event/cfs.html:62
 msgid "Submit Proposal"
 msgstr ""
 
-#: app/templates/gentelella/guest/event/cfs.html:49
+#: app/templates/gentelella/guest/event/cfs.html:47
 msgid "Please login to submit your proposal"
 msgstr ""
 
-#: app/templates/gentelella/guest/event/cfs.html:52
+#: app/templates/gentelella/guest/event/cfs.html:50
 #: app/templates/gentelella/super_admin/content/_system_images.html:112
 #: app/templates/gentelella/super_admin/sales/discount_codes_create.html:128
 #: app/templates/gentelella/users/events/event_base.html:114
@@ -387,8 +388,38 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: app/templates/gentelella/guest/event/cfs.html:53
+#: app/templates/gentelella/guest/event/cfs.html:51
 msgid "Login/SignUp"
+msgstr ""
+
+#: app/templates/gentelella/guest/event/cfs.html:65
+msgid "Register as a Speaker"
+msgstr ""
+
+#: app/templates/gentelella/guest/event/cfs.html:66
+msgid "Propose Session"
+msgstr ""
+
+#: app/templates/gentelella/guest/event/cfs.html:77
+msgid "Add Speaker Information"
+msgstr ""
+
+#: app/templates/gentelella/guest/event/cfs.html:81
+msgid "Existing Sessions"
+msgstr ""
+
+#: app/templates/gentelella/guest/event/cfs.html:94
+msgid "Add Session Proposal"
+msgstr ""
+
+#: app/templates/gentelella/guest/event/cfs_new_session.html:14
+#: app/templates/gentelella/users/events/sessions/components/session_speaker_form.html:7
+msgid "Session Details"
+msgstr ""
+
+#: app/templates/gentelella/guest/event/cfs_new_speaker.html:14
+#: app/templates/gentelella/users/events/sessions/components/session_speaker_form.html:27
+msgid "Speaker Details"
 msgstr ""
 
 #: app/templates/gentelella/guest/event/code_of_conduct.html:7
@@ -396,19 +427,19 @@ msgstr ""
 msgid "Code of Conduct"
 msgstr ""
 
-#: app/templates/gentelella/guest/event/details.html:57
+#: app/templates/gentelella/guest/event/details.html:112
 msgid "No sessions have been published yet"
 msgstr ""
 
-#: app/templates/gentelella/guest/event/details.html:71
+#: app/templates/gentelella/guest/event/details.html:126
 msgid "Other Sponsors"
 msgstr ""
 
-#: app/templates/gentelella/guest/event/details.html:83
+#: app/templates/gentelella/guest/event/details.html:138
 msgid "Organized by"
 msgstr ""
 
-#: app/templates/gentelella/guest/event/details.html:88
+#: app/templates/gentelella/guest/event/details.html:143
 msgid "Getting Here"
 msgstr ""
 
@@ -445,7 +476,7 @@ msgstr ""
 #: app/templates/gentelella/super_admin/events/events.html:271
 #: app/templates/gentelella/super_admin/sessions/sessions.html:4
 #: app/templates/gentelella/super_admin/widgets/_sessions.html:3
-#: app/templates/gentelella/users/events/_table.html:9
+#: app/templates/gentelella/users/events/_table.html:10
 #: app/templates/gentelella/users/events/export/export.html:136
 #: app/templates/gentelella/users/events/sessions/base_session_table.html:4
 #: app/templates/gentelella/users/events/sessions/display.html:4
@@ -464,7 +495,7 @@ msgstr ""
 #: app/templates/gentelella/super_admin/sales/summary_base.html:80
 #: app/templates/gentelella/super_admin/sales/summary_base.html:86
 #: app/templates/gentelella/super_admin/sales/summary_base.html:92
-#: app/templates/gentelella/users/events/_table.html:11
+#: app/templates/gentelella/users/events/_table.html:12
 #: app/templates/gentelella/users/events/export/export.html:157
 #: app/templates/gentelella/users/events/tickets/tickets.html:194
 #: app/templates/gentelella/users/events/tickets/tickets.html:200
@@ -488,7 +519,7 @@ msgstr ""
 
 #: app/templates/gentelella/guest/explore/_collapse_search.html:67
 #: app/templates/gentelella/guest/ticketing/components/_invoice.html:27
-#: app/templates/gentelella/users/events/_table.html:7
+#: app/templates/gentelella/users/events/_table.html:8
 msgid "Date"
 msgstr ""
 
@@ -606,7 +637,7 @@ msgstr ""
 #: app/templates/gentelella/super_admin/widgets/_kubernetes.html:34
 #: app/templates/gentelella/users/events/sessions/components/session_speaker_form.html:37
 #: app/templates/gentelella/users/events/speakers/base_speaker_table.html:81
-#: app/templates/gentelella/users/events/tickets/attendees.html:182
+#: app/templates/gentelella/users/events/tickets/attendees.html:179
 #: app/templates/gentelella/users/settings/pages/contact_info.html:18
 msgid "Email"
 msgstr ""
@@ -1027,18 +1058,18 @@ msgid "Debug"
 msgstr ""
 
 #: app/templates/gentelella/super_admin/events/events.html:66
-#: app/templates/gentelella/users/events/_table.html:57
+#: app/templates/gentelella/users/events/_table.html:58
 msgid "Drafts"
 msgstr ""
 
 #: app/templates/gentelella/super_admin/events/events.html:67
-#: app/templates/gentelella/users/events/_table.html:58
+#: app/templates/gentelella/users/events/_table.html:59
 msgid "Submitted"
 msgstr ""
 
 #: app/templates/gentelella/super_admin/events/events.html:68
 #: app/templates/gentelella/super_admin/widgets/_sessions.html:12
-#: app/templates/gentelella/users/events/_table.html:59
+#: app/templates/gentelella/users/events/_table.html:60
 #: app/templates/gentelella/users/events/details/widgets/roles.html:18
 #: app/templates/gentelella/users/events/sessions/base_session_table.html:43
 #: app/templates/gentelella/users/events/speakers/base_speaker_table.html:62
@@ -1049,11 +1080,11 @@ msgstr ""
 
 #: app/templates/gentelella/super_admin/events/events.html:69
 #: app/templates/gentelella/super_admin/sales/fees_status.html:62
-#: app/templates/gentelella/users/events/_table.html:60
+#: app/templates/gentelella/users/events/_table.html:61
 #: app/templates/gentelella/users/events/sessions/base_session_table.html:40
 #: app/templates/gentelella/users/events/speakers/base_speaker_table.html:59
 #: app/templates/gentelella/users/events/tickets/attendees.html:133
-#: app/templates/gentelella/users/events/tickets/attendees.html:212
+#: app/templates/gentelella/users/events/tickets/attendees.html:198
 #: app/templates/gentelella/users/events/tickets/orders.html:97
 #: app/templates/gentelella/users/events/tickets/orders.html:148
 msgid "Pending"
@@ -1061,7 +1092,7 @@ msgstr ""
 
 #: app/templates/gentelella/super_admin/events/events.html:70
 #: app/templates/gentelella/super_admin/widgets/_sessions.html:14
-#: app/templates/gentelella/users/events/_table.html:61
+#: app/templates/gentelella/users/events/_table.html:62
 #: app/templates/gentelella/users/events/sessions/base_session_table.html:46
 #: app/templates/gentelella/users/events/speakers/base_speaker_table.html:65
 #: app/templates/gentelella/users/mysessions/mysession_detail.html:27
@@ -1070,7 +1101,7 @@ msgid "Rejected"
 msgstr ""
 
 #: app/templates/gentelella/super_admin/events/events.html:90
-#: app/templates/gentelella/users/events/_table.html:79
+#: app/templates/gentelella/users/events/_table.html:80
 msgid "No Ticket Information"
 msgstr ""
 
@@ -1120,7 +1151,7 @@ msgstr ""
 #: app/templates/gentelella/super_admin/users/users.html:215
 #: app/templates/gentelella/super_admin/users/users.html:236
 #: app/templates/gentelella/super_admin/users/users.html:257
-#: app/templates/gentelella/users/events/_table.html:6
+#: app/templates/gentelella/users/events/_table.html:7
 #: app/templates/gentelella/users/events/details/widgets/sponsors_list.html:16
 #: app/templates/gentelella/users/events/speakers/base_speaker_table.html:80
 #: app/templates/gentelella/users/events/wizard/basic-details.html:6
@@ -1144,7 +1175,7 @@ msgstr ""
 #: app/templates/gentelella/super_admin/events/events.html:201
 #: app/templates/gentelella/super_admin/events/events.html:223
 #: app/templates/gentelella/super_admin/events/events.html:245
-#: app/templates/gentelella/users/events/_table.html:12
+#: app/templates/gentelella/users/events/_table.html:13
 msgid "Public"
 msgstr ""
 
@@ -1153,7 +1184,7 @@ msgstr ""
 #: app/templates/gentelella/super_admin/events/events.html:226
 #: app/templates/gentelella/super_admin/events/events.html:248
 #: app/templates/gentelella/super_admin/events/events.html:270
-#: app/templates/gentelella/users/events/_table.html:8
+#: app/templates/gentelella/users/events/_table.html:9
 msgid "Roles"
 msgstr ""
 
@@ -1167,7 +1198,7 @@ msgstr ""
 #: app/templates/gentelella/super_admin/sessions/sessions.html:160
 #: app/templates/gentelella/super_admin/sessions/sessions.html:178
 #: app/templates/gentelella/super_admin/sessions/sessions.html:196
-#: app/templates/gentelella/users/events/_table.html:10
+#: app/templates/gentelella/users/events/_table.html:11
 #: app/templates/gentelella/users/events/export/export.html:149
 #: app/templates/gentelella/users/events/sessions/base_session_table.html:63
 #: app/templates/gentelella/users/events/speakers/base_speaker_table.html:4
@@ -1495,7 +1526,7 @@ msgstr ""
 #: app/templates/gentelella/super_admin/reports/_system_logs.html:90
 #: app/templates/gentelella/super_admin/sales/discount_codes.html:55
 #: app/templates/gentelella/users/events/tickets/access_codes.html:53
-#: app/templates/gentelella/users/events/tickets/attendees.html:185
+#: app/templates/gentelella/users/events/tickets/attendees.html:182
 #: app/templates/gentelella/users/events/tickets/discount_codes.html:53
 #: app/templates/gentelella/users/events/tickets/orders.html:132
 msgid "Action"
@@ -2867,7 +2898,7 @@ msgstr ""
 msgid "Add Microlocation"
 msgstr ""
 
-#: app/templates/gentelella/users/events/scheduler/components/timeline.html:33
+#: app/templates/gentelella/users/events/scheduler/components/timeline.html:34
 msgid "All the timings are in"
 msgstr ""
 
@@ -2889,7 +2920,7 @@ msgstr ""
 msgid "Email Sent"
 msgstr ""
 
-#: app/templates/gentelella/users/events/sessions/base_session_table.html:196
+#: app/templates/gentelella/users/events/sessions/base_session_table.html:209
 msgid "Send email"
 msgstr ""
 
@@ -2942,30 +2973,22 @@ msgstr ""
 msgid "Done"
 msgstr ""
 
-#: app/templates/gentelella/users/events/sessions/components/session_form.html:17
 #: app/templates/gentelella/users/events/sessions/components/session_form.html:18
+#: app/templates/gentelella/users/events/sessions/components/session_form.html:19
 msgid "Modify Speakers"
 msgstr ""
 
-#: app/templates/gentelella/users/events/sessions/components/session_form.html:21
+#: app/templates/gentelella/users/events/sessions/components/session_form.html:22
 msgid "selected"
 msgstr ""
 
-#: app/templates/gentelella/users/events/sessions/components/session_form.html:30
+#: app/templates/gentelella/users/events/sessions/components/session_form.html:35
 msgid "Save Session"
 msgstr ""
 
-#: app/templates/gentelella/users/events/sessions/components/session_form.html:32
+#: app/templates/gentelella/users/events/sessions/components/session_form.html:37
 #: app/templates/gentelella/users/events/sessions/components/session_speaker_form.html:57
 msgid "Submit Session"
-msgstr ""
-
-#: app/templates/gentelella/users/events/sessions/components/session_speaker_form.html:7
-msgid "Session Details"
-msgstr ""
-
-#: app/templates/gentelella/users/events/sessions/components/session_speaker_form.html:27
-msgid "Speaker Details"
 msgstr ""
 
 #: app/templates/gentelella/users/events/sessions/components/session_speaker_form.html:35
@@ -3174,33 +3197,28 @@ msgid "Order"
 msgstr ""
 
 #: app/templates/gentelella/users/events/tickets/attendees.html:167
-#: app/templates/gentelella/users/events/tickets/tickets.html:122
-msgid "Order Status"
-msgstr ""
-
-#: app/templates/gentelella/users/events/tickets/attendees.html:170
 #: app/templates/gentelella/users/events/wizard/basic-details.html:254
 msgid "Ticket Name"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:173
+#: app/templates/gentelella/users/events/tickets/attendees.html:170
 msgid "Ticket Price"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:176
+#: app/templates/gentelella/users/events/tickets/attendees.html:173
 #: app/templates/gentelella/users/profile/_form.html:8
 msgid "First Name"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:179
+#: app/templates/gentelella/users/events/tickets/attendees.html:176
 msgid "Last Name"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:230
+#: app/templates/gentelella/users/events/tickets/attendees.html:225
 msgid "Undo"
 msgstr ""
 
-#: app/templates/gentelella/users/events/tickets/attendees.html:234
+#: app/templates/gentelella/users/events/tickets/attendees.html:229
 msgid "Check In"
 msgstr ""
 
@@ -3293,6 +3311,10 @@ msgstr ""
 #: app/templates/gentelella/users/events/tickets/tickets.html:115
 #: app/templates/gentelella/users/events/tickets/tickets.html:169
 msgid "by order status"
+msgstr ""
+
+#: app/templates/gentelella/users/events/tickets/tickets.html:122
+msgid "Order Status"
 msgstr ""
 
 #: app/templates/gentelella/users/events/tickets/tickets.html:125
@@ -3901,11 +3923,15 @@ msgstr ""
 msgid "Comments"
 msgstr ""
 
-#: app/templates/gentelella/users/mysessions/mysessions_list.html:129
+#: app/templates/gentelella/users/mysessions/mysessions_list.html:64
+msgid "Session Not Yet Scheduled"
+msgstr ""
+
+#: app/templates/gentelella/users/mysessions/mysessions_list.html:131
 msgid "No session proposals for upcoming events found"
 msgstr ""
 
-#: app/templates/gentelella/users/mysessions/mysessions_list.html:140
+#: app/templates/gentelella/users/mysessions/mysessions_list.html:142
 msgid "No session proposals for past events found"
 msgstr ""
 

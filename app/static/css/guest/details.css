@@ -52,6 +52,15 @@ body {
   font-weight: 300;
 }
 
+.speaker-bio {
+  max-height: 120px;
+  overflow: hidden;
+}
+
+.speaker-bio:hover {
+  overflow-y: scroll;
+}
+
 @media (min-width: 768px) {
   .carousel-caption p {
     margin-bottom: 50px;
