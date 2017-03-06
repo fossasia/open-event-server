@@ -131,7 +131,7 @@
                     </small>
                 </h1>
             </div>
-            <div class="col-md-12 scheduler-container"">
+            <div class="col-md-12 scheduler-container">
                 <div class="btn-toolbar scheduler-heading" role="toolbar">
                     <div id="date-change-btn-holder" class="btn-group date-change-btn-holder" role="group">
 
@@ -225,12 +225,19 @@
                     $body.addClass('noscroll');
                     $('.overlay').addClass('visible');
                     $('.btn-pop-out').removeClass('fa-expand').addClass('fa-compress');
+                    var width = $("#timeline").width() - $('.timeunits.x1').width();
+                    console.log($("#timeline").width());
+                    console.log($('.timeunits.x1').width());
+                    console.log(width);
+                    $('.microlocation-container').css("width", width + "px");
                 }
                 function close(){
                     $scheduler.removeClass('scheduler-pop');
                     $body.removeClass('noscroll');
                     $('.overlay').removeClass('visible');
                     $('.btn-pop-out').addClass('fa-expand').removeClass('fa-compress');
+                    var width = $("#timeline").width() - $('.timeunits.x1').width();
+                    $('.microlocation-container').css("width", width + "px");
                 }
                 if(force == null) {
                     state ? close() : open();
