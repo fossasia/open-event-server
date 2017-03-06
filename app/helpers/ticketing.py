@@ -3,7 +3,7 @@ from datetime import timedelta, datetime
 
 from flask import url_for, flash
 from flask.ext import login
-from sqlalchemy import asc
+from sqlalchemy import desc
 from sqlalchemy import or_
 
 from app.helpers.cache import cache
@@ -69,8 +69,7 @@ class TicketingManager(object):
         if promoted_event:
             orders = orders.join(Order.event).filter(Event.discount_code_id != None)
 
-            orders = orders.order_by(asc(Order.created_at))
-
+        orders = orders.order_by(desc(Order.id))
         return orders.all()
 
     @staticmethod
@@ -92,7 +91,8 @@ class TicketingManager(object):
                 'total': ticket.quantity,
                 'completed': 0
             }
-        orders = Order.query.filter_by(event_id=event.id).filter_by(status='completed').all()
+        orders = Order.query.filter_by(event_id=event.id).filter(
+            or_(Order.status == 'completed', Order.status == 'placed')).all()
         for order in orders:
             for order_ticket in order.tickets:
                 tickets_summary[str(order_ticket.ticket_id)]['completed'] += order_ticket.quantity
@@ -111,16 +111,18 @@ class TicketingManager(object):
             return 0
 
     @staticmethod
-    def get_attendee(id):
+    def get_attendee(event_id, attendee_id):
         holder = None
-        if represents_int(id):
+        if represents_int(attendee_id):
             holder = TicketHolder.query.get(id)
+            if holder.ticket.event_id != event_id:
+                return None
         else:
-            id_splitted = id.split("/")
-            order_identifier = id_splitted[0]
-            holder_id = id_splitted[1]
+            id_splitted = attendee_id.split("-")
+            holder_id = id_splitted[-1]
+            order_identifier = attendee_id.replace('-' + holder_id, '')
             order = TicketingManager.get_order_by_identifier(order_identifier)
-            attendee = TicketingManager.get_attendee(holder_id)
+            attendee = TicketingManager.get_attendee(event_id, holder_id)
             if attendee.order_id == order.id:
                 holder = attendee
         return holder
@@ -131,8 +133,8 @@ class TicketingManager(object):
             .filter(Order.status == 'completed').filter(Order.event_id == event_id).all()
 
     @staticmethod
-    def attendee_check_in_out(id, state=None):
-        holder = TicketingManager.get_attendee(id)
+    def attendee_check_in_out(event_id, attendee_id, state=None):
+        holder = TicketingManager.get_attendee(event_id, attendee_id)
         if holder:
             if state is not None:
                 holder.checked_in = state
@@ -303,6 +305,9 @@ class TicketingManager(object):
         if order:
             user = DataGetter.get_or_create_user_by_email(email, form)
             order.user_id = user.id
+            if not order.user.user_detail.firstname and not order.user.user_detail.lastname:
+                order.user.user_detail.firstname = form['firstname']
+                order.user.user_detail.lastname = form['lastname']
 
             if order.amount > 0 \
                 and (not order.paid_via
@@ -541,5 +546,18 @@ class TicketingManager(object):
                 order.trashed_at = datetime.now()
                 order.status = "deleted"
                 save_to_db(order)
+            return True
+        return False
+
+    @staticmethod
+    def resend_confirmation(form):
+        order = TicketingManager.get_and_set_expiry(form.get('identifier'))
+        email = form.get('email')
+        event_id = order.event_id
+        invoice_id = order.get_invoice_number()
+        order_url = url_for('ticketing.view_order_after_payment', order_identifier=order.identifier, _external=True)
+        if login.current_user.is_organizer(event_id):
+            trigger_after_purchase_notifications(email, order.event_id, order.event, invoice_id, order_url)
+            send_email_for_after_purchase(email, invoice_id, order_url, order.event.name, order.event.organizer_name)
             return True
         return False

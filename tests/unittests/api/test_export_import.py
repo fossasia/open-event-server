@@ -139,8 +139,6 @@ class TestEventExport(ImportExportBase):
         # test unicode in file
         self.assertIn('ü', data)
         self.assertNotIn('\u', data)  # unicode escape
-        # test no ID of creator
-        self.assertEqual(json.loads(data)['creator'].get('id'), None)
         obj = json.loads(data)
         logo_data = open(dr + obj['logo'], 'r').read()
         self.assertTrue(len(logo_data) > 10)

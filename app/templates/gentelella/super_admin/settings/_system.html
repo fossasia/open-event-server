@@ -230,6 +230,13 @@
                            value="{{ settings.email_from|default('', True) }}">
                 </div>
             </div>
+            <div class="form-group">
+                 <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ _("From Name") }}</label>
+                 <div class=" col-md-9 col-xs-12">
+                     <input name="email_from_name"  class="form-control col-md-6 col-xs-6"
+                            value="{{ settings.email_from_name|default('', True) }}">
+                 </div>
+            </div>
             <div class="radio">
                 <label>
                     <input type="radio" name="email_service" id="email_service_smtp" class="radio_email" value="smtp"

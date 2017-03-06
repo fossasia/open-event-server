@@ -8,6 +8,110 @@
     {{ super() }}
     <link href="{{ url_for('static', filename='css/events/scheduler.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/sessions.css') }}"/>
+    <style>
+        div {
+            box-sizing: border-box !important;
+        }
+
+        .noscroll {
+            overflow: hidden;
+        }
+
+        .visible {
+            display: block;
+        }
+
+        .scheduler-pop {
+            position: fixed;
+            width: 96vw;
+            height: 0;
+            bottom: 2vh;
+            right: 2vw;
+            height: 96vh;
+            box-shadow: rgba(0,0,0,0.2) 0 2px 6px;
+            background: #FFFFFF;
+            z-index: 12;
+            padding: 0px;
+        }
+
+        .scheduler-heading {
+            position: relative;
+            width: 100%;
+        }
+
+        .scheduler-pop .scheduler-head {
+            display: none;
+        }
+
+        .scheduler-pop .scheduler-container {
+            height: 100%;
+        }
+
+        .scheduler-pop .scheduler-heading {
+            margin-top: 10px;
+            top: 0;
+            z-index: 13;
+        }
+
+        .scheduler-pop .scheduler-body {
+            width: 100%;
+            top: 50px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            position: absolute;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            padding-right: 20px;
+        }
+
+        .scheduler .scheduler-heading span.btn-pop-out {
+            position: absolute;
+            right: 0;
+            top: 0;
+            margin-top: 5px;
+            margin-left: 10px;
+            font-size: 20px;
+            color: #000;
+        }
+
+        #type-change-btn-holder {
+            margin-right: 30px;
+        }
+
+
+        @media screen and (max-width: 600px) {
+            .scheduler-pop .scheduler-body {
+                top: 100px;
+            }
+
+            .scheduler .scheduler-heading span.btn-pop-out {
+                position: absolute;
+                top: 0;
+            }
+
+            #date-change-btn-holder {
+                width: 100%;
+            }
+
+            #type-change-btn-holder {
+                width: 100%;
+                float: none !important;
+            }
+
+            .scheduler-pop #date-change-btn-holder {
+                padding-left: 10px;
+            }
+
+            .scheduler-pop #type-change-btn-holder {
+                padding-left: 10px;
+            }
+
+        }
+
+
+
+    </style>
 {% endblock %}
 
 {% block head_js %}
@@ -19,37 +123,40 @@
 
 {% block content %}
     <div>
-        <div class="row">
-            <div class="col-md-12">
+        <div class="row scheduler">
+            <div class="col-md-12 scheduler-head">
                 <h1 style="font-weight: 300; font-size: 24px">{{ _("Schedule") }}
                     <small>
                         ({{ _("Published on") }} {{ event.schedule_published_on.strftime('%B %d, %Y') }})
                     </small>
                 </h1>
             </div>
-            <div class="col-md-12" style="margin-top: 10px;">
-                <div class="btn-toolbar" role="toolbar">
+            <div class="col-md-12 scheduler-container">
+                <div class="btn-toolbar scheduler-heading" role="toolbar">
                     <div id="date-change-btn-holder" class="btn-group date-change-btn-holder" role="group">
 
                     </div>
-                    <div class="btn-group pull-right" role="group">
+                    <div id="type-change-btn-holder" class="btn-group pull-right" role="group">
                         <button type="button" class="btn btn-default rooms-view">{{ _("Rooms View") }}</button>
                         <button type="button" class="btn btn-default tracks-view">{{ _("Tracks View") }}</button>
                         <button type="button" class="btn btn-default sessions-view">{{ _("Sessions View") }}</button>
                     </div>
+                    <span class="fa fa-expand btn-pop-out"></span>
                 </div>
 
-                <div class="flash-message-holder" style="width: 100%; text-align: center;">
-                    <span class="text-muted message loading-text"
-                          style="font-weight: 300; font-size: 30px;">{{ _("Sessions loading") }} ...</span>
-                </div>
-                <div class="scheduler-holder" style="display: none;">
-                    <div id="session-view-holder" class="hidden">
-                        <br>
-                        {% include 'gentelella/guest/event/_sessions_list.html' %}
+                <div class="scheduler-body">
+                    <div class="flash-message-holder" style="width: 100%; text-align: center;">
+                        <span class="text-muted message loading-text"
+                              style="font-weight: 300; font-size: 30px;">{{ _("Sessions loading") }} ...</span>
                     </div>
-                    {% include 'gentelella/users/events/scheduler/components/timeline.html' %}
+                    <div class="scheduler-holder" style="display: none;">
+                        <div id="session-view-holder" class="hidden">
+                            <br>
+                            {% include 'gentelella/guest/event/_sessions_list.html' %}
+                        </div>
+                        {% include 'gentelella/users/events/scheduler/components/timeline.html' %}
 
+                    </div>
                 </div>
 
             </div>
@@ -99,6 +206,57 @@
                 }
             }
         });
+        $(".audio-btn").popover({
+            html: true,
+            placement: 'top'
+        }).click(function (e) {
+            e.preventDefault();
+        });
+
+        var $document = $(document),
+            $body = $('body'),
+            $scheduler = $('.scheduler');
+
+        function toggleScheduleBox(){
+            var state = false;
+            function toggle(force = null) {
+                function open(){
+                    $scheduler.addClass('scheduler-pop');
+                    $body.addClass('noscroll');
+                    $('.overlay').addClass('visible');
+                    $('.btn-pop-out').removeClass('fa-expand').addClass('fa-compress');
+                    var width = $("#timeline").width() - $('.timeunits.x1').width();
+                    console.log($("#timeline").width());
+                    console.log($('.timeunits.x1').width());
+                    console.log(width);
+                    $('.microlocation-container').css("width", width + "px");
+                }
+                function close(){
+                    $scheduler.removeClass('scheduler-pop');
+                    $body.removeClass('noscroll');
+                    $('.overlay').removeClass('visible');
+                    $('.btn-pop-out').addClass('fa-expand').removeClass('fa-compress');
+                    var width = $("#timeline").width() - $('.timeunits.x1').width();
+                    $('.microlocation-container').css("width", width + "px");
+                }
+                if(force == null) {
+                    state ? close() : open();
+                    state = !state;
+                }
+                else {
+                    force ? open() : close();
+                    state = force;
+                }
+            }
+            return toggle;
+        }
+
+        var toggleSchedule = toggleScheduleBox();
+
+        $('.btn-pop-out').on('click touchstart', function() {
+            toggleSchedule();
+        });
+
         $(".audio-btn").popover({
             html: true,
             placement: 'top'

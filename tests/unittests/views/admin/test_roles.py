@@ -17,7 +17,6 @@ class TestRoles(OpenEventViewTestCase):
     def test_role_create_post(self):
         with app.test_request_context():
             event = ObjectMother.get_event()
-            event.creator = self.super_admin
             save_to_db(event, "Event saved")
             user = ObjectMother.get_user()
             save_to_db(user, "New user saved")
@@ -36,7 +35,6 @@ class TestRoles(OpenEventViewTestCase):
     def test_role_delete(self):
         with app.test_request_context():
             event = ObjectMother.get_event()
-            event.creator = self.super_admin
             save_to_db(event, "Event saved")
             user = ObjectMother.get_user()
             save_to_db(user, "New user saved")
@@ -52,7 +50,6 @@ class TestRoles(OpenEventViewTestCase):
     def test_role_update(self):
         with app.test_request_context():
             event = ObjectMother.get_event()
-            event.creator = self.super_admin
             save_to_db(event, "Event saved")
             user = ObjectMother.get_user()
             save_to_db(user, "New user saved")

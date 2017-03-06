@@ -43,6 +43,9 @@
                         <input type="radio" name="show_state" autocomplete="off" value="accepted"> {{ _("Accepted") }}
                     </label>
                     <label class="btn btn-default btn-responsive">
+                        <input type="radio" name="show_state" autocomplete="off" value="confirmed"> {{ _("Confirmed") }}
+                    </label>
+                    <label class="btn btn-default btn-responsive">
                         <input type="radio" name="show_state" autocomplete="off" value="rejected"> {{ _("Rejected") }}
                     </label>
                 </div>
@@ -72,11 +75,17 @@
                 </thead>
                 <tbody>
                 {% for session in sessions %}
-                    {% if session.in_trash == False %}
+                    {% if session.title and session.in_trash == False %}
                         {% set versions_count = count_versions(session) %}
                         <tr>
                             <td>
-                                <span class="label label-{{ 'success' if session.state == 'accepted' else 'warning' }}">{{ session.state }}</span>
+                              {% if session.state == 'confirmed' %}
+                                  <span class="label label-success">{{ session.state }}</span>
+                              {% elif session.state == 'rejected' %}
+                                  <span class="label label-danger">{{ session.state }}</span>
+                              {% else %}
+                                  <span class="label label-warning">{{ session.state }}</span>
+                              {% endif %}
                             </td>
                             <td>{{ session.title }}</td>
                             <td>
@@ -122,12 +131,12 @@
                             </td>
                             <td>
                                 <div class="btn-group-vertical" role="group" aria-label="...">
-                                    {% if session.state != 'accepted' %}
-                                        <a href="{{ session.id }}/accept/?skip=email" class="btn btn-sm btn-success"
+                                    {% if session.state != 'accepted' and session.state != 'confirmed' %}
+                                        <a href="{{ session.id }}/accept/?skip=email" class="btn btn-sm btn-warning"
                                            data-toggle="tooltip" title="Approve" data-placement="right">
                                             <i class="fa fa-check"></i>
                                         </a>
-                                        <a type="button" class="btn btn-primary btn-success with-email-modal"
+                                        <a type="button" class="btn btn-primary btn-warning with-email-modal"
                                            data-toggle="tooltip"
                                            title="Approve & send acceptance email"
                                            data-placement="right"
@@ -153,18 +162,40 @@
                                            data-email-type="reject">
                                             <i class="fa fa-times fa-fw"></i> <i class="fa fa-envelope fa-fw"></i>
                                         </a>
+                                        
+                                    {% endif %}
+                                    {% if session.state == 'accepted' %}
+                                        <a href="{{ session.id }}/confirm/?skip=email" class="btn btn-success"
+                                           data-toggle="tooltip" title="Confirm" data-placement="right">
+                                            <i class="fa fa-check fa-fw"></i>
+                                        </a>
+                                        <a type="button" class="btn btn-success with-email-modal"
+                                           data-toggle="tooltip"
+                                           title="Confirm & send confirmation email"
+                                           data-placement="right"
+                                           data-session-id="{{ session.id }}"
+                                           data-session-title="{{ session.title }}"
+                                           data-email-type="confirm">
+                                            <i class="fa fa-check fa-fw"></i><i class="fa fa-envelope fa-fw"></i>
+                                        </a>
+
                                     {% endif %}
                                     {% if not session.state_email_sent and (session.state == 'accepted' or session.state == 'rejected') %}
-                                        <a href="{{ session.id }}/send-emails/" class="btn btn-sm btn-info"
-                                           data-toggle="tooltip" title="Sending pending email" data-placement="right">
+                                        <a class="btn btn-sm btn-info with-email-modal"
+                                           data-toggle="tooltip" 
+                                           title="Sending pending email" 
+                                           data-placement="right"
+                                           data-session-id="{{ session.id }}"
+                                           data-session-title="{{ session.title }}"
+                                           data-email-type="send-email"
+                                           data-session-state={{session.state}}>
                                             <i class="fa fa-envelope"></i>
                                         </a>
                                     {% endif %}
-                                    <form enctype="multipart/form-data" action="" method="POST" class="form-horizontal"
-                                          id="session-create-form">
-
-                                        <div class="modal fade" id="mailModal" tabindex="-1" role="dialog"
+                                    <div class="modal fade" id="mailModal" tabindex="-1" role="dialog"
                                              aria-labelledby="mailModalLabel">
+                                        <form enctype="multipart/form-data" action="" method="POST" class="form-horizontal"
+                                          id="session-create-form">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -202,8 +233,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </form>
+                                        </form>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
@@ -274,8 +305,17 @@
                 $mailModal.find('.subject').val("Your Session '" + sessionTitle + "' has been accepted");
                 $mailModal.find('.message').val("Hello,\n\nYour session '" + sessionTitle + "' has been " + emailType + "ed.\n\nVisit this link to view the session: http://" + window.location.hostname + "/events/mysessions/1/ .");
                 $mailModal.find('.form-horizontal').attr('action', sessionId + '/accept');
+            } else if(emailType === "confirm"){
+                $mailModal.find('.subject').val("Confirm your availability for '" + sessionTitle + "'");
+                $mailModal.find('.message').val("Hello,\n\nYour session '" + sessionTitle + "' has been accepted. \n\nTo " + emailType + " your availability visit this link: http://" + window.location.hostname + "/events/mysessions/1/ .");
+                $mailModal.find('.form-horizontal').attr('action', sessionId + '/confirm');
+            } else if (emailType === "send-email") {
+                var sessionState = button.data('session-state');
+                $mailModal.find('.subject').val("Your Session '" + sessionTitle + "' has been " + sessionState);
+                $mailModal.find('.message').val("Hello,\n\nYour session '" + sessionTitle + "' has been " + sessionState + ".\n\nVisit this link to view the session: http://" + window.location.hostname + "/events/mysessions/1/ .");
+                $mailModal.find('.form-horizontal').attr('action', sessionId + '/send-emails');
             } else {
-                $mailModal.find('.subject').val("Your Session '" + sessiontitle + "' has been rejected");
+                $mailModal.find('.subject').val("Your Session '" + sessionTitle + "' has been rejected");
                 $mailModal.find('.message').val("Hello,\n\nYour session '" + sessionTitle + "' has been " + emailType + "ed.\n\nVisit this link to view the session: http://" + window.location.hostname + "/events/mysessions/1/ .");
                 $mailModal.find('.form-horizontal').attr('action', sessionId + '/reject');
             }

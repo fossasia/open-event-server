@@ -26,11 +26,6 @@ from app.api.helpers.utils import Resource, ETAG_HEADER_DEFN
 
 api = Namespace('events', description='Events')
 
-EVENT_CREATOR = api.model('EventCreator', {
-    'id': fields.Integer(),
-    'email': fields.Email()
-})
-
 EVENT_COPYRIGHT = api.model('EventCopyright', {
     'holder': fields.String(),
     'holder_url': fields.Uri(),
@@ -90,7 +85,6 @@ EVENT = api.model('Event', {
     'sub_topic': EventSubTopicField(),
     'privacy': EventPrivacyField(),
     'ticket_url': fields.Uri(),
-    'creator': fields.Nested(EVENT_CREATOR, allow_null=True),
     'copyright': fields.Nested(EVENT_COPYRIGHT, allow_null=True),
     'schedule_published_on': fields.DateTime(),
     'code_of_conduct': fields.String(),
@@ -117,7 +111,6 @@ EVENT_PAGINATED = api.clone('EventPaginated', PAGINATED_MODEL, {
 
 EVENT_POST = api.clone('EventPost', EVENT)
 del EVENT_POST['id']
-del EVENT_POST['creator']
 del EVENT_POST['social_links']
 del EVENT_POST['version']
 
@@ -167,7 +160,6 @@ class EventDAO(BaseDAO):
             payload['call_for_papers'] = CFSDAO.create(payload['call_for_papers'], validate=False)
         # save event
         new_event = self.model(**payload)
-        new_event.creator = g.user
         save_to_db(new_event, "Event saved")
         # set organizer
         role = Role.query.filter_by(name=ORGANIZER).first()

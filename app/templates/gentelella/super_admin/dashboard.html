@@ -21,7 +21,7 @@
 {% set active_page = active_page|default('home') -%}
 {% macro tabs() %}
     <ul class="nav nav-tabs bar_tabs right admin_tabs" role="tablist"
-        style="background: #FFFFFF; margin-bottom:0px; border-bottom: 0px; background: none; margin-top:40px">
+        style="background: #FFFFFF; margin-bottom:0px; border-bottom: 0px; background: none; margin-top:80px">
         {% for href, id, caption, title in navigation_bar|reverse %}
             <li
                     {% if id == active_page %} class="active"{% endif %}><a href="{{ href|e }}">{{ caption|e }}</a></li>

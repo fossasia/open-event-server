@@ -28,6 +28,7 @@
 
 .unscheduled {
     margin-bottom: 3px;
+    color: white;
     cursor: all-scroll !important;
 }
 
@@ -275,14 +276,19 @@
     font-size: 15px;
 }
 
-@media (max-width: 660px) {
-    .event {
-        max-width: 400px;
-    }
+.session-track-details {
+    width: auto;
+    margin-left: 4%;
+    max-width: 500px;
+    font-size: 15px;
 }
 
 @media (max-width: 660px) {
     .event {
+        max-width: 270px;
+    }
+
+    .session-track-details {
         max-width: 270px;
     }
 }

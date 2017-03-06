@@ -24,6 +24,7 @@ from flask.ext.script import Manager
 from flask.ext.login import current_user
 from flask.ext.jwt import JWT
 from datetime import timedelta
+from flask_cors import CORS
 
 import sqlalchemy as sa
 
@@ -121,6 +122,7 @@ def create_app():
     app.config['CELERY_RESULT_BACKEND'] = app.config['CELERY_BROKER_URL']
 
     HTMLMIN(app)
+    CORS(app, resources={r"/api/*": {"origins": "*"}})
     AuthManager.init_login(app)
 
     if app.config['TESTING'] and app.config['PROFILE']:

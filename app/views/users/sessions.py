@@ -170,13 +170,29 @@ def reject_session(event_id, session_id):
     DataManager.session_accept_reject(session, event_id, 'rejected', send_email, message=message, subject=subject)
     return redirect(url_for('.index_view', event_id=event_id))
 
+@event_sessions.route('/<int:session_id>/confirm/', methods=('POST', 'GET'))
+@belongs_to_event
+@can_accept_and_reject
+def confirm_session(event_id, session_id):
+    session = get_session_or_throw(session_id)
+    skip = request.args.get('skip')
+    send_email = True
+    if skip and skip == 'email':
+        send_email = False
+    message = request.form.get('message', None) if request.form else None
+    subject = request.form.get('subject', None) if request.form else None
+    DataManager.session_accept_reject(session, event_id, 'confirmed', send_email, message=message, subject=subject)
+    return redirect(url_for('.index_view', event_id=event_id))
+
 
 @event_sessions.route('/<int:session_id>/send-emails/')
 @belongs_to_event
 @can_accept_and_reject
 def send_emails_session(event_id, session_id):
     session = get_session_or_throw(session_id)
-    trigger_session_state_change_notifications(session, event_id)
+    message = request.form.get('message', None) if request.form else None
+    subject = request.form.get('subject', None) if request.form else None
+    trigger_session_state_change_notifications(session, event_id, message=message, subject=subject)
     return redirect(url_for('.index_view', event_id=event_id))
 
 

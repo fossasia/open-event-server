@@ -121,6 +121,8 @@ var $unscheduledSessionsHolder = $unscheduledSessionsList;
 var $noSessionsInfoBox = $("#no-sessions-info");
 var $dayButtonsHolder = $("#date-change-btn-holder");
 var $addMicrolocationForm = $('#add-microlocation-form');
+var $timelineTable = $('table.timeline-table');
+var $noSessionMessage = $('#no-session-message');
 
 var $mobileTimeline = $("#mobile-timeline");
 var $tracksTimeline = $("#tracks-timeline");
@@ -230,7 +232,6 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
         }
     }
 
-
     sessionRefObject.$sessionElement.css({
         "-webkit-transform": "",
         "transform": ""
@@ -253,6 +254,14 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     var $mobileSessionElement = $(mobileSessionTemplate);
     $mobileSessionElement.find('.time').text(sessionRefObject.session.start_time.format('hh:mm A'));
     $mobileSessionElement.find('.event').text(sessionRefObject.session.title);
+    $mobileSessionElement.find('.event').attr("data-target", "#session-track-details"+sessionRefObject.session.id);
+    $mobileSessionElement.find('.session-track-details').attr("id", "session-track-details"+sessionRefObject.session.id);
+    $mobileSessionElement.find('.session-speakers').text("Speakers: ");
+    _.each(sessionRefObject.session.speakers, function(speaker) {
+        $mobileSessionElement.find('.session-speakers').append(speaker.name);
+    });
+    $mobileSessionElement.find('.session-description').html(sessionRefObject.session.short_abstract);
+    $mobileSessionElement.find('.session-location').html(sessionRefObject.session.microlocation.name+'<i class="fa fa-map-marker fa-fw"></i>');
     updateColor($mobileSessionElement.find('.event'), sessionRefObject.session.track);
     $mobileTimeline.find(".mobile-microlocation[data-microlocation-id=" + sessionRefObject.session.microlocation.id + "] > .mobile-sessions-holder").append($mobileSessionElement);
 
@@ -321,6 +330,7 @@ function addSessionToUnscheduled(sessionRef, isFiltering, shouldBroadcast) {
         "top": ""
     }).removeData("x").removeData("y");
 
+    updateColor(sessionRefObject.$sessionElement, sessionRefObject.session.track);
     sessionRefObject.$sessionElement.ellipsis().ellipsis();
     $noSessionsInfoBox.hide();
 
@@ -341,9 +351,11 @@ function addSessionToUnscheduled(sessionRef, isFiltering, shouldBroadcast) {
     }
 
     try {
-        sessionRefObject.$sessionElement.popover('destroy');
-    } catch(ignored) { }
-
+        setTimeout( function() {
+            $('.session.unscheduled').popover('hide');
+        }, 100);
+    }
+    catch(ignored) { }
 }
 
 /**
@@ -483,6 +495,11 @@ function updateSessionTime($sessionElement, session) {
         session = $sessionElement.data("session");
         saveSession = true;
     }
+
+    var day = session.start_time.format("Do MMMM YYYY");
+    var dayIndex = _.indexOf(days, day);
+
+    var selectedDate = moment($('.date-change-btn.active').text(), "Do MMMM YYYY");
     var topTime = moment.utc({hour: dayLevelTime.start.hours, minute: dayLevelTime.start.minutes});
     var mins = pixelsToMinutes($sessionElement.outerHeight(false));
     var topInterval = pixelsToMinutes($sessionElement.data("temp-top"), true);
@@ -491,11 +508,34 @@ function updateSessionTime($sessionElement, session) {
     var newEndTime = topTime.add(mins, "m");
 
     session.duration = mins;
+    session.start_time.date(selectedDate.date());
+    session.start_time.month(selectedDate.month());
+    session.start_time.year(selectedDate.year());
     session.start_time.hours(newStartTime.hours());
     session.start_time.minutes(newStartTime.minutes());
 
+    session.end_time.date(selectedDate.date());
+    session.end_time.month(selectedDate.month());
+    session.end_time.year(selectedDate.year());
     session.end_time.hours(newEndTime.hours());
     session.end_time.minutes(newEndTime.minutes());
+
+    _.each(sessionsStore[dayIndex], function (stored_session) {
+        if (stored_session.id === session.id) {
+            var index = sessionsStore[dayIndex].indexOf(session);
+            if (index > -1) {
+                sessionsStore[dayIndex].splice(index, 1);
+            }
+            var dayString = session.start_time.format("Do MMMM YYYY");
+
+            var dayIndex1 = _.indexOf(days, dayString);
+            if (_.isArray(sessionsStore[dayIndex1])) {
+                sessionsStore[dayIndex1].push(session);
+            } else {
+                sessionsStore[dayIndex1] = [session];
+            }
+        }
+    });
 
     if (saveSession) {
         $sessionElement.data("session", session);
@@ -519,10 +559,31 @@ function addInfoBox($sessionElement, session) {
         html: true,
         title: session.title
     });
-    var speakers = _.map(session.speakers, 'name');
     var content = "";
-    if(speakers.length > 0) {
-        content += "By " + _.join(speakers, ', ') + "<br><br>";
+    if(!_.isNull(session.short_abstract)) {
+        content +=  "<strong>About the session:</strong> " + session.short_abstract + "<br><br>";
+    } else {
+        session.long_abstract  = session.long_abstract.substr(0, 100);
+        content +=  "<strong>About the session:</strong> " + session.long_abstract + "<br><br>";
+    }
+    _.forEach(session.speakers, function(speaker, index) {
+        if(session.speakers.length === 1) {
+            content += "<strong>Speaker: </strong> " + speaker.name + "<br><br>";
+        } else {
+            content += "<strong>Speaker </strong> " + (parseInt(index, 10)+1) + "<strong> :</strong> " + speaker.name + "<br><br>";
+        }
+        if(speaker.short_biography) {
+            content += "<strong>About the Speaker: </strong><br>" + speaker.short_biography + "<br><br>";
+        } else {
+            session.speakers.long_biography = speaker.long_biography.substr(1, 100);
+            content += "<strong>About the Speaker: </strong><br>" + speaker.long_biography + "<br><br>";
+        }
+    });
+    if(!_.isNull(session.start_time)) {
+        content += "<strong>Start Time:</strong> " + session.start_time.format("HH:mm:ss") + "<br>";
+    }
+    if(!_.isNull(session.end_time)) {
+        content += "<strong>End Time:</strong> " + session.end_time.format("HH:mm:ss") + "<br>";
     }
     if(!_.isNull(session.track)) {
         content += "<strong>Track:</strong> " + session.track.name + "<br>";
@@ -590,7 +651,6 @@ function initializeInteractables() {
             inertia: false,
             // enable autoScroll
             autoScroll: {
-                container: $microlocationsHolder[0],
                 margin: 50,
                 distance: 5,
                 interval: 10
@@ -745,6 +805,13 @@ function processMicrolocationSession(microlocations, sessions, callback) {
                 minute: startTime.minutes()
             }).diff(topTime)).asMinutes(), true);
 
+            var now = window.mainEvent.start_time;
+            var end = window.mainEvent.end_time;
+            while(now.format('M/D/YYYY') <= end.format('M/D/YYYY')) {
+                days.push(now.format("Do MMMM YYYY"));
+                now.add('days', 1);
+            }
+
             var dayString = startTime.format("Do MMMM YYYY"); // formatted as eg. 2nd May 2013
 
             if (!_.includes(days, dayString)) {
@@ -763,11 +830,18 @@ function processMicrolocationSession(microlocations, sessions, callback) {
             session.top = top;
 
             var dayIndex = _.indexOf(days, dayString);
-
             if (_.isArray(sessionsStore[dayIndex])) {
                 sessionsStore[dayIndex].push(session);
             } else {
                 sessionsStore[dayIndex] = [session];
+            }
+
+            for (var index in days) {
+                if (_.isArray(unscheduledStore[index])) {
+                    unscheduledStore[index].push(session);
+                } else {
+                    unscheduledStore[index] = [session];
+                }
             }
         }
     });
@@ -799,12 +873,15 @@ function loadDateButtons() {
     loadMicrolocationsToTimeline(sortedDays[0]);
 }
 
-
 /**
  * Load all the sessions of a given day into the timeline
  * @param {string} day
  */
 function loadMicrolocationsToTimeline(day) {
+
+    $timelineTable.show();
+    $noSessionMessage.hide();
+    $microlocationsHolder.find(".microlocation").show();
 
     var parsedDay = moment.utc(day, "Do MMMM YYYY");
     if (parsedDay.isSame(mainEvent.start_time, "day")) {
@@ -816,9 +893,51 @@ function loadMicrolocationsToTimeline(day) {
         window.dayLevelTime.end.minutes = mainEvent.end_time.minutes();
     }
 
-    generateTimeUnits();
-
+    var least_hours = 24;
+    var max_hours = 0;
+    var max_minutes = 0;
     var dayIndex = _.indexOf(days, day);
+
+    if (isReadOnly()) {
+        _.each(sessionsStore[dayIndex], function (session) {
+            // Add session elements, but do not broadcast.
+            if (!_.isNull(session.top) && !_.isNull(session.microlocation) && !_.isNull(session.microlocation.id) && !_.isNull(session.start_time) && !_.isNull(session.end_time) && !session.hasOwnProperty("isReset")) {
+                if (session.start_time.hours() < least_hours) {
+                    least_hours = session.start_time.hours();
+                }
+                if (session.end_time.hours() > max_hours) {
+                    max_hours= session.end_time.hours();
+                    if (session.end_time.minutes() > max_minutes) {
+                        max_minutes = session.end_time.minutes();
+                    }
+                }
+            }
+        });
+
+        if (max_hours === 0) {
+            $timelineTable.hide();
+            $noSessionMessage.show();
+        }
+
+        window.dayLevelTime.start.hours = least_hours;
+        window.dayLevelTime.start.minutes = 0;
+
+        window.dayLevelTime.end.hours = max_hours + 2;
+        window.dayLevelTime.end.minutes = max_minutes;
+
+        var topTime = moment.utc({hour: dayLevelTime.start.hours, minute: dayLevelTime.start.minutes});
+
+        _.each(sessionsStore[dayIndex], function (session) {
+            var top = minutesToPixels(moment.duration(moment.utc({
+                    hour: session.start_time.hours(),
+                    minute: session.start_time.minutes()
+                }).diff(topTime)).asMinutes(), true);
+
+            session.top = top;
+        });
+    }
+
+    generateTimeUnits();
 
     $microlocationsHolder.empty();
     $unscheduledSessionsHolder.empty();
@@ -827,6 +946,7 @@ function loadMicrolocationsToTimeline(day) {
 
     _.each(microlocationsStore, addMicrolocationToTimeline);
 
+    $tracksTimeline.html("");
     _.each(tracks, function (track) {
         if(!_.isNull(track)) {
             var $trackElement = $(mobileMicrolocationTemplate);
@@ -836,11 +956,20 @@ function loadMicrolocationsToTimeline(day) {
         }
     });
 
+    sessionsStore[dayIndex] = _.sortBy(sessionsStore[dayIndex], "start_time");
+
     _.each(sessionsStore[dayIndex], function (session) {
+        // Add session elements, but do not broadcast.
+        if (!_.isNull(session.top) && !_.isNull(session.microlocation) && !_.isNull(session.microlocation.id) && !_.isNull(session.start_time) && !_.isNull(session.end_time) && !session.hasOwnProperty("isReset")) {
+            addSessionToTimeline(session, null, false);
+        }
+    });
+
+    _.each(unscheduledStore[dayIndex], function (session) {
         // Add session elements, but do not broadcast.
 
         if (!_.isNull(session.top) && !_.isNull(session.microlocation) && !_.isNull(session.microlocation.id) && !_.isNull(session.start_time) && !_.isNull(session.end_time) && !session.hasOwnProperty("isReset")) {
-            addSessionToTimeline(session, null, false);
+            return true;
         } else {
             if (!isReadOnly()) {
                 addSessionToUnscheduled(session, false, false);
@@ -866,6 +995,12 @@ function loadMicrolocationsToTimeline(day) {
     $("[data-toggle=tooltip]").tooltip("hide");
 
     if (isReadOnly()) {
+        _.each($microlocations, function ($microlocation) {
+            $microlocation = $($microlocation);
+            if ($microlocation.find('.microlocation-inner').children().length === 0) {
+                $microlocation.hide();
+            }
+        });
         $('.edit-btn').hide();
         $('.remove-btn').hide();
     }
@@ -938,6 +1073,7 @@ $("#sessions-search").valueChange(function (value) {
     }
 
     filtered = _.sortBy(filtered, "title");
+    filtered = _.uniqBy(filtered, "id");
 
     $unscheduledSessionsHolder.html("");
 
