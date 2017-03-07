@@ -456,3 +456,7 @@ span.twitter-typeahead {
     margin-left: 1px;
     padding: 8px;
 }
+
+.fullwidth {
+    width: 100% !important;
+}
