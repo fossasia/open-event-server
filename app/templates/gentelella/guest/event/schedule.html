@@ -162,6 +162,10 @@
 
             </div>
         </div>
+
+        <div style="float: right; padding-right: 20px">
+            {{ _("All the timings are in") }} {{ event.timezone | default('UTC', true) }}
+        </div>
     </div>
     {% include 'gentelella/users/events/scheduler/components/timeline_templates.html' %}
 {% endblock %}
