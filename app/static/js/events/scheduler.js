@@ -32,8 +32,9 @@ var time = {
         minutes: 59
     },
     unit: {
-        minutes: 15,
+        minutes: 10,
         pixels: 48,
+        minimum_duration: 5,
         count: 0
     },
     format: "YYYY-MM-DD HH:mm:ss"
@@ -707,9 +708,8 @@ function initializeInteractables() {
                 var target = event.target,
                     x = (parseFloat(target.getAttribute("data-x")) || 0),
                     y = (parseFloat(target.getAttribute("data-y")) || 0);
-
-                if(roundOffToMultiple(event.rect.height) < time.unit.pixels) {
-                    target.style.height = time.unit.pixels + "px";
+                if(roundOffToMultiple(event.rect.height) < minutesToPixels(time.unit.minimum_duration)) {
+                    target.style.height = minutesToPixels(time.unit.minimum_duration) + "px";
                 } else {
                     target.style.height = roundOffToMultiple(event.rect.height) + "px";
                 }
