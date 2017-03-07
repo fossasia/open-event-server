@@ -163,8 +163,14 @@ function getSessionFromReference(sessionRef, $searchTarget) {
         // If it's a new session, create session element from template and initialize
         if ($sessionElement.length === 0) {
             $sessionElement = $(sessionTemplate);
+            var content = sessionRef.title + " by ";
+            var speakers = [];
+            _.each(sessionRef.speakers, function(speaker) {
+                speakers.push(speaker.name);
+            });
+            content += speakers.join(', ');
             $sessionElement.attr("data-session-id", sessionRef.id);
-            $sessionElement.attr("data-original-text", sessionRef.title);
+            $sessionElement.attr("data-original-text", content);
             $sessionElement.data("session", sessionRef);
             newElement = true;
         }
@@ -251,15 +257,18 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     updateSessionTimeOnTooltip(sessionRefObject.$sessionElement);
     updateColor(sessionRefObject.$sessionElement, sessionRefObject.session.track);
 
-    var $mobileSessionElement = $(mobileSessionTemplate);
+    var $mobileSessionElement = $(mobileSessionTemplate);    
+    var content = sessionRefObject.session.title + " by ";
+    var speakers = [];
+    _.each(sessionRefObject.session.speakers, function(speaker) {
+        speakers.push(speaker.name);
+    });
+    content += speakers.join(', ');
     $mobileSessionElement.find('.time').text(sessionRefObject.session.start_time.format('hh:mm A'));
-    $mobileSessionElement.find('.event').text(sessionRefObject.session.title);
+    $mobileSessionElement.find('.event').text(content);
     $mobileSessionElement.find('.event').attr("data-target", "#session-track-details"+sessionRefObject.session.id);
     $mobileSessionElement.find('.session-track-details').attr("id", "session-track-details"+sessionRefObject.session.id);
-    $mobileSessionElement.find('.session-speakers').text("Speakers: ");
-    _.each(sessionRefObject.session.speakers, function(speaker) {
-        $mobileSessionElement.find('.session-speakers').append(speaker.name);
-    });
+    $mobileSessionElement.find('.session-speakers').text("Speakers: " + speakers.join(', '));
     $mobileSessionElement.find('.session-description').html(sessionRefObject.session.short_abstract);
     $mobileSessionElement.find('.session-location').html(sessionRefObject.session.microlocation.name+'<i class="fa fa-map-marker fa-fw"></i>');
     updateColor($mobileSessionElement.find('.event'), sessionRefObject.session.track);
@@ -553,12 +562,6 @@ function addInfoBox($sessionElement, session) {
     if(isReadOnly()) {
         $sessionElement.css('cursor', 'pointer');
     }
-    $sessionElement.popover({
-        trigger: 'manual',
-        placement: 'bottom',
-        html: true,
-        title: session.title
-    });
     var content = "";
     if(!_.isNull(session.short_abstract)) {
         content +=  "<strong>About the session:</strong> " + session.short_abstract + "<br><br>";
@@ -591,7 +594,14 @@ function addInfoBox($sessionElement, session) {
     if(!_.isNull(session.microlocation)) {
         content += "<strong>Room:</strong> " + session.microlocation.name + "<br>";
     }
-    $sessionElement.attr("data-content", content);
+    $sessionElement.popover({
+        trigger: 'manual',
+        placement: 'bottom',
+        html: true,
+        title: session.title,
+        content: content,
+        container: 'body'
+    });
 }
 
 
@@ -603,7 +613,7 @@ function addMicrolocationToTimeline(microlocation) {
     var $microlocationElement = $(microlocationTemplate);
     $microlocationElement.attr("data-microlocation-id", microlocation.id);
     $microlocationElement.attr("data-microlocation-name", microlocation.name);
-    $microlocationElement.find(".microlocation-header").html(microlocation.name + "&nbsp;&nbsp;&nbsp;<span class='badge'>0</span>");
+    $microlocationElement.find(".microlocation-header").html(microlocation.name);
     $microlocationElement.find(".microlocation-inner").css("height", time.unit.count * time.unit.pixels + "px");
     $microlocationsHolder.append($microlocationElement);
 
@@ -922,7 +932,7 @@ function loadMicrolocationsToTimeline(day) {
         window.dayLevelTime.start.hours = least_hours;
         window.dayLevelTime.start.minutes = 0;
 
-        window.dayLevelTime.end.hours = max_hours + 2;
+        window.dayLevelTime.end.hours = max_hours + 1;
         window.dayLevelTime.end.minutes = max_minutes;
 
         var topTime = moment.utc({hour: dayLevelTime.start.hours, minute: dayLevelTime.start.minutes});
