@@ -24,7 +24,6 @@
         .scheduler-pop {
             position: fixed;
             width: 96vw;
-            height: 0;
             bottom: 2vh;
             right: 2vw;
             height: 96vh;
@@ -32,6 +31,7 @@
             background: #FFFFFF;
             z-index: 12;
             padding: 0px;
+            overflow: auto;
         }
 
         .scheduler-heading {
@@ -55,12 +55,11 @@
 
         .scheduler-pop .scheduler-body {
             width: 100%;
-            top: 50px;
-            bottom: 0;
+            top: 5px;
+            bottom: 10px;
             left: 0;
             right: 0;
-            position: absolute;
-            overflow-y: scroll;
+            position: relative;
             overflow-x: hidden;
             padding-right: 20px;
         }
@@ -162,6 +161,10 @@
                 </div>
 
             </div>
+        </div>
+
+        <div style="float: right; padding-right: 20px">
+            {{ _("All the timings are in") }} {{ event.timezone | default('UTC', true) }}
         </div>
     </div>
     {% include 'gentelella/users/events/scheduler/components/timeline_templates.html' %}
