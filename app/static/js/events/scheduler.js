@@ -163,7 +163,7 @@ function getSessionFromReference(sessionRef, $searchTarget) {
         // If it's a new session, create session element from template and initialize
         if ($sessionElement.length === 0) {
             $sessionElement = $(sessionTemplate);
-            var content = sessionRef.title + " by ";
+            var content = sessionRef.title + " | ";
             var speakers = [];
             _.each(sessionRef.speakers, function(speaker) {
                 speakers.push(speaker.name);
@@ -258,7 +258,7 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     updateColor(sessionRefObject.$sessionElement, sessionRefObject.session.track);
 
     var $mobileSessionElement = $(mobileSessionTemplate);    
-    var content = sessionRefObject.session.title + " by ";
+    var content = sessionRefObject.session.title + " | ";
     var speakers = [];
     _.each(sessionRefObject.session.speakers, function(speaker) {
         speakers.push(speaker.name);
