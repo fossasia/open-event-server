@@ -114,7 +114,7 @@ class TicketingManager(object):
     def get_attendee(event_id, attendee_id):
         holder = None
         if represents_int(attendee_id):
-            holder = TicketHolder.query.get(id)
+            holder = TicketHolder.query.get(attendee_id)
             if holder.ticket.event_id != event_id:
                 return None
         else:
