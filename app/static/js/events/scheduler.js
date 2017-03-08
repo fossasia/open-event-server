@@ -931,9 +931,8 @@ function loadMicrolocationsToTimeline(day) {
 
         window.dayLevelTime.start.hours = least_hours;
         window.dayLevelTime.start.minutes = 0;
-
-        window.dayLevelTime.end.hours = max_hours + 1;
-        window.dayLevelTime.end.minutes = max_minutes;
+        window.dayLevelTime.end.hours = max_hours + ~~((max_minutes + 15) / 60);
+        window.dayLevelTime.end.minutes = (max_minutes + 15) % 60;
 
         var topTime = moment.utc({hour: dayLevelTime.start.hours, minute: dayLevelTime.start.minutes});
 
