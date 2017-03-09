@@ -21,10 +21,8 @@
     <div>
         <div class="row">
             <div class="col-md-12">
-                <h1 style="font-weight: 300; font-size: 24px">{{ _("Schedule") }}
-                    <small>
-                        ({{ _("Published on") }} {{ event.schedule_published_on.strftime('%B %d, %Y') }})
-                    </small>
+                <h1 style="font-weight: 300; font-size: 24px">{{ event.name }} {{ _(" Schedule") }}
+
                 </h1>
             </div>
             <div class="col-md-12" style="margin-top: 10px;">
@@ -54,6 +52,9 @@
 
             </div>
         </div>
+        <strong>
+            ({{ _("Published on") }} {{ event.schedule_published_on.strftime('%B %d, %Y') }})
+        </strong>
     </div>
     {% include 'gentelella/users/events/scheduler/components/timeline_templates.html' %}
 {% endblock %}
