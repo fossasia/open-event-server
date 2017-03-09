@@ -27,11 +27,16 @@
 
 <script id="mobile-speaker-template" type="text/x-template">
     <div class="speaker-biography">
-        <img class="speaker-big-photo" style="width:10rem;height:10rem;border-radius:50%">
+        <img class="speaker-big-photo" onerror="this.onerror=null; this.src='/static/placeholders/avatar.png';" style="width:10rem;height:10rem;border-radius:50%">
         <p class="name"> </p>
         <p class="organisation"> </p>
         <p class="biography"> </p>
+        <div class="image"> </div>
     </div>
+</script>
+
+<script id="mobile-speaker-image-template" type="text/x-template">
+    <img class="speaker-image" onerror="this.onerror=null; this.src='/static/placeholders/avatar.png';">
 </script>
 
 <script id="mobile-microlocation-template" type="text/x-template">
