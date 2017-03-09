@@ -68,10 +68,10 @@
             </form>
 
             <form class="form-inline" method="get" id="discount-filter-form"
-                  {% if not from_date or not to_date %}style="display: none;"{% endif %}>
+                  {% if not discount_code %}style="display: none;"{% endif %}>
 
                 <div class="form-group">
-                    <input type="text" >
+                    <input type="text"  name="discount_code" value="{{ discount_code }}">
                 </div>
                 <div class="btn-group">
                     <button type="submit" class="btn btn-default" style="margin-bottom: 0;"><i
@@ -346,5 +346,6 @@
         }).draw();
 
     </script>
-
+<h3>
+</h3>
 {% endblock %}
