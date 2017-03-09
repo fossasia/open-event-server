@@ -270,7 +270,6 @@
     background: rgba(0, 150, 136, 0.75);
     width: auto;
     margin-left: 4%;
-    max-width: 500px;
     color: #FFFFFF;
     padding: 5px;
     font-size: 15px;
@@ -279,18 +278,7 @@
 .session-track-details {
     width: auto;
     margin-left: 4%;
-    max-width: 500px;
     font-size: 15px;
-}
-
-@media (max-width: 660px) {
-    .event {
-        max-width: 270px;
-    }
-
-    .session-track-details {
-        max-width: 270px;
-    }
 }
 
 #track-list {
