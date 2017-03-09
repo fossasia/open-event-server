@@ -1,6 +1,8 @@
 var $dateFilterForm = $("#date-filter-form");
 var $filterControlBtn = $("#filter-control-btn");
 
+var $discountFilterForm = $("#discount-filter-form");
+
 $dateFilterForm.find(".date").datepicker({
     'format': 'dd/mm/yyyy',
     'autoclose': true
@@ -20,9 +22,20 @@ $(".date-filter-open").click(function () {
     $dateFilterForm.find("input").val("");
 });
 
+$(".discount-filter-open").click(function () {
+    $discountFilterForm.show();
+});
+
 $(".filter-remove").click(function () {
     $dateFilterForm.find("input").val("");
     $dateFilterForm.hide();
-    $dateFilterForm.submit();
+//    $dateFilterForm.submit();
+    $filterControlBtn.show();
+});
+
+$(".discount-filter-remove").click(function () {
+    $discountFilterForm.find("input").val("");
+    $discountFilterForm.hide();
+//    $discountFilterForm.submit();
     $filterControlBtn.show();
 });
