@@ -7,7 +7,7 @@
 {% endmacro %}
 
 {% macro speaker_info(speaker, count) %}
-    <div class="col-sm-3 speaker-info">
+    <div class="col-sm-3 col-xs-12 speaker-info">
         <img src="{{ speaker.thumbnail if speaker.thumbnail and speaker.thumbnail != '' and '.' in speaker.thumbnail else speaker.photo }}" width="100%" onerror="imgError(this);"><br>
         <h4 style="font-weight: 500;">{{ speaker.name }}</h4>
         <h5 style="margin-top: 0;">{{ speaker.organisation }}</h5>
@@ -26,7 +26,7 @@
 
 {% macro featured_speaker_info(speaker, count) %}
     <div class="col-sm-6">
-        <div class="col-sm-6">
+        <div class="col-sm-6 col-xs-12">
             <img src="{{ speaker.thumbnail if speaker.thumbnail and speaker.thumbnail != '' and '.' in speaker.thumbnail else speaker.photo }}" style="margin-top:10px" width="100%" onerror="imgError(this);"><br>
             <div class="text-center speaker-links hidden-xs">
                 {% if speaker.website %}<a href="{{ speaker.website }}"><i class="fa fa-external-link-square"></i></a>{% endif %}
