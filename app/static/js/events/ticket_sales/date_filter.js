@@ -24,10 +24,6 @@ $(".date-filter-open").click(function () {
 $(".filter-remove").click(function () {
     $dateFilterForm.find("input").val("");
     $dateFilterForm.hide();
-
-    $discountFilterForm.find("input").val("");
-    $discountFilterForm.hide();
-
     $dateFilterForm.submit();
     $filterControlBtn.show();
 });
@@ -35,4 +31,11 @@ $(".filter-remove").click(function () {
 $(".discount-filter-open").click(function () {
     $discountFilterForm.show();
     $discountFilterForm.find("input").val("");
+});
+
+$(".discount-filter-remove").click(function () {
+    $discountFilterForm.find("input").val("");
+    $discountFilterForm.hide();
+    $discountFilterForm.submit();
+    $filterControlBtn.show();
 });
