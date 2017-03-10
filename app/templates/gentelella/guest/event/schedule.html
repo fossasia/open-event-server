@@ -124,10 +124,8 @@
     <div>
         <div class="row scheduler">
             <div class="col-md-12 scheduler-head">
-                <h1 style="font-weight: 300; font-size: 24px">{{ _("Schedule") }}
-                    <small>
-                        ({{ _("Published on") }} {{ event.schedule_published_on.strftime('%B %d, %Y') }})
-                    </small>
+                <h1 style="font-weight: 300; font-size: 24px">
+                    {{ event.name }}{{ _(" Schedule") }}
                 </h1>
             </div>
             <div class="col-md-12 scheduler-container">
@@ -159,14 +157,18 @@
 
                     </div>
                 </div>
-
+                <div class="col-md-12 scheduler-head">
+                    <p style="float: right; padding-right: 20px">
+                        {{ _("All the timings are in") }} {{ event.timezone | default('UTC', true) }}
+                    </p>
+                    <strong>
+                        {{ _("Published on") }} {{ event.schedule_published_on.strftime('%B %d, %Y') }}
+                    </strong>
+                    </p>
+                </div>
             </div>
-        </div>
 
-        <div style="float: right; padding-right: 20px">
-            {{ _("All the timings are in") }} {{ event.timezone | default('UTC', true) }}
         </div>
-    </div>
     {% include 'gentelella/users/events/scheduler/components/timeline_templates.html' %}
 {% endblock %}
 
