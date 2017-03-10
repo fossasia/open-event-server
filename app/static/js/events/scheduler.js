@@ -140,6 +140,8 @@ var dayButtonTemplate = $("#date-change-button-template").html();
 
 var mobileMicrolocationTemplate = $("#mobile-microlocation-template").html();
 var mobileSessionTemplate = $("#mobile-session-template").html();
+var mobileSpeakerTemplate = $("#mobile-speaker-template").html();
+var mobileSpeakerElementTemplate = $("#mobile-speaker-image-template").html();
 /**
  * Data Getters
  * ============
@@ -259,18 +261,33 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     updateColor(sessionRefObject.$sessionElement, sessionRefObject.session.track);
 
     var $mobileSessionElement = $(mobileSessionTemplate);    
-    var content = sessionRefObject.session.title + " | ";
-    var speakers = [];
-    _.each(sessionRefObject.session.speakers, function(speaker) {
-        speakers.push(speaker.name);
-    });
-    content += speakers.join(', ');
-    $mobileSessionElement.find('.time').text(sessionRefObject.session.start_time.format('hh:mm A'));
-    $mobileSessionElement.find('.event').text(content);
-    $mobileSessionElement.find('.event').attr("data-target", "#session-track-details"+sessionRefObject.session.id);
+    $mobileSessionElement.find('.time').text(sessionRefObject.session.start_time.format('hh:mm A') + " - " + sessionRefObject.session.end_time.format('hh:mm A'));
+    $mobileSessionElement.find('.title').text(sessionRefObject.session.title);
     $mobileSessionElement.find('.session-track-details').attr("id", "session-track-details"+sessionRefObject.session.id);
-    $mobileSessionElement.find('.session-speakers').text("Speakers: " + speakers.join(', '));
+    $mobileSessionElement.find('.event').attr("data-target", "#session-track-details"+sessionRefObject.session.id + ",#session-track-short-details"+sessionRefObject.session.id);
+    $mobileSessionElement.find('.shorter-detail').attr("id", "session-track-short-details"+sessionRefObject.session.id);
+    _.each(sessionRefObject.session.speakers, function(speaker) {
+        var $mobileSpeakerElement = $(mobileSpeakerTemplate);
+        var $mobileSpeakerImageElement = $(mobileSpeakerElementTemplate);
+        $mobileSpeakerImageElement.attr('src', speaker.photo);
+        $mobileSpeakerImageElement.attr('style', 'width:5rem;height:5rem;border-radius:50%;margin-right:10px;');
+        $mobileSpeakerElement.find('.speaker-big-photo').attr('src', speaker.photo);
+        $mobileSpeakerElement.find('.name').html(speaker.name);
+        $mobileSpeakerElement.find('.organisation').html(speaker.organisation);
+        $mobileSpeakerElement.find('.biography').html(speaker.short_biography);
+        $mobileSessionElement.find('.speaker-more-detail').append($mobileSpeakerElement);
+        $mobileSessionElement.find('.speaker-photo').append($mobileSpeakerImageElement);
+        var speakerInfo = speaker.name;
+        if(speaker.organisation) {
+            speakerInfo = speakerInfo + " (" + speaker.organisation + ")";
+        }
+        speakerInfo = speakerInfo + ", ";
+        $mobileSessionElement.find('.speaker-detail').append(speakerInfo);
+    });
     $mobileSessionElement.find('.session-description').html(sessionRefObject.session.short_abstract);
+    if(sessionRefObject.session.session_type) {
+        $mobileSessionElement.find('.session-type').html(sessionRefObject.session.session_type.name);
+    }
     $mobileSessionElement.find('.session-location').html(sessionRefObject.session.microlocation.name+'<i class="fa fa-map-marker fa-fw"></i>');
     updateColor($mobileSessionElement.find('.event'), sessionRefObject.session.track);
     $mobileTimeline.find(".mobile-microlocation[data-microlocation-id=" + sessionRefObject.session.microlocation.id + "] > .mobile-sessions-holder").append($mobileSessionElement);
