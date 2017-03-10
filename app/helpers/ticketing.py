@@ -55,8 +55,11 @@ class TicketingManager(object):
                 orders = Order.query.filter_by(event_id=event_id).filter_by(status=status) \
                     .filter(Order.user_id.isnot(None))
             elif discount_code:
-                discount_id = DiscountCode.query.filter_by(event_id=event_id).filter_by(code=discount_code) \
-                                   .filter(Order.user_id.isnot(None))[0].id
+                try:
+                    discount_id = DiscountCode.query.filter_by(event_id=event_id).filter_by(code=discount_code) \
+                        .filter(Order.user_id.isnot(None))[0].id
+                except Exception as e:
+                    return []
 
                 orders = Order.query.filter_by(event_id=event_id).filter_by(discount_code_id=discount_id) \
                     .filter(Order.user_id.isnot(None))
