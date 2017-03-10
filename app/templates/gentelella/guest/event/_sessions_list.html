@@ -78,7 +78,7 @@
 
                     {% for speaker in session.speakers %}
                         <img data-toggle="tooltip" data-placement="bottom" title="{{ speaker.name }}"
-                             src="{{ speaker.photo }}"
+                             src="{{ speaker.small if speaker.small and speaker.small != '' and '.' in speaker.small else speaker.photo }}"
                              onerror="imgError(this);">
                     {% endfor %}
 

@@ -18,7 +18,7 @@
     color: #3d3d3d;
     height: 48px;
     overflow: hidden;
-    width: 216px;
+    width: 200px;
     white-space: normal;
     padding: 5px;
     font-size: 11px;
@@ -124,7 +124,7 @@
 .timeline .microlocations .microlocation {
     display: inline-block;
     position: relative;
-    width: 216px;
+    width: 200px;
     border-right: 1px solid rgb(221, 221, 221);
     margin-left: 0;
 }
@@ -299,7 +299,7 @@
 }
 
 .height {
-    min-height: 70px;
+    min-height: 110px;
     border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
 

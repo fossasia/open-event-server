@@ -32,8 +32,9 @@ var time = {
         minutes: 59
     },
     unit: {
-        minutes: 15,
+        minutes: 10,
         pixels: 48,
+        minimum_duration: 5,
         count: 0
     },
     format: "YYYY-MM-DD HH:mm:ss"
@@ -139,6 +140,8 @@ var dayButtonTemplate = $("#date-change-button-template").html();
 
 var mobileMicrolocationTemplate = $("#mobile-microlocation-template").html();
 var mobileSessionTemplate = $("#mobile-session-template").html();
+var mobileSpeakerTemplate = $("#mobile-speaker-template").html();
+var mobileSpeakerElementTemplate = $("#mobile-speaker-image-template").html();
 /**
  * Data Getters
  * ============
@@ -163,8 +166,14 @@ function getSessionFromReference(sessionRef, $searchTarget) {
         // If it's a new session, create session element from template and initialize
         if ($sessionElement.length === 0) {
             $sessionElement = $(sessionTemplate);
+            var content = sessionRef.title + " | ";
+            var speakers = [];
+            _.each(sessionRef.speakers, function(speaker) {
+                speakers.push(speaker.name);
+            });
+            content += speakers.join(', ');
             $sessionElement.attr("data-session-id", sessionRef.id);
-            $sessionElement.attr("data-original-text", sessionRef.title);
+            $sessionElement.attr("data-original-text", content);
             $sessionElement.data("session", sessionRef);
             newElement = true;
         }
@@ -251,16 +260,34 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     updateSessionTimeOnTooltip(sessionRefObject.$sessionElement);
     updateColor(sessionRefObject.$sessionElement, sessionRefObject.session.track);
 
-    var $mobileSessionElement = $(mobileSessionTemplate);
-    $mobileSessionElement.find('.time').text(sessionRefObject.session.start_time.format('hh:mm A'));
-    $mobileSessionElement.find('.event').text(sessionRefObject.session.title);
-    $mobileSessionElement.find('.event').attr("data-target", "#session-track-details"+sessionRefObject.session.id);
+    var $mobileSessionElement = $(mobileSessionTemplate);    
+    $mobileSessionElement.find('.time').text(sessionRefObject.session.start_time.format('hh:mm A') + " - " + sessionRefObject.session.end_time.format('hh:mm A'));
+    $mobileSessionElement.find('.title').text(sessionRefObject.session.title);
     $mobileSessionElement.find('.session-track-details').attr("id", "session-track-details"+sessionRefObject.session.id);
-    $mobileSessionElement.find('.session-speakers').text("Speakers: ");
+    $mobileSessionElement.find('.event').attr("data-target", "#session-track-details"+sessionRefObject.session.id + ",#session-track-short-details"+sessionRefObject.session.id);
+    $mobileSessionElement.find('.shorter-detail').attr("id", "session-track-short-details"+sessionRefObject.session.id);
     _.each(sessionRefObject.session.speakers, function(speaker) {
-        $mobileSessionElement.find('.session-speakers').append(speaker.name);
+        var $mobileSpeakerElement = $(mobileSpeakerTemplate);
+        var $mobileSpeakerImageElement = $(mobileSpeakerElementTemplate);
+        $mobileSpeakerImageElement.attr('src', speaker.photo);
+        $mobileSpeakerImageElement.attr('style', 'width:5rem;height:5rem;border-radius:50%;margin-right:10px;');
+        $mobileSpeakerElement.find('.speaker-big-photo').attr('src', speaker.photo);
+        $mobileSpeakerElement.find('.name').html(speaker.name);
+        $mobileSpeakerElement.find('.organisation').html(speaker.organisation);
+        $mobileSpeakerElement.find('.biography').html(speaker.short_biography);
+        $mobileSessionElement.find('.speaker-more-detail').append($mobileSpeakerElement);
+        $mobileSessionElement.find('.speaker-photo').append($mobileSpeakerImageElement);
+        var speakerInfo = speaker.name;
+        if(speaker.organisation) {
+            speakerInfo = speakerInfo + " (" + speaker.organisation + ")";
+        }
+        speakerInfo = speakerInfo + ", ";
+        $mobileSessionElement.find('.speaker-detail').append(speakerInfo);
     });
     $mobileSessionElement.find('.session-description').html(sessionRefObject.session.short_abstract);
+    if(sessionRefObject.session.session_type) {
+        $mobileSessionElement.find('.session-type').html(sessionRefObject.session.session_type.name);
+    }
     $mobileSessionElement.find('.session-location').html(sessionRefObject.session.microlocation.name+'<i class="fa fa-map-marker fa-fw"></i>');
     updateColor($mobileSessionElement.find('.event'), sessionRefObject.session.track);
     $mobileTimeline.find(".mobile-microlocation[data-microlocation-id=" + sessionRefObject.session.microlocation.id + "] > .mobile-sessions-holder").append($mobileSessionElement);
@@ -553,16 +580,31 @@ function addInfoBox($sessionElement, session) {
     if(isReadOnly()) {
         $sessionElement.css('cursor', 'pointer');
     }
-    $sessionElement.popover({
-        trigger: 'manual',
-        placement: 'bottom',
-        html: true,
-        title: session.title
-    });
-    var speakers = _.map(session.speakers, 'name');
     var content = "";
-    if(speakers.length > 0) {
-        content += "By " + _.join(speakers, ', ') + "<br><br>";
+    if(!_.isNull(session.short_abstract)) {
+        content +=  "<strong>About the session:</strong> " + session.short_abstract + "<br><br>";
+    } else {
+        session.long_abstract  = session.long_abstract.substr(0, 100);
+        content +=  "<strong>About the session:</strong> " + session.long_abstract + "<br><br>";
+    }
+    _.forEach(session.speakers, function(speaker, index) {
+        if(session.speakers.length === 1) {
+            content += "<strong>Speaker: </strong> " + speaker.name + "<br><br>";
+        } else {
+            content += "<strong>Speaker </strong> " + (parseInt(index, 10)+1) + "<strong> :</strong> " + speaker.name + "<br><br>";
+        }
+        if(speaker.short_biography) {
+            content += "<strong>About the Speaker: </strong><br>" + speaker.short_biography + "<br><br>";
+        } else {
+            session.speakers.long_biography = speaker.long_biography.substr(1, 100);
+            content += "<strong>About the Speaker: </strong><br>" + speaker.long_biography + "<br><br>";
+        }
+    });
+    if(!_.isNull(session.start_time)) {
+        content += "<strong>Start Time:</strong> " + session.start_time.format("HH:mm:ss") + "<br>";
+    }
+    if(!_.isNull(session.end_time)) {
+        content += "<strong>End Time:</strong> " + session.end_time.format("HH:mm:ss") + "<br>";
     }
     if(!_.isNull(session.track)) {
         content += "<strong>Track:</strong> " + session.track.name + "<br>";
@@ -570,7 +612,14 @@ function addInfoBox($sessionElement, session) {
     if(!_.isNull(session.microlocation)) {
         content += "<strong>Room:</strong> " + session.microlocation.name + "<br>";
     }
-    $sessionElement.attr("data-content", content);
+    $sessionElement.popover({
+        trigger: 'manual',
+        placement: 'bottom',
+        html: true,
+        title: session.title,
+        content: content,
+        container: 'body'
+    });
 }
 
 
@@ -582,7 +631,7 @@ function addMicrolocationToTimeline(microlocation) {
     var $microlocationElement = $(microlocationTemplate);
     $microlocationElement.attr("data-microlocation-id", microlocation.id);
     $microlocationElement.attr("data-microlocation-name", microlocation.name);
-    $microlocationElement.find(".microlocation-header").html(microlocation.name + "&nbsp;&nbsp;&nbsp;<span class='badge'>0</span>");
+    $microlocationElement.find(".microlocation-header").html(microlocation.name);
     $microlocationElement.find(".microlocation-inner").css("height", time.unit.count * time.unit.pixels + "px");
     $microlocationsHolder.append($microlocationElement);
 
@@ -676,9 +725,8 @@ function initializeInteractables() {
                 var target = event.target,
                     x = (parseFloat(target.getAttribute("data-x")) || 0),
                     y = (parseFloat(target.getAttribute("data-y")) || 0);
-
-                if(roundOffToMultiple(event.rect.height) < time.unit.pixels) {
-                    target.style.height = time.unit.pixels + "px";
+                if(roundOffToMultiple(event.rect.height) < minutesToPixels(time.unit.minimum_duration)) {
+                    target.style.height = minutesToPixels(time.unit.minimum_duration) + "px";
                 } else {
                     target.style.height = roundOffToMultiple(event.rect.height) + "px";
                 }
@@ -900,9 +948,8 @@ function loadMicrolocationsToTimeline(day) {
 
         window.dayLevelTime.start.hours = least_hours;
         window.dayLevelTime.start.minutes = 0;
-
-        window.dayLevelTime.end.hours = max_hours;
-        window.dayLevelTime.end.minutes = max_minutes;
+        window.dayLevelTime.end.hours = max_hours + ~~((max_minutes + 15) / 60);
+        window.dayLevelTime.end.minutes = (max_minutes + 15) % 60;
 
         var topTime = moment.utc({hour: dayLevelTime.start.hours, minute: dayLevelTime.start.minutes});
 

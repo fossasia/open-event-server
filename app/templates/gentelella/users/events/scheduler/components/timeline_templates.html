@@ -1,6 +1,6 @@
 <script id="microlocation-template" type="text/x-template">
     <div class="microlocation">
-        <div class="text-center microlocation-header"><span class="badge">0</span></div>
+        <div class="text-center microlocation-header"></div>
         <div class="microlocation-inner" style="height: 1296px;">
 
         </div>
@@ -23,6 +23,20 @@
 
 <script id="date-change-button-template" type="text/x-template">
     <button type="button" class="btn btn-default date-change-btn">May 20</button>
+</script>
+
+<script id="mobile-speaker-template" type="text/x-template">
+    <div class="speaker-biography">
+        <img class="speaker-big-photo" onerror="this.onerror=null; this.src='/static/placeholders/avatar.png';" style="width:10rem;height:10rem;border-radius:50%">
+        <p class="name"> </p>
+        <p class="organisation"> </p>
+        <p class="biography"> </p>
+        <div class="image"> </div>
+    </div>
+</script>
+
+<script id="mobile-speaker-image-template" type="text/x-template">
+    <img class="speaker-image" onerror="this.onerror=null; this.src='/static/placeholders/avatar.png';">
 </script>
 
 <script id="mobile-microlocation-template" type="text/x-template">
@@ -56,15 +70,29 @@
         </div>
         <div class="col-xs-8 col-sm-8 col-md-8">
             <div class="event track-title name" data-toggle="collapse">
-
+                <div class = "title">  </div>
+                <div class="shorter-detail collapse in" style="margin-top:10px;">
+                    <div class = "row" style="padding:0px">
+                        <div class="col-md-6 col-xs-12" style="padding:0px;width:auto;max-width:50%;">
+                            <span class="speaker-photo">
+                            </span>
+                        </div>
+                        <div class="col-md-6 col-xs-12" style="padding:0px">
+                            <span class="speaker-detail">
+                            </span>
+                            <p class="session-type">
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="session-track-details collapse">
                 <p>
-                    <span class="session-speakers"></span>
-                </p>
-                <p>
                     <span class="session-description"></span>
                 </p>
+                <br>
+                <div class="speaker-more-detail">
+                </div>
                 <p class="session-location">
                 </p>
             </div>

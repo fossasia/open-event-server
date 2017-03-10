@@ -6,7 +6,9 @@
 {% set scrollspy_top = (carousel_height + 95) ~ "px" %}
 
 {# Set `event_image` to use inside template #}
-{% if event.background_url %}
+{% if event.large %}
+    {% set event_image = event.large %}
+{% elif event.background_url %}
     {% set event_image = event.background_url %}
 {% elif custom_placeholder != None %}
     {% set event_image = custom_placeholder.url %}
@@ -66,6 +68,17 @@
         .scrollspy {
             top: {{ scrollspy_top }};
         }
+
+        .overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2;
+        }
     </style>
 {% endblock %}
 
@@ -78,6 +91,7 @@
 {% endblock %}
 
 {% block body %}
+    <div class="overlay"></div>
     <div class="mobile-menu hidden-sm hidden-lg hidden-md">
         <ul class="nav nav-pills review-menu mobile">
             <li {% if active_page == 'info' %}class="active"{% endif %} id="info-menu"><a
@@ -156,9 +170,9 @@
         </div>
     </div>
     <div class="row">
-        <div class = "col-xs-12 
+        <div class = "col-xs-12
         {% if active_page =='sessions' or active_page == 'schedule' %}
-            col-md-10 col-sm-10 
+            col-md-10 col-sm-10
         {% else %}
             col-md-8 col-sm-8
         {% endif %}
