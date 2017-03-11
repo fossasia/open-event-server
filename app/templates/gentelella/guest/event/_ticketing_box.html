@@ -199,55 +199,55 @@
         });
         function show_hidden_ticket(access_code) {
             {% for ticket in tickets %}
-                {% if ticket.hide %}
-                    if (access_code.split(",").indexOf("{{ticket.id}}") != -1){
+                {% if ticket.ticket.hide %}
+                    if (access_code.split(",").indexOf("{{ticket.ticket.id}}") != -1){
                         $("#total-holder-row").before("<tr>\
                                    <td>\
                                         <a data-toggle=\"tooltip\"\
                                            style=\"cursor: pointer; font-size:15px;\">\
-                                            {{ ticket.name }}<br>\
+                                            {{ ticket.ticket.name }}<br>\
                                         </a>\
-                                        {% if not ticket.description_toggle and ticket.description%}\
+                                        {% if not ticket.ticket.description_toggle and ticket.ticket.description%}\
                                             <u><a class=\"show\" style=\"cursor: pointer; font-size:10px;\ color:#2aa9dd;\">show details</a></u>\
-                                            <font color=\"#696969\"><p class=\"ticket_description\" style=\"display:none;\">{{ ticket.description }}</p></font>\
-                                        {% elif ticket.description_toggle and ticket.description %}\
-                                            <font color=\"#696969\"><p style=\"visibility: visible;\">{{ ticket.description }}</p></font>\
+                                            <font color=\"#696969\"><p class=\"ticket_description\" style=\"display:none;\">{{ ticket.ticket.description }}</p></font>\
+                                        {% elif ticket.ticket.description_toggle and ticket.ticket.description %}\
+                                            <font color=\"#696969\"><p style=\"visibility: visible;\">{{ ticket.ticket.description }}</p></font>\
                                         {% endif %}\
                                     </td>\
-                                    <td>{{ ((ticket.sales_end|localize_dt_obj(event.timezone))|as_timezone(current_timezone)).strftime('%a, %B %d') }}</td>\
-                                    <td class=\"individual-price\">{{ event.payment_currency | currency_symbol }}{{ ticket.price | money }}</td>\
+                                    <td>{{ ((ticket.ticket.sales_end|localize_dt_obj(event.timezone))|as_timezone(current_timezone)).strftime('%a, %B %d') }}</td>\
+                                    <td class=\"individual-price\">{{ event.payment_currency | currency_symbol }}{{ ticket.ticket.price | money }}</td>\
                                     {% if fees %}\
                                     <td class=\"individual-fee\">\
                                         {{ event.payment_currency | currency_symbol }}\
-                                        {% set fee = ticket.price * fees.service_fee / 100 %}\
-                                        {% if not ticket.absorb_fees %}\
+                                        {% set fee = ticket.ticket.price * fees.service_fee / 100 %}\
+                                        {% if not ticket.ticket.absorb_fees %}\
                                             {% if fee < fees.maximum_fee %}\
-                                                {{ ticket.price * fees.service_fee / 100}}\
+                                                {{ ticket.ticket.price * fees.service_fee / 100}}\
                                             {% else %}\
-                                                {{ ticket.price * fees.maximum_fee / 100}}\
+                                                {{ ticket.ticket.price * fees.maximum_fee / 100}}\
                                             {% endif %}\
                                         {% else %}\
                                             0.00\
                                         {% endif %}\
                                     </td>\
                                     {% endif %}\
-                                    {% if (ticket.sales_start|localize_dt_obj(event.timezone))<= timenow_event_tz and (ticket.sales_end|localize_dt_obj(event.timezone)) >= timenow_event_tz %}\
+                                    {% if (ticket.ticket.sales_start|localize_dt_obj(event.timezone))<= timenow_event_tz and (ticket.ticket.sales_end|localize_dt_obj(event.timezone)) >= timenow_event_tz and ticket.status == 'Available' %}\
                                         <td>\
-                                            <input type=\"hidden\" name=\"ticket_ids[]\" value=\"{{ ticket.id }}\">\
+                                            <input type=\"hidden\" name=\"ticket_ids[]\" value=\"{{ ticket.ticket.id }}\">\
                                             <select title=\"ticket quantity\" name=\"ticket_quantities[]\" class=\"quantity-select\"\
-                                                    data-rate=\"{{ ticket.price }}\" data-id=\"{{ticket.id}}\" data-fee=\"{% if not ticket.absorb_fees %}\
+                                                    data-rate=\"{{ ticket.ticket.price }}\" data-id=\"{{ticket.ticket.id}}\" data-fee=\"{% if not ticket.ticket.absorb_fees %}\
                                             {% if fee < fees.maximum_fee %}\
-                                                {{ (ticket.price * fees.service_fee / 100) | money}}\
+                                                {{ (ticket.ticket.price * fees.service_fee / 100) | money}}\
                                             {% else %}\
-                                                {{ (ticket.price * fees.maximum_fee / 100) | money}}\
+                                                {{ (ticket.ticket.price * fees.maximum_fee / 100) | money}}\
                                             {% endif %}\
                                         {% else %}\
                                             0.00\
                                         {% endif %}\">\
-                                                {% if ticket.min_order > 1 %}\
+                                                {% if ticket.ticket.min_order > 1 %}\
                                                     <option value=\"0\" selected>0</option>\
                                                 {% endif %}\
-                                                {% for quantity in range(ticket.min_order - 1, ticket.max_order + 1) %}\
+                                                {% for quantity in range(ticket.ticket.min_order - 1, ticket.ticket.max_order + 1) %}\
                                                     <option value=\"{{ quantity }}\">{{ quantity }}</option>\
                                                 {% endfor %}\
                                             </select>\
@@ -255,12 +255,15 @@
                                         <td class=\"subtotal\">\
                                             {{ event.payment_currency | currency_symbol }}{{ 0 | money }}</td>\
                                     {% else %}\
-                                        {% if (ticket.sales_end|localize_dt_obj(event.timezone)) < timenow_event_tz %}\
+                                        {% if (ticket.ticket.sales_end|localize_dt_obj(event.timezone)) < timenow_event_tz %}\
                                             <td colspan=\"2\"\
                                                 style=\"color: #adadad;\">This ticket's sale has ended</td>\
-                                        {% elif (ticket.sales_start|localize_dt_obj(event.timezone)) >= timenow_event_tz %}\
+                                        {% elif (ticket.ticket.sales_start|localize_dt_obj(event.timezone)) >= timenow_event_tz %}\
                                             <td colspan=\"2\"\
-                                                style=\"color: #adadad;\">This ticket's sale will start on {{ ((ticket.sales_start|localize_dt_obj(event.timezone))|as_timezone(current_timezone)) | datetime }}</td>\
+                                                style=\"color: #adadad;\">This ticket's sale will start on {{ ((ticket.ticket.sales_start|localize_dt_obj(event.timezone))|as_timezone(current_timezone)) | datetime }}</td>\
+                                        {% elif ticket.status == 'Sold' %}\
+                                            <td colspan=\"2\"\
+                                                style=\"color: #adadad;\">This ticket is sold out</td>\
                                         {% endif %}\
                                     {% endif %}\
                                 </tr>");
