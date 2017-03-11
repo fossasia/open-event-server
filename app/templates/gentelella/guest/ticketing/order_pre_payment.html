@@ -27,7 +27,7 @@
                     </div>
                 {% endif %}
                 <form class="form-horizontal" data-toggle="validator" id="order-payment-form"
-                      action="{{ url_for('ticketing.initiate_order_payment') }}">
+                      action="{{ url_for('ticketing.initiate_order_payment') }}" role="form">
                     <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                         <i class="fa fa-ticket"></i>
                         {{ _("Ticket") }} {% if from_organizer %}Holder{% else %}Buyer{% endif %}
@@ -281,7 +281,7 @@
                             ", {{ _("I acknowledge that I have read and agree with") }}
                             {{ _("the") }}
                             {{ _("Open Event terms of service, and privacy policy.") }}<br><br>
-                            <button type="submit" class="btn btn-success btn-lg">
+                            <button id="submitButton" type="submit" class="btn btn-success btn-lg">
                                 {% if order.amount == 0 or (is_organizer and (pay_via == 'stripe' or pay_via == 'paypal')) %}
                                     {{ _("Order now") }}{% else %}Pay Now{% endif %}</button>
                         </div>
