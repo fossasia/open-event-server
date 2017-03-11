@@ -260,7 +260,7 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     updateSessionTimeOnTooltip(sessionRefObject.$sessionElement);
     updateColor(sessionRefObject.$sessionElement, sessionRefObject.session.track);
 
-    var $mobileSessionElement = $(mobileSessionTemplate);    
+    var $mobileSessionElement = $(mobileSessionTemplate);
     $mobileSessionElement.find('.time').text(sessionRefObject.session.start_time.format('hh:mm A') + " - " + sessionRefObject.session.end_time.format('hh:mm A'));
     $mobileSessionElement.find('.title').text(sessionRefObject.session.title);
     $mobileSessionElement.find('.session-track-details').attr("id", "session-track-details"+sessionRefObject.session.id);
@@ -811,7 +811,7 @@ function initializeInteractables() {
 function processMicrolocationSession(microlocations, sessions, callback) {
 
     _.each(sessions, function (session) {
-        if (session.state === 'accepted') {
+        if (session.state === 'accepted' || session.state === 'confirmed') {
 
             session = _.cloneDeep(session);
 
