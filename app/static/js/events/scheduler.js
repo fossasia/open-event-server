@@ -32,7 +32,7 @@ var time = {
         minutes: 59
     },
     unit: {
-        minutes: 10,
+        minutes: 15,
         pixels: 48,
         minimum_duration: 5,
         count: 0
