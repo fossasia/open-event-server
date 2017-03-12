@@ -733,7 +733,8 @@ class DataGetter(object):
             orders = OrderTicket.query.filter(OrderTicket.ticket_id == ticket.id)
             ticket_count = 0
             for order in orders:
-                ticket_count += order.quantity
+                if order.order.status == 'completed' or order.order.status == 'placed':
+                    ticket_count += order.quantity
             if ticket_count >= ticket.quantity:
                 status = "Sold"
             else:
