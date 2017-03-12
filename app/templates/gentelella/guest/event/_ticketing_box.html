@@ -381,6 +381,7 @@
                 if(discount_type == "amount"){
                     discount_individual = discount_amount * parseFloat($this.val());
                     price_individual_new = $this.data('rate') - discount_amount;
+                    price_individual_new = (price_individual_new < 0)? 0 : price_individual_new;
                 }
                 else if(discount_type != "amount"){
                     discount_individual = (discount_amount * parseFloat($this.val()) * (parseFloat($this.data('rate')) + parseFloat($this.data('fee')))/100.0);
