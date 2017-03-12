@@ -35,6 +35,7 @@ from app.models.microlocation import Microlocation
 from app.models.modules import Module
 from app.models.notifications import Notification
 from app.models.order import Order
+from app.models.order import OrderTicket
 from app.models.page import Page
 from app.models.panel_permissions import PanelPermission
 from app.models.permission import Permission
@@ -723,10 +724,23 @@ class DataGetter(object):
     @staticmethod
     def get_sales_open_tickets(event_id, give_all=False):
         if give_all:
-            return Ticket.query.filter(Ticket.event_id == event_id)
-        return Ticket.query.filter(Ticket.event_id == event_id).filter(
+            tickets = Ticket.query.filter(Ticket.event_id == event_id)
+        tickets = Ticket.query.filter(Ticket.event_id == event_id).filter(
             Ticket.sales_start <= datetime.datetime.now()).filter(
             Ticket.sales_end >= datetime.datetime.now())
+        open_tickets = []
+        for ticket in tickets:
+            orders = OrderTicket.query.filter(OrderTicket.ticket_id == ticket.id)
+            ticket_count = 0
+            for order in orders:
+                if order.order.status == 'completed' or order.order.status == 'placed':
+                    ticket_count += order.quantity
+            if ticket_count >= ticket.quantity:
+                status = "Sold"
+            else:
+                status = "Available"
+            open_tickets.append({'ticket': ticket, "status": status})
+        return open_tickets
 
     @staticmethod
     def get_module():

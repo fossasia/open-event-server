@@ -270,7 +270,6 @@
     background: rgba(0, 150, 136, 0.75);
     width: auto;
     margin-left: 4%;
-    max-width: 500px;
     color: #FFFFFF;
     padding: 5px;
     font-size: 15px;
@@ -279,18 +278,7 @@
 .session-track-details {
     width: auto;
     margin-left: 4%;
-    max-width: 500px;
     font-size: 15px;
-}
-
-@media (max-width: 660px) {
-    .event {
-        max-width: 270px;
-    }
-
-    .session-track-details {
-        max-width: 270px;
-    }
 }
 
 #track-list {
@@ -299,7 +287,7 @@
 }
 
 .height {
-    min-height: 70px;
+    min-height: 110px;
     border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -314,5 +302,11 @@
 
 .active {
     color: #757575 !important;
+    font-weight: bold;
+}
+
+.text
+{
+    font-size: 15px;
     font-weight: bold;
 }
