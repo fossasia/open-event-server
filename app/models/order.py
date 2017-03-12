@@ -45,7 +45,7 @@ class Order(db.Model):
     event = db.relationship('Event', backref='orders')
     user = db.relationship('User', backref='orders', foreign_keys=[user_id])
     marketer = db.relationship('User', backref='marketed_orders', foreign_keys=[marketer_id])
-    tickets = db.relationship("OrderTicket")
+    tickets = db.relationship("OrderTicket", backref='order')
 
     def __init__(self,
                  identifier=None,
