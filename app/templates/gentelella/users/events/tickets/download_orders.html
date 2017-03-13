@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ event.name }} - {{ _("Order List") }}</title>
+    <style type="text/css">
+        {% include 'gentelella/guest/ticketing/components/bootstrap_pdf.css' %}
+        table th {
+            text-align: left;
+        }
+
+        table td {
+            text-align: left;
+            border-spacing: 1em;
+        }
+
+        table {
+            margin-top: 20px;
+            border-collapse: separate;
+        }
+
+        .total-row {
+            margin-top: 25px;
+        }
+
+        .order-total {
+            margin-right: 50px;
+        }
+
+        tr.padded td{
+        padding-top : 40px;
+        }
+    </style>
+</head>
+<body id="body">
+<h3 style="text-align:center;">{{ event.name }} - {{ _("Order List") }}</h3>
+    <br>
+    <table class="table with-datatable" id="orders-table" width="100%">
+        <thead>
+        <tr>
+            <th>
+                {{ _("Order") }}
+            </th>
+            <th>
+                {{ _("Order Details") }}
+            </th>
+            <th>
+                {{ _("User") }}
+            </th>
+            <th>
+                {{ _("User Details") }}
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            {% if order.status != "deleted" %}
+                <tr class="padded">
+                    <td><br>
+                            Order Number    :<br>
+                            Order By        :<br>
+                            Order Status    :<br>
+                            Payment Mode    :<br>
+                            Quantity        :<br>
+                            Total Amount    :<br>
+                            Discount Code   :<br>
+                        {% if order.status == 'completed' %}
+                            Order Completed :<br>
+                        {% else %}
+                            Order Placed    :<br>
+                        {% endif %}
+                    </td>
+                    <td><br>
+                            <strong>{{ order.get_invoice_number() }}</strong><br>
+                            {{ order.user.user_detail.fullname if order.user.user_detail and order.user.user_detail.fullname else order.user.email }}<br>
+                            {% if order.status == 'completed' %}
+                                {{ order.status | capitalize }}
+                            {% elif order.status == 'pending' or order.status == 'initialized' %}
+                                {{ _("Pending") }}
+                            {% elif order.status == 'placed' %}
+                                {{ order.status | capitalize }}
+                            {% elif order.status == 'cancelled' %}
+                                {{ order.status | capitalize }}
+                            {% else %}
+                                {{ order.status | capitalize }}
+                            {% endif %}<br>
+                            {{ order.get_tickets_count() }}<br>
+                            {{ event.payment_currency | currency_symbol }}{{ order.amount | money }}<br>
+                            {% if order.status == 'completed' %}
+                                {{ order.paid_via | capitalize }}<br>
+                            {% endif %}
+                            {{ order.discount_code.code }}<br>
+                            {% if order.status == 'completed' %}
+                                <span class="datetime">{{ order.completed_at | datetime }}</span>
+                            {% else %}
+                                <span class="datetime">{{ order.created_at | datetime }}</span>
+                            {% endif %}<br>
+                    </td>
+                    <td style="text-align:center;"><br>
+                        <strong>
+                        Firstname   :<br>
+                        Lastname    :<br>
+                        Email       :<br>
+                        </strong>
+                    </td>
+                    <td><br>
+                            <strong>
+                            {{ order.user.user_detail.firstname }}<br>
+                            {{ order.user.user_detail.lastname }}<br>
+                            {{ order.user.email }}<br>
+                            </strong>
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
