@@ -137,6 +137,7 @@ def display_ticket_stats(event_id):
 def display_orders(event_id):
     from_date = request.args.get('from_date')
     to_date = request.args.get('to_date')
+    discount_code = request.args.get('discount_code')
     if ('from_date' in request.args and not from_date) or ('to_date' in request.args and not to_date) or \
         ('from_date' in request.args and 'to_date' not in request.args) or \
         ('to_date' in request.args and 'from_date' not in request.args):
@@ -147,11 +148,18 @@ def display_orders(event_id):
             from_date=datetime.strptime(from_date, '%d/%m/%Y'),
             to_date=datetime.strptime(to_date, '%d/%m/%Y')
         )
+    elif discount_code == '':
+        return redirect(url_for('.display_orders', event_id=event_id))
+    elif discount_code:
+        orders = TicketingManager.get_orders(
+            event_id=event_id,
+            discount_code=discount_code,
+        )
     else:
         orders = TicketingManager.get_orders(event_id)
     event = DataGetter.get_event(event_id)
     return render_template('gentelella/users/events/tickets/orders.html', event=event, event_id=event_id,
-                            orders=orders, from_date=from_date, to_date = to_date)
+                           orders=orders, from_date=from_date, to_date=to_date, discount_code=discount_code)
 
 
 @event_ticket_sales.route('/attendees/')
@@ -414,7 +422,7 @@ def access_codes_delete(event_id, access_code_id=None):
 
 @event_ticket_sales.route('/attendees/check_in_toggle/<holder_id>/', methods=('POST',))
 def attendee_check_in_toggle(event_id, holder_id):
-    holder = TicketingManager.attendee_check_in_out(holder_id)
+    holder = TicketingManager.attendee_check_in_out(event_id, holder_id)
     if holder:
         return jsonify({
             'status': 'ok',

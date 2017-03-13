@@ -90,6 +90,7 @@
     <script src="{{ url_for('static', filename='vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/bootstrap-progressbar/bootstrap-progressbar.min.js') }}"></script>
+
     <script type="text/javascript">
         $('.table').DataTable({
         "columnDefs": [
@@ -134,4 +135,7 @@
             $(this).tab('show');
         });
     </script>
+
+    <script src="{{ url_for('static', filename='js/events/event-dashboard.js') }}"></script>
+
 {% endblock %}

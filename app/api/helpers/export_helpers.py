@@ -5,6 +5,7 @@ from collections import OrderedDict
 from datetime import datetime
 
 import requests
+from flask import current_app as app
 from flask import request, g, url_for
 from flask_restplus import marshal
 
@@ -26,7 +27,6 @@ from ..tracks import DAO as TrackDAO, TRACK
 # DELETE FIELDS
 # All fields to be deleted go here
 EVENT = EVENT_MODEL.clone('EventExport')
-del EVENT['creator'].model['id']
 
 EXPORTS = [
     ('event', EventDAO, EVENT),
@@ -176,7 +176,10 @@ def export_event_json(event_id, settings):
     Exports the event as a zip on the server and return its path
     """
     # make directory
-    dir_path = 'static/exports/event%d' % event_id
+    exports_dir = app.config['BASE_DIR'] + '/static/uploads/exports/'
+    if not os.path.isdir(exports_dir):
+        os.mkdir(exports_dir)
+    dir_path = exports_dir + 'event%d' % event_id
     if os.path.isdir(dir_path):
         shutil.rmtree(dir_path, ignore_errors=True)
     os.mkdir(dir_path)
@@ -204,7 +207,7 @@ def export_event_json(event_id, settings):
     fp.close()
     # make zip
     shutil.make_archive(dir_path, 'zip', dir_path)
-    return os.path.realpath('.') + '/' + dir_path + '.zip'
+    return dir_path + '.zip'
 
 
 # HELPERS

@@ -40,7 +40,7 @@ def create_order():
 def apply_promo():
     discount = TicketingManager.get_discount_code(request.form.get('event_id'), request.form.get('promo_code', ''))
     access_code = TicketingManager.get_access_code(request.form.get('event_id'), request.form.get('promo_code', ''))
-    if discount and access_code:
+    if discount and access_code and discount.is_active:
         return jsonify({
             'discount_type': discount.type,
             'discount_amount': discount.value,
@@ -49,7 +49,7 @@ def apply_promo():
             'access_code_ticket': access_code.tickets,
             'discount_code_ticket': discount.tickets,
         })
-    elif discount:
+    elif discount and discount.is_active:
         return jsonify({
             'discount_type': discount.type,
             'discount_amount': discount.value,

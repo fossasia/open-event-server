@@ -13,7 +13,7 @@ Vue.component('session-track', {
         this.$nextTick(function () {
             var $div = $(this.$el);
             $div.find('.colorpicker-component').colorpicker().on('changeColor', function () {
-                $div.find('input')[0].dispatchEvent(new Event('input'));
+                $div.find('input.color-picker-input')[0].dispatchEvent(new Event('input'));
             });
         });
     }

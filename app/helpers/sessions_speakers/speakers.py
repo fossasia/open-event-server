@@ -47,7 +47,8 @@ def save_speaker(request, event_id=None, speaker=None, user=None):
         save_to_db(speaker)
 
     speaker.email = trim_get_form(request.form, 'email', None)
-    speaker.name = trim_get_form(request.form, 'name', None)
+    if trim_get_form(request.form, 'name', None):
+        speaker.name = trim_get_form(request.form, 'name', None)
 
     if not speaker.user:
         if user:

@@ -9,8 +9,6 @@ class OrderTicket(db.Model):
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id', ondelete='CASCADE'), primary_key=True)
     ticket_id = db.Column(db.Integer, db.ForeignKey('ticket.id', ondelete='CASCADE'), primary_key=True)
     quantity = db.Column(db.Integer)
-    ticket = db.relationship('Ticket', backref='order_tickets')
-
 
 class Order(db.Model):
     __tablename__ = "orders"
@@ -47,7 +45,7 @@ class Order(db.Model):
     event = db.relationship('Event', backref='orders')
     user = db.relationship('User', backref='orders', foreign_keys=[user_id])
     marketer = db.relationship('User', backref='marketed_orders', foreign_keys=[marketer_id])
-    tickets = db.relationship("OrderTicket")
+    tickets = db.relationship("OrderTicket", backref='order')
 
     def __init__(self,
                  identifier=None,

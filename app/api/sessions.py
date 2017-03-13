@@ -38,9 +38,17 @@ SESSION_SPEAKER = api.model('SessionSpeaker', {
     'name': fields.String(),
     'organisation': fields.String(),
     'city': fields.String(),
+    'short_biography': fields.String(),
+    'long_biography': fields.String(),
     'heard_from': fields.String(),
     'speaking_experience': fields.String(),
-    'sponsorship_required': fields.String()
+    'sponsorship_required': fields.String(),
+    'short_biography': fields.String(),
+    'long_biography' : fields.String(),
+    'photo' : fields.String(),
+    'small': fields.Upload(),
+    'thumbnail': fields.Upload(),
+    'icon': fields.Upload(),
 })
 
 SESSION_MICROLOCATION = api.model('SessionMicrolocation', {
@@ -162,7 +170,8 @@ class SessionDAO(ServiceDAO):
                 trigger_new_session_notifications(session.id, event_id=event_id)
 
             if (data['state'] == 'accepted' and session.state != 'accepted') \
-                or (data['state'] == 'rejected' and session.state != 'rejected'):
+                or (data['state'] == 'rejected' and session.state != 'rejected') \
+                or (data['state'] == 'confirmed' and session.state != 'confirmed'):
                 trigger_session_state_change_notifications(obj, event_id=event_id, state=data['state'])
 
         if session.start_time != obj.start_time or session.end_time != obj.end_time:
