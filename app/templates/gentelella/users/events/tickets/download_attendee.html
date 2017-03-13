@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ invoice.get_invoice_number() }} - {{ _("Invoice") }}</title>
+    <style type="text/css">
+        {% include 'gentelella/guest/ticketing/components/bootstrap_pdf.css' %}
+        table th {
+            text-align: left;
+        }
+
+        table td {
+            text-align: left;
+        }
+
+        table {
+            margin-top: 20px;
+        }
+
+        .total-row {
+            margin-top: 25px;
+        }
+
+        .order-total {
+            margin-right: 50px;
+        }
+
+        h3 {
+            margin-left: 0;
+        }
+    </style>
+</head>
+<body id="body">
+<h3>{{ _("View Attendees") }}</h3>
+    <br>
+    <table class="table with-datatable" id="orders-table" width="100%">
+        <thead>
+        <tr>
+            <th>
+                {{ _("Order") }}
+            </th>
+            <th>
+                {{ _("Order Details") }}
+            </th>
+            <th>
+                {{ _("User") }}
+            </th>
+            <th>
+                {{ _("User Details") }}
+            </th>
+            <!--<th>-->
+                <!--{{ _("First Name") }}-->
+            <!--</th>-->
+            <!--<th>-->
+                <!--{{ _("Last Name") }}-->
+            <!--</th>-->
+            <!--<th>-->
+                <!--{{ _("Email") }}-->
+            <!--</th>-->
+            <!--<th>-->
+                <!--{{ _("Action") }}-->
+            <!--</th>-->
+        </tr>
+        </thead>
+        <tbody>
+        {% for holder in holders %}
+            {% if holder.status != "deleted" %}
+                <tr>
+                    <td></td>
+                    <td>
+                        <p>
+                            Order Number    :<br>
+                            Order By        :<br>
+                            Order Status    :<br>
+                            Payment Mode    :<br>
+                        {% if holder.status == 'completed' %}
+                            <span class="payment-via">Payment via {{ holder.paid_via | capitalize }}</span>
+                        {% endif %}
+                        {% if holder.status == 'completed' %}
+                            Order Completed :<br>
+                        {% else %}
+                            Order Placed    :<br>
+                        {% endif %}
+                        </p>
+                    </td>
+                    <td>
+                        <p>
+                            <strong>{{ holder.order_invoice }}</strong>
+                            {{ holder.by_whom }}
+                            {% if holder.status == 'completed' %}
+                                {{ holder.status | capitalize }}
+                            {% elif holder.status == 'pending' or holder.status == 'initialized' %}
+                                {{ _("Pending") }}
+                            {% elif holder.status == 'placed' %}
+                                {{ holder.status | capitalize }}
+                            {% elif holder.status == 'cancelled' %}
+                                {{ holder.status | capitalize }}
+                            {% else %}
+                                {{ holder.status | capitalize }}
+                            {% endif %}<br>
+                            {% if holder.status == 'completed' %}
+                                {{ holder.paid_via | capitalize }}<br>
+                            {% endif %}
+                            {% if holder.status == 'completed' %}
+                                <span class="datetime">{{ holder.completed_at | datetime }} - {{ holder.completed_at | humanize }}</span>
+                            {% else %}
+                                <span class="datetime">{{ holder.created_at | datetime }} - {{ holder.created_at | humanize }}</span>
+                            {% endif %}
+                        </p>
+                    </td>
+                    <td>{{ holder.ticket_name }}</td>
+                    <td>{% if holder.ticket_price %}{{ event.payment_currency | currency_symbol }}{{ holder.ticket_price | money }}{% endif %}</td>
+                    <td>{{ holder.firstname }}</td>
+                    <td>{{ holder.lastname }}</td>
+                    <td>{{ holder.email }}</td>
+                    <td>
+                        {% if holder.status == 'completed' %}
+                            {% if holder.checked_in %}
+                                <button class="btn btn-warning holder-check-in-toggle" data-holder-id="{{ holder.id }}">
+                                    {{ _("Undo") }}
+                                </button>
+                            {% else %}
+                                <button class="btn btn-success holder-check-in-toggle" data-holder-id="{{ holder.id }}">
+                                    <i class="fa fa-check fa-fw"></i> {{ _("Check In") }}
+                                </button>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
