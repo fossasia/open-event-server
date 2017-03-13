@@ -40,7 +40,7 @@ class Event(db.Model):
     """Event object table"""
     __tablename__ = 'events'
     __versioned__ = {
-        'exclude': ['creator_id', 'schedule_published_on', 'created_at']
+        'exclude': ['schedule_published_on', 'created_at']
     }
     id = db.Column(db.Integer, primary_key=True)
     identifier = db.Column(db.String)
@@ -79,8 +79,6 @@ class Event(db.Model):
     topic = db.Column(db.String)
     sub_topic = db.Column(db.String)
     ticket_url = db.Column(db.String)
-    creator_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
-    creator = db.relationship('User')
     db.UniqueConstraint('track.name')
     code_of_conduct = db.Column(db.String)
     schedule_published_on = db.Column(db.DateTime)
@@ -128,7 +126,6 @@ class Event(db.Model):
                  topic=None,
                  sub_topic=None,
                  ticket_url=None,
-                 creator=None,
                  copyright=None,
                  code_of_conduct=None,
                  schedule_published_on=None,
@@ -178,7 +175,6 @@ class Event(db.Model):
         self.copyright = copyright
         self.sub_topic = sub_topic
         self.ticket_url = ticket_url
-        self.creator = creator
         self.code_of_conduct = code_of_conduct
         self.schedule_published_on = schedule_published_on
         self.in_trash = in_trash

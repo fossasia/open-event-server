@@ -3,7 +3,7 @@ import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-VERSION_NAME = '1.0.0-alpha.8'
+VERSION_NAME = '1.0.0-alpha.9'
 
 LANGUAGES = {
     'en': 'English',

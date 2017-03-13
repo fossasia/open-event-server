@@ -328,6 +328,7 @@ def sales_by_events_view(path):
                 'sales': 0
             },
         }
+        organizer = DataGetter.get_user_event_roles_by_role_name(event.id, 'organizer').first()
 
         if promoted_events:
             tickets_summary_event_wise[str(event.id)]['marketer'] = \
@@ -335,10 +336,10 @@ def sales_by_events_view(path):
             tickets_summary_event_wise[str(event.id)]['discount_code'] = \
                 str(event.discount_code.value) + '% off for ' + str(event.discount_code.max_quantity) + ' months'
 
-        tickets_summary_organizer_wise[str(event.creator_id)] = \
+        tickets_summary_organizer_wise[str(organizer.user.id)] = \
             copy.deepcopy(tickets_summary_event_wise[str(event.id)])
-        if event.creator:
-            tickets_summary_organizer_wise[str(event.creator_id)]['name'] = event.creator.email
+        if organizer:
+            tickets_summary_organizer_wise[str(organizer.user.id)]['name'] = organizer.user.email
 
         tickets_summary_location_wise[unicode(event.searchable_location_name)] = \
             copy.deepcopy(tickets_summary_event_wise[str(event.id)])
@@ -358,7 +359,7 @@ def sales_by_events_view(path):
                 ticket = CachedGetter.get_ticket(order_ticket.ticket_id)
                 tickets_summary_event_wise[str(order.event_id)][str(order.status)]['tickets_count'] \
                     += order_ticket.quantity
-                tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)]['tickets_count'] \
+                tickets_summary_organizer_wise[str(organizer.user.id)][str(order.status)]['tickets_count'] \
                     += order_ticket.quantity
                 tickets_summary_location_wise[unicode(order.event.searchable_location_name)][str(order.status)][
                     'tickets_count'] \
@@ -370,7 +371,7 @@ def sales_by_events_view(path):
                             tickets_summary_event_wise[str(order.event_id)][str(order.status)][
                                 'sales'] += forex(order.event.payment_currency, display_currency, \
                                             order_ticket.quantity * (ticket.price - discount.value))
-                            tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)][
+                            tickets_summary_organizer_wise[str(organizer.user.id)][str(order.status)][
                                 'sales'] += forex(order.event.payment_currency, display_currency, \
                                             order_ticket.quantity * (ticket.price - discount.value))
                             tickets_summary_location_wise[str(order.event.searchable_location_name)][str(order.status)][
@@ -380,7 +381,7 @@ def sales_by_events_view(path):
                             tickets_summary_event_wise[str(order.event_id)][str(order.status)]['sales'] += \
                                 forex(order.event.payment_currency, display_currency, \
                                     order_ticket.quantity * (ticket.price - discount.value * ticket.price / 100.0))
-                            tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)]['sales'] += \
+                            tickets_summary_organizer_wise[str(organizer.user.id)][str(order.status)]['sales'] += \
                                 forex(order.event.payment_currency, display_currency, \
                                     order_ticket.quantity * (ticket.price - discount.value * ticket.price / 100.0))
                             tickets_summary_location_wise[str(order.event.searchable_location_name)][str(order.status)]['sales'] += \
@@ -389,7 +390,7 @@ def sales_by_events_view(path):
                     else:
                         tickets_summary_event_wise[str(order.event_id)][str(order.status)][
                             'sales'] += forex(order.event.payment_currency, display_currency, order_ticket.quantity * ticket.price)
-                        tickets_summary_organizer_wise[str(order.event.creator_id)][str(order.status)][
+                        tickets_summary_organizer_wise[str(organizer.user.id)][str(order.status)][
                             'sales'] += forex(order.event.payment_currency, display_currency, order_ticket.quantity * ticket.price)
                         tickets_summary_location_wise[str(order.event.searchable_location_name)][str(order.status)][
                             'sales'] += forex(order.event.payment_currency, display_currency, order_ticket.quantity * ticket.price)

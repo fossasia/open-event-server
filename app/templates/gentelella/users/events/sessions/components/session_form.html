@@ -13,18 +13,23 @@
                 {{ _session_component.session_form_field(elem, session_form[elem].require) }}
             {% endif %}
         {% endfor %}
-        <div class="item form-group">
-            <label>{{ _("Modify Speakers") }}</label>
-            <select title="{{ _("Modify Speakers") }}" multiple="multiple" id="speakers" name="speakers[]">
-                {% for existing_speaker in speakers %}
-                    <option value="{{ existing_speaker.id }}"
+        {% if from_path != 'cfs' %}
+            <div class="item form-group">
+                <label>{{ _("Modify Speakers") }}</label>
+                <select title="{{ _("Modify Speakers") }}" multiple="multiple" id="speakers" name="speakers[]">
+                    {% for existing_speaker in speakers %}
+                        <option value="{{ existing_speaker.id }}"
                             {% if session and existing_speaker in session.speakers %}{{ _("selected") }}{% endif %}
                             data-html-addon="<img src='{{ existing_speaker.photo }}' onerror='imgError(this);' style='width: 2rem; height: 2rem;border-radius: 50%;'>">
-                        {{ existing_speaker.name }}
-                    </option>
-                {% endfor %}
-            </select>
-        </div>
+                            {{ existing_speaker.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        {% endif %}
+        {% if from_path == 'cfs' %}
+            <input  name="email"  value="{{ current_user.email }}" type="hidden">
+        {% endif %}
 
         <br>
         <button type="submit" class="btn btn-success" name="state" value="save">{{ _("Save Session") }}</button>

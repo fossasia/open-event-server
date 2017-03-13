@@ -25,11 +25,13 @@
                         <span class="detail-status label label-success">{{ _("Accepted") }}</span>
                     {% elif session.state == 'rejected' %}
                         <span class="detail-status label label-danger">{{ _("Rejected") }}</span>
+                    {% elif session.state == 'confirmed' %}
+                        <span class="detail-status label label-danger">{{ _("Confirmed") }}</span>
                     {% else %}
                         <span class="detail-status label label-info">N/A</span>
                     {% endif %}
                     <div class="btn-group pull-right">
-                        {% if session.state == 'pending' or session.state == 'accepted' or session.state == 'rejected' %}
+                        {% if session.state == 'pending' or session.state == 'accepted' or session.state == 'confirmed' or session.state == 'rejected' %}
                             <a href="{{ url_for('my_sessions.withdraw_session_view',session_id=session.id) }}"
                                class="btn btn-danger ">
                                 {{ _("Withdraw Proposal") }}

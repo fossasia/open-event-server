@@ -385,7 +385,7 @@ class DataManager(object):
             session.video = video_temp_url
 
             if form_state == 'pending' and session.state != 'pending' and \
-                    session.state != 'accepted' and session.state != 'rejected':
+                    session.state != 'accepted' and session.state != 'rejected' and session.state != 'confirmed':
                 session.state = 'pending'
                 trigger_new_session_notifications(session.id, event_id=event_id)
 

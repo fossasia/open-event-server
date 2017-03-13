@@ -189,6 +189,9 @@ def display_event_schedule_xcal(identifier):
 def display_event_cfs(identifier, via_hash=False):
     event = get_published_event_or_abort(identifier)
     placeholder_images = DataGetter.get_event_default_images()
+    if login.current_user.is_authenticated:
+        email = login.current_user.email
+        user_speaker = DataGetter.get_speaker_by_email(email)
     if event.sub_topic:
         custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.sub_topic)
     elif event.topic:
@@ -218,12 +221,20 @@ def display_event_cfs(identifier, via_hash=False):
         state = "future"
     speakers = DataGetter.get_speakers(event.id).all()
     accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
-    return render_template('gentelella/guest/event/cfs.html', event=event,
+    if not login.current_user.is_authenticated:
+        return render_template('gentelella/guest/event/cfs.html', event=event,
                            speaker_form=speaker_form,
                            accepted_sessions_count=accepted_sessions_count,
                            session_form=session_form, call_for_speakers=call_for_speakers,
                            placeholder_images=placeholder_images, state=state, speakers=speakers,
                            via_hash=via_hash, custom_placeholder=custom_placeholder)
+    else:
+        return render_template('gentelella/guest/event/cfs.html', event=event,
+                           speaker_form=speaker_form,
+                           accepted_sessions_count=accepted_sessions_count,
+                           session_form=session_form, call_for_speakers=call_for_speakers,
+                           placeholder_images=placeholder_images, state=state, speakers=speakers,
+                           via_hash=via_hash, custom_placeholder=custom_placeholder, user_speaker=user_speaker)
 
 
 @event_detail.route('/cfs/<hash>/', methods=('GET', 'POST'))
@@ -310,7 +321,7 @@ def process_event_cfs(identifier, via_hash=False):
                                accepted_sessions_count=accepted_sessions_count,
                                session_form=session_form, call_for_speakers=call_for_speakers,
                                placeholder_images=placeholder_images, state=state, speakers=speakers,
-                               via_hash=via_hash, custom_placeholder=custom_placeholder)
+                               via_hash=via_hash, custom_placeholder=custom_placeholder, from_path="cfs")
 
     if request.method == 'POST':
         email = request.form['email']
@@ -324,6 +335,120 @@ def process_event_cfs(identifier, via_hash=False):
         else:
             flash(Markup(
                 "Your session proposal has been submitted. Please login/register with <strong><u>" + email + "</u></strong> to manage it."),
+                "success")
+            return redirect(url_for('admin.login_view', next=url_for('my_sessions.display_my_sessions_view')))
+
+
+@event_detail.route('/<identifier>/cfs/new_session/', methods=('POST', 'GET'))
+def process_event_cfs_session(identifier, via_hash=False):
+    if request.method == 'GET':
+        event = get_published_event_or_abort(identifier)
+        placeholder_images = DataGetter.get_event_default_images()
+        if event.sub_topic:
+            custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.sub_topic)
+        elif event.topic:
+            custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.topic)
+        else:
+            custom_placeholder = DataGetter.get_custom_placeholder_by_name('Other')
+        if not event.has_session_speakers:
+            abort(404)
+
+        call_for_speakers = DataGetter.get_call_for_papers(event.id).first()
+
+        if not call_for_speakers or (not via_hash and call_for_speakers.privacy == 'private'):
+            abort(404)
+
+        form_elems = DataGetter.get_custom_form_elements(event.id)
+        speaker_form = json.loads(form_elems.speaker_form)
+        session_form = json.loads(form_elems.session_form)
+
+        now = datetime.now(pytz.timezone(event.timezone
+                                                  if (event.timezone and event.timezone != '') else 'UTC'))
+        start_date = pytz.timezone(event.timezone).localize(call_for_speakers.start_date)
+        end_date = pytz.timezone(event.timezone).localize(call_for_speakers.end_date)
+        state = "now"
+        if end_date < now:
+            state = "past"
+        elif start_date > now:
+            state = "future"
+        speakers = DataGetter.get_speakers(event.id).all()
+        accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
+        return render_template('gentelella/guest/event/cfs_new_session.html', event=event,
+                               speaker_form=speaker_form,
+                               accepted_sessions_count=accepted_sessions_count,
+                               session_form=session_form, call_for_speakers=call_for_speakers,
+                               placeholder_images=placeholder_images, state=state, speakers=speakers,
+                               via_hash=via_hash, custom_placeholder=custom_placeholder, from_path="cfs")
+
+    if request.method == 'POST':
+        email = request.form['email']
+        event = DataGetter.get_event_by_identifier(identifier)
+        if not event.has_session_speakers:
+            abort(404)
+        DataManager.add_session_to_event(request, event.id)
+        if login.current_user.is_authenticated:
+            flash("Your session proposal has been submitted", "success")
+            return redirect(url_for('my_sessions.display_my_sessions_view', event_id=event.id))
+        else:
+            flash(Markup(
+                "Your session proposal has been submitted. Please login/register with <strong><u>" + email + "</u></strong> to manage it."),
+                "success")
+            return redirect(url_for('admin.login_view', next=url_for('my_sessions.display_my_sessions_view')))
+
+
+@event_detail.route('/<identifier>/cfs/new_speaker/', methods=('POST', 'GET'))
+def process_event_cfs_speaker(identifier, via_hash=False):
+    if request.method == 'GET':
+        event = get_published_event_or_abort(identifier)
+        placeholder_images = DataGetter.get_event_default_images()
+        if event.sub_topic:
+            custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.sub_topic)
+        elif event.topic:
+            custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.topic)
+        else:
+            custom_placeholder = DataGetter.get_custom_placeholder_by_name('Other')
+        if not event.has_session_speakers:
+            abort(404)
+
+        call_for_speakers = DataGetter.get_call_for_papers(event.id).first()
+
+        if not call_for_speakers or (not via_hash and call_for_speakers.privacy == 'private'):
+            abort(404)
+
+        form_elems = DataGetter.get_custom_form_elements(event.id)
+        speaker_form = json.loads(form_elems.speaker_form)
+        session_form = json.loads(form_elems.session_form)
+
+        now = datetime.now(pytz.timezone(event.timezone
+                                                  if (event.timezone and event.timezone != '') else 'UTC'))
+        start_date = pytz.timezone(event.timezone).localize(call_for_speakers.start_date)
+        end_date = pytz.timezone(event.timezone).localize(call_for_speakers.end_date)
+        state = "now"
+        if end_date < now:
+            state = "past"
+        elif start_date > now:
+            state = "future"
+        speakers = DataGetter.get_speakers(event.id).all()
+        accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
+        return render_template('gentelella/guest/event/cfs_new_speaker.html', event=event,
+                               speaker_form=speaker_form,
+                               accepted_sessions_count=accepted_sessions_count,
+                               session_form=session_form, call_for_speakers=call_for_speakers,
+                               placeholder_images=placeholder_images, state=state, speakers=speakers,
+                               via_hash=via_hash, custom_placeholder=custom_placeholder)
+
+    if request.method == 'POST':
+        email = request.form['email']
+        event = DataGetter.get_event_by_identifier(identifier)
+        if not event.has_session_speakers:
+            abort(404)
+        DataManager.add_session_to_event(request, event.id)
+        if login.current_user.is_authenticated:
+            flash("You have been registered as Speaker", "success")
+            return redirect(url_for('event_detail.display_event_cfs', identifier=identifier))
+        else:
+            flash(Markup(
+                "You have been registered as Speaker. Please login/register with <strong><u>" + email + "</u></strong> to manage it."),
                 "success")
             return redirect(url_for('admin.login_view', next=url_for('my_sessions.display_my_sessions_view')))
 
@@ -375,39 +500,6 @@ def display_event_coc(identifier):
                            accepted_sessions_count=accepted_sessions_count,
                            custom_placeholder=custom_placeholder,
                            call_for_speakers=call_for_speakers)
-
-
-@event_detail.route('/<identifier>/tickets/')
-def display_event_tickets(identifier):
-    event = get_published_event_or_abort(identifier)
-    placeholder_images = DataGetter.get_event_default_images()
-    if event.sub_topic:
-        custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.sub_topic)
-    elif event.topic:
-        custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.topic)
-    else:
-        custom_placeholder = DataGetter.get_custom_placeholder_by_name('Other')
-    if event.copyright:
-        licence_details = DataGetter.get_licence_details(event.copyright.licence)
-    else:
-        licence_details = None
-    module = DataGetter.get_module()
-    tickets = DataGetter.get_sales_open_tickets(event.id, True)
-    accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
-    timenow_event_tz = datetime.now(pytz.timezone(event.timezone))
-    fees = DataGetter.get_fee_settings_by_currency(event.payment_currency)
-    return render_template('gentelella/guest/event/details.html',
-                           event=event,
-                           placeholder_images=placeholder_images,
-                           custom_placeholder=custom_placeholder,
-                           accepted_sessions_count=accepted_sessions_count,
-                           licence_details=licence_details,
-                           module=module,
-                           timenow_event_tz=timenow_event_tz,
-                           current_timezone=get_current_timezone(),
-                           tickets=tickets if tickets else [],
-                           fees=fees)
-
 
 # SLUGGED PATHS
 
