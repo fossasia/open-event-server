@@ -21,7 +21,7 @@ celery>=3.1.23,<4
 redis>=2.10.5,<3
 apscheduler>=3.3.0,<4
 pillow>=3.4.2,<3.5
-librabbitmq>=1.6.1,<2
+librabbitmq==1.5.1
 gunicorn>=19.6.0,<20
 boto>=2.45.0,<3
 geoip2>=2.4.2,<3

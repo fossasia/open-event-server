@@ -1,0 +1,1 @@
+These files were added here to fix the descrepancies due to an update to chrome in v56. These files are supposed to be here until https://github.com/leafo/sticky-kit/pull/218 is merged or https://github.com/leafo/sticky-kit/issues/217 is resolved via any aternative solution. Please use the files from the vendor directly then.

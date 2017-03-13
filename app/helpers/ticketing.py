@@ -1,7 +1,7 @@
 import uuid
 from datetime import timedelta, datetime
 
-from flask import url_for, flash
+from flask import url_for, flash, abort
 from flask.ext import login
 from sqlalchemy import desc
 from sqlalchemy import or_
@@ -48,11 +48,22 @@ class TicketingManager(object):
             return query.filter(Event.end_time < datetime.now())
 
     @staticmethod
-    def get_orders(event_id=None, status=None, from_date=None, to_date=None, marketer_id=None, promoted_event=False):
+    def get_orders(event_id=None, status=None, from_date=None, to_date=None, marketer_id=None, promoted_event=False,
+                   discount_code=None):
         if event_id:
             if status:
                 orders = Order.query.filter_by(event_id=event_id).filter_by(status=status) \
                     .filter(Order.user_id.isnot(None))
+            elif discount_code:
+                try:
+                    discount_id = DiscountCode.query.filter_by(event_id=event_id).filter_by(code=discount_code) \
+                        .filter(Order.user_id.isnot(None))[0].id
+                except:
+                    return []
+
+                orders = Order.query.filter_by(event_id=event_id).filter_by(discount_code_id=discount_id) \
+                    .filter(Order.user_id.isnot(None))
+
             else:
                 orders = Order.query.filter_by(event_id=event_id).filter(Order.user_id.isnot(None))
         else:
@@ -114,7 +125,7 @@ class TicketingManager(object):
     def get_attendee(event_id, attendee_id):
         holder = None
         if represents_int(attendee_id):
-            holder = TicketHolder.query.get(id)
+            holder = TicketHolder.query.get(attendee_id)
             if holder.ticket.event_id != event_id:
                 return None
         else:
@@ -362,6 +373,8 @@ class TicketingManager(object):
                                              ticket_id=int(holders_ticket_ids[i]),
                                              email=holder_user.email,
                                              order_id=order.id)
+                if data['firstname'] == '' or data['lastname'] == '' or holder_user.email == '':
+                    return abort(400)
                 if order.status == "completed":
                     send_email_for_after_purchase(holder_user.email, invoice_id, order_url, order.event.name,
                                                   order.event.organizer_name)

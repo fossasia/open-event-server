@@ -78,7 +78,7 @@
 
                     {% for speaker in session.speakers %}
                         <img data-toggle="tooltip" data-placement="bottom" title="{{ speaker.name }}"
-                             src="{{ speaker.photo }}"
+                             src="{{ speaker.small if speaker.small and speaker.small != '' and '.' in speaker.small else speaker.photo }}"
                              onerror="imgError(this);">
                     {% endfor %}
 
@@ -168,7 +168,7 @@
     {% endfor %}
 </ul>
 
-<script src="{{ url_for('static', filename='vendor/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/vendor/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
 <script type="text/javascript">
     var nav_expand = function(){
         $('#current-track-navbar').hide();

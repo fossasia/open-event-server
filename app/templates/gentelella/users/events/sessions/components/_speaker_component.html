@@ -85,6 +85,8 @@
 
             {% set photo_url = speaker.photo if (speaker and speaker.photo and speaker.photo) else (session.speakers[0].photo if (session.speakers and session.speakers[0].photo and session.speakers[0].photo != '') else '') %}
 
+            {% set thumbnail_url = speaker.thumbnail if (speaker and speaker.thumbnail and speaker.thumbnail) else (session.speakers[0].thumbnail if (session.speakers and session.speakers[0].thumbnail and session.speakers[0].thumbnail != '') else '') %}
+
             <div class="row">
                 <div class="col-md-7">
 
@@ -109,7 +111,7 @@
 
                     <div class="item form-group" id="image-view-group"
                          {% if not photo_url or photo_url == '' %}style="display: none;"{% endif %}>
-                        <img src="{{ photo_url }}" class="profile_avatar"><br><br>
+                        <img src="{%if thumbnail_url%}{{ thumbnail_url }}{% else %}{{ photo_url }}{% endif %}" class="profile_avatar" style="max-width:150px;"><br><br>
                         {% if not photo_url or photo_url == '' %}
                             <button type="button" class="btn btn-sm btn-default" data-target="#cropper-modal"
                                     data-toggle="modal">
