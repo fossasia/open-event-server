@@ -28,7 +28,7 @@ Zip structure is as follows -
 
 ### The data files
 
-Files are the root of the zip are text files and contain the event information. They are -
+Files at the root of the zip are text files and contain the event information. These are -
 
 ```sh
 event
