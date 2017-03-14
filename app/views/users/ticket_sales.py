@@ -290,7 +290,7 @@ def download_as_csv(event_id):
                 value += holder['order_invoice']
             value += ','
             if 'created_at' in holder:
-                value += str(holder['created_at']
+                value += str(holder['created_at'])
             value += ','
             if 'status' in holder:
                 value += holder['status']
@@ -308,7 +308,7 @@ def download_as_csv(event_id):
                 value += holder['paid_via']
             value += ','
             if 'ticket_price' in holder:
-                value += str(holder['ticket_price']
+                value += str(holder['ticket_price'])
             value += ','
             value += '\n'
 
