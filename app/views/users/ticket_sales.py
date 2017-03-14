@@ -212,7 +212,9 @@ def display_attendees(event_id, pdf=None):
                 'firstname': holder.firstname,
                 'lastname': holder.lastname,
                 'email': holder.email,
-                'ticket_price': holder.ticket.price
+                'ticket_price': holder.ticket.price,
+                'discount_code': order.discount_code_id,
+                'order_id': order.id
             }
 
             if order.status == 'completed':
@@ -239,7 +241,9 @@ def display_attendees(event_id, pdf=None):
                 'paid_via': order.paid_via,
                 'status': order.status,
                 'completed_at': order.completed_at,
-                'created_at': order.created_at
+                'created_at': order.created_at,
+                'discount_code': order.discount_code_id,
+                'order_id': order.id
             }
 
             if order.status == 'completed':
@@ -255,7 +259,7 @@ def display_attendees(event_id, pdf=None):
             holders.append(order_holder)
 
     if pdf is not None:
-        return (event, event_id, holders, from_date, to_date, ticket_names, selected_ticket)
+        return (event, event_id, holders, orders, ticket_names, selected_ticket)
     else:
         return render_template('gentelella/users/events/tickets/attendees.html', event=event,
                                event_id=event_id, holders=holders, from_date=from_date, to_date=to_date,
@@ -263,16 +267,57 @@ def display_attendees(event_id, pdf=None):
 
 
 @event_ticket_sales.route('/attendees/pdf')
-def download_as_pdf(event_id, pdf=None):
-    (event, event_id, holders, from_date, to_date, ticket_names, selected_ticket) = display_attendees(event_id,
-                                                                                                      pdf='print_pdf')
+def download_as_pdf(event_id):
+    (event, event_id, holders, orders, ticket_names, selected_ticket) = display_attendees(event_id, pdf='print_pdf')
     pdf = create_pdf(render_template('gentelella/users/events/tickets/download_attendees.html', event=event,
-                                     event_id=event_id, holders=holders, from_date=from_date, to_date=to_date,
-                                     ticket_names=ticket_names, selected_ticket=selected_ticket))
+                                     event_id=event_id, holders=holders, ticket_names=ticket_names, selected_ticket=selected_ticket))
     response = make_response(pdf.getvalue())
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = \
-        'inline; filename=%s.pdf' % (event.name, event.created_at)
+        'inline; filename=%s_%s.pdf' % (event.name, event.created_at)
+    return response
+
+
+@event_ticket_sales.route('/attendees/csv')
+def download_as_csv(event_id):
+    (event, event_id, holders, orders, ticket_names, selected_ticket) = display_attendees(event_id,
+                                                                                                      pdf='print_pdf')
+    filename = str(event.name) + '_' + str(event.created_at) + '.csv'
+    ofile = open(filename, 'a')
+    value = 'Order#,Order Date, Invoice No., First Name, Last Name, Email, Payment Type,' \
+            'Ticket Price \n'
+
+    for holder in holders:
+        # print str(holder['discount_code'])
+        if holder['status'] == "completed":
+            value += holder['order_invoice'] + ','
+            value += str(holder['created_at']) + ','
+            value += holder['status'] + ','
+            value += holder['firstname'] + ','
+            value += holder['lastname'] + ','
+            value += holder['email'] + ','
+            value += holder['paid_via'] + ','
+            # value += str(event['payment_currency']) + ','
+            value += str(holder['ticket_price']) + ','
+            # Need to implement tax and tax amount, right now it's hardcoded
+            # value += '0.00,'
+            # value += '0.00,'
+            # # Need to find grand total amount , right now = ticket price
+            value += str(holder['ticket_price']) + ','
+            # order = TicketingManager.get_order(int(holder['order_id']))
+            # print str(order)
+            # value += order['discount_code'] + ','
+            # value += order.discount_code.type + ','
+            # value += order.discount_code.value + ','
+            value += '\n'
+
+    ofile.write(value)
+    ofile.close()
+    response = make_response(value)
+    response.headers['Content-Type'] = 'text/html'
+    response.headers['Content-Disposition'] = \
+        'inline; filename=%s_%s.pdf' % (event.name, event.created_at)
+
     return response
 
 
