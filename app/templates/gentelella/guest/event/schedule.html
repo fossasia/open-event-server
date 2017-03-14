@@ -124,10 +124,8 @@
     <div>
         <div class="row scheduler">
             <div class="col-md-12 scheduler-head">
-                <h1 style="font-weight: 300; font-size: 24px">{{ _("Schedule") }}
-                    <small>
-                        ({{ _("Published on") }} {{ event.schedule_published_on.strftime('%B %d, %Y') }})
-                    </small>
+                <h1 style="font-weight: 300; font-size: 24px">
+                    {{ event.name }}{{ _(" Schedule") }}
                 </h1>
             </div>
             <div class="col-md-12 scheduler-container">
@@ -138,8 +136,8 @@
                     <div id="type-change-btn-holder" class="btn-group pull-right" role="group">
                         <button type="button" class="btn btn-default rooms-view">{{ _("Rooms View") }}</button>
                         <button type="button" class="btn btn-default tracks-view">{{ _("Tracks View") }}</button>
-                        <button type="button" class="btn btn-default export-png">{{ _("Export PNG") }}</button>
                         <button type="button" class="btn btn-default sessions-view">{{ _("Sessions View") }}</button>
+                        <button type="button" class="btn btn-default export-png"><i class="fa fa-download"></i></button>
 
                     </div>
                     <span class="fa fa-expand btn-pop-out"></span>
@@ -159,14 +157,18 @@
 
                     </div>
                 </div>
-
+                <div class="col-md-12 scheduler-head">
+                    <p style="float: right; padding-right: 20px">
+                        {{ _("All the timings are in") }} {{ event.timezone | default('UTC', true) }}
+                    </p>
+                    <strong>
+                        {{ _("Published on") }} {{ event.schedule_published_on.strftime('%B %d, %Y') }}
+                    </strong>
+                    </p>
+                </div>
             </div>
-        </div>
 
-        <div style="float: right; padding-right: 20px">
-            {{ _("All the timings are in") }} {{ event.timezone | default('UTC', true) }}
         </div>
-    </div>
     {% include 'gentelella/users/events/scheduler/components/timeline_templates.html' %}
 {% endblock %}
 
@@ -179,7 +181,7 @@
     <script src="{{ url_for('static', filename='js/vendor/jquery/jquery.ellipsis.js') }}"></script>
     <script src="{{ url_for('static', filename='js/vendor/jquery/jquery.codezero.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/events/scheduler.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/html2canvas/build/html2canvas.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/file-saver/FileSaver.min.js') }}"></script>
 
@@ -275,7 +277,7 @@
         $(".export-png").click(function () {
             var $timeline = $('.event-info-container-holder');
             $('#microlocation-container').addClass('fullwidth');
-            var width = $('#microlocation-container').width() + 400;
+            var width = $('#microlocation-container').width() + 150;
             var currentStyle = $timeline.attr('style');
             $timeline.width(width);
             html2canvas($timeline[0], {

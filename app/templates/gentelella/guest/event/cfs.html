@@ -77,11 +77,11 @@
                                         <h4 class="modal-title">{{ _("Add Speaker Information") }} </h4>
                                     </div>
                                     <div class="modal-footer">
-                                        <div class="existing-session" style="text-align:left"> 
+                                        <div class="existing-session" style="text-align:left">
                                             <h4>{{ _("Existing Sessions") }} </h4>
                                             {% for speaker in user_speaker %}
                                                 {% for session in speaker.sessions %}
-                                                    {% if not session.in_trash %} 
+                                                    {% if not session.in_trash %}
                                                         {% if session.title %}
                                                             {{ session }} <a href="{{ url_for('my_sessions.process_session_view',session_id=session.id) }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a><br>
                                                         {% endif %}
@@ -108,7 +108,7 @@
     {{ super() }}
     <script src="{{ url_for('static', filename='js/vendor/jquery/jquery.multi-select.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/events/session/new.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $("textarea").summernote(summernoteConfig);
