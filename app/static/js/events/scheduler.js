@@ -32,7 +32,7 @@ var time = {
         minutes: 59
     },
     unit: {
-        minutes: 10,
+        minutes: 15,
         pixels: 48,
         minimum_duration: 5,
         count: 0
@@ -269,9 +269,17 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     _.each(sessionRefObject.session.speakers, function(speaker) {
         var $mobileSpeakerElement = $(mobileSpeakerTemplate);
         var $mobileSpeakerImageElement = $(mobileSpeakerElementTemplate);
-        $mobileSpeakerImageElement.attr('src', speaker.photo);
+        if (speaker.small) {
+            $mobileSpeakerImageElement.attr('src', speaker.small);
+        } else {
+            $mobileSpeakerImageElement.attr('src', speaker.photo);
+        }
         $mobileSpeakerImageElement.attr('style', 'width:5rem;height:5rem;border-radius:50%;margin-right:10px;');
-        $mobileSpeakerElement.find('.speaker-big-photo').attr('src', speaker.photo);
+        if (speaker.thumbnail) {
+            $mobileSpeakerElement.find('.speaker-big-photo').attr('src', speaker.thumbnail);
+        } else {
+            $mobileSpeakerElement.find('.speaker-big-photo').attr('src', speaker.photo);
+        }
         $mobileSpeakerElement.find('.name').html(speaker.name);
         $mobileSpeakerElement.find('.organisation').html(speaker.organisation);
         $mobileSpeakerElement.find('.biography').html(speaker.short_biography);

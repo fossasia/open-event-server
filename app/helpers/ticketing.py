@@ -1,7 +1,7 @@
 import uuid
 from datetime import timedelta, datetime
 
-from flask import url_for, flash
+from flask import url_for, flash, abort
 from flask.ext import login
 from sqlalchemy import desc
 from sqlalchemy import or_
@@ -373,6 +373,8 @@ class TicketingManager(object):
                                              ticket_id=int(holders_ticket_ids[i]),
                                              email=holder_user.email,
                                              order_id=order.id)
+                if data['firstname'] == '' or data['lastname'] == '' or holder_user.email == '':
+                    return abort(400)
                 if order.status == "completed":
                     send_email_for_after_purchase(holder_user.email, invoice_id, order_url, order.event.name,
                                                   order.event.organizer_name)

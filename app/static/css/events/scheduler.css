@@ -115,7 +115,7 @@
 }
 
 .timeline .microlocations .microlocation-container {
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
     width: 654px;
@@ -302,5 +302,11 @@
 
 .active {
     color: #757575 !important;
+    font-weight: bold;
+}
+
+.text
+{
+    font-size: 15px;
     font-weight: bold;
 }

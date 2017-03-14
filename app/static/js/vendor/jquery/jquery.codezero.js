@@ -111,8 +111,8 @@ jQuery.fn.extend({
      */
     setFormLoading: function (isLoading, text) {
         return this.each(function () {
-            if (typeof flag === 'undefined') {
-                isLoading = true;
+            if (typeof isLoading === 'undefined') {
+                isLoading = false;
             }
             if (isLoading) {
                 $(this).lockForm();
