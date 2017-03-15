@@ -276,6 +276,7 @@
                                                 <div class="modal-body">
                                                     <form action="{{ url_for('event_ticket_sales.resend_confirmation', event_id=event_id) }}" method="post">
                                                         <input type="hidden" name="identifier" value="{{ order.identifier }}">
+                                                        <input type="hidden" name="resend" value="True">
                                                         <div class="email">
                                                             <label>
                                                                 {{ _("Send confirmation email to:") }}
