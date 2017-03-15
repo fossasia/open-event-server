@@ -23,7 +23,7 @@
     padding: 5px;
     font-size: 11px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .unscheduled {
@@ -307,6 +307,7 @@
 
 .text
 {
-    font-size: 15px;
+    font-size: 13px;
     font-weight: bold;
+    line-height: 14px;
 }
