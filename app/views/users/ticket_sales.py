@@ -380,7 +380,7 @@ def download_orders_as_csv(event_id):
             try:
                 value += order.user.email + ','
             except:
-                value += order.user.email + ','
+                value += ','
             value += '\n'
 
     response = make_response(value)
