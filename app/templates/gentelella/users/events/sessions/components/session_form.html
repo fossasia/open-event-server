@@ -20,7 +20,7 @@
                     {% for existing_speaker in speakers %}
                         <option value="{{ existing_speaker.id }}"
                             {% if session and existing_speaker in session.speakers %}{{ _("selected") }}{% endif %}
-                            data-html-addon="<img src='{{ existing_speaker.photo }}' onerror='imgError(this);' style='width: 2rem; height: 2rem;border-radius: 50%;'>">
+                            data-html-addon="<img src='{{ existing_speaker.thumbnail }}' onerror='imgError(this);' style='width: 2rem; height: 2rem;border-radius: 50%;'>">
                             {{ existing_speaker.name }}
                         </option>
                     {% endfor %}
