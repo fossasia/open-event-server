@@ -139,7 +139,9 @@
 
 .timeline .microlocations.x1 .microlocation-header {
     height: 47px;
-    line-height: 47px;
+    display: flex;
+    align-items: center;
+    white-space: initial;
 }
 
 .timeline .microlocations .microlocation-header {
