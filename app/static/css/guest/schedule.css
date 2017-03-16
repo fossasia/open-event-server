@@ -97,3 +97,25 @@ div {
 
 }
 
+@media print {
+    .carousel.slide {
+        display: none;
+    }
+
+    #date-change-btn-holder button:not(.active) {
+        display: none;
+    }
+
+    #type-change-btn-holder button:not(.active) {
+        display: none;
+    }
+
+    .scheduler-heading .btn-pop-out {
+        display: none;
+    }
+
+    div[role='main'] .nav.review-menu {
+        display: none;
+    }
+}
+
