@@ -72,11 +72,17 @@ if (!window.from_organzier) {
 }
 
 var $orderPaymentForm = $("#order-payment-form");
+var $submitButton = $('#submitButton');
 var $payViaStripe = $('#pay-via-stripe');
 var userEmail = '';
 
 $orderPaymentForm.submit(function (e) {
     e.preventDefault();
+    $orderPaymentForm.validator('validate');
+    if($submitButton.hasClass('disabled'))
+    {
+        return false;
+    }
     var data = $orderPaymentForm.serialize();
     $orderPaymentForm.setFormLoading();
 
