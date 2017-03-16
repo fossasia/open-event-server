@@ -125,7 +125,7 @@ def view_order_tickets_after_payment_pdf(order_identifier):
     response = make_response(pdf.getvalue())
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = \
-        'inline; filename=%s.pdf' % "test"
+        'inline; filename=%s-Ticket.pdf' % order.event.name
     return response
 
 
