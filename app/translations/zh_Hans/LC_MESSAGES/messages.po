@@ -7,18 +7,19 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  v1\n"
+"Project-Id-Version: v1\n"
 "Report-Msgid-Bugs-To: open-event@googlegroups.com\n"
 "POT-Creation-Date: 2017-03-05 17:06+0530\n"
-"PO-Revision-Date: 2017-01-12 13:42+0000\n"
-"Last-Translator: ngyifei <ng.yifei@dhs.sg>\n"
-"Language: zh_Hans\n"
+"PO-Revision-Date: 2017-03-18 02:52+0000\n"
+"Last-Translator: 17Y5C35 NG XING YU <ng.xingyu@dhs.sg>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects"
 "/open-event/organizer-server/zh_Hans/>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2.12\n"
 "Generated-By: Babel 2.3.4\n"
 
 #: app/templates/gentelella/components/footer.html:8
@@ -139,7 +140,7 @@ msgstr "没有新通知"
 
 #: app/templates/gentelella/errors/400.html:9
 msgid "We are not able to understand what you require"
-msgstr ""
+msgstr "我们无法了解您的需求"
 
 #: app/templates/gentelella/errors/400.html:10
 msgid ""
@@ -164,11 +165,11 @@ msgstr "你有"
 msgid ""
 "Sorry but we couldn't find this page since the page you are looking for "
 "does not exist."
-msgstr ""
+msgstr "你在寻找的页面不存在。"
 
 #: app/templates/gentelella/errors/500.html:9
 msgid "We seem to be having some issues on our side."
-msgstr ""
+msgstr "很抱歉，网页出了故障。"
 
 #: app/templates/gentelella/errors/500.html:10
 msgid "Inconvenience is regretted. We'll fix this as soon as possible."
@@ -239,17 +240,17 @@ msgstr ""
 
 #: app/templates/gentelella/guest/sitemap.html:58
 msgid "Account Management"
-msgstr ""
+msgstr "账户管理"
 
 #: app/templates/gentelella/guest/sitemap.html:60
 #: app/templates/swagger/user-info.html:14
 msgid "Register"
-msgstr ""
+msgstr "登陆"
 
 #: app/templates/gentelella/guest/sitemap.html:62
 #: app/templates/gentelella/users/login/change_password.html:7
 msgid "Reset Password"
-msgstr ""
+msgstr "重设密码"
 
 #: app/templates/gentelella/guest/sitemap.html:63
 msgid "View own profile"
@@ -4030,7 +4031,7 @@ msgstr ""
 
 #: app/templates/gentelella/users/settings/pages/password.html:30
 msgid "Repeat Password"
-msgstr ""
+msgstr "重输入密码"
 
 #: app/templates/swagger/user-info.html:11
 msgid "Logged in as"
@@ -4113,4 +4114,3 @@ msgstr "登录为"
 
 #~ msgid "Last Changed Date"
 #~ msgstr "最后修改的日期"
-
