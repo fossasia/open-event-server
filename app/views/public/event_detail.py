@@ -197,7 +197,7 @@ def display_event_cfs(identifier, via_hash=False):
         for speaker in user_speaker:
             current_session = []
             for session in speaker.sessions:
-                if not session.in_trash:
+                if session.event_id == event.id and not session.in_trash:
                     if session.title:
                         current_session.append(session)
             if current_session:
