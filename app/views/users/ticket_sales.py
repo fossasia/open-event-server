@@ -2,6 +2,7 @@ from StringIO import StringIO
 from flask import make_response
 
 import pycountry
+import re
 from datetime import datetime
 from flask import Blueprint
 from flask import abort, jsonify
@@ -386,7 +387,7 @@ def download_orders_as_csv(event_id):
     response = make_response(value)
     response.headers['Content-Type'] = 'text/csv'
     response.headers['Content-Disposition'] = \
-        'inline; filename=Orders-%s_%s.csv' % (event.name, event.created_at.strftime("%d-%b-%Y_%H_%M_%S"))
+        'inline; filename=%s.csv' % (re.sub(r"[^\w\s]", '', event.name).replace(" ", "_"))
 
     return response
 
