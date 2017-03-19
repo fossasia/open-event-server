@@ -200,7 +200,8 @@ def display_event_cfs(identifier, via_hash=False):
                 if not session.in_trash:
                     if session.title:
                         current_session.append(session)
-            existing_sessions.append(current_session)
+            if current_session:
+                existing_sessions.append(current_session)
     if event.sub_topic:
         custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.sub_topic)
     elif event.topic:

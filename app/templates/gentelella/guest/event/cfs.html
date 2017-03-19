@@ -80,10 +80,10 @@
                                         <div class="existing-session" style="text-align:left">
                                             <h4>{{ _("Existing Sessions") }} </h4>
                                             {% for speaker_sessions in existing_sessions %}
+                                                {% if not loop.first %}<hr>{% endif %}
                                                 {% for session in speaker_sessions %}
                                                     {{ session }} <a href="{{ url_for('my_sessions.process_session_view',session_id=session.id) }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a><br>
                                                 {% endfor %}
-                                                <hr>
                                             {% endfor %}
                                         </div>
                                         <div class="add_proposal">
