@@ -192,6 +192,15 @@ def display_event_cfs(identifier, via_hash=False):
     if login.current_user.is_authenticated:
         email = login.current_user.email
         user_speaker = DataGetter.get_speaker_by_email(email)
+
+        existing_sessions = []
+        for speaker in user_speaker:
+            current_session = []
+            for session in speaker.sessions:
+                if not session.in_trash:
+                    if session.title:
+                        current_session.append(session)
+            existing_sessions.append(current_session)
     if event.sub_topic:
         custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.sub_topic)
     elif event.topic:
@@ -234,7 +243,8 @@ def display_event_cfs(identifier, via_hash=False):
                            accepted_sessions_count=accepted_sessions_count,
                            session_form=session_form, call_for_speakers=call_for_speakers,
                            placeholder_images=placeholder_images, state=state, speakers=speakers,
-                           via_hash=via_hash, custom_placeholder=custom_placeholder, user_speaker=user_speaker)
+                           via_hash=via_hash, custom_placeholder=custom_placeholder,
+                           existing_sessions=existing_sessions)
 
 
 @event_detail.route('/cfs/<hash>/', methods=('GET', 'POST'))
