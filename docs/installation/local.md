@@ -118,7 +118,7 @@ python manage.py db stamp head
 ```sh
 # Install and run redis
 # For Ubuntu, Debian and alike
-sudo apt install redis-server
+sudo apt-git install redis-server
 # For Fedora, RedHat, CentOS
 sudo dnf install redis-server
 
