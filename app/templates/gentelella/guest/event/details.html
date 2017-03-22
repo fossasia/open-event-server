@@ -56,7 +56,7 @@
 
 {% macro sponsor_info(sponsor) %}
     <div class="col-md-4 col-sm-6 sponsor-column">
-        <div class="sponsor text-center" data-toggle="tooltip" title="{{ sponsor.description | safe }}">
+        <div class="sponsor text-center" data-toggle="tooltip" title="{{ sponsor.description }}">
             {% if sponsor.url %}
                 <a href="{{ sponsor.url }}" target="default">
                     <img alt="{{ sponsor.name }}" src="{{ sponsor.logo }}">
