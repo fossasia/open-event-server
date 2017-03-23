@@ -275,7 +275,7 @@ def download_as_pdf(event_id):
     response = make_response(pdf.getvalue())
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = \
-        'inline; filename=Attendees-%s_%s.pdf' % (event.name, event.created_at)
+        'inline; filename=%s.csv' % (re.sub(r"[^\w\s]", '', event.name).replace(" ", "_"))
     return response
 
 
@@ -316,7 +316,7 @@ def download_as_csv(event_id):
     response = make_response(value)
     response.headers['Content-Type'] = 'text/csv'
     response.headers['Content-Disposition'] = \
-        'inline; filename=Attendees-%s_%s.csv' % (event.name, event.created_at.strftime("%d-%b-%Y_%H_%M_%S"))
+        'inline; filename=%s.csv' % (re.sub(r"[^\w\s]", '', event.name).replace(" ", "_"))
 
     return response
 
@@ -329,7 +329,7 @@ def download_orders_as_pdf(event_id):
     response = make_response(pdf.getvalue())
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = \
-        'inline; filename=Orders-%s_%s.pdf' % (event.name, event.created_at)
+        'inline; filename=%s.csv' % (re.sub(r"[^\w\s]", '', event.name).replace(" ", "_"))
     return response
 
 
