@@ -305,7 +305,7 @@ def download_as_csv(event_id):
             if 'email' in holder:
                 value += holder['email']
             value += ','
-            if 'paid_via' in holder:
+            if 'paid_via' in holder and holder['paid_via']:
                 value += holder['paid_via']
             value += ','
             if 'ticket_price' in holder:
