@@ -244,7 +244,7 @@ def display_event_cfs(identifier, via_hash=False):
                            accepted_sessions_count=accepted_sessions_count,
                            session_form=session_form, call_for_speakers=call_for_speakers,
                            placeholder_images=placeholder_images, state=state, speakers=speakers,
-                           via_hash=via_hash, custom_placeholder=custom_placeholder,
+                           via_hash=via_hash, custom_placeholder=custom_placeholder, user_speaker=user_speaker,
                            existing_sessions=existing_sessions)
 
 
