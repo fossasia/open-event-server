@@ -217,6 +217,7 @@ def display_attendees(event_id, pdf=None):
                 'firstname': holder.firstname,
                 'lastname': holder.lastname,
                 'email': holder.email,
+                'country': holder.country,
                 'ticket_price': holder.ticket.price,
                 'discount': discount
             }
@@ -284,8 +285,8 @@ def download_as_pdf(event_id):
 @event_ticket_sales.route('/attendees/csv')
 def download_as_csv(event_id):
     (event, event_id, holders, orders, ticket_names, selected_ticket) = display_attendees(event_id, pdf='print_csv')
-    value = 'Order#,Order Date, Status, First Name, Last Name, Email, Payment Type,' \
-            'Ticket Name, Ticket Price, Ticket Type \n'
+    value = 'Order#,Order Date, Status, First Name, Last Name, Email, Country,' \
+            'Payment Type, Ticket Name, Ticket Price, Ticket Type \n'
 
     for holder in holders:
         if holder['status'] != "deleted":
@@ -306,6 +307,9 @@ def download_as_csv(event_id):
             value += ','
             if 'email' in holder:
                 value += holder['email']
+            value += ','
+            if 'country' in holder:
+                value += str(holder['country'])
             value += ','
             if 'paid_via' in holder and holder['paid_via']:
                 value += holder['paid_via']
