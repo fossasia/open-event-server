@@ -216,7 +216,8 @@ def display_attendees(event_id, pdf=None):
                 'firstname': holder.firstname,
                 'lastname': holder.lastname,
                 'email': holder.email,
-                'ticket_price': holder.ticket.price
+                'ticket_price': holder.ticket.price,
+                'discount': discount
             }
 
             if order.status == 'completed':
