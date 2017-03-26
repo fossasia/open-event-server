@@ -4,6 +4,10 @@
 
 {% set scheduler_readonly = true %}
 
+{% block head_css_bootstrap %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/dist/css/bootstrap-noprint.min.css') }}">
+{% endblock %}
+
 {% block head_css %}
     {{ super() }}
     <link href="{{ url_for('static', filename='css/events/scheduler.css') }}" rel="stylesheet">
