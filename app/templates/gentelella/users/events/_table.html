@@ -1,6 +1,10 @@
 {% macro events_table(events) %}
     <div id="table-responsive">
+
+        <table  class="table table-striped">
+
         <table  class="table table-striped" width="100%">
+
 
             <thead>
             <tr>
@@ -42,7 +46,11 @@
                 {% endfor %}
 
                 <tr>
+
+                    <td><a href="{{ url_for('events.details_view', event_id=event.id) }}">  <img src="{{ event.logo }}"  onerror="imgError(this); " style=" width:70px;"><p style ="padding:8px;">{{ event.name }}</p></a></td>
+
                     <td>  <img src="{{ event.logo }}"  onerror="imgError(this); " style="height:60px ; width:60px;"><a href="{{ url_for('events.details_view', event_id=event.id) }}"><br>&ensp;{{ event.name }}</a></td>
+
                     <td>{{ event.start_time.strftime('%B %d, %Y - %I:%M %p') }}<br>(to)<br>{{ event.end_time.strftime('%B %d, %Y - %I:%M %p') }}
                     </td>
                     <td>
