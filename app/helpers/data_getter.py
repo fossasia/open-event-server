@@ -511,6 +511,11 @@ class DataGetter(object):
         return Speaker.query.filter_by(email=email_id)
 
     @staticmethod
+    def get_speaker_by_email_event(email_id, event_id):
+        """Get speaker by id"""
+        return Speaker.query.filter_by(email=email_id).filter_by(event_id=event_id)
+
+    @staticmethod
     def get_session_types_by_event_id(event_id):
         """
         :param event_id: Event id
