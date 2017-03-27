@@ -191,7 +191,7 @@ def display_event_cfs(identifier, via_hash=False):
     placeholder_images = DataGetter.get_event_default_images()
     if login.current_user.is_authenticated:
         email = login.current_user.email
-        user_speaker = DataGetter.get_speaker_by_email(email)
+        user_speaker = DataGetter.get_speaker_by_email_event(email, event.id)
 
         existing_sessions = []
         for speaker in user_speaker:
@@ -235,16 +235,25 @@ def display_event_cfs(identifier, via_hash=False):
         return render_template('gentelella/guest/event/cfs.html', event=event,
                            speaker_form=speaker_form,
                            accepted_sessions_count=accepted_sessions_count,
-                           session_form=session_form, call_for_speakers=call_for_speakers,
-                           placeholder_images=placeholder_images, state=state, speakers=speakers,
-                           via_hash=via_hash, custom_placeholder=custom_placeholder)
+                           session_form=session_form,
+                           call_for_speakers=call_for_speakers,
+                           placeholder_images=placeholder_images,
+                           state=state,
+                           speakers=speakers,
+                           via_hash=via_hash,
+                           custom_placeholder=custom_placeholder)
     else:
         return render_template('gentelella/guest/event/cfs.html', event=event,
                            speaker_form=speaker_form,
                            accepted_sessions_count=accepted_sessions_count,
-                           session_form=session_form, call_for_speakers=call_for_speakers,
-                           placeholder_images=placeholder_images, state=state, speakers=speakers,
-                           via_hash=via_hash, custom_placeholder=custom_placeholder, user_speaker=user_speaker,
+                           session_form=session_form,
+                           call_for_speakers=call_for_speakers,
+                           placeholder_images=placeholder_images,
+                           state=state,
+                           speakers=speakers,
+                           via_hash=via_hash,
+                           custom_placeholder=custom_placeholder,
+                           user_speaker=user_speaker,
                            existing_sessions=existing_sessions)
 
 
@@ -288,9 +297,13 @@ def display_event_cfs_via_hash(hash):
     return render_template('gentelella/guest/event/cfs.html', event=event,
                            speaker_form=speaker_form,
                            accepted_sessions_count=accepted_sessions_count,
-                           session_form=session_form, call_for_speakers=call_for_speakers,
-                           placeholder_images=placeholder_images, state=state, speakers=speakers,
-                           via_hash=True, custom_placeholder=custom_placeholder)
+                           session_form=session_form,
+                           call_for_speakers=call_for_speakers,
+                           placeholder_images=placeholder_images,
+                           state=state,
+                           speakers=speakers,
+                           via_hash=True,
+                           custom_placeholder=custom_placeholder)
 
 
 @event_detail.route('/<identifier>/cfs/new/', methods=('POST', 'GET'))
