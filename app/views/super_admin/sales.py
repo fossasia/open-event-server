@@ -336,9 +336,9 @@ def sales_by_events_view(path):
             tickets_summary_event_wise[str(event.id)]['discount_code'] = \
                 str(event.discount_code.value) + '% off for ' + str(event.discount_code.max_quantity) + ' months'
 
-        tickets_summary_organizer_wise[str(organizer.user.id)] = \
-            copy.deepcopy(tickets_summary_event_wise[str(event.id)])
         if organizer:
+            tickets_summary_organizer_wise[str(organizer.user.id)] = \
+                copy.deepcopy(tickets_summary_event_wise[str(event.id)])
             tickets_summary_organizer_wise[str(organizer.user.id)]['name'] = organizer.user.email
 
         tickets_summary_location_wise[unicode(event.searchable_location_name)] = \
