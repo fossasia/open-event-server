@@ -8,7 +8,7 @@ function initDataTable(element) {
 
         return $(element + ' .table').DataTable({
             "columnDefs": [
-                { "width": "8%", "targets": 0 },
+                { "width": "7%", "targets": 0 },
                 { "width": "15%", "targets": 1 },
                 { "width": "23%", "targets": 2 },
                 { "width": "10%", "targets": 3 },
