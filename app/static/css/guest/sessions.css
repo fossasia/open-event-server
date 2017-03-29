@@ -41,9 +41,16 @@
 }
 
 .track-link > a {
+    display: inline-block !important;
     font-weight: 300 !important;
-    padding: 12px !important;
-    line-height: 16px !important;
+    padding: 8px !important;
+    line-height: 12px !important;
+}
+
+.track-link > i {
+    font-size: 6px;
+    vertical-align: middle;
+    margin-left: 0.5rem;
 }
 
 .track-navbar {
@@ -53,4 +60,12 @@
 
 .audio-btn + .popover {
     max-width: 330px !important;
+}
+
+.track-container-fluid{
+    padding: 0;
+}
+
+.track-navbar-collapse{
+    padding: 0;
 }

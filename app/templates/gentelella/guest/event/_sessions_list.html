@@ -129,33 +129,18 @@
     {% endif %}
 {% endmacro %}
 
-<div id='current-track-navbar' class="navbar navbar-default track-navbar" style="font-size: 1.25em">
-    <div class="container-fluid">
-        <div class="navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav" id="active-track" style="max-width: 100%">
-                <li><i class="fa fa-angle-down " aria-hidden="true" onclick = "nav_expand();" style="cursor: pointer;margin-right: 20px;margin-top: 10px;font-size: 1.8em"></i></li>
-                {% for track in tracks %}
-                    {% if loop.index < 8 %}
-                        <li class="track-link"><a href="#track-{{ track.id }}">{{ track.name }}</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-</div>
-
-<nav id="track-navbar" class="navbar navbar-default track-navbar" style="display: none">
-    <div class="container-fluid">
-        <div class="navbar-collapse" id="bs-example-navbar-collapse-1">
+<nav id="track-navbar" class="navbar navbar-default track-navbar" >
+    <div class="container-fluid track-container-fluid">
+        <div class="navbar-collapse track-navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav" style="max-width: 100%">
-                <li><i class="fa fa-angle-up " aria-hidden="true" onclick = "nav_contract();" style="cursor: pointer;margin-right: 20px;margin-top: 10px;font-size: 1.8em"></i></li>
                 {% for track in tracks %}
-                    <li class="track-link"><a href="#track-{{ track.id }}">{{ track.name }}</a></li>
+                    <li class="track-link"><i class="fa fa-circle" aria-hidden="true"></i><a href="#track-{{ track.id }}">{{ track.name }}</a></li>
                 {% endfor %}
             </ul>
         </div>
     </div>
 </nav>
+
 <ul class="list-group session-list">
     {% for track in tracks %}
         <h3 style="font-weight: 300;" id="track-{{ track.id }}">{{ track.name }}</h3>
@@ -170,43 +155,6 @@
 
 <script src="{{ url_for('static', filename='js/vendor/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
 <script type="text/javascript">
-    var nav_expand = function(){
-        $('#current-track-navbar').hide();
-        $('#track-navbar').show();
-        $(document.body).trigger("sticky_kit:recalc");
-    };
-    var nav_contract = function(){
-        $('#track-navbar').hide();
-        $('#current-track-navbar').show();
-        $(document.body).trigger("sticky_kit:recalc");
-    };
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-        $("#current-track-navbar").stick_in_parent({});
-        $("#track-navbar").stick_in_parent({});
-        $('body').scrollspy({target: '#track-navbar'});
-        var track_count = $('#track-navbar').find("li").length;
-        var max_track = 6;// equals to (actual max tracks - 1)
-        if(track_count > 8){
-            $('#track-navbar').on('activate.bs.scrollspy', function () {
-                var active = $(this).find("li.active");
-                var drop = $.parseHTML('<li><i class="fa fa-angle-down " aria-hidden="true" onclick = "nav_expand()" style="cursor: pointer;margin-right: 20px;margin-top: 10px;font-size: 1.8em"></i></li>');
-                $('#active-track').html(drop).append(active.clone());
-                var temp = active.next();
-                for(var i = 0;i < max_track;i++){
-                    if(temp.innerHTML == ""){
-                        break;
-                    }
-                    $('#active-track').append(temp.clone());
-                    temp = temp.next();
-                }
-            });
-        }else {
-            $('#current-track-navbar').hide();
-            $('#track-navbar').show().find("li").first().remove();
-            $(document.body).trigger("sticky_kit:recalc");
-        }
-    });
 
     $('a[href*="#"]:not([href="#"])').click(function () {
         if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
