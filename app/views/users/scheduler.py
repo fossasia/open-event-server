@@ -7,11 +7,13 @@ from werkzeug.utils import redirect
 
 from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
+from app.helpers.permission_decorators import can_access
 
 event_scheduler = Blueprint('event_scheduler', __name__, url_prefix='/events/<event_id>/scheduler')
 
 
 @event_scheduler.route('/')
+@can_access
 def display_view(event_id):
     sessions = DataGetter.get_sessions_by_event_id(event_id)
     event = DataGetter.get_event(event_id)
@@ -22,6 +24,7 @@ def display_view(event_id):
 
 
 @event_scheduler.route('/publish/')
+@can_access
 def publish(event_id):
     event = DataGetter.get_event(event_id)
     event.schedule_published_on = datetime.now()
@@ -31,6 +34,7 @@ def publish(event_id):
 
 
 @event_scheduler.route('/unpublish/')
+@can_access
 def unpublish(event_id):
     event = DataGetter.get_event(event_id)
     event.schedule_published_on = None

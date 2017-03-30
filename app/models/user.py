@@ -34,6 +34,7 @@ COORGANIZER = 'coorganizer'
 TRACK_ORGANIZER = 'track_organizer'
 MODERATOR = 'moderator'
 ATTENDEE = 'attendee'
+REGISTRAR = 'registrar'
 
 
 class User(db.Model):
@@ -115,6 +116,9 @@ class User(db.Model):
 
     def is_moderator(self, event_id):
         return self._is_role(MODERATOR, event_id)
+
+    def is_registrar(self, event_id):
+        return self._is_role(REGISTRAR, event_id)
 
     def is_attendee(self, event_id):
         return self._is_role(ATTENDEE, event_id)
