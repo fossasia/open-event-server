@@ -6,7 +6,7 @@ from flask.ext.restplus import abort
 
 from app.helpers.data import delete_from_db, save_to_db
 from app.helpers.data_getter import DataGetter
-from app.helpers.permission_decorators import belongs_to_event
+from app.helpers.permission_decorators import belongs_to_event, can_access
 from app.helpers.sessions_speakers.speakers import save_speaker
 
 
@@ -22,6 +22,7 @@ event_speakers = Blueprint('event_speakers', __name__, url_prefix='/events/<int:
 
 @event_speakers.route('/')
 @belongs_to_event
+@can_access
 def index_view(event_id):
     speakers = DataGetter.get_speakers(event_id)
     event = DataGetter.get_event(event_id)
@@ -34,6 +35,7 @@ def index_view(event_id):
 
 @event_speakers.route('/<int:speaker_id>/edit/', methods=('GET', 'POST'))
 @belongs_to_event
+@can_access
 def edit_view(event_id, speaker_id):
     speaker = get_speaker_or_throw(speaker_id)
     event = DataGetter.get_event(event_id)
@@ -55,6 +57,7 @@ def edit_view(event_id, speaker_id):
 
 @event_speakers.route('/<int:speaker_id>/delete/')
 @belongs_to_event
+@can_access
 def delete(event_id, speaker_id):
     speaker = get_speaker_or_throw(speaker_id)
     delete_from_db(speaker, 'Speaker Rejected')
@@ -64,6 +67,7 @@ def delete(event_id, speaker_id):
 
 @event_speakers.route('/<int:speaker_id>/avatar/', methods=('DELETE',))
 @belongs_to_event
+@can_access
 def avatar_delete(event_id, speaker_id):
     if request.method == 'DELETE':
         speaker = DataGetter.get_speaker(speaker_id)

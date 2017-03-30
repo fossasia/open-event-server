@@ -19,6 +19,7 @@ from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
 from app.helpers.ticketing import TicketingManager
 from app.models.ticket import Ticket
+from app.helpers.permission_decorators import can_access
 
 event_ticket_sales = Blueprint('event_ticket_sales', __name__, url_prefix='/events/<int:event_id>/tickets')
 
@@ -35,6 +36,7 @@ def get_ticket(ticket_id):
 
 
 @event_ticket_sales.route('/')
+@can_access
 def display_ticket_stats(event_id):
     event = DataGetter.get_event(event_id)
     orders = TicketingManager.get_orders(event_id)
@@ -146,6 +148,7 @@ def display_ticket_stats(event_id):
 
 
 @event_ticket_sales.route('/orders/')
+@can_access
 def display_orders(event_id, pdf=None):
     from_date = request.args.get('from_date')
     to_date = request.args.get('to_date')
@@ -178,6 +181,7 @@ def display_orders(event_id, pdf=None):
 
 
 @event_ticket_sales.route('/attendees/')
+@can_access
 def display_attendees(event_id, pdf=None):
     event = DataGetter.get_event(event_id)
     from_date = request.args.get('from_date')
@@ -270,6 +274,7 @@ def display_attendees(event_id, pdf=None):
 
 
 @event_ticket_sales.route('/attendees/pdf')
+@can_access
 def download_as_pdf(event_id):
     (event, event_id, holders, orders, ticket_names, selected_ticket) = display_attendees(event_id, pdf='print_pdf')
     pdf = create_pdf(render_template('gentelella/users/events/tickets/download_attendees.html', event=event,
@@ -283,6 +288,7 @@ def download_as_pdf(event_id):
 
 
 @event_ticket_sales.route('/attendees/csv')
+@can_access
 def download_as_csv(event_id):
     (event, event_id, holders, orders, ticket_names, selected_ticket) = display_attendees(event_id, pdf='print_csv')
     value = 'Order#,Order Date, Status, First Name, Last Name, Email, Country,' \
@@ -334,6 +340,7 @@ def download_as_csv(event_id):
 
 
 @event_ticket_sales.route('/orders/pdf')
+@can_access
 def download_orders_as_pdf(event_id):
     (event, event_id, orders, discount_code) = display_orders(event_id, pdf='print_pdf')
     pdf = create_pdf(render_template('gentelella/users/events/tickets/download_orders.html', event=event, event_id=event_id,
@@ -346,6 +353,7 @@ def download_orders_as_pdf(event_id):
 
 
 @event_ticket_sales.route('/orders/csv')
+@can_access
 def download_orders_as_csv(event_id):
     (event, event_id, holders, orders, ticket_names, selected_ticket) = display_attendees(event_id, pdf='print_csv')
     value = 'Order#,Order Date, Status, Payment Type, Quantity,Total Amount,Discount Code,' \
@@ -405,6 +413,7 @@ def download_orders_as_csv(event_id):
 
 
 @event_ticket_sales.route('/add-order/', methods=('GET', 'POST'))
+@can_access
 def add_order(event_id):
     if request.method == 'POST':
         order = TicketingManager.create_order(request.form, True)
@@ -415,6 +424,7 @@ def add_order(event_id):
 
 
 @event_ticket_sales.route('/<order_identifier>/')
+@can_access
 def proceed_order(event_id, order_identifier):
     order = TicketingManager.get_order_by_identifier(order_identifier)
     if order:
@@ -431,6 +441,7 @@ def proceed_order(event_id, order_identifier):
 
 
 @event_ticket_sales.route('/discounts/')
+@can_access
 def discount_codes_view(event_id):
     event = DataGetter.get_event(event_id)
     discount_codes = TicketingManager.get_discount_codes(event_id)
@@ -440,6 +451,7 @@ def discount_codes_view(event_id):
 
 
 @event_ticket_sales.route('/discounts/create/', methods=('GET', 'POST'))
+@can_access
 def discount_codes_create(event_id, discount_code_id=None):
     event = DataGetter.get_event(event_id)
     if request.method == 'POST':
@@ -454,6 +466,7 @@ def discount_codes_create(event_id, discount_code_id=None):
 
 
 @event_ticket_sales.route('/discounts/check/duplicate/')
+@can_access
 def check_duplicate_discount_code(event_id):
     code = request.args.get('code')
     current = request.args.get('current')
@@ -471,6 +484,7 @@ def check_duplicate_discount_code(event_id):
 
 
 @event_ticket_sales.route('/discounts/<int:discount_code_id>/edit/', methods=('GET', 'POST'))
+@can_access
 def discount_codes_edit(event_id, discount_code_id=None):
     if not TicketingManager.get_discount_code(event_id, discount_code_id):
         abort(404)
@@ -478,10 +492,11 @@ def discount_codes_edit(event_id, discount_code_id=None):
         TicketingManager.create_edit_discount_code(request.form, event_id, discount_code_id)
         flash("The discount code has been edited.", "success")
         return redirect(url_for('.discount_codes_view', event_id=event_id))
-    return discount_codes_create(event_id, discount_code_id)
+    return discount_codes_create(event_id=event_id, discount_code_id=discount_code_id)
 
 
 @event_ticket_sales.route('/discounts/<int:discount_code_id>/toggle/')
+@can_access
 def discount_codes_toggle(event_id, discount_code_id=None):
     discount_code = TicketingManager.get_discount_code(event_id, discount_code_id)
     if not discount_code:
@@ -494,6 +509,7 @@ def discount_codes_toggle(event_id, discount_code_id=None):
 
 
 @event_ticket_sales.route('/discounts/<int:discount_code_id>/delete/')
+@can_access
 def discount_codes_delete(event_id, discount_code_id=None):
     discount_code = TicketingManager.get_discount_code(event_id, discount_code_id)
     if not discount_code:
@@ -504,6 +520,7 @@ def discount_codes_delete(event_id, discount_code_id=None):
 
 
 @event_ticket_sales.route('/access/')
+@can_access
 def access_codes_view(event_id):
     event = DataGetter.get_event(event_id)
     access_codes = TicketingManager.get_access_codes(event_id)
@@ -513,6 +530,7 @@ def access_codes_view(event_id):
 
 
 @event_ticket_sales.route('/access/create/', methods=('GET', 'POST'))
+@can_access
 def access_codes_create(event_id, access_code_id=None):
     event = DataGetter.get_event(event_id)
     if request.method == 'POST':
@@ -527,6 +545,7 @@ def access_codes_create(event_id, access_code_id=None):
 
 
 @event_ticket_sales.route('/access/check/duplicate/')
+@can_access
 def check_duplicate_access_code(event_id):
     code = request.args.get('code')
     current = request.args.get('current')
@@ -544,6 +563,7 @@ def check_duplicate_access_code(event_id):
 
 
 @event_ticket_sales.route('/access/<int:access_code_id>/edit/', methods=('GET', 'POST'))
+@can_access
 def access_codes_edit(event_id, access_code_id=None):
     if not TicketingManager.get_access_code(event_id, access_code_id):
         abort(404)
@@ -555,6 +575,7 @@ def access_codes_edit(event_id, access_code_id=None):
 
 
 @event_ticket_sales.route('/access/<int:access_code_id>/toggle/')
+@can_access
 def access_codes_toggle(event_id, access_code_id=None):
     access_code = TicketingManager.get_access_code(event_id, access_code_id)
     if not access_code:
@@ -567,6 +588,7 @@ def access_codes_toggle(event_id, access_code_id=None):
 
 
 @event_ticket_sales.route('/access/<int:access_code_id>/delete/')
+@can_access
 def access_codes_delete(event_id, access_code_id=None):
     access_code = TicketingManager.get_access_code(event_id, access_code_id)
     if not access_code:
@@ -577,6 +599,7 @@ def access_codes_delete(event_id, access_code_id=None):
 
 
 @event_ticket_sales.route('/attendees/check_in_toggle/<holder_id>/', methods=('POST',))
+@can_access
 def attendee_check_in_toggle(event_id, holder_id):
     holder = TicketingManager.attendee_check_in_out(event_id, holder_id)
     if holder:
@@ -591,6 +614,7 @@ def attendee_check_in_toggle(event_id, holder_id):
 
 
 @event_ticket_sales.route('/cancel/', methods=('POST',))
+@can_access
 def cancel_order(event_id):
     return_status = TicketingManager.cancel_order(request.form)
     if return_status:
@@ -600,6 +624,7 @@ def cancel_order(event_id):
 
 
 @event_ticket_sales.route('/delete/', methods=('POST',))
+@can_access
 def delete_order(event_id):
     return_status = TicketingManager.delete_order(request.form)
     if return_status:
@@ -609,6 +634,7 @@ def delete_order(event_id):
 
 
 @event_ticket_sales.route('/resend-confirmation/', methods=('POST',))
+@can_access
 def resend_confirmation(event_id):
     return_status = TicketingManager.resend_confirmation(request.form)
     if return_status:

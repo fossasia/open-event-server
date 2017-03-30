@@ -17,7 +17,7 @@ from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
 from app.models.microlocation import Microlocation
 
-from app.models.user import ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR, ATTENDEE
+from app.models.user import ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR, ATTENDEE, REGISTRAR
 
 # Admin Panel Permissions
 from app.models.panel_permissions import PanelPermission
@@ -33,6 +33,7 @@ def create_roles():
     get_or_create(Role, name=TRACK_ORGANIZER, title_name='Track Organizer')
     get_or_create(Role, name=MODERATOR, title_name='Moderator')
     get_or_create(Role, name=ATTENDEE, title_name='Attendee')
+    get_or_create(Role, name=REGISTRAR, title_name='Registrar')
 
 
 def create_services():

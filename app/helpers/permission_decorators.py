@@ -93,6 +93,20 @@ def is_moderator(f):
     return decorated_function
 
 
+def is_registrar(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        user = login.current_user
+        event_id = kwargs['event_id']
+        if user.is_staff:
+            return f(*args, **kwargs)
+        if not user.is_registrar(event_id):
+            abort(403)
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
 def can_accept_and_reject(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -156,9 +170,13 @@ def can_access(f):
         if user.is_staff:
             return f(*args, **kwargs)
         if 'events/' + str(event_id) + '/' in url:
-            if user.has_role(event_id):
-                return f(*args, **kwargs)
-            abort(403)
+            if not user.has_role(event_id):
+                abort(403)
+            if user.is_registrar(event_id):
+                if '/attendees' in url:
+                    return f(*args, **kwargs)
+                else:
+                    abort(403)
         if '/create/' in url or '/new/' in url:
             if '/events/create/' in url:
                 return f(*args, **kwargs)
