@@ -194,7 +194,7 @@ class DataManager(object):
         return notification_ids
 
     @staticmethod
-    def add_session_to_event(request, event_id, state=None, use_current_user=True):
+    def add_session_to_event(request, event_id, state=None, use_current_user=True, no_name=False):
         """
         Session will be saved to database with proper Event id
         :param use_current_user:
@@ -242,15 +242,17 @@ class DataManager(object):
         if form.get('session_type', None) != "":
             new_session.session_type_id = form.get('session_type', None)
 
-        speaker = Speaker.query.filter_by(email=form.get('email', '')).filter_by(event_id=event_id).first()
-        speaker = save_speaker(
-            request,
-            event_id=event_id,
-            speaker=speaker,
-            user=login.current_user if use_current_user else None
-        )
+        if form.get('email', '') != '':
+            speaker = Speaker.query.filter_by(email=form.get('email', '')).filter_by(event_id=event_id).first()
+            speaker = save_speaker(
+                request,
+                event_id=event_id,
+                speaker=speaker,
+                user=login.current_user if use_current_user else None,
+                no_name=no_name
+            )
 
-        new_session.speakers.append(speaker)
+            new_session.speakers.append(speaker)
 
         save_to_db(new_session, "Session saved")
 
@@ -278,7 +280,6 @@ class DataManager(object):
                     event_id=int(event_id), id=int(new_session.id)
                 ))
             new_session.video = video_url
-
         record_activity('create_session', session=new_session, event_id=event_id)
         update_version(event_id, False, 'sessions_ver')
 
