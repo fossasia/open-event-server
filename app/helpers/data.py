@@ -329,14 +329,21 @@ class DataManager(object):
         update_version(event_id, False, "sessions_ver")
 
     @staticmethod
-    def add_speaker_to_event(request, event_id, user=login.current_user):
+    def add_speaker_to_event(request, event_id, user=login.current_user, no_name=False):
         """
         Speaker will be saved to database with proper Event id
         :param user:
         :param request: view data form
         :param event_id: Speaker belongs to Event by event id
         """
-        speaker = save_speaker(request, event_id, user=user)
+        speaker = Speaker.query.filter_by(email=request.form.get('email', '')).filter_by(event_id=event_id).first()
+        speaker = save_speaker(
+            request,
+            event_id=event_id,
+            speaker=speaker,
+            user=user,
+            no_name=no_name
+        )
         update_version(event_id, False, "speakers_ver")
 
     @staticmethod
