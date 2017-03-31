@@ -53,7 +53,7 @@
                             </div>
                         </div>
                     </div>
-                    {% if user_speaker[0]['name'] == '' %}
+                    {% if user_speaker[0]['name'] == '' or not user_speaker[0] %}
                         <div id="speaker-session-modal" class="modal fade" tabindex="-1" role="dialog">
                             <div class="modal-dialog">
                                 <div class="modal-content">

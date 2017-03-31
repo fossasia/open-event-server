@@ -329,6 +329,17 @@ class DataManager(object):
         update_version(event_id, False, "sessions_ver")
 
     @staticmethod
+    def add_speaker_to_event(request, event_id, user=login.current_user):
+        """
+        Speaker will be saved to database with proper Event id
+        :param user:
+        :param request: view data form
+        :param event_id: Speaker belongs to Event by event id
+        """
+        speaker = save_speaker(request, event_id, user=user)
+        update_version(event_id, False, "speakers_ver")
+
+    @staticmethod
     def session_accept_reject(session, event_id, state, send_email=True, message=None, subject=None):
         session.state = state
         session.submission_date = datetime.now()

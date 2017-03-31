@@ -470,7 +470,7 @@ def process_event_cfs_speaker(identifier, via_hash=False):
         event = DataGetter.get_event_by_identifier(identifier)
         if not event.has_session_speakers:
             abort(404)
-        DataManager.add_session_to_event(request, event.id)
+        DataManager.add_speaker_to_event(request, event.id)
         if login.current_user.is_authenticated:
             flash("You have been registered as Speaker", "success")
             return redirect(url_for('event_detail.display_event_cfs', identifier=identifier))
