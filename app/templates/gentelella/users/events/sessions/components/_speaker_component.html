@@ -1,4 +1,4 @@
-{% set email_disabled = false if (current_user.is_authenticated and (current_user.is_admin or current_user.is_super_admin or current_user.is_organizer(event.id) or current_user.is_coorganizer(event.id) or current_user.is_track_organizer(event.id))) else true %}
+{% set email_disabled = false if (from_path != 'cfs' and (current_user.is_authenticated and (current_user.is_admin or current_user.is_super_admin or current_user.is_organizer(event.id) or current_user.is_coorganizer(event.id) or current_user.is_track_organizer(event.id)))) else true %}
 
 {% set textarea_speaker_fields = ['short_biography', 'long_biography', 'speaking_experience', 'sponsorship_required'] %}
 {% set media_speaker_fields = ['photo'] %}
