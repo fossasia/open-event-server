@@ -64,12 +64,16 @@
                                     <div class="modal-footer" style="padding:6px">
                                         <div class="existing-session" style="text-align:left">
                                             <h4>{{ _("Existing Sessions") }} </h4>
+                                            {% if not existing_sessions[0] %}
+                                            <p>No Existing Sessions!<br><p>
+                                            {% else %}
                                             {% for speaker_sessions in existing_sessions %}
                                                 {% if not loop.first %}<hr>{% endif %}
                                                 {% for session in speaker_sessions %}
                                                     {{ session }} <a href="{{ url_for('my_sessions.process_session_view',session_id=session.id) }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a><br>
                                                 {% endfor %}
                                             {% endfor %}
+                                            {% endif %}
                                         </div>
                                         <a href="/e/{{ event.identifier }}/cfs/new_speaker" type="button" class="btn btn-info" id = "speaker-button">{{ _("Register as a Speaker") }}</a>
                                         <a href="/e/{{ event.identifier }}/cfs/new/" type="button" class="btn btn-primary" id = "session-button" style="margin-top:-6px">{{ _("Propose Session") }}</a>
