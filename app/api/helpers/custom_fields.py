@@ -3,6 +3,7 @@ import colour
 from datetime import datetime
 from flask import request
 from flask.ext.restplus.fields import Raw, Nested, List
+from app.helpers.data_getter import DataGetter
 
 EMAIL_REGEX = re.compile(r'\S+@\S+\.\S+')
 URI_REGEX = re.compile(r'(http|https|ftp)://\S*(\S+\.|localhost(\:\d+)?/)\S+')
@@ -245,3 +246,20 @@ class ChoiceString(String):
             self.validation_error = 'Value of %s is not in available choices'
             return False
         return True
+
+
+class Licence(Raw):
+    """
+    Custom field that gets the licence details given the licence name
+    """
+    __schema_example__ = {
+        'name': 'Licence name',
+        'long_name': 'Long licence name',
+        'description': 'Description about the licence',
+        'licence_url': 'http://example.com',
+        'licence_logo': 'http://example.com/example.jpg',
+        'licence_compact_logo': 'http://example.com/example.jpg'
+    }
+
+    def format(self, value):
+        return DataGetter.get_licence_details(value)
