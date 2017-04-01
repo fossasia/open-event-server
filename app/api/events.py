@@ -23,6 +23,7 @@ from app.api.helpers.helpers import requires_auth, parse_args, \
 from app.api.helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, BaseDAO, ServiceDAO
 from app.api.helpers.utils import Resource, ETAG_HEADER_DEFN
+from app.api.helpers.custom_fields import Licence
 
 api = Namespace('events', description='Events')
 
@@ -58,6 +59,7 @@ SOCIAL_LINK = api.model('SocialLink', {
     'link': fields.String(required=True)
 })
 
+
 SOCIAL_LINK_POST = api.clone('SocialLinkPost', SOCIAL_LINK)
 del SOCIAL_LINK_POST['id']
 
@@ -86,6 +88,7 @@ EVENT = api.model('Event', {
     'privacy': EventPrivacyField(),
     'ticket_url': fields.Uri(),
     'copyright': fields.Nested(EVENT_COPYRIGHT, allow_null=True),
+    'licence_details': Licence(attribute='copyright.licence', allow_null=True),
     'schedule_published_on': fields.DateTime(),
     'code_of_conduct': fields.String(),
     'social_links': fields.List(fields.Nested(SOCIAL_LINK), attribute='social_link'),
@@ -113,7 +116,7 @@ EVENT_POST = api.clone('EventPost', EVENT)
 del EVENT_POST['id']
 del EVENT_POST['social_links']
 del EVENT_POST['version']
-
+del EVENT_POST['licence_details']
 
 # ###################
 # Data Access Objects
