@@ -30,7 +30,7 @@
                     {% else %}
                         <span class="detail-status label label-info">N/A</span>
                     {% endif %}
-                    <div class="btn-group pull-right">
+                    <div class="pull-right">
                         {% if session.state == 'pending' or session.state == 'accepted' or session.state == 'confirmed' or session.state == 'rejected' %}
                             <a href="{{ url_for('my_sessions.withdraw_session_view',session_id=session.id) }}"
                                class="btn btn-danger ">
@@ -39,8 +39,14 @@
                         {% endif %}
                         <a href="{{ url_for('my_sessions.process_session_view',session_id=session.id) }}"
                            class="btn btn-info">
-                            {{ _("Edit Proposal") }}
+                            {{ _("Edit Session Proposal") }}
                         </a>
+                        {% if user_speaker.name != '' %}
+                            <a href="{{ url_for('my_sessions.process_speaker_view',session_id=session.id) }}"
+                               class="btn btn-info">
+                                {{ _("Edit Speaker Details") }}
+                            </a>
+                        {% endif %}
                     </div>
                     <br>
                     <br>

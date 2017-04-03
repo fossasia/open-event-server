@@ -8,7 +8,7 @@
 
 {% endblock %}
 {% block title %}
-    {{ session.title }} - My Sessions
+    {{ speaker.name }} - My Sessions
 {% endblock %}
 
 {% block body %}
@@ -16,7 +16,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel" style="min-height:600px;">
                 <div class="x_content">
-                    {% include 'gentelella/users/events/sessions/components/session_speaker_form.html' %}
+                    {% include 'gentelella/users/events/sessions/components/speaker_form.html' %}
                 </div>
             </div>
         </div>
