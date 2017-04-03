@@ -140,6 +140,8 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 
 ### 3. Session
 
+Note: If the `microlocation` field of the session is null, the session is unscheduled in the event scheduler.
+
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |
 |**id** | integer | Required | Public |
