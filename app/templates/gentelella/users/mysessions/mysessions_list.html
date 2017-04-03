@@ -49,7 +49,7 @@
                     {% endif %}
                 {% endfor %}
                 {% if not event_image.status %}
-                    {% set bg = url_for("static", filename="placeholders/thumbnails/" + placeholder_images["Other"]) %}
+                    {% set bg = url_for("static", filename="placeholders/" + placeholder_images["Other"]) %}
                 {% endif %}
             {% endif %}
 
