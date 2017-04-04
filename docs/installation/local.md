@@ -33,7 +33,14 @@ nvm install 6.9.1
 
 Make sure you have the dependencies mentioned above installed before proceeding further.
 
-* **Step 1** - Install python requirements. You need to be present into the root directory of the project.
+* **Step 0** - Clone the Open Event Orga Server repository (from the development branch) and ```cd ``` into the directory.
+```sh
+git clone -b development https://github.com/fossasia/open-event-orga-server.git
+cd open-event-orga-server
+```
+
+
+* **Step 1** - Install python requirements. You need to be present into the root directoryt  of the project.
 
 ```sh
 sudo -H pip install -r requirements.txt
