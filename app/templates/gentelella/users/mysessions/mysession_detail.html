@@ -42,7 +42,7 @@
                             {{ _("Edit Session Proposal") }}
                         </a>
                         {% if user_speaker.name != '' %}
-                            <a href="{{ url_for('my_sessions.process_speaker_view',session_id=session.id) }}"
+                            <a href="{{ url_for('my_sessions.process_speaker_view',speaker_id=user_speaker.id) }}"
                                class="btn btn-info">
                                 {{ _("Edit Speaker Details") }}
                             </a>

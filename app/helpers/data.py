@@ -448,6 +448,10 @@ class DataManager(object):
             update_version(event_id, False, "sessions_ver")
 
     @staticmethod
+    def edit_speaker(request, speaker):
+        save_speaker(request, event_id=speaker.event_id, speaker=speaker)
+
+    @staticmethod
     def remove_role(uer_id):
         """
         Role will be removed from database

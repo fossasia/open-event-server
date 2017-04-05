@@ -96,33 +96,33 @@ def process_session_view(session_id):
         return redirect(url_for('.display_session_view', session_id=session_id))
 
 
-@my_sessions.route('/<int:session_id>/speaker-edit/', methods=('POST', 'GET'))
-def process_speaker_view(session_id):
+@my_sessions.route('/<int:speaker_id>/speaker-edit/', methods=('POST', 'GET'))
+def process_speaker_view(speaker_id):
     if request.method == 'GET':
-        session = DataGetter.get_sessions_of_user_by_id(session_id)
-        speaker = DataGetter.get_speakers(session.event_id).filter_by(user_id=login.current_user.id).first()
+        speaker = DataGetter.get_speaker(speaker_id)
         if not speaker or speaker.name == '':
             abort(404)
-        form_elems = DataGetter.get_custom_form_elements(session.event_id)
+        form_elems = DataGetter.get_custom_form_elements(speaker.event_id)
         if not form_elems:
             flash("Speaker and Session forms have been incorrectly configured for this event."
                   " Session creation has been disabled", "danger")
-            return redirect(url_for('.display_my_sessions_view', event_id=session.event_id))
+            return redirect(url_for('.display_my_sessions_view', event_id=speaker.event_id))
         speaker_form = json.loads(form_elems.speaker_form)
-        event = DataGetter.get_event(session.event_id)
+        event = DataGetter.get_event(speaker.event_id)
         return render_template(
             'gentelella/users/mysessions/mysession_speaker_edit.html',
-            photo_delete_url=url_for('.avatar_delete', event_id=event.id, speaker_id=speaker.id),
+            photo_delete_url=url_for('.avatar_delete',
+            event_id=event.id,
+            speaker_id=speaker.id),
             speaker_form=speaker_form,
             event=event,
             speaker=speaker)
 
     if request.method == 'POST':
-        session = DataGetter.get_sessions_of_user_by_id(session_id)
-        speaker = DataGetter.get_speakers(session.event_id).filter_by(user_id=login.current_user.id).first()
-        DataManager.edit_session(request, session, speaker)
-        flash("The session has been updated successfully", "success")
-        return redirect(url_for('.display_session_view', session_id=session_id))
+        speaker = DataGetter.get_speaker(speaker_id)
+        DataManager.edit_speaker(request, speaker)
+        flash("The speaker has been updated successfully", "success")
+        return redirect(url_for('.display_my_sessions_view', event_id=speaker.event_id))
 
 
 @my_sessions.route('/<int:event_id>/speakers/<int:speaker_id>/avatar', methods=('DELETE',))
