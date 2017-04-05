@@ -95,9 +95,8 @@
                                                 <h4>{{ _("Existing Sessions") }} </h4>
                                                 <p>No Existing Sessions! Please Click on <b>Add Session Proposal</b> to submit a new session.<br><br></p>
                                             </div>
-                                            <div class="add_proposal">
-                                                <a href="/e/{{ event.identifier }}/cfs/new_session" type="button" class="btn btn-success" id = "session-button" style="margin-top:-6px">{{ _("Add Session Proposal") }} </a>
-                                            </div>
+                                            <a href="{{ url_for('my_sessions.process_speaker_view',speaker=user_speaker[0]['id']) }}" type="button" class="btn btn-info" id = "speaker-button">{{ _("Edit Speaker Details") }}</a>
+                                            <a href="/e/{{ event.identifier }}/cfs/new_session" type="button" class="btn btn-success" id = "session-button" style="margin-top:-6px">{{ _("Add Session Proposal") }} </a>
                                         </div>
                                     </div>
                                 </div>
@@ -120,9 +119,8 @@
                                                     {% endfor %}
                                                 {% endfor %}
                                             </div>
-                                            <div class="add_proposal">
-                                                <a href="/e/{{ event.identifier }}/cfs/new_session" type="button" class="btn btn-success" id = "session-button" style="margin-top:-6px">{{ _("Add Session Proposal") }}</a>
-                                            </div>
+                                            <a href="{{ url_for('my_sessions.process_speaker_view',speaker_id=user_speaker[0]['id']) }}" type="button" class="btn btn-info" id = "speaker-button">{{ _("Edit Speaker Details") }}</a>
+                                            <a href="/e/{{ event.identifier }}/cfs/new_session" type="button" class="btn btn-success" id = "session-button" style="margin-top:-6px">{{ _("Add Session Proposal") }}</a>
                                         </div>
                                     </div>
                                 </div>
