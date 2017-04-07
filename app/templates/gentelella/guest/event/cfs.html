@@ -19,15 +19,15 @@
                 <p {% if via_hash %}style="display:none;"{% endif %}>
                     {% if state == 'now' %}
                         <span class="label label-success">{{ _("Open") }}</span>
+                        Call open until {{ call_for_speakers.end_date.strftime('%a, %B %d %Y at %I:%M %p') }}
                     {% elif state == 'past' %}
                         <span class="label label-danger">{{ _("Closed") }}</span>
                     {% elif state == 'future' %}
                         <span class="label label-info">{{ _("Yet to Open") }}</span>
+                        Call open from {{ call_for_speakers.start_date.strftime('%a, %B %d %Y at %I:%M %p')}} until {{ call_for_speakers.end_date.strftime('%a, %B %d %Y at %I:%M %p') }}
                     {% endif %}
                 </p>
-                <p><strong>{{ call_for_speakers.start_date.strftime('%a, %B %d %Y at %I:%M %p') }}</strong>
-                    to
-                    <strong>{{ call_for_speakers.end_date.strftime('%a, %B %d %Y at %I:%M %p') }}</strong></p>
+
                 {{ call_for_speakers.announcement | safe }}
                 {% if state == "now" or via_hash %}
                     {% if current_user.is_authenticated %}
@@ -102,7 +102,7 @@
                                     </div>
                                 </div>
                             </div>
-                        {% else %}   
+                        {% else %}
                             <div id="speaker-session-modal" class="modal fade" tabindex="-1" role="dialog">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
