@@ -11,7 +11,7 @@
         <img src="{{ speaker.thumbnail if speaker.thumbnail and speaker.thumbnail != '' and '.' in speaker.thumbnail else speaker.photo }}" width="100%" onerror="imgError(this);"><br>
         <h4 style="font-weight: 500;">{{ speaker.name }}</h4>
         <h5 style="margin-top: 0;">{{ speaker.organisation }}</h5>
-        <div class="speaker-links" style="margin-top: -10px">
+        <div class="speaker-links">
             {% if speaker.website %}<a href="{{ speaker.website }}"><i class="fa fa-external-link-square"></i></a>{% endif %}
             {% if speaker.facebook %}<a href="{{ speaker.facebook }}"><i class="fa fa-facebook-square"></i></a>{% endif %}
             {% if speaker.twitter %}<a href="{{ speaker.twitter }}"><i class="fa fa-twitter-square"></i></a>{% endif %}
@@ -26,7 +26,7 @@
 
 {% macro featured_speaker_info(speaker, count) %}
     <div class="col-sm-6">
-        <div class="col-sm-6 col-xs-12">
+        <div class="col-sm-6 col-xs-12" style="margin-left: 0;">
             <img src="{{ speaker.thumbnail if speaker.thumbnail and speaker.thumbnail != '' and '.' in speaker.thumbnail else speaker.photo }}" style="margin-top:10px" width="100%" onerror="imgError(this);"><br>
             <div class="text-center speaker-links hidden-xs">
                 {% if speaker.website %}<a href="{{ speaker.website }}"><i class="fa fa-external-link-square"></i></a>{% endif %}
