@@ -11,7 +11,7 @@
                 <th>{{ _("Speakers") }}</th>
                 <th>{{ _("Tickets") }}</th>
                 <th>{{ _("Public") }} URL</th>
-                <th></th>
+                <th>{{ _("Actions") }}</th>
             </tr>
             </thead>
             <tbody>
@@ -42,7 +42,7 @@
                 {% endfor %}
 
                 <tr>
-                  <td><a href="{{ url_for('events.details_view', event_id=event.id) }}"><img src="{{ event.logo }}" style="width: 7rem; height: 5rem;" onerror="imgError(this);"><p style ="padding:8px;">{{ event.name }}</p></a></td>
+                  <td><a href="{{ url_for('events.details_view', event_id=event.id) }}"><img src="{{ event.logo }}" style="width: 65%;" onerror="imgError(this);"><p style ="padding:8px;">{{ event.name }}</p></a></td>
                     <td>{{ event.start_time.strftime('%B %d, %Y - %I:%M %p') }}<br>(to)<br>{{ event.end_time.strftime('%B %d, %Y - %I:%M %p') }}
                     </td>
                     <td>
