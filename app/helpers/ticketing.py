@@ -570,7 +570,7 @@ class TicketingManager(object):
         invoice_id = order.get_invoice_number()
         order_url = url_for('ticketing.view_order_after_payment', order_identifier=order.identifier, _external=True)
         if login.current_user.is_organizer(event_id):
-            trigger_after_purchase_notifications(email, order.event_id, order.event, invoice_id, order_url)
+            trigger_after_purchase_notifications(email, order.event_id, order.event, invoice_id, order_url, resend=True)
             send_email_for_after_purchase(email, invoice_id, order_url, order.event.name, order.event.organizer_name)
             return True
         return False
