@@ -81,7 +81,7 @@ body {
   color: #5d5d5d;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
 
   .event-info-container-holder {
     margin-left: 70px;

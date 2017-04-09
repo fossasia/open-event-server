@@ -92,7 +92,7 @@
 
 {% block body %}
     <div class="overlay"></div>
-    <div class="mobile-menu hidden-sm hidden-lg hidden-md">
+    <div class="mobile-menu hidden-lg hidden-md">
         <ul class="nav nav-pills review-menu mobile">
             <li {% if active_page == 'info' %}class="active"{% endif %} id="info-menu"><a
                     href="/e/{{ event.identifier }}/#info">Info</a></li>
@@ -116,7 +116,7 @@
             {% endif %}
         </ul>
     </div>
-    <div class="scrollspy hidden-xs" id="scrollspy">
+    <div class="scrollspy hidden-xs hidden-sm" id="scrollspy">
         <ul class="nav nav-pills nav-stacked preview-menu">
             <li {% if active_page == 'info' %}class="active"{% endif %} id="info-menu"><a
                     href="/e/{{ event.identifier }}/#info">Info</a></li>
@@ -172,11 +172,11 @@
     <div class="row">
         <div class = "col-xs-12
         {% if active_page =='sessions' or active_page == 'schedule' %}
-            col-md-10 col-sm-10
+            col-md-10 col-sm-12
         {% else %}
-            col-md-8 col-sm-8
+            col-md-8 col-sm-10
         {% endif %}
-         col-md-push-1 col-sm-push-2 event-info-container-holder"
+         col-md-push-1 event-info-container-holder"
         style="min-height: 600px;">
 
             {% block content %}
