@@ -3,7 +3,7 @@ from flask.ext.restplus import Namespace
 from app.helpers.ticketing import TicketingManager
 from app.api.helpers import custom_fields as fields
 from app.api.helpers.helpers import (
-    requires_auth)
+    requires_auth, replace_event_id)
 from app.api.helpers.utils import POST_RESPONSES
 from app.api.helpers.utils import Resource
 from app.helpers.data_getter import DataGetter
@@ -31,9 +31,10 @@ TICKET = api.model('Ticket', {
 })
 
 
-@api.route('/events/<int:event_id>/tickets/')
+@api.route('/events/<string:event_id>/tickets/')
 class TicketsList(Resource):
     @requires_auth
+    @replace_event_id
     @api.doc('tickets', responses=POST_RESPONSES)
     @api.marshal_list_with(TICKET)
     def get(self, event_id):
@@ -41,9 +42,10 @@ class TicketsList(Resource):
         return DataGetter.get_sales_open_tickets(event_id=event_id).all()
 
 
-@api.route('/events/<int:event_id>/tickets/<int:ticket_id>')
+@api.route('/events/<string:event_id>/tickets/<int:ticket_id>')
 class Ticket(Resource):
     @requires_auth
+    @replace_event_id
     @api.doc('ticket', responses=POST_RESPONSES)
     @api.marshal_with(TICKET)
     def get(self, event_id, ticket_id):
@@ -51,9 +53,10 @@ class Ticket(Resource):
         return TicketingManager.get_ticket(ticket_id=ticket_id)
 
 
-@api.route('/events/<int:event_id>/orders/<string:identifier>')
+@api.route('/events/<string:event_id>/orders/<string:identifier>')
 class Order(Resource):
     @requires_auth
+    @replace_event_id
     @api.doc('order', responses=POST_RESPONSES)
     @api.marshal_with(ORDER)
     def get(self, event_id, identifier):

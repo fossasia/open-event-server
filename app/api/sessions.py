@@ -15,8 +15,8 @@ from app.api.helpers import custom_fields as fields
 from app.api.helpers.helpers import (
     can_create,
     can_update,
-    can_delete
-)
+    can_delete,
+    replace_event_id)
 from app.api.helpers.helpers import save_db_model, get_object_in_event, \
     model_custom_form, requires_auth, parse_args
 from app.api.helpers.special_fields import SessionLanguageField, SessionStateField
@@ -237,10 +237,11 @@ class SessionResource():
     session_parser.add_argument('order_by', dest='__sessions_order_by')
 
 
-@api.route('/events/<int:event_id>/sessions/<int:session_id>')
+@api.route('/events/<string:event_id>/sessions/<int:session_id>')
 @api.doc(responses=SERVICE_RESPONSES)
 class Session(Resource):
     @api.doc('get_session')
+    @replace_event_id
     @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_with(SESSION)
     def get(self, event_id, session_id):
@@ -248,6 +249,7 @@ class Session(Resource):
         return DAO.get(event_id, session_id)
 
     @requires_auth
+    @replace_event_id
     @can_delete(DAO)
     @api.doc('delete_session')
     @api.marshal_with(SESSION)
@@ -256,6 +258,7 @@ class Session(Resource):
         return DAO.delete(event_id, session_id)
 
     @requires_auth
+    @replace_event_id
     @can_update(DAO)
     @api.doc('update_session', responses=PUT_RESPONSES)
     @api.marshal_with(SESSION)
@@ -265,8 +268,9 @@ class Session(Resource):
         return DAO.update(event_id, session_id, self.api.payload)
 
 
-@api.route('/events/<int:event_id>/sessions')
+@api.route('/events/<string:event_id>/sessions')
 class SessionList(Resource, SessionResource):
+    @replace_event_id
     @api.doc('list_sessions', params=SESSIONS_PARAMS)
     @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_list_with(SESSION)
@@ -275,6 +279,7 @@ class SessionList(Resource, SessionResource):
         return DAO.list(event_id, **parse_args(self.session_parser))
 
     @requires_auth
+    @replace_event_id
     @can_create(DAO)
     @api.doc('create_session', responses=POST_RESPONSES)
     @api.marshal_with(SESSION)
@@ -290,9 +295,10 @@ class SessionList(Resource, SessionResource):
         return item
 
 
-@api.route('/events/<int:event_id>/sessions/page')
+@api.route('/events/<string:event_id>/sessions/page')
 class SessionListPaginated(Resource, PaginatedResourceBase, SessionResource):
     @api.doc('list_sessions_paginated', params=PAGE_PARAMS)
+    @replace_event_id
     @api.doc(params=SESSIONS_PARAMS)
     @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_with(SESSION_PAGINATED)
@@ -306,9 +312,10 @@ class SessionListPaginated(Resource, PaginatedResourceBase, SessionResource):
 
 # Use Session DAO to check for permission
 
-@api.route('/events/<int:event_id>/sessions/types')
+@api.route('/events/<string:event_id>/sessions/types')
 class SessionTypeList(Resource):
     @api.doc('list_session_types')
+    @replace_event_id
     @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_list_with(SESSION_TYPE)
     def get(self, event_id):
@@ -329,9 +336,10 @@ class SessionTypeList(Resource):
         )
 
 
-@api.route('/events/<int:event_id>/sessions/types/<int:type_id>')
+@api.route('/events/<string:event_id>/sessions/types/<int:type_id>')
 class SessionType(Resource):
     @requires_auth
+    @replace_event_id
     @can_delete(DAO)
     @api.doc('delete_session_type')
     @api.marshal_with(SESSION_TYPE)
@@ -340,6 +348,7 @@ class SessionType(Resource):
         return TypeDAO.delete(event_id, type_id)
 
     @requires_auth
+    @replace_event_id
     @can_update(DAO)
     @api.doc('update_session_type', responses=PUT_RESPONSES)
     @api.marshal_with(SESSION_TYPE)
@@ -349,6 +358,7 @@ class SessionType(Resource):
         return TypeDAO.update(event_id, type_id, self.api.payload)
 
     @api.hide
+    @replace_event_id
     @api.header(*ETAG_HEADER_DEFN)
     @api.marshal_with(SESSION_TYPE)
     def get(self, event_id, type_id):

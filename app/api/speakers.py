@@ -10,8 +10,8 @@ from app.api.helpers import custom_fields as fields
 from app.api.helpers.helpers import (
     can_create,
     can_update,
-    can_delete
-)
+    can_delete,
+    replace_event_id)
 from app.api.helpers.helpers import model_custom_form, requires_auth
 from app.api.helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
@@ -126,9 +126,10 @@ def speakers_marshal_with(fields=None, fields_private=None):
 # API Resource
 # ############
 
-@api.route('/events/<int:event_id>/speakers/<int:speaker_id>')
+@api.route('/events/<string:event_id>/speakers/<int:speaker_id>')
 @api.doc(responses=SERVICE_RESPONSES)
 class Speaker(Resource):
+    @replace_event_id
     @api.doc('get_speaker', model=SPEAKER)
     @api.header(*ETAG_HEADER_DEFN)
     @speakers_marshal_with()
@@ -137,6 +138,7 @@ class Speaker(Resource):
         return DAO.get(event_id, speaker_id)
 
     @requires_auth
+    @replace_event_id
     @can_delete(DAO)
     @api.doc('delete_speaker', model=SPEAKER)
     @speakers_marshal_with()
@@ -145,6 +147,7 @@ class Speaker(Resource):
         return DAO.delete(event_id, speaker_id)
 
     @requires_auth
+    @replace_event_id
     @can_update(DAO)
     @api.doc('update_speaker', responses=PUT_RESPONSES, model=SPEAKER)
     @speakers_marshal_with()
@@ -154,9 +157,10 @@ class Speaker(Resource):
         return DAO.update(event_id, speaker_id, self.api.payload)
 
 
-@api.route('/events/<int:event_id>/speakers')
+@api.route('/events/<string:event_id>/speakers')
 class SpeakerList(Resource):
     @api.doc('list_speakers', model=[SPEAKER])
+    @replace_event_id
     @api.header(*ETAG_HEADER_DEFN)
     @speakers_marshal_with()
     def get(self, event_id):
@@ -164,6 +168,7 @@ class SpeakerList(Resource):
         return DAO.list(event_id)
 
     @requires_auth
+    @replace_event_id
     @can_create(DAO)
     @api.doc('create_speaker', responses=POST_RESPONSES, model=SPEAKER)
     @speakers_marshal_with()
@@ -177,9 +182,10 @@ class SpeakerList(Resource):
         )
 
 
-@api.route('/events/<int:event_id>/speakers/page')
+@api.route('/events/<string:event_id>/speakers/page')
 class SpeakerListPaginated(Resource, PaginatedResourceBase):
     @api.doc('list_speakers_paginated', params=PAGE_PARAMS)
+    @replace_event_id
     @api.doc(model=SPEAKER_PAGINATED)
     @api.header(*ETAG_HEADER_DEFN)
     @speakers_marshal_with(fields=SPEAKER_PAGINATED, fields_private=SPEAKER_PAGINATED_PRIVATE)
