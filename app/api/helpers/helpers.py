@@ -10,6 +10,7 @@ from flask.ext.scrypt import check_password_hash
 from flask_jwt import jwt_required, JWTError, current_identity
 from sqlalchemy import func
 
+from app.helpers.helpers import represents_int
 from app.helpers.data import save_to_db, delete_from_db
 from app.models import db
 from app.models.event import Event as EventModel
@@ -419,6 +420,27 @@ def model_custom_form(cf_data, model):
 ###################################
 # Permission Decorators for Event #
 ###################################
+
+def replace_event_id(func):
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        event_id = kwargs.get('event_id')
+        if not event_id:
+            raise ServerError()
+        # Check if event exists
+        if not represents_int(event_id):
+            event = EventModel.query.filter_by(identifier=event_id).first()
+        else:
+            event = EventModel.query.get(event_id)
+        if event is None or event.in_trash:
+            raise NotFoundError(message='{} does not exist'.format(EventModel.__name__))
+
+        kwargs['event_id'] = event.id
+        return func(*args, **kwargs)
+
+    return wrapper
+
 
 def staff_only(func):
     @wraps(func)
