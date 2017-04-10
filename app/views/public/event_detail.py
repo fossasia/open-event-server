@@ -118,10 +118,13 @@ def display_event_sessions(identifier):
     call_for_speakers = DataGetter.get_call_for_papers(event.id).first()
     accepted_session_count = get_count(DataGetter.get_sessions(event.id))
     tracks = DataGetter.get_tracks(event.id)
-    return render_template('gentelella/guest/event/sessions.html', event=event,
-                           placeholder_images=placeholder_images, tracks=tracks,
+    return render_template('gentelella/guest/event/sessions.html',
+                           event=event,
+                           placeholder_images=placeholder_images,
+                           tracks=tracks,
                            accepted_sessions_count=accepted_session_count,
-                           call_for_speakers=call_for_speakers, custom_placeholder=custom_placeholder)
+                           call_for_speakers=call_for_speakers,
+                           custom_placeholder=custom_placeholder)
 
 
 @event_detail.route('/<identifier>/schedule/')
@@ -138,12 +141,16 @@ def display_event_schedule(identifier):
         abort(404)
     tracks = DataGetter.get_tracks(event.id)
     accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
+    call_for_speakers = DataGetter.get_call_for_papers(event.id).first()
     if accepted_sessions_count == 0 or not event.schedule_published_on:
         abort(404)
-    return render_template('gentelella/guest/event/schedule.html', event=event,
+    return render_template('gentelella/guest/event/schedule.html',
+                           event=event,
                            placeholder_images=placeholder_images,
                            accepted_sessions_count=accepted_sessions_count,
-                           tracks=tracks, custom_placeholder=custom_placeholder)
+                           call_for_speakers=call_for_speakers,
+                           tracks=tracks,
+                           custom_placeholder=custom_placeholder)
 
 
 @event_detail.route('/<identifier>/schedule/pentabarf.xml')

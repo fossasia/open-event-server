@@ -67,8 +67,19 @@ div {
     margin-right: 30px;
 }
 
+@media screen and (max-width: 768px) {
+    .microlocation-container {
+        max-width: 70vw;
+    }
+}
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 425px) {
+    .microlocation-container {
+        max-width: 50vw;
+    }
+}
+
+@media screen and (max-width: 992px) {
     .scheduler-pop .scheduler-body {
         top: 100px;
     }
