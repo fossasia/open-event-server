@@ -1093,6 +1093,49 @@ $(".timeline").scroll(function () {
 });
 
 /**
+ * Handle track-view and session-view sessions search
+ */
+$("#sessions-public-search").valueChange(function (value) {
+    var trackFiltered = [];
+    var sessionFiltered = [];
+    var trackSessionRows = $("#tracks-timeline .mobile-sessions-holder .event").parent().parent();
+    var sessionSessionRows = $('#session-view-holder .list-group-item');
+
+    if (_.isEmpty(value) || value === "") {
+        trackFiltered = trackSessionRows;
+        sessionFiltered = sessionSessionRows;
+    } else {
+        trackFiltered = _.filter($(trackSessionRows), function (session) {
+            return fuzzyMatch($(session).find('.title').text(), value);
+        });
+        sessionFiltered = _.filter($(sessionSessionRows), function (session) {
+            return fuzzyMatch($(session).find('.session-title').text(), value);
+        });
+    }
+
+    $(trackSessionRows).hide();
+    $(sessionSessionRows).hide();
+
+    if (trackFiltered.length === 0) {
+        $(".no-sessions-info").show();
+    } else {
+        $(".no-sessions-info").hide();
+        _.each(trackFiltered, function (session) {
+            $(session).show();
+        });
+    }
+
+    if (sessionFiltered.length === 0) {
+        $(".no-sessions-info").show();
+    } else {
+        $(".no-sessions-info").hide();
+        _.each(sessionFiltered, function (session) {
+            $(session).show();
+        });
+    }
+});
+
+/**
  * Handle unscheduled sessions search
  */
 $("#sessions-search").valueChange(function (value) {
@@ -1162,6 +1205,7 @@ $(document)
     .on("click", ".date-change-btn", function () {
         $(this).addClass("active").siblings().removeClass("active");
         loadMicrolocationsToTimeline($(this).text());
+        $("#sessions-public-search").val("");
     })
     .on("click", ".session.scheduled > .remove-btn", function () {
         addSessionToUnscheduled($(this).parent());
@@ -1180,7 +1224,6 @@ $(document)
     .on("click", ".rooms-view", function(){
         $dayButtonsHolder.show();
         $timeline.removeClass('hidden');
-        $mobileTimeline.removeClass('hidden');
         $tracksTimeline.addClass('hidden');
         $sessionViewHolder.addClass('hidden');
         $(this).addClass("active").siblings().removeClass("active");
