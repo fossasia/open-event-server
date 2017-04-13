@@ -48,6 +48,17 @@
                 </div>
 
                 <div class="scheduler-body">
+                    <nav id="public-track-navbar" class="navbar navbar-default track-navbar hidden" style="margin-top: 25px;">
+                        <div class="container-fluid track-container-fluid">
+                            <div class="navbar-collapse track-navbar-collapse" id="bs-example-navbar-collapse-1">
+                                <ul class="nav navbar-nav" style="max-width: 100%">
+                                    {% for track in tracks %}
+                                        <li class="track-link"><i class="fa fa-circle" aria-hidden="true"></i><a href="#track-id-{{ track.id }}">{{ track.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
                     <div class="flash-message-holder" style="width: 100%; text-align: center;">
                         <span class="text-muted message loading-text"
                               style="font-weight: 300; font-size: 30px;">{{ _("Sessions loading") }} ...</span>

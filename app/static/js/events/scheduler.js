@@ -986,6 +986,7 @@ function loadMicrolocationsToTimeline(day) {
             var $trackElement = $(mobileMicrolocationTemplate);
             $trackElement.find('.name').text(track.name);
             $trackElement.attr("data-track-id", track.id);
+            $trackElement.attr("id", "track-id-"+track.id);
             $tracksTimeline.append($trackElement);
         }
     });
@@ -1226,6 +1227,7 @@ $(document)
         $timeline.removeClass('hidden');
         $tracksTimeline.addClass('hidden');
         $sessionViewHolder.addClass('hidden');
+        $('#public-track-navbar').addClass('hidden');
         $(this).addClass("active").siblings().removeClass("active");
     })
     .on("click", ".tracks-view", function(){
@@ -1234,6 +1236,7 @@ $(document)
         $mobileTimeline.addClass('hidden');
         $tracksTimeline.removeClass('hidden');
         $sessionViewHolder.addClass('hidden');
+        $('#public-track-navbar').removeClass('hidden');
         $(this).addClass("active").siblings().removeClass("active");
     })
     .on("click", ".sessions-view", function() {
@@ -1242,6 +1245,7 @@ $(document)
         $timeline.addClass('hidden');
         $mobileTimeline.addClass('hidden');
         $tracksTimeline.addClass('hidden');
+        $('#public-track-navbar').addClass('hidden');
         $(this).addClass("active").siblings().removeClass("active");
 
     })
