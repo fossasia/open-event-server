@@ -2,7 +2,12 @@
     "name": "open-event-orga-server",
     "description": "Open Event Orga Server ",
     "scripts": {
-        "postinstall": "node node_modules/bower/bin/bower install"
+        "bootstrap-install-devDeps": "cd node_modules/bootstrap && NODE_ENV= NPM_CONFIG_PRODUCTION=false npm_config_production=false npm install",
+        "//": "while we are grunt from node_modules/bootstrap, grunt expects a copy of grunt in the same directory as the Gruntfile (ie. vendor/bootstrap)",
+        "bootstrap-noprint-grunt": "cd vendor/bootstrap && npm install",
+        "bootstrap-noprint": "npm run bootstrap-install-devDeps && npm run bootstrap-noprint-grunt && cd node_modules/bootstrap && node node_modules/grunt/bin/grunt --base . --gruntfile ../../vendor/bootstrap/Gruntfile.js noprint-css",
+        "bootstrap-noprint-dist": "cp vendor/bootstrap/dist/css/* app/static/vendor/bootstrap/dist/css/",
+        "postinstall": "npm run bootstrap-noprint && node node_modules/bower/bin/bower install && npm run bootstrap-noprint-dist"
     },
     "repository": {
         "type": "git",
@@ -20,9 +25,11 @@
     "homepage": "https://github.com/fossasia/open-event-orga-server#readme",
     "cacheDirectories": [
         "node_modules",
+        "vendor/bootstrap/node_modules",
         "app/static/vendor"
     ],
     "dependencies": {
-        "bower": "^1.7.9"
+        "bower": "^1.7.9",
+        "bootstrap": "~3"
     }
 }
