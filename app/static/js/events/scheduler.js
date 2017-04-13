@@ -1065,8 +1065,8 @@ function initializeTimeline(eventId) {
                 $('.remove-btn').hide();
             }
             $(".rooms-view").addClass('active');
-
-            $('.microlocation-container').css("width", $(".microlocations.x1").width() + "px");
+            var max_width = $("#timeline").width() - $(".timeunits.x1").width();
+            $('.microlocation-container').css("max-width", max_width + "px");
 
             $(document).trigger({
                 type: "scheduling:recount",
