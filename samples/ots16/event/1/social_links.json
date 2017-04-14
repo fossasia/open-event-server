@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "link": "https://twitter.com/opntec",
+        "name": "Twitter"
+    },
+    {
+        "id": 2,
+        "link": "https://github.com/opentechsummit",
+        "name": "Github"
+    },
+    {
+        "id": 3,
+        "link": "https://www.facebook.com/OpenTechSummit",
+        "name": "Facebook"
+    },
+    {
+        "id": 4,
+        "link": "https://www.flickr.com/search/?q=openxlab",
+        "name": "Flickr"
+    },
+    {
+        "id": 5,
+        "link": "https://plus.google.com/u/0/111141930325574830495",
+        "name": "Google Plus"
+    },
+    {
+        "id": 6,
+        "link": "https://www.youtube.com/channel/UCJoKp-gG2t7lH5_hiKp95yA",
+        "name": "YouTube"
+    }
+]

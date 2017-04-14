@@ -1,0 +1,7 @@
+[
+    {
+        "id": 1,
+        "session_form": "{\"short_abstract\":{\"require\":0,\"include\":1},\"subtitle\":{\"require\":0,\"include\":0},\"session_type\":{\"require\":0,\"include\":0},\"track\":{\"require\":0,\"include\":0},\"slides\":{\"require\":0,\"include\":1},\"video\":{\"require\":0,\"include\":0},\"long_abstract\":{\"require\":0,\"include\":0},\"language\":{\"require\":0,\"include\":0},\"title\":{\"require\":1,\"include\":1},\"comments\":{\"require\":0,\"include\":1},\"audio\":{\"require\":0,\"include\":0}}",
+        "speaker_form": "{\"website\":{\"require\":0,\"include\":1},\"short_biography\":{\"require\":0,\"include\":1},\"photo\":{\"require\":0,\"include\":1},\"twitter\":{\"require\":0,\"include\":1},\"linkedin\":{\"require\":0,\"include\":0},\"facebook\":{\"require\":0,\"include\":0},\"github\":{\"require\":0,\"include\":0},\"name\":{\"require\":1,\"include\":1},\"long_biography\":{\"require\":0,\"include\":0},\"mobile\":{\"require\":0,\"include\":0},\"country\":{\"require\":0,\"include\":1},\"organisation\":{\"require\":0,\"include\":1},\"position\":{\"require\":0,\"include\":1},\"email\":{\"require\":1,\"include\":1}}"
+    }
+]

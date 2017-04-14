@@ -1,0 +1,147 @@
+[
+    {
+        "id": 1, 
+        "length": 0.3, 
+        "name": "Ganzt\u00e4giger L\u00f6tworkshop / Soldering Workshop"
+    }, 
+    {
+        "id": 2, 
+        "length": 0.3, 
+        "name": "Workshop/Ausstellung/Exhibition"
+    }, 
+    {
+        "id": 3, 
+        "length": 0.3, 
+        "name": "Infotisch, Ausstellung, Exhibition, Gem\u00fctliche Kissenecke"
+    }, 
+    {
+        "id": 4, 
+        "length": 0.3, 
+        "name": "Workshop und Infotisch"
+    }, 
+    {
+        "id": 5, 
+        "length": 0.3, 
+        "name": "Infotisch mit Workshops / Info table and Workshops"
+    }, 
+    {
+        "id": 6, 
+        "length": 0.3, 
+        "name": "Hackspace-Infotisch, Exhibition"
+    }, 
+    {
+        "id": 7, 
+        "length": 0.3, 
+        "name": "Freie Software-Infoecke / Information Corner"
+    }, 
+    {
+        "id": 8, 
+        "length": 0.3, 
+        "name": "Infotisch/Info Table"
+    }, 
+    {
+        "id": 9, 
+        "length": 0.3, 
+        "name": "Hardware Hacks"
+    }, 
+    {
+        "id": 10, 
+        "length": 0.3, 
+        "name": "Workshop mit befreiten Strickmaschinen / Knitting Machines with Open Source"
+    }, 
+    {
+        "id": 11, 
+        "length": 0.3, 
+        "name": "Infotisch / Showcase Table"
+    }, 
+    {
+        "id": 12, 
+        "length": 0.3, 
+        "name": "Awesome Workshop"
+    }, 
+    {
+        "id": 13, 
+        "length": 0.3, 
+        "name": "Workshop und Infotisch / Showcase Table"
+    }, 
+    {
+        "id": 14, 
+        "length": 0.3, 
+        "name": "Workshop, 2h"
+    }, 
+    {
+        "id": 15, 
+        "length": 0.3, 
+        "name": "Workshop, 5h"
+    }, 
+    {
+        "id": 16, 
+        "length": 0.3, 
+        "name": "Workshop"
+    }, 
+    {
+        "id": 17, 
+        "length": 0.3, 
+        "name": "Workshop und Developer Meetup, 2h"
+    }, 
+    {
+        "id": 18, 
+        "length": 0.3, 
+        "name": "Workshop, 1h"
+    }, 
+    {
+        "id": 19, 
+        "length": 0.3, 
+        "name": "Workshop, 1/2 h"
+    }, 
+    {
+        "id": 20, 
+        "length": 0.3, 
+        "name": "Lightning Talk"
+    }, 
+    {
+        "id": 21, 
+        "length": 0.3, 
+        "name": "Vortrag/Talk"
+    }, 
+    {
+        "id": 22, 
+        "length": 0.3, 
+        "name": "Lightning Talks"
+    }, 
+    {
+        "id": 23, 
+        "length": 0.3, 
+        "name": "Panel"
+    }, 
+    {
+        "id": 24, 
+        "length": 0.3, 
+        "name": "Danke und Lounge"
+    }, 
+    {
+        "id": 25, 
+        "length": 0.3, 
+        "name": "Talk mit Live-Hack (20 Minuten)"
+    }, 
+    {
+        "id": 26, 
+        "length": 0.3, 
+        "name": "Talk of 25 minutes"
+    }, 
+    {
+        "id": 27, 
+        "length": 0.3, 
+        "name": "Kids Workshops, Ganzt\u00e4gig / Whole day"
+    }, 
+    {
+        "id": 28, 
+        "length": 0.3, 
+        "name": "Ausstellung/Vorstellung/ Exhibition"
+    }, 
+    {
+        "id": 29, 
+        "length": 0.3, 
+        "name": "Zertifizierung"
+    }
+]
