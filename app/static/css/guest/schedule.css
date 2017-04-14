@@ -121,12 +121,58 @@ div {
         display: none;
     }
 
+    #date-change-btn-holder .btn, #type-change-btn-holder .btn {
+        background: transparent;
+        box-shadow: none;
+    }
+
     .scheduler-heading .btn-pop-out {
         display: none;
     }
 
-    div[role='main'] .nav.review-menu {
+    div[role='main'] .nav.review-menu, div[role='main'] .nav.preview-menu {
         display: none;
+    }
+
+    div[role='main'] > * > .row {
+        padding: 0;
+    }
+
+    .event-info-container-holder {
+        padding: 0;
+    }
+
+    .scheduler {
+        padding: 0;
+    }
+
+    .scheduler-head {
+        padding: 0;
+    }
+
+    .scheduler-container {
+        padding: 0;
+    }
+
+    .scheduler-heading {
+        margin-left: 0;
+    }
+
+    #timeline {
+        margin-left: 0;
+    }
+
+    #date-change-btn-holder {
+        margin-left: 0;
+    }
+
+    #type-change-btn-holder {
+        margin-right: 0;
+    }
+
+    .event-info-container-holder {
+        margin-left: 0;
+        left: 0;
     }
 }
 
