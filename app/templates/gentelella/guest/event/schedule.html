@@ -151,9 +151,6 @@
                     $('.overlay').addClass('visible');
                     $('.btn-pop-out').removeClass('fa-expand').addClass('fa-compress');
                     var width = $("#timeline").width() - $('.timeunits.x1').width();
-                    console.log($("#timeline").width());
-                    console.log($('.timeunits.x1').width());
-                    console.log(width);
                     $('.microlocation-container').css("width", width + "px");
                 }
                 function close(){
@@ -161,8 +158,7 @@
                     $body.removeClass('noscroll');
                     $('.overlay').removeClass('visible');
                     $('.btn-pop-out').addClass('fa-expand').removeClass('fa-compress');
-                    var width = $("#timeline").width() - $('.timeunits.x1').width();
-                    $('.microlocation-container').css("width", width + "px");
+                    $('.microlocation-container').css("width", "fit-content");
                 }
                 if(force == null) {
                     state ? close() : open();
@@ -178,7 +174,7 @@
 
         var toggleSchedule = toggleScheduleBox();
 
-        $('.btn-pop-out').on('click touchstart', function() {
+        $('.btn.pop-out').on('click touchstart', function() {
             toggleSchedule();
         });
 
