@@ -75,7 +75,7 @@
                 </thead>
                 <tbody>
                 {% for session in sessions %}
-                    {% if session.title and session.in_trash == False %}
+                    {% if session.title and session.deleted_at is none %}
                         {% set versions_count = count_versions(session) %}
                         <tr>
                             <td>
@@ -162,7 +162,7 @@
                                            data-email-type="reject">
                                             <i class="fa fa-times fa-fw"></i> <i class="fa fa-envelope fa-fw"></i>
                                         </a>
-                                        
+
                                     {% endif %}
                                     {% if session.state == 'accepted' %}
                                         <a href="{{ session.id }}/confirm/?skip=email" class="btn btn-success"
@@ -182,8 +182,8 @@
                                     {% endif %}
                                     {% if not session.state_email_sent and (session.state == 'accepted' or session.state == 'rejected') %}
                                         <a class="btn btn-sm btn-info with-email-modal"
-                                           data-toggle="tooltip" 
-                                           title="Sending pending email" 
+                                           data-toggle="tooltip"
+                                           title="Sending pending email"
                                            data-placement="right"
                                            data-session-id="{{ session.id }}"
                                            data-session-title="{{ session.title }}"

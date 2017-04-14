@@ -55,7 +55,7 @@ class TestDeleteApi(OpenEventTestCase):
         with app.test_request_context():
             item = model.query.get(1)
             self.assertNotEqual(item, None)
-            self.assertEqual(item.in_trash, True)
+            self.assertTrue(item.deleted_at is not None)
 
     def test_event_api(self):
         self._test_model('event', POST_EVENT_DATA)
