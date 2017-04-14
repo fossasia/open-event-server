@@ -67,12 +67,12 @@
                     {% endif %}
                 </td>
                 <td>
-                    {% if discount_code.valid_from %}Valid from {% endif %}
-                    {% if discount_code.valid_from %}{{ discount_code.valid_from | datetime }}{% endif %}
-                    {% if discount_code.valid_from and discount_code.valid_till %} to {% endif %}
-                    {% if not discount_code.valid_from and discount_code.valid_till %}Valid till {% endif %}
-                    {% if discount_code.valid_till %}{{ discount_code.valid_till | datetime }}{% endif %}
-                    {% if not discount_code.valid_from and not discount_code.valid_till %}N/A{% endif %}
+                    {% if discount_code.valid_from_date_time %}Valid from {% endif %}
+                    {% if discount_code.valid_from_date_time %}{{ discount_code.valid_from_date_time | datetime }}{% endif %}
+                    {% if discount_code.valid_from_date_time and discount_code.valid_till_date_time %} to {% endif %}
+                    {% if not discount_code.valid_from_date_time and discount_code.valid_till_date_time %}Valid till {% endif %}
+                    {% if discount_code.valid_till_date_time %}{{ discount_code.valid_till_date_time | datetime }}{% endif %}
+                    {% if not discount_code.valid_from_date_time and not discount_code.valid_till_date_time %}N/A{% endif %}
                 </td>
                 <td>
                     {% if discount_code.is_active %}

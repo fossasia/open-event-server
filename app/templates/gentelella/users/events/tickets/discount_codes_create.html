@@ -157,13 +157,13 @@
                                 <div class="col-xs-8" style="padding-left: 0;">
                                     <input name="start_date"
                                            data-error="Start date & time is required"
-                                           value="{{ discount_code.valid_from.strftime('%m/%d/%Y') if discount_code.valid_from else '' | default('', true) }}"
+                                           value="{{ discount_code.valid_from_date_time.strftime('%m/%d/%Y') if discount_code.valid_from_date_time else '' | default('', true) }}"
                                            class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY"/>
 
                                 </div>
                                 <div class="col-xs-4" style="padding-left: 0;">
                                     <input name="start_time"
-                                           value="{{ discount_code.valid_from.strftime('%H:%M') if discount_code.valid_from else '' | default('', true) }}"
+                                           value="{{ discount_code.valid_from_date_time.strftime('%H:%M') if discount_code.valid_from_date_time else '' | default('', true) }}"
                                            class="form-control col-xs-6 time start" placeholder="HH:MM"/>
 
                                 </div>
@@ -177,13 +177,13 @@
                                 <div class="col-xs-8" style="padding-left: 0;">
                                     <input name="end_date"
                                            data-error="End date & time is required"
-                                           value="{{ discount_code.valid_till.strftime('%m/%d/%Y') if discount_code.valid_till else '' | default('', true) }}"
+                                           value="{{ discount_code.valid_till_date_time.strftime('%m/%d/%Y') if discount_code.valid_till_date_time else '' | default('', true) }}"
                                            class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY"/>
 
                                 </div>
                                 <div class="col-xs-4" style="padding-left: 0;">
                                     <input name="end_time"
-                                           value="{{ discount_code.valid_till.strftime('%H:%M') if discount_code.valid_till else '' | default('', true) }}"
+                                           value="{{ discount_code.valid_till_date_time.strftime('%H:%M') if discount_code.valid_till_date_time else '' | default('', true) }}"
                                            class="form-control col-xs-6 time end" placeholder="HH:MM"/>
 
                                 </div>

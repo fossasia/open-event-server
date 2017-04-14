@@ -478,16 +478,16 @@ class TicketingManager(object):
             discount_code.tickets_number = None
 
         try:
-            discount_code.valid_from = datetime.strptime(form.get('start_date', None) + ' ' +
+            discount_code.valid_from_date_time = datetime.strptime(form.get('start_date', None) + ' ' +
                                                          form.get('start_time', None), '%m/%d/%Y %H:%M')
         except:
-            discount_code.valid_from = None
+            discount_code.valid_from_date_time = None
 
         try:
-            discount_code.valid_till = datetime.strptime(form.get('end_date', None) + ' ' +
+            discount_code.valid_till_date_time = datetime.strptime(form.get('end_date', None) + ' ' +
                                                          form.get('end_time', None), '%m/%d/%Y %H:%M')
         except:
-            discount_code.valid_till = None
+            discount_code.valid_till_date_time = None
 
         discount_code.tickets = ",".join(form.getlist('tickets[]'))
 
@@ -518,16 +518,16 @@ class TicketingManager(object):
             access_code.tickets_number = None
 
         try:
-            access_code.valid_from = datetime.strptime(form.get('start_date', None) + ' ' +
-                                                       form.get('start_time', None), '%m/%d/%Y %H:%M')
+            access_code.valid_from_date_time = datetime.strptime(form.get('start_date', None) + ' ' +
+                                                                 form.get('start_time', None), '%m/%d/%Y %H:%M')
         except:
-            access_code.valid_from = None
+            access_code.valid_from_date_time = None
 
         try:
-            access_code.valid_till = datetime.strptime(form.get('end_date', None) + ' ' +
-                                                       form.get('end_time', None), '%m/%d/%Y %H:%M')
+            access_code.valid_till_date_time = datetime.strptime(form.get('end_date', None) + ' ' +
+                                                                 form.get('end_time', None), '%m/%d/%Y %H:%M')
         except:
-            access_code.valid_till = None
+            access_code.valid_till_date_time = None
 
         access_code.tickets = ",".join(form.getlist('tickets[]'))
 
