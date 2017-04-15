@@ -92,17 +92,16 @@ def create_view(step):
 
 @events.route('/create/files/image/', methods=['POST'])
 def create_image_upload():
-    if request.method == 'POST':
-        image = request.form['image']
-        if image:
-            image_file = uploaded_file(file_content=image)
-            image_url = upload_local(
-                image_file,
-                UPLOAD_PATHS['temp']['image'].format(uuid=uuid4())
-            )
-            return jsonify({'status': 'ok', 'image_url': image_url})
-        else:
-            return jsonify({'status': 'no_image'})
+    image = request.form['image']
+    result = {'status': 'no_image'}
+    if image:
+        image_file = uploaded_file(file_content=image)
+        image_url = upload_local(
+            image_file,
+            UPLOAD_PATHS['temp']['image'].format(uuid=uuid4())
+        )
+        result = {'status': 'ok', 'image_url': image_url}
+    return jsonify(result)
 
 
 @events.route('/<event_id>/')
@@ -362,33 +361,30 @@ def user_role_invite(event_id, hash):
     """
     event = DataGetter.get_event(event_id)
     user = current_user
-    role_invite = DataGetter.get_event_role_invite(event.id, hash,
-                                                   email=user.email)
+    role_invite = DataGetter.get_event_role_invite(event.id, hash, email=user.email)
 
-    if role_invite:
-        if role_invite.has_expired():
-            delete_from_db(role_invite, 'Deleted RoleInvite')
+    if not role_invite:
+        abort(404)
 
-            flash('Sorry, the invitation link has expired.', 'error')
-            return redirect(url_for('.details_view', event_id=event.id))
-
-        if user.has_role(event.id):
-            flash('You have already been assigned a Role in the Event.', 'warning')
-            return redirect(url_for('events.details_view', event_id=event_id))
-
-        role = role_invite.role
-        data = dict()
-        data['user_email'] = role_invite.email
-        data['user_role'] = role.name
-        DataManager.add_role_to_event(data, event.id)
-
-        # Delete Role Invite after it has been accepted
+    if role_invite.has_expired():
         delete_from_db(role_invite, 'Deleted RoleInvite')
 
-        flash('You have been added as a %s' % role.title_name)
+        flash('Sorry, the invitation link has expired.', 'error')
         return redirect(url_for('.details_view', event_id=event.id))
-    else:
-        abort(404)
+
+    if user.has_role(event.id):
+        flash('You have already been assigned a Role in the Event.', 'warning')
+        return redirect(url_for('events.details_view', event_id=event_id))
+
+    role = role_invite.role
+    data = {'user_email': role_invite.email, 'user_rule': role.name}
+    DataManager.add_role_to_event(data, event.id)
+
+    # Delete Role Invite after it has been accepted
+    delete_from_db(role_invite, 'Deleted RoleInvite')
+
+    flash('You have been added as a %s' % role.title_name)
+    return redirect(url_for('.details_view', event_id=event.id))
 
 
 @events.route('/<int:event_id>/role-invite/decline/<hash>/', methods=['GET', 'POST'])
@@ -397,22 +393,21 @@ def user_role_invite_decline(event_id, hash):
     """
     event = DataGetter.get_event(event_id)
     user = current_user
-    role_invite = DataGetter.get_event_role_invite(event.id, hash,
-                                                   email=user.email)
+    role_invite = DataGetter.get_event_role_invite(event.id, hash, email=user.email)
 
-    if role_invite:
-        if role_invite.has_expired():
-            delete_from_db(role_invite, 'Deleted RoleInvite')
-
-            flash('Sorry, the invitation link has expired.', 'error')
-            return redirect(url_for('.details_view', event_id=event.id))
-
-        DataManager.decline_role_invite(role_invite)
-
-        flash('You have declined the role invite.')
-        return redirect(url_for('.details_view', event_id=event.id))
-    else:
+    if not role_invite:
         abort(404)
+
+    if role_invite.has_expired():
+        delete_from_db(role_invite, 'Deleted RoleInvite')
+
+        flash('Sorry, the invitation link has expired.', 'error')
+        return redirect(url_for('.details_view', event_id=event.id))
+
+    DataManager.decline_role_invite(role_invite)
+
+    flash('You have declined the role invite.')
+    return redirect(url_for('.details_view', event_id=event.id))
 
 
 @events.route('/<int:event_id>/role-invite/delete/<hash>/', methods=['GET', 'POST'])
@@ -421,28 +416,32 @@ def delete_user_role_invite(event_id, hash):
     event = DataGetter.get_event(event_id)
     role_invite = DataGetter.get_event_role_invite(event.id, hash)
 
-    if role_invite:
-        delete_from_db(role_invite, 'Deleted RoleInvite')
-
-        flash('Invitation link has been successfully deleted.')
-        return redirect(url_for('.details_view', event_id=event.id))
-    else:
+    if not role_invite:
         abort(404)
+
+    delete_from_db(role_invite, 'Deleted RoleInvite')
+
+    flash('Invitation link has been successfully deleted.')
+    return redirect(url_for('.details_view', event_id=event.id))
 
 
 @events.route('/discount/apply/', methods=['POST'])
 def apply_discount_code():
-    discount_code = request.form['discount_code']
-    discount_code = InvoicingManager.get_discount_code(discount_code)
-    if discount_code:
-        if discount_code.is_active:
-            if InvoicingManager.get_discount_code_used_count(discount_code.id) >= discount_code.tickets_number:
-                return jsonify({'status': 'error', 'message': 'Expired discount code'})
-            return jsonify({'status': 'ok', 'discount_code': discount_code.serialize})
-        else:
-            return jsonify({'status': 'error', 'message': 'Expired discount code'})
-    else:
-        return jsonify({'status': 'error', 'message': 'Invalid discount code'})
+    discount_code = InvoicingManager.get_discount_code(request.form['discount_code'])
+
+    def get_info(message=None, code=None):
+        if code:
+            return jsonify({'status': 'ok', 'discount_code': code})
+        return jsonify({'status': 'error', 'message': message})
+
+    if not discount_code:
+        return get_info(message='Invalid discount code')
+
+    if discount_code.is_active and not (
+            InvoicingManager.get_discount_code_used_count(discount_code.id) >= discount_code.tickets_number):
+        return get_info(code=discount_code.serialize)
+
+    return get_info(message='Expired discount code')
 
 
 @events.route('/save/<string:what>/', methods=['POST'])

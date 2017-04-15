@@ -17,13 +17,14 @@ def get_or_create_notification_settings(event_id):
     if email_notification:
         return email_notification
     else:
-        email_notification = EmailNotification(next_event=1,
-                                               new_paper=1,
-                                               session_schedule=1,
-                                               session_accept_reject=1,
-                                               after_ticket_purchase=1,
-                                               user_id=login.current_user.id,
-                                               event_id=event_id)
+        email_notification = EmailNotification(
+            next_event=1,
+            new_paper=1,
+            session_schedule=1,
+            session_accept_reject=1,
+            after_ticket_purchase=1,
+            user_id=login.current_user.id,
+            event_id=event_id)
         return email_notification
 
 
@@ -81,7 +82,6 @@ def contact_info_view():
         DataManager.update_user(request.form, int(user_id), contacts_only_update=True)
         flash("Your contact info has been updated.", "success")
         return redirect(url_for('.contact_info_view'))
-    profile = DataGetter.get_user(int(user_id))
 
     return render_template('gentelella/users/settings/pages/contact_info.html', user=login.current_user)
 
