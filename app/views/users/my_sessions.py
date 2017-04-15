@@ -111,9 +111,10 @@ def process_speaker_view(speaker_id):
         event = DataGetter.get_event(speaker.event_id)
         return render_template(
             'gentelella/users/mysessions/mysession_speaker_edit.html',
-            photo_delete_url=url_for('.avatar_delete',
-            event_id=event.id,
-            speaker_id=speaker.id),
+            photo_delete_url=url_for(
+                '.avatar_delete',
+                event_id=event.id,
+                speaker_id=speaker.id),
             speaker_form=speaker_form,
             event=event,
             speaker=speaker)
@@ -129,15 +130,16 @@ def process_speaker_view(speaker_id):
 def avatar_delete(event_id, speaker_id):
     if request.method == 'DELETE':
         speaker = DataGetter.get_speakers(event_id).filter_by(user_id=login.current_user.id, id=speaker_id).first()
-        if speaker:
-            speaker.photo = ''
-            speaker.small = ''
-            speaker.thumbnail = ''
-            speaker.icon = ''
-            save_to_db(speaker)
-            return jsonify({'status': 'ok'})
-        else:
+
+        if not speaker:
             abort(403)
+
+        speaker.photo = ''
+        speaker.small = ''
+        speaker.thumbnail = ''
+        speaker.icon = ''
+        save_to_db(speaker)
+        return jsonify({'status': 'ok'})
 
 
 @my_sessions.route('/<int:session_id>/withdraw/')

@@ -18,8 +18,9 @@ def display_view(event_id):
     sessions = DataGetter.get_sessions_by_event_id(event_id)
     event = DataGetter.get_event(event_id)
     if not event.has_session_speakers:
-        return render_template('gentelella/users/events/info/enable_module.html', active_page='scheduler',
-                               title='Scheduler', event=event)
+        return render_template(
+            'gentelella/users/events/info/enable_module.html', active_page='scheduler',
+            title='Scheduler', event=event)
     return render_template('gentelella/users/events/scheduler/scheduler.html', sessions=sessions, event=event)
 
 
