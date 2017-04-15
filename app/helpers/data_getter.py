@@ -99,12 +99,12 @@ class DataGetter(object):
     @staticmethod
     def get_all_events():
         """Method return all events"""
-        return Event.query.order_by(desc(Event.created_at)).filter_by(in_trash=False).all()
+        return Event.query.order_by(desc(Event.created_at)).filter_by(deleted_at=None).all()
 
     @staticmethod
     def get_all_events_with_discounts():
         """Method return all events"""
-        return Event.query.order_by(desc(Event.id)).filter_by(in_trash=False) \
+        return Event.query.order_by(desc(Event.id)).filter_by(deleted_at=None) \
             .filter(Event.discount_code_id != None).filter(Event.discount_code_id > 0).all()
 
     @staticmethod
@@ -178,14 +178,14 @@ class DataGetter(object):
         """
         :return: All Sessions with correct event_id
         """
-        return Session.query.filter_by(event_id=event_id).filter(Session.in_trash == False)
+        return Session.query.filter_by(event_id=event_id).filter(Session.deleted_at.is_(None))
 
     @staticmethod
     def get_sessions_by_state(state):
         """
         :return: All Sessions with correct event_id
         """
-        return Session.query.filter(Session.state == state).filter(Session.in_trash == False)
+        return Session.query.filter(Session.state == state).filter(Session.deleted_at.is_(None))
 
     @staticmethod
     def get_sessions_by_state_and_event_id(state, event_id):
@@ -194,11 +194,11 @@ class DataGetter(object):
         """
         return Session.query.filter(Session.event_id == event_id) \
             .filter(Session.state == state) \
-            .filter(Session.in_trash == False)
+            .filter(Session.deleted_at.is_(None))
 
     @staticmethod
     def get_all_sessions():
-        return Session.query.filter(Session.in_trash == False).all()
+        return Session.query.filter(Session.deleted_at.is_(None)).all()
 
     @staticmethod
     def get_tracks(event_id):
@@ -225,7 +225,7 @@ class DataGetter(object):
         return Session.query.filter_by(
             event_id=event_id,
             state=state
-        ).filter(Session.in_trash == False)
+        ).filter(Session.deleted_at.is_(None))
 
     @staticmethod
     def get_image_sizes():
@@ -265,7 +265,7 @@ class DataGetter(object):
         """
         try:
             return Session.query.filter(Session.speakers.any(Speaker.user_id == user.id)).filter(
-                Session.id == session_id).filter(Session.in_trash == False).one()
+                Session.id == session_id).filter(Session.deleted_at.is_(None)).one()
         except MultipleResultsFound:
             return None
         except NoResultFound:
@@ -278,10 +278,10 @@ class DataGetter(object):
         """
         if upcoming_events:
             return Session.query.filter(Session.speakers.any(Speaker.user_id == (login.current_user.id if not user_id else int(user_id)))).filter(
-                Session.start_time >= datetime.datetime.now()).filter(Session.in_trash == False)
+                Session.start_time >= datetime.datetime.now()).filter(Session.deleted_at.is_(None))
         else:
             return Session.query.filter(Session.speakers.any(Speaker.user_id == (login.current_user.id if not user_id else int(user_id)))).filter(
-                Session.start_time < datetime.datetime.now()).filter(Session.in_trash == False)
+                Session.start_time < datetime.datetime.now()).filter(Session.deleted_at.is_(None))
 
     @staticmethod
     def get_speakers(event_id):
@@ -417,7 +417,7 @@ class DataGetter(object):
             events = Event.query.filter(Event.state == 'Published')
         else:
             events = Event.query.filter(Event.state == 'Published').filter(Event.privacy != 'private')
-        events = events.filter(Event.end_time >= datetime.datetime.now()).filter(Event.in_trash == 'False')
+        events = events.filter(Event.end_time >= datetime.datetime.now()).filter(Event.deleted_at.is_(None))
         return events
 
     @staticmethod
@@ -425,7 +425,7 @@ class DataGetter(object):
         events = DataGetter.get_all_published_events(include_private)
         return [event for event in events
                 if DataGetter.get_call_for_papers(event.id)
-                and not event.in_trash][:12]
+                and not event.deleted_at][:12]
 
     @staticmethod
     def get_call_for_papers(event_id):
@@ -449,7 +449,7 @@ class DataGetter(object):
     def get_live_events_of_user(user_id=None):
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id = login.current_user.id if not user_id else user_id) \
             .filter(Event.end_time >= datetime.datetime.now()) \
-            .filter(Event.state == 'Published').filter(Event.in_trash == False)
+            .filter(Event.state == 'Published').filter(Event.deleted_at.is_(None))
         return DataGetter.trim_attendee_events(events, user_id)
 
     @staticmethod
@@ -460,14 +460,14 @@ class DataGetter(object):
     @staticmethod
     def get_draft_events_of_user(user_id=None):
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id if not user_id else user_id) \
-            .filter(Event.state == 'Draft').filter(Event.in_trash == False)
+            .filter(Event.state == 'Draft').filter(Event.deleted_at.is_(None))
         return DataGetter.trim_attendee_events(events, user_id)
 
     @staticmethod
     def get_past_events_of_user(user_id=None):
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id if not user_id else user_id) \
             .filter(Event.end_time <= datetime.datetime.now()).filter(
-            or_(Event.state == 'Completed', Event.state == 'Published')).filter(Event.in_trash == False)
+            or_(Event.state == 'Completed', Event.state == 'Published')).filter(Event.deleted_at.is_(None))
         return DataGetter.trim_attendee_events(events, user_id)
 
     @staticmethod
@@ -475,7 +475,7 @@ class DataGetter(object):
         return Event.query.filter(Event.start_time >= datetime.datetime.now(),
                                   Event.end_time >= datetime.datetime.now(),
                                   Event.state == 'Published',
-                                  Event.in_trash == False)
+                                  Event.deleted_at.is_(None))
 
     @staticmethod
     def get_live_and_public_events():
@@ -483,12 +483,12 @@ class DataGetter(object):
 
     @staticmethod
     def get_all_draft_events():
-        return Event.query.filter_by(state='Draft', in_trash=False)
+        return Event.query.filter_by(state='Draft', deleted_at=None)
 
     @staticmethod
     def get_all_past_events():
         return Event.query.filter(Event.end_time <= datetime.datetime.now(),
-                                  Event.in_trash == False,
+                                  Event.deleted_at.is_(None),
                                   or_(Event.state == 'Completed', Event.state == 'Published'))
 
     @staticmethod
@@ -641,25 +641,25 @@ class DataGetter(object):
 
     @staticmethod
     def get_trash_events():
-        return Event.query.filter_by(in_trash=True)
+        return Event.query.filter(Event.deleted_at.isnot(None))
 
     @staticmethod
     def get_trash_users():
-        return User.query.filter_by(in_trash=True)
+        return User.query.filter(User.deleted_at.isnot(None))
 
     @staticmethod
     def get_active_users():
-        return User.query.filter_by(in_trash=False)
+        return User.query.filter_by(deleted_at=None)
 
     @staticmethod
     def get_trash_sessions():
-        return Session.query.filter_by(in_trash=True)
+        return Session.query.filter(Session.deleted_at.isnot(None))
 
     @staticmethod
     def get_upcoming_events():
         return Event.query.join(Event.roles, aliased=True) \
             .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
-            .filter_by(in_trash=False)
+            .filter_by(deleted_at=None)
 
     @staticmethod
     def get_all_pages(selected_lang=None):
@@ -810,20 +810,20 @@ class DataGetter(object):
     def get_all_user_roles(role_name):
         role = Role.query.filter_by(name=role_name).first()
         uers = UsersEventsRoles.query.join(UsersEventsRoles.event).join(UsersEventsRoles.role).filter(
-            Event.in_trash == False, UsersEventsRoles.role == role)
+            Event.deleted_at.is_(None), UsersEventsRoles.role == role)
         return uers
 
     @staticmethod
     def get_all_accepted_sessions():
-        return Session.query.filter_by(state='accepted').filter(Session.in_trash == False)
+        return Session.query.filter_by(state='accepted').filter(Session.deleted_at.is_(None))
 
     @staticmethod
     def get_all_rejected_sessions():
-        return Session.query.filter_by(state='rejected').filter(Session.in_trash == False)
+        return Session.query.filter_by(state='rejected').filter(Session.deleted_at.is_(None))
 
     @staticmethod
     def get_all_draft_sessions():
-        return Session.query.filter_by(state='pending').filter(Session.in_trash == False)
+        return Session.query.filter_by(state='pending').filter(Session.deleted_at.is_(None))
 
     @staticmethod
     def get_email_by_times():

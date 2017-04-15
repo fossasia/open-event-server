@@ -50,21 +50,21 @@
                            class="btn btn-default">
                             <i class="fa fa-pencil"></i>
                         </a>
-                        {% if session.in_trash == False %}
+                        {% if session.deleted_at is none %}
                             <a data-toggle="tooltip" data-placement="top" title="Delete"
                                href="/events/{{ session.event.id }}/sessions/{{ session.id }}/trash"
                                class="btn btn-default">
                                 <i class="fa fa-trash"></i>
                             </a>
                         {% endif %}
-                        {% if session.in_trash == True %}
+                        {% if session.deleted_at is not none %}
                             <a data-toggle="tooltip" data-placement="top" title="Delete"
                                href="/events/{{ session.event.id }}/sessions/{{ session.id }}/delete"
                                class="btn btn-default">
                                 <i class="fa fa-trash"></i>
                             </a>
                         {% endif %}
-                        {% if session.in_trash == True %}
+                        {% if session.deleted_at is not none %}
                             <a class="btn btn-success"
                                href="/events/{{ session.event.id }}/sessions/{{ session.id }}/restore_trash"
                                data-toggle="tooltip" data-placement="top"

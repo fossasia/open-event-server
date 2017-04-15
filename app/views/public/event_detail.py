@@ -30,7 +30,7 @@ def get_published_event_or_abort(identifier):
 
             abort(404)
 
-    if event.in_trash:
+    if event.deleted_at:
         abort(404)
     return event
 
@@ -204,7 +204,7 @@ def display_event_cfs(identifier, via_hash=False):
         for speaker in user_speaker:
             current_session = []
             for session in speaker.sessions:
-                if session.event_id == event.id and not session.in_trash:
+                if session.event_id == event.id and not session.deleted_at:
                     if session.title:
                         current_session.append(session)
             if current_session:

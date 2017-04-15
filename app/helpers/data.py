@@ -733,8 +733,7 @@ class DataManager(object):
     @staticmethod
     def trash_event(e_id):
         event = Event.query.get(e_id)
-        event.in_trash = True
-        event.trash_date = datetime.now()
+        event.deleted_at = datetime.now()
         save_to_db(event, "Event Added to Trash")
         return event
 
@@ -1032,16 +1031,14 @@ def update_role_to_admin(form, user_id):
 
 def trash_user(user_id):
     user = DataGetter.get_user(user_id)
-    user.in_trash = True
-    user.trash_date = datetime.now()
+    user.deleted_at = datetime.now()
     save_to_db(user, 'User has been added to trash')
     return user
 
 
 def trash_session(session_id):
     session = DataGetter.get_session(session_id)
-    session.in_trash = True
-    session.trash_date = datetime.now()
+    session.deleted_at = datetime.now()
     save_to_db(session, "Session added to Trash")
     update_version(session.event_id, False, 'sessions_ver')
     return session
@@ -1049,19 +1046,19 @@ def trash_session(session_id):
 
 def restore_event(event_id):
     event = DataGetter.get_event(event_id)
-    event.in_trash = False
+    event.deleted_at = None
     save_to_db(event, "Event restored from Trash")
 
 
 def restore_user(user_id):
     user = DataGetter.get_user(user_id)
-    user.in_trash = False
+    user.deleted_at = None
     save_to_db(user, "User restored from Trash")
 
 
 def restore_session(session_id):
     session = DataGetter.get_session(session_id)
-    session.in_trash = False
+    session.deleted_at = None
     save_to_db(session, "Session restored from Trash")
     update_version(session.event_id, False, 'sessions_ver')
 

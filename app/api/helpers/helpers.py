@@ -39,8 +39,8 @@ def get_object_list(klass, **kwargs):
     `klass` can be a model such as a Track, Event, Session, etc.
     """
     queryset = _get_queryset(klass)
-    if hasattr(klass, 'in_trash'):
-        queryset = queryset.filter(klass.in_trash != True)
+    if hasattr(klass, 'deleted_at'):
+        queryset = queryset.filter(klass.deleted_at.is_(None))
     kwargs, specials = extract_special_queries(kwargs)
     # case insenstive filter
     for i in kwargs:
@@ -72,7 +72,7 @@ def get_object_or_404(klass, id_):
     """
     queryset = _get_queryset(klass)
     obj = queryset.get(id_)
-    if obj is None or (hasattr(klass, 'in_trash') and obj.in_trash):
+    if obj is None or (hasattr(klass, 'deleted_at') and obj.deleted_at):
         raise NotFoundError(message='{} does not exist'.format(klass.__name__))
     return obj
 
@@ -246,8 +246,8 @@ def delete_model(model, item_id, event_id=None):
         item = get_object_in_event(model, item_id, event_id)
     else:
         item = get_object_or_404(model, item_id)
-    if hasattr(item, 'in_trash'):
-        item.in_trash = True
+    if hasattr(item, 'deleted_at'):
+        item.deleted_at = datetime.now()
         save_to_db(item, '{} moved to trash'.format(model.__name__))
     else:
         delete_from_db(item, '{} deleted'.format(model.__name__))
@@ -433,7 +433,7 @@ def replace_event_id(func):
             event = EventModel.query.filter_by(identifier=event_id).first()
         else:
             event = EventModel.query.get(event_id)
-        if event is None or event.in_trash:
+        if event is None or event.deleted_at:
             raise NotFoundError(message='{} does not exist'.format(EventModel.__name__))
 
         kwargs['event_id'] = event.id

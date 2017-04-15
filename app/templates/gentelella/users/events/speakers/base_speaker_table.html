@@ -97,7 +97,7 @@
                         <td>
                             <ol style="padding-left: 14px;">
                                 {% for session in speaker.sessions %}
-                                    {% if not session.in_trash %}
+                                    {% if not session.deleted_at %}
                                         {% if session.title %}
                                             <li>{{ session.title }}</li>
                                         {% endif %}
@@ -108,7 +108,7 @@
                         <td>
                             <ol style="padding-left: 14px;" class="state-list">
                                 {% for session in speaker.sessions %}
-                                    {% if not session.in_trash %}
+                                    {% if not session.deleted_at %}
                                         <li>
                                           {% if session.state == 'confirmed' %}
                                               <span class="label label-success">{{ session.state }}</span>

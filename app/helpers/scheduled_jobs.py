@@ -21,23 +21,23 @@ def empty_trash():
     from app import current_app as app
 
     with app.app_context():
-        events = Event.query.filter_by(in_trash=True)
-        users = User.query.filter_by(in_trash=True)
-        sessions = Session.query.filter_by(in_trash=True)
+        events = Event.query.filter(Event.deleted_at.isnot(None)).all()
+        users = User.query.filter(User.deleted_at.isnot(None)).all()
+        sessions = Session.query.filter(Session.deleted_at.isnot(None)).all()
         pending_orders = Order.query.filter_by(status="pending")
 
         for event in events:
-            if datetime.now() - event.trash_date >= timedelta(days=30):
+            if datetime.now() - event.deleted_at >= timedelta(days=30):
                 DataManager.delete_event(event.id)
 
         for user in users:
-            if datetime.now() - user.trash_date >= timedelta(days=30):
+            if datetime.now() - user.deleted_at >= timedelta(days=30):
                 transaction = transaction_class(Event)
                 transaction.query.filter_by(user_id=user.id).delete()
                 delete_from_db(user, "User deleted permanently")
 
         for session_ in sessions:
-            if datetime.now() - session_.trash_date >= timedelta(days=30):
+            if datetime.now() - session_.deleted_at >= timedelta(days=30):
                 delete_from_db(session_, "Session deleted permanently")
 
         for pending_order in pending_orders:

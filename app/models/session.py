@@ -41,9 +41,8 @@ class Session(db.Model):
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     state = db.Column(db.String, default="pending")
-    in_trash = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
-    trash_date = db.Column(db.DateTime)
+    deleted_at = db.Column(db.DateTime)
     submission_date = db.Column(db.DateTime)
     submission_modifier = db.Column(db.String)
     state_email_sent = db.Column(db.Boolean, default=False)
@@ -70,8 +69,7 @@ class Session(db.Model):
                  level=None,
                  created_at=None,
                  state_email_sent=False,
-                 in_trash=False,
-                 trash_date=None):
+                 deleted_at=None):
 
         if speakers is None:
             speakers = []
@@ -96,8 +94,7 @@ class Session(db.Model):
         self.session_type = session_type
         self.level = level
         self.created_at = created_at
-        self.in_trash = in_trash
-        self.trash_date = trash_date
+        self.deleted_at = deleted_at
         self.state_email_sent = state_email_sent
 
     @staticmethod

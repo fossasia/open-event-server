@@ -143,8 +143,7 @@ def avatar_delete(event_id, speaker_id):
 @my_sessions.route('/<int:session_id>/withdraw/')
 def withdraw_session_view(session_id):
     session = DataGetter.get_sessions_of_user_by_id(session_id)
-    session.in_trash = True
-    session.trash_date = datetime.now()
+    session.deleted_at = datetime.now()
     save_to_db(session)
     flash("The session has been withdrawn", "success")
     return redirect(url_for('.display_my_sessions_view', session_id=session_id))
