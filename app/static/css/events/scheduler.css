@@ -46,7 +46,7 @@
     color: white;
     z-index: 2;
     border: 1px solid rgba(0, 0, 0, 0.4);
-    padding-right: 10px;
+    padding: 0;
 }
 
 .scheduled > .remove-btn {
