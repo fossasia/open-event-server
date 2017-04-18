@@ -7,7 +7,7 @@ The system has two kind of role types: System Roles and Event Roles.
 1. System roles are related to the Open Event organization and operators of the application.
 2. Event Roles are related to the users of the system with their different permissions for events.
 
-##1. System Roles
+## 1. System Roles
 
 There are three System Roles:
 
@@ -54,9 +54,9 @@ The Sales Admin can only access the Sales Panel.
 | ALL SALES | Sales Admin | YES | YES |  YES | /admin/sales
 
 
-##2. Event Roles
+## 2. Event Roles
 
-###2.1 Organizer
+### 2.1 Organizer
 
 Organizer can access:
  - HOME
