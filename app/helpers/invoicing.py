@@ -157,16 +157,16 @@ class InvoicingManager(object):
             discount_code.max_quantity = None
 
         try:
-            discount_code.valid_from = datetime.strptime(form.get('start_date', None) + ' ' +
-                                                         form.get('start_time', None), '%m/%d/%Y %H:%M')
+            discount_code.valid_from_date_time = datetime.strptime(form.get('start_date', None) + ' ' +
+                                                                   form.get('start_time', None), '%m/%d/%Y %H:%M')
         except:
-            discount_code.valid_from = None
+            discount_code.valid_from_date_time = None
 
         try:
-            discount_code.valid_till = datetime.strptime(form.get('end_date', None) + ' ' +
-                                                         form.get('end_time', None), '%m/%d/%Y %H:%M')
+            discount_code.valid_till_date_time = datetime.strptime(form.get('end_date', None) + ' ' +
+                                                                   form.get('end_time', None), '%m/%d/%Y %H:%M')
         except:
-            discount_code.valid_till = None
+            discount_code.valid_till_date_time = None
 
         save_to_db(discount_code)
 
