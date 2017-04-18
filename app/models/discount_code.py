@@ -55,6 +55,11 @@ class DiscountCode(db.Model):
         self.is_active = is_active
         self.created_at = datetime.utcnow()
         self.used_for = used_for
+
+    @staticmethod
+    def get_service_name():
+        return 'discount_code'
+
     def __repr__(self):
         return '<DiscountCode %r>' % self.id
 
