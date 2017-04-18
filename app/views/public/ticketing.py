@@ -105,7 +105,7 @@ def view_order_after_payment(order_identifier):
 @ticketing.route('/<order_identifier>/view/pdf/')
 def view_order_after_payment_pdf(order_identifier):
     order = TicketingManager.get_and_set_expiry(order_identifier)
-    if not order or order.status != 'completed':
+    if not order or (order.status != 'completed' and order.status != 'placed'):
         abort(404)
     pdf = create_pdf(render_template('gentelella/guest/ticketing/invoice_pdf.html',
                                      order=order, event=order.event))
@@ -119,7 +119,7 @@ def view_order_after_payment_pdf(order_identifier):
 @ticketing.route('/<order_identifier>/view/tickets/pdf/')
 def view_order_tickets_after_payment_pdf(order_identifier):
     order = TicketingManager.get_and_set_expiry(order_identifier)
-    if not order or order.status != 'completed':
+    if not order or (order.status != 'completed' and order.status != 'placed'):
         abort(404)
     pdf = create_pdf(render_template('gentelella/guest/ticketing/pdf/ticket.html', order=order))
     response = make_response(pdf.getvalue())
