@@ -226,7 +226,7 @@ def display_attendees(event_id, pdf=None):
                 'discount': discount
             }
 
-            if order.status == 'completed':
+            if order.status == 'completed' or order.status == 'placed':
                 order_holder['order_url'] = url_for('ticketing.view_order_after_payment',
                                                     order_identifier=order.identifier)
             else:
@@ -253,7 +253,7 @@ def display_attendees(event_id, pdf=None):
                 'created_at': order.created_at
             }
 
-            if order.status == 'completed':
+            if order.status == 'completed' or order.status == 'placed':
                 order_holder['order_url'] = url_for('ticketing.view_order_after_payment',
                                                     order_identifier=order.identifier)
             else:

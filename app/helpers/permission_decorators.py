@@ -6,6 +6,7 @@ from flask.ext.restplus import abort
 
 from app.helpers.helpers import get_count
 from app.models.discount_code import DiscountCode
+from app.models.access_code import AccessCode
 from app.models.microlocation import Microlocation
 from app.models.session import Session
 from app.models.speaker import Speaker
@@ -187,7 +188,14 @@ def can_access(f):
             if 'microlocation' in url:
                 if user.can_create(Microlocation, event_id):
                     return f(*args, **kwargs)
-            abort(403)
+            '''
+            #This code to be implemented after service and permissions fixed properly
+            if 'discounts' in url:
+                if user.can_create(DiscountCode, event_id):
+                    return f(*args, **kwargs)
+            if 'access' in url:
+                if user.can_create(AccessCode, event_id):
+                    return f(*args, **kwargs)'''
         if '/edit/' in url:
             if 'events/' + str(event_id) + '/edit/' in url:
                 if user.is_organizer(event_id) or user.is_coorganizer(event_id):
@@ -207,7 +215,14 @@ def can_access(f):
             if 'microlocation' in url:
                 if user.can_update(Microlocation, event_id):
                     return f(*args, **kwargs)
-            abort(403)
+            '''
+            #This code to be implemented after service and permissions fixed properly
+            if 'discounts' in url:
+                if user.can_update(DiscountCode, event_id):
+                    return f(*args, **kwargs)
+            if 'access' in url:
+                if user.can_update(AccessCode, event_id):
+                    return f(*args, **kwargs)'''
         if '/delete/' in url or '/trash/' in url:
             if 'events/' + str(event_id) + '/delete/' in url:
                 if user.is_organizer(event_id) or user.is_coorganizer(event_id):
@@ -230,7 +245,14 @@ def can_access(f):
             if 'microlocation' in url:
                 if user.can_delete(Microlocation, event_id):
                     return f(*args, **kwargs)
-            abort(403)
+            '''
+            #This code to be implemented after service and permissions fixed properly
+            if 'discounts' in url:
+                if user.can_delete(DiscountCode, event_id):
+                    return f(*args, **kwargs)
+            if 'access' in url:
+                if user.can_delete(AccessCode, event_id):
+                    return f(*args, **kwargs)'''
         if 'events/' + str(event_id) + '/' in url:
             if not user.has_role(event_id):
                 abort(403)
@@ -239,6 +261,8 @@ def can_access(f):
                     return f(*args, **kwargs)
                 else:
                     abort(403)
-            return f(*args, **kwargs)
+            if user.is_organizer(event_id) or user.is_coorganizer(event_id):
+                return f(*args, **kwargs)
+        abort(403)
 
     return decorated_function
