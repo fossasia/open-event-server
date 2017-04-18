@@ -4,7 +4,7 @@ from app.helpers.data import save_to_db
 from app.helpers.helpers import update_state
 from app.models.role import Role
 from app.models.user import ORGANIZER
-from app.models.users_events_roles import UsersEventsRoles
+from app.models.users_events_role import UsersEventsRoles
 
 
 def string_to_timedelta(string):

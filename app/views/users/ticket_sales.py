@@ -126,7 +126,7 @@ def display_ticket_stats(event_id):
             ticket = get_ticket(order_ticket.ticket_id)
             tickets_summary[str(ticket.id)][str(order.status)]['tickets_count'] += order_ticket.quantity
             ticket_price = ticket.price
-            if fees and not ticket.absorb_fees:
+            if fees and not ticket.is_fee_absorbed:
                 order_fee = fees.service_fee * (ticket.price * order_ticket.quantity) / 100.0
                 if order_fee > fees.maximum_fee:
                     ticket_price = ticket.price + fees.maximum_fee / order_ticket.quantity
@@ -240,7 +240,7 @@ def display_attendees(event_id, pdf=None):
                     order_holder['ticket_price'] = order_holder['ticket_price'] - discount.value
                 else:
                     order_holder['ticket_price'] -= order_holder['ticket_price'] * discount.value / 100.0
-            order_holder['checked_in'] = holder.checked_in
+            order_holder['is_checked_in'] = holder.is_checked_in
             order_holder['id'] = holder.id
             holders.append(order_holder)
         if len(order.ticket_holders) == 0:
@@ -605,7 +605,7 @@ def attendee_check_in_toggle(event_id, holder_id):
     if holder:
         return jsonify({
             'status': 'ok',
-            'checked_in': holder.checked_in
+            'is_checked_in': holder.is_checked_in
         })
 
     return jsonify({

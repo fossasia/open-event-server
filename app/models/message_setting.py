@@ -18,13 +18,13 @@ class MessageSettings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     action = db.Column(db.String)
     mail_status = db.Column(db.Integer)
-    notif_status = db.Column(db.Integer)
+    notification_status = db.Column(db.Integer)
     user_control_status = db.Column(db.Integer)
 
-    def __init__(self, action=None, mail_status=None, notif_status=None, user_control_status=None):
+    def __init__(self, action=None, mail_status=None, notification_status=None, user_control_status=None):
         self.action = action
         self.mail_status = mail_status
-        self.notif_status = notif_status
+        self.notification_status = notification_status
         self.user_control_status = user_control_status
 
     def __repr__(self):
@@ -43,5 +43,5 @@ class MessageSettings(db.Model):
         return {'id': self.id,
                 'action': self.action,
                 'mail_status': self.mail_status,
-                'notif_status': self.notif_status,
+                'notification_status': self.notification_status,
                 'user_control_status': self.user_control_status}

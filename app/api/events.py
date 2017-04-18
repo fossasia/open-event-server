@@ -8,13 +8,13 @@ from app.api.speakers import SPEAKER
 from app.api.sponsors import SPONSOR
 from app.api.tracks import TRACK
 from app.helpers.data import save_to_db, record_activity
-from app.models.call_for_papers import CallForPaper as EventCFS
+from app.models.call_for_paper import CallForPaper as EventCFS
 from app.models.event import Event as EventModel
 from app.models.event_copyright import EventCopyright
 from app.models.role import Role
 from app.models.social_link import SocialLink as SocialLinkModel
 from app.models.user import ORGANIZER
-from app.models.users_events_roles import UsersEventsRoles
+from app.models.users_events_role import UsersEventsRoles
 from helpers.special_fields import EventTypeField, EventTopicField, \
     EventPrivacyField, EventSubTopicField, EventStateField
 from app.api.helpers import custom_fields as fields

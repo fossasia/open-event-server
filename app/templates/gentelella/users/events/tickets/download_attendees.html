@@ -113,7 +113,7 @@
                             {% if holder.ticket_price %}{{ event.payment_currency | currency_symbol }}{{ holder.ticket_price | money }}{% endif %}<br>
                             {{ holder.ticket_name }}<br>
                                 {% if holder.status == 'completed' %}
-                                    {% if holder.checked_in %}
+                                    {% if holder.is_checked_in %}
                                             {{ _("Checked In") }}<br>
                                     {% else %}
                                             {{ _("Not Checked") }}<br>

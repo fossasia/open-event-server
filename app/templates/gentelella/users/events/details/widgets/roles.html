@@ -77,7 +77,7 @@
                                     {{ _("Invitation Link") }}
                                 </a>
                             </del>
-                        {% elif invite.declined %}
+                        {% elif invite.is_declined %}
                             <del>
                                 <a href="#" data-toggle="tooltip" data-placement="left"
                                    data-original-title="Invitation declined">

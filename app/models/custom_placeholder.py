@@ -3,7 +3,7 @@ from app.models import db
 
 class CustomPlaceholder(db.Model):
     """email notifications model class"""
-    __tablename__ = 'custom_placeholder'
+    __tablename__ = 'custom_placeholders'
     id = db.Column(db.Integer,
                    primary_key=True)
     name = db.Column(db.String)

@@ -16,7 +16,7 @@ from app.helpers.exporters.ical import ICalExporter
 from app.helpers.exporters.pentabarfxml import PentabarfExporter
 from app.helpers.exporters.xcal import XCalExporter
 from app.helpers.helpers import get_count
-from app.models.call_for_papers import CallForPaper
+from app.models.call_for_paper import CallForPaper
 from app.helpers.wizard.helpers import get_current_timezone
 
 

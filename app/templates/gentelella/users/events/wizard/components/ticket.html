@@ -79,7 +79,7 @@
                     </div>
                     <div class="item form-group" v-if="ticket.type == 'paid'">
                         <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1;  margin-top: 0;">
-                            <input type="checkbox" id="absorb_fees" v-model="ticket.absorb_fees" name="tickets[absorb_fees]" class="checkbox form-control" style="display: inline-block;width: 14px;height: 14px;">
+                            <input type="checkbox" id="is_fee_absorbed" v-model="ticket.is_fee_absorbed" name="tickets[is_fee_absorbed]" class="checkbox form-control" style="display: inline-block;width: 14px;height: 14px;">
                             {{ _("Absorb Fees") }}
                         </label>
                         <div style="font-size: 13px;">
@@ -89,7 +89,7 @@
                     <div class="item form-group">
                         <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1;  margin-top: 0;">
                             {{ _("Fee: ") }} {{ '{{ service_fee * ticket.price / 100 }}' }} {{ _("| Buyer Total:") }}
-                            {{ '{{ ticket.absorb_fees  ? ticket.price : ticket.price + ((service_fee * ticket.price / 100)) }}' }}
+                            {{ '{{ ticket.is_fee_absorbed  ? ticket.price : ticket.price + ((service_fee * ticket.price / 100)) }}' }}
 
                     </div>
                     <div class="item form-group">

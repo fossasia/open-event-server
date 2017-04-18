@@ -5,7 +5,7 @@ from flask import url_for
 
 from app import current_app as app
 from app.helpers.data import save_to_db
-from app.models.call_for_papers import CallForPaper
+from app.models.call_for_paper import CallForPaper
 from tests.unittests.object_mother import ObjectMother
 from tests.unittests.utils import OpenEventTestCase
 

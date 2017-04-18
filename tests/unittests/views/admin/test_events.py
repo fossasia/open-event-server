@@ -8,7 +8,7 @@ from app.api.events import EVENT_POST
 from app.api.helpers.helpers import fix_attribute_names
 from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
-from app.models.modules import Module
+from app.models.module import Module
 from tests.unittests.api.utils_post_data import POST_EVENT_DATA
 from tests.unittests.object_mother import ObjectMother
 from tests.unittests.views.view_test_case import OpenEventViewTestCase

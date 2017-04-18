@@ -17,7 +17,7 @@ from app.helpers.data_getter import DataGetter
 from app.helpers.invoicing import InvoicingManager
 from app.helpers.payment import get_fee
 from app.helpers.ticketing import TicketingManager
-from app.models.system_role import CustomSysRole, UserSystemRole
+from app.models.custom_system_role import CustomSysRole, UserSystemRole
 from app.models.user import User
 from app.views.super_admin import SALES
 from app.views.super_admin import check_accessible, list_navbar

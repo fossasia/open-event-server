@@ -59,7 +59,7 @@
                                     <td class="individual-fee">
                                         {{ event.payment_currency | currency_symbol }}
                                         {% set fee = ticket.ticket.price * fees.service_fee / 100 %}
-                                        {% if not ticket.ticket.absorb_fees %}
+                                        {% if not ticket.ticket.is_fee_absorbed %}
                                             {% if fee < fees.maximum_fee %}
                                                 {{ (ticket.ticket.price * fees.service_fee / 100) | money}}
                                             {% else %}
@@ -75,7 +75,7 @@
                                         <td>
                                             <input type="hidden" name="ticket_ids[]" value="{{ ticket.ticket.id }}">
                                             <select title="ticket quantity" name="ticket_quantities[]" class="quantity-select"
-                                                    data-rate="{{ ticket.ticket.price }}" data-id="{{ticket.ticket.id}}" data-fee="{% if not ticket.ticket.absorb_fees %}
+                                                    data-rate="{{ ticket.ticket.price }}" data-id="{{ticket.ticket.id}}" data-fee="{% if not ticket.ticket.is_fee_absorbed %}
                                             {% if fee < fees.maximum_fee %}
                                                 {{ ticket.ticket.price * fees.service_fee / 100 }}
                                             {% else %}
@@ -220,7 +220,7 @@
                                     <td class=\"individual-fee\">\
                                         {{ event.payment_currency | currency_symbol }}\
                                         {% set fee = ticket.ticket.price * fees.service_fee / 100 %}\
-                                        {% if not ticket.ticket.absorb_fees %}\
+                                        {% if not ticket.ticket.is_fee_absorbed %}\
                                             {% if fee < fees.maximum_fee %}\
                                                 {{ ticket.ticket.price * fees.service_fee / 100}}\
                                             {% else %}\
@@ -235,7 +235,7 @@
                                         <td>\
                                             <input type=\"hidden\" name=\"ticket_ids[]\" value=\"{{ ticket.ticket.id }}\">\
                                             <select title=\"ticket quantity\" name=\"ticket_quantities[]\" class=\"quantity-select\"\
-                                                    data-rate=\"{{ ticket.ticket.price }}\" data-id=\"{{ticket.ticket.id}}\" data-fee=\"{% if not ticket.ticket.absorb_fees %}\
+                                                    data-rate=\"{{ ticket.ticket.price }}\" data-id=\"{{ticket.ticket.id}}\" data-fee=\"{% if not ticket.ticket.is_fee_absorbed %}\
                                             {% if fee < fees.maximum_fee %}\
                                                 {{ (ticket.ticket.price * fees.service_fee / 100) | money}}\
                                             {% else %}\

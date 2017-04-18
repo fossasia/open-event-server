@@ -2,7 +2,7 @@ from app.models import db
 
 
 class SessionType(db.Model):
-    __tablename__ = "session_type"
+    __tablename__ = "session_types"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     length = db.Column(db.String, nullable=False)

@@ -63,8 +63,8 @@
                                     <div class="checkbox" style="margin-top:10px;">
                                         <label>
                                             <input type="checkbox" class="flat"
-                                                   {% if message_settings[mail].notif_status != 0 or not message_settings[mail] %}checked="checked"{% endif %}
-                                                   name="{{ mail }}_notif_status"> Notification
+                                                   {% if message_settings[mail].notification_status != 0 or not message_settings[mail] %}checked="checked"{% endif %}
+                                                   name="{{ mail }}_notification_status"> Notification
                                         </label>
                                     </div><br>
                                     <div class="checkbox" style="margin-top:10px;">

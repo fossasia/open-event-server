@@ -2,7 +2,7 @@ import stripe
 from flask import current_app
 from sqlalchemy import desc
 
-from app.models.fees import TicketFees
+from app.models.ticket_fee import TicketFees
 from app.models.setting import Setting, Environment
 
 

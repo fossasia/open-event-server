@@ -9,10 +9,10 @@ class Permission(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    role_id = db.Column(db.Integer, db.ForeignKey('role.id', ondelete='CASCADE'))
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id', ondelete='CASCADE'))
     role = db.relationship('Role')
 
-    service_id = db.Column(db.Integer, db.ForeignKey('service.id', ondelete='CASCADE'))
+    service_id = db.Column(db.Integer, db.ForeignKey('services.id', ondelete='CASCADE'))
     service = db.relationship('Service')
 
     can_create = db.Column(db.Boolean, nullable=False)

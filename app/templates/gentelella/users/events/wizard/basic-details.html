@@ -673,14 +673,14 @@
                                 <label class="control-label">{{ _("Tax Invoices") }}:</label>
                                 <div class="checkbox">
                                     <label style="font-weight: 300;">
-                                        <input type="checkbox" name="tax_invoice" v-model="event.tax.send_invoice">
+                                        <input type="checkbox" name="tax_invoice" v-model="event.tax.is_invoice_sent">
                                         <strong style="font-weight: 400;">{{ _("Send tax invoice to attendees") }}: </strong>
                                         {{ _("Tax Invoices are sent to your attendees when you select this feature.") }}
                                         {{ _("Enter your registered business company name and address to be included on the tax invoice") }}
                                     </label>
                                 </div>
                             </div>
-                            <div id="tax-invoice-holder" v-show="event.tax.send_invoice">
+                            <div id="tax-invoice-holder" v-show="event.tax.is_invoice_sent">
                                 <div class="col-sm-12 form-group">
                                     <label for="registered_company">{{ _("Registered Company") }} <span
                                             class="required">*</span></label>
@@ -733,14 +733,14 @@
                                 <div class="radio">
                                     <label style="font-weight: 300;">
                                         <input type="radio" name="tax_options" value="0"
-                                               v-model.number="event.tax.tax_include_in_price">
+                                               v-model.number="event.tax.is_tax_included_in_price">
                                         <strong style="font-weight: 400;">{{ _("Add tax as separate fee on top of the price") }}</strong>
                                     </label>
                                 </div>
                                 <div class="radio">
                                     <label style="font-weight: 300;">
                                         <input type="radio" name="tax_options" value="1"
-                                               v-model.number="event.tax.tax_include_in_price">
+                                               v-model.number="event.tax.is_tax_included_in_price">
                                         <strong style="font-weight: 400;">{{ _("Include tax in ticket price") }}</strong>
                                     </label>
                                 </div>
