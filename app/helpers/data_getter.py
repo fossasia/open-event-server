@@ -6,7 +6,7 @@ import binascii
 import humanize
 import pytz
 import requests
-from flask import flash, abort
+from flask import flash, abort, request
 from flask import url_for
 from flask.ext import login
 from sqlalchemy import desc, asc, or_
@@ -590,6 +590,17 @@ class DataGetter(object):
     @staticmethod
     def get_event_default_images():
         return DEFAULT_EVENT_IMAGES
+
+    @staticmethod
+    def get_placeholder_url_by_event(event):
+        custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.sub_topic or event.topic or 'Other')
+        if custom_placeholder:
+            return custom_placeholder.url
+        else:
+            default_images = DataGetter.get_event_default_images()
+            for key in [event.sub_topic, event.topic, 'Other']:
+                if key in default_images:
+                    return request.url_root.strip('/') + url_for('static', filename='placeholders/' + default_images[key])
 
     @staticmethod
     def get_all_mails(count=300):

@@ -263,3 +263,13 @@ class Licence(Raw):
 
     def format(self, value):
         return DataGetter.get_licence_details(value)
+
+
+class PlaceHolder(CustomField):
+    """
+    Background Image PlaceHolder field for Events
+    """
+    __schema_example__ = 'http://url.com/img.ext'
+
+    def format(self, value):
+        return DataGetter.get_placeholder_url_by_event(value)
