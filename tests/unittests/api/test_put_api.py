@@ -119,7 +119,7 @@ class TestPutApiMin(TestPutApiBase):
                     return i
         return False
 
-    def _test_model(self, name, data, path=None, exclude=None):
+    def _test_model(self, name, data, path=None, exclude=None, linked_pairs=None):
         if exclude is None:
             exclude = []
         if not path:
@@ -139,11 +139,11 @@ class TestPutApiMin(TestPutApiBase):
                              msg='Key: %s\nMsg: %s' % (i, resp.data))
             # check persistence
             status = self._test_change_json(resp_old.data, resp.data, i)
-            if status:
+            if status and (linked_pairs.get(i) != status):
                 self.assertTrue(0, msg='Key %s changed in %s' % (status, i))
 
     def test_event_api(self):
-        self._test_model('event', POST_EVENT_DATA, exclude=['sub_topic'])
+        self._test_model('event', POST_EVENT_DATA, exclude=['sub_topic'], linked_pairs={'topic': 'placeholder_url'})
 
     def test_track_api(self):
         self._test_model('track', POST_TRACK_DATA)
