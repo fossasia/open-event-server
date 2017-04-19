@@ -33,7 +33,7 @@ class TestGetApi(OpenEventTestCase):
 
     def test_event_api(self):
         path = get_path(1)
-        self._test_path(path, 'TestEvent')
+        self._test_path(path, 'TestEvent', 'placeholder')
 
     def test_track_api(self):
         path = get_path(1, 'tracks', 1)
