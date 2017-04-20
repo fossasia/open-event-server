@@ -22,6 +22,11 @@ body {
   text-align: left;
 }
 
+/* custom modal properties */
+.modal-content {
+  border-radius: 0;
+}
+
 /*noinspection CssOptimizeSimilarProperties,CssUnknownTarget*/
 .carousel .item {
   background-position: center;

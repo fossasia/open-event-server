@@ -39,7 +39,7 @@
                                 data-target="#login-user-modal">{{ _("Submit Proposal") }}
                         </button>
                     {% endif %}
-                    <div id="login-user-modal" class="modal fade" tabindex="-1" role="dialog">
+                    <div id="login-user-modal" class="modal" tabindex="-1" role="dialog">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -54,7 +54,7 @@
                         </div>
                     </div>
                     {% if user_speaker[0]['name'] == '' or not user_speaker[0] %}
-                        <div id="speaker-session-modal" class="modal fade" tabindex="-1" role="dialog">
+                        <div id="speaker-session-modal" class="modal" tabindex="-1" role="dialog">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -83,7 +83,7 @@
                         </div>
                     {% else %}
                         {% if not existing_sessions[0] %}
-                             <div id="speaker-session-modal" class="modal fade" tabindex="-1" role="dialog">
+                             <div id="speaker-session-modal" class="modal" tabindex="-1" role="dialog">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -102,7 +102,7 @@
                                 </div>
                             </div>
                         {% else %}
-                            <div id="speaker-session-modal" class="modal fade" tabindex="-1" role="dialog">
+                            <div id="speaker-session-modal" class="modal" tabindex="-1" role="dialog">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
