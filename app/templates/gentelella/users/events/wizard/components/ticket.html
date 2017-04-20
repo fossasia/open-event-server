@@ -43,6 +43,7 @@
                     </a>
                 </div>
             </div>
+            <span class="help-block" v-show="ticket.type == 'paid' && ticket.price <= 0">Paid ticket should have a price greater than 0</span>
         </div>
 
         <transition name="fade">

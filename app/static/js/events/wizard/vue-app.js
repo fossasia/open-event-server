@@ -95,6 +95,12 @@ var app = new Vue({
         'event.end_time_date': function () {
             this.disableMove = shouldDisableMove(this);
         },
+        'event.tickets': {
+            handler :  function () {
+                this.disableMove = shouldDisableMove(this);
+            },
+            deep: true
+        },
         'event.discount_code': function () {
             this.discountMessage.success = '';
             this.discountMessage.error = '';
@@ -169,8 +175,9 @@ var app = new Vue({
             var ticket = _.cloneDeep(TICKET);
             ticket.sales_start_date = moment().tz(this.event.timezone).format('MM/DD/YYYY');
             ticket.sales_start_time = moment().tz(this.event.timezone).format('HH:mm');
-            ticket.sales_end_date = moment().tz(this.event.timezone).add(10, 'days').format('MM/DD/YYYY'),
-            ticket.sales_end_time = moment().tz(this.event.timezone).add(10, 'days').hour(22).minute(0).format('HH:mm'),
+            ticket.sales_end_date = moment().tz(this.event.timezone).add(10, 'days').format('MM/DD/YYYY');
+            ticket.sales_end_time = moment().tz(this.event.timezone).add(10, 'days').hour(22).minute(0).format('HH:mm');
+            ticket.price = 0.01;
             ticket.type = ticketType;
             this.event.tickets.push(ticket);
         },
@@ -350,8 +357,20 @@ function shouldDisableMove($this) {
         $this.event.start_time_time.trim() === '' ||
         $this.event.start_time_date.trim() === '' ||
         $this.event.end_time_time.trim() ==='' ||
-        $this.event.end_time_date.trim() === ''
+        $this.event.end_time_date.trim() === '' ||
+        checkTickets($this.event.tickets)
     );
+}
+
+function checkTickets($this) {
+    var flag = false;
+    $this.forEach(function(ticket){
+        if(ticket.type === 'paid' && (ticket.price === '' || ticket.price <=0))
+        {
+            flag = true;
+        }
+    });
+    return flag;
 }
 
 function showLoading(text) {
