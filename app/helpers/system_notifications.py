@@ -12,6 +12,7 @@ from app.models.notifications import (
     EVENT_PUBLISH,
     USER_CHANGE_EMAIL,
     TICKET_PURCHASED,
+    TICKET_RESEND_ORGANIZER,
     EVENT_EXPORT_FAIL,
     EVENT_EXPORTED,
     TICKET_PURCHASED_ORGANIZER
@@ -48,6 +49,13 @@ NOTIFS = {
         'message': (
             u"The order has been processed successfully."
             u"<br><br><a href='{order_url}' class='btn btn-info btn-sm'>View Invoice</a>"
+        )
+    },
+    TICKET_RESEND_ORGANIZER: {
+        'recipient': 'Organizer',
+        'title': u'Email resent for {event_name} by {buyer_email} ({invoice_id}) ',
+        'message': (
+            u"Email has been sent successfully."
         )
     },
     USER_CHANGE_EMAIL: {

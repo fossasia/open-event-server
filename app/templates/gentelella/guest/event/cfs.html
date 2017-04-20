@@ -19,15 +19,15 @@
                 <p {% if via_hash %}style="display:none;"{% endif %}>
                     {% if state == 'now' %}
                         <span class="label label-success">{{ _("Open") }}</span>
+                        Call open until {{ call_for_speakers.end_date.strftime('%a, %B %d %Y at %I:%M %p') }}
                     {% elif state == 'past' %}
                         <span class="label label-danger">{{ _("Closed") }}</span>
                     {% elif state == 'future' %}
                         <span class="label label-info">{{ _("Yet to Open") }}</span>
+                        Call open from {{ call_for_speakers.start_date.strftime('%a, %B %d %Y at %I:%M %p')}} until {{ call_for_speakers.end_date.strftime('%a, %B %d %Y at %I:%M %p') }}
                     {% endif %}
                 </p>
-                <p><strong>{{ call_for_speakers.start_date.strftime('%a, %B %d %Y at %I:%M %p') }}</strong>
-                    to
-                    <strong>{{ call_for_speakers.end_date.strftime('%a, %B %d %Y at %I:%M %p') }}</strong></p>
+
                 {{ call_for_speakers.announcement | safe }}
                 {% if state == "now" or via_hash %}
                     {% if current_user.is_authenticated %}
@@ -53,7 +53,7 @@
                             </div>
                         </div>
                     </div>
-                    {% if not user_speaker[0] %}
+                    {% if user_speaker[0]['name'] == '' or not user_speaker[0] %}
                         <div id="speaker-session-modal" class="modal fade" tabindex="-1" role="dialog">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -62,6 +62,19 @@
                                         <h4 class="modal-title">{{ _("Submit Proposal") }}? </h4>
                                     </div>
                                     <div class="modal-footer" style="padding:6px">
+                                        <div class="existing-session" style="text-align:left">
+                                            <h4>{{ _("Existing Sessions") }} </h4>
+                                            {% if not existing_sessions[0] %}
+                                            <p>No Existing Sessions!<br><p>
+                                            {% else %}
+                                            {% for speaker_sessions in existing_sessions %}
+                                                {% if not loop.first %}<hr>{% endif %}
+                                                {% for session in speaker_sessions %}
+                                                    {{ session }} <a href="{{ url_for('my_sessions.process_session_view',session_id=session.id) }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a><br>
+                                                {% endfor %}
+                                            {% endfor %}
+                                            {% endif %}
+                                        </div>
                                         <a href="/e/{{ event.identifier }}/cfs/new_speaker" type="button" class="btn btn-info" id = "speaker-button">{{ _("Register as a Speaker") }}</a>
                                         <a href="/e/{{ event.identifier }}/cfs/new/" type="button" class="btn btn-primary" id = "session-button" style="margin-top:-6px">{{ _("Propose Session") }}</a>
                                     </div>
@@ -69,34 +82,50 @@
                             </div>
                         </div>
                     {% else %}
-                        <div id="speaker-session-modal" class="modal fade" tabindex="-1" role="dialog">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-                                        <h4 class="modal-title">{{ _("Add Speaker Information") }} </h4>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <div class="existing-session" style="text-align:left"> 
-                                            <h4>{{ _("Existing Sessions") }} </h4>
-                                            {% for speaker in user_speaker %}
-                                                {% for session in speaker.sessions %}
-                                                    {% if not session.in_trash %} 
-                                                        {% if session.title %}
-                                                            {{ session }} <a href="{{ url_for('my_sessions.process_session_view',session_id=session.id) }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a><br>
-                                                        {% endif %}
-                                                    {% endif %}
-                                                {% endfor %}
-                                                <hr>
-                                            {% endfor %}
+                        {% if not existing_sessions[0] %}
+                             <div id="speaker-session-modal" class="modal fade" tabindex="-1" role="dialog">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                                            <h4 class="modal-title">{{ _("Add Speaker Information") }} </h4>
                                         </div>
-                                        <div class="add_proposal">
+                                        <div class="modal-footer">
+                                            <div class="existing-session" style="text-align:left">
+                                                <h4>{{ _("Existing Sessions") }} </h4>
+                                                <p>No Existing Sessions! Please Click on <b>Add Session Proposal</b> to submit a new session.<br><br></p>
+                                            </div>
+                                            <a href="{{ url_for('my_sessions.process_speaker_view',speaker=user_speaker[0]['id']) }}" type="button" class="btn btn-info" id = "speaker-button">{{ _("Edit Speaker Details") }}</a>
+                                            <a href="/e/{{ event.identifier }}/cfs/new_session" type="button" class="btn btn-success" id = "session-button" style="margin-top:-6px">{{ _("Add Session Proposal") }} </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div id="speaker-session-modal" class="modal fade" tabindex="-1" role="dialog">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                                            <h4 class="modal-title">{{ _("Add Speaker Information") }} </h4>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="existing-session" style="text-align:left">
+                                                <h4>{{ _("Existing Sessions") }} </h4>
+                                                {% for speaker_sessions in existing_sessions %}
+                                                    {% if not loop.first %}<hr>{% endif %}
+                                                    {% for session in speaker_sessions %}
+                                                        {{ session }} <a href="{{ url_for('my_sessions.process_session_view',session_id=session.id) }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a><br>
+                                                    {% endfor %}
+                                                {% endfor %}
+                                            </div>
+                                            <a href="{{ url_for('my_sessions.process_speaker_view',speaker_id=user_speaker[0]['id']) }}" type="button" class="btn btn-info" id = "speaker-button">{{ _("Edit Speaker Details") }}</a>
                                             <a href="/e/{{ event.identifier }}/cfs/new_session" type="button" class="btn btn-success" id = "session-button" style="margin-top:-6px">{{ _("Add Session Proposal") }}</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
             </div>
@@ -108,7 +137,7 @@
     {{ super() }}
     <script src="{{ url_for('static', filename='js/vendor/jquery/jquery.multi-select.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/events/session/new.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $("textarea").summernote(summernoteConfig);

@@ -31,19 +31,27 @@ def trim_get_form(form, key, default=None):
     return value.strip()
 
 
-def save_speaker(request, event_id=None, speaker=None, user=None):
+def save_speaker(request, event_id=None, speaker=None, user=None, no_name=False):
     if not speaker and not event_id:
         raise Exception('event_id or speaker is required')
 
     from app.helpers.data import save_to_db, record_activity
 
     if not speaker:
-        speaker = Speaker(
-            event_id=event_id,
-            user=user,
-            name=trim_get_form(request.form, 'name', None),
-            email=trim_get_form(request.form, 'email', None)
-        )
+        if no_name:
+            speaker = Speaker(
+                event_id=event_id,
+                user=user,
+                name='',
+                email=trim_get_form(request.form, 'email', None)
+            )
+        else:
+            speaker = Speaker(
+                event_id=event_id,
+                user=user,
+                name=trim_get_form(request.form, 'name', None),
+                email=trim_get_form(request.form, 'email', None)
+            )
         save_to_db(speaker)
 
     speaker.email = trim_get_form(request.form, 'email', None)

@@ -99,6 +99,22 @@
                             class="fa fa-times fa-fw"></i></button>
                 </div>
             </form>
+             <div class="btn-group form-inline" id="export-control-btn">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                    {{ _("Export As") }} <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" style="font-size: 14px;padding: 5px 0;">
+                    <li><a href="{{ url_for('event_ticket_sales.download_as_pdf', event_id=event.id ) }}"
+                        target="_blank"><i class="fa fa-file-pdf-o fa-fw"></i> {{ _("PDF") }}</a>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="{{ url_for('event_ticket_sales.download_as_csv', event_id=event.id) }}"
+                        target="_blank"><i class="fa fa-file-excel-o fa-fw"></i> {{ _("CSV") }}</a>
+                    </li>
+                </ul>
+            </div>
             <div class="btn-group form-inline" id="filter-control-btn">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
                         aria-haspopup="true"
@@ -214,7 +230,9 @@
                         {% endif %}
                     </td>
                     <td>{{ holder.ticket_name }}</td>
-                    <td>{% if holder.ticket_price %}{{ event.payment_currency | currency_symbol }}{{ holder.ticket_price | money }}{% endif %}</td>
+                    <td>{% if holder.ticket_price %}{{ event.payment_currency | currency_symbol }}{{ holder.ticket_price | money }}{% else %}Free{% endif %}
+                        {% if holder.discount %}<p><span id="label-{{ holder.identifier }}" class="label label-warning label-small">{{ holder.discount }}</span></p>{% endif %}
+                    </td>
                     <td>{{ holder.firstname }}</td>
                     <td>{{ holder.lastname }}</td>
                     <td>{{ holder.email }}</td>

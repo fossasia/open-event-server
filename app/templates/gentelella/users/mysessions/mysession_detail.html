@@ -25,20 +25,30 @@
                         <span class="detail-status label label-success">{{ _("Accepted") }}</span>
                     {% elif session.state == 'rejected' %}
                         <span class="detail-status label label-danger">{{ _("Rejected") }}</span>
+                    {% elif session.state == 'confirmed' %}
+                        <span class="detail-status label label-danger">{{ _("Confirmed") }}</span>
                     {% else %}
                         <span class="detail-status label label-info">N/A</span>
                     {% endif %}
-                    <div class="btn-group pull-right">
-                        {% if session.state == 'pending' or session.state == 'accepted' or session.state == 'rejected' %}
+                    <div class="pull-right">
+                        {% if session.state == 'pending' or session.state == 'accepted' or session.state == 'confirmed' or session.state == 'rejected' %}
+                            {% if datetime_now <= session.end_time %}
                             <a href="{{ url_for('my_sessions.withdraw_session_view',session_id=session.id) }}"
                                class="btn btn-danger ">
                                 {{ _("Withdraw Proposal") }}
                             </a>
+                            {% endif %}
                         {% endif %}
                         <a href="{{ url_for('my_sessions.process_session_view',session_id=session.id) }}"
                            class="btn btn-info">
-                            {{ _("Edit Proposal") }}
+                            {{ _("Edit Session Proposal") }}
                         </a>
+                        {% if user_speaker.name != '' %}
+                            <a href="{{ url_for('my_sessions.process_speaker_view',speaker_id=user_speaker.id) }}"
+                               class="btn btn-info">
+                                {{ _("Edit Speaker Details") }}
+                            </a>
+                        {% endif %}
                     </div>
                     <br>
                     <br>
@@ -156,4 +166,3 @@
         });
     </script>
 {% endblock %}
-

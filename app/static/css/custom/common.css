@@ -70,6 +70,10 @@ ul.msg_list li:last-child a {
     overflow-x: hidden;
 }
 
+.popover {
+  max-width: 500px;
+}
+
 .image-box {
     width: 100%;
     height: 200px;
@@ -451,4 +455,8 @@ span.twitter-typeahead {
     border: 1px solid #dcdcdc;
     margin-left: 1px;
     padding: 8px;
+}
+
+.fullwidth {
+    width: 100% !important;
 }

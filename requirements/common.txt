@@ -21,7 +21,7 @@ celery>=3.1.23,<4
 redis>=2.10.5,<3
 apscheduler>=3.3.0,<4
 pillow>=3.4.2,<3.5
-librabbitmq>=1.6.1,<2
+librabbitmq==1.5.1
 gunicorn>=19.6.0,<20
 boto>=2.45.0,<3
 geoip2>=2.4.2,<3
@@ -45,6 +45,7 @@ Flask-Babel>=0.11.1,<1
 python-geoip>=1.2,<2
 marrow.mailer>=4.0.2,<5
 defusedxml>=0.4.1,<1
+flask-cors>=3.0.2,<3.1
 python-pentabarf-xml==0.19  # leave versions untouched.
 Flask-SocketIO==2.5  # leave versions untouched.
 python-geoip-geolite2

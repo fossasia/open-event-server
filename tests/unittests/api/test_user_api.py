@@ -113,7 +113,7 @@ class TestUserApiWritable(TestUserApi):
             # test existence in database (in trash)
             user = User.query.get(1)
             self.assertNotEqual(user, None)
-            self.assertEqual(user.in_trash, True)
+            self.assertTrue(user.deleted_at is not None)
 
 
 if __name__ == '__main__':

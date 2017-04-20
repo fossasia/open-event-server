@@ -194,7 +194,7 @@ class DataManager(object):
         return notification_ids
 
     @staticmethod
-    def add_session_to_event(request, event_id, state=None, use_current_user=True):
+    def add_session_to_event(request, event_id, state=None, use_current_user=True, no_name=False):
         """
         Session will be saved to database with proper Event id
         :param use_current_user:
@@ -242,15 +242,17 @@ class DataManager(object):
         if form.get('session_type', None) != "":
             new_session.session_type_id = form.get('session_type', None)
 
-        speaker = Speaker.query.filter_by(email=form.get('email', '')).filter_by(event_id=event_id).first()
-        speaker = save_speaker(
-            request,
-            event_id=event_id,
-            speaker=speaker,
-            user=login.current_user if use_current_user else None
-        )
+        if form.get('email', '') != '':
+            speaker = Speaker.query.filter_by(email=form.get('email', '')).filter_by(event_id=event_id).first()
+            speaker = save_speaker(
+                request,
+                event_id=event_id,
+                speaker=speaker,
+                user=login.current_user if use_current_user else None,
+                no_name=no_name
+            )
 
-        new_session.speakers.append(speaker)
+            new_session.speakers.append(speaker)
 
         save_to_db(new_session, "Session saved")
 
@@ -278,7 +280,6 @@ class DataManager(object):
                     event_id=int(event_id), id=int(new_session.id)
                 ))
             new_session.video = video_url
-
         record_activity('create_session', session=new_session, event_id=event_id)
         update_version(event_id, False, 'sessions_ver')
 
@@ -326,6 +327,24 @@ class DataManager(object):
         save_to_db(session, "Session updated")
         update_version(event_id, False, "speakers_ver")
         update_version(event_id, False, "sessions_ver")
+
+    @staticmethod
+    def add_speaker_to_event(request, event_id, user=login.current_user, no_name=False):
+        """
+        Speaker will be saved to database with proper Event id
+        :param user:
+        :param request: view data form
+        :param event_id: Speaker belongs to Event by event id
+        """
+        speaker = Speaker.query.filter_by(email=request.form.get('email', '')).filter_by(event_id=event_id).first()
+        speaker = save_speaker(
+            request,
+            event_id=event_id,
+            speaker=speaker,
+            user=user,
+            no_name=no_name
+        )
+        update_version(event_id, False, "speakers_ver")
 
     @staticmethod
     def session_accept_reject(session, event_id, state, send_email=True, message=None, subject=None):
@@ -385,7 +404,7 @@ class DataManager(object):
             session.video = video_temp_url
 
             if form_state == 'pending' and session.state != 'pending' and \
-                    session.state != 'accepted' and session.state != 'rejected':
+                    session.state != 'accepted' and session.state != 'rejected' and session.state != 'confirmed':
                 session.state = 'pending'
                 trigger_new_session_notifications(session.id, event_id=event_id)
 
@@ -427,6 +446,10 @@ class DataManager(object):
 
             record_activity('update_session', session=session, event_id=event_id)
             update_version(event_id, False, "sessions_ver")
+
+    @staticmethod
+    def edit_speaker(request, speaker):
+        save_speaker(request, event_id=speaker.event_id, speaker=speaker)
 
     @staticmethod
     def remove_role(uer_id):
@@ -710,8 +733,7 @@ class DataManager(object):
     @staticmethod
     def trash_event(e_id):
         event = Event.query.get(e_id)
-        event.in_trash = True
-        event.trash_date = datetime.now()
+        event.deleted_at = datetime.now()
         save_to_db(event, "Event Added to Trash")
         return event
 
@@ -1009,16 +1031,14 @@ def update_role_to_admin(form, user_id):
 
 def trash_user(user_id):
     user = DataGetter.get_user(user_id)
-    user.in_trash = True
-    user.trash_date = datetime.now()
+    user.deleted_at = datetime.now()
     save_to_db(user, 'User has been added to trash')
     return user
 
 
 def trash_session(session_id):
     session = DataGetter.get_session(session_id)
-    session.in_trash = True
-    session.trash_date = datetime.now()
+    session.deleted_at = datetime.now()
     save_to_db(session, "Session added to Trash")
     update_version(session.event_id, False, 'sessions_ver')
     return session
@@ -1026,19 +1046,19 @@ def trash_session(session_id):
 
 def restore_event(event_id):
     event = DataGetter.get_event(event_id)
-    event.in_trash = False
+    event.deleted_at = None
     save_to_db(event, "Event restored from Trash")
 
 
 def restore_user(user_id):
     user = DataGetter.get_user(user_id)
-    user.in_trash = False
+    user.deleted_at = None
     save_to_db(user, "User restored from Trash")
 
 
 def restore_session(session_id):
     session = DataGetter.get_session(session_id)
-    session.in_trash = False
+    session.deleted_at = None
     save_to_db(session, "Session restored from Trash")
     update_version(session.event_id, False, 'sessions_ver')
 

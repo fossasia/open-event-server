@@ -8,6 +8,7 @@
     {{ super() }}
     <link href="{{ url_for('static', filename='css/events/scheduler.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/sessions.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/guest/schedule.css') }}"/>
 {% endblock %}
 
 {% block head_js %}
@@ -19,42 +20,70 @@
 
 {% block content %}
     <div>
-        <div class="row">
-            <div class="col-md-12">
-                <h1 style="font-weight: 300; font-size: 24px">{{ _("Schedule") }}
-                    <small>
-                        ({{ _("Published on") }} {{ event.schedule_published_on.strftime('%B %d, %Y') }})
-                    </small>
+        <div class="row scheduler">
+            <div class="col-md-12 scheduler-head">
+                <h1 style="font-weight: 300; font-size: 24px">
+                    {{ event.name }}{{ _(" Schedule") }}
                 </h1>
             </div>
-            <div class="col-md-12" style="margin-top: 10px;">
-                <div class="btn-toolbar" role="toolbar">
+            <div class="col-md-12 scheduler-container">
+                <div class="btn-toolbar scheduler-heading" role="toolbar">
                     <div id="date-change-btn-holder" class="btn-group date-change-btn-holder" role="group">
 
                     </div>
-                    <div class="btn-group pull-right" role="group">
+                    <div id="type-change-btn-holder" class="btn-group pull-right" role="group">
+                        <div class="input-group" style="margin: 0px; width: 15vw;">
+                            <span class="input-group-addon" id="search-public-addon"><i
+                                            class="glyphicon glyphicon-search"></i></span>
+                            <input type="search" class="form-control" id="sessions-public-search"
+                                   placeholder="Search sessions ..."
+                                   aria-describedby="search-public-addon">
+                        </div>
                         <button type="button" class="btn btn-default rooms-view">{{ _("Rooms View") }}</button>
                         <button type="button" class="btn btn-default tracks-view">{{ _("Tracks View") }}</button>
                         <button type="button" class="btn btn-default sessions-view">{{ _("Sessions View") }}</button>
+                        <button type="button" class="btn btn-default export-png"><i class="fa fa-download"></i></button>
+                        <button type="button" class="btn btn-default pop-out"><i class="fa fa-expand btn-pop-out"></i></button>
                     </div>
                 </div>
 
-                <div class="flash-message-holder" style="width: 100%; text-align: center;">
-                    <span class="text-muted message loading-text"
-                          style="font-weight: 300; font-size: 30px;">{{ _("Sessions loading") }} ...</span>
-                </div>
-                <div class="scheduler-holder" style="display: none;">
-                    <div id="session-view-holder" class="hidden">
-                        <br>
-                        {% include 'gentelella/guest/event/_sessions_list.html' %}
+                <div class="scheduler-body">
+                    <nav id="public-track-navbar" class="navbar navbar-default track-navbar hidden" style="margin-top: 25px;">
+                        <div class="container-fluid track-container-fluid">
+                            <div class="navbar-collapse track-navbar-collapse" id="bs-example-navbar-collapse-1">
+                                <ul class="nav navbar-nav" style="max-width: 100%">
+                                    {% for track in tracks %}
+                                        <li class="track-link"><i class="fa fa-circle" aria-hidden="true"></i><a href="#track-id-{{ track.id }}">{{ track.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+                    <div class="flash-message-holder" style="width: 100%; text-align: center;">
+                        <span class="text-muted message loading-text"
+                              style="font-weight: 300; font-size: 30px;">{{ _("Sessions loading") }} ...</span>
                     </div>
-                    {% include 'gentelella/users/events/scheduler/components/timeline.html' %}
+                    <div class="scheduler-holder" style="display: none;">
+                        <div id="session-view-holder" class="hidden">
+                            <br>
+                            {% include 'gentelella/guest/event/_sessions_list.html' %}
+                        </div>
+                        {% include 'gentelella/users/events/scheduler/components/timeline.html' %}
 
+                    </div>
                 </div>
-
+                <div class="col-md-12 scheduler-head">
+                    <p style="float: right; padding-right: 20px">
+                        {{ _("All the timings are in") }} {{ event.timezone | default('UTC', true) }}
+                    </p>
+                    <strong>
+                        {{ _("Published on") }} {{ event.schedule_published_on.strftime('%B %d, %Y') }}
+                    </strong>
+                    </p>
+                </div>
             </div>
+
         </div>
-    </div>
     {% include 'gentelella/users/events/scheduler/components/timeline_templates.html' %}
 {% endblock %}
 
@@ -67,7 +96,10 @@
     <script src="{{ url_for('static', filename='js/vendor/jquery/jquery.ellipsis.js') }}"></script>
     <script src="{{ url_for('static', filename='js/vendor/jquery/jquery.codezero.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/events/scheduler.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/html2canvas/build/html2canvas.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/file-saver/FileSaver.min.js') }}"></script>
+
     <script type="text/javascript">
         var $scrollSpy = $('#scrollspy');
         $scrollSpy.stick_in_parent({
@@ -106,5 +138,70 @@
             e.preventDefault();
         });
 
+        var $document = $(document),
+            $body = $('body'),
+            $scheduler = $('.scheduler');
+
+        function toggleScheduleBox(){
+            var state = false;
+            function toggle(force = null) {
+                function open(){
+                    $scheduler.addClass('scheduler-pop');
+                    $body.addClass('noscroll');
+                    $('.overlay').addClass('visible');
+                    $('.btn-pop-out').removeClass('fa-expand').addClass('fa-compress');
+                    var width = $("#timeline").width() - $('.timeunits.x1').width();
+                    $('.microlocation-container').css("width", width + "px");
+                }
+                function close(){
+                    $scheduler.removeClass('scheduler-pop');
+                    $body.removeClass('noscroll');
+                    $('.overlay').removeClass('visible');
+                    $('.btn-pop-out').addClass('fa-expand').removeClass('fa-compress');
+                    $('.microlocation-container').css("width", "fit-content");
+                }
+                if(force == null) {
+                    state ? close() : open();
+                    state = !state;
+                }
+                else {
+                    force ? open() : close();
+                    state = force;
+                }
+            }
+            return toggle;
+        }
+
+        var toggleSchedule = toggleScheduleBox();
+
+        $('.btn.pop-out').on('click touchstart', function() {
+            toggleSchedule();
+        });
+
+        $(".audio-btn").popover({
+            html: true,
+            placement: 'top'
+        }).click(function (e) {
+            e.preventDefault();
+        });
+
+        $(".export-png").click(function () {
+            var $timeline = $('.event-info-container-holder');
+            $('#microlocation-container').addClass('fullwidth');
+            var width = $('#microlocation-container').width() + 150;
+            var currentStyle = $timeline.attr('style');
+            $timeline.width(width);
+            html2canvas($timeline[0], {
+                onrendered: function (canvas) {
+                    canvas.id = "generated-canvas";
+                    canvas.toBlob(function (blob) {
+                        saveAs(blob, "timeline.png");
+                        $('#microlocation-container').removeClass('fullwidth');
+                        $timeline.attr('style', currentStyle);
+                    });
+                },
+            });
+
+        });
     </script>
 {% endblock %}

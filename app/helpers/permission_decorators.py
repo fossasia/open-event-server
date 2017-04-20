@@ -6,6 +6,7 @@ from flask.ext.restplus import abort
 
 from app.helpers.helpers import get_count
 from app.models.discount_code import DiscountCode
+from app.models.access_code import AccessCode
 from app.models.microlocation import Microlocation
 from app.models.session import Session
 from app.models.speaker import Speaker
@@ -93,6 +94,20 @@ def is_moderator(f):
     return decorated_function
 
 
+def is_registrar(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        user = login.current_user
+        event_id = kwargs['event_id']
+        if user.is_staff:
+            return f(*args, **kwargs)
+        if not user.is_registrar(event_id):
+            abort(403)
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
 def can_accept_and_reject(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -155,10 +170,6 @@ def can_access(f):
 
         if user.is_staff:
             return f(*args, **kwargs)
-        if 'events/' + str(event_id) + '/' in url:
-            if user.has_role(event_id):
-                return f(*args, **kwargs)
-            abort(403)
         if '/create/' in url or '/new/' in url:
             if '/events/create/' in url:
                 return f(*args, **kwargs)
@@ -177,7 +188,14 @@ def can_access(f):
             if 'microlocation' in url:
                 if user.can_create(Microlocation, event_id):
                     return f(*args, **kwargs)
-            abort(403)
+            '''
+            #This code to be implemented after service and permissions fixed properly
+            if 'discounts' in url:
+                if user.can_create(DiscountCode, event_id):
+                    return f(*args, **kwargs)
+            if 'access' in url:
+                if user.can_create(AccessCode, event_id):
+                    return f(*args, **kwargs)'''
         if '/edit/' in url:
             if 'events/' + str(event_id) + '/edit/' in url:
                 if user.is_organizer(event_id) or user.is_coorganizer(event_id):
@@ -197,7 +215,14 @@ def can_access(f):
             if 'microlocation' in url:
                 if user.can_update(Microlocation, event_id):
                     return f(*args, **kwargs)
-            abort(403)
+            '''
+            #This code to be implemented after service and permissions fixed properly
+            if 'discounts' in url:
+                if user.can_update(DiscountCode, event_id):
+                    return f(*args, **kwargs)
+            if 'access' in url:
+                if user.can_update(AccessCode, event_id):
+                    return f(*args, **kwargs)'''
         if '/delete/' in url or '/trash/' in url:
             if 'events/' + str(event_id) + '/delete/' in url:
                 if user.is_organizer(event_id) or user.is_coorganizer(event_id):
@@ -220,6 +245,24 @@ def can_access(f):
             if 'microlocation' in url:
                 if user.can_delete(Microlocation, event_id):
                     return f(*args, **kwargs)
-            abort(403)
+            '''
+            #This code to be implemented after service and permissions fixed properly
+            if 'discounts' in url:
+                if user.can_delete(DiscountCode, event_id):
+                    return f(*args, **kwargs)
+            if 'access' in url:
+                if user.can_delete(AccessCode, event_id):
+                    return f(*args, **kwargs)'''
+        if 'events/' + str(event_id) + '/' in url:
+            if not user.has_role(event_id):
+                abort(403)
+            if user.is_registrar(event_id):
+                if '/attendees' in url:
+                    return f(*args, **kwargs)
+                else:
+                    abort(403)
+            if user.is_organizer(event_id) or user.is_coorganizer(event_id):
+                return f(*args, **kwargs)
+        abort(403)
 
     return decorated_function

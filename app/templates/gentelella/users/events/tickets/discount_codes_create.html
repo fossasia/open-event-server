@@ -108,13 +108,15 @@
                 </div>
                 <hr>
                 {% for ticket in event.tickets %}
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="tickets[]" class="single-ticket" value="{{ ticket.id }}"
+                    {% if ticket.price %}
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="tickets[]" class="single-ticket" value="{{ ticket.id }}"
                                    {% if not discount_code or (discount_code and ticket.id|string in discount_code.tickets.split(",")) %}checked{% endif %}>
-                            {{ ticket.name }}
-                        </label>
-                    </div>
+                                {{ ticket.name }}
+                            </label>
+                        </div>
+                    {% endif %}
                 {% endfor %}
 
                 <div class="help-block with-errors"></div>

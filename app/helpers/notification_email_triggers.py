@@ -3,7 +3,7 @@ from flask import url_for
 from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import send_new_session_organizer, send_notif_new_session_organizer, \
     send_notif_session_accept_reject, send_session_accept_reject, send_schedule_change, send_notif_session_schedule, \
-    send_email_for_after_purchase_organizers, send_notif_for_after_purchase_organizer
+    send_email_for_after_purchase_organizers, send_notif_for_after_purchase_organizer, send_notif_for_resend
 from app.models.mail import NEW_SESSION, SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, TICKET_PURCHASED
 
 
@@ -65,7 +65,7 @@ def trigger_session_schedule_change_notifications(session, event_id):
             send_notif_session_schedule(speaker.user, session.title, link)
 
 
-def trigger_after_purchase_notifications(buyer_email, event_id, event, invoice_id, order_url):
+def trigger_after_purchase_notifications(buyer_email, event_id, event, invoice_id, order_url, resend=False):
     if not event and not event_id:
         raise Exception('event or event_id is required')
     if not event:
@@ -79,7 +79,10 @@ def trigger_after_purchase_notifications(buyer_email, event_id, event, invoice_i
             (email_notification_setting and email_notification_setting.after_ticket_purchase == 1 and
              admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
             send_email_for_after_purchase_organizers(organizer.user.email, buyer_email, invoice_id, order_url, event.name, event.organizer_name)
-        send_notif_for_after_purchase_organizer(organizer.user, invoice_id, order_url, event.name, buyer_email)
+        if resend:
+            send_notif_for_resend(organizer.user, invoice_id, order_url, event.name, buyer_email)
+        else:
+            send_notif_for_after_purchase_organizer(organizer.user, invoice_id, order_url, event.name, buyer_email)
 
     coorganizers = DataGetter.get_user_event_roles_by_role_name(event.id, 'coorganizer')
     for coorganizer in coorganizers:
@@ -88,4 +91,8 @@ def trigger_after_purchase_notifications(buyer_email, event_id, event, invoice_i
             (email_notification_setting and email_notification_setting.after_ticket_purchase == 1 and
                      admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
             send_email_for_after_purchase_organizers(coorganizer.user.email, buyer_email, invoice_id, order_url, event.name, event.organizer_name)
-        send_notif_for_after_purchase_organizer(organizer.user, invoice_id, order_url, event.name, buyer_email)
+        if not resend:
+            send_notif_for_resend(organizer.user, invoice_id, order_url, event.name, buyer_email)
+        else:
+            send_notif_for_after_purchase_organizer(organizer.user, invoice_id, order_url, event.name, buyer_email)
+

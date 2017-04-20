@@ -6,7 +6,7 @@ from flask.ext.restplus import Resource, Namespace, marshal
 from app.helpers.data import record_activity
 from helpers import custom_fields as fields
 from helpers.export_helpers import export_event_json, create_export_job, send_export_mail
-from helpers.helpers import nocache, can_access, requires_auth
+from helpers.helpers import nocache, can_access, requires_auth, replace_event_id
 from helpers.utils import TASK_RESULTS
 
 api = Namespace('exports', description='Exports', path='/')
@@ -20,10 +20,11 @@ EXPORT_SETTING = api.model('ExportSetting', {
 
 
 @nocache
-@api.route('/events/<int:event_id>/export/json')
+@api.route('/events/<string:event_id>/export/json')
 @api.hide
 class EventExportJson(Resource):
     @requires_auth
+    @replace_event_id
     @can_access
     @api.expect(EXPORT_SETTING)
     def post(self, event_id):
@@ -50,8 +51,9 @@ class EventExportJson(Resource):
 
 @nocache
 @api.hide
-@api.route('/events/<int:event_id>/exports/<path:path>')
+@api.route('/events/<string:event_id>/exports/<path:path>')
 class ExportDownload(Resource):
+    @replace_event_id
     def get(self, event_id, path):
         if not path.startswith('/'):
             path = '/' + path

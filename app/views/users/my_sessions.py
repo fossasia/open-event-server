@@ -35,9 +35,12 @@ def display_my_sessions_view():
                      '<br>Did not get the email? Please <a href="/resend_email/" class="alert-link"> '
                      'click here to resend the confirmation.</a>'))
     return render_template('gentelella/users/mysessions/mysessions_list.html',
-                           upcoming_events_sessions=upcoming_events_sessions, past_events_sessions=past_events_sessions,
-                           page_content=page_content, placeholder_images=placeholder_images,
-                           custom_placeholder=custom_placeholder, im_size=im_size)
+                           upcoming_events_sessions=upcoming_events_sessions,
+                           past_events_sessions=past_events_sessions,
+                           page_content=page_content,
+                           placeholder_images=placeholder_images,
+                           custom_placeholder=custom_placeholder,
+                           im_size=im_size)
 
 
 @my_sessions.route('/<int:session_id>/')
@@ -54,14 +57,21 @@ def display_session_view(session_id):
     session_form = json.loads(form_elems.session_form)
     event = DataGetter.get_event(session.event_id)
     speakers = DataGetter.get_speakers(session.event_id).all()
-    return render_template('gentelella/users/mysessions/mysession_detail.html', session=session,
-                           speaker_form=speaker_form, session_form=session_form, event=event, speakers=speakers)
+    user_speaker = DataGetter.get_speakers(session.event_id).filter_by(user_id=login.current_user.id).first()
+    return render_template('gentelella/users/mysessions/mysession_detail.html',
+                           session=session,
+                           speaker_form=speaker_form,
+                           session_form=session_form,
+                           event=event,
+                           speakers=speakers,
+                           user_speaker=user_speaker)
 
 
-@my_sessions.route('/<int:session_id>/edit/', methods=('POST', 'GET'))
+@my_sessions.route('/<int:session_id>/session-edit/', methods=('POST', 'GET'))
 def process_session_view(session_id):
     if request.method == 'GET':
         session = DataGetter.get_sessions_of_user_by_id(session_id)
+        speaker = DataGetter.get_speakers(session.event_id).filter_by(user_id=login.current_user.id).first()
         if not session:
             abort(404)
         form_elems = DataGetter.get_custom_form_elements(session.event_id)
@@ -69,14 +79,14 @@ def process_session_view(session_id):
             flash("Speaker and Session forms have been incorrectly configured for this event."
                   " Session creation has been disabled", "danger")
             return redirect(url_for('.display_my_sessions_view', event_id=session.event_id))
-        speaker_form = json.loads(form_elems.speaker_form)
         session_form = json.loads(form_elems.session_form)
         event = DataGetter.get_event(session.event_id)
-        speaker = DataGetter.get_speakers(session.event_id).filter_by(user_id=login.current_user.id).first()
         return render_template(
-            'gentelella/users/mysessions/mysession_detail_edit.html', session=session,
-            photo_delete_url=url_for('.avatar_delete', event_id=event.id, speaker_id=speaker.id),
-            speaker_form=speaker_form, session_form=session_form, event=event, speaker=speaker)
+            'gentelella/users/mysessions/mysession_session_edit.html',
+            session=session,
+            speaker=speaker,
+            session_form=session_form,
+            event=event)
 
     if request.method == 'POST':
         session = DataGetter.get_sessions_of_user_by_id(session_id)
@@ -84,6 +94,35 @@ def process_session_view(session_id):
         DataManager.edit_session(request, session, speaker)
         flash("The session has been updated successfully", "success")
         return redirect(url_for('.display_session_view', session_id=session_id))
+
+
+@my_sessions.route('/<int:speaker_id>/speaker-edit/', methods=('POST', 'GET'))
+def process_speaker_view(speaker_id):
+    if request.method == 'GET':
+        speaker = DataGetter.get_speaker(speaker_id)
+        if not speaker or speaker.name == '':
+            abort(404)
+        form_elems = DataGetter.get_custom_form_elements(speaker.event_id)
+        if not form_elems:
+            flash("Speaker and Session forms have been incorrectly configured for this event."
+                  " Session creation has been disabled", "danger")
+            return redirect(url_for('.display_my_sessions_view', event_id=speaker.event_id))
+        speaker_form = json.loads(form_elems.speaker_form)
+        event = DataGetter.get_event(speaker.event_id)
+        return render_template(
+            'gentelella/users/mysessions/mysession_speaker_edit.html',
+            photo_delete_url=url_for('.avatar_delete',
+            event_id=event.id,
+            speaker_id=speaker.id),
+            speaker_form=speaker_form,
+            event=event,
+            speaker=speaker)
+
+    if request.method == 'POST':
+        speaker = DataGetter.get_speaker(speaker_id)
+        DataManager.edit_speaker(request, speaker)
+        flash("The speaker has been updated successfully", "success")
+        return redirect(url_for('.display_my_sessions_view', event_id=speaker.event_id))
 
 
 @my_sessions.route('/<int:event_id>/speakers/<int:speaker_id>/avatar', methods=('DELETE',))
@@ -104,8 +143,7 @@ def avatar_delete(event_id, speaker_id):
 @my_sessions.route('/<int:session_id>/withdraw/')
 def withdraw_session_view(session_id):
     session = DataGetter.get_sessions_of_user_by_id(session_id)
-    session.in_trash = True
-    session.trash_date = datetime.now()
+    session.deleted_at = datetime.now()
     save_to_db(session)
     flash("The session has been withdrawn", "success")
     return redirect(url_for('.display_my_sessions_view', session_id=session_id))

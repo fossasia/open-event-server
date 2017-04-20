@@ -49,7 +49,7 @@
                     {% endif %}
                 {% endfor %}
                 {% if not event_image.status %}
-                    {% set bg = url_for("static", filename="placeholders/thumbnails/" + placeholder_images["Other"]) %}
+                    {% set bg = url_for("static", filename="placeholders/" + placeholder_images["Other"]) %}
                 {% endif %}
             {% endif %}
 
@@ -58,10 +58,10 @@
         <div class="col col-md-5 col-sm-5  col-xs-12" style="position: relative;">
             <h3 class="title">{{ session.title }}</h3>
             <span class="time">
-            {% if session.start_time %}
-                {{ session.event.start_time.strftime('%B %d, %Y - %I:%M %p') }}
+            {% if session.start_time and session.microlocation %}
+                {{ session.start_time.strftime('%B %d, %Y - %I:%M %p') }}
             {% else %}
-                {{ session.event.start_time.strftime('%B %d, %Y - %I:%M %p') }}
+                {{ _("Session Not Yet Scheduled") }}
             {% endif %}
         </span><br><br>
             <span class="event-name">{{ session.event.name }}</span>
@@ -75,6 +75,8 @@
                 <span class="status label label-success pull-right">{{ _("Accepted") }}</span>
             {% elif session.state == 'rejected' %}
                 <span class="status label label-danger pull-right">{{ _("Rejected") }}</span>
+            {% elif session.state == 'confirmed' %}
+                <span class="status label label-danger pull-right">{{ _("Confirmed") }}</span>
             {% else %}
                 <span class="status label label-info pull-right">N/A</span>
             {% endif %}

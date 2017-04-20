@@ -1,5 +1,7 @@
 
 footer{
+    position: relative;
+    z-index: 15;
     border-top: 5px solid grey;
     background:#282C35;
     color: white;

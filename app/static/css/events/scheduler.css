@@ -18,12 +18,12 @@
     color: #3d3d3d;
     height: 48px;
     overflow: hidden;
-    width: 216px;
+    width: 200px;
     white-space: normal;
     padding: 5px;
     font-size: 11px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .unscheduled {
@@ -46,7 +46,7 @@
     color: white;
     z-index: 2;
     border: 1px solid rgba(0, 0, 0, 0.4);
-    padding-right: 10px;
+    padding: 0;
 }
 
 .scheduled > .remove-btn {
@@ -115,7 +115,7 @@
 }
 
 .timeline .microlocations .microlocation-container {
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
     width: 654px;
@@ -124,7 +124,7 @@
 .timeline .microlocations .microlocation {
     display: inline-block;
     position: relative;
-    width: 216px;
+    width: 200px;
     border-right: 1px solid rgb(221, 221, 221);
     margin-left: 0;
 }
@@ -139,7 +139,9 @@
 
 .timeline .microlocations.x1 .microlocation-header {
     height: 47px;
-    line-height: 47px;
+    display: flex;
+    align-items: center;
+    white-space: initial;
 }
 
 .timeline .microlocations .microlocation-header {
@@ -270,22 +272,15 @@
     background: rgba(0, 150, 136, 0.75);
     width: auto;
     margin-left: 4%;
-    max-width: 500px;
     color: #FFFFFF;
     padding: 5px;
     font-size: 15px;
 }
 
-@media (max-width: 660px) {
-    .event {
-        max-width: 400px;
-    }
-}
-
-@media (max-width: 660px) {
-    .event {
-        max-width: 270px;
-    }
+.session-track-details {
+    width: auto;
+    margin-left: 4%;
+    font-size: 15px;
 }
 
 #track-list {
@@ -294,7 +289,7 @@
 }
 
 .height {
-    min-height: 70px;
+    min-height: 110px;
     border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -310,4 +305,11 @@
 .active {
     color: #757575 !important;
     font-weight: bold;
+}
+
+.text
+{
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 14px;
 }

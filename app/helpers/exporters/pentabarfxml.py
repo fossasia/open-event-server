@@ -36,7 +36,7 @@ class PentabarfExporter:
         dates = (db.session.query(cast(Session.start_time, DATE))
                  .filter_by(event_id=event_id)
                  .filter_by(state='accepted')
-                 .filter(Session.in_trash is not True)
+                 .filter(Session.deleted_at.is_(None))
                  .order_by(asc(Session.start_time)).distinct().all())
 
         for date in dates:
@@ -45,7 +45,7 @@ class PentabarfExporter:
             microlocation_ids = list(db.session.query(Session.microlocation_id)
                                      .filter(func.date(Session.start_time) == date)
                                      .filter_by(state='accepted')
-                                     .filter(Session.in_trash is not True)
+                                     .filter(Session.deleted_at.is_(None))
                                      .order_by(asc(Session.microlocation_id)).distinct())
             for microlocation_id in microlocation_ids:
                 microlocation_id = microlocation_id[0]
@@ -53,7 +53,7 @@ class PentabarfExporter:
                 sessions = Session.query.filter_by(microlocation_id=microlocation_id) \
                     .filter(func.date(Session.start_time) == date) \
                     .filter_by(state='accepted') \
-                    .filter(Session.in_trash is not True) \
+                    .filter(Session.deleted_at.is_(None)) \
                     .order_by(asc(Session.start_time)).all()
 
                 room = Room(name=microlocation.name)

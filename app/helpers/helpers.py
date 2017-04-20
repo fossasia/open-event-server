@@ -21,7 +21,8 @@ from app.models.notifications import (
     TICKET_PURCHASED as NOTIF_TICKET_PURCHASED,
     EVENT_EXPORT_FAIL as NOTIF_EVENT_EXPORT_FAIL,
     EVENT_EXPORTED as NOTIF_EVENT_EXPORTED,
-    TICKET_PURCHASED_ORGANIZER as NOTIF_TICKET_PURCHASED_ORGANIZER
+    TICKET_PURCHASED_ORGANIZER as NOTIF_TICKET_PURCHASED_ORGANIZER,
+    TICKET_RESEND_ORGANIZER as NOTIF_TICKET_RESEND_ORGANIZER
 
 )
 from app.settings import get_settings
@@ -497,6 +498,16 @@ def send_notif_for_after_purchase_organizer(user, invoice_id, order_url, event_n
         title=NOTIFS[NOTIF_TICKET_PURCHASED_ORGANIZER]['title'].format(invoice_id=invoice_id, event_name=event_name,
                                                                        buyer_email=buyer_email),
         message=NOTIFS[NOTIF_TICKET_PURCHASED_ORGANIZER]['message'].format(order_url=order_url)
+    )
+
+
+def send_notif_for_resend(user, invoice_id, order_url, event_name, buyer_email):
+    """Send notification with order invoice link after purchase"""
+    send_notification(
+        user=user,
+        action=NOTIF_TICKET_RESEND_ORGANIZER,
+        title=NOTIFS[NOTIF_TICKET_RESEND_ORGANIZER]['title'].format(invoice_id=invoice_id, event_name=event_name, buyer_email=buyer_email),
+        message=NOTIFS[NOTIF_TICKET_RESEND_ORGANIZER]['message'].format(order_url=order_url)
     )
 
 

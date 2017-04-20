@@ -30,7 +30,7 @@ def get_published_event_or_abort(identifier):
 
             abort(404)
 
-    if event.in_trash:
+    if event.deleted_at:
         abort(404)
     return event
 
@@ -118,10 +118,13 @@ def display_event_sessions(identifier):
     call_for_speakers = DataGetter.get_call_for_papers(event.id).first()
     accepted_session_count = get_count(DataGetter.get_sessions(event.id))
     tracks = DataGetter.get_tracks(event.id)
-    return render_template('gentelella/guest/event/sessions.html', event=event,
-                           placeholder_images=placeholder_images, tracks=tracks,
+    return render_template('gentelella/guest/event/sessions.html',
+                           event=event,
+                           placeholder_images=placeholder_images,
+                           tracks=tracks,
                            accepted_sessions_count=accepted_session_count,
-                           call_for_speakers=call_for_speakers, custom_placeholder=custom_placeholder)
+                           call_for_speakers=call_for_speakers,
+                           custom_placeholder=custom_placeholder)
 
 
 @event_detail.route('/<identifier>/schedule/')
@@ -138,12 +141,16 @@ def display_event_schedule(identifier):
         abort(404)
     tracks = DataGetter.get_tracks(event.id)
     accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
+    call_for_speakers = DataGetter.get_call_for_papers(event.id).first()
     if accepted_sessions_count == 0 or not event.schedule_published_on:
         abort(404)
-    return render_template('gentelella/guest/event/schedule.html', event=event,
+    return render_template('gentelella/guest/event/schedule.html',
+                           event=event,
                            placeholder_images=placeholder_images,
                            accepted_sessions_count=accepted_sessions_count,
-                           tracks=tracks, custom_placeholder=custom_placeholder)
+                           call_for_speakers=call_for_speakers,
+                           tracks=tracks,
+                           custom_placeholder=custom_placeholder)
 
 
 @event_detail.route('/<identifier>/schedule/pentabarf.xml')
@@ -191,7 +198,17 @@ def display_event_cfs(identifier, via_hash=False):
     placeholder_images = DataGetter.get_event_default_images()
     if login.current_user.is_authenticated:
         email = login.current_user.email
-        user_speaker = DataGetter.get_speaker_by_email(email)
+        user_speaker = DataGetter.get_speaker_by_email_event(email, event.id)
+
+        existing_sessions = []
+        for speaker in user_speaker:
+            current_session = []
+            for session in speaker.sessions:
+                if session.event_id == event.id and not session.deleted_at:
+                    if session.title:
+                        current_session.append(session)
+            if current_session:
+                existing_sessions.append(current_session)
     if event.sub_topic:
         custom_placeholder = DataGetter.get_custom_placeholder_by_name(event.sub_topic)
     elif event.topic:
@@ -225,16 +242,26 @@ def display_event_cfs(identifier, via_hash=False):
         return render_template('gentelella/guest/event/cfs.html', event=event,
                            speaker_form=speaker_form,
                            accepted_sessions_count=accepted_sessions_count,
-                           session_form=session_form, call_for_speakers=call_for_speakers,
-                           placeholder_images=placeholder_images, state=state, speakers=speakers,
-                           via_hash=via_hash, custom_placeholder=custom_placeholder)
+                           session_form=session_form,
+                           call_for_speakers=call_for_speakers,
+                           placeholder_images=placeholder_images,
+                           state=state,
+                           speakers=speakers,
+                           via_hash=via_hash,
+                           custom_placeholder=custom_placeholder)
     else:
         return render_template('gentelella/guest/event/cfs.html', event=event,
                            speaker_form=speaker_form,
                            accepted_sessions_count=accepted_sessions_count,
-                           session_form=session_form, call_for_speakers=call_for_speakers,
-                           placeholder_images=placeholder_images, state=state, speakers=speakers,
-                           via_hash=via_hash, custom_placeholder=custom_placeholder, user_speaker=user_speaker)
+                           session_form=session_form,
+                           call_for_speakers=call_for_speakers,
+                           placeholder_images=placeholder_images,
+                           state=state,
+                           speakers=speakers,
+                           via_hash=via_hash,
+                           custom_placeholder=custom_placeholder,
+                           user_speaker=user_speaker,
+                           existing_sessions=existing_sessions)
 
 
 @event_detail.route('/cfs/<hash>/', methods=('GET', 'POST'))
@@ -277,9 +304,13 @@ def display_event_cfs_via_hash(hash):
     return render_template('gentelella/guest/event/cfs.html', event=event,
                            speaker_form=speaker_form,
                            accepted_sessions_count=accepted_sessions_count,
-                           session_form=session_form, call_for_speakers=call_for_speakers,
-                           placeholder_images=placeholder_images, state=state, speakers=speakers,
-                           via_hash=True, custom_placeholder=custom_placeholder)
+                           session_form=session_form,
+                           call_for_speakers=call_for_speakers,
+                           placeholder_images=placeholder_images,
+                           state=state,
+                           speakers=speakers,
+                           via_hash=True,
+                           custom_placeholder=custom_placeholder)
 
 
 @event_detail.route('/<identifier>/cfs/new/', methods=('POST', 'GET'))
@@ -315,28 +346,32 @@ def process_event_cfs(identifier, via_hash=False):
         elif start_date > now:
             state = "future"
         speakers = DataGetter.get_speakers(event.id).all()
+        user_speaker = DataGetter.get_speaker_by_email_event(login.current_user.email, event.id)
         accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
-        return render_template('gentelella/guest/event/cfs_new.html', event=event,
+        return render_template('gentelella/guest/event/cfs_new_session.html',
+                               event=event,
                                speaker_form=speaker_form,
+                               user_speaker=user_speaker,
                                accepted_sessions_count=accepted_sessions_count,
-                               session_form=session_form, call_for_speakers=call_for_speakers,
-                               placeholder_images=placeholder_images, state=state, speakers=speakers,
-                               via_hash=via_hash, custom_placeholder=custom_placeholder, from_path="cfs")
+                               session_form=session_form,
+                               call_for_speakers=call_for_speakers,
+                               placeholder_images=placeholder_images,
+                               state=state,
+                               speakers=speakers,
+                               via_hash=via_hash,
+                               custom_placeholder=custom_placeholder,
+                               from_path="cfs")
 
     if request.method == 'POST':
-        email = request.form['email']
         event = DataGetter.get_event_by_identifier(identifier)
         if not event.has_session_speakers:
             abort(404)
-        DataManager.add_session_to_event(request, event.id)
         if login.current_user.is_authenticated:
+            DataManager.add_session_to_event(request, event.id, no_name=True)
             flash("Your session proposal has been submitted", "success")
             return redirect(url_for('my_sessions.display_my_sessions_view', event_id=event.id))
-        else:
-            flash(Markup(
-                "Your session proposal has been submitted. Please login/register with <strong><u>" + email + "</u></strong> to manage it."),
-                "success")
-            return redirect(url_for('admin.login_view', next=url_for('my_sessions.display_my_sessions_view')))
+
+        return redirect(url_for('admin.login_view', next=url_for('my_sessions.display_my_sessions_view')))
 
 
 @event_detail.route('/<identifier>/cfs/new_session/', methods=('POST', 'GET'))
@@ -372,13 +407,21 @@ def process_event_cfs_session(identifier, via_hash=False):
         elif start_date > now:
             state = "future"
         speakers = DataGetter.get_speakers(event.id).all()
+        user_speaker = DataGetter.get_speaker_by_email_event(login.current_user.email, event.id)
         accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
-        return render_template('gentelella/guest/event/cfs_new_session.html', event=event,
+        return render_template('gentelella/guest/event/cfs_new_session.html',
+                               event=event,
                                speaker_form=speaker_form,
                                accepted_sessions_count=accepted_sessions_count,
-                               session_form=session_form, call_for_speakers=call_for_speakers,
-                               placeholder_images=placeholder_images, state=state, speakers=speakers,
-                               via_hash=via_hash, custom_placeholder=custom_placeholder, from_path="cfs")
+                               session_form=session_form,
+                               call_for_speakers=call_for_speakers,
+                               placeholder_images=placeholder_images,
+                               state=state,
+                               speakers=speakers,
+                               user_speaker=user_speaker,
+                               via_hash=via_hash,
+                               custom_placeholder=custom_placeholder,
+                               from_path="cfs")
 
     if request.method == 'POST':
         email = request.form['email']
@@ -430,19 +473,25 @@ def process_event_cfs_speaker(identifier, via_hash=False):
             state = "future"
         speakers = DataGetter.get_speakers(event.id).all()
         accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
-        return render_template('gentelella/guest/event/cfs_new_speaker.html', event=event,
+        return render_template('gentelella/guest/event/cfs_new_speaker.html',
+                               event=event,
                                speaker_form=speaker_form,
                                accepted_sessions_count=accepted_sessions_count,
-                               session_form=session_form, call_for_speakers=call_for_speakers,
-                               placeholder_images=placeholder_images, state=state, speakers=speakers,
-                               via_hash=via_hash, custom_placeholder=custom_placeholder)
+                               session_form=session_form,
+                               call_for_speakers=call_for_speakers,
+                               placeholder_images=placeholder_images,
+                               state=state,
+                               speakers=speakers,
+                               via_hash=via_hash,
+                               custom_placeholder=custom_placeholder,
+                               from_path="cfs")
 
     if request.method == 'POST':
         email = request.form['email']
         event = DataGetter.get_event_by_identifier(identifier)
         if not event.has_session_speakers:
             abort(404)
-        DataManager.add_session_to_event(request, event.id)
+        DataManager.add_speaker_to_event(request, event.id)
         if login.current_user.is_authenticated:
             flash("You have been registered as Speaker", "success")
             return redirect(url_for('event_detail.display_event_cfs', identifier=identifier))

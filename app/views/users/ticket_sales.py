@@ -1,10 +1,16 @@
+from StringIO import StringIO
+from flask import make_response
+
 import pycountry
+import re
 from datetime import datetime
 from flask import Blueprint
 from flask import abort, jsonify
 from flask import redirect, flash
 from flask import request, render_template
 from flask import url_for
+
+from xhtml2pdf import pisa
 
 from app import get_settings
 from app.helpers.cache import cache
@@ -13,8 +19,15 @@ from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
 from app.helpers.ticketing import TicketingManager
 from app.models.ticket import Ticket
+from app.helpers.permission_decorators import can_access
 
 event_ticket_sales = Blueprint('event_ticket_sales', __name__, url_prefix='/events/<int:event_id>/tickets')
+
+
+def create_pdf(pdf_data):
+    pdf = StringIO()
+    pisa.CreatePDF(StringIO(pdf_data.encode('utf-8')), pdf)
+    return pdf
 
 
 @cache.memoize(50)
@@ -23,6 +36,7 @@ def get_ticket(ticket_id):
 
 
 @event_ticket_sales.route('/')
+@can_access
 def display_ticket_stats(event_id):
     event = DataGetter.get_event(event_id)
     orders = TicketingManager.get_orders(event_id)
@@ -134,9 +148,11 @@ def display_ticket_stats(event_id):
 
 
 @event_ticket_sales.route('/orders/')
-def display_orders(event_id):
+@can_access
+def display_orders(event_id, pdf=None):
     from_date = request.args.get('from_date')
     to_date = request.args.get('to_date')
+    discount_code = request.args.get('discount_code')
     if ('from_date' in request.args and not from_date) or ('to_date' in request.args and not to_date) or \
         ('from_date' in request.args and 'to_date' not in request.args) or \
         ('to_date' in request.args and 'from_date' not in request.args):
@@ -147,15 +163,26 @@ def display_orders(event_id):
             from_date=datetime.strptime(from_date, '%d/%m/%Y'),
             to_date=datetime.strptime(to_date, '%d/%m/%Y')
         )
+    elif discount_code == '':
+        return redirect(url_for('.display_orders', event_id=event_id))
+    elif discount_code:
+        orders = TicketingManager.get_orders(
+            event_id=event_id,
+            discount_code=discount_code,
+        )
     else:
         orders = TicketingManager.get_orders(event_id)
     event = DataGetter.get_event(event_id)
-    return render_template('gentelella/users/events/tickets/orders.html', event=event, event_id=event_id,
-                            orders=orders, from_date=from_date, to_date = to_date)
+    if pdf is not None:
+        return (event, event_id, orders, discount_code)
+    else:
+        return render_template('gentelella/users/events/tickets/orders.html', event=event, event_id=event_id,
+                               orders=orders, from_date=from_date, to_date=to_date, discount_code=discount_code)
 
 
 @event_ticket_sales.route('/attendees/')
-def display_attendees(event_id):
+@can_access
+def display_attendees(event_id, pdf=None):
     event = DataGetter.get_event(event_id)
     from_date = request.args.get('from_date')
     to_date = request.args.get('to_date')
@@ -190,13 +217,16 @@ def display_attendees(event_id):
                 'completed_at': order.completed_at,
                 'created_at': order.created_at,
                 'ticket_name': holder.ticket.name,
+                'ticket_type': holder.ticket.type,
                 'firstname': holder.firstname,
                 'lastname': holder.lastname,
                 'email': holder.email,
-                'ticket_price': holder.ticket.price
+                'country': holder.country,
+                'ticket_price': holder.ticket.price,
+                'discount': discount
             }
 
-            if order.status == 'completed':
+            if order.status == 'completed' or order.status == 'placed':
                 order_holder['order_url'] = url_for('ticketing.view_order_after_payment',
                                                     order_identifier=order.identifier)
             else:
@@ -223,7 +253,7 @@ def display_attendees(event_id):
                 'created_at': order.created_at
             }
 
-            if order.status == 'completed':
+            if order.status == 'completed' or order.status == 'placed':
                 order_holder['order_url'] = url_for('ticketing.view_order_after_payment',
                                                     order_identifier=order.identifier)
             else:
@@ -235,12 +265,155 @@ def display_attendees(event_id):
 
             holders.append(order_holder)
 
-    return render_template('gentelella/users/events/tickets/attendees.html', event=event,
-                           event_id=event_id, holders=holders, from_date=from_date, to_date=to_date,
-                           ticket_names=ticket_names, selected_ticket=selected_ticket)
+    if pdf is not None:
+        return (event, event_id, holders, orders, ticket_names, selected_ticket)
+    else:
+        return render_template('gentelella/users/events/tickets/attendees.html', event=event,
+                               event_id=event_id, holders=holders, from_date=from_date, to_date=to_date,
+                               ticket_names=ticket_names, selected_ticket=selected_ticket)
+
+
+@event_ticket_sales.route('/attendees/pdf')
+@can_access
+def download_as_pdf(event_id):
+    (event, event_id, holders, orders, ticket_names, selected_ticket) = display_attendees(event_id=event_id, pdf='print_pdf')
+    pdf = create_pdf(render_template('gentelella/users/events/tickets/download_attendees.html', event=event,
+                                     event_id=event_id, holders=holders, ticket_names=ticket_names,
+                                     selected_ticket=selected_ticket))
+    response = make_response(pdf.getvalue())
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = \
+        'inline; filename=%s.csv' % (re.sub(r"[^\w\s]", '', event.name).replace(" ", "_"))
+    return response
+
+
+@event_ticket_sales.route('/attendees/csv')
+@can_access
+def download_as_csv(event_id):
+    (event, event_id, holders, orders, ticket_names, selected_ticket) = display_attendees(event_id=event_id, pdf='print_csv')
+    value = 'Order#,Order Date, Status, First Name, Last Name, Email, Country,' \
+            'Payment Type, Ticket Name, Ticket Price, Ticket Type \n'
+
+    for holder in holders:
+        if holder['status'] != "deleted":
+            if 'order_invoice' in holder:
+                value += holder['order_invoice']
+            value += ','
+            if 'created_at' in holder:
+                value += str(holder['created_at'])
+            value += ','
+            if 'status' in holder:
+                value += holder['status']
+            value += ','
+            if 'firstname' in holder:
+                value += holder['firstname']
+            value += ','
+            if 'lastname' in holder:
+                value += holder['lastname']
+            value += ','
+            if 'email' in holder:
+                value += holder['email']
+            value += ','
+            if 'country' in holder:
+                value += str(holder['country'])
+            value += ','
+            if 'paid_via' in holder and holder['paid_via']:
+                value += holder['paid_via']
+            value += ','
+            if 'ticket_name' in holder:
+                value += str(holder['ticket_name'])
+            value += ','
+            if 'ticket_price' in holder:
+                value += str(holder['ticket_price'])
+            value += ','
+            if 'ticket_type' in holder:
+                value += str(holder['ticket_type'])
+            value += ','
+            value += '\n'
+
+    response = make_response(value)
+    response.headers['Content-Type'] = 'text/csv'
+    response.headers['Content-Disposition'] = \
+        'inline; filename=%s.csv' % (re.sub(r"[^\w\s]", '', event.name).replace(" ", "_"))
+
+    return response
+
+
+@event_ticket_sales.route('/orders/pdf')
+@can_access
+def download_orders_as_pdf(event_id):
+    (event, event_id, orders, discount_code) = display_orders(event_id=event_id, pdf='print_pdf')
+    pdf = create_pdf(render_template('gentelella/users/events/tickets/download_orders.html', event=event, event_id=event_id,
+                                     orders=orders, discount_code=discount_code))
+    response = make_response(pdf.getvalue())
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = \
+        'inline; filename=%s.csv' % (re.sub(r"[^\w\s]", '', event.name).replace(" ", "_"))
+    return response
+
+
+@event_ticket_sales.route('/orders/csv')
+@can_access
+def download_orders_as_csv(event_id):
+    (event, event_id, holders, orders, ticket_names, selected_ticket) = display_attendees(event_id=event_id, pdf='print_csv')
+    value = 'Order#,Order Date, Status, Payment Type, Quantity,Total Amount,Discount Code,' \
+            'First Name, Last Name, Email \n'
+
+    for order in orders:
+        if order.status != "deleted":
+            # To avoid KeyError exception
+            try:
+                value += str(order.get_invoice_number()) + ','
+            except:
+                value += ','
+            try:
+                value += str(order.created_at) + ','
+            except:
+                value += ','
+            try:
+                value += order.status + ','
+            except:
+                value += ','
+            try:
+                value += order.paid_via + ','
+            except:
+                value += ','
+            try:
+                value += str(order.get_tickets_count()) + ','
+            except:
+                value += ','
+            try:
+                value += str(order.amount) + ','
+            except:
+                value += ','
+            try:
+                value += order.discount_code.code + ','
+            except:
+                value += ','
+            try:
+                value += order.user.user_detail.firstname + ','
+            except:
+                value += ','
+            try:
+                value += order.user.user_detail.lastname + ','
+            except:
+                value += ','
+            try:
+                value += order.user.email + ','
+            except:
+                value += ','
+            value += '\n'
+
+    response = make_response(value)
+    response.headers['Content-Type'] = 'text/csv'
+    response.headers['Content-Disposition'] = \
+        'inline; filename=%s.csv' % (re.sub(r"[^\w\s]", '', event.name).replace(" ", "_"))
+
+    return response
 
 
 @event_ticket_sales.route('/add-order/', methods=('GET', 'POST'))
+@can_access
 def add_order(event_id):
     if request.method == 'POST':
         order = TicketingManager.create_order(request.form, True)
@@ -251,6 +424,7 @@ def add_order(event_id):
 
 
 @event_ticket_sales.route('/<order_identifier>/')
+@can_access
 def proceed_order(event_id, order_identifier):
     order = TicketingManager.get_order_by_identifier(order_identifier)
     if order:
@@ -267,6 +441,7 @@ def proceed_order(event_id, order_identifier):
 
 
 @event_ticket_sales.route('/discounts/')
+@can_access
 def discount_codes_view(event_id):
     event = DataGetter.get_event(event_id)
     discount_codes = TicketingManager.get_discount_codes(event_id)
@@ -276,6 +451,7 @@ def discount_codes_view(event_id):
 
 
 @event_ticket_sales.route('/discounts/create/', methods=('GET', 'POST'))
+@can_access
 def discount_codes_create(event_id, discount_code_id=None):
     event = DataGetter.get_event(event_id)
     if request.method == 'POST':
@@ -290,6 +466,7 @@ def discount_codes_create(event_id, discount_code_id=None):
 
 
 @event_ticket_sales.route('/discounts/check/duplicate/')
+@can_access
 def check_duplicate_discount_code(event_id):
     code = request.args.get('code')
     current = request.args.get('current')
@@ -307,6 +484,7 @@ def check_duplicate_discount_code(event_id):
 
 
 @event_ticket_sales.route('/discounts/<int:discount_code_id>/edit/', methods=('GET', 'POST'))
+@can_access
 def discount_codes_edit(event_id, discount_code_id=None):
     if not TicketingManager.get_discount_code(event_id, discount_code_id):
         abort(404)
@@ -314,10 +492,11 @@ def discount_codes_edit(event_id, discount_code_id=None):
         TicketingManager.create_edit_discount_code(request.form, event_id, discount_code_id)
         flash("The discount code has been edited.", "success")
         return redirect(url_for('.discount_codes_view', event_id=event_id))
-    return discount_codes_create(event_id, discount_code_id)
+    return discount_codes_create(event_id=event_id, discount_code_id=discount_code_id)
 
 
 @event_ticket_sales.route('/discounts/<int:discount_code_id>/toggle/')
+@can_access
 def discount_codes_toggle(event_id, discount_code_id=None):
     discount_code = TicketingManager.get_discount_code(event_id, discount_code_id)
     if not discount_code:
@@ -330,6 +509,7 @@ def discount_codes_toggle(event_id, discount_code_id=None):
 
 
 @event_ticket_sales.route('/discounts/<int:discount_code_id>/delete/')
+@can_access
 def discount_codes_delete(event_id, discount_code_id=None):
     discount_code = TicketingManager.get_discount_code(event_id, discount_code_id)
     if not discount_code:
@@ -340,6 +520,7 @@ def discount_codes_delete(event_id, discount_code_id=None):
 
 
 @event_ticket_sales.route('/access/')
+@can_access
 def access_codes_view(event_id):
     event = DataGetter.get_event(event_id)
     access_codes = TicketingManager.get_access_codes(event_id)
@@ -349,6 +530,7 @@ def access_codes_view(event_id):
 
 
 @event_ticket_sales.route('/access/create/', methods=('GET', 'POST'))
+@can_access
 def access_codes_create(event_id, access_code_id=None):
     event = DataGetter.get_event(event_id)
     if request.method == 'POST':
@@ -363,6 +545,7 @@ def access_codes_create(event_id, access_code_id=None):
 
 
 @event_ticket_sales.route('/access/check/duplicate/')
+@can_access
 def check_duplicate_access_code(event_id):
     code = request.args.get('code')
     current = request.args.get('current')
@@ -380,6 +563,7 @@ def check_duplicate_access_code(event_id):
 
 
 @event_ticket_sales.route('/access/<int:access_code_id>/edit/', methods=('GET', 'POST'))
+@can_access
 def access_codes_edit(event_id, access_code_id=None):
     if not TicketingManager.get_access_code(event_id, access_code_id):
         abort(404)
@@ -391,6 +575,7 @@ def access_codes_edit(event_id, access_code_id=None):
 
 
 @event_ticket_sales.route('/access/<int:access_code_id>/toggle/')
+@can_access
 def access_codes_toggle(event_id, access_code_id=None):
     access_code = TicketingManager.get_access_code(event_id, access_code_id)
     if not access_code:
@@ -403,6 +588,7 @@ def access_codes_toggle(event_id, access_code_id=None):
 
 
 @event_ticket_sales.route('/access/<int:access_code_id>/delete/')
+@can_access
 def access_codes_delete(event_id, access_code_id=None):
     access_code = TicketingManager.get_access_code(event_id, access_code_id)
     if not access_code:
@@ -413,8 +599,9 @@ def access_codes_delete(event_id, access_code_id=None):
 
 
 @event_ticket_sales.route('/attendees/check_in_toggle/<holder_id>/', methods=('POST',))
+@can_access
 def attendee_check_in_toggle(event_id, holder_id):
-    holder = TicketingManager.attendee_check_in_out(holder_id)
+    holder = TicketingManager.attendee_check_in_out(event_id, holder_id)
     if holder:
         return jsonify({
             'status': 'ok',
@@ -427,6 +614,7 @@ def attendee_check_in_toggle(event_id, holder_id):
 
 
 @event_ticket_sales.route('/cancel/', methods=('POST',))
+@can_access
 def cancel_order(event_id):
     return_status = TicketingManager.cancel_order(request.form)
     if return_status:
@@ -436,6 +624,7 @@ def cancel_order(event_id):
 
 
 @event_ticket_sales.route('/delete/', methods=('POST',))
+@can_access
 def delete_order(event_id):
     return_status = TicketingManager.delete_order(request.form)
     if return_status:
@@ -445,6 +634,7 @@ def delete_order(event_id):
 
 
 @event_ticket_sales.route('/resend-confirmation/', methods=('POST',))
+@can_access
 def resend_confirmation(event_id):
     return_status = TicketingManager.resend_confirmation(request.form)
     if return_status:

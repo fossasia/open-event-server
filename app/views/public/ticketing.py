@@ -40,7 +40,7 @@ def create_order():
 def apply_promo():
     discount = TicketingManager.get_discount_code(request.form.get('event_id'), request.form.get('promo_code', ''))
     access_code = TicketingManager.get_access_code(request.form.get('event_id'), request.form.get('promo_code', ''))
-    if discount and access_code:
+    if discount and access_code and discount.is_active:
         return jsonify({
             'discount_type': discount.type,
             'discount_amount': discount.value,
@@ -49,7 +49,7 @@ def apply_promo():
             'access_code_ticket': access_code.tickets,
             'discount_code_ticket': discount.tickets,
         })
-    elif discount:
+    elif discount and discount.is_active:
         return jsonify({
             'discount_type': discount.type,
             'discount_amount': discount.value,
@@ -105,7 +105,7 @@ def view_order_after_payment(order_identifier):
 @ticketing.route('/<order_identifier>/view/pdf/')
 def view_order_after_payment_pdf(order_identifier):
     order = TicketingManager.get_and_set_expiry(order_identifier)
-    if not order or order.status != 'completed':
+    if not order or (order.status != 'completed' and order.status != 'placed'):
         abort(404)
     pdf = create_pdf(render_template('gentelella/guest/ticketing/invoice_pdf.html',
                                      order=order, event=order.event))
@@ -119,13 +119,13 @@ def view_order_after_payment_pdf(order_identifier):
 @ticketing.route('/<order_identifier>/view/tickets/pdf/')
 def view_order_tickets_after_payment_pdf(order_identifier):
     order = TicketingManager.get_and_set_expiry(order_identifier)
-    if not order or order.status != 'completed':
+    if not order or (order.status != 'completed' and order.status != 'placed'):
         abort(404)
     pdf = create_pdf(render_template('gentelella/guest/ticketing/pdf/ticket.html', order=order))
     response = make_response(pdf.getvalue())
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = \
-        'inline; filename=%s.pdf' % "test"
+        'inline; filename=%s-Ticket.pdf' % order.event.name
     return response
 
 

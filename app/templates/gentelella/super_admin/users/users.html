@@ -44,7 +44,7 @@
         <tr>
             <td>{{ 'Not Available' if not user['user'].user_detail.fullname else user['user'].user_detail.fullname }}</td>
             <td>{{ user['user'].email }}</td>
-            {% if user['user'].in_trash == False %}
+            {% if user['user'].deleted_at is none %}
                 <td>{{ _("Active") }}</td>
             {% else %}
                 <td>{{ _("Deleted") }}</td>
@@ -109,7 +109,7 @@
                         <i class="glyphicon glyphicon-eye-open"></i>
                     </a>
                     {% if user['user'].is_super_admin == False %}
-                        {% if user['user'].in_trash == False %}
+                        {% if user['user'].deleted_at is none %}
                             <a data-toggle="tooltip" data-placement="top" class="btn btn-default"
                                onclick="return confirm('Are you sure you want to delete this record?');"
                                href="{{ url_for('sadmin_users.trash_view', user_id=user['user'].id) }}"
@@ -118,7 +118,7 @@
                             </a>
                         {% endif %}
                     {% endif %}
-                    {% if user['user'].in_trash == True %}
+                    {% if user['user'].deleted_at is not none %}
                         <a data-toggle="tooltip" data-placement="top" class="btn btn-default"
                            onclick="return confirm('Are you sure you want to delete this record?');"
                            href="{{ url_for('sadmin_users.delete_view', user_id=user['user'].id) }}"
@@ -126,7 +126,7 @@
                             <i class="glyphicon glyphicon-trash"></i>
                         </a>
                     {% endif %}
-                    {% if user['user'].in_trash == True %}
+                    {% if user['user'].deleted_at is not none %}
                         <a class="btn btn-success"
                            href="{{ url_for('sadmin_users.restore_view', user_id=user['user'].id) }}"
                            data-toggle="tooltip" data-placement="top"

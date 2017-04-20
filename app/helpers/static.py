@@ -153,7 +153,7 @@ EVENT_TOPICS = {
 }
 PAYMENT_COUNTRIES = {
     'United States',
-    'Albania'
+    'Albania',
     'Argentina',
     'Australia',
     'Austria',
