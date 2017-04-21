@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: android-generator
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: android-generator
+#  type: LoadBalancer
+#  loadBalancerIP: '104.196.233.213'
