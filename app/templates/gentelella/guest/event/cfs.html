@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/events/event-wizard.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/multiselect/css/multi-select.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/Croppie/croppie.css') }}"/>
+    <style type="text/css">
+        .modal-backdrop {
+           background-color: white;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -61,7 +66,7 @@
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                         <h4 class="modal-title">{{ _("Submit Proposal") }}? </h4>
                                     </div>
-                                    <div class="modal-footer" style="padding:6px">
+                                    <div class="modal-footer">
                                         <div class="existing-session" style="text-align:left">
                                             <h4>{{ _("Existing Sessions") }} </h4>
                                             {% if not existing_sessions[0] %}
