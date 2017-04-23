@@ -32,11 +32,4 @@ spec:
           value: 'web'
         - name: FORCE_SSL
           value: 'yes'
-        volumeMounts:
-          - mountPath: /opev/open_event/static/uploads/
-            name: nfs-storage
       restartPolicy: Always
-      volumes:
-        - name: nfs-storage
-          persistentVolumeClaim:
-            claimName: nfs-claim
