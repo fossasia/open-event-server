@@ -19,17 +19,9 @@ before_script:
   - psql -c 'create database test;' -U postgres
   - export DATABASE_URL=postgresql://postgres@localhost:5432/test
   - python manage.py initialize_db -c open_event_test_user@fossasia.org:fossasia
-  - python manage.py runserver &
 # command to run tests
 script:
   - nosetests tests/unittests -v --with-coverage
-  # re-init db
-  - psql -c 'drop database if exists test;' -U postgres
-  - psql -c 'create database test;' -U postgres
-  - python manage.py initialize_db -c open_event_test_user@fossasia.org:fossasia
-  - python manage.py runserver &
-  # robot
-  - robot tests/robot
 # upload coverage
 after_success:
   - bash <(curl -s https://codecov.io/bash)
