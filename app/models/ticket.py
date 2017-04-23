@@ -17,6 +17,7 @@ class Ticket(db.Model):
     description_toggle = db.Column(db.Boolean)
     type = db.Column(db.String)
     quantity = db.Column(db.Integer)
+    position = db.Column(db.Integer)
     price = db.Column(db.Float)
     absorb_fees = db.Column(db.Boolean)
 
@@ -43,6 +44,7 @@ class Ticket(db.Model):
                  description=None,
                  description_toggle=True,
                  quantity=100,
+                 position=1,
                  price=0,
                  min_order=1,
                  max_order=10,
@@ -53,6 +55,7 @@ class Ticket(db.Model):
             tags = []
         self.name = name
         self.quantity = quantity
+        self.position = position
         self.type = type
         self.event = event
         self.description = description
@@ -112,6 +115,7 @@ class Ticket(db.Model):
             'id': self.id,
             'name': self.name,
             'quantity': self.quantity,
+            'position': self.position,
             'type': self.type,
             'description_visibility': self.description_toggle,
             'description': self.description,

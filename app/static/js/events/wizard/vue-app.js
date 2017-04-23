@@ -179,6 +179,7 @@ var app = new Vue({
             ticket.sales_end_time = moment().tz(this.event.timezone).add(10, 'days').hour(22).minute(0).format('HH:mm');
             ticket.price = 0.01;
             ticket.type = ticketType;
+            ticket.position = this.event.tickets.length + 1;
             this.event.tickets.push(ticket);
         },
         recenterMap: function () {
