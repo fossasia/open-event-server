@@ -6,7 +6,7 @@ python manage.py initialize_db -c open_event_test_user@fossasia.org:fossasia
 python manage.py db upgrade > /dev/null 2>&1
 if [ "$DEPLOYMENT" == "web" ]
 then
-    gunicorn -b 0.0.0.0:8080 app:app --worker-class eventlet -w 1 --enable-stdio-inheritance --log-level "warning" --proxy-protocol
+    gunicorn -b 0.0.0.0:8080 app:app -w 1 --enable-stdio-inheritance --log-level "warning" --proxy-protocol
 fi
 if [ "$DEPLOYMENT" == "celery" ]
 then
