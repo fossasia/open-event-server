@@ -71,7 +71,7 @@
 
                                     </td>
                                     {% endif %}
-                                    {% if (ticket.ticket.sales_start|localize_dt_obj(event.timezone)) <= timenow_event_tz and (ticket.ticket.sales_end|localize_dt_obj(event.timezone)) >= timenow_event_tz and ticket.status == "Available"%}
+                                    {% if ticket.status == "Available" %}
                                         <td>
                                             <input type="hidden" name="ticket_ids[]" value="{{ ticket.ticket.id }}">
                                             <select title="ticket quantity" name="ticket_quantities[]" class="quantity-select"
@@ -95,14 +95,7 @@
                                         <td class="subtotal">
                                             {{ event.payment_currency | currency_symbol }}{{ 0 | money }}</td>
                                     {% else %}
-                                        {% if (ticket.ticket.sales_end|localize_dt_obj(event.timezone)) < timenow_event_tz %}
-                                            <td colspan="2"
-                                                style="color: #adadad;">{{ _("This ticket's sale has ended") }}</td>
-                                        {% elif (ticket.ticket.sales_start|localize_dt_obj(event.timezone)) >= timenow_event_tz %}
-                                            <td colspan="2"
-                                                style="color: #adadad;">{{ _("This ticket's sale will start") }}
-                                                {{ _("on") }} {{ ((ticket.ticket.sales_start|localize_dt_obj(event.timezone))|as_timezone(current_timezone)) | datetime }}</td>
-                                        {% elif ticket.status == "Sold" %}
+                                        {% if ticket.status == "Sold" %}
                                             <td colspan="2"
                                                 style="color: #adadad;">{{ _("This ticket is sold out") }}</td>
                                         {% endif %}
