@@ -733,12 +733,10 @@ class DataGetter(object):
             return names
 
     @staticmethod
-    def get_sales_open_tickets(event_id, give_all=False):
-        if give_all:
-            tickets = Ticket.query.filter(Ticket.event_id == event_id)
+    def get_sales_open_tickets(event_id, event_timezone='UTC'):
         tickets = Ticket.query.filter(Ticket.event_id == event_id).filter(
-            Ticket.sales_start <= datetime.datetime.now()).filter(
-            Ticket.sales_end >= datetime.datetime.now())
+            Ticket.sales_start <= datetime.datetime.now(pytz.timezone(event_timezone))).filter(
+            Ticket.sales_end >= datetime.datetime.now(pytz.timezone(event_timezone)))
         open_tickets = []
         for ticket in tickets:
             orders = OrderTicket.query.filter(OrderTicket.ticket_id == ticket.id)
