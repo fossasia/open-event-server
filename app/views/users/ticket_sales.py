@@ -571,7 +571,7 @@ def access_codes_edit(event_id, access_code_id=None):
         TicketingManager.create_edit_access_code(request.form, event_id, access_code_id)
         flash("The access code has been edited.", "success")
         return redirect(url_for('.access_codes_view', event_id=event_id))
-    return access_codes_create(event_id, access_code_id)
+    return access_codes_create(event_id=event_id, access_code_id=access_code_id)
 
 
 @event_ticket_sales.route('/access/<int:access_code_id>/toggle/')
