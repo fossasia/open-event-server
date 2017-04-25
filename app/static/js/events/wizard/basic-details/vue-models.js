@@ -88,6 +88,7 @@ var TICKET = {
     has_orders: false,
     price: 0,
     quantity: 100,
+    position: 1,
     description: '',
     description_visibility: false,
     ticket_visibility: false,

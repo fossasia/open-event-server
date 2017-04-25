@@ -47,6 +47,9 @@ var app = new Vue({
         zoom: function () {
             return this.event.latitude === 0.0 && this.event.longitude === 0.0 ? 1 : 15;
         },
+        sortedTickets: function() {
+            return _.sortBy(this.event.tickets, "position");
+        },
         invalidDateRange: function () {
             if(this.event.end_time_date.trim().length <= 0
                 || this.event.end_time_time.trim().length <= 0
@@ -179,7 +182,18 @@ var app = new Vue({
             ticket.sales_end_time = moment().tz(this.event.timezone).add(10, 'days').hour(22).minute(0).format('HH:mm');
             ticket.price = 0.01;
             ticket.type = ticketType;
+            ticket.position = this.event.tickets.length + 1;
             this.event.tickets.push(ticket);
+        },
+        moveTicket: function (ticket, index, direction) {
+            var tickets = this.sortedTickets;
+            if (direction === 'up' && index > 0) {
+                tickets[index - 1].position = ticket.position;
+                ticket.position = ticket.position - 1;
+            } else if (direction === 'down' && index < tickets.length) {
+                tickets[index + 1].position = ticket.position;
+                ticket.position = ticket.position + 1;
+            }
         },
         recenterMap: function () {
             var center = window.map.getCenter();
