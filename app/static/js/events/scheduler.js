@@ -620,13 +620,14 @@ function addInfoBox($sessionElement, session) {
     if(!_.isNull(session.microlocation)) {
         content += "<strong>Room:</strong> " + session.microlocation.name + "<br>";
     }
+
     $sessionElement.popover({
         trigger: 'manual',
         placement: 'bottom',
         html: true,
         title: session.title,
         content: content,
-        container: 'body'
+        container: '.scheduler-body'
     });
 }
 
@@ -1202,6 +1203,7 @@ $(".export-png-button").click(function () {
 /**
  * Global document events for date change button, remove button and clear overlaps button
  */
+
 $(document)
     .on("click", ".date-change-btn", function () {
         $(this).addClass("active").siblings().removeClass("active");
@@ -1215,6 +1217,18 @@ $(document)
         try {
             $('.session.scheduled').not(this).popover('hide');
             $(this).popover('toggle');
+            if ($('.scheduler-pop').length !== 0) {
+                var scheduler_height = $('.scheduler-holder').height();
+                var popover_height = parseInt($('.popover').css('top')) + $('.popover').height();
+                if (popover_height > scheduler_height) {
+                    $('.scheduler-holder').height(scheduler_height + $('.popover').height());
+                } else {
+                    $('.scheduler-holder').height($('.timeline').height());
+                }
+                if ($('.popover').length === 0) {
+                    $('.scheduler-holder').height($('.timeline').height());
+                }
+            }
         } catch (ignored) { }
     })
     .on("click", ".session.scheduled > .edit-btn", function () {

@@ -152,6 +152,7 @@
                     $('.btn-pop-out').removeClass('fa-expand').addClass('fa-compress');
                     var width = $("#timeline").width() - $('.timeunits.x1').width();
                     $('.microlocation-container').css("width", width + "px");
+                    $('.session.scheduled').popover('hide');
                 }
                 function close(){
                     $scheduler.removeClass('scheduler-pop');
@@ -159,6 +160,8 @@
                     $('.overlay').removeClass('visible');
                     $('.btn-pop-out').addClass('fa-expand').removeClass('fa-compress');
                     $('.microlocation-container').css("width", "fit-content");
+                    $('.session.scheduled').popover('hide');
+                    $('.scheduler-holder').height($('.timeline').height());
                 }
                 if(force == null) {
                     state ? close() : open();
