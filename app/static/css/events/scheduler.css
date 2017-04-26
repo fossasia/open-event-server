@@ -73,6 +73,7 @@
 
 .timeline .timeunits {
     padding: 0;
+    min-width: 2vw;
 }
 
 .timeline .timeunits.x1 .timeunit {
