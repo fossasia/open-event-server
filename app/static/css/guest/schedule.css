@@ -49,7 +49,7 @@ div {
     left: 0;
     right: 0;
     position: relative;
-    overflow-x: hidden;
+    overflow: hidden;
     padding-right: 20px;
 }
 
