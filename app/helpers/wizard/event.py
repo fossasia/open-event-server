@@ -93,7 +93,9 @@ def get_event_json(event_id):
             result["social_links"].append(social_link.serialize)
 
     sorted_tickets = sorted(event.tickets, key=lambda x: x.position)
-    for ticket in sorted_tickets:
+    for index, ticket in enumerate(sorted_tickets):
+        if not ticket.position:
+            ticket.position = index + 1
         result["tickets"].append(ticket.serialize)
 
     if event.stripe:
