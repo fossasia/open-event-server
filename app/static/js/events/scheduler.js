@@ -419,6 +419,7 @@ function updateColor($element, track) {
             if(!_.isNull(track.color) && !_.isEmpty(track.color)) {
                 $element.css("background-color", track.color.trim());
                 $element.css("background-color", track.color.trim());
+                $element.css("color", track.font_color.trim());
                 return;
             }
         }

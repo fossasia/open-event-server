@@ -78,7 +78,7 @@ def create_services(event_id, serial_no=''):
         name=test_track,
         description='descp',
         event_id=event_id,
-        color='red'
+        color='#caf034'
     )
     session_type = SessionType(
         name=test_session_type,

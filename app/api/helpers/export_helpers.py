@@ -57,7 +57,7 @@ FIELD_ORDER = {
         'short_biography', 'long_biography', 'website', 'twitter', 'facebook', 'github', 'linkedin'
     ],
     'sponsors': ['id', 'name', 'logo', 'level', 'sponsor_type', 'url', 'description'],
-    'tracks': ['id', 'name', 'color'],
+    'tracks': ['id', 'name', 'color', 'font_color'],
     'session_types': ['id', 'name', 'length'],
     'forms': []
 }

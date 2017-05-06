@@ -13,7 +13,8 @@ var MICROLOCATION = {
 var TRACK = {
     id: null,
     name: '',
-    color: ''
+    color: '',
+    font_color: ''
 };
 
 var CALL_FOR_SPEAKERS = {
@@ -30,12 +31,20 @@ var CALL_FOR_SPEAKERS = {
 function getNewTrack(name) {
     var track = _.clone(TRACK);
     track.name = _.isUndefined(name) ? '' : name;
-    track.color = palette.random("800");
-    track.color = palette.random("800");
-    if(!track.color || track.color === '') {
+    while(!track.color || track.color === '') {
         track.color = palette.random("800");
     }
+    track.font_color = getFontColor(track.color);
     return track;
+}
+
+function getFontColor(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if(result) {
+        var a = 1 - (0.299 * parseInt(result[1], 16) + 0.587 * parseInt(result[2], 16) + 0.114 * parseInt(result[3], 16))/255;
+        return (a < 0.5) ? '#000000' : '#ffffff';
+    }
+    return '#ffffff';
 }
 
 function getNewSessionType(name) {

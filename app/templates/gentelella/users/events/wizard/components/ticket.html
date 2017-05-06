@@ -102,7 +102,7 @@
                         <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1;  margin-top: 0;">
                             {{ _("Fee: ") }} {{ '{{ service_fee * ticket.price / 100 }}' }} {{ _("| Buyer Total:") }}
                             {{ '{{ ticket.absorb_fees  ? ticket.price : ticket.price + ((service_fee * ticket.price / 100)) }}' }}
-
+                        </label>
                     </div>
                     <div class="item form-group">
                         <label>{{ _("Sales Start") }}</label><br>
