@@ -2,13 +2,13 @@ from app.models.order import OrderTicket, Order
 from app.models import db
 
 ticket_tags_table = db.Table('association', db.Model.metadata,
-                             db.Column('ticket_id', db.Integer, db.ForeignKey('ticket.id', ondelete='CASCADE')),
+                             db.Column('ticket_id', db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE')),
                              db.Column('ticket_tag_id', db.Integer, db.ForeignKey('ticket_tag.id', ondelete='CASCADE'))
                              )
 
 
 class Ticket(db.Model):
-    __tablename__ = 'ticket'
+    __tablename__ = 'tickets'
     __table_args__ = (db.UniqueConstraint('name', 'event_id', name='name_event_uc'),)
 
     id = db.Column(db.Integer, primary_key=True)
@@ -19,7 +19,7 @@ class Ticket(db.Model):
     quantity = db.Column(db.Integer)
     position = db.Column(db.Integer)
     price = db.Column(db.Float)
-    absorb_fees = db.Column(db.Boolean)
+    is_fee_absorbed = db.Column(db.Boolean)
 
     sales_start = db.Column(db.DateTime)
     sales_end = db.Column(db.DateTime)
@@ -48,7 +48,7 @@ class Ticket(db.Model):
                  price=0,
                  min_order=1,
                  max_order=10,
-                 absorb_fees=False,
+                 is_fee_absorbed=False,
                  tags=None):
 
         if tags is None:
@@ -67,7 +67,7 @@ class Ticket(db.Model):
         self.min_order = min_order
         self.max_order = max_order
         self.tags = tags
-        self.absorb_fees = absorb_fees
+        self.is_fee_absorbed = is_fee_absorbed
 
     def has_order_tickets(self):
         """Returns True if ticket has already placed orders.
@@ -130,7 +130,7 @@ class Ticket(db.Model):
             'tags_string': '',
             'has_orders': self.has_order_tickets(),
             'has_completed_orders': self.has_completed_order_tickets(),
-            'absorb_fees': self.absorb_fees
+            'is_fee_absorbed': self.is_fee_absorbed
         }
 
         tags = []
@@ -174,9 +174,9 @@ class BookedTicket(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
-    user = db.relationship('User', backref='booked_tickets')
-    ticket_id = db.Column(db.Integer, db.ForeignKey('ticket.id', ondelete='CASCADE'))
-    ticket = db.relationship('Ticket', backref='booked_tickets')
+    user = db.relationship('User', backref='booked_ticket')
+    ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE'))
+    ticket = db.relationship('Ticket', backref='booked_ticket')
     quantity = db.Column(db.Integer)
 
     def __init__(self, user, ticket, quantity):

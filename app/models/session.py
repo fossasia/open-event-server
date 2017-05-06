@@ -6,12 +6,12 @@ from app.models import db
 
 speakers_sessions = db.Table('speakers_sessions', db.Column(
     'speaker_id', db.Integer, db.ForeignKey('speaker.id', ondelete='CASCADE')), db.Column(
-    'session_id', db.Integer, db.ForeignKey('session.id', ondelete='CASCADE')))
+    'session_id', db.Integer, db.ForeignKey('sessions.id', ondelete='CASCADE')))
 
 
 class Session(db.Model):
     """Session model class"""
-    __tablename__ = 'session'
+    __tablename__ = 'sessions'
     __versioned__ = {
         'exclude': []
     }
@@ -29,8 +29,8 @@ class Session(db.Model):
         secondary=speakers_sessions,
         backref=db.backref('sessions', lazy='dynamic'))
     language = db.Column(db.String)
-    microlocation_id = db.Column(db.Integer, db.ForeignKey('microlocation.id', ondelete='CASCADE'))
-    session_type_id = db.Column(db.Integer, db.ForeignKey('session_type.id', ondelete='CASCADE'))
+    microlocation_id = db.Column(db.Integer, db.ForeignKey('microlocations.id', ondelete='CASCADE'))
+    session_type_id = db.Column(db.Integer, db.ForeignKey('session_types.id', ondelete='CASCADE'))
     level = db.Column(db.String)
 
     slides = db.Column(db.String)
@@ -45,7 +45,7 @@ class Session(db.Model):
     deleted_at = db.Column(db.DateTime)
     submission_date = db.Column(db.DateTime)
     submission_modifier = db.Column(db.String)
-    state_email_sent = db.Column(db.Boolean, default=False)
+    is_mail_sent = db.Column(db.Boolean, default=False)
 
     def __init__(self,
                  title=None,
@@ -68,7 +68,7 @@ class Session(db.Model):
                  session_type=None,
                  level=None,
                  created_at=None,
-                 state_email_sent=False,
+                 is_mail_sent=False,
                  deleted_at=None):
 
         if speakers is None:
@@ -95,7 +95,7 @@ class Session(db.Model):
         self.level = level
         self.created_at = created_at
         self.deleted_at = deleted_at
-        self.state_email_sent = state_email_sent
+        self.is_mail_sent = is_mail_sent
 
     @staticmethod
     def get_service_name():

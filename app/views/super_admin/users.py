@@ -11,7 +11,7 @@ from app.helpers.data import delete_from_db, DataManager, save_to_db
 from app.helpers.data import trash_user, restore_user
 from app.helpers.data_getter import DataGetter
 from app.helpers.ticketing import TicketingManager
-from app.models.email_notifications import EmailNotification
+from app.models.email_notification import EmailNotification
 from app.models.event import Event
 from app.views.super_admin import USERS, check_accessible, list_navbar
 

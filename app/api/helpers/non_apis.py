@@ -5,7 +5,7 @@ from flask_restplus import Model
 
 import custom_fields as fields
 from app.helpers.data import update_or_create
-from app.models.custom_forms import CustomForms
+from app.models.custom_form import CustomForms
 from utils import ServiceDAO
 
 # #############

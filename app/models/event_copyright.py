@@ -7,7 +7,7 @@ class EventCopyright(db.Model):
     """
     Copyright Information about an event.
     """
-    __tablename__ = 'event_copyright'
+    __tablename__ = 'event_copyrights'
 
     id = db.Column(db.Integer, primary_key=True)
     holder = db.Column(db.String)

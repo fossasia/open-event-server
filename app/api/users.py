@@ -7,7 +7,7 @@ from app.helpers.data_getter import DataGetter
 from app.models.role import Role
 from app.models.user import User as UserModel, ATTENDEE
 from app.models.user_detail import UserDetail as UserDetailModel
-from app.models.users_events_roles import UsersEventsRoles
+from app.models.users_events_role import UsersEventsRoles
 from app.api.helpers import custom_fields as fields
 from app.api.helpers.helpers import requires_auth, can_access_account, staff_only
 from app.api.helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, BaseDAO, \

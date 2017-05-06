@@ -23,11 +23,11 @@
                             <div id="toolbar-holder">
                                 <div class="btn-group pull-left" data-toggle="buttons">
                                     <label class="btn btn-default active btn-responsive">
-                                        <input type="radio" name="notif_status" autocomplete="off" value="unread"
+                                        <input type="radio" name="notification_status" autocomplete="off" value="unread"
                                                checked> {{ _("Unread") }}
                                     </label>
                                     <label class="btn btn-default btn-responsive">
-                                        <input type="radio" name="notif_status" autocomplete="off"
+                                        <input type="radio" name="notification_status" autocomplete="off"
                                                value="all"> {{ _("All") }}
                                     </label>
                                 </div>
@@ -50,8 +50,8 @@
                                 </thead>
                                 <tbody>
                                 {% for notif in notifications %}
-                                    <tr class="notification {{ '' if notif.has_read else 'info' }}">
-                                        <td style="display: none;">{{ 'read' if notif.has_read else 'unread' }}</td>
+                                    <tr class="notification {{ '' if notif.is_read else 'info' }}">
+                                        <td style="display: none;">{{ 'read' if notif.is_read else 'unread' }}</td>
                                         <td>
                                             <h4>{{ notif.title }}</h4>
                                             <p class="clickable-link-holder">{{ notif.message | safe }}</p>
@@ -62,7 +62,7 @@
                                         </td>
                                         <td>{{ notif.received_at | humanize_alt }}</td>
                                         <td>
-                                            {% if not notif.has_read %}
+                                            {% if not notif.is_read %}
                                                 <a class="read-btn btn btn-default btn-xs"
                                                    href="{{ url_for('notifications.mark_as_read', notification_id=notif.id) }}">{{ _("Mark") }}
                                                     {{ _("as Read") }}</a>
@@ -90,7 +90,7 @@
     <script type="text/javascript">
         $.fn.dataTable.ext.search.push(
             function (settings, data, dataIndex) {
-                var user_option = $("input[name=notif_status]:checked").val();
+                var user_option = $("input[name=notification_status]:checked").val();
                 var state = data[0].trim() || 'unread';
                 if (user_option === "all") {
                     return true;
@@ -127,7 +127,7 @@
         $(".dataTables_filter").hide();
         $(".notif-table thead").hide();
 
-        $("input[name=notif_status]").change(function () {
+        $("input[name=notification_status]").change(function () {
             notifTable.draw();
         });
 

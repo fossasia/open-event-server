@@ -3,7 +3,7 @@ from app.models import db
 
 class EmailNotification(db.Model):
     """email notifications model class"""
-    __tablename__ = 'email_notification'
+    __tablename__ = 'email_notifications'
     id = db.Column(db.Integer,
                    primary_key=True)
     next_event = db.Column(db.Integer)

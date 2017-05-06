@@ -13,16 +13,16 @@ from app.helpers.storage import UPLOAD_PATHS
 from app.helpers.wizard.helpers import get_searchable_location_name, get_event_time_field_format
 from app.helpers.assets.images import save_resized_image, save_event_image, get_path_of_temp_url
 from app.models import db
-from app.models.email_notifications import EmailNotification
+from app.models.email_notification import EmailNotification
 from app.models.event import Event
 from app.models.event_copyright import EventCopyright
-from app.models.image_sizes import ImageSizes
+from app.models.image_size import ImageSizes
 from app.models.role import Role
 from app.models.stripe_authorization import StripeAuthorization
 from app.models.tax import Tax
 from app.models.ticket import Ticket, ticket_tags_table, TicketTag
 from app.models.user import ORGANIZER
-from app.models.users_events_roles import UsersEventsRoles
+from app.models.users_events_role import UsersEventsRoles
 from app.models.social_link import SocialLink
 
 
@@ -230,13 +230,13 @@ def save_event_from_json(json, event_id=None):
 
         tax.country = tax_data['country']
         tax.tax_name = tax_data['tax_name']
-        tax.send_invoice = tax_data['send_invoice']
+        tax.is_invoice_sent = tax_data['is_invoice_sent']
         tax.tax_id = tax_data['tax_id']
         tax.registered_company = tax_data['registered_company']
         tax.address = tax_data['address']
         tax.state = tax_data['state']
         tax.zip = tax_data['zip']
-        tax.tax_include_in_price = tax_data['tax_include_in_price']
+        tax.is_tax_included_in_price = tax_data['is_tax_included_in_price']
         tax.invoice_footer = tax_data['invoice_footer']
         db.session.add(tax)
     else:
@@ -330,7 +330,7 @@ def save_tickets(tickets_data, event):
         ticket.max_order = ticket_data['max_order'] if ticket_data['max_order'] != '' else 10
         ticket.sales_start = get_event_time_field_format(ticket_data, 'sales_start')
         ticket.sales_end = get_event_time_field_format(ticket_data, 'sales_end')
-        ticket.absorb_fees = ticket_data['absorb_fees']
+        ticket.is_fee_absorbed = ticket_data['is_fee_absorbed']
 
         if ticket_data['tags_string'].strip() != '':
             tag_names = ticket_data['tags_string'].split(',')

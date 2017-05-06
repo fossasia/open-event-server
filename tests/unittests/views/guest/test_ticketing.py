@@ -9,7 +9,7 @@ from flask import url_for
 from app import current_app as app
 from app.helpers.data import save_to_db
 from app.helpers.ticketing import TicketingManager
-from app.models.modules import Module
+from app.models.module import Module
 from app.models.stripe_authorization import StripeAuthorization
 from app.models.ticket import Ticket
 from app.settings import set_settings

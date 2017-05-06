@@ -1,11 +1,11 @@
 from datetime import datetime
 
-from app.models.call_for_papers import CallForPaper
-from app.models.custom_forms import CustomForms, session_form_str, speaker_form_str
+from app.models.call_for_paper import CallForPaper
+from app.models.custom_form import CustomForms, session_form_str, speaker_form_str
 from app.models.event import Event
-from app.models.message_settings import MessageSettings
+from app.models.message_setting import MessageSettings
 from app.models.microlocation import Microlocation
-from app.models.notifications import Notification
+from app.models.notification import Notification
 from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.track import Track
@@ -77,7 +77,7 @@ class ObjectMother(object):
     def get_message_settings():
         return MessageSettings(action="Next Event",
                                mail_status=1,
-                               notif_status=1,
+                               notification_status=1,
                                user_control_status=1)
 
     @staticmethod

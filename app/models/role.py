@@ -4,7 +4,7 @@ from app.models import db
 class Role(db.Model):
     """Event Role
     """
-    __tablename__ = 'role'
+    __tablename__ = 'roles'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False, unique=True)

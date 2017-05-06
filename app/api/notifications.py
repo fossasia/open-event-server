@@ -2,7 +2,7 @@ from flask.ext.restplus import Namespace
 
 from app.helpers.data import DataManager
 from app.helpers.data_getter import DataGetter
-from app.models.notifications import Notification as NotificationModel
+from app.models.notification import Notification as NotificationModel
 from app.api.helpers import custom_fields as fields
 from app.api.helpers.helpers import (
     can_create,

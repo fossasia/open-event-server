@@ -13,7 +13,7 @@ from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import send_email_after_export, send_notif_after_export
 from app.models.event import Event as EventModel
-from app.models.export_jobs import ExportJob
+from app.models.export_job import ExportJob
 from import_helpers import is_downloadable, get_filename_from_cd
 from .non_apis import CustomFormDAO, CUSTOM_FORM
 from ..events import DAO as EventDAO, EVENT as EVENT_MODEL

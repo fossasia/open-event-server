@@ -3,7 +3,7 @@ import unittest
 
 from app import current_app as app
 from app.helpers.data import update_or_create
-from app.models.custom_forms import CustomForms, SESSION_FORM, \
+from app.models.custom_form import CustomForms, SESSION_FORM, \
     SPEAKER_FORM
 from tests.unittests.api.utils import get_path, create_event
 from tests.unittests.auth_helper import register

@@ -17,11 +17,11 @@ class TicketHolder(db.Model):
     city = db.Column(db.String)
     state = db.Column(db.String)
     country = db.Column(db.String)
-    ticket_id = db.Column(db.Integer, db.ForeignKey('ticket.id', ondelete='CASCADE'))
+    ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE'))
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id', ondelete='CASCADE'))
     order = db.relationship('Order', backref='ticket_holders')
     ticket = db.relationship('Ticket', backref='ticket_holders')
-    checked_in = db.Column(db.Boolean, default=False)
+    is_checked_in = db.Column(db.Boolean, default=False)
 
     def __init__(self,
                  firstname=None,
@@ -32,7 +32,7 @@ class TicketHolder(db.Model):
                  state=None,
                  country=None,
                  ticket_id=None,
-                 checked_in=False,
+                 is_checked_in=False,
                  order_id=None):
         self.firstname = firstname
         self.lastname = lastname
@@ -43,7 +43,7 @@ class TicketHolder(db.Model):
         self.ticket_id = ticket_id
         self.country = country
         self.order_id = order_id
-        self.checked_in = checked_in
+        self.is_checked_in = is_checked_in
 
     def __repr__(self):
         return '<TicketHolder %r>' % self.id

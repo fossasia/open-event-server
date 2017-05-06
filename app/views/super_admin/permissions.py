@@ -4,7 +4,7 @@ from flask import request, redirect, url_for, flash
 
 from app.helpers.data import DataManager
 from app.helpers.data_getter import DataGetter
-from app.models.system_role import CustomSysRole
+from app.models.custom_system_role import CustomSysRole
 from app.models.user import SYS_ROLES_LIST
 from app.views.super_admin import PERMISSIONS, check_accessible, PANEL_LIST, list_navbar
 

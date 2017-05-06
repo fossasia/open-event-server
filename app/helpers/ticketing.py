@@ -148,9 +148,9 @@ class TicketingManager(object):
         holder = TicketingManager.get_attendee(event_id, attendee_id)
         if holder:
             if state is not None:
-                holder.checked_in = state
+                holder.is_checked_in = state
             else:
-                holder.checked_in = not holder.checked_in
+                holder.is_checked_in = not holder.is_checked_in
             save_to_db(holder)
             return holder
         else:
@@ -272,7 +272,7 @@ class TicketingManager(object):
                     order_ticket.quantity = int(ticket_quantity[index])
                     order.tickets.append(order_ticket)
 
-                    if order_ticket.ticket.absorb_fees or not fees:
+                    if order_ticket.ticket.is_fee_absorbed or not fees:
                         ticket_amount = (order_ticket.ticket.price * order_ticket.quantity)
                         amount += (order_ticket.ticket.price * order_ticket.quantity)
                     else:
