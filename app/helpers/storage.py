@@ -219,6 +219,9 @@ def upload_to_gs(bucket_name, client_id, client_secret, file, key, acl='public-r
         return gs_url + k.key
     return False
 
+def is_external_file(filename):
+    return ('http://' in filename) or ('https://' in filename)
+
 
 # ########
 # HELPERS

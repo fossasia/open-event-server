@@ -135,3 +135,10 @@ def init_filters(app):
         if url:
             return url.rsplit('/', 1)[1]
         return ""
+
+    @app.template_filter('is_external_url')
+    def is_external_url(url):
+        if url:
+            if ('http://' in url) or ('https://' in url):
+                return "external_url"
+        return "no_external_url"
