@@ -55,6 +55,12 @@
                         {{ _("Create Session") }}
                     </a>
                 </div>
+                <div class="btn-group pull-left" style="margin-left: 5px; margin-right: 10px;">
+                    <a class="btn btn-info btn-responsive"
+                       href="{{ url_for('event_sessions.download_sessions_as_csv', event_id=event.id) }}"
+                        target="_blank">{{ _("Export As CSV") }}
+                    </a>
+                </div>
             </div>
         </div>
         <div class="col-md-12 table-responsive" style="margin-top: 10px;">
