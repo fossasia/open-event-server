@@ -460,3 +460,6 @@ span.twitter-typeahead {
 .fullwidth {
     width: 100% !important;
 }
+.external_url{
+    display: none;
+}
