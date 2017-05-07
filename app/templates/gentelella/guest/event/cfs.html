@@ -80,8 +80,8 @@
                                             {% endfor %}
                                             {% endif %}
                                         </div>
-                                        <a href="/e/{{ event.identifier }}/cfs/new_speaker" type="button" class="btn btn-info" id = "speaker-button">{{ _("Register as a Speaker") }}</a>
-                                        <a href="/e/{{ event.identifier }}/cfs/new/" type="button" class="btn btn-primary" id = "session-button" style="margin-top:-6px">{{ _("Propose Session") }}</a>
+                                        <a href="/e/{{ event.identifier }}/cfs/new_speaker" type="button" class="btn btn-info" id = "speaker-button">{{ _("Add Speaker Details") }}</a>
+                                        <a href="#" type="button" class="btn btn-primary" id = "session-button" style="margin-top:-6px" data-toggle="tooltip" title="Please add speaker details to propose a session!" disabled>{{ _("Add Session Proposal") }}</a>
                                     </div>
                                 </div>
                             </div>
