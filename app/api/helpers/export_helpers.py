@@ -23,6 +23,8 @@ from ..sessions import DAO as SessionDAO, SESSION, \
 from ..speakers import DAO as SpeakerDAO, SPEAKER
 from ..sponsors import DAO as SponsorDAO, SPONSOR
 from ..tracks import DAO as TrackDAO, TRACK
+from app.helpers.storage import upload, UPLOAD_PATHS, UploadedFile
+from app.settings import get_settings
 
 # DELETE FIELDS
 # All fields to be deleted go here
@@ -207,7 +209,17 @@ def export_event_json(event_id, settings):
     fp.close()
     # make zip
     shutil.make_archive(dir_path, 'zip', dir_path)
-    return dir_path + '.zip'
+    dir_path = dir_path + ".zip"
+
+    storage_path = UPLOAD_PATHS['exports']['zip'].format(
+        event_id = event_id
+    )
+    uploaded_file = UploadedFile(dir_path, dir_path.rsplit('/', 1)[1])
+    storage_url = upload(uploaded_file, storage_path)
+
+    if get_settings()['storage_place'] != "s3" or get_settings()['storage_place'] != 'gs':
+        storage_url = app.config['BASE_DIR'] + storage_url.replace("/serve_","/")
+    return storage_url
 
 
 # HELPERS
