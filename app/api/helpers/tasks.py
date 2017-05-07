@@ -16,6 +16,7 @@ from export_helpers import send_export_mail
 from import_helpers import update_import_job, send_import_mail
 from app.api.exports import event_export_task_base
 from app.api.imports import import_event_task_base
+from app.settings import get_settings
 
 
 @celery.task(base=RequestContextTask, name='import.event', bind=True, throws=(BaseError,))
@@ -46,10 +47,15 @@ def export_event_task(self, event_id, settings):
         logging.info('Exporting started')
         path = event_export_task_base(event_id, settings)
         # task_id = self.request.id.__str__()  # str(async result)
-        result = {
-            'download_url': url_for(
+        if get_settings()['storage_place'] == 'local' or get_settings()['storage_place'] == None:
+            download_url = url_for(
                 'api.exports_export_download', event_id=event_id, path=path
             )
+        else:
+            download_url = path
+
+        result = {
+            'download_url': download_url
         }
     except BaseError as e:
         result = {'__error': True, 'result': e.to_dict()}
