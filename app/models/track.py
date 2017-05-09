@@ -38,9 +38,16 @@ class Track(db.Model):
         return self.name
 
     @property
+    def font_color(self):
+        h = self.color.lstrip('#')
+        a = 1 - (0.299 * int(h[0:2], 16) + 0.587 * int(h[2:4], 16) + 0.114 * int(h[4:6], 16))/255
+        return '#000000' if (a < 0.5) else '#ffffff'
+
+    @property
     def serialize(self):
         return {
             'id': self.id,
             'name': self.name,
-            'color': self.color
+            'color': self.color,
+            'font_color': self.font_color
         }

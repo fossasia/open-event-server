@@ -24,6 +24,7 @@ TRACK = api.model('Track', {
     'name': fields.String(required=True),
     'description': fields.String(),
     'color': fields.Color(required=True),
+    'font_color': fields.Color(),
     'track_image_url': fields.Upload(),
     'location': fields.String(),
     'sessions': fields.List(fields.Nested(TRACK_SESSION)),
@@ -36,6 +37,7 @@ TRACK_PAGINATED = api.clone('TrackPaginated', PAGINATED_MODEL, {
 TRACK_POST = api.clone('TrackPost', TRACK)
 del TRACK_POST['id']
 del TRACK_POST['sessions']
+del TRACK_POST['font_color']
 
 
 # Create DAO

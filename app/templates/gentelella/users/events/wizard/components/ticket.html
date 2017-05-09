@@ -3,6 +3,7 @@
         <div class="row" style="border: 1px solid #dcdcdc;padding-top: 10px;">
             <div class="col-xs-4">
                 <input type="hidden" name="tickets[type]" v-model="ticket.type">
+                <input type="hidden" name="tickets[position]" v-model="ticket.position">
                 <div class="item form-group" style="margin-bottom: 0;">
                     <input type="text" name="tickets[name]"
                            class="form-control"
@@ -18,17 +19,27 @@
                        v-model.number="ticket.price" placeholder="Price" required="required"
                        :readonly="ticket.has_completed_orders">
             </div>
-            <div class="col-xs-3">
+            <div class="col-xs-2">
                 <input type="number" min="0" name="tickets[quantity]" class="form-control"
                        v-model.number="ticket.quantity"
                        placeholder="100">
             </div>
-            <div class="col-xs-2">
+            <div class="col-xs-3">
                 <div class="btn-group">
                     <a class="btn btn-default edit-ticket-button ticket-button-resp" data-toggle="tooltip"
                        v-on:click="show_settings = !show_settings"
                        title="Settings">
                         <i class="glyphicon glyphicon-cog" style="color: #46b8da;"></i>
+                    </a>
+                    <a class="btn btn-default edit-ticket-button ticket-button-resp" data-toggle="tooltip"
+                       v-on:click="move('up')"
+                       title="Move Up">
+                        <i class="glyphicon glyphicon-arrow-up" style="color: #46b8da;"></i>
+                    </a>
+                    <a class="btn btn-default edit-ticket-button ticket-button-resp" data-toggle="tooltip"
+                       v-on:click="move('down')"
+                       title="Move Down">
+                        <i class="glyphicon glyphicon-arrow-down" style="color: #46b8da;"></i>
                     </a>
                     <a class="btn btn-default" data-toggle="tooltip" data-container="body"
                        v-if="ticket.has_completed_orders"
@@ -43,6 +54,7 @@
                     </a>
                 </div>
             </div>
+            <span class="help-block" v-show="ticket.type == 'paid' && ticket.price <= 0">Paid ticket should have a price greater than 0</span>
         </div>
 
         <transition name="fade">
@@ -90,7 +102,7 @@
                         <label style="font-weight: normal; text-transform: none; font-size: 14px; line-height: 1;  margin-top: 0;">
                             {{ _("Fee: ") }} {{ '{{ service_fee * ticket.price / 100 }}' }} {{ _("| Buyer Total:") }}
                             {{ '{{ ticket.absorb_fees  ? ticket.price : ticket.price + ((service_fee * ticket.price / 100)) }}' }}
-
+                        </label>
                     </div>
                     <div class="item form-group">
                         <label>{{ _("Sales Start") }}</label><br>

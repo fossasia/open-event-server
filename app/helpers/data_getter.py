@@ -424,11 +424,11 @@ class DataGetter(object):
     def get_call_for_speakers_events(include_private=False):
         events = DataGetter.get_all_published_events(include_private)
         return [event for event in events
-                if DataGetter.get_call_for_papers(event.id)
+                if DataGetter.get_open_call_for_papers(event.id)
                 and not event.deleted_at][:12]
 
     @staticmethod
-    def get_call_for_papers(event_id):
+    def get_open_call_for_papers(event_id):
         datetime_now = datetime.datetime.now()
         return CallForPaper.query.filter_by(
             event_id=event_id
@@ -733,12 +733,10 @@ class DataGetter(object):
             return names
 
     @staticmethod
-    def get_sales_open_tickets(event_id, give_all=False):
-        if give_all:
-            tickets = Ticket.query.filter(Ticket.event_id == event_id)
+    def get_sales_open_tickets(event_id, event_timezone='UTC'):
         tickets = Ticket.query.filter(Ticket.event_id == event_id).filter(
-            Ticket.sales_start <= datetime.datetime.now()).filter(
-            Ticket.sales_end >= datetime.datetime.now())
+            Ticket.sales_start <= datetime.datetime.now(pytz.timezone(event_timezone)).replace(tzinfo=None)).filter(
+            Ticket.sales_end >= datetime.datetime.now(pytz.timezone(event_timezone)).replace(tzinfo=None))
         open_tickets = []
         for ticket in tickets:
             orders = OrderTicket.query.filter(OrderTicket.ticket_id == ticket.id)

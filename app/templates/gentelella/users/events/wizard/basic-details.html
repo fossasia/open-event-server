@@ -256,17 +256,21 @@
                     <div class="col-xs-3">
                         <h3 style="font-size: 15px;">{{ _("Price") }}</h3>
                     </div>
-                    <div class="col-xs-3">
+                    <div class="col-xs-2">
                         <h3 style="font-size: 15px;">{{ _("Quantity") }} <span class="required">*</span></h3>
                     </div>
-                    <div class="col-xs-2">
+                    <div class="col-xs-3">
                         <h3 style="font-size: 15px;">{{ _("Options") }}</h3>
                     </div>
                 </div>
                 <div class="tickets-holder" style="margin-bottom: 10px;">
-                    <ticket v-for="(ticket, index) in event.tickets" v-bind:ticket="ticket" v-bind:event="event" v-bind:service_fee="{{ (event.payment_currency | fees_by_currency).service_fee | default(0, true) }}"
+                    <ticket  class="form-group" v-for="(ticket, index) in sortedTickets" v-bind:ticket="ticket" v-bind:event="event" v-bind:service_fee="{{ (event.payment_currency | fees_by_currency).service_fee | default(0, true) }}"
                             v-bind:key="index"
-                            v-on:remove="removeTicket(ticket)"></ticket>
+                            v-on:remove="removeTicket(ticket)"
+                            v-on:moveup="moveTicket(ticket, index, 'up')"
+                            v-on:movedown="moveTicket(ticket, index, 'down')"
+                            v-bind:class="{ 'has-error': ticket.type == 'paid' && ticket.price <= 0 }"></ticket>
+
                 </div>
             </div>
 

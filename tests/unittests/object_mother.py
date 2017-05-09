@@ -29,7 +29,7 @@ class ObjectMother(object):
         return Track(name="name",
                      event_id=event_id,
                      description="description",
-                     color="red")
+                     color="#caf034")
 
     @staticmethod
     def get_session(event_id=1):

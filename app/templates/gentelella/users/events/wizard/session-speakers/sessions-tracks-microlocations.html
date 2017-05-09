@@ -6,16 +6,17 @@
             <hr>
         </h2>
         <div class="row" id="session-tracks-rooms-holder">
-            <div class="col-md-7 tracks">
+            <div class="col-md-12 tracks">
                 <h2 class="label-header">{{ _("Tracks") }}</h2>
                 <session-track v-for="(track, index) in tracks"
                                v-bind:track="track"
                                v-bind:key="index"
                                v-on:add="addTrack()"
-                               v-on:remove="removeTrack(track)"></session-track>
+                               v-on:remove="removeTrack(track)"
+                               v-on:changefont="changeFont(track)"></session-track>
             </div>
             <div class="clearfix"></div>
-            <div class="col-md-7 rooms">
+            <div class="col-md-12 rooms">
                 <h2 class="label-header">{{ _("Microlocations") }}</h2>
                 <microlocation v-for="(microlocation, index) in microlocations"
                                v-bind:microlocation="microlocation"
@@ -25,7 +26,7 @@
 
             </div>
             <div class="clearfix"></div>
-            <div class="col-md-7 session-types">
+            <div class="col-md-12 session-types">
                 <h2 class="label-header">{{ _("Session Types") }}</h2>
                 <session-type v-for="(sessionType, index) in sessionTypes"
                               v-bind:session-type="sessionType"

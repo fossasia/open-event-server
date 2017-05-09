@@ -76,6 +76,7 @@ def view_order(order_identifier):
     if not order or order.status == 'expired':
         abort(404)
     if order.status == 'completed' or order.status == 'placed':
+        flash("An email with the ticket has also been sent to your email account.")
         return redirect(url_for('ticketing.view_order_after_payment', order_identifier=order_identifier))
 
     if order.event.stripe:
@@ -94,7 +95,6 @@ def view_order_after_payment(order_identifier):
     order = TicketingManager.get_and_set_expiry(order_identifier)
     if not order or (order.status != 'completed' and order.status != 'placed'):
         abort(404)
-    flash("An email with the ticket has also been sent to your email account.")
     fees = DataGetter.get_fee_settings_by_currency(order.event.payment_currency)
     return render_template('gentelella/guest/ticketing/order_post_payment.html',
                            order=order,

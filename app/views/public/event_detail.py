@@ -71,7 +71,9 @@ def display_event_detail_home(identifier):
     timenow_event_tz = datetime.now(pytz.timezone(event.timezone
                                                   if (event.timezone and event.timezone != '') else 'UTC'))
     module = DataGetter.get_module()
-    tickets = DataGetter.get_sales_open_tickets(event.id, True)
+    tickets = DataGetter.get_sales_open_tickets(event.id, event.timezone
+                                                  if (event.timezone and event.timezone != '') else 'UTC')
+    sorted_tickets = sorted(tickets, key=lambda x: x['ticket'].position)
 
     '''Sponsor Levels'''
     sponsors = {-1: []}
@@ -98,7 +100,7 @@ def display_event_detail_home(identifier):
                            module=module,
                            timenow_event_tz=timenow_event_tz,
                            current_timezone=get_current_timezone(),
-                           tickets=tickets if tickets else [],
+                           tickets=sorted_tickets if sorted_tickets else [],
                            fees=fees,
                            code=code)
 

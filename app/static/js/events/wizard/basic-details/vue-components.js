@@ -9,6 +9,13 @@ Vue.component('ticket', {
     methods: {
         remove: function () {
             this.$emit('remove');
+        },
+        move: function (direction) {
+            if (direction === 'up') {
+                this.$emit('moveup');
+            } else if (direction === 'down') {
+                this.$emit('movedown');
+            }
         }
     },
     mounted: function () {
