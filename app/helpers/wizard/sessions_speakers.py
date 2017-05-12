@@ -48,7 +48,6 @@ def save_session_speakers(json, event_id=None):
         save_custom_forms(json['custom_forms'], event_id)
     else:
         event.has_session_speakers = False
-        delete_all_sessions_speakers_data(event_id)
 
     event.state = json['state'] if event.location_name.strip() != '' else 'Draft'
     save_to_db(event)
