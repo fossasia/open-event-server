@@ -83,7 +83,9 @@ def get_event_json(event_id):
         "state": event.state,
         "cheque_details": event.cheque_details,
         "bank_details": event.bank_details,
-        "onsite_details": event.onsite_details
+        "onsite_details": event.onsite_details,
+        "sponsors_enabled": event.sponsors_enabled,
+        "has_session_speakers": event.has_session_speakers
     }
 
     for social_link in event.social_link:

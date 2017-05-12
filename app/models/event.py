@@ -96,6 +96,7 @@ class Event(db.Model):
     bank_details = db.Column(db.String)
     onsite_details = db.Column(db.String)
     created_at = db.Column(db.DateTime)
+    sponsors_enabled = db.Column(db.Boolean, default=False)
 
     discount_code_id = db.Column(db.Integer, db.ForeignKey('discount_codes.id', ondelete='SET NULL'),
                                  nullable=True, default=None)
