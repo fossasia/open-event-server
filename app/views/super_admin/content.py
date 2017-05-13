@@ -15,7 +15,7 @@ from flask import flash
 from app.helpers.data import DataManager, delete_from_db, save_to_db
 from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import uploaded_file
-from app.helpers.storage import upload, UploadedFile
+from app.helpers.storage import upload, upload_local, UploadedFile
 from app.models.custom_placeholder import CustomPlaceholder
 from app.settings import get_settings, set_settings
 from app.views.super_admin import check_accessible, CONTENT, list_navbar
@@ -67,23 +67,26 @@ def placeholder_upload():
                 placeholder_file,
                 'placeholders/original/' + filename
             )
-            temp_img_file = placeholder.replace('/serve_', '')
 
-            basewidth = 300
-            img = Image.open(temp_img_file)
-            wpercent = (basewidth / float(img.size[0]))
-            hsize = int((float(img.size[1]) * float(wpercent)))
-            img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
             try:
                 os.mkdir(app.config['TEMP_UPLOADS_FOLDER'])
             except OSError as exc:
                 if exc.errno != errno.EEXIST:
                     raise exc
                 pass
+
+            placeholder_local = upload_local(placeholder_file, app.config['TEMP_UPLOADS_FOLDER'] + filename)
+            temp_img_file = placeholder_local.replace('/serve_', '')
+            basewidth = 300
+            img = Image.open(temp_img_file)
+            wpercent = (basewidth / float(img.size[0]))
+            hsize = int((float(img.size[1]) * float(wpercent)))
+            img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
+
             img.save(app.config['TEMP_UPLOADS_FOLDER'] + '/temp.png')
             file_name = temp_img_file.rsplit('/', 1)[1]
             thumbnail_file = UploadedFile(file_path=temp_img_file, filename=file_name)
-            background_thumbnail_url = upload(
+            background_thumbnail_url = upload_local(
                 thumbnail_file,
                 'placeholders/thumbnail/' + filename
             )
