@@ -1,4 +1,6 @@
 from sqlalchemy.orm import backref
+import pytz
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from app.models import db
 
@@ -34,6 +36,17 @@ class CallForPaper(db.Model):
 
     def __unicode__(self):
         return self.announcement
+
+    def get_tz_aware_time(self, time):
+        return pytz.timezone(self.timezone).localize(time)
+
+    @hybrid_property
+    def start_date_tz(self):
+        return self.get_tz_aware_time(self.start_date)
+
+    @hybrid_property
+    def end_date_tz(self):
+        return self.get_tz_aware_time(self.end_date)
 
     @property
     def serialize(self):

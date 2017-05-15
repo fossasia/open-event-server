@@ -1,8 +1,11 @@
 import datetime
+import pytz
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from app.helpers.date_formatter import DateFormatter
 from app.helpers.versioning import clean_up_string, clean_html
 from app.models import db
+import app.models.event
 
 speakers_sessions = db.Table('speakers_sessions', db.Column(
     'speaker_id', db.Integer, db.ForeignKey('speaker.id', ondelete='CASCADE')), db.Column(
@@ -100,6 +103,21 @@ class Session(db.Model):
     @staticmethod
     def get_service_name():
         return 'session'
+
+    def get_tz_aware_time(self, time):
+        return pytz.timezone(self.timezone).localize(time)
+
+    @hybrid_property
+    def start_time_tz(self):
+        return self.get_tz_aware_time(self.start_time)
+
+    @hybrid_property
+    def end_time_tz(self):
+        return self.get_tz_aware_time(self.end_time)
+
+    @property
+    def timezone(self):
+        return app.models.event.Event.query.get(self.event_id).timezone
 
     @property
     def is_accepted(self):

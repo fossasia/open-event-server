@@ -74,8 +74,8 @@ SESSION = api.model('Session', {
     'short_abstract': fields.String(),
     'long_abstract': fields.String(),
     'comments': fields.String(),
-    'start_time': fields.DateTime(required=True),
-    'end_time': fields.DateTime(required=True),
+    'start_time': fields.DateTime(attribute='start_time_tz', required=True),
+    'end_time': fields.DateTime(attribute='end_time_tz', required=True),
     'track': fields.Nested(SESSION_TRACK, allow_null=True),
     'speakers': fields.List(fields.Nested(SESSION_SPEAKER)),
     'language': SessionLanguageField(),
@@ -123,9 +123,10 @@ class SessionDAO(ServiceDAO):
         data = self._del(data, ['speaker_ids', 'track_id',
                                 'microlocation_id', 'session_type_id'])
         # convert datetime fields
-        for _ in ['start_time', 'end_time']:
+        for _ in ['start_time_tz', 'end_time_tz']:
             if _ in data:
-                data[_] = SESSION_POST[_].from_str(data[_])
+                data[_] = SESSION_POST[_[0:-3]].from_str(data[_])
+                data[_[0:-3]] = data.pop(_)
         return data
 
     def get_object(self, model, sid, event_id):

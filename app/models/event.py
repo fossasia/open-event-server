@@ -1,6 +1,8 @@
 import binascii
 import os
 from datetime import datetime
+import pytz
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from flask.ext import login
 from sqlalchemy import event
@@ -238,6 +240,21 @@ class Event(db.Model):
     def get_staff_roles(self):
         """returns only roles which are staff i.e. not attendee"""
         return [role for role in self.roles if role.role.name != ATTENDEE]
+
+    def get_tz_aware_time(self, time):
+        return pytz.timezone(self.timezone).localize(time)
+
+    @hybrid_property
+    def start_time_tz(self):
+        return self.get_tz_aware_time(self.start_time)
+
+    @hybrid_property
+    def end_time_tz(self):
+        return self.get_tz_aware_time(self.end_time)
+
+    @hybrid_property
+    def schedule_published_on_tz(self):
+        return self.get_tz_aware_time(self.schedule_published_on)
 
     @property
     def serialize(self):
