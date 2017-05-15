@@ -132,8 +132,8 @@ class DateTime(CustomField):
     Custom DateTime field
     """
     __schema_format__ = 'date-time'
-    __schema_example__ = '2016-06-06T11:22:33'
-    dt_format = '%Y-%m-%dT%H:%M:%S'
+    __schema_example__ = '2016-06-06T11:22:33+0530'
+    dt_format = '%Y-%m-%dT%H:%M:%S%z'
 
     def to_str(self, value):
         return None if not value \
@@ -143,7 +143,7 @@ class DateTime(CustomField):
         if not value:
             return None
         value = value.replace(' ', 'T', 1)
-        return datetime.strptime(value, self.dt_format)
+        return datetime.strptime(value, self.dt_format[0:-2])
 
     def format(self, value):
         return self.to_str(value)
@@ -153,7 +153,10 @@ class DateTime(CustomField):
             return self.validate_empty()
         try:
             if value.__class__.__name__ in ['unicode', 'str']:
-                self.from_str(value)
+                if(len(value) <= 19):
+                    self.from_str(value)
+                else:
+                    self.from_str(value[0:-5])
             else:
                 self.to_str(value)
         except Exception:
