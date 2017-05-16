@@ -38,5 +38,5 @@ def get_searchable_location_name(event):
         if response['status'] == u'OK':
             for addr in response['results'][0]['address_components']:
                 if addr['types'] == ['locality', 'political']:
-                    searchable_location_name = addr['short_name']
+                    searchable_location_name = addr['long_name']
     return searchable_location_name

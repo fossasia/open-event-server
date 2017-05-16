@@ -6,6 +6,7 @@ from flask import url_for, abort
 from flask.ext import login
 
 from app.helpers.data import save_to_db, record_activity
+from app.helpers.cache import cache
 from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import represents_int
 from app.helpers.static import EVENT_LICENCES
@@ -113,6 +114,7 @@ def save_event_from_json(json, event_id=None):
     :param json:
     :return:
     """
+    cache.delete('event_locations')
     event_data = json['event']
     state = json['state']
 
