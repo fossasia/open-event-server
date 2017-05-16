@@ -304,20 +304,20 @@
             if (emailType === "accept") {
                 $mailModal.find('.subject').val("Your Session '" + sessionTitle + "' has been accepted");
                 $mailModal.find('.message').val("Hello,\n\nYour session '" + sessionTitle + "' has been " + emailType + "ed.\n\nVisit this link to view the session: http://" + window.location.hostname + "/events/mysessions/1/ .");
-                $mailModal.find('.form-horizontal').attr('action', sessionId + '/accept');
+                $mailModal.find('.form-horizontal').attr('action', sessionId + '/accept/');
             } else if(emailType === "confirm"){
                 $mailModal.find('.subject').val("Confirm your availability for '" + sessionTitle + "'");
                 $mailModal.find('.message').val("Hello,\n\nYour session '" + sessionTitle + "' has been accepted. \n\nTo " + emailType + " your availability visit this link: http://" + window.location.hostname + "/events/mysessions/1/ .");
-                $mailModal.find('.form-horizontal').attr('action', sessionId + '/confirm');
+                $mailModal.find('.form-horizontal').attr('action', sessionId + '/confirm/');
             } else if (emailType === "send-email") {
                 var sessionState = button.data('session-state');
                 $mailModal.find('.subject').val("Your Session '" + sessionTitle + "' has been " + sessionState);
                 $mailModal.find('.message').val("Hello,\n\nYour session '" + sessionTitle + "' has been " + sessionState + ".\n\nVisit this link to view the session: http://" + window.location.hostname + "/events/mysessions/1/ .");
-                $mailModal.find('.form-horizontal').attr('action', sessionId + '/send-emails');
+                $mailModal.find('.form-horizontal').attr('action', sessionId + '/send-emails/');
             } else {
                 $mailModal.find('.subject').val("Your Session '" + sessionTitle + "' has been rejected");
                 $mailModal.find('.message').val("Hello,\n\nYour session '" + sessionTitle + "' has been " + emailType + "ed.\n\nVisit this link to view the session: http://" + window.location.hostname + "/events/mysessions/1/ .");
-                $mailModal.find('.form-horizontal').attr('action', sessionId + '/reject');
+                $mailModal.find('.form-horizontal').attr('action', sessionId + '/reject/');
             }
 
             $mailModal.modal('show');
