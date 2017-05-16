@@ -12,7 +12,7 @@ spec:
       hostname: nfs-server
       containers:
       - name: nfs-server
-        image: gcr.io/eventyay/nfs-server:latest
+        image: eventyay/nfs-server:latest
         ports:
           - name: nfs
             containerPort: 2049

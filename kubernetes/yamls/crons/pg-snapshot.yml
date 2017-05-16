@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
           - name: pg-snapshot
-            image: gcr.io/eventyay/utils/gcloud:latest
+            image: eventyay/gcloud-utils:latest
             command:
             - /usr/bin/gcloud
             - compute disks snapshot pg-data-disk --zone us-west1-a
