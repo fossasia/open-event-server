@@ -8,6 +8,15 @@ services:
     volumes:
       - /var/lib/postgresql
     command: echo true
+    
+  nginx:
+    build: .
+    ports:
+        - "80:80"
+    volumes_from:
+        - data
+    links:
+        - data:data
 
   postgres:
     image: postgres:9.5
@@ -28,6 +37,8 @@ services:
 
   web:
     build: .
+    expose:
+    - "5000"
     environment:
       DATABASE_URL: postgresql://postgres:test@postgres:5432/opev
       REDIS_URL: redis://redis:6379/0
@@ -36,6 +47,7 @@ services:
     links:
       - postgres:postgres
       - redis:redis
+      - nginx:nginx
     volumes:
       - 'storage:/open_event/static'
     ports:
