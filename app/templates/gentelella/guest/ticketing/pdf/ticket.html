@@ -28,7 +28,6 @@
 
              @frame col2_frame {
                 left: 440pt; top: 170pt;
-                -pdf-frame-content: personal_content;
             }
         }
 
@@ -65,9 +64,9 @@
         <div id="qrcode">
             <img src="data:image/png;base64,{{ holder.qr_code }}" />
         </div>
-        <strong id="number_content" style="color: #ffffff; text-align: center">#{{ order.get_invoice_number() }}/{{ holder.id }}</strong>
+        <strong id="number_content" style="color: #000; text-align: center">#{{ order.get_invoice_number() }}/{{ holder.id }}</strong>
 
-        <div id="personal_content">
+        <div id="personal_content_{{ holder.id }}">
             <span>{{ holder.name }}</span><br>
             <span>{{ holder.email }}</span>
         </div>
