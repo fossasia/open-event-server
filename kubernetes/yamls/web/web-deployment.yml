@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: web
-        image: eventyay/api-server:latest
+        image: eventyay/staging-api-server:latest
         command: ["/bin/sh","-c"]
         args: ["./kubernetes/run.sh"]
         livenessProbe:
