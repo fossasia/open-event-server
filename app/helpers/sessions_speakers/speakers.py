@@ -1,8 +1,10 @@
+from flask import current_app as app
 from app.helpers.assets.images import save_resized_image, get_path_of_temp_url, save_event_image
 from app.helpers.data_getter import DataGetter
 from app.helpers.storage import UPLOAD_PATHS
 from app.models.image_sizes import ImageSizes
 from app.models.speaker import Speaker
+from app.helpers.signals import speakers_modified
 
 
 def speaker_image_sizes():
@@ -106,6 +108,7 @@ def save_speaker(request, event_id=None, speaker=None, user=None, no_name=False)
         speaker.heard_from = trim_get_form(request.form, 'heard_from', None)
     speaker.sponsorship_required = trim_get_form(request.form, 'sponsorship_required', None)
     speaker.speaking_experience = trim_get_form(request.form, 'speaking_experience', None)
+    speakers_modified.send(app._get_current_object(), event_id=event_id)
     save_to_db(speaker, "Speaker has been updated")
     record_activity('update_speaker', speaker=speaker, event_id=event_id)
     return speaker

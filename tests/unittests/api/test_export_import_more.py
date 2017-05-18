@@ -10,6 +10,7 @@ from tests.unittests.api.utils import create_event, create_services, create_sess
 from tests.unittests.auth_helper import register
 from tests.unittests.setup_database import Setup
 from test_export_import import ImportExportBase
+from app.helpers.tasks import export_ical_task, export_pentabarf_task, export_xcal_task
 
 
 class ImportExportOtherBase(ImportExportBase):
@@ -32,6 +33,9 @@ class ImportExportOtherBase(ImportExportBase):
             '/api/v1/events/%s' % event_id,
             {'state': 'Published', 'schedule_published_on': '2017-01-01 23:11:44', 'has_session_speakers': True}
         )
+        export_ical_task(event_id)
+        export_xcal_task(event_id)
+        export_pentabarf_task(event_id)
         self.assertEqual(resp.status_code, 200)
 
 

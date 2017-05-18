@@ -6,11 +6,11 @@ POST_EVENT_DATA = {
     "email": "event@gmail.com",
     "end_time": "2016-05-30T12:12:43",
     "timezone": "UTC",
-    "latitude": 0,
+    "latitude": 0.0,
     "location_name": "Berlin",
     "searchable_location_name": "Berlin",
     "logo": "",
-    "longitude": 0,
+    "longitude": 0.0,
     "name": "TestEvent",
     'event_url': "http://site.com",
     'background_image': "",
@@ -52,8 +52,8 @@ POST_SOCIAL_LINK_DATA = {
 
 POST_MICROLOCATION_DATA = {
     "floor": 1,
-    "latitude": 1,
-    "longitude": 1,
+    "latitude": 1.0,
+    "longitude": 1.0,
     "name": "TestMicrolocation",
     "room": "TestRoom"
 }
