@@ -15,12 +15,12 @@ var app = new Vue({
             loading: false
         },
         sponsors: (sponsorsSeed && sponsorsSeed.length > 0) ? sponsorsSeed : [],
-        sponsors_enabled: (sponsorsSeed && sponsorsSeed.length > 0),
+        sponsors_enabled: sponsorsEnabled ? sponsorsEnabled : false,
         tracks: (tracksSeed && tracksSeed.length > 0) ? tracksSeed : [],
         sessionTypes: (sessionTypesSeed && sessionTypesSeed.length > 0) ? sessionTypesSeed : [],
         microlocations: (microlocationsSeed && microlocationsSeed.length > 0) ? microlocationsSeed : [],
         call_for_speakers: callForSpeakersSeed ? callForSpeakersSeed : getCallForSpeakers(EVENT),
-        sessions_speakers_enabled: enabled,
+        sessions_speakers_enabled: sessionSpeakersEnabled ? sessionSpeakersEnabled : false,
         custom_forms: {
             session: [],
             speaker: []
@@ -67,10 +67,14 @@ var app = new Vue({
         'event.topic': function () {
             this.event.sub_topic = '';
         },
-        'event.ticket_include': function () {
-            this.event.tickets = [];
-            this.ticket_url = '';
+        'event.ticket_include': function (value) {
             save(this.step);
+            if(value){
+                this.event.tickets = ticketsSeed;
+            } else {
+                this.event.tickets = [];
+                this.ticket_url = '';
+            }
         },
         'addressShown': function (val) {
             if (val) {
@@ -111,10 +115,15 @@ var app = new Vue({
         'sponsors_enabled': function (value) {
             save(this.step);
             if (value) {
-                this.sponsors = [_.clone(SPONSOR)];
+                if(sponsorsSeed && sponsorsSeed.length > 0){
+                    this.sponsors = sponsorsSeed;
+                } else {
+                    this.sponsors = [_.clone(SPONSOR)];
+                }
             } else {
                 this.sponsors = [];
             }
+
             this.$nextTick(function () {
                 bindSummerNote(this);
             });
@@ -126,9 +135,9 @@ var app = new Vue({
         },
         'sessions_speakers_enabled': function (value) {
             if (value) {
-                this.tracks = [getNewTrack('Main Track')];
-                this.sessionTypes = [getNewSessionType('Talks')];
-                this.microlocations = [getNewMicrolocation('Room 1')];
+                this.tracks = tracksSeed || [getNewTrack('Main Track')];
+                this.sessionTypes = sessionTypesSeed || [getNewSessionType('Talks')];
+                this.microlocations = microlocationsSeed || [getNewMicrolocation('Room 1')];
                 this.call_for_speakers = getCallForSpeakers(this.event);
             } else {
                 this.tracks = [];

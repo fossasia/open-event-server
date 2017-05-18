@@ -70,7 +70,7 @@ bower install
 * **Step 4** - Create application environment variables.
 
 ```sh
-export DATABASE_URL=postgresql://open_event_user:start@127.0.0.1:5432/test
+export DATABASE_URL=postgresql://open_event_user:test@127.0.0.1:5432/test
 ```
 
 

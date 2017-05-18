@@ -3,6 +3,7 @@ var sessionTypesSeed = null;
 var microlocationsSeed = null;
 var callForSpeakersSeed = null;
 var enabled = false;
+var sessionSpeakersEnabled = false;
 
 if (!_.isUndefined(window.seed)) {
     if (!_.isNull(window.seed.tracks)) {
@@ -19,6 +20,9 @@ if (!_.isUndefined(window.seed)) {
     }
     if (!_.isNull(window.seed.callForSpeakers)) {
         callForSpeakersSeed = window.seed.callForSpeakers;
+    }
+    if (!_.isNull(window.seed.event)) {
+        sessionSpeakersEnabled = window.seed.event.has_session_speakers;
     }
 }
 

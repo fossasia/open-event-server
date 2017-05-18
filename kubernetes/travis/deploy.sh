@@ -27,8 +27,9 @@ export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/eventyay-8245fde7ab8a.json
 gcloud config set project eventyay
 gcloud container clusters get-credentials eventyay-cluster
 cd kubernetes/images/web
-docker build --build-arg COMMIT_HASH=$TRAVIS_COMMIT --build-arg BRANCH=$DEPLOY_BRANCH --build-arg REPOSITORY=$REPOSITORY --no-cache -t gcr.io/eventyay/web:$TRAVIS_COMMIT .
-docker tag gcr.io/eventyay/web:$TRAVIS_COMMIT gcr.io/eventyay/web:latest
-gcloud docker -- push gcr.io/eventyay/web
-kubectl set image deployment/web web=gcr.io/eventyay/web:$TRAVIS_COMMIT
-kubectl set image deployment/celery celery=gcr.io/eventyay/web:$TRAVIS_COMMIT
+docker build --build-arg COMMIT_HASH=$TRAVIS_COMMIT --build-arg BRANCH=$DEPLOY_BRANCH --build-arg REPOSITORY=$REPOSITORY --no-cache -t eventyay/api-server:$TRAVIS_COMMIT .
+docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+docker tag eventyay/api-server:$TRAVIS_COMMIT eventyay/api-server:latest
+docker push eventyay/api-server
+kubectl set image deployment/web web=eventyay/api-server:$TRAVIS_COMMIT
+kubectl set image deployment/celery celery=eventyay/api-server:$TRAVIS_COMMIT

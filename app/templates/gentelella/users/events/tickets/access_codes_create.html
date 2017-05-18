@@ -181,9 +181,6 @@
     <script src="{{ url_for('static', filename='vendor/bootstrap-validator/dist/validator.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/jt.timepicker/jquery.timepicker.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/datepair.js/dist/datepair.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/datepair.js/dist/jquery.datepair.min.js') }}"></script>
-
     <script type="text/javascript">
 
         $.fn.validator.Constructor.INPUT_SELECTOR = ':input:not([type="hidden"], [type="submit"], [type="reset"], [name="value_type"], button, [disabled])';
@@ -199,10 +196,6 @@
         $('.date').datepicker({
             'format': 'mm/dd/yyyy',
             'autoclose': true
-        });
-
-        $(".event-date-picker").datepair({
-            'defaultTimeDelta': 3600000
         });
 
         $(".all-tickets").click(function () {

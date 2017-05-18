@@ -1,3 +1,16 @@
+Date.prototype.ddmmyyyy = function() {
+  var mm = this.getMonth() + 1;
+  var dd = this.getDate();
+  return [(dd>9 ? '' : '0') + dd, (mm>9 ? '' : '0') + mm, this.getFullYear()].join('/');
+};
+
+Date.prototype.hhmm = function() {
+  var mm = this.getMinutes() + 1;
+  var hh = this.getHours();
+  return [(hh>9 ? '' : '0') + hh, (mm>9 ? '' : '0') + mm].join(':');
+};
+
+
 var SESSION_TYPE = {
     id: null,
     name: '',
@@ -62,6 +75,9 @@ function getNewMicrolocation(name) {
 
 function getCallForSpeakers(event) {
     var callForSpeakers = _.clone(CALL_FOR_SPEAKERS);
+    var currentDate = (new Date());
+    callForSpeakers.start_date = currentDate.ddmmyyyy();
+    callForSpeakers.start_time = currentDate.hhmm();
     callForSpeakers.end_date = event.end_time_date;
     callForSpeakers.end_time = event.end_time_time;
     callForSpeakers.timezone = event.timezone;

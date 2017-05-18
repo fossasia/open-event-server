@@ -51,6 +51,9 @@ UPLOAD_PATHS = {
     'temp': {
         'event': 'events/temp/{uuid}',
         'image': 'temp/images/{uuid}'
+    },
+    'exports': {
+        'zip': 'exports/{event_id}'
     }
 }
 
