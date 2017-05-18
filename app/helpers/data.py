@@ -54,6 +54,7 @@ from app.models.user import User, ATTENDEE
 from app.models.user_detail import UserDetail
 from app.models.user_permissions import UserPermission
 from app.models.users_events_roles import UsersEventsRoles
+from app.helpers.signals import sessions_modified, speakers_modified
 
 
 class DataManager(object):
@@ -324,6 +325,7 @@ class DataManager(object):
         session = DataGetter.get_session(session_id)
         speaker = save_speaker(request, event_id, user=user)
         session.speakers.append(speaker)
+        sessions_modified.send(current_app._get_current_object(), event_id=session.event_id)
         save_to_db(session, "Session updated")
         update_version(event_id, False, "speakers_ver")
         update_version(event_id, False, "sessions_ver")
@@ -352,6 +354,7 @@ class DataManager(object):
         session.submission_date = datetime.now()
         session.submission_modifier = login.current_user.email
         session.state_email_sent = False
+        sessions_modified.send(current_app._get_current_object(), event_id=session.event_id)
         save_to_db(session, 'Session State Updated')
         if send_email:
             trigger_session_state_change_notifications(session, event_id, message=message, subject=subject)
@@ -419,7 +422,7 @@ class DataManager(object):
             existing_speaker_ids = form.getlist("speakers[]")
             current_speaker_ids = []
             existing_speaker_ids_by_email = []
-
+            sessions_modified.send(current_app._get_current_object(), event_id=session.event_id)
             save_to_db(session, 'Session Updated')
 
             if speaker:
@@ -928,6 +931,7 @@ def user_logged_in(user):
             role = Role.query.filter_by(name='speaker').first()
             event = DataGetter.get_event(speaker.event_id)
             uer = UsersEventsRoles(user=user, event=event, role=role)
+            speakers_modified.send(current_app._get_current_object(), event_id=speaker.event_id)
             save_to_db(uer)
             save_to_db(speaker)
     return True
@@ -1039,6 +1043,7 @@ def trash_user(user_id):
 def trash_session(session_id):
     session = DataGetter.get_session(session_id)
     session.deleted_at = datetime.now()
+    sessions_modified.send(current_app._get_current_object(), event_id=session.event_id)
     save_to_db(session, "Session added to Trash")
     update_version(session.event_id, False, 'sessions_ver')
     return session
@@ -1059,6 +1064,7 @@ def restore_user(user_id):
 def restore_session(session_id):
     session = DataGetter.get_session(session_id)
     session.deleted_at = None
+    sessions_modified.send(current_app._get_current_object(), event_id=session.event_id)
     save_to_db(session, "Session restored from Trash")
     update_version(session.event_id, False, 'sessions_ver')
 

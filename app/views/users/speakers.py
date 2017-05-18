@@ -1,13 +1,14 @@
 import json
 
 from flask import Blueprint
-from flask import request, url_for, redirect, flash, jsonify, render_template
+from flask import request, url_for, redirect, flash, jsonify, render_template, current_app
 from flask.ext.restplus import abort
 
 from app.helpers.data import delete_from_db, save_to_db
 from app.helpers.data_getter import DataGetter
 from app.helpers.permission_decorators import belongs_to_event, can_access
 from app.helpers.sessions_speakers.speakers import save_speaker
+from app.helpers.signals import speakers_modified
 
 
 def get_speaker_or_throw(speaker_id):
@@ -60,6 +61,7 @@ def edit_view(event_id, speaker_id):
 @can_access
 def delete(event_id, speaker_id):
     speaker = get_speaker_or_throw(speaker_id)
+    speakers_modified.send(current_app._get_current_object(), event_id=speaker.event_id)
     delete_from_db(speaker, 'Speaker Rejected')
     flash("The speaker has been deleted", "danger")
     return redirect(url_for('.index_view', event_id=event_id))
@@ -75,5 +77,6 @@ def avatar_delete(event_id, speaker_id):
         speaker.small = ''
         speaker.thumbnail = ''
         speaker.icon = ''
+        speakers_modified.send(current_app._get_current_object(), event_id=speaker.event_id)
         save_to_db(speaker)
         return jsonify({'status': 'ok'})
