@@ -29,7 +29,7 @@
                     <a href="#analytics" id="analytics-tab" data-toggle="tab">{{ _("Analytics") }}</a>
                 </li>
                 <li>
-                    <a href="#microservices" id="payment-gateway-tab" data-toggle="tab">{{ _("Payment Gateways") }}</a>
+                    <a href="#payementgateway" id="payment-gateway-tab" data-toggle="tab">{{ _("Payment Gateways") }}</a>
                 </li>
 
                 {% if 'ticketing' in included_settings and 'payments' in included_settings %}
@@ -57,7 +57,7 @@
                     </li>
                     <li value="{{ _("Payment Gateways") }}" class="small_tab_list">
                         <a href="#microservices" id="payment-gateway-tab"
-                           data-toggle="tab">P{{ _("ayment Gateways") }}</a>
+                           data-toggle="tab">{{ _("Payment Gateways") }}</a>
                     </li>
                     {% if 'ticketing' in included_settings and 'payments' in included_settings %}
                         <li value="{{ _("Ticket Fees") }}" class="small_tab_list">
@@ -70,10 +70,10 @@
                 <div role="tabpanel" class="tab-pane fade active in" id="system" aria-labelledby="profile-tab">
                     {% include 'gentelella/super_admin/settings/_system.html' %}
                 </div>
-                <div role="tabpanel" class="tab-pane fade in" id="microservices" aria-labelledby="payment-gateway-tab">
+                <div role="tabpanel" class="tab-pane fade in" id="payementgateway" aria-labelledby="payment-gateway-tab">
                     {% include 'gentelella/super_admin/settings/_payment_gateway.html' %}
                 </div>
-                <div role="tabpanel" class="tab-pane fade in" id="tab_content2" aria-labelledby="microservice-tab">
+                <div role="tabpanel" class="tab-pane fade in" id="microservices" aria-labelledby="microservice-tab">
                     {% include 'gentelella/super_admin/settings/_microservices.html' %}
                 </div>
                 <div role="tabpanel" class="tab-pane fade in" id="images" aria-labelledby="image-config-tab">
