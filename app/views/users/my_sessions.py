@@ -3,7 +3,7 @@ from datetime import datetime
 
 from flask import Blueprint, jsonify
 from flask import flash, redirect, url_for, request
-from flask import render_template
+from flask import render_template, current_app
 from flask.ext.restplus import abort
 from flask.ext import login
 from markupsafe import Markup
@@ -11,6 +11,7 @@ from markupsafe import Markup
 from app.helpers.data import DataManager, save_to_db
 from app.helpers.data_getter import DataGetter
 from app.helpers.auth import AuthManager
+from app.helpers.signals import sessions_modified, speakers_modified
 
 my_sessions = Blueprint('my_sessions', __name__, url_prefix='/events/mysessions')
 
@@ -136,6 +137,7 @@ def avatar_delete(event_id, speaker_id):
             speaker.small = ''
             speaker.thumbnail = ''
             speaker.icon = ''
+            speakers_modified.send(current_app._get_current_object(), event_id=speaker.event_id)
             save_to_db(speaker)
             return jsonify({'status': 'ok'})
         else:
@@ -146,6 +148,7 @@ def avatar_delete(event_id, speaker_id):
 def withdraw_session_view(session_id):
     session = DataGetter.get_sessions_of_user_by_id(session_id)
     session.deleted_at = datetime.now()
+    sessions_modified.send(current_app._get_current_object(), event_id=session.event_id)
     save_to_db(session)
     flash("The session has been withdrawn", "success")
     return redirect(url_for('.display_my_sessions_view', session_id=session_id))

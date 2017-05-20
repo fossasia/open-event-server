@@ -5,7 +5,7 @@ import os
 from uuid import uuid4
 
 from flask import Blueprint
-from flask import flash, url_for, redirect, request, jsonify, Markup, render_template
+from flask import flash, url_for, redirect, request, jsonify, Markup, render_template, current_app
 from flask.ext.login import current_user
 from flask.ext.restplus import abort
 
@@ -29,6 +29,7 @@ from app.helpers.wizard.sessions_speakers import get_microlocations_json, get_se
 from app.helpers.wizard.sponsors import get_sponsors_json, save_sponsors_from_json
 from app.models.call_for_papers import CallForPaper
 from app.settings import get_settings
+from app.helpers.signals import event_json_modified
 
 
 def get_random_hash():
@@ -299,6 +300,7 @@ def publish_event(event_id):
         return redirect(url_for('.details_view', event_id=event_id))
     event.state = 'Published'
     save_to_db(event, 'Event Published')
+    event_json_modified.send(current_app._get_current_object(), event_id=event_id)
     organizers = DataGetter.get_user_event_roles_by_role_name(event_id, 'organizer')
     speakers = DataGetter.get_user_event_roles_by_role_name(event_id, 'speaker')
     link = url_for('.details_view', event_id=event_id, _external=True)
@@ -319,6 +321,7 @@ def unpublish_event(event_id):
     event = DataGetter.get_event(event_id)
     event.state = 'Draft'
     save_to_db(event, 'Event Unpublished')
+    event_json_modified.send(current_app._get_current_object(), event_id=event_id)
     record_activity('publish_event', event_id=event.id, status='un-published')
     flash("Your event has been unpublished.", "warning")
     return redirect(url_for('.details_view', event_id=event_id))
