@@ -29,6 +29,7 @@ from app.helpers.wizard.sessions_speakers import get_microlocations_json, get_se
 from app.helpers.wizard.sponsors import get_sponsors_json, save_sponsors_from_json
 from app.models.call_for_papers import CallForPaper
 from app.settings import get_settings
+from app.views.users.ticket_sales import get_ticket
 
 
 def get_random_hash():
@@ -109,6 +110,7 @@ def create_image_upload():
 @can_access
 def details_view(event_id):
     event = DataGetter.get_event(event_id)
+    orders = TicketingManager.get_orders(event_id)
     checklist = {"": ""}
 
     if fields_not_empty(event,
@@ -188,11 +190,106 @@ def details_view(event_id):
                 'accepted': get_count(DataGetter.get_sessions_by_state_and_event_id('accepted', event_id)),
                 'rejected': get_count(DataGetter.get_sessions_by_state_and_event_id('rejected', event_id)),
                 'draft': get_count(DataGetter.get_sessions_by_state_and_event_id('draft', event_id))}
+    tickets_summary = {}
 
+    for ticket in event.tickets:
+        tickets_summary[str(ticket.id)] = {
+            'name': ticket.name,
+            'quantity': ticket.quantity,
+            'completed': {
+                'tickets_count': 0,
+                'sales': 0
+            },
+            'placed': {
+                'tickets_count': 0,
+                'sales': 0
+            },
+            'pending': {
+                'tickets_count': 0,
+                'sales': 0
+            },
+            'expired': {
+                'class': 'danger',
+                'tickets_count': 0,
+                'sales': 0
+            },
+            'deleted': {
+                'tickets_count': 0,
+                'sales': 0
+            },
+            'cancelled': {
+                'tickets_count': 0,
+                'sales': 0
+            },
+        }
+
+    orders_summary = {
+        'completed': {
+            'tickets_count': 0,
+            'orders_count': 0,
+            'total_sales': 0
+        },
+        'placed': {
+            'tickets_count': 0,
+            'orders_count': 0,
+            'total_sales': 0
+        },
+        'pending': {
+            'tickets_count': 0,
+            'orders_count': 0,
+            'total_sales': 0
+        },
+        'expired': {
+            'tickets_count': 0,
+            'orders_count': 0,
+            'total_sales': 0
+        },
+        'deleted': {
+            'tickets_count': 0,
+            'orders_count': 0,
+            'total_sales': 0
+        },
+        'cancelled': {
+            'tickets_count': 0,
+            'orders_count': 0,
+            'total_sales': 0
+        }
+    }
+
+    for order in orders:
+        fees = DataGetter.get_fee_settings_by_currency(DataGetter.get_event(order.event_id).payment_currency)
+        orders_summary[str(order.status)]['orders_count'] += 1
+        orders_summary[str(order.status)]['total_sales'] += order.amount
+
+        for order_ticket in order.tickets:
+            discount = TicketingManager.get_discount_code(event_id, order.discount_code_id)
+            orders_summary[str(order.status)]['tickets_count'] += order_ticket.quantity
+            ticket = get_ticket(order_ticket.ticket_id)
+            tickets_summary[str(ticket.id)][str(order.status)]['tickets_count'] += order_ticket.quantity
+            ticket_price = ticket.price
+            if fees and not ticket.absorb_fees:
+                order_fee = fees.service_fee * (ticket.price * order_ticket.quantity) / 100.0
+                if order_fee > fees.maximum_fee:
+                    ticket_price = ticket.price + fees.maximum_fee / order_ticket.quantity
+                else:
+                    ticket_price = ticket.price + fees.service_fee * ticket.price / 100.0
+
+            if order.paid_via != 'free' and order.amount > 0:
+                if discount and str(ticket.id) in discount.tickets.split(","):
+                    if discount.type == "amount":
+                        tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * (
+                            ticket_price - discount.value)
+                    else:
+                        tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * (
+                            ticket_price - discount.value * ticket_price / 100.0)
+                else:
+                    tickets_summary[str(ticket.id)][str(order.status)]['sales'] += order_ticket.quantity * ticket_price
     return render_template('gentelella/users/events/details/details.html',
                            event=event,
                            checklist=checklist,
                            sessions=sessions,
+                           tickets_summary=tickets_summary,
+                           orders_summary=orders_summary,
                            settings=get_settings())
 
 
