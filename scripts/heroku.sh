@@ -4,8 +4,7 @@ export INTEGRATE_SOCKETIO=false
 # also socketio is not used in a celery task so no problem to turn it off
 chmod -R 0777 ./static
 celery worker -A app.celery --loglevel=info &
-unset INTEGRATE_SOCKETIO
-gunicorn app:app --worker-class eventlet -w 1
+gunicorn app:app -w 1
 # if not running on free dyno
 # define a separate worker and scale
 # https://devcenter.heroku.com/articles/celery-heroku
