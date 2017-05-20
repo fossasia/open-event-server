@@ -30,15 +30,15 @@ class Notification(db.Model):
     message = db.Column(db.Text)
     action = db.Column(db.String)
     received_at = db.Column(db.DateTime)
-    has_read = db.Column(db.Boolean)
+    is_read = db.Column(db.Boolean)
 
-    def __init__(self, user, title, message, action, received_at, has_read=False):
+    def __init__(self, user, title, message, action, received_at, is_read=False):
         self.user = user
         self.title = title
         self.message = message
         self.action = action
         self.received_at = received_at
-        self.has_read = has_read
+        self.is_read = is_read
 
     def __repr__(self):
         return '<Notif %s:%s>' % (self.user, self.title)

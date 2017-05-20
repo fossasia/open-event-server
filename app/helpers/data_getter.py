@@ -18,26 +18,26 @@ from app.helpers.helpers import get_event_id, string_empty, represents_int, get_
 from app.helpers.language_list import LANGUAGE_LIST
 from app.helpers.static import EVENT_TOPICS, EVENT_LICENCES, PAYMENT_COUNTRIES, PAYMENT_CURRENCIES, DEFAULT_EVENT_IMAGES
 from app.models.activity import Activity
-from app.models.call_for_papers import CallForPaper
-from app.models.custom_forms import CustomForms
+from app.models.call_for_paper import CallForPaper
+from app.models.custom_form import CustomForms
 from app.models.custom_placeholder import CustomPlaceholder
-from app.models.email_notifications import EmailNotification
+from app.models.email_notification import EmailNotification
 from app.models.event import Event
-from app.models.export_jobs import ExportJob
-from app.models.fees import TicketFees
+from app.models.export_job import ExportJob
+from app.models.ticket_fee import TicketFees
 from app.models.image_config import ImageConfig
-from app.models.image_sizes import ImageSizes
-from app.models.import_jobs import ImportJob
+from app.models.image_size import ImageSizes
+from app.models.import_job import ImportJob
 from app.models.invite import Invite
 from app.models.mail import Mail
-from app.models.message_settings import MessageSettings
+from app.models.message_setting import MessageSettings
 from app.models.microlocation import Microlocation
-from app.models.modules import Module
-from app.models.notifications import Notification
+from app.models.module import Module
+from app.models.notification import Notification
 from app.models.order import Order
 from app.models.order import OrderTicket
 from app.models.page import Page
-from app.models.panel_permissions import PanelPermission
+from app.models.panel_permission import PanelPermission
 from app.models.permission import Permission
 from app.models.role import Role
 from app.models.role_invite import RoleInvite
@@ -47,14 +47,14 @@ from app.models.session_type import SessionType
 from app.models.social_link import SocialLink
 from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
-from app.models.system_role import CustomSysRole
+from app.models.custom_system_role import CustomSysRole
 from app.models.tax import Tax
 from app.models.ticket import Ticket
 from app.models.track import Track
 from app.models.user import User
 from app.models.user_detail import UserDetail
-from app.models.user_permissions import UserPermission
-from app.models.users_events_roles import UsersEventsRoles
+from app.models.user_permission import UserPermission
+from app.models.users_events_role import UsersEventsRoles
 
 
 class DataGetter(object):
@@ -76,7 +76,7 @@ class DataGetter(object):
 
     @staticmethod
     def get_latest_notif(user):
-        unread_notifs = Notification.query.filter_by(user=user, has_read=False)
+        unread_notifs = Notification.query.filter_by(user=user, is_read=False)
         notif = unread_notifs.order_by(desc(Notification.received_at)).first()
         latest_notif = {
             'title': notif.title,
@@ -699,7 +699,7 @@ class DataGetter(object):
         all_settings = {}
         for index in range(len(settings_list)):
             all_settings[settings_list[index].action] = {'mail_status': settings_list[index].mail_status,
-                                                         'notif_status': settings_list[index].notif_status,
+                                                         'notification_status': settings_list[index].notification_status,
                                                          'user_control_status': settings_list[
                                                              index].user_control_status}
         return all_settings

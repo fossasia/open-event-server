@@ -17,7 +17,7 @@ ATTENDEE = api.model('TicketHolder', {
     'firstname': fields.String(),
     'lastname': fields.String(),
     'email': fields.Email(),
-    'checked_in': fields.Boolean(),
+    'is_checked_in': fields.Boolean(),
     'order': fields.Nested(ORDER, allow_null=False),
     'ticket': fields.Nested(TICKET, allow_null=False)
 })

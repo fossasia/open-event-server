@@ -40,7 +40,7 @@ ACTIVITIES = {
 
 
 class Activity(db.Model):
-    __tablename__ = 'activity'
+    __tablename__ = 'activities'
     id = db.Column(db.Integer, primary_key=True)
     actor = db.Column(db.String)  # user email + id
     time = db.Column(db.DateTime)

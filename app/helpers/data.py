@@ -32,14 +32,14 @@ from app.helpers.system_mails import MAILS
 from app.helpers.update_version import VersionUpdater
 from app.models import db
 from app.models.activity import Activity, ACTIVITIES
-from app.models.email_notifications import EmailNotification
+from app.models.email_notification import EmailNotification
 from app.models.event import Event, EventsUsers
-from app.models.image_sizes import ImageSizes
+from app.models.image_size import ImageSizes
 from app.models.invite import Invite
-from app.models.message_settings import MessageSettings
-from app.models.notifications import Notification
+from app.models.message_setting import MessageSettings
+from app.models.notification import Notification
 from app.models.page import Page
-from app.models.panel_permissions import PanelPermission
+from app.models.panel_permission import PanelPermission
 from app.models.permission import Permission
 from app.models.role import Role
 from app.models.role_invite import RoleInvite
@@ -48,13 +48,13 @@ from app.models.session import Session
 from app.models.session_type import SessionType
 from app.models.social_link import SocialLink
 from app.models.speaker import Speaker
-from app.models.system_role import CustomSysRole, UserSystemRole
+from app.models.custom_system_role import CustomSysRole, UserSystemRole
 from app.models.track import Track
 from app.models.user import User, ATTENDEE
 from app.models.user_detail import UserDetail
-from app.models.user_permissions import UserPermission
-from app.models.users_events_roles import UsersEventsRoles
 from app.helpers.signals import sessions_modified, speakers_modified
+from app.models.user_permission import UserPermission
+from app.models.users_events_role import UsersEventsRoles
 
 
 class DataManager(object):
@@ -103,7 +103,7 @@ class DataManager(object):
     def mark_user_notification_as_read(notification):
         """Mark a particular notification read.
         """
-        notification.has_read = True
+        notification.is_read = True
         save_to_db(notification, 'Mark notification as read')
 
     @staticmethod
@@ -111,10 +111,10 @@ class DataManager(object):
         """Mark all notifications for a User as read.
         """
         unread_notifs = Notification.query.filter_by(user=user,
-                                                     has_read=False)
+                                                     is_read=False)
 
         for notif in unread_notifs:
-            notif.has_read = True
+            notif.is_read = True
             db.session.add(notif)
 
         db.session.commit()
@@ -133,7 +133,7 @@ class DataManager(object):
         role_invite = RoleInvite(email=email.lower(),
                                  event=event,
                                  role=role,
-                                 create_time=datetime.now())
+                                 created_at=datetime.now())
 
         hash = random.getrandbits(128)
         role_invite.hash = '%032x' % hash
@@ -353,7 +353,7 @@ class DataManager(object):
         session.state = state
         session.submission_date = datetime.now()
         session.submission_modifier = login.current_user.email
-        session.state_email_sent = False
+        session.is_mail_sent = False
         sessions_modified.send(current_app._get_current_object(), event_id=session.event_id)
         save_to_db(session, 'Session State Updated')
         if send_email:
@@ -758,7 +758,7 @@ class DataManager(object):
 
     @staticmethod
     def decline_role_invite(role_invite):
-        role_invite.declined = True
+        role_invite.is_declined = True
         save_to_db(role_invite)
 
     @staticmethod
@@ -796,18 +796,18 @@ class DataManager(object):
 
         for mail in MAILS:
             mail_status = 1 if form.get(mail + '_mail_status', 'off') == 'on' else 0
-            notif_status = 1 if form.get(mail + '_notif_status', 'off') == 'on' else 0
+            notification_status = 1 if form.get(mail + '_notification_status', 'off') == 'on' else 0
             user_control_status = 1 if form.get(mail + '_user_control_status', 'off') == 'on' else 0
             message_setting = MessageSettings.query.filter_by(action=mail).first()
             if message_setting:
                 message_setting.mail_status = mail_status
-                message_setting.notif_status = notif_status
+                message_setting.notification_status = notification_status
                 message_setting.user_control_status = user_control_status
                 save_to_db(message_setting, "Message Settings Updated")
             else:
                 message_setting = MessageSettings(action=mail,
                                                   mail_status=mail_status,
-                                                  notif_status=notif_status,
+                                                  notification_status=notification_status,
                                                   user_control_status=user_control_status)
                 save_to_db(message_setting, "Message Settings Updated")
 

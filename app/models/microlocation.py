@@ -3,7 +3,7 @@ from app.models import db
 
 class Microlocation(db.Model):
     """Microlocation model class"""
-    __tablename__ = 'microlocation'
+    __tablename__ = 'microlocations'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     latitude = db.Column(db.Float)

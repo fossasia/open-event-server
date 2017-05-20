@@ -45,7 +45,7 @@ def trigger_session_state_change_notifications(session, event_id, state=None, me
             # Send notification
         if speaker.user:
             send_notif_session_accept_reject(speaker.user, session.title, state, link)
-    session.state_email_sent = True
+    session.is_mail_sent = True
     from app.helpers.data import save_to_db
     save_to_db(session)
 

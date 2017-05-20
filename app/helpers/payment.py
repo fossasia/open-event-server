@@ -11,7 +11,7 @@ from app.helpers.cache import cache
 from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import represents_int
-from app.models.fees import TicketFees
+from app.models.ticket_fee import TicketFees
 from app.models.order import Order
 from app.models.stripe_authorization import StripeAuthorization
 from app.settings import get_settings

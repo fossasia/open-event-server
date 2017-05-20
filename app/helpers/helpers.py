@@ -9,7 +9,7 @@ from sqlalchemy import func
 from app.helpers.assets.images import get_image_file_name
 from app.helpers.flask_ext.helpers import get_real_ip
 from app.helpers.storage import UploadedFile
-from app.models.notifications import (
+from app.models.notification import (
     # Prepended with `NOTIF_` to differentiate from mails
     EVENT_ROLE_INVITE as NOTIF_EVENT_ROLE,
     NEW_SESSION as NOTIF_NEW_SESSION,
@@ -34,7 +34,7 @@ from app.models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, NEXT_EVENT
     AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, TICKET_PURCHASED, EVENT_EXPORTED, \
     EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, MONTHLY_PAYMENT_EMAIL, \
     EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER, TICKET_CANCELLED
-from app.models.message_settings import MessageSettings
+from app.models.message_setting import MessageSettings
 
 
 def represents_int(string):
@@ -524,7 +524,7 @@ def send_notif_when_changes_email(user, old_email, new_email):
 
 def send_notif_event_role(user, role_name, event_name, accept_link, decline_link):
     message_settings = MessageSettings.query.filter_by(action=NOTIF_EVENT_ROLE).first()
-    if not message_settings or message_settings.notif_status == 1:
+    if not message_settings or message_settings.notification_status == 1:
         notif = NOTIFS[NOTIF_EVENT_ROLE]
         action = NOTIF_EVENT_ROLE
         title = notif['title'].format(
@@ -543,7 +543,7 @@ def send_notif_event_role(user, role_name, event_name, accept_link, decline_link
 
 def send_notif_new_session_organizer(user, event_name, link):
     message_settings = MessageSettings.query.filter_by(action=NOTIF_NEW_SESSION).first()
-    if not message_settings or message_settings.notif_status == 1:
+    if not message_settings or message_settings.notification_status == 1:
         notif = NOTIFS[NOTIF_NEW_SESSION]
         action = NOTIF_NEW_SESSION
         title = notif['title'].format(event_name=event_name)
@@ -554,7 +554,7 @@ def send_notif_new_session_organizer(user, event_name, link):
 
 def send_notif_session_schedule(user, session_name, link):
     message_settings = MessageSettings.query.filter_by(action=NOTIF_SESSION_SCHEDULE).first()
-    if not message_settings or message_settings.notif_status == 1:
+    if not message_settings or message_settings.notification_status == 1:
         notif = NOTIFS[NOTIF_SESSION_SCHEDULE]
         action = NOTIF_SESSION_SCHEDULE
         title = notif['title'].format(session_name=session_name)
@@ -565,7 +565,7 @@ def send_notif_session_schedule(user, session_name, link):
 
 def send_notif_next_event(user, event_name, up_coming_events, link):
     message_settings = MessageSettings.query.filter_by(action=NOTIF_NEXT_EVENT).first()
-    if not message_settings or message_settings.notif_status == 1:
+    if not message_settings or message_settings.notification_status == 1:
         notif = NOTIFS[NOTIF_NEXT_EVENT]
         action = NOTIF_NEXT_EVENT
         title = notif['title'].format(event_name=event_name)
@@ -577,7 +577,7 @@ def send_notif_next_event(user, event_name, up_coming_events, link):
 
 def send_notif_session_accept_reject(user, session_name, acceptance, link):
     message_settings = MessageSettings.query.filter_by(action=NOTIF_SESSION_ACCEPT_REJECT).first()
-    if not message_settings or message_settings.notif_status == 1:
+    if not message_settings or message_settings.notification_status == 1:
         notif = NOTIFS[NOTIF_SESSION_ACCEPT_REJECT]
         action = NOTIF_SESSION_ACCEPT_REJECT
         title = notif['title'].format(session_name=session_name,
@@ -593,7 +593,7 @@ def send_notif_session_accept_reject(user, session_name, acceptance, link):
 
 def send_notif_invite_papers(user, event_name, cfs_link, submit_link):
     message_settings = MessageSettings.query.filter_by(action=NOTIF_INVITE_PAPERS).first()
-    if not message_settings or message_settings.notif_status == 1:
+    if not message_settings or message_settings.notification_status == 1:
         notif = NOTIFS[NOTIF_INVITE_PAPERS]
         action = NOTIF_INVITE_PAPERS
         title = notif['title'].format(event_name=event_name)

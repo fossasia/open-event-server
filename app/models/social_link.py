@@ -2,7 +2,7 @@ from app.models import db
 
 
 class SocialLink(db.Model):
-    __tablename__ = "social_link"
+    __tablename__ = "social_links"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     link = db.Column(db.String, nullable=False)

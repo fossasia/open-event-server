@@ -14,14 +14,14 @@ class Tax(db.Model):
     tax_name = db.Column(db.String, nullable=False)
     tax_rate = db.Column(db.Float, nullable=False)
     tax_id = db.Column(db.String, nullable=False)
-    send_invoice = db.Column(db.Boolean, default=False)
+    is_invoice_sent = db.Column(db.Boolean, default=False)
     registered_company = db.Column(db.String)
     address = db.Column(db.String)
     city = db.Column(db.String)
     state = db.Column(db.String)
     zip = db.Column(db.Integer)
     invoice_footer = db.Column(db.String)
-    tax_include_in_price = db.Column(db.Boolean, default=False)
+    is_tax_included_in_price = db.Column(db.Boolean, default=False)
 
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref=backref('tax', uselist=False))
@@ -31,27 +31,27 @@ class Tax(db.Model):
                  tax_name=None,
                  tax_rate=None,
                  tax_id=None,
-                 send_invoice=None,
+                 is_invoice_sent=None,
                  registered_company=None,
                  address=None,
                  city=None,
                  state=None,
                  zip=None,
                  invoice_footer=None,
-                 tax_include_in_price=None,
+                 is_tax_included_in_price=None,
                  event_id=None):
         self.country = country
         self.tax_name = tax_name
         self.tax_rate = tax_rate
         self.tax_id = tax_id
-        self.send_invoice = send_invoice
+        self.is_invoice_sent = is_invoice_sent
         self.registered_company = registered_company
         self.address = address
         self.city = city
         self.state = state
         self.zip = zip
         self.invoice_footer = invoice_footer
-        self.tax_include_in_price = tax_include_in_price
+        self.is_tax_included_in_price = is_tax_included_in_price
         self.event_id = event_id
 
     def __repr__(self):
@@ -71,12 +71,12 @@ class Tax(db.Model):
             'country': self.country,
             'tax_name': self.tax_name,
             'tax_id': self.tax_id,
-            'send_invoice': self.send_invoice,
+            'is_invoice_sent': self.is_invoice_sent,
             'registered_company': self.registered_company,
             'address': self.address,
             'city': self.city,
             'state': self.state,
             'zip': self.zip,
             'invoice_footer': self.invoice_footer,
-            'tax_include_in_price': self.tax_include_in_price
+            'is_tax_included_in_price': self.is_tax_included_in_price
         }

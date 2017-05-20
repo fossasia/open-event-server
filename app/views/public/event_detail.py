@@ -12,7 +12,7 @@ from werkzeug.utils import redirect
 from app.helpers.data import DataManager
 from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import get_count
-from app.models.call_for_papers import CallForPaper
+from app.models.call_for_paper import CallForPaper
 from app.helpers.wizard.helpers import get_current_timezone
 from app.settings import get_settings
 from urllib2 import urlopen

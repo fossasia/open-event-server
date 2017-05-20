@@ -1,12 +1,12 @@
 from app.models import db
 
-from app.models.panel_permissions import PanelPermission
+from app.models.panel_permission import PanelPermission
 
 
 class CustomSysRole(db.Model):
     """Custom System Role
     """
-    __tablename__ = 'custom_sys_role'
+    __tablename__ = 'custom_sys_roles'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True)
@@ -41,7 +41,7 @@ class UserSystemRole(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
     user = db.relationship('User', backref='sys_roles')
 
-    role_id = db.Column(db.Integer, db.ForeignKey('custom_sys_role.id', ondelete='CASCADE'))
+    role_id = db.Column(db.Integer, db.ForeignKey('custom_sys_roles.id', ondelete='CASCADE'))
     role = db.relationship('CustomSysRole')
 
     def __init__(self, user, role):

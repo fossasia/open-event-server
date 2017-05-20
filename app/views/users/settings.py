@@ -7,7 +7,7 @@ from flask.ext.scrypt import generate_password_hash, generate_random_salt
 
 from app.helpers.data import DataManager, save_to_db
 from app.helpers.data_getter import DataGetter
-from app.models.email_notifications import EmailNotification
+from app.models.email_notification import EmailNotification
 from app.views.home import record_user_login_logout
 
 

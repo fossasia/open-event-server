@@ -13,7 +13,7 @@ from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
 from app.models.ticket import Ticket
 from app.models.track import Track
-from app.models.users_events_roles import UsersEventsRoles
+from app.models.users_events_role import UsersEventsRoles
 
 
 def is_super_admin(f):

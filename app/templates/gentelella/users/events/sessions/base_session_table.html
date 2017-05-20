@@ -108,7 +108,7 @@
                             {% set transaction = transaction_class(version) %}
                             <td>{{ transaction.issued_at.strftime('%B %d, %I:%M %p') }}</td>
                             <td>
-                                {{ "Yes" if session.state_email_sent else "No" }}
+                                {{ "Yes" if session.is_mail_sent else "No" }}
                             </td>
                             <td>
                                 <div class="btn-group-vertical btn-group-xs" role="group" aria-label="...">
@@ -186,7 +186,7 @@
                                         </a>
 
                                     {% endif %}
-                                    {% if not session.state_email_sent and (session.state == 'accepted' or session.state == 'rejected') %}
+                                    {% if not session.is_mail_sent and (session.state == 'accepted' or session.state == 'rejected') %}
                                         <a class="btn btn-sm btn-info with-email-modal"
                                            data-toggle="tooltip"
                                            title="Sending pending email"

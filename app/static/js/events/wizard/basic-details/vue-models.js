@@ -61,14 +61,14 @@ var EVENT = {
         tax_name: '',
         tax_rate: '',
         tax_id: '',
-        send_invoice: false,
+        is_invoice_sent: false,
         registered_company: '',
         address: '',
         city: '',
         state: '',
         zip: '',
         invoice_footer: '',
-        tax_include_in_price: 1
+        is_tax_included_in_price: 1
     },
     latitude: 0.0,
     longitude: 0.0,
@@ -100,5 +100,5 @@ var TICKET = {
     min_order: 1,
     max_order: 10,
     tags_string: '',
-    absorb_fees: false
+    is_fee_absorbed: false
 };
