@@ -43,6 +43,7 @@
 </body>
 </html>
 {% for holder in order.ticket_holders %}
+    {% if email == order.user.email or email == holder.email or email == '' %}
         <div id="main_content">
             <span class="label">{{_("Event")}}</span><br>
             <span style="font-size: 20px;">{{ order.event.name }}</span><br><br>
@@ -69,5 +70,6 @@
             <span>{{ holder.email }}</span>
         </div>
 
-    <pdf:nextpage />
+        <pdf:nextpage />
+    {% endif %}
 {% endfor %}
