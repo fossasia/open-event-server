@@ -2,7 +2,7 @@ from flask import current_app as app
 from app.helpers.assets.images import save_resized_image, get_path_of_temp_url, save_event_image
 from app.helpers.data_getter import DataGetter
 from app.helpers.storage import UPLOAD_PATHS
-from app.models.image_sizes import ImageSizes
+from app.models.image_size import ImageSizes
 from app.models.speaker import Speaker
 from app.helpers.signals import speakers_modified
 

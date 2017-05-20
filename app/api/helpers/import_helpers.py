@@ -15,7 +15,7 @@ from app.helpers.helpers import update_state, send_email_after_import
 from app.helpers.storage import UploadedFile, upload, UploadedMemory, \
     UPLOAD_PATHS
 from app.helpers.update_version import VersionUpdater
-from app.models.import_jobs import ImportJob
+from app.models.import_job import ImportJob
 from errors import BaseError, ServerError, NotFoundError
 from app.api.helpers.non_apis import CustomFormDAO
 from app.api.events import DAO as EventDAO, LinkDAO as SocialLinkDAO

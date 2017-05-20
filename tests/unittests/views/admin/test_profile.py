@@ -4,7 +4,7 @@ from flask import url_for
 
 from app import current_app as app
 from app.helpers.data import DataManager
-from app.models.notifications import Notification
+from app.models.notification import Notification
 from tests.unittests.views.view_test_case import OpenEventViewTestCase, get_or_create_super_admin
 
 
@@ -64,7 +64,7 @@ class TestProfile(OpenEventViewTestCase):
             rv = self.app.get(url_for('notifications.mark_as_read',
                                       notification_id=notification.id))
 
-            self.assertEqual(notification.has_read, True, msg=rv.data)
+            self.assertEqual(notification.is_read, True, msg=rv.data)
 
 
 if __name__ == '__main__':

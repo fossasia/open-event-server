@@ -27,7 +27,7 @@ from app.helpers.wizard.helpers import get_current_timezone
 from app.helpers.wizard.sessions_speakers import get_microlocations_json, get_session_types_json, get_tracks_json, \
     save_session_speakers
 from app.helpers.wizard.sponsors import get_sponsors_json, save_sponsors_from_json
-from app.models.call_for_papers import CallForPaper
+from app.models.call_for_paper import CallForPaper
 from app.settings import get_settings
 from app.helpers.signals import event_json_modified
 

@@ -1,7 +1,7 @@
 """
 User Notification Structures
 """
-from app.models.notifications import (
+from app.models.notification import (
     EVENT_ROLE_INVITE,
     NEW_SESSION,
     SESSION_SCHEDULE,

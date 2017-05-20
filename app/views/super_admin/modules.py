@@ -5,7 +5,7 @@ from flask import flash
 
 from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
-from app.models.modules import Module
+from app.models.module import Module
 from app.views.super_admin import MODULES, check_accessible, list_navbar
 
 sadmin_modules = Blueprint('sadmin_modules', __name__, url_prefix='/admin/modules')

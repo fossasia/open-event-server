@@ -7,7 +7,7 @@ from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
 from app.models.role import Role
 from app.models.role_invite import RoleInvite
-from app.models.users_events_roles import UsersEventsRoles
+from app.models.users_events_role import UsersEventsRoles
 from populate_db import populate
 from tests.unittests.object_mother import ObjectMother
 from tests.unittests.views.view_test_case import OpenEventViewTestCase

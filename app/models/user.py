@@ -10,14 +10,14 @@ from app.models.session import Session
 from app.models.speaker import Speaker
 from user_detail import UserDetail
 from app.models import db
-from app.models.notifications import Notification
+from app.models.notification import Notification
 from app.models.permission import Permission
 from app.models.role import Role
 from app.models.service import Service
-from app.models.system_role import UserSystemRole
-from app.models.user_permissions import UserPermission
-from app.models.users_events_roles import UsersEventsRoles as UER
-from app.models.panel_permissions import PanelPermission
+from app.models.custom_system_role import UserSystemRole
+from app.models.user_permission import UserPermission
+from app.models.users_events_role import UsersEventsRoles as UER
+from app.models.panel_permission import PanelPermission
 
 # System-wide
 ADMIN = 'admin'
@@ -52,7 +52,7 @@ class User(db.Model):
     signup_time = db.Column(db.DateTime)
     last_access_time = db.Column(db.DateTime)
     user_detail = db.relationship("UserDetail", uselist=False, backref="user")
-    created_date = db.Column(db.DateTime, default=datetime.now())
+    created_at = db.Column(db.DateTime, default=datetime.now())
     deleted_at = db.Column(db.DateTime)
 
     # User Permissions
@@ -244,14 +244,14 @@ class User(db.Model):
         return False
 
     def get_unread_notif_count(self):
-        return get_count(Notification.query.filter_by(user=self, has_read=False))
+        return get_count(Notification.query.filter_by(user=self, is_read=False))
 
     def get_unread_notifs(self):
         """Get unread notifications with titles, humanized receiving time
         and Mark-as-read links.
         """
         notifs = []
-        unread_notifs = Notification.query.filter_by(user=self, has_read=False).order_by(
+        unread_notifs = Notification.query.filter_by(user=self, is_read=False).order_by(
             desc(Notification.received_at))
         for notif in unread_notifs:
             notifs.append({

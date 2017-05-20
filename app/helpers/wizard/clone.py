@@ -4,9 +4,9 @@ from flask.ext import login
 from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
 from app.models import db
-from app.models.users_events_roles import UsersEventsRoles
+from app.models.users_events_role import UsersEventsRoles
 from app.models.role import Role
-from app.models.email_notifications import EmailNotification
+from app.models.email_notification import EmailNotification
 from app.models.user import ORGANIZER
 from app.models.event import get_new_event_identifier
 

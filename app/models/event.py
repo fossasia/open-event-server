@@ -8,10 +8,10 @@ from sqlalchemy import event
 from app.helpers.date_formatter import DateFormatter
 from app.helpers.helpers import get_count
 from app.helpers.versioning import clean_up_string, clean_html
-from app.models.email_notifications import EmailNotification
+from app.models.email_notification import EmailNotification
 from app.models.user import ATTENDEE
-from custom_forms import CustomForms, session_form_str, speaker_form_str
-from version import Version
+from app.models.custom_form import CustomForms, session_form_str, speaker_form_str
+from app.models.version import Version
 from app.models import db
 
 
@@ -26,7 +26,7 @@ def get_new_event_identifier(length=8):
 
 class EventsUsers(db.Model):
     """Many to Many table Event Users"""
-    __tablename__ = 'eventsusers'
+    __tablename__ = 'event_user'
     id = db.Column(db.Integer, primary_key=True)
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))

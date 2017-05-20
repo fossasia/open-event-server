@@ -4,7 +4,7 @@ from app.helpers.data import get_or_create  # , save_to_db
 
 # Admin message settings
 from app.helpers.system_mails import MAILS
-from app.models.message_settings import MessageSettings
+from app.models.message_setting import MessageSettings
 
 # Event Role-Service Permissions
 from app.models.role import Role
@@ -20,11 +20,11 @@ from app.models.microlocation import Microlocation
 from app.models.user import ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR, ATTENDEE, REGISTRAR
 
 # Admin Panel Permissions
-from app.models.panel_permissions import PanelPermission
-from app.models.system_role import CustomSysRole
+from app.models.panel_permission import PanelPermission
+from app.models.custom_system_role import CustomSysRole
 
 # User Permissions
-from app.models.user_permissions import UserPermission
+from app.models.user_permission import UserPermission
 
 
 def create_roles():
@@ -147,9 +147,9 @@ def create_admin_message_settings():
                      "New Session Proposal"]
     for mail in MAILS:
         if mail in default_mails:
-            get_or_create(MessageSettings, action=mail, mail_status=1, notif_status=1, user_control_status=1)
+            get_or_create(MessageSettings, action=mail, mail_status=1, notification_status=1, user_control_status=1)
         else:
-            get_or_create(MessageSettings, action=mail, mail_status=0, notif_status=0, user_control_status=0)
+            get_or_create(MessageSettings, action=mail, mail_status=0, notification_status=0, user_control_status=0)
 
 
 def populate():

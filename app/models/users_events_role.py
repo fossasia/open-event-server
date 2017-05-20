@@ -11,7 +11,7 @@ class UsersEventsRoles(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
     user = db.relationship("User")
 
-    role_id = db.Column(db.Integer, db.ForeignKey('role.id', ondelete='CASCADE'))
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id', ondelete='CASCADE'))
     role = db.relationship("Role")
 
     def __init__(self, user=None, event=None, role=None, user_id=None, role_id=None, event_id=None):

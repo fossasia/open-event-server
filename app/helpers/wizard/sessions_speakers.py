@@ -7,9 +7,9 @@ from app.helpers.wizard.helpers import get_event_time_field_format
 from app.models.microlocation import Microlocation
 from app.models.track import Track
 from app.models.session_type import SessionType
-from app.models.custom_forms import CustomForms
-from app.models.call_for_papers import CallForPaper
 from app.helpers.signals import microlocations_modified
+from app.models.custom_form import CustomForms
+from app.models.call_for_paper import CallForPaper
 
 
 def get_tracks_json(event_id):

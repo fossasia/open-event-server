@@ -6,7 +6,7 @@ from werkzeug.datastructures import ImmutableMultiDict
 
 from app.helpers.data import save_to_db, delete_from_db
 from app.helpers.data_getter import DataGetter
-from app.models.image_sizes import ImageSizes
+from app.models.image_size import ImageSizes
 from app.models.setting import Environment
 from app.settings import get_settings, set_settings
 from app.views.super_admin import SETTINGS, check_accessible, list_navbar
