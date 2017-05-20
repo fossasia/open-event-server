@@ -163,6 +163,9 @@ def make_celery(app):
         abstract = True
 
         def __call__(self, *args, **kwargs):
+            if current_app.config['TESTING']:
+                with app.test_request_context():
+                    return task_base.__call__(self, *args, **kwargs)
             with app.app_context():
                 return task_base.__call__(self, *args, **kwargs)
 

@@ -5,7 +5,7 @@ import os
 from uuid import uuid4
 
 from flask import Blueprint
-from flask import flash, url_for, redirect, request, jsonify, Markup, render_template
+from flask import flash, url_for, redirect, request, jsonify, Markup, render_template, current_app
 from flask.ext.login import current_user
 from flask.ext.restplus import abort
 
@@ -30,6 +30,7 @@ from app.helpers.wizard.sponsors import get_sponsors_json, save_sponsors_from_js
 from app.models.call_for_papers import CallForPaper
 from app.settings import get_settings
 from app.views.users.ticket_sales import get_ticket
+from app.helpers.signals import event_json_modified
 
 
 def get_random_hash():
@@ -407,6 +408,7 @@ def publish_event(event_id):
 
     record_activity('publish_event', event_id=event.id, status='published')
     flash("Your event has been published.", "success")
+    event_json_modified.send(current_app._get_current_object(), event_id=event_id)
     return redirect(url_for('.details_view', event_id=event_id))
 
 
@@ -418,6 +420,7 @@ def unpublish_event(event_id):
     save_to_db(event, 'Event Unpublished')
     record_activity('publish_event', event_id=event.id, status='un-published')
     flash("Your event has been unpublished.", "warning")
+    event_json_modified.send(current_app._get_current_object(), event_id=event_id)
     return redirect(url_for('.details_view', event_id=event_id))
 
 

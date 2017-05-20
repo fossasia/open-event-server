@@ -6,6 +6,7 @@ from sqlalchemy import asc
 
 from app.models.event import Event as EventModel
 from app.models.session import Session
+from app.helpers.signals import event_json_modified, speakers_modified, sessions_modified
 
 
 class ICalExporter:
@@ -58,3 +59,11 @@ class ICalExporter:
                 cal.add_component(event_component)
 
         return cal.to_ical()
+
+
+@speakers_modified.connect
+@sessions_modified.connect
+@event_json_modified.connect
+def ical_export_celery(app, **kwargs):
+    from app.helpers.tasks import export_ical_task
+    export_ical_task.delay(kwargs['event_id'])
