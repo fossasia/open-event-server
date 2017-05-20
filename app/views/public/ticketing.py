@@ -93,13 +93,15 @@ def view_order(order_identifier):
 @ticketing.route('/<order_identifier>/view/')
 def view_order_after_payment(order_identifier):
     order = TicketingManager.get_and_set_expiry(order_identifier)
+    email = request.args.get('email', '')
     if not order or (order.status != 'completed' and order.status != 'placed'):
         abort(404)
     fees = DataGetter.get_fee_settings_by_currency(order.event.payment_currency)
     return render_template('gentelella/guest/ticketing/order_post_payment.html',
                            order=order,
                            event=order.event,
-                           fees=fees)
+                           fees=fees,
+                           email=email)
 
 
 @ticketing.route('/<order_identifier>/view/pdf/')
@@ -119,9 +121,10 @@ def view_order_after_payment_pdf(order_identifier):
 @ticketing.route('/<order_identifier>/view/tickets/pdf/')
 def view_order_tickets_after_payment_pdf(order_identifier):
     order = TicketingManager.get_and_set_expiry(order_identifier)
+    email = request.args.get('email', '')
     if not order or (order.status != 'completed' and order.status != 'placed'):
         abort(404)
-    pdf = create_pdf(render_template('gentelella/guest/ticketing/pdf/ticket.html', order=order))
+    pdf = create_pdf(render_template('gentelella/guest/ticketing/pdf/ticket.html', order=order, email=email))
     response = make_response(pdf.getvalue())
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = \
