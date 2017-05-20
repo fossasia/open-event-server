@@ -7,6 +7,7 @@ from sqlalchemy import asc
 from app.helpers.data_getter import DataGetter
 from app.helpers.exporters.helpers import format_timedelta
 from app.models.session import Session
+from app.helpers.signals import event_json_modified, speakers_modified, sessions_modified
 
 
 class XCalExporter:
@@ -86,3 +87,11 @@ class XCalExporter:
                     attendee_node.text = speaker.name
 
         return tostring(i_calendar_node)
+
+
+@speakers_modified.connect
+@sessions_modified.connect
+@event_json_modified.connect
+def xcal_export_celery(app, **kwargs):
+    from app.helpers.tasks import export_xcal_task
+    export_xcal_task.delay(kwargs['event_id'])

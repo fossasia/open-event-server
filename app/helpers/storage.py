@@ -53,7 +53,10 @@ UPLOAD_PATHS = {
         'image': 'temp/images/{uuid}'
     },
     'exports': {
-        'zip': 'exports/{event_id}'
+        'zip': 'exports/{event_id}/zip',
+        'pentabarf': 'exports/{event_id}/pentabarf',
+        'ical': 'exports/{event_id}/ical',
+        'xcal': 'exports/{event_id}/xcal'
     }
 }
 
