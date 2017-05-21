@@ -112,7 +112,6 @@ def downgrade():
     op.alter_column('export_jobs', 'starts_at', new_column_name='start_time')
     op.alter_column('import_jobs', 'starts_at', new_column_name='start_time')
     op.alter_column('events', 'ends_at', new_column_name='end_time')
-    op.alter_column('session', 'ends_at', new_column_name='end_time')
     op.alter_column('user', 'signup_at', new_column_name='signup_time')
     op.alter_column('user', 'last_accessed_at', new_column_name='last_access_time')
 
