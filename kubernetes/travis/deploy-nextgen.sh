@@ -25,7 +25,7 @@ mkdir -p lib
 gcloud auth activate-service-account --key-file eventyay-8245fde7ab8a.json
 export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/eventyay-8245fde7ab8a.json
 gcloud config set project eventyay
-gcloud container clusters get-credentials staging-cluster
+gcloud container clusters get-credentials nextgen-cluster
 cd kubernetes/images/web
 docker build --build-arg COMMIT_HASH=$TRAVIS_COMMIT --build-arg BRANCH=$NEXTGEN_DEPLOY_BRANCH --build-arg REPOSITORY=$REPOSITORY --no-cache -t eventyay/nextgen-api-server:$TRAVIS_COMMIT .
 docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"

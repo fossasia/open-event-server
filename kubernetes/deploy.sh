@@ -1,6 +1,6 @@
 #!/bin/bash
-echo "Getting credentials for staging cluster"
-gcloud container clusters get-credentials staging-cluster
+echo "Getting credentials for nextgen cluster"
+gcloud container clusters get-credentials nextgen-cluster
 export DIR=${BASH_SOURCE%/*}
 
 if [ "$1" = "delete" ]; then
