@@ -23,7 +23,7 @@ title: GCE Kubernetes
     gcloud components install kubectl
     ```
 
-- Choose a [Google Cloud Project zone](https://cloud.google.com/compute/docs/regions-zones/regions-zones) to run your service. We will be using us-central1-a. This is configured on the command line via:
+- Choose a [Google Cloud Project zone](https://cloud.google.com/compute/docs/regions-zones/regions-zones) to run your service. We will be using `us-west1-a`. This is configured on the command line via:
 
     ```
     gcloud config set compute/zone us-west1-a
