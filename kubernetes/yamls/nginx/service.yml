@@ -5,7 +5,7 @@ metadata:
   namespace: nginx-ingress
 spec:
   type: LoadBalancer
-  loadBalancerIP: '104.199.125.171'
+  loadBalancerIP: '35.185.193.151'
   ports:
   - port: 80
     name: http

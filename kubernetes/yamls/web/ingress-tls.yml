@@ -10,7 +10,7 @@ spec:
   tls:
   - hosts:
     - api.eventyay.com
-    secretName: eventyay-tls
+    secretName: eventyay-api-tls
   rules:
   - host: api.eventyay.com
     http:
