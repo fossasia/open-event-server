@@ -1,13 +1,12 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: web
+  name: api-server
+  namespace: web
 spec:
   ports:
   - port: 8080
     protocol: TCP
     targetPort: 8080
   selector:
-    app: web
-#  type: LoadBalancer
-#  loadBalancerIP: '104.196.233.213'
+    app: api-server

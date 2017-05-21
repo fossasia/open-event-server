@@ -1,0 +1,19 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: https-redirector
+  namespace: web
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: https-redirector
+    spec:
+      containers:
+      - name: https-redirector
+        image: https-redirector
+        ports:
+        - containerPort: 80
+          protocol: TCP
+      restartPolicy: Always

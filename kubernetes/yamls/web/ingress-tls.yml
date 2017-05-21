@@ -2,27 +2,20 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: web
+  namespace: web
   annotations:
     kubernetes.io/tls-acme: "true"
     kubernetes.io/ingress.class: "nginx"
 spec:
   tls:
   - hosts:
-    - eventyay.com
-    - www.eventyay.com
+    - api.eventyay.com
     secretName: eventyay-tls
   rules:
-  - host: www.eventyay.com
+  - host: api.eventyay.com
     http:
       paths:
       - path: /
         backend:
-          serviceName: redirector
-          servicePort: 8080
-  - host: eventyay.com
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: web
+          serviceName: api-server
           servicePort: 8080

@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: celery
-        image: eventyay/api-server:latest
+        image: eventyay/nextgen-api-server:latest
         command: ["/bin/sh","-c"]
         args: ["./kubernetes/run.sh"]
         env:
@@ -19,11 +19,4 @@ spec:
           value: 'true'
         - name: DEPLOYMENT
           value: 'celery'
-        volumeMounts:
-          - mountPath: /opev/open_event/static/uploads/
-            name: nfs-storage
       restartPolicy: Always
-      volumes:
-        - name: nfs-storage
-          persistentVolumeClaim:
-            claimName: nfs-claim

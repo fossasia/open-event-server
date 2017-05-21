@@ -2,6 +2,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: pg-data-claim
+  namespace: postgres
 spec:
   accessModes:
     - ReadWriteOnce

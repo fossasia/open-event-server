@@ -2,6 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: redis
+  namespace: redis
   labels:
     service: redis
 spec:

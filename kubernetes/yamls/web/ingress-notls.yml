@@ -2,21 +2,15 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: web-notls
+  namespace: web
   annotations:
     kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
-  - host: www.eventyay.com
+  - host: api.eventyay.com
     http:
       paths:
       - path: /
         backend:
-          serviceName: redirector
-          servicePort: 8080
-  - host: eventyay.com
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: web
-          servicePort: 8080
+          serviceName: https-redirector
+          servicePort: 80

@@ -2,6 +2,7 @@ kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
   name: redirector
+  namespace: web
 spec:
   replicas: 1
   template:
@@ -19,5 +20,5 @@ spec:
         - name: HTTP_PORT
           value: '8080'
         - name: REDIRECT
-          value: 'https://eventyay.com'
+          value: 'https://staging.eventyay.com'
       restartPolicy: Always
