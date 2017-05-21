@@ -55,7 +55,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**location_name** | string | Optional | Public |
 |**searchable_location_name** | string | Optional | Public |
 |**starts_at** | string | Required | Public |
-|**end_time** | string | Required | Public |
+|**ends_at** | string | Required | Public |
 |**latitude** | number | Optional | Public |
 |**longitude** | number | Optional | Public |
 |**background_image** | string | Optional | Public |
@@ -151,7 +151,7 @@ Note: If the `microlocation` field of the session is null, the session is unsche
 |**long_abstract** | string | Required | Public |
 |**comments** | string | Optional | Public |
 |**starts_at** | string | Required | Public |
-|**end_time** | string | Required | Public |
+|**ends_at** | string | Required | Public |
 |**speakers** | Array[**SessionSpeaker**] | Optional | Public |
 |**track** | **SessionTrack** | Optional | Public |
 |**language** | string | Optional | Public |
@@ -265,8 +265,8 @@ Note: If the `microlocation` field of the session is null, the session is unsche
 | --- | --- | --- | --- |
 |**id** | integer | Required | Public |
 |**email** | string | Required | Public |
-|**signup_time** | string | Optional | Public |
-|**last_access_time** | string | Optional | Public |
+|**signup_at** | string | Optional | Public |
+|**last_accessed_at** | string | Optional | Public |
 |**user_detail** | **UserDetail** | Optional | Public |
 
 #### UserDetail

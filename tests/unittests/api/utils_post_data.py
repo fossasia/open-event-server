@@ -4,7 +4,7 @@ This file contains sample POST data
 
 POST_EVENT_DATA = {
     "email": "event@gmail.com",
-    "end_time": "2016-05-30T12:12:43",
+    "ends_at": "2016-05-30T12:12:43",
     "timezone": "UTC",
     "latitude": 0.0,
     "location_name": "Berlin",
@@ -61,7 +61,7 @@ POST_MICROLOCATION_DATA = {
 POST_SESSION_DATA = {
     "short_abstract": "TestSession",
     "long_abstract": "TestSession",
-    "end_time": "2016-05-30T09:47:37",
+    "ends_at": "2016-05-30T09:47:37",
     "microlocation_id": None,
     "speaker_ids": [],
     "starts_at": "2016-05-30T08:47:37",

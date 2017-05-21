@@ -45,7 +45,7 @@ class CallForPaper(db.Model):
             'start_date': self.start_date.strftime('%m/%d/%Y') if self.start_date else '',
             'starts_at': self.start_date.strftime('%H:%M') if self.start_date else '',
             'end_date': self.end_date.strftime('%m/%d/%Y') if self.end_date else '',
-            'end_time': self.end_date.strftime('%H:%M') if self.end_date else '',
+            'ends_at': self.end_date.strftime('%H:%M') if self.end_date else '',
             'timezone': self.timezone,
             'privacy': self.privacy,
             'hash': self.hash

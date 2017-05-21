@@ -41,7 +41,7 @@ class XCalExporter:
 
         for session in sessions:
 
-            if session and session.starts_at and session.end_time:
+            if session and session.starts_at and session.ends_at:
 
                 v_event_node = SubElement(v_calendar_node, 'vevent')
 
@@ -55,10 +55,10 @@ class XCalExporter:
                 dtstart_node.text = tz.localize(session.starts_at).isoformat()
 
                 dtend_node = SubElement(v_event_node, 'dtend')
-                dtend_node.text = tz.localize(session.end_time).isoformat()
+                dtend_node.text = tz.localize(session.ends_at).isoformat()
 
                 duration_node = SubElement(v_event_node, 'duration')
-                duration_node.text = format_timedelta(session.end_time - session.starts_at) + "00:00"
+                duration_node.text = format_timedelta(session.ends_at - session.starts_at) + "00:00"
 
                 summary_node = SubElement(v_event_node, 'summary')
                 summary_node.text = session.title

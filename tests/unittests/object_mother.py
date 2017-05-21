@@ -17,7 +17,7 @@ class ObjectMother(object):
     def get_event():
         return Event(name="event1",
                      starts_at=datetime(2003, 8, 4, 12, 30, 45),
-                     end_time=datetime(2003, 9, 4, 12, 30, 45),
+                     ends_at=datetime(2003, 9, 4, 12, 30, 45),
                      location_name='India',
                      topic='Travel & Outdoor',
                      sub_topic='Climbing',
@@ -36,7 +36,7 @@ class ObjectMother(object):
         return Session(title='test',
                        long_abstract='dsad',
                        starts_at=datetime(2003, 8, 4, 12, 30, 45),
-                       end_time=datetime(2003, 8, 4, 12, 30, 45),
+                       ends_at=datetime(2003, 8, 4, 12, 30, 45),
                        event_id=event_id,
                        state='pending')
 

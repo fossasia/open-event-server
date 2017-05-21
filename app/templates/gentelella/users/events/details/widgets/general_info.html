@@ -51,7 +51,7 @@
         </tr>
         <tr>
             <td>{{ _("End Time") }} </td>
-            <td>{{ event.end_time.strftime('%B %d, %Y %I:%M %p') }} ({{ event.timezone }})</td>
+            <td>{{ event.ends_at.strftime('%B %d, %Y %I:%M %p') }} ({{ event.timezone }})</td>
         </tr>
         {% if event.session_type %}
             <tr>

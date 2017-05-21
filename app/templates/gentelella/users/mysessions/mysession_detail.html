@@ -32,7 +32,7 @@
                     {% endif %}
                     <div class="pull-right">
                         {% if session.state == 'pending' or session.state == 'accepted' or session.state == 'confirmed' or session.state == 'rejected' %}
-                            {% if datetime_now <= session.end_time %}
+                            {% if datetime_now <= session.ends_at %}
                             <a href="{{ url_for('my_sessions.withdraw_session_view',session_id=session.id) }}"
                                class="btn btn-danger ">
                                 {{ _("Withdraw Proposal") }}
@@ -64,7 +64,7 @@
                     </h3>
                     <h4 style="font-weight: 300; color: #8d8d8d">
                         {{ session.event.starts_at.strftime('%B %d, %Y - %I:%M %p') }}
-                        <i>(to)</i> {{ session.event.end_time.strftime('%B %d, %Y - %I:%M %p') }}
+                        <i>(to)</i> {{ session.event.ends_at.strftime('%B %d, %Y - %I:%M %p') }}
                     </h4>
                     <br>
                     {% if session.short_abstract %}

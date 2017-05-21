@@ -301,7 +301,7 @@ def sales_by_events_view(path):
                                                                                                                'e'),
             'event_url': url_for('events.details_view', event_id=event.id),
             'starts_at': event.starts_at,
-            'end_time': event.end_time,
+            'ends_at': event.ends_at,
             'completed': {
                 'tickets_count': 0,
                 'sales': 0

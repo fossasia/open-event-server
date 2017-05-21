@@ -35,7 +35,7 @@ var CALL_FOR_SPEAKERS = {
     start_date: '',
     starts_at: '',
     end_date: '',
-    end_time: '',
+    ends_at: '',
     timezone: current_timezone,
     privacy: 'public',
     hash: cfsHash
@@ -78,8 +78,8 @@ function getCallForSpeakers(event) {
     var currentDate = (new Date());
     callForSpeakers.start_date = currentDate.ddmmyyyy();
     callForSpeakers.starts_at = currentDate.hhmm();
-    callForSpeakers.end_date = event.end_time_date;
-    callForSpeakers.end_time = event.end_time_time;
+    callForSpeakers.end_date = event.ends_at_date;
+    callForSpeakers.ends_at = event.ends_at_time;
     callForSpeakers.timezone = event.timezone;
     return callForSpeakers;
 }

@@ -53,7 +53,7 @@ window.dayLevelTime = {
 
 //noinspection JSValidateTypes
 /**
- * @type {{id: number, starts_at: moment.Moment, end_time: moment.Moment}}
+ * @type {{id: number, starts_at: moment.Moment, ends_at: moment.Moment}}
  */
 window.mainEvent = {};
 
@@ -249,7 +249,7 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     sessionRefObject.$sessionElement.removeClass("unscheduled").addClass("scheduled");
 
     delete  sessionRefObject.session.starts_at.isReset;
-    delete  sessionRefObject.session.end_time.isReset;
+    delete  sessionRefObject.session.ends_at.isReset;
 
     sessionRefObject.$sessionElement.data("temp-top", sessionRefObject.session.top);
     sessionRefObject.$sessionElement.css("top", sessionRefObject.session.top + "px");
@@ -261,7 +261,7 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     updateColor(sessionRefObject.$sessionElement, sessionRefObject.session.track);
 
     var $mobileSessionElement = $(mobileSessionTemplate);
-    $mobileSessionElement.find('.time').text(sessionRefObject.session.starts_at.format('hh:mm A') + " - " + sessionRefObject.session.end_time.format('hh:mm A'));
+    $mobileSessionElement.find('.time').text(sessionRefObject.session.starts_at.format('hh:mm A') + " - " + sessionRefObject.session.ends_at.format('hh:mm A'));
     $mobileSessionElement.find('.title').text(sessionRefObject.session.title);
     $mobileSessionElement.find('.session-track-details').attr("id", "session-track-details"+sessionRefObject.session.id);
     $mobileSessionElement.find('.event').attr("data-target", "#session-track-details"+sessionRefObject.session.id + ",#session-track-short-details"+sessionRefObject.session.id);
@@ -346,11 +346,11 @@ function addSessionToUnscheduled(sessionRef, isFiltering, shouldBroadcast) {
     sessionRefObject.session.top = null;
     sessionRefObject.session.duration = 30;
     sessionRefObject.session.starts_at.hours(0).minutes(0);
-    sessionRefObject.session.end_time.hours(0).minutes(0);
+    sessionRefObject.session.ends_at.hours(0).minutes(0);
     sessionRefObject.session.microlocation = null;
 
     sessionRefObject.session.starts_at.isReset = true;
-    sessionRefObject.session.end_time.isReset = true;
+    sessionRefObject.session.ends_at.isReset = true;
 
     sessionRefObject.$sessionElement.data("session", sessionRefObject.session);
     $unscheduledSessionsHolder.append(sessionRefObject.$sessionElement);
@@ -550,11 +550,11 @@ function updateSessionTime($sessionElement, session) {
     session.starts_at.hours(newStartTime.hours());
     session.starts_at.minutes(newStartTime.minutes());
 
-    session.end_time.date(selectedDate.date());
-    session.end_time.month(selectedDate.month());
-    session.end_time.year(selectedDate.year());
-    session.end_time.hours(newEndTime.hours());
-    session.end_time.minutes(newEndTime.minutes());
+    session.ends_at.date(selectedDate.date());
+    session.ends_at.month(selectedDate.month());
+    session.ends_at.year(selectedDate.year());
+    session.ends_at.hours(newEndTime.hours());
+    session.ends_at.minutes(newEndTime.minutes());
 
     _.each(sessionsStore[dayIndex], function (stored_session) {
         if (stored_session.id === session.id) {
@@ -612,8 +612,8 @@ function addInfoBox($sessionElement, session) {
     if(!_.isNull(session.starts_at)) {
         content += "<strong>Start Time:</strong> " + session.starts_at.format("HH:mm:ss") + "<br>";
     }
-    if(!_.isNull(session.end_time)) {
-        content += "<strong>End Time:</strong> " + session.end_time.format("HH:mm:ss") + "<br>";
+    if(!_.isNull(session.ends_at)) {
+        content += "<strong>End Time:</strong> " + session.ends_at.format("HH:mm:ss") + "<br>";
     }
     if(!_.isNull(session.track)) {
         content += "<strong>Track:</strong> " + session.track.name + "<br>";
@@ -826,7 +826,7 @@ function processMicrolocationSession(microlocations, sessions, callback) {
             session = _.cloneDeep(session);
 
             var startTime = moment.utc(session.starts_at);
-            var endTime = moment.utc(session.end_time);
+            var endTime = moment.utc(session.ends_at);
 
             if (startTime.isSame(mainEvent.starts_at, "day")) {
                 window.dayLevelTime.start.hours = mainEvent.starts_at.hours();
@@ -843,7 +843,7 @@ function processMicrolocationSession(microlocations, sessions, callback) {
             }).diff(topTime)).asMinutes(), true);
 
             var now = window.mainEvent.starts_at;
-            var end = window.mainEvent.end_time;
+            var end = window.mainEvent.ends_at;
             while(now.format('M/D/YYYY') <= end.format('M/D/YYYY')) {
                 days.push(now.format("Do MMMM YYYY"));
                 now.add('days', 1);
@@ -862,7 +862,7 @@ function processMicrolocationSession(microlocations, sessions, callback) {
             }
 
             session.starts_at = startTime;
-            session.end_time = endTime;
+            session.ends_at = endTime;
             session.duration = Math.abs(duration.asMinutes());
             session.top = top;
 
@@ -925,9 +925,9 @@ function loadMicrolocationsToTimeline(day) {
         window.dayLevelTime.start.hours = mainEvent.starts_at.hours();
         window.dayLevelTime.start.minutes = mainEvent.starts_at.minutes();
     }
-    if (parsedDay.isSame(mainEvent.end_time, "day")) {
-        window.dayLevelTime.end.hours = mainEvent.end_time.hours();
-        window.dayLevelTime.end.minutes = mainEvent.end_time.minutes();
+    if (parsedDay.isSame(mainEvent.ends_at, "day")) {
+        window.dayLevelTime.end.hours = mainEvent.ends_at.hours();
+        window.dayLevelTime.end.minutes = mainEvent.ends_at.minutes();
     }
 
     var least_hours = 24;
@@ -938,14 +938,14 @@ function loadMicrolocationsToTimeline(day) {
     if (isReadOnly()) {
         _.each(sessionsStore[dayIndex], function (session) {
             // Add session elements, but do not broadcast.
-            if (!_.isNull(session.top) && !_.isNull(session.microlocation) && !_.isNull(session.microlocation.id) && !_.isNull(session.starts_at) && !_.isNull(session.end_time) && !session.hasOwnProperty("isReset")) {
+            if (!_.isNull(session.top) && !_.isNull(session.microlocation) && !_.isNull(session.microlocation.id) && !_.isNull(session.starts_at) && !_.isNull(session.ends_at) && !session.hasOwnProperty("isReset")) {
                 if (session.starts_at.hours() < least_hours) {
                     least_hours = session.starts_at.hours();
                 }
-                if (session.end_time.hours() > max_hours) {
-                    max_hours= session.end_time.hours();
-                    if (session.end_time.minutes() > max_minutes) {
-                        max_minutes = session.end_time.minutes();
+                if (session.ends_at.hours() > max_hours) {
+                    max_hours= session.ends_at.hours();
+                    if (session.ends_at.minutes() > max_minutes) {
+                        max_minutes = session.ends_at.minutes();
                     }
                 }
             }
@@ -997,7 +997,7 @@ function loadMicrolocationsToTimeline(day) {
 
     _.each(sessionsStore[dayIndex], function (session) {
         // Add session elements, but do not broadcast.
-        if (!_.isNull(session.top) && !_.isNull(session.microlocation) && !_.isNull(session.microlocation.id) && !_.isNull(session.starts_at) && !_.isNull(session.end_time) && !session.hasOwnProperty("isReset")) {
+        if (!_.isNull(session.top) && !_.isNull(session.microlocation) && !_.isNull(session.microlocation.id) && !_.isNull(session.starts_at) && !_.isNull(session.ends_at) && !session.hasOwnProperty("isReset")) {
             addSessionToTimeline(session, null, false);
         }
     });
@@ -1005,7 +1005,7 @@ function loadMicrolocationsToTimeline(day) {
     _.each(unscheduledStore[dayIndex], function (session) {
         // Add session elements, but do not broadcast.
 
-        if (!_.isNull(session.top) && !_.isNull(session.microlocation) && !_.isNull(session.microlocation.id) && !_.isNull(session.starts_at) && !_.isNull(session.end_time) && !session.hasOwnProperty("isReset")) {
+        if (!_.isNull(session.top) && !_.isNull(session.microlocation) && !_.isNull(session.microlocation.id) && !_.isNull(session.starts_at) && !_.isNull(session.ends_at) && !session.hasOwnProperty("isReset")) {
             return true;
         } else {
             if (!isReadOnly()) {
@@ -1272,7 +1272,7 @@ $(document)
 $(document).ready(function () {
     window.mainEvent.id = parseInt($timeline.data("event-id"));
     window.mainEvent.starts_at = moment.utc($timeline.data("event-start"));
-    window.mainEvent.end_time = moment.utc($timeline.data("event-end"));
+    window.mainEvent.ends_at = moment.utc($timeline.data("event-end"));
     initializeTimeline(window.mainEvent.id);
 });
 
@@ -1292,7 +1292,7 @@ $(document).on("scheduling:change", function (e) {
 
         // Format the payload to match API requirements
         session.starts_at = session.starts_at.format(time.format);
-        session.end_time = session.end_time.format(time.format);
+        session.ends_at = session.ends_at.format(time.format);
         session.track_id = (_.isNull(session.track) || _.isNull(session.track.id)) ? null : session.track.id;
         session.microlocation_id = (_.isNull(session.microlocation) || _.isNull(session.microlocation.id)) ? null : session.microlocation.id;
         session.speaker_ids = _.map(session.speakers, 'id');

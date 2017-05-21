@@ -14,7 +14,7 @@
                 <div class="col-md-8">
                     <h3>{{ event.name }}</h3>
                     {{ event.starts_at.strftime('%A, %B %d, %Y at %I:%M %p') }}
-                    - {{ event.end_time.strftime('%A, %B %d, %Y at %I:%M %p') }} ({{ event.timezone }})<br>
+                    - {{ event.ends_at.strftime('%A, %B %d, %Y at %I:%M %p') }} ({{ event.timezone }})<br>
                     {{ event.location_name }}
                     <br>
                     <br>
@@ -34,7 +34,7 @@
                             <div class="panel-body" style="padding-bottom: 10px;">
                                 <strong>{{ event.location_name }}</strong><br>
                                 {{ event.starts_at.strftime('%A, %B %d, %Y at %I:%M %p') }}
-                                - {{ event.end_time.strftime('%A, %B %d, %Y at %I:%M %p') }} ({{ event.timezone }})<br>
+                                - {{ event.ends_at.strftime('%A, %B %d, %Y at %I:%M %p') }} ({{ event.timezone }})<br>
                             </div>
                         </div>
                     </div>

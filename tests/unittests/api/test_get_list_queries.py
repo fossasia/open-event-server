@@ -55,7 +55,7 @@ class TestGetListQueries(OpenEventTestCase):
             login(self.app, u'test@example.com', u'test')
             path = get_path()
             # Event is of Apr 16
-            resp = self.app.get(path + '?end_time_lt=2015-12-31T23:59:59')
+            resp = self.app.get(path + '?ends_at_lt=2015-12-31T23:59:59')
             self.assertEqual(len(resp.data), 3, msg=resp.data)
             resp = self.app.get(path + '?starts_at_gt=2015-12-31T23:59:59')
             self.assertIn('TestEvent0', resp.data)
@@ -64,7 +64,7 @@ class TestGetListQueries(OpenEventTestCase):
             # test
             resp = self.app.get(path + '?starts_at_lt=2016-05-31T23:59:59')
             self.assertEqual(len(json.loads(resp.data)), 2, msg=resp.data)
-            resp = self.app.get(path + '?end_time_gt=2016-05-01T00:00:00')
+            resp = self.app.get(path + '?ends_at_gt=2016-05-01T00:00:00')
             self.assertIn('"TestEvent"', resp.data)
             self.assertNotIn('TestEvent0', resp.data)
 
@@ -96,12 +96,12 @@ class TestGetListQueries(OpenEventTestCase):
             resp = self.app.get(path)
             self.assertIn('TestSession', resp.data)
             # check results when query exists
-            for _ in ['starts_at_lt', 'end_time_lt']:
+            for _ in ['starts_at_lt', 'ends_at_lt']:
                 resp = self.app.get(path + '?%s=2014-05-12T00:00:00' % _)
                 self.assertNotIn('TestSession', resp.data)
                 resp = self.app.get(path + '?%s=2017-05-12T00:00:00' % _)
                 self.assertIn('TestSession', resp.data)
-            for _ in ['starts_at_gt', 'end_time_gt']:
+            for _ in ['starts_at_gt', 'ends_at_gt']:
                 resp = self.app.get(path + '?%s=2018-05-12T00:00:00' % _)
                 self.assertNotIn('TestSession', resp.data)
                 resp = self.app.get(path + '?%s=2015-05-12T00:00:00' % _)
@@ -114,7 +114,7 @@ class TestGetListQueries(OpenEventTestCase):
             # 2016-05-30 8:47 to 9:47
             new_data = POST_SESSION_DATA.copy()
             new_data['starts_at'] = '2016-05-30T10:47:37'
-            new_data['end_time'] = '2016-05-30T11:47:37'
+            new_data['ends_at'] = '2016-05-30T11:47:37'
             self._post(path, new_data)
             # check ordering
             data = json.loads(self.app.get(path + '?order_by=starts_at.asc').data)

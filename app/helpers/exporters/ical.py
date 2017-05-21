@@ -36,14 +36,14 @@ class ICalExporter:
 
         for session in sessions:
 
-            if session and session.starts_at and session.end_time:
+            if session and session.starts_at and session.ends_at:
                 event_component = icalendar.Event()
                 event_component.add('summary', session.title)
                 event_component.add('uid', str(session.id) + "-" + event.identifier)
                 event_component.add('geo', (event.latitude, event.longitude))
                 event_component.add('location', session.microlocation.name or '' + " " + event.location_name)
                 event_component.add('dtstart', tz.localize(session.starts_at))
-                event_component.add('dtend', tz.localize(session.end_time))
+                event_component.add('dtend', tz.localize(session.ends_at))
                 event_component.add('email', event.email)
                 event_component.add('description', session.short_abstract)
                 event_component.add('url', url_for('event_detail.display_event_detail_home',

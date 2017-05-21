@@ -45,7 +45,7 @@ class TicketingManager(object):
         if upcoming_events:
             return query.filter(Event.starts_at >= datetime.now())
         else:
-            return query.filter(Event.end_time < datetime.now())
+            return query.filter(Event.ends_at < datetime.now())
 
     @staticmethod
     def get_orders(event_id=None, status=None, from_date=None, to_date=None, marketer_id=None, promoted_event=False,
@@ -485,7 +485,7 @@ class TicketingManager(object):
 
         try:
             discount_code.valid_till = datetime.strptime(form.get('end_date', None) + ' ' +
-                                                         form.get('end_time', None), '%m/%d/%Y %H:%M')
+                                                         form.get('ends_at', None), '%m/%d/%Y %H:%M')
         except:
             discount_code.valid_till = None
 
@@ -525,7 +525,7 @@ class TicketingManager(object):
 
         try:
             access_code.valid_till = datetime.strptime(form.get('end_date', None) + ' ' +
-                                                       form.get('end_time', None), '%m/%d/%Y %H:%M')
+                                                       form.get('ends_at', None), '%m/%d/%Y %H:%M')
         except:
             access_code.valid_till = None
 

@@ -28,7 +28,7 @@ class PentabarfImporter:
         update_status(task_handle, 'Processing event')
         event = Event()
         event.starts_at = conference_object.start
-        event.end_time = conference_object.end
+        event.ends_at = conference_object.end
         event.has_session_speakers = True
         event.name = conference_object.title
         event.location_name = conference_object.venue  # + ', ' + conference_object.city
@@ -65,7 +65,7 @@ class PentabarfImporter:
                     session.long_abstract = event_object.description
                     session.level = getattr(event_object, 'level', None)  # https://github.com/niranjan94/python-pentabarf-xml/issues/3
                     session.starts_at = event_object.date + string_to_timedelta(event_object.start)
-                    session.end_time = session.starts_at + string_to_timedelta(event_object.duration)
+                    session.ends_at = session.starts_at + string_to_timedelta(event_object.duration)
                     session.slides = event_object.slides_url
                     session.video = event_object.video_url
                     session.audio = event_object.audio_url
@@ -77,13 +77,13 @@ class PentabarfImporter:
 
                     if not event_time_updated:
                         event.starts_at = None
-                        event.end_time = None
+                        event.ends_at = None
                         event_time_updated = True
 
                     if not event.starts_at or session.starts_at < event.starts_at:
                         event.starts_at = session.starts_at
-                    if not event.end_time or session.end_time > event.end_time:
-                        event.end_time = session.end_time
+                    if not event.ends_at or session.ends_at > event.ends_at:
+                        event.ends_at = session.ends_at
 
                     for person_object in event_object.person_objects:
                         name_mix = person_object.name + ' ' + conference_object.title
