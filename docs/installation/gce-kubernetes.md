@@ -86,14 +86,12 @@ title: GCE Kubernetes
 
 _You can delete the instance if your not planning to use it for anything else. But make sure the disk `pg-data-disk` is not deleted._
 
-Repeat the same procedure and create another disk named `nfs-data-disk`.
-
 ## Create your Kubernetes Cluster
 
 - Create a cluster via the `gcloud` command line tool:
 
     ```
-    gcloud container clusters create opev-cluster --image-type=container_vm
+    gcloud container clusters create opev-cluster
     ```
 
 - Get the credentials for `kubectl` to use.
@@ -128,29 +126,13 @@ Repeat the same procedure and create another disk named `nfs-data-disk`.
 - Add the **External IP Address One** to `kubernetes/yamls/nginx/service.yml` for the parameter `loadBalancerIP`.
 - Add your domain name to `kubernetes/yamls/web/ingress-notls.yml` & `kubernetes/yamls/web/ingress-tls.yml`. (replace `eventyay.com`)
 - Add your email ID to `kubernetes/yamls/lego/configmap.yml` for the parameter `lego.email`.
-- Get your cluster internal IP range by running
-
-	```
-	kubectl get services kubernetes
-	```
-	
-	The response would be similar to 
-	
-	```
-	NAME         CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
-	kubernetes   10.3.240.1   <none>        443/TCP   115d
-	```
-	
-	Note down the cluster IP. (In this case `10.3.240.1`). Pick an IP in the same range. (For this case `10.3.1.1` to `10.3.255.255`). We'll call the IP address you picked as **Internal IP Address One**.
-- Add the **Internal IP Address One** to `kubernetes/yamls/persistent-store/nfs-pv.yml` for the property `server`
-- Add the **Internal IP Address One** to `kubernetes/yamls/persistent-store/nfs-server-service.yml` for the property `clusterIP`
 
 ## Deploy our pods, services and deployments
 
 - From the project directory, use the provided deploy script to deploy our application from the defined configuration files that are in the `kubernetes` directory.
 
     ```
-    ./kubernetes/deploy.sh
+    ./kubernetes/deploy.sh create
     ```
 
 - The Kubernetes master creates the load balancer and related Compute Engine forwarding rules, target pools, and firewall rules to make the service fully accessible from outside of Google Cloud Platform. 
@@ -164,7 +146,7 @@ Repeat the same procedure and create another disk named `nfs-data-disk`.
 - Delete all created pods, services and deployments
 
     ```
-    kubectl delete -R -f kubernetes/yamls/
+    ./kubernetes/deploy.sh delete
     ```
     
 -  Access The Kubernetes dashboard Web GUI
