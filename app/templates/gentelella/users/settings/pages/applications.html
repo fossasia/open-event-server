@@ -14,20 +14,27 @@
 {% block content %}
 
     <div style="display: block;">
+        {% if fb %}
         <div class="row" style="margin-bottom:20px">
-
             <div class="col-md-6 col-xs-6">
                 <label>Facebook:</label>
                 <div class="input-group">
                     <span class="input-group-addon social-addon">facebook.com/</span>
                     <input type="text" name="facebook" class="form-control"
-                           value="{{ user.user_detail.facebook|default('', true) | replace('https://facebook.com/', '') }}"
+                           value="{{ user.user_detail.facebook|default('', true) | replace('https://www.facebook.com/', '') }}"
                            style="min-width: 400px"
-                           disabled />
-                    {% if not user_id %}
+                           disabled/>
+                    {% if user.user_detail.facebook %}
                         <div class="input-group-btn">
-                            <a type="button" class="btn btn-info"
-                               style="margin-bottom: 0">{{ _("Connected") }}</a>
+                            <a  type="button" class="btn btn-info"
+                                href="/unlink-social/facebook?next=settings/applications/"
+                                style="margin-bottom: 0" title="{{ _('Click to Disconnect') }}" data-toggle="tooltip">{{ _("Connected") }}</a>
+                        </div>
+                    {% else %}
+                        <div class="input-group-btn">
+                            <a  type="button" class="btn btn-info"
+                                href="/profile/fb_connect"
+                                style="margin-bottom: 0" >{{ _("Connect") }}</a>
                         </div>
                     {% endif %}
 
@@ -36,7 +43,9 @@
             </div>
 
         </div>
+        {% endif %}
 
+        {% if twitter %}
         <div class="row" style="margin-bottom:20px">
             <div class="col-md-6 col-xs-6">
                 <label>Twitter:</label>
@@ -46,16 +55,26 @@
                     <input type="text" name="twitter" class="form-control"
                            value="{{ user.user_detail.twitter|default('', true) | replace('https://twitter.com/', '') }}"
                            style="min-width: 400px"
-                           disabled />
-                    {% if not user_id %}
+                           disabled/>
+                    {% if user.user_detail.twitter %}
+                        <div class="input-group-btn">
+                            <a  type="button" class="btn btn-info"
+                                href="/unlink-social/twitter?next=settings/applications/"
+                                style="margin-bottom: 0" title="{{ _('Click to Disconnect') }}" data-toggle="tooltip">{{ _("Connected") }}</a>
+                        </div>
+                    {% else %}
                         <div class="input-group-btn">
                             <a type="button" class="btn btn-info"
-                               style="margin-bottom: 0">{{ _("Connected") }}</a>
+                                href="/profile/tw_connect"
+                               style="margin-bottom: 0" >{{ _("Connect") }}</a>
                         </div>
                     {% endif %}
                 </div>
             </div>
         </div>
+        {% endif %}
+
+        {% if insta %}
         <div class="row" style="margin-bottom:20px">
             <div class="col-md-6 col-xs-6">
                 <label>Instagram:</label>
@@ -66,16 +85,25 @@
                            value="{{ user.user_detail.instagram|default('', true) | replace('https://instagram.com/', '') }}"
                            style="min-width: 400px"
                            disabled />
-                    {% if not user_id %}
+                    {% if user.user_detail.instagram %}
+                        <div class="input-group-btn">
+                            <a  type="button" class="btn btn-info"
+                                href="/unlink-social/insta?next=settings/applications/"
+                                style="margin-bottom: 0" title="{{ _('Click to Disconnect') }}" data-toggle="tooltip">{{ _("Connected") }}</a>
+                        </div>
+                    {% else %}
                         <div class="input-group-btn">
                             <a type="button" class="btn btn-info"
-                               style="margin-bottom: 0">{{ _("Connected") }}</a>
+                                href="/profile/instagram_connect"
+                               style="margin-bottom: 0" >{{ _("Connect") }}</a>
                         </div>
                     {% endif %}
                 </div>
             </div>
         </div>
+        {% endif %}
 
+        {% if gplus %}
         <div class="row" style="margin-bottom:20px">
             <div class="col-md-6 col-xs-6">
                 <label>Google+:</label>
@@ -86,15 +114,23 @@
                            value="{{ user.user_detail.google|default('', true) | replace('https://plus.google.com/', '') }}"
                            style="min-width: 400px"
                            disabled />
-                    {% if not user_id %}
+                    {% if user.user_detail.google %}
+                        <div class="input-group-btn">
+                            <a  type="button" class="btn btn-info"
+                                href="/unlink-social/google?next=settings/applications/"
+                                style="margin-bottom: 0" title="{{ _('Click to Disconnect') }}" data-toggle="tooltip">{{ _("Connected") }}</a>
+                        </div>
+                    {% else %}
                         <div class="input-group-btn">
                             <a type="button" class="btn btn-info"
-                               style="margin-bottom: 0">{{ _("Connected") }}</a>
+                                href="/profile/google_connect"
+                               style="margin-bottom: 0" >{{ _("Connect") }}</a>
                         </div>
                     {% endif %}
                 </div>
             </div>
         </div>
+        {% endif %}
 
         <div class="btn-toolbar" data-role="editor-toolbar"
              data-target="#editor">

@@ -1,7 +1,7 @@
 import unicodedata
 
 from flask import Blueprint, render_template
-from flask import request, url_for, redirect, jsonify, flash
+from flask import request, url_for, redirect, jsonify, flash, session
 from flask.ext import login
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
 
@@ -9,6 +9,7 @@ from app.helpers.data import DataManager, save_to_db
 from app.helpers.data_getter import DataGetter
 from app.models.email_notifications import EmailNotification
 from app.views.home import record_user_login_logout
+from app.settings import get_settings
 
 
 def get_or_create_notification_settings(event_id):
@@ -70,8 +71,19 @@ def email_preferences_view():
 @settings.route('/applications/')
 def applications_view():
     user = DataGetter.get_user(login.current_user.id)
+    settings = get_settings()
+    no_fb = settings['fb_client_id'] is None or settings['fb_client_secret'] is None
+    no_twitter = settings['tw_consumer_key'] is None or settings['tw_consumer_secret'] is None
+    no_insta = settings['in_client_id'] is None or settings['in_client_secret'] is None
+    no_gplus = settings['google_client_id'] is None or settings['google_client_secret'] is None
+
+    session['next_redirect'] = '/settings/applications'
     return render_template('gentelella/users/settings/pages/applications.html',
-                           user=user)
+                           user=user,
+                           fb= not no_fb,
+                           twitter= not no_twitter,
+                           insta= not no_insta,
+                           gplus= not no_gplus)
 
 
 @settings.route('/contact-info/', methods=('POST', 'GET'))

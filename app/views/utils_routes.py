@@ -7,7 +7,7 @@ import geoip2.database
 from flask import Blueprint, current_app
 from flask import flash
 from flask import jsonify, url_for, redirect, request, send_from_directory, \
-    render_template, make_response
+    render_template, make_response, session
 from flask.ext import login
 from flask.ext.migrate import upgrade
 from requests.exceptions import HTTPError
@@ -24,10 +24,9 @@ from ..helpers.helpers import get_serializer
 
 utils_routes = Blueprint('', __name__)
 
-
 @utils_routes.route('/gCallback/', methods=('GET', 'POST'))
 def callback():
-    if login.current_user is not None and login.current_user.is_authenticated:
+    if login.current_user is not None and login.current_user.is_authenticated and 'test' in request.url:
         return redirect(url_for('admin.index'))
     elif 'error' in request.args:
         if request.args.get('error') == 'access denied':
@@ -57,6 +56,14 @@ def callback():
         resp = google.get(OAuth.get_user_info())
         if resp.status_code == 200:
             user_data = resp.json()
+            if login.current_user is not None and login.current_user.is_authenticated:
+                update_user_details(google=user_data['link'])
+                try:
+                    if session['next_redirect']:
+                        return redirect(session['next_redirect'])
+                except Exception:
+                    pass
+                return redirect(url_for('admin.index'))
             email = user_data['email']
             user = DataGetter.get_user_by_email(email, no_flash=True)
             user = create_user_oauth(user, user_data, token=token, method='Google')
@@ -85,6 +92,11 @@ def facebook_callback():
                                     last_name=user_info['last_name'],
                                     facebook_link=user_info['link'],
                                     file_url=user_info['picture']['data']['url'])
+        except Exception:
+            pass
+        try:
+            if session['next_redirect']:
+                return redirect(session['next_redirect'])
         except Exception:
             pass
         return redirect(url_for('admin.index'))
@@ -119,10 +131,20 @@ def facebook_callback():
         return redirect(url_for('admin.login_view'))
 
 
-def update_user_details(first_name=None, last_name=None, facebook_link=None, twitter_link=None, file_url=None):
+def update_user_details(first_name=None,
+                        last_name=None,
+                        facebook_link=None,
+                        twitter_link=None,
+                        file_url=None,
+                        instagram=None,
+                        google=None):
     user = login.current_user
     if not user.user_detail.facebook:
         user.user_detail.facebook = facebook_link
+    if not user.user_detail.instagram:
+        user.user_detail.instagram = instagram
+    if not user.user_detail.google:
+        user.user_detail.google = google
     if not user.user_detail.firstname:
         user.user_detail.firstname = first_name
     if not user.user_detail.lastname:
@@ -135,6 +157,17 @@ def update_user_details(first_name=None, last_name=None, facebook_link=None, twi
         user.user_detail.twitter = twitter_link
     save_to_db(user)
 
+def delete_user_social_links(social):
+    user = login.current_user
+    if 'facebook' == social:
+        user.user_detail.facebook = None
+    if 'twitter' == social:
+        user.user_detail.twitter = None
+    if 'insta' == social:
+        user.user_detail.instagram = None
+    if 'google' == social:
+        user.user_detail.google = None
+    save_to_db(user)
 
 def get_fb_auth():
     facebook = get_facebook_auth()
@@ -164,6 +197,8 @@ def twitter_callback():
     update_user_details(first_name=user_info['name'],
                         file_url=user_info['profile_image_url'],
                         twitter_link="https://twitter.com/" + access_token["screen_name"])
+    if session['next_redirect']:
+        return redirect(session['next_redirect'])
     return redirect(url_for('profile.index_view'))
 
 
@@ -181,13 +216,22 @@ def instagram_callback():
         response = instagram.get(
             'https://api.instagram.com/v1/users/self/media/recent/?access_token=' + token.get('access_token',
                                                                                               '')).json()
+
         for el in response.get('data'):
             filename, uploaded_file = uploaded_file_provided_by_url(el['images']['standard_resolution']['url'])
             upload(uploaded_file, '/image/' + filename)
-
-    flash("OAuth Authorization error. Please try again later.")
+            update_user_details(instagram=el['caption']['from']['username'])
+            if session['next_redirect']:
+                return redirect(session['next_redirect'])
+    else:
+        flash("OAuth Authorization error. Please try again later.")
     return redirect(url_for('admin.login_view'))
 
+@utils_routes.route('/unlink-social/<social>')
+def unlink_social(social):
+    if login.current_user is not None and login.current_user.is_authenticated:
+        delete_user_social_links(social)
+    return redirect(intended_url())
 
 @utils_routes.route('/pic/<path:filename>')
 def send_pic(filename):
