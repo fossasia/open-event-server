@@ -86,27 +86,27 @@
     <div class="row event-date-picker">
         <div class="col-md-4 col-xs-12">
             <div class="item form-group"
-                 v-bind:class="{ 'has-error': event.start_time_date.trim().length <= 0 || event.start_time_time.trim().length <= 0 || invalidDateRange}">
+                 v-bind:class="{ 'has-error': event.starts_at_date.trim().length <= 0 || event.starts_at_time.trim().length <= 0 || invalidDateRange}">
                 <label>{{ _("Starts") }} <span class="required">*</span></label>
                 <br>
                 <div class="col-xs-8" style="padding-left: 0;">
                     <input required="required"
                            name="start_date"
-                           v-model="event.start_time_date"
+                           v-model="event.starts_at_date"
                            class="form-control col-xs-6 date start" placeholder="MM/DD/YYYY"/>
 
                 </div>
                 <div class="col-xs-4" style="padding-left: 0;">
                     <input required="required"
-                           name="start_time"
-                           v-model="event.start_time_time"
+                           name="starts_at"
+                           v-model="event.starts_at_time"
                            class="form-control col-xs-6 time start" placeholder="HH:MM"/>
 
                 </div>
             </div>
             <div class="help-block text-danger"
                  style="color: #a94442;"
-                 v-show="event.start_time_date.trim().length <= 0 || event.start_time_time.trim().length <= 0">
+                 v-show="event.starts_at_date.trim().length <= 0 || event.starts_at_time.trim().length <= 0">
                 Start date/time is required
             </div>
             <div class="help-block text-danger" style="color: #a94442;" v-show="invalidDateRange">

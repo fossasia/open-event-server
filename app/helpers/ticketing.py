@@ -43,7 +43,7 @@ class TicketingManager(object):
             .filter(Order.user_id == user_id) \
             .filter(or_(Order.status == 'completed', Order.status == 'placed'))
         if upcoming_events:
-            return query.filter(Event.start_time >= datetime.now())
+            return query.filter(Event.starts_at >= datetime.now())
         else:
             return query.filter(Event.end_time < datetime.now())
 
@@ -479,7 +479,7 @@ class TicketingManager(object):
 
         try:
             discount_code.valid_from = datetime.strptime(form.get('start_date', None) + ' ' +
-                                                         form.get('start_time', None), '%m/%d/%Y %H:%M')
+                                                         form.get('starts_at', None), '%m/%d/%Y %H:%M')
         except:
             discount_code.valid_from = None
 
@@ -519,7 +519,7 @@ class TicketingManager(object):
 
         try:
             access_code.valid_from = datetime.strptime(form.get('start_date', None) + ' ' +
-                                                       form.get('start_time', None), '%m/%d/%Y %H:%M')
+                                                       form.get('starts_at', None), '%m/%d/%Y %H:%M')
         except:
             access_code.valid_from = None
 

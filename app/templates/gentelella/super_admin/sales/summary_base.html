@@ -121,8 +121,8 @@
                 {% endif %}
                 {% if path and path == 'events' %}
                     <td style="font-size:13px">
-                        {% if item.start_time and item.end_time %}
-                            {{ item.start_time }}<br>to {{ item.end_time }}
+                        {% if item.starts_at and item.end_time %}
+                            {{ item.starts_at }}<br>to {{ item.end_time }}
                         {% else %}
                             {{ _("-") }}
                         {% endif %}

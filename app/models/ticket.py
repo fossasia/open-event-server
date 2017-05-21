@@ -121,7 +121,7 @@ class Ticket(db.Model):
             'description': self.description,
             'price': self.price,
             'sales_start_date': self.sales_start.strftime('%m/%d/%Y') if self.sales_start else '',
-            'sales_start_time': self.sales_start.strftime('%H:%M') if self.sales_start else '',
+            'sales_starts_at': self.sales_start.strftime('%H:%M') if self.sales_start else '',
             'sales_end_date': self.sales_end.strftime('%m/%d/%Y') if self.sales_end else '',
             'sales_end_time': self.sales_end.strftime('%H:%M') if self.sales_end else '',
             'ticket_visibility': self.hide,

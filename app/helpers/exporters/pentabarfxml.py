@@ -25,26 +25,26 @@ class PentabarfExporter:
     @staticmethod
     def export(event_id):
         event = DataGetter.get_event(event_id)
-        diff = (event.end_time - event.start_time)
+        diff = (event.end_time - event.starts_at)
 
         tz = event.timezone or 'UTC'
         tz = pytz.timezone(tz)
 
-        conference = Conference(title=event.name, start=tz.localize(event.start_time), end=tz.localize(event.end_time),
+        conference = Conference(title=event.name, start=tz.localize(event.starts_at), end=tz.localize(event.end_time),
                                 days=diff.days if diff.days > 0 else 1,
                                 day_change="00:00", timeslot_duration="00:15",
                                 venue=event.location_name)
-        dates = (db.session.query(cast(Session.start_time, DATE))
+        dates = (db.session.query(cast(Session.starts_at, DATE))
                  .filter_by(event_id=event_id)
                  .filter_by(state='accepted')
                  .filter(Session.deleted_at.is_(None))
-                 .order_by(asc(Session.start_time)).distinct().all())
+                 .order_by(asc(Session.starts_at)).distinct().all())
 
         for date in dates:
             date = date[0]
             day = Day(date=date)
             microlocation_ids = list(db.session.query(Session.microlocation_id)
-                                     .filter(func.date(Session.start_time) == date)
+                                     .filter(func.date(Session.starts_at) == date)
                                      .filter_by(state='accepted')
                                      .filter(Session.deleted_at.is_(None))
                                      .order_by(asc(Session.microlocation_id)).distinct())
@@ -52,18 +52,18 @@ class PentabarfExporter:
                 microlocation_id = microlocation_id[0]
                 microlocation = DataGetter.get_microlocation(microlocation_id)
                 sessions = Session.query.filter_by(microlocation_id=microlocation_id) \
-                    .filter(func.date(Session.start_time) == date) \
+                    .filter(func.date(Session.starts_at) == date) \
                     .filter_by(state='accepted') \
                     .filter(Session.deleted_at.is_(None)) \
-                    .order_by(asc(Session.start_time)).all()
+                    .order_by(asc(Session.starts_at)).all()
 
                 room = Room(name=microlocation.name)
                 for session in sessions:
 
                     session_event = Event(id=session.id,
-                                          date=tz.localize(session.start_time),
-                                          start=tz.localize(session.start_time).strftime("%H:%M"),
-                                          duration=format_timedelta(session.end_time - session.start_time),
+                                          date=tz.localize(session.starts_at),
+                                          start=tz.localize(session.starts_at).strftime("%H:%M"),
+                                          duration=format_timedelta(session.end_time - session.starts_at),
                                           track=session.track.name,
                                           abstract=session.short_abstract,
                                           title=session.title,

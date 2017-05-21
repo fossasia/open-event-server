@@ -27,7 +27,7 @@ class PentabarfImporter:
         conference_object = PentabarfParser.parse(string)
         update_status(task_handle, 'Processing event')
         event = Event()
-        event.start_time = conference_object.start
+        event.starts_at = conference_object.start
         event.end_time = conference_object.end
         event.has_session_speakers = True
         event.name = conference_object.title
@@ -64,8 +64,8 @@ class PentabarfImporter:
                     session.short_abstract = event_object.abstract
                     session.long_abstract = event_object.description
                     session.level = getattr(event_object, 'level', None)  # https://github.com/niranjan94/python-pentabarf-xml/issues/3
-                    session.start_time = event_object.date + string_to_timedelta(event_object.start)
-                    session.end_time = session.start_time + string_to_timedelta(event_object.duration)
+                    session.starts_at = event_object.date + string_to_timedelta(event_object.start)
+                    session.end_time = session.starts_at + string_to_timedelta(event_object.duration)
                     session.slides = event_object.slides_url
                     session.video = event_object.video_url
                     session.audio = event_object.audio_url
@@ -76,12 +76,12 @@ class PentabarfImporter:
                     save_to_db(session, 'Session Updated')
 
                     if not event_time_updated:
-                        event.start_time = None
+                        event.starts_at = None
                         event.end_time = None
                         event_time_updated = True
 
-                    if not event.start_time or session.start_time < event.start_time:
-                        event.start_time = session.start_time
+                    if not event.starts_at or session.starts_at < event.starts_at:
+                        event.starts_at = session.starts_at
                     if not event.end_time or session.end_time > event.end_time:
                         event.end_time = session.end_time
 

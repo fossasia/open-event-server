@@ -92,12 +92,12 @@ def get_query_close_area(lng, lat):
         return None
 
 
-def event_start_time_gt(value, query):
-    return query.filter(Event.start_time >= DateTime().from_str(value))
+def event_starts_at_gt(value, query):
+    return query.filter(Event.starts_at >= DateTime().from_str(value))
 
 
-def event_start_time_lt(value, query):
-    return query.filter(Event.start_time <= DateTime().from_str(value))
+def event_starts_at_lt(value, query):
+    return query.filter(Event.starts_at <= DateTime().from_str(value))
 
 
 def event_end_time_gt(value, query):
@@ -111,18 +111,18 @@ def event_end_time_lt(value, query):
 def event_time_period(value, query):
     start, end = get_date_range(value)
     if start:
-        query = event_start_time_gt(start, query)
+        query = event_starts_at_gt(start, query)
     if end:
         query = event_end_time_lt(end, query)
     return query
 
 
-def sessions_start_time_gt(value, query):
-    return query.filter(Session.start_time >= DateTime().from_str(value))
+def sessions_starts_at_gt(value, query):
+    return query.filter(Session.starts_at >= DateTime().from_str(value))
 
 
-def sessions_start_time_lt(value, query):
-    return query.filter(Session.start_time <= DateTime().from_str(value))
+def sessions_starts_at_lt(value, query):
+    return query.filter(Session.starts_at <= DateTime().from_str(value))
 
 
 def sessions_end_time_gt(value, query):
@@ -150,14 +150,14 @@ FILTERS_LIST = {
     '__event_contains': event_contains,
     '__event_location': event_location,
     '__event_search_location': event_search_location,
-    '__event_start_time_gt': event_start_time_gt,
-    '__event_start_time_lt': event_start_time_lt,
+    '__event_starts_at_gt': event_starts_at_gt,
+    '__event_starts_at_lt': event_starts_at_lt,
     '__event_end_time_gt': event_end_time_gt,
     '__event_end_time_lt': event_end_time_lt,
     '__event_time_period': event_time_period,
     # sessions
-    '__sessions_start_time_gt': sessions_start_time_gt,
-    '__sessions_start_time_lt': sessions_start_time_lt,
+    '__sessions_starts_at_gt': sessions_starts_at_gt,
+    '__sessions_starts_at_lt': sessions_starts_at_lt,
     '__sessions_end_time_gt': sessions_end_time_gt,
     '__sessions_end_time_lt': sessions_end_time_lt,
     '__sessions_order_by': sessions_order_by

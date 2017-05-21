@@ -19,7 +19,7 @@
                 <div class="caption col-md-9 col-sm-9 col-xs-9">
                     <small class="time">
                         {% if order.event %}
-                            {{ order.event.start_time.strftime('%a, %B %d %I:%M %p') }}{% endif %}</small>
+                            {{ order.event.starts_at.strftime('%a, %B %d %I:%M %p') }}{% endif %}</small>
                     <h4 class="name">{{ order.event.name }}</h4>
                     <small class="location_name">
                         {% if order.event %}{{ order.event.location_name.split(",")[0] }}{% endif %}</small>

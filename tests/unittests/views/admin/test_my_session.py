@@ -25,7 +25,7 @@ class TestMySession(OpenEventViewTestCase):
             save_to_db(speaker, "Speaker saved")
             session = Session(title='test session',
                               long_abstract='dsad',
-                              start_time=datetime(2003, 8, 4, 12, 30, 45),
+                              starts_at=datetime(2003, 8, 4, 12, 30, 45),
                               end_time=datetime(2003, 8, 4, 12, 30, 45),
                               event_id=event.id,
                               speakers=[speaker],
@@ -49,7 +49,7 @@ class TestMySession(OpenEventViewTestCase):
             save_to_db(speaker, "Speaker saved")
             session = Session(title='test',
                               long_abstract='dsad',
-                              start_time=datetime(2003, 8, 4, 12, 30, 45),
+                              starts_at=datetime(2003, 8, 4, 12, 30, 45),
                               end_time=datetime(2003, 8, 4, 12, 30, 45),
                               event_id=event.id,
                               speakers=[speaker],

@@ -1,5 +1,5 @@
 <div class="timeline" id="timeline" data-event-id="{{ event.id }}"
-     data-event-start="{{ event.start_time }}"
+     data-event-start="{{ event.starts_at }}"
      data-event-end="{{ event.end_time }}"
      style="margin-top: 10px; margin-left: 10px; width: 100%; overflow-x: hidden;">
     <table class="timeline-table table" style="width: auto">
@@ -20,12 +20,12 @@
     <h3 id="no-session-message">No sessions in this date</h3>
 </div>
 
-<div id="tracks-timeline" class="hidden" data-event-id="{{ event.id }}" data-event-start="{{ event.start_time }}"
+<div id="tracks-timeline" class="hidden" data-event-id="{{ event.id }}" data-event-start="{{ event.starts_at }}"
      data-event-end="{{ event.end_time }}">
 
 </div>
 
-<div id="mobile-timeline" class="hidden" data-event-id="{{ event.id }}" data-event-start="{{ event.start_time }}"
+<div id="mobile-timeline" class="hidden" data-event-id="{{ event.id }}" data-event-start="{{ event.starts_at }}"
      data-event-end="{{ event.end_time }}">
 
 </div>

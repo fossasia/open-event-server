@@ -300,7 +300,7 @@ def sales_by_events_view(path):
             'live_url': url_for('event_detail.display_event_detail_home', identifier=event.identifier).replace('events',
                                                                                                                'e'),
             'event_url': url_for('events.details_view', event_id=event.id),
-            'start_time': event.start_time,
+            'starts_at': event.starts_at,
             'end_time': event.end_time,
             'completed': {
                 'tickets_count': 0,

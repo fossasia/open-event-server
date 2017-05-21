@@ -47,7 +47,7 @@
     {% if event.longitude %}
         <meta property="event:location:longitude" content="{{ event.longitude }}">
     {% endif %}
-    <meta property="event:start_time" content="{{ event.start_time | localize_dt(event.timezone) }}">
+    <meta property="event:starts_at" content="{{ event.starts_at | localize_dt(event.timezone) }}">
     <meta property="event:end_time" content="{{ event.end_time | localize_dt(event.timezone) }}">
 {% endblock %}
 
@@ -160,7 +160,7 @@
             <div class="item active">
                 <div class="container">
                     <div class="carousel-caption">
-                        <h4 style="font-weight: 300;">{{ event.start_time.strftime('%a, %B %d at %I:%M %p') | upper }}</h4>
+                        <h4 style="font-weight: 300;">{{ event.starts_at.strftime('%a, %B %d at %I:%M %p') | upper }}</h4>
                         <h1>{{ event.name }}</h1>
                         <h4 style="font-weight: 300;"><i class="glyphicon glyphicon-map-marker"></i> {{ event.location_name | upper }}</h4>
                         <p></p>

@@ -113,10 +113,10 @@ def details_view(event_id):
     checklist = {"": ""}
 
     if fields_not_empty(event,
-                        ['name', 'start_time', 'end_time', 'location_name',
+                        ['name', 'starts_at', 'end_time', 'location_name',
                          'organizer_name', 'organizer_description']):
         checklist["1"] = 'success'
-    elif fields_not_empty(event, ['name', 'start_time', 'end_time']):
+    elif fields_not_empty(event, ['name', 'starts_at', 'end_time']):
         checklist["1"] = 'missing_some'
     else:
         checklist["1"] = 'missing_main'

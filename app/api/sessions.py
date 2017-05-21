@@ -74,7 +74,7 @@ SESSION = api.model('Session', {
     'short_abstract': fields.String(),
     'long_abstract': fields.String(),
     'comments': fields.String(),
-    'start_time': fields.DateTime(required=True),
+    'starts_at': fields.DateTime(required=True),
     'end_time': fields.DateTime(required=True),
     'track': fields.Nested(SESSION_TRACK, allow_null=True),
     'speakers': fields.List(fields.Nested(SESSION_SPEAKER)),
@@ -123,7 +123,7 @@ class SessionDAO(ServiceDAO):
         data = self._del(data, ['speaker_ids', 'track_id',
                                 'microlocation_id', 'session_type_id'])
         # convert datetime fields
-        for _ in ['start_time', 'end_time']:
+        for _ in ['starts_at', 'end_time']:
             if _ in data:
                 data[_] = SESSION_POST[_].from_str(data[_])
         return data
@@ -175,7 +175,7 @@ class SessionDAO(ServiceDAO):
                 or (data['state'] == 'confirmed' and session.state != 'confirmed'):
                 trigger_session_state_change_notifications(obj, event_id=event_id, state=data['state'])
 
-        if session.start_time != obj.start_time or session.end_time != obj.end_time:
+        if session.starts_at != obj.starts_at or session.end_time != obj.end_time:
             trigger_session_schedule_change_notifications(obj, event_id)
 
         for f in ['track', 'microlocation', 'speakers', 'session_type']:
@@ -211,12 +211,12 @@ TypeDAO = SessionTypeDAO(SessionTypeModel, SESSION_TYPE_POST)
 # Define Params
 
 SESSIONS_PARAMS = {
-    'start_time_gt': {},
-    'start_time_lt': {},
+    'starts_at_gt': {},
+    'starts_at_lt': {},
     'end_time_gt': {},
     'end_time_lt': {},
     'order_by': {
-        'description': 'Order by a field, example "start_time.asc" or "end_time.desc"'
+        'description': 'Order by a field, example "starts_at.asc" or "end_time.desc"'
     }
 }
 
@@ -231,8 +231,8 @@ class SessionResource():
     Session Resource Base class
     """
     session_parser = reqparse.RequestParser()
-    session_parser.add_argument('start_time_gt', dest='__sessions_start_time_gt')
-    session_parser.add_argument('start_time_lt', dest='__sessions_start_time_lt')
+    session_parser.add_argument('starts_at_gt', dest='__sessions_starts_at_gt')
+    session_parser.add_argument('starts_at_lt', dest='__sessions_starts_at_lt')
     session_parser.add_argument('end_time_gt', dest='__sessions_end_time_gt')
     session_parser.add_argument('end_time_lt', dest='__sessions_end_time_lt')
     session_parser.add_argument('order_by', dest='__sessions_order_by')

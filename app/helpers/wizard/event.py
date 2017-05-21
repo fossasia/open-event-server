@@ -44,8 +44,8 @@ def get_event_json(event_id):
         "name": event.name,
         "location_name": event.location_name,
         "show_map": event.show_map,
-        "start_time_date": event.start_time.strftime('%m/%d/%Y') if event.start_time else '',
-        "start_time_time": event.start_time.strftime('%H:%M') if event.start_time else '',
+        "starts_at_date": event.starts_at.strftime('%m/%d/%Y') if event.starts_at else '',
+        "starts_at_time": event.starts_at.strftime('%H:%M') if event.starts_at else '',
         "end_time_date": event.end_time.strftime('%m/%d/%Y') if event.end_time else '',
         "end_time_time": event.end_time.strftime('%H:%M') if event.end_time else '',
         "timezone": event.timezone,
@@ -126,13 +126,13 @@ def save_event_from_json(json, event_id=None):
         event = Event()
         is_edit = False
 
-    start_time = get_event_time_field_format(event_data, 'start_time')
+    starts_at = get_event_time_field_format(event_data, 'starts_at')
     end_time = get_event_time_field_format(event_data, 'end_time')
 
-    if event_data['name'].strip() == '' or not start_time or not end_time:
+    if event_data['name'].strip() == '' or not starts_at or not end_time:
         abort(400)
 
-    if start_time > end_time:
+    if starts_at > end_time:
         abort(400)
 
     event.name = event_data['name']
@@ -145,7 +145,7 @@ def save_event_from_json(json, event_id=None):
         event.event_url = ""
     event.location_name = event_data['location_name']
     event.show_map = 1 if event_data['show_map'] else 0
-    event.start_time = start_time
+    event.starts_at = starts_at
     event.end_time = end_time
     event.timezone = event_data['timezone']
     event.description = event_data['description']

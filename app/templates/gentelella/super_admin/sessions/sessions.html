@@ -36,7 +36,7 @@
                 </ol>
             </td>
             <td>{{ session.submission_date.strftime('%B %d, %Y %I:%M %p')  if session.submission_date != None }}</td>
-            <td>{{ session.event.start_time }} - {{ session.event.end_time }}</td>
+            <td>{{ session.event.starts_at }} - {{ session.event.end_time }}</td>
             <td>
                 {% if session %}
                     <div class="btn-group btn-group-sm" role="group" aria-label="...">

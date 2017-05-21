@@ -10,7 +10,7 @@ class ExportJob(db.Model):
     __tablename__ = 'export_jobs'
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.String, nullable=False)
-    start_time = db.Column(db.DateTime)
+    starts_at = db.Column(db.DateTime)
 
     user_email = db.Column(db.String)
     # not linking to User because when user is deleted, this will be lost
@@ -23,7 +23,7 @@ class ExportJob(db.Model):
         self.task = task
         self.user_email = user_email
         self.event = event
-        self.start_time = datetime.now()
+        self.starts_at = datetime.now()
 
     def __repr__(self):
         return '<ExportJob %d for event %d>' % (self.id, self.event.id)
