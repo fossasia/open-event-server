@@ -12,5 +12,5 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: https-redirector
-          servicePort: 80
+          serviceName: redirector
+          servicePort: 8080
