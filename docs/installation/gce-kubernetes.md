@@ -105,7 +105,7 @@ _You can delete the instance if your not planning to use it for anything else. B
 - Reserve a static external IP address 
 	
 	```bash
-	gcloud compute addresses create testip --region us-west1-a
+	gcloud compute addresses create testip --region us-west1
 	```
 	
 	The response would be similar to 
@@ -124,7 +124,7 @@ _You can delete the instance if your not planning to use it for anything else. B
 	Note down the address. (In this case `123.123.123.123`). We'll call this **External IP Address One**.
 - Add the **External IP Address One** as an `A` record to your domain's DNS Zone.
 - Add the **External IP Address One** to `kubernetes/yamls/nginx/service.yml` for the parameter `loadBalancerIP`.
-- Add your domain name to `kubernetes/yamls/web/ingress-notls.yml` & `kubernetes/yamls/web/ingress-tls.yml`. (replace `eventyay.com`)
+- Add your domain name to `kubernetes/yamls/web/ingress-notls.yml` & `kubernetes/yamls/web/ingress-tls.yml`. (replace `api.eventyay.com`)
 - Add your email ID to `kubernetes/yamls/lego/configmap.yml` for the parameter `lego.email`.
 
 ## Deploy our pods, services and deployments
