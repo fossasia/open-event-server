@@ -92,8 +92,8 @@
                     <a href="{{url_for('sadmin_users.settings_view', user_id=user['user'].id)}}"> Settings </a>
                 </li>
             </td>
-            <td>{{ user['user'].last_access_time.strftime("%Y-%m-%d %H:%M")|time_format }}</td>
-            <td>{{ user['user'].last_access_time.strftime("%Y-%m-%d %H:%M")|time_format }}</td>
+            <td>{{ user['user'].last_accessed_at.strftime("%Y-%m-%d %H:%M")|time_format }}</td>
+            <td>{{ user['user'].last_accessed_at.strftime("%Y-%m-%d %H:%M")|time_format }}</td>
             <td>
                 <div class="btn-group btn-group-sm">
                     {% if not user['user'].is_super_admin and current_user.is_super_admin %}

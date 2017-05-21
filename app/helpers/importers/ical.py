@@ -34,12 +34,12 @@ class ICalImporter:
                 event.name = get_valid_event_name(session.decoded('UID'))
 
             starts_at = session.decoded('dtstart')
-            end_time = session.decoded('dtend')
+            ends_at = session.decoded('dtend')
 
             if not event.starts_at or starts_at < event.starts_at:
                 event.starts_at = starts_at
-            if not event.end_time or end_time > event.end_time:
-                event.end_time = end_time
+            if not event.ends_at or ends_at > event.ends_at:
+                event.ends_at = ends_at
 
         if not event.name:
             event.name = 'Un-named Event'
@@ -74,7 +74,7 @@ class ICalImporter:
             session.title = session_block.decoded('summary')
             session.short_abstract = session_block.decoded('description')
             session.starts_at = session_block.decoded('dtstart')
-            session.end_time = session_block.decoded('dtend')
+            session.ends_at = session_block.decoded('dtend')
             session.signup_url = session_block.decoded('url')
             session.event_id = event.id
             session.state = 'accepted'

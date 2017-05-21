@@ -115,20 +115,20 @@
         </div>
         <div class="col-md-4 col-xs-12">
             <div class="item form-group"
-                 v-bind:class="{ 'has-error': event.end_time_date.trim().length <= 0 || event.end_time_time.trim().length <= 0 || invalidDateRange }">
+                 v-bind:class="{ 'has-error': event.ends_at_date.trim().length <= 0 || event.ends_at_time.trim().length <= 0 || invalidDateRange }">
                 <label>{{ _("Ends") }} <span class="required">*</span></label>
                 <br>
                 <div class="col-xs-8" style="padding-left: 0;">
                     <input required="required"
                            name="end_date"
-                           v-model="event.end_time_date"
+                           v-model="event.ends_at_date"
                            class="form-control col-xs-6 date end" placeholder="MM/DD/YYYY"/>
 
                 </div>
                 <div class="col-xs-4" style="padding-left: 0;">
                     <input required="required"
-                           name="end_time"
-                           v-model="event.end_time_time"
+                           name="ends_at"
+                           v-model="event.ends_at_time"
                            class="form-control col-xs-6 time end" placeholder="HH:MM"/>
 
                 </div>
@@ -136,7 +136,7 @@
             </div>
             <div class="help-block text-danger"
                  style="color: #a94442;"
-                 v-show="event.end_time_date.trim().length <= 0 || event.end_time_time.trim().length <= 0">End
+                 v-show="event.ends_at_date.trim().length <= 0 || event.ends_at_time.trim().length <= 0">End
                 date/time is required
             </div>
         </div>

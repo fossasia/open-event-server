@@ -28,8 +28,8 @@ USER_DETAIL = api.model('UserDetail', {
 USER = api.model('User', {
     'id': fields.Integer(),
     'email': fields.Email(required=True),
-    'signup_time': fields.DateTime(),
-    'last_access_time': fields.DateTime(),
+    'signup_at': fields.DateTime(),
+    'last_accessed_at': fields.DateTime(),
     'user_detail': fields.Nested(USER_DETAIL)
 })
 
@@ -39,8 +39,8 @@ USER_PAGINATED = api.clone('UserPaginated', PAGINATED_MODEL, {
 
 USER_PUT = api.clone('UserPut', USER)
 del USER_PUT['id']
-del USER_PUT['signup_time']
-del USER_PUT['last_access_time']
+del USER_PUT['signup_at']
+del USER_PUT['last_accessed_at']
 
 USER_POST = api.model('UserPost', {
     'email': fields.Email(required=True),

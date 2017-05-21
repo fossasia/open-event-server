@@ -25,12 +25,12 @@ class PentabarfExporter:
     @staticmethod
     def export(event_id):
         event = DataGetter.get_event(event_id)
-        diff = (event.end_time - event.starts_at)
+        diff = (event.ends_at - event.starts_at)
 
         tz = event.timezone or 'UTC'
         tz = pytz.timezone(tz)
 
-        conference = Conference(title=event.name, start=tz.localize(event.starts_at), end=tz.localize(event.end_time),
+        conference = Conference(title=event.name, start=tz.localize(event.starts_at), end=tz.localize(event.ends_at),
                                 days=diff.days if diff.days > 0 else 1,
                                 day_change="00:00", timeslot_duration="00:15",
                                 venue=event.location_name)
@@ -63,7 +63,7 @@ class PentabarfExporter:
                     session_event = Event(id=session.id,
                                           date=tz.localize(session.starts_at),
                                           start=tz.localize(session.starts_at).strftime("%H:%M"),
-                                          duration=format_timedelta(session.end_time - session.starts_at),
+                                          duration=format_timedelta(session.ends_at - session.starts_at),
                                           track=session.track.name,
                                           abstract=session.short_abstract,
                                           title=session.title,

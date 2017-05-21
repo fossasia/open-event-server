@@ -417,7 +417,7 @@ class DataGetter(object):
             events = Event.query.filter(Event.state == 'Published')
         else:
             events = Event.query.filter(Event.state == 'Published').filter(Event.privacy != 'private')
-        events = events.filter(Event.end_time >= datetime.datetime.now()).filter(Event.deleted_at.is_(None))
+        events = events.filter(Event.ends_at >= datetime.datetime.now()).filter(Event.deleted_at.is_(None))
         return events
 
     @staticmethod
@@ -448,7 +448,7 @@ class DataGetter(object):
     @staticmethod
     def get_live_events_of_user(user_id=None):
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id = login.current_user.id if not user_id else user_id) \
-            .filter(Event.end_time >= datetime.datetime.now()) \
+            .filter(Event.ends_at >= datetime.datetime.now()) \
             .filter(Event.state == 'Published').filter(Event.deleted_at.is_(None))
         return DataGetter.trim_attendee_events(events, user_id)
 
@@ -466,14 +466,14 @@ class DataGetter(object):
     @staticmethod
     def get_past_events_of_user(user_id=None):
         events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id if not user_id else user_id) \
-            .filter(Event.end_time <= datetime.datetime.now()).filter(
+            .filter(Event.ends_at <= datetime.datetime.now()).filter(
             or_(Event.state == 'Completed', Event.state == 'Published')).filter(Event.deleted_at.is_(None))
         return DataGetter.trim_attendee_events(events, user_id)
 
     @staticmethod
     def get_all_live_events():
         return Event.query.filter(Event.starts_at >= datetime.datetime.now(),
-                                  Event.end_time >= datetime.datetime.now(),
+                                  Event.ends_at >= datetime.datetime.now(),
                                   Event.state == 'Published',
                                   Event.deleted_at.is_(None))
 
@@ -487,7 +487,7 @@ class DataGetter(object):
 
     @staticmethod
     def get_all_past_events():
-        return Event.query.filter(Event.end_time <= datetime.datetime.now(),
+        return Event.query.filter(Event.ends_at <= datetime.datetime.now(),
                                   Event.deleted_at.is_(None),
                                   or_(Event.state == 'Completed', Event.state == 'Published'))
 
@@ -669,7 +669,7 @@ class DataGetter(object):
     @staticmethod
     def get_upcoming_events():
         return Event.query.join(Event.roles, aliased=True) \
-            .filter(Event.starts_at >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
+            .filter(Event.starts_at >= datetime.datetime.now()).filter(Event.ends_at >= datetime.datetime.now()) \
             .filter_by(deleted_at=None)
 
     @staticmethod

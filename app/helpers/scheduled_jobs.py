@@ -56,7 +56,7 @@ def send_after_event_mail():
                 event.id, 'organizer')
             speakers = DataGetter.get_user_event_roles_by_role_name(event.id,
                                                                     'speaker')
-            if datetime.now() > event.end_time:
+            if datetime.now() > event.ends_at:
                 for speaker in speakers:
                     send_after_event(speaker.user.email, event.id,
                                      upcoming_events)

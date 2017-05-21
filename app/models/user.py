@@ -49,8 +49,8 @@ class User(db.Model):
     is_super_admin = db.Column(db.Boolean, default=False)
     is_admin = db.Column(db.Boolean, default=False)
     is_verified = db.Column(db.Boolean, default=False)
-    signup_time = db.Column(db.DateTime)
-    last_access_time = db.Column(db.DateTime)
+    signup_at = db.Column(db.DateTime)
+    last_accessed_at = db.Column(db.DateTime)
     user_detail = db.relationship("UserDetail", uselist=False, backref="user")
     created_at = db.Column(db.DateTime, default=datetime.now())
     deleted_at = db.Column(db.DateTime)
@@ -264,7 +264,7 @@ class User(db.Model):
 
     # update last access time
     def update_lat(self):
-        self.last_access_time = datetime.now()
+        self.last_accessed_at = datetime.now()
 
     def __repr__(self):
         return '<User %r>' % self.email
@@ -279,4 +279,4 @@ class User(db.Model):
 @event.listens_for(User, 'init')
 def receive_init(target, args, kwargs):
     target.user_detail = UserDetail()
-    target.signup_time = datetime.now()
+    target.signup_at = datetime.now()

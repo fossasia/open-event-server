@@ -44,14 +44,14 @@ EXPORTS = [
 # order of keys in export json
 FIELD_ORDER = {
     'event': [
-        'id', 'name', 'latitude', 'longitude', 'location_name', 'starts_at', 'end_time',
+        'id', 'name', 'latitude', 'longitude', 'location_name', 'starts_at', 'ends_at',
         'timezone', 'description', 'background_image', 'logo', 'organizer_name',
         'organizer_description', 'event_url', 'social_links', 'ticket_url', 'privacy', 'type',
         'topic', 'sub_topic', 'code_of_conduct', 'copyright'
     ],
     'microlocations': ['id', 'name', 'floor'],
     'sessions': [
-        'id', 'title', 'subtitle', 'short_abstract', 'long_abstract', 'starts_at', 'end_time',
+        'id', 'title', 'subtitle', 'short_abstract', 'long_abstract', 'starts_at', 'ends_at',
         'session_type', 'track', 'comments', 'language', 'slides', 'audio', 'video'
     ],
     'speakers': [

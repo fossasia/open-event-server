@@ -133,7 +133,7 @@ def explore_view(location):
     if start:
         filtering['__event_starts_at_gt'] = start
     if end:
-        filtering['__event_end_time_lt'] = end
+        filtering['__event_ends_at_lt'] = end
 
     results = marshal(get_paginated(**filtering), EVENT_PAGINATED)
     filters = clean_dict(request.args.items())

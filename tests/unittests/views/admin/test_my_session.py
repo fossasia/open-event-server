@@ -26,7 +26,7 @@ class TestMySession(OpenEventViewTestCase):
             session = Session(title='test session',
                               long_abstract='dsad',
                               starts_at=datetime(2003, 8, 4, 12, 30, 45),
-                              end_time=datetime(2003, 8, 4, 12, 30, 45),
+                              ends_at=datetime(2003, 8, 4, 12, 30, 45),
                               event_id=event.id,
                               speakers=[speaker],
                               state='pending')
@@ -50,7 +50,7 @@ class TestMySession(OpenEventViewTestCase):
             session = Session(title='test',
                               long_abstract='dsad',
                               starts_at=datetime(2003, 8, 4, 12, 30, 45),
-                              end_time=datetime(2003, 8, 4, 12, 30, 45),
+                              ends_at=datetime(2003, 8, 4, 12, 30, 45),
                               event_id=event.id,
                               speakers=[speaker],
                               state='pending')

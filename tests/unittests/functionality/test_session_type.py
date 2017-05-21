@@ -23,7 +23,7 @@ class TestSessionType(OpenEventTestCase):
             session2 = Session(title='test2',
                                long_abstract='dsadsd',
                                starts_at=datetime(2003, 8, 4, 12, 30, 45),
-                               end_time=datetime(2003, 8, 4, 12, 30, 45),
+                               ends_at=datetime(2003, 8, 4, 12, 30, 45),
                                session_type=session_type1)
             save_to_db(event, "Event Saved")
             save_to_db(session1, "Session1 Saved")

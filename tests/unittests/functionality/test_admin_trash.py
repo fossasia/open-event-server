@@ -22,7 +22,7 @@ class TestAdminTrash(OpenEventTestCase):
         with app.test_request_context():
             event = Event(name="event1",
                           starts_at=datetime(2003, 8, 4, 12, 30, 45),
-                          end_time=datetime(2003, 9, 4, 12, 30, 45),
+                          ends_at=datetime(2003, 9, 4, 12, 30, 45),
                           deleted_at=None)
 
             save_to_db(event, "Event saved")
@@ -48,7 +48,7 @@ class TestAdminTrash(OpenEventTestCase):
             session = Session(title='Session 1',
                               long_abstract='dsad',
                               starts_at=datetime(2003, 8, 4, 12, 30, 45),
-                              end_time=datetime(2003, 8, 4, 12, 30, 45),
+                              ends_at=datetime(2003, 8, 4, 12, 30, 45),
                               event_id=1,
                               state='pending',
                               deleted_at=None)

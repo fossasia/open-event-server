@@ -229,7 +229,7 @@ class DataManager(object):
                               subtitle=form.get('subtitle', ''),
                               long_abstract=form.get('long_abstract', ''),
                               starts_at=event.starts_at,
-                              end_time=event.starts_at + timedelta(hours=1),
+                              ends_at=event.starts_at + timedelta(hours=1),
                               event_id=event_id,
                               short_abstract=form.get('short_abstract', ''),
                               level=form.get('level', ''),

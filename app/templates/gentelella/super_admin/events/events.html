@@ -53,7 +53,7 @@
                 <a target="_blank" href="/e/{{ event.identifier }}/">/e/{{ event.identifier }}</a>
             </td>
             <td>{{ event.starts_at }}</td>
-            <td>{{ event.end_time }}</td>
+            <td>{{ event.ends_at }}</td>
             <td>
                 <ol style="padding-left:0;">
                     {% for role in event.get_staff_roles() %}

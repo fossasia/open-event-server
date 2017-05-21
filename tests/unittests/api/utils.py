@@ -20,7 +20,7 @@ def create_event(name='TestEvent', creator_email=None, **kwargs):
     """
     event = Event(name=name,
                   starts_at=datetime(2016, 4, 8, 12, 30, 45),
-                  end_time=datetime(2016, 4, 9, 12, 30, 45),
+                  ends_at=datetime(2016, 4, 9, 12, 30, 45),
                   **kwargs)
 
     save_to_db(event, 'Event saved')
@@ -53,7 +53,7 @@ def create_session(event_id, serial_no='', **kwargs):
         title='TestSession%d_%s' % (event_id, serial_no),
         long_abstract='descp',
         starts_at=kwargs.get('starts_at', datetime(2014, 8, 4, 12, 45, 00)),
-        end_time=datetime(2014, 8, 4, 13, 00, 00),
+        ends_at=datetime(2014, 8, 4, 13, 00, 00),
         event_id=event_id,
         **kwargs
     )
@@ -88,7 +88,7 @@ def create_services(event_id, serial_no=''):
     session = Session(title=test_session,
                       long_abstract='descp',
                       starts_at=datetime(2014, 8, 4, 12, 30, 45),
-                      end_time=datetime(2014, 8, 4, 13, 00, 00),
+                      ends_at=datetime(2014, 8, 4, 13, 00, 00),
                       event_id=event_id,
                       session_type=session_type)
     speaker = Speaker(name=test_speaker,
