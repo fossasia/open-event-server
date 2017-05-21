@@ -10,6 +10,9 @@ spec:
       labels:
         app: api-server
     spec:
+      volumes:
+      - name: data-store
+        emptyDir: {}
       containers:
       - name: api-server
         image: eventyay/nextgen-api-server:latest
@@ -20,7 +23,7 @@ spec:
             path: /health-check/
             port: 8080
           initialDelaySeconds: 15
-          timeoutSeconds: 1
+          timeoutSeconds: 3
         ports:
         - containerPort: 8080
           protocol: TCP
@@ -33,4 +36,19 @@ spec:
           value: 'api'
         - name: FORCE_SSL
           value: 'yes'
+        volumeMounts:
+        - mountPath: /opev/open_event/static/uploads/
+          name: data-store
+      - name: celery
+        image: eventyay/nextgen-api-server:latest
+        command: ["/bin/sh","-c"]
+        args: ["./kubernetes/run.sh"]
+        env:
+        - name: C_FORCE_ROOT
+          value: 'true'
+        - name: DEPLOYMENT
+          value: 'celery'
+        volumeMounts:
+        - mountPath: /opev/open_event/static/uploads/
+          name: data-store
       restartPolicy: Always

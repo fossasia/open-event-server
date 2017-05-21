@@ -31,5 +31,5 @@ docker build --build-arg COMMIT_HASH=$TRAVIS_COMMIT --build-arg BRANCH=$NEXTGEN_
 docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 docker tag eventyay/nextgen-api-server:$TRAVIS_COMMIT eventyay/nextgen-api-server:latest
 docker push eventyay/nextgen-api-server
-kubectl set image deployment/api-server web=eventyay/nextgen-api-server:$TRAVIS_COMMIT
-kubectl set image deployment/celery celery=eventyay/nextgen-api-server:$TRAVIS_COMMIT
+kubectl set image deployment/api-server api-server=eventyay/nextgen-api-server:$TRAVIS_COMMIT
+kubectl set image deployment/api-server celery=eventyay/nextgen-api-server:$TRAVIS_COMMIT

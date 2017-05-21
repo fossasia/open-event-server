@@ -20,5 +20,5 @@ spec:
         - name: HTTP_PORT
           value: '8080'
         - name: REDIRECT
-          value: 'https://staging.eventyay.com'
+          value: 'https://api.eventyay.com'
       restartPolicy: Always
