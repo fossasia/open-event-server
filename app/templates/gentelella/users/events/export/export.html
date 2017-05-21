@@ -231,7 +231,7 @@
         loadPreviousJob(
             task_url = "{{ export_jobs.task }}",
             user_email = "{{ export_jobs.user_email }}",
-            start_time = "{{ export_jobs.start_time | humanize_alt }}"
+            starts_at = "{{ export_jobs.starts_at | humanize_alt }}"
         );
     </script>
 

@@ -131,7 +131,7 @@ def explore_view(location):
     if event_type:
         filtering['type'] = event_type
     if start:
-        filtering['__event_start_time_gt'] = start
+        filtering['__event_starts_at_gt'] = start
     if end:
         filtering['__event_end_time_lt'] = end
 

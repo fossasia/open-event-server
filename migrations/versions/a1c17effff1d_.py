@@ -8,7 +8,7 @@ Create Date: 2017-04-19 05:17:26.020254
 
 # revision identifiers, used by Alembic.
 revision = 'a1c17effff1d'
-down_revision = '1c6f7e989021'
+down_revision = 'ddaa6df27340'
 
 from alembic import op
 import sqlalchemy as sa
@@ -45,6 +45,10 @@ def upgrade():
     op.alter_column('role_invites', 'declined', new_column_name='is_declined')
     op.alter_column('sessions', 'state_email_sent', new_column_name='is_mail_sent')
     op.alter_column('sessions_version', 'state_email_sent', new_column_name='is_mail_sent')
+    op.alter_column('sessions', 'start_time', new_column_name='starts_at')
+    op.alter_column('events', 'start_time', new_column_name='starts_at')
+    op.alter_column('export_jobs', 'start_time', new_column_name='starts_at')
+    op.alter_column('import_jobs', 'start_time', new_column_name='starts_at')
 
     op.drop_constraint(u'association_ticket_id_fkey', 'association', type_='foreignkey')
     op.create_foreign_key(u'association_ticket_id_fkey', 'association', 'tickets', ['ticket_id'], ['id'], ondelete='CASCADE')
@@ -100,6 +104,10 @@ def downgrade():
     op.alter_column('role_invite', 'is_declined', new_column_name='declined')
     op.alter_column('session', 'is_mail_sent', new_column_name='state_email_sent')
     op.alter_column('session_version', 'is_mail_sent', new_column_name='state_email_sent')
+    op.alter_column('session', 'starts_at', new_column_name='start_time')
+    op.alter_column('events', 'starts_at', new_column_name='start_time')
+    op.alter_column('export_jobs', 'starts_at', new_column_name='start_time')
+    op.alter_column('import_jobs', 'starts_at', new_column_name='start_time')
 
     op.drop_constraint(u'user_system_role_role_id_fkey', 'user_system_role', type_='foreignkey')
     op.drop_constraint(u'users_events_roles_role_id_fkey', 'users_events_roles', type_='foreignkey')

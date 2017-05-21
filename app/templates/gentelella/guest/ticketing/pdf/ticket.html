@@ -51,7 +51,7 @@
             <span style="font-size: 15px;">{{ order.event.location_name }}</span><br><br>
 
             <span class="label">{{_("Date and Time")}}</span><br>
-            <span  style="font-size: 15px;">{{ order.event.start_time | datetime }} to {{ order.event.end_time | datetime }}</span>
+            <span  style="font-size: 15px;">{{ order.event.starts_at | datetime }} to {{ order.event.end_time | datetime }}</span>
             <br><br>
 
             <span class="label">{{_("Type")}}</span><br>

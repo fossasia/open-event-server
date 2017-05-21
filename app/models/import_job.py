@@ -8,7 +8,7 @@ class ImportJob(db.Model):
     __tablename__ = 'import_jobs'
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.String, nullable=False)
-    start_time = db.Column(db.DateTime)
+    starts_at = db.Column(db.DateTime)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
     user = db.relationship('User', backref='import_jobs')
@@ -20,7 +20,7 @@ class ImportJob(db.Model):
         self.user = user
         self.result = result
         self.result_status = result_status
-        self.start_time = datetime.now()
+        self.starts_at = datetime.now()
 
     def __repr__(self):
         return '<ImportJob %d by user %s>' % (self.id, str(self.user))

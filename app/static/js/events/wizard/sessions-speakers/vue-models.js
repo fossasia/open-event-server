@@ -33,7 +33,7 @@ var TRACK = {
 var CALL_FOR_SPEAKERS = {
     announcement: '',
     start_date: '',
-    start_time: '',
+    starts_at: '',
     end_date: '',
     end_time: '',
     timezone: current_timezone,
@@ -77,7 +77,7 @@ function getCallForSpeakers(event) {
     var callForSpeakers = _.clone(CALL_FOR_SPEAKERS);
     var currentDate = (new Date());
     callForSpeakers.start_date = currentDate.ddmmyyyy();
-    callForSpeakers.start_time = currentDate.hhmm();
+    callForSpeakers.starts_at = currentDate.hhmm();
     callForSpeakers.end_date = event.end_time_date;
     callForSpeakers.end_time = event.end_time_time;
     callForSpeakers.timezone = event.timezone;

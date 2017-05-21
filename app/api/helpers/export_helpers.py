@@ -44,14 +44,14 @@ EXPORTS = [
 # order of keys in export json
 FIELD_ORDER = {
     'event': [
-        'id', 'name', 'latitude', 'longitude', 'location_name', 'start_time', 'end_time',
+        'id', 'name', 'latitude', 'longitude', 'location_name', 'starts_at', 'end_time',
         'timezone', 'description', 'background_image', 'logo', 'organizer_name',
         'organizer_description', 'event_url', 'social_links', 'ticket_url', 'privacy', 'type',
         'topic', 'sub_topic', 'code_of_conduct', 'copyright'
     ],
     'microlocations': ['id', 'name', 'floor'],
     'sessions': [
-        'id', 'title', 'subtitle', 'short_abstract', 'long_abstract', 'start_time', 'end_time',
+        'id', 'title', 'subtitle', 'short_abstract', 'long_abstract', 'starts_at', 'end_time',
         'session_type', 'track', 'comments', 'language', 'slides', 'audio', 'video'
     ],
     'speakers': [
@@ -234,7 +234,7 @@ def create_export_job(task_id, event_id):
         export_job.task = task_url
         export_job.user_email = g.user.email
         export_job.event = EventModel.query.get(event_id)
-        export_job.start_time = datetime.now()
+        export_job.starts_at = datetime.now()
     else:
         export_job = ExportJob(
             task=task_url, user_email=g.user.email,

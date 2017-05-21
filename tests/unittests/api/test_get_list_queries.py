@@ -57,12 +57,12 @@ class TestGetListQueries(OpenEventTestCase):
             # Event is of Apr 16
             resp = self.app.get(path + '?end_time_lt=2015-12-31T23:59:59')
             self.assertEqual(len(resp.data), 3, msg=resp.data)
-            resp = self.app.get(path + '?start_time_gt=2015-12-31T23:59:59')
+            resp = self.app.get(path + '?starts_at_gt=2015-12-31T23:59:59')
             self.assertIn('TestEvent0', resp.data)
             # add one more event of May 16
             resp = self._post(path, POST_EVENT_DATA)
             # test
-            resp = self.app.get(path + '?start_time_lt=2016-05-31T23:59:59')
+            resp = self.app.get(path + '?starts_at_lt=2016-05-31T23:59:59')
             self.assertEqual(len(json.loads(resp.data)), 2, msg=resp.data)
             resp = self.app.get(path + '?end_time_gt=2016-05-01T00:00:00')
             self.assertIn('"TestEvent"', resp.data)
@@ -96,12 +96,12 @@ class TestGetListQueries(OpenEventTestCase):
             resp = self.app.get(path)
             self.assertIn('TestSession', resp.data)
             # check results when query exists
-            for _ in ['start_time_lt', 'end_time_lt']:
+            for _ in ['starts_at_lt', 'end_time_lt']:
                 resp = self.app.get(path + '?%s=2014-05-12T00:00:00' % _)
                 self.assertNotIn('TestSession', resp.data)
                 resp = self.app.get(path + '?%s=2017-05-12T00:00:00' % _)
                 self.assertIn('TestSession', resp.data)
-            for _ in ['start_time_gt', 'end_time_gt']:
+            for _ in ['starts_at_gt', 'end_time_gt']:
                 resp = self.app.get(path + '?%s=2018-05-12T00:00:00' % _)
                 self.assertNotIn('TestSession', resp.data)
                 resp = self.app.get(path + '?%s=2015-05-12T00:00:00' % _)
@@ -113,15 +113,15 @@ class TestGetListQueries(OpenEventTestCase):
             self._post(path, POST_SESSION_DATA)
             # 2016-05-30 8:47 to 9:47
             new_data = POST_SESSION_DATA.copy()
-            new_data['start_time'] = '2016-05-30T10:47:37'
+            new_data['starts_at'] = '2016-05-30T10:47:37'
             new_data['end_time'] = '2016-05-30T11:47:37'
             self._post(path, new_data)
             # check ordering
-            data = json.loads(self.app.get(path + '?order_by=start_time.asc').data)
+            data = json.loads(self.app.get(path + '?order_by=starts_at.asc').data)
             self.assertEqual(data[0]['id'], 1)
             self.assertEqual(data[1]['id'], 2)
             # order reverse
-            data = json.loads(self.app.get(path + '?order_by=start_time.desc').data)
+            data = json.loads(self.app.get(path + '?order_by=starts_at.desc').data)
             self.assertEqual(data[0]['id'], 2)
             self.assertEqual(data[1]['id'], 1)
 

@@ -21,7 +21,7 @@ class Session(db.Model):
     short_abstract = db.Column(db.Text)
     long_abstract = db.Column(db.Text)
     comments = db.Column(db.Text)
-    start_time = db.Column(db.DateTime, nullable=False)
+    starts_at = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
     track_id = db.Column(db.Integer, db.ForeignKey('tracks.id', ondelete='CASCADE'))
     speakers = db.relationship(
@@ -53,7 +53,7 @@ class Session(db.Model):
                  short_abstract='',
                  long_abstract='',
                  comments=None,
-                 start_time=None,
+                 starts_at=None,
                  end_time=None,
                  track=None,
                  language=None,
@@ -79,7 +79,7 @@ class Session(db.Model):
         self.short_abstract = short_abstract
         self.long_abstract = long_abstract
         self.comments = comments
-        self.start_time = start_time
+        self.starts_at = starts_at
         self.end_time = end_time
         self.track = track
         self.language = language
@@ -115,7 +115,7 @@ class Session(db.Model):
             'short_abstract': self.short_abstract,
             'long_abstract': self.long_abstract,
             'comments': self.comments,
-            'begin': DateFormatter().format_date(self.start_time),
+            'begin': DateFormatter().format_date(self.starts_at),
             'end': DateFormatter().format_date(self.end_time),
             'track': self.track.id if self.track else None,
             'speakers': [

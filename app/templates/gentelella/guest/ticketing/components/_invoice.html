@@ -34,7 +34,7 @@
                     {% endif %}
                     <strong>{{ _("Payment Due") }}:</strong> {{ order.completed_at.strftime('%B %d, %Y %I:%M %p') }}<br>
                     <strong>{{ _("Invoice number") }}:</strong> {{ order.get_invoice_number() }}<br>
-                    <strong>{{ _("Event Date") }}:</strong> {{ order.event.start_time.strftime('%A, %B %d, %Y at %I:%M %p') }}
+                    <strong>{{ _("Event Date") }}:</strong> {{ order.event.starts_at.strftime('%A, %B %d, %Y at %I:%M %p') }}
                     - {{ order.event.end_time.strftime('%A, %B %d, %Y at %I:%M %p') }} ({{ order.event.timezone }})
                 </div>
             </div>

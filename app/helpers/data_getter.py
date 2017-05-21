@@ -278,10 +278,10 @@ class DataGetter(object):
         """
         if upcoming_events:
             return Session.query.filter(Session.speakers.any(Speaker.user_id == (login.current_user.id if not user_id else int(user_id)))).filter(
-                Session.start_time >= datetime.datetime.now()).filter(Session.deleted_at.is_(None))
+                Session.starts_at >= datetime.datetime.now()).filter(Session.deleted_at.is_(None))
         else:
             return Session.query.filter(Session.speakers.any(Speaker.user_id == (login.current_user.id if not user_id else int(user_id)))).filter(
-                Session.start_time < datetime.datetime.now()).filter(Session.deleted_at.is_(None))
+                Session.starts_at < datetime.datetime.now()).filter(Session.deleted_at.is_(None))
 
     @staticmethod
     def get_speakers(event_id):
@@ -472,7 +472,7 @@ class DataGetter(object):
 
     @staticmethod
     def get_all_live_events():
-        return Event.query.filter(Event.start_time >= datetime.datetime.now(),
+        return Event.query.filter(Event.starts_at >= datetime.datetime.now(),
                                   Event.end_time >= datetime.datetime.now(),
                                   Event.state == 'Published',
                                   Event.deleted_at.is_(None))
@@ -647,7 +647,7 @@ class DataGetter(object):
         Get all imports by user by recent first
         """
         imports = ImportJob.query.filter_by(user=login.current_user if not user_id else int(user_id)) \
-            .order_by(desc(ImportJob.start_time)).limit(count).all()
+            .order_by(desc(ImportJob.starts_at)).limit(count).all()
         return imports
 
     @staticmethod
@@ -669,7 +669,7 @@ class DataGetter(object):
     @staticmethod
     def get_upcoming_events():
         return Event.query.join(Event.roles, aliased=True) \
-            .filter(Event.start_time >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
+            .filter(Event.starts_at >= datetime.datetime.now()).filter(Event.end_time >= datetime.datetime.now()) \
             .filter_by(deleted_at=None)
 
     @staticmethod

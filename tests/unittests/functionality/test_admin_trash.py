@@ -21,7 +21,7 @@ class TestAdminTrash(OpenEventTestCase):
     def test_add_event_to_trash(self):
         with app.test_request_context():
             event = Event(name="event1",
-                          start_time=datetime(2003, 8, 4, 12, 30, 45),
+                          starts_at=datetime(2003, 8, 4, 12, 30, 45),
                           end_time=datetime(2003, 9, 4, 12, 30, 45),
                           deleted_at=None)
 
@@ -47,7 +47,7 @@ class TestAdminTrash(OpenEventTestCase):
             event = ObjectMother.get_event()
             session = Session(title='Session 1',
                               long_abstract='dsad',
-                              start_time=datetime(2003, 8, 4, 12, 30, 45),
+                              starts_at=datetime(2003, 8, 4, 12, 30, 45),
                               end_time=datetime(2003, 8, 4, 12, 30, 45),
                               event_id=1,
                               state='pending',

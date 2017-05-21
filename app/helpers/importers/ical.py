@@ -33,11 +33,11 @@ class ICalImporter:
             if not event.name:
                 event.name = get_valid_event_name(session.decoded('UID'))
 
-            start_time = session.decoded('dtstart')
+            starts_at = session.decoded('dtstart')
             end_time = session.decoded('dtend')
 
-            if not event.start_time or start_time < event.start_time:
-                event.start_time = start_time
+            if not event.starts_at or starts_at < event.starts_at:
+                event.starts_at = starts_at
             if not event.end_time or end_time > event.end_time:
                 event.end_time = end_time
 
@@ -73,7 +73,7 @@ class ICalImporter:
             session.microlocation_id = microlocation.id
             session.title = session_block.decoded('summary')
             session.short_abstract = session_block.decoded('description')
-            session.start_time = session_block.decoded('dtstart')
+            session.starts_at = session_block.decoded('dtstart')
             session.end_time = session_block.decoded('dtend')
             session.signup_url = session_block.decoded('url')
             session.event_id = event.id

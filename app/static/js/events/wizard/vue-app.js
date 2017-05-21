@@ -53,12 +53,12 @@ var app = new Vue({
         invalidDateRange: function () {
             if(this.event.end_time_date.trim().length <= 0
                 || this.event.end_time_time.trim().length <= 0
-                || this.event.start_time_date.trim().length <= 0
-                || this.event.start_time_time.trim().length <= 0) {
+                || this.event.starts_at_date.trim().length <= 0
+                || this.event.starts_at_time.trim().length <= 0) {
                 return false;
             }
             var format = 'MM/DD/YYYY HH:mm';
-            var start = moment(this.event.start_time_date.trim() + " " + this.event.start_time_time.trim(), format);
+            var start = moment(this.event.starts_at_date.trim() + " " + this.event.starts_at_time.trim(), format);
             var end = moment(this.event.end_time_date.trim() + " " + this.event.end_time_time.trim(), format);
             return end.isBefore(start);
         }
@@ -90,10 +90,10 @@ var app = new Vue({
         'event.name': function () {
             this.disableMove = shouldDisableMove(this);
         },
-        'event.start_time_time': function () {
+        'event.starts_at_time': function () {
             this.disableMove = shouldDisableMove(this);
         },
-        'event.start_time_date': function () {
+        'event.starts_at_date': function () {
             this.disableMove = shouldDisableMove(this);
         },
         'event.end_time_time': function () {
@@ -186,7 +186,7 @@ var app = new Vue({
         addTicket: function (ticketType) {
             var ticket = _.cloneDeep(TICKET);
             ticket.sales_start_date = moment().tz(this.event.timezone).format('MM/DD/YYYY');
-            ticket.sales_start_time = moment().tz(this.event.timezone).format('HH:mm');
+            ticket.sales_starts_at = moment().tz(this.event.timezone).format('HH:mm');
             ticket.sales_end_date = moment().tz(this.event.timezone).add(10, 'days').format('MM/DD/YYYY');
             ticket.sales_end_time = moment().tz(this.event.timezone).add(10, 'days').hour(22).minute(0).format('HH:mm');
             ticket.price = 0.01;
@@ -377,8 +377,8 @@ app.$nextTick(function () {
 function shouldDisableMove($this) {
     return (
         $this.event.name.trim() === '' ||
-        $this.event.start_time_time.trim() === '' ||
-        $this.event.start_time_date.trim() === '' ||
+        $this.event.starts_at_time.trim() === '' ||
+        $this.event.starts_at_date.trim() === '' ||
         $this.event.end_time_time.trim() ==='' ||
         $this.event.end_time_date.trim() === '' ||
         checkTickets($this.event.tickets)

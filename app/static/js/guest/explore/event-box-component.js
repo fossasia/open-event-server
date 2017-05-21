@@ -19,7 +19,7 @@ Vue.component('event-box', {
     },
     computed: {
         startTimeFormatted: function () {
-            return moment(this.event.start_time).format('ddd, MMM DD HH:mm A');
+            return moment(this.event.starts_at).format('ddd, MMM DD HH:mm A');
         },
         locationName: function () {
             if (this.event.location_name && _.isString(this.event.location_name)) {

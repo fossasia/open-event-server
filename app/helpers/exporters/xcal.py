@@ -37,11 +37,11 @@ class XCalExporter:
             .filter_by(event_id=event_id) \
             .filter_by(state='accepted') \
             .filter(Session.deleted_at.is_(None)) \
-            .order_by(asc(Session.start_time)).all()
+            .order_by(asc(Session.starts_at)).all()
 
         for session in sessions:
 
-            if session and session.start_time and session.end_time:
+            if session and session.starts_at and session.end_time:
 
                 v_event_node = SubElement(v_calendar_node, 'vevent')
 
@@ -52,13 +52,13 @@ class XCalExporter:
                 uid_node.text = str(session.id) + "-" + event.identifier
 
                 dtstart_node = SubElement(v_event_node, 'dtstart')
-                dtstart_node.text = tz.localize(session.start_time).isoformat()
+                dtstart_node.text = tz.localize(session.starts_at).isoformat()
 
                 dtend_node = SubElement(v_event_node, 'dtend')
                 dtend_node.text = tz.localize(session.end_time).isoformat()
 
                 duration_node = SubElement(v_event_node, 'duration')
-                duration_node.text = format_timedelta(session.end_time - session.start_time) + "00:00"
+                duration_node.text = format_timedelta(session.end_time - session.starts_at) + "00:00"
 
                 summary_node = SubElement(v_event_node, 'summary')
                 summary_node.text = session.title

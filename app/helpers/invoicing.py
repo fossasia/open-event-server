@@ -158,7 +158,7 @@ class InvoicingManager(object):
 
         try:
             discount_code.valid_from = datetime.strptime(form.get('start_date', None) + ' ' +
-                                                         form.get('start_time', None), '%m/%d/%Y %H:%M')
+                                                         form.get('starts_at', None), '%m/%d/%Y %H:%M')
         except:
             discount_code.valid_from = None
 

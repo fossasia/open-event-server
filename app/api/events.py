@@ -69,7 +69,7 @@ EVENT = api.model('Event', {
     'event_url': fields.Uri(),
     'email': fields.Email(),
     'logo': fields.Upload(),
-    'start_time': fields.DateTime(required=True),
+    'starts_at': fields.DateTime(required=True),
     'end_time': fields.DateTime(required=True),
     'timezone': fields.String(),
     'latitude': fields.Float(),
@@ -143,7 +143,7 @@ class EventDAO(BaseDAO):
         Fixes the payload data.
         Here converts string time from datetime obj
         """
-        datetime_fields = ['start_time', 'end_time', 'schedule_published_on']
+        datetime_fields = ['starts_at', 'end_time', 'schedule_published_on']
         for f in datetime_fields:
             if f in data:
                 data[f] = EVENT_POST[f].from_str(data.get(f))
@@ -217,8 +217,8 @@ EVENT_PARAMS = {
     'type': {},
     'topic': {},
     'sub_topic': {},
-    'start_time_gt': {},
-    'start_time_lt': {},
+    'starts_at_gt': {},
+    'starts_at_lt': {},
     'end_time_gt': {},
     'end_time_lt': {},
     'time_period': {},
@@ -270,8 +270,8 @@ class EventResource():
     event_parser.add_argument('type', type=str)
     event_parser.add_argument('topic', type=str)
     event_parser.add_argument('sub_topic', type=str)
-    event_parser.add_argument('start_time_gt', dest='__event_start_time_gt')
-    event_parser.add_argument('start_time_lt', dest='__event_start_time_lt')
+    event_parser.add_argument('starts_at_gt', dest='__event_starts_at_gt')
+    event_parser.add_argument('starts_at_lt', dest='__event_starts_at_lt')
     event_parser.add_argument('end_time_gt', dest='__event_end_time_gt')
     event_parser.add_argument('end_time_lt', dest='__event_end_time_lt')
     event_parser.add_argument('time_period', type=str, dest='__event_time_period')

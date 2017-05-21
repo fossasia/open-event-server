@@ -14,8 +14,8 @@ from tests.unittests.utils import OpenEventTestCase
 def get_event():
     event = ObjectMother.get_event()
     event.name = 'Super Event'
-    event.start_time = datetime.now() + timedelta(days=5)
-    event.end_time = event.start_time + timedelta(days=5)
+    event.starts_at = datetime.now() + timedelta(days=5)
+    event.end_time = event.starts_at + timedelta(days=5)
     event.location_name = 'India'
     event.searchable_location_name = 'India'
     event.state = 'Published'
@@ -24,8 +24,8 @@ def get_event():
 
 def get_event_two():
     event = get_event()
-    event.start_time = datetime.now() + timedelta(days=8)
-    event.end_time = event.start_time + timedelta(days=4)
+    event.starts_at = datetime.now() + timedelta(days=8)
+    event.end_time = event.starts_at + timedelta(days=4)
     event.name = 'Random Event'
     return event
 
@@ -121,11 +121,11 @@ class TestSearchEventPage(OpenEventTestCase):
             save_to_db(event_two, "Event Saved")
 
             query_params_one = {
-                'period': (event_one.start_time - timedelta(days=1)).strftime('%m-%d-%Y') + ' to ' +
+                'period': (event_one.starts_at - timedelta(days=1)).strftime('%m-%d-%Y') + ' to ' +
                           (event_one.end_time + timedelta(days=1)).strftime('%m-%d-%Y')
             }
             query_params_two = {
-                'period': (event_two.start_time - timedelta(days=1)).strftime('%m-%d-%Y') + ' to ' +
+                'period': (event_two.starts_at - timedelta(days=1)).strftime('%m-%d-%Y') + ' to ' +
                           (event_two.end_time + timedelta(days=1)).strftime('%m-%d-%Y')
             }
             assert_events(self, event_one.location_name, query_params_one, query_params_two)

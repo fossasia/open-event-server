@@ -48,7 +48,7 @@ class Event(db.Model):
     event_url = db.Column(db.String)
     email = db.Column(db.String)
     logo = db.Column(db.String)
-    start_time = db.Column(db.DateTime, nullable=False)
+    starts_at = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
     timezone = db.Column(db.String, nullable=False, default="UTC")
     latitude = db.Column(db.Float)
@@ -108,7 +108,7 @@ class Event(db.Model):
     def __init__(self,
                  name=None,
                  logo=None,
-                 start_time=None,
+                 starts_at=None,
                  end_time=None,
                  timezone='UTC',
                  latitude=None,
@@ -158,7 +158,7 @@ class Event(db.Model):
         self.name = name
         self.logo = logo
         self.email = email
-        self.start_time = start_time
+        self.starts_at = starts_at
         self.end_time = end_time
         self.timezone = timezone
         self.latitude = latitude
@@ -246,7 +246,7 @@ class Event(db.Model):
             'id': self.id,
             'name': self.name,
             'logo': self.logo,
-            'begin': DateFormatter().format_date(self.start_time),
+            'begin': DateFormatter().format_date(self.starts_at),
             'end': DateFormatter().format_date(self.end_time),
             'timezone': self.timezone,
             'latitude': self.latitude,

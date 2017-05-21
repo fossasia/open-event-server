@@ -62,10 +62,10 @@ function exportTask(url) {
 }
 
 // load previous job data
-function loadPreviousJob(task_url, user_email, start_time) {
+function loadPreviousJob(task_url, user_email, starts_at) {
     $('#export_status').text('Loading...');
     if (task_url) {
-        isTaskInvalid(task_url, user_email, start_time);
+        isTaskInvalid(task_url, user_email, starts_at);
     } else {
         noPreviousJob();
     }
@@ -78,11 +78,11 @@ function noPreviousJob() {
 }
 
 // load data about previous job helper (real) function
-function loadPreviousJob_(task_url, user_email, start_time) {
+function loadPreviousJob_(task_url, user_email, starts_at) {
     if (user_email) {
         $('#export_creator').show();
         $('#export_creator_email').text(user_email);
-        $('#export_creator_datetime').text(start_time);
+        $('#export_creator_datetime').text(starts_at);
     }
     if (task_url) {
         exportTask(task_url);
@@ -90,7 +90,7 @@ function loadPreviousJob_(task_url, user_email, start_time) {
 }
 
 // is task old and not available on redis
-function isTaskInvalid(task_url, user_email, start_time) {
+function isTaskInvalid(task_url, user_email, starts_at) {
     jQuery.ajax({
         url: task_url,
         type: 'GET',
@@ -98,12 +98,12 @@ function isTaskInvalid(task_url, user_email, start_time) {
             if (data['state'] == 'PENDING') {
                 noPreviousJob();
             } else {
-                loadPreviousJob_(task_url, user_email, start_time);
+                loadPreviousJob_(task_url, user_email, starts_at);
             }
         },
         error: function (x) {
             noPreviousJob();
-            loadPreviousJob_(task_url, user_email, start_time);
+            loadPreviousJob_(task_url, user_email, starts_at);
         }
     });
 }

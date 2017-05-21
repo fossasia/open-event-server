@@ -54,7 +54,7 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**logo** | string | Optional | Public |
 |**location_name** | string | Optional | Public |
 |**searchable_location_name** | string | Optional | Public |
-|**start_time** | string | Required | Public |
+|**starts_at** | string | Required | Public |
 |**end_time** | string | Required | Public |
 |**latitude** | number | Optional | Public |
 |**longitude** | number | Optional | Public |
@@ -150,7 +150,7 @@ Note: If the `microlocation` field of the session is null, the session is unsche
 |**short_abstract** | string | Optional | Public |
 |**long_abstract** | string | Required | Public |
 |**comments** | string | Optional | Public |
-|**start_time** | string | Required | Public |
+|**starts_at** | string | Required | Public |
 |**end_time** | string | Required | Public |
 |**speakers** | Array[**SessionSpeaker**] | Optional | Public |
 |**track** | **SessionTrack** | Optional | Public |
