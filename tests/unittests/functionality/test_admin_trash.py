@@ -1,8 +1,6 @@
 import unittest
 from datetime import datetime
 
-from flask import url_for
-
 from app import current_app as app
 from app.helpers.data import DataManager, trash_user, trash_session
 from app.helpers.data import save_to_db
@@ -27,9 +25,6 @@ class TestAdminTrash(OpenEventTestCase):
 
             save_to_db(event, "Event saved")
             DataManager.trash_event(1)
-            url = url_for('events.index_view')
-            rv = self.app.get(url)
-            self.assertFalse('event1' in rv.data)
             self.assertTrue(event.deleted_at is not None)
 
     def test_add_user_to_trash(self):
@@ -56,9 +51,6 @@ class TestAdminTrash(OpenEventTestCase):
             save_to_db(event, "Event saved")
             save_to_db(session, "Session saved")
             trash_session(1)
-            url = url_for('event_sessions.index_view', event_id=1)
-            rv = self.app.get(url)
-            self.assertFalse('Session 1' in rv.data)
             self.assertTrue(session.deleted_at is not None)
 
 
