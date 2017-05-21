@@ -20,12 +20,10 @@ def index_view():
 def mark_as_read(notification_id):
     user = login.current_user
     notification = DataGetter.get_user_notification(notification_id)
-
-    if notification and notification.user == user:
-        DataManager.mark_user_notification_as_read(notification)
-        return jsonify({'status': 'ok'})
-    else:
+    if not notification and not notification.user == user:
         abort(404)
+    DataManager.mark_user_notification_as_read(notification)
+    return jsonify({'status': 'ok'})
 
 
 @notifications.route('/allread/')

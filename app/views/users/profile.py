@@ -23,9 +23,8 @@ def index_view():
                      "Please verify by clicking on the confirmation link that has been emailed to you."
                      '<br>Did not get the email? Please <a href="/resend_email/" class="alert-link"> '
                      'click here to resend the confirmation.</a>'))
-    profile = DataGetter.get_user(login.current_user.id)
     return render_template('gentelella/users/profile/index.html',
-                           profile=profile)
+                           profile=DataGetter.get_user(login.current_user.id))
 
 
 @profile.route('/edit/', methods=('GET', 'POST'))
@@ -36,6 +35,7 @@ def edit_view(user_id=None):
         user_id = login.current_user.id
     else:
         admin = True
+
     if request.method == 'POST':
         DataManager.update_user(request.form, int(user_id))
         if admin:
@@ -76,8 +76,7 @@ def bgimage_upload(user_id):
                     user_id=user_id
                 ))
             return jsonify({'status': 'ok', 'background_url': background_url})
-        else:
-            return jsonify({'status': 'no bgimage'})
+        return jsonify({'status': 'no bgimage'})
     elif request.method == 'DELETE':
         profile = DataGetter.get_user(int(user_id))
         profile.avatar_uploaded = ''
@@ -96,5 +95,4 @@ def create_event_bgimage_upload():
                 UPLOAD_PATHS['temp']['event'].format(uuid=uuid4())
             )
             return jsonify({'status': 'ok', 'background_url': background_url})
-        else:
-            return jsonify({'status': 'no bgimage'})
+        return jsonify({'status': 'no bgimage'})
