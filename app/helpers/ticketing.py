@@ -383,6 +383,7 @@ class TicketingManager(object):
 
             # add attendee role to user
             if order.status == "completed":
+                send_notif_for_after_purchase(order.user, invoice_id, order_url)
                 trigger_after_purchase_notifications(email, order.event_id, order.event, invoice_id, order_url)
                 send_email_for_after_purchase(email, invoice_id, order_url, order.event.name,
                                               order.event.organizer_name)
