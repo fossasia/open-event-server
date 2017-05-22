@@ -126,6 +126,8 @@ _You can delete the instance if your not planning to use it for anything else. B
 - Add the **External IP Address One** to `kubernetes/yamls/nginx/service.yml` for the parameter `loadBalancerIP`.
 - Add your domain name to `kubernetes/yamls/web/ingress-notls.yml` & `kubernetes/yamls/web/ingress-tls.yml`. (replace `api.eventyay.com`)
 - Add your email ID to `kubernetes/yamls/lego/configmap.yml` for the parameter `lego.email`.
+- In `kubernetes/yamls/postgres/postgres-pod.yml` ensure `pdName` is `pg-data-disk`. Else change it.
+- In `kubernetes/yamls/redirector/api.eventyay.com/redirector-deployment.yml` add your domain (`https://<yourdomain>`) as the value of `REDIRECT`. (Replace `https://api.eventyay.com`)
 
 ## Deploy our pods, services and deployments
 
