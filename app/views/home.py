@@ -21,7 +21,12 @@ from app.helpers.helpers import send_email_with_reset_password_hash, send_email_
     get_serializer, get_request_stats
 from app.helpers.oauth import OAuth, FbOAuth
 from app.models.user import User
-from app.views.public.explore import erase_from_dict
+
+
+def erase_from_dict(d, k):
+    if isinstance(d, dict):
+        if k in d.keys():
+            d.pop(k)
 
 
 def intended_url():

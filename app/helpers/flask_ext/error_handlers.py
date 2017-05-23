@@ -3,7 +3,8 @@ import json
 from flask import render_template
 from flask import request
 
-from app.api.helpers.errors import NotFoundError, PermissionDeniedError, ServerError, ValidationError
+from app.helpers.flask_ext.errors import NotFoundError, PermissionDeniedError, ServerError, ValidationError
+
 
 # taken from http://flask.pocoo.org/snippets/45/
 def request_wants_json():

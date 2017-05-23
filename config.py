@@ -115,7 +115,7 @@ class TestingConfig(Config):
     The configuration for a test suit
     """
     INTEGRATE_SOCKETIO = False
-    TESTING = True
+    TESTING = False
     CELERY_ALWAYS_EAGER = True
     CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
     SQLALCHEMY_RECORD_QUERIES = True

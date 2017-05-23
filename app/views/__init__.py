@@ -7,7 +7,6 @@ from app.views.home import home_routes
 from app.views.public.babel_view import babel
 from app.views.public.event_detail import event_detail
 from app.views.public.event_invoice import event_invoicing
-from app.views.public.explore import explore
 from app.views.public.pages import pages
 from app.views.public.ticketing import ticketing
 from app.views.sitemap import sitemaps
@@ -59,7 +58,7 @@ class BlueprintsManager:
 
         app.register_blueprint(babel)
         app.register_blueprint(event_invoicing)
-        app.register_blueprint(explore)
+        #app.register_blueprint(explore)
         app.register_blueprint(ticketing)
         app.register_blueprint(event_detail)
 
