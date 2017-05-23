@@ -39,7 +39,7 @@ from app.models.session import Session
 from helpers.jwt import jwt_authenticate, jwt_identity
 from helpers.formatter import operation_name
 from app.helpers.data_getter import DataGetter
-from app.api.helpers.errors import NotFoundError, PermissionDeniedError, ServerError, ValidationError
+from app.helpers.flask_ext.errors import NotFoundError, PermissionDeniedError, ServerError, ValidationError
 from apscheduler.schedulers.background import BackgroundScheduler
 from app.helpers.data import DataManager, delete_from_db
 from app.helpers.helpers import send_after_event
@@ -47,10 +47,9 @@ from app.helpers.cache import cache
 from app.helpers.babel import babel
 from helpers.helpers import send_email_for_expired_orders
 from werkzeug.contrib.profiler import ProfilerMiddleware
-
+from app.views import BlueprintsManager
 from flask.ext.sqlalchemy import get_debug_queries
 from app.helpers.auth import AuthManager
-from app.views import BlueprintsManager
 
 from app.helpers.flask_ext.error_handlers import init_error_handlers
 from app.helpers.flask_ext.jinja.filters import init_filters
@@ -84,6 +83,7 @@ app.wsgi_app = ReverseProxied(app.wsgi_app)
 
 def create_app():
     babel.init_app(app)
+    # turned off for nextgen api
     BlueprintsManager.register(app)
     Migrate(app, db)
 
@@ -130,9 +130,10 @@ def create_app():
         app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
 
     # API version 2
-    with app.app_context():
-        from app.api import api_v1
-        app.register_blueprint(api_v1)
+    #turned off until the new api setup is complete
+    #with app.app_context():
+    #    from app.api import api_v1
+    #    app.register_blueprint(api_v1)
 
     sa.orm.configure_mappers()
 
@@ -189,7 +190,8 @@ def update_sent_state(sender=None, body=None, **kwargs):
 
 # register celery tasks. removing them will cause the tasks to not function. so don't remove them
 # it is important to register them after celery is defined to resolve circular imports
-import api.helpers.tasks
+
+#import api.helpers.tasks
 import helpers.tasks
 
 
