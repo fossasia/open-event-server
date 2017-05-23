@@ -173,7 +173,7 @@ class BookedTicket(db.Model):
                                           name='user_ticket_uc'),)
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     user = db.relationship('User', backref='booked_ticket')
     ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE'))
     ticket = db.relationship('Ticket', backref='booked_ticket')

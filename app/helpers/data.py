@@ -51,7 +51,6 @@ from app.models.speaker import Speaker
 from app.models.custom_system_role import CustomSysRole, UserSystemRole
 from app.models.track import Track
 from app.models.user import User, ATTENDEE
-from app.models.user_detail import UserDetail
 from app.helpers.signals import sessions_modified, speakers_modified
 from app.models.user_permission import UserPermission
 from app.models.users_events_role import UsersEventsRoles
@@ -515,7 +514,6 @@ class DataManager(object):
     def update_user(form, user_id, contacts_only_update=False):
 
         user = User.query.filter_by(id=user_id).first()
-        user_detail = UserDetail.query.filter_by(user_id=user_id).first()
 
         if user.email != form['email']:
             record_activity('update_user_email',
@@ -531,45 +529,45 @@ class DataManager(object):
             Helper.send_email_confirmation(form, link)
             user.email = form['email']
 
-        user_detail.contact = form['contact']
+        user.contact = form['contact']
         if not contacts_only_update:
-            user_detail.firstname = form['firstname']
-            user_detail.lastname = form['lastname']
+            user.firstname = form['firstname']
+            user.lastname = form['lastname']
 
             if form.get('facebook', '').strip() != '':
-                user_detail.facebook = 'https://facebook.com/' + form['facebook'].strip()
+                user.facebook = 'https://facebook.com/' + form['facebook'].strip()
             else:
-                user_detail.facebook = ''
+                user.facebook = ''
 
             if form.get('twitter', '').strip() != '':
-                user_detail.twitter = 'https://twitter.com/' + form['twitter'].strip()
+                user.twitter = 'https://twitter.com/' + form['twitter'].strip()
             else:
-                user_detail.twitter = ''
+                user.twitter = ''
 
             if form.get('instagram', '').strip() != '':
-                user_detail.instagram = 'https://instagram.com/' + form['instagram'].strip()
+                user.instagram = 'https://instagram.com/' + form['instagram'].strip()
             else:
-                user_detail.instagram = ''
+                user.instagram = ''
 
             if form.get('google', '').strip() != '':
-                user_detail.google = 'https://plus.google.com/' + form['google'].strip()
+                user.google = 'https://plus.google.com/' + form['google'].strip()
             else:
-                user_detail.google = ''
+                user.google = ''
 
-            user_detail.details = form['details']
+            user.details = form['details']
             avatar_img = form.get('avatar-img', None)
             if string_not_empty(avatar_img) and avatar_img:
-                user_detail.avatar_uploaded = ""
-                user_detail.thumbnail = ""
-                user_detail.small = ""
-                user_detail.icon = ""
+                user.avatar_uploaded = ""
+                user.thumbnail = ""
+                user.small = ""
+                user.icon = ""
                 filename = '{}.png'.format(get_image_file_name())
                 filepath = '{}/static/{}'.format(path.realpath('.'),
                                                  avatar_img[len('/serve_static/'):])
                 # print "File path 1", filepath
                 avatar_img_file = UploadedFile(filepath, filename)
                 avatar_img_temp = upload(avatar_img_file, 'users/%d/avatar' % int(user_id))
-                user_detail.avatar_uploaded = avatar_img_temp
+                user.avatar_uploaded = avatar_img_temp
                 image_sizes = DataGetter.get_image_sizes_by_type(type='profile')
                 if not image_sizes:
                     image_sizes = ImageSizes(full_width=150,
@@ -629,10 +627,10 @@ class DataManager(object):
                         user_id=int(user_id)
                     ))
                 shutil.rmtree(path='static/media/' + 'users/{user_id}/temp'.format(user_id=int(user_id)))
-                user_detail.thumbnail = profile_thumbnail_url
-                user_detail.small = profile_small_url
-                user_detail.icon = profile_icon_url
-        user, user_detail, save_to_db(user, "User updated")
+                user.thumbnail = profile_thumbnail_url
+                user.small = profile_small_url
+                user.icon = profile_icon_url
+        user, save_to_db(user, "User updated")
         record_activity('update_user', user=user)
 
     @staticmethod
@@ -900,13 +898,12 @@ def create_user_oauth(user, user_data, token, method):
     user.tokens = json.dumps(token)
     user.is_verified = True
     save_to_db(user, "User created")
-    user_detail = UserDetail.query.filter_by(user_id=user.id).first()
     if 'http' in user.avatar:
         f_name, uploaded_file = uploaded_file_provided_by_url(user.avatar)
         avatar = upload(uploaded_file, 'users/%d/avatar' % int(user.id))
-        user_detail.avatar_uploaded = avatar
+        user.avatar_uploaded = avatar
 
-    user_detail.firstname = user_data['name']
+    user.firstname = user_data['name']
     save_to_db(user, "User Details Updated")
     return user
 

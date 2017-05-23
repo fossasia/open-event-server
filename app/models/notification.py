@@ -23,7 +23,7 @@ class Notification(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     user = db.relationship('User', backref='notifications')
 
     title = db.Column(db.String)

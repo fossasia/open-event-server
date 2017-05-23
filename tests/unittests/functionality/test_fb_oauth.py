@@ -50,7 +50,7 @@ class TestFacebookOauth(OpenEventTestCase):
             token = 'dsadsads'
             method = 'Facebook'
             user = create_user_oauth(user, user_data, token, method)
-            self.assertTrue(user.user_detail)
+            self.assertTrue(user.firstname)
 
 
 if __name__ == '__main__':
