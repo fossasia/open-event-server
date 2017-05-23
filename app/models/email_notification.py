@@ -11,7 +11,7 @@ class EmailNotification(db.Model):
     session_accept_reject = db.Column(db.Integer)
     session_schedule = db.Column(db.Integer)
     after_ticket_purchase = db.Column(db.Integer)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
 
     def __init__(self,

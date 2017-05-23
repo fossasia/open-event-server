@@ -31,7 +31,7 @@ class Speaker(db.Model):
     heard_from = db.Column(db.String)
     sponsorship_required = db.Column(db.Text)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='SET NULL'))
     user = db.relationship('User', backref='speakers')
 
     def __init__(self,

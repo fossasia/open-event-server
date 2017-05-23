@@ -30,7 +30,7 @@ class EventsUsers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     editor = db.Column(db.Boolean)
     admin = db.Column(db.Boolean)
     user = db.relationship("User", backref="events_assocs")

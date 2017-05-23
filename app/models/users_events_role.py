@@ -8,7 +8,7 @@ class UsersEventsRoles(db.Model):
 
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     user = db.relationship("User")
 
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id', ondelete='CASCADE'))

@@ -52,7 +52,6 @@ from app.models.tax import Tax
 from app.models.ticket import Ticket
 from app.models.track import Track
 from app.models.user import User
-from app.models.user_detail import UserDetail
 from app.models.user_permission import UserPermission
 from app.models.users_events_role import UsersEventsRoles
 
@@ -346,10 +345,10 @@ class DataGetter(object):
                 'email': email,
                 'password': password
             })
-
-        if not user.user_detail:
-            user_detail = UserDetail(firstname=data['firstname'], lastname=data['lastname'])
-            user.user_detail = user_detail
+        if not user.firstname:
+            user.firstname = data['firstname']
+        if not user.lastname:
+            user.lastname = data['lastname']
         from app.helpers.data import save_to_db
         save_to_db(user)
         return user

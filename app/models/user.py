@@ -8,7 +8,6 @@ from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from app.helpers.helpers import get_count
 from app.models.session import Session
 from app.models.speaker import Speaker
-from user_detail import UserDetail
 from app.models import db
 from app.models.notification import Notification
 from app.models.permission import Permission
@@ -18,6 +17,7 @@ from app.models.custom_system_role import UserSystemRole
 from app.models.user_permission import UserPermission
 from app.models.users_events_role import UsersEventsRoles as UER
 from app.models.panel_permission import PanelPermission
+from app.helpers.versioning import clean_up_string, clean_html
 
 # System-wide
 ADMIN = 'admin'
@@ -39,21 +39,35 @@ REGISTRAR = 'registrar'
 
 class User(db.Model):
     """User model class"""
-    id = db.Column(db.Integer, primary_key=True)
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(128))
     reset_password = db.Column(db.String(128))
     salt = db.Column(db.String(128))
-    avatar = db.Column(db.String())
+    avatar = db.Column(db.String)
     tokens = db.Column(db.Text)
+    firstname = db.Column(db.String)
+    lastname = db.Column(db.String)
+    details = db.Column(db.String)
+    contact = db.Column(db.String)
+    facebook = db.Column(db.String)
+    twitter = db.Column(db.String)
+    instagram = db.Column(db.String)
+    google = db.Column(db.String)
+    avatar_uploaded = db.Column(db.String)
+    thumbnail = db.Column(db.String)
+    small = db.Column(db.String)
+    icon = db.Column(db.String)
     is_super_admin = db.Column(db.Boolean, default=False)
     is_admin = db.Column(db.Boolean, default=False)
     is_verified = db.Column(db.Boolean, default=False)
     signup_at = db.Column(db.DateTime)
     last_accessed_at = db.Column(db.DateTime)
-    user_detail = db.relationship("UserDetail", uselist=False, backref="user")
     created_at = db.Column(db.DateTime, default=datetime.now())
     deleted_at = db.Column(db.DateTime)
+
 
     # User Permissions
     def can_publish_event(self):
@@ -266,6 +280,15 @@ class User(db.Model):
     def update_lat(self):
         self.last_accessed_at = datetime.now()
 
+    @property
+    def fullname(self):
+        firstname = self.firstname if self.firstname else ''
+        lastname = self.lastname if self.lastname else ''
+        if firstname and lastname:
+            return u'{} {}'.format(firstname, lastname)
+        else:
+            return ''
+
     def __repr__(self):
         return '<User %r>' % self.email
 
@@ -275,8 +298,13 @@ class User(db.Model):
     def __unicode__(self):
         return self.email
 
+    def __setattr__(self, name, value):
+        if name == 'details':
+            super(User, self).__setattr__(name, clean_html(clean_up_string(value)))
+        else:
+            super(User, self).__setattr__(name, value)
+
 
 @event.listens_for(User, 'init')
 def receive_init(target, args, kwargs):
-    target.user_detail = UserDetail()
     target.signup_at = datetime.now()

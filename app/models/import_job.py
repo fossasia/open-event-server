@@ -10,7 +10,7 @@ class ImportJob(db.Model):
     task = db.Column(db.String, nullable=False)
     starts_at = db.Column(db.DateTime)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     user = db.relationship('User', backref='import_jobs')
     result = db.Column(db.String)
     result_status = db.Column(db.String)

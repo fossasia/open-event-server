@@ -22,7 +22,7 @@ class AccessCode(db.Model):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref='access_codes', foreign_keys=[event_id])
     created_at = db.Column(db.DateTime)
-    marketer_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
+    marketer_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     marketer = db.relationship('User', backref='access_codes')
 
     used_for = db.Column(db.String)
