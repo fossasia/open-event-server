@@ -42,7 +42,7 @@
 {% macro users_row(user_list) %}
     {% for user in user_list %}
         <tr>
-            <td>{{ 'Not Available' if not user['user'].user_detail.fullname else user['user'].user_detail.fullname }}</td>
+            <td>{{ 'Not Available' if not user['user'].fullname else user['user'].fullname }}</td>
             <td>{{ user['user'].email }}</td>
             {% if user['user'].deleted_at is none %}
                 <td>{{ _("Active") }}</td>

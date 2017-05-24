@@ -94,7 +94,7 @@
                 <tbody>
                 {% for notif in notifications %}
                     <tr>
-                        <td>{{ notif.user.user_detail.fullname | default(notif.user.email, true) }}</td>
+                        <td>{{ notif.user.fullname | default(notif.user.email, true) }}</td>
                         <td data-toggle="tooltip" data-placement="bottom" title="{{ notif.received_at }}"
                             data-delay='{"show":"500", "hide":"300"}'>{{ notif.received_at.strftime("%Y-%m-%d %H:%M") }}
                         </td>

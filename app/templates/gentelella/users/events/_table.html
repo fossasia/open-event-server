@@ -49,7 +49,7 @@
                         <ol style="padding-left:0;">
                             {% for role in event.get_staff_roles() %}
                                 <li>
-                                    {{ role.user.user_detail.fullname if role.user.user_detail.fullname else role.user.email }}
+                                    {{ role.user.fullname if role.user.fullname else role.user.email }}
                                     ({{ role.role.title_name }})
                                 </li>
                             {% endfor %}

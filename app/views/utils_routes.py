@@ -121,18 +121,18 @@ def facebook_callback():
 
 def update_user_details(first_name=None, last_name=None, facebook_link=None, twitter_link=None, file_url=None):
     user = login.current_user
-    if not user.user_detail.facebook:
-        user.user_detail.facebook = facebook_link
-    if not user.user_detail.firstname:
-        user.user_detail.firstname = first_name
-    if not user.user_detail.lastname:
-        user.user_detail.lastname = last_name
-    if not user.user_detail.avatar_uploaded:
+    if not user.facebook:
+        user.facebook = facebook_link
+    if not user.firstname:
+        user.firstname = first_name
+    if not user.lastname:
+        user.lastname = last_name
+    if not user.avatar_uploaded:
         filename, img = uploaded_file_provided_by_url(file_url)
         background_url = upload(img, '/image/' + filename)
-        user.user_detail.avatar_uploaded = background_url
-    if not user.user_detail.twitter:
-        user.user_detail.twitter = twitter_link
+        user.avatar_uploaded = background_url
+    if not user.twitter:
+        user.twitter = twitter_link
     save_to_db(user)
 
 

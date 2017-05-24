@@ -4,7 +4,7 @@
             <div class="panel panel-default height">
                 <div class="panel-heading"><h3 class="panel-title">{{ _("Billing Details") }}</h3></div>
                 <div class="panel-body">
-                    <strong>{{ invoice.user.user_detail.fullname if invoice.user.user_detail and invoice.user.user_detail.fullname and invoice.user.user_detail.fullname != ''else invoice.user.email }}:</strong><br>
+                    <strong>{{ invoice.user.fullname if invoice.user and invoice.user.fullname and invoice.user.fullname != ''else invoice.user.email }}:</strong><br>
                     {{ invoice.address }}<br>
                     {{ invoice.city }}<br>
                     {{ invoice.state }}<br>

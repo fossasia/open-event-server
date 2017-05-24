@@ -114,7 +114,7 @@
                     {% for marketer in marketers %}
                         <option value="{{ marketer.id }}"
                                 {% if discount_code and discount_code.marketer_id == marketer.id %}selected{% endif %}>{{ marketer.email }}
-                            - {{ marketer.user_detail.firstname }} </option>
+                            - {{ marketer.firstname }} </option>
                     {% endfor %}
                 </select>
                 <i class="glyphicon form-control-feedback" aria-hidden="true"

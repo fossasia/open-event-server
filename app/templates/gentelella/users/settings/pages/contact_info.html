@@ -23,7 +23,7 @@
         <div class="form-group">
             <label for="contact">{{ _("Phone") }}</label>
             <input type="text" class="form-control" id="contact"
-                   value="{{ user.user_detail.contact | default('', true) }}" name="contact" maxlength="15"
+                   value="{{ user.contact | default('', true) }}" name="contact" maxlength="15"
                    pattern='[\+]\d*[a-zA-Z0-9 ]+' placeholder="+123456789"
                    data-pattern-error="Please enter the requested format, e.g. +123456789"
                    data-error="Please enter the requested format, e.g. +123456789" >

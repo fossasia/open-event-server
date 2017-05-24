@@ -72,7 +72,7 @@
                     </td>
                     <td><br>
                             <strong>{{ order.get_invoice_number() }}</strong><br>
-                            {{ order.user.user_detail.fullname if order.user.user_detail and order.user.user_detail.fullname else order.user.email }}<br>
+                            {{ order.user.fullname if order.user and order.user.fullname else order.user.email }}<br>
                             {% if order.status == 'completed' %}
                                 {{ order.status | capitalize }}
                             {% elif order.status == 'pending' or order.status == 'initialized' %}
@@ -105,8 +105,8 @@
                     </td>
                     <td><br>
                             <strong>
-                            {{ order.user.user_detail.firstname }}<br>
-                            {{ order.user.user_detail.lastname }}<br>
+                            {{ order.user.firstname }}<br>
+                            {{ order.user.lastname }}<br>
                             {{ order.user.email }}<br>
                             </strong>
                     </td>
