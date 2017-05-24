@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
+from envparse import env
+
+env.read_envfile()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -45,9 +48,9 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     ERROR_404_HELP = False
     CSRF_ENABLED = True
-    SERVER_NAME = os.getenv('SERVER_NAME')
+    SERVER_NAME = env.str('SERVER_NAME', default=None)
     CORS_HEADERS = 'Content-Type'
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', None)
+    SQLALCHEMY_DATABASE_URI =  env.str('DATABASE_URL', default=None)
     DATABASE_QUERY_TIMEOUT = 0.1
 
     if not SQLALCHEMY_DATABASE_URI:
@@ -79,7 +82,7 @@ class ProductionConfig(Config):
     CACHING = True
 
     # if force on
-    socketio_integration = os.environ.get('INTEGRATE_SOCKETIO')
+    socketio_integration =  env.str('INTEGRATE_SOCKETIO', default=False)
     if socketio_integration == 'true':
         INTEGRATE_SOCKETIO = True
 
@@ -106,7 +109,7 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_RECORD_QUERIES = True
 
     # If Env Var `INTEGRATE_SOCKETIO` is set to 'true', then integrate SocketIO
-    socketio_integration = os.environ.get('INTEGRATE_SOCKETIO')
+    socketio_integration =  env.str('INTEGRATE_SOCKETIO', default=False)
     INTEGRATE_SOCKETIO = bool(socketio_integration == 'true')
 
 
