@@ -78,7 +78,7 @@ def upgrade():
     op.execute(
         "INSERT INTO users SELECT temp_user.* , user_detail.firstname, user_detail.lastname, user_detail.details, user_detail.contact, user_detail.facebook, user_detail.twitter, user_detail.instagram, user_detail.google, user_detail.avatar_uploaded, user_detail.thumbnail, user_detail.small, user_detail.icon FROM temp_user INNER JOIN user_detail ON temp_user.id = user_detail.user_id",
         execution_options=None)
-    
+
     op.drop_constraint(u'user_detail_user_id_fkey', 'user_detail', type_='foreignkey')
     op.drop_constraint(u'access_codes_marketer_id_fkey', 'access_codes', type_='foreignkey')
     op.create_foreign_key(u'access_codes_marketer_id_fkey', 'access_codes', 'users', ['marketer_id'], ['id'], ondelete='CASCADE')
@@ -90,8 +90,8 @@ def upgrade():
     op.create_foreign_key(u'email_notifications_user_id_fkey', 'email_notifications', 'users', ['user_id'], ['id'], ondelete='CASCADE')
     op.drop_constraint(u'event_invoices_user_id_fkey', 'event_invoices', type_='foreignkey')
     op.create_foreign_key(u'event_invoices_user_id_fkey', 'event_invoices', 'users', ['user_id'], ['id'], ondelete='SET NULL')
-    op.drop_constraint(u'event_user_user_id_fkey', 'event_user', type_='foreignkey')
-    op.create_foreign_key(u'eventsusers_user_id_fkey', 'event_user', 'users', ['user_id'], ['id'], ondelete='CASCADE')
+    op.drop_constraint(u'eventsusers_user_id_fkey', 'event_user', type_='foreignkey')
+    op.create_foreign_key(u'event_user_user_id_fkey', 'event_user', 'users', ['user_id'], ['id'], ondelete='CASCADE')
     op.drop_constraint(u'import_jobs_user_id_fkey', 'import_jobs', type_='foreignkey')
     op.create_foreign_key(u'import_jobs_user_id_fkey', 'import_jobs', 'users', ['user_id'], ['id'], ondelete='CASCADE')
     op.drop_constraint(u'invites_user_id_fkey', 'invites', type_='foreignkey')
