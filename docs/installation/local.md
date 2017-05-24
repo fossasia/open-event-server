@@ -93,8 +93,7 @@ bower install
 * **Step 4** - Create application environment variables.
 
 ```sh
-export DATABASE_URL=postgresql:///oevent
-export SERVER_NAME=localhost:5000
+cp .env.example .env
 ```
 
 The URL is short, thank to the resemble of Postgres user and OS user.
