@@ -56,7 +56,7 @@ def upgrade():
     op.create_foreign_key(u'sessions_session_type_id_fkey', 'sessions', 'session_types', ['session_type_id'], ['id'], ondelete = 'CASCADE')
     op.drop_constraint(u'ticket_event_id_fkey', 'tickets', type_='foreignkey')
     op.create_foreign_key(u'tickets_event_id_fkey', 'tickets', 'events', ['event_id'], ['id'], ondelete='CASCADE')
-    op.drop_constraint(u'eventsusers_user_id_fkey', 'event_user', type_='foreignkey')
+    op.drop_constraint(u'eventsusers_event_id_fkey', 'event_user', type_='foreignkey')
     op.create_foreign_key(u'event_user_event_id_fkey', 'event_user', 'events', ['event_id'], ['id'], ondelete='CASCADE')
     op.drop_constraint(u'social_link_event_id_fkey', 'social_links', type_='foreignkey')
     op.create_foreign_key(u'social_links_event_id_fkey', 'social_links', 'events', ['event_id'], ['id'], ondelete='CASCADE')
