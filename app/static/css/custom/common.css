@@ -459,6 +459,7 @@ span.twitter-typeahead {
 
 .fullwidth {
     width: 100% !important;
+    max-width: none !important;
 }
 .external_url{
     display: none;
