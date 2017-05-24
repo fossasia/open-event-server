@@ -11,10 +11,10 @@
                 <div class="modal-body">
                     <form action="/events/{{ current_event.id }}/roles/{{ role.id }}/update/" method="POST" role="form">
                         <div style="font-size: 17px;">
-                            {% if not role.user.user_detail.fullname %}
+                            {% if not role.user.fullname %}
                                 {{ role.user.email }}
                             {% else %}
-                                {{ role.user.user_detail.fullname }}
+                                {{ role.user.fullname }}
                                 <span style="color: #a9a9a9;font-size: 15px;">({{ role.user.email }})</span>
                             {% endif %}
                         </div>

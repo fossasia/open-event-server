@@ -21,7 +21,7 @@
                 <div class="input-group">
                     <span class="input-group-addon social-addon">facebook.com/</span>
                     <input type="text" name="facebook" class="form-control"
-                           value="{{ user.user_detail.facebook|default('', true) | replace('https://facebook.com/', '') }}"
+                           value="{{ user.facebook|default('', true) | replace('https://facebook.com/', '') }}"
                            style="min-width: 400px"
                            disabled />
                     {% if not user_id %}
@@ -44,7 +44,7 @@
                     <span class="input-group-addon social-addon" id="basic-addon3">twitter.com/</span>
 
                     <input type="text" name="twitter" class="form-control"
-                           value="{{ user.user_detail.twitter|default('', true) | replace('https://twitter.com/', '') }}"
+                           value="{{ user.twitter|default('', true) | replace('https://twitter.com/', '') }}"
                            style="min-width: 400px"
                            disabled />
                     {% if not user_id %}
@@ -63,7 +63,7 @@
                     <span class="input-group-addon social-addon" id="basic-addon3">instagram.com/</span>
 
                     <input type="text" name="instagram" class="form-control"
-                           value="{{ user.user_detail.instagram|default('', true) | replace('https://instagram.com/', '') }}"
+                           value="{{ user.instagram|default('', true) | replace('https://instagram.com/', '') }}"
                            style="min-width: 400px"
                            disabled />
                     {% if not user_id %}
@@ -83,7 +83,7 @@
                     <span class="input-group-addon social-addon" id="basic-addon3">plus.google.com/</span>
 
                     <input type="text" name="google" class="form-control"
-                           value="{{ user.user_detail.google|default('', true) | replace('https://plus.google.com/', '') }}"
+                           value="{{ user.google|default('', true) | replace('https://plus.google.com/', '') }}"
                            style="min-width: 400px"
                            disabled />
                     {% if not user_id %}

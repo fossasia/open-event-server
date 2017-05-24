@@ -39,10 +39,10 @@
                     <td style="display: none;">{{ _("accepted") }}</td>
                     <td style="display: none;">{{ role.user.email }}</td>
                     <td>
-                        {% if not role.user.user_detail.fullname %}
+                        {% if not role.user.fullname %}
                             {{ role.user.email }}
                         {% else %}
-                            {{ role.user.user_detail.fullname }}
+                            {{ role.user.fullname }}
                             <span style="color: #a9a9a9;">({{ role.user.email }})</span>
                         {% endif %}
                     </td>

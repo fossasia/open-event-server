@@ -5,8 +5,8 @@
                 <div class="panel-heading"><h3 class="panel-title">{{ _("Billing Details") }}</h3></div>
                 <div class="panel-body">
                     <strong>
-                    {% if order.user.user_detail.fullname %}
-                    {{ order.user.user_detail.fullname }}
+                    {% if order.user.fullname %}
+                    {{ order.user.fullname }}
                     {% else %}
                     {{ order.user.email}}
                     {% endif %}:

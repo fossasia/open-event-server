@@ -316,9 +316,9 @@ class TicketingManager(object):
         if order:
             user = DataGetter.get_or_create_user_by_email(email, form)
             order.user_id = user.id
-            if not order.user.user_detail.firstname and not order.user.user_detail.lastname:
-                order.user.user_detail.firstname = form['firstname']
-                order.user.user_detail.lastname = form['lastname']
+            if not order.user.firstname and not order.user.lastname:
+                order.user.firstname = form['firstname']
+                order.user.lastname = form['lastname']
 
             if order.amount > 0 \
                 and (not order.paid_via

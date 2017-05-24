@@ -154,7 +154,7 @@ def sales_by_marketer_view(by_discount_code=False):
         for marketer in marketers:
             tickets_summary[str(marketer.id)] = {
                 'email': marketer.email,
-                'name': marketer.user_detail.firstname,
+                'name': marketer.firstname,
                 'tickets_count': 0,
                 'sales': 0,
                 'discounts': 0

@@ -233,8 +233,8 @@ def display_attendees(event_id, pdf=None):
                 order_holder['order_url'] = url_for('ticketing.show_transaction_error',
                                                     order_identifier=order.identifier)
 
-            order_holder['by_whom'] = order.user.user_detail.fullname \
-                if order.user.user_detail and order.user.user_detail.fullname else order.user.email
+            order_holder['by_whom'] = order.user.fullname \
+                if order.user and order.user.fullname else order.user.email
             if discount and str(holder.ticket.id) in discount.tickets.split(","):
                 if discount.type == "amount":
                     order_holder['ticket_price'] = order_holder['ticket_price'] - discount.value
@@ -260,8 +260,8 @@ def display_attendees(event_id, pdf=None):
                 order_holder['order_url'] = url_for('ticketing.show_transaction_error',
                                                     order_identifier=order.identifier)
 
-            order_holder['by_whom'] = order.user.user_detail.fullname \
-                if order.user.user_detail and order.user.user_detail.fullname else order.user.email
+            order_holder['by_whom'] = order.user.fullname \
+                if order.user and order.user.fullname else order.user.email
 
             holders.append(order_holder)
 
@@ -391,11 +391,11 @@ def download_orders_as_csv(event_id):
             except:
                 value += ','
             try:
-                value += order.user.user_detail.firstname + ','
+                value += order.user.firstname + ','
             except:
                 value += ','
             try:
-                value += order.user.user_detail.lastname + ','
+                value += order.user.lastname + ','
             except:
                 value += ','
             try:

@@ -49,8 +49,8 @@
                     {{ display_currency | currency_symbol }}{{ forex(invoice.event.payment_currency, display_currency, invoice.amount) | money }}
                 </td>
                 <th>
-                    {{ invoice.user.email }}{% if invoice.user.user_detail and invoice.user.user_detail.firstname %} -
-                        {{ invoice.user.user_detail.firstname }} {% endif %}
+                    {{ invoice.user.email }}{% if invoice.user and invoice.user.firstname %} -
+                        {{ invoice.user.firstname }} {% endif %}
                 </th>
                 <th>
                     {% if invoice.status == 'completed' %}
