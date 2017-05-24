@@ -258,6 +258,8 @@ def details_view(event_id):
     }
 
     for order in orders:
+        if order.status == 'initialized':
+            order.status = 'pending'
         fees = DataGetter.get_fee_settings_by_currency(DataGetter.get_event(order.event_id).payment_currency)
         orders_summary[str(order.status)]['orders_count'] += 1
         orders_summary[str(order.status)]['total_sales'] += order.amount
