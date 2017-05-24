@@ -75,6 +75,10 @@ def upgrade():
     op.drop_constraint(u'role_invite_role_id_fkey', 'role_invites', type_='foreignkey')
     op.create_foreign_key(u'role_invites_role_id_fkey', 'role_invites', 'roles', ['role_id'], ['id'], ondelete = 'CASCADE')
 
+    op.execute(
+        "INSERT INTO users SELECT temp_user.* , user_detail.firstname, user_detail.lastname, user_detail.details, user_detail.contact, user_detail.facebook, user_detail.twitter, user_detail.instagram, user_detail.google, user_detail.avatar_uploaded, user_detail.thumbnail, user_detail.small, user_detail.icon FROM temp_user INNER JOIN user_detail ON temp_user.id = user_detail.user_id",
+        execution_options=None)
+    
     op.drop_constraint(u'user_detail_user_id_fkey', 'user_detail', type_='foreignkey')
     op.drop_constraint(u'access_codes_marketer_id_fkey', 'access_codes', type_='foreignkey')
     op.create_foreign_key(u'access_codes_marketer_id_fkey', 'access_codes', 'users', ['marketer_id'], ['id'], ondelete='CASCADE')
@@ -106,8 +110,7 @@ def upgrade():
     op.create_foreign_key(u'user_system_role_user_id_fkey', 'user_system_role', 'users', ['user_id'], ['id'], ondelete='CASCADE')
     op.drop_constraint(u'users_events_roles_user_id_fkey', 'users_events_roles', type_='foreignkey')
     op.create_foreign_key(u'users_events_roles_user_id_fkey', 'users_events_roles', 'users', ['user_id'], ['id'], ondelete='CASCADE')
-    op.execute("INSERT INTO users SELECT temp_user.* , user_detail.firstname, user_detail.lastname, user_detail.details, user_detail.contact, user_detail.facebook, user_detail.twitter, user_detail.instagram, user_detail.google, user_detail.avatar_uploaded, user_detail.thumbnail, user_detail.small, user_detail.icon FROM temp_user INNER JOIN user_detail ON temp_user.id = user_detail.user_id",
-               execution_options=None)
+
     op.drop_table('temp_user')
     op.drop_table('user_detail')
     ### end Alembic commands ###
