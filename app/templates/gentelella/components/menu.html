@@ -42,17 +42,17 @@
                         <li>
                             <a href="#" class="user-profile dropdown-toggle" data-toggle="dropdown"
                                aria-expanded="false">
-                                {% if current_user.user_detail.icon %}
-                                    <img src="{{ current_user.user_detail.icon }}" onerror="imgError(this)"/>
-                                {% elif current_user.user_detail.avatar_uploaded %}
-                                    <img src="{{ current_user.user_detail.avatar_uploaded }}" onerror="imgError(this)"/>
+                                {% if current_user.icon %}
+                                    <img src="{{ current_user.icon }}" onerror="imgError(this)"/>
+                                {% elif current_user.avatar_uploaded %}
+                                    <img src="{{ current_user.avatar_uploaded }}" onerror="imgError(this)"/>
                                 {% elif avatar != None %}
                                     <img src='{{ avatar.url }}'/>
                                 {% else %}
                                     <img src="{{ url_for('static', filename='placeholders/avatar.png') }}"
                                              onerror="imgError(this);"/>
                                 {% endif %}
-                                <span class="user-text">{{ current_user.user_detail.firstname | default(current_user.email, true) }}</span>
+                                <span class="user-text">{{ current_user.firstname | default(current_user.email, true) }}</span>
                                 <span class=" fa fa-angle-down"></span>
                             </a>
                             <ul class="dropdown-menu dropdown-usermenu pull-right">

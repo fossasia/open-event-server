@@ -28,7 +28,7 @@
                     <div id="crop-avatar">
                         <input type="hidden" name="avatar-img" id="avatar-img">
                         <div class="item form-group" id="image-upload-group"
-                             {% if profile and profile.user_detail.avatar_uploaded and profile.user_detail.avatar_uploaded != '' %}style="display: none;"{% endif %}>
+                             {% if profile and profile.avatar_uploaded and profile.avatar_uploaded != '' %}style="display: none;"{% endif %}>
                             <div class="image-box">
                                 <input type="file" id="event-image-upload" name="event-image-upload"
                                        class="image-upload-btn no-js"
@@ -44,10 +44,10 @@
                         </div>
 
                         <div class="item form-group" id="image-view-group"
-                             {% if not profile or not profile.user_detail.avatar_uploaded or profile.user_detail.avatar_uploaded == '' %}style="display: none;"{% endif %}>
-                            <img src="{{ profile.user_detail.avatar_uploaded | default('', true) }}"
+                             {% if not profile or not profile.avatar_uploaded or profile.avatar_uploaded == '' %}style="display: none;"{% endif %}>
+                            <img src="{{ profile.avatar_uploaded | default('', true) }}"
                                  class="profile_avatar"><br><br>
-                            {% if not profile.user_detail.avatar_uploaded %}
+                            {% if not profile.avatar_uploaded %}
                                 <button type="button" class="btn btn-sm btn-default" data-target="#cropper-modal"
                                         data-toggle="modal">
                                     <i class="fa fa-arrows" aria-hidden="true"></i>
@@ -63,8 +63,8 @@
                     </div>
 
                 </div>
-                {% if profile.user_detail.fullname %}
-                    <h3>{{ profile.user_detail.fullname }}</h3>
+                {% if profile.fullname %}
+                    <h3>{{ profile.fullname }}</h3>
                 {% endif %}
 
                 <ul class="list-unstyled user_data">
@@ -74,21 +74,21 @@
                         </li>
 
                     {% endif %}
-                    {% if profile.user_detail.contact %}
+                    {% if profile.contact %}
                         <li>
-                            <i class="glyphicon glyphicon-earphone"></i> {{ profile.user_detail.contact }}
+                            <i class="glyphicon glyphicon-earphone"></i> {{ profile.contact }}
                         </li>
                     {% endif %}
                     <div style="width: 100%">
-                        {% if profile.user_detail.facebook %}
+                        {% if profile.facebook %}
                             <li class="m-top-xs" style="float:left;margin-right: 3%;">
-                                <a href="{{ profile.user_detail.facebook }}"
+                                <a href="{{ profile.facebook }}"
                                            target="_blank"><i class="fa fa-facebook-square fa-2x user-profile-icon"></i></a>
                             </li>
                         {% endif %}
-                        {% if profile.user_detail.twitter %}
+                        {% if profile.twitter %}
                             <li class="m-top-xs" style="float:left;margin-right: 3%;">
-                                <a href="{{ profile.user_detail.twitter }}"
+                                <a href="{{ profile.twitter }}"
                                            target="_blank"><i class="fa fa-twitter-square fa-2x user-profile-icon"></i></a>
                             </li>
                         {% endif %}
@@ -192,7 +192,7 @@
                 $(".publish-unpublish-event").prop("disabled", true);
                 $.ajax({
                     type: 'POST',
-                    url: "{{ url_for('profile.bgimage_upload', user_id=profile.user_detail.id) if event else url_for('profile.create_event_bgimage_upload') }}",
+                    url: "{{ url_for('profile.bgimage_upload', user_id=profile.id) if event else url_for('profile.create_event_bgimage_upload') }}",
                     data: {bgimage: resp},
                     dataType: 'json'
                 }).done(function (data) {
@@ -210,11 +210,11 @@
             });
         });
 
-        {% if profile.user_detail.avatar_uploaded %}
+        {% if profile.avatar_uploaded %}
             $("#remove-image-btn").click(function () {
                 $.ajax({
                     type: 'DELETE',
-                    url: "{{ url_for('profile.bgimage_upload', user_id=profile.user_detail.id) }}",
+                    url: "{{ url_for('profile.bgimage_upload', user_id=profile.id) }}",
                     dataType: 'json'
                 }).done(function (data) {
                     $("#image-view-group").hide();
