@@ -189,23 +189,47 @@
             e.preventDefault();
         });
 
+        $('.blackscreen').hide();
+        
         $(".export-png").click(function () {
-            var $timeline = $('.event-info-container-holder');
-            $('#microlocation-container').addClass('fullwidth');
-            var width = $('#microlocation-container').width() + 150;
-            var currentStyle = $timeline.attr('style');
-            $timeline.width(width);
-            html2canvas($timeline[0], {
-                onrendered: function (canvas) {
-                    canvas.id = "generated-canvas";
-                    canvas.toBlob(function (blob) {
-                        saveAs(blob, "timeline.png");
-                        $('#microlocation-container').removeClass('fullwidth');
-                        $timeline.attr('style', currentStyle);
-                    });
-                },
-            });
-
+            if($('.scheduler-pop')[0]){
+                $('.blackscreen').show();
+                $scheduler.removeClass('scheduler-pop');
+                var $timeline = $('.event-info-container-holder');
+                $('#microlocation-container').addClass('fullwidth');
+                var width = $('#microlocation-container').width() + 150;
+                var currentStyle = $timeline.attr('style');
+                $timeline.width(width);
+                html2canvas($timeline[0], {
+                    onrendered: function (canvas) {
+                        canvas.id = "generated-canvas";
+                        canvas.toBlob(function (blob) {
+                            saveAs(blob, "timeline.png");
+                            $('#microlocation-container').removeClass('fullwidth');
+                            $timeline.attr('style', currentStyle);
+                            $scheduler.addClass('scheduler-pop');
+                            $('.blackscreen').hide();
+                        });
+                    },
+                });
+            } else {
+                var $timeline = $('.event-info-container-holder');
+                $('#microlocation-container').addClass('fullwidth');
+                var width = $('#microlocation-container').width() + 150;
+                var currentStyle = $timeline.attr('style');
+                $timeline.width(width);
+                html2canvas($timeline[0], {
+                    onrendered: function (canvas) {
+                        canvas.id = "generated-canvas";
+                        canvas.toBlob(function (blob) {
+                            saveAs(blob, "timeline.png");
+                            $('#microlocation-container').removeClass('fullwidth');
+                            $timeline.attr('style', currentStyle);
+                        });
+                    },
+                });
+            } 
         });
     </script>
+    <div class="blackscreen">Downloading...</div>
 {% endblock %}
