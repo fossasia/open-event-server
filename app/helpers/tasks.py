@@ -8,6 +8,8 @@ from app.helpers.versioning import strip_tags
 from app.helpers.exporters.pentabarfxml import PentabarfExporter
 from app.helpers.exporters.ical import ICalExporter
 from app.helpers.exporters.xcal import XCalExporter
+from app.helpers.exporters.attendee_csv import AttendeeCsv
+from app.helpers.exporters.order_csv import OrderCsv
 from app.helpers.storage import UPLOAD_PATHS, upload, UploadedFile
 from app.helpers.data_getter import DataGetter
 from app.helpers.data import save_to_db
@@ -94,3 +96,35 @@ def export_xcal_task(event_id):
     xcal_file = UploadedFile(file_path=file_path, filename=filename)
     event.xcal_url = upload(xcal_file, UPLOAD_PATHS['exports']['xcal'].format(event_id=event_id))
     save_to_db(event)
+
+
+@celery.task(name='export.attendee.csv')
+def export_attendee_csv_task(event_id):
+    try:
+        os.mkdir(app.config['TEMP_UPLOADS_FOLDER'])
+    except OSError as exc:
+        if exc.errno != errno.EEXIST:
+            raise exc
+    filename = "attendees.csv"
+    file_path = app.config['TEMP_UPLOADS_FOLDER'] + "/" + filename
+    with open(file_path, "w") as temp_file:
+        temp_file.write(AttendeeCsv.export(event_id))
+    attendee_csv_file = UploadedFile(file_path=file_path, filename=filename)
+    attendee_csv_url = upload(attendee_csv_file, UPLOAD_PATHS['exports']['csv'].format(event_id=event_id))
+    return attendee_csv_url
+
+
+@celery.task(name='export.order.csv')
+def export_order_csv_task(event_id):
+    try:
+        os.mkdir(app.config['TEMP_UPLOADS_FOLDER'])
+    except OSError as exc:
+        if exc.errno != errno.EEXIST:
+            raise exc
+    filename = "order.csv"
+    file_path = app.config['TEMP_UPLOADS_FOLDER'] + "/" + filename
+    with open(file_path, "w") as temp_file:
+        temp_file.write(OrderCsv.export(event_id))
+    order_csv_file = UploadedFile(file_path=file_path, filename=filename)
+    order_csv_url = upload(order_csv_file, UPLOAD_PATHS['exports']['csv'].format(event_id=event_id))
+    return order_csv_url

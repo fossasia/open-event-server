@@ -110,8 +110,7 @@
                         target="_blank"><i class="fa fa-file-pdf-o fa-fw"></i> {{ _("PDF") }}</a>
                     </li>
                     <li role="separator" class="divider"></li>
-                    <li><a href="{{ url_for('event_ticket_sales.download_as_csv', event_id=event.id) }}"
-                        target="_blank"><i class="fa fa-file-excel-o fa-fw"></i> {{ _("CSV") }}</a>
+                    <li><a href="" id="csv-export"><i class="fa fa-file-excel-o fa-fw"></i> {{ _("CSV") }}</a>
                     </li>
                 </ul>
             </div>
@@ -271,7 +270,6 @@
             function (settings, data, dataIndex) {
                 var user_option = $("input[name=show_state]:checked").val();
                 var state = data[1].trim() || 'pending';
-                console.log(state);
                 if (user_option === "all") {
                     return true;
                 } else if (user_option === 'checked_in') {
@@ -370,6 +368,47 @@
                 }
             });
         });
+
+        $(document).on('click', '#csv-export', function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: "{{ url_for('event_ticket_sales.download_as_csv', event_id=event.id) }}",
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+                    setTimeout(function () {
+                        exportTask(data['task_url']);
+                    }, 1000);
+                },
+                error: function (x) {
+                    var obj = JSON.parse(x.responseText);
+                    $('#export_status').html('<span class="red">' + obj['message'] + '</span>');
+                }
+            });
+        });
+
+        function exportTask(url) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data) {
+                    if (data['state'] != 'SUCCESS') {
+                        setTimeout(function () {
+                            exportTask(url);
+                        }, 3000);
+                    } else {
+                        window.open(data['result']);
+                    }
+                },
+                error: function (x) {
+                    var obj = JSON.parse(x.responseText);
+                    $('#export_status').html('<span class="red">' + obj['message'] + '</span>');
+                    $('#btnStartExport').prop('disabled', false);
+                }
+            });
+        }
 
 
     </script>

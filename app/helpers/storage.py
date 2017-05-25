@@ -56,7 +56,9 @@ UPLOAD_PATHS = {
         'zip': 'exports/{event_id}/zip',
         'pentabarf': 'exports/{event_id}/pentabarf',
         'ical': 'exports/{event_id}/ical',
-        'xcal': 'exports/{event_id}/xcal'
+        'xcal': 'exports/{event_id}/xcal',
+        'csv': 'exports/{event_id}/csv',
+        'pdf': 'exports/{event_id}/pdf'
     }
 }
 
