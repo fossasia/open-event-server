@@ -48,9 +48,9 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     ERROR_404_HELP = False
     CSRF_ENABLED = True
-    SERVER_NAME = env.str('SERVER_NAME', default=None)
+    SERVER_NAME = env('SERVER_NAME', default=None)
     CORS_HEADERS = 'Content-Type'
-    SQLALCHEMY_DATABASE_URI =  env.str('DATABASE_URL', default=None)
+    SQLALCHEMY_DATABASE_URI =  env('DATABASE_URL', default=None)
     DATABASE_QUERY_TIMEOUT = 0.1
 
     if not SQLALCHEMY_DATABASE_URI:
@@ -82,9 +82,7 @@ class ProductionConfig(Config):
     CACHING = True
 
     # if force on
-    socketio_integration =  env.str('INTEGRATE_SOCKETIO', default=False)
-    if socketio_integration == 'true':
-        INTEGRATE_SOCKETIO = True
+    INTEGRATE_SOCKETIO = env.bool('INTEGRATE_SOCKETIO', default=False)
 
 
 class StagingConfig(ProductionConfig):
@@ -109,8 +107,7 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_RECORD_QUERIES = True
 
     # If Env Var `INTEGRATE_SOCKETIO` is set to 'true', then integrate SocketIO
-    socketio_integration =  env.str('INTEGRATE_SOCKETIO', default=False)
-    INTEGRATE_SOCKETIO = bool(socketio_integration == 'true')
+    INTEGRATE_SOCKETIO = env.bool('INTEGRATE_SOCKETIO', default=False)
 
 
 class TestingConfig(Config):
