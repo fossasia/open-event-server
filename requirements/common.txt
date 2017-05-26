@@ -54,3 +54,4 @@ pytz
 diff-match-patch
 blinker
 envparse
+flask-rest-jsonapi

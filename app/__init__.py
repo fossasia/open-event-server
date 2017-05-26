@@ -83,7 +83,6 @@ app.wsgi_app = ReverseProxied(app.wsgi_app)
 
 def create_app():
     babel.init_app(app)
-    # turned off for nextgen api
     BlueprintsManager.register(app)
     Migrate(app, db)
 
@@ -114,7 +113,7 @@ def create_app():
     # set up jwt
     app.config['JWT_AUTH_USERNAME_KEY'] = 'email'
     app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=24 * 60 * 60)
-    app.config['JWT_AUTH_URL_RULE'] = None
+    app.config['JWT_AUTH_URL_RULE'] = '/auth/session'
     _jwt = JWT(app, jwt_authenticate, jwt_identity)
 
     # setup celery
@@ -129,11 +128,10 @@ def create_app():
         # Profiling
         app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
 
-    # API version 2
-    #turned off until the new api setup is complete
-    #with app.app_context():
-    #    from app.api import api_v1
-    #    app.register_blueprint(api_v1)
+    # nextgen api
+    with app.app_context():
+        from app.api import api_v1
+        app.register_blueprint(api_v1)
 
     sa.orm.configure_mappers()
 
