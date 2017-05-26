@@ -1,4 +1,4 @@
-<!-- 
+<!--
 (Thanks for sending a pull request! Please make sure you click the link above to view the contribution guidelines, then fill out the blanks below.)
 -->
 
@@ -9,6 +9,8 @@
 - [ ] The unit tests pass locally with my changes <!-- use `nosetests tests/unittests` to run all the tests -->
 - [ ] I have added tests that prove my fix is effective or that my feature works
 - [ ] I have added necessary documentation (if appropriate)
+<!-- If an existing function does not have a docstring, please add one -->
+- [ ] All the functions created/modified in this PR contain relevant docstrings.
 
 #### Short description of what this resolves:
 
