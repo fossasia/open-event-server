@@ -78,7 +78,8 @@ title: GCE Kubernetes
     sudo mkfs.ext4 -F -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/disk/by-id/google-[DISK_NAME]
     ```
 
-- Now, the disk is formatted and ready. Detach the disk from the instance.
+- The disk is formatted and ready. 
+- Now exit the SSH session and Detach the disk from the instance by running
 
     ```
     gcloud compute instances detach-disk pg-disk-formatter --disk pg-data-disk
