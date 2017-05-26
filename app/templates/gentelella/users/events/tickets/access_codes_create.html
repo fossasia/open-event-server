@@ -220,9 +220,8 @@
 
         var host = (document.URL.split("//")[1].split("/"))[0];
         $("#code").change(function(){
-            $("#link").val(document.URL.split("/")[0]+"//"+host+"/e/"+"{{ event.identifier }}"+"/?code="+$(this).val());
+            $("#link").val(document.URL.split("/")[0]+"//"+host+"/e/"+"{{ event.identifier }}"+"/?access_code="+$(this).val());
         });
 
     </script>
 {% endblock %}
-
