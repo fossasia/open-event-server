@@ -51,7 +51,7 @@ class EventImportJson(Resource):
 def import_event_task_base(task_handle, file_path, source_type='json', creator_id=None):
     new_event = None
     if source_type == 'json':
-        new_event = import_event_json(task_handle, file_path)
+        new_event = import_event_json(zip_path=file_path, task_handle=task_handle)
     elif source_type == 'pentabarf':
         new_event = PentabarfImporter.import_data(file_path=file_path, task_handle=task_handle, creator_id=creator_id)
     elif source_type == 'ical':
