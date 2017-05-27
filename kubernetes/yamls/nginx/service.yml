@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: nginx
   namespace: nginx-ingress
+  annotations:
+    service.beta.kubernetes.io/external-traffic: "OnlyLocal"
 spec:
   type: LoadBalancer
   loadBalancerIP: '35.185.193.151'
