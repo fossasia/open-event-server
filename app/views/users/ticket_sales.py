@@ -290,53 +290,11 @@ def download_as_pdf(event_id):
 @event_ticket_sales.route('/attendees/csv')
 @can_access
 def download_as_csv(event_id):
-    (event, event_id, holders, orders, ticket_names, selected_ticket) = display_attendees(event_id=event_id, pdf='print_csv')
-    value = 'Order#,Order Date, Status, First Name, Last Name, Email, Country,' \
-            'Payment Type, Ticket Name, Ticket Price, Ticket Type \n'
-
-    for holder in holders:
-        if holder['status'] != "deleted":
-            if 'order_invoice' in holder:
-                value += holder['order_invoice']
-            value += ','
-            if 'created_at' in holder:
-                value += str(holder['created_at'])
-            value += ','
-            if 'status' in holder:
-                value += holder['status']
-            value += ','
-            if 'firstname' in holder:
-                value += holder['firstname']
-            value += ','
-            if 'lastname' in holder:
-                value += holder['lastname']
-            value += ','
-            if 'email' in holder:
-                value += holder['email']
-            value += ','
-            if 'country' in holder:
-                value += str(holder['country'])
-            value += ','
-            if 'paid_via' in holder and holder['paid_via']:
-                value += holder['paid_via']
-            value += ','
-            if 'ticket_name' in holder:
-                value += str(holder['ticket_name'])
-            value += ','
-            if 'ticket_price' in holder:
-                value += str(holder['ticket_price'])
-            value += ','
-            if 'ticket_type' in holder:
-                value += str(holder['ticket_type'])
-            value += ','
-            value += '\n'
-
-    response = make_response(value)
-    response.headers['Content-Type'] = 'text/csv'
-    response.headers['Content-Disposition'] = \
-        'inline; filename=%s.csv' % (re.sub(r"[^\w\s]", '', event.name).replace(" ", "_"))
-
-    return response
+    from app.helpers.tasks import export_attendee_csv_task
+    task = export_attendee_csv_task.delay(event_id)
+    return jsonify({
+            'task_url': url_for('api.extras_celery_task', task_id=task.id)
+        })
 
 
 @event_ticket_sales.route('/orders/pdf')
@@ -355,61 +313,11 @@ def download_orders_as_pdf(event_id):
 @event_ticket_sales.route('/orders/csv')
 @can_access
 def download_orders_as_csv(event_id):
-    (event, event_id, holders, orders, ticket_names, selected_ticket) = display_attendees(event_id=event_id, pdf='print_csv')
-    value = 'Order#,Order Date, Status, Payment Type, Quantity,Total Amount,Discount Code,' \
-            'First Name, Last Name, Email \n'
-
-    for order in orders:
-        if order.status != "deleted":
-            # To avoid KeyError exception
-            try:
-                value += str(order.get_invoice_number()) + ','
-            except:
-                value += ','
-            try:
-                value += str(order.created_at) + ','
-            except:
-                value += ','
-            try:
-                value += order.status + ','
-            except:
-                value += ','
-            try:
-                value += order.paid_via + ','
-            except:
-                value += ','
-            try:
-                value += str(order.get_tickets_count()) + ','
-            except:
-                value += ','
-            try:
-                value += str(order.amount) + ','
-            except:
-                value += ','
-            try:
-                value += order.discount_code.code + ','
-            except:
-                value += ','
-            try:
-                value += order.user.user_detail.firstname + ','
-            except:
-                value += ','
-            try:
-                value += order.user.user_detail.lastname + ','
-            except:
-                value += ','
-            try:
-                value += order.user.email + ','
-            except:
-                value += ','
-            value += '\n'
-
-    response = make_response(value)
-    response.headers['Content-Type'] = 'text/csv'
-    response.headers['Content-Disposition'] = \
-        'inline; filename=%s.csv' % (re.sub(r"[^\w\s]", '', event.name).replace(" ", "_"))
-
-    return response
+    from app.helpers.tasks import export_order_csv_task
+    task = export_order_csv_task.delay(event_id)
+    return jsonify({
+            'task_url': url_for('api.extras_celery_task', task_id=task.id)
+        })
 
 
 @event_ticket_sales.route('/add-order/', methods=('GET', 'POST'))

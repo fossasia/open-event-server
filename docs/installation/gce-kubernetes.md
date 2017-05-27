@@ -107,7 +107,7 @@ Repeat the same procedure and create another disk named `nfs-data-disk`.
 - Reserve a static external IP address 
 	
 	```bash
-	gcloud compute addresses create testip --region us-west1-a
+	gcloud compute addresses create testip --region us-west1
 	```
 	
 	The response would be similar to 
