@@ -110,7 +110,7 @@ def make_error(uploaded_file, er=None, id_=None):
     if id_ is not None:
         istr = '%s, ID %s' % (istr, id_)
     er.message = '%s, %s' % (istr, er.message)
-    if not er.code:
+    if hasattr(er, 'code') and not er.code:
         er.code = 500
     return er
 
@@ -294,7 +294,7 @@ def create_service_from_json(task_handle, data, srv, event_id, service_ids=None)
     return ids
 
 
-def import_event_json(task_handle, zip_path):
+def import_event_json(zip_path, task_handle):
     """
     Imports and creates event from json zip
     """
