@@ -3,7 +3,7 @@ from datetime import datetime
 
 from PIL import Image
 from flask import url_for, abort, current_app
-from flask.ext import login
+import flask_login as login
 
 from app.helpers.data import save_to_db, record_activity
 from app.helpers.cache import cache

@@ -9,9 +9,9 @@ import geoip2.database
 from flask import Blueprint
 from flask import abort, render_template, current_app
 from flask import url_for, redirect, request, session, flash
-from flask.ext import login
-from flask.ext.login import login_required
-from flask.ext.scrypt import generate_password_hash
+import flask_login as login
+from flask_login import login_required
+from flask_scrypt import generate_password_hash
 
 from app.helpers.data import DataManager, save_to_db, get_google_auth, get_facebook_auth, create_user_password, \
     user_logged_in, record_activity

@@ -1,7 +1,7 @@
 from flask import g
 from flask import jsonify, url_for, current_app
-from flask.ext.restplus import Resource, Namespace, marshal
-from flask.ext.restplus import abort
+from flask_restplus import Resource, Namespace, marshal
+from flask_restplus import abort
 
 from app.helpers.data import record_activity
 from app.helpers.importers.ical import ICalImporter

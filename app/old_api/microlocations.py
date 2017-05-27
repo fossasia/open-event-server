@@ -1,4 +1,4 @@
-from flask.ext.restplus import Namespace
+from flask_restplus import Namespace
 
 from app.models.microlocation import Microlocation as MicrolocationModel
 from app.api.helpers import custom_fields as fields

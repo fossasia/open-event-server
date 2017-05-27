@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-from flask.ext.restplus import Api
+from flask_restplus import Api
 from flask_login import current_user
 
 from helpers.error_docs import api as error_models

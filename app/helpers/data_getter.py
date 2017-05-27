@@ -8,7 +8,7 @@ import pytz
 import requests
 from flask import flash, abort, request
 from flask import url_for
-from flask.ext import login
+import flask_login as login
 from sqlalchemy import desc, asc, or_
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 

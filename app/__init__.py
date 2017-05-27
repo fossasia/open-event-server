@@ -12,17 +12,17 @@ from app.helpers.scheduled_jobs import send_mail_to_expired_orders, empty_trash,
 
 from celery import Celery
 from celery.signals import after_task_publish
-from flask.ext.htmlmin import HTMLMIN
+from flask_htmlmin import HTMLMIN
 import logging
 import os.path
 from os import environ
 import sys
 from flask import Flask, session
 from app.settings import get_settings, get_setts
-from flask.ext.migrate import Migrate, MigrateCommand
-from flask.ext.script import Manager
-from flask.ext.login import current_user
-from flask.ext.jwt import JWT
+from flask_migrate import Migrate, MigrateCommand
+from flask_script import Manager
+from flask_login import current_user
+from flask_jwt import JWT
 from datetime import timedelta
 from flask_cors import CORS
 
@@ -48,7 +48,7 @@ from app.helpers.babel import babel
 from helpers.helpers import send_email_for_expired_orders
 from werkzeug.contrib.profiler import ProfilerMiddleware
 from app.views import BlueprintsManager
-from flask.ext.sqlalchemy import get_debug_queries
+from flask_sqlalchemy import get_debug_queries
 from app.helpers.auth import AuthManager
 
 from app.helpers.flask_ext.error_handlers import init_error_handlers

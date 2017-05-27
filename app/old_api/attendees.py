@@ -1,4 +1,4 @@
-from flask.ext.restplus import Namespace
+from flask_restplus import Namespace
 
 from app.api.tickets import ORDER, TICKET
 from app.helpers.ticketing import TicketingManager

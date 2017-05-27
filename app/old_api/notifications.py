@@ -1,4 +1,4 @@
-from flask.ext.restplus import Namespace
+from flask_restplus import Namespace
 
 from app.helpers.data import DataManager
 from app.helpers.data_getter import DataGetter

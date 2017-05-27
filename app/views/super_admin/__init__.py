@@ -1,6 +1,6 @@
 from flask import request, url_for, redirect
-from flask.ext.login import current_user
-from flask.ext.restplus import abort
+from flask_login import current_user
+from flask_restplus import abort
 from app.helpers.auth import AuthManager
 
 # Admin Panels

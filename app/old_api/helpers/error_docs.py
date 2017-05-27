@@ -1,5 +1,5 @@
-from flask.ext.restplus import Namespace, fields
-from flask.ext.restplus.fields import Raw
+from flask_restplus import Namespace, fields
+from flask_restplus.fields import Raw
 
 api = Namespace('errors', description='Error Responses')
 

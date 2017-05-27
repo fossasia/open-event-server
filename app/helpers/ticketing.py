@@ -2,7 +2,7 @@ import uuid
 from datetime import timedelta, datetime
 
 from flask import url_for, flash, abort
-from flask.ext import login
+import flask_login as login
 from sqlalchemy import desc
 from sqlalchemy import or_
 

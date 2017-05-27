@@ -4,8 +4,8 @@ import pytz
 
 from flask import Blueprint
 from flask import request, url_for, flash, render_template, jsonify, make_response, current_app as app
-from flask.ext import login
-from flask.ext.restplus import abort
+import flask_login as login
+from flask_restplus import abort
 from markupsafe import Markup
 from werkzeug.utils import redirect
 

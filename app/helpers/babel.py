@@ -1,3 +1,3 @@
-from flask.ext.babel import Babel
+from flask_babel import Babel
 
 babel = Babel()  # Babel Initialization

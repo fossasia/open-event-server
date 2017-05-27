@@ -7,7 +7,7 @@ from flask import Blueprint
 from flask import render_template
 from flask import request
 from flask import url_for
-from flask.ext import login
+import flask_login as login
 from werkzeug.exceptions import abort
 from werkzeug.utils import redirect
 

@@ -8,8 +8,8 @@ from flask import Blueprint, current_app
 from flask import flash
 from flask import jsonify, url_for, redirect, request, send_from_directory, \
     render_template, make_response
-from flask.ext import login
-from flask.ext.migrate import upgrade
+import flask_login as login
+from flask_migrate import upgrade
 from requests.exceptions import HTTPError
 
 from app.helpers.flask_ext.helpers import get_real_ip, slugify
