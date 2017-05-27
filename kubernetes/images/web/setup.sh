@@ -9,6 +9,7 @@ fi
 
 pip install --no-cache-dir -r requirements.txt
 bower install --allow-root && bower cache clean --allow-root
+touch .env
 chmod +x ./kubernetes/run.sh
 chmod -R 0777 ./static
 # /bin/bash ./kubernetes/run.sh

@@ -1,3 +1,6 @@
+#
+# API Server service which will expose the API Server to the rest of the cluster
+#
 kind: Service
 apiVersion: v1
 metadata:

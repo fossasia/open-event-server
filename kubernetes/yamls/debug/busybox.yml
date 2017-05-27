@@ -1,3 +1,6 @@
+#
+# A simple pod with busy box. Used for debugging.
+#
 apiVersion: v1
 kind: Pod
 metadata:
@@ -11,4 +14,4 @@ spec:
       - "3600"
     imagePullPolicy: IfNotPresent
     name: busybox
-  restartPolicy: Always
+  restartPolicy: OnFailure

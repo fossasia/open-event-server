@@ -9,15 +9,10 @@ spec:
   containers:
     - name: postgres
       image: postgres
+      envFrom:
+      - configMapRef:
+          name: postgres
       env:
-        - name: DB_PASS
-          value: test
-        - name: DB_NAME
-          value: opev
-        - name: POSTGRES_DB
-          value: opev
-        - name: POSTGRES_PASSWORD
-          value: test
         - name: PGDATA
           value: /var/lib/postgresql/data/pgdata
       ports:

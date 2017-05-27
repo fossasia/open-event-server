@@ -1,0 +1,17 @@
+#
+# A simple pod with gcloud utilities. Used for debugging.
+#
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gcloud
+  namespace: default
+spec:
+  containers:
+  - image: eventyay/gcloud-utils:latest
+    command:
+    - /usr/bin/gcloud
+    - config set compute/zone us-west1-a
+    imagePullPolicy: IfNotPresent
+    name: gcloud
+  restartPolicy: OnFailure

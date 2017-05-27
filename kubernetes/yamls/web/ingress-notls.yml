@@ -12,5 +12,5 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: redirector
+          serviceName: api-server
           servicePort: 8080

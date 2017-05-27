@@ -1,5 +1,8 @@
+#
+# Deployment of the API Server and celery worker
+#
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1beta1
 metadata:
   name: api-server
   namespace: web

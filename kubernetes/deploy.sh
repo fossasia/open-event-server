@@ -24,7 +24,7 @@ elif [ "$1" = "create" ]; then
     # Create web namespace
     kubectl create -R -f ${DIR}/yamls/web
     # Start the redirector deployment & service
-    kubectl create -R -f ${DIR}/yamls/redirector
+    # kubectl create -R -f ${DIR}/yamls/redirector
     # Create API server deployment and service
     kubectl create -R -f ${DIR}/yamls/api
     echo "Done. The project was deployed to kubernetes. :)"
