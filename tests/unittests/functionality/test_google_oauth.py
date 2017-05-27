@@ -1,11 +1,12 @@
 import unittest
 
 from oauthlib.oauth2 import WebApplicationClient
+from httmock import HTTMock
 
 from app import current_app as app
 from app.helpers.data import get_google_auth
 from app.helpers.oauth import OAuth
-from tests.unittests.auth_helper import login, logout, register
+from tests.unittests.auth_helper import login, logout, register, google_profile_mock, google_auth_mock
 from tests.unittests.setup_database import Setup
 from tests.unittests.utils import OpenEventTestCase
 
@@ -21,9 +22,10 @@ class TestGoogleOauth(OpenEventTestCase):
             register(self.app, 'email@gmail.com', 'test')
             logout(self.app)
             login(self.app, 'email@gmail.com', 'test')
-            self.assertTrue('Open Event' in self.app.get('/gCallback/?state=dummy_state&code=dummy_code',
+            with HTTMock(google_auth_mock, google_profile_mock):
+                self.assertTrue('Open Event' in self.app.get('/gCallback/?state=dummy_state&code=dummy_code',
                                                          follow_redirects=True).data)
-            self.assertEqual(self.app.get('/gCallback/?state=dummy_state&code=dummy_code').status_code, 302)
+                self.assertEqual(self.app.get('/gCallback/?state=dummy_state&code=dummy_code').status_code, 302)
 
     def test_redirect(self):
         """Tests whether on redirection the user is being redirected to the proper authentication url of Google"""
