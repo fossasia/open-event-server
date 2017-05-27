@@ -13,8 +13,8 @@ import PIL
 import oauth2
 from PIL import Image
 from flask import flash, url_for, g, current_app
-from flask.ext import login
-from flask.ext.scrypt import generate_password_hash, generate_random_salt
+import flask_login as login
+from flask_scrypt import generate_password_hash, generate_random_salt
 from flask_socketio import emit
 from requests_oauthlib import OAuth2Session
 

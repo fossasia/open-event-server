@@ -4,7 +4,7 @@ import getpass
 import eventlet
 
 from app import current_app
-from flask.ext.migrate import stamp
+from flask_migrate import stamp
 from app.helpers.data import DataManager
 from app.models import db
 from populate_db import populate

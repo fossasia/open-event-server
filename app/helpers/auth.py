@@ -1,7 +1,7 @@
 import flask_login as login
 from app.models import db
 from app.models.user import User
-from flask.ext.login import current_user
+from flask_login import current_user
 
 
 class AuthManager:

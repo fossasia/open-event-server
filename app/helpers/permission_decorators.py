@@ -1,8 +1,8 @@
 from functools import wraps
 
 from flask import request
-from flask.ext import login
-from flask.ext.restplus import abort
+import flask_login as login
+from flask_restplus import abort
 
 from app.helpers.helpers import get_count
 from app.models.discount_code import DiscountCode

@@ -6,8 +6,8 @@ from uuid import uuid4
 
 from flask import Blueprint
 from flask import flash, url_for, redirect, request, jsonify, Markup, render_template, current_app
-from flask.ext.login import current_user
-from flask.ext.restplus import abort
+from flask_login import current_user
+from flask_restplus import abort
 
 from app import db
 from app.helpers.auth import AuthManager

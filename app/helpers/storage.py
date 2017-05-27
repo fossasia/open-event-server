@@ -7,7 +7,7 @@ import magic
 from boto.gs.connection import GSConnection
 from boto.s3.connection import S3Connection, OrdinaryCallingFormat
 from boto.s3.key import Key
-from flask.ext.scrypt import generate_password_hash
+from flask_scrypt import generate_password_hash
 from werkzeug.utils import secure_filename
 from flask import current_app as app
 

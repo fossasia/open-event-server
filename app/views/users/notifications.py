@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask import url_for, redirect, abort, jsonify, render_template
-from flask.ext import login
+import flask_login as login
 
 from app.helpers.data import DataManager
 from app.helpers.data_getter import DataGetter

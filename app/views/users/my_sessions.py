@@ -4,8 +4,8 @@ from datetime import datetime
 from flask import Blueprint, jsonify
 from flask import flash, redirect, url_for, request
 from flask import render_template, current_app
-from flask.ext.restplus import abort
-from flask.ext import login
+from flask_restplus import abort
+import flask_login as login
 from markupsafe import Markup
 
 from app.helpers.data import DataManager, save_to_db

@@ -1,7 +1,7 @@
 import os
 
 from flask import send_file, make_response, jsonify, url_for, current_app
-from flask.ext.restplus import Resource, Namespace, marshal
+from flask_restplus import Resource, Namespace, marshal
 
 from app.helpers.data import record_activity
 from helpers import custom_fields as fields

@@ -6,7 +6,7 @@ import stripe
 from flask import Blueprint
 from flask import redirect, url_for, request, jsonify, make_response, flash
 from flask import render_template
-from flask.ext.restplus import abort
+from flask_restplus import abort
 from xhtml2pdf import pisa
 
 from app import get_settings

@@ -1,4 +1,4 @@
-from flask.ext.restplus import Namespace
+from flask_restplus import Namespace
 
 from app.models.track import Track as TrackModel
 from app.api.helpers import custom_fields as fields

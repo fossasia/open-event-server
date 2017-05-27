@@ -3,10 +3,10 @@ from datetime import datetime
 from functools import wraps, update_wrapper
 
 from flask import request, g, make_response
-from flask.ext import login
-from flask.ext.restplus import fields
-from flask.ext.restplus.utils import merge
-from flask.ext.scrypt import check_password_hash
+import flask_login as login
+from flask_restplus import fields
+from flask_restplus.utils import merge
+from flask_scrypt import check_password_hash
 from flask_jwt import jwt_required, JWTError, current_identity
 from sqlalchemy import func
 

@@ -2,9 +2,9 @@ import unicodedata
 from flask import Blueprint
 from flask import request, jsonify
 from flask import url_for, redirect, flash, render_template
-from flask.ext.scrypt import generate_password_hash, generate_random_salt
-from flask.ext.login import current_user
-from flask.ext.restplus import abort
+from flask_scrypt import generate_password_hash, generate_random_salt
+from flask_login import current_user
+from flask_restplus import abort
 from sqlalchemy_continuum import transaction_class
 
 from app.helpers.data import delete_from_db, DataManager, save_to_db

@@ -2,8 +2,8 @@ import unicodedata
 
 from flask import Blueprint, render_template
 from flask import request, url_for, redirect, jsonify, flash
-from flask.ext import login
-from flask.ext.scrypt import generate_password_hash, generate_random_salt
+import flask_login as login
+from flask_scrypt import generate_password_hash, generate_random_salt
 
 from app.helpers.data import DataManager, save_to_db
 from app.helpers.data_getter import DataGetter

@@ -4,7 +4,7 @@ import requests
 from flask import Blueprint
 from flask import render_template
 from flask import request, redirect, url_for, jsonify
-from flask.ext.restplus import abort
+from flask_restplus import abort
 from flask_restplus import marshal
 from requests import ConnectionError
 

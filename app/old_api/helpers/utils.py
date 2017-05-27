@@ -2,7 +2,7 @@ import json
 from hashlib import md5
 
 from flask import request
-from flask.ext.restplus import Resource as RestplusResource
+from flask_restplus import Resource as RestplusResource
 from flask_restplus import Model, fields, reqparse
 
 from app.helpers.data import update_version

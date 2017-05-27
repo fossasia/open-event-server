@@ -3,7 +3,7 @@ from uuid import uuid4
 from flask import Blueprint
 from flask import render_template
 from flask import request, url_for, redirect, flash, jsonify
-from flask.ext import login
+import flask_login as login
 from markupsafe import Markup
 
 from app.helpers.auth import AuthManager

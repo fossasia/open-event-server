@@ -2,7 +2,7 @@ import binascii
 import os
 from datetime import datetime
 
-from flask.ext import login
+import flask_login as login
 from sqlalchemy import event
 
 from app.helpers.date_formatter import DateFormatter

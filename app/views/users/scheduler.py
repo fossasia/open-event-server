@@ -3,8 +3,8 @@ from datetime import datetime
 from flask import Blueprint
 from flask import render_template
 from flask import url_for, flash
-from flask.ext import login
-from flask.ext.restplus import abort
+import flask_login as login
+from flask_restplus import abort
 from werkzeug.utils import redirect
 
 from app.helpers.data import save_to_db

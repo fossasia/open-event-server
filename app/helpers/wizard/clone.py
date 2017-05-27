@@ -1,5 +1,5 @@
 from sqlalchemy.orm import make_transient
-from flask.ext import login
+import flask_login as login
 
 from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter

@@ -1,5 +1,5 @@
 from flask import g
-from flask.ext.restplus import Namespace, reqparse, marshal
+from flask_restplus import Namespace, reqparse, marshal
 
 from app.api.attendees import TICKET
 from app.api.microlocations import MICROLOCATION

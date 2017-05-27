@@ -2,7 +2,7 @@ import json
 
 from flask import Blueprint
 from flask import request, url_for, redirect, flash, jsonify, render_template, current_app
-from flask.ext.restplus import abort
+from flask_restplus import abort
 
 from app.helpers.data import delete_from_db, save_to_db
 from app.helpers.data_getter import DataGetter

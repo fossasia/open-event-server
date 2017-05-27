@@ -9,7 +9,7 @@ from app.models.speaker import Speaker
 from app.helpers.data import DataManager
 from app.helpers.data_getter import DataGetter
 from populate_db import populate
-from flask.ext.migrate import stamp
+from flask_migrate import stamp
 from sqlalchemy.engine import reflection
 
 

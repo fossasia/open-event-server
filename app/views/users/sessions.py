@@ -4,7 +4,7 @@ import re
 from flask import Blueprint
 from flask import make_response
 from flask import url_for, redirect, flash, render_template
-from flask.ext import login
+import flask_login as login
 from app import db
 from app.helpers.data import DataManager, delete_from_db, trash_session as _trash_session, \
     restore_session as _restore_session

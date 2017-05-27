@@ -1,7 +1,7 @@
 from functools import wraps
 
 from flask import g
-from flask.ext.restplus import Namespace, marshal_with
+from flask_restplus import Namespace, marshal_with
 from flask_login import current_user
 
 from app.helpers.data_getter import DataGetter

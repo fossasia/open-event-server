@@ -2,7 +2,7 @@ import re
 import colour
 from datetime import datetime
 from flask import request
-from flask.ext.restplus.fields import Raw, Nested, List
+from flask_restplus.fields import Raw, Nested, List
 from app.helpers.data_getter import DataGetter
 
 EMAIL_REGEX = re.compile(r'\S+@\S+\.\S+')

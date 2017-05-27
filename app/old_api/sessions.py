@@ -1,4 +1,4 @@
-from flask.ext.restplus import Namespace, reqparse
+from flask_restplus import Namespace, reqparse
 from sqlalchemy.orm.collections import InstrumentedList
 
 from app.helpers.data import record_activity, save_to_db

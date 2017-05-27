@@ -1,5 +1,5 @@
 from flask import g
-from flask.ext.restplus import Resource, Namespace
+from flask_restplus import Resource, Namespace
 
 from app.api.events import EVENT
 from app.helpers.data import DataManager, record_activity
