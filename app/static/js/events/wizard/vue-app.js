@@ -61,6 +61,12 @@ var app = new Vue({
             var start = moment(this.event.start_time_date.trim() + " " + this.event.start_time_time.trim(), format);
             var end = moment(this.event.end_time_date.trim() + " " + this.event.end_time_time.trim(), format);
             return end.isBefore(start);
+        },
+        showTickets: function(){
+            if(this.event.tickets === null)
+                return false;
+            else
+                return this.event.tickets.length > 0;
         }
     },
     watch: {
@@ -387,12 +393,13 @@ function shouldDisableMove($this) {
 
 function checkTickets($this) {
     var flag = false;
-    $this.forEach(function(ticket){
-        if(ticket.type === 'paid' && (ticket.price === '' || ticket.price <=0))
-        {
-            flag = true;
-        }
-    });
+    if($this !== null) {
+        $this.forEach(function(ticket){
+            if(ticket.type === 'paid' && (ticket.price === '' || ticket.price <=0)) {
+                flag = true;
+            }
+        });
+    }
     return flag;
 }
 
