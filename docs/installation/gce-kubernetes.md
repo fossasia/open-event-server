@@ -128,14 +128,13 @@ _You can delete the instance if your not planning to use it for anything else. B
 - Add your domain name to `kubernetes/yamls/web/ingress-notls.yml` & `kubernetes/yamls/web/ingress-tls.yml`. (replace `api.eventyay.com`)
 - Add your email ID to `kubernetes/yamls/lego/configmap.yml` for the parameter `lego.email`.
 - In `kubernetes/yamls/postgres/postgres-pod.yml` ensure `pdName` is `pg-data-disk`. Else change it.
-- In `kubernetes/yamls/redirector/api.eventyay.com/redirector-deployment.yml` add your domain (`https://<yourdomain>`) as the value of `REDIRECT`. (Replace `https://api.eventyay.com`)
 
 ## Deploy our pods, services and deployments
 
 - From the project directory, use the provided deploy script to deploy our application from the defined configuration files that are in the `kubernetes` directory.
 
     ```
-    ./kubernetes/deploy.sh create
+    ./kubernetes/deploy.sh create all
     ```
 
 - The Kubernetes master creates the load balancer and related Compute Engine forwarding rules, target pools, and firewall rules to make the service fully accessible from outside of Google Cloud Platform. 
@@ -149,7 +148,7 @@ _You can delete the instance if your not planning to use it for anything else. B
 - Delete all created pods, services and deployments
 
     ```
-    ./kubernetes/deploy.sh delete
+    ./kubernetes/deploy.sh delete all
     ```
     
 -  Access The Kubernetes dashboard Web GUI

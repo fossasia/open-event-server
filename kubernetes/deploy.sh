@@ -3,18 +3,22 @@ export DIR=${BASH_SOURCE%/*}
 
 if [ "$1" = "delete" ]; then
     echo "Clearing the cluster."
-    kubectl delete -f ${DIR}/yamls/lego/00-namespace.yml
+    if [ "$2" = "all" ]; then
+        kubectl delete -f ${DIR}/yamls/lego/00-namespace.yml
+        kubectl delete -f ${DIR}/yamls/nginx/00-namespace.yml
+    fi
     kubectl delete -f ${DIR}/yamls/postgres/00-namespace.yml
     kubectl delete -f ${DIR}/yamls/redis/00-namespace.yml
-    kubectl delete -f ${DIR}/yamls/nginx/00-namespace.yml
     kubectl delete -f ${DIR}/yamls/web/00-namespace.yml
     echo "Done. The project was removed from the cluster."
 elif [ "$1" = "create" ]; then
     echo "Deploying the project to kubernetes cluster"
-    # Start KubeLego deployment
-    kubectl create -R -f ${DIR}/yamls/lego
-    # Start nginx deployment, ingress & service
-    kubectl create -R -f ${DIR}/yamls/nginx
+    if [ "$2" = "all" ]; then
+        # Start KubeLego deployment
+        kubectl create -R -f ${DIR}/yamls/lego
+        # Start nginx deployment, ingress & service
+        kubectl create -R -f ${DIR}/yamls/nginx
+    fi
     # Start Redis deployment & service
     kubectl create -R -f ${DIR}/yamls/redis
     # Start postgres persistent volume, deployment & service
