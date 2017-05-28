@@ -212,10 +212,9 @@
                 <transition name="fade">
                     <span class="help-block" v-show="!isValidLinkEntry(event.event_url)">This looks like an invalid URL and hence will be ignored.</span>
                 </transition>
-                <span class="input-group-btn" v-bind:style="{ opacity: 1 - event.social_links.length  }">
+                <span class="input-group-btn">
                         <button type="button" class="btn btn-primary add-social-links"
                                 v-on:click="addSocialLink()">+</button>
-                        <button type="button" class="btn btn-danger remove-social-links" style="opacity: 0;">-</button>
                     </span>
             </div>
         </div>
