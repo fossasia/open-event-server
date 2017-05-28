@@ -69,6 +69,12 @@
                     <a href="{{ url_for('event_sessions.create_view', event_id=event_id) }}?from=speaker"
                        class="btn btn-info">{{ _("Add Speaker") }}</a>
                 </div>
+                <div class="btn-group pull-left" style="margin-left: 5px; margin-right: 10px;">
+                    <a class="btn btn-info btn-responsive"
+                       href="{{ url_for('event_sessions.download_speakers_as_csv', event_id=event.id) }}"
+                        target="_blank">{{ _("Export As CSV") }}
+                    </a>
+                </div>
 
             </div>
         </div>

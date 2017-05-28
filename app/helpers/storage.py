@@ -51,6 +51,14 @@ UPLOAD_PATHS = {
     'temp': {
         'event': 'events/temp/{uuid}',
         'image': 'temp/images/{uuid}'
+    },
+    'exports': {
+        'zip': 'exports/{event_id}/zip',
+        'pentabarf': 'exports/{event_id}/pentabarf',
+        'ical': 'exports/{event_id}/ical',
+        'xcal': 'exports/{event_id}/xcal',
+        'csv': 'exports/{event_id}/csv',
+        'pdf': 'exports/{event_id}/pdf'
     }
 }
 
@@ -218,6 +226,9 @@ def upload_to_gs(bucket_name, client_id, client_secret, file, key, acl='public-r
     if sent == size:
         return gs_url + k.key
     return False
+
+def is_external_file(filename):
+    return ('http://' in filename) or ('https://' in filename)
 
 
 # ########

@@ -139,7 +139,8 @@ function setATagsInNotifMenuDropDown(notificationViewPath) {
                         $(li).remove();
                     });
                     var notif_count = $notifCount.text();
-                    $notifCount.text(parseInt(notif_count) - 1);
+                    notif_count = ((notif_count - 1) > 0 ) ? (notif_count - 1) : 0;
+                    $notifCount.text(parseInt(notif_count, 10));
                 }
             });
         });

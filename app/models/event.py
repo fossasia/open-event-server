@@ -98,6 +98,10 @@ class Event(db.Model):
     bank_details = db.Column(db.String)
     onsite_details = db.Column(db.String)
     created_at = db.Column(db.DateTime)
+    pentabarf_url = db.Column(db.String)
+    ical_url = db.Column(db.String)
+    xcal_url = db.Column(db.String)
+    sponsors_enabled = db.Column(db.Boolean, default=False)
 
     discount_code_id = db.Column(db.Integer, db.ForeignKey('discount_codes.id', ondelete='SET NULL'),
                                  nullable=True, default=None)
@@ -147,6 +151,9 @@ class Event(db.Model):
                  pay_onsite=None,
                  cheque_details=None,
                  bank_details=None,
+                 pentabarf_url=None,
+                 ical_url=None,
+                 xcal_url=None,
                  discount_code_id=None,
                  onsite_details=None):
 
@@ -193,6 +200,9 @@ class Event(db.Model):
         self.identifier = get_new_event_identifier()
         self.cheque_details = cheque_details
         self.bank_details = bank_details
+        self.pentabarf_url = pentabarf_url
+        self.ical_url = ical_url
+        self.xcal_url = xcal_url
         self.onsite_details = onsite_details
         self.discount_code_id = discount_code_id
         self.created_at = datetime.utcnow()

@@ -91,8 +91,8 @@ def trigger_after_purchase_notifications(buyer_email, event_id, event, invoice_i
             (email_notification_setting and email_notification_setting.after_ticket_purchase == 1 and
                      admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
             send_email_for_after_purchase_organizers(coorganizer.user.email, buyer_email, invoice_id, order_url, event.name, event.organizer_name)
-        if not resend:
-            send_notif_for_resend(organizer.user, invoice_id, order_url, event.name, buyer_email)
+        if resend:
+            send_notif_for_resend(coorganizer.user, invoice_id, order_url, event.name, buyer_email)
         else:
-            send_notif_for_after_purchase_organizer(organizer.user, invoice_id, order_url, event.name, buyer_email)
+            send_notif_for_after_purchase_organizer(coorganizer.user, invoice_id, order_url, event.name, buyer_email)
 

@@ -25,7 +25,8 @@ from app.helpers.notification_email_triggers import trigger_new_session_notifica
     trigger_session_state_change_notifications
 from app.helpers.oauth import OAuth, FbOAuth, InstagramOAuth, TwitterOAuth
 from app.helpers.sessions_speakers.speakers import save_speaker
-from app.helpers.storage import upload, UPLOAD_PATHS, UploadedFile, upload_local
+from app.helpers.storage import upload, UPLOAD_PATHS, UploadedFile, upload_local, \
+    is_external_file
 from app.helpers import helpers as Helper
 from app.helpers.data_getter import DataGetter
 from app.helpers.system_mails import MAILS
@@ -54,6 +55,7 @@ from app.models.user import User, ATTENDEE
 from app.models.user_detail import UserDetail
 from app.models.user_permissions import UserPermission
 from app.models.users_events_roles import UsersEventsRoles
+from app.helpers.signals import sessions_modified, speakers_modified
 
 
 class DataManager(object):
@@ -210,13 +212,13 @@ class DataManager(object):
         video_file = ''
         audio_file = ''
 
-        if slide_temp_url:
+        if slide_temp_url and not is_external_file(slide_temp_url):
             slide_file = UploadedFile(get_path_of_temp_url(slide_temp_url), slide_temp_url.rsplit('/', 1)[1])
 
-        if video_temp_url:
+        if video_temp_url and not is_external_file(video_temp_url):
             video_file = UploadedFile(get_path_of_temp_url(video_temp_url), video_temp_url.rsplit('/', 1)[1])
 
-        if audio_temp_url:
+        if audio_temp_url and not is_external_file(audio_temp_url):
             audio_file = UploadedFile(get_path_of_temp_url(audio_temp_url), audio_temp_url.rsplit('/', 1)[1])
 
         if not state:
@@ -259,27 +261,36 @@ class DataManager(object):
         if state == 'pending':
             trigger_new_session_notifications(new_session.id, event=event)
 
-        if slide_temp_url != "" and slide_file:
-            slide_url = upload(
-                slide_file,
-                UPLOAD_PATHS['sessions']['slides'].format(
+        if slide_temp_url:
+            if slide_file:
+                slide_file = upload(
+                    slide_file,
+                    UPLOAD_PATHS['sessions']['slides'].format(
                     event_id=int(event_id), id=int(new_session.id)
                 ))
-            new_session.slides = slide_url
-        if audio_temp_url != "" and audio_file:
-            audio_url = upload(
-                audio_file,
-                UPLOAD_PATHS['sessions']['audio'].format(
-                    event_id=int(event_id), id=int(new_session.id)
-                ))
-            new_session.audio = audio_url
-        if video_temp_url != "" and video_file:
-            video_url = upload(
-                video_file,
-                UPLOAD_PATHS['sessions']['video'].format(
-                    event_id=int(event_id), id=int(new_session.id)
-                ))
-            new_session.video = video_url
+            else:
+                slide_file = slide_temp_url
+            new_session.slides = slide_file
+        if audio_temp_url:
+            if audio_file:
+                audio_file = upload(
+                    audio_file,
+                    UPLOAD_PATHS['sessions']['audio'].format(
+                        event_id=int(event_id), id=int(new_session.id)
+                    ))
+            else:
+                audio_file = audio_temp_url
+            new_session.audio = audio_file
+        if video_temp_url:
+            if video_file:
+                video_file = upload(
+                    video_file,
+                    UPLOAD_PATHS['sessions']['video'].format(
+                        event_id=int(event_id), id=int(new_session.id)
+                    ))
+            else:
+                video_file = video_temp_url
+            new_session.video = video_file
         record_activity('create_session', session=new_session, event_id=event_id)
         update_version(event_id, False, 'sessions_ver')
 
@@ -324,6 +335,7 @@ class DataManager(object):
         session = DataGetter.get_session(session_id)
         speaker = save_speaker(request, event_id, user=user)
         session.speakers.append(speaker)
+        sessions_modified.send(current_app._get_current_object(), event_id=session.event_id)
         save_to_db(session, "Session updated")
         update_version(event_id, False, "speakers_ver")
         update_version(event_id, False, "sessions_ver")
@@ -352,6 +364,7 @@ class DataManager(object):
         session.submission_date = datetime.now()
         session.submission_modifier = login.current_user.email
         session.state_email_sent = False
+        sessions_modified.send(current_app._get_current_object(), event_id=session.event_id)
         save_to_db(session, 'Session State Updated')
         if send_email:
             trigger_session_state_change_notifications(session, event_id, message=message, subject=subject)
@@ -366,42 +379,43 @@ class DataManager(object):
             slide_temp_url = form.get('slides_url')
             video_temp_url = form.get('video_url')
             audio_temp_url = form.get('audio_url')
+
             slide_file = ''
             video_file = ''
             audio_file = ''
 
-            if slide_temp_url and slide_temp_url != session.slides:
+            if slide_temp_url and slide_temp_url != session.slides and not is_external_file(slide_temp_url):
                 slide_file = UploadedFile(get_path_of_temp_url(slide_temp_url), slide_temp_url.rsplit('/', 1)[1])
 
-            if video_temp_url and video_temp_url != session.video:
+            if video_temp_url and video_temp_url != session.video and not is_external_file(video_temp_url):
                 video_file = UploadedFile(get_path_of_temp_url(video_temp_url), video_temp_url.rsplit('/', 1)[1])
 
-            if audio_temp_url and audio_temp_url != session.audio:
+            if audio_temp_url and audio_temp_url != session.audio and not is_external_file(audio_temp_url):
                 audio_file = UploadedFile(get_path_of_temp_url(audio_temp_url), audio_temp_url.rsplit('/', 1)[1])
 
             form_state = form.get('state', 'draft')
 
-            if slide_temp_url != "" and slide_temp_url != session.slides and slide_file:
+            if slide_file:
                 slide_temp_url = upload(slide_file,
-                                        UPLOAD_PATHS['sessions']['slides'].format(
-                                            event_id=int(event_id), id=int(session.id)
-                                        ))
-            if audio_temp_url != "" and audio_temp_url != session.audio and audio_file:
-                audio_temp_url = upload(
-                    audio_file,
-                    UPLOAD_PATHS['sessions']['audio'].format(
-                        event_id=int(event_id), id=int(session.id)
-                    ))
-            if video_temp_url != "" and video_temp_url != session.video and video_file:
+                                    UPLOAD_PATHS['sessions']['slides'].format(
+                                        event_id=int(event_id), id=int(session.id)
+                                    ))
+            if video_file:
                 video_temp_url = upload(
                     video_file,
                     UPLOAD_PATHS['sessions']['video'].format(
                         event_id=int(event_id), id=int(session.id)
                     ))
+            if audio_file:
+                audio_temp_url = upload(
+                    audio_file,
+                    UPLOAD_PATHS['sessions']['audio'].format(
+                        event_id=int(event_id), id=int(session.id)
+                    ))
 
-            session.slides = slide_temp_url
             session.audio = audio_temp_url
             session.video = video_temp_url
+            session.slides = slide_temp_url
 
             if form_state == 'pending' and session.state != 'pending' and \
                     session.state != 'accepted' and session.state != 'rejected' and session.state != 'confirmed':
@@ -419,7 +433,7 @@ class DataManager(object):
             existing_speaker_ids = form.getlist("speakers[]")
             current_speaker_ids = []
             existing_speaker_ids_by_email = []
-
+            sessions_modified.send(current_app._get_current_object(), event_id=session.event_id)
             save_to_db(session, 'Session Updated')
 
             if speaker:
@@ -928,6 +942,7 @@ def user_logged_in(user):
             role = Role.query.filter_by(name='speaker').first()
             event = DataGetter.get_event(speaker.event_id)
             uer = UsersEventsRoles(user=user, event=event, role=role)
+            speakers_modified.send(current_app._get_current_object(), event_id=speaker.event_id)
             save_to_db(uer)
             save_to_db(speaker)
     return True
@@ -1039,6 +1054,7 @@ def trash_user(user_id):
 def trash_session(session_id):
     session = DataGetter.get_session(session_id)
     session.deleted_at = datetime.now()
+    sessions_modified.send(current_app._get_current_object(), event_id=session.event_id)
     save_to_db(session, "Session added to Trash")
     update_version(session.event_id, False, 'sessions_ver')
     return session
@@ -1059,6 +1075,7 @@ def restore_user(user_id):
 def restore_session(session_id):
     session = DataGetter.get_session(session_id)
     session.deleted_at = None
+    sessions_modified.send(current_app._get_current_object(), event_id=session.event_id)
     save_to_db(session, "Session restored from Trash")
     update_version(session.event_id, False, 'sessions_ver')
 

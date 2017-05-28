@@ -2,7 +2,7 @@
 title: GCE Kubernetes
 ---
 
-## Setup and Requirements
+## Setup
 
 - If you don’t already have a Google Account (Gmail or Google Apps), you must [create one](https://accounts.google.com/SignUp). Then, sign-in to Google Cloud Platform console ([console.cloud.google.com](http://console.cloud.google.com/)) and create a new project:
 
@@ -23,7 +23,7 @@ title: GCE Kubernetes
     gcloud components install kubectl
     ```
 
-- Choose a [Google Cloud Project zone](https://cloud.google.com/compute/docs/regions-zones/regions-zones) to run your service. We will be using us-central1-a. This is configured on the command line via:
+- Choose a [Google Cloud Project zone](https://cloud.google.com/compute/docs/regions-zones/regions-zones) to run your service. We will be using `us-west1-a`. This is configured on the command line via:
 
     ```
     gcloud config set compute/zone us-west1-a
@@ -102,6 +102,49 @@ Repeat the same procedure and create another disk named `nfs-data-disk`.
     gcloud container clusters get-credentials opev-cluster
     ```
 
+## Pre deployment steps 
+- A domain name (Eg. eventyay.com, google.com, hello.io). - A free domain can be registered at http://www.freenom.com .
+- Reserve a static external IP address 
+	
+	```bash
+	gcloud compute addresses create testip --region us-west1
+	```
+	
+	The response would be similar to 
+	
+	```
+	address: 123.123.123.123
+	creationTimestamp: '2017-05-16T05:26:24.894-07:00'
+	description: ''
+	id: '1234556789'
+	kind: compute#address
+	name: test
+	selfLink: https://www.googleapis.com/compute/v1/projects/eventyay/global/addresses/test
+	status: RESERVED
+	```	
+	
+	Note down the address. (In this case `123.123.123.123`). We'll call this **External IP Address One**.
+- Add the **External IP Address One** as an `A` record to your domain's DNS Zone.
+- Add the **External IP Address One** to `kubernetes/yamls/nginx/service.yml` for the parameter `loadBalancerIP`.
+- Add your domain name to `kubernetes/yamls/web/ingress-notls.yml` & `kubernetes/yamls/web/ingress-tls.yml`. (replace `eventyay.com`)
+- Add your email ID to `kubernetes/yamls/lego/configmap.yml` for the parameter `lego.email`.
+- Get your cluster internal IP range by running
+
+	```
+	kubectl get services kubernetes
+	```
+	
+	The response would be similar to 
+	
+	```
+	NAME         CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+	kubernetes   10.3.240.1   <none>        443/TCP   115d
+	```
+	
+	Note down the cluster IP. (In this case `10.3.240.1`). Pick an IP in the same range. (For this case `10.3.1.1` to `10.3.255.255`). We'll call the IP address you picked as **Internal IP Address One**.
+- Add the **Internal IP Address One** to `kubernetes/yamls/persistent-store/nfs-pv.yml` for the property `server`
+- Add the **Internal IP Address One** to `kubernetes/yamls/persistent-store/nfs-server-service.yml` for the property `clusterIP`
+
 ## Deploy our pods, services and deployments
 
 - From the project directory, use the provided deploy script to deploy our application from the defined configuration files that are in the `kubernetes` directory.
@@ -110,19 +153,11 @@ Repeat the same procedure and create another disk named `nfs-data-disk`.
     ./kubernetes/deploy.sh
     ```
 
-- The Kubernetes master creates the load balancer and related Compute Engine forwarding rules, target pools, and firewall rules to make the service fully accessible from outside of Google Cloud Platform.
+- The Kubernetes master creates the load balancer and related Compute Engine forwarding rules, target pools, and firewall rules to make the service fully accessible from outside of Google Cloud Platform. 
+- Wait for a few minutes for all the containers to be created and the SSL Certificates to be generated and loaded. 
+- You can track the progress using the Web GUI as mentioned below.
+- Once deployed, your instance will be accessible at your domain name.
     
-    To find the ip addresses associated with the service run:
-
-    ```
-    kubectl get services web
-    ```
-
-    The `EXTERNAL_IP` may take several minutes to become available and visible. If the `EXTERNAL_IP` is missing, wait a few minutes and try again.
-    
-    Note there are 2 IP addresses listed, both serving port 80. `CLUSTER_IP` is only visible inside your cloud virtual network. `EXTERNAL_IP` is externally accessible.
-    
-    You should now be able to reach the web application by pointing your browser to this address: `http://EXTERNAL_IP`
 
 ## Other handy commands
 

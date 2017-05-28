@@ -15,6 +15,7 @@ from app.api.helpers.helpers import (
 from app.api.helpers.helpers import model_custom_form, requires_auth
 from app.api.helpers.utils import PAGINATED_MODEL, PaginatedResourceBase, ServiceDAO, \
     PAGE_PARAMS, POST_RESPONSES, PUT_RESPONSES, SERVICE_RESPONSES
+from app.api.helpers.special_fields import SessionStateField
 from app.api.helpers.utils import Resource, ETAG_HEADER_DEFN
 
 api = Namespace('speakers', description='Speakers', path='/')
@@ -22,6 +23,7 @@ api = Namespace('speakers', description='Speakers', path='/')
 SPEAKER_SESSION = api.model('SpeakerSession', {
     'id': fields.Integer(),
     'title': fields.String(),
+    'state': SessionStateField(),
 })
 
 SPEAKER = api.model('Speaker', {

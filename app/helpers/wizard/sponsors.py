@@ -55,9 +55,8 @@ def save_sponsors_from_json(json, event_id=None):
 
         if len(ids) > 0:
             Sponsor.query.filter(~Sponsor.id.in_(ids)).filter_by(event_id=event_id).delete(synchronize_session='fetch')
-    else:
-        Sponsor.query.filter_by(event_id=event_id).delete(synchronize_session='fetch')
 
+    event.sponsors_enabled = sponsors_enabled
     event.state = json['state'] if event.location_name.strip() != '' else 'Draft'
     save_to_db(event)
     return {

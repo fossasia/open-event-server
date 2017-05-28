@@ -1,5 +1,5 @@
 import json
-
+from flask import current_app as app
 from app.helpers.data import save_to_db
 from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import represents_int
@@ -9,6 +9,7 @@ from app.models.track import Track
 from app.models.session_type import SessionType
 from app.models.custom_forms import CustomForms
 from app.models.call_for_papers import CallForPaper
+from app.helpers.signals import microlocations_modified
 
 
 def get_tracks_json(event_id):
@@ -48,7 +49,6 @@ def save_session_speakers(json, event_id=None):
         save_custom_forms(json['custom_forms'], event_id)
     else:
         event.has_session_speakers = False
-        delete_all_sessions_speakers_data(event_id)
 
     event.state = json['state'] if event.location_name.strip() != '' else 'Draft'
     save_to_db(event)
@@ -80,6 +80,7 @@ def save_data(object, data, event_id, attrs):
 
 
 def save_microlocations(data, event_id):
+    microlocations_modified.send(app._get_current_object(), event_id=event_id)
     save_data(Microlocation, data, event_id, ['floor-number', 'name'])
 
 
@@ -112,9 +113,3 @@ def save_custom_forms(data, event_id):
     custom_forms.speaker_form = json.dumps(data['speaker'])
     save_to_db(custom_forms)
 
-
-def delete_all_sessions_speakers_data(event_id):
-    Microlocation.query.filter_by(event_id=event_id).delete()
-    SessionType.query.filter_by(event_id=event_id).delete()
-    Track.query.filter_by(event_id=event_id).delete()
-    CallForPaper.query.filter_by(event_id=event_id).delete()

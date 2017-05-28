@@ -20,7 +20,9 @@
 {% macro tabs() %}
     <ul class="nav nav-tabs bar_tabs" role="tablist" style="background: #FFFFFF;">
         {% for href, id, caption in navigation_bar %}
+        {% if not (current_user.is_coorganizer(event.id) and id == 'scheduler') %}
             <li{% if id == active_page %} class="active"{% endif %}><a href="{{ href|e }}" style="cursor: pointer;">{{ caption|e }}</a></li>
+        {% endif %}
         {% endfor %}
     </ul>
 {% endmacro %}

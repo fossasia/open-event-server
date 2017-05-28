@@ -170,7 +170,7 @@ class EventDAO(BaseDAO):
         save_to_db(new_event, "Event saved")
         # set organizer
         role = Role.query.filter_by(name=ORGANIZER).first()
-        uer = UsersEventsRoles(g.user, new_event, role)
+        uer = UsersEventsRoles(user_id=g.user.id, event=new_event, role=role)
         save_to_db(uer, 'UER saved')
         # Return created resource with a 201 status code and its Location
         # (url) in the header.

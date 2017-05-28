@@ -3,8 +3,7 @@ from datetime import datetime
 import pytz
 
 from flask import Blueprint
-from flask import make_response
-from flask import request, url_for, flash, render_template, jsonify
+from flask import request, url_for, flash, render_template, jsonify, make_response, current_app as app
 from flask.ext import login
 from flask.ext.restplus import abort
 from markupsafe import Markup
@@ -12,12 +11,11 @@ from werkzeug.utils import redirect
 
 from app.helpers.data import DataManager
 from app.helpers.data_getter import DataGetter
-from app.helpers.exporters.ical import ICalExporter
-from app.helpers.exporters.pentabarfxml import PentabarfExporter
-from app.helpers.exporters.xcal import XCalExporter
 from app.helpers.helpers import get_count
 from app.models.call_for_papers import CallForPaper
 from app.helpers.wizard.helpers import get_current_timezone
+from app.settings import get_settings
+from urllib2 import urlopen
 
 
 def get_published_event_or_abort(identifier):
@@ -158,12 +156,15 @@ def display_event_schedule(identifier):
 @event_detail.route('/<identifier>/schedule/pentabarf.xml')
 def display_event_schedule_pentabarf(identifier):
     event = get_published_event_or_abort(identifier)
+    file_url = event.pentabarf_url
     if not event.has_session_speakers:
-        abort(404)
+       abort(404)
     accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
     if accepted_sessions_count == 0 or not event.schedule_published_on:
         abort(404)
-    response = make_response(PentabarfExporter.export(event.id))
+    if get_settings()['storage_place'] != "s3" and get_settings()['storage_place'] != 'gs':
+        file_url = "file://" + app.config['BASE_DIR'] + file_url.replace("/serve_", "/")
+    response = make_response(urlopen(file_url).read())
     response.headers["Content-Type"] = "application/xml"
     return response
 
@@ -171,12 +172,15 @@ def display_event_schedule_pentabarf(identifier):
 @event_detail.route('/<identifier>/schedule/calendar.ics')
 def display_event_schedule_ical(identifier):
     event = get_published_event_or_abort(identifier)
+    file_url = event.ical_url
     if not event.has_session_speakers:
         abort(404)
     accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
     if accepted_sessions_count == 0 or not event.schedule_published_on:
         abort(404)
-    response = make_response(ICalExporter.export(event.id))
+    if get_settings()['storage_place'] != "s3" and get_settings()['storage_place'] != 'gs':
+        file_url = "file://" + app.config['BASE_DIR'] + file_url.replace("/serve_", "/")
+    response = make_response(urlopen(file_url).read())
     response.headers["Content-Type"] = "text/calendar"
     return response
 
@@ -184,12 +188,15 @@ def display_event_schedule_ical(identifier):
 @event_detail.route('/<identifier>/schedule/calendar.xcs')
 def display_event_schedule_xcal(identifier):
     event = get_published_event_or_abort(identifier)
+    file_url = event.xcal_url
     if not event.has_session_speakers:
         abort(404)
     accepted_sessions_count = get_count(DataGetter.get_sessions(event.id))
     if accepted_sessions_count == 0 or not event.schedule_published_on:
         abort(404)
-    response = make_response(XCalExporter.export(event.id))
+    if get_settings()['storage_place'] != "s3" and get_settings()['storage_place'] != 'gs':
+        file_url = "file://" + app.config['BASE_DIR'] + file_url.replace("/serve_", "/")
+    response = make_response(urlopen(file_url).read())
     response.headers["Content-Type"] = "application/xml"
     return response
 

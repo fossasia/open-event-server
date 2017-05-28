@@ -1,7 +1,11 @@
 var sponsorsSeed = null;
+var sponsorsEnabled = null;
+var ticketsSeed = null;
 
-if(!_.isUndefined(window.seed) && !_.isNull(window.seed.sponsors)) {
+if(!_.isUndefined(window.seed) && !_.isNull(window.seed.sponsors)  && !_.isNull(window.seed.event)) {
     sponsorsSeed = window.seed.sponsors;
+    sponsorsEnabled = window.seed.event.sponsors_enabled;
+    ticketsSeed = window.seed.event.tickets;
 }
 
 function bindSummerNote($this) {

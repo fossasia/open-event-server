@@ -84,6 +84,67 @@ class TicketingManager(object):
         return orders.all()
 
     @staticmethod
+    def get_attendee_export_info(event_id):
+        event = DataGetter.get_event(event_id)
+        orders = TicketingManager.get_orders(event_id)
+        holders = []
+        ticket_names = []
+        for ticket in event.tickets:
+            ticket_names.append(ticket.name)
+        for order in orders:
+            for holder in order.ticket_holders:
+                discount = TicketingManager.get_discount_code(event_id, order.discount_code_id)
+                order_holder = {
+                    'order_invoice': order.get_invoice_number(),
+                    'paid_via': order.paid_via,
+                    'status': order.status,
+                    'completed_at': order.completed_at,
+                    'created_at': order.created_at,
+                    'ticket_name': holder.ticket.name,
+                    'ticket_type': holder.ticket.type,
+                    'firstname': holder.firstname,
+                    'lastname': holder.lastname,
+                    'email': holder.email,
+                    'country': holder.country,
+                    'ticket_price': holder.ticket.price,
+                    'discount': discount
+                }
+
+                order_holder['by_whom'] = order.user.user_detail.fullname \
+                    if order.user.user_detail and order.user.user_detail.fullname else order.user.email
+                if discount and str(holder.ticket.id) in discount.tickets.split(","):
+                    if discount.type == "amount":
+                        order_holder['ticket_price'] = order_holder['ticket_price'] - discount.value
+                    else:
+                        order_holder['ticket_price'] -= order_holder['ticket_price'] * discount.value / 100.0
+                order_holder['checked_in'] = holder.checked_in
+                order_holder['id'] = holder.id
+                holders.append(order_holder)
+            if len(order.ticket_holders) == 0:
+
+                order_holder = {
+                    'order_invoice': order.get_invoice_number(),
+                    'paid_via': order.paid_via,
+                    'status': order.status,
+                    'completed_at': order.completed_at,
+                    'created_at': order.created_at
+                }
+
+                if order.status == 'completed' or order.status == 'placed':
+                    order_holder['order_url'] = url_for('ticketing.view_order_after_payment',
+                                                        order_identifier=order.identifier)
+                else:
+                    order_holder['order_url'] = url_for('ticketing.show_transaction_error',
+                                                        order_identifier=order.identifier)
+
+                order_holder['by_whom'] = order.user.user_detail.fullname \
+                    if order.user.user_detail and order.user.user_detail.fullname else order.user.email
+
+                holders.append(order_holder)
+
+        return (event, event_id, holders, orders, ticket_names)
+
+    @staticmethod
     def get_orders_count(event_id, status='completed'):
         return get_count(Order.query.filter_by(event_id=event_id).filter(Order.user_id.isnot(None))
                          .filter_by(status=status))
@@ -383,6 +444,7 @@ class TicketingManager(object):
 
             # add attendee role to user
             if order.status == "completed":
+                send_notif_for_after_purchase(order.user, invoice_id, order_url)
                 trigger_after_purchase_notifications(email, order.event_id, order.event, invoice_id, order_url)
                 send_email_for_after_purchase(email, invoice_id, order_url, order.event.name,
                                               order.event.organizer_name)

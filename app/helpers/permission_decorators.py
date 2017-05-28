@@ -1,6 +1,6 @@
 from functools import wraps
 
-from flask import request
+from flask import request, redirect, url_for
 from flask.ext import login
 from flask.ext.restplus import abort
 
@@ -259,6 +259,8 @@ def can_access(f):
             if user.is_registrar(event_id):
                 if '/attendees' in url:
                     return f(*args, **kwargs)
+                elif not request.is_xhr:
+                    return redirect(url_for('event_ticket_sales.display_attendees', event_id=event_id))
                 else:
                     abort(403)
             if user.is_organizer(event_id) or user.is_coorganizer(event_id):

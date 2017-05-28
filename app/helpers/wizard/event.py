@@ -2,10 +2,11 @@ import os
 from datetime import datetime
 
 from PIL import Image
-from flask import url_for, abort
+from flask import url_for, abort, current_app
 from flask.ext import login
 
 from app.helpers.data import save_to_db, record_activity
+from app.helpers.cache import cache
 from app.helpers.data_getter import DataGetter
 from app.helpers.helpers import represents_int
 from app.helpers.static import EVENT_LICENCES
@@ -24,6 +25,7 @@ from app.models.ticket import Ticket, ticket_tags_table, TicketTag
 from app.models.user import ORGANIZER
 from app.models.users_events_roles import UsersEventsRoles
 from app.models.social_link import SocialLink
+from app.helpers.signals import event_json_modified
 
 
 def get_event_json(event_id):
@@ -83,7 +85,9 @@ def get_event_json(event_id):
         "state": event.state,
         "cheque_details": event.cheque_details,
         "bank_details": event.bank_details,
-        "onsite_details": event.onsite_details
+        "onsite_details": event.onsite_details,
+        "sponsors_enabled": event.sponsors_enabled,
+        "has_session_speakers": event.has_session_speakers
     }
 
     for social_link in event.social_link:
@@ -111,6 +115,7 @@ def save_event_from_json(json, event_id=None):
     :param json:
     :return:
     """
+    cache.delete('event_locations')
     event_data = json['event']
     state = json['state']
 
@@ -294,7 +299,7 @@ def save_event_from_json(json, event_id=None):
                                                                user_id=login.current_user.id,
                                                                event_id=event.id)
             save_to_db(new_email_notification_setting, "EmailSetting Saved")
-
+    event_json_modified.send(current_app._get_current_object(), event_id=event.id)
     return {
         'event_id': event.id
     }
@@ -312,7 +317,7 @@ def save_tickets(tickets_data, event):
         if ticket_data['id']:
             with db.session.no_autoflush:
                 ticket = Ticket.query.filter_by(id=ticket_data['id'], event_id=event.id).first()
-                ticket_tags=db.session.query(ticket_tags_table).filter_by(ticket_id=ticket.id)
+                ticket_tags = db.session.query(ticket_tags_table).filter_by(ticket_id=ticket.id)
                 if ticket_tags.first():
                     ticket_tags.delete()
         else:

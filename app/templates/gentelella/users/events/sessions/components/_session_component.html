@@ -64,9 +64,13 @@
                 {% endif %}
             {% endif %}
         {% elif identifier in media_session_fields %}
-            <input type="hidden" {% if (require==1) and not session[identifier] %} required="required" {% endif %} name="{{ identifier }}_url" value="{{ session[identifier] | default('', true) }}">
+            <input {% if (require==1) and not session[identifier] %} required="required" {% endif %} name="{{ identifier }}_url" value="{{ session[identifier] | default('', true) }}" style="width: 330px" class="form-control">
 
-            <br><input
+            <!-- <input type="text" {% if (require==1) and not session[identifier] %} required="required" {% endif %} name="{{ identifier }}_custom_url" {% if not (session[identifier] | filename_from_url) %} value="{{ session[identifier] | default('', true) }}" {% endif %} class="form-control" style="width: 330px" placeholder="Enter Url"> -->
+            <br>
+             - or -
+             <br/>
+            <input
             type="file" id="speaker-file-{{ identifier | default(1) }}" name="{{ identifier }}"
             class="upload-btn"/>
 
@@ -74,7 +78,8 @@
                 <i class="fa fa-cloud-upload" aria-hidden="true"></i>
                 Choose a file</label>
             <br>
-            <div class="media-progress row" id="media-progress-{{ identifier }}" {% if not session[identifier] %} style="display: none" {% endif %}>
+            <div class="media-progress row {{ session[identifier] | is_external_url }}" id="media-progress-{{ identifier }}" {% if not (session[identifier]) %} style="display: none" {% endif %}>
+
                  <div class="col-md-6" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
                      <a href="{{ session[identifier] }}" target="_blank" id="download-{{ identifier }}" download>{{ session[identifier] | filename_from_url }}</a>
                  </div>

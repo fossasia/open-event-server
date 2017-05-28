@@ -1,0 +1,51 @@
+{% extends 'gentelella/users/events/details/base_panel.html' %}
+{% block panel_title %}
+    {{ _("TICKETS") }}
+{% endblock %}
+{% block panel_content %}
+    <div class="col-md-12">
+        <h4>Summary</h4>
+        <table class="table table-striped">
+            <tbody>
+            <tr>
+                <td>{{ _("Total tickets sold") }}</td>
+                <td>{{ orders_summary.completed.tickets_count }}</td>
+            </tr>
+            <tr>
+                <td>{{ _("No. of orders") }}</td>
+                <td>{{ orders_summary.completed.orders_count }}</td>
+            </tr>
+            <trs>
+                <td>{{ _("Sales (amount)") }}</td>
+                <td>{{ event.payment_currency | currency_symbol }}{{ orders_summary.completed.total_sales | money }}</td>
+            </trs>
+            </tbody>
+        </table>
+        <br>
+        <h4>Details</h4>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>{{ _("Type") }}</th>
+                <th>{{ _("Sold") }}</th>
+                <th>{{ _("Available") }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for id, item in tickets_summary.iteritems() %}
+                <tr>
+                    <td>
+                        {{ item.name }}
+                    </td>
+                    <td>
+                        {{ item.completed.tickets_count }}
+                    </td>
+                    <td>
+                        {{ item.quantity - item.completed.tickets_count }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

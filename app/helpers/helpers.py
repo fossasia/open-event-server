@@ -279,6 +279,7 @@ def send_email_for_event_role_invite(email, role, event, link):
 
 def send_email_for_after_purchase(email, invoice_id, order_url, event_name, event_organiser):
     """Send email with order invoice link after purchase"""
+    order_url = order_url + '?email=' + email
     send_email(
         to=email,
         action=TICKET_PURCHASED,
