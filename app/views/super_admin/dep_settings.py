@@ -25,7 +25,8 @@ def index_view():
     if request.method == 'POST':
         if 'super_admin_email' in request.form:
             super_admin = DataGetter.get_super_admin_user()
-            super_admin.email = request.form['super_admin_email']
+            if super_admin.email is None:
+                super_admin.email = request.form['super_admin_email']
             save_to_db(super_admin)
         if 'event-thumbnail_width' in request.form:
             im_size_profile = DataGetter.get_image_sizes_by_type(type='profile')
