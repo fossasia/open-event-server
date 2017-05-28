@@ -81,17 +81,28 @@ def initialize_db(credentials):
         inspector = reflection.Inspector.from_engine(db.engine)
         table_name = 'events'
         table_names = inspector.get_table_names()
+        print "[LOG] Existing tables:"
+        print "[LOG] " + ','.join(table_names)
         if table_name not in table_names:
+            print "[LOG] Table not found. Attempting creation"
             try:
                 db.create_all()
                 stamp()
             except:
                 populate_data = False
-                print "Could not create tables. Either database does not exist or tables already created"
+                print "[LOG] Could not create tables. Either database does not exist or tables already created"
             if populate_data:
                 credentials = credentials.split(":")
                 DataManager.create_super_admin(credentials[0], credentials[1])
                 populate()
+        else:
+            print "[LOG] Tables already exist. Skipping data population & creation."
+
+
+@manager.command
+def prepare_kubernetes_db():
+    with app.app_context():
+        initialize_db('open_event_test_user@fossasia.org:fossasia')
 
 
 if __name__ == "__main__":

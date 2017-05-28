@@ -25,7 +25,7 @@ spec:
           httpGet:
             path: /health-check/
             port: 8080
-          initialDelaySeconds: 15
+          initialDelaySeconds: 30
           timeoutSeconds: 3
         ports:
         - containerPort: 8080

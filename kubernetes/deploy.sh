@@ -31,5 +31,7 @@ elif [ "$1" = "create" ]; then
     # kubectl create -R -f ${DIR}/yamls/redirector
     # Create API server deployment and service
     kubectl create -R -f ${DIR}/yamls/api
+    echo "Waiting for server to start up. ~30s."
+    sleep 30
     echo "Done. The project was deployed to kubernetes. :)"
 fi

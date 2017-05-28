@@ -4,12 +4,12 @@ export REDIS_URL=redis://redis.redis:6379/0
 export DATABASE_URL=postgresql://postgres:test@postgres.postgres:5432/opev
 echo "[LOG] Using database: ${DATABASE_URL}"
 echo "[LOG] Using redis: ${REDIS_URL}"
-echo "[LOG] Preparing database"
-python manage.py initialize_db -c open_event_test_user@fossasia.org:fossasia
-echo "[LOG] Running migrations"
-python manage.py db upgrade
 if [ "$DEPLOYMENT" == "api" ]
 then
+    echo "[LOG] Preparing database"
+    python manage.py prepare_kubernetes_db
+    echo "[LOG] Running migrations"
+    python manage.py db upgrade
     echo "[LOG] Starting gunicorn on port 8080"
     gunicorn -b 0.0.0.0:8080 app:app -w 1 --enable-stdio-inheritance --log-level "warning" --proxy-protocol
 fi
