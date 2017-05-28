@@ -469,8 +469,6 @@ class DataManager(object):
         user = User(email=userdata[0],
                     password=userdata[1],
                     is_verified=is_verified)
-        # we hash the users password to avoid saving it as plaintext in the db,
-        # remove to use plain text:
         salt = generate_random_salt()
         user.password = generate_password_hash(user.password, salt)
         hash = random.getrandbits(128)

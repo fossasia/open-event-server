@@ -36,7 +36,7 @@ from app.models import db
 from app.models.user import User
 from app.models.event import Event
 from app.models.session import Session
-from helpers.jwt import jwt_authenticate, jwt_identity
+from app.api.helpers.jwt import jwt_authenticate, jwt_identity
 from helpers.formatter import operation_name
 from app.helpers.data_getter import DataGetter
 from app.helpers.flask_ext.errors import NotFoundError, PermissionDeniedError, ServerError, ValidationError
