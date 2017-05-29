@@ -54,4 +54,4 @@ pytz
 diff-match-patch
 blinker
 envparse
-flask-rest-jsonapi
+-e git://github.com/shubham-padia/flask-rest-jsonapi.git@master#egg=flask-rest-jsonapi

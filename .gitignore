@@ -45,3 +45,6 @@ dump.rdb
 /log.html
 /selenium-screenshot-1.png
 jobs.sqlite
+
+# for -e pip packages
+src
