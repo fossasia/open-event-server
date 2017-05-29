@@ -2,9 +2,11 @@
 title: API
 ---
 
+All the APIs of nextgen branch are right now hosted in `/v1/`.
+
 ## API Authentication
 
-To get access token, send a POST request to `/api/v1/login` with email and password.
+To get access token, send a POST request to `/auth/session` with email and password.
 
 ```json
 {
