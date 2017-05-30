@@ -3,7 +3,7 @@ import re
 
 from flask import Blueprint
 from flask import make_response
-from flask import url_for, redirect, flash, render_template
+from flask import url_for, redirect, flash, render_template, jsonify
 from flask.ext import login
 from app import db
 from app.helpers.data import DataManager, delete_from_db, trash_session as _trash_session, \
@@ -12,8 +12,6 @@ from app.helpers.data_getter import DataGetter
 from app.helpers.notification_email_triggers import trigger_session_state_change_notifications
 from app.helpers.permission_decorators import *
 from app.helpers.versioning import strip_tags
-from StringIO import StringIO
-from csv import writer
 
 event_sessions = Blueprint('event_sessions', __name__, url_prefix='/events/<int:event_id>/sessions')
 
@@ -150,65 +148,22 @@ def add_speaker_view(event_id, session_id):
 @belongs_to_event
 @can_access
 def download_speakers_as_csv(event_id):
-    speakers = DataGetter.get_speakers(event_id)
-    event = DataGetter.get_event(event_id)
-    main = [["Speaker Name", "Speaker Email", "Speaker Session(s)", \
-             "Speaker Mobile", "Speaker Organisation", "Speaker Position"]]
-    for speaker in speakers:
-        data = [speaker.name if speaker.name else '', speaker.email if speaker.email else '']
-        if speaker.sessions:
-            session_details = ''
-            for session in speaker.sessions:
-                if not session.deleted_at:
-                    session_details += session.title + ' (' + session.state + '), '
-            data.append(session_details[:-2])
-        data.append(speaker.mobile if speaker.mobile else '')
-        data.append(speaker.organisation if speaker.organisation else '')
-        data.append(speaker.position if speaker.position else '')
-        main.append(data)
-
-    final = StringIO()
-    csvWriter = writer(final)
-    csvWriter.writerows(main)
-    response = make_response(final.getvalue())
-    final.close()
-    response.headers['Content-Type'] = 'text/csv'
-    response.headers['Content-Disposition'] = \
-        'inline; filename=%s-Speakers.csv' % (re.sub(r"[^\w\s]", '', event.name).replace(" ", "_"))
-
-    return response
+    from app.helpers.tasks import export_speaker_csv_task
+    task = export_speaker_csv_task.delay(event_id)
+    return jsonify({
+        'task_url': url_for('api.extras_celery_task', task_id=task.id)
+    })
 
 
 @event_sessions.route('/download_sessions_as_csv/')
 @belongs_to_event
 @can_access
 def download_sessions_as_csv(event_id):
-    sessions = DataGetter.get_sessions_by_event_id(event_id)
-    event = DataGetter.get_event(event_id)
-    main = [["Session Title", "Session Speakers", \
-             "Session Track", "Session Abstract", "Email Sent"]]
-    for session in sessions:
-        if not session.deleted_at:
-            data = [session.title + " (" + session.state + ")" if session.title else '']
-            if session.speakers:
-                inSession = ''
-                for speaker in session.speakers:
-                    if speaker.name:
-                        inSession += (speaker.name + ', ')
-                data.append(inSession[:-2])
-            data.append(session.track.name if session.track.name else '')
-            data.append(strip_tags(session.short_abstract) if session.short_abstract else '')
-            data.append('Yes' if session.state_email_sent else 'No')
-            main.append(data)
-    final = StringIO()
-    csvWriter = writer(final)
-    csvWriter.writerows(main)
-    response = make_response(final.getvalue())
-    final.close()
-    response.headers['Content-Type'] = 'text/csv'
-    response.headers['Content-Disposition'] = \
-        'inline; filename=%s-Sessions.csv' % (re.sub(r"[^\w\s]", '', event.name).replace(" ", "_"))
-    return response
+    from app.helpers.tasks import export_session_csv_task
+    task = export_session_csv_task.delay(event_id)
+    return jsonify({
+        'task_url': url_for('api.extras_celery_task', task_id=task.id)
+    })
 
 
 @event_sessions.route('/<int:session_id>/accept/', methods=('POST', 'GET'))
@@ -222,7 +177,8 @@ def accept_session(event_id, session_id):
         send_email = False
     message = request.form.get('message', None) if request.form else None
     subject = request.form.get('subject', None) if request.form else None
-    DataManager.session_accept_reject(session, event_id, 'accepted', send_email, message=message, subject=subject)
+    DataManager.session_accept_reject(session, event_id, 'accepted',
+                                      send_email, message=message, subject=subject)
     return redirect(url_for('.index_view', event_id=event_id))
 
 
@@ -237,7 +193,8 @@ def reject_session(event_id, session_id):
         send_email = False
     message = request.form.get('message', None) if request.form else None
     subject = request.form.get('subject', None) if request.form else None
-    DataManager.session_accept_reject(session, event_id, 'rejected', send_email, message=message, subject=subject)
+    DataManager.session_accept_reject(session, event_id, 'rejected',
+                                      send_email, message=message, subject=subject)
     return redirect(url_for('.index_view', event_id=event_id))
 
 
@@ -252,7 +209,8 @@ def confirm_session(event_id, session_id):
         send_email = False
     message = request.form.get('message', None) if request.form else None
     subject = request.form.get('subject', None) if request.form else None
-    DataManager.session_accept_reject(session, event_id, 'confirmed', send_email, message=message, subject=subject)
+    DataManager.session_accept_reject(session, event_id, 'confirmed',
+                                      send_email, message=message, subject=subject)
     return redirect(url_for('.index_view', event_id=event_id))
 
 

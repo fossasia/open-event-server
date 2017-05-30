@@ -10,6 +10,8 @@ from app.helpers.exporters.ical import ICalExporter
 from app.helpers.exporters.xcal import XCalExporter
 from app.helpers.exporters.attendee_csv import AttendeeCsv
 from app.helpers.exporters.order_csv import OrderCsv
+from app.helpers.exporters.session_csv import SessionCsv
+from app.helpers.exporters.speaker_csv import SpeakerCsv
 from app.helpers.storage import UPLOAD_PATHS, upload, UploadedFile
 from app.helpers.data_getter import DataGetter
 from app.helpers.data import save_to_db
@@ -60,7 +62,8 @@ def export_pentabarf_task(event_id):
     with open(file_path, "w") as temp_file:
         temp_file.write(PentabarfExporter.export(event_id))
     pentabarf_file = UploadedFile(file_path=file_path, filename=filename)
-    event.pentabarf_url = upload(pentabarf_file, UPLOAD_PATHS['exports']['pentabarf'].format(event_id=event_id))
+    event.pentabarf_url = upload(pentabarf_file, UPLOAD_PATHS['exports'][
+                                 'pentabarf'].format(event_id=event_id))
     save_to_db(event)
 
 
@@ -110,7 +113,8 @@ def export_attendee_csv_task(event_id):
     with open(file_path, "w") as temp_file:
         temp_file.write(AttendeeCsv.export(event_id))
     attendee_csv_file = UploadedFile(file_path=file_path, filename=filename)
-    attendee_csv_url = upload(attendee_csv_file, UPLOAD_PATHS['exports']['csv'].format(event_id=event_id))
+    attendee_csv_url = upload(attendee_csv_file, UPLOAD_PATHS['exports'][
+                              'csv'].format(event_id=event_id))
     return attendee_csv_url
 
 
@@ -128,3 +132,37 @@ def export_order_csv_task(event_id):
     order_csv_file = UploadedFile(file_path=file_path, filename=filename)
     order_csv_url = upload(order_csv_file, UPLOAD_PATHS['exports']['csv'].format(event_id=event_id))
     return order_csv_url
+
+
+@celery.task(name='export.session.csv')
+def export_session_csv_task(event_id):
+    try:
+        os.mkdir(app.config['TEMP_UPLOADS_FOLDER'])
+    except OSError as exc:
+        if exc.errno != errno.EEXIST:
+            raise exc
+    filename = "session.csv"
+    file_path = app.config['TEMP_UPLOADS_FOLDER'] + "/" + filename
+    with open(file_path, "w") as temp_file:
+        temp_file.write(SessionCsv.export(event_id))
+    session_csv_file = UploadedFile(file_path=file_path, filename=filename)
+    session_csv_url = upload(session_csv_file, UPLOAD_PATHS['exports'][
+                             'csv'].format(event_id=event_id))
+    return session_csv_url
+
+
+@celery.task(name='export.speaker.csv')
+def export_speaker_csv_task(event_id):
+    try:
+        os.mkdir(app.config['TEMP_UPLOADS_FOLDER'])
+    except OSError as exc:
+        if exc.errno != errno.EEXIST:
+            raise exc
+    filename = "speaker.csv"
+    file_path = app.config['TEMP_UPLOADS_FOLDER'] + "/" + filename
+    with open(file_path, "w") as temp_file:
+        temp_file.write(SpeakerCsv.export(event_id))
+    speaker_csv_file = UploadedFile(file_path=file_path, filename=filename)
+    speaker_csv_url = upload(speaker_csv_file, UPLOAD_PATHS['exports'][
+                             'csv'].format(event_id=event_id))
+    return speaker_csv_url
