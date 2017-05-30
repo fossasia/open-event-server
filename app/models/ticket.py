@@ -36,7 +36,7 @@ class Ticket(db.Model):
 
     def __init__(self,
                  name=None,
-                 event=None,
+                 event_id=None,
                  type=None,
                  sales_start=None,
                  sales_end=None,
@@ -57,7 +57,7 @@ class Ticket(db.Model):
         self.quantity = quantity
         self.position = position
         self.type = type
-        self.event = event
+        self.event_id = event_id
         self.description = description
         self.description_toggle = description_toggle
         self.price = price
