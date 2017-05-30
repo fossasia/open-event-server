@@ -469,12 +469,6 @@ class DataManager(object):
         user = User(email=userdata[0],
                     password=userdata[1],
                     is_verified=is_verified)
-        salt = generate_random_salt()
-        user.password = generate_password_hash(user.password, salt)
-        hash = random.getrandbits(128)
-        user.reset_password = str(hash)
-
-        user.salt = salt
         save_to_db(user, "User created")
         record_activity('create_user', user=user)
 
@@ -485,12 +479,7 @@ class DataManager(object):
         user = User()
         user.login = 'super_admin'
         user.email = email
-        salt = generate_random_salt()
-        password = password
-        user.password = generate_password_hash(password, salt)
-        hash = random.getrandbits(128)
-        user.reset_password = str(hash)
-        user.salt = salt
+        user.password = password
         user.is_super_admin = True
         user.is_admin = True
         user.is_verified = True
