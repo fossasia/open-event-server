@@ -47,7 +47,7 @@ def edit_view(user_id=None):
 @profile.route('/fb_connect/', methods=('GET', 'POST'))
 def connect_facebook():
     facebook = get_facebook_auth()
-    fb_auth_url, state = facebook.authorization_url(FbOAuth.get_auth_uri(), access_type='offline')
+    fb_auth_url, __ = facebook.authorization_url(FbOAuth.get_auth_uri(), access_type='offline')
     return redirect(fb_auth_url)
 
 
@@ -60,8 +60,14 @@ def connect_twitter():
 @profile.route('/instagram_connect/', methods=('GET', 'POST'))
 def connect_instagram():
     instagram = get_instagram_auth()
-    instagram_auth_url, state = instagram.authorization_url(InstagramOAuth.get_auth_uri(), access_type='offline')
+    instagram_auth_url, __ = instagram.authorization_url(InstagramOAuth.get_auth_uri(), access_type='offline')
     return redirect(instagram_auth_url)
+
+@profile.route('/google_connect/', methods=('GET', 'POST'))
+def google_connect():
+    google = get_google_auth()
+    gp_auth_url, __ = google.authorization_url(OAuth.get_auth_uri(), access_type='offline')
+    return redirect(gp_auth_url)
 
 
 @profile.route('/<int:user_id>/editfiles/bgimage/', methods=('POST', 'DELETE'))

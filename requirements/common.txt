@@ -53,3 +53,5 @@ pycountry
 pytz
 diff-match-patch
 blinker
+httmock
+

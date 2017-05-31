@@ -37,8 +37,8 @@ EVENT_COPYRIGHT = api.model('EventCopyright', {
 
 EVENT_CFS = api.model('EventCFS', {
     'announcement': fields.String(),
-    'start_date': fields.DateTime(),
-    'end_date': fields.DateTime(),
+    'start_date': fields.DateTime(attribute='start_date_tz'),
+    'end_date': fields.DateTime(attribute='end_date_tz'),
     'timezone': fields.String(),
     'privacy': EventPrivacyField()  # [public, private]
 })
@@ -69,8 +69,8 @@ EVENT = api.model('Event', {
     'event_url': fields.Uri(),
     'email': fields.Email(),
     'logo': fields.Upload(),
-    'start_time': fields.DateTime(required=True),
-    'end_time': fields.DateTime(required=True),
+    'start_time': fields.DateTime(attribute='start_time_tz', required=True),
+    'end_time': fields.DateTime(attribute='end_time_tz', required=True),
     'timezone': fields.String(),
     'latitude': fields.Float(),
     'longitude': fields.Float(),
@@ -89,7 +89,7 @@ EVENT = api.model('Event', {
     'ticket_url': fields.Uri(),
     'copyright': fields.Nested(EVENT_COPYRIGHT, allow_null=True),
     'licence_details': fields.Licence(attribute='copyright.licence', allow_null=True),
-    'schedule_published_on': fields.DateTime(),
+    'schedule_published_on': fields.DateTime(attribute='schedule_published_on_tz'),
     'code_of_conduct': fields.String(),
     'social_links': fields.List(fields.Nested(SOCIAL_LINK), attribute='social_link'),
     'call_for_papers': fields.Nested(EVENT_CFS, allow_null=True),
@@ -143,16 +143,18 @@ class EventDAO(BaseDAO):
         Fixes the payload data.
         Here converts string time from datetime obj
         """
-        datetime_fields = ['start_time', 'end_time', 'schedule_published_on']
+        datetime_fields = ['start_time_tz', 'end_time_tz', 'schedule_published_on_tz']
         for f in datetime_fields:
             if f in data:
-                data[f] = EVENT_POST[f].from_str(data.get(f))
+                data[f] = EVENT_POST[f[0:-3]].from_str(data.get(f))
+                data[f[0:-3]] = data.pop(f)
         # cfs datetimes
         if data.get('call_for_papers'):
-            for _ in ['start_date', 'end_date']:
+            for _ in ['start_date_tz', 'end_date_tz']:
                 if _ in data['call_for_papers']:
-                    data['call_for_papers'][_] = EVENT_CFS[_].from_str(
+                    data['call_for_papers'][_] = EVENT_CFS[_[0:-3]].from_str(
                         data['call_for_papers'].get(_))
+                    data['call_for_papers'][_[0:-3]] = data['call_for_papers'].pop(_)
         return data
 
     def create(self, data, url):
@@ -168,7 +170,7 @@ class EventDAO(BaseDAO):
         save_to_db(new_event, "Event saved")
         # set organizer
         role = Role.query.filter_by(name=ORGANIZER).first()
-        uer = UsersEventsRoles(g.user, new_event, role)
+        uer = UsersEventsRoles(user_id=g.user.id, event=new_event, role=role)
         save_to_db(uer, 'UER saved')
         # Return created resource with a 201 status code and its Location
         # (url) in the header.
