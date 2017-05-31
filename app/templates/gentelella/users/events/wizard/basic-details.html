@@ -238,7 +238,7 @@
         <label for="ticket-switch" style="margin-left:0;"></label>
     </div>
     <div id="ticketing-system"
-         v-show="(event.ticket_include && event.tickets.length > 0) || (_.includes(included_settings, 'ticketing') && event.ticket_include)">
+         v-show="(event.ticket_include && showTickets) || (_.includes(included_settings, 'ticketing') && event.ticket_include)">
         <div id="ticket-system-holder" class="item form-group">
             <h2 style="font-weight:300; text-transform: uppercase; margin-top: 35px; color:#5bc0de;">
                 <i class="fa fa-ticket"></i>
@@ -247,7 +247,7 @@
             </h2>
 
             <!-- TicketsSegment -->
-            <div class="tickets-segment" v-show="event.tickets.length > 0">
+            <div class="tickets-segment" v-show="showTickets">
                 <div class="row">
                     <div class="col-xs-4">
                         <h3 style="font-size: 15px;">{{ _("Ticket Name") }} <span class="required">*</span></h3>
