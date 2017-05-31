@@ -1,8 +1,5 @@
-from flask import current_app
 from flask.ext.scrypt import check_password_hash
-from flask_jwt import _jwt_required
 from app.models.user import User
-from functools import wraps
 
 
 def jwt_authenticate(email, password):
@@ -35,14 +32,3 @@ def jwt_identity(payload):
     return User.query.get(payload['identity'])
 
 
-def jwt_required(fn, realm=None):
-    """
-    Modified from original jwt_required to comply with `flask-rest-jsonapi` decorator conventions
-    View decorator that requires a valid JWT token to be present in the request
-    :param realm: an optional realm
-    """
-    @wraps(fn)
-    def decorator(*args, **kwargs):
-        _jwt_required(realm or current_app.config['JWT_DEFAULT_REALM'])
-        return fn(*args, **kwargs)
-    return decorator

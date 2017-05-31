@@ -1,14 +1,20 @@
 from datetime import datetime
-from app.api.helpers.jwt import jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from app.models import db
 from app.models.user import User
+from app.api.helpers.permissions import is_admin, is_user_itself
 
 
 class UserSchema(Schema):
+    """
+    Api schema for User Model
+    """
     class Meta:
+        """
+        Meta class for User Api Schema
+        """
         type_ = 'user'
         self_view = 'v1.user_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -40,13 +46,19 @@ class UserSchema(Schema):
 
 
 class UserList(ResourceList):
-    decorators = (jwt_required, )
+    """
+    List and create Users
+    """
+    get = is_admin(ResourceList.get.__func__)
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User}
 
 
 class UserDetail(ResourceDetail):
+    """
+    User detail by id
+    """
     def delete(self, *args, **kwargs):
         """
         Function for soft-delete
@@ -58,7 +70,7 @@ class UserDetail(ResourceDetail):
         obj.deleted_at = datetime.now()
         return {'meta': {'message': 'Object successfully deleted'}}
 
-    decorators = (jwt_required, )
+    decorators = (is_user_itself, )
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User}
