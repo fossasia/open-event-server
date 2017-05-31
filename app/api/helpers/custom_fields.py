@@ -132,18 +132,18 @@ class DateTime(CustomField):
     Custom DateTime field
     """
     __schema_format__ = 'date-time'
-    __schema_example__ = '2016-06-06T11:22:33'
+    __schema_example__ = '2016-06-06T11:22:33+05:30'
     dt_format = '%Y-%m-%dT%H:%M:%S'
 
     def to_str(self, value):
         return None if not value \
-            else unicode(value.strftime(self.dt_format))
+            else unicode(value.isoformat())
 
     def from_str(self, value):
         if not value:
             return None
         value = value.replace(' ', 'T', 1)
-        return datetime.strptime(value, self.dt_format)
+        return datetime.strptime(value[:19], self.dt_format)
 
     def format(self, value):
         return self.to_str(value)
