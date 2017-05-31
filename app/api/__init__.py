@@ -1,6 +1,8 @@
 from flask import current_app as app, Blueprint
 from flask_rest_jsonapi import Api
 from app.api.users import UserList, UserDetail
+from app.api.tickets import AllTicketList, TicketDetail, TicketRelationship
+from app.api.events import EventList, EventDetail, EventRelationship
 
 api_v1 = Blueprint('v1', __name__, url_prefix='/v1')
 api = Api(app, api_v1)
@@ -8,3 +10,13 @@ api = Api(app, api_v1)
 # users
 api.route(UserList, 'user_list', '/users')
 api.route(UserDetail, 'user_detail', '/users/<int:id>')
+
+# tickets
+api.route(AllTicketList, 'all_ticket_list', '/tickets', '/events/<int:id>/tickets')
+api.route(TicketDetail, 'ticket_detail', '/tickets/<int:id>')
+api.route(TicketRelationship, 'ticket_event', '/tickets/<int:id>/relationships/event')
+
+# events
+api.route(EventList, 'event_list', '/events')
+api.route(EventDetail, 'event_detail', '/events/<int:id>', '/tickets/<int:ticket_id>/event')
+api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/ticket')
