@@ -44,18 +44,6 @@ class EventRelationship(ResourceRelationship):
 
 
 class EventDetail(ResourceDetail):
-
-    def delete(self, *args, **kwargs):
-        """
-        Function for soft-delete
-        :param args:
-        :param kwargs:
-        :return:
-        """
-        obj = self._data_layer.get_object(kwargs)
-        obj.deleted_at = datetime.now()
-        return {'meta': {'message': 'Object successfully deleted'}}
-
     decorators = (jwt_required, )
     schema = EventSchema
     data_layer = {'session': db.session,
