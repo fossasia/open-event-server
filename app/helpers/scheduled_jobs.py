@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import shutil
 
 from dateutil.relativedelta import relativedelta
 from flask import url_for
@@ -15,6 +16,9 @@ from app.models.event_invoice import EventInvoice
 from app.models.order import Order
 from app.models.session import Session
 from app.models.user import User
+
+from app.helpers.storage import UPLOAD_PATHS, generate_hash
+from app.settings import get_settings
 
 
 def empty_trash():
@@ -44,6 +48,19 @@ def empty_trash():
             if datetime.now() - pending_order.created_at >= timedelta(days=3):
                 pending_order.status = "expired"
                 save_to_db(pending_order, "Pending order expired.")
+
+
+def empty_csv_export():
+    from app import current_app as app
+
+    with app.app_context():
+        events = Event.query.filter(Event.deleted_at.isnot(None)).all()
+
+        for event in events:
+            key = UPLOAD_PATHS['exports']['csv'].format(event_id=event_id)
+            file_relative_path = 'static/media/' + key + '/'
+            file_path = app.config['BASE_DIR'] + '/' + file_relative_path
+            shutil.rmtree(file_path)
 
 
 def send_after_event_mail():
@@ -80,7 +97,8 @@ def send_event_fee_notification():
     with app.app_context():
         events = Event.query.all()
         for event in events:
-            latest_invoice = EventInvoice.filter_by(event_id=event.id).order_by(EventInvoice.created_at.desc()).first()
+            latest_invoice = EventInvoice.filter_by(event_id=event.id).order_by(
+                EventInvoice.created_at.desc()).first()
 
             if latest_invoice:
                 orders = Order.query \
@@ -88,7 +106,8 @@ def send_event_fee_notification():
                     .filter_by(status='completed') \
                     .filter(Order.completed_at > latest_invoice.created_at).all()
             else:
-                orders = Order.query.filter_by(event_id=event.id).filter_by(status='completed').all()
+                orders = Order.query.filter_by(
+                    event_id=event.id).filter_by(status='completed').all()
 
             fee_total = 0
             for order in orders:
@@ -99,17 +118,21 @@ def send_event_fee_notification():
                         fee_total += fee
 
             if fee_total > 0:
-                organizer = DataGetter.get_user_event_roles_by_role_name(event.id, 'organizer').first()
-                new_invoice = EventInvoice(amount=fee_total, event_id=event.id, user_id=organizer.user.id)
+                organizer = DataGetter.get_user_event_roles_by_role_name(
+                    event.id, 'organizer').first()
+                new_invoice = EventInvoice(
+                    amount=fee_total, event_id=event.id, user_id=organizer.user.id)
 
                 if event.discount_code_id and event.discount_code:
                     r = relativedelta(datetime.utcnow(), event.created_at)
                     if r <= event.discount_code.max_quantity:
-                        new_invoice.amount = fee_total - (fee_total * (event.discount_code.value / 100.0))
+                        new_invoice.amount = fee_total - \
+                            (fee_total * (event.discount_code.value / 100.0))
                         new_invoice.discount_code_id = event.discount_code_id
 
                 save_to_db(new_invoice)
-                prev_month = monthdelta(new_invoice.created_at, 1).strftime("%b %Y")  # Displayed as Aug 2016
+                prev_month = monthdelta(new_invoice.created_at, 1).strftime(
+                    "%b %Y")  # Displayed as Aug 2016
                 send_email_for_monthly_fee_payment(new_invoice.user.email,
                                                    event.name,
                                                    prev_month,
@@ -124,7 +147,8 @@ def send_event_fee_notification_followup():
         incomplete_invoices = EventInvoice.query.filter(EventInvoice.status != 'completed').all()
         for incomplete_invoice in incomplete_invoices:
             if incomplete_invoice.amount > 0:
-                prev_month = monthdelta(incomplete_invoice.created_at, 1).strftime("%b %Y")  # Displayed as Aug 2016
+                prev_month = monthdelta(incomplete_invoice.created_at, 1).strftime(
+                    "%b %Y")  # Displayed as Aug 2016
                 send_followup_email_for_monthly_fee_payment(incomplete_invoice.user.email,
                                                             incomplete_invoice.event.name,
                                                             prev_month,

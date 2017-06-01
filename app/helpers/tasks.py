@@ -1,6 +1,7 @@
 import requests
 import os
 import errno
+import uuid
 from flask import current_app as app
 from marrow.mailer import Mailer, Message
 from app import celery
@@ -108,7 +109,7 @@ def export_attendee_csv_task(event_id):
     except OSError as exc:
         if exc.errno != errno.EEXIST:
             raise exc
-    filename = "attendees.csv"
+    filename = "attendees-{}.csv".format(uuid.uuid1().hex)
     file_path = app.config['TEMP_UPLOADS_FOLDER'] + "/" + filename
     with open(file_path, "w") as temp_file:
         temp_file.write(AttendeeCsv.export(event_id))
@@ -125,7 +126,7 @@ def export_order_csv_task(event_id):
     except OSError as exc:
         if exc.errno != errno.EEXIST:
             raise exc
-    filename = "order.csv"
+    filename = "order-{}.csv".format(uuid.uuid1().hex)
     file_path = app.config['TEMP_UPLOADS_FOLDER'] + "/" + filename
     with open(file_path, "w") as temp_file:
         temp_file.write(OrderCsv.export(event_id))
@@ -141,7 +142,7 @@ def export_session_csv_task(event_id):
     except OSError as exc:
         if exc.errno != errno.EEXIST:
             raise exc
-    filename = "session.csv"
+    filename = "session-{}.csv".format(uuid.uuid1().hex)
     file_path = app.config['TEMP_UPLOADS_FOLDER'] + "/" + filename
     with open(file_path, "w") as temp_file:
         temp_file.write(SessionCsv.export(event_id))
@@ -158,7 +159,7 @@ def export_speaker_csv_task(event_id):
     except OSError as exc:
         if exc.errno != errno.EEXIST:
             raise exc
-    filename = "speaker.csv"
+    filename = "speaker-{}.csv".format(uuid.uuid1().hex)
     file_path = app.config['TEMP_UPLOADS_FOLDER'] + "/" + filename
     with open(file_path, "w") as temp_file:
         temp_file.write(SpeakerCsv.export(event_id))
