@@ -11,15 +11,15 @@ class Sponsor(db.Model):
     description = db.Column(db.String)
     url = db.Column(db.String)
     level = db.Column(db.String)
-    logo = db.Column(db.String)
+    logo_url = db.Column(db.String)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     sponsor_type = db.Column(db.String)
 
-    def __init__(self, name=None, url=None, logo=None, event_id=None,
+    def __init__(self, name=None, url=None, logo_url=None, event_id=None,
                  description=None, sponsor_type=None, level=None):
         self.name = name
         self.url = url
-        self.logo = logo
+        self.logo_url = logo_url
         self.event_id = event_id
         self.level = level
         self.sponsor_type = sponsor_type
@@ -51,7 +51,7 @@ class Sponsor(db.Model):
             'id': self.id,
             'name': self.name,
             'url': self.url,
-            'logo': self.logo,
+            'logo_url': self.logo_url,
             'level': self.level,
             'type': self.sponsor_type,
             'description': self.description,
