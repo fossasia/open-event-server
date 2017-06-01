@@ -1,11 +1,14 @@
 from flask import current_app as app, Blueprint
 from flask_rest_jsonapi import Api
+
 from app.api.users import UserList, UserDetail
 from app.api.tickets import AllTicketList, TicketDetail, TicketRelationship
 from app.api.events import EventList, EventDetail, EventRelationship
 from app.api.microlocations import MicrolocationList, MicrolocationDetail, MicrolocationRelationship
 from app.api.sessions import SessionList, SessionDetail, SessionRelationship
 from app.api.social_links import SocialLinkList, SocialLinkDetail, SocialLinkRelationship
+from app.api.sponsors import SponsorList, SponsorDetail, SponsorRelationship
+
 
 api_v1 = Blueprint('v1', __name__, url_prefix='/v1')
 api = Api(app, api_v1)
@@ -22,10 +25,12 @@ api.route(TicketRelationship, 'ticket_event', '/tickets/<int:id>/relationships/e
 # events
 api.route(EventList, 'event_list', '/events')
 api.route(EventDetail, 'event_detail', '/events/<int:id>', '/tickets/<int:ticket_id>/event',
-          '/microlocations/<int:microlocation_id>/event', '/social_links/<int:social_link_id>/event')
+          '/microlocations/<int:microlocation_id>/event', '/social_links/<int:social_link_id>/event',
+          '/sponsors/<int:sponsor_id>/event')
 api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/ticket')
 api.route(EventRelationship, 'event_microlocation', '/events/<int:id>/relationships/microlocation')
 api.route(EventRelationship, 'event_social_link', '/events/<int:id>/relationships/social_link')
+api.route(EventRelationship, 'event_sponsor', '/events/<int:id>/relationships/sponsor')
 
 # microlocations
 api.route(MicrolocationList, 'microlocation_list', '/microlocations',
@@ -50,3 +55,9 @@ api.route(SocialLinkDetail, 'social_link_detail',
           '/social_links/<int:id>', '/events/<int:event_id>/social_links')
 api.route(SocialLinkRelationship, 'social_link_event',
           '/social_links/<int:id>/relationships/event')
+
+#sponsors
+api.route(SponsorList, 'sponsor_list', '/sponsors', '/events/<int:event_id>/sponsors')
+api.route(SponsorDetail, 'sponsor_detail', '/sponsors/<int:id>', '/events/<int:event_id>/sponsors/<int:id>')
+api.route(SponsorRelationship, 'sponsor_event', '/sponsors/<int:id>/relationships/event')
+

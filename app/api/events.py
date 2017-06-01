@@ -3,8 +3,11 @@ from app.api.helpers.permissions import jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+from sqlalchemy.orm.exc import NoResultFound
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 from app.models import db
 from app.models.event import Event
+from app.models.sponsor import Sponsor
 
 
 class EventSchema(Schema):
@@ -43,6 +46,15 @@ class EventSchema(Schema):
                                many=True,
                                type_='social_link')
 
+    sponsor = Relationship(attribute='sponsor',
+                           self_view='v1.event_sponsor',
+                           self_view_kwargs={'id': '<id>'},
+                           related_view='v1.sponsor_detail',
+                           related_view_kwargs={'event_id': '<id>'},
+                           schema='SponsorSchema',
+                           many=True,
+                           type_='sponsor')
+
 
 class EventList(ResourceList):
     decorators = (jwt_required, )
@@ -59,7 +71,22 @@ class EventRelationship(ResourceRelationship):
 
 
 class EventDetail(ResourceDetail):
+
+    def before_get_object(self, view_kwargs):
+        if view_kwargs.get('sponsor_id') is not None:
+            try:
+                sponsor = self.session.query(Sponsor).filter_by(id=view_kwargs['sponsor_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'sponsor_id'},
+                                     "Sponsor: {} not found".format(view_kwargs['sponsor_id']))
+            else:
+                if sponsor.event_id is not None:
+                    view_kwargs['id'] = sponsor.event_id
+                else:
+                    view_kwargs['id'] = None
+
     decorators = (jwt_required, )
     schema = EventSchema
     data_layer = {'session': db.session,
-                  'model': Event}
+                  'model': Event,
+                  'methods': {'before_get_object': before_get_object}}
