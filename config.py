@@ -52,6 +52,7 @@ class Config(object):
     CORS_HEADERS = 'Content-Type'
     SQLALCHEMY_DATABASE_URI =  env('DATABASE_URL', default=None)
     DATABASE_QUERY_TIMEOUT = 0.1
+    SOFT_DELETE = True
 
     if not SQLALCHEMY_DATABASE_URI:
         print '`DATABASE_URL` either not exported or empty'
