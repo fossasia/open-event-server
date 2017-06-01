@@ -23,10 +23,17 @@ class EventSchema(Schema):
                           self_view='v1.event_ticket',
                           self_view_kwargs={'id': '<id>'},
                           related_view='v1.ticket_detail',
-                          related_view_kwargs={'id': '<id>'},
+                          related_view_kwargs={'event_id': '<id>'},
                           schema='TicketSchema',
                           many=True,
                           type_='ticket')
+    microlocation = Relationship(attribute='microlocation',
+                                 self_view='v1.event_microlocation',
+                                 self_view_kwargs={'id': '<id>'},
+                                 related_view='v1.microlocation_detail',
+                                 related_view_kwargs={'event_id': '<id>'},
+                                 schema='MicrolocationSchema',
+                                 type_='microlocation')
 
 
 class EventList(ResourceList):
