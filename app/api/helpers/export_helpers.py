@@ -212,13 +212,13 @@ def export_event_json(event_id, settings):
     dir_path = dir_path + ".zip"
 
     storage_path = UPLOAD_PATHS['exports']['zip'].format(
-        event_id = event_id
+        event_id=event_id
     )
     uploaded_file = UploadedFile(dir_path, dir_path.rsplit('/', 1)[1])
     storage_url = upload(uploaded_file, storage_path)
 
     if get_settings()['storage_place'] != "s3" and get_settings()['storage_place'] != 'gs':
-        storage_url = app.config['BASE_DIR'] + storage_url.replace("/serve_","/")
+        storage_url = app.config['BASE_DIR'] + storage_url.replace("/serve_", "/")
     return storage_url
 
 

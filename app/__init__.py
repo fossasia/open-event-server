@@ -8,7 +8,7 @@ warnings.simplefilter('ignore', ExtDeprecationWarning)
 from pytz import utc
 
 from app.helpers.scheduled_jobs import send_mail_to_expired_orders, empty_trash, send_after_event_mail, \
-    send_event_fee_notification, send_event_fee_notification_followup
+    send_event_fee_notification, send_event_fee_notification_followup, empty_csv_export
 
 from celery import Celery
 from celery.signals import after_task_publish
@@ -67,6 +67,7 @@ class ReverseProxied(object):
     """
     ReverseProxied flask wsgi app wrapper from http://stackoverflow.com/a/37842465/1562480 by aldel
     """
+
     def __init__(self, app):
         self.app = app
 
@@ -196,6 +197,7 @@ import helpers.tasks
 scheduler = BackgroundScheduler(timezone=utc)
 scheduler.add_job(send_mail_to_expired_orders, 'interval', hours=5)
 scheduler.add_job(empty_trash, 'cron', hour=5, minute=30)
+scheduler.add_job(empty_csv_export, 'cron', hour=5, minute=30)
 scheduler.add_job(send_after_event_mail, 'cron', hour=5, minute=30)
 scheduler.add_job(send_event_fee_notification, 'cron', day=1)
 scheduler.add_job(send_event_fee_notification_followup, 'cron', day=15)
@@ -226,14 +228,12 @@ if current_app.config.get('INTEGRATE_SOCKETIO', False):
     async_mode = 'eventlet'
     socketio = SocketIO(current_app, async_mode=async_mode)
 
-
     @socketio.on('connect', namespace='/notifs')
     def connect_handler_notifs():
         if current_user.is_authenticated():
             user_room = 'user_{}'.format(session['user_id'])
             join_room(user_room)
             emit('notifs-response', {'meta': 'WS connected'}, namespace='/notifs')
-
 
     @socketio.on('connect', namespace='/notifpage')
     def connect_handler_notif_page():
