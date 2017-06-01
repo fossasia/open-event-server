@@ -16,12 +16,11 @@ class TicketSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
 
     id = fields.Str(dump_only=True)
-    name = fields.Str()
+    name = fields.Str(required=True)
     description = fields.Str()
-    type = fields.Str()
+    type = fields.Str(required=True)
     price = fields.Float()
     quantity = fields.Integer()
-    price = db.Column(db.Float)
     is_fee_absorbed = fields.Boolean()
     min_order = fields.Integer()
     max_order = fields.Integer()
@@ -30,7 +29,7 @@ class TicketSchema(Schema):
                          self_view_kwargs={'id': '<id>'},
                          related_view='v1.event_detail',
                          related_view_kwargs={'ticket_id': '<id>'},
-                         schema='TicketSchema',
+                         schema='EventSchema',
                          type_='event')
 
 
