@@ -1,7 +1,8 @@
 from flask import current_app as app, Blueprint
 from flask_rest_jsonapi import Api
 
-from app.api.users import UserList, UserDetail
+from app.api.users import UserList, UserDetail, UserRelationship
+from app.api.notifications import NotificationList, NotificationDetail, NotificationRelationship
 from app.api.tickets import AllTicketList, TicketDetail, TicketRelationship
 from app.api.events import EventList, EventDetail, EventRelationship
 from app.api.microlocations import MicrolocationList, MicrolocationDetail, MicrolocationRelationship
@@ -15,7 +16,13 @@ api = Api(app, api_v1)
 
 # users
 api.route(UserList, 'user_list', '/users')
-api.route(UserDetail, 'user_detail', '/users/<int:id>')
+api.route(UserDetail, 'user_detail', '/users/<int:id>', '/notifications/<int:notification_id>/user')
+api.route(UserRelationship, 'user_notification', '/users/<int:id>/relationships/notifications')
+
+#notifications
+api.route(NotificationList, 'notification_list', '/notifications', '/users/<int:id>/notifications')
+api.route(NotificationDetail, 'notification_detail', '/notifications/<int:id>')
+api.route(NotificationRelationship, 'notification_user', '/notifications/<int:id>/relationships/user')
 
 # tickets
 api.route(AllTicketList, 'all_ticket_list', '/tickets', '/events/<int:id>/tickets')
@@ -60,4 +67,3 @@ api.route(SocialLinkRelationship, 'social_link_event',
 api.route(SponsorList, 'sponsor_list', '/sponsors', '/events/<int:event_id>/sponsors')
 api.route(SponsorDetail, 'sponsor_detail', '/sponsors/<int:id>', '/events/<int:event_id>/sponsors/<int:id>')
 api.route(SponsorRelationship, 'sponsor_event', '/sponsors/<int:id>/relationships/event')
-
