@@ -16,9 +16,9 @@ class TicketSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
 
     id = fields.Str(dump_only=True)
-    name = fields.Str()
+    name = fields.Str(required=True)
     description = fields.Str()
-    type = fields.Str()
+    type = fields.Str(required=True)
     price = fields.Float()
     quantity = fields.Integer()
     is_fee_absorbed = fields.Boolean()
