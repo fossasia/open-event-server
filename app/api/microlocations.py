@@ -1,4 +1,3 @@
-from datetime import datetime
 from app.api.helpers.permissions import jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship

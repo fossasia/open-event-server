@@ -1,10 +1,10 @@
-from datetime import datetime
 from app.api.helpers.permissions import jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from app.models import db
 from app.models.session import Session
+from app.models.track import Track
 
 
 class SessionSchema(Schema):
@@ -37,16 +37,38 @@ class SessionSchema(Schema):
                                  related_view_kwargs={'session_id': '<id>'},
                                  schema='MicrolocationSchema',
                                  type_='microlocation')
+    track = Relationship(attribute='track',
+                         self_view='v1.session_track',
+                         self_view_kwargs={'id': '<id>'},
+                         related_view='v1.track_detail',
+                         related_view_kwargs={'session_id': '<id>'},
+                         schema='TrackSchema',
+                         type_='track')
 
 
 class SessionList(ResourceList):
     """
     List and create Sessions
     """
+    def query(self, view_kwargs):
+        query_ = self.session.query(Session)
+        if view_kwargs.get('track_id') is not None:
+            query_ = query_.join(Track).filter(Track.id == view_kwargs['track_id'])
+        return query_
+
+    def before_create_object(self, data, view_kwargs):
+        if view_kwargs.get('track_id') is not None:
+            track = self.session.query(Track).filter_by(id=view_kwargs['track_id']).one()
+            data['track_id'] = track.id
+
     decorators = (jwt_required, )
     schema = SessionSchema
     data_layer = {'session': db.session,
-                  'model': Session}
+                  'model': Session,
+                  'methods': {
+                      'query': query,
+                      'before_create_object': before_create_object
+                  }}
 
 
 class SessionDetail(ResourceDetail):
