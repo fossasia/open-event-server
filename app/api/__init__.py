@@ -8,6 +8,7 @@ from app.api.microlocations import MicrolocationList, MicrolocationDetail, Micro
 from app.api.sessions import SessionList, SessionDetail, SessionRelationship
 from app.api.social_links import SocialLinkList, SocialLinkDetail, SocialLinkRelationship
 from app.api.sponsors import SponsorList, SponsorDetail, SponsorRelationship
+from app.api.tracks import TrackList, TrackDetail, TrackRelationship
 
 
 api_v1 = Blueprint('v1', __name__, url_prefix='/v1')
@@ -26,11 +27,12 @@ api.route(TicketRelationship, 'ticket_event', '/tickets/<int:id>/relationships/e
 api.route(EventList, 'event_list', '/events')
 api.route(EventDetail, 'event_detail', '/events/<int:id>', '/tickets/<int:ticket_id>/event',
           '/microlocations/<int:microlocation_id>/event', '/social_links/<int:social_link_id>/event',
-          '/sponsors/<int:sponsor_id>/event')
+          '/sponsors/<int:sponsor_id>/event', '/tracks/<int:track_id>/event')
 api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/ticket')
 api.route(EventRelationship, 'event_microlocation', '/events/<int:id>/relationships/microlocation')
 api.route(EventRelationship, 'event_social_link', '/events/<int:id>/relationships/social_link')
 api.route(EventRelationship, 'event_sponsor', '/events/<int:id>/relationships/sponsor')
+api.route(EventRelationship, 'event_tracks', '/events/<int:id>/relationships/tracks')
 
 # microlocations
 api.route(MicrolocationList, 'microlocation_list', '/microlocations',
@@ -43,11 +45,12 @@ api.route(MicrolocationRelationship, 'microlocation_event',
           '/microlocations/<int:id>/relationships/event')
 
 # sessions
-api.route(SessionList, 'session_list', '/sessions', '/events/<int:id>/sessions')
+api.route(SessionList, 'session_list', '/sessions', '/events/<int:id>/sessions', '/tracks/<int:track_id>/sessions')
 api.route(SessionDetail, 'session_detail', '/sessions/<int:id>',
           '/microlocations/<int:microlocation_id>/sessions', '/events/<int:event_id>/microlocations')
 api.route(SessionRelationship, 'session_microlocation',
           '/sessions/<int:id>/relationships/microlocation')
+api.route(SessionRelationship, 'session_track', '/sessions/<int:id>/relationships/track')
 
 # social_links
 api.route(SocialLinkList, 'social_link_list', '/social_links', '/events/<int:id>/social_links')
@@ -56,8 +59,13 @@ api.route(SocialLinkDetail, 'social_link_detail',
 api.route(SocialLinkRelationship, 'social_link_event',
           '/social_links/<int:id>/relationships/event')
 
-#sponsors
+# sponsors
 api.route(SponsorList, 'sponsor_list', '/sponsors', '/events/<int:event_id>/sponsors')
-api.route(SponsorDetail, 'sponsor_detail', '/sponsors/<int:id>', '/events/<int:event_id>/sponsors/<int:id>')
+api.route(SponsorDetail, 'sponsor_detail', '/sponsors/<int:id>')
 api.route(SponsorRelationship, 'sponsor_event', '/sponsors/<int:id>/relationships/event')
 
+# tracks
+api.route(TrackList, 'track_list', '/tracks', '/events/<int:event_id>/tracks')
+api.route(TrackDetail, 'track_detail', '/tracks/<int:id>', '/sessions/<int:session_id>/track')
+api.route(TrackRelationship, 'track_sessions', '/tracks/<int:id>/relationships/sessions')
+api.route(TrackRelationship, 'track_event', '/tracks/<int:id>/relationships/event')

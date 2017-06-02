@@ -1,4 +1,3 @@
-from datetime import datetime
 from app.api.helpers.permissions import jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
@@ -8,6 +7,7 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from app.models import db
 from app.models.event import Event
 from app.models.sponsor import Sponsor
+from app.models.track import Track
 
 
 class EventSchema(Schema):
@@ -36,6 +36,7 @@ class EventSchema(Schema):
                                  related_view='v1.microlocation_detail',
                                  related_view_kwargs={'event_id': '<id>'},
                                  schema='MicrolocationSchema',
+                                 many=True,
                                  type_='microlocation')
     social_link = Relationship(attribute='social_link',
                                self_view='v1.event_social_link',
@@ -45,11 +46,19 @@ class EventSchema(Schema):
                                schema='SocialLinkSchema',
                                many=True,
                                type_='social_link')
+    tracks = Relationship(attribute='track',
+                          self_view='v1.event_tracks',
+                          self_view_kwargs={'id': '<id>'},
+                          related_view='v1.track_list',
+                          related_view_kwargs={'event_id': '<id>'},
+                          schema='TrackSchema',
+                          many=True,
+                          type_='track')
 
     sponsor = Relationship(attribute='sponsor',
                            self_view='v1.event_sponsor',
                            self_view_kwargs={'id': '<id>'},
-                           related_view='v1.sponsor_detail',
+                           related_view='v1.sponsor_list',
                            related_view_kwargs={'event_id': '<id>'},
                            schema='SponsorSchema',
                            many=True,
@@ -82,6 +91,18 @@ class EventDetail(ResourceDetail):
             else:
                 if sponsor.event_id is not None:
                     view_kwargs['id'] = sponsor.event_id
+                else:
+                    view_kwargs['id'] = None
+
+        if view_kwargs.get('track_id') is not None:
+            try:
+                track = self.session.query(Track).filter_by(id=view_kwargs['track_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'track_id'},
+                                     "Track: {} not found".format(view_kwargs['track_id']))
+            else:
+                if track.event_id is not None:
+                    view_kwargs['id'] = track.event_id
                 else:
                     view_kwargs['id'] = None
 
