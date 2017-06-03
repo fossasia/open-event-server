@@ -2,6 +2,7 @@ from functools import wraps
 from flask import current_app as app
 from flask_jwt import _jwt_required, current_identity
 from app.api.helpers.errors import ForbiddenError
+from app.models.user import User
 
 
 def second_order_decorator(inner_dec):
@@ -88,4 +89,23 @@ def is_user_itself(f):
     return decorated_function
 
 
+def can_access_orders(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        user = current_identity
 
+        if user.is_staff:
+            return f(*args, **kwargs)
+        if not kwargs['event_id']:
+            return ForbiddenError({'source': ''}, 'Access Forbidden').respond()
+
+        event_id = kwargs['event_id']
+        if kwargs['user_id'] is not None and user.id == kwargs['id']:
+            return f(*args, **kwargs)
+        if 'GET' in request.method:
+            if user.is_organizer(event_id) or user.is_coorganizer(event_id):
+                return f(*args, **kwargs)
+        
+        return ForbiddenError({'source': ''}, 'Access Forbidden').respond()
+
+    return decorated_function

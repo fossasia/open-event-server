@@ -62,8 +62,16 @@ class EventSchema(Schema):
                            related_view_kwargs={'event_id': '<id>'},
                            schema='SponsorSchema',
                            many=True,
-                           type_='sponsor')
+                           type_='order')
 
+    order = Relationship(attribute='order',
+                           self_view='v1.event_order',
+                           self_view_kwargs={'id': '<id>'},
+                           related_view='v1.order_list',
+                           related_view_kwargs={'id': '<id>'},
+                           schema='OrderSchema',
+                           many=True,
+                           type_='order')
 
 class EventList(ResourceList):
     decorators = (jwt_required, )
@@ -103,6 +111,17 @@ class EventDetail(ResourceDetail):
             else:
                 if track.event_id is not None:
                     view_kwargs['id'] = track.event_id
+                else:
+                    view_kwargs['id'] = None
+        if view_kwargs.get('order_id') is not None:
+            try:
+                order = self.session.query(Order).filter_by(id=view_kwargs['order_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'order_id'},
+                                     "Order: {} not found".format(view_kwargs['order_id']))
+            else:
+                if order.event_id is not None:
+                    view_kwargs['id'] = order.event_id
                 else:
                     view_kwargs['id'] = None
 
