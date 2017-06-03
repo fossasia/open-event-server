@@ -42,6 +42,14 @@ class UserSchema(Schema):
     thumbnail = fields.Str()
     small = fields.Str()
     icon = fields.Str()
+    order = Relationship(attribute='order',
+                       self_view='v1.user_order',
+                       self_view_kwargs={'id': '<id>'},
+                       related_view='v1.order_list',
+                       related_view_kwargs={'id': '<id>'},
+                       schema='OrderSchema',
+                       many=True,
+                       type_='order')
 
 
 class UserList(ResourceList):
@@ -58,6 +66,19 @@ class UserDetail(ResourceDetail):
     """
     User detail by id
     """
+    def before_get_object(self, view_kwargs):
+        if view_kwargs.get('order_id') is not None:
+            try:
+                order = self.session.query(Order).filter_by(id=view_kwargs['order_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'order_id'},
+                                     "Order: {} not found".format(view_kwargs['order_id']))
+            else:
+                if order.user_id is not None:
+                    view_kwargs['id'] = order.user_id
+                else:
+                    view_kwargs['id'] = None
+
     decorators = (is_user_itself, )
     schema = UserSchema
     data_layer = {'session': db.session,
