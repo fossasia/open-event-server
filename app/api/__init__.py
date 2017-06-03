@@ -9,6 +9,7 @@ from app.api.sessions import SessionList, SessionDetail, SessionRelationship
 from app.api.social_links import SocialLinkList, SocialLinkDetail, SocialLinkRelationship
 from app.api.sponsors import SponsorList, SponsorDetail, SponsorRelationship
 from app.api.tracks import TrackList, TrackDetail, TrackRelationship
+from app.api.call_for_papers import CallForPaperList, CallForPaperDetail, CallForPaperRelationship
 
 
 api_v1 = Blueprint('v1', __name__, url_prefix='/v1')
@@ -27,12 +28,13 @@ api.route(TicketRelationship, 'ticket_event', '/tickets/<int:id>/relationships/e
 api.route(EventList, 'event_list', '/events')
 api.route(EventDetail, 'event_detail', '/events/<int:id>', '/tickets/<int:ticket_id>/event',
           '/microlocations/<int:microlocation_id>/event', '/social_links/<int:social_link_id>/event',
-          '/sponsors/<int:sponsor_id>/event', '/tracks/<int:track_id>/event')
+          '/sponsors/<int:sponsor_id>/event', '/tracks/<int:track_id>/event', '/call_for_papers/<int:call_for_paper_id>/event')
 api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/ticket')
 api.route(EventRelationship, 'event_microlocation', '/events/<int:id>/relationships/microlocation')
 api.route(EventRelationship, 'event_social_link', '/events/<int:id>/relationships/social_link')
 api.route(EventRelationship, 'event_sponsor', '/events/<int:id>/relationships/sponsor')
 api.route(EventRelationship, 'event_tracks', '/events/<int:id>/relationships/tracks')
+api.route(EventRelationship, 'event_call_for_paper', '/events/<int:id>/relationships/call_for_paper')
 
 # microlocations
 api.route(MicrolocationList, 'microlocation_list', '/microlocations',
@@ -69,3 +71,8 @@ api.route(TrackList, 'track_list', '/tracks', '/events/<int:event_id>/tracks')
 api.route(TrackDetail, 'track_detail', '/tracks/<int:id>', '/sessions/<int:session_id>/track')
 api.route(TrackRelationship, 'track_sessions', '/tracks/<int:id>/relationships/sessions')
 api.route(TrackRelationship, 'track_event', '/tracks/<int:id>/relationships/event')
+
+# call_for_papers
+api.route(CallForPaperList, 'call_for_paper_list', '/events/<int:event_id>/call_for_papers')
+api.route(CallForPaperDetail, 'call_for_paper_detail', '/call_for_papers/<int:id>', '/events/<int:event_id>/call_for_papers')
+api.route(CallForPaperRelationship, 'call_for_paper_event', '/call_for_papers/<int:id>/relationships/event')
