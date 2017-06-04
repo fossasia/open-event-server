@@ -9,7 +9,7 @@ from app.api.sessions import SessionList, SessionDetail, SessionRelationship
 from app.api.social_links import SocialLinkList, SocialLinkDetail, SocialLinkRelationship
 from app.api.sponsors import SponsorList, SponsorDetail, SponsorRelationship
 from app.api.tracks import TrackList, TrackDetail, TrackRelationship
-
+from app.api.image_sizes import ImageSizeList, ImageSizeDetail
 
 api_v1 = Blueprint('v1', __name__, url_prefix='/v1')
 api = Api(app, api_v1)
@@ -17,6 +17,10 @@ api = Api(app, api_v1)
 # users
 api.route(UserList, 'user_list', '/users')
 api.route(UserDetail, 'user_detail', '/users/<int:id>')
+
+# image_sizes
+api.route(ImageSizeList, 'image_size_list', '/image_sizes')
+api.route(ImageSizeDetail, 'image_size_detail', '/image_sizes/<int:id>')
 
 # tickets
 api.route(AllTicketList, 'all_ticket_list', '/tickets', '/events/<int:id>/tickets')
