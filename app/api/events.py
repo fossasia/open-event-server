@@ -12,7 +12,8 @@ from app.models.sponsor import Sponsor
 from app.models.track import Track
 from app.models.session_type import SessionType
 from app.models.event_invoice import EventInvoice
-
+from app.models.user import User
+from app.api.helpers.permissions import accessible_events, is_coorganizer
 
 class EventSchema(Schema):
 
@@ -107,7 +108,13 @@ class EventSchema(Schema):
 
 
 class EventList(ResourceList):
-    decorators = (jwt_required, )
+    def query(self, view_kwargs):
+        query_ = self.session.query(Track)
+        if view_kwargs.get('user_id') is not None:
+            query_ = query_.join(User).filter(User.id == view_kwargs['user_id'])
+        return query_
+
+    decorators = (jwt_required, accessible_events, )
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event}
@@ -164,7 +171,7 @@ class EventDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
-    decorators = (jwt_required, )
+    decorators = (is_coorganizer, )
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
