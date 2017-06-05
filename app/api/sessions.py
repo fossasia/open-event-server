@@ -5,6 +5,7 @@ from marshmallow_jsonapi import fields
 from app.models import db
 from app.models.session import Session
 from app.models.track import Track
+from app.models.session_type import SessionType
 
 
 class SessionSchema(Schema):
@@ -44,6 +45,13 @@ class SessionSchema(Schema):
                          related_view_kwargs={'session_id': '<id>'},
                          schema='TrackSchema',
                          type_='track')
+    session_type = Relationship(attribute='session_type',
+                                self_view='v1.session_session_type',
+                                self_view_kwargs={'id': '<id>'},
+                                related_view='v1.session_type_detail',
+                                related_view_kwargs={'session_id': '<id>'},
+                                schema='SessionTypeSchema',
+                                type_='session_type')
 
 
 class SessionList(ResourceList):
@@ -54,12 +62,17 @@ class SessionList(ResourceList):
         query_ = self.session.query(Session)
         if view_kwargs.get('track_id') is not None:
             query_ = query_.join(Track).filter(Track.id == view_kwargs['track_id'])
+        if view_kwargs.get('session_type_id') is not None:
+            query_ = query_.join(SessionType).filter(SessionType.id == view_kwargs['session_type_id'])
         return query_
 
     def before_create_object(self, data, view_kwargs):
         if view_kwargs.get('track_id') is not None:
             track = self.session.query(Track).filter_by(id=view_kwargs['track_id']).one()
             data['track_id'] = track.id
+        if view_kwargs.get('session_type_id') is not None:
+            session_type = self.session.query(SessionType).filter_by(id=view_kwargs['session_type_id']).one()
+            data['session_type_id'] = session_type.id
 
     decorators = (jwt_required, )
     schema = SessionSchema
