@@ -8,6 +8,7 @@ from app.models import db
 from app.models.event import Event
 from app.models.sponsor import Sponsor
 from app.models.track import Track
+from app.models.session_type import SessionType
 
 
 class EventSchema(Schema):
@@ -69,6 +70,14 @@ class EventSchema(Schema):
                                     related_view_kwargs={'event_id': '<id>'},
                                     schema='CallForPaperSchema',
                                     type_='sponsor')
+    session_types = Relationship(attribute='session_type',
+                                 self_view='v1.event_session_types',
+                                 self_view_kwargs={'id': '<id>'},
+                                 related_view='v1.session_type_list',
+                                 related_view_kwargs={'event_id': '<id>'},
+                                 schema='SessionTypeSchema',
+                                 many=True,
+                                 type_='session_type')
 
 
 class EventList(ResourceList):
@@ -109,6 +118,18 @@ class EventDetail(ResourceDetail):
             else:
                 if track.event_id is not None:
                     view_kwargs['id'] = track.event_id
+                else:
+                    view_kwargs['id'] = None
+
+        if view_kwargs.get('session_type_id') is not None:
+            try:
+                session_type = self.session.query(SessionType).filter_by(id=view_kwargs['session_type_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'session_type_id'},
+                                     "SessionType: {} not found".format(view_kwargs['session_type_id']))
+            else:
+                if session_type.event_id is not None:
+                    view_kwargs['id'] = session_type.event_id
                 else:
                     view_kwargs['id'] = None
 
