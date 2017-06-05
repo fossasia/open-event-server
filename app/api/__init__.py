@@ -11,6 +11,7 @@ from app.api.social_links import SocialLinkList, SocialLinkDetail, SocialLinkRel
 from app.api.sponsors import SponsorList, SponsorDetail, SponsorRelationship
 from app.api.tracks import TrackList, TrackDetail, TrackRelationship
 from app.api.call_for_papers import CallForPaperList, CallForPaperDetail, CallForPaperRelationship
+from app.api.image_sizes import ImageSizeList, ImageSizeDetail
 
 
 api_v1 = Blueprint('v1', __name__, url_prefix='/v1')
@@ -25,6 +26,10 @@ api.route(UserRelationship, 'user_notification', '/users/<int:id>/relationships/
 api.route(NotificationList, 'notification_list', '/notifications', '/users/<int:id>/notifications')
 api.route(NotificationDetail, 'notification_detail', '/notifications/<int:id>')
 api.route(NotificationRelationship, 'notification_user', '/notifications/<int:id>/relationships/user')
+
+# image_sizes
+api.route(ImageSizeList, 'image_size_list', '/image_sizes')
+api.route(ImageSizeDetail, 'image_size_detail', '/image_sizes/<int:id>')
 
 # tickets
 api.route(AllTicketList, 'all_ticket_list', '/tickets', '/events/<int:id>/tickets')
