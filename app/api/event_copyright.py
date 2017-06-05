@@ -1,35 +1,40 @@
+from datetime import datetime
 from app.api.helpers.permissions import jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from app.models import db
-from app.models.social_link import SocialLink
+from app.models.event_copyright import EventCopyright
 from app.models.event import Event
 
 
-class SocialLinkSchema(Schema):
+class EventCopyrightSchema(Schema):
 
     class Meta:
-        type_ = 'social_link'
-        self_view = 'v1.social_link_detail'
+        type_ = 'event_copyright'
+        self_view = 'v1.event_copyright_detail'
         self_view_kwargs = {'id': '<id>'}
 
     id = fields.Str(dump_only=True)
-    name = fields.Str(required=True)
-    link = fields.Str(required=True)
+    holder = fields.Str()
+    holder_url = fields.Str()
+    licence = fields.Str()
+    licence_url = fields.Str()
+    year = fields.Str()
+    logo = fields.Str()
     event = Relationship(attribute='event',
-                         self_view='v1.social_link_event',
+                         self_view='v1.copyright_event',
                          self_view_kwargs={'id': '<id>'},
                          related_view='v1.event_detail',
-                         related_view_kwargs={'social_link_id': '<id>'},
+                         related_view_kwargs={'copyright_id': '<id>'},
                          schema='EventSchema',
                          type_='event')
 
 
-class SocialLinkList(ResourceList):
+class EventCopyrightList(ResourceList):
 
     def query(self, view_kwargs):
-        query_ = self.session.query(SocialLink)
+        query_ = self.session.query(EventCopyright)
         if view_kwargs.get('id') is not None:
             query_ = query_.join(Event).filter(Event.id == view_kwargs['id'])
         return query_
@@ -41,24 +46,24 @@ class SocialLinkList(ResourceList):
 
     view_kwargs = True
     decorators = (jwt_required, )
-    schema = SocialLinkSchema
+    schema = EventCopyrightSchema
     data_layer = {'session': db.session,
-                  'model': SocialLink,
+                  'model': EventCopyright,
                   'methods': {
                       'query': query,
                       'before_create_object': before_create_object
                   }}
 
 
-class SocialLinkDetail(ResourceDetail):
+class EventCopyrightDetail(ResourceDetail):
     decorators = (jwt_required, )
-    schema = SocialLinkSchema
+    schema = EventCopyrightSchema
     data_layer = {'session': db.session,
-                  'model': SocialLink}
+                  'model': EventCopyright}
 
 
-class SocialLinkRelationship(ResourceRelationship):
+class EventCopyrightRelationship(ResourceRelationship):
     decorators = (jwt_required, )
-    schema = SocialLinkSchema
+    schema = EventCopyrightSchema
     data_layer = {'session': db.session,
-                  'model': SocialLink}
+                  'model': EventCopyright}

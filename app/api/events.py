@@ -69,6 +69,13 @@ class EventSchema(Schema):
                                     related_view_kwargs={'event_id': '<id>'},
                                     schema='CallForPaperSchema',
                                     type_='sponsor')
+    event_copyright = Relationship(attribute='event_copyright',
+                                   self_view='v1.event_copyright',
+                                   self_view_kwargs={'id': '<id>'},
+                                   related_view='v1.event_copyright_detail',
+                                   related_view_kwargs={'event_id': '<id>'},
+                                   schema='EventCopyrightSchema',
+                                   type_='social_link')
 
 
 class EventList(ResourceList):
