@@ -54,7 +54,6 @@ class EventSchema(Schema):
                           schema='TrackSchema',
                           many=True,
                           type_='track')
-
     sponsor = Relationship(attribute='sponsor',
                            self_view='v1.event_sponsor',
                            self_view_kwargs={'id': '<id>'},
@@ -63,6 +62,13 @@ class EventSchema(Schema):
                            schema='SponsorSchema',
                            many=True,
                            type_='sponsor')
+    call_for_speaker = Relationship(attribute='call_for_paper',
+                                    self_view='v1.event_call_for_paper',
+                                    self_view_kwargs={'id': '<id>'},
+                                    related_view='v1.call_for_paper_detail',
+                                    related_view_kwargs={'event_id': '<id>'},
+                                    schema='CallForPaperSchema',
+                                    type_='sponsor')
 
 
 class EventList(ResourceList):
