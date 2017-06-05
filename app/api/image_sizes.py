@@ -2,7 +2,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from app.models import db
-from app.api.helpers.permissions import jwt_required
+from app.api.helpers.permissions import jwt_required, is_admin, is_user_itself
 from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from app.models.event import Event
@@ -20,7 +20,6 @@ class ImageSizeSchema(Schema):
         type_ = 'image_size'
         self_view = 'v1.image_size_detail'
         self_view_kwargs = {'id': '<id>'}
-        self_view_many = 'v1.image_size_list'
 
     id = fields.Str(dump_only=True)
     type = fields.Str()
@@ -44,7 +43,7 @@ class ImageSizeList(ResourceList):
     """
     List and create image_sizes
     """
-    decorators = (jwt_required, )
+    post = is_admin(ResourceList.post.__func__)
     schema = ImageSizeSchema
     data_layer = {'session': db.session,
                   'model': ImageSizes}
@@ -54,9 +53,8 @@ class ImageSizeDetail(ResourceDetail):
     """
     image_size detail by id
     """
-    decorators = (jwt_required, )
+    patch = is_admin(ResourceDetail.patch.__func__)
+    delete = is_admin(ResourceDetail.delete.__func__)
     schema = ImageSizeSchema
     data_layer = {'session': db.session,
                   'model': ImageSizes}
-
-
