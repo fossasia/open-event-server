@@ -78,7 +78,8 @@ class TicketDetail(ResourceDetail):
 
 
 class TicketRelationship(ResourceRelationship):
-    decorators = (jwt_required,)
+
+    decorators = (jwt_required, )
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket}
