@@ -78,6 +78,13 @@ class EventSchema(Schema):
                                  schema='SessionTypeSchema',
                                  many=True,
                                  type_='session_type')
+    event_copyright = Relationship(attribute='event_copyright',
+                                   self_view='v1.event_copyright',
+                                   self_view_kwargs={'id': '<id>'},
+                                   related_view='v1.event_copyright_detail',
+                                   related_view_kwargs={'event_id': '<id>'},
+                                   schema='EventCopyrightSchema',
+                                   type_='social_link')
 
 
 class EventList(ResourceList):
