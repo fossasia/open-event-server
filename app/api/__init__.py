@@ -88,7 +88,7 @@ api.route(SponsorDetail, 'sponsor_detail', '/sponsors/<int:id>')
 api.route(SponsorRelationship, 'sponsor_event', '/sponsors/<int:id>/relationships/event')
 
 # tracks
-api.route(TrackList, 'track_list', '/tracks', '/events/<int:event_id>/tracks')
+api.route(TrackList, 'track_list', '/events/<int:event_id>/tracks')
 api.route(TrackDetail, 'track_detail', '/tracks/<int:id>', '/sessions/<int:session_id>/track')
 api.route(TrackRelationship, 'track_sessions', '/tracks/<int:id>/relationships/sessions')
 api.route(TrackRelationship, 'track_event', '/tracks/<int:id>/relationships/event')

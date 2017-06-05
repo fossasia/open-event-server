@@ -21,7 +21,6 @@ class TrackSchema(Schema):
         type_ = 'track'
         self_view = 'v1.track_detail'
         self_view_kwargs = {'id': '<id>'}
-        self_view_many = 'v1.track_list'
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
@@ -62,6 +61,7 @@ class TrackList(ResourceList):
             event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
             data['event_id'] = event.id
 
+    view_kwargs = True
     decorators = (jwt_required, )
     schema = TrackSchema
     data_layer = {'session': db.session,
