@@ -27,14 +27,14 @@ class EventCopyright(db.Model):
                  licence_url=None,
                  year=None,
                  logo=None,
-                 event=None):
+                 event_id=None):
         self.holder = holder
         self.holder_url = holder_url
         self.licence = licence
         self.licence_url = licence_url
         self.year = year
         self.logo = logo
-        self.event = event
+        self.event_id = event_id
 
     def __repr__(self):
         return '<Copyright %r>' % self.holder
