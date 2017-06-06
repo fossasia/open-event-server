@@ -14,6 +14,7 @@ from app.api.call_for_papers import CallForPaperList, CallForPaperDetail, CallFo
 from app.api.image_sizes import ImageSizeList, ImageSizeDetail
 from app.api.session_types import SessionTypeList, SessionTypeDetail, SessionTypeRelationship
 from app.api.event_copyright import EventCopyrightList, EventCopyrightDetail, EventCopyrightRelationship
+from app.api.pages import PageList, PageDetail
 
 
 api_v1 = Blueprint('v1', __name__, url_prefix='/v1')
@@ -33,6 +34,10 @@ api.route(NotificationRelationship, 'notification_user',
 # image_sizes
 api.route(ImageSizeList, 'image_size_list', '/image_sizes')
 api.route(ImageSizeDetail, 'image_size_detail', '/image_sizes/<int:id>')
+
+# pages
+api.route(PageList, 'page_list', '/pages')
+api.route(PageDetail, 'page_detail', '/pages/<int:id>')
 
 # tickets
 api.route(AllTicketList, 'all_ticket_list', '/tickets', '/events/<int:id>/tickets')
