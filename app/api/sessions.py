@@ -6,6 +6,7 @@ from app.models import db
 from app.models.session import Session
 from app.models.track import Track
 from app.models.session_type import SessionType
+from app.models.microlocation import Microlocation
 
 
 class SessionSchema(Schema):
@@ -19,7 +20,6 @@ class SessionSchema(Schema):
         type_ = 'session'
         self_view = 'v1.session_detail'
         self_view_kwargs = {'id': '<id>'}
-        self_view_many = 'v1.session_list'
 
     id = fields.Str(dump_only=True)
     title = fields.Str(required=True)
@@ -31,6 +31,17 @@ class SessionSchema(Schema):
     comments = fields.Str()
     starts_at = fields.DateTime(required=True)
     ends_at = fields.DateTime(required=True)
+    language = fields.Str()
+    level = fields.Str()
+    slides = fields.Str()
+    videos = fields.Str()
+    audios = fields.Str()
+    signup_url = fields.Str()
+    state = fields.Str()
+    created_at = fields.DateTime()
+    deleted_at = fields.DateTime()
+    submitted_at = fields.DateTime()
+    is_mail_sent = fields.Boolean()
     microlocation = Relationship(attribute='microlocation',
                                  self_view='v1.session_microlocation',
                                  self_view_kwargs={'id': '<id>'},
@@ -64,6 +75,8 @@ class SessionList(ResourceList):
             query_ = query_.join(Track).filter(Track.id == view_kwargs['track_id'])
         if view_kwargs.get('session_type_id') is not None:
             query_ = query_.join(SessionType).filter(SessionType.id == view_kwargs['session_type_id'])
+        if view_kwargs.get('microlocation_id') is not None:
+            query_ = query_.join(Microlocation).filter(Microlocation.id == view_kwargs['microlocation_id'])
         return query_
 
     def before_create_object(self, data, view_kwargs):
@@ -73,7 +86,11 @@ class SessionList(ResourceList):
         if view_kwargs.get('session_type_id') is not None:
             session_type = self.session.query(SessionType).filter_by(id=view_kwargs['session_type_id']).one()
             data['session_type_id'] = session_type.id
+        if view_kwargs.get('microlocation_id') is not None:
+            microlocation = self.session.query(Microlocation).filter_by(id=view_kwargs['microlocation_id']).one()
+            data['microlocation_id'] = microlocation.id
 
+    view_kwargs = True
     decorators = (jwt_required, )
     schema = SessionSchema
     data_layer = {'session': db.session,

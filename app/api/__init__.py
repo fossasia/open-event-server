@@ -66,10 +66,9 @@ api.route(MicrolocationRelationship, 'microlocation_event',
           '/microlocations/<int:id>/relationships/event')
 
 # sessions
-api.route(SessionList, 'session_list', '/sessions', '/events/<int:id>/sessions', '/tracks/<int:track_id>/sessions',
-          '/session_types/<int:session_type_id>/sessions')
-api.route(SessionDetail, 'session_detail', '/sessions/<int:id>',
-          '/microlocations/<int:microlocation_id>/sessions', '/events/<int:event_id>/microlocations')
+api.route(SessionList, 'session_list', '/events/<int:id>/sessions', '/tracks/<int:track_id>/sessions',
+          '/session_types/<int:session_type_id>/sessions', '/microlocations/<int:microlocation_id>/sessions')
+api.route(SessionDetail, 'session_detail', '/sessions/<int:id>', '/events/<int:event_id>/microlocations')
 api.route(SessionRelationship, 'session_microlocation',
           '/sessions/<int:id>/relationships/microlocation')
 api.route(SessionRelationship, 'session_track', '/sessions/<int:id>/relationships/track')
