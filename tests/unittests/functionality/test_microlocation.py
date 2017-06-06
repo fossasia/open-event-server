@@ -25,7 +25,7 @@ class TestMicrolocationApi(OpenEventTestCase):
 
     def test_multiple_microlocation_for_same_event(self):
         microlocation1 = ObjectMother.get_microlocation()
-        microlocation2 = Microlocation(name='test2',
+        microlocation2 = Microlocation(room_name='test2',
                                        latitude=1.0,
                                        longitude=1.0,
                                        event_id=1)
