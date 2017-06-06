@@ -43,7 +43,7 @@ class Session(db.Model):
     state = db.Column(db.String, default="pending")
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     deleted_at = db.Column(db.DateTime)
-    submission_date = db.Column(db.DateTime)
+    submitted_at = db.Column(db.DateTime)
     submission_modifier = db.Column(db.String)
     is_mail_sent = db.Column(db.Boolean, default=False)
 

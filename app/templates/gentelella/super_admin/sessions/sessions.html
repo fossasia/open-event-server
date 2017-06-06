@@ -35,7 +35,7 @@
                     {% endfor %}
                 </ol>
             </td>
-            <td>{{ session.submission_date.strftime('%B %d, %Y %I:%M %p')  if session.submission_date != None }}</td>
+            <td>{{ session.submitted_at.strftime('%B %d, %Y %I:%M %p')  if session.submitted_at != None }}</td>
             <td>{{ session.event.starts_at }} - {{ session.event.ends_at }}</td>
             <td>
                 {% if session %}

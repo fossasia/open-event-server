@@ -28,7 +28,7 @@ class MicrolocationSchema(Schema):
     session = Relationship(attribute='session',
                            self_view='v1.microlocation_session',
                            self_view_kwargs={'id': '<id>'},
-                           related_view='v1.session_detail',
+                           related_view='v1.session_list',
                            related_view_kwargs={'microlocation_id': '<id>'},
                            schema='SessionSchema',
                            type_='session')
@@ -66,6 +66,7 @@ class MicrolocationList(ResourceList):
             event = self.session.query(Event).filter_by(id=view_kwargs['id']).one()
             data['event_id'] = event.id
 
+    view_kwargs = True
     decorators = (jwt_required, )
     schema = MicrolocationSchema
     data_layer = {'session': db.session,
