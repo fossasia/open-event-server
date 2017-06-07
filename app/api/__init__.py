@@ -15,6 +15,7 @@ from app.api.image_sizes import ImageSizeList, ImageSizeDetail
 from app.api.session_types import SessionTypeList, SessionTypeDetail, SessionTypeRelationship
 from app.api.event_copyright import EventCopyrightList, EventCopyrightDetail, EventCopyrightRelationship
 from app.api.pages import PageList, PageDetail
+from app.api.tax import TaxList, TaxDetail,TaxRelationship
 
 
 api_v1 = Blueprint('v1', __name__, url_prefix='/v1')
@@ -50,7 +51,7 @@ api.route(EventDetail, 'event_detail', '/events/<int:id>', '/tickets/<int:ticket
           '/microlocations/<int:microlocation_id>/event', '/social_links/<int:social_link_id>/event',
           '/sponsors/<int:sponsor_id>/event', '/tracks/<int:track_id>/event',
           '/call_for_papers/<int:call_for_paper_id>/event', '/session_types/<int:session_type_id>/event',
-          '/event_copyright/<int:copyright_id>/event')
+          '/event_copyright/<int:copyright_id>/event', '/tax/<int:tax_id>/event')
 api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/ticket')
 api.route(EventRelationship, 'event_microlocation', '/events/<int:id>/relationships/microlocation')
 api.route(EventRelationship, 'event_social_link', '/events/<int:id>/relationships/social_link')
@@ -59,6 +60,8 @@ api.route(EventRelationship, 'event_tracks', '/events/<int:id>/relationships/tra
 api.route(EventRelationship, 'event_call_for_paper', '/events/<int:id>/relationships/call_for_paper')
 api.route(EventRelationship, 'event_session_types', '/events/<int:id>/relationships/session_types')
 api.route(EventRelationship, 'event_copyright', '/events/<int:id>/relationships/event_copyright')
+api.route(EventRelationship, 'event_tax', '/events/<int:id>/relationships/tax')
+
 
 # microlocations
 api.route(MicrolocationList, 'microlocation_list', '/microlocations',
@@ -116,3 +119,9 @@ api.route(EventCopyrightDetail, 'event_copyright_detail',
           '/event_copyright/<int:id>', '/events/<int:event_id>/event_copyright')
 api.route(EventCopyrightRelationship, 'copyright_event',
           '/event_copyright/<int:id>/relationships/event')
+
+
+# tax
+api.route(TaxList, 'tax_list', '/events/<int:id>/tax')
+api.route(TaxDetail, 'tax_detail', '/tax/<int:id>', '/events/<int:event_id>/tax')
+api.route(TaxRelationship, 'tax_event','/tax/<int:id>/relationships/event')

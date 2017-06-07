@@ -85,6 +85,13 @@ class EventSchema(Schema):
                                    related_view_kwargs={'event_id': '<id>'},
                                    schema='EventCopyrightSchema',
                                    type_='social_link')
+    tax = Relationship(attribute='tax',
+                       self_view='v1.event_tax',
+                       self_view_kwargs={'id': '<id>'},
+                       related_view='v1.tax_detail',
+                       related_view_kwargs={'event_id': '<id>'},
+                       schema='TaxSchema',
+                       type_='tax')
 
 
 class EventList(ResourceList):
