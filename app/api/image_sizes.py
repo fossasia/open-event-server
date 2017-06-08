@@ -1,11 +1,10 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+
+from app.api.helpers.utilities import dasherize
 from app.models import db
-from app.api.helpers.permissions import jwt_required, is_admin, is_user_itself
-from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound
-from app.models.event import Event
+from app.api.helpers.permissions import is_admin
 from app.models.image_size import ImageSizes
 
 
@@ -20,6 +19,7 @@ class ImageSizeSchema(Schema):
         type_ = 'image_size'
         self_view = 'v1.image_size_detail'
         self_view_kwargs = {'id': '<id>'}
+        inflect = dasherize
 
     id = fields.Str(dump_only=True)
     type = fields.Str()

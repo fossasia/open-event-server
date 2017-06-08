@@ -3,6 +3,8 @@ from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
+
+from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.user import User
 from app.models.notification import Notification
@@ -21,6 +23,7 @@ class UserSchema(Schema):
         self_view = 'v1.user_detail'
         self_view_kwargs = {'id': '<id>'}
         self_view_many = 'v1.user_list'
+        inflect = dasherize
 
     id = fields.Str(dump_only=True)
     email = fields.Email(required=True)

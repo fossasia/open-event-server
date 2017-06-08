@@ -1,12 +1,14 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+from sqlalchemy.orm.exc import NoResultFound
+from flask_rest_jsonapi.exceptions import ObjectNotFound
+
+from app.api.helpers.utilities import dasherize
+from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.track import Track
 from app.models.session import Session
-from app.api.helpers.permissions import jwt_required
-from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 from app.models.event import Event
 
 
@@ -21,6 +23,7 @@ class TrackSchema(Schema):
         type_ = 'track'
         self_view = 'v1.track_detail'
         self_view_kwargs = {'id': '<id>'}
+        inflect = dasherize
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)

@@ -1,9 +1,11 @@
-from app.api.helpers.permissions import jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
+
+from app.api.helpers.permissions import jwt_required
+from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.event import Event
 from app.models.sponsor import Sponsor
@@ -18,6 +20,7 @@ class EventSchema(Schema):
         self_view = 'v1.event_detail'
         self_view_kwargs = {'id': '<id>'}
         self_view_many = 'v1.event_list'
+        inflect = dasherize
 
     id = fields.Str(dump_only=True)
     identifier = fields.Str(dump_only=True)

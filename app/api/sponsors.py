@@ -2,6 +2,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema, Relationship
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
+from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.sponsor import Sponsor
@@ -14,6 +15,7 @@ class SponsorSchema(Schema):
         type_ = 'sponsor'
         self_view = 'v1.sponsor_detail'
         self_view_kwargs = {'id': '<id>'}
+        inflect = dasherize
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
