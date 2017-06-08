@@ -4,6 +4,7 @@ from marshmallow_jsonapi import fields
 from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
+from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.api.helpers.permissions import jwt_required
 from app.models.session_type import SessionType
@@ -22,6 +23,7 @@ class SessionTypeSchema(Schema):
         type_ = 'session_type'
         self_view = 'v1.session_type_detail'
         self_view_kwargs = {'id': '<id>'}
+        inflect = dasherize
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
