@@ -23,7 +23,9 @@
 
     {% block head_css %}
         <link rel="stylesheet" href="{{ url_for('static', filename='css/vendor/roboto.css') }}"/>
+        {% block head_css_bootstrap %}
         <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/dist/css/bootstrap.min.css') }}">
+        {% endblock %}
         <link rel="stylesheet" href="{{ url_for('static', filename='vendor/font-awesome/css/font-awesome.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/vendor/gentelella.css') }}"/>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/custom/common.css') }}"/>
