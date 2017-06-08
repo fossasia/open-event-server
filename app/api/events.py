@@ -74,7 +74,11 @@ EVENT = api.model('Event', {
     'timezone': fields.String(),
     'latitude': fields.Float(),
     'longitude': fields.Float(),
-    'background_image': fields.Upload(attribute='background_url'),
+    'background_image': {
+        'original_image_url': fields.Upload(attribute='background_url'),
+        'large_image_url': fields.Uri(attribute='large'),
+        'thumbnail_image_url': fields.Uri(attribute='thumbnail'),
+    },
     'placeholder_url': fields.PlaceHolder(attribute=lambda event: event),
     'description': fields.String(),
     'location_name': fields.String(),
@@ -95,8 +99,6 @@ EVENT = api.model('Event', {
     'call_for_papers': fields.Nested(EVENT_CFS, allow_null=True),
     'version': fields.Nested(EVENT_VERSION),
     'has_session_speakers': fields.Boolean(default=False),
-    'thumbnail': fields.Uri(),
-    'large': fields.Uri()
 })
 
 EVENT_COMPLETE = api.clone('EventComplete', EVENT, {
