@@ -81,11 +81,16 @@ def is_user_itself(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         user = current_identity
-        if not user.is_admin and not user.is_super_admin and user.id != kwargs['id']:
+        if 'user_id' in kwargs:
+            if not user.is_admin and not user.is_super_admin and user.id != kwargs['user_id']:
+                return ForbiddenError({'source': ''}, 'Access Forbidden').respond()
+            return f(*args, **kwargs)
+        elif 'id' in kwargs:
+            if not user.is_admin and not user.is_super_admin and user.id != kwargs['id']:
+                return ForbiddenError({'source': ''}, 'Access Forbidden').respond()
+            return f(*args, **kwargs)
+        if not user.is_admin and not user.is_super_admin:
             return ForbiddenError({'source': ''}, 'Access Forbidden').respond()
         return f(*args, **kwargs)
 
     return decorated_function
-
-
-

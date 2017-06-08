@@ -3,9 +3,11 @@ from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
+
 from app.models import db
 from app.models.user import User
 from app.models.notification import Notification
+from app.models.import_job import ImportJob
 from app.api.helpers.permissions import is_admin, is_user_itself, jwt_required
 
 
@@ -55,6 +57,16 @@ class UserSchema(Schema):
         many=True,
         type_='notification'
     )
+    import_jobs = Relationship(
+        attribute='import_jobs',
+        self_view='v1.user_import_jobs',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.import_job_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='ImportJobSchema',
+        many=True,
+        type_='import_job'
+    )
 
 
 class UserList(ResourceList):
@@ -81,6 +93,17 @@ class UserDetail(ResourceDetail):
             else:
                 if notification.user_id is not None:
                     view_kwargs['id'] = notification.user_id
+                else:
+                    view_kwargs['id'] = None
+        if view_kwargs.get('import_job_id') is not None:
+            try:
+                import_job = self.session.query(ImportJob).filter_by(id=view_kwargs['import_job_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'import_job_id'},
+                                     "ImportJob: {} not found".format(view_kwargs['import_job_id']))
+            else:
+                if import_job.user_id is not None:
+                    view_kwargs['id'] = import_job.user_id
                 else:
                     view_kwargs['id'] = None
 

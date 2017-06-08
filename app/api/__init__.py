@@ -14,6 +14,7 @@ from app.api.call_for_papers import CallForPaperList, CallForPaperDetail, CallFo
 from app.api.image_sizes import ImageSizeList, ImageSizeDetail
 from app.api.session_types import SessionTypeList, SessionTypeDetail, SessionTypeRelationship
 from app.api.event_copyright import EventCopyrightList, EventCopyrightDetail, EventCopyrightRelationship
+from app.api.import_jobs import ImportJobList, ImportJobDetail, ImportJobRelationship
 from app.api.pages import PageList, PageDetail
 from app.api.tax import TaxList, TaxDetail,TaxRelationship
 
@@ -23,14 +24,21 @@ api = Api(app, api_v1)
 
 # users
 api.route(UserList, 'user_list', '/users')
-api.route(UserDetail, 'user_detail', '/users/<int:id>', '/notifications/<int:notification_id>/user')
+api.route(UserDetail, 'user_detail', '/users/<int:id>', '/notifications/<int:notification_id>/user',
+          '/import_jobs/<int:import_job_id>/user')
 api.route(UserRelationship, 'user_notification', '/users/<int:id>/relationships/notifications')
+api.route(UserRelationship, 'user_import_jobs', '/users/<int:id>/relationships/import_jobs')
 
 # notifications
 api.route(NotificationList, 'notification_list', '/notifications', '/users/<int:id>/notifications')
 api.route(NotificationDetail, 'notification_detail', '/notifications/<int:id>')
 api.route(NotificationRelationship, 'notification_user',
           '/notifications/<int:id>/relationships/user')
+
+# import_jobs
+api.route(ImportJobList, 'import_job_list', '/import_jobs', '/users/<int:user_id>/import_jobs')
+api.route(ImportJobDetail, 'import_job_detail', '/import_jobs/<int:id>')
+api.route(ImportJobRelationship, 'import_job_user', '/import_jobs/<int:id>/relationships/user')
 
 # image_sizes
 api.route(ImageSizeList, 'image_size_list', '/image_sizes')
