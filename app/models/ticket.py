@@ -21,8 +21,8 @@ class Ticket(db.Model):
     price = db.Column(db.Float)
     is_fee_absorbed = db.Column(db.Boolean)
 
-    sales_start = db.Column(db.DateTime)
-    sales_end = db.Column(db.DateTime)
+    sales_start = db.Column(db.DateTime(timezone=True))
+    sales_end = db.Column(db.DateTime(timezone=True))
     hide = db.Column(db.Boolean)
 
     min_order = db.Column(db.Integer)

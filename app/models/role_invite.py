@@ -17,7 +17,7 @@ class RoleInvite(db.Model):
     role = db.relationship("Role")
 
     hash = db.Column(db.String)
-    created_at = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime(timezone=True))
     is_declined = db.Column(db.Boolean)
 
     def __init__(self, email, event, role, created_at, is_declined=False):
