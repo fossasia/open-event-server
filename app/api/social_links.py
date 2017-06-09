@@ -19,7 +19,7 @@ class SocialLinkSchema(Schema):
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
-    link = fields.Str(required=True)
+    link = fields.Url(required=True)
     event = Relationship(attribute='event',
                          self_view='v1.social_link_event',
                          self_view_kwargs={'id': '<id>'},

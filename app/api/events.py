@@ -26,7 +26,7 @@ class EventSchema(Schema):
     id = fields.Str(dump_only=True)
     identifier = fields.Str(dump_only=True)
     name = fields.Str()
-    event_url = fields.Str()
+    event_url = fields.Url()
     ticket = Relationship(attribute='ticket',
                           self_view='v1.event_ticket',
                           self_view_kwargs={'id': '<id>'},
