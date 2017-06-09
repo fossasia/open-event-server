@@ -109,9 +109,16 @@ The Open Event API Server
 + Response 200 (application/vnd.api+json)
     
         {
-          "data": "data"
+            "data": {
+                "attributes": {
+                "name": "Open Event User",
+                "email": "example@example.com",
+                "password": "12345678"
+                },
+                "type": "user"
+            }
         }
-
+        
 ## User Details [/users/{user_id}]
 + Parameters
     + user_id (integer) - ID of the user in the form of an integer
@@ -284,6 +291,7 @@ The Open Event API Server
 + logo_width (integer)- Width of the logo
 + logo_height (integer)- Height of the logo 
 
+
 + Request (application/vnd.api+json)
 
         {
@@ -436,6 +444,7 @@ The Open Event API Server
 
 + Response 204
 
+
 ## Page Collection [/pages?page,limit]
 
 ### Page Sizes [GET]
@@ -519,6 +528,7 @@ The Open Event API Server
     + page_id (integer) - ID of the page in the form of an integer
     
 ### Get Page Details [GET]
+
 + Request
 
     + Headers
@@ -606,3 +616,137 @@ The Open Event API Server
 ### Delete Page [DELETE]
 
 + Response 204
+
+## Tracks Collection [/events/{event_id}/tracks]
++ Parameters
+    + event_id (integer) - ID of the event in the form of an integer
+
+### List All Tracks [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+    
+        {
+            'body': 'body'
+        }
+
+### Create Track [POST]
+
++ name (string) - The name of the track **(required)**
++ description (string) - Description of the track
++ track_image_url (string) - URL of uploaded track image
++ color (string) - Color code of the track **(required)**
++ location (string) - Name of the location of track
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+                "name" : "name ",
+                "description": "description",
+                "track_image_url": "track_image_url",
+                "color": "color",
+                "location": "location"
+            },
+            "type": "track"
+          }
+        }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": "data"
+        }
+
+
+### Track Deatil [/tracks/{track_id}]
++ Parameters
+    + track_id (integer) - ID of the track in the form of an integer
+
+### Get Details [GET]
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "attributes": {
+                    "name" : "name ",
+                    "description": "description",
+                    "track_image_url": "track_image_url",
+                    "color": "color",
+                    "location": "location"
+                },
+                "type": "track",
+                "id": "1",
+                "links": {
+                  "self": "/v1/tracks/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/tracks/1"
+            }
+        }
+
+
+### Update Track [PATCH]
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+                "name" : "name ",
+                "description": "description",
+                "track_image_url": "track_image_url",
+                "color": "color",
+                "location": "location"
+            },
+            "type": "track",
+            "id": "1",
+          }
+        }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+                "name" : "name ",
+                "description": "description",
+                "track_image_url": "track_image_url",
+                "color": "color",
+                "location": "location"
+            },
+            "type": "track",
+            "id": "1",
+            "links": {
+              "self": "/v1/tracks/1"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+          }
+        }
+
+### Delete Track [DELETE]
+
++ Response 204
+
