@@ -2,6 +2,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 
+from app.api.events import Event
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
 from app.models import db
@@ -89,6 +90,10 @@ class SessionList(ResourceList):
         if view_kwargs.get('microlocation_id') is not None:
             query_ = query_.join(Microlocation).filter(
                 Microlocation.id == view_kwargs['microlocation_id'])
+        if view_kwargs.get('id'):
+            query_ = query_.join(Event).filter(Event.id == view_kwargs['id'])
+        elif view_kwargs.get('identifier'):
+            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
         return query_
 
     def before_create_object(self, data, view_kwargs):

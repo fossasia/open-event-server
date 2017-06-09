@@ -16,6 +16,7 @@ class TrackSchema(Schema):
     """
     Api Schema for track model
     """
+
     class Meta:
         """
         Meta class for User Api Schema
@@ -38,7 +39,6 @@ class TrackSchema(Schema):
                          related_view_kwargs={'track_id': '<id>'},
                          schema='EventSchema',
                          type_='event')
-
     sessions = Relationship(attribute='sessions',
                             self_view='v1.track_sessions',
                             self_view_kwargs={'id': '<id>'},
@@ -53,19 +53,26 @@ class TrackList(ResourceList):
     """
     List and create Tracks
     """
+
     def query(self, view_kwargs):
         query_ = self.session.query(Track)
-        if view_kwargs.get('event_id') is not None:
+        if view_kwargs.get('event_id'):
             query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
+        elif view_kwargs.get('identifier'):
+            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
         return query_
 
     def before_create_object(self, data, view_kwargs):
-        if view_kwargs.get('event_id') is not None:
+        if view_kwargs.get('event_id'):
             event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
             data['event_id'] = event.id
 
+        elif view_kwargs.get('identifier'):
+            event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
+            data['event_id'] = event.id
+
     view_kwargs = True
-    decorators = (jwt_required, )
+    decorators = (jwt_required,)
     schema = TrackSchema
     data_layer = {'session': db.session,
                   'model': Track,
@@ -79,6 +86,7 @@ class TrackDetail(ResourceDetail):
     """
     Track detail by id
     """
+
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('session_id') is not None:
             try:
@@ -92,7 +100,7 @@ class TrackDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
-    decorators = (jwt_required, )
+    decorators = (jwt_required,)
     schema = TrackSchema
     data_layer = {'session': db.session,
                   'model': Track,
@@ -103,7 +111,7 @@ class TrackRelationship(ResourceRelationship):
     """
     Track Relationship
     """
-    decorators = (jwt_required, )
+    decorators = (jwt_required,)
     schema = TrackSchema
     data_layer = {'session': db.session,
                   'model': Track}

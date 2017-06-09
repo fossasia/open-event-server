@@ -2,6 +2,5 @@
 # MODULES RELATED TO THE EVENT-SYSTEM i.e FUNCTIONS RELATED TO DB MODELS, OTHER API MODULES
 # OR OTHER HELPER MODULES
 
-
 def dasherize(text):
     return text.replace('_', '-')

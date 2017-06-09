@@ -28,14 +28,13 @@ class SessionTypeSchema(Schema):
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
     length = fields.Str()
-    event = Relationship(attribute='events',
+    event = Relationship(attribute='event',
                          self_view='v1.session_type_event',
                          self_view_kwargs={'id': '<id>'},
                          related_view='v1.event_detail',
                          related_view_kwargs={'session_type_id': '<id>'},
                          schema='EventSchema',
                          type_='event')
-
     sessions = Relationship(attribute='session',
                             self_view='v1.session_type_sessions',
                             self_view_kwargs={'id': '<id>'},
@@ -53,13 +52,18 @@ class SessionTypeList(ResourceList):
 
     def query(self, view_kwargs):
         query_ = self.session.query(SessionType)
-        if view_kwargs.get('event_id') is not None:
+        if view_kwargs.get('event_id'):
             query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
+        elif view_kwargs.get('identifier'):
+            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
         return query_
 
     def before_create_object(self, data, view_kwargs):
-        if view_kwargs.get('event_id') is not None:
+        if view_kwargs.get('event_id'):
             event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
+            data['event_id'] = event.id
+        elif view_kwargs.get('identifier'):
+            event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
             data['event_id'] = event.id
 
     view_kwargs = True

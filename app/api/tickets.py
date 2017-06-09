@@ -37,25 +37,30 @@ class TicketSchema(Schema):
                          related_view_kwargs={'ticket_id': '<id>'},
                          schema='EventSchema',
                          type_='event')
-    tags =  Relationship(attribute='ticket_tag',
-                         self_view='v1.ticket_ticket_tag',
-                         self_view_kwargs={'id': '<id>'},
-                         related_view='v1.tag_detail',
-                         related_view_kwargs={'ticket_id': '<id>'},
-                         schema='TicketTagSchema',
-                         type_='ticket-tag')
+    tags = Relationship(attribute='ticket_tag',
+                        self_view='v1.ticket_ticket_tag',
+                        self_view_kwargs={'id': '<id>'},
+                        related_view='v1.tag_detail',
+                        related_view_kwargs={'ticket_id': '<id>'},
+                        schema='TicketTagSchema',
+                        type_='ticket-tag')
 
 
 class AllTicketList(ResourceList):
     def query(self, view_kwargs):
         query_ = self.session.query(Ticket)
-        if view_kwargs.get('id') is not None:
+        if view_kwargs.get('id'):
             query_ = query_.join(Event).filter(Event.id == view_kwargs['id'])
+        elif view_kwargs.get('identifier'):
+            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
         return query_
 
     def before_create_object(self, data, view_kwargs):
-        if view_kwargs.get('id') is not None:
+        if view_kwargs.get('id'):
             event = self.session.query(Event).filter_by(id=view_kwargs['id']).one()
+            data['event_id'] = event.id
+        elif view_kwargs.get('identifier'):
+            event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
             data['event_id'] = event.id
 
     decorators = (jwt_required,)

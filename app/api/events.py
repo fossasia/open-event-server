@@ -1,8 +1,11 @@
+from datetime import datetime
+
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+from pytz import timezone
 from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound
+from flask_rest_jsonapi.exceptions import ObjectNotFound, BadRequest
 from flask import request
 
 from app.api.helpers.permissions import jwt_required
@@ -23,7 +26,6 @@ from app.api.helpers.helpers import save_to_db
 
 
 class EventSchema(Schema):
-
     class Meta:
         type_ = 'event'
         self_view = 'v1.event_detail'
@@ -33,10 +35,53 @@ class EventSchema(Schema):
 
     id = fields.Str(dump_only=True)
     identifier = fields.Str(dump_only=True)
-    name = fields.Str()
-    event_url = fields.Url()
-    starts_at = fields.DateTime(required=True)
-    ends_at = fields.DateTime(required=True)
+    name = fields.Str(required=True)
+    email = fields.Str()
+    event_url = fields.Str(dump_only=True)
+    starts_at = fields.DateTime(required=True, timezone=True)
+    ends_at = fields.DateTime(required=True, timezone=True)
+    timezone = fields.Str(required=True)
+    latitude = fields.Float()
+    longitude = fields.Float()
+    logo_url = fields.Str(attribute='logo')
+    location_name = fields.Str()
+    searchable_location_name = fields.Str()
+    description = fields.Str()
+    thumbnail_image_url = fields.Str(attribute='thumbnail')
+    large_image_url = fields.Str(attribute='large')
+    original_image_url = fields.Str(attribute='background_url')
+    icon_image_url = fields.Str(attribute='icon')
+    organizer_name = fields.Str()
+    show_map = fields.Int()
+    organizer_description = fields.Str()
+    has_session_speakers = fields.Bool(default=False)
+    privacy = fields.Str(default="public")
+    state = fields.Str(default="Draft")
+    type = fields.Str()
+    topic = fields.Str()
+    sub_topic = fields.Str()
+    ticket_url = fields.Str()
+    code_of_conduct = fields.Str()
+    schedule_published_on = fields.DateTime()
+    ticket_include = fields.Bool(default=False)
+    deleted_at = fields.DateTime()
+    payment_country = fields.Str()
+    payment_currency = fields.Str()
+    paypal_email = fields.Str()
+    tax_allow = fields.Bool(default=False)
+    pay_by_paypal = fields.Bool(default=False)
+    pay_by_stripe = fields.Bool(default=False)
+    pay_by_cheque = fields.Bool(default=False)
+    pay_by_bank = fields.Bool(default=False)
+    pay_onsite = fields.Bool(default=False)
+    cheque_details = fields.Str()
+    bank_details = fields.Str()
+    onsite_details = fields.Str()
+    sponsors_enabled = fields.Bool(default=False)
+    created_at = fields.DateTime(dump_only=True, timezone=True)
+    pentabarf_url = fields.Url(dump_only=True)
+    ical_url = fields.Url(dump_only=True)
+    xcal_url = fields.Url(dump_only=True)
     tickets = Relationship(attribute='ticket',
                            self_view='v1.event_ticket',
                            self_view_kwargs={'id': '<id>'},
@@ -77,10 +122,10 @@ class EventSchema(Schema):
                             schema='SponsorSchema',
                             many=True,
                             type_='sponsor')
-    call_for_papers = Relationship(attribute='call_for_paper',
+    call_for_papers = Relationship(attribute='call_for_papers',
                                    self_view='v1.event_call_for_paper',
                                    self_view_kwargs={'id': '<id>'},
-                                   related_view='v1.call_for_paper_detail',
+                                   related_view='v1.call_for_paper_list',
                                    related_view_kwargs={'event_id': '<id>'},
                                    schema='CallForPaperSchema',
                                    type_='call-for-paper')
@@ -92,28 +137,27 @@ class EventSchema(Schema):
                                  schema='SessionTypeSchema',
                                  many=True,
                                  type_='session-type')
-    event_copyright = Relationship(attribute='event_copyright',
+    event_copyright = Relationship(attribute='copyright',
                                    self_view='v1.event_copyright',
                                    self_view_kwargs={'id': '<id>'},
                                    related_view='v1.event_copyright_detail',
                                    related_view_kwargs={'event_id': '<id>'},
                                    schema='EventCopyrightSchema',
-                                   type_='social-link')
-    tax = Relationship(attribute='tax',
-                       self_view='v1.event_tax',
+                                   type_='event-copyright')
+    tax = Relationship(self_view='v1.event_tax',
                        self_view_kwargs={'id': '<id>'},
                        related_view='v1.tax_detail',
                        related_view_kwargs={'event_id': '<id>'},
                        schema='TaxSchema',
                        type_='tax')
-    event_invoice = Relationship(attribute='event_invoice',
-                                 self_view='v1.event_event_invoice',
-                                 self_view_kwargs={'id': '<id>'},
-                                 related_view='v1.event_invoice_list',
-                                 related_view_kwargs={'event_id': '<id>'},
-                                 schema='EventInvoiceSchema',
-                                 many=True,
-                                 type_='event-invoice')
+    event_invoices = Relationship(attribute='invoices',
+                                  self_view='v1.event_event_invoice',
+                                  self_view_kwargs={'id': '<id>'},
+                                  related_view='v1.event_invoice_list',
+                                  related_view_kwargs={'event_id': '<id>'},
+                                  schema='EventInvoiceSchema',
+                                  many=True,
+                                  type_='event-invoice')
     discount_codes = Relationship(attribute='discount_code',
                                   self_view='v1.event_discount_code',
                                   self_view_kwargs={'id': '<id>'},
@@ -133,14 +177,29 @@ class EventSchema(Schema):
 
 
 class EventList(ResourceList):
-
     def query(self, view_kwargs):
         query_ = self.session.query(Event)
-        if view_kwargs.get('user_id') is not None:
+        if view_kwargs.get('user_id'):
             if 'GET' in request.method:
                 query_ = query_.join(Event.roles).filter_by(user_id=view_kwargs['user_id']) \
                     .join(UsersEventsRoles.role).filter(Role.name != ATTENDEE)
         return query_
+
+    def before_create_object(self, data, view_kwargs):
+        if data['timezone']:
+            tz = timezone(data['timezone'])
+            dt = datetime.strptime('2014-12-01', '%Y-%m-%d')
+            offset = tz.utcoffset(dt).seconds
+            starts_at = data['starts_at'].utcoffset().seconds
+            ends_at = data['ends_at'].utcoffset().seconds
+            if offset != starts_at:
+                raise BadRequest({'parameter': 'timezone'}, "timezone: {} does not match with the starts-at "
+                                                            "offset {:02}:{:02}".
+                                 format(data['timezone'], starts_at // 3600, starts_at % 3600 // 60))
+            if offset != ends_at:
+                raise BadRequest({'parameter': 'timezone'}, "timezone: {} does not match with the ends-at "
+                                                            "offset {:02}:{:02}".
+                                 format(data['timezone'], ends_at // 3600, ends_at % 3600 // 60))
 
     def after_create_object(self, event, data, view_kwargs):
         role = Role.query.filter_by(name=ORGANIZER).first()
@@ -152,15 +211,17 @@ class EventList(ResourceList):
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
-                  'methods': {
-                      'query': query,
-                      'after_create_object': after_create_object
-                  }}
+                  'methods': {'after_create_object': after_create_object,
+                              'before_create_object': before_create_object,
+                              'query': query
+                              }}
 
 
 class EventDetail(ResourceDetail):
-
     def before_get_object(self, view_kwargs):
+        if view_kwargs.get('identifier'):
+            event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
+            view_kwargs['id'] = event.id
         if view_kwargs.get('sponsor_id') is not None:
             try:
                 sponsor = self.session.query(Sponsor).filter_by(id=view_kwargs['sponsor_id']).one()
@@ -237,15 +298,35 @@ class EventDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
-    decorators = (is_coorganizer, )
-    schema = EventSchema
-    data_layer = {'session': db.session,
-                  'model': Event,
-                  'methods': {'before_get_object': before_get_object}}
+        if view_kwargs.get('user_id') is not None:
+            try:
+                discount_code = self.session.query(DiscountCode).filter_by(id=view_kwargs['discount_code_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'discount_code_id'},
+                                     "DiscountCode: {} not found".format(view_kwargs['discount_code_id']))
+            else:
+                if discount_code.event_id is not None:
+                    view_kwargs['id'] = discount_code.event_id
+                else:
+                    view_kwargs['id'] = None
 
-
-class EventRelationship(ResourceRelationship):
     decorators = (jwt_required,)
     schema = EventSchema
     data_layer = {'session': db.session,
-                  'model': Event}
+                  'model': Event,
+                  'methods': {'before_get_object': before_get_object}
+                  }
+
+
+class EventRelationship(ResourceRelationship):
+    def before_get_object(self, view_kwargs):
+        if view_kwargs.get('identifier'):
+            event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
+            view_kwargs['id'] = event.id
+
+    decorators = (jwt_required,)
+    schema = EventSchema
+    data_layer = {'session': db.session,
+                  'model': Event,
+                  'methods': {'before_get_object': before_get_object}
+                  }

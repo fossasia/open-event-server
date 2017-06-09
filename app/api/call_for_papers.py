@@ -1,6 +1,3 @@
-import pytz
-import dateutil.parser
-
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
@@ -47,13 +44,18 @@ class CallForPaperList(ResourceList):
 
     def query(self, view_kwargs):
         query_ = self.session.query(CallForPaper)
-        if view_kwargs.get('event_id') is not None:
-            query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
+        if view_kwargs.get('id'):
+            query_ = query_.join(Event).filter(Event.id == view_kwargs['id'])
+        elif view_kwargs.get('identifier'):
+            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
         return query_
 
     def before_create_object(self, data, view_kwargs):
-        if view_kwargs.get('event_id') is not None:
-            event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
+        if view_kwargs.get('id'):
+            event = self.session.query(Event).filter_by(id=view_kwargs['id']).one()
+            data['event_id'] = event.id
+        elif view_kwargs.get('identifier'):
+            event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
             data['event_id'] = event.id
 
     view_kwargs = True
@@ -71,10 +73,21 @@ class CallForPaperDetail(ResourceDetail):
     """
     cfs detail by id
     """
+    def query(self, view_kwargs):
+        query_ = self.session.query(CallForPaper)
+        if view_kwargs.get('id'):
+            query_ = query_.join(Event).filter(Event.id == view_kwargs['id'])
+        elif view_kwargs.get('identifier'):
+            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
+        return query_
+
     decorators = (jwt_required,)
     schema = CallForPaperSchema
     data_layer = {'session': db.session,
-                  'model': CallForPaper}
+                  'model': CallForPaper,
+                  'methods': {
+                      'query': query
+                  }}
 
 
 class CallForPaperRelationship(ResourceRelationship):
