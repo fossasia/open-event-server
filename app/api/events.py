@@ -12,6 +12,7 @@ from app.models.event import Event
 from app.models.sponsor import Sponsor
 from app.models.track import Track
 from app.models.session_type import SessionType
+from app.models.discount_code import DiscountCode
 from app.models.event_invoice import EventInvoice
 from app.models.user import User, ATTENDEE, ORGANIZER
 from app.models.users_events_role import UsersEventsRoles
@@ -111,6 +112,14 @@ class EventSchema(Schema):
                                  schema='EventInvoiceSchema',
                                  many=True,
                                  type_='event_invoice')
+    discount_codes = Relationship(attribute='discount_code',
+                                 self_view='v1.event_discount_code',
+                                 self_view_kwargs={'id': '<id>'},
+                                 related_view='v1.discount_code_list',
+                                 related_view_kwargs={'event_id': '<id>'},
+                                 schema='DiscountCodeSchema',
+                                 many=True,
+                                 type_='discount_code')
 
 
 class EventList(ResourceList):
@@ -184,8 +193,20 @@ class EventDetail(ResourceDetail):
                 raise ObjectNotFound({'parameter': 'event_invoice_id'},
                                      "Event Invoice: {} not found".format(view_kwargs['event_invoice_id']))
             else:
-                if event_invoice.user_id is not None:
-                    view_kwargs['id'] = event_invoice.user_id
+                if event_invoice.event_id is not None:
+                    view_kwargs['id'] = event_invoice.event_id
+                else:
+                    view_kwargs['id'] = None
+
+        if view_kwargs.get('discount_code_id') is not None:
+            try:
+                discount_code = self.session.query(DiscountCode).filter_by(id=view_kwargs['discount_code_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'discount_code_id'},
+                                     "DiscountCode: {} not found".format(view_kwargs['discount_code_id']))
+            else:
+                if discount_code.event_id is not None:
+                    view_kwargs['id'] = discount_code.event_id
                 else:
                     view_kwargs['id'] = None
 

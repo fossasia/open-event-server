@@ -100,10 +100,7 @@ class Event(db.Model):
     ical_url = db.Column(db.String)
     xcal_url = db.Column(db.String)
     sponsors_enabled = db.Column(db.Boolean, default=False)
-
-    discount_code_id = db.Column(db.Integer, db.ForeignKey('discount_codes.id', ondelete='SET NULL'),
-                                 nullable=True, default=None)
-    discount_code = db.relationship('DiscountCode', backref='events', foreign_keys=[discount_code_id])
+    discount_code = db.relationship('DiscountCode', backref='events')
 
     def __init__(self,
                  name=None,

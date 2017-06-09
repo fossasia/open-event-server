@@ -18,6 +18,8 @@ from app.api.event_copyright import EventCopyrightList, EventCopyrightDetail, Ev
 from app.api.pages import PageList, PageDetail
 from app.api.tax import TaxList, TaxDetail, TaxRelationship
 from app.api.settings import SettingDetail
+from app.api.discount_codes import DiscountCodeList, DiscountCodeDetail, DiscountCodeRelationship
+
 
 api_v1 = Blueprint('v1', __name__, url_prefix='/v1')
 api = Api(app, api_v1)
@@ -58,7 +60,8 @@ api.route(EventDetail, 'event_detail', '/events/<int:id>', '/tickets/<int:ticket
           '/microlocations/<int:microlocation_id>/event', '/social-links/<int:social_link_id>/event',
           '/sponsors/<int:sponsor_id>/event', '/tracks/<int:track_id>/event',
           '/call-for-papers/<int:call_for_paper_id>/event', '/session-types/<int:session_type_id>/event',
-          '/event-copyright/<int:copyright_id>/event', '/tax/<int:tax_id>/event', '/event-invoices/<int:event_invoice_id>/event')
+          '/event-copyright/<int:copyright_id>/event', '/tax/<int:tax_id>/event',
+          '/event-invoices/<int:event_invoice_id>/event','/discount-codes/<int:discount_code_id>/event')
 api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/tickets')
 api.route(EventRelationship, 'event_microlocation', '/events/<int:id>/relationships/microlocation')
 api.route(EventRelationship, 'event_social_link', '/events/<int:id>/relationships/social-links')
@@ -70,6 +73,7 @@ api.route(EventRelationship, 'event_session_types', '/events/<int:id>/relationsh
 api.route(EventRelationship, 'event_copyright', '/events/<int:id>/relationships/event-copyright')
 api.route(EventRelationship, 'event_tax', '/events/<int:id>/relationships/tax')
 api.route(EventRelationship, 'event_event_invoice', '/events/<int:id>/relationships/event-invoices')
+api.route(EventRelationship, 'event_discount_code', '/events/<int:id>/relationships/discount-codes')
 
 # microlocations
 api.route(MicrolocationList, 'microlocation_list', '/microlocations',
@@ -146,3 +150,10 @@ api.route(EventInvoiceRelationship, 'event_invoice_user',
           '/event-invoices/<int:id>/relationships/user')
 api.route(EventInvoiceRelationship, 'event_invoice_event',
           '/event-invoices/<int:id>/relationships/event')
+api.route(EventInvoiceRelationship, 'event_invoice_discount_code',
+	'/event-invoices/<int:id>/relationships/discount-codes')
+
+# discount codes
+api.route(DiscountCodeList, 'discount_code_list', '/events/<int:event_id>/discount-codes')
+api.route(DiscountCodeDetail, 'discount_code_detail', '/discount-codes/<int:id>')
+api.route(DiscountCodeRelationship, 'discount_code_event', '/discount-codes/<int:id>/relationships/event')
