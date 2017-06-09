@@ -28,7 +28,7 @@ class TrackSchema(Schema):
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
     description = fields.Str()
-    track_image_url = fields.Str()
+    track_image_url = fields.Url()
     color = fields.Str()
     location = fields.Str()
     event = Relationship(attribute='event',

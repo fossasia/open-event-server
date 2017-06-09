@@ -45,9 +45,9 @@ class UserSchema(Schema):
     instagram = fields.Str()
     google = fields.Str()
     avatar_uploaded = fields.Str()
-    thumbnail = fields.Str()
-    small = fields.Str()
-    icon = fields.Str()
+    thumbnail_url = fields.Url(attribute='thumbnail')
+    small_url = fields.Url(attribute='small')
+    icon_url = fields.Url(attribute='icon')
     notification = Relationship(
         attribute='notification',
         self_view='v1.user_notification',
