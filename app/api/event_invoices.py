@@ -8,6 +8,7 @@ from app.models import db
 from app.models.event import Event
 from app.models.user import User
 from app.models.event_invoice import EventInvoice
+from app.models.discount_code import DiscountCode
 
 
 class EventInvoiceSchema(Schema):
@@ -52,6 +53,13 @@ class EventInvoiceSchema(Schema):
                          related_view_kwargs={'event_invoice_id': '<id>'},
                          schema='EventSchema',
                          type_='event')
+    discount_codes = Relationship(attribute='discount_code',
+                         self_view='v1.event_invoice_discount_code',
+                         self_view_kwargs={'id': '<id>'},
+                         related_view='v1.discount_code_detail',
+                         related_view_kwargs={'event_invoice_id': '<id>'},
+                         schema='DiscountCodeSchema',
+                         type_='discount_code')
 
 
 class EventInvoiceList(ResourceList):
@@ -65,6 +73,8 @@ class EventInvoiceList(ResourceList):
             query_ = query_.filter_by(event_id=view_kwargs['event_id'])
         if view_kwargs.get('user_id') is not None:
             query_ = query_.filter_by(user_id=view_kwargs['user_id'])
+        if view_kwargs.get('discount_code_id') is not None:
+            query_ = query_.filter_by(discount_code_id=view_kwargs['discount_code_id'])
         return query_
 
     def before_create_object(self, data, view_kwargs):
@@ -74,6 +84,9 @@ class EventInvoiceList(ResourceList):
         if view_kwargs.get('user_id') is not None:
             user = self.session.query(User).filter_by(id=view_kwargs['user_id']).one()
             data['user_id'] = user.id
+        if view_kwargs.get('discount_code_id') is not None:
+            discount_code = self.session.query(DiscountCode).filter_by(id=view_kwargs['discount_code_id']).one()
+            data['discount_code_id'] = discount_code.id
 
     view_kwargs = True
     decorators = (is_admin, )
