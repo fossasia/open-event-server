@@ -58,15 +58,15 @@ class AllTicketList(ResourceList):
                   }}
 
 
-class TicketRelationship(ResourceRelationship):
+class TicketDetail(ResourceDetail):
     decorators = (jwt_required, )
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket}
 
 
-class TicketDetail(ResourceDetail):
-    decorators = (jwt_required, )
+class TicketRelationship(ResourceRelationship):
+    decorators = (jwt_required,)
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket}

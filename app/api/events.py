@@ -11,6 +11,7 @@ from app.models.event import Event
 from app.models.sponsor import Sponsor
 from app.models.track import Track
 from app.models.session_type import SessionType
+from app.models.event_invoice import EventInvoice
 
 
 class EventSchema(Schema):
@@ -95,16 +96,17 @@ class EventSchema(Schema):
                        related_view_kwargs={'event_id': '<id>'},
                        schema='TaxSchema',
                        type_='tax')
+    event_invoice = Relationship(attribute='event_invoice',
+                                 self_view='v1.event_event_invoice',
+                                 self_view_kwargs={'id': '<id>'},
+                                 related_view='v1.event_invoice_list',
+                                 related_view_kwargs={'event_id': '<id>'},
+                                 schema='EventInvoiceSchema',
+                                 many=True,
+                                 type_='event_invoice')
 
 
 class EventList(ResourceList):
-    decorators = (jwt_required, )
-    schema = EventSchema
-    data_layer = {'session': db.session,
-                  'model': Event}
-
-
-class EventRelationship(ResourceRelationship):
     decorators = (jwt_required, )
     schema = EventSchema
     data_layer = {'session': db.session,
@@ -150,8 +152,27 @@ class EventDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
+        if view_kwargs.get('event_invoice_id') is not None:
+            try:
+                event_invoice = self.session.query(EventInvoice).filter_by(id=view_kwargs['event_invoice_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_invoice_id'},
+                                     "Event Invoice: {} not found".format(view_kwargs['event_invoice_id']))
+            else:
+                if event_invoice.user_id is not None:
+                    view_kwargs['id'] = event_invoice.user_id
+                else:
+                    view_kwargs['id'] = None
+
     decorators = (jwt_required, )
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
                   'methods': {'before_get_object': before_get_object}}
+
+
+class EventRelationship(ResourceRelationship):
+    decorators = (jwt_required, )
+    schema = EventSchema
+    data_layer = {'session': db.session,
+                  'model': Event}
