@@ -1,0 +1,8 @@
+{
+  "description": "hook onto bootstrap's build to generate bootstrap without clearing print (ie. excludes print.less)",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "grunt": "^1.0.1",
+    "partial.lenses": "^9.8.0"
+  }
+}
