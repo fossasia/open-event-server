@@ -1,4 +1,5 @@
 from datetime import datetime
+from pytz import timezone
 
 from app.models.call_for_paper import CallForPaper
 from app.models.custom_form import CustomForms, session_form_str, speaker_form_str
@@ -16,8 +17,8 @@ class ObjectMother(object):
     @staticmethod
     def get_event():
         return Event(name="event1",
-                     starts_at=datetime(2003, 8, 4, 12, 30, 45),
-                     ends_at=datetime(2003, 9, 4, 12, 30, 45),
+                     starts_at=(datetime(2003, 8, 4, 12, 30, 45)).replace(tzinfo=timezone('UTC')),
+                     ends_at=(datetime(2003, 9, 4, 12, 30, 45)).replace(tzinfo=timezone('UTC')),
                      location_name='India',
                      topic='Travel & Outdoor',
                      sub_topic='Climbing',
@@ -35,8 +36,8 @@ class ObjectMother(object):
     def get_session(event_id=1):
         return Session(title='test',
                        long_abstract='dsad',
-                       starts_at=datetime(2003, 8, 4, 12, 30, 45),
-                       ends_at=datetime(2003, 8, 4, 12, 30, 45),
+                       starts_at=(datetime(2003, 8, 4, 12, 30, 45)).replace(tzinfo=timezone('UTC')),
+                       ends_at=(datetime(2003, 8, 4, 12, 30, 45)).replace(tzinfo=timezone('UTC')),
                        event_id=event_id,
                        state='pending')
 
@@ -68,8 +69,8 @@ class ObjectMother(object):
 
     @staticmethod
     def get_cfs(event_id=1):
-        return CallForPaper(start_date=datetime(2003, 8, 4, 12, 30, 45),
-                            end_date=datetime(2003, 9, 4, 12, 30, 45),
+        return CallForPaper(start_date=(datetime(2003, 8, 4, 12, 30, 45)).replace(tzinfo=timezone('UTC')),
+                            end_date=(datetime(2003, 9, 4, 12, 30, 45)).replace(tzinfo=timezone('UTC')),
                             announcement="Hello there!",
                             event_id=event_id)
 
@@ -88,4 +89,4 @@ class ObjectMother(object):
             title="test title",
             message="test msg",
             action="Testing",
-            received_at=datetime.now())
+            received_at=datetime.now().replace(tzinfo=timezone('UTC')))

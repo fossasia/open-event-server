@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 from datetime import datetime
+from pytz import timezone
 
 from app import current_app as app
 from app.helpers.data import save_to_db
@@ -24,14 +25,14 @@ class TestModelUnicode(OpenEventTestCase):
         self.app = Setup.create_app()
         with app.test_request_context():
             event = Event(name=UNICODE_STRING,
-                          starts_at=datetime(2013, 8, 4, 12, 30, 45),
-                          ends_at=datetime(2016, 9, 4, 12, 30, 45))
+                          starts_at=(datetime(2003, 8, 4, 12, 30, 45)).replace(tzinfo=timezone('UTC')),
+                          ends_at=(datetime(2003, 9, 4, 12, 30, 45)).replace(tzinfo=timezone('UTC')))
             event.owner = 1
 
             microlocation = Microlocation(name=UNICODE_STRING)
             session = Session(title=UNICODE_STRING, long_abstract='descp',
-                              starts_at=datetime(2014, 8, 4, 12, 30, 45),
-                              ends_at=datetime(2015, 9, 4, 12, 30, 45))
+                              starts_at=(datetime(2003, 8, 4, 12, 30, 45)).replace(tzinfo=timezone('UTC')),
+                              ends_at=(datetime(2003, 9, 4, 12, 30, 45)).replace(tzinfo=timezone('UTC')))
             speaker = Speaker(name=UNICODE_STRING, email='email@eg.com',
                               organisation='org', country='japan')
             sponsor = Sponsor(name=UNICODE_STRING)
