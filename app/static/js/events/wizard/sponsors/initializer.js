@@ -1,6 +1,6 @@
 var sponsorsSeed = null;
 var sponsorsEnabled = null;
-var ticketsSeed = null;
+var ticketsSeed = [];
 
 if(!_.isUndefined(window.seed) && !_.isNull(window.seed.sponsors)  && !_.isNull(window.seed.event)) {
     sponsorsSeed = window.seed.sponsors;
