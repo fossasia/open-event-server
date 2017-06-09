@@ -11,10 +11,10 @@ class Tax(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     country = db.Column(db.String)
-    tax_name = db.Column(db.String, nullable=False)
-    tax_rate = db.Column(db.Float, nullable=False)
+    name = db.Column(db.String, nullable=False)
+    rate = db.Column(db.Float, nullable=False)
     tax_id = db.Column(db.String, nullable=False)
-    is_invoice_sent = db.Column(db.Boolean, default=False)
+    should_send_invoice = db.Column(db.Boolean, default=False)
     registered_company = db.Column(db.String)
     address = db.Column(db.String)
     city = db.Column(db.String)
@@ -28,10 +28,10 @@ class Tax(db.Model):
 
     def __init__(self,
                  country=None,
-                 tax_name=None,
-                 tax_rate=None,
+                 name=None,
+                 rate=None,
                  tax_id=None,
-                 is_invoice_sent=None,
+                 should_send_invoice=None,
                  registered_company=None,
                  address=None,
                  city=None,
@@ -41,10 +41,10 @@ class Tax(db.Model):
                  is_tax_included_in_price=None,
                  event_id=None):
         self.country = country
-        self.tax_name = tax_name
-        self.tax_rate = tax_rate
+        self.name = name
+        self.rate = rate
         self.tax_id = tax_id
-        self.is_invoice_sent = is_invoice_sent
+        self.should_send_invoice = should_send_invoice
         self.registered_company = registered_company
         self.address = address
         self.city = city
@@ -55,13 +55,13 @@ class Tax(db.Model):
         self.event_id = event_id
 
     def __repr__(self):
-        return '<Tax %r>' % self.tax_name
+        return '<Tax %r>' % self.name
 
     def __str__(self):
         return unicode(self).encode('utf-8')
 
     def __unicode__(self):
-        return self.tax_name
+        return self.name
 
     @property
     def serialize(self):
@@ -69,9 +69,10 @@ class Tax(db.Model):
         return {
             'id': self.id,
             'country': self.country,
-            'tax_name': self.tax_name,
+            'name': self.name,
+            'rate': self.rate,
             'tax_id': self.tax_id,
-            'is_invoice_sent': self.is_invoice_sent,
+            'should_send_invoice': self.should_send_invoice,
             'registered_company': self.registered_company,
             'address': self.address,
             'city': self.city,

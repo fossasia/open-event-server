@@ -6,6 +6,7 @@ from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.microlocation import Microlocation
+from app.models.event import Event
 
 
 class MicrolocationSchema(Schema):
@@ -28,7 +29,7 @@ class MicrolocationSchema(Schema):
     longitude = fields.Float()
     floor = fields.Integer()
     room = fields.Str()
-    session = Relationship(attribute='session',
+    sessions = Relationship(attribute='session',
                            self_view='v1.microlocation_session',
                            self_view_kwargs={'id': '<id>'},
                            related_view='v1.session_list',

@@ -45,6 +45,7 @@ api.route(PageDetail, 'page_detail', '/pages/<int:id>')
 api.route(AllTicketList, 'all_ticket_list', '/tickets', '/events/<int:id>/tickets')
 api.route(TicketDetail, 'ticket_detail', '/tickets/<int:id>', '/events/<int:event_id>/tickets')
 api.route(TicketRelationship, 'ticket_event', '/tickets/<int:id>/relationships/event')
+api.route(TicketRelationship, 'ticket_ticket_tag', '/tickets/<int:id>/relationships/ticket-tags')
 
 # events
 api.route(EventList, 'event_list', '/events')
@@ -53,12 +54,12 @@ api.route(EventDetail, 'event_detail', '/events/<int:id>', '/tickets/<int:ticket
           '/sponsors/<int:sponsor_id>/event', '/tracks/<int:track_id>/event',
           '/call-for-papers/<int:call_for_paper_id>/event', '/session-types/<int:session_type_id>/event',
           '/event-copyright/<int:copyright_id>/event', '/tax/<int:tax_id>/event', '/event-invoices/<int:event_invoice_id>/event')
-api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/ticket')
+api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/tickets')
 api.route(EventRelationship, 'event_microlocation', '/events/<int:id>/relationships/microlocation')
-api.route(EventRelationship, 'event_social_link', '/events/<int:id>/relationships/social-link')
-api.route(EventRelationship, 'event_sponsor', '/events/<int:id>/relationships/sponsor')
+api.route(EventRelationship, 'event_social_link', '/events/<int:id>/relationships/social-links')
+api.route(EventRelationship, 'event_sponsor', '/events/<int:id>/relationships/sponsors')
 api.route(EventRelationship, 'event_tracks', '/events/<int:id>/relationships/tracks')
-api.route(EventRelationship, 'event_call_for_paper', '/events/<int:id>/relationships/call-for-paper')
+api.route(EventRelationship, 'event_call_for_paper', '/events/<int:id>/relationships/call-for-papers')
 api.route(EventRelationship, 'event_session_types', '/events/<int:id>/relationships/session-types')
 api.route(EventRelationship, 'event_copyright', '/events/<int:id>/relationships/event-copyright')
 api.route(EventRelationship, 'event_tax', '/events/<int:id>/relationships/tax')
@@ -70,7 +71,7 @@ api.route(MicrolocationList, 'microlocation_list', '/microlocations',
 api.route(MicrolocationDetail, 'microlocation_detail', '/microlocations/<int:id>',
           '/sessions/<int:session_id>/microlocation', '/events/<int:event_id>/microlocation')
 api.route(MicrolocationRelationship, 'microlocation_session',
-          '/microlocations/<int:id>/relationships/session')
+          '/microlocations/<int:id>/relationships/sessions')
 api.route(MicrolocationRelationship, 'microlocation_event',
           '/microlocations/<int:id>/relationships/event')
 

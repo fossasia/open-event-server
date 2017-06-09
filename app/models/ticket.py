@@ -21,8 +21,8 @@ class Ticket(db.Model):
     price = db.Column(db.Float)
     is_fee_absorbed = db.Column(db.Boolean)
 
-    sales_start = db.Column(db.DateTime)
-    sales_end = db.Column(db.DateTime)
+    sales_starts_at = db.Column(db.DateTime)
+    sales_ends_at = db.Column(db.DateTime)
     hide = db.Column(db.Boolean)
 
     min_order = db.Column(db.Integer)
@@ -38,8 +38,8 @@ class Ticket(db.Model):
                  name=None,
                  event_id=None,
                  type=None,
-                 sales_start=None,
-                 sales_end=None,
+                 sales_starts_at=None,
+                 sales_ends_at=None,
                  hide=False,
                  description=None,
                  description_toggle=True,
@@ -61,8 +61,8 @@ class Ticket(db.Model):
         self.description = description
         self.description_toggle = description_toggle
         self.price = price
-        self.sales_start = sales_start
-        self.sales_end = sales_end
+        self.sales_starts_at = sales_starts_at
+        self.sales_ends_at = sales_ends_at
         self.hide = hide
         self.min_order = min_order
         self.max_order = max_order
@@ -120,10 +120,10 @@ class Ticket(db.Model):
             'description_visibility': self.description_toggle,
             'description': self.description,
             'price': self.price,
-            'sales_start_date': self.sales_start.strftime('%m/%d/%Y') if self.sales_start else '',
-            'sales_starts_at': self.sales_start.strftime('%H:%M') if self.sales_start else '',
-            'sales_end_date': self.sales_end.strftime('%m/%d/%Y') if self.sales_end else '',
-            'sales_ends_at': self.sales_end.strftime('%H:%M') if self.sales_end else '',
+            'sales_start_date': self.sales_starts_at.strftime('%m/%d/%Y') if self.sales_starts_at else '',
+            'sales_starts_at': self.sales_starts_at.strftime('%H:%M') if self.sales_starts_at else '',
+            'sales_end_date': self.sales_ends_at.strftime('%m/%d/%Y') if self.sales_ends_at else '',
+            'sales_ends_at': self.sales_ends_at.strftime('%H:%M') if self.sales_ends_at else '',
             'ticket_visibility': self.hide,
             'min_order': self.min_order,
             'max_order': self.max_order,
