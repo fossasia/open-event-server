@@ -18,8 +18,8 @@ The Open Event API Server
     + Body
 
             {
-                'email': 'email@example.com',
-                'password': 'password'
+                "email": "email@example.com",
+                "password": "password"
             }
 
 + Response 200 (application/json)
@@ -90,8 +90,8 @@ The Open Event API Server
 ### Create User [POST]
 
 + name (string) - Name of the user
-+ passowrd (string) - Password of the user
-+ email (string) - Email of the user
++ passowrd (string) - Password of the user **(required)**
++ email (string) - Email of the user **(required)**
 
 + Request (application/vnd.api+json)
 
@@ -102,14 +102,14 @@ The Open Event API Server
               "email": "example@example.com",
               "password": "12345678"
             },
-            "type": "user",
+            "type": "user"
           }
         }
 
 + Response 200 (application/vnd.api+json)
     
         {
-            'data': 'data'
+          "data": "data"
         }
 
 ## User Details [/users/{user_id}]
@@ -269,24 +269,20 @@ The Open Event API Server
 ### Create Image Size [POST]
 
  (For Events and Speakers)
-+ full_width - Full width of the image
-+ full_height - Full height of the image
-+ full_aspect - Full aspect ratio of the image
-+ full_quality - Full quality of the image
-+ icon_width - Width of the icon
-+ icon_height - Height of the icon
-+ icon_aspect - Aspect ratio of the icon
-+ icon_quality - Quality of the icon
-+ thumbnail_width - Width of the thumbnail
-+ thumbnail_height - Height of the thumbnail
-+ thumbnail_aspect - Aspect ratio of the thumbnail
-+ thumbnail_quality - Quality of the thumbnail
-+ logo_width - Width of the logo
-+ logo_height - Height of the logo 
-
-+ name (string) - Name of the user
-+ passowrd (string) - Password of the user
-+ email (string) - Email of the user
++ full_width (integer)- Full width of the image
++ full_height (integer)- Full height of the image
++ full_aspect (string)- Full aspect ratio of the image
++ full_quality (integer)- Full quality of the image
++ icon_width (integer)- Width of the icon
++ icon_height (integer)- Height of the icon
++ icon_aspect (string)- Aspect ratio of the icon
++ icon_quality (integer)- Quality of the icon
++ thumbnail_width (integer)- Width of the thumbnail
++ thumbnail_height (integer)- Height of the thumbnail
++ thumbnail_aspect (string)- Aspect ratio of the thumbnail
++ thumbnail_quality (integer)- Quality of the thumbnail
++ logo_width (integer)- Width of the logo
++ logo_height (integer)- Height of the logo 
 
 + Request (application/vnd.api+json)
 
@@ -315,14 +311,14 @@ The Open Event API Server
               "avatar_uploaded": null,
               "icon": null
             },
-            "type": "image_size",
+            "type": "image_size"
           }
         }
 
 + Response 200 (application/vnd.api+json)
     
         {
-            'data': 'data'
+          "data": "data"
         }
 
 ## Image Size Details [/image-sizes/{image_size_id}]
@@ -376,6 +372,32 @@ The Open Event API Server
         
 ### Update Image Size [PATCH]
 
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "full_width": 1300,
+              "full_height": 500,
+              "full_aspect": null,
+              "full_quality": 80,
+              "icon_width": 75,
+              "icon_height": 30,
+              "icon_aspect": null,
+              "icon_quality": 80,
+              "thumbnail_width": 500,
+              "thumbnail_height": 200,
+              "thumbnail_aspect": null,
+              "thumbnail_quality": 80,
+              "logo_width": null,
+              "logo_height": null
+            },
+            "type": "image_size",
+            "id": "1",
+          }
+        }
+
 + Response 200 (application/vnd.api+json)
     
         {
@@ -401,9 +423,186 @@ The Open Event API Server
             "links": {
               "self": "/v1/image-sizes/1"
             }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/image-sizes/1"
           }
         }
 
 ### Delete Image Size [DELETE]
+
++ Response 204
+
+## Page Collection [/pages?page,limit]
+
+### Page Sizes [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "attributes": {
+                "name": "How it works",
+                "title": "How it works",
+                "url": "/how_it_works",
+                "description": null,
+                "place": "Use Open Event",
+                "language": "English",
+                "index": 0
+              },
+              "type": "image_size",
+              "id": "1",
+              "links": {
+                "self": "/v1/image-sizes/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/pages"
+          }
+        }
+
+
+### Create Page [POST]
+
+ (For Events and Speakers)
++ name (string)- Name of the page **(required)**
++ title (string)- Title of the page 
++ url (url)- Url of the page **(required)**
++ description (string) - Description of the page
++ language (string)- Language of the page
++ index (integer)- Position of the page, default: 0
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "name": "How it works",
+              "title": "How it works",
+              "url": "/how_it_works",
+              "description": null,
+              "place": "Use Open Event",
+              "language": "English",
+              "index": 0
+            },
+            "type": "page"
+          }
+        }
+
++ Response 200 (application/vnd.api+json)
+    
+        {
+          "data": "data"
+        }
+
+## Page Details [/pages/{page_id}]
++ Parameters
+    + page_id (integer) - ID of the page in the form of an integer
+    
+### Get Page Details [GET]
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+    
+        {
+          "data": {
+            "attributes": {
+              "name": "How it works",
+              "title": "How it works",
+              "url": "/how_it_works",
+              "description": null,
+              "place": "Use Open Event",
+              "language": "English",
+              "index": 0
+            },
+            "type": "page",
+            "id": "1",
+            "links": {
+              "self": "/v1/pages/1"
+            }
+
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/pages/1"
+          }
+        }
+
+        
+### Update Page [PATCH]
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "name": "How it works",
+              "title": "How it works",
+              "url": "/how_it_works",
+              "description": null,
+              "place": "Use Open Event",
+              "language": "English",
+              "index": 0
+            },
+            "type": "page",
+            "id": "1"
+          }
+        }
+
++ Response 200 (application/vnd.api+json)
+    
+        {
+          "data": {
+            "attributes": {
+              "name": "How it works",
+              "title": "How it works",
+              "url": "/how_it_works",
+              "description": null,
+              "place": "Use Open Event",
+              "language": "English",
+              "index": 0
+            },
+            "type": "pages",
+            "id": "1",
+            "links": {
+              "self": "/v1/pages/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/pages/1"
+          }
+        }
+
+### Delete Page [DELETE]
 
 + Response 204
