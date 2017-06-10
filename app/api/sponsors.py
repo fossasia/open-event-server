@@ -20,10 +20,10 @@ class SponsorSchema(Schema):
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
     description = fields.Str()
-    url = fields.Str()
+    url = fields.Url()
     level = fields.Str()
-    logo_url = fields.Str()
-    sponsor_type = fields.Str()
+    logo_url = fields.Url()
+    type = fields.Str()
     event = Relationship(attribute='event',
                          self_view='v1.sponsor_event',
                          self_view_kwargs={'id': '<id>'},

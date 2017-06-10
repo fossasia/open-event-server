@@ -1,0 +1,978 @@
+FORMAT: V1
+HOST: http://nextgen.eventyay.com
+
+# Orga-Server
+
+The Open Event API Server
+
+## JWT Auth Key [/auth/session?filter_parameters]
+
+### JWT Auth Key [POST]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+ 
+    + Body
+
+            {
+                "email": "email@example.com",
+                "password": "password"
+            }
+
++ Response 200 (application/json)
+
+        {
+            "access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGl0eSI6MSwiaWF0IjoxNDk2OTU2ODMwLCJuYmYiOjE0OTY5NTY4MzAsImV4cCI6MTQ5NzA0MzIzMH0.bjl0"
+        }
+
+## Users Collection [/users?page,limit]
+
+### List All Users [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "attributes": {
+                "created_at": "2017-06-01T01:24:47.500127+00:00",
+                "google": null,
+                "instagram": null,
+                "firstname": null,
+                "lastname": null,
+                "twitter": null,
+                "signup_at": "2017-06-01T01:25:07.385816+00:00",
+                "is_super_admin": true,
+                "thumbnail": null,
+                "email": "me@ipiyush.com",
+                "avatar": null,
+                "contact": null,
+                "is_admin": true,
+                "details": null,
+                "last_accessed_at": null,
+                "small": null,
+                "facebook": null,
+                "deleted_at": null,
+                "is_verified": true,
+                "avatar_uploaded": null,
+                "icon": null
+              },
+              "type": "user",
+              "id": "1",
+              "links": {
+                "self": "/v1/users/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/users"
+          }
+        }
+
+
+### Create User [POST]
+
++ name (string) - Name of the user
++ passowrd (string) - Password of the user **(required)**
++ email (string) - Email of the user **(required)**
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "name": "Open Event User",
+              "email": "example@example.com",
+              "password": "12345678"
+            },
+            "type": "user"
+          }
+        }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "attributes": {
+                "name": "Open Event User",
+                "email": "example@example.com",
+                "password": "12345678"
+                },
+                "type": "user"
+            }
+        }
+
+## User Details [/users/{user_id}]
++ Parameters
+    + user_id (integer) - ID of the user in the form of an integer
+
+### Get Details [GET]
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "created_at": "2017-06-01T01:24:47.500127+00:00",
+              "google": null,
+              "instagram": null,
+              "firstname": null,
+              "lastname": null,
+              "twitter": null,
+              "signup_at": "2017-06-01T01:25:07.385816+00:00",
+              "is_super_admin": true,
+              "thumbnail": null,
+              "email": "me@ipiyush.com",
+              "avatar": null,
+              "contact": null,
+              "is_admin": true,
+              "details": null,
+              "last_accessed_at": null,
+              "small": null,
+              "facebook": null,
+              "deleted_at": null,
+              "is_verified": true,
+              "avatar_uploaded": null,
+              "icon": null
+            },
+            "type": "user",
+            "id": "1",
+            "links": {
+              "self": "/v1/users/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/users/1"
+          }
+        }
+
+        
+### Update User [PATCH]
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "created_at": "2017-06-01T01:24:47.500127+00:00",
+              "google": null,
+              "instagram": null,
+              "firstname": null,
+              "lastname": null,
+              "twitter": null,
+              "signup_at": "2017-06-01T01:25:07.385816+00:00",
+              "is_super_admin": true,
+              "thumbnail": null,
+              "email": "me@ipiyush.com",
+              "avatar": null,
+              "contact": null,
+              "is_admin": true,
+              "details": null,
+              "last_accessed_at": null,
+              "small": null,
+              "facebook": null,
+              "deleted_at": null,
+              "is_verified": true,
+              "avatar_uploaded": null,
+              "icon": null
+            },
+            "type": "user",
+            "id": "1",
+            "links": {
+              "self": "/v1/users/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/users/1"
+          }
+        }
+
+### Delete User [DELETE]
+
++ Response 204
+
+## Image Size Collection [/image-sizes?page,limit]
+
+### List Image Sizes [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "attributes": {
+                "full_width": 1300,
+                "full_height": 500,
+                "full_aspect": null,
+                "full_quality": 80,
+                "icon_width": 75,
+                "icon_height": 30,
+                "icon_aspect": null,
+                "icon_quality": 80,
+                "thumbnail_width": 500,
+                "thumbnail_height": 200,
+                "thumbnail_aspect": null,
+                "thumbnail_quality": 80,
+                "logo_width": null,
+                "logo_height": null
+              },
+              "type": "image_size",
+              "id": "1",
+              "links": {
+                "self": "/v1/image-sizes/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/image-sizes"
+          }
+        }
+
+
+### Create Image Size [POST]
+
+ (For Events and Speakers)
++ full_width (integer)- Full width of the image
++ full_height (integer)- Full height of the image
++ full_aspect (string)- Full aspect ratio of the image
++ full_quality (integer)- Full quality of the image
++ icon_width (integer)- Width of the icon
++ icon_height (integer)- Height of the icon
++ icon_aspect (string)- Aspect ratio of the icon
++ icon_quality (integer)- Quality of the icon
++ thumbnail_width (integer)- Width of the thumbnail
++ thumbnail_height (integer)- Height of the thumbnail
++ thumbnail_aspect (string)- Aspect ratio of the thumbnail
++ thumbnail_quality (integer)- Quality of the thumbnail
++ logo_width (integer)- Width of the logo
++ logo_height (integer)- Height of the logo 
+
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "created_at": "2017-06-01T01:24:47.500127+00:00",
+              "google": null,
+              "instagram": null,
+              "firstname": null,
+              "lastname": null,
+              "twitter": null,
+              "signup_at": "2017-06-01T01:25:07.385816+00:00",
+              "is_super_admin": true,
+              "thumbnail": null,
+              "email": "me@ipiyush.com",
+              "avatar": null,
+              "contact": null,
+              "is_admin": true,
+              "details": null,
+              "last_accessed_at": null,
+              "small": null,
+              "facebook": null,
+              "deleted_at": null,
+              "is_verified": true,
+              "avatar_uploaded": null,
+              "icon": null
+            },
+            "type": "image_size"
+          }
+        }
+
++ Response 200 (application/vnd.api+json)
+    
+        {
+          "data": "data"
+        }
+
+## Image Size Details [/image-sizes/{image_size_id}]
++ Parameters
+    + image_size_id (integer) - ID of the image size in the form of an integer
+    
+### Get Image Size Details [GET]
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "full_width": 1300,
+              "full_height": 500,
+              "full_aspect": null,
+              "full_quality": 80,
+              "icon_width": 75,
+              "icon_height": 30,
+              "icon_aspect": null,
+              "icon_quality": 80,
+              "thumbnail_width": 500,
+              "thumbnail_height": 200,
+              "thumbnail_aspect": null,
+              "thumbnail_quality": 80,
+              "logo_width": null,
+              "logo_height": null
+            },
+            "type": "image_size",
+            "id": "1",
+            "links": {
+              "self": "/v1/image-sizes/1"
+            }
+
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/image-sizes/1"
+          }
+        }
+
+        
+### Update Image Size [PATCH]
+
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "full_width": 1300,
+              "full_height": 500,
+              "full_aspect": null,
+              "full_quality": 80,
+              "icon_width": 75,
+              "icon_height": 30,
+              "icon_aspect": null,
+              "icon_quality": 80,
+              "thumbnail_width": 500,
+              "thumbnail_height": 200,
+              "thumbnail_aspect": null,
+              "thumbnail_quality": 80,
+              "logo_width": null,
+              "logo_height": null
+            },
+            "type": "image_size",
+            "id": "1",
+          }
+        }
+
++ Response 200 (application/vnd.api+json)
+    
+        {
+          "data": {
+            "attributes": {
+              "full_width": 1300,
+              "full_height": 500,
+              "full_aspect": null,
+              "full_quality": 80,
+              "icon_width": 75,
+              "icon_height": 30,
+              "icon_aspect": null,
+              "icon_quality": 80,
+              "thumbnail_width": 500,
+              "thumbnail_height": 200,
+              "thumbnail_aspect": null,
+              "thumbnail_quality": 80,
+              "logo_width": null,
+              "logo_height": null
+            },
+            "type": "image_size",
+            "id": "1",
+            "links": {
+              "self": "/v1/image-sizes/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/image-sizes/1"
+          }
+        }
+
+### Delete Image Size [DELETE]
+
++ Response 204
+
+
+## Page Collection [/pages?page,limit]
+
+### Page Sizes [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "attributes": {
+                "name": "How it works",
+                "title": "How it works",
+                "url": "/how_it_works",
+                "description": null,
+                "place": "Use Open Event",
+                "language": "English",
+                "index": 0
+              },
+              "type": "image_size",
+              "id": "1",
+              "links": {
+                "self": "/v1/image-sizes/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/pages"
+          }
+        }
+
+
+### Create Page [POST]
+
+ (For Events and Speakers)
++ name (string)- Name of the page **(required)**
++ title (string)- Title of the page 
++ url (url)- Url of the page **(required)**
++ description (string) - Description of the page
++ language (string)- Language of the page
++ index (integer)- Position of the page, default: 0
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "name": "How it works",
+              "title": "How it works",
+              "url": "/how_it_works",
+              "description": null,
+              "place": "Use Open Event",
+              "language": "English",
+              "index": 0
+            },
+            "type": "page"
+          }
+        }
+
++ Response 200 (application/vnd.api+json)
+    
+        {
+          "data": "data"
+        }
+
+## Page Details [/pages/{page_id}]
++ Parameters
+    + page_id (integer) - ID of the page in the form of an integer
+    
+### Get Page Details [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+    
+        {
+          "data": {
+            "attributes": {
+              "name": "How it works",
+              "title": "How it works",
+              "url": "/how_it_works",
+              "description": null,
+              "place": "Use Open Event",
+              "language": "English",
+              "index": 0
+            },
+            "type": "page",
+            "id": "1",
+            "links": {
+              "self": "/v1/pages/1"
+            }
+
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/pages/1"
+          }
+        }
+
+        
+### Update Page [PATCH]
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "name": "How it works",
+              "title": "How it works",
+              "url": "/how_it_works",
+              "description": null,
+              "place": "Use Open Event",
+              "language": "English",
+              "index": 0
+            },
+            "type": "page",
+            "id": "1"
+          }
+        }
+
++ Response 200 (application/vnd.api+json)
+    
+        {
+          "data": {
+            "attributes": {
+              "name": "How it works",
+              "title": "How it works",
+              "url": "/how_it_works",
+              "description": null,
+              "place": "Use Open Event",
+              "language": "English",
+              "index": 0
+            },
+            "type": "pages",
+            "id": "1",
+            "links": {
+              "self": "/v1/pages/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/pages/1"
+          }
+        }
+
+### Delete Page [DELETE]
+
++ Response 204
+
+## Tracks Collection [/events/{event_id}/tracks]
++ Parameters
+    + event_id (integer) - ID of the event in the form of an integer
+
+### List All Tracks [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+    
+        {
+            'body': 'body'
+        }
+
+### Create Track [POST]
+
++ name (string) - The name of the track **(required)**
++ description (string) - Description of the track
++ track_image_url (string) - URL of uploaded track image
++ color (string) - Color code of the track **(required)**
++ location (string) - Name of the location of track
+
++ Request (application/vnd.api+json)
+    
+        {
+          "data": {
+            "attributes": {
+                "name" : "name ",
+                "description": "description",
+                "track_image_url": "track_image_url",
+                "color": "color",
+                "location": "location"
+            },
+            "type": "track",
+            "id": "1",
+          }
+        }
+
++ Response 200 (application/vnd.api+json)
+        
+        {
+            "data": "data"
+        }
+        
+
+### Track Deatil [/tracks/{track_id}]
++ Parameters
+    + track_id (integer) - ID of the track in the form of an integer
+    
+### Get Details [GET]
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+    
+        {
+            "data": {
+                "attributes": {
+                    "name" : "name ",
+                    "description": "description",
+                    "track_image_url": "track_image_url",
+                    "color": "color",
+                    "location": "location"
+                },
+                "type": "track",
+                "id": "1",
+                "links": {
+                  "self": "/v1/tracks/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/tracks/1"
+            }
+        }
+
+        
+### Update Track [PATCH]
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+                "name" : "name ",
+                "description": "description",
+                "track_image_url": "track_image_url",
+                "color": "color",
+                "location": "location"
+            },
+            "type": "track",
+            "id": "1",
+          }
+        }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+                "name" : "name ",
+                "description": "description",
+                "track_image_url": "track_image_url",
+                "color": "color",
+                "location": "location"
+            },
+            "type": "track",
+            "id": "1",
+            "links": {
+              "self": "/v1/tracks/1"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+          }
+        }
+
+### Delete Track [DELETE]
+
++ Response 204
+
+
+## Sponsors Collection [/events/{event_id}/sponsors?page,limit]
++ Parameters
+    + event_id (integer) - ID of the spcific event in integer
+
+### List All Sponsors [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "event": {
+                  "links": {
+                    "self": "/v1/sponsors/1/relationships/event",
+                    "related": "/v1/sponsors/1/event"
+                  }
+                }
+              },
+              "attributes": {
+                "description": "Some Description",
+                "level": "Level",
+                "url": "http://example.com",
+                "type": "Type",
+                "logo_url": "http://placehold.it/200X200",
+                "name": "New Brand"
+              },
+              "type": "sponsor",
+              "id": "1",
+              "links": {
+                "self": "/v1/sponsors/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/sponsors"
+          }
+        }
+
+
+### Create Sponsor [POST]
+
++ name (string) - Name of the user **(required)**
++ description (string) - Description of the sponsor
++ url (string in proper URL) - Url of the sponsor
++ level (string) - Level of the sponsor
++ type (string) - The type of the sponsor
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "name": "Open Event Sponsor",
+              "description": "Example Description",
+              "url": "http://example.com",
+              "level": "Example",
+              "type": "Gold"
+            },
+            "type": "sponsor"
+          }
+        }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/sponsors/5/relationships/event",
+                  "related": "/v1/sponsors/5/event"
+                }
+              }
+            },
+            "attributes": {
+              "description": "Example Description",
+              "level": "Example",
+              "url": "http://example.com",
+              "logo-url": null,
+              "type": "Gold",
+              "name": "Open Event Sponsor"
+            },
+            "type": "sponsor",
+            "id": "5",
+            "links": {
+              "self": "/v1/sponsors/5"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/sponsors/5"
+          }
+        }
+        
+
+## Sponsor Details [/sponsors/{sponsor_id}]
++ Parameters
+    + sponsor_id (integer) - ID of the sponsor in the form of an integer
+
+### Sponsor Details [GET]
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/sponsors/5/relationships/event",
+                  "related": "/v1/sponsors/5/event"
+                }
+              }
+            },
+            "attributes": {
+              "description": "Example Description",
+              "level": "Example",
+              "url": "http://example.com",
+              "logo-url": null,
+              "type": "Gold",
+              "name": "Open Event Sponsor"
+            },
+            "type": "sponsor",
+            "id": "5",
+            "links": {
+              "self": "/v1/sponsors/5"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/sponsors/5"
+          }
+        }
+
+        
+### Update Sponsor [PATCH]
+
++ id (integer) - ID of the record to update **(required)**
+
++ name (string) - Name of the user **(optional)**
++ description (string) - Description of the sponsor **(optional)**
++ url (string in proper URL) - Url of the sponsor **(optional)**
++ level (string) - Level of the sponsor **(optional)**
++ type (string) - The type of the sponsor **(optional)**
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "description": "Example Description",
+              "url": "http://example.com",
+              "level": "Example",
+              "type": "Gold",
+              "name": "New Open Event Sponsor"
+            },
+            "type": "sponsor",
+            "id": "5"
+          }
+        }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/sponsors/5/relationships/event",
+                  "related": "/v1/sponsors/5/event"
+                }
+              }
+            },
+            "attributes": {
+              "description": "Example Description",
+              "level": "Example",
+              "url": "http://example.com",
+              "logo-url": null,
+              "type": "Gold",
+              "name": "New Open Event Sponsor"
+            },
+            "type": "sponsor",
+            "id": "5",
+            "links": {
+              "self": "/v1/sponsors/5"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/sponsors/5"
+          }
+        }
+
+### Delete Sponsor [DELETE]
+
++ Response 204

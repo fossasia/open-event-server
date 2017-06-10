@@ -8,7 +8,7 @@ Create Date: 2017-06-07 02:26:13.097039
 
 # revision identifiers, used by Alembic.
 revision = 'f5fec4ca8b2b'
-down_revision = 'b15e124e9b93'
+down_revision = '37208b5daa39'
 
 from alembic import op
 import sqlalchemy as sa
@@ -160,11 +160,11 @@ def upgrade():
                     existing_type=postgresql.TIMESTAMP(),
                     type_=sa.DateTime(timezone=True),
                     existing_nullable=True)
-    op.alter_column('tickets', 'sales_end',
+    op.alter_column('tickets', 'sales_ends_at',
                     existing_type=postgresql.TIMESTAMP(),
                     type_=sa.DateTime(timezone=True),
                     existing_nullable=True)
-    op.alter_column('tickets', 'sales_start',
+    op.alter_column('tickets', 'sales_starts_at',
                     existing_type=postgresql.TIMESTAMP(),
                     type_=sa.DateTime(timezone=True),
                     existing_nullable=True)
@@ -205,11 +205,11 @@ def downgrade():
                     existing_type=sa.DateTime(timezone=True),
                     type_=postgresql.TIMESTAMP(),
                     existing_nullable=True)
-    op.alter_column('tickets', 'sales_start',
+    op.alter_column('tickets', 'sales_starts_at',
                     existing_type=sa.DateTime(timezone=True),
                     type_=postgresql.TIMESTAMP(),
                     existing_nullable=True)
-    op.alter_column('tickets', 'sales_end',
+    op.alter_column('tickets', 'sales_ends_at',
                     existing_type=sa.DateTime(timezone=True),
                     type_=postgresql.TIMESTAMP(),
                     existing_nullable=True)

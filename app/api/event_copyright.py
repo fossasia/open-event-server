@@ -19,11 +19,11 @@ class EventCopyrightSchema(Schema):
 
     id = fields.Str(dump_only=True)
     holder = fields.Str()
-    holder_url = fields.Str()
+    holder_url = fields.Url()
     licence = fields.Str()
-    licence_url = fields.Str()
-    year = fields.Str()
-    logo = fields.Str()
+    licence_url = fields.Url()
+    year = fields.Int()
+    logo_url = fields.Url(attribute='logo')
     event = Relationship(attribute='event',
                          self_view='v1.copyright_event',
                          self_view_kwargs={'id': '<id>'},

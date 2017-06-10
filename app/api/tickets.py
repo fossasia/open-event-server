@@ -23,7 +23,12 @@ class TicketSchema(Schema):
     type = fields.Str(required=True)
     price = fields.Float()
     quantity = fields.Integer()
+    description_toggle = fields.Boolean(default=False)
+    position = fields.Integer()
     is_fee_absorbed = fields.Boolean()
+    sales_starts_at = fields.DateTime()
+    sales_ends_at = fields.DateTime()
+    is_hidden = fields.Boolean(default=False)
     min_order = fields.Integer()
     max_order = fields.Integer()
     event = Relationship(attribute='event',
@@ -33,6 +38,13 @@ class TicketSchema(Schema):
                          related_view_kwargs={'ticket_id': '<id>'},
                          schema='EventSchema',
                          type_='event')
+    tags =  Relationship(attribute='ticket_tag',
+                         self_view='v1.ticket_ticket_tag',
+                         self_view_kwargs={'id': '<id>'},
+                         related_view='v1.tag_detail',
+                         related_view_kwargs={'ticket_id': '<id>'},
+                         schema='TicketTagSchema',
+                         type_='ticket_tag')
 
 
 class AllTicketList(ResourceList):
@@ -58,15 +70,15 @@ class AllTicketList(ResourceList):
                   }}
 
 
-class TicketRelationship(ResourceRelationship):
+class TicketDetail(ResourceDetail):
     decorators = (jwt_required, )
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket}
 
 
-class TicketDetail(ResourceDetail):
-    decorators = (jwt_required, )
+class TicketRelationship(ResourceRelationship):
+    decorators = (jwt_required,)
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket}

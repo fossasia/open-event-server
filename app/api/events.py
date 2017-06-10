@@ -11,6 +11,7 @@ from app.models.event import Event
 from app.models.sponsor import Sponsor
 from app.models.track import Track
 from app.models.session_type import SessionType
+from app.models.event_invoice import EventInvoice
 
 
 class EventSchema(Schema):
@@ -25,8 +26,8 @@ class EventSchema(Schema):
     id = fields.Str(dump_only=True)
     identifier = fields.Str(dump_only=True)
     name = fields.Str()
-    event_url = fields.Str()
-    ticket = Relationship(attribute='ticket',
+    event_url = fields.Url()
+    tickets = Relationship(attribute='ticket',
                           self_view='v1.event_ticket',
                           self_view_kwargs={'id': '<id>'},
                           related_view='v1.ticket_detail',
@@ -42,7 +43,7 @@ class EventSchema(Schema):
                                  schema='MicrolocationSchema',
                                  many=True,
                                  type_='microlocation')
-    social_link = Relationship(attribute='social_link',
+    social_links = Relationship(attribute='social_link',
                                self_view='v1.event_social_link',
                                self_view_kwargs={'id': '<id>'},
                                related_view='v1.social_link_detail',
@@ -58,7 +59,7 @@ class EventSchema(Schema):
                           schema='TrackSchema',
                           many=True,
                           type_='track')
-    sponsor = Relationship(attribute='sponsor',
+    sponsors = Relationship(attribute='sponsor',
                            self_view='v1.event_sponsor',
                            self_view_kwargs={'id': '<id>'},
                            related_view='v1.sponsor_list',
@@ -66,13 +67,13 @@ class EventSchema(Schema):
                            schema='SponsorSchema',
                            many=True,
                            type_='sponsor')
-    call_for_speaker = Relationship(attribute='call_for_paper',
+    call_for_papers = Relationship(attribute='call_for_paper',
                                     self_view='v1.event_call_for_paper',
                                     self_view_kwargs={'id': '<id>'},
                                     related_view='v1.call_for_paper_detail',
                                     related_view_kwargs={'event_id': '<id>'},
                                     schema='CallForPaperSchema',
-                                    type_='sponsor')
+                                    type_='call_for_paper')
     session_types = Relationship(attribute='session_type',
                                  self_view='v1.event_session_types',
                                  self_view_kwargs={'id': '<id>'},
@@ -95,16 +96,17 @@ class EventSchema(Schema):
                        related_view_kwargs={'event_id': '<id>'},
                        schema='TaxSchema',
                        type_='tax')
+    event_invoice = Relationship(attribute='event_invoice',
+                                 self_view='v1.event_event_invoice',
+                                 self_view_kwargs={'id': '<id>'},
+                                 related_view='v1.event_invoice_list',
+                                 related_view_kwargs={'event_id': '<id>'},
+                                 schema='EventInvoiceSchema',
+                                 many=True,
+                                 type_='event_invoice')
 
 
 class EventList(ResourceList):
-    decorators = (jwt_required, )
-    schema = EventSchema
-    data_layer = {'session': db.session,
-                  'model': Event}
-
-
-class EventRelationship(ResourceRelationship):
     decorators = (jwt_required, )
     schema = EventSchema
     data_layer = {'session': db.session,
@@ -150,8 +152,27 @@ class EventDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
+        if view_kwargs.get('event_invoice_id') is not None:
+            try:
+                event_invoice = self.session.query(EventInvoice).filter_by(id=view_kwargs['event_invoice_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_invoice_id'},
+                                     "Event Invoice: {} not found".format(view_kwargs['event_invoice_id']))
+            else:
+                if event_invoice.user_id is not None:
+                    view_kwargs['id'] = event_invoice.user_id
+                else:
+                    view_kwargs['id'] = None
+
     decorators = (jwt_required, )
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
                   'methods': {'before_get_object': before_get_object}}
+
+
+class EventRelationship(ResourceRelationship):
+    decorators = (jwt_required, )
+    schema = EventSchema
+    data_layer = {'session': db.session,
+                  'model': Event}
