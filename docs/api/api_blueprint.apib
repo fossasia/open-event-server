@@ -754,7 +754,7 @@ The Open Event API Server
 
 ## Sponsors Collection [/events/{event_id}/sponsors?page,limit]
 + Parameters
-    + event_id (integer) - ID of the spcific event in integer
+    + event_id (integer) - ID of the specific event in integer
 
 ### List All Sponsors [GET]
 
@@ -979,7 +979,7 @@ The Open Event API Server
 
 ## Tax Collection [/events/{event_id}/tax?page,limit]
 + Parameters
-    + event_id (integer) - ID of the spcific event in integer
+    + event_id (integer) - ID of the specific event in integer
 
 ### List All Sponsors [GET]
 
@@ -1231,5 +1231,201 @@ The Open Event API Server
         }
 
 ### Delete Tax [DELETE]
+
++ Response 204
+
+## Social Links Collection [/events/{event_id}/social-links?page,limit]
++ Parameters
+    + event_id (integer) - ID of the specific event in integer
+
+### List All Social Links [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "event": {
+                  "links": {
+                    "self": "/v1/social-links/1/relationships/event",
+                    "related": "/v1/social-links/1/event"
+                  }
+                }
+              },
+              "attributes": {
+                "link": "http://facebook.com/facebook",
+                "name": "Facebook Url"
+              },
+              "type": "social_link",
+              "id": "1",
+              "links": {
+                "self": "/v1/social-links/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/events/1/social-links"
+          }
+        }
+
+### Create Social Link [POST]
+
++ name (string) - Name of Social Link **(required)**
++ link (string - proper url) - Url of the Social Link **(required)**
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "name": "Facebook Url",
+              "link": "http://facebook.com/facebook"
+            },
+            "type": "social_link"
+          }
+        }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/social-links/1/relationships/event",
+                  "related": "/v1/social-links/1/event"
+                }
+              }
+            },
+            "attributes": {
+              "link": "http://facebook.com/facebook",
+              "name": "Facebook Url"
+            },
+            "type": "social_link",
+            "id": "1",
+            "links": {
+              "self": "/v1/social-links/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/social-links/1"
+          }
+        }
+
+
+## Social Link [/social-links/{link_id}]
++ Parameters
+    + link_id (integer) - ID of the Social Link in the form of an integer
+
+### Social Link Details [GET]
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/social-links/1/relationships/event",
+                  "related": "/v1/social-links/1/event"
+                }
+              }
+            },
+            "attributes": {
+              "link": "http://facebook.com/facebook",
+              "name": "Facebook Url"
+            },
+            "type": "social_link",
+            "id": "1",
+            "links": {
+              "self": "/v1/social-links/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/social-links/1"
+          }
+        }
+
+        
+### Update Social Link [PATCH]
+
++ id (integer) - ID of the record to update **(required)**
+
++ name (string) - Name of Social Link **(optional)**
++ link (string - proper url) - Url of the Social Link **(optional)**
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "name": "Facebook Page Url",
+              "link": "http://facebook.com/facebook"
+            },
+            "type": "social_link",
+            "id": "1"
+          }
+        }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/social-links/1/relationships/event",
+                  "related": "/v1/social-links/1/event"
+                }
+              }
+            },
+            "attributes": {
+              "link": "http://facebook.com/facebook",
+              "name": "Facebook Page Url"
+            },
+            "type": "social_link",
+            "id": "1",
+            "links": {
+              "self": "/v1/social-links/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/social-links/1"
+          }
+        }
+
+### Delete Social Link [DELETE]
 
 + Response 204
