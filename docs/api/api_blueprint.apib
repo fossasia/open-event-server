@@ -107,7 +107,7 @@ The Open Event API Server
         }
 
 + Response 200 (application/vnd.api+json)
-    
+
         {
             "data": {
                 "attributes": {
@@ -118,11 +118,11 @@ The Open Event API Server
                 "type": "user"
             }
         }
-        
+
 ## User Details [/users/{user_id}]
 + Parameters
     + user_id (integer) - ID of the user in the form of an integer
-    
+
 ### Get Details [GET]
 + Request
 
@@ -133,7 +133,7 @@ The Open Event API Server
             Authorization: JWT <Auth Key>
 
 + Response 200 (application/vnd.api+json)
-    
+
         {
           "data": {
             "attributes": {
@@ -177,7 +177,7 @@ The Open Event API Server
 ### Update User [PATCH]
 
 + Response 200 (application/vnd.api+json)
-    
+
         {
           "data": {
             "attributes": {
@@ -343,7 +343,7 @@ The Open Event API Server
             Authorization: JWT <Auth Key>
 
 + Response 200 (application/vnd.api+json)
-    
+
         {
           "data": {
             "attributes": {
@@ -646,7 +646,7 @@ The Open Event API Server
 + location (string) - Name of the location of track
 
 + Request (application/vnd.api+json)
-
+    
         {
           "data": {
             "attributes": {
@@ -656,21 +656,22 @@ The Open Event API Server
                 "color": "color",
                 "location": "location"
             },
-            "type": "track"
+            "type": "track",
+            "id": "1",
           }
         }
 
 + Response 200 (application/vnd.api+json)
-
+        
         {
             "data": "data"
         }
-
+        
 
 ### Track Deatil [/tracks/{track_id}]
 + Parameters
     + track_id (integer) - ID of the track in the form of an integer
-
+    
 ### Get Details [GET]
 + Request
 
@@ -681,7 +682,7 @@ The Open Event API Server
             Authorization: JWT <Auth Key>
 
 + Response 200 (application/vnd.api+json)
-
+    
         {
             "data": {
                 "attributes": {
@@ -705,7 +706,7 @@ The Open Event API Server
             }
         }
 
-
+        
 ### Update Track [PATCH]
 
 + Request (application/vnd.api+json)
@@ -750,3 +751,228 @@ The Open Event API Server
 
 + Response 204
 
+
+## Sponsors Collection [/events/{event_id}/sponsors?page,limit]
++ Parameters
+    + event_id (integer) - ID of the spcific event in integer
+
+### List All Sponsors [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "event": {
+                  "links": {
+                    "self": "/v1/sponsors/1/relationships/event",
+                    "related": "/v1/sponsors/1/event"
+                  }
+                }
+              },
+              "attributes": {
+                "description": "Some Description",
+                "level": "Level",
+                "url": "http://example.com",
+                "type": "Type",
+                "logo_url": "http://placehold.it/200X200",
+                "name": "New Brand"
+              },
+              "type": "sponsor",
+              "id": "1",
+              "links": {
+                "self": "/v1/sponsors/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/sponsors"
+          }
+        }
+
+
+### Create Sponsor [POST]
+
++ name (string) - Name of the user **(required)**
++ description (string) - Description of the sponsor
++ url (string in proper URL) - Url of the sponsor
++ level (string) - Level of the sponsor
++ type (string) - The type of the sponsor
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "name": "Open Event Sponsor",
+              "description": "Example Description",
+              "url": "http://example.com",
+              "level": "Example",
+              "type": "Gold"
+            },
+            "type": "sponsor"
+          }
+        }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/sponsors/5/relationships/event",
+                  "related": "/v1/sponsors/5/event"
+                }
+              }
+            },
+            "attributes": {
+              "description": "Example Description",
+              "level": "Example",
+              "url": "http://example.com",
+              "logo-url": null,
+              "type": "Gold",
+              "name": "Open Event Sponsor"
+            },
+            "type": "sponsor",
+            "id": "5",
+            "links": {
+              "self": "/v1/sponsors/5"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/sponsors/5"
+          }
+        }
+        
+
+## Sponsor Details [/sponsors/{sponsor_id}]
++ Parameters
+    + sponsor_id (integer) - ID of the sponsor in the form of an integer
+
+### Sponsor Details [GET]
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/sponsors/5/relationships/event",
+                  "related": "/v1/sponsors/5/event"
+                }
+              }
+            },
+            "attributes": {
+              "description": "Example Description",
+              "level": "Example",
+              "url": "http://example.com",
+              "logo-url": null,
+              "type": "Gold",
+              "name": "Open Event Sponsor"
+            },
+            "type": "sponsor",
+            "id": "5",
+            "links": {
+              "self": "/v1/sponsors/5"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/sponsors/5"
+          }
+        }
+
+        
+### Update Sponsor [PATCH]
+
++ id (integer) - ID of the record to update **(required)**
+
++ name (string) - Name of the user **(optional)**
++ description (string) - Description of the sponsor **(optional)**
++ url (string in proper URL) - Url of the sponsor **(optional)**
++ level (string) - Level of the sponsor **(optional)**
++ type (string) - The type of the sponsor **(optional)**
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "description": "Example Description",
+              "url": "http://example.com",
+              "level": "Example",
+              "type": "Gold",
+              "name": "New Open Event Sponsor"
+            },
+            "type": "sponsor",
+            "id": "5"
+          }
+        }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/sponsors/5/relationships/event",
+                  "related": "/v1/sponsors/5/event"
+                }
+              }
+            },
+            "attributes": {
+              "description": "Example Description",
+              "level": "Example",
+              "url": "http://example.com",
+              "logo-url": null,
+              "type": "Gold",
+              "name": "New Open Event Sponsor"
+            },
+            "type": "sponsor",
+            "id": "5",
+            "links": {
+              "self": "/v1/sponsors/5"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/sponsors/5"
+          }
+        }
+
+### Delete Sponsor [DELETE]
+
++ Response 204
