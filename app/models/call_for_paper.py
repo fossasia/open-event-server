@@ -8,8 +8,8 @@ class CallForPaper(db.Model):
     __tablename__ = 'call_for_papers'
     id = db.Column(db.Integer, primary_key=True)
     announcement = db.Column(db.Text, nullable=False)
-    start_date = db.Column(db.DateTime, nullable=False)
-    end_date = db.Column(db.DateTime, nullable=False)
+    start_date = db.Column(db.DateTime(timezone=True), nullable=False)
+    end_date = db.Column(db.DateTime(timezone=True), nullable=False)
     timezone = db.Column(db.String, nullable=False, default="UTC")
     hash = db.Column(db.String, nullable=True)
     privacy = db.Column(db.String, nullable=False)

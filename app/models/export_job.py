@@ -10,7 +10,7 @@ class ExportJob(db.Model):
     __tablename__ = 'export_jobs'
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.String, nullable=False)
-    starts_at = db.Column(db.DateTime)
+    starts_at = db.Column(db.DateTime(timezone=True))
 
     user_email = db.Column(db.String)
     # not linking to User because when user is deleted, this will be lost

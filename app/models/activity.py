@@ -43,7 +43,7 @@ class Activity(db.Model):
     __tablename__ = 'activities'
     id = db.Column(db.Integer, primary_key=True)
     actor = db.Column(db.String)  # user email + id
-    time = db.Column(db.DateTime)
+    time = db.Column(db.DateTime(timezone=True))
     action = db.Column(db.String)
 
     def __init__(self, actor=None, time=None, action=None):

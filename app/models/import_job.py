@@ -8,7 +8,7 @@ class ImportJob(db.Model):
     __tablename__ = 'import_jobs'
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.String, nullable=False)
-    starts_at = db.Column(db.DateTime)
+    starts_at = db.Column(db.DateTime(timezone=True))
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     user = db.relationship('User', backref='import_jobs')

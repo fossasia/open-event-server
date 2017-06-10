@@ -64,10 +64,10 @@ class User(db.Model):
     is_super_admin = db.Column(db.Boolean, default=False)
     is_admin = db.Column(db.Boolean, default=False)
     is_verified = db.Column(db.Boolean, default=False)
-    signup_at = db.Column(db.DateTime)
-    last_accessed_at = db.Column(db.DateTime)
-    created_at = db.Column(db.DateTime, default=datetime.now())
-    deleted_at = db.Column(db.DateTime)
+    signup_at = db.Column(db.DateTime(timezone=True))
+    last_accessed_at = db.Column(db.DateTime(timezone=True))
+    created_at = db.Column(db.DateTime(timezone=True), default=datetime.now())
+    deleted_at = db.Column(db.DateTime(timezone=True))
 
     @hybrid_property
     def password(self):

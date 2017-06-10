@@ -33,8 +33,8 @@ class EventInvoice(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='SET NULL'))
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='SET NULL'))
 
-    created_at = db.Column(db.DateTime)
-    completed_at = db.Column(db.DateTime, nullable=True, default=None)
+    created_at = db.Column(db.DateTime(timezone=True))
+    completed_at = db.Column(db.DateTime(timezone=True), nullable=True, default=None)
     transaction_id = db.Column(db.String)
     paid_via = db.Column(db.String)
     payment_mode = db.Column(db.String)
