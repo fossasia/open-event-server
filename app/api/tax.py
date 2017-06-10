@@ -1,12 +1,13 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+
+from app.api.helpers.utilities import dasherize
 from app.models import db
-from app.api.helpers.permissions import jwt_required, is_admin, is_user_itself
-from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound
+from app.api.helpers.permissions import jwt_required
 from app.models.event import Event
 from app.models.tax import Tax
+
 
 class TaxSchema(Schema):
 
@@ -14,6 +15,7 @@ class TaxSchema(Schema):
         type_ = 'tax'
         self_view = 'v1.tax_detail'
         self_view_kwargs = {'id': '<id>'}
+        inflect = dasherize
 
     id = fields.Str(dump_only=True)
     country = fields.Str()

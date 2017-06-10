@@ -1,11 +1,12 @@
-from datetime import datetime
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+
+from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.notification import Notification
 from app.models.user import User
-from app.api.helpers.permissions import is_admin, is_user_itself, jwt_required
+from app.api.helpers.permissions import is_user_itself, jwt_required
 
 
 class NotificationSchema(Schema):
@@ -20,6 +21,7 @@ class NotificationSchema(Schema):
         self_view = 'v1.notification_detail'
         self_view_kwargs = {'id': '<id>'}
         self_view_many = 'v1.notification_list'
+        inflect = dasherize
 
     id = fields.Str(dump_only=True)
     title = fields.Str()
@@ -35,6 +37,7 @@ class NotificationSchema(Schema):
         schema='UserSchema',
         type_='user'
     )
+
 
 class NotificationList(ResourceList):
     '''

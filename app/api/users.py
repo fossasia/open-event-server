@@ -3,9 +3,12 @@ from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
+
+from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.user import User
 from app.models.notification import Notification
+from app.models.event_invoice import EventInvoice
 from app.api.helpers.permissions import is_admin, is_user_itself, jwt_required
 
 
@@ -21,6 +24,7 @@ class UserSchema(Schema):
         self_view = 'v1.user_detail'
         self_view_kwargs = {'id': '<id>'}
         self_view_many = 'v1.user_list'
+        inflect = dasherize
 
     id = fields.Str(dump_only=True)
     email = fields.Email(required=True)
@@ -42,9 +46,9 @@ class UserSchema(Schema):
     instagram = fields.Str()
     google = fields.Str()
     avatar_uploaded = fields.Str()
-    thumbnail = fields.Str()
-    small = fields.Str()
-    icon = fields.Str()
+    thumbnail_url = fields.Url(attribute='thumbnail')
+    small_url = fields.Url(attribute='small')
+    icon_url = fields.Url(attribute='icon')
     notification = Relationship(
         attribute='notification',
         self_view='v1.user_notification',
@@ -53,8 +57,16 @@ class UserSchema(Schema):
         related_view_kwargs={'user_id': '<id>'},
         schema='NotificationSchema',
         many=True,
-        type_='notification'
-    )
+        type_='notification')
+    event_invoice = Relationship(
+        attribute='event_invoice',
+        self_view='v1.user_event_invoice',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_invoice_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='EventInvoiceSchema',
+        many=True,
+        type_='event_invoice')
 
 
 class UserList(ResourceList):
@@ -84,6 +96,18 @@ class UserDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
+        if view_kwargs.get('event_invoice_id') is not None:
+            try:
+                event_invoice = self.session.query(EventInvoice).filter_by(id=view_kwargs['event_invoice_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_invoice_id'},
+                                     "Event Invoice: {} not found".format(view_kwargs['event_invoice_id']))
+            else:
+                if event_invoice.user_id is not None:
+                    view_kwargs['id'] = event_invoice.user_id
+                else:
+                    view_kwargs['id'] = None
+
     decorators = (is_user_itself, )
     schema = UserSchema
     data_layer = {'session': db.session,
@@ -92,7 +116,8 @@ class UserDetail(ResourceDetail):
 
 
 class UserRelationship(ResourceRelationship):
-    decorators = (jwt_required,)
+
+    decorators = (jwt_required, )
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User}

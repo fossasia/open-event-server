@@ -1,15 +1,15 @@
+import pytz
+import dateutil.parser
+
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+
+from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.api.helpers.permissions import jwt_required
-from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 from app.models.event import Event
 from app.models.call_for_paper import CallForPaper
-import pytz
-from datetime import datetime
-import dateutil.parser
 
 
 class CallForPaperSchema(Schema):
@@ -23,6 +23,7 @@ class CallForPaperSchema(Schema):
         type_ = 'call_for_paper'
         self_view = 'v1.call_for_paper_detail'
         self_view_kwargs = {'id': '<id>'}
+        inflect = dasherize
 
     id = fields.Str(dump_only=True)
     announcement = fields.Str(required=True)

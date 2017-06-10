@@ -1,7 +1,9 @@
-from app.api.helpers.permissions import jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+
+from app.api.helpers.utilities import dasherize
+from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.ticket import Ticket
 from app.models.event import Event
@@ -13,6 +15,7 @@ class TicketSchema(Schema):
         type_ = 'ticket'
         self_view = 'v1.ticket_detail'
         self_view_kwargs = {'id': '<id>'}
+        inflect = dasherize
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
@@ -55,15 +58,15 @@ class AllTicketList(ResourceList):
                   }}
 
 
-class TicketRelationship(ResourceRelationship):
+class TicketDetail(ResourceDetail):
     decorators = (jwt_required, )
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket}
 
 
-class TicketDetail(ResourceDetail):
-    decorators = (jwt_required, )
+class TicketRelationship(ResourceRelationship):
+    decorators = (jwt_required,)
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket}

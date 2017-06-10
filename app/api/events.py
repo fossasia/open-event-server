@@ -1,14 +1,17 @@
-from app.api.helpers.permissions import jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
+
+from app.api.helpers.permissions import jwt_required
+from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.event import Event
 from app.models.sponsor import Sponsor
 from app.models.track import Track
 from app.models.session_type import SessionType
+from app.models.event_invoice import EventInvoice
 
 
 class EventSchema(Schema):
@@ -18,11 +21,12 @@ class EventSchema(Schema):
         self_view = 'v1.event_detail'
         self_view_kwargs = {'id': '<id>'}
         self_view_many = 'v1.event_list'
+        inflect = dasherize
 
     id = fields.Str(dump_only=True)
     identifier = fields.Str(dump_only=True)
     name = fields.Str()
-    event_url = fields.Str()
+    event_url = fields.Url()
     ticket = Relationship(attribute='ticket',
                           self_view='v1.event_ticket',
                           self_view_kwargs={'id': '<id>'},
@@ -92,16 +96,17 @@ class EventSchema(Schema):
                        related_view_kwargs={'event_id': '<id>'},
                        schema='TaxSchema',
                        type_='tax')
+    event_invoice = Relationship(attribute='event_invoice',
+                                 self_view='v1.event_event_invoice',
+                                 self_view_kwargs={'id': '<id>'},
+                                 related_view='v1.event_invoice_list',
+                                 related_view_kwargs={'event_id': '<id>'},
+                                 schema='EventInvoiceSchema',
+                                 many=True,
+                                 type_='event_invoice')
 
 
 class EventList(ResourceList):
-    decorators = (jwt_required, )
-    schema = EventSchema
-    data_layer = {'session': db.session,
-                  'model': Event}
-
-
-class EventRelationship(ResourceRelationship):
     decorators = (jwt_required, )
     schema = EventSchema
     data_layer = {'session': db.session,
@@ -147,8 +152,27 @@ class EventDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
+        if view_kwargs.get('event_invoice_id') is not None:
+            try:
+                event_invoice = self.session.query(EventInvoice).filter_by(id=view_kwargs['event_invoice_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_invoice_id'},
+                                     "Event Invoice: {} not found".format(view_kwargs['event_invoice_id']))
+            else:
+                if event_invoice.user_id is not None:
+                    view_kwargs['id'] = event_invoice.user_id
+                else:
+                    view_kwargs['id'] = None
+
     decorators = (jwt_required, )
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
                   'methods': {'before_get_object': before_get_object}}
+
+
+class EventRelationship(ResourceRelationship):
+    decorators = (jwt_required, )
+    schema = EventSchema
+    data_layer = {'session': db.session,
+                  'model': Event}

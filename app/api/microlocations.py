@@ -1,7 +1,9 @@
-from app.api.helpers.permissions import jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+
+from app.api.helpers.utilities import dasherize
+from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.microlocation import Microlocation
 
@@ -18,12 +20,13 @@ class MicrolocationSchema(Schema):
         self_view = 'v1.microlocation_detail'
         self_view_kwargs = {'id': '<id>'}
         self_view_many = 'v1.session_list'
+        inflect = dasherize
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
     latitude = fields.Float()
     longitude = fields.Float()
-    floor =  fields.Integer()
+    floor = fields.Integer()
     room = fields.Str()
     session = Relationship(attribute='session',
                            self_view='v1.microlocation_session',

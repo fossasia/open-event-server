@@ -1,8 +1,9 @@
-from datetime import datetime
-from app.api.helpers.permissions import jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+
+from app.api.helpers.utilities import dasherize
+from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.event_copyright import EventCopyright
 from app.models.event import Event
@@ -14,14 +15,15 @@ class EventCopyrightSchema(Schema):
         type_ = 'event_copyright'
         self_view = 'v1.event_copyright_detail'
         self_view_kwargs = {'id': '<id>'}
+        inflect = dasherize
 
     id = fields.Str(dump_only=True)
     holder = fields.Str()
-    holder_url = fields.Str()
+    holder_url = fields.Url()
     licence = fields.Str()
-    licence_url = fields.Str()
-    year = fields.Str()
-    logo = fields.Str()
+    licence_url = fields.Url()
+    year = fields.Int()
+    logo_url = fields.Url(attribute='logo')
     event = Relationship(attribute='event',
                          self_view='v1.copyright_event',
                          self_view_kwargs={'id': '<id>'},

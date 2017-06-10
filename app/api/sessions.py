@@ -1,7 +1,9 @@
-from app.api.helpers.permissions import jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+
+from app.api.helpers.utilities import dasherize
+from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.session import Session
 from app.models.track import Track
@@ -20,23 +22,23 @@ class SessionSchema(Schema):
         type_ = 'session'
         self_view = 'v1.session_detail'
         self_view_kwargs = {'id': '<id>'}
+        inflect = dasherize
 
     id = fields.Str(dump_only=True)
     title = fields.Str(required=True)
     subtitle = fields.Str()
-    event_url = fields.Str()
-    level = fields.Str()
+    event_url = fields.Url()
+    level = fields.Int()
     short_abstract = fields.Str()
     long_abstract = fields.Str()
     comments = fields.Str()
     starts_at = fields.DateTime(required=True)
     ends_at = fields.DateTime(required=True)
     language = fields.Str()
-    level = fields.Str()
-    slides = fields.Str()
-    videos = fields.Str()
-    audios = fields.Str()
-    signup_url = fields.Str()
+    slides_url = fields.Url(attribute='slides')
+    videos_url = fields.Url(attribute='videos')
+    audios_url = fields.Url(attribute='audios')
+    signup_url = fields.Url()
     state = fields.Str()
     created_at = fields.DateTime()
     deleted_at = fields.DateTime()
