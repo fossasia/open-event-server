@@ -27,9 +27,8 @@ class CallForPaperSchema(Schema):
 
     id = fields.Str(dump_only=True)
     announcement = fields.Str(required=True)
-    start_date = fields.DateTime(required=True)
-    end_date = fields.DateTime(required=True)
-    timezone = fields.Str(default="UTC")
+    starts_at = fields.DateTime(required=True)
+    ends_at = fields.DateTime(required=True)
     hash = fields.Str()
     privacy = fields.String()
     event = Relationship(attribute='event',
