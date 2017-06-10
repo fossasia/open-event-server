@@ -23,7 +23,7 @@ class SponsorSchema(Schema):
     url = fields.Url()
     level = fields.Str()
     logo_url = fields.Url()
-    sponsor_type = fields.Str()
+    type = fields.Str()
     event = Relationship(attribute='event',
                          self_view='v1.sponsor_event',
                          self_view_kwargs={'id': '<id>'},
