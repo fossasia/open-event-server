@@ -976,3 +976,260 @@ The Open Event API Server
 ### Delete Sponsor [DELETE]
 
 + Response 204
+
+## Tax Collection [/events/{event_id}/tax?page,limit]
++ Parameters
+    + event_id (integer) - ID of the spcific event in integer
+
+### List All Sponsors [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "event": {
+                  "links": {
+                    "self": "/v1/tax/1/relationships/event",
+                    "related": "/v1/tax/1/event"
+                  }
+                }
+              },
+              "attributes": {
+                "city": null,
+                "zip": null,
+                "is-invoice-sent": false,
+                "country": null,
+                "is-tax-included-in-price": false,
+                "invoice-footer": null,
+                "state": null,
+                "tax-id": "1",
+                "tax-name": "Service Tax",
+                "registered-company": null,
+                "address": null,
+                "tax-rate": 12.0
+              },
+              "type": "tax",
+              "id": "1",
+              "links": {
+                "self": "/v1/tax/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/events/1/tax"
+          }
+        }
+
+
+### Create Tax [POST]
+
++ country (string)  -  Country of Tax
++ tax_name (string) - Name of the Tax**(required)**
++ tax_rate (float)  - Tax charges rate**(required)**
++ tax_id (string)  - A string based ID **(required)**
++ is_invoice_sent (boolean) - **(default=False)**
++ registered_company (string) - Registered Cmpany Name
++ address (string) - Address of the company
++ city (string) - City of the company
++ state (string) - State of the Company
++ zip (Integer) - Zip Code of the Company
++ invoice_footer (string) - A text to add on the footer
++ is_tax_included_in_price (boolean) - **(default=False)**
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "tax_name": "Service Tax",
+              "tax_rate": "12",
+              "tax_id": "1"
+            },
+            "type": "tax"
+          }
+        }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/tax/1/relationships/event",
+                  "related": "/v1/tax/1/event"
+                }
+              }
+            },
+            "attributes": {
+              "city": null,
+              "zip": null,
+              "is-invoice-sent": false,
+              "country": null,
+              "is-tax-included-in-price": false,
+              "invoice-footer": null,
+              "state": null,
+              "tax-id": "1",
+              "tax-name": "Service Tax",
+              "registered-company": null,
+              "address": null,
+              "tax-rate": 12.0
+            },
+            "type": "tax",
+            "id": "1",
+            "links": {
+              "self": "/v1/tax/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/tax/1"
+          }
+        }
+        
+
+## Tax Details [/tax/{tax_id}]
++ Parameters
+    + tax_id (integer) - ID of the Tax in the form of an integer
+
+### Tax Details [GET]
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/tax/1/relationships/event",
+                  "related": "/v1/tax/1/event"
+                }
+              }
+            },
+            "attributes": {
+              "city": null,
+              "zip": null,
+              "is-invoice-sent": false,
+              "country": null,
+              "is-tax-included-in-price": false,
+              "invoice-footer": null,
+              "state": null,
+              "tax-id": "1",
+              "tax-name": "Service Tax",
+              "registered-company": null,
+              "address": null,
+              "tax-rate": 12.0
+            },
+            "type": "tax",
+            "id": "1",
+            "links": {
+              "self": "/v1/tax/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/tax/1"
+          }
+        }
+
+        
+### Update Tax [PATCH]
+
++ id (integer) - ID of the record to update **(required)**
+
++ country (string)  -  Country of Tax**(optional)**
++ tax_name (string) - Name of the Tax**(optional)**
++ tax_rate (float)  - Tax charges rate**(optional)**
++ tax_id (string)  - A string based ID **(optional)**
++ is_invoice_sent (boolean) - **(optional)**
++ registered_company (string) - Registered Cmpany Name**(optional)**
++ address (string) - Address of the company**(optional)**
++ city (string) - City of the company**(optional)**
++ state (string) - State of the Company**(optional)**
++ zip (Integer) - Zip Code of the Company**(optional)**
++ invoice_footer (string) - A text to add on the footer**(optional)**
++ is_tax_included_in_price (boolean) - **(optional)**
+
++ Request (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "tax_rate": "15",
+              "tax_name": "GST"
+            },
+            "type": "tax",
+            "id": "1"
+          }
+        }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/tax/1/relationships/event",
+                  "related": "/v1/tax/1/event"
+                }
+              }
+            },
+            "attributes": {
+              "city": null,
+              "zip": null,
+              "is-invoice-sent": false,
+              "country": null,
+              "is-tax-included-in-price": false,
+              "invoice-footer": null,
+              "state": null,
+              "tax-id": "1",
+              "tax-name": "GST",
+              "registered-company": null,
+              "address": null,
+              "tax-rate": 15.0
+            },
+            "type": "tax",
+            "id": "1",
+            "links": {
+              "self": "/v1/tax/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/tax/1"
+          }
+        }
+
+### Delete Tax [DELETE]
+
++ Response 204
