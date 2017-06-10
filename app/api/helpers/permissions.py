@@ -198,7 +198,7 @@ def is_moderator(f):
 
     return decorated_function
 
-
+@second_order_decorator(jwt_required)
 def accessible_events(f):
     """
     Filter the accessible events to the current authorized user
