@@ -13,16 +13,16 @@ class Sponsor(db.Model):
     level = db.Column(db.String)
     logo_url = db.Column(db.String)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-    sponsor_type = db.Column(db.String)
+    type = db.Column(db.String)
 
     def __init__(self, name=None, url=None, logo_url=None, event_id=None,
-                 description=None, sponsor_type=None, level=None):
+                 description=None, type=None, level=None):
         self.name = name
         self.url = url
         self.logo_url = logo_url
         self.event_id = event_id
         self.level = level
-        self.sponsor_type = sponsor_type
+        self.type = type
         self.description = description
 
     @staticmethod
@@ -53,6 +53,6 @@ class Sponsor(db.Model):
             'url': self.url,
             'logo_url': self.logo_url,
             'level': self.level,
-            'type': self.sponsor_type,
+            'type': self.type,
             'description': self.description,
         }
