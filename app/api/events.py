@@ -3,6 +3,7 @@ from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
+from flask import request
 
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.utilities import dasherize
@@ -12,8 +13,11 @@ from app.models.sponsor import Sponsor
 from app.models.track import Track
 from app.models.session_type import SessionType
 from app.models.event_invoice import EventInvoice
-from app.models.user import User
+from app.models.user import User, ATTENDEE, ORGANIZER
+from app.models.users_events_role import UsersEventsRoles
+from app.models.role import Role
 from app.api.helpers.permissions import accessible_events, is_coorganizer
+from app.api.helpers.helpers import save_to_db
 
 class EventSchema(Schema):
 
@@ -28,6 +32,8 @@ class EventSchema(Schema):
     identifier = fields.Str(dump_only=True)
     name = fields.Str()
     event_url = fields.Url()
+    starts_at = fields.DateTime(required=True)
+    ends_at = fields.DateTime(required=True)
     tickets = Relationship(attribute='ticket',
                           self_view='v1.event_ticket',
                           self_view_kwargs={'id': '<id>'},
@@ -109,15 +115,27 @@ class EventSchema(Schema):
 
 class EventList(ResourceList):
     def query(self, view_kwargs):
-        query_ = self.session.query(Track)
+        query_ = self.session.query(Event)
         if view_kwargs.get('user_id') is not None:
-            query_ = query_.join(User).filter(User.id == view_kwargs['user_id'])
+            if 'GET' in request.method:
+                query_ = query_.join(Event.roles).filter_by(user_id=view_kwargs['user_id']) \
+                            .join(UsersEventsRoles.role).filter(Role.name != ATTENDEE)
         return query_
 
-    decorators = (jwt_required, accessible_events, )
+    def after_create_object(self, event, data, view_kwargs):
+        role = Role.query.filter_by(name=ORGANIZER).first()
+        user = User.query.filter_by(id=view_kwargs['user_id']).first()
+        uer = UsersEventsRoles(user, event, role)
+        save_to_db(uer, 'Event Saved')
+
+    decorators = (accessible_events, )
     schema = EventSchema
     data_layer = {'session': db.session,
-                  'model': Event}
+                  'model': Event,
+                  'methods': {
+                    'query': query,
+                    'after_create_object': after_create_object
+                  }}
 
 
 class EventDetail(ResourceDetail):
