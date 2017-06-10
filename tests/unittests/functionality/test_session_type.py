@@ -1,5 +1,6 @@
 import unittest
 from datetime import datetime
+from pytz import timezone
 
 from app import current_app as app
 from app.helpers.data import save_to_db
@@ -22,8 +23,8 @@ class TestSessionType(OpenEventTestCase):
             session_type2 = SessionType(name='Type2', length='30', event_id='1')
             session2 = Session(title='test2',
                                long_abstract='dsadsd',
-                               starts_at=datetime(2003, 8, 4, 12, 30, 45),
-                               ends_at=datetime(2003, 8, 4, 12, 30, 45),
+                               starts_at=(datetime(2003, 8, 4, 12, 30, 45)).replace(tzinfo=timezone('UTC')),
+                               ends_at=(datetime(2003, 8, 4, 12, 30, 45)).replace(tzinfo=timezone('UTC')),
                                session_type=session_type1)
             save_to_db(event, "Event Saved")
             save_to_db(session1, "Session1 Saved")

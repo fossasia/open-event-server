@@ -27,7 +27,7 @@ class EventSchema(Schema):
     identifier = fields.Str(dump_only=True)
     name = fields.Str()
     event_url = fields.Url()
-    ticket = Relationship(attribute='ticket',
+    tickets = Relationship(attribute='ticket',
                           self_view='v1.event_ticket',
                           self_view_kwargs={'id': '<id>'},
                           related_view='v1.ticket_detail',
@@ -43,7 +43,7 @@ class EventSchema(Schema):
                                  schema='MicrolocationSchema',
                                  many=True,
                                  type_='microlocation')
-    social_link = Relationship(attribute='social_link',
+    social_links = Relationship(attribute='social_link',
                                self_view='v1.event_social_link',
                                self_view_kwargs={'id': '<id>'},
                                related_view='v1.social_link_detail',
@@ -59,7 +59,7 @@ class EventSchema(Schema):
                           schema='TrackSchema',
                           many=True,
                           type_='track')
-    sponsor = Relationship(attribute='sponsor',
+    sponsors = Relationship(attribute='sponsor',
                            self_view='v1.event_sponsor',
                            self_view_kwargs={'id': '<id>'},
                            related_view='v1.sponsor_list',
@@ -67,13 +67,13 @@ class EventSchema(Schema):
                            schema='SponsorSchema',
                            many=True,
                            type_='sponsor')
-    call_for_speaker = Relationship(attribute='call_for_paper',
+    call_for_papers = Relationship(attribute='call_for_paper',
                                     self_view='v1.event_call_for_paper',
                                     self_view_kwargs={'id': '<id>'},
                                     related_view='v1.call_for_paper_detail',
                                     related_view_kwargs={'event_id': '<id>'},
                                     schema='CallForPaperSchema',
-                                    type_='sponsor')
+                                    type_='call_for_paper')
     session_types = Relationship(attribute='session_type',
                                  self_view='v1.event_session_types',
                                  self_view_kwargs={'id': '<id>'},

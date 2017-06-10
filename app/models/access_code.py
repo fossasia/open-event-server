@@ -16,12 +16,12 @@ class AccessCode(db.Model):
     tickets_number = db.Column(db.Integer)  # For event level access this holds the max. uses
     min_quantity = db.Column(db.Integer)
     max_quantity = db.Column(db.Integer)  # For event level access this holds the months for which it is valid
-    valid_from = db.Column(db.DateTime, nullable=True)
-    valid_till = db.Column(db.DateTime, nullable=True)
+    valid_from = db.Column(db.DateTime(timezone=True), nullable=True)
+    valid_till = db.Column(db.DateTime(timezone=True), nullable=True)
     tickets = db.Column(db.String)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref='access_codes', foreign_keys=[event_id])
-    created_at = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime(timezone=True))
     marketer_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     marketer = db.relationship('User', backref='access_codes')
 

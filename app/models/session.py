@@ -21,8 +21,8 @@ class Session(db.Model):
     short_abstract = db.Column(db.Text)
     long_abstract = db.Column(db.Text)
     comments = db.Column(db.Text)
-    starts_at = db.Column(db.DateTime, nullable=False)
-    ends_at = db.Column(db.DateTime, nullable=False)
+    starts_at = db.Column(db.DateTime(timezone=True), nullable=False)
+    ends_at = db.Column(db.DateTime(timezone=True), nullable=False)
     track_id = db.Column(db.Integer, db.ForeignKey('tracks.id', ondelete='CASCADE'))
     speakers = db.relationship(
         'Speaker',
@@ -41,9 +41,9 @@ class Session(db.Model):
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     state = db.Column(db.String, default="pending")
-    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
-    deleted_at = db.Column(db.DateTime)
-    submitted_at = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow)
+    deleted_at = db.Column(db.DateTime(timezone=True))
+    submitted_at = db.Column(db.DateTime(timezone=True))
     submission_modifier = db.Column(db.String)
     is_mail_sent = db.Column(db.Boolean, default=False)
 

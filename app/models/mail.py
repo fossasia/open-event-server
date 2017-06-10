@@ -31,7 +31,7 @@ class Mail(db.Model):
     __tablename__ = 'mails'
     id = db.Column(db.Integer, primary_key=True)
     recipient = db.Column(db.String)
-    time = db.Column(db.DateTime)
+    time = db.Column(db.DateTime(timezone=True))
     action = db.Column(db.String)
     subject = db.Column(db.String)
     message = db.Column(db.String)

@@ -29,7 +29,7 @@ class Notification(db.Model):
     title = db.Column(db.String)
     message = db.Column(db.Text)
     action = db.Column(db.String)
-    received_at = db.Column(db.DateTime)
+    received_at = db.Column(db.DateTime(timezone=True))
     is_read = db.Column(db.Boolean)
 
     def __init__(self, user, title, message, action, received_at, is_read=False):

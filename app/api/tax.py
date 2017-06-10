@@ -19,10 +19,10 @@ class TaxSchema(Schema):
 
     id = fields.Str(dump_only=True)
     country = fields.Str()
-    tax_name = fields.Str(required=True)
-    tax_rate = fields.Float(required=True)
+    name = fields.Str(required=True)
+    rate = fields.Float(required=True)
     tax_id = fields.Str(required=True)
-    is_invoice_sent = fields.Boolean(default=False)
+    should_send_invoice = fields.Boolean(default=False)
     registered_company = fields.Str()
     address = fields.Str()
     city = fields.Str()
