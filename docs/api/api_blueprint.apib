@@ -5,7 +5,7 @@ HOST: http://nextgen.eventyay.com
 
 The Open Event API Server
 
-## JWT Auth Key [/auth/session?filter_parameters]
+## JWT Auth Key [/auth/session?filter-parameters]
 
 ### JWT Auth Key [POST]
 
@@ -49,26 +49,26 @@ The Open Event API Server
           "data": [
             {
               "attributes": {
-                "created_at": "2017-06-01T01:24:47.500127+00:00",
+                "created-at": "2017-06-01T01:24:47.500127+00:00",
                 "google": null,
                 "instagram": null,
                 "firstname": null,
                 "lastname": null,
                 "twitter": null,
-                "signup_at": "2017-06-01T01:25:07.385816+00:00",
-                "is_super_admin": true,
+                "signup-at": "2017-06-01T01:25:07.385816+00:00",
+                "is-super-admin": true,
                 "thumbnail": null,
                 "email": "me@ipiyush.com",
                 "avatar": null,
                 "contact": null,
-                "is_admin": true,
+                "is-admin": true,
                 "details": null,
-                "last_accessed_at": null,
+                "last-accessed-at": null,
                 "small": null,
                 "facebook": null,
-                "deleted_at": null,
-                "is_verified": true,
-                "avatar_uploaded": null,
+                "deleted-at": null,
+                "is-verified": true,
+                "avatar-uploaded": null,
                 "icon": null
               },
               "type": "user",
@@ -94,17 +94,23 @@ The Open Event API Server
 + email (string) - Email of the user **(required)**
 
 + Request (application/vnd.api+json)
+    
+    + Headers
 
-        {
-          "data": {
-            "attributes": {
-              "name": "Open Event User",
-              "email": "example@example.com",
-              "password": "12345678"
-            },
-            "type": "user"
-          }
-        }
+            Authorization: JWT <Auth Key>
+        
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "name": "Open Event User",
+                  "email": "example@example.com",
+                  "password": "12345678"
+                },
+                "type": "user"
+              }
+            }
 
 + Response 200 (application/vnd.api+json)
 
@@ -137,26 +143,26 @@ The Open Event API Server
         {
           "data": {
             "attributes": {
-              "created_at": "2017-06-01T01:24:47.500127+00:00",
+              "created-at": "2017-06-01T01:24:47.500127+00:00",
               "google": null,
               "instagram": null,
               "firstname": null,
               "lastname": null,
               "twitter": null,
-              "signup_at": "2017-06-01T01:25:07.385816+00:00",
-              "is_super_admin": true,
+              "signup-at": "2017-06-01T01:25:07.385816+00:00",
+              "is-super-admin": true,
               "thumbnail": null,
               "email": "me@ipiyush.com",
               "avatar": null,
               "contact": null,
-              "is_admin": true,
+              "is-admin": true,
               "details": null,
-              "last_accessed_at": null,
+              "last-accessed-at": null,
               "small": null,
               "facebook": null,
-              "deleted_at": null,
-              "is_verified": true,
-              "avatar_uploaded": null,
+              "deleted-at": null,
+              "is-verified": true,
+              "avatar-uploaded": null,
               "icon": null
             },
             "type": "user",
@@ -176,31 +182,52 @@ The Open Event API Server
         
 ### Update User [PATCH]
 
+Authorized user should be same as user in request body or must be admin.
+
++ Request (application/vnd.api+json)
+    
+    + Headers
+
+            Authorization: JWT <Auth Key>
+        
+    + Body
+    
+            {
+              "data": {
+                "attributes": {
+                  "name": "Open Event User",
+                  "email": "example@example.com",
+                  "password": "12345678"
+                },
+                "type": "user"
+              }
+            }
+
 + Response 200 (application/vnd.api+json)
 
         {
           "data": {
             "attributes": {
-              "created_at": "2017-06-01T01:24:47.500127+00:00",
+              "created-at": "2017-06-01T01:24:47.500127+00:00",
               "google": null,
               "instagram": null,
               "firstname": null,
               "lastname": null,
               "twitter": null,
-              "signup_at": "2017-06-01T01:25:07.385816+00:00",
-              "is_super_admin": true,
+              "signup-at": "2017-06-01T01:25:07.385816+00:00",
+              "is-super-admin": true,
               "thumbnail": null,
               "email": "me@ipiyush.com",
               "avatar": null,
               "contact": null,
-              "is_admin": true,
+              "is-admin": true,
               "details": null,
-              "last_accessed_at": null,
+              "last-accessed-at": null,
               "small": null,
               "facebook": null,
-              "deleted_at": null,
-              "is_verified": true,
-              "avatar_uploaded": null,
+              "deleted-at": null,
+              "is-verified": true,
+              "avatar-uploaded": null,
               "icon": null
             },
             "type": "user",
@@ -219,7 +246,24 @@ The Open Event API Server
 
 ### Delete User [DELETE]
 
-+ Response 204
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
 
 ## Image Size Collection [/image-sizes?page,limit]
 
@@ -242,22 +286,22 @@ The Open Event API Server
           "data": [
             {
               "attributes": {
-                "full_width": 1300,
-                "full_height": 500,
-                "full_aspect": null,
-                "full_quality": 80,
-                "icon_width": 75,
-                "icon_height": 30,
-                "icon_aspect": null,
-                "icon_quality": 80,
-                "thumbnail_width": 500,
-                "thumbnail_height": 200,
-                "thumbnail_aspect": null,
-                "thumbnail_quality": 80,
-                "logo_width": null,
-                "logo_height": null
+                "full-width": 1300,
+                "full-height": 500,
+                "full-aspect": null,
+                "full-quality": 80,
+                "icon-width": 75,
+                "icon-height": 30,
+                "icon-aspect": null,
+                "icon-quality": 80,
+                "thumbnail-width": 500,
+                "thumbnail-height": 200,
+                "thumbnail-aspect": null,
+                "thumbnail-quality": 80,
+                "logo-width": null,
+                "logo-height": null
               },
-              "type": "image_size",
+              "type": "image-size",
               "id": "1",
               "links": {
                 "self": "/v1/image-sizes/1"
@@ -276,55 +320,61 @@ The Open Event API Server
 ### Create Image Size [POST]
 
  (For Events and Speakers)
-+ full_width (integer)- Full width of the image
-+ full_height (integer)- Full height of the image
-+ full_aspect (string)- Full aspect ratio of the image
-+ full_quality (integer)- Full quality of the image
-+ icon_width (integer)- Width of the icon
-+ icon_height (integer)- Height of the icon
-+ icon_aspect (string)- Aspect ratio of the icon
-+ icon_quality (integer)- Quality of the icon
-+ thumbnail_width (integer)- Width of the thumbnail
-+ thumbnail_height (integer)- Height of the thumbnail
-+ thumbnail_aspect (string)- Aspect ratio of the thumbnail
-+ thumbnail_quality (integer)- Quality of the thumbnail
-+ logo_width (integer)- Width of the logo
-+ logo_height (integer)- Height of the logo 
++ full-width (integer)- Full width of the image
++ full-height (integer)- Full height of the image
++ full-aspect (string)- Full aspect ratio of the image
++ full-quality (integer)- Full quality of the image
++ icon-width (integer)- Width of the icon
++ icon-height (integer)- Height of the icon
++ icon-aspect (string)- Aspect ratio of the icon
++ icon-quality (integer)- Quality of the icon
++ thumbnail-width (integer)- Width of the thumbnail
++ thumbnail-height (integer)- Height of the thumbnail
++ thumbnail-aspect (string)- Aspect ratio of the thumbnail
++ thumbnail-quality (integer)- Quality of the thumbnail
++ logo-width (integer)- Width of the logo
++ logo-height (integer)- Height of the logo 
 
 
 + Request (application/vnd.api+json)
+    
+    + Headers
 
-        {
-          "data": {
-            "attributes": {
-              "created_at": "2017-06-01T01:24:47.500127+00:00",
-              "google": null,
-              "instagram": null,
-              "firstname": null,
-              "lastname": null,
-              "twitter": null,
-              "signup_at": "2017-06-01T01:25:07.385816+00:00",
-              "is_super_admin": true,
-              "thumbnail": null,
-              "email": "me@ipiyush.com",
-              "avatar": null,
-              "contact": null,
-              "is_admin": true,
-              "details": null,
-              "last_accessed_at": null,
-              "small": null,
-              "facebook": null,
-              "deleted_at": null,
-              "is_verified": true,
-              "avatar_uploaded": null,
-              "icon": null
-            },
-            "type": "image_size"
-          }
-        }
+            Authorization: JWT <Auth Key>
+        
+    + Body
+    
+            {
+              "data": {
+                "attributes": {
+                  "created-at": "2017-06-01T01:24:47.500127+00:00",
+                  "google": null,
+                  "instagram": null,
+                  "firstname": null,
+                  "lastname": null,
+                  "twitter": null,
+                  "signup-at": "2017-06-01T01:25:07.385816+00:00",
+                  "is-super-admin": true,
+                  "thumbnail": null,
+                  "email": "me@ipiyush.com",
+                  "avatar": null,
+                  "contact": null,
+                  "is-admin": true,
+                  "details": null,
+                  "last-accessed-at": null,
+                  "small": null,
+                  "facebook": null,
+                  "deleted-at": null,
+                  "is-verified": true,
+                  "avatar-uploaded": null,
+                  "icon": null
+                },
+                "type": "image-size"
+              }
+            }
 
 + Response 200 (application/vnd.api+json)
-    
+
         {
           "data": "data"
         }
@@ -332,7 +382,7 @@ The Open Event API Server
 ## Image Size Details [/image-sizes/{image_size_id}]
 + Parameters
     + image_size_id (integer) - ID of the image size in the form of an integer
-    
+
 ### Get Image Size Details [GET]
 + Request
 
@@ -347,27 +397,26 @@ The Open Event API Server
         {
           "data": {
             "attributes": {
-              "full_width": 1300,
-              "full_height": 500,
-              "full_aspect": null,
-              "full_quality": 80,
-              "icon_width": 75,
-              "icon_height": 30,
-              "icon_aspect": null,
-              "icon_quality": 80,
-              "thumbnail_width": 500,
-              "thumbnail_height": 200,
-              "thumbnail_aspect": null,
-              "thumbnail_quality": 80,
-              "logo_width": null,
-              "logo_height": null
+              "full-width": 1300,
+              "full-height": 500,
+              "full-aspect": null,
+              "full-quality": 80,
+              "icon-width": 75,
+              "icon-height": 30,
+              "icon-aspect": null,
+              "icon-quality": 80,
+              "thumbnail-width": 500,
+              "thumbnail-height": 200,
+              "thumbnail-aspect": null,
+              "thumbnail-quality": 80,
+              "logo-width": null,
+              "logo-height": null
             },
-            "type": "image_size",
+            "type": "image-size",
             "id": "1",
             "links": {
               "self": "/v1/image-sizes/1"
             }
-
           },
           "jsonapi": {
             "version": "1.0"
@@ -382,51 +431,57 @@ The Open Event API Server
 
 
 + Request (application/vnd.api+json)
+    
+    + Headers
 
-        {
-          "data": {
-            "attributes": {
-              "full_width": 1300,
-              "full_height": 500,
-              "full_aspect": null,
-              "full_quality": 80,
-              "icon_width": 75,
-              "icon_height": 30,
-              "icon_aspect": null,
-              "icon_quality": 80,
-              "thumbnail_width": 500,
-              "thumbnail_height": 200,
-              "thumbnail_aspect": null,
-              "thumbnail_quality": 80,
-              "logo_width": null,
-              "logo_height": null
-            },
-            "type": "image_size",
-            "id": "1",
-          }
-        }
+            Authorization: JWT <Auth Key>
+        
+    + Body
+    
+            {
+              "data": {
+                "attributes": {
+                  "full-width": 1300,
+                  "full-height": 500,
+                  "full-aspect": null,
+                  "full-quality": 80,
+                  "icon-width": 75,
+                  "icon-height": 30,
+                  "icon-aspect": null,
+                  "icon-quality": 80,
+                  "thumbnail-width": 500,
+                  "thumbnail-height": 200,
+                  "thumbnail-aspect": null,
+                  "thumbnail-quality": 80,
+                  "logo-width": null,
+                  "logo-height": null
+                },
+                "type": "image-size",
+                "id": "1",
+              }
+            }
 
 + Response 200 (application/vnd.api+json)
-    
+
         {
           "data": {
             "attributes": {
-              "full_width": 1300,
-              "full_height": 500,
-              "full_aspect": null,
-              "full_quality": 80,
-              "icon_width": 75,
-              "icon_height": 30,
-              "icon_aspect": null,
-              "icon_quality": 80,
-              "thumbnail_width": 500,
-              "thumbnail_height": 200,
-              "thumbnail_aspect": null,
-              "thumbnail_quality": 80,
-              "logo_width": null,
-              "logo_height": null
+              "full-width": 1300,
+              "full-height": 500,
+              "full-aspect": null,
+              "full-quality": 80,
+              "icon-width": 75,
+              "icon-height": 30,
+              "icon-aspect": null,
+              "icon-quality": 80,
+              "thumbnail-width": 500,
+              "thumbnail-height": 200,
+              "thumbnail-aspect": null,
+              "thumbnail-quality": 80,
+              "logo-width": null,
+              "logo-height": null
             },
-            "type": "image_size",
+            "type": "image-size",
             "id": "1",
             "links": {
               "self": "/v1/image-sizes/1"
@@ -442,7 +497,24 @@ The Open Event API Server
 
 ### Delete Image Size [DELETE]
 
-+ Response 204
++ Request
+
+    + Headers
+    
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
 
 
 ## Page Collection [/pages?page,limit]
@@ -468,13 +540,13 @@ The Open Event API Server
               "attributes": {
                 "name": "How it works",
                 "title": "How it works",
-                "url": "/how_it_works",
+                "url": "/how-it-works",
                 "description": null,
                 "place": "Use Open Event",
                 "language": "English",
                 "index": 0
               },
-              "type": "image_size",
+              "type": "image-size",
               "id": "1",
               "links": {
                 "self": "/v1/image-sizes/1"
@@ -501,24 +573,30 @@ The Open Event API Server
 + index (integer)- Position of the page, default: 0
 
 + Request (application/vnd.api+json)
+    
+    + Headers
 
-        {
-          "data": {
-            "attributes": {
-              "name": "How it works",
-              "title": "How it works",
-              "url": "/how_it_works",
-              "description": null,
-              "place": "Use Open Event",
-              "language": "English",
-              "index": 0
-            },
-            "type": "page"
-          }
-        }
+            Authorization: JWT <Auth Key>
+        
+    + Body
+    
+            {
+              "data": {
+                "attributes": {
+                  "name": "How it works",
+                  "title": "How it works",
+                  "url": "/how-it-works",
+                  "description": null,
+                  "place": "Use Open Event",
+                  "language": "English",
+                  "index": 0
+                },
+                "type": "page"
+              }
+            }
 
 + Response 200 (application/vnd.api+json)
-    
+
         {
           "data": "data"
         }
@@ -538,13 +616,13 @@ The Open Event API Server
             Authorization: JWT <Auth Key>
 
 + Response 200 (application/vnd.api+json)
-    
+
         {
           "data": {
             "attributes": {
               "name": "How it works",
               "title": "How it works",
-              "url": "/how_it_works",
+              "url": "/how-it-works",
               "description": null,
               "place": "Use Open Event",
               "language": "English",
@@ -569,31 +647,37 @@ The Open Event API Server
 ### Update Page [PATCH]
 
 + Request (application/vnd.api+json)
+    
+    + Headers
 
-        {
-          "data": {
-            "attributes": {
-              "name": "How it works",
-              "title": "How it works",
-              "url": "/how_it_works",
-              "description": null,
-              "place": "Use Open Event",
-              "language": "English",
-              "index": 0
-            },
-            "type": "page",
-            "id": "1"
-          }
-        }
+            Authorization: JWT <Auth Key>
+        
+    + Body
+    
+            {
+              "data": {
+                "attributes": {
+                  "name": "How it works",
+                  "title": "How it works",
+                  "url": "/how-it-works",
+                  "description": null,
+                  "place": "Use Open Event",
+                  "language": "English",
+                  "index": 0
+                },
+                "type": "page",
+                "id": "1"
+              }
+            }
 
 + Response 200 (application/vnd.api+json)
-    
+
         {
           "data": {
             "attributes": {
               "name": "How it works",
               "title": "How it works",
-              "url": "/how_it_works",
+              "url": "/how-it-works",
               "description": null,
               "place": "Use Open Event",
               "language": "English",
@@ -615,7 +699,24 @@ The Open Event API Server
 
 ### Delete Page [DELETE]
 
-+ Response 204
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
 
 ## Tracks Collection [/events/{event_id}/tracks]
 + Parameters
@@ -632,7 +733,7 @@ The Open Event API Server
             Authorization: JWT <Auth Key>
 
 + Response 200 (application/vnd.api+json)
-    
+
         {
             'body': 'body'
         }
@@ -641,25 +742,31 @@ The Open Event API Server
 
 + name (string) - The name of the track **(required)**
 + description (string) - Description of the track
-+ track_image_url (string) - URL of uploaded track image
++ track-image-url (string) - URL of uploaded track image
 + color (string) - Color code of the track **(required)**
 + location (string) - Name of the location of track
 
 + Request (application/vnd.api+json)
     
-        {
-          "data": {
-            "attributes": {
-                "name" : "name ",
-                "description": "description",
-                "track_image_url": "track_image_url",
-                "color": "color",
-                "location": "location"
-            },
-            "type": "track",
-            "id": "1",
-          }
-        }
+    + Headers
+
+            Authorization: JWT <Auth Key>
+        
+    + Body
+    
+            {
+              "data": {
+                "attributes": {
+                    "name" : "name ",
+                    "description": "description",
+                    "track-image-url": "track-image-url",
+                    "color": "color",
+                    "location": "location"
+                },
+                "type": "track",
+                "id": "1",
+              }
+            }
 
 + Response 200 (application/vnd.api+json)
         
@@ -682,13 +789,13 @@ The Open Event API Server
             Authorization: JWT <Auth Key>
 
 + Response 200 (application/vnd.api+json)
-    
+
         {
             "data": {
                 "attributes": {
                     "name" : "name ",
                     "description": "description",
-                    "track_image_url": "track_image_url",
+                    "track-image-url": "track-image-url",
                     "color": "color",
                     "location": "location"
                 },
@@ -710,20 +817,27 @@ The Open Event API Server
 ### Update Track [PATCH]
 
 + Request (application/vnd.api+json)
+    
+    + Headers
 
-        {
-          "data": {
-            "attributes": {
-                "name" : "name ",
-                "description": "description",
-                "track_image_url": "track_image_url",
-                "color": "color",
-                "location": "location"
-            },
-            "type": "track",
-            "id": "1",
-          }
-        }
+            Authorization: JWT <Auth Key>
+        
+    + Body
+
+    
+            {
+              "data": {
+                "attributes": {
+                    "name" : "name ",
+                    "description": "description",
+                    "track-image-url": "track-image-url",
+                    "color": "color",
+                    "location": "location"
+                },
+                "type": "track",
+                "id": "1",
+              }
+            }
 
 + Response 200 (application/vnd.api+json)
 
@@ -732,7 +846,7 @@ The Open Event API Server
             "attributes": {
                 "name" : "name ",
                 "description": "description",
-                "track_image_url": "track_image_url",
+                "track-image-url": "track-image-url",
                 "color": "color",
                 "location": "location"
             },
@@ -749,12 +863,29 @@ The Open Event API Server
 
 ### Delete Track [DELETE]
 
-+ Response 204
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
 
 
 ## Sponsors Collection [/events/{event_id}/sponsors?page,limit]
 + Parameters
-    + event_id (integer) - ID of the specific event in integer
+    + event_id (integer) - ID of the spcific event in integer
 
 ### List All Sponsors [GET]
 
@@ -787,7 +918,7 @@ The Open Event API Server
                 "level": "Level",
                 "url": "http://example.com",
                 "type": "Type",
-                "logo_url": "http://placehold.it/200X200",
+                "logo-url": "http://placehold.it/200X200",
                 "name": "New Brand"
               },
               "type": "sponsor",
@@ -815,19 +946,25 @@ The Open Event API Server
 + type (string) - The type of the sponsor
 
 + Request (application/vnd.api+json)
+    
+    + Headers
 
-        {
-          "data": {
-            "attributes": {
-              "name": "Open Event Sponsor",
-              "description": "Example Description",
-              "url": "http://example.com",
-              "level": "Example",
-              "type": "Gold"
-            },
-            "type": "sponsor"
-          }
-        }
+            Authorization: JWT <Auth Key>
+        
+    + Body
+    
+            {
+              "data": {
+                "attributes": {
+                  "name": "Open Event Sponsor",
+                  "description": "Example Description",
+                  "url": "http://example.com",
+                  "level": "Example",
+                  "type": "Gold"
+                },
+                "type": "sponsor"
+              }
+            }
 
 
 + Response 200 (application/vnd.api+json)
@@ -924,20 +1061,26 @@ The Open Event API Server
 + type (string) - The type of the sponsor **(optional)**
 
 + Request (application/vnd.api+json)
+    
+    + Headers
 
-        {
-          "data": {
-            "attributes": {
-              "description": "Example Description",
-              "url": "http://example.com",
-              "level": "Example",
-              "type": "Gold",
-              "name": "New Open Event Sponsor"
-            },
-            "type": "sponsor",
-            "id": "5"
-          }
-        }
+            Authorization: JWT <Auth Key>
+        
+    + Body
+    
+            {
+              "data": {
+                "attributes": {
+                  "description": "Example Description",
+                  "url": "http://example.com",
+                  "level": "Example",
+                  "type": "Gold",
+                  "name": "New Open Event Sponsor"
+                },
+                "type": "sponsor",
+                "id": "5"
+              }
+            }
 
 + Response 200 (application/vnd.api+json)
 
@@ -975,13 +1118,31 @@ The Open Event API Server
 
 ### Delete Sponsor [DELETE]
 
-+ Response 204
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
 
 ## Tax Collection [/events/{event_id}/tax?page,limit]
 + Parameters
-    + event_id (integer) - ID of the specific event in integer
+    + event_id (integer) - ID of the spcific event in integer
 
-### List All Sponsors [GET]
+### List All Tax Records [GET]
 
 + Request
 
@@ -1040,30 +1201,36 @@ The Open Event API Server
 ### Create Tax [POST]
 
 + country (string)  -  Country of Tax
-+ tax_name (string) - Name of the Tax**(required)**
-+ tax_rate (float)  - Tax charges rate**(required)**
-+ tax_id (string)  - A string based ID **(required)**
-+ is_invoice_sent (boolean) - **(default=False)**
-+ registered_company (string) - Registered Cmpany Name
++ tax-name (string) - Name of the Tax**(required)**
++ tax-rate (float)  - Tax charges rate**(required)**
++ tax-id (string)  - A string based ID **(required)**
++ is-invoice-sent (boolean) - **(default=False)**
++ registered-company (string) - Registered Cmpany Name
 + address (string) - Address of the company
 + city (string) - City of the company
 + state (string) - State of the Company
 + zip (Integer) - Zip Code of the Company
-+ invoice_footer (string) - A text to add on the footer
-+ is_tax_included_in_price (boolean) - **(default=False)**
++ invoice-footer (string) - A text to add on the footer
++ is-tax-included-in-price (boolean) - **(default=False)**
 
 + Request (application/vnd.api+json)
+    
+    + Headers
 
-        {
-          "data": {
-            "attributes": {
-              "tax_name": "Service Tax",
-              "tax_rate": "12",
-              "tax_id": "1"
-            },
-            "type": "tax"
-          }
-        }
+            Authorization: JWT <Auth Key>
+        
+    + Body
+    
+            {
+              "data": {
+                "attributes": {
+                  "tax-name": "Service Tax",
+                  "tax-rate": "12",
+                  "tax-id": "1"
+                },
+                "type": "tax"
+              }
+            }
 
 + Response 200 (application/vnd.api+json)
 
@@ -1165,30 +1332,36 @@ The Open Event API Server
 + id (integer) - ID of the record to update **(required)**
 
 + country (string)  -  Country of Tax**(optional)**
-+ tax_name (string) - Name of the Tax**(optional)**
-+ tax_rate (float)  - Tax charges rate**(optional)**
-+ tax_id (string)  - A string based ID **(optional)**
-+ is_invoice_sent (boolean) - **(optional)**
-+ registered_company (string) - Registered Cmpany Name**(optional)**
++ tax-name (string) - Name of the Tax**(optional)**
++ tax-rate (float)  - Tax charges rate**(optional)**
++ tax-id (string)  - A string based ID **(optional)**
++ is-invoice-sent (boolean) - **(optional)**
++ registered-company (string) - Registered Cmpany Name**(optional)**
 + address (string) - Address of the company**(optional)**
 + city (string) - City of the company**(optional)**
 + state (string) - State of the Company**(optional)**
 + zip (Integer) - Zip Code of the Company**(optional)**
-+ invoice_footer (string) - A text to add on the footer**(optional)**
-+ is_tax_included_in_price (boolean) - **(optional)**
++ invoice-footer (string) - A text to add on the footer**(optional)**
++ is-tax-included-in-price (boolean) - **(optional)**
 
 + Request (application/vnd.api+json)
+    
+    + Headers
 
-        {
-          "data": {
-            "attributes": {
-              "tax_rate": "15",
-              "tax_name": "GST"
-            },
-            "type": "tax",
-            "id": "1"
-          }
-        }
+            Authorization: JWT <Auth Key>
+        
+    + Body
+    
+            {
+              "data": {
+                "attributes": {
+                  "tax-rate": "15",
+                  "tax-name": "GST"
+                },
+                "type": "tax",
+                "id": "1"
+              }
+            }
 
 + Response 200 (application/vnd.api+json)
 
@@ -1232,11 +1405,29 @@ The Open Event API Server
 
 ### Delete Tax [DELETE]
 
-+ Response 204
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
 
 ## Social Links Collection [/events/{event_id}/social-links?page,limit]
 + Parameters
-    + event_id (integer) - ID of the specific event in integer
+    + event_id (integer) - ID of the spcific event in integer
 
 ### List All Social Links [GET]
 
@@ -1249,7 +1440,6 @@ The Open Event API Server
             Authorization: JWT <Auth Key>
 
 + Response 200 (application/vnd.api+json)
-
 
         {
           "meta": {
@@ -1269,7 +1459,7 @@ The Open Event API Server
                 "link": "http://facebook.com/facebook",
                 "name": "Facebook Url"
               },
-              "type": "social_link",
+              "type": "social-link",
               "id": "1",
               "links": {
                 "self": "/v1/social-links/1"
@@ -1290,16 +1480,22 @@ The Open Event API Server
 + link (string - proper url) - Url of the Social Link **(required)**
 
 + Request (application/vnd.api+json)
+    
+    + Headers
 
-        {
-          "data": {
-            "attributes": {
-              "name": "Facebook Url",
-              "link": "http://facebook.com/facebook"
-            },
-            "type": "social_link"
-          }
-        }
+            Authorization: JWT <Auth Key>
+        
+    + Body
+    
+            {
+              "data": {
+                "attributes": {
+                  "name": "Facebook Url",
+                  "link": "http://facebook.com/facebook"
+                },
+                "type": "social-link"
+              }
+            }
 
 + Response 200 (application/vnd.api+json)
 
@@ -1317,7 +1513,7 @@ The Open Event API Server
               "link": "http://facebook.com/facebook",
               "name": "Facebook Url"
             },
-            "type": "social_link",
+            "type": "social-link",
             "id": "1",
             "links": {
               "self": "/v1/social-links/1"
@@ -1332,11 +1528,11 @@ The Open Event API Server
         }
 
 
-## Social Link [/social-links/{link_id}]
+## Social Links [/social-links/{link_id}]
 + Parameters
     + link_id (integer) - ID of the Social Link in the form of an integer
 
-### Social Link Details [GET]
+### Social Link Detail [GET]
 + Request
 
     + Headers
@@ -1361,7 +1557,7 @@ The Open Event API Server
               "link": "http://facebook.com/facebook",
               "name": "Facebook Url"
             },
-            "type": "social_link",
+            "type": "social-link",
             "id": "1",
             "links": {
               "self": "/v1/social-links/1"
@@ -1384,17 +1580,23 @@ The Open Event API Server
 + link (string - proper url) - Url of the Social Link **(optional)**
 
 + Request (application/vnd.api+json)
+    
+    + Headers
 
-        {
-          "data": {
-            "attributes": {
-              "name": "Facebook Page Url",
-              "link": "http://facebook.com/facebook"
-            },
-            "type": "social_link",
-            "id": "1"
-          }
-        }
+            Authorization: JWT <Auth Key>
+        
+    + Body
+    
+            {
+              "data": {
+                "attributes": {
+                  "name": "Facebook Page Url",
+                  "link": "http://facebook.com/facebook"
+                },
+                "type": "social-link",
+                "id": "1"
+              }
+            }
 
 + Response 200 (application/vnd.api+json)
 
@@ -1412,7 +1614,7 @@ The Open Event API Server
               "link": "http://facebook.com/facebook",
               "name": "Facebook Page Url"
             },
-            "type": "social_link",
+            "type": "social-link",
             "id": "1",
             "links": {
               "self": "/v1/social-links/1"
@@ -1428,4 +1630,21 @@ The Open Event API Server
 
 ### Delete Social Link [DELETE]
 
-+ Response 204
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
