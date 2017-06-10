@@ -88,4 +88,131 @@ def is_user_itself(f):
     return decorated_function
 
 
+@second_order_decorator(jwt_required)
+def is_organizer(f):
+    """
+    Allows only Organizer to access the event resources.
+    :param f:
+    :return:
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        user = current_identity
 
+        if user.is_staff:
+            return f(*args, **kwargs)
+        if 'event_id' in kwargs and user.is_organizer(kwargs['event_id']):
+            return f(*args, **kwargs)
+        return ForbiddenError({'source': ''}, 'Organizer access is required').respond()
+
+    return decorated_function
+
+
+@second_order_decorator(jwt_required)
+def is_coorganizer(f):
+    """
+    Allows Organizer and Co-organizer to access the event resources.
+    :param f:
+    :return:
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        user = current_identity
+
+        if user.is_staff:
+            return f(*args, **kwargs)
+        if 'event_id' in kwargs and (
+                user.is_coorganizer(kwargs['event_id']) or
+                user.is_organizer(kwargs['event_id'])):
+            return f(*args, **kwargs)
+        return ForbiddenError({'source': ''}, 'Co-organizer access is required.').respond()
+
+    return decorated_function
+
+
+@second_order_decorator(jwt_required)
+def is_registrar(f):
+    """
+    Allows Organizer, Co-organizer and registrar to access the event resources.
+    :param f:
+    :return:
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        user = current_identity
+
+        if user.is_staff:
+            return f(*args, **kwargs)
+        if 'event_id' in kwargs and (
+                user.is_registrar(kwargs['event_id']) or
+                user.is_organizer(kwargs['event_id']) or
+                user.is_coorganizer(kwargs['event_id'])):
+            return f(*args, **kwargs)
+        return ForbiddenError({'source': ''}, 'Registrar Access is Required.').respond()
+
+    return decorated_function
+
+
+@second_order_decorator(jwt_required)
+def is_track_organizer(f):
+    """
+    Allows Organizer, Co-organizer and Track Organizer to access the resource(s).
+    :param f:
+    :return:
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        user = current_identity
+
+        if user.is_staff:
+            return f(*args, **kwargs)
+        if 'event_id' in kwargs and (
+                user.is_track_organizer(kwargs['event_id']) or
+                user.is_organizer(kwargs['event_id']) or
+                user.is_coorganizer(kwargs['event_id'])):
+            return f(*args, **kwargs)
+        return ForbiddenError({'source': ''}, 'Track Organizer access is Required.').respond()
+
+    return decorated_function
+
+
+@second_order_decorator(jwt_required)
+def is_moderator(f):
+    """
+    Allows Organizer, Co-organizer and Moderator to access the resource(s).
+    :param f:
+    :return:
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        user = current_identity
+
+        if user.is_staff:
+            return f(*args, **kwargs)
+        if 'event_id' in kwargs and (
+                user.is_moderator(kwargs['event_id']) or
+                user.is_organizer(kwargs['event_id']) or
+                user.is_coorganizer(kwargs['event_id'])):
+            return f(*args, **kwargs)
+        return ForbiddenError({'source': ''}, 'Moderator Access is Required.').respond()
+
+    return decorated_function
+
+@second_order_decorator(jwt_required)
+def accessible_events(f):
+    """
+    Filter the accessible events to the current authorized user
+    If the user is not admin then only events created by user is
+    accessible.
+    :param f:
+    :return:
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        user = current_identity
+        if not user.is_staff:
+            kwargs['user_id'] = user.id
+
+        return f(*args, **kwargs)
+
+    return decorated_function
