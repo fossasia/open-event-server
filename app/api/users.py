@@ -83,10 +83,12 @@ class UserDetail(ResourceDetail):
     """
     User detail by id
     """
+
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('notification_id') is not None:
             try:
-                notification = self.session.query(Notification).filter_by(id=view_kwargs['notification_id']).one()
+                notification = self.session.query(Notification).filter_by(
+                    id=view_kwargs['notification_id']).one()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': 'notification_id'},
                                      "Notification: {} not found".format(view_kwargs['notification_id']))
@@ -98,7 +100,8 @@ class UserDetail(ResourceDetail):
 
         if view_kwargs.get('event_invoice_id') is not None:
             try:
-                event_invoice = self.session.query(EventInvoice).filter_by(id=view_kwargs['event_invoice_id']).one()
+                event_invoice = self.session.query(EventInvoice).filter_by(
+                    id=view_kwargs['event_invoice_id']).one()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': 'event_invoice_id'},
                                      "Event Invoice: {} not found".format(view_kwargs['event_invoice_id']))
