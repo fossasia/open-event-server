@@ -85,7 +85,7 @@ class EventSchema(Schema):
     tickets = Relationship(attribute='ticket',
                            self_view='v1.event_ticket',
                            self_view_kwargs={'id': '<id>'},
-                           related_view='v1.ticket_detail',
+                           related_view='v1.ticket_list',
                            related_view_kwargs={'event_id': '<id>'},
                            schema='TicketSchema',
                            many=True,
