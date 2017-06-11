@@ -3534,3 +3534,255 @@ Authorized user should be same as user in request body or must be admin.
             "version": "1.0"
           }
         }
+
+
+
+## Session Type Collection [/events/{event_id}/session-types?page,limit]
++ Parameters
+    + event_id (integer) - ID of the spcific event in integer
+
+### List All Session Types [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "event": {
+                  "links": {
+                    "self": "/v1/session-types/22/relationships/event",
+                    "related": "/v1/session-types/22/event"
+                  }
+                }, 
+                "sessions": {
+                  "links": {
+                    "self": "/v1/session-types/22/relationships/sessions",
+                    "related": "/v1/session-types/22/sessions"
+                  }
+                }
+              },
+              "attributes": {
+                "name": "Workshop",
+                "length": "1:00:00"
+              },
+              "type": "session-type",
+              "id": "22",
+              "links": {
+                "self": "/v1/session-types/22"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/session-types"
+          }
+        }
+
+
+### Create Session Type [POST]
+
++ name (string) - Name of the Session Type **(required)**
++ length (string) - Length of the Session Type **(optional)**
+
++ Request (application/vnd.api+json)
+    
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+    
+            {
+              "data": {
+                "attributes": {
+                  "name": "Workshop",
+                  "length": "1:00:00"
+                },
+                "type": "session-type"
+              }
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/session-types/22/relationships/event",
+                  "related": "/v1/session-types/22/event"
+                }
+              }, 
+              "sessions": {
+                "links": {
+                  "self": "/v1/session-types/22/relationships/sessions",
+                  "related": "/v1/session-types/22/sessions"
+                }
+              }
+            },
+            "attributes": {
+              "name": "Workshop",
+              "length": "1:00:00"
+            },
+            "type": "session_type",
+            "id": "22",
+            "links": {
+              "self": "/v1/session-types/22"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/session-types/22"
+          }
+        }
+        
+
+## Session Type Details [/session-types/{session_type_id}]
++ Parameters
+    + session_type_id (integer) - ID of the session_type in the form of an integer
+
+### Session Details [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/session-types/22/relationships/event",
+                  "related": "/v1/session-types/22/event"
+                }
+              }, 
+              "sessions": {
+                "links": {
+                  "self": "/v1/session-types/22/relationships/sessions",
+                  "related": "/v1/session-types/22/sessions"
+                }
+              }
+            },
+            "attributes": {
+              "name": "Workshop",
+              "length": "1:00:00"
+            },
+            "type": "session-type",
+            "id": "1",
+            "links": {
+              "self": "/v1/session-types/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/session-types/1"
+          }
+        }
+
+        
+### Update Session Type [PATCH]
+
++ id (integer) - ID of the record to update **(required)**
++ name (string) - Name of the Session Type **(required)**
++ length (string) - Length of the Session Type **(optional)**
+
++ Request (application/vnd.api+json)
+    
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "name": "Workshop",
+                  "length": "1:00:00"
+                },
+                "type": "session-type",
+                "id": "22"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/session-types/22/relationships/event",
+                  "related": "/v1/session-types/22/event"
+                }
+              }, 
+              "sessions": {
+                "links": {
+                  "self": "/v1/session-types/22/relationships/sessions",
+                  "related": "/v1/session-types/22/sessions"
+                }
+              }
+            },
+            "attributes": {
+              "name": "Workshop",
+              "length": "1:00:00"
+            },
+            "type": "session-type",
+            "id": "21",
+            "links": {
+              "self": "/v1/session-types/22"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/session-types/22"
+          }
+        }
+
+### Delete Session Type [DELETE]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
