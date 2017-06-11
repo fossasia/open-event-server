@@ -166,10 +166,11 @@ class SettingDetail(ResourceDetail):
         else:
             self.schema = SettingSchemaNonAdmin
 
-    def before_path(self, args, kwargs):
+    def before_patch(self, args, kwargs):
         kwargs['id'] = 1
 
     decorators = (jwt_required, )
+    methods = ['GET', 'PATCH']
     patch = is_admin(ResourceDetail.patch.__func__)
     schema = SettingSchemaAdmin
     data_layer = {'session': db.session,
