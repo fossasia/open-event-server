@@ -3108,3 +3108,429 @@ Authorized user should be same as user in request body or must be admin.
             "version": "1.0"
           }
         }
+
+## Sessions Collection [/events/{event_id}/sessions?page,limit]
++ Parameters
+    + event_id (integer) - ID of the spcific event in integer
+
+### List All Sessions [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "event": {
+                  "links": {
+                    "self": "/v1/sessions/21/relationships/event",
+                    "related": "/v1/sessions/21/event"
+                  }
+                },
+                "track": {
+                  "links": {
+                    "self": "/v1/sessions/21/relationships/track",
+                    "related": "/v1/sessions/21/track"
+                  }
+                }, 
+                "microlocation": {
+                  "links": {
+                    "self": "/v1/sessions/21/relationships/microlocation", 
+                    "related": "/v1/sessions/21/microlocation"
+                  }
+                },
+                "session-type": {
+                  "links": {
+                    "self": "/v1/sessions/21/relationships/session-type",
+                    "related": "/v1/sessions/21/session-type"
+                  }
+                }
+              },
+              "attributes": {
+                "title": "Micropython Session",
+                "subtitle": null,
+                "level": 1,
+                "short_abstract": null,
+                "long_abstract": null,
+                "comments": null,
+                "starts-at": "2017-06-01T10:00:00.500127+00:00",
+                "ends-at": "2017-06-01T11:00:00.500127+00:00",
+                "language": "English",
+                "slides-url": null,
+                "videos-url": null,
+                "audios-url": null,
+                "signup-url": null,
+                "state": null,
+                "created-at": "2017-05-01T01:24:47.500127+00:00",
+                "deleted-at": null,
+                "submitted-at": null,
+                "is-mail-sent": false
+              },
+              "type": "session",
+              "id": "21",
+              "links": {
+                "self": "/v1/sessions/21"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/sessions"
+          }
+        }
+
+
+### Create Sessions [POST]
+
++ title (string) - Title of the Session **(required)**
++ subtitle (string) - Subtitle of the Session **(optional)**
++ level (integer) - Level of the Session **(optional)**
++ short_abstract (string) - Short Abstract of the Session **(optional)**
++ long_abstract (string) - Long Abstract of the Session **(optional)**
++ comments (string) - COmments of the Session **(optional)**
++ starts-at (datetime) - Start date of the Session **(required)**
++ ends-at (datetime) - End date of the Session **(required)**
++ language (string) - Language of the Session **(optional)**
++ slides-url (string in proper url) - Slide Url of the Session **(optional)**
++ videos-url (string in proper url) - Video Url of the Session **(optional)**
++ audios-url (string in proper url) - Audio Url of the Session **(optional)**
++ signup-url (string in proper url) - Signup Url of the Session **(optional)**
++ state (string) - State of the Session **(optional)**
++ created-at (datetime) - Date the Session was created **(optional)**
++ deleted-at (datetime) - Date the Session was deleted **(optional)**
++ submitted-at (datetime) - Date the Session was submitted **(optional)**
++ is-mail-sent (boolean) - Yes/No for Session accept/reject email **(optional)**
+
++ Request (application/vnd.api+json)
+    
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+    
+            {
+              "data": {
+                "attributes": {
+                  "title": "Micropython Session",
+                  "subtitle": null,
+                  "level": 1,
+                  "short_abstract": null,
+                  "long_abstract": null,
+                  "comments": null,
+                  "starts-at": "2017-06-01T10:00:00.500127+00:00",
+                  "ends-at": "2017-06-01T11:00:00.500127+00:00",
+                  "language": "English",
+                  "slides-url": null,
+                  "videos-url": null,
+                  "audios-url": null,
+                  "signup-url": null,
+                  "state": null,
+                  "created-at": "2017-05-01T01:24:47.500127+00:00",
+                  "deleted-at": null,
+                  "submitted-at": null,
+                  "is-mail-sent": false
+                },
+                "type": "session"
+              }
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/sessions/21/relationships/event",
+                  "related": "/v1/sessions/21/event"
+                }
+              },
+              "track": {
+                "links": {
+                  "self": "/v1/sessions/21/relationships/track",
+                  "related": "/v1/sessions/21/track"
+                }
+              }, 
+              "microlocation": {
+                "links": {
+                  "self": "/v1/sessions/21/relationships/microlocation", 
+                  "related": "/v1/sessions/21/microlocation"
+                }
+              },
+              "session-type": {
+                "links": {
+                  "self": "/v1/sessions/21/relationships/session-type",
+                  "related": "/v1/sessions/21/session-type"
+                }
+              }
+            },
+            "attributes": {
+              "title": "Micropython Session",
+              "subtitle": null,
+              "level": 1,
+              "short_abstract": null,
+              "long_abstract": null,
+              "comments": null,
+              "starts-at": "2017-06-01T10:00:00.500127+00:00",
+              "ends-at": "2017-06-01T11:00:00.500127+00:00",
+              "language": "English",
+              "slides-url": null,
+              "videos-url": null,
+              "audios-url": null,
+              "signup-url": null,
+              "state": null,
+              "created-at": "2017-05-01T01:24:47.500127+00:00",
+              "deleted-at": null,
+              "submitted-at": null,
+              "is-mail-sent": false
+            },
+            "type": "session",
+            "id": "21",
+            "links": {
+              "self": "/v1/sessions/21"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/sessions/21"
+          }
+        }
+        
+
+## Sessions Details [/sessions/{session_id}]
++ Parameters
+    + session_id (integer) - ID of the speaker call in the form of an integer
+
+### Session Details [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/sessions/21/relationships/event",
+                  "related": "/v1/sessions/21/event"
+                }
+              },
+              "track": {
+                "links": {
+                  "self": "/v1/sessions/21/relationships/track",
+                  "related": "/v1/sessions/21/track"
+                }
+              }, 
+              "microlocation": {
+                "links": {
+                  "self": "/v1/sessions/21/relationships/microlocation", 
+                  "related": "/v1/sessions/21/microlocation"
+                }
+              },
+              "session-type": {
+                "links": {
+                  "self": "/v1/sessions/21/relationships/session-type",
+                  "related": "/v1/sessions/21/session-type"
+                }
+              }
+            },
+            "attributes": {
+              "title": "Micropython Session",
+              "subtitle": null,
+              "level": 1,
+              "short_abstract": null,
+              "long_abstract": null,
+              "comments": null,
+              "starts-at": "2017-06-01T10:00:00.500127+00:00",
+              "ends-at": "2017-06-01T11:00:00.500127+00:00",
+              "language": "English",
+              "slides-url": null,
+              "videos-url": null,
+              "audios-url": null,
+              "signup-url": null,
+              "state": null,
+              "created-at": "2017-05-01T01:24:47.500127+00:00",
+              "deleted-at": null,
+              "submitted-at": null,
+              "is-mail-sent": false
+            },
+            "type": "session",
+            "id": "1",
+            "links": {
+              "self": "/v1/sessions/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/sessions/1"
+          }
+        }
+
+        
+### Update Session [PATCH]
+
++ id (integer) - ID of the record to update **(required)**
++ title (string) - Title of the Session **(required)**
++ subtitle (string) - Subtitle of the Session **(optional)**
++ level (integer) - Level of the Session **(optional)**
++ short_abstract (string) - Short Abstract of the Session **(optional)**
++ long_abstract (string) - Long Abstract of the Session **(optional)**
++ comments (string) - COmments of the Session **(optional)**
++ starts-at (datetime) - Start date of the Session **(required)**
++ ends-at (datetime) - End date of the Session **(required)**
++ language (string) - Language of the Session **(optional)**
++ slides-url (string in proper url) - Slide Url of the Session **(optional)**
++ videos-url (string in proper url) - Video Url of the Session **(optional)**
++ audios-url (string in proper url) - Audio Url of the Session **(optional)**
++ signup-url (string in proper url) - Signup Url of the Session **(optional)**
++ state (string) - State of the Session **(optional)**
++ created-at (datetime) - Date the Session was created **(optional)**
++ deleted-at (datetime) - Date the Session was deleted **(optional)**
++ submitted-at (datetime) - Date the Session was submitted **(optional)**
++ is-mail-sent (boolean) - Yes/No for Session accept/reject email **(optional)**
+
++ Request (application/vnd.api+json)
+    
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "title": "Micropython Session",
+                  "subtitle": null,
+                  "level": 1,
+                  "short_abstract": null,
+                  "long_abstract": null,
+                  "comments": null,
+                  "starts-at": "2017-06-01T10:00:00.500127+00:00",
+                  "ends-at": "2017-06-01T11:00:00.500127+00:00",
+                  "language": "English",
+                  "slides-url": null,
+                  "videos-url": null,
+                  "audios-url": null,
+                  "signup-url": null,
+                  "state": null,
+                  "created-at": "2017-05-01T01:24:47.500127+00:00",
+                  "deleted-at": null,
+                  "submitted-at": null,
+                  "is-mail-sent": false
+                },
+                "type": "session",
+                "id": "21"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/sessions/21/relationships/event",
+                  "related": "/v1/sessions/21/event"
+                }
+              },
+              "track": {
+                "links": {
+                  "self": "/v1/sessions/21/relationships/track",
+                  "related": "/v1/sessions/21/track"
+                }
+              }, 
+              "microlocation": {
+                "links": {
+                  "self": "/v1/sessions/21/relationships/microlocation", 
+                  "related": "/v1/sessions/21/microlocation"
+                }
+              },
+              "session-type": {
+                "links": {
+                  "self": "/v1/sessions/21/relationships/session-type",
+                  "related": "/v1/sessions/21/session-type"
+                }
+              }
+            },
+            "attributes": {
+              "title": "Micropython Session",
+              "subtitle": null,
+              "level": 1,
+              "short_abstract": null,
+              "long_abstract": null,
+              "comments": null,
+              "starts-at": "2017-06-01T10:00:00.500127+00:00",
+              "ends-at": "2017-06-01T11:00:00.500127+00:00",
+              "language": "English",
+              "slides-url": null,
+              "videos-url": null,
+              "audios-url": null,
+              "signup-url": null,
+              "state": null,
+              "created-at": "2017-05-01T01:24:47.500127+00:00",
+              "deleted-at": null,
+              "submitted-at": null,
+              "is-mail-sent": false
+            },
+            "type": "session",
+            "id": "21",
+            "links": {
+              "self": "/v1/sessions/21"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/sessions/21"
+          }
+        }
+
+### Delete Session [DELETE]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
