@@ -2230,3 +2230,262 @@ Authorized user should be same as user in request body or must be admin.
             "version": "1.0"
           }
         }
+
+
+## Event Copyright [/events/{event_id}/event-copyright?page,limit]
++ Parameters
+    + event_id (integer) - ID of the spcific event in integer
+
+### Get Event Copyright [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "event": {
+                  "links": {
+                    "self": "/v1/event-copyright/1/relationships/event",
+                    "related": "/v1/event-copyright/1/event"
+                  }
+                }
+              },
+              "attributes": {
+                "holder": "Name of Holder",
+                "holder-url": "URL for holder",
+                "licence": "Licence text",
+                "licence-url": "Licence URL",
+                "year": "Copyright validity year",
+                "logo-url": "New Brand"
+              },
+              "type": "event_copyright",
+              "id": "1",
+              "links": {
+                "self": "/v1/event-copyright/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/event-copyright"
+          }
+        }
+
+
+### Create Event Copyright [POST]
+
++ holder (string) - Holder Name **(optional)**
++ holder_url (string in proper URL) - URL of the Holder **(optional)**
++ licence (string) - Licence text **(optional)**
++ licence_url (string in proper URL) - URL of the Licence **(optional)**
++ year (string) - Year till which you have copyright **(optional)**
++ logo_url (string) - URL of the logo for the Licence **(optional)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "holder": "Name of Holder",
+                  "holder-url": "URL for holder",
+                  "licence": "Licence text",
+                  "licence-url": "Licence URL",
+                  "year": "Copyright validity year",
+                  "logo-url": "New Brand"
+                },
+                "type": "event_copyright"
+              }
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/event-copyright/5/relationships/event",
+                  "related": "/v1/event-copyright/5/event"
+                }
+              }
+            },
+            "attributes": {
+              "holder": "Name of Holder",
+              "holder-url": "URL for holder",
+              "licence": "Licence text",
+              "licence-url": "Licence URL",
+              "year": "Copyright validity year",
+              "logo-url": "New Brand"
+            },
+            "type": "event-copyright",
+            "id": "5",
+            "links": {
+              "self": "/v1/event-copyright/5"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/event-copyright/5"
+          }
+        }
+
+
+## Event Copyright Details [/event-copyright/{event_copyright_id}]
++ Parameters
+    + event_copyright_id (integer) - ID of the event copyright in the form of an integer
+
+### Event Copyright Details [GET]
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/event-copyright/5/relationships/event",
+                  "related": "/v1/event-copyright/5/event"
+                }
+              }
+            },
+            "attributes": {
+              "holder": "Name of Holder",
+              "holder-url": "URL for holder",
+              "licence": "Licence text",
+              "licence-url": "Licence URL",
+              "year": "Copyright validity year",
+              "logo-url": "New Brand"
+            },
+            "type": "event-copyright",
+            "id": "5",
+            "links": {
+              "self": "/v1/event-copyright/5"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/event-copyright/5"
+          }
+        }
+
+
+### Update Event Copyright [PATCH]
+
++ id (integer) - ID of the record to update **(required)**
+
++ holder (string) - Holder Name **(optional)**
++ holder_url (string in proper URL) - URL of the Holder **(optional)**
++ licence (string) - Licence text **(optional)**
++ licence_url (string in proper URL) - URL of the Licence **(optional)**
++ year (string) - Year till which you have copyright **(optional)**
++ logo_url (string) - URL of the logo for the Licence **(optional)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "holder": "Name of Holder1",
+                  "holder-url": "URL for holder1",
+                  "licence": "Licence text",
+                  "licence-url": "Licence URL",
+                  "year": "Copyright validity year",
+                  "logo-url": "New Brand"
+                },
+                "type": "event_copyright",
+                "id": 5
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/event-copyright/5/relationships/event",
+                  "related": "/v1/event-copyright/5/event"
+                }
+              }
+            },
+            "attributes": {
+              "holder": "Name of Holder1",
+              "holder-url": "URL for holder1",
+              "licence": "Licence text",
+              "licence-url": "Licence URL",
+              "year": "Copyright validity year",
+              "logo-url": "New Brand"
+            },
+            "type": "event-copyright",
+            "id": "5",
+            "links": {
+              "self": "/v1/event-copyright/5"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/event-copyright/5"
+          }
+        }
+
+### Delete Event Copyright [DELETE]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
