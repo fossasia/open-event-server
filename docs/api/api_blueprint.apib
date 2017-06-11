@@ -2858,3 +2858,253 @@ Authorized user should be same as user in request body or must be admin.
             "version": "1.0"
           }
         }
+
+## Speakers Call Collection [/events/{event_id}/speakers-calls?page,limit]
++ Parameters
+    + event_id (integer) - ID of the spcific event in integer
+
+### List All Speakers Calls [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "event": {
+                  "links": {
+                    "self": "/v1/speakers-calls/1/relationships/event",
+                    "related": "/v1/speakers-calls/1/event"
+                  }
+                }
+              },
+              "attributes": {
+                "announcement": "Speaker Call Announcement",
+                "starts-at": "2017-06-01T01:24:47.500127+00:00",
+                "ends-at": "2017-06-20T01:24:47.500127+00:00",
+                "hash": null,
+                "private": null
+              },
+              "type": "speakers-call",
+              "id": "1",
+              "links": {
+                "self": "/v1/speakers-calls/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/speakers-calls"
+          }
+        }
+
+
+### Create Spearkers Call [POST]
+
++ announcement (string) - Announcement for speakers call **(required)**
++ starts-at (datetime) - Start date for speakers call **(required)**
++ ends-at (datetime) - End date for speakers call **(required)**
++ hash (string) - Hash for speakers call **(optional)**
++ privacy (string) - Privacy of speakers call **(optional)**
+
++ Request (application/vnd.api+json)
+    
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+    
+            {
+              "data": {
+                "attributes": {
+                  "announcement": "Speaker Call Announcement",
+                  "starts-at": "2017-06-01T01:24:47.500127+00:00",
+                  "ends-at": "2017-06-20T01:24:47.500127+00:00",
+                  "hash": null,
+                  "private": null
+                },
+                "type": "speakers-call"
+              }
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/speakers-calls/1/relationships/event",
+                  "related": "/v1/speakers-calls/1/event"
+                }
+              }
+            },
+            "attributes": {
+              "announcement": "Speaker Call Announcement",
+              "starts-at": "2017-06-01T01:24:47.500127+00:00",
+              "ends-at": "2017-06-20T01:24:47.500127+00:00",
+              "hash": null,
+              "private": null
+            },
+            "type": "speakers-call",
+            "id": "1",
+            "links": {
+              "self": "/v1/speakers-calls/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/speaker-calls/1"
+          }
+        }
+        
+
+## Speakers Call Details [/speakers-calls/{speakers_call_id}]
++ Parameters
+    + speakers_call_id (integer) - ID of the session in the form of an integer
+
+### Speakers Call Details [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/speakers-calls/1/relationships/event",
+                  "related": "/v1/speakers-calls/1/event"
+                }
+              }
+            },
+            "attributes": {
+              "announcement": "Speaker Call Announcement",
+              "starts-at": "2017-06-01T01:24:47.500127+00:00",
+              "ends-at": "2017-06-20T01:24:47.500127+00:00",
+              "hash": null,
+              "private": null
+            },
+            "type": "speakers-calls",
+            "id": "1",
+            "links": {
+              "self": "/v1/speakers-calls/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/speakers-calls/1"
+          }
+        }
+
+        
+### Update Speakers Call [PATCH]
+
++ id (integer) - ID of the record to update **(required)**
++ announcement (string) - Announcement for speakers call **(required)**
++ starts-at (datetime) - Start date for speakers call **(required)**
++ ends-at (datetime) - End date for speakers call **(required)**
++ hash (string) - Hash for speakers call **(optional)**
++ privacy (string) - Privacy of speakers call **(optional)**
+
++ Request (application/vnd.api+json)
+    
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "announcement": "Speaker Call Announcement",
+                  "starts-at": "2017-06-01T01:24:47.500127+00:00",
+                  "ends-at": "2017-06-20T01:24:47.500127+00:00",
+                  "hash": null,
+                  "private": null
+                },
+                "type": "speakers-call",
+                "id": "1"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/speaker-calls/1/relationships/event",
+                  "related": "/v1/speakers-calls/1/event"
+                }
+              },
+            },
+            "attributes": {
+              "announcement": "Speaker Call Announcement",
+              "starts-at": "2017-06-01T01:24:47.500127+00:00",
+              "ends-at": "2017-06-20T01:24:47.500127+00:00",
+              "hash": null,
+              "private": null
+            },
+            "type": "speakers-call",
+            "id": "1",
+            "links": {
+              "self": "/v1/speakers-call/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/speakers-calls/1"
+          }
+        }
+
+### Delete Speakers Call [DELETE]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
