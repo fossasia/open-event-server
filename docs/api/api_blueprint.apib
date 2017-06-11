@@ -5,7 +5,7 @@ HOST: http://nextgen.eventyay.com
 
 The Open Event API Server
 
-## JWT Auth Key [/auth/session?filter-parameters]
+## JWT Auth Key [/auth/session]
 
 ### JWT Auth Key [POST]
 
@@ -422,6 +422,7 @@ Authorized user should be same as user in request body or must be admin.
         
 ### Update Image Size [PATCH]
 
++ id (integer) - ID of the record to update **(required)**
 
 + Request (application/vnd.api+json)
     
@@ -637,6 +638,8 @@ Authorized user should be same as user in request body or must be admin.
 
         
 ### Update Page [PATCH]
+
++ id (integer) - ID of the record to update **(required)**
 
 + Request (application/vnd.api+json)
     
@@ -1706,17 +1709,17 @@ Authorized user should be same as user in request body or must be admin.
 
 + name (string) - Name of the ticket **(required)**
 + type (string) - Type of the ticket **(required)**
-+ description (string) - Description of the ticket
-+ price (float) - Price of the ticket
-+ quantity (integer) - Total quantity of tickets
-+ description_toggle (boolean) - Yes/No to enter description
-+ position (integer) - Position of the ticket
-+ is-fee-absorbed (boolean) - Yes/No for ticket absorption
-+ sales-starts-at (datetime) - Start date of ticket sale
-+ sales-ends-at (datetime) - End date of ticket sale
-+ is-hidden (boolean) - Yes/No to hide ticket
-+ min-order (integer) - Min order of the ticket
-+ max-order (integer) - Max order of the ticket
++ description (string) - Description of the ticket **(optional)**
++ price (float) - Price of the ticket **(optional)**
++ quantity (integer) - Total quantity of tickets **(optional)**
++ description_toggle (boolean) - Yes/No to enter description **(optional)**
++ position (integer) - Position of the ticket **(optional)**
++ is-fee-absorbed (boolean) - Yes/No for ticket absorption **(optional)**
++ sales-starts-at (datetime) - Start date of ticket sale **(optional)**
++ sales-ends-at (datetime) - End date of ticket sale **(optional)**
++ is-hidden (boolean) - Yes/No to hide ticket **(optional)**
++ min-order (integer) - Min order of the ticket **(optional)**
++ max-order (integer) - Max order of the ticket **(optional)**
 
 + Request (application/vnd.api+json)
     
@@ -1811,7 +1814,7 @@ Authorized user should be same as user in request body or must be admin.
             "relationships": {
               "event": {
                 "links": {
-                  "self": "/v1/tckets/2/relationships/event",
+                  "self": "/v1/tickets/2/relationships/event",
                   "related": "/v1/tickets/2/event"
                 }
               }
@@ -1934,7 +1937,281 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
-### Delete ticket [DELETE]
+### Delete Ticket [DELETE]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
+## Microlocation Collection [/events/{event_id}/microlocations?page,limit]
++ Parameters
+    + event_id (integer) - ID of the spcific event in integer
+
+### List All Microlocations [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "event": {
+                  "links": {
+                    "self": "/v1/microlocations/1/relationships/event",
+                    "related": "/v1/microlocations/1/event"
+                  }
+                },
+                 "sessions": {
+                  "links": {
+                    "self": "/v1/microlocations/1/relationships/sessions",
+                    "related": "/v1/microlocations/1/sessions"
+                  }
+                }
+              },
+              "attributes": {
+                "name": "microlocation-name",
+                "latitude": null,
+                "longitude": null,
+                "floor": 2,
+                "room": "room1"
+              },
+              "type": "microlocation",
+              "id": "1",
+              "links": {
+                "self": "/v1/microlocations/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/microlocations"
+          }
+        }
+
+
+### Create Microlocation [POST]
+
++ name (string) - Name of the microlocation **(required)**
++ latitude (float) - Latitude of the microlocation **(optional)**
++ longitude (float) - Longitude of the microlocation **(optional)**
++ floor (integer) - Floor of the microlocation **(optional)**
++ room (string) - Room of the microlocation **(optional)**
+
++ Request (application/vnd.api+json)
+    
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+    
+            {
+              "data": {
+                "attributes": {
+                  "name": "microlocation-name",
+                  "latitude": null,
+                  "longitude": null,
+                  "floor": 2,
+                  "room": "room1"
+                },
+                "type": "microlocation"
+              }
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/microlocations/1/relationships/event",
+                  "related": "/v1/microlocations/1/event"
+                }
+              },
+              "sessions": {
+                "links": {
+                  "self": "/v1/microlocations/1/relationships/sessions",
+                  "related": "/v1/microlocations/1/sessions"
+                }
+              }
+            },
+            "attributes": {
+              "name": "microlocation-name",
+              "latitude": null,
+              "longitude": null,
+              "floor": 2,
+              "room": "room1"
+            },
+            "type": "microlocation",
+            "id": "1",
+            "links": {
+              "self": "/v1/microlocations/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/microlocations/1"
+          }
+        }
+        
+
+## Microlocation Details [/microlocations/{microlocation_id}]
++ Parameters
+    + microlocation_id (integer) - ID of the ticket in the form of an integer
+
+### Mictolocation Details [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/microlocations/1/relationships/event",
+                  "related": "/v1/microlocations/1/event"
+                }
+              },
+              "sessions": {
+                "links": {
+                  "self": "/v1/microlocations/1/relationships/sessions",
+                  "related": "/v1/microlocations/1/sessions"
+                }
+              }
+            },
+            "attributes": {
+              "name": "microlocation-name",
+              "latitude": null,
+              "longitude": null,
+              "floor": 2,
+              "room": "room1"
+            },
+            "type": "microlocation",
+            "id": "2",
+            "links": {
+              "self": "/v1/microlocations/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/microlocations/1"
+          }
+        }
+
+        
+### Update Microlocation [PATCH]
+
++ id (integer) - ID of the record to update **(required)**
++ name (string) - Name of the microlocation **(required)**
++ latitude (float) - Latitude of the microlocation **(optional)**
++ longitude (float) - Longitude of the microlocation **(optional)**
++ floor (integer) - Floor of the microlocation **(optional)**
++ room (string) - Room of the microlocation **(optional)**
+
++ Request (application/vnd.api+json)
+    
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "name": "microlocation-name",
+                  "latitude": null,
+                  "longitude": null,
+                  "floor": 2,
+                  "room": "room1"
+                },
+                "type": "microlocation",
+                "id": "1"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/microlocations/1/relationships/event",
+                  "related": "/v1/microlocations/1/event"
+                }
+              },
+              "sessions": {
+                "links": {
+                  "self": "/v1/microlocations/1/relationships/sessions",
+                  "related": "/v1/microlocations/1/sessions"
+                }
+              }
+            },
+            "attributes": {
+              "name": "microlocation-name",
+              "latitude": null,
+              "longitude": null,
+              "floor": 2,
+              "room": "room1"
+            },
+            "type": "microlocation",
+            "id": "1",
+            "links": {
+              "self": "/v1/microlocations/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/microlocations/1"
+          }
+        }
+
+### Delete Microlocation [DELETE]
 
 + Request
 
