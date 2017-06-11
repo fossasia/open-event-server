@@ -5,7 +5,7 @@ HOST: http://nextgen.eventyay.com
 
 The Open Event API Server
 
-## JWT Auth Key [/auth/session?filter-parameters]
+## JWT Auth Key [/auth/session]
 
 ### JWT Auth Key [POST]
 
@@ -347,27 +347,20 @@ Authorized user should be same as user in request body or must be admin.
             {
               "data": {
                 "attributes": {
-                  "created-at": "2017-06-01T01:24:47.500127+00:00",
-                  "google": null,
-                  "instagram": null,
-                  "firstname": null,
-                  "lastname": null,
-                  "twitter": null,
-                  "signup-at": "2017-06-01T01:25:07.385816+00:00",
-                  "is-super-admin": true,
-                  "thumbnail": null,
-                  "email": "me@ipiyush.com",
-                  "avatar": null,
-                  "contact": null,
-                  "is-admin": true,
-                  "details": null,
-                  "last-accessed-at": null,
-                  "small": null,
-                  "facebook": null,
-                  "deleted-at": null,
-                  "is-verified": true,
-                  "avatar-uploaded": null,
-                  "icon": null
+                  "full-width": 1300,
+                  "full-height": 500,
+                  "full-aspect": null,
+                  "full-quality": 80,
+                  "icon-width": 75,
+                  "icon-height": 30,
+                  "icon-aspect": null,
+                  "icon-quality": 80,
+                  "thumbnail-width": 500,
+                  "thumbnail-height": 200,
+                  "thumbnail-aspect": null,
+                  "thumbnail-quality": 80,
+                  "logo-width": null,
+                  "logo-height": null
                 },
                 "type": "image-size"
               }
@@ -429,6 +422,7 @@ Authorized user should be same as user in request body or must be admin.
         
 ### Update Image Size [PATCH]
 
++ id (integer) - ID of the record to update **(required)**
 
 + Request (application/vnd.api+json)
     
@@ -564,7 +558,6 @@ Authorized user should be same as user in request body or must be admin.
 
 ### Create Page [POST]
 
- (For Events and Speakers)
 + name (string)- Name of the page **(required)**
 + title (string)- Title of the page 
 + url (url)- Url of the page **(required)**
@@ -645,6 +638,8 @@ Authorized user should be same as user in request body or must be admin.
 
         
 ### Update Page [PATCH]
+
++ id (integer) - ID of the record to update **(required)**
 
 + Request (application/vnd.api+json)
     
@@ -881,7 +876,6 @@ Authorized user should be same as user in request body or must be admin.
             "version": "1.0"
           }
         }
-
 
 ## Sponsors Collection [/events/{event_id}/sponsors?page,limit]
 + Parameters
@@ -1629,6 +1623,594 @@ Authorized user should be same as user in request body or must be admin.
         }
 
 ### Delete Social Link [DELETE]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
+## Tickets Collection [/events/{event_id}/tickets?page,limit]
++ Parameters
+    + event_id (integer) - ID of the spcific event in integer
+
+### List All Tickets [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "event": {
+                  "links": {
+                    "self": "/v1/tickets/1/relationships/event",
+                    "related": "/v1/tickets/1/event"
+                  }
+                }
+              },
+              "attributes": {
+                "name": "ticket-name",
+                "description": "some description",
+                "type": "VIP-ticket",
+                "price": 100.00,
+                "quantity": 100,
+                "description_toggle": False,
+                "position": null,
+                "is-fee-absorbed": null,
+                "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
+                "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
+                "is-hidden": False,
+                "min-order": 1,
+                "max-order": 100
+              },
+              "type": "ticket",
+              "id": "1",
+              "links": {
+                "self": "/v1/tickets/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/tickets"
+          }
+        }
+
+
+### Create Ticket [POST]
+
++ name (string) - Name of the ticket **(required)**
++ type (string) - Type of the ticket **(required)**
++ description (string) - Description of the ticket **(optional)**
++ price (float) - Price of the ticket **(optional)**
++ quantity (integer) - Total quantity of tickets **(optional)**
++ description_toggle (boolean) - Yes/No to enter description **(optional)**
++ position (integer) - Position of the ticket **(optional)**
++ is-fee-absorbed (boolean) - Yes/No for ticket absorption **(optional)**
++ sales-starts-at (datetime) - Start date of ticket sale **(optional)**
++ sales-ends-at (datetime) - End date of ticket sale **(optional)**
++ is-hidden (boolean) - Yes/No to hide ticket **(optional)**
++ min-order (integer) - Min order of the ticket **(optional)**
++ max-order (integer) - Max order of the ticket **(optional)**
+
++ Request (application/vnd.api+json)
+    
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+    
+            {
+              "data": {
+                "attributes": {
+                  "name": "ticket-name",
+                  "description": "some description",
+                  "type": "VIP-ticket",
+                  "price": 100.00,
+                  "quantity": 100,
+                  "description-toggle": false,
+                  "position": null,
+                  "is-fee-absorbed": null,
+                  "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
+                  "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
+                  "is-hidden": false,
+                  "min-order": 1,
+                  "max-order": 100
+                },
+                "type": "ticket"
+              }
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/tickets/2/relationships/event",
+                  "related": "/v1/tickets/2/event"
+                }
+              }
+            },
+            "attributes": {
+              "name": "ticket_name",
+              "description": "some description",
+              "type": "VIP_ticket",
+              "price": 100.00,
+              "quantity": 100,
+              "description-toggle": false,
+              "position": null,
+              "is-fee-absorbed": null,
+              "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
+              "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
+              "is-hidden": false,
+              "min-order": 1,
+              "max-order": 100
+            },
+            "type": "ticket",
+            "id": "2",
+            "links": {
+              "self": "/v1/tickets/2"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/tickets/2"
+          }
+        }
+        
+
+## Ticket Details [/tickets/{ticket_id}]
++ Parameters
+    + ticket_id (integer) - ID of the ticket in the form of an integer
+
+### Ticket Details [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/tickets/2/relationships/event",
+                  "related": "/v1/tickets/2/event"
+                }
+              }
+            },
+            "attributes": {
+              "name": "ticket_name",
+              "description": "some description",
+              "type": "VIP_ticket",
+              "price": 100.00,
+              "quantity": 100,
+              "description-toggle": false,
+              "position": null,
+              "is-fee-absorbed": null,
+              "sales-starts_at": "2017-06-01T01:24:47.500127+00:00",
+              "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
+              "is-hidden": false,
+              "min-order": 1,
+              "max-order": 100
+            },
+            "type": "ticket",
+            "id": "2",
+            "links": {
+              "self": "/v1/tickets/2"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/tickets/2"
+          }
+        }
+
+        
+### Update Ticket [PATCH]
+
++ id (integer) - ID of the record to update **(required)**
++ name (string) - Name of the ticket **(required)**
++ type (string) - Type of the ticket **(required)**
++ description (string) - Description of the ticket **(optional)**
++ price (float) - Price of the ticket **(optional)**
++ quantity (integer) - Total quantity of tickets **(optional)**
++ description-toggle (boolean) - Yes/No to enter description **(optional)**
++ position (integer) - Position of the ticket **(optional)**
++ is-fee-absorbed (boolean) - Yes/No for ticket absorption **(optional)**
++ sales-starts-at (datetime) - Start date of ticket sale **(optional)**
++ sales-ends-at (datetime) - End date of ticket sale **(optional)**
++ is-hidden (boolean) - Yes/No to hide ticket **(optional)**
++ min-order (integer) - Min order of the ticket **(optional)**
++ max-order (integer) - Max order of the ticket **(optional)**
+
++ Request (application/vnd.api+json)
+    
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "name": "ticket_name",
+                  "description": "some description",
+                  "type": "VIP_ticket",
+                  "price": 100.00,
+                  "quantity": 100,
+                  "description-toggle": false,
+                  "position": null,
+                  "is-fee-absorbed": null,
+                  "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
+                  "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
+                  "is-hidden": false,
+                  "min-order": 1,
+                  "max-order": 100
+                },
+                "type": "ticket",
+                "id": "2"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/tickets/2/relationships/event",
+                  "related": "/v1/tickets/2/event"
+                }
+              }
+            },
+            "attributes": {
+              "name": "ticket_name",
+              "description": "some description",
+              "type": "VIP_ticket",
+              "price": 100.00,
+              "quantity": 100,
+              "description_toggle": false,
+              "position": null,
+              "is-fee-absorbed": null,
+              "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
+              "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
+              "is-hidden": false,
+              "min-order": 1,
+              "max-order": 100
+            },
+            "type": "ticket",
+            "id": "2",
+            "links": {
+              "self": "/v1/tickets/2"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/tickets/2"
+          }
+        }
+
+### Delete Ticket [DELETE]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
+## Microlocation Collection [/events/{event_id}/microlocations?page,limit]
++ Parameters
+    + event_id (integer) - ID of the spcific event in integer
+
+### List All Microlocations [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "event": {
+                  "links": {
+                    "self": "/v1/microlocations/1/relationships/event",
+                    "related": "/v1/microlocations/1/event"
+                  }
+                },
+                 "sessions": {
+                  "links": {
+                    "self": "/v1/microlocations/1/relationships/sessions",
+                    "related": "/v1/microlocations/1/sessions"
+                  }
+                }
+              },
+              "attributes": {
+                "name": "microlocation-name",
+                "latitude": null,
+                "longitude": null,
+                "floor": 2,
+                "room": "room1"
+              },
+              "type": "microlocation",
+              "id": "1",
+              "links": {
+                "self": "/v1/microlocations/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/microlocations"
+          }
+        }
+
+
+### Create Microlocation [POST]
+
++ name (string) - Name of the microlocation **(required)**
++ latitude (float) - Latitude of the microlocation **(optional)**
++ longitude (float) - Longitude of the microlocation **(optional)**
++ floor (integer) - Floor of the microlocation **(optional)**
++ room (string) - Room of the microlocation **(optional)**
+
++ Request (application/vnd.api+json)
+    
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+    
+            {
+              "data": {
+                "attributes": {
+                  "name": "microlocation-name",
+                  "latitude": null,
+                  "longitude": null,
+                  "floor": 2,
+                  "room": "room1"
+                },
+                "type": "microlocation"
+              }
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/microlocations/1/relationships/event",
+                  "related": "/v1/microlocations/1/event"
+                }
+              },
+              "sessions": {
+                "links": {
+                  "self": "/v1/microlocations/1/relationships/sessions",
+                  "related": "/v1/microlocations/1/sessions"
+                }
+              }
+            },
+            "attributes": {
+              "name": "microlocation-name",
+              "latitude": null,
+              "longitude": null,
+              "floor": 2,
+              "room": "room1"
+            },
+            "type": "microlocation",
+            "id": "1",
+            "links": {
+              "self": "/v1/microlocations/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/microlocations/1"
+          }
+        }
+        
+
+## Microlocation Details [/microlocations/{microlocation_id}]
++ Parameters
+    + microlocation_id (integer) - ID of the ticket in the form of an integer
+
+### Mictolocation Details [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/microlocations/1/relationships/event",
+                  "related": "/v1/microlocations/1/event"
+                }
+              },
+              "sessions": {
+                "links": {
+                  "self": "/v1/microlocations/1/relationships/sessions",
+                  "related": "/v1/microlocations/1/sessions"
+                }
+              }
+            },
+            "attributes": {
+              "name": "microlocation-name",
+              "latitude": null,
+              "longitude": null,
+              "floor": 2,
+              "room": "room1"
+            },
+            "type": "microlocation",
+            "id": "2",
+            "links": {
+              "self": "/v1/microlocations/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/microlocations/1"
+          }
+        }
+
+        
+### Update Microlocation [PATCH]
+
++ id (integer) - ID of the record to update **(required)**
++ name (string) - Name of the microlocation **(required)**
++ latitude (float) - Latitude of the microlocation **(optional)**
++ longitude (float) - Longitude of the microlocation **(optional)**
++ floor (integer) - Floor of the microlocation **(optional)**
++ room (string) - Room of the microlocation **(optional)**
+
++ Request (application/vnd.api+json)
+    
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "name": "microlocation-name",
+                  "latitude": null,
+                  "longitude": null,
+                  "floor": 2,
+                  "room": "room1"
+                },
+                "type": "microlocation",
+                "id": "1"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/microlocations/1/relationships/event",
+                  "related": "/v1/microlocations/1/event"
+                }
+              },
+              "sessions": {
+                "links": {
+                  "self": "/v1/microlocations/1/relationships/sessions",
+                  "related": "/v1/microlocations/1/sessions"
+                }
+              }
+            },
+            "attributes": {
+              "name": "microlocation-name",
+              "latitude": null,
+              "longitude": null,
+              "floor": 2,
+              "room": "room1"
+            },
+            "type": "microlocation",
+            "id": "1",
+            "links": {
+              "self": "/v1/microlocations/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/microlocations/1"
+          }
+        }
+
+### Delete Microlocation [DELETE]
 
 + Request
 
