@@ -20,6 +20,7 @@ class Notification(db.Model):
     """
     Model for storing user notifications.
     """
+    __tablename__ = 'notifications'
 
     id = db.Column(db.Integer, primary_key=True)
 

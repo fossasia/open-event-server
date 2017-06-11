@@ -15,7 +15,6 @@ from PIL import Image
 from flask import flash, url_for, g, current_app
 import flask_login as login
 from flask_scrypt import generate_password_hash, generate_random_salt
-from flask_socketio import emit
 from requests_oauthlib import OAuth2Session
 
 from app.helpers.assets.images import get_image_file_name, get_path_of_temp_url
@@ -83,20 +82,7 @@ class DataManager(object):
         """
         Push user notification using websockets.
         """
-        if not current_app.config.get('INTEGRATE_SOCKETIO', False):
-            return False
         user_room = 'user_{}'.format(user.id)
-        emit('notifs-response',
-             {'meta': 'New notifications',
-              'notif_count': user.get_unread_notif_count(),
-              'notifs': user.get_unread_notifs()},
-             room=user_room,
-             namespace='/notifs')
-        emit('notifpage-response',
-             {'meta': 'New notifpage notifications',
-              'notif': DataGetter.get_latest_notif(user)},
-             room=user_room,
-             namespace='/notifpage')
 
     @staticmethod
     def mark_user_notification_as_read(notification):
@@ -197,6 +183,7 @@ class DataManager(object):
     def add_session_to_event(request, event_id, state=None, use_current_user=True, no_name=False):
         """
         Session will be saved to database with proper Event id
+        :param no_name:
         :param use_current_user:
         :param state:
         :param request: The request
@@ -333,6 +320,7 @@ class DataManager(object):
     def add_speaker_to_event(request, event_id, user=login.current_user, no_name=False):
         """
         Speaker will be saved to database with proper Event id
+        :param no_name:
         :param user:
         :param request: view data form
         :param event_id: Speaker belongs to Event by event id
@@ -435,7 +423,7 @@ class DataManager(object):
 
             for current_speaker_id in current_speaker_ids:
                 if current_speaker_id \
-                     not in existing_speaker_ids and current_speaker_id not in existing_speaker_ids_by_email:
+                    not in existing_speaker_ids and current_speaker_id not in existing_speaker_ids_by_email:
                     current_speaker = DataGetter.get_speaker(current_speaker_id)
                     session.speakers.remove(current_speaker)
                     db.session.commit()
@@ -811,7 +799,8 @@ def save_to_db(item, msg="Saved to db", print_error=True):
         return True
     except Exception, e:
         if print_error:
-            print e
+            print
+            e
             traceback.print_exc()
         logging.error('DB Exception! %s' % e)
         db.session.rollback()

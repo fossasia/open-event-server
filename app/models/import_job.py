@@ -1,5 +1,5 @@
 from datetime import datetime
-
+import pytz
 from app.models import db
 
 
@@ -20,7 +20,7 @@ class ImportJob(db.Model):
         self.user = user
         self.result = result
         self.result_status = result_status
-        self.starts_at = datetime.now()
+        self.starts_at = datetime.now(pytz.utc)
 
     def __repr__(self):
         return '<ImportJob %d by user %s>' % (self.id, str(self.user))

@@ -185,7 +185,8 @@ def save_event_from_json(json, event_id=None):
     event.ticket_include = event_data['ticket_include']
 
     if event.ticket_include:
-        event.ticket_url = url_for('event_detail.display_event_detail_home', identifier=event.identifier, _external=True)
+        event.ticket_url = url_for('event_detail.display_event_detail_home', identifier=event.identifier,
+                                   _external=True)
         save_tickets(event_data['tickets'], event)
     else:
         event.ticket_url = event_data['ticket_url']
@@ -448,7 +449,8 @@ def save_social_links(social_links, event):
                 social_link['link'] = social_link['link']
             social_exists = SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).scalar()
             if social_exists:
-                SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).update({'link': social_link['link']})
+                SocialLink.query.filter_by(name=social_link['name'], event_id=event.id).update(
+                    {'link': social_link['link']})
             else:
                 social = SocialLink(social_link['name'], social_link['link'], event.id)
                 db.session.add(social)

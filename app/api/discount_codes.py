@@ -60,7 +60,7 @@ class DiscountCodeList(ResourceList):
             data['event_id'] = event.id
 
     view_kwargs = True
-    decorators = (jwt_required,  )
+    decorators = (jwt_required,)
     schema = DiscountCodeSchema
     data_layer = {'session': db.session,
                   'model': DiscountCode,
@@ -83,7 +83,7 @@ class DiscountCodeRelationship(ResourceRelationship):
     """
     Discount Code Relationship
     """
-    decorators = (jwt_required,  )
+    decorators = (jwt_required,)
     schema = DiscountCodeSchema
     data_layer = {'session': db.session,
                   'model': DiscountCode}

@@ -10,9 +10,7 @@ def new_send(self, *sender, **kwargs):
     """Emit this signal on behalf of *sender*, passing on \*\*kwargs.
     Returns a list of 2-tuples, pairing receivers with their return
     value. The ordering of receiver notification is undefined.
-    :param \*sender: Any object or ``None``.  If omitted, synonymous
-      with ``None``.  Only accepts one positional argument.
-    :param \*\*kwargs: Data to be sent to receivers.
+    :param self:
     """
     # Using '*sender' rather than 'sender=None' allows 'sender' to be
     # used as a keyword argument- i.e. it's an invisible name in the

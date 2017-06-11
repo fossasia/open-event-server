@@ -430,7 +430,8 @@ def send_email(to, action, subject, html):
                 payload['fromname'] = email_from_name
                 key = get_settings()['sendgrid_key']
                 if not key and not current_app.config['TESTING']:
-                    print 'Sendgrid key not defined'
+                    print
+                    'Sendgrid key not defined'
                     return
                 headers = {
                     "Authorization": ("Bearer " + key)
@@ -506,7 +507,8 @@ def send_notif_for_resend(user, invoice_id, order_url, event_name, buyer_email):
     send_notification(
         user=user,
         action=NOTIF_TICKET_RESEND_ORGANIZER,
-        title=NOTIFS[NOTIF_TICKET_RESEND_ORGANIZER]['title'].format(invoice_id=invoice_id, event_name=event_name, buyer_email=buyer_email),
+        title=NOTIFS[NOTIF_TICKET_RESEND_ORGANIZER]['title'].format(invoice_id=invoice_id, event_name=event_name,
+                                                                    buyer_email=buyer_email),
         message=NOTIFS[NOTIF_TICKET_RESEND_ORGANIZER]['message'].format(order_url=order_url)
     )
 

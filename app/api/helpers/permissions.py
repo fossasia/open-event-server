@@ -12,14 +12,18 @@ def second_order_decorator(inner_dec):
     :param inner_dec:
     :return:
     """
+
     def ddmain(outer_dec):
         def decwrapper(f):
             wrapped = inner_dec(outer_dec(f))
 
             def fwrapper(*args, **kwargs):
                 return wrapped(*args, **kwargs)
+
             return fwrapper
+
         return decwrapper
+
     return ddmain
 
 
@@ -27,12 +31,15 @@ def jwt_required(fn, realm=None):
     """
     Modified from original jwt_required to comply with `flask-rest-jsonapi` decorator conventions
     View decorator that requires a valid JWT token to be present in the request
+    :param fn:
     :param realm: an optional realm
     """
+
     @wraps(fn)
     def decorator(*args, **kwargs):
         _jwt_required(realm or app.config['JWT_DEFAULT_REALM'])
         return fn(*args, **kwargs)
+
     return decorator
 
 
@@ -44,6 +51,7 @@ def is_super_admin(f):
     :param f:
     :return:
     """
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         user = current_identity
@@ -61,6 +69,7 @@ def is_admin(f):
     :param f:
     :return:
     """
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         user = current_identity
@@ -79,6 +88,7 @@ def is_user_itself(f):
     :param f:
     :return:
     """
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         user = current_identity
@@ -96,6 +106,7 @@ def is_organizer(f):
     :param f:
     :return:
     """
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         user = current_identity
@@ -116,6 +127,7 @@ def is_coorganizer(f):
     :param f:
     :return:
     """
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         user = current_identity
@@ -138,6 +150,7 @@ def is_registrar(f):
     :param f:
     :return:
     """
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         user = current_identity
@@ -145,8 +158,8 @@ def is_registrar(f):
         if user.is_staff:
             return f(*args, **kwargs)
         if 'event_id' in kwargs and (
-                user.is_registrar(kwargs['event_id']) or
-                user.is_organizer(kwargs['event_id']) or
+                    user.is_registrar(kwargs['event_id']) or
+                    user.is_organizer(kwargs['event_id']) or
                 user.is_coorganizer(kwargs['event_id'])):
             return f(*args, **kwargs)
         return ForbiddenError({'source': ''}, 'Registrar Access is Required.').respond()
@@ -161,6 +174,7 @@ def is_track_organizer(f):
     :param f:
     :return:
     """
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         user = current_identity
@@ -168,8 +182,8 @@ def is_track_organizer(f):
         if user.is_staff:
             return f(*args, **kwargs)
         if 'event_id' in kwargs and (
-                user.is_track_organizer(kwargs['event_id']) or
-                user.is_organizer(kwargs['event_id']) or
+                    user.is_track_organizer(kwargs['event_id']) or
+                    user.is_organizer(kwargs['event_id']) or
                 user.is_coorganizer(kwargs['event_id'])):
             return f(*args, **kwargs)
         return ForbiddenError({'source': ''}, 'Track Organizer access is Required.').respond()
@@ -184,6 +198,7 @@ def is_moderator(f):
     :param f:
     :return:
     """
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         user = current_identity
@@ -191,13 +206,14 @@ def is_moderator(f):
         if user.is_staff:
             return f(*args, **kwargs)
         if 'event_id' in kwargs and (
-                user.is_moderator(kwargs['event_id']) or
-                user.is_organizer(kwargs['event_id']) or
+                    user.is_moderator(kwargs['event_id']) or
+                    user.is_organizer(kwargs['event_id']) or
                 user.is_coorganizer(kwargs['event_id'])):
             return f(*args, **kwargs)
         return ForbiddenError({'source': ''}, 'Moderator Access is Required.').respond()
 
     return decorated_function
+
 
 @second_order_decorator(jwt_required)
 def accessible_events(f):
@@ -208,6 +224,7 @@ def accessible_events(f):
     :param f:
     :return:
     """
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         user = current_identity

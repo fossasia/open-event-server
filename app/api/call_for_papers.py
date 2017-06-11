@@ -56,17 +56,6 @@ class CallForPaperList(ResourceList):
             event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
             data['event_id'] = event.id
 
-    def after_get(self, result):
-        tz = pytz.timezone(result['data'][0]['attributes']['timezone'])
-        start_date_str = result['data'][0]['attributes']['start_date']
-        start_date_datetime = dateutil.parser.parse(start_date_str)
-        start_date_datetime = tz.localize(start_date_datetime.replace(tzinfo=None))
-        result['data'][0]['attributes']['start_date'] = start_date_datetime.isoformat()
-        end_date_str = result['data'][0]['attributes']['end_date']
-        end_date_datetime = dateutil.parser.parse(end_date_str)
-        end_date_datetime = tz.localize(end_date_datetime.replace(tzinfo=None))
-        result['data'][0]['attributes']['end_date'] = end_date_datetime.isoformat()
-
     view_kwargs = True
     decorators = (jwt_required, )
     schema = CallForPaperSchema
@@ -82,18 +71,6 @@ class CallForPaperDetail(ResourceDetail):
     """
     cfs detail by id
     """
-
-    def after_get(self, result):
-        tz = pytz.timezone(result['data']['attributes']['timezone'])
-        start_date_str = result['data']['attributes']['start_date']
-        start_date_datetime = dateutil.parser.parse(start_date_str)
-        start_date_datetime = tz.localize(start_date_datetime.replace(tzinfo=None))
-        result['data']['attributes']['start_date'] = start_date_datetime.isoformat()
-        end_date_str = result['data']['attributes']['end_date']
-        end_date_datetime = dateutil.parser.parse(end_date_str)
-        end_date_datetime = tz.localize(end_date_datetime.replace(tzinfo=None))
-        result['data']['attributes']['end_date'] = end_date_datetime.isoformat()
-
     decorators = (jwt_required,)
     schema = CallForPaperSchema
     data_layer = {'session': db.session,

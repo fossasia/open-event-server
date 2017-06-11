@@ -16,7 +16,6 @@ class Setup(object):
     @staticmethod
     def create_app():
         app.config.from_object('config.TestingConfig')
-        app.config['INTEGRATE_SOCKETIO'] = False
         app.secret_key = 'super secret key'
         app.logger.addHandler(logging.StreamHandler(sys.stdout))
         app.logger.setLevel(logging.ERROR)

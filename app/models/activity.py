@@ -1,5 +1,5 @@
 from datetime import datetime
-
+import pytz
 from app.models import db
 
 ACTIVITIES = {
@@ -50,11 +50,11 @@ class Activity(db.Model):
         self.actor = actor
         self.time = time
         if self.time is None:
-            self.time = datetime.now()
+            self.time = datetime.now(pytz.utc)
         self.action = action
 
     def __repr__(self):
-        return '<Activity by %s>' % (self.actor)
+        return '<Activity by %s>' % self.actor
 
     def __str__(self):
         return unicode(self).encode('utf-8')

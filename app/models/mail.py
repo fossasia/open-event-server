@@ -1,5 +1,5 @@
 from datetime import datetime
-
+import pytz
 from app.models import db
 
 USER_REGISTER = 'User Registration'
@@ -41,7 +41,7 @@ class Mail(db.Model):
         self.recipient = recipient
         self.time = time
         if self.time is None:
-            self.time = datetime.now()
+            self.time = datetime.now(pytz.utc)
         self.action = action
         self.subject = subject
         self.message = message

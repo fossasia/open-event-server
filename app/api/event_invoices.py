@@ -12,7 +12,6 @@ from app.models.discount_code import DiscountCode
 
 
 class EventInvoiceSchema(Schema):
-
     class Meta:
         type_ = 'event_invoice'
         self_view = 'v1.event_invoice_detail'
@@ -54,12 +53,12 @@ class EventInvoiceSchema(Schema):
                          schema='EventSchema',
                          type_='event')
     discount_codes = Relationship(attribute='discount_code',
-                         self_view='v1.event_invoice_discount_code',
-                         self_view_kwargs={'id': '<id>'},
-                         related_view='v1.discount_code_detail',
-                         related_view_kwargs={'event_invoice_id': '<id>'},
-                         schema='DiscountCodeSchema',
-                         type_='discount_code')
+                                  self_view='v1.event_invoice_discount_code',
+                                  self_view_kwargs={'id': '<id>'},
+                                  related_view='v1.discount_code_detail',
+                                  related_view_kwargs={'event_invoice_id': '<id>'},
+                                  schema='DiscountCodeSchema',
+                                  type_='discount_code')
 
 
 class EventInvoiceList(ResourceList):
@@ -89,7 +88,7 @@ class EventInvoiceList(ResourceList):
             data['discount_code_id'] = discount_code.id
 
     view_kwargs = True
-    decorators = (is_admin, )
+    decorators = (is_admin,)
     schema = EventInvoiceSchema
     data_layer = {'session': db.session,
                   'model': EventInvoice,
@@ -102,7 +101,7 @@ class EventInvoiceDetail(ResourceDetail):
     """
     Event Invoice detail by id
     """
-    decorators = (is_admin, )
+    decorators = (is_admin,)
     schema = EventInvoiceSchema
     data_layer = {'session': db.session,
                   'model': EventInvoice}
@@ -112,7 +111,7 @@ class EventInvoiceRelationship(ResourceRelationship):
     """
     Event Invoice Relationship
     """
-    decorators = (is_admin, )
+    decorators = (is_admin,)
     schema = EventInvoiceSchema
     data_layer = {'session': db.session,
                   'model': EventInvoice}

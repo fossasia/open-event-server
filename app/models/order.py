@@ -10,6 +10,7 @@ class OrderTicket(db.Model):
     ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE'), primary_key=True)
     quantity = db.Column(db.Integer)
 
+
 class Order(db.Model):
     __tablename__ = "orders"
 

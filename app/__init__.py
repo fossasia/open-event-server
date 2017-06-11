@@ -12,7 +12,6 @@ from app.helpers.scheduled_jobs import send_mail_to_expired_orders, empty_trash,
 
 from celery import Celery
 from celery.signals import after_task_publish
-from flask_htmlmin import HTMLMIN
 import logging
 import os.path
 from os import environ
@@ -44,17 +43,12 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from app.helpers.data import DataManager, delete_from_db
 from app.helpers.helpers import send_after_event
 from app.helpers.cache import cache
-from app.helpers.babel import babel
 from helpers.helpers import send_email_for_expired_orders
 from werkzeug.contrib.profiler import ProfilerMiddleware
 from app.views import BlueprintsManager
 from flask_sqlalchemy import get_debug_queries
 from app.helpers.auth import AuthManager
 
-from app.helpers.flask_ext.error_handlers import init_error_handlers
-from app.helpers.flask_ext.jinja.filters import init_filters
-from app.helpers.flask_ext.jinja.helpers import init_helpers
-from app.helpers.flask_ext.jinja.variables import init_variables
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -82,7 +76,6 @@ app.wsgi_app = ReverseProxied(app.wsgi_app)
 
 
 def create_app():
-    babel.init_app(app)
     BlueprintsManager.register(app)
     Migrate(app, db)
 
@@ -99,7 +92,6 @@ def create_app():
     stripe.api_key = 'SomeStripeKey'
     app.secret_key = 'super secret key'
     app.json_encoder = MiniJSONEncoder
-    app.config['BABEL_DEFAULT_LOCALE'] = 'en'
     app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
     app.config['FILE_SYSTEM_STORAGE_FILE_VIEW'] = 'static'
 
@@ -120,7 +112,6 @@ def create_app():
     app.config['CELERY_BROKER_URL'] = environ.get('REDIS_URL', 'redis://localhost:6379/0')
     app.config['CELERY_RESULT_BACKEND'] = app.config['CELERY_BROKER_URL']
 
-    HTMLMIN(app)
     CORS(app, resources={r"/api/*": {"origins": "*"}})
     AuthManager.init_login(app)
 
@@ -139,11 +130,6 @@ def create_app():
 
 
 current_app, manager, database, jwt = create_app()
-
-init_filters(app)
-init_helpers(app)
-init_variables(app)
-init_error_handlers(app)
 
 
 # http://stackoverflow.com/questions/26724623/
@@ -201,49 +187,5 @@ scheduler.add_job(send_event_fee_notification, 'cron', day=1)
 scheduler.add_job(send_event_fee_notification_followup, 'cron', day=15)
 scheduler.start()
 
-
-# Testing database performance
-@app.after_request
-def after_request(response):
-    if app.config['SQLALCHEMY_RECORD_QUERIES']:
-        for query in get_debug_queries():
-            if query.duration >= app.config['DATABASE_QUERY_TIMEOUT']:
-                app.logger.warning("SLOW QUERY: %s\nParameters: %s\nDuration: %fs\nContext: %s\n" % (query.statement,
-                                                                                                     query.parameters,
-                                                                                                     query.duration,
-                                                                                                     query.context))
-    return response
-
-
-# Flask-SocketIO integration
-socketio = None
-if current_app.config.get('INTEGRATE_SOCKETIO', False):
-    from eventlet import monkey_patch
-    from flask_socketio import SocketIO, emit, join_room
-
-    monkey_patch()
-
-    async_mode = 'eventlet'
-    socketio = SocketIO(current_app, async_mode=async_mode)
-
-
-    @socketio.on('connect', namespace='/notifs')
-    def connect_handler_notifs():
-        if current_user.is_authenticated():
-            user_room = 'user_{}'.format(session['user_id'])
-            join_room(user_room)
-            emit('notifs-response', {'meta': 'WS connected'}, namespace='/notifs')
-
-
-    @socketio.on('connect', namespace='/notifpage')
-    def connect_handler_notif_page():
-        if current_user.is_authenticated():
-            user_room = 'user_{}'.format(session['user_id'])
-            join_room(user_room)
-            emit('notifpage-response', {'meta': 'WS notifpage connected'}, namespace='/notifpage')
-
 if __name__ == '__main__':
-    if current_app.config.get('INTEGRATE_SOCKETIO', False):
-        socketio.run(current_app)
-    else:
         current_app.run()
