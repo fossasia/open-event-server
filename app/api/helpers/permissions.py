@@ -2,6 +2,7 @@ from functools import wraps
 from flask import current_app as app
 from flask_jwt import _jwt_required, current_identity
 from app.api.helpers.errors import ForbiddenError
+from flask import request
 
 
 def second_order_decorator(inner_dec):
@@ -210,8 +211,11 @@ def accessible_events(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         user = current_identity
-        if not user.is_staff:
+        if 'POST' in request.method:
             kwargs['user_id'] = user.id
+        else:
+            if not user.is_staff:
+                kwargs['user_id'] = user.id
 
         return f(*args, **kwargs)
 
