@@ -678,7 +678,7 @@ Authorized user should be same as user in request body or must be admin.
               "language": "English",
               "index": 0
             },
-            "type": "pages",
+            "type": "page",
             "id": "1",
             "links": {
               "self": "/v1/pages/1"
@@ -2270,7 +2270,7 @@ Authorized user should be same as user in request body or must be admin.
                 "year": "Copyright validity year",
                 "logo-url": "New Brand"
               },
-              "type": "event_copyright",
+              "type": "event-copyright",
               "id": "1",
               "links": {
                 "self": "/v1/event-copyright/1"
@@ -2313,7 +2313,7 @@ Authorized user should be same as user in request body or must be admin.
                   "year": "Copyright validity year",
                   "logo-url": "New Brand"
                 },
-                "type": "event_copyright"
+                "type": "event-copyright"
               }
             }
 
@@ -2430,7 +2430,7 @@ Authorized user should be same as user in request body or must be admin.
                   "year": "Copyright validity year",
                   "logo-url": "New Brand"
                 },
-                "type": "event_copyright",
+                "type": "event-copyright",
                 "id": 5
               }
             }
@@ -2470,6 +2470,375 @@ Authorized user should be same as user in request body or must be admin.
         }
 
 ### Delete Event Copyright [DELETE]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
+
+## Event Invoices [/events/{event_id}/event-invoices?page,limit]
++ Parameters
+    + event_id (integer) - ID of the spcific event in integer
+
+### Get Event Invoices [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "event": {
+                  "links": {
+                    "self": "/v1/event-invoices/1/relationships/event",
+                    "related": "/v1/event-invoices/1/event"
+                  }
+                },
+                "user": {
+                  "links": {
+                    "self": "/v1/event-invoices/1/relationships/user",
+                    "related": "/v1/event-invoices/1/user"
+                  }
+                }
+              },
+              "attributes": {
+                "status": "pending",
+                "city": null,
+                "identifier": "3fe1aa02-34dd-41ea-a0a9-f7a0259b90b5",
+                "paypal-token": null,
+                "exp-year": null,
+                "transaction-id": null,
+                "country": null,
+                "brand": null,
+                "created-at": "2017-06-08T11:24:57.344803+00:00",
+                "zipcode": null,
+                "payment-mode": null,
+                "stripe-token": null,
+                "last4": null,
+                "state": null,
+                "address": null,
+                "exp-month": null,
+                "amount": 100.0,
+                "completed-at": null,
+                "paid-via": null
+              },
+              "type": "event-invoice",
+              "id": "1",
+              "links": {
+                "self": "/v1/event-invoices/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/event-invoices"
+          }
+        }
+
+
+### Create Event Invoices [POST]
+
++ status (string) - Status of event order **(optional)**
++ identifier (string) - Unique ID for the invoice **(optional)**
++ paypal-token (string) - Paypal Token for the event organizer **(optional)**
++ transaction-id (string) - ID for Transaction **(optional)**
++ brand (string) - Brand for event invoice **(optional)**
++ created-at (datetime) - Time of creation of order **(optional)**
++ payment-mode (string) - Payment Mode **(optional)**
++ stripe-token (string) - Stripe Token for the event organizer **(optional)**
++ last4 (string) **(optional)**
++ address (string) - Billing Address **(optional)**
++ city (string) - City for Billing Address **(optional)**
++ state (string) - State for Billing Address **(optional)**
++ country (string)- Country for Billing Address **(optional)**
++ zipcode (string) - Zipcode for Billing Address **(optional)**
++ exp-month (integer) - Expiring Month **(optional)**
++ exp-year (integer) - Expiring Year  **(optional)**
++ amount (float) - Amount of the order **(optional)**
++ completed-at (datetime) -Completion of Invoice Order **(optional)**
++ paid-via (string) - Payment procedure **(optional)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "status": "pending",
+                  "identifier": "3fe1aa02-34dd-41ea-a0a9-f7a0259b90b5",
+                  "paypal-token": null,
+                  "exp-year": null,
+                  "transaction-id": null,
+                  "brand": null,
+                  "created-at": "2017-06-08T11:24:57.344803+00:00",
+                  "payment-mode": null,
+                  "stripe-token": null,
+                  "last4": null,
+                  "address": null,
+                  "city": null,
+                  "state": null,
+                  "country": "India",
+                  "zipcode": null,
+                  "exp-month": null,
+                  "amount": 500.0,
+                  "completed-at": null,
+                  "paid-via": null
+                },
+                "type": "event-invoice"
+              }
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/event-invoices/5/relationships/event",
+                  "related": "/v1/event-invoices/5/event"
+                }
+              }
+            },
+            "attributes": {
+              "status": "pending",
+              "city": "India",
+              "identifier": "3fe1aa02-34dd-41ea-a0a9-f7a0259b90b5",
+              "paypal-token": null,
+              "exp-year": null,
+              "transaction-id": null,
+              "country": null,
+              "brand": null,
+              "created-at": "2017-06-08T11:24:57.344803+00:00",
+              "zipcode": null,
+              "payment-mode": null,
+              "stripe-token": null,
+              "last4": null,
+              "state": null,
+              "address": null,
+              "exp-month": null,
+              "amount": 500.0,
+              "completed-at": null,
+              "paid-via": null
+            },
+            "type": "event-invoice",
+            "id": "5",
+            "links": {
+              "self": "/v1/event-invoices/5"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/event-invoices/5"
+          }
+        }
+
+
+## Event Invoices Details [/event-invoices/{event_invoices_id}]
++ Parameters
+    + event_invoices_id (integer) - ID of the event invoices in the form of an integer
+
+### Event Invoices Details [GET]
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/event-invoices/5/relationships/event",
+                  "related": "/v1/event-invoices/5/event"
+                }
+              }
+            },
+            "attributes": {
+              "status": "pending",
+              "city": "India",
+              "identifier": "3fe1aa02-34dd-41ea-a0a9-f7a0259b90b5",
+              "paypal-token": null,
+              "exp-year": null,
+              "transaction-id": null,
+              "country": null,
+              "brand": null,
+              "created-at": "2017-06-08T11:24:57.344803+00:00",
+              "zipcode": null,
+              "payment-mode": null,
+              "stripe-token": null,
+              "last4": null,
+              "state": null,
+              "address": null,
+              "exp-month": null,
+              "amount": 500.0,
+              "completed-at": null,
+              "paid-via": null
+            },
+            "type": "event-invoice",
+            "id": "5",
+            "links": {
+              "self": "/v1/event-invoices/5"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/event-invoices/5"
+          }
+        }
+
+
+### Update Event Invoices [PATCH]
+
++ id (integer) - ID of the record to update **(required)**
+
++ status (string) - Status of event order **(optional)**
++ identifier (string) - Unique ID for the invoice **(optional)**
++ paypal-token (string) - Paypal Token for the event organizer **(optional)**
++ transaction-id (string) - ID for Transaction **(optional)**
++ brand (string) - Brand for event invoice **(optional)**
++ created-at (datetime) - Time of creation of order **(optional)**
++ payment-mode (string) - Payment Mode **(optional)**
++ stripe-token (string) - Stripe Token for the event organizer **(optional)**
++ last4 (string) **(optional)**
++ address (string) - Billing Address **(optional)**
++ city (string) - City for Billing Address **(optional)**
++ state (string) - State for Billing Address **(optional)**
++ country (string)- Country for Billing Address **(optional)**
++ zipcode (string) - Zipcode for Billing Address **(optional)**
++ exp-month (integer) - Expiring Month **(optional)**
++ exp-year (integer) - Expiring Year  **(optional)**
++ amount (float) - Amount of the order **(optional)**
++ completed-at (datetime) -Completion of Invoice Order **(optional)**
++ paid-via (string) - Payment procedure **(optional)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "status": "completed",
+                  "identifier": "3fe1aa02-34dd-41ea-a0a9-f7a0259b90b5",
+                  "paypal-token": null,
+                  "exp-year": null,
+                  "transaction-id": null,
+                  "brand": null,
+                  "created-at": "2017-06-08T11:24:57.344803+00:00",
+                  "payment-mode": null,
+                  "stripe-token": null,
+                  "last4": null,
+                  "address": null,
+                  "city": null,
+                  "state": null,
+                  "country": "India",
+                  "zipcode": null,
+                  "exp-month": null,
+                  "amount": 500.0,
+                  "completed-at": null,
+                  "paid-via": null
+                },
+                "type": "event-invoice",
+                "id": 5
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/event-invoices/5/relationships/event",
+                  "related": "/v1/event-invoices/5/event"
+                }
+              }
+            },
+            "attributes": {
+              "status": "completed",
+              "city": "India",
+              "identifier": "3fe1aa02-34dd-41ea-a0a9-f7a0259b90b5",
+              "paypal-token": null,
+              "exp-year": null,
+              "transaction-id": null,
+              "country": null,
+              "brand": null,
+              "created-at": "2017-06-08T11:24:57.344803+00:00",
+              "zipcode": null,
+              "payment-mode": null,
+              "stripe-token": null,
+              "last4": null,
+              "state": null,
+              "address": null,
+              "exp-month": null,
+              "amount": 500.0,
+              "completed-at": null,
+              "paid-via": null
+            },
+            "type": "event-invoice",
+            "id": "5",
+            "links": {
+              "self": "/v1/event-invoices/5"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/event-invoices/5"
+          }
+        }
+
+### Delete Event Invoices [DELETE]
 
 + Request
 
