@@ -112,7 +112,7 @@ The Open Event API Server
               }
             }
 
-+ Response 200 (application/vnd.api+json)
++ Response 201 (application/vnd.api+json)
 
         {
             "data": {
@@ -600,7 +600,8 @@ Authorized user should be same as user in request body or must be admin.
                 "thumbnail-aspect": null,
                 "thumbnail-quality": 80,
                 "logo-width": null,
-                "logo-height": null
+                "logo-height": null,
+                "type": null
               },
               "type": "image-size",
               "id": "1",
@@ -623,19 +624,19 @@ Authorized user should be same as user in request body or must be admin.
  (For Events and Speakers)
 + full-width (integer)- Full width of the image
 + full-height (integer)- Full height of the image
-+ full-aspect (string)- Full aspect ratio of the image
++ full-aspect (boolean)- To maintain aspect ratio of the image or not
 + full-quality (integer)- Full quality of the image
 + icon-width (integer)- Width of the icon
 + icon-height (integer)- Height of the icon
-+ icon-aspect (string)- Aspect ratio of the icon
++ icon-aspect (boolean)- To maintain aspect ratio of the icon or not
 + icon-quality (integer)- Quality of the icon
 + thumbnail-width (integer)- Width of the thumbnail
 + thumbnail-height (integer)- Height of the thumbnail
-+ thumbnail-aspect (string)- Aspect ratio of the thumbnail
++ thumbnail-aspect (boolean)- To maintain aspect ratio of the thumbnail or not
 + thumbnail-quality (integer)- Quality of the thumbnail
 + logo-width (integer)- Width of the logo
 + logo-height (integer)- Height of the logo 
-
++ type (string) - Type of the image
 
 + Request (application/vnd.api+json)
     
@@ -661,13 +662,14 @@ Authorized user should be same as user in request body or must be admin.
                   "thumbnail-aspect": null,
                   "thumbnail-quality": 80,
                   "logo-width": null,
-                  "logo-height": null
+                  "logo-height": null,
+                  "type": null
                 },
                 "type": "image-size"
               }
             }
 
-+ Response 200 (application/vnd.api+json)
++ Response 201 (application/vnd.api+json)
 
         {
           "data": "data"
@@ -704,7 +706,8 @@ Authorized user should be same as user in request body or must be admin.
               "thumbnail-aspect": null,
               "thumbnail-quality": 80,
               "logo-width": null,
-              "logo-height": null
+              "logo-height": null,
+              "type": null
             },
             "type": "image-size",
             "id": "1",
@@ -749,7 +752,8 @@ Authorized user should be same as user in request body or must be admin.
                   "thumbnail-aspect": null,
                   "thumbnail-quality": 80,
                   "logo-width": null,
-                  "logo-height": null
+                  "logo-height": null,
+                  "type": null
                 },
                 "type": "image-size",
                 "id": "1",
@@ -774,7 +778,8 @@ Authorized user should be same as user in request body or must be admin.
               "thumbnail-aspect": null,
               "thumbnail-quality": 80,
               "logo-width": null,
-              "logo-height": null
+              "logo-height": null,
+              "type": null
             },
             "type": "image-size",
             "id": "1",
@@ -889,7 +894,7 @@ Authorized user should be same as user in request body or must be admin.
               }
             }
 
-+ Response 200 (application/vnd.api+json)
++ Response 201 (application/vnd.api+json)
 
         {
           "data": "data"
@@ -1064,7 +1069,7 @@ Authorized user should be same as user in request body or must be admin.
               }
             }
 
-+ Response 200 (application/vnd.api+json)
++ Response 201 (application/vnd.api+json)
         
         {
             "data": "data"
@@ -1262,7 +1267,7 @@ Authorized user should be same as user in request body or must be admin.
             }
 
 
-+ Response 200 (application/vnd.api+json)
++ Response 201 (application/vnd.api+json)
 
         {
           "data": {
@@ -1527,7 +1532,7 @@ Authorized user should be same as user in request body or must be admin.
               }
             }
 
-+ Response 200 (application/vnd.api+json)
++ Response 201 (application/vnd.api+json)
 
         {
           "data": {
@@ -1792,7 +1797,7 @@ Authorized user should be same as user in request body or must be admin.
               }
             }
 
-+ Response 200 (application/vnd.api+json)
++ Response 201 (application/vnd.api+json)
 
         {
           "data": {
@@ -2051,7 +2056,7 @@ Authorized user should be same as user in request body or must be admin.
             }
 
 
-+ Response 200 (application/vnd.api+json)
++ Response 201 (application/vnd.api+json)
 
         {
           "data": {
@@ -2347,7 +2352,7 @@ Authorized user should be same as user in request body or must be admin.
             }
 
 
-+ Response 200 (application/vnd.api+json)
++ Response 201 (application/vnd.api+json)
 
         {
           "data": {
@@ -2619,7 +2624,7 @@ Authorized user should be same as user in request body or must be admin.
             }
 
 
-+ Response 200 (application/vnd.api+json)
++ Response 201 (application/vnd.api+json)
 
         {
           "data": {
@@ -2923,7 +2928,7 @@ Authorized user should be same as user in request body or must be admin.
             }
 
 
-+ Response 200 (application/vnd.api+json)
++ Response 201 (application/vnd.api+json)
 
         {
           "data": {
@@ -3243,7 +3248,7 @@ Authorized user should be same as user in request body or must be admin.
             }
 
 
-+ Response 200 (application/vnd.api+json)
++ Response 201 (application/vnd.api+json)
 
         {
           "data": {
@@ -3550,7 +3555,7 @@ Authorized user should be same as user in request body or must be admin.
             }
 
 
-+ Response 200 (application/vnd.api+json)
++ Response 201 (application/vnd.api+json)
 
         {
           "data": {
@@ -3918,7 +3923,7 @@ Authorized user should be same as user in request body or must be admin.
             }
 
 
-+ Response 200 (application/vnd.api+json)
++ Response 201 (application/vnd.api+json)
 
         {
           "data": {
@@ -4375,7 +4380,7 @@ Authorized user should be same as user in request body or must be admin.
             }
 
 
-+ Response 200 (application/vnd.api+json)
++ Response 201 (application/vnd.api+json)
 
         {
           "data": {
