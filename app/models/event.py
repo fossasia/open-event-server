@@ -138,7 +138,7 @@ class Event(db.Model):
                  payment_country=None,
                  payment_currency=None,
                  paypal_email=None,
-                 call_for_papers=None,
+                 speakers_call=None,
                  pay_by_paypal=None,
                  pay_by_stripe=None,
                  pay_by_cheque=None,
@@ -187,7 +187,7 @@ class Event(db.Model):
         self.payment_country = payment_country
         self.payment_currency = payment_currency
         self.paypal_email = paypal_email
-        self.call_for_papers = call_for_papers
+        self.speakers_call = speakers_call
         self.pay_by_paypal = pay_by_paypal
         self.pay_by_stripe = pay_by_stripe
         self.pay_by_cheque = pay_by_cheque

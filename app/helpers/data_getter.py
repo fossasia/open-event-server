@@ -18,7 +18,7 @@ from app.helpers.helpers import get_event_id, string_empty, represents_int, get_
 from app.helpers.language_list import LANGUAGE_LIST
 from app.helpers.static import EVENT_TOPICS, EVENT_LICENCES, PAYMENT_COUNTRIES, PAYMENT_CURRENCIES, DEFAULT_EVENT_IMAGES
 from app.models.activity import Activity
-from app.models.call_for_paper import CallForPaper
+from app.models.speakers_call import SpeakersCall
 from app.models.custom_form import CustomForms
 from app.models.custom_placeholder import CustomPlaceholder
 from app.models.email_notification import EmailNotification
@@ -422,21 +422,21 @@ class DataGetter(object):
         return events
 
     @staticmethod
-    def get_call_for_speakers_events(include_private=False):
+    def get_speakers_call_events(include_private=False):
         events = DataGetter.get_all_published_events(include_private)
         return [event for event in events
-                if DataGetter.get_open_call_for_papers(event.id)
+                if DataGetter.get_open_speakers_call(event.id)
                 and not event.deleted_at][:12]
 
     @staticmethod
-    def get_open_call_for_papers(event_id):
+    def get_open_speakers_call(event_id):
         datetime_now = datetime.datetime.now()
-        return CallForPaper.query.filter_by(
+        return SpeakersCall.query.filter_by(
             event_id=event_id
         ).filter(
-            CallForPaper.start_date <= datetime_now
+            SpeakersCall.start_date <= datetime_now
         ).filter(
-            CallForPaper.end_date >= datetime_now
+            SpeakersCall.end_date >= datetime_now
         ).first()
 
     @staticmethod
@@ -533,8 +533,8 @@ class DataGetter(object):
         return SocialLink.query.filter_by(event_id=event_id)
 
     @staticmethod
-    def get_call_for_papers(event_id):
-        return CallForPaper.query.filter_by(event_id=event_id)
+    def get_speakers_call(event_id):
+        return SpeakersCall.query.filter_by(event_id=event_id)
 
     @staticmethod
     def get_event_types():
