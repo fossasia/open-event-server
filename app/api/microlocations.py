@@ -1,11 +1,14 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+from sqlalchemy.orm.exc import NoResultFound
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.microlocation import Microlocation
+from app.models.session import Session
 from app.models.event import Event
 
 
@@ -46,16 +49,6 @@ class MicrolocationSchema(Schema):
                          type_='event')
 
 
-class MicrolocationDetail(ResourceDetail):
-    """
-    Microlocation detail by id
-    """
-    decorators = (jwt_required,)
-    schema = MicrolocationSchema
-    data_layer = {'session': db.session,
-                  'model': Microlocation}
-
-
 class MicrolocationList(ResourceList):
     """
     List and create Microlocations
@@ -81,6 +74,32 @@ class MicrolocationList(ResourceList):
                       'query': query,
                       'before_create_object': before_create_object
                   }}
+
+
+class MicrolocationDetail(ResourceDetail):
+    """
+    Microlocation detail by id
+    """
+
+    def before_get_object(self, view_kwargs):
+        if view_kwargs.get('session_id') is not None:
+            try:
+                sessions = self.session.query(Session).filter_by(
+                    id=view_kwargs['session_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'session_id'},
+                                     "Session: {} not found".format(view_kwargs['session_id']))
+            else:
+                if sessions.event_id is not None:
+                    view_kwargs['id'] = sessions.event_id
+                else:
+                    view_kwargs['id'] = None
+
+    decorators = (jwt_required, )
+    schema = MicrolocationSchema
+    data_layer = {'session': db.session,
+                  'model': Microlocation,
+                  'methods': {'before_get_object': before_get_object}}
 
 
 class MicrolocationRelationship(ResourceRelationship):

@@ -11,6 +11,7 @@ from app.models import db
 from app.models.event import Event
 from app.models.sponsor import Sponsor
 from app.models.track import Track
+from app.models.session import Session
 from app.models.session_type import SessionType
 from app.models.discount_code import DiscountCode
 from app.models.event_invoice import EventInvoice
@@ -22,6 +23,7 @@ from app.api.helpers.helpers import save_to_db
 
 
 class EventSchema(Schema):
+
     class Meta:
         type_ = 'event'
         self_view = 'v1.event_detail'
@@ -43,22 +45,22 @@ class EventSchema(Schema):
                            schema='TicketSchema',
                            many=True,
                            type_='ticket')
-    microlocation = Relationship(attribute='microlocation',
-                                 self_view='v1.event_microlocation',
-                                 self_view_kwargs={'id': '<id>'},
-                                 related_view='v1.microlocation_detail',
-                                 related_view_kwargs={'event_id': '<id>'},
-                                 schema='MicrolocationSchema',
-                                 many=True,
-                                 type_='microlocation')
+    microlocations = Relationship(attribute='microlocation',
+                                  self_view='v1.event_microlocation',
+                                  self_view_kwargs={'id': '<id>'},
+                                  related_view='v1.microlocation_detail',
+                                  related_view_kwargs={'event_id': '<id>'},
+                                  schema='MicrolocationSchema',
+                                  many=True,
+                                  type_='microlocation')
     social_links = Relationship(attribute='social_link',
-                               self_view='v1.event_social_link',
-                               self_view_kwargs={'id': '<id>'},
-                               related_view='v1.social_link_detail',
-                               related_view_kwargs={'event_id': '<id>'},
-                               schema='SocialLinkSchema',
-                               many=True,
-                               type_='social-link')
+                                self_view='v1.event_social_link',
+                                self_view_kwargs={'id': '<id>'},
+                                related_view='v1.social_link_detail',
+                                related_view_kwargs={'event_id': '<id>'},
+                                schema='SocialLinkSchema',
+                                many=True,
+                                type_='social-link')
     tracks = Relationship(attribute='track',
                           self_view='v1.event_tracks',
                           self_view_kwargs={'id': '<id>'},
@@ -76,12 +78,12 @@ class EventSchema(Schema):
                             many=True,
                             type_='sponsor')
     call_for_papers = Relationship(attribute='call_for_paper',
-                                    self_view='v1.event_call_for_paper',
-                                    self_view_kwargs={'id': '<id>'},
-                                    related_view='v1.call_for_paper_detail',
-                                    related_view_kwargs={'event_id': '<id>'},
-                                    schema='CallForPaperSchema',
-                                    type_='call-for-paper')
+                                   self_view='v1.event_call_for_paper',
+                                   self_view_kwargs={'id': '<id>'},
+                                   related_view='v1.call_for_paper_detail',
+                                   related_view_kwargs={'event_id': '<id>'},
+                                   schema='CallForPaperSchema',
+                                   type_='call-for-paper')
     session_types = Relationship(attribute='session_type',
                                  self_view='v1.event_session_types',
                                  self_view_kwargs={'id': '<id>'},
@@ -113,16 +115,25 @@ class EventSchema(Schema):
                                  many=True,
                                  type_='event-invoice')
     discount_codes = Relationship(attribute='discount_code',
-                                 self_view='v1.event_discount_code',
-                                 self_view_kwargs={'id': '<id>'},
-                                 related_view='v1.discount_code_list',
-                                 related_view_kwargs={'event_id': '<id>'},
-                                 schema='DiscountCodeSchema',
-                                 many=True,
-                                 type_='discount-code')
+                                  self_view='v1.event_discount_code',
+                                  self_view_kwargs={'id': '<id>'},
+                                  related_view='v1.discount_code_list',
+                                  related_view_kwargs={'event_id': '<id>'},
+                                  schema='DiscountCodeSchema',
+                                  many=True,
+                                  type_='discount-code')
+    sessions = Relationship(attribute='session',
+                            self_view='v1.event_session',
+                            self_view_kwargs={'id': '<id>'},
+                            related_view='v1.session_list',
+                            related_view_kwargs={'event_id': '<id>'},
+                            schema='SessionSchema',
+                            many=True,
+                            type_='session')
 
 
 class EventList(ResourceList):
+
     def query(self, view_kwargs):
         query_ = self.session.query(Event)
         if view_kwargs.get('user_id') is not None:
@@ -148,6 +159,7 @@ class EventList(ResourceList):
 
 
 class EventDetail(ResourceDetail):
+
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('sponsor_id') is not None:
             try:
@@ -175,7 +187,8 @@ class EventDetail(ResourceDetail):
 
         if view_kwargs.get('session_type_id') is not None:
             try:
-                session_type = self.session.query(SessionType).filter_by(id=view_kwargs['session_type_id']).one()
+                session_type = self.session.query(SessionType).filter_by(
+                    id=view_kwargs['session_type_id']).one()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': 'session_type_id'},
                                      "SessionType: {} not found".format(view_kwargs['session_type_id']))
@@ -187,7 +200,8 @@ class EventDetail(ResourceDetail):
 
         if view_kwargs.get('event_invoice_id') is not None:
             try:
-                event_invoice = self.session.query(EventInvoice).filter_by(id=view_kwargs['event_invoice_id']).one()
+                event_invoice = self.session.query(EventInvoice).filter_by(
+                    id=view_kwargs['event_invoice_id']).one()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': 'event_invoice_id'},
                                      "Event Invoice: {} not found".format(view_kwargs['event_invoice_id']))
@@ -199,7 +213,8 @@ class EventDetail(ResourceDetail):
 
         if view_kwargs.get('discount_code_id') is not None:
             try:
-                discount_code = self.session.query(DiscountCode).filter_by(id=view_kwargs['discount_code_id']).one()
+                discount_code = self.session.query(DiscountCode).filter_by(
+                    id=view_kwargs['discount_code_id']).one()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': 'discount_code_id'},
                                      "DiscountCode: {} not found".format(view_kwargs['discount_code_id']))
@@ -209,7 +224,20 @@ class EventDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
-    decorators = (is_coorganizer,)
+        if view_kwargs.get('session_id') is not None:
+            try:
+                sessions = self.session.query(Session).filter_by(
+                    id=view_kwargs['session_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'session_id'},
+                                     "Session: {} not found".format(view_kwargs['session_id']))
+            else:
+                if sessions.event_id is not None:
+                    view_kwargs['id'] = sessions.event_id
+                else:
+                    view_kwargs['id'] = None
+
+    decorators = (is_coorganizer, )
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,

@@ -65,20 +65,30 @@ class SessionSchema(Schema):
                                 related_view_kwargs={'session_id': '<id>'},
                                 schema='SessionTypeSchema',
                                 type_='session-type')
+    event = Relationship(attribute='event',
+                         self_view='v1.session_event',
+                         self_view_kwargs={'id': '<id>'},
+                         related_view='v1.event_detail',
+                         related_view_kwargs={'session_id': '<id>'},
+                         schema='EventSchema',
+                         type_='event')
 
 
 class SessionList(ResourceList):
     """
     List and create Sessions
     """
+
     def query(self, view_kwargs):
         query_ = self.session.query(Session)
         if view_kwargs.get('track_id') is not None:
             query_ = query_.join(Track).filter(Track.id == view_kwargs['track_id'])
         if view_kwargs.get('session_type_id') is not None:
-            query_ = query_.join(SessionType).filter(SessionType.id == view_kwargs['session_type_id'])
+            query_ = query_.join(SessionType).filter(
+                SessionType.id == view_kwargs['session_type_id'])
         if view_kwargs.get('microlocation_id') is not None:
-            query_ = query_.join(Microlocation).filter(Microlocation.id == view_kwargs['microlocation_id'])
+            query_ = query_.join(Microlocation).filter(
+                Microlocation.id == view_kwargs['microlocation_id'])
         return query_
 
     def before_create_object(self, data, view_kwargs):
@@ -86,10 +96,12 @@ class SessionList(ResourceList):
             track = self.session.query(Track).filter_by(id=view_kwargs['track_id']).one()
             data['track_id'] = track.id
         if view_kwargs.get('session_type_id') is not None:
-            session_type = self.session.query(SessionType).filter_by(id=view_kwargs['session_type_id']).one()
+            session_type = self.session.query(SessionType).filter_by(
+                id=view_kwargs['session_type_id']).one()
             data['session_type_id'] = session_type.id
         if view_kwargs.get('microlocation_id') is not None:
-            microlocation = self.session.query(Microlocation).filter_by(id=view_kwargs['microlocation_id']).one()
+            microlocation = self.session.query(Microlocation).filter_by(
+                id=view_kwargs['microlocation_id']).one()
             data['microlocation_id'] = microlocation.id
 
     view_kwargs = True
