@@ -102,14 +102,14 @@ class BlueprintsManager:
         """
         app.register_blueprint(home_routes)
         admin = Admin(app, name='admin', template_mode='bootstrap3', index_view=MyAdminIndexView(),
-                      base_template='my_master.html')
+                      base_template='admin_base.html')
 
         # Get all the models in the db, all models should have a explicit __tablename__
         classes, models, table_names = [], [], []
-        for clazz in db.Model._decl_class_registry.values():
+        for class_ in db.Model._decl_class_registry.values():
             try:
-                table_names.append(clazz.__tablename__)
-                classes.append(clazz)
+                table_names.append(class_.__tablename__)
+                classes.append(class_)
             except:
                 pass
         for table in db.metadata.tables.items():

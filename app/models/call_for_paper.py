@@ -40,10 +40,8 @@ class CallForPaper(db.Model):
         return {
             'id': self.id,
             'announcement': self.announcement,
-            'starts_at': self.starts_at.strftime('%m/%d/%Y') if self.starts_at else '',
-            'starts_at': self.starts_at.strftime('%H:%M') if self.starts_at else '',
-            'ends_at': self.ends_at.strftime('%m/%d/%Y') if self.ends_at else '',
-            'ends_at': self.ends_at.strftime('%H:%M') if self.ends_at else '',
+            'starts_at': self.starts_at.strftime("%Y-%m-%dT%H:%M:%S%Z") if self.starts_at else '',
+            'ends_at': self.ends_at.strftime("%Y-%m-%dT%H:%M:%S%Z") if self.ends_at else '',
             'privacy': self.privacy,
             'hash': self.hash
         }

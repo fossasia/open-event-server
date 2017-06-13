@@ -32,7 +32,7 @@ class Config(object):
     The base configuration option. Contains the defaults.
     """
 
-    DEBUG = True
+    DEBUG = False
 
     DEVELOPMENT = False
     STAGING = False

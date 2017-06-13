@@ -37,7 +37,7 @@ def trigger_session_state_change_notifications(session, event_id, state=None, me
         email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(speaker.user_id, event_id)
         if not admin_msg_setting or \
             (email_notification_setting and email_notification_setting.session_accept_reject == 1 and
-                     admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
+                admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
 
             if speaker.email:
                 send_session_accept_reject(speaker.email, session.title, state, link, subject=subject, message=message)
@@ -56,7 +56,7 @@ def trigger_session_schedule_change_notifications(session, event_id):
         email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(speaker.user_id, event_id)
         if not admin_msg_setting or \
             (email_notification_setting and email_notification_setting.session_schedule == 1 and
-                     admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
+                admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
             if speaker.email:
                 send_schedule_change(speaker.email, session.title, link)
         # Send notification
@@ -76,7 +76,7 @@ def trigger_after_purchase_notifications(buyer_email, event_id, event, invoice_i
         email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(organizer.user.id, event_id)
         if not admin_msg_setting or \
             (email_notification_setting and email_notification_setting.after_ticket_purchase == 1 and
-                     admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
+                admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
             send_email_for_after_purchase_organizers(organizer.user.email, buyer_email, invoice_id, order_url,
                                                      event.name, event.organizer_name)
         if resend:
@@ -90,7 +90,7 @@ def trigger_after_purchase_notifications(buyer_email, event_id, event, invoice_i
                                                                                             event_id)
         if not admin_msg_setting or \
             (email_notification_setting and email_notification_setting.after_ticket_purchase == 1 and
-                     admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
+                admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
             send_email_for_after_purchase_organizers(coorganizer.user.email, buyer_email, invoice_id, order_url,
                                                      event.name, event.organizer_name)
         if not resend:
