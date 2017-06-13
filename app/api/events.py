@@ -52,13 +52,13 @@ class EventSchema(Schema):
                                  many=True,
                                  type_='microlocation')
     social_links = Relationship(attribute='social_link',
-                                self_view='v1.event_social_link',
-                                self_view_kwargs={'id': '<id>'},
-                                related_view='v1.social_link_detail',
-                                related_view_kwargs={'event_id': '<id>'},
-                                schema='SocialLinkSchema',
-                                many=True,
-                                type_='social_link')
+                               self_view='v1.event_social_link',
+                               self_view_kwargs={'id': '<id>'},
+                               related_view='v1.social_link_detail',
+                               related_view_kwargs={'event_id': '<id>'},
+                               schema='SocialLinkSchema',
+                               many=True,
+                               type_='social-link')
     tracks = Relationship(attribute='track',
                           self_view='v1.event_tracks',
                           self_view_kwargs={'id': '<id>'},
@@ -76,12 +76,12 @@ class EventSchema(Schema):
                             many=True,
                             type_='sponsor')
     call_for_papers = Relationship(attribute='call_for_paper',
-                                   self_view='v1.event_call_for_paper',
-                                   self_view_kwargs={'id': '<id>'},
-                                   related_view='v1.call_for_paper_detail',
-                                   related_view_kwargs={'event_id': '<id>'},
-                                   schema='CallForPaperSchema',
-                                   type_='call_for_paper')
+                                    self_view='v1.event_call_for_paper',
+                                    self_view_kwargs={'id': '<id>'},
+                                    related_view='v1.call_for_paper_detail',
+                                    related_view_kwargs={'event_id': '<id>'},
+                                    schema='CallForPaperSchema',
+                                    type_='call-for-paper')
     session_types = Relationship(attribute='session_type',
                                  self_view='v1.event_session_types',
                                  self_view_kwargs={'id': '<id>'},
@@ -89,14 +89,14 @@ class EventSchema(Schema):
                                  related_view_kwargs={'event_id': '<id>'},
                                  schema='SessionTypeSchema',
                                  many=True,
-                                 type_='session_type')
+                                 type_='session-type')
     event_copyright = Relationship(attribute='event_copyright',
                                    self_view='v1.event_copyright',
                                    self_view_kwargs={'id': '<id>'},
                                    related_view='v1.event_copyright_detail',
                                    related_view_kwargs={'event_id': '<id>'},
                                    schema='EventCopyrightSchema',
-                                   type_='social_link')
+                                   type_='social-link')
     tax = Relationship(attribute='tax',
                        self_view='v1.event_tax',
                        self_view_kwargs={'id': '<id>'},
@@ -111,15 +111,15 @@ class EventSchema(Schema):
                                  related_view_kwargs={'event_id': '<id>'},
                                  schema='EventInvoiceSchema',
                                  many=True,
-                                 type_='event_invoice')
+                                 type_='event-invoice')
     discount_codes = Relationship(attribute='discount_code',
-                                  self_view='v1.event_discount_code',
-                                  self_view_kwargs={'id': '<id>'},
-                                  related_view='v1.discount_code_list',
-                                  related_view_kwargs={'event_id': '<id>'},
-                                  schema='DiscountCodeSchema',
-                                  many=True,
-                                  type_='discount_code')
+                                 self_view='v1.event_discount_code',
+                                 self_view_kwargs={'id': '<id>'},
+                                 related_view='v1.discount_code_list',
+                                 related_view_kwargs={'event_id': '<id>'},
+                                 schema='DiscountCodeSchema',
+                                 many=True,
+                                 type_='discount-code')
 
 
 class EventList(ResourceList):

@@ -37,13 +37,13 @@ class TicketSchema(Schema):
                          related_view_kwargs={'ticket_id': '<id>'},
                          schema='EventSchema',
                          type_='event')
-    tags = Relationship(attribute='ticket_tag',
-                        self_view='v1.ticket_ticket_tag',
-                        self_view_kwargs={'id': '<id>'},
-                        related_view='v1.tag_detail',
-                        related_view_kwargs={'ticket_id': '<id>'},
-                        schema='TicketTagSchema',
-                        type_='ticket_tag')
+    tags =  Relationship(attribute='ticket_tag',
+                         self_view='v1.ticket_ticket_tag',
+                         self_view_kwargs={'id': '<id>'},
+                         related_view='v1.tag_detail',
+                         related_view_kwargs={'ticket_id': '<id>'},
+                         schema='TicketTagSchema',
+                         type_='ticket-tag')
 
 
 class AllTicketList(ResourceList):

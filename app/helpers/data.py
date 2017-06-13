@@ -74,16 +74,6 @@ class DataManager(object):
                                     received_at=datetime.now())
         saved = save_to_db(notification, 'User notification saved')
 
-        if saved:
-            DataManager.push_user_notification(user)
-
-    @staticmethod
-    def push_user_notification(user):
-        """
-        Push user notification using websockets.
-        """
-        user_room = 'user_{}'.format(user.id)
-
     @staticmethod
     def mark_user_notification_as_read(notification):
         """Mark a particular notification read.
@@ -797,10 +787,9 @@ def save_to_db(item, msg="Saved to db", print_error=True):
         logging.info('added to session')
         db.session.commit()
         return True
-    except Exception, e:
+    except Exception as e:
         if print_error:
-            print
-            e
+            print(e)
             traceback.print_exc()
         logging.error('DB Exception! %s' % e)
         db.session.rollback()
@@ -818,7 +807,7 @@ def delete_from_db(item, msg='Deleted from db'):
         logging.info('removed from session')
         db.session.commit()
         return True
-    except Exception, error:
+    except Exception as error:
         logging.error('DB Exception! %s' % error)
         db.session.rollback()
         return False

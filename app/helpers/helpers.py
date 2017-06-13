@@ -430,8 +430,7 @@ def send_email(to, action, subject, html):
                 payload['fromname'] = email_from_name
                 key = get_settings()['sendgrid_key']
                 if not key and not current_app.config['TESTING']:
-                    print
-                    'Sendgrid key not defined'
+                    print('Sendgrid key not defined')
                     return
                 headers = {
                     "Authorization": ("Bearer " + key)
