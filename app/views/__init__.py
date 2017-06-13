@@ -1,8 +1,9 @@
 import flask_login as login
-from flask import url_for, redirect, render_template, current_app as app, Blueprint, request
+import requests
+from flask import url_for, redirect, render_template, Blueprint, request, make_response
 from flask_scrypt import generate_password_hash
 from wtforms import form, fields, validators
-from flask_admin import Admin, BaseView, AdminIndexView, expose, helpers as admin_helpers
+from flask_admin import Admin, AdminIndexView, expose, helpers as admin_helpers
 from flask_admin.contrib.sqla import ModelView
 from app.models import db
 from app.models.user import User
@@ -18,8 +19,8 @@ class AdminModelView(ModelView):
 
 
 class LoginForm(form.Form):
-    login = fields.TextField(validators=[validators.required()])
-    password = fields.PasswordField(validators=[validators.required()])
+    login = fields.TextField(validators=[validators.required(), validators.email()], render_kw={"placeholder": "john.doe@example.com"})
+    password = fields.PasswordField(validators=[validators.required()], render_kw={"placeholder": "xyzzy"})
 
     def validate_login(self, field):
         """
@@ -30,10 +31,10 @@ class LoginForm(form.Form):
         user = self.get_user()
 
         if user is None:
-            raise validators.ValidationError('Invalid user')
+            raise validators.ValidationError('User does not exist.')
 
         if user.password != generate_password_hash(self.password.data, user.salt):
-            raise validators.ValidationError('Invalid password')
+            raise validators.ValidationError('Credentials incorrect.')
 
         if not user.is_admin or not user.is_super_admin:
             raise validators.ValidationError('Access Forbidden. Admin Rights Required')
@@ -86,7 +87,10 @@ def index():
     Index route
     :return:
     """
-    return render_template('index.html')
+    r = requests.get('https://raw.githubusercontent.com/fossasia/open-event-orga-server/gh-pages/api/v1/index.html')
+    response = make_response(r.content)
+    response.headers["Content-Type"] = "text/html"
+    return response
 
 
 class BlueprintsManager:
@@ -101,11 +105,12 @@ class BlueprintsManager:
         :return:
         """
         app.register_blueprint(home_routes)
-        admin = Admin(app, name='admin', template_mode='bootstrap3', index_view=MyAdminIndexView(),
+        admin = Admin(app, name='Open Event API', template_mode='bootstrap3', index_view=MyAdminIndexView(),
                       base_template='admin_base.html')
 
         # Get all the models in the db, all models should have a explicit __tablename__
         classes, models, table_names = [], [], []
+        # noinspection PyProtectedMember
         for class_ in db.Model._decl_class_registry.values():
             try:
                 table_names.append(class_.__tablename__)
