@@ -1,4 +1,5 @@
 import logging
+import traceback
 from app.models import db
 
 
@@ -14,9 +15,9 @@ def save_to_db(item, msg="Saved to db", print_error=True):
         logging.info('added to session')
         db.session.commit()
         return True
-    except Exception, e:
+    except Exception as e:
         if print_error:
-            print e
+            print(e)
             traceback.print_exc()
         logging.error('DB Exception! %s' % e)
         db.session.rollback()

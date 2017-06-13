@@ -1,6 +1,7 @@
 import binascii
 import os
 from datetime import datetime
+import pytz
 
 import flask_login as login
 from sqlalchemy import event
@@ -200,7 +201,7 @@ class Event(db.Model):
         self.xcal_url = xcal_url
         self.onsite_details = onsite_details
         self.discount_code_id = discount_code_id
-        self.created_at = datetime.utcnow()
+        self.created_at = datetime.now(pytz.utc)
 
     def __repr__(self):
         return '<Event %r>' % self.name
@@ -219,7 +220,9 @@ class Event(db.Model):
 
     def notification_settings(self, user_id):
         try:
-            return EmailNotification.query.filter_by(user_id=(login.current_user.id if not user_id else int(user_id))).filter_by(event_id=self.id).first()
+            return EmailNotification.query.filter_by(
+                user_id=(login.current_user.id if not user_id else int(user_id))).\
+                filter_by(event_id=self.id).first()
         except:
             return None
 

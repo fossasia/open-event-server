@@ -42,7 +42,6 @@ class Config(object):
     CACHING = False
     PROFILE = False
     SQLALCHEMY_RECORD_QUERIES = False
-    INTEGRATE_SOCKETIO = False
 
     VERSION = VERSION_NAME
     SQLALCHEMY_TRACK_MODIFICATIONS = True
@@ -79,11 +78,9 @@ class ProductionConfig(Config):
 
     MINIFY_PAGE = True
     PRODUCTION = True
-    INTEGRATE_SOCKETIO = False
     CACHING = True
 
     # if force on
-    INTEGRATE_SOCKETIO = env.bool('INTEGRATE_SOCKETIO', default=False)
 
 
 class StagingConfig(ProductionConfig):
@@ -107,15 +104,13 @@ class DevelopmentConfig(Config):
     # Test database performance
     SQLALCHEMY_RECORD_QUERIES = True
 
-    # If Env Var `INTEGRATE_SOCKETIO` is set to 'true', then integrate SocketIO
-    INTEGRATE_SOCKETIO = env.bool('INTEGRATE_SOCKETIO', default=False)
+
 
 
 class TestingConfig(Config):
     """
     The configuration for a test suit
     """
-    INTEGRATE_SOCKETIO = False
     TESTING = False
     CELERY_ALWAYS_EAGER = True
     CELERY_EAGER_PROPAGATES_EXCEPTIONS = True

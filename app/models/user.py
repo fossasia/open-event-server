@@ -1,4 +1,5 @@
 from datetime import datetime
+import pytz
 import random
 import humanize
 from flask import url_for
@@ -66,7 +67,7 @@ class User(db.Model):
     is_verified = db.Column(db.Boolean, default=False)
     signup_at = db.Column(db.DateTime(timezone=True))
     last_accessed_at = db.Column(db.DateTime(timezone=True))
-    created_at = db.Column(db.DateTime(timezone=True), default=datetime.now())
+    created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(pytz.utc))
     deleted_at = db.Column(db.DateTime(timezone=True))
 
     @hybrid_property
@@ -311,7 +312,7 @@ class User(db.Model):
         for notif in unread_notifs:
             notifs.append({
                 'title': notif.title,
-                'received_at': humanize.naturaltime(datetime.now() - notif.received_at),
+                'received_at': humanize.naturaltime(datetime.now(pytz.utc) - notif.received_at),
                 'mark_read': url_for('notifications.mark_as_read', notification_id=notif.id)
             })
 
@@ -319,7 +320,7 @@ class User(db.Model):
 
     # update last access time
     def update_lat(self):
-        self.last_accessed_at = datetime.now()
+        self.last_accessed_at = datetime.now(pytz.utc)
 
     @property
     def fullname(self):
@@ -348,4 +349,4 @@ class User(db.Model):
 
 @event.listens_for(User, 'init')
 def receive_init(target, args, kwargs):
-    target.signup_at = datetime.now()
+    target.signup_at = datetime.now(pytz.utc)

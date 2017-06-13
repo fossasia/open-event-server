@@ -22,8 +22,7 @@ def trigger_new_session_notifications(session_id, event_id=None, event=None):
         email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(organizer.user.id, event.id)
         if not admin_msg_setting or \
             (email_notification_setting and email_notification_setting.new_paper == 1 and
-             admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
-
+                     admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
             send_new_session_organizer(organizer.user.email, event.name, link)
         # Send notification
         send_notif_new_session_organizer(organizer.user, event.name, link)
@@ -38,11 +37,11 @@ def trigger_session_state_change_notifications(session, event_id, state=None, me
         email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(speaker.user_id, event_id)
         if not admin_msg_setting or \
             (email_notification_setting and email_notification_setting.session_accept_reject == 1 and
-             admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
+                admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
 
             if speaker.email:
                 send_session_accept_reject(speaker.email, session.title, state, link, subject=subject, message=message)
-            # Send notification
+                # Send notification
         if speaker.user:
             send_notif_session_accept_reject(speaker.user, session.title, state, link)
     session.is_mail_sent = True
@@ -57,7 +56,7 @@ def trigger_session_schedule_change_notifications(session, event_id):
         email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(speaker.user_id, event_id)
         if not admin_msg_setting or \
             (email_notification_setting and email_notification_setting.session_schedule == 1 and
-             admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
+                admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
             if speaker.email:
                 send_schedule_change(speaker.email, session.title, link)
         # Send notification
@@ -77,8 +76,9 @@ def trigger_after_purchase_notifications(buyer_email, event_id, event, invoice_i
         email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(organizer.user.id, event_id)
         if not admin_msg_setting or \
             (email_notification_setting and email_notification_setting.after_ticket_purchase == 1 and
-             admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
-            send_email_for_after_purchase_organizers(organizer.user.email, buyer_email, invoice_id, order_url, event.name, event.organizer_name)
+                admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
+            send_email_for_after_purchase_organizers(organizer.user.email, buyer_email, invoice_id, order_url,
+                                                     event.name, event.organizer_name)
         if resend:
             send_notif_for_resend(organizer.user, invoice_id, order_url, event.name, buyer_email)
         else:
@@ -86,13 +86,14 @@ def trigger_after_purchase_notifications(buyer_email, event_id, event, invoice_i
 
     coorganizers = DataGetter.get_user_event_roles_by_role_name(event.id, 'coorganizer')
     for coorganizer in coorganizers:
-        email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(coorganizer.user.id, event_id)
+        email_notification_setting = DataGetter.get_email_notification_settings_by_event_id(coorganizer.user.id,
+                                                                                            event_id)
         if not admin_msg_setting or \
             (email_notification_setting and email_notification_setting.after_ticket_purchase == 1 and
-                     admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
-            send_email_for_after_purchase_organizers(coorganizer.user.email, buyer_email, invoice_id, order_url, event.name, event.organizer_name)
+                admin_msg_setting.user_control_status == 1) or admin_msg_setting.user_control_status == 0:
+            send_email_for_after_purchase_organizers(coorganizer.user.email, buyer_email, invoice_id, order_url,
+                                                     event.name, event.organizer_name)
         if not resend:
             send_notif_for_resend(organizer.user, invoice_id, order_url, event.name, buyer_email)
         else:
             send_notif_for_after_purchase_organizer(organizer.user, invoice_id, order_url, event.name, buyer_email)
-

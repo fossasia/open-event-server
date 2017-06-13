@@ -20,8 +20,8 @@ from app.models.role import Role
 from app.api.helpers.permissions import accessible_events, is_coorganizer
 from app.api.helpers.helpers import save_to_db
 
-class EventSchema(Schema):
 
+class EventSchema(Schema):
     class Meta:
         type_ = 'event'
         self_view = 'v1.event_detail'
@@ -36,13 +36,13 @@ class EventSchema(Schema):
     starts_at = fields.DateTime(required=True)
     ends_at = fields.DateTime(required=True)
     tickets = Relationship(attribute='ticket',
-                          self_view='v1.event_ticket',
-                          self_view_kwargs={'id': '<id>'},
-                          related_view='v1.ticket_detail',
-                          related_view_kwargs={'event_id': '<id>'},
-                          schema='TicketSchema',
-                          many=True,
-                          type_='ticket')
+                           self_view='v1.event_ticket',
+                           self_view_kwargs={'id': '<id>'},
+                           related_view='v1.ticket_detail',
+                           related_view_kwargs={'event_id': '<id>'},
+                           schema='TicketSchema',
+                           many=True,
+                           type_='ticket')
     microlocation = Relationship(attribute='microlocation',
                                  self_view='v1.event_microlocation',
                                  self_view_kwargs={'id': '<id>'},
@@ -68,13 +68,13 @@ class EventSchema(Schema):
                           many=True,
                           type_='track')
     sponsors = Relationship(attribute='sponsor',
-                           self_view='v1.event_sponsor',
-                           self_view_kwargs={'id': '<id>'},
-                           related_view='v1.sponsor_list',
-                           related_view_kwargs={'event_id': '<id>'},
-                           schema='SponsorSchema',
-                           many=True,
-                           type_='sponsor')
+                            self_view='v1.event_sponsor',
+                            self_view_kwargs={'id': '<id>'},
+                            related_view='v1.sponsor_list',
+                            related_view_kwargs={'event_id': '<id>'},
+                            schema='SponsorSchema',
+                            many=True,
+                            type_='sponsor')
     call_for_papers = Relationship(attribute='call_for_paper',
                                     self_view='v1.event_call_for_paper',
                                     self_view_kwargs={'id': '<id>'},
@@ -128,7 +128,7 @@ class EventList(ResourceList):
         if view_kwargs.get('user_id') is not None:
             if 'GET' in request.method:
                 query_ = query_.join(Event.roles).filter_by(user_id=view_kwargs['user_id']) \
-                            .join(UsersEventsRoles.role).filter(Role.name != ATTENDEE)
+                    .join(UsersEventsRoles.role).filter(Role.name != ATTENDEE)
         return query_
 
     def after_create_object(self, event, data, view_kwargs):
@@ -137,18 +137,17 @@ class EventList(ResourceList):
         uer = UsersEventsRoles(user, event, role)
         save_to_db(uer, 'Event Saved')
 
-    decorators = (accessible_events, )
+    decorators = (accessible_events,)
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
                   'methods': {
-                    'query': query,
-                    'after_create_object': after_create_object
+                      'query': query,
+                      'after_create_object': after_create_object
                   }}
 
 
 class EventDetail(ResourceDetail):
-
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('sponsor_id') is not None:
             try:
@@ -210,7 +209,7 @@ class EventDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
-    decorators = (is_coorganizer, )
+    decorators = (is_coorganizer,)
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
@@ -218,7 +217,7 @@ class EventDetail(ResourceDetail):
 
 
 class EventRelationship(ResourceRelationship):
-    decorators = (jwt_required, )
+    decorators = (jwt_required,)
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event}

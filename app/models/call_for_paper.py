@@ -13,14 +13,13 @@ class CallForPaper(db.Model):
     hash = db.Column(db.String, nullable=True)
     privacy = db.Column(db.String, nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-    events = db.relationship("Event", backref=backref("call_for_papers", uselist=False))
+    event = db.relationship("Event", backref=backref("call_for_papers", uselist=False))
 
-    def __init__(self, announcement=None, start_date=None, end_date=None, timezone='UTC', hash=None, privacy='public',
+    def __init__(self, announcement=None, starts_at=None, ends_at=None, hash=None, privacy='public',
                  event_id=None):
         self.announcement = announcement
-        self.start_date = start_date
-        self.end_date = end_date
-        self.timezone = timezone
+        self.starts_at = starts_at
+        self.ends_at = ends_at
         self.hash = hash
         self.privacy = privacy
         self.event_id = event_id
@@ -41,11 +40,8 @@ class CallForPaper(db.Model):
         return {
             'id': self.id,
             'announcement': self.announcement,
-            'start_date': self.start_date.strftime('%m/%d/%Y') if self.start_date else '',
-            'starts_at': self.start_date.strftime('%H:%M') if self.start_date else '',
-            'end_date': self.end_date.strftime('%m/%d/%Y') if self.end_date else '',
-            'ends_at': self.end_date.strftime('%H:%M') if self.end_date else '',
-            'timezone': self.timezone,
+            'starts_at': self.starts_at.strftime("%Y-%m-%dT%H:%M:%S%Z") if self.starts_at else '',
+            'ends_at': self.ends_at.strftime("%Y-%m-%dT%H:%M:%S%Z") if self.ends_at else '',
             'privacy': self.privacy,
             'hash': self.hash
         }

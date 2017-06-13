@@ -10,13 +10,13 @@ from app.api.helpers.permissions import is_user_itself, jwt_required
 
 
 class NotificationSchema(Schema):
-    '''
+    """
     API Schema for Notification Model
-    '''
+    """
     class Meta:
-        '''
+        """
         Meta class for Notification API schema
-        '''
+        """
         type_ = 'notification'
         self_view = 'v1.notification_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -40,9 +40,9 @@ class NotificationSchema(Schema):
 
 
 class NotificationList(ResourceList):
-    '''
+    """
     List all the Notification
-    '''
+    """
     def query(self, view_kwargs):
         query_ = self.session.query(Notification)
         if view_kwargs.get('id') is not None:
@@ -66,9 +66,9 @@ class NotificationList(ResourceList):
 
 
 class NotificationDetail(ResourceDetail):
-    '''
+    """
     Notification detail by ID
-    '''
+    """
     decorators = (is_user_itself, )
     schema = NotificationSchema
     data_layer = {'session': db.session,

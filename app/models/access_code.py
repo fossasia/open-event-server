@@ -62,6 +62,7 @@ class AccessCode(db.Model):
 
     def __unicode__(self):
         return self.code
+
     @property
     def serialize(self):
         """Return object data in easily serializable format"""

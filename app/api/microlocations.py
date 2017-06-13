@@ -13,6 +13,7 @@ class MicrolocationSchema(Schema):
     """
     Api schema for Microlocation Model
     """
+
     class Meta:
         """
         Meta class for Microlocation Api Schema
@@ -30,12 +31,12 @@ class MicrolocationSchema(Schema):
     floor = fields.Integer()
     room = fields.Str()
     sessions = Relationship(attribute='session',
-                           self_view='v1.microlocation_session',
-                           self_view_kwargs={'id': '<id>'},
-                           related_view='v1.session_list',
-                           related_view_kwargs={'microlocation_id': '<id>'},
-                           schema='SessionSchema',
-                           type_='session')
+                            self_view='v1.microlocation_session',
+                            self_view_kwargs={'id': '<id>'},
+                            related_view='v1.session_list',
+                            related_view_kwargs={'microlocation_id': '<id>'},
+                            schema='SessionSchema',
+                            type_='session')
     event = Relationship(attribute='event',
                          self_view='v1.microlocation_event',
                          self_view_kwargs={'id': '<id>'},
@@ -49,7 +50,7 @@ class MicrolocationDetail(ResourceDetail):
     """
     Microlocation detail by id
     """
-    decorators = (jwt_required, )
+    decorators = (jwt_required,)
     schema = MicrolocationSchema
     data_layer = {'session': db.session,
                   'model': Microlocation}
@@ -59,6 +60,7 @@ class MicrolocationList(ResourceList):
     """
     List and create Microlocations
     """
+
     def query(self, view_kwargs):
         query_ = self.session.query(Microlocation)
         if view_kwargs.get('id') is not None:
@@ -71,7 +73,7 @@ class MicrolocationList(ResourceList):
             data['event_id'] = event.id
 
     view_kwargs = True
-    decorators = (jwt_required, )
+    decorators = (jwt_required,)
     schema = MicrolocationSchema
     data_layer = {'session': db.session,
                   'model': Microlocation,
@@ -85,9 +87,7 @@ class MicrolocationRelationship(ResourceRelationship):
     """
     Microlocation Relationship
     """
-    decorators = (jwt_required, )
+    decorators = (jwt_required,)
     schema = MicrolocationSchema
     data_layer = {'session': db.session,
                   'model': Microlocation}
-
-

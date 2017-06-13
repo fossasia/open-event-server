@@ -2,13 +2,12 @@ from datetime import datetime
 
 from flask import request
 
-from app.helpers.babel import babel
+
 from app.helpers.data_getter import DataGetter
 from app.settings import get_settings
 from config import LANGUAGES
 
 
-@babel.localeselector
 def get_locale():
     try:
         return request.cookies["selected_lang"]
@@ -31,5 +30,4 @@ def init_variables(app):
             datetime_now=datetime.now(),
             logo=DataGetter.get_custom_placeholder_by_name('Logo'),
             avatar=DataGetter.get_custom_placeholder_by_name('Avatar'),
-            integrate_socketio=app.config.get('INTEGRATE_SOCKETIO', False)
         )

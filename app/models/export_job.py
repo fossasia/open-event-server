@@ -1,5 +1,5 @@
 from datetime import datetime
-
+import pytz
 from sqlalchemy.orm import backref
 
 from app.models import db
@@ -23,7 +23,7 @@ class ExportJob(db.Model):
         self.task = task
         self.user_email = user_email
         self.event = event
-        self.starts_at = datetime.now()
+        self.starts_at = datetime.now(pytz.utc)
 
     def __repr__(self):
         return '<ExportJob %d for event %d>' % (self.id, self.event.id)

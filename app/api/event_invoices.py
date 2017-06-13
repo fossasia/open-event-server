@@ -12,7 +12,6 @@ from app.models.discount_code import DiscountCode
 
 
 class EventInvoiceSchema(Schema):
-
     class Meta:
         type_ = 'event-invoice'
         self_view = 'v1.event_invoice_detail'
@@ -89,7 +88,7 @@ class EventInvoiceList(ResourceList):
             data['discount_code_id'] = discount_code.id
 
     view_kwargs = True
-    decorators = (is_admin, )
+    decorators = (is_admin,)
     schema = EventInvoiceSchema
     data_layer = {'session': db.session,
                   'model': EventInvoice,
@@ -102,7 +101,7 @@ class EventInvoiceDetail(ResourceDetail):
     """
     Event Invoice detail by id
     """
-    decorators = (is_admin, )
+    decorators = (is_admin,)
     schema = EventInvoiceSchema
     data_layer = {'session': db.session,
                   'model': EventInvoice}
@@ -112,7 +111,7 @@ class EventInvoiceRelationship(ResourceRelationship):
     """
     Event Invoice Relationship
     """
-    decorators = (is_admin, )
+    decorators = (is_admin,)
     schema = EventInvoiceSchema
     data_layer = {'session': db.session,
                   'model': EventInvoice}

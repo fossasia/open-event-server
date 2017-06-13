@@ -78,7 +78,7 @@ class TicketingManager(object):
             orders = orders.filter(Order.created_at <= to_date)
 
         if promoted_event:
-            orders = orders.join(Order.event).filter(Event.discount_code_id != None)
+            orders = orders.join(Order.event).filter(Event.discount_code_id is not None)
 
         orders = orders.order_by(desc(Order.id))
         return orders.all()

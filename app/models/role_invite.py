@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-
+import pytz
 from app.models import db
 
 
@@ -29,7 +29,7 @@ class RoleInvite(db.Model):
 
     def has_expired(self):
         # Check if invitation link has expired (it expires after 24 hours)
-        return datetime.now() > self.created_at + timedelta(hours=24)
+        return datetime.now(pytz.utc) > self.created_at + timedelta(hours=24)
 
     def __repr__(self):
         return '<RoleInvite %r:%r:%r>' % (self.email,

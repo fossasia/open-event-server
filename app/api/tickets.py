@@ -10,7 +10,6 @@ from app.models.event import Event
 
 
 class TicketSchema(Schema):
-
     class Meta:
         type_ = 'ticket'
         self_view = 'v1.ticket_detail'
@@ -48,7 +47,6 @@ class TicketSchema(Schema):
 
 
 class AllTicketList(ResourceList):
-
     def query(self, view_kwargs):
         query_ = self.session.query(Ticket)
         if view_kwargs.get('id') is not None:
@@ -60,7 +58,7 @@ class AllTicketList(ResourceList):
             event = self.session.query(Event).filter_by(id=view_kwargs['id']).one()
             data['event_id'] = event.id
 
-    decorators = (jwt_required, )
+    decorators = (jwt_required,)
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket,
@@ -71,15 +69,14 @@ class AllTicketList(ResourceList):
 
 
 class TicketDetail(ResourceDetail):
-    decorators = (jwt_required, )
+    decorators = (jwt_required,)
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket}
 
 
 class TicketRelationship(ResourceRelationship):
-
-    decorators = (jwt_required, )
+    decorators = (jwt_required,)
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket}

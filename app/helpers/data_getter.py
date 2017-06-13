@@ -104,7 +104,7 @@ class DataGetter(object):
     def get_all_events_with_discounts():
         """Method return all events"""
         return Event.query.order_by(desc(Event.id)).filter_by(deleted_at=None) \
-            .filter(Event.discount_code_id != None).filter(Event.discount_code_id > 0).all()
+            .filter(Event.discount_code_id is not None).filter(Event.discount_code_id > 0).all()
 
     @staticmethod
     def get_custom_placeholders():
@@ -276,10 +276,12 @@ class DataGetter(object):
         :return: Return all Sessions objects with the current user as a speaker
         """
         if upcoming_events:
-            return Session.query.filter(Session.speakers.any(Speaker.user_id == (login.current_user.id if not user_id else int(user_id)))).filter(
+            return Session.query.filter(Session.speakers.any(
+                Speaker.user_id == (login.current_user.id if not user_id else int(user_id)))).filter(
                 Session.starts_at >= datetime.datetime.now()).filter(Session.deleted_at.is_(None))
         else:
-            return Session.query.filter(Session.speakers.any(Speaker.user_id == (login.current_user.id if not user_id else int(user_id)))).filter(
+            return Session.query.filter(Session.speakers.any(
+                Speaker.user_id == (login.current_user.id if not user_id else int(user_id)))).filter(
                 Session.starts_at < datetime.datetime.now()).filter(Session.deleted_at.is_(None))
 
     @staticmethod
@@ -446,25 +448,29 @@ class DataGetter(object):
 
     @staticmethod
     def get_live_events_of_user(user_id=None):
-        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id = login.current_user.id if not user_id else user_id) \
+        events = Event.query.join(Event.roles, aliased=True).filter_by(
+            user_id=login.current_user.id if not user_id else user_id) \
             .filter(Event.ends_at >= datetime.datetime.now()) \
             .filter(Event.state == 'Published').filter(Event.deleted_at.is_(None))
         return DataGetter.trim_attendee_events(events, user_id)
 
     @staticmethod
     def get_all_events_of_user(user_id=None):
-        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id = login.current_user.id if not user_id else user_id)
+        events = Event.query.join(Event.roles, aliased=True).filter_by(
+            user_id=login.current_user.id if not user_id else user_id)
         return DataGetter.trim_attendee_events(events, user_id)
 
     @staticmethod
     def get_draft_events_of_user(user_id=None):
-        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id if not user_id else user_id) \
+        events = Event.query.join(Event.roles, aliased=True).filter_by(
+            user_id=login.current_user.id if not user_id else user_id) \
             .filter(Event.state == 'Draft').filter(Event.deleted_at.is_(None))
         return DataGetter.trim_attendee_events(events, user_id)
 
     @staticmethod
     def get_past_events_of_user(user_id=None):
-        events = Event.query.join(Event.roles, aliased=True).filter_by(user_id=login.current_user.id if not user_id else user_id) \
+        events = Event.query.join(Event.roles, aliased=True).filter_by(
+            user_id=login.current_user.id if not user_id else user_id) \
             .filter(Event.ends_at <= datetime.datetime.now()).filter(
             or_(Event.state == 'Completed', Event.state == 'Published')).filter(Event.deleted_at.is_(None))
         return DataGetter.trim_attendee_events(events, user_id)
@@ -599,7 +605,8 @@ class DataGetter(object):
             default_images = DataGetter.get_event_default_images()
             for key in [event.sub_topic, event.topic, 'Other']:
                 if key in default_images:
-                    return request.url_root.strip('/') + url_for('static', filename='placeholders/' + default_images[key])
+                    return request.url_root.strip('/') + url_for('static',
+                                                                 filename='placeholders/' + default_images[key])
 
     @staticmethod
     def get_all_mails(count=300):
@@ -698,7 +705,8 @@ class DataGetter(object):
         all_settings = {}
         for index in range(len(settings_list)):
             all_settings[settings_list[index].action] = {'mail_status': settings_list[index].mail_status,
-                                                         'notification_status': settings_list[index].notification_status,
+                                                         'notification_status': settings_list[
+                                                             index].notification_status,
                                                          'user_control_status': settings_list[
                                                              index].user_control_status}
         return all_settings
@@ -714,10 +722,10 @@ class DataGetter(object):
         try:
             for event in DataGetter.get_live_and_public_events():
                 if not string_empty(event.location_name) and not string_empty(event.latitude) and not string_empty(
-                     event.longitude):
+                    event.longitude):
                     response = requests.get(
-                         "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
-                             event.longitude)).json()
+                        "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(event.latitude) + "," + str(
+                            event.longitude)).json()
                     if response['status'] == u'OK':
                         for addr in response['results'][0]['address_components']:
                             if addr['types'] == ['locality', 'political']:

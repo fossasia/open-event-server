@@ -1,42 +1,92 @@
-from flask import request
-from flask import url_for
-from werkzeug.utils import redirect
+import flask_login as login
+from flask import url_for, redirect, render_template, current_app as app, Blueprint, request
+from flask_scrypt import generate_password_hash
+from wtforms import form, fields, validators
+from flask_admin import Admin, BaseView, AdminIndexView, expose, helpers as admin_helpers
+from flask_admin.contrib.sqla import ModelView
+from app.models import db
+from app.models.user import User
 
-from app.helpers.auth import AuthManager
-from app.views.home import home_routes
-from app.views.public.babel_view import babel
-from app.views.public.event_detail import event_detail
-from app.views.public.event_invoice import event_invoicing
-from app.views.public.pages import pages
-from app.views.public.ticketing import ticketing
-from app.views.sitemap import sitemaps
-from app.views.super_admin.content import sadmin_content
-from app.views.super_admin.debug import sadmin_debug
-from app.views.super_admin.dep_settings import sadmin_settings
-from app.views.super_admin.events import sadmin_events
-from app.views.super_admin.messages import sadmin_messages
-from app.views.super_admin.modules import sadmin_modules
-from app.views.super_admin.my_sessions import sadmin_sessions
-from app.views.super_admin.permissions import sadmin_permissions
-from app.views.super_admin.reports import sadmin_reports
-from app.views.super_admin.sales import sadmin_sales
-from app.views.super_admin.super_admin import sadmin
-from app.views.super_admin.users import sadmin_users
-from app.views.users.events import events
-from app.views.users.settings import settings
-from app.views.users.export import event_export
-from app.views.users.invite import event_invites
-from app.views.users.my_sessions import my_sessions
-from app.views.users.my_tickets import my_tickets
-from app.views.users.notifications import notifications
-from app.views.users.profile import profile
-from app.views.users.roles import event_roles
-from app.views.users.scheduler import event_scheduler
-from app.views.users.sessions import event_sessions
-from app.views.users.speakers import event_speakers
-from app.views.users.ticket_sales import event_ticket_sales
-from app.views.users.sponsors import event_sponsors
-from app.views.utils_routes import utils_routes
+
+class AdminModelView(ModelView):
+    def is_accessible(self):
+        return login.current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        # redirect to login page if user doesn't have access
+        return redirect(url_for('admin.index', next=request.url))
+
+
+class LoginForm(form.Form):
+    login = fields.TextField(validators=[validators.required()])
+    password = fields.PasswordField(validators=[validators.required()])
+
+    def validate_login(self, field):
+        """
+        validate login
+        :param field:
+        :return:
+        """
+        user = self.get_user()
+
+        if user is None:
+            raise validators.ValidationError('Invalid user')
+
+        if user.password != generate_password_hash(self.password.data, user.salt):
+            raise validators.ValidationError('Invalid password')
+
+        if not user.is_admin or not user.is_super_admin:
+            raise validators.ValidationError('Access Forbidden. Admin Rights Required')
+
+    def get_user(self):
+        return User.query.filter_by(email=self.login.data).first()
+
+
+class MyAdminIndexView(AdminIndexView):
+    @expose('/')
+    def index(self):
+        """
+        /admin
+        :return:
+        """
+        if not login.current_user.is_authenticated:
+            return redirect(url_for('.login_view'))
+        return super(MyAdminIndexView, self).index()
+
+    @expose('/login/', methods=('GET', 'POST'))
+    def login_view(self):
+        """
+        login view for flask-admin
+        :return:
+        """
+        # handle user login
+        form = LoginForm(request.form)
+        if admin_helpers.validate_form_on_submit(form):
+            user = form.get_user()
+            login.login_user(user)
+
+        if login.current_user.is_authenticated:
+            return redirect(url_for('.index'))
+        self._template_args['form'] = form
+        return super(MyAdminIndexView, self).index()
+
+    @expose('/logout/')
+    def logout_view(self):
+        login.logout_user()
+        return redirect(url_for('.index'))
+
+
+home_routes = Blueprint('home', __name__)
+
+
+# Flask views
+@home_routes.route('/')
+def index():
+    """
+    Index route
+    :return:
+    """
+    return render_template('index.html')
 
 
 class BlueprintsManager:
@@ -50,64 +100,21 @@ class BlueprintsManager:
         :param app: a flask app instance
         :return:
         """
-        app.register_blueprint(pages)
-
         app.register_blueprint(home_routes)
-        app.register_blueprint(utils_routes)
-        app.register_blueprint(sitemaps)
+        admin = Admin(app, name='admin', template_mode='bootstrap3', index_view=MyAdminIndexView(),
+                      base_template='admin_base.html')
 
-        app.register_blueprint(babel)
-        app.register_blueprint(event_invoicing)
-        #app.register_blueprint(explore)
-        app.register_blueprint(ticketing)
-        app.register_blueprint(event_detail)
+        # Get all the models in the db, all models should have a explicit __tablename__
+        classes, models, table_names = [], [], []
+        for class_ in db.Model._decl_class_registry.values():
+            try:
+                table_names.append(class_.__tablename__)
+                classes.append(class_)
+            except:
+                pass
+        for table in db.metadata.tables.items():
+            if table[0] in table_names:
+                models.append(classes[table_names.index(table[0])])
 
-        # Blueprints that require login
-        app.register_blueprint(events)
-        app.register_blueprint(event_speakers)
-        app.register_blueprint(event_sessions)
-        app.register_blueprint(event_scheduler)
-        app.register_blueprint(event_export)
-        app.register_blueprint(event_roles)
-        app.register_blueprint(event_invites)
-        app.register_blueprint(event_ticket_sales)
-        app.register_blueprint(event_sponsors)
-
-        app.register_blueprint(my_tickets)
-        app.register_blueprint(my_sessions)
-        app.register_blueprint(settings)
-        app.register_blueprint(notifications)
-        app.register_blueprint(profile)
-
-        # Blueprints that are accessible only by a super admin
-        app.register_blueprint(sadmin)
-        app.register_blueprint(sadmin_events)
-        app.register_blueprint(sadmin_sales)
-        app.register_blueprint(sadmin_sessions)
-        app.register_blueprint(sadmin_users)
-        app.register_blueprint(sadmin_permissions)
-        app.register_blueprint(sadmin_messages)
-        app.register_blueprint(sadmin_reports)
-        app.register_blueprint(sadmin_settings)
-        app.register_blueprint(sadmin_modules)
-        app.register_blueprint(sadmin_content)
-        app.register_blueprint(sadmin_debug)
-
-
-@event_speakers.before_request
-@event_sessions.before_request
-@event_scheduler.before_request
-@event_export.before_request
-@events.before_request
-@event_roles.before_request
-@event_sponsors.before_request
-@event_invites.before_request
-@event_ticket_sales.before_request
-@my_tickets.before_request
-@my_sessions.before_request
-@settings.before_request
-@notifications.before_request
-@profile.before_request
-def check_accessible():
-    if not AuthManager.is_accessible():
-        return redirect(url_for('admin.login_view', next=request.url))
+        for model in models:
+            admin.add_view(AdminModelView(model, db.session))

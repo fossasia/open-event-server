@@ -5,7 +5,6 @@ import errno
 
 import PIL
 from PIL import Image
-from babel.messages import frontend as babel
 from flask import Blueprint
 from flask import current_app as app
 from flask import redirect, request, url_for, jsonify, render_template
@@ -158,7 +157,6 @@ def upload_translation():
             l_code = request.form["l_code"]
             file_destination = BASE_TRANSLATIONS_DIR + "/" + l_code + "/LC_MESSAGES"
             file.save(os.path.join(file_destination, "messages.po"))
-            compiler = babel.compile_catalog()
             compiler.input_file = os.path.join(file_destination, "messages.po")
             compiler.output_file = os.path.join(file_destination, "messages.mo")
             compiler.run()

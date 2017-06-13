@@ -123,7 +123,7 @@ EVENT_TOPICS = {
         "Opera", "Other", "Pop", "R&B", "Reggae", "Religious/Spiritual", "Rock",
         "Top 40"
     ],
-    'Other': ["Avatar","Logo"],
+    'Other': ["Avatar", "Logo"],
     'Performing & Visual Arts': [
         "Ballet", "Comedy", "Craft", "Dance", "Fine Art", "Literary Arts",
         "Musical", "Opera", "Orchestra", "Other", "Theatre"
