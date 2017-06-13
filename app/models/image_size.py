@@ -9,15 +9,15 @@ class ImageSizes(db.Model):
     type = db.Column(db.String)
     full_width = db.Column(db.Integer)
     full_height = db.Column(db.Integer)
-    full_aspect = db.Column(db.String)
+    full_aspect = db.Column(db.Boolean, default=False)
     full_quality = db.Column(db.Integer)
     icon_width = db.Column(db.Integer)
     icon_height = db.Column(db.Integer)
-    icon_aspect = db.Column(db.String)
+    icon_aspect = db.Column(db.Boolean, default=False)
     icon_quality = db.Column(db.Integer)
     thumbnail_width = db.Column(db.Integer)
     thumbnail_height = db.Column(db.Integer)
-    thumbnail_aspect = db.Column(db.String)
+    thumbnail_aspect = db.Column(db.Boolean, default=False)
     thumbnail_quality = db.Column(db.Integer)
     logo_width = db.Column(db.Integer)
     logo_height = db.Column(db.Integer)
@@ -26,15 +26,15 @@ class ImageSizes(db.Model):
                  type=None,
                  full_width=None,
                  full_height=None,
-                 full_aspect=None,
+                 full_aspect=False,
                  full_quality=None,
                  icon_width=None,
                  icon_height=None,
-                 icon_aspect=None,
+                 icon_aspect=False,
                  icon_quality=None,
                  thumbnail_width=None,
                  thumbnail_height=None,
-                 thumbnail_aspect=None,
+                 thumbnail_aspect=False,
                  thumbnail_quality=None,
                  logo_width=None,
                  logo_height=None):
