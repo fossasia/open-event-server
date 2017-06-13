@@ -16,7 +16,7 @@ import logging
 import os.path
 from os import environ
 import sys
-from flask import Flask, session
+from flask import Flask
 from app.settings import get_settings, get_setts
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
@@ -46,9 +46,7 @@ from app.helpers.cache import cache
 from helpers.helpers import send_email_for_expired_orders
 from werkzeug.contrib.profiler import ProfilerMiddleware
 from app.views import BlueprintsManager
-from flask_sqlalchemy import get_debug_queries
 from app.helpers.auth import AuthManager
-
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
