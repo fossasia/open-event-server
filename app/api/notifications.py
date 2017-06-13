@@ -20,20 +20,20 @@ class NotificationSchema(Schema):
         type_ = 'notification'
         self_view = 'v1.notification_detail'
         self_view_kwargs = {'id': '<id>'}
-        self_view_many = 'v1.notification_list'
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
     title = fields.Str()
     message = fields.Str()
     received_at = fields.DateTime()
+    accept = fields.Str()
     is_read = fields.Boolean()
     user = Relationship(
         attribute='user',
         self_view='v1.notification_user',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.user_detail',
-        related_view_kwargs={'notification_id': '<notification_id>'},
+        related_view_kwargs={'notification_id': '<id>'},
         schema='UserSchema',
         type_='user'
     )
@@ -44,16 +44,17 @@ class NotificationList(ResourceList):
     List all the Notification
     '''
     def query(self, view_kwargs):
-        query_ = self.session.query(User)
-        if view_kwargs.get('user_id') is not None:
-            query_ = query_.join(User).filter(User.id == view_kwargs['user_id'])
+        query_ = self.session.query(Notification)
+        if view_kwargs.get('id') is not None:
+            query_ = query_.join(User).filter(User.id == view_kwargs['id'])
         return query_
 
     def before_create_object(self, data, view_kwargs):
-        if view_kwargs.get('user_id') is not None:
-            user = self.session.query(User).filter_by(id=view_kwargs['user_id']).one()
+        if view_kwargs.get('id') is not None:
+            user = self.session.query(User).filter_by(id=view_kwargs['id']).one()
             data['user_id'] = user.id
 
+    view_kwargs = True
     decorators = (is_user_itself, )
     schema = NotificationSchema
     data_layer = {'session': db.session,

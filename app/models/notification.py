@@ -32,8 +32,8 @@ class Notification(db.Model):
     received_at = db.Column(db.DateTime(timezone=True))
     is_read = db.Column(db.Boolean)
 
-    def __init__(self, user, title, message, action, received_at, is_read=False):
-        self.user = user
+    def __init__(self, user_id=None, title=None, message=None, action=None, received_at=None, is_read=False):
+        self.user_id = user_id
         self.title = title
         self.message = message
         self.action = action

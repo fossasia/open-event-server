@@ -85,7 +85,7 @@ class ObjectMother(object):
     def get_notification():
         user = ObjectMother.get_user()
         return Notification(
-            user=user,
+            user_id=user.id,
             title="test title",
             message="test msg",
             action="Testing",
