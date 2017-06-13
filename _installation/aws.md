@@ -74,9 +74,9 @@ sudo usermod -a -G docker $(whoami)
 
 ## Phase 3
 
-The third phase is about building the Open Event on the server and running it. The steps are very similar to the [Docker installation instructions](INSTALLATION_DOCKER.md) so it is very highly recommended you have a look at it and try to understand the process.
+The third phase is about building the Open Event on the server and running it. The steps are very similar to the [Docker installation instructions](docker.md) so it is very highly recommended you have a look at it and try to understand the process.
 
-* First we will set the `SERVER_NAME` config. (See [Docker instructions](INSTALLATION_DOCKER.md) for more info on this)
+* First we will set the `SERVER_NAME` config. (See [Docker instructions](docker.md) for more info on this)
 
 ```sh
 export SERVER_NAME="ec2-52-41-207-116.us-west-2.compute.amazonaws.com"
@@ -139,7 +139,7 @@ python manage.py db stamp head
 
 * [Amazon EC2 Getting Started](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance_linux)
 * [EC2 Docker Getting Started](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-basics.html)
-* [Open Event Docker Manual](INSTALLATION_DOCKER.md)
+* [Open Event Docker Manual](docker.md)
 
 
 

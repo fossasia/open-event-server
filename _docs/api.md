@@ -2,9 +2,11 @@
 title: API
 ---
 
+All the APIs of nextgen branch are right now hosted in `/v1/`.
+
 ## API Authentication
 
-To get access token, send a POST request to `/api/v2/login` with email and password.
+To get access token, send a POST request to `/auth/session` with email and password.
 
 ```json
 {
@@ -26,13 +28,13 @@ Then use the `access_token` in a request by setting the header `Authorization` t
 
 ## Swagger Docs
 
-Swagger API documentation with live-testing feature is available at `/api/v2` endpoint of the server where Open Event is hosted.
-For the current dev deployement, it is at http://open-event-dev.herokuapp.com/api/v2/ and for the master deployement, it is at
-http://open-event.herokuapp.com/api/v2/
+Swagger API documentation with live-testing feature is available at `/api/v1` endpoint of the server where Open Event is hosted.
+For the current dev deployement, it is at http://open-event-dev.herokuapp.com/api/v1/ and for the master deployement, it is at
+http://open-event.herokuapp.com/api/v1/
 
 Don't forget to login into the swagger UI (through the top right link) to get access to all authorized API methods (like POST, PUT).
 
-**Note** - A static documentation with no live-testing feature is available at http://fossasia.github.io/open-event-orga-server/api/v2/. In case the above documentation links
+**Note** - A static documentation with no live-testing feature is available at http://fossasia.github.io/open-event-orga-server/api/v1/. In case the above documentation links
 are down/dead, please refer to it. It will always contain docs of latest version of Open Event Orga Server.
 
 
@@ -54,8 +56,8 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**logo** | string | Optional | Public |
 |**location_name** | string | Optional | Public |
 |**searchable_location_name** | string | Optional | Public |
-|**start_time** | string | Required | Public |
-|**end_time** | string | Required | Public |
+|**starts_at** | string | Required | Public |
+|**ends_at** | string | Required | Public |
 |**latitude** | number | Optional | Public |
 |**longitude** | number | Optional | Public |
 |**background_image** | string | Optional | Public |
@@ -140,6 +142,8 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 
 ### 3. Session
 
+Note: If the `microlocation` field of the session is null, the session is unscheduled in the event scheduler.
+
 | Field | Datatype | Requirement | Access |
 | --- | --- | --- | --- |
 |**id** | integer | Required | Public |
@@ -148,8 +152,8 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 |**short_abstract** | string | Optional | Public |
 |**long_abstract** | string | Required | Public |
 |**comments** | string | Optional | Public |
-|**start_time** | string | Required | Public |
-|**end_time** | string | Required | Public |
+|**starts_at** | string | Required | Public |
+|**ends_at** | string | Required | Public |
 |**speakers** | Array[**SessionSpeaker**] | Optional | Public |
 |**track** | **SessionTrack** | Optional | Public |
 |**language** | string | Optional | Public |
@@ -263,8 +267,8 @@ Datatype, requirement and access-level has been defined for every model. Nested 
 | --- | --- | --- | --- |
 |**id** | integer | Required | Public |
 |**email** | string | Required | Public |
-|**signup_time** | string | Optional | Public |
-|**last_access_time** | string | Optional | Public |
+|**signup_at** | string | Optional | Public |
+|**last_accessed_at** | string | Optional | Public |
 |**user_detail** | **UserDetail** | Optional | Public |
 
 #### UserDetail

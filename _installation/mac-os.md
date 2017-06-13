@@ -1,32 +1,27 @@
 ---
-title: Generic
+title: macOS
 ---
 
 ## Dependencies required to run Orga Server
 
 * Python 2
+
+* Installation of 'Homebrew' would catalyze the process of installation
+```sh
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+brew update
+brew doctor
+export PATH="/usr/local/bin:$PATH"
+```
+
 * Postgres
 ```sh
-sudo apt-get update
-sudo apt-get install postgresql postgresql-contrib
+brew update
+brew install postgres
 ```
 * NodeJS
-if nvm(Node Version Manager)  is not installed:
-using cURL:
 ```sh
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash
-```
-or Wget:
-```sh
-wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash
-```
-run nvm after exporting NVM_DIR:
-```sh
-. "$NVM_DIR/nvm.sh"
-```
-Node installation, v6.9.1 is LTS, though you can install other versions as well:
-```sh
-nvm install 6.9.1
+brew install node
 ```
 
 ## Steps
@@ -35,18 +30,27 @@ Make sure you have the dependencies mentioned above installed before proceeding 
 
 Run the commands mentioned below with the terminal active in the project's root directory.
 
+You may encounter problems installing 'libevent' while executing the requirements.txt..
+
+Installing the below files would prevent the 'egg_info' error.
+
+```sh
+brew install python libevent
+curl https://bootstrap.pypa.io/ez_setup.py -o - | python
+pip install gevent gunicorn
+```
 
 * **Step 1** - Install python requirements.
 
 ```sh
-pip install -r requirements.txt
+sudo pip install -r requirements.txt
 ```
 
 
 * **Step 2** - Create the database. For that we first open the psql shell.
 
 ```sh
-sudo -u postgres psql
+psql
 ```
 
 * When inside psql, create a user for open-event and then using the user create the database.
@@ -70,15 +74,11 @@ bower install
 * **Step 4** - Create application environment variables.
 
 ```sh
-cp .env.example .env
+export DATABASE_URL=postgresql://open_event_user:start@127.0.0.1:5432/test
 ```
 
 
-* **Step 5** - Start the postgres service.
-
-```sh
-sudo service postgresql restart
-```
+* **Step 5** - Start the postgres service on the application manually.
 
 
 * **Step 6** - Create the tables. For that we will use `create_db.py`.
@@ -119,22 +119,3 @@ python manage.py runserver
 
 ---
 
-**Note:**
-
-If you are working from within a proxied network of an organization/institute, Bower might not be able to install the libraries. For that, we need to configure .bowerrc to work via proxy.
-* Open .bowerrc in any text editor like vim. Run:
-```vim .bowerrc```
-* The contents of .bowerrc will be something like this:
-```
-{
-	"directory": "app/static/admin/lib"
-}
-```
-* Modify the file to add "proxy" and "https-proxy" properties like this:
-```
-{
-	"directory": "app/static/admin/lib",
-	"proxy": "http://172.31.1.23:8080",
-	"https-proxy": "http://172.31.1.23:8080"
-}
-```

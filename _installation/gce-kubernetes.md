@@ -2,7 +2,7 @@
 title: GCE Kubernetes
 ---
 
-## Setup and Requirements
+## Setup
 
 - If you don’t already have a Google Account (Gmail or Google Apps), you must [create one](https://accounts.google.com/SignUp). Then, sign-in to Google Cloud Platform console ([console.cloud.google.com](http://console.cloud.google.com/)) and create a new project:
 
@@ -78,7 +78,8 @@ title: GCE Kubernetes
     sudo mkfs.ext4 -F -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/disk/by-id/google-[DISK_NAME]
     ```
 
-- Now, the disk is formatted and ready. Detach the disk from the instance.
+- The disk is formatted and ready. 
+- Now exit the SSH session and Detach the disk from the instance by running
 
     ```
     gcloud compute instances detach-disk pg-disk-formatter --disk pg-data-disk
@@ -86,14 +87,12 @@ title: GCE Kubernetes
 
 _You can delete the instance if your not planning to use it for anything else. But make sure the disk `pg-data-disk` is not deleted._
 
-Repeat the same procedure and create another disk named `nfs-data-disk`.
-
 ## Create your Kubernetes Cluster
 
 - Create a cluster via the `gcloud` command line tool:
 
     ```
-    gcloud container clusters create opev-cluster --image-type=container_vm
+    gcloud container clusters create opev-cluster --cluster-version=1.6.4
     ```
 
 - Get the credentials for `kubectl` to use.
@@ -102,34 +101,54 @@ Repeat the same procedure and create another disk named `nfs-data-disk`.
     gcloud container clusters get-credentials opev-cluster
     ```
 
+## Pre deployment steps 
+- A domain name (Eg. eventyay.com, google.com, hello.io). - A free domain can be registered at http://www.freenom.com .
+- Reserve a static external IP address 
+	
+	```bash
+	gcloud compute addresses create testip --region us-west1
+	```
+	
+	The response would be similar to 
+	
+	```
+	address: 123.123.123.123
+	creationTimestamp: '2017-05-16T05:26:24.894-07:00'
+	description: ''
+	id: '1234556789'
+	kind: compute#address
+	name: test
+	selfLink: https://www.googleapis.com/compute/v1/projects/eventyay/global/addresses/test
+	status: RESERVED
+	```	
+	
+	Note down the address. (In this case `123.123.123.123`). We'll call this **External IP Address One**.
+- Add the **External IP Address One** as an `A` record to your domain's DNS Zone.
+- Add the **External IP Address One** to `kubernetes/yamls/nginx/service.yml` for the parameter `loadBalancerIP`.
+- Add your domain name to `kubernetes/yamls/web/ingress-notls.yml` & `kubernetes/yamls/web/ingress-tls.yml`. (replace `api.eventyay.com`)
+- Add your email ID to `kubernetes/yamls/lego/configmap.yml` for the parameter `lego.email`.
+- In `kubernetes/yamls/postgres/postgres-pod.yml` ensure `pdName` is `pg-data-disk`. Else change it.
+
 ## Deploy our pods, services and deployments
 
 - From the project directory, use the provided deploy script to deploy our application from the defined configuration files that are in the `kubernetes` directory.
 
     ```
-    ./kubernetes/deploy.sh
+    ./kubernetes/deploy.sh create all
     ```
 
-- The Kubernetes master creates the load balancer and related Compute Engine forwarding rules, target pools, and firewall rules to make the service fully accessible from outside of Google Cloud Platform.
+- The Kubernetes master creates the load balancer and related Compute Engine forwarding rules, target pools, and firewall rules to make the service fully accessible from outside of Google Cloud Platform. 
+- Wait for a few minutes for all the containers to be created and the SSL Certificates to be generated and loaded. 
+- You can track the progress using the Web GUI as mentioned below.
+- Once deployed, your instance will be accessible at your domain name.
     
-    To find the ip addresses associated with the service run:
-
-    ```
-    kubectl get services web
-    ```
-
-    The `EXTERNAL_IP` may take several minutes to become available and visible. If the `EXTERNAL_IP` is missing, wait a few minutes and try again.
-    
-    Note there are 2 IP addresses listed, both serving port 80. `CLUSTER_IP` is only visible inside your cloud virtual network. `EXTERNAL_IP` is externally accessible.
-    
-    You should now be able to reach the web application by pointing your browser to this address: `http://EXTERNAL_IP`
 
 ## Other handy commands
 
 - Delete all created pods, services and deployments
 
     ```
-    kubectl delete -R -f kubernetes/yamls/
+    ./kubernetes/deploy.sh delete all
     ```
     
 -  Access The Kubernetes dashboard Web GUI

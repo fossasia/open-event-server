@@ -113,7 +113,7 @@ Here is a basic example.
 ```python
 from flask import request, current_app as app
 from app.helpers.storage import upload
-from flask.ext import login
+import flask_login as login
 
 @app.route('/users/upload/', methods=('POST'))
 def view():

@@ -10,8 +10,8 @@ title: Local
 sudo apt-get update
 sudo apt-get install postgresql postgresql-contrib
 ```
-* NodeJS  
-if nvm(Node Version Manager)  is not installed:  
+* NodeJS
+if nvm(Node Version Manager)  is not installed:
 using cURL:
 ```sh
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash
@@ -33,12 +33,24 @@ nvm install 6.9.1
 
 Make sure you have the dependencies mentioned above installed before proceeding further.
 
-* **Step 1** - Install python requirements. You need to be present into the root directory of the project.
+* **Step 0** - Clone the Open Event Orga Server repository (from the development branch) and ```cd ``` into the directory.
+```sh
+git clone -b development https://github.com/fossasia/open-event-orga-server.git
+cd open-event-orga-server
+```
+
+
+* **Step 1** - Install python requirements. You need to be present into the root directoryt  of the project.
 
 ```sh
 sudo -H pip install -r requirements.txt
 ```
-
+hint: You may need to upgrade your pip version and install following packages if you encounter errors while installing the requirements.
+```sh
+sudo apt-get install python-dev
+sudo apt-get install libpq-dev
+sudo apt-get install libffi6 libffi-dev
+```
 
 * **Step 2** - Create the database. For that we first open the psql shell. Go the directory where your postgres file is stored.
 
@@ -58,12 +70,20 @@ CREATE DATABASE oevent WITH OWNER john;
 * Once database is created, exit the psql shell with `\q` followed by ENTER.
 
 
-* **Step 3** - Install bower and frontend requirements. Learn more at [BOWER.md](../README.md#how-to-configure-bower). For this you need to be present in the root directory of the project. The root directory contains the file ```bower.json```. When you write ```bower install```, it finds bower.json and installs the libraries on the system.
+* **Step 3** - Install bower and frontend requirements. For this you need to be present in the root directory of the project. The root directory contains the file ```bower.json```. When you write ```bower install```, it finds bower.json and installs the libraries on the system.
 
 ```sh
 npm install bower -g
 bower install
 ```
+
+if error
+```sh
+sudo npm install bower -g
+sudo ln -s /usr/bin/nodejs /usr/bin/node
+sudo bower install
+```
+
 for mac user:
 ```sh
 sudo npm install bower -g
@@ -73,8 +93,7 @@ bower install
 * **Step 4** - Create application environment variables.
 
 ```sh
-export DATABASE_URL=postgresql:///oevent
-export SERVER_NAME=localhost:5000
+cp .env.example .env
 ```
 
 The URL is short, thank to the resemble of Postgres user and OS user.
@@ -105,7 +124,7 @@ python manage.py db stamp head
 ```sh
 # Install and run redis
 # For Ubuntu, Debian and alike
-sudo apt install redis-server
+sudo apt-get install redis-server
 # For Fedora, RedHat, CentOS
 sudo dnf install redis-server
 
