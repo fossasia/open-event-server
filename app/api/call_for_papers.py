@@ -20,7 +20,7 @@ class CallForPaperSchema(Schema):
         """
         Meta class for cfp Api Schema
         """
-        type_ = 'call_for_paper'
+        type_ = 'call-for-paper'
         self_view = 'v1.call_for_paper_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize

@@ -44,7 +44,7 @@ class TicketSchema(Schema):
                          related_view='v1.tag_detail',
                          related_view_kwargs={'ticket_id': '<id>'},
                          schema='TicketTagSchema',
-                         type_='ticket_tag')
+                         type_='ticket-tag')
 
 
 class AllTicketList(ResourceList):

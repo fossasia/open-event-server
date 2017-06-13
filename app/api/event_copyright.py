@@ -12,7 +12,7 @@ from app.models.event import Event
 class EventCopyrightSchema(Schema):
 
     class Meta:
-        type_ = 'event_copyright'
+        type_ = 'event-copyright'
         self_view = 'v1.event_copyright_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
