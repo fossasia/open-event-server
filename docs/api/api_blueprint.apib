@@ -4087,3 +4087,723 @@ Authorized user should be same as user in request body or must be admin.
             "version": "1.0"
           }
         }
+
+## Events Collection [/events?page,limit]
+
+### List All Events [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 2
+          },
+          "data": [
+            {
+              "relationships": {
+                "tax": {
+                  "links": {
+                    "self": "/v1/events/12/relationships/tax",
+                    "related": "/v1/events/12/tax"
+                  }
+                },
+                "sponsors": {
+                  "links": {
+                    "self": "/v1/events/12/relationships/sponsors",
+                    "related": "/v1/events/12/sponsors"
+                  }
+                },
+                "social-links": {
+                  "links": {
+                    "self": "/v1/events/12/relationships/social-links",
+                    "related": "/v1/events/12/social-links"
+                  }
+                },
+                "tracks": {
+                  "links": {
+                    "self": "/v1/events/12/relationships/tracks",
+                    "related": "/v1/events/12/tracks"
+                  }
+                },
+                "microlocation": {
+                  "links": {
+                    "self": "/v1/events/12/relationships/microlocations",
+                    "related": "/v1/events/12/microlocation"
+                  }
+                },
+                "session-types": {
+                  "links": {
+                    "self": "/v1/events/12/relationships/session-types",
+                    "related": "/v1/events/12/session-types"
+                  }
+                }
+              },
+              "attributes": {
+                "payment-country": "India",
+                "paypal-email": "johndoe@example.com",
+                "code-of-conduct": "",
+                "pay-by-bank": false,
+                "schedule-published-on": null,
+                "payment-currency": null,
+                "organizer-description": "",
+                "xcal-url": null,
+                "original-image-url": null,
+                "topic": null,
+                "onsite-details": null,
+                "organizer-name": "John Doe",
+                "large-image-url": null,
+                "timezone": "UTC",
+                "deleted-at": null,
+                "ticket-url": null,
+                "pay-by-stripe": false,
+                "location-name": null,
+                "privacy": "public",
+                "state": "Draft",
+                "latitude": null,
+                "tax-allow": false,
+                "pay-onsite": false,
+                "type": null,
+                "email": "example@example.com",
+                "starts-at": "2017-05-31T18:30:00+00:00",
+                "searchable-location-name": null,
+                "description": "",
+                "pentabarf-url": null,
+                "logo-url": null,
+                "ticket-include": false,
+                "event-url": null,
+                "ical-url": null,
+                "pay-by-paypal": true,
+                "show-map": 1,
+                "sponsors-enabled": false,
+                "name": "New Event 1",
+                "sub-topic": null,
+                "icon-image-url": null,
+                "thumbnail-image-url": null,
+                "created-at": "2017-06-11T06:23:39.513383+00:00",
+                "longitude": null,
+                "pay-by-cheque": false,
+                "bank-details": null,
+                "cheque-details": null,
+                "has-session-speakers": false,
+                "identifier": "b8324ae2",
+                "ends-at": "2017-06-04T18:30:00+00:00"
+              },
+              "type": "event",
+              "id": "12",
+              "links": {
+                "self": "/v1/events/12"
+              }
+            },
+            {
+              "relationships": {
+                "tax": {
+                  "links": {
+                    "self": "/v1/events/11/relationships/tax",
+                    "related": "/v1/events/11/tax"
+                  }
+                },
+                "sponsors": {
+                  "links": {
+                    "self": "/v1/events/11/relationships/sponsors",
+                    "related": "/v1/events/11/sponsors"
+                  }
+                },
+                "social-links": {
+                  "links": {
+                    "self": "/v1/events/11/relationships/social-links",
+                    "related": "/v1/events/11/social-links"
+                  }
+                },
+                "tracks": {
+                  "links": {
+                    "self": "/v1/events/11/relationships/tracks",
+                    "related": "/v1/events/11/tracks"
+                  }
+                },
+                "microlocation": {
+                  "links": {
+                    "self": "/v1/events/11/relationships/microlocations",
+                    "related": "/v1/events/11/microlocation"
+                  }
+                },
+                "session-types": {
+                  "links": {
+                    "self": "/v1/events/11/relationships/session-types",
+                    "related": "/v1/events/11/session-types"
+                  }
+                }
+              },
+              "attributes": {
+                "payment-country": null,
+                "paypal-email": null,
+                "code-of-conduct": "",
+                "pay-by-bank": false,
+                "schedule-published-on": null,
+                "payment-currency": null,
+                "organizer-description": "",
+                "xcal-url": null,
+                "original-image-url": null,
+                "topic": null,
+                "onsite-details": null,
+                "organizer-name": null,
+                "large-image-url": null,
+                "timezone": "UTC",
+                "deleted-at": null,
+                "ticket-url": null,
+                "pay-by-stripe": false,
+                "location-name": null,
+                "privacy": "public",
+                "state": "Draft",
+                "latitude": null,
+                "tax-allow": false,
+                "pay-onsite": false,
+                "type": null,
+                "email": "example@example.com",
+                "starts-at": "2017-05-31T18:30:00+00:00",
+                "searchable-location-name": null,
+                "description": "",
+                "pentabarf-url": null,
+                "logo-url": null,
+                "ticket-include": false,
+                "event-url": null,
+                "ical-url": null,
+                "pay-by-paypal": false,
+                "show-map": 1,
+                "sponsors-enabled": false,
+                "name": "New Event",
+                "sub-topic": null,
+                "icon-image-url": null,
+                "thumbnail-image-url": null,
+                "created-at": "2017-06-11T06:03:31.790343+00:00",
+                "longitude": null,
+                "pay-by-cheque": false,
+                "bank-details": null,
+                "cheque-details": null,
+                "has-session-speakers": false,
+                "identifier": "cde06485",
+                "ends-at": "2017-06-04T18:30:00+00:00"
+              },
+              "type": "event",
+              "id": "11",
+              "links": {
+                "self": "/v1/events/11"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/events"
+          }
+        }
+
+
+### Create Event [POST]
+
++ name (string) - Name of the event **(required)**
++ email (string) - Email of the Organizer **(required)**
++ starts-at (datetime) - Start time of the Event **(required)**
++ ends-at (datetime) - End time of the Event **(required)**
++ timezone (string) - Local TImezone of the Event
++ latitude (float) - latitude Coordinate of the Event
++ longitude (float) - longitude Coordinate of the Event
++ logo-url (string in URL format) - URL of the logo uploaded
++ location-name (string) - Name of the location of the event
++ searchable-location-name (string) - searchable name of the event's location
++ description (string) - Description of the event
++ thumbnail-image-url (string in URL format) - URL of the uploaded thumbnail
++ large-image-url (string in URL format) - URL of the large uploaded banner image
++ original-image-url (string in URL format) - URL of original image
++ icon-image-url (string in URL format) - URL of icon image
++ organizer-name (string) - Name of The Organizer of event
++ show-map (Integer) - 
++ organizer-description (string) - Description of the Organizer
++ has-session-speakers (boolean) - **(default=False)**
++ privacy (string) - Can be ```public``` and ```private``` **(default="public")** 
++ state (string) - **(default="Draft")**
++ type (string) - 
++ topic (string) - 
++ sub-topic (string) - 
++ ticket-url (string in URL format) - 
++ code-of-conduct (string) - 
++ schedule-published-on (datetime) - 
++ ticket-include (boolean) - **(default=False)**
++ deleted-at (datetime) - 
++ payment-country (string) - 
++ payment-currency (string) - 
++ paypal-email (string) - 
++ tax-allow (boolean) - **(default=False)**
++ pay-by-paypal (boolean) - **(default=False)**
++ pay-by-stringipe (boolean) - **(default=False)**
++ pay-by-cheque (boolean) - **(default=False)**
++ pay-by-bank (boolean) - **(default=False)**
++ pay-onsite (boolean) - **(default=False)**
++ cheque-details (string) - 
++ bank-details (string) - 
++ onsite-details (string) - 
++ sponsors-enabled (boolean) - **(default=False)**
+
++ Request (application/vnd.api+json)
+    
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+    
+            {
+              "data": {
+                "attributes": {
+                  "event-url": "http://eventyay.com/zbcd",
+                  "identifier": "1234",
+                  "name": "New Event",
+                  "starts-at": "2017-06-01",
+                  "ends-at": "2017-06-05",
+                  "email": "example@example.com"
+                },
+                "type": "event"
+              }
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "tax": {
+                "links": {
+                  "self": "/v1/events/12/relationships/tax",
+                  "related": "/v1/events/12/tax"
+                }
+              },
+              "sponsors": {
+                "links": {
+                  "self": "/v1/events/12/relationships/sponsors",
+                  "related": "/v1/events/12/sponsors"
+                }
+              },
+              "social-links": {
+                "links": {
+                  "self": "/v1/events/12/relationships/social-links",
+                  "related": "/v1/events/12/social-links"
+                }
+              },
+              "tracks": {
+                "links": {
+                  "self": "/v1/events/12/relationships/tracks",
+                  "related": "/v1/events/12/tracks"
+                }
+              },
+              "microlocation": {
+                "links": {
+                  "self": "/v1/events/12/relationships/microlocations",
+                  "related": "/v1/events/12/microlocation"
+                }
+              },
+              "session-types": {
+                "links": {
+                  "self": "/v1/events/12/relationships/session-types",
+                  "related": "/v1/events/12/session-types"
+                }
+              }
+            },
+            "attributes": {
+              "payment-country": null,
+              "paypal-email": null,
+              "code-of-conduct": "",
+              "pay-by-bank": false,
+              "schedule-published-on": null,
+              "payment-currency": null,
+              "organizer-description": "",
+              "xcal-url": null,
+              "original-image-url": null,
+              "topic": null,
+              "onsite-details": null,
+              "organizer-name": null,
+              "large-image-url": null,
+              "timezone": "UTC",
+              "deleted-at": null,
+              "ticket-url": null,
+              "pay-by-stripe": false,
+              "location-name": null,
+              "privacy": "public",
+              "state": "Draft",
+              "latitude": null,
+              "tax-allow": false,
+              "pay-onsite": false,
+              "type": null,
+              "email": "example@example.com",
+              "starts-at": "2017-05-31T18:30:00+00:00",
+              "searchable-location-name": null,
+              "description": "",
+              "pentabarf-url": null,
+              "logo-url": null,
+              "ticket-include": false,
+              "event-url": null,
+              "ical-url": null,
+              "pay-by-paypal": false,
+              "show-map": 1,
+              "sponsors-enabled": false,
+              "name": "New Event",
+              "sub-topic": null,
+              "icon-image-url": null,
+              "thumbnail-image-url": null,
+              "created-at": "2017-06-11T06:23:39.513383+00:00",
+              "longitude": null,
+              "pay-by-cheque": false,
+              "bank-details": null,
+              "cheque-details": null,
+              "has-session-speakers": false,
+              "identifier": "b8324ae2",
+              "ends-at": "2017-06-04T18:30:00+00:00"
+            },
+            "type": "event",
+            "id": "12",
+            "links": {
+              "self": "/v1/events/12"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/events/12"
+          }
+        }
+        
+
+## Event Details [/events/{event_id}]
++ Parameters
+    + event_id (integer) - ID of the ticket in the form of an integer
+
+### Event Details [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "tax": {
+                "links": {
+                  "self": "/v1/events/13/relationships/tax",
+                  "related": "/v1/events/13/tax"
+                }
+              },
+              "sponsors": {
+                "links": {
+                  "self": "/v1/events/13/relationships/sponsors",
+                  "related": "/v1/events/13/sponsors"
+                }
+              },
+              "social-links": {
+                "links": {
+                  "self": "/v1/events/13/relationships/social-links",
+                  "related": "/v1/events/13/social-links"
+                }
+              },
+              "tracks": {
+                "links": {
+                  "self": "/v1/events/13/relationships/tracks",
+                  "related": "/v1/events/13/tracks"
+                }
+              },
+              "microlocation": {
+                "links": {
+                  "self": "/v1/events/13/relationships/microlocations",
+                  "related": "/v1/events/13/microlocation"
+                }
+              },
+              "session-types": {
+                "links": {
+                  "self": "/v1/events/13/relationships/session-types",
+                  "related": "/v1/events/13/session-types"
+                }
+              }
+            },
+            "attributes": {
+              "payment-country": null,
+              "paypal-email": null,
+              "code-of-conduct": "",
+              "pay-by-bank": false,
+              "schedule-published-on": null,
+              "payment-currency": null,
+              "organizer-description": "",
+              "xcal-url": null,
+              "original-image-url": null,
+              "topic": null,
+              "onsite-details": null,
+              "organizer-name": null,
+              "large-image-url": null,
+              "timezone": "UTC",
+              "deleted-at": null,
+              "ticket-url": null,
+              "pay-by-stripe": false,
+              "location-name": null,
+              "privacy": "public",
+              "state": "Draft",
+              "latitude": null,
+              "tax-allow": false,
+              "pay-onsite": false,
+              "type": null,
+              "email": "example@example.com",
+              "starts-at": "2017-05-31T18:30:00+00:00",
+              "searchable-location-name": null,
+              "description": "",
+              "pentabarf-url": null,
+              "logo-url": null,
+              "ticket-include": false,
+              "event-url": null,
+              "ical-url": null,
+              "pay-by-paypal": false,
+              "show-map": 1,
+              "sponsors-enabled": false,
+              "name": "New Event",
+              "sub-topic": null,
+              "icon-image-url": null,
+              "thumbnail-image-url": null,
+              "created-at": "2017-06-11T07:26:41.852285+00:00",
+              "longitude": null,
+              "pay-by-cheque": false,
+              "bank-details": null,
+              "cheque-details": null,
+              "has-session-speakers": false,
+              "identifier": "99c4d267",
+              "ends-at": "2017-06-04T18:30:00+00:00"
+            },
+            "type": "event",
+            "id": "13",
+            "links": {
+              "self": "/v1/events/13"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/events/13"
+          }
+        }
+
+        
+### Update Event [PATCH]
+
++ id (integer) ID of the record to update (required)
+
+All other fields are optional. Add attributes you want to modify.
+
++ name (string) 
++ email (string) 
++ starts-at (datetime) 
++ ends-at (datetime) 
++ timezone (string) 
++ latitude (float) 
++ longitude (float) 
++ logo-url (string in URL format) 
++ location-name (string) 
++ searchable-location-name (string) 
++ description (string) 
++ thumbnail-image-url (string in URL format) 
++ large-image-url (string in URL format) 
++ original-image-url (string in URL format) 
++ icon-image-url (string in URL format) 
++ organizer-name (string) 
++ show-map (Integer) 
++ organizer-description (string) 
++ has-session-speakers (boolean) 
++ privacy (string) Can be ```public``` and ```private```
++ state (string) 
++ type (string) 
++ topic (string) 
++ sub-topic (string) 
++ ticket-url (string in URL format) 
++ code-of-conduct (string) 
++ schedule-published-on (datetime) 
++ ticket-include (boolean) 
++ deleted-at (datetime) 
++ payment-country (string) 
++ payment-currency (string) 
++ paypal-email (string) 
++ tax-allow (boolean) 
++ pay-by-paypal (boolean) 
++ pay-by-stringipe (boolean) 
++ pay-by-cheque (boolean) 
++ pay-by-bank (boolean) 
++ pay-onsite (boolean) 
++ cheque-details (string) 
++ bank-details (string) 
++ onsite-details (string) 
++ sponsors-enabled (boolean) 
+
++ Request (application/vnd.api+json)
+    
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+    
+            {
+              "data": {
+                "attributes": {
+                  "event-url": "http://eventyay.com/zbcd",
+                  "identifier": "1234",
+                  "name": "Changed Name",
+                  "starts-at": "2017-06-11T00:00:00+05:30",
+                  "ends-at": "2017-06-12T00:00:00+05:30",
+                  "email": "example@example.com"
+                },
+                "type": "event",
+                "id": "13"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "discount-codes": {
+                "links": {
+                  "self": "/v1/events/13/relationships/discount-codes",
+                  "related": "/v1/events/13/discount-codes"
+                }
+              },
+              "tax": {
+                "links": {
+                  "self": "/v1/events/13/relationships/tax",
+                  "related": "/v1/events/13/tax"
+                }
+              },
+              "sponsors": {
+                "links": {
+                  "self": "/v1/events/13/relationships/sponsors",
+                  "related": "/v1/events/13/sponsors"
+                }
+              },
+              "social-links": {
+                "links": {
+                  "self": "/v1/events/13/relationships/social-links",
+                  "related": "/v1/events/13/social-links"
+                }
+              },
+              "tracks": {
+                "links": {
+                  "self": "/v1/events/13/relationships/tracks",
+                  "related": "/v1/events/13/tracks"
+                }
+              },
+              "microlocation": {
+                "links": {
+                  "self": "/v1/events/13/relationships/microlocations",
+                  "related": "/v1/events/13/microlocation"
+                }
+              },
+              "session-types": {
+                "links": {
+                  "self": "/v1/events/13/relationships/session-types",
+                  "related": "/v1/events/13/session-types"
+                }
+              }
+            },
+            "attributes": {
+              "payment-country": null,
+              "paypal-email": null,
+              "code-of-conduct": "",
+              "pay-by-bank": false,
+              "schedule-published-on": null,
+              "payment-currency": null,
+              "organizer-description": "",
+              "xcal-url": null,
+              "original-image-url": null,
+              "topic": null,
+              "onsite-details": null,
+              "organizer-name": null,
+              "large-image-url": null,
+              "timezone": "UTC",
+              "deleted-at": null,
+              "ticket-url": null,
+              "pay-by-stripe": false,
+              "location-name": null,
+              "privacy": "public",
+              "state": "Draft",
+              "latitude": null,
+              "tax-allow": false,
+              "pay-onsite": false,
+              "type": null,
+              "email": "example@example.com",
+              "starts-at": "2017-06-10T18:30:00+00:00",
+              "searchable-location-name": null,
+              "description": "",
+              "pentabarf-url": null,
+              "logo-url": null,
+              "ticket-include": false,
+              "event-url": null,
+              "ical-url": null,
+              "pay-by-paypal": false,
+              "show-map": 1,
+              "sponsors-enabled": false,
+              "name": "Changed Name",
+              "sub-topic": null,
+              "icon-image-url": null,
+              "thumbnail-image-url": null,
+              "created-at": "2017-06-11T07:26:41.852285+00:00",
+              "longitude": null,
+              "pay-by-cheque": false,
+              "bank-details": null,
+              "cheque-details": null,
+              "has-session-speakers": false,
+              "identifier": "99c4d267",
+              "ends-at": "2017-06-11T18:30:00+00:00"
+            },
+            "type": "event",
+            "id": "13",
+            "links": {
+              "self": "/v1/events/13"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/events/13"
+          }
+        }
+
+### Delete Event [DELETE]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
