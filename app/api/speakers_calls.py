@@ -3,25 +3,27 @@ from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from marshmallow import validates_schema
 import marshmallow.validate as validate
+from sqlalchemy.orm.exc import NoResultFound
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.api.helpers.permissions import jwt_required
 from app.models.event import Event
-from app.models.call_for_paper import CallForPaper
 from app.api.helpers.exceptions import UnprocessableEntity
+from app.models.speakers_call import SpeakersCall
 
 
-class CallForPaperSchema(Schema):
+class SpeakersCallSchema(Schema):
     """
-    Api Schema for cfp model
+    Api Schema for Speakers Call model
     """
     class Meta:
         """
-        Meta class for cfp Api Schema
+        Meta class for Speakers Call Api Schema
         """
-        type_ = 'call-for-paper'
-        self_view = 'v1.call_for_paper_detail'
+        type_ = 'speakers-call'
+        self_view = 'v1.speakers_call_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
@@ -37,30 +39,30 @@ class CallForPaperSchema(Schema):
     hash = fields.Str()
     privacy = fields.String(validate=validate.OneOf(choices=["private", "public"]))
     event = Relationship(attribute='event',
-                         self_view='v1.call_for_paper_event',
+                         self_view='v1.speakers_call_event',
                          self_view_kwargs={'id': '<id>'},
                          related_view='v1.event_detail',
-                         related_view_kwargs={'call_for_paper_id': '<id>'},
+                         related_view_kwargs={'speakers_call_id': '<id>'},
                          schema='EventSchema',
                          type_='event')
 
 
-class CallForPaperList(ResourceList):
+class SpeakersCallList(ResourceList):
     """
-    List and create cfp
+    List and create Speakers Call
     """
 
     def query(self, view_kwargs):
-        query_ = self.session.query(CallForPaper)
-        if view_kwargs.get('id'):
-            query_ = query_.join(Event).filter(Event.id == view_kwargs['id'])
+        query_ = self.session.query(SpeakersCall)
+        if view_kwargs.get('event_id'):
+            query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
         elif view_kwargs.get('identifier'):
             query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
         return query_
 
     def before_create_object(self, data, view_kwargs):
-        if view_kwargs.get('id'):
-            event = self.session.query(Event).filter_by(id=view_kwargs['id']).one()
+        if view_kwargs.get('event_id'):
+            event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
             data['event_id'] = event.id
         elif view_kwargs.get('identifier'):
             event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
@@ -68,41 +70,57 @@ class CallForPaperList(ResourceList):
 
     view_kwargs = True
     decorators = (jwt_required, )
-    schema = CallForPaperSchema
+    schema = SpeakersCallSchema
+    methods = ['POST', ]
     data_layer = {'session': db.session,
-                  'model': CallForPaper,
+                  'model': SpeakersCall,
                   'methods': {
                       'query': query,
                       'before_create_object': before_create_object
                   }}
 
 
-class CallForPaperDetail(ResourceDetail):
+class SpeakersCallDetail(ResourceDetail):
     """
-    cfs detail by id
+     speakers call detail by id
     """
     def query(self, view_kwargs):
-        query_ = self.session.query(CallForPaper)
-        if view_kwargs.get('id'):
-            query_ = query_.join(Event).filter(Event.id == view_kwargs['id'])
+        query_ = self.session.query(SpeakersCall)
+        if view_kwargs.get('event_id'):
+            query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
         elif view_kwargs.get('identifier'):
             query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
         return query_
 
+    def before_get_object(self, view_kwargs):
+        if view_kwargs.get('event_id'):
+            try:
+                event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_id'},
+                                     "Event: {} not found".format(view_kwargs['event_id']))
+            else:
+                if event.speakers_call:
+                    view_kwargs['id'] = event.speakers_call.id
+                else:
+                    view_kwargs['id'] = None
+
+
     decorators = (jwt_required,)
-    schema = CallForPaperSchema
+    schema = SpeakersCallSchema
     data_layer = {'session': db.session,
-                  'model': CallForPaper,
+                  'model': SpeakersCall,
                   'methods': {
-                      'query': query
+                      'query': query,
+                      'before_get_object': before_get_object
                   }}
 
 
-class CallForPaperRelationship(ResourceRelationship):
+class SpeakersCallRelationship(ResourceRelationship):
     """
-    cfs Relationship
+    speakers call Relationship
     """
     decorators = (jwt_required,)
-    schema = CallForPaperSchema
+    schema = SpeakersCallSchema
     data_layer = {'session': db.session,
-                  'model': CallForPaper}
+                  'model': SpeakersCall}
