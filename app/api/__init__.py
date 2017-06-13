@@ -31,7 +31,7 @@ api.route(UserRelationship, 'user_notification', '/users/<int:id>/relationships/
 api.route(UserRelationship, 'user_event_invoices', '/users/<int:id>/relationships/event-invoices')
 
 # notifications
-api.route(NotificationList, 'notification_list','/users/<int:id>/notifications')
+api.route(NotificationList, 'notification_list', '/users/<int:id>/notifications')
 api.route(NotificationDetail, 'notification_detail', '/notifications/<int:id>')
 api.route(NotificationRelationship, 'notification_user',
           '/notifications/<int:id>/relationships/user')
@@ -60,7 +60,8 @@ api.route(EventDetail, 'event_detail', '/events/<int:id>', '/tickets/<int:ticket
           '/sponsors/<int:sponsor_id>/event', '/tracks/<int:track_id>/event',
           '/call-for-papers/<int:call_for_paper_id>/event', '/session-types/<int:session_type_id>/event',
           '/event-copyright/<int:copyright_id>/event', '/tax/<int:tax_id>/event',
-          '/event-invoices/<int:event_invoice_id>/event', '/discount-codes/<int:discount_code_id>/event')
+          '/event-invoices/<int:event_invoice_id>/event', '/discount-codes/<int:discount_code_id>/event',
+          '/sessions/<int:session_id>/event')
 api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/tickets')
 api.route(EventRelationship, 'event_microlocation', '/events/<int:id>/relationships/microlocation')
 api.route(EventRelationship, 'event_social_link', '/events/<int:id>/relationships/social-links')
@@ -73,10 +74,11 @@ api.route(EventRelationship, 'event_copyright', '/events/<int:id>/relationships/
 api.route(EventRelationship, 'event_tax', '/events/<int:id>/relationships/tax')
 api.route(EventRelationship, 'event_event_invoice', '/events/<int:id>/relationships/event-invoices')
 api.route(EventRelationship, 'event_discount_code', '/events/<int:id>/relationships/discount-codes')
+api.route(EventRelationship, 'event_session', '/events/<int:id>/relationships/sessions')
 
 # microlocations
 api.route(MicrolocationList, 'microlocation_list', '/microlocations',
-          '/events/<int:id>/microlocations', '/sessions/<int:id>/microlocations')
+          '/events/<int:id>/microlocations')
 api.route(MicrolocationDetail, 'microlocation_detail', '/microlocations/<int:id>',
           '/sessions/<int:session_id>/microlocation', '/events/<int:event_id>/microlocation')
 api.route(MicrolocationRelationship, 'microlocation_session',
@@ -87,13 +89,14 @@ api.route(MicrolocationRelationship, 'microlocation_event',
 # sessions
 api.route(SessionList, 'session_list', '/events/<int:id>/sessions', '/tracks/<int:track_id>/sessions',
           '/session-types/<int:session_type_id>/sessions', '/microlocations/<int:microlocation_id>/sessions')
-api.route(SessionDetail, 'session_detail', '/sessions/<int:id>',
-          '/events/<int:event_id>/microlocations')
+api.route(SessionDetail, 'session_detail', '/sessions/<int:id>')
 api.route(SessionRelationship, 'session_microlocation',
           '/sessions/<int:id>/relationships/microlocation')
 api.route(SessionRelationship, 'session_track', '/sessions/<int:id>/relationships/track')
 api.route(SessionRelationship, 'session_session_type',
           '/sessions/<int:id>/relationships/session-type')
+api.route(SessionRelationship, 'session_event',
+          '/sessions/<int:id>/relationships/event')
 
 # social_links
 api.route(SocialLinkList, 'social_link_list', '/events/<int:id>/social-links')
@@ -155,4 +158,5 @@ api.route(EventInvoiceRelationship, 'event_invoice_discount_code',
 # discount codes
 api.route(DiscountCodeList, 'discount_code_list', '/events/<int:event_id>/discount-codes')
 api.route(DiscountCodeDetail, 'discount_code_detail', '/discount-codes/<int:id>')
-api.route(DiscountCodeRelationship, 'discount_code_event', '/discount-codes/<int:id>/relationships/event')
+api.route(DiscountCodeRelationship, 'discount_code_event',
+          '/discount-codes/<int:id>/relationships/event')

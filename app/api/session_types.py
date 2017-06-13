@@ -50,6 +50,7 @@ class SessionTypeList(ResourceList):
     """
     List and create sessions
     """
+
     def query(self, view_kwargs):
         query_ = self.session.query(SessionType)
         if view_kwargs.get('event_id') is not None:
@@ -76,6 +77,7 @@ class SessionTypeDetail(ResourceDetail):
     """
     Detail about a single session type by id
     """
+
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('session_id') is not None:
             try:
