@@ -1,20 +1,22 @@
 FORMAT: V1
 HOST: http://nextgen.eventyay.com
 
-# Orga-Server
+# Open Event API Server
 
 The Open Event API Server
 
-## JWT Auth Key [/auth/session]
+# Group Authentication
 
-### JWT Auth Key [POST]
+## JWT Authentication [/auth/session]
+
+### Authenticate and generate token [POST]
 
 + Request
 
     + Headers
 
             Content-Type: application/json
- 
+
     + Body
 
             {
@@ -28,6 +30,7 @@ The Open Event API Server
             "access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGl0eSI6MSwiaWF0IjoxNDk2OTU2ODMwLCJuYmYiOjE0OTY5NTY4MzAsImV4cCI6MTQ5NzA0MzIzMH0.bjl0"
         }
 
+# Group Users
 ## Users Collection [/users?page,limit]
 
 ### List All Users [GET]
@@ -94,11 +97,11 @@ The Open Event API Server
 + email (string) - Email of the user **(required)**
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
-        
+
     + Body
 
             {
@@ -179,19 +182,19 @@ The Open Event API Server
           }
         }
 
-        
+
 ### Update User [PATCH]
 
 Authorized user should be same as user in request body or must be admin.
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
-        
+
     + Body
-    
+
             {
               "data": {
                 "attributes": {
@@ -264,6 +267,8 @@ Authorized user should be same as user in request body or must be admin.
             "version": "1.0"
           }
         }
+
+# Group Settings
 
 ## Settings Details [/settings?page,limit]
 
@@ -409,14 +414,14 @@ Authorized user should be same as user in request body or must be admin.
 
 (Sendgrid)
 + sendgrid-key: Sendgrid key **(ADMIN)**
-  
+
 (SMTP)
 + smtp-host: smtp host **(ADMIN)**
 + smtp-username: smtp  username **(ADMIN)**
 + smtp-password: smtp password **(ADMIN)**
 + smtp-port: smtp port **(ADMIN)**
-+ smtp-encryption : smtp encryption **(ADMIN)** 
-    
++ smtp-encryption : smtp encryption **(ADMIN)**
+
 **Google Analytics**
 + analytics-key = Google analytics key **(NON ADMIN)**
 
@@ -433,13 +438,13 @@ Authorized user should be same as user in request body or must be admin.
 + web-app-url: Web App url **(ADMIN)**
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
 
     + Body
-    
+
             {
               "data": {
                 "attributes": {
@@ -566,6 +571,8 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
+# Group Image Size
+
 ## Image Size Collection [/image-sizes?page,limit]
 
 ### List Image Sizes [GET]
@@ -635,17 +642,17 @@ Authorized user should be same as user in request body or must be admin.
 + thumbnail-aspect (boolean)- To maintain aspect ratio of the thumbnail or not
 + thumbnail-quality (integer)- Quality of the thumbnail
 + logo-width (integer)- Width of the logo
-+ logo-height (integer)- Height of the logo 
++ logo-height (integer)- Height of the logo
 + type (string) - Type of the image
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
-        
+
     + Body
-    
+
             {
               "data": {
                 "attributes": {
@@ -723,19 +730,19 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
-        
+
 ### Update Image Size [PATCH]
 
 + id (integer) - ID of the record to update **(required)**
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
-        
+
     + Body
-    
+
             {
               "data": {
                 "attributes": {
@@ -800,7 +807,7 @@ Authorized user should be same as user in request body or must be admin.
 + Request
 
     + Headers
-    
+
             Accept: application/vnd.api+json
 
             Authorization: JWT <Auth Key>
@@ -816,6 +823,7 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
+# Group Pages
 
 ## Page Collection [/pages?page,limit]
 
@@ -865,20 +873,20 @@ Authorized user should be same as user in request body or must be admin.
 ### Create Page [POST]
 
 + name (string)- Name of the page **(required)**
-+ title (string)- Title of the page 
++ title (string)- Title of the page
 + url (url)- Url of the page **(required)**
 + description (string) - Description of the page
 + language (string)- Language of the page
 + index (integer)- Position of the page, default: 0
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
-        
+
     + Body
-    
+
             {
               "data": {
                 "attributes": {
@@ -903,7 +911,7 @@ Authorized user should be same as user in request body or must be admin.
 ## Page Details [/pages/{page_id}]
 + Parameters
     + page_id (integer) - ID of the page in the form of an integer
-    
+
 ### Get Page Details [GET]
 
 + Request
@@ -942,19 +950,19 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
-        
+
 ### Update Page [PATCH]
 
 + id (integer) - ID of the record to update **(required)**
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
-        
+
     + Body
-    
+
             {
               "data": {
                 "attributes": {
@@ -1019,6 +1027,8 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
+# Group Tracks
+
 ## Tracks Collection [/events/{event_id}/tracks]
 + Parameters
     + event_id (integer) - ID of the event in the form of an integer
@@ -1048,13 +1058,13 @@ Authorized user should be same as user in request body or must be admin.
 + location (string) - Name of the location of track
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
-        
+
     + Body
-    
+
             {
               "data": {
                 "attributes": {
@@ -1070,16 +1080,16 @@ Authorized user should be same as user in request body or must be admin.
             }
 
 + Response 201 (application/vnd.api+json)
-        
+
         {
             "data": "data"
         }
-        
+
 
 ### Track Deatil [/tracks/{track_id}]
 + Parameters
     + track_id (integer) - ID of the track in the form of an integer
-    
+
 ### Get Details [GET]
 + Request
 
@@ -1114,18 +1124,18 @@ Authorized user should be same as user in request body or must be admin.
             }
         }
 
-        
+
 ### Update Track [PATCH]
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
-        
+
     + Body
 
-    
+
             {
               "data": {
                 "attributes": {
@@ -1182,6 +1192,8 @@ Authorized user should be same as user in request body or must be admin.
             "version": "1.0"
           }
         }
+
+# Group Sponsors
 
 ## Sponsors Collection [/events/{event_id}/sponsors?page,limit]
 + Parameters
@@ -1246,13 +1258,13 @@ Authorized user should be same as user in request body or must be admin.
 + type (string) - The type of the sponsor
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
-        
+
     + Body
-    
+
             {
               "data": {
                 "attributes": {
@@ -1300,7 +1312,7 @@ Authorized user should be same as user in request body or must be admin.
             "self": "/v1/sponsors/5"
           }
         }
-        
+
 
 ## Sponsor Details [/sponsors/{sponsor_id}]
 + Parameters
@@ -1349,7 +1361,7 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
-        
+
 ### Update Sponsor [PATCH]
 
 + id (integer) - ID of the record to update **(required)**
@@ -1361,13 +1373,13 @@ Authorized user should be same as user in request body or must be admin.
 + type (string) - The type of the sponsor **(optional)**
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
-        
+
     + Body
-    
+
             {
               "data": {
                 "attributes": {
@@ -1437,6 +1449,8 @@ Authorized user should be same as user in request body or must be admin.
             "version": "1.0"
           }
         }
+
+# Group Tax
 
 ## Tax Collection [/events/{event_id}/tax?page,limit]
 + Parameters
@@ -1514,13 +1528,13 @@ Authorized user should be same as user in request body or must be admin.
 + is-tax-included-in-price (boolean) - **(default=False)**
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
-        
+
     + Body
-    
+
             {
               "data": {
                 "attributes": {
@@ -1571,7 +1585,7 @@ Authorized user should be same as user in request body or must be admin.
             "self": "/v1/tax/1"
           }
         }
-        
+
 
 ## Tax Details [/tax/{tax_id}]
 + Parameters
@@ -1626,7 +1640,7 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
-        
+
 ### Update Tax [PATCH]
 
 + id (integer) - ID of the record to update **(required)**
@@ -1645,13 +1659,13 @@ Authorized user should be same as user in request body or must be admin.
 + is-tax-included-in-price (boolean) - **(optional)**
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
-        
+
     + Body
-    
+
             {
               "data": {
                 "attributes": {
@@ -1724,6 +1738,7 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
+# Group Social Links
 
 ## Social Links Collection [/events/{event_id}/social-links?page,limit]
 + Parameters
@@ -1780,13 +1795,13 @@ Authorized user should be same as user in request body or must be admin.
 + link (string - proper url) - Url of the Social Link **(required)**
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
-        
+
     + Body
-    
+
             {
               "data": {
                 "attributes": {
@@ -1871,7 +1886,7 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
-        
+
 ### Update Social Link [PATCH]
 
 + id (integer) - ID of the record to update **(required)**
@@ -1880,13 +1895,13 @@ Authorized user should be same as user in request body or must be admin.
 + link (string - proper url) - Url of the Social Link **(optional)**
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
-        
+
     + Body
-    
+
             {
               "data": {
                 "attributes": {
@@ -1948,6 +1963,8 @@ Authorized user should be same as user in request body or must be admin.
             "version": "1.0"
           }
         }
+
+# Group Tickets
 
 ## Tickets Collection [/events/{event_id}/tickets?page,limit]
 + Parameters
@@ -2027,13 +2044,13 @@ Authorized user should be same as user in request body or must be admin.
 + max-order (integer) - Max order of the ticket **(optional)**
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
 
     + Body
-    
+
             {
               "data": {
                 "attributes": {
@@ -2096,7 +2113,7 @@ Authorized user should be same as user in request body or must be admin.
             "self": "/v1/tickets/2"
           }
         }
-        
+
 
 ## Ticket Details [/tickets/{ticket_id}]
 + Parameters
@@ -2153,7 +2170,7 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
-        
+
 ### Update Ticket [PATCH]
 
 + id (integer) - ID of the record to update **(required)**
@@ -2172,7 +2189,7 @@ Authorized user should be same as user in request body or must be admin.
 + max-order (integer) - Max order of the ticket **(optional)**
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
@@ -2263,6 +2280,8 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
+# Group Microlocations
+
 ## Microlocation Collection [/events/{event_id}/microlocations?page,limit]
 + Parameters
     + event_id (integer) - ID of the spcific event in integer
@@ -2331,13 +2350,13 @@ Authorized user should be same as user in request body or must be admin.
 + room (string) - Room of the microlocation **(optional)**
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
 
     + Body
-    
+
             {
               "data": {
                 "attributes": {
@@ -2390,7 +2409,7 @@ Authorized user should be same as user in request body or must be admin.
             "self": "/v1/microlocations/1"
           }
         }
-        
+
 
 ## Microlocation Details [/microlocations/{microlocation_id}]
 + Parameters
@@ -2445,7 +2464,7 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
-        
+
 ### Update Microlocation [PATCH]
 
 + id (integer) - ID of the record to update **(required)**
@@ -2456,7 +2475,7 @@ Authorized user should be same as user in request body or must be admin.
 + room (string) - Room of the microlocation **(optional)**
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
@@ -2537,6 +2556,8 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
+
+# Group Copyright
 
 ## Event Copyright [/events/{event_id}/event-copyright?page,limit]
 + Parameters
@@ -2796,6 +2817,8 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
+
+# Group Invoices
 
 ## Event Invoices [/events/{event_id}/event-invoices?page,limit]
 + Parameters
@@ -3165,6 +3188,8 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
+# Group Speakers Calls
+
 ## Speakers Call Collection [/events/{event_id}/speakers-calls?page,limit]
 + Parameters
     + event_id (integer) - ID of the spcific event in integer
@@ -3227,13 +3252,13 @@ Authorized user should be same as user in request body or must be admin.
 + privacy (string) - Privacy of speakers call **(optional)**
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
 
     + Body
-    
+
             {
               "data": {
                 "attributes": {
@@ -3280,7 +3305,7 @@ Authorized user should be same as user in request body or must be admin.
             "self": "/v1/speaker-calls/1"
           }
         }
-        
+
 
 ## Speakers Call Details [/speakers-calls/{speakers_call_id}]
 + Parameters
@@ -3329,7 +3354,7 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
-        
+
 ### Update Speakers Call [PATCH]
 
 + id (integer) - ID of the record to update **(required)**
@@ -3340,7 +3365,7 @@ Authorized user should be same as user in request body or must be admin.
 + privacy (string) - Privacy of speakers call **(optional)**
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
@@ -3415,6 +3440,8 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
+# Group Sessions
+
 ## Sessions Collection [/events/{event_id}/sessions?page,limit]
 + Parameters
     + event_id (integer) - ID of the spcific event in integer
@@ -3449,10 +3476,10 @@ Authorized user should be same as user in request body or must be admin.
                     "self": "/v1/sessions/21/relationships/track",
                     "related": "/v1/sessions/21/track"
                   }
-                }, 
+                },
                 "microlocation": {
                   "links": {
-                    "self": "/v1/sessions/21/relationships/microlocation", 
+                    "self": "/v1/sessions/21/relationships/microlocation",
                     "related": "/v1/sessions/21/microlocation"
                   }
                 },
@@ -3521,13 +3548,13 @@ Authorized user should be same as user in request body or must be admin.
 + is-mail-sent (boolean) - Yes/No for Session accept/reject email **(optional)**
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
 
     + Body
-    
+
             {
               "data": {
                 "attributes": {
@@ -3571,10 +3598,10 @@ Authorized user should be same as user in request body or must be admin.
                   "self": "/v1/sessions/21/relationships/track",
                   "related": "/v1/sessions/21/track"
                 }
-              }, 
+              },
               "microlocation": {
                 "links": {
-                  "self": "/v1/sessions/21/relationships/microlocation", 
+                  "self": "/v1/sessions/21/relationships/microlocation",
                   "related": "/v1/sessions/21/microlocation"
                 }
               },
@@ -3618,7 +3645,7 @@ Authorized user should be same as user in request body or must be admin.
             "self": "/v1/sessions/21"
           }
         }
-        
+
 
 ## Sessions Details [/sessions/{session_id}]
 + Parameters
@@ -3650,10 +3677,10 @@ Authorized user should be same as user in request body or must be admin.
                   "self": "/v1/sessions/21/relationships/track",
                   "related": "/v1/sessions/21/track"
                 }
-              }, 
+              },
               "microlocation": {
                 "links": {
-                  "self": "/v1/sessions/21/relationships/microlocation", 
+                  "self": "/v1/sessions/21/relationships/microlocation",
                   "related": "/v1/sessions/21/microlocation"
                 }
               },
@@ -3698,7 +3725,7 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
-        
+
 ### Update Session [PATCH]
 
 + id (integer) - ID of the record to update **(required)**
@@ -3722,7 +3749,7 @@ Authorized user should be same as user in request body or must be admin.
 + is-mail-sent (boolean) - Yes/No for Session accept/reject email **(optional)**
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
@@ -3772,10 +3799,10 @@ Authorized user should be same as user in request body or must be admin.
                   "self": "/v1/sessions/21/relationships/track",
                   "related": "/v1/sessions/21/track"
                 }
-              }, 
+              },
               "microlocation": {
                 "links": {
-                  "self": "/v1/sessions/21/relationships/microlocation", 
+                  "self": "/v1/sessions/21/relationships/microlocation",
                   "related": "/v1/sessions/21/microlocation"
                 }
               },
@@ -3841,7 +3868,7 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
-
+# Group Session Type
 
 ## Session Type Collection [/events/{event_id}/session-types?page,limit]
 + Parameters
@@ -3871,7 +3898,7 @@ Authorized user should be same as user in request body or must be admin.
                     "self": "/v1/session-types/22/relationships/event",
                     "related": "/v1/session-types/22/event"
                   }
-                }, 
+                },
                 "sessions": {
                   "links": {
                     "self": "/v1/session-types/22/relationships/sessions",
@@ -3905,13 +3932,13 @@ Authorized user should be same as user in request body or must be admin.
 + length (string) - Length of the Session Type **(optional)**
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
 
     + Body
-    
+
             {
               "data": {
                 "attributes": {
@@ -3933,7 +3960,7 @@ Authorized user should be same as user in request body or must be admin.
                   "self": "/v1/session-types/22/relationships/event",
                   "related": "/v1/session-types/22/event"
                 }
-              }, 
+              },
               "sessions": {
                 "links": {
                   "self": "/v1/session-types/22/relationships/sessions",
@@ -3958,7 +3985,7 @@ Authorized user should be same as user in request body or must be admin.
             "self": "/v1/session-types/22"
           }
         }
-        
+
 
 ## Session Type Details [/session-types/{session_type_id}]
 + Parameters
@@ -3984,7 +4011,7 @@ Authorized user should be same as user in request body or must be admin.
                   "self": "/v1/session-types/22/relationships/event",
                   "related": "/v1/session-types/22/event"
                 }
-              }, 
+              },
               "sessions": {
                 "links": {
                   "self": "/v1/session-types/22/relationships/sessions",
@@ -4010,7 +4037,7 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
-        
+
 ### Update Session Type [PATCH]
 
 + id (integer) - ID of the record to update **(required)**
@@ -4018,7 +4045,7 @@ Authorized user should be same as user in request body or must be admin.
 + length (string) - Length of the Session Type **(optional)**
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
@@ -4046,7 +4073,7 @@ Authorized user should be same as user in request body or must be admin.
                   "self": "/v1/session-types/22/relationships/event",
                   "related": "/v1/session-types/22/event"
                 }
-              }, 
+              },
               "sessions": {
                 "links": {
                   "self": "/v1/session-types/22/relationships/sessions",
@@ -4092,6 +4119,8 @@ Authorized user should be same as user in request body or must be admin.
             "version": "1.0"
           }
         }
+
+# Group Events
 
 ## Events Collection [/events?page,limit]
 
@@ -4330,41 +4359,41 @@ Authorized user should be same as user in request body or must be admin.
 + original-image-url (string in URL format) - URL of original image
 + icon-image-url (string in URL format) - URL of icon image
 + organizer-name (string) - Name of The Organizer of event
-+ show-map (Integer) - 
++ show-map (Integer) -
 + organizer-description (string) - Description of the Organizer
 + has-session-speakers (boolean) - **(default=False)**
-+ privacy (string) - Can be ```public``` and ```private``` **(default="public")** 
++ privacy (string) - Can be ```public``` and ```private``` **(default="public")**
 + state (string) - **(default="Draft")**
-+ type (string) - 
-+ topic (string) - 
-+ sub-topic (string) - 
-+ ticket-url (string in URL format) - 
-+ code-of-conduct (string) - 
-+ schedule-published-on (datetime) - 
++ type (string) -
++ topic (string) -
++ sub-topic (string) -
++ ticket-url (string in URL format) -
++ code-of-conduct (string) -
++ schedule-published-on (datetime) -
 + ticket-include (boolean) - **(default=False)**
-+ deleted-at (datetime) - 
-+ payment-country (string) - 
-+ payment-currency (string) - 
-+ paypal-email (string) - 
++ deleted-at (datetime) -
++ payment-country (string) -
++ payment-currency (string) -
++ paypal-email (string) -
 + tax-allow (boolean) - **(default=False)**
 + pay-by-paypal (boolean) - **(default=False)**
 + pay-by-stringipe (boolean) - **(default=False)**
 + pay-by-cheque (boolean) - **(default=False)**
 + pay-by-bank (boolean) - **(default=False)**
 + pay-onsite (boolean) - **(default=False)**
-+ cheque-details (string) - 
-+ bank-details (string) - 
-+ onsite-details (string) - 
++ cheque-details (string) -
++ bank-details (string) -
++ onsite-details (string) -
 + sponsors-enabled (boolean) - **(default=False)**
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
 
     + Body
-    
+
             {
               "data": {
                 "attributes": {
@@ -4485,7 +4514,7 @@ Authorized user should be same as user in request body or must be admin.
             "self": "/v1/events/12"
           }
         }
-        
+
 
 ## Event Details [/events/{event_id}]
 + Parameters
@@ -4607,64 +4636,64 @@ Authorized user should be same as user in request body or must be admin.
           }
         }
 
-        
+
 ### Update Event [PATCH]
 
 + id (integer) ID of the record to update (required)
 
 All other fields are optional. Add attributes you want to modify.
 
-+ name (string) 
-+ email (string) 
-+ starts-at (datetime) 
-+ ends-at (datetime) 
-+ timezone (string) 
-+ latitude (float) 
-+ longitude (float) 
-+ logo-url (string in URL format) 
-+ location-name (string) 
-+ searchable-location-name (string) 
-+ description (string) 
-+ thumbnail-image-url (string in URL format) 
-+ large-image-url (string in URL format) 
-+ original-image-url (string in URL format) 
-+ icon-image-url (string in URL format) 
-+ organizer-name (string) 
-+ show-map (Integer) 
-+ organizer-description (string) 
-+ has-session-speakers (boolean) 
++ name (string)
++ email (string)
++ starts-at (datetime)
++ ends-at (datetime)
++ timezone (string)
++ latitude (float)
++ longitude (float)
++ logo-url (string in URL format)
++ location-name (string)
++ searchable-location-name (string)
++ description (string)
++ thumbnail-image-url (string in URL format)
++ large-image-url (string in URL format)
++ original-image-url (string in URL format)
++ icon-image-url (string in URL format)
++ organizer-name (string)
++ show-map (Integer)
++ organizer-description (string)
++ has-session-speakers (boolean)
 + privacy (string) Can be ```public``` and ```private```
-+ state (string) 
-+ type (string) 
-+ topic (string) 
-+ sub-topic (string) 
-+ ticket-url (string in URL format) 
-+ code-of-conduct (string) 
-+ schedule-published-on (datetime) 
-+ ticket-include (boolean) 
-+ deleted-at (datetime) 
-+ payment-country (string) 
-+ payment-currency (string) 
-+ paypal-email (string) 
-+ tax-allow (boolean) 
-+ pay-by-paypal (boolean) 
-+ pay-by-stringipe (boolean) 
-+ pay-by-cheque (boolean) 
-+ pay-by-bank (boolean) 
-+ pay-onsite (boolean) 
-+ cheque-details (string) 
-+ bank-details (string) 
-+ onsite-details (string) 
-+ sponsors-enabled (boolean) 
++ state (string)
++ type (string)
++ topic (string)
++ sub-topic (string)
++ ticket-url (string in URL format)
++ code-of-conduct (string)
++ schedule-published-on (datetime)
++ ticket-include (boolean)
++ deleted-at (datetime)
++ payment-country (string)
++ payment-currency (string)
++ paypal-email (string)
++ tax-allow (boolean)
++ pay-by-paypal (boolean)
++ pay-by-stringipe (boolean)
++ pay-by-cheque (boolean)
++ pay-by-bank (boolean)
++ pay-onsite (boolean)
++ cheque-details (string)
++ bank-details (string)
++ onsite-details (string)
++ sponsors-enabled (boolean)
 
 + Request (application/vnd.api+json)
-    
+
     + Headers
 
             Authorization: JWT <Auth Key>
 
     + Body
-    
+
             {
               "data": {
                 "attributes": {
