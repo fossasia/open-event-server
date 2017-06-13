@@ -28,7 +28,6 @@ rm -rf gh-pages/api/v1/*
 aglio --theme-variables slate --theme-template triple -i docs/api/api_blueprint.apib -o gh-pages/api/v1/index.html
 cp -R docs/general/* gh-pages/_docs/
 cp -R docs/installation/* gh-pages/_installation/
-cp -R docs/kubernetes/* gh-pages/_kubernetes/
 cd gh-pages
 git add .
 git commit -m '[Auto] Updated API Docs'
