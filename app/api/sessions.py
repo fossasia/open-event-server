@@ -64,7 +64,7 @@ class SessionSchema(Schema):
                                 related_view='v1.session_type_detail',
                                 related_view_kwargs={'session_id': '<id>'},
                                 schema='SessionTypeSchema',
-                                type_='session_type')
+                                type_='session-type')
 
 
 class SessionList(ResourceList):

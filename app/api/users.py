@@ -66,7 +66,7 @@ class UserSchema(Schema):
         related_view_kwargs={'user_id': '<id>'},
         schema='EventInvoiceSchema',
         many=True,
-        type_='event_invoice')
+        type_='event-invoice')
 
 
 class UserList(ResourceList):

@@ -20,7 +20,7 @@ class SessionTypeSchema(Schema):
         """
         Meta class for SessionTypeSchema
         """
-        type_ = 'session_type'
+        type_ = 'session-type'
         self_view = 'v1.session_type_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize

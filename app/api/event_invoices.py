@@ -14,7 +14,7 @@ from app.models.discount_code import DiscountCode
 class EventInvoiceSchema(Schema):
 
     class Meta:
-        type_ = 'event_invoice'
+        type_ = 'event-invoice'
         self_view = 'v1.event_invoice_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
@@ -59,7 +59,7 @@ class EventInvoiceSchema(Schema):
                          related_view='v1.discount_code_detail',
                          related_view_kwargs={'event_invoice_id': '<id>'},
                          schema='DiscountCodeSchema',
-                         type_='discount_code')
+                         type_='discount-code')
 
 
 class EventInvoiceList(ResourceList):

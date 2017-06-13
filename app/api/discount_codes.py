@@ -14,7 +14,7 @@ class DiscountCodeSchema(Schema):
     API Schema for discount_code Model
     """
     class Meta:
-        type_ = 'discount_code'
+        type_ = 'discount-code'
         self_view = 'v1.discount_code_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize

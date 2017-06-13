@@ -12,7 +12,7 @@ from app.models.event import Event
 class SocialLinkSchema(Schema):
 
     class Meta:
-        type_ = 'social_link'
+        type_ = 'social-link'
         self_view = 'v1.social_link_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize

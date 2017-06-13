@@ -16,7 +16,7 @@ class ImageSizeSchema(Schema):
         """
         Meta class for image_size Api Schema
         """
-        type_ = 'image_size'
+        type_ = 'image-size'
         self_view = 'v1.image_size_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
