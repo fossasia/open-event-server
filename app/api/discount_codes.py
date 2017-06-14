@@ -13,6 +13,7 @@ class DiscountCodeSchema(Schema):
     """
     API Schema for discount_code Model
     """
+
     class Meta:
         type_ = 'discount-code'
         self_view = 'v1.discount_code_detail'
@@ -33,14 +34,13 @@ class DiscountCodeSchema(Schema):
     tickets = fields.Str()
     created_at = fields.DateTime()
     used_for = fields.Str()
-    event = Relationship(
-        attribute='event',
-        self_view='v1.discount_code_event',
-        self_view_kwargs={'id': '<id>'},
-        related_view='v1.event_detail',
-        related_view_kwargs={'discount_code_id': '<id>'},
-        schema='EventSchema',
-        type_='event')
+    event = Relationship(attribute='event',
+                         self_view='v1.discount_code_event',
+                         self_view_kwargs={'id': '<id>'},
+                         related_view='v1.event_detail',
+                         related_view_kwargs={'discount_code_id': '<id>'},
+                         schema='EventSchema',
+                         type_='event')
 
 
 class DiscountCodeList(ResourceList):
@@ -73,7 +73,7 @@ class DiscountCodeDetail(ResourceDetail):
     """
     Discount Code detail by id
     """
-    decorators = (jwt_required, )
+    decorators = (jwt_required,)
     schema = DiscountCodeSchema
     data_layer = {'session': db.session,
                   'model': DiscountCode}

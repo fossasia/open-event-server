@@ -13,6 +13,7 @@ class NotificationSchema(Schema):
     """
     API Schema for Notification Model
     """
+
     class Meta:
         """
         Meta class for Notification API schema
@@ -28,21 +29,21 @@ class NotificationSchema(Schema):
     received_at = fields.DateTime()
     accept = fields.Str()
     is_read = fields.Boolean()
-    user = Relationship(
-        attribute='user',
-        self_view='v1.notification_user',
-        self_view_kwargs={'id': '<id>'},
-        related_view='v1.user_detail',
-        related_view_kwargs={'notification_id': '<id>'},
-        schema='UserSchema',
-        type_='user'
-    )
+    user = Relationship(attribute='user',
+                        self_view='v1.notification_user',
+                        self_view_kwargs={'id': '<id>'},
+                        related_view='v1.user_detail',
+                        related_view_kwargs={'notification_id': '<id>'},
+                        schema='UserSchema',
+                        type_='user'
+                        )
 
 
 class NotificationList(ResourceList):
     """
     List all the Notification
     """
+
     def query(self, view_kwargs):
         query_ = self.session.query(Notification)
         if view_kwargs.get('id') is not None:
@@ -55,7 +56,7 @@ class NotificationList(ResourceList):
             data['user_id'] = user.id
 
     view_kwargs = True
-    decorators = (is_user_itself, )
+    decorators = (is_user_itself,)
     schema = NotificationSchema
     data_layer = {'session': db.session,
                   'model': Notification,
@@ -69,7 +70,7 @@ class NotificationDetail(ResourceDetail):
     """
     Notification detail by ID
     """
-    decorators = (is_user_itself, )
+    decorators = (is_user_itself,)
     schema = NotificationSchema
     data_layer = {'session': db.session,
                   'model': Notification}

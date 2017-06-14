@@ -53,12 +53,12 @@ class EventInvoiceSchema(Schema):
                          schema='EventSchema',
                          type_='event')
     discount_codes = Relationship(attribute='discount_code',
-                         self_view='v1.event_invoice_discount_code',
-                         self_view_kwargs={'id': '<id>'},
-                         related_view='v1.discount_code_detail',
-                         related_view_kwargs={'event_invoice_id': '<id>'},
-                         schema='DiscountCodeSchema',
-                         type_='discount-code')
+                                  self_view='v1.event_invoice_discount_code',
+                                  self_view_kwargs={'id': '<id>'},
+                                  related_view='v1.discount_code_detail',
+                                  related_view_kwargs={'event_invoice_id': '<id>'},
+                                  schema='DiscountCodeSchema',
+                                  type_='discount-code')
 
 
 class EventInvoiceList(ResourceList):
@@ -70,6 +70,8 @@ class EventInvoiceList(ResourceList):
         query_ = self.session.query(EventInvoice)
         if view_kwargs.get('event_id') is not None:
             query_ = query_.filter_by(event_id=view_kwargs['event_id'])
+        elif view_kwargs.get('identifier'):
+            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
         if view_kwargs.get('user_id') is not None:
             query_ = query_.filter_by(user_id=view_kwargs['user_id'])
         if view_kwargs.get('discount_code_id') is not None:
@@ -79,6 +81,9 @@ class EventInvoiceList(ResourceList):
     def before_create_object(self, data, view_kwargs):
         if view_kwargs.get('event_id') is not None:
             event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
+            data['event_id'] = event.id
+        elif view_kwargs.get('identifier'):
+            event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
             data['event_id'] = event.id
         if view_kwargs.get('user_id') is not None:
             user = self.session.query(User).filter_by(id=view_kwargs['user_id']).one()

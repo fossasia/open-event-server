@@ -1,12 +1,9 @@
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from marshmallow_jsonapi.flask import Schema, Relationship
+from flask_rest_jsonapi import ResourceDetail
+from marshmallow_jsonapi.flask import Schema
 from marshmallow_jsonapi import fields
 from app.models import db
-from app.api.helpers.permissions import jwt_required, is_admin, is_user_itself
+from app.api.helpers.permissions import jwt_required, is_admin
 from flask_jwt import current_identity
-from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound
-from app.models.event import Event
 from app.models.setting import Setting
 
 
