@@ -36,7 +36,7 @@ class LoginForm(form.Form):
         if user.password != generate_password_hash(self.password.data, user.salt):
             raise validators.ValidationError('Credentials incorrect.')
 
-        if not user.is_admin or not user.is_super_admin:
+        if not user.is_admin and not user.is_super_admin:
             raise validators.ValidationError('Access Forbidden. Admin Rights Required')
 
     def get_user(self):
