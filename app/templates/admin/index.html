@@ -1,39 +1,38 @@
 {% extends 'admin/master.html' %}
 {% block body %}
-{{ super() }}
-<div class="row-fluid">
-
-    <div>
+    {{ super() }}
+    <div class="container">
         {% if current_user.is_authenticated %}
-        <h1>Open Event</h1>
-        <p class="lead">
-            Event management system
-        </p>
-        <p>
-            Welcome to open event admin dashboard
-        </p>
-        {% else %}
-        <form method="POST" action="">
-            {{ form.hidden_tag() if form.hidden_tag }}
-            {% for f in form if f.type != 'CSRFTokenField' %}
-            <div>
-            {{ f.label }}
-            {{ f }}
-            {% if f.errors %}
-            <ul>
-                {% for e in f.errors %}
-                <li>{{ e }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
+            <div class="col-md-12">
+                <h3>Open Event API Server debugging environment</h3>
+                <p>
+                    To start with, click on one of the Models above.
+                </p>
             </div>
-            {% endfor %}
-            <button class="btn" type="submit">Submit</button>
-        </form>
-        {{ link | safe }}
+        {% else %}
+            <div class="col-md-5 col-md-push-3">
+                <form method="post">
+                    {% for f in form if f.type != 'CSRFTokenField' %}
+                        <div class="form-group {% if f.errors %}has-error{% endif %}">
+                            {{ f.label }}
+                            {{ f(class_="form-control") }}
+                            {% if f.errors %}
+                                <span class="help-block">
+                            <ul style="padding-left: 16px;">
+                                {% for e in f.errors %}
+                                    <li>{{ e }}</li>
+                                {% endfor %}
+                            </ul>
+                            </span>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+            </div>
+
         {% endif %}
     </div>
 
-    <a class="btn btn-primary" href="/"><i class="icon-arrow-left icon-white"></i> Back</a>
-</div>
 {% endblock body %}

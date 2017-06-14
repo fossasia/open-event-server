@@ -43,6 +43,8 @@ class Config(object):
     PROFILE = False
     SQLALCHEMY_RECORD_QUERIES = False
 
+    FLASK_ADMIN_SWATCH = 'lumen'
+
     VERSION = VERSION_NAME
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     ERROR_404_HELP = False
