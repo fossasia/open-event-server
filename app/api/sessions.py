@@ -13,6 +13,7 @@ from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.session import Session
+from app.models.speaker import Speaker
 from app.models.track import Track
 from app.models.session_type import SessionType
 from app.models.microlocation import Microlocation
@@ -86,6 +87,13 @@ class SessionSchema(Schema):
                          related_view_kwargs={'session_id': '<id>'},
                          schema='EventSchema',
                          type_='event')
+    speaker = Relationship(attribute='speakers',
+                           self_view='v1.session_speaker',
+                           self_view_kwargs={'id': '<id>'},
+                           related_view='v1.speaker_detail',
+                           related_view_kwargs={'session_id': '<id>'},
+                           schema='SpeakerSchema',
+                           type_='speaker')
 
 
 class SessionList(ResourceList):
@@ -107,6 +115,9 @@ class SessionList(ResourceList):
             query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
         elif view_kwargs.get('event_identifier'):
             query_ = query_.join(Event).filter(Event.identifier == view_kwargs['event_identifier'])
+        if view_kwargs.get('speaker_id') is not None:
+            query_ = query_.join(Speaker).filter(
+                Speaker.id == view_kwargs['speaker_id'])
         return query_
 
     def before_create_object(self, data, view_kwargs):
@@ -118,6 +129,11 @@ class SessionList(ResourceList):
                                      "Event: {} not found".format(view_kwargs['event_id']))
             else:
                 data['event_id'] = event.id
+
+        if view_kwargs.get('speaker_id'):
+            speaker = self.session.query(Speaker).filter_by(
+                id=view_kwargs['speaker_id']).one()
+            data['speaker_id'] = speaker.id
 
     view_kwargs = True
     decorators = (api.has_permission('is_coorganizer', fetch="event_id",
@@ -136,7 +152,7 @@ class SessionDetail(ResourceDetail):
     """
     Session detail by id
     """
-    def before_get_object(self, view_kwargs):
+    def before_get_object(self, data, view_kwargs):
         if view_kwargs.get('event_identifier'):
             try:
                 event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
@@ -146,11 +162,15 @@ class SessionDetail(ResourceDetail):
             else:
                 view_kwargs['event_id'] = event.id
 
+        if view_kwargs.get('speaker_id'):
+            speaker = self.session.query(Speaker).filter_by(
+                id=view_kwargs['speaker_id']).one()
+            data['speaker_id'] = speaker.id
+
     decorators = (api.has_permission('is_coorganizer', fetch="event_id",
                                                        fetch_as="event_id",
                                                        model=Session,
-                                                       methods="PATCH,DELETE"),)
-    schema = SessionSchema
+                                                       methods="PATCH,DELETE"),)    schema = SessionSchema
     data_layer = {'session': db.session,
                   'model': Session,
                   'methods': {
@@ -160,6 +180,7 @@ class SessionRelationship(ResourceRelationship):
     """
     Session Relationship
     """
+    decorators = (jwt_required,)
     schema = SessionSchema
     data_layer = {'session': db.session,
                   'model': Session}

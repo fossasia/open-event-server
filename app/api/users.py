@@ -7,6 +7,7 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.utilities import dasherize
 from app.models import db
+from app.models.speaker import Speaker
 from app.models.user import User
 from app.models.notification import Notification
 from app.models.event_invoice import EventInvoice
@@ -41,31 +42,38 @@ class UserSchema(Schema):
     last_name = fields.Str()
     details = fields.Str()
     contact = fields.Str()
-    facebook_url = fields.Url()
-    twitter_url = fields.Url()
-    instagram_url = fields.Url()
-    google_plus_url = fields.Url()
-    thumbnail_image_url = fields.Url(attribute='thumbnail_image_url')
-    small_image_url = fields.Url(attribute='small_image_url')
-    icon_image_url = fields.Url(attribute='icon_image_url')
-    notification = Relationship(
-        attribute='notification',
-        self_view='v1.user_notification',
-        self_view_kwargs={'id': '<id>'},
-        related_view='v1.notification_list',
-        related_view_kwargs={'user_id': '<id>'},
-        schema='NotificationSchema',
-        many=True,
-        type_='notification')
-    event_invoice = Relationship(
-        attribute='event_invoice',
-        self_view='v1.user_event_invoice',
-        self_view_kwargs={'id': '<id>'},
-        related_view='v1.event_invoice_list',
-        related_view_kwargs={'user_id': '<id>'},
-        schema='EventInvoiceSchema',
-        many=True,
-        type_='event-invoice')
+    facebook = fields.Str()
+    twitter = fields.Str()
+    instagram = fields.Str()
+    google = fields.Str()
+    avatar_uploaded = fields.Str()
+    thumbnail_url = fields.Url(attribute='thumbnail')
+    small_url = fields.Url(attribute='small')
+    icon_url = fields.Url(attribute='icon')
+    notification = Relationship(attribute='notification',
+                                self_view='v1.user_notification',
+                                self_view_kwargs={'id': '<id>'},
+                                related_view='v1.notification_list',
+                                related_view_kwargs={'user_id': '<id>'},
+                                schema='NotificationSchema',
+                                many=True,
+                                type_='notification')
+    event_invoice = Relationship(attribute='event_invoice',
+                                 self_view='v1.user_event_invoice',
+                                 self_view_kwargs={'id': '<id>'},
+                                 related_view='v1.event_invoice_list',
+                                 related_view_kwargs={'user_id': '<id>'},
+                                 schema='EventInvoiceSchema',
+                                 many=True,
+                                 type_='event-invoice')
+    speaker = Relationship(attribute='speakers',
+                           self_view='v1.user_speaker',
+                           self_view_kwargs={'id': '<id>'},
+                           related_view='v1.speaker_detail',
+                           related_view_kwargs={'user_id': '<id>'},
+                           schema='SpeakerSchema',
+                           many=True,
+                           type_='speaker')
 
 
 class UserList(ResourceList):
@@ -110,7 +118,19 @@ class UserDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
-    decorators = (is_user_itself, )
+        if view_kwargs.get('speaker_id'):
+            try:
+                speaker = self.session.query(Speaker).filter_by(id=view_kwargs['speaker_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'speaker_id'},
+                                     "Speaker: {} not found".format(view_kwargs['speaker_id']))
+            else:
+                if speaker.user_id:
+                    view_kwargs['id'] = speaker.user_id
+                else:
+                    view_kwargs['id'] = None
+
+    decorators = (is_user_itself,)
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User,

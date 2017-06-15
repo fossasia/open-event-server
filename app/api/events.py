@@ -17,6 +17,7 @@ from app.models.event import Event
 from app.models.sponsor import Sponsor
 from app.models.track import Track
 from app.models.session import Session
+from app.models.speaker import Speaker
 from app.models.session_type import SessionType
 from app.models.discount_code import DiscountCode
 from app.models.event_invoice import EventInvoice
@@ -214,6 +215,14 @@ class EventSchema(Schema):
                               related_view_kwargs={'event_id': '<id>'},
                               schema='EventTypeSchema',
                               type_='event-type')
+    speakers = Relationship(attribute='speaker',
+                            self_view='v1.event_speaker',
+                            self_view_kwargs={'id': '<id>'},
+                            related_view='v1.speaker_list',
+                            related_view_kwargs={'event_id': '<id>'},
+                            schema='SpeakerSchema',
+                            many=True,
+                            type_='speaker')
 
 
 class EventList(ResourceList):
@@ -325,15 +334,15 @@ class EventDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
-        if view_kwargs.get('user_id') is not None:
+        if view_kwargs.get('speaker_id'):
             try:
-                discount_code = self.session.query(DiscountCode).filter_by(id=view_kwargs['discount_code_id']).one()
+                speaker = self.session.query(Speaker).filter_by(id=view_kwargs['speaker_id']).one()
             except NoResultFound:
-                raise ObjectNotFound({'parameter': 'discount_code_id'},
-                                     "DiscountCode: {} not found".format(view_kwargs['discount_code_id']))
+                raise ObjectNotFound({'parameter': 'speaker_id'},
+                                     "Speaker: {} not found".format(view_kwargs['speaker_id']))
             else:
-                if discount_code.event_id is not None:
-                    view_kwargs['id'] = discount_code.event_id
+                if speaker.event_id:
+                    view_kwargs['id'] = speaker.event_id
                 else:
                     view_kwargs['id'] = None
 
