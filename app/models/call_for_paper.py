@@ -7,7 +7,7 @@ class CallForPaper(db.Model):
     """call for paper model class"""
     __tablename__ = 'call_for_papers'
     id = db.Column(db.Integer, primary_key=True)
-    announcement = db.Column(db.Text, nullable=False)
+    announcement = db.Column(db.Text)
     starts_at = db.Column(db.DateTime(timezone=True), nullable=False)
     ends_at = db.Column(db.DateTime(timezone=True), nullable=False)
     hash = db.Column(db.String, nullable=True)
