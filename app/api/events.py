@@ -90,6 +90,14 @@ class EventSchema(Schema):
                            schema='TicketSchema',
                            many=True,
                            type_='ticket')
+    ticket_tags = Relationship(attribute='ticket_tag',
+                               self_view='v1.event_ticket_tag',
+                               self_view_kwargs={'id': '<id>'},
+                               related_view='v1.ticket_tag_list',
+                               related_view_kwargs={'event_id': '<id>'},
+                               schema='TicketTagSchema',
+                               many=True,
+                               type_='ticket-tag')
     microlocations = Relationship(attribute='microlocation',
                                   self_view='v1.event_microlocation',
                                   self_view_kwargs={'id': '<id>'},
