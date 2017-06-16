@@ -22,7 +22,7 @@ class EventCopyrightSchema(Schema):
     holder_url = fields.Url()
     licence = fields.Str()
     licence_url = fields.Url()
-    year = fields.Int()
+    year = fields.Int(validate=lambda n: n >= 0)
     logo_url = fields.Url(attribute='logo')
     event = Relationship(attribute='event',
                          self_view='v1.copyright_event',

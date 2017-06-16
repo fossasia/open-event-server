@@ -1,6 +1,7 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+import marshmallow.validate as validate
 
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import is_admin
@@ -9,6 +10,7 @@ from app.models.event import Event
 from app.models.user import User
 from app.models.event_invoice import EventInvoice
 from app.models.discount_code import DiscountCode
+from app.api.helpers.static import PAYMENT_COUNTRIES
 
 
 class EventInvoiceSchema(Schema):
@@ -20,24 +22,25 @@ class EventInvoiceSchema(Schema):
 
     id = fields.Str(dump_only=True)
     identifier = fields.Str()
-    amount = fields.Float()
+    amount = fields.Float(validate=lambda n: n >= 0)
     address = fields.Str()
     city = fields.Str()
     state = fields.Str()
-    country = fields.Str()
+    country = fields.Str(validate=validate.OneOf(choices=PAYMENT_COUNTRIES))
     zipcode = fields.Str()
     created_at = fields.DateTime()
     completed_at = fields.DateTime(default=None)
     transaction_id = fields.Str()
-    paid_via = fields.Str()
+    paid_via = fields.Str(validate=validate.OneOf(choices=["free", "stripe", "paypal", "transfer", "onsite", "cheque"]))
     payment_mode = fields.Str()
     brand = fields.Str()
-    exp_month = fields.Integer()
-    exp_year = fields.Integer()
+    exp_month = fields.Integer(validate=lambda n: 0 <= n <= 12)
+    exp_year = fields.Integer(validate=lambda n: n >= 0)
     last4 = fields.Str()
     stripe_token = fields.Str()
     paypal_token = fields.Str()
-    status = fields.Str()
+    status = fields.Str(validate=validate.OneOf(
+        choices=["expired", "deleted", "initialized" "completed", "placed", "pending", "cancelled"]))
     user = Relationship(attribute='user',
                         self_view='v1.event_invoice_user',
                         self_view_kwargs={'id': '<id>'},

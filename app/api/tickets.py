@@ -1,12 +1,14 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+from marshmallow import validates_schema
 
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.ticket import Ticket
 from app.models.event import Event
+from app.api.helpers.exceptions import UnprocessableEntity
 
 
 class TicketSchema(Schema):
@@ -16,20 +18,25 @@ class TicketSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
+    @validates_schema
+    def validate_date(self, data):
+        if data['sales_starts_at'] >= data['sales_ends_at']:
+            raise UnprocessableEntity({'pointer': 'sales_ends_at'}, "sales_ends_at should be after sales_starts_at")
+
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
     description = fields.Str()
     type = fields.Str(required=True)
-    price = fields.Float()
-    quantity = fields.Integer()
+    price = fields.Float(validate=lambda n: n >= 0)
+    quantity = fields.Integer(validate=lambda n: n >= 0)
     description_toggle = fields.Boolean(default=False)
     position = fields.Integer()
     is_fee_absorbed = fields.Boolean()
-    sales_starts_at = fields.DateTime()
-    sales_ends_at = fields.DateTime()
+    sales_starts_at = fields.DateTime(required=True)
+    sales_ends_at = fields.DateTime(required=True)
     is_hidden = fields.Boolean(default=False)
-    min_order = fields.Integer()
-    max_order = fields.Integer()
+    min_order = fields.Integer(validate=lambda n: n >= 0)
+    max_order = fields.Integer(validate=lambda n: n >= 0)
     event = Relationship(attribute='event',
                          self_view='v1.ticket_event',
                          self_view_kwargs={'id': '<id>'},

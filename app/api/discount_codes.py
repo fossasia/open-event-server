@@ -1,12 +1,15 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+from marshmallow import validates_schema
+import marshmallow.validate as validate
 
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.event import Event
 from app.models.discount_code import DiscountCode
+from app.api.helpers.exceptions import UnprocessableEntity
 
 
 class DiscountCodeSchema(Schema):
@@ -20,18 +23,23 @@ class DiscountCodeSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
+    @validates_schema
+    def validate_quantity(self, data):
+        if data['max_quantity'] < data['min_quantity']:
+            raise UnprocessableEntity({'pointer': 'max_quantity'}, "max_quantity should be greater than min_quantity")
+
     id = fields.Integer()
     code = fields.Str()
     discount_url = fields.Url()
     value = fields.Float()
-    type = fields.Str()
+    type = fields.Str(validate=validate.OneOf(choices=["amount", "percent"]))
     is_active = fields.Boolean()
-    tickets_number = fields.Integer()
-    min_quantity = fields.Integer()
-    max_quantity = fields.Integer()
+    tickets_number = fields.Integer(validate=lambda n: n >= 0)
+    min_quantity = fields.Integer(validate=lambda n: n >= 0)
+    max_quantity = fields.Integer(validate=lambda n: n >= 0)
     valid_from = fields.DateTime()
     valid_till = fields.DateTime()
-    tickets = fields.Str()
+    tickets = fields.Str(validate=validate.OneOf(choices=["event", "ticket"]))
     created_at = fields.DateTime()
     used_for = fields.Str()
     event = Relationship(attribute='event',

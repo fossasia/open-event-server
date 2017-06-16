@@ -29,8 +29,8 @@ class MicrolocationSchema(Schema):
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
-    latitude = fields.Float()
-    longitude = fields.Float()
+    latitude = fields.Float(validate=lambda n: -90 <= n <= 90)
+    longitude = fields.Float(validate=lambda n: -180 <= n <= 180)
     floor = fields.Integer()
     room = fields.Str()
     sessions = Relationship(attribute='session',

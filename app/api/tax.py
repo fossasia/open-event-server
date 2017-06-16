@@ -20,7 +20,7 @@ class TaxSchema(Schema):
     id = fields.Str(dump_only=True)
     country = fields.Str()
     name = fields.Str(required=True)
-    rate = fields.Float(required=True)
+    rate = fields.Float(validate=lambda n: n >= 0, required=True)
     tax_id = fields.Str(required=True)
     should_send_invoice = fields.Boolean(default=False)
     registered_company = fields.Str()
