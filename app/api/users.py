@@ -9,7 +9,6 @@ from app.models import db
 from app.models.user import User
 from app.models.notification import Notification
 from app.models.event_invoice import EventInvoice
-from app.models.event import Event
 from app.api.helpers.permissions import is_admin, is_user_itself, jwt_required
 
 
@@ -17,7 +16,6 @@ class UserSchema(Schema):
     """
     Api schema for User Model
     """
-
     class Meta:
         """
         Meta class for User Api Schema
@@ -31,42 +29,42 @@ class UserSchema(Schema):
     id = fields.Str(dump_only=True)
     email = fields.Email(required=True)
     password = fields.Str(required=True, load_only=True)
-    avatar = fields.Str()
+    avatar_url = fields.Url()
     is_super_admin = fields.Boolean(dump_only=True)
     is_admin = fields.Boolean(dump_only=True)
     is_verified = fields.Boolean(dump_only=True)
-    signup_at = fields.DateTime(dump_only=True)
     last_accessed_at = fields.DateTime(dump_only=True)
     created_at = fields.DateTime(dump_only=True)
     deleted_at = fields.DateTime(dump_only=True)
-    firstname = fields.Str()
-    lastname = fields.Str()
+    first_name = fields.Str()
+    last_name = fields.Str()
     details = fields.Str()
     contact = fields.Str()
-    facebook = fields.Str()
-    twitter = fields.Str()
-    instagram = fields.Str()
-    google = fields.Str()
-    avatar_uploaded = fields.Str()
-    thumbnail_url = fields.Url(attribute='thumbnail')
-    small_url = fields.Url(attribute='small')
-    icon_url = fields.Url(attribute='icon')
-    notification = Relationship(attribute='notification',
-                                self_view='v1.user_notification',
-                                self_view_kwargs={'id': '<id>'},
-                                related_view='v1.notification_list',
-                                related_view_kwargs={'user_id': '<id>'},
-                                schema='NotificationSchema',
-                                many=True,
-                                type_='notification')
-    event_invoice = Relationship(attribute='event_invoice',
-                                 self_view='v1.user_event_invoice',
-                                 self_view_kwargs={'id': '<id>'},
-                                 related_view='v1.event_invoice_list',
-                                 related_view_kwargs={'user_id': '<id>'},
-                                 schema='EventInvoiceSchema',
-                                 many=True,
-                                 type_='event-invoice')
+    facebook_url = fields.Url()
+    twitter_url = fields.Url()
+    instagram_url = fields.Url()
+    google_plus_url = fields.Url()
+    thumbnail_image_url = fields.Url(attribute='thumbnail_image_url')
+    small_image_url = fields.Url(attribute='small_image_url')
+    icon_image_url = fields.Url(attribute='icon_image_url')
+    notification = Relationship(
+        attribute='notification',
+        self_view='v1.user_notification',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.notification_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='NotificationSchema',
+        many=True,
+        type_='notification')
+    event_invoice = Relationship(
+        attribute='event_invoice',
+        self_view='v1.user_event_invoice',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_invoice_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='EventInvoiceSchema',
+        many=True,
+        type_='event-invoice')
 
 
 class UserList(ResourceList):
@@ -85,7 +83,7 @@ class UserDetail(ResourceDetail):
     """
 
     def before_get_object(self, view_kwargs):
-        if view_kwargs.get('notification_id'):
+        if view_kwargs.get('notification_id') is not None:
             try:
                 notification = self.session.query(Notification).filter_by(
                     id=view_kwargs['notification_id']).one()
@@ -98,7 +96,7 @@ class UserDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
-        if view_kwargs.get('event_invoice_id'):
+        if view_kwargs.get('event_invoice_id') is not None:
             try:
                 event_invoice = self.session.query(EventInvoice).filter_by(
                     id=view_kwargs['event_invoice_id']).one()
@@ -111,7 +109,7 @@ class UserDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
-    decorators = (is_user_itself,)
+    decorators = (is_user_itself, )
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User,
@@ -119,7 +117,8 @@ class UserDetail(ResourceDetail):
 
 
 class UserRelationship(ResourceRelationship):
-    decorators = (jwt_required,)
+
+    decorators = (jwt_required, )
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User}
