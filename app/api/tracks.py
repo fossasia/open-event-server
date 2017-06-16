@@ -29,9 +29,8 @@ class TrackSchema(Schema):
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
     description = fields.Str()
-    track_image_url = fields.Url()
-    color = fields.Str()
-    location = fields.Str()
+    color = fields.Str(required=True)
+    font_color = fields.Str()
     event = Relationship(attribute='event',
                          self_view='v1.track_event',
                          self_view_kwargs={'id': '<id>'},
@@ -70,6 +69,9 @@ class TrackList(ResourceList):
         elif view_kwargs.get('identifier'):
             event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
             data['event_id'] = event.id
+        
+        if data['font_color']:
+            del data['font_color']
 
     view_kwargs = True
     decorators = (jwt_required,)
@@ -100,11 +102,16 @@ class TrackDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
+    def before_update_object(self, obj, data, view_kwargs):
+        if data['font_color']:
+            del data['font_color']
+
     decorators = (jwt_required,)
     schema = TrackSchema
     data_layer = {'session': db.session,
                   'model': Track,
-                  'methods': {'before_get_object': before_get_object}}
+                  'methods': {'before_get_object': before_get_object,
+                              'before_update_object': before_update_object}}
 
 
 class TrackRelationship(ResourceRelationship):
