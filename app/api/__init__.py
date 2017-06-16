@@ -19,6 +19,7 @@ from app.api.pages import PageList, PageDetail
 from app.api.tax import TaxList, TaxDetail, TaxRelationship
 from app.api.settings import SettingDetail
 from app.api.discount_codes import DiscountCodeList, DiscountCodeDetail, DiscountCodeRelationship
+from app.api.ticket_tags import TicketTagList, TicketTagDetail, TicketTagRelationship
 
 api_v1 = Blueprint('v1', __name__, url_prefix='/v1')
 api = Api(app, api_v1)
@@ -53,6 +54,13 @@ api.route(TicketDetail, 'ticket_detail', '/tickets/<int:id>', '/events/<int:even
 api.route(TicketRelationship, 'ticket_event', '/tickets/<int:id>/relationships/event')
 api.route(TicketRelationship, 'ticket_ticket_tag', '/tickets/<int:id>/relationships/ticket-tags')
 
+# ticket_tags
+api.route(TicketTagList, 'ticket_tag_list', '/tickets/<int:ticket_id>/ticket-tags', '/events/<int:id>/ticket-tags',
+          '/events/<identifier>/ticket-tags')
+api.route(TicketTagDetail, 'ticket_tag_detail', '/ticket-tags/<int:id>')
+api.route(TicketTagRelationship, 'ticket_tag_ticket', '/ticket-tags/<int:id>/relationships/ticket')
+api.route(TicketTagRelationship, 'ticket_tag_event', '/ticket-tags/<int:id>/relationships/event')
+
 # events
 api.route(EventList, 'event_list', '/events')
 api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>', '/tickets/<int:ticket_id>/event',
@@ -61,9 +69,11 @@ api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>
           '/call-for-papers/<int:call_for_paper_id>/event', '/session-types/<int:session_type_id>/event',
           '/event-copyright/<int:copyright_id>/event', '/tax/<int:tax_id>/event',
           '/event-invoices/<int:event_invoice_id>/event', '/discount-codes/<int:discount_code_id>/event',
-          '/sessions/<int:session_id>/event')
+          '/sessions/<int:session_id>/event', '/ticket-tags/<int:ticket_tag_id>/event')
 api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/tickets',
           '/events/<identifier>/relationships/tickets')
+api.route(EventRelationship, 'event_ticket_tag', '/events/<int:id>/relationships/ticket-tags',
+          '/events/<identifier>/relationships/ticket-tags')
 api.route(EventRelationship, 'event_microlocation', '/events/<int:id>/relationships/microlocations',
           '/events/<identifier>/relationships/microlocations')
 api.route(EventRelationship, 'event_social_link', '/events/<int:id>/relationships/social-links',
