@@ -3952,16 +3952,52 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
 + Response 200 (application/vnd.api+json)
 
         {
-            'body': 'body'
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "event": {
+                  "links": {
+                    "self": "/v1/tracks/1/relationships/event", 
+                    "related": "/v1/tracks/1/event"
+                  }
+                }, 
+                "sessions": {
+                  "links": {
+                    "self": "/v1/tracks/1/relationships/sessions",
+                    "related": "/v1/tracks/1/sessions"
+                  }
+                }
+              },
+              "attributes": {
+                "name" : "Main Track",
+                "description": "description",
+                "color": "#a04b4b",
+                "font-color":"#ffffff"
+              },
+              "type": "track",
+              "id": "1",
+              "links": {
+                "self": "/v1/tracks/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/trackss"
+          }
         }
 
 ### Create Track [POST]
 
 + name (string) - The name of the track **(required)**
 + description (string) - Description of the track
-+ track-image-url (string) - URL of uploaded track image
 + color (string) - Color code of the track **(required)**
-+ location (string) - Name of the location of track
++ font-color (string) - Font color of the track: Black/White **(no user role - automatically updated based on color)**
 
 + Request (application/vnd.api+json)
 
@@ -3974,14 +4010,11 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
             {
               "data": {
                 "attributes": {
-                    "name" : "name ",
-                    "description": "description",
-                    "track-image-url": "track-image-url",
-                    "color": "color",
-                    "location": "location"
+                  "name" : "Main Track",
+                  "description": "description",
+                  "color": "#a04b4b"
                 },
-                "type": "track",
-                "id": "1",
+                "type": "track"
               }
             }
 
@@ -3992,7 +4025,7 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
         }
 
 
-### Track Deatil [/tracks/{track_id}]
+### Track Detail [/tracks/{track_id}]
 + Parameters
     + track_id (integer) - ID of the track in the form of an integer
 
@@ -4009,12 +4042,25 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
 
         {
             "data": {
+                "relationships": {
+                  "event": {
+                    "links": {
+                      "self": "/v1/tracks/1/relationships/event", 
+                      "related": "/v1/tracks/1/event"
+                    }
+                  }, 
+                  "sessions": {
+                    "links": {
+                      "self": "/v1/tracks/1/relationships/sessions",
+                      "related": "/v1/tracks/1/sessions"
+                    }
+                  }
+                },
                 "attributes": {
-                    "name" : "name ",
-                    "description": "description",
-                    "track-image-url": "track-image-url",
-                    "color": "color",
-                    "location": "location"
+                  "name" : "Main Track",
+                  "description": "description",
+                  "color": "#a04b4b",
+                  "font-color":"#ffffff"
                 },
                 "type": "track",
                 "id": "1",
@@ -4045,14 +4091,12 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
             {
               "data": {
                 "attributes": {
-                    "name" : "name ",
-                    "description": "description",
-                    "track-image-url": "track-image-url",
-                    "color": "color",
-                    "location": "location"
+                  "name" : "Main Track",
+                  "description": "description",
+                  "color": "#a04b4b"
                 },
                 "type": "track",
-                "id": "1",
+                "id": "1"
               }
             }
 
@@ -4061,11 +4105,10 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
         {
           "data": {
             "attributes": {
-                "name" : "name ",
+                "name" : "Main Track",
                 "description": "description",
-                "track-image-url": "track-image-url",
-                "color": "color",
-                "location": "location"
+                "color": "#a04b4b",
+                "font-color":"#ffffff"
             },
             "type": "track",
             "id": "1",
