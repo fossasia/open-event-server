@@ -17,6 +17,7 @@ class TicketHolder(db.Model):
     city = db.Column(db.String)
     state = db.Column(db.String)
     country = db.Column(db.String)
+    pdf_url = db.Column(db.String, nullable=False)
     ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE'))
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id', ondelete='CASCADE'))
     order = db.relationship('Order', backref='ticket_holders')
@@ -33,7 +34,8 @@ class TicketHolder(db.Model):
                  country=None,
                  ticket_id=None,
                  is_checked_in=False,
-                 order_id=None):
+                 order_id=None,
+                 pdf_url=None):
         self.firstname = firstname
         self.lastname = lastname
         self.email = email
@@ -44,6 +46,7 @@ class TicketHolder(db.Model):
         self.country = country
         self.order_id = order_id
         self.is_checked_in = is_checked_in
+        self.pdf_url = pdf_url
 
     def __repr__(self):
         return '<TicketHolder %r>' % self.id

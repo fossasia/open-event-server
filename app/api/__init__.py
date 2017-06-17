@@ -20,6 +20,7 @@ from app.api.tax import TaxList, TaxDetail, TaxRelationship
 from app.api.settings import SettingDetail
 from app.api.discount_codes import DiscountCodeList, DiscountCodeDetail, DiscountCodeRelationship
 from app.api.ticket_tags import TicketTagList, TicketTagDetail, TicketTagRelationship
+from app.api.attendees import AttendeeList, AttendeeDetail, AttendeeRelationship
 
 api_v1 = Blueprint('v1', __name__, url_prefix='/v1')
 api = Api(app, api_v1)
@@ -50,7 +51,8 @@ api.route(PageDetail, 'page_detail', '/pages/<int:id>')
 
 # tickets
 api.route(AllTicketList, 'all_ticket_list', '/tickets', '/events/<int:id>/tickets', '/events/<identifier>/tickets')
-api.route(TicketDetail, 'ticket_detail', '/tickets/<int:id>', '/events/<int:event_id>/tickets')
+api.route(TicketDetail, 'ticket_detail', '/tickets/<int:id>', '/events/<int:event_id>/tickets',
+          '/attendees/<int:attendee_id>/ticket')
 api.route(TicketRelationship, 'ticket_event', '/tickets/<int:id>/relationships/event')
 api.route(TicketRelationship, 'ticket_ticket_tag', '/tickets/<int:id>/relationships/ticket-tags')
 
@@ -183,3 +185,8 @@ api.route(DiscountCodeList, 'discount_code_list', '/events/<int:event_id>/discou
 api.route(DiscountCodeDetail, 'discount_code_detail', '/discount-codes/<int:id>')
 api.route(DiscountCodeRelationship, 'discount_code_event',
           '/discount-codes/<int:id>/relationships/event')
+
+# attendees
+api.route(AttendeeList, 'attendee_list', '/attendees', '/orders/<int:order_id>/tickets/<int:ticket_id>/attendees')
+api.route(AttendeeDetail, 'attendee_detail', '/attendees/<int:id>')
+api.route(AttendeeRelationship, 'attendee_ticket', '/attendees/<int:id>/relationships/ticket')
