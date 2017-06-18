@@ -49,18 +49,19 @@ class EventSchema(Schema):
             starts_at = data['starts_at'].utcoffset().seconds
             ends_at = data['ends_at'].utcoffset().seconds
             if offset != starts_at:
-                raise UnprocessableEntity({'pointer': '/data/attributes/timezone'}, "timezone: {} does not match with the starts-at "
-                                                                     "offset {:02}:{:02}".
+                raise UnprocessableEntity({'pointer': '/data/attributes/timezone'},
+                                          "timezone: {} does not match with the starts-at "
+                                          "offset {:02}:{:02}".
                                           format(data['timezone'], starts_at // 3600, starts_at % 3600 // 60))
             if offset != ends_at:
-                raise UnprocessableEntity({'pointer': '/data/attributes/timezone'}, "timezone: {} does not match with the ends-at "
-                                                                     "offset {:02}:{:02}".
+                raise UnprocessableEntity({'pointer': '/data/attributes/timezone'},
+                                          "timezone: {} does not match with the ends-at "
+                                          "offset {:02}:{:02}".
                                           format(data['timezone'], ends_at // 3600, ends_at % 3600 // 60))
 
     id = fields.Str(dump_only=True)
     identifier = fields.Str(dump_only=True)
     name = fields.Str(required=True)
-    email = fields.Email()
     event_url = fields.Url(dump_only=True)
     starts_at = fields.DateTime(required=True, timezone=True)
     ends_at = fields.DateTime(required=True, timezone=True)
@@ -76,9 +77,9 @@ class EventSchema(Schema):
     large_image_url = fields.Url(dump_only=True)
     icon_image_url = fields.Url(dump_only=True)
     organizer_name = fields.Str()
-    show_map = fields.Int()
+    is_map_shown = fields.Bool(default=False)
     organizer_description = fields.Str()
-    has_session_speakers = fields.Bool(default=False)
+    is_sessions_speakers_enabled = fields.Bool(default=False)
     privacy = fields.Str(default="public")
     state = fields.Str(default="Draft")
     type = fields.Str()
@@ -87,21 +88,21 @@ class EventSchema(Schema):
     ticket_url = fields.Url()
     code_of_conduct = fields.Str()
     schedule_published_on = fields.DateTime()
-    ticket_include = fields.Bool(default=False)
+    is_ticketing_enabled = fields.Bool(default=True)
     deleted_at = fields.DateTime()
     payment_country = fields.Str()
     payment_currency = fields.Str()
     paypal_email = fields.Str()
-    tax_allow = fields.Bool(default=False)
-    pay_by_paypal = fields.Bool(default=False)
-    pay_by_stripe = fields.Bool(default=False)
-    pay_by_cheque = fields.Bool(default=False)
-    pay_by_bank = fields.Bool(default=False)
-    pay_onsite = fields.Bool(default=False)
+    is_tax_enabled = fields.Bool(default=False)
+    can_pay_by_paypal = fields.Bool(default=False)
+    can_pay_by_stripe = fields.Bool(default=False)
+    can_pay_by_cheque = fields.Bool(default=False)
+    can_pay_by_bank = fields.Bool(default=False)
+    can_pay_onsite = fields.Bool(default=False)
     cheque_details = fields.Str()
     bank_details = fields.Str()
     onsite_details = fields.Str()
-    sponsors_enabled = fields.Bool(default=False)
+    is_sponsors_enabled = fields.Bool(default=False)
     created_at = fields.DateTime(dump_only=True, timezone=True)
     pentabarf_url = fields.Url(dump_only=True)
     ical_url = fields.Url(dump_only=True)

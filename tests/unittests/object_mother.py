@@ -22,7 +22,7 @@ class ObjectMother(object):
                      location_name='India',
                      topic='Travel & Outdoor',
                      sub_topic='Climbing',
-                     has_session_speakers=True,
+                     is_sessions_speakers_enabled=True,
                      type='Camp, Trip, or Retreat')
 
     @staticmethod
