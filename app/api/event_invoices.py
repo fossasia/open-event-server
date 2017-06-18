@@ -35,7 +35,7 @@ class EventInvoiceSchema(Schema):
     payment_mode = fields.Str()
     brand = fields.Str()
     exp_month = fields.Integer(validate=lambda n: 0 <= n <= 12)
-    exp_year = fields.Integer(validate=lambda n: n >= 0)
+    exp_year = fields.Integer(validate=lambda n: n >= 2015)
     last4 = fields.Str()
     stripe_token = fields.Str()
     paypal_token = fields.Str()

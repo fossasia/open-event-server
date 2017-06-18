@@ -48,7 +48,7 @@ class SessionSchema(Schema):
     videos_url = fields.Url(attribute='videos')
     audios_url = fields.Url(attribute='audios')
     signup_url = fields.Url()
-    state = fields.Str(validate=validate.OneOf(choices=["pending", "accepted", "confirmed", "rejected"]))
+    state = fields.Str(validate=validate.OneOf(choices=["pending", "accepted", "confirmed", "rejected", "draft"]))
     created_at = fields.DateTime(dump_only=True)
     deleted_at = fields.DateTime(dump_only=True)
     submitted_at = fields.DateTime()

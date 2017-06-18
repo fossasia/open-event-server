@@ -26,6 +26,18 @@ class TicketSchema(Schema):
         if data['sales_starts_at'] >= data['sales_ends_at']:
             raise UnprocessableEntity({'pointer': 'sales_ends_at'}, "sales_ends_at should be after sales_starts_at")
 
+    @validates_schema
+    def validate_order_quantity(self, data):
+        if 'max_order' in data and 'min_order' in data:
+            if data['max_order'] < data['min_order']:
+                raise UnprocessableEntity({'pointer': 'max_order'},
+                                          "max_order should be greater than min_order")
+
+        if 'quantity' in data and 'min_order' in data:
+            if data['quantity'] < data['min_order']:
+                raise UnprocessableEntity({'pointer': 'quantity'},
+                                          "quantity should be greater than min_order")
+
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
     description = fields.Str()
@@ -84,7 +96,6 @@ class AllTicketList(ResourceList):
 
 
 class TicketDetail(ResourceDetail):
-
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('attendee_id') is not None:
             try:

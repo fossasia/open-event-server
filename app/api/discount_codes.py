@@ -25,8 +25,14 @@ class DiscountCodeSchema(Schema):
 
     @validates_schema
     def validate_quantity(self, data):
-        if data['max_quantity'] < data['min_quantity']:
-            raise UnprocessableEntity({'pointer': 'max_quantity'}, "max_quantity should be greater than min_quantity")
+        if 'max_quantity' in data and 'min_quantity' in data:
+            if data['max_quantity'] < data['min_quantity']:
+                raise UnprocessableEntity({'pointer': 'max_quantity'},
+                                          "max_quantity should be greater than min_quantity")
+        if 'tickets_number' in data and 'min_quantity' in data:
+            if data['tickets_number'] < data['min_quantity']:
+                raise UnprocessableEntity({'pointer': 'tickets_number'},
+                                          "tickets_number should be greater than min_quantity")
 
     id = fields.Integer()
     code = fields.Str()
