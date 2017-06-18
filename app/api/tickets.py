@@ -2,6 +2,8 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from marshmallow import validates_schema
+from sqlalchemy.orm.exc import NoResultFound
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
@@ -9,6 +11,7 @@ from app.models import db
 from app.models.ticket import Ticket
 from app.models.event import Event
 from app.api.helpers.exceptions import UnprocessableEntity
+from app.models.ticket_holder import TicketHolder
 
 
 class TicketSchema(Schema):
@@ -81,6 +84,20 @@ class AllTicketList(ResourceList):
 
 
 class TicketDetail(ResourceDetail):
+
+    def before_get_object(self, view_kwargs):
+        if view_kwargs.get('attendee_id') is not None:
+            try:
+                session = self.session.query(TicketHolder).filter_by(id=view_kwargs['attendee_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'attendee_id'},
+                                     "Attendee: {} not found".format(view_kwargs['attendee_id']))
+            else:
+                if session.ticket_id is not None:
+                    view_kwargs['id'] = session.ticket_id
+                else:
+                    view_kwargs['id'] = None
+
     decorators = (jwt_required,)
     schema = TicketSchema
     data_layer = {'session': db.session,
