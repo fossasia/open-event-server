@@ -47,7 +47,6 @@ class Event(db.Model):
     identifier = db.Column(db.String)
     name = db.Column(db.String, nullable=False)
     event_url = db.Column(db.String)
-    email = db.Column(db.String)
     logo_url = db.Column(db.String)
     starts_at = db.Column(db.DateTime(timezone=True), nullable=False)
     ends_at = db.Column(db.DateTime(timezone=True), nullable=False)
@@ -62,9 +61,9 @@ class Event(db.Model):
     large_image_url = db.Column(db.String)
     icon_image_url = db.Column(db.String)
     organizer_name = db.Column(db.String)
-    show_map = db.Column(db.Integer)
+    is_map_shown = db.Column(db.Integer)
     organizer_description = db.Column(db.String)
-    has_session_speakers = db.Column(db.Boolean, default=False)
+    is_sessions_speakers_enabled = db.Column(db.Boolean, default=False)
     track = db.relationship('Track', backref="event")
     microlocation = db.relationship('Microlocation', backref="event")
     session = db.relationship('Session', backref="event")
@@ -82,17 +81,17 @@ class Event(db.Model):
     db.UniqueConstraint('track.name')
     code_of_conduct = db.Column(db.String)
     schedule_published_on = db.Column(db.DateTime(timezone=True))
-    ticket_include = db.Column(db.Boolean, default=False)
+    is_ticketing_enabled = db.Column(db.Boolean, default=True)
     deleted_at = db.Column(db.DateTime(timezone=True))
     payment_country = db.Column(db.String)
     payment_currency = db.Column(db.String)
     paypal_email = db.Column(db.String)
-    tax_allow = db.Column(db.Boolean, default=False)
-    pay_by_paypal = db.Column(db.Boolean, default=False)
-    pay_by_stripe = db.Column(db.Boolean, default=False)
-    pay_by_cheque = db.Column(db.Boolean, default=False)
-    pay_by_bank = db.Column(db.Boolean, default=False)
-    pay_onsite = db.Column(db.Boolean, default=False)
+    is_tax_enabled = db.Column(db.Boolean, default=False)
+    can_pay_by_paypal = db.Column(db.Boolean, default=False)
+    can_pay_by_stripe = db.Column(db.Boolean, default=False)
+    can_pay_by_cheque = db.Column(db.Boolean, default=False)
+    can_pay_by_bank = db.Column(db.Boolean, default=False)
+    can_pay_onsite = db.Column(db.Boolean, default=False)
     cheque_details = db.Column(db.String)
     bank_details = db.Column(db.String)
     onsite_details = db.Column(db.String)
@@ -100,7 +99,7 @@ class Event(db.Model):
     pentabarf_url = db.Column(db.String)
     ical_url = db.Column(db.String)
     xcal_url = db.Column(db.String)
-    sponsors_enabled = db.Column(db.Boolean, default=False)
+    is_sponsors_enabled = db.Column(db.Boolean, default=False)
     discount_code = db.relationship('DiscountCode', backref='events')
 
     def __init__(self,
@@ -112,7 +111,6 @@ class Event(db.Model):
                  latitude=None,
                  longitude=None,
                  location_name=None,
-                 email=None,
                  description=None,
                  event_url=None,
                  thumbnail_image_url=None,
@@ -129,21 +127,21 @@ class Event(db.Model):
                  copyright=None,
                  code_of_conduct=None,
                  schedule_published_on=None,
-                 has_session_speakers=False,
-                 show_map=1,
+                 is_sessions_speakers_enabled=False,
+                 is_map_shown=1,
                  searchable_location_name=None,
-                 ticket_include=None,
+                 is_ticketing_enabled=None,
                  deleted_at=None,
                  payment_country=None,
                  payment_currency=None,
                  paypal_email=None,
                  speakers_call=None,
-                 pay_by_paypal=None,
-                 pay_by_stripe=None,
-                 pay_by_cheque=None,
+                 can_pay_by_paypal=None,
+                 can_pay_by_stripe=None,
+                 can_pay_by_cheque=None,
                  identifier=None,
-                 pay_by_bank=None,
-                 pay_onsite=None,
+                 can_pay_by_bank=None,
+                 can_pay_onsite=None,
                  cheque_details=None,
                  bank_details=None,
                  pentabarf_url=None,
@@ -155,7 +153,6 @@ class Event(db.Model):
 
         self.name = name
         self.logo = logo
-        self.email = email
         self.starts_at = starts_at
         self.ends_at = ends_at
         self.timezone = timezone
@@ -171,7 +168,7 @@ class Event(db.Model):
         self.organizer_name = organizer_name
         self.organizer_description = clean_up_string(organizer_description)
         self.state = state
-        self.show_map = show_map
+        self.is_map_shown = is_map_shown
         self.privacy = privacy
         self.type = type
         self.topic = topic
@@ -180,19 +177,19 @@ class Event(db.Model):
         self.ticket_url = ticket_url
         self.code_of_conduct = code_of_conduct
         self.schedule_published_on = schedule_published_on
-        self.has_session_speakers = has_session_speakers
+        self.is_sessions_speakers_enabled = is_sessions_speakers_enabled
         self.searchable_location_name = searchable_location_name
-        self.ticket_include = ticket_include
+        self.is_ticketing_enabled = is_ticketing_enabled
         self.deleted_at = deleted_at
         self.payment_country = payment_country
         self.payment_currency = payment_currency
         self.paypal_email = paypal_email
         self.speakers_call = speakers_call
-        self.pay_by_paypal = pay_by_paypal
-        self.pay_by_stripe = pay_by_stripe
-        self.pay_by_cheque = pay_by_cheque
-        self.pay_by_bank = pay_by_bank
-        self.pay_onsite = pay_onsite
+        self.can_pay_by_paypal = can_pay_by_paypal
+        self.can_pay_by_stripe = can_pay_by_stripe
+        self.can_pay_by_cheque = can_pay_by_cheque
+        self.can_pay_by_bank = can_pay_by_bank
+        self.can_pay_onsite = can_pay_onsite
         self.identifier = get_new_event_identifier()
         self.cheque_details = cheque_details
         self.bank_details = bank_details
@@ -252,7 +249,6 @@ class Event(db.Model):
             'latitude': self.latitude,
             'longitude': self.longitude,
             'location_name': self.location_name,
-            'email': self.email,
             'description': self.description,
             'event_url': self.event_url,
             'background_url': self.background_url,
@@ -261,7 +257,7 @@ class Event(db.Model):
             'icon': self.icon,
             'organizer_name': self.organizer_name,
             'organizer_description': self.organizer_description,
-            'has_session_speakers': self.has_session_speakers,
+            'is_sessions_speakers_enabled': self.is_sessions_speakers_enabled,
             'privacy': self.privacy,
             'ticket_url': self.ticket_url,
             'code_of_conduct': self.code_of_conduct,
