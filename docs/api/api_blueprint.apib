@@ -36,7 +36,12 @@ The API uses JWT Authentication to authenticate users to the server. For authent
 
 For using the API you need(mostly) to register as an user. Registering gives you access to all non admin API endpoints. After registration, you need to create your JWT access token to send requests to the API endpoints.
 
-## Users Collection [/users?page,limit]
+## Users Collection [/users{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter(optional, string, `[{"is-super-admin":"true"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Users [GET]
 
@@ -98,7 +103,7 @@ For using the API you need(mostly) to register as an user. Registering gives you
 ### Create User [POST]
 
 + name (string) - Name of the user
-+ passowrd (string) - Password of the user **(required)**
++ password (string) - Password of the user **(required)**
 + email (string) - Email of the user **(required)**
 
 + Request (application/vnd.api+json)
@@ -135,7 +140,7 @@ For using the API you need(mostly) to register as an user. Registering gives you
 
 ## User Details [/users/{user_id}]
 + Parameters
-    + user_id (integer) - ID of the user in the form of an integer
+    + user_id: 1 (integer) - ID of the user in the form of an integer
 
 ### Get Details [GET]
 + Request
@@ -274,9 +279,14 @@ Authorized user should be same as user in request body or must be admin.
         }
 
 # Group Events
-These endpoints help you to create the basic event structue. To add other parts of the event such as ticket, sponsor, copyright, etc. there are separate endpoints.
+These endpoints help you to create the basic event structure. To add other parts of the event such as ticket, sponsor, copyright, etc. there are separate endpoints.
 
-## Events Collection [/events?page,limit]
+## Events Collection [/events{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[{"has-session-speakers":"true"}]`) - Filter according to the flask-rest-jsonapi filtering system. If you want to filter by firstname and lastname, example url will /endpoint?filter=[{"firstname":"firstname","lastname":"lastname"}]Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Events [GET]
 
@@ -672,7 +682,7 @@ These endpoints help you to create the basic event structue. To add other parts 
 
 ## Event Details [/events/{event_id}]
 + Parameters
-    + event_id (integer) - ID of the ticket in the form of an integer
+    + event_id: 1 (integer) - ID of the ticket in the form of an integer
 
 ### Event Details [GET]
 
@@ -999,9 +1009,13 @@ All other fields are optional. Add attributes you want to modify.
 # Group Copyright
 Data related to event copyright information.
 
-## Event Copyright [/events/{event_id}/event-copyright?page,limit]
+## Event Copyright [/events/{event_id}/event-copyright{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id (integer) - ID of the spcific event in integer
+    + event_id: 1 (integer) - ID of the specific event in integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `year`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[{"year": "2017"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### Get Event Copyright [GET]
 
@@ -1122,7 +1136,7 @@ Data related to event copyright information.
 
 ## Event Copyright Details [/event-copyright/{event_copyright_id}]
 + Parameters
-    + event_copyright_id (integer) - ID of the event copyright in the form of an integer
+    + event_copyright_id: 1 (integer) - ID of the event copyright in the form of an integer
 
 ### Event Copyright Details [GET]
 + Request
@@ -1261,9 +1275,13 @@ Data related to event copyright information.
 # Group Invoices
 Data related to an invoice for the event.
 
-## Event Invoices [/events/{event_id}/event-invoices?page,limit]
+## Event Invoices [/events/{event_id}/event-invoices{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id (integer) - ID of the spcific event in integer
+    + event_id: 1 (integer) - ID of the specific event in integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[{"status":"pending"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### Get Event Invoices [GET]
 
@@ -1442,7 +1460,7 @@ Data related to an invoice for the event.
 
 ## Event Invoices Details [/event-invoices/{event_invoices_id}]
 + Parameters
-    + event_invoices_id (integer) - ID of the event invoices in the form of an integer
+    + event_invoices_id: 1 (integer) - ID of the event invoices in the form of an integer
 
 ### Event Invoices Details [GET]
 + Request
@@ -1632,9 +1650,13 @@ Data related to an invoice for the event.
 # Group Microlocations
 Data related to all the microlocations for the various sessions of the event.
 
-## Microlocation Collection [/events/{event_id}/microlocations?page,limit]
+## Microlocation Collection [/events/{event_id}/microlocations{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id (integer) - ID of the spcific event in integer
+    + event_id: 1 (integer) - ID of the specific event in integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `floor`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[{"floor":"2"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Microlocations [GET]
 
@@ -1763,7 +1785,7 @@ Data related to all the microlocations for the various sessions of the event.
 
 ## Microlocation Details [/microlocations/{microlocation_id}]
 + Parameters
-    + microlocation_id (integer) - ID of the ticket in the form of an integer
+    + microlocation_id: 1 (integer) - ID of the ticket in the form of an integer
 
 ### Mictolocation Details [GET]
 
@@ -1909,9 +1931,13 @@ Data related to all the microlocations for the various sessions of the event.
 # Group Sessions
 Data related to all the sessions in the event.
 
-## Sessions Collection [/events/{event_id}/sessions?page,limit]
+## Sessions Collection [/events/{event_id}/sessions{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id (integer) - ID of the spcific event in integer
+    + event_id: 1 (integer) - ID of the specific event in integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[{"level":"1"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Sessions [GET]
 
@@ -2116,7 +2142,7 @@ Data related to all the sessions in the event.
 
 ## Sessions Details [/sessions/{session_id}]
 + Parameters
-    + session_id (integer) - ID of the speaker call in the form of an integer
+    + session_id: 1 (integer) - ID of the speaker call in the form of an integer
 
 ### Session Details [GET]
 
@@ -2338,9 +2364,13 @@ Data related to all the sessions in the event.
 # Group Session Type
 Data related to all the session types (such as talks, workshops, lightning talks) associated with the event.
 
-## Session Type Collection [/events/{event_id}/session-types?page,limit]
+## Session Type Collection [/events/{event_id}/session-types{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id (integer) - ID of the spcific event in integer
+    + event_id: 1 (integer) - ID of the specific event in integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[{"length":"00:30"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Session Types [GET]
 
@@ -2457,7 +2487,7 @@ Data related to all the session types (such as talks, workshops, lightning talks
 
 ## Session Type Details [/session-types/{session_type_id}]
 + Parameters
-    + session_type_id (integer) - ID of the session_type in the form of an integer
+    + session_type_id: 1 (integer) - ID of the session_type in the form of an integer
 
 ### Session Details [GET]
 
@@ -2591,9 +2621,13 @@ Data related to all the session types (such as talks, workshops, lightning talks
 # Group Social Links
 You can add various social links such as facebook, twitter, website, blog link, etc. related to the event.
 
-## Social Links Collection [/events/{event_id}/social-links?page,limit]
+## Social Links Collection [/events/{event_id}/social-links{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id (integer) - ID of the spcific event in integer
+    + event_id: 1 (integer) - ID of the specific event in integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[{"name": "facebook"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Social Links [GET]
 
@@ -2696,7 +2730,7 @@ You can add various social links such as facebook, twitter, website, blog link, 
 
 ## Social Links [/social-links/{link_id}]
 + Parameters
-    + link_id (integer) - ID of the Social Link in the form of an integer
+    + link_id: 1 (integer) - ID of the Social Link in the form of an integer
 
 ### Social Link Detail [GET]
 + Request
@@ -2818,9 +2852,13 @@ You can add various social links such as facebook, twitter, website, blog link, 
 # Group Speakers Calls
 Announcement for call for speaker to accept session proposals from speakers.
 
-## Speakers Call Collection [/events/{event_id}/speakers-calls?page,limit]
+## Speakers Call Collection [/events/{event_id}/speakers-calls{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id (integer) - ID of the spcific event in integer
+    + event_id: 1 (integer) - ID of the specific event in integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `starts-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[{"announcement":"string"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Speakers Calls [GET]
 
@@ -2937,7 +2975,7 @@ Announcement for call for speaker to accept session proposals from speakers.
 
 ## Speakers Call Details [/speakers-calls/{speakers_call_id}]
 + Parameters
-    + speakers_call_id (integer) - ID of the session in the form of an integer
+    + speakers_call_id: 1 (integer) - ID of the session in the form of an integer
 
 ### Speakers Call Details [GET]
 
@@ -3071,9 +3109,13 @@ Announcement for call for speaker to accept session proposals from speakers.
 # Group Sponsors
 Data related to the various sponsors with their level, url and images associated with a specific event.
 
-## Sponsors Collection [/events/{event_id}/sponsors?page,limit]
+## Sponsors Collection [/events/{event_id}/sponsors{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id (integer) - ID of the spcific event in integer
+    + event_id: 1 (integer) - ID of the specific event in integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `level`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[{"description":"string"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Sponsors [GET]
 
@@ -3192,7 +3234,7 @@ Data related to the various sponsors with their level, url and images associated
 
 ## Sponsor Details [/sponsors/{sponsor_id}]
 + Parameters
-    + sponsor_id (integer) - ID of the sponsor in the form of an integer
+    + sponsor_id: 1 (integer) - ID of the sponsor in the form of an integer
 
 ### Sponsor Details [GET]
 + Request
@@ -3329,9 +3371,13 @@ Data related to the various sponsors with their level, url and images associated
 # Group Tax
 Related to any tax related information that might be related with the tickets for the event.
 
-## Tax Collection [/events/{event_id}/tax?page,limit]
+## Tax Collection [/events/{event_id}/tax{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id (integer) - ID of the spcific event in integer
+    + event_id: 1 (integer) - ID of the specific event in integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `tax-rate`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[{"tax-rate":"12.0"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Tax Records [GET]
 
@@ -3466,7 +3512,7 @@ Related to any tax related information that might be related with the tickets fo
 
 ## Tax Details [/tax/{tax_id}]
 + Parameters
-    + tax_id (integer) - ID of the Tax in the form of an integer
+    + tax_id: 1 (integer) - ID of the Tax in the form of an integer
 
 ### Tax Details [GET]
 + Request
@@ -3618,9 +3664,13 @@ Related to any tax related information that might be related with the tickets fo
 # Group Tickets
 Related to tickets (free, paid, donation) to the event.
 
-## Tickets Collection [/events/{event_id}/tickets?page,limit]
+## Tickets Collection [/events/{event_id}/tickets{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id (integer) - ID of the spcific event in integer
+    + event_id: 1 (integer) - ID of the specific event in integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `sales-starts-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[{"name":"string"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Tickets [GET]
 
@@ -3769,7 +3819,7 @@ Related to tickets (free, paid, donation) to the event.
 
 ## Ticket Details [/tickets/{ticket_id}]
 + Parameters
-    + ticket_id (integer) - ID of the ticket in the form of an integer
+    + ticket_id: 1 (integer) - ID of the ticket in the form of an integer
 
 ### Ticket Details [GET]
 
@@ -3937,7 +3987,7 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
 
 ## Tracks Collection [/events/{event_id}/tracks]
 + Parameters
-    + event_id (integer) - ID of the event in the form of an integer
+    + event_id: 1 (integer) - ID of the event in the form of an integer
 
 ### List All Tracks [GET]
 
@@ -3960,10 +4010,10 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
               "relationships": {
                 "event": {
                   "links": {
-                    "self": "/v1/tracks/1/relationships/event", 
+                    "self": "/v1/tracks/1/relationships/event",
                     "related": "/v1/tracks/1/event"
                   }
-                }, 
+                },
                 "sessions": {
                   "links": {
                     "self": "/v1/tracks/1/relationships/sessions",
@@ -4027,7 +4077,7 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
 
 ### Track Detail [/tracks/{track_id}]
 + Parameters
-    + track_id (integer) - ID of the track in the form of an integer
+    + track_id: 1 (integer) - ID of the track in the form of an integer
 
 ### Get Details [GET]
 + Request
@@ -4045,10 +4095,10 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
                 "relationships": {
                   "event": {
                     "links": {
-                      "self": "/v1/tracks/1/relationships/event", 
+                      "self": "/v1/tracks/1/relationships/event",
                       "related": "/v1/tracks/1/event"
                     }
-                  }, 
+                  },
                   "sessions": {
                     "links": {
                       "self": "/v1/tracks/1/relationships/sessions",
@@ -4148,7 +4198,12 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
 
 To create or modify data of this data layer, you will need admin access. You can get the data without admin access as well. Image sizes basically stores the configuration for the width, height and aspect ratio for full size, thumbnail and icon version of various images that is uploaded to the server.
 
-## Image Size Collection [/image-sizes?page,limit]
+## Image Size Collection [/image-sizes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `full-width`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[{"full-width":"1300"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List Image Sizes [GET]
 
@@ -4259,7 +4314,7 @@ To create or modify data of this data layer, you will need admin access. You can
 
 ## Image Size Details [/image-sizes/{image_size_id}]
 + Parameters
-    + image_size_id (integer) - ID of the image size in the form of an integer
+    + image_size_id: 1 (integer) - ID of the image size in the form of an integer
 
 ### Get Image Size Details [GET]
 + Request
@@ -4404,7 +4459,12 @@ To create or modify data of this data layer, you will need admin access. You can
 
 To create or modify any data of this data layer, you will need admin access. However you get the schema without admin access. Pages endpoints is used to create static pages such as about page or any other page that doesn't need to be updated frequently and only a specific content is to be shown.
 
-## Page Collection [/pages?page,limit]
+## Page Collection [/pages{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[{"name":"string"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### Page Sizes [GET]
 
@@ -4489,7 +4549,7 @@ To create or modify any data of this data layer, you will need admin access. How
 
 ## Page Details [/pages/{page_id}]
 + Parameters
-    + page_id (integer) - ID of the page in the form of an integer
+    + page_id: 1 (integer) - ID of the page in the form of an integer
 
 ### Get Page Details [GET]
 
@@ -4612,7 +4672,12 @@ To create or modify any data of this data layer, you will need admin access. How
 
 To update or get any attribute of this data layer, you will need admin access. However a part of the schema is available to the general registered user without admin access.
 
-## Settings Details [/settings?page,limit]
+## Settings Details [/settings{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `app-name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[{"app-name": "Event-Yay!"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### Show Settings[GET]
 
