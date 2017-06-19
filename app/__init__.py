@@ -58,6 +58,7 @@ class ReverseProxied(object):
     """
     ReverseProxied flask wsgi app wrapper from http://stackoverflow.com/a/37842465/1562480 by aldel
     """
+
     def __init__(self, app):
         self.app = app
 
@@ -120,7 +121,9 @@ def create_app():
     # nextgen api
     with app.app_context():
         from app.api import api_v1
+        from app.api.image_upload import upload_routes
         app.register_blueprint(api_v1)
+        app.register_blueprint(upload_routes)
 
     sa.orm.configure_mappers()
 
@@ -186,4 +189,4 @@ scheduler.add_job(send_event_fee_notification_followup, 'cron', day=15)
 scheduler.start()
 
 if __name__ == '__main__':
-        current_app.run()
+    current_app.run()
