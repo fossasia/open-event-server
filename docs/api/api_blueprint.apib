@@ -4192,6 +4192,263 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
           }
         }
 
+# Group Notifications
+Notifications related to the various users about invites, ticket purchase, session proposal etc.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `title`  | Title ofthe notification | string | - |
+| `message` | Message/content of the notification | string | - |
+| `accept` | Accept/Reject notification | string | - |
+| `is-read` | Yes/No for read notification | boolean (default: `false`) | - |
+| `recieved-at` | Notification recieved time | ISO 8601 (tz-aware) | - |
+
+## Notifications Collection [/users/{user_id}/notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + user_id: 1 (integer) - ID of the specific user in integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[{"is_read": "true" }]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List All Notifications [GET]
+Get a list of Notifications.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "user": {
+                  "links": {
+                    "self": "/v1/notifications/12/relationships/user",
+                    "related": "/v1/notifications/12/user"
+                  }
+                }
+              },
+              "attributes": {
+                "title": "Ticket-kids Purchased",
+                "message": "Ticket-kids Purchased for Classical Music Event",
+                "recieved-at": "2017-06-01T01:25:07.385816+00:00",
+                "accept": null,
+                "is-read": false
+              },
+              "type": "notification",
+              "id": "12",
+              "links": {
+                "self": "/v1/notifications/12"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/users/1/notifications"
+          }
+        }
+
+### Create Notificaiton [POST]
+Create a new notification with user_id.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "title": "Ticket-kids Purchased",
+                  "message": "Ticket-kids Purchased for Classical Music Event",
+                  "recieved-at": "2017-06-01T01:25:07.385816+00:00",
+                  "accept": null,
+                  "is-read": false
+                },
+                "type": "notification"
+              }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "user": {
+                "links": {
+                  "self": "/v1/notifications/12/relationships/user",
+                  "related": "/v1/notifications/12/user"
+                }
+              }
+            },
+            "attributes": {
+              "title": "Ticket-kids Purchased",
+              "message": "Ticket-kids Purchased for Classical Music Event",
+              "recieved-at": "2017-06-01T01:25:07.385816+00:00",
+              "accept": null,
+              "is-read": false
+            },
+            "type": "notification",
+            "id": "12",
+            "links": {
+              "self": "/v1/notifications/12"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/notifications/12"
+          }
+        }
+
+
+## Notification Detail [/notifications/{notification_id}]
++ Parameters
+    + notification_id: 1 (integer) - ID of the notifcaiton in the form of an integer
+
+### Notification Detail [GET]
+Get a single notification.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "user": {
+                "links": {
+                  "self": "/v1/notifications/12/relationships/user",
+                  "related": "/v1/notifications/12/user"
+                }
+              }
+            },
+            "attributes": {
+              "title": "Ticket-kids Purchased",
+              "message": "Ticket-kids Purchased for Classical Music Event",
+              "recieved-at": "2017-06-01T01:25:07.385816+00:00",
+              "accept": null,
+              "is-read": false
+            },
+            "type": "notification",
+            "id": "1",
+            "links": {
+              "self": "/v1/notifications/12"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/notifications/12"
+          }
+        }
+
+
+### Update Notification [PATCH]
+Update a single notification with `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "title": "Ticket-kids Purchased",
+                  "message": "Ticket-kids Purchased for Classical Music Event",
+                  "recieved-at": "2017-06-01T01:25:07.385816+00:00",
+                  "accept": null,
+                  "is-read": false
+                },
+                "type": "notification",
+                "id": "12"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "user": {
+                "links": {
+                  "self": "/v1/notifications/12/relationships/user",
+                  "related": "/v1/notifications/12/user"
+                }
+              }
+            },
+            "attributes": {
+              "title": "Ticket-kids Purchased",
+              "message": "Ticket-kids Purchased for Classical Music Event",
+              "recieved-at": "2017-06-01T01:25:07.385816+00:00",
+              "accept": null,
+              "is-read": false
+            },
+            "type": "notification",
+            "id": "12",
+            "links": {
+              "self": "/v1/notifcations/12"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/notifications/12"
+          }
+        }
+
+### Delete Notification [DELETE]
+Delete a single notification.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
 # Group Image Size
 
 **ADMIN**
