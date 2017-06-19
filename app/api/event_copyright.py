@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
@@ -20,9 +21,9 @@ class EventCopyrightSchema(Schema):
     id = fields.Str(dump_only=True)
     holder = fields.Str()
     holder_url = fields.Url()
-    licence = fields.Str()
+    licence = fields.Str(required=True)
     licence_url = fields.Url()
-    year = fields.Int()
+    year = fields.Int(validate=lambda n: 1900 <= n <= datetime.now().year)
     logo_url = fields.Url(attribute='logo')
     event = Relationship(attribute='event',
                          self_view='v1.copyright_event',

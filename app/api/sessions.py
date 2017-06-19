@@ -1,6 +1,8 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+from marshmallow import validates_schema
+import marshmallow.validate as validate
 
 from app.api.events import Event
 from app.api.helpers.utilities import dasherize
@@ -10,6 +12,7 @@ from app.models.session import Session
 from app.models.track import Track
 from app.models.session_type import SessionType
 from app.models.microlocation import Microlocation
+from app.api.helpers.exceptions import UnprocessableEntity
 
 
 class SessionSchema(Schema):
@@ -24,6 +27,11 @@ class SessionSchema(Schema):
         self_view = 'v1.session_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
+
+    @validates_schema
+    def validate_date(self, data):
+        if data['starts_at'] >= data['ends_at']:
+            raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at")
 
     id = fields.Str(dump_only=True)
     title = fields.Str(required=True)
@@ -40,9 +48,9 @@ class SessionSchema(Schema):
     videos_url = fields.Url(attribute='videos')
     audios_url = fields.Url(attribute='audios')
     signup_url = fields.Url()
-    state = fields.Str()
-    created_at = fields.DateTime()
-    deleted_at = fields.DateTime()
+    state = fields.Str(validate=validate.OneOf(choices=["pending", "accepted", "confirmed", "rejected", "draft"]))
+    created_at = fields.DateTime(dump_only=True)
+    deleted_at = fields.DateTime(dump_only=True)
     submitted_at = fields.DateTime()
     is_mail_sent = fields.Boolean()
     microlocation = Relationship(attribute='microlocation',

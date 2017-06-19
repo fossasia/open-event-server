@@ -1,3 +1,5 @@
+# ONLY INCLUDE THOSE DB HELPERS WHICH ARE NOT SPECIFIC TO ANY MODEL
+
 import logging
 import traceback
 from app.models import db

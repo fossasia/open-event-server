@@ -3,6 +3,8 @@ from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
+from datetime import datetime
+from marshmallow import validates_schema
 
 from app.api.helpers.utilities import dasherize
 from app.models import db
@@ -10,6 +12,7 @@ from app.api.helpers.permissions import jwt_required
 from app.models.session_type import SessionType
 from app.models.event import Event
 from app.models.session import Session
+from app.api.helpers.exceptions import UnprocessableEntity
 
 
 class SessionTypeSchema(Schema):
@@ -25,9 +28,16 @@ class SessionTypeSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
+    @validates_schema
+    def validate_length(self, data):
+        try:
+            datetime.strptime(data['length'], '%H:%M')
+        except ValueError:
+            raise UnprocessableEntity({'pointer': '/data/attributes/length'}, "Length should be in the format %H:%M")
+
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
-    length = fields.Str()
+    length = fields.Str(required=True)
     event = Relationship(attribute='event',
                          self_view='v1.session_type_event',
                          self_view_kwargs={'id': '<id>'},

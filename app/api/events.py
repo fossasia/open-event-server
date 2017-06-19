@@ -6,6 +6,7 @@ from marshmallow_jsonapi import fields
 from pytz import timezone
 from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound, BadRequest
+from marshmallow import validates_schema
 from flask import request
 
 from app.api.helpers.permissions import jwt_required
@@ -22,7 +23,8 @@ from app.models.user import User, ATTENDEE, ORGANIZER
 from app.models.users_events_role import UsersEventsRoles
 from app.models.role import Role
 from app.api.helpers.permissions import accessible_events, is_coorganizer
-from app.api.helpers.helpers import save_to_db
+from app.api.helpers.db import save_to_db
+from app.api.helpers.exceptions import UnprocessableEntity
 
 
 class EventSchema(Schema):
@@ -33,16 +35,36 @@ class EventSchema(Schema):
         self_view_many = 'v1.event_list'
         inflect = dasherize
 
+    @validates_schema
+    def validate_date(self, data):
+        if data['starts_at'] >= data['ends_at']:
+            raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at")
+
+    @validates_schema
+    def validate_timezone(self, data):
+        if 'timezone' in data['timezone']:
+            offset = timezone(data['timezone']).tz.utcoffset(datetime.strptime('2014-12-01', '%Y-%m-%d')).seconds
+            starts_at = data['starts_at'].utcoffset().seconds
+            ends_at = data['ends_at'].utcoffset().seconds
+            if offset != starts_at:
+                raise UnprocessableEntity({'pointer': '/data/attributes/timezone'}, "timezone: {} does not match with the starts-at "
+                                                                     "offset {:02}:{:02}".
+                                          format(data['timezone'], starts_at // 3600, starts_at % 3600 // 60))
+            if offset != ends_at:
+                raise UnprocessableEntity({'pointer': '/data/attributes/timezone'}, "timezone: {} does not match with the ends-at "
+                                                                     "offset {:02}:{:02}".
+                                          format(data['timezone'], ends_at // 3600, ends_at % 3600 // 60))
+
     id = fields.Str(dump_only=True)
     identifier = fields.Str(dump_only=True)
     name = fields.Str(required=True)
-    email = fields.Str()
+    email = fields.Email()
     event_url = fields.Url(dump_only=True)
     starts_at = fields.DateTime(required=True, timezone=True)
     ends_at = fields.DateTime(required=True, timezone=True)
     timezone = fields.Str(required=True)
-    latitude = fields.Float()
-    longitude = fields.Float()
+    latitude = fields.Float(validate=lambda n: -90 <= n <= 90)
+    longitude = fields.Float(validate=lambda n: -180 <= n <= 180)
     logo_url = fields.Url()
     location_name = fields.Str()
     searchable_location_name = fields.Str()
@@ -193,22 +215,6 @@ class EventList(ResourceList):
                     .join(UsersEventsRoles.role).filter(Role.name != ATTENDEE)
         return query_
 
-    def before_create_object(self, data, view_kwargs):
-        if data['timezone']:
-            tz = timezone(data['timezone'])
-            dt = datetime.strptime('2014-12-01', '%Y-%m-%d')
-            offset = tz.utcoffset(dt).seconds
-            starts_at = data['starts_at'].utcoffset().seconds
-            ends_at = data['ends_at'].utcoffset().seconds
-            if offset != starts_at:
-                raise BadRequest({'parameter': 'timezone'}, "timezone: {} does not match with the starts-at "
-                                                            "offset {:02}:{:02}".
-                                 format(data['timezone'], starts_at // 3600, starts_at % 3600 // 60))
-            if offset != ends_at:
-                raise BadRequest({'parameter': 'timezone'}, "timezone: {} does not match with the ends-at "
-                                                            "offset {:02}:{:02}".
-                                 format(data['timezone'], ends_at // 3600, ends_at % 3600 // 60))
-
     def after_create_object(self, event, data, view_kwargs):
         role = Role.query.filter_by(name=ORGANIZER).first()
         user = User.query.filter_by(id=view_kwargs['user_id']).first()
@@ -220,7 +226,6 @@ class EventList(ResourceList):
     data_layer = {'session': db.session,
                   'model': Event,
                   'methods': {'after_create_object': after_create_object,
-                              'before_create_object': before_create_object,
                               'query': query
                               }}
 
