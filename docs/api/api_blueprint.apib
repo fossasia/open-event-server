@@ -2822,7 +2822,7 @@ Announcement for call for speaker to accept session proposals from speakers.
 | `hash` | Hash for speakers call | string | - |
 | `privacy` | Privacy of speakers call | string | - |
 
-## Speakers Call Collection [/events/{event_id}/speakers-calls{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Create Speakers Call for an Event [/events/{event_id}/speakers-calls{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_id: 1 (integer) - ID of the specific event in integer
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -2830,59 +2830,19 @@ Announcement for call for speaker to accept session proposals from speakers.
     + sort (optional, string, `starts-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[{"announcement":"string"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List All Speakers Calls [GET]
-Get a list of Speaker Calls.
 
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-          "meta": {
-            "count": 1
-          },
-          "data": [
-            {
-              "relationships": {
-                "event": {
-                  "links": {
-                    "self": "/v1/speakers-calls/1/relationships/event",
-                    "related": "/v1/speakers-calls/1/event"
-                  }
-                }
-              },
-              "attributes": {
-                "announcement": "Speaker Call Announcement",
-                "starts-at": "2017-06-01T01:24:47.500127+00:00",
-                "ends-at": "2017-06-20T01:24:47.500127+00:00",
-                "hash": null,
-                "private": null
-              },
-              "type": "speakers-call",
-              "id": "1",
-              "links": {
-                "self": "/v1/speakers-calls/1"
-              }
-            }
-          ],
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/speakers-calls"
-          }
-        }
-
-
-### Create Spearkers Call [POST]
+=======
+### Create Speakers Call [POST]
 Create a new speakers call using an event_id.
 
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `announcement`  | Announcement for speakers call | string | **yes** |
+| `starts-at` | Start date of the speakers call | ISO 8601 (tz-aware) | **yes** |
+| `ends-at` | End date of the speakers call | ISO 8601 (tz-aware) | **yes** |
+| `hash` | Hash for speakers call | string | - |
+| `privacy` | Privacy of speakers call | string | - |
+    
 + Request (application/vnd.api+json)
 
     + Headers
@@ -2937,6 +2897,55 @@ Create a new speakers call using an event_id.
             "self": "/v1/speaker-calls/1"
           }
         }
+
+## Get Speakers Call for an Event [/events/{event_id}/speakers-call?page,limit]
++ Parameters
+    + event_id (integer) - ID of the spcific event in integer
+
+### Get Speakers Call [GET]
+
++ Request
+
+    + Headers
+
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/speakers-calls/1/relationships/event",
+                            "related": "/v1/speakers-calls/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "announcement": "Speaker Call Announcement",
+                    "ends-at": "2017-06-20T01:24:47.500127+00:00",
+                    "hash": "sfasd",
+                    "starts-at": "2017-06-01T01:24:47.500127+00:00",
+                    "privacy": "public"
+                },
+                "type": "speakers-call",
+                "id": "10",
+                "links": {
+                    "self": "/v1/speakers-calls/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/speakers-calls/1"
+            }
+        }
+
 
 
 ## Speakers Call Details [/speakers-calls/{speakers_call_id}]
