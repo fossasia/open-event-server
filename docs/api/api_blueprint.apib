@@ -36,6 +36,14 @@ The API uses JWT Authentication to authenticate users to the server. For authent
 
 For using the API you need(mostly) to register as an user. Registering gives you access to all non admin API endpoints. After registration, you need to create your JWT access token to send requests to the API endpoints.
 
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the user | string | - |
+| `password` | Password of the user | string | **yes** |
+| `email` | Email of the user | string | **yes** |
+
+
 ## Users Collection [/users{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -44,6 +52,7 @@ For using the API you need(mostly) to register as an user. Registering gives you
     + filter(optional, string, `[{"is-super-admin":"true"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Users [GET]
+Get a list of Users.
 
 + Request
 
@@ -101,10 +110,7 @@ For using the API you need(mostly) to register as an user. Registering gives you
 
 
 ### Create User [POST]
-
-+ name (string) - Name of the user
-+ password (string) - Password of the user **(required)**
-+ email (string) - Email of the user **(required)**
+Create a new user using an email, password and an optional name.
 
 + Request (application/vnd.api+json)
 
@@ -143,6 +149,8 @@ For using the API you need(mostly) to register as an user. Registering gives you
     + user_id: 1 (integer) - ID of the user in the form of an integer
 
 ### Get Details [GET]
+Get a single user.
+
 + Request
 
     + Headers
@@ -194,6 +202,9 @@ For using the API you need(mostly) to register as an user. Registering gives you
 
 
 ### Update User [PATCH]
++ `id` (integer) - ID of the record to update **(required)**
+
+Update a single note by setting the email, email and/or name.
 
 Authorized user should be same as user in request body or must be admin.
 
@@ -258,6 +269,7 @@ Authorized user should be same as user in request body or must be admin.
         }
 
 ### Delete User [DELETE]
+Delete a single user.
 
 + Request
 
@@ -281,6 +293,51 @@ Authorized user should be same as user in request body or must be admin.
 # Group Events
 These endpoints help you to create the basic event structure. To add other parts of the event such as ticket, sponsor, copyright, etc. there are separate endpoints.
 
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the event | string | **yes** |
+| `starts-at` | Start time of the event | ISO 8601 (tz-aware) | **yes** |
+| `ends-at` | End time of the event | ISO 8601 (tz-aware) | **yes** |
+| `timezone` | Timezone of the event | string | **yes** |
+| `location-name` | Name of the event location | string | -  |
+| `logo-url` | URL of the logo uploaded | string | -  |
+| `latitude` | Latitude of the event location | float | - |
+| `longitude` | Longitude of the event location| float | - |
+| `description` | Description of the event| String | - |
+| `searchable-location-name` | Search friendly name of the event location | string | -  |
+| `organizer-name` | Name of the event organizer | string | - |
+| `organizer-description` | Additional details about the event organizer | string | - |
+| `description` | Event's description | string | - |
+| `is-map-shown`  | Should the map be shown on public page | boolean (default: `false`) | - |
+| `has-sessions-speakers` | Does the event have sessions & speakers | boolean (default: `false`) | - |
+| `privacy` | Should the event be listed publicly | string (default: `public`) | - |
+| `state` | Current state of the event | string (default: `draft`) | - |
+| `type` | Type of the event | string | - |
+| `topic` | Topic of the event | string | - |
+| `sub-topic` | Sub-topic of the event | string | - |
+| `sub-topic` | Sub-topic of the event | string | - |
+| `ticket-url` | The ticketing URL of the event | string | - |
+| `code-of-conduct` | Event's code of conduct | string | - |
+| `is-ticketing-enabled` | Does the event use Open Event ticketing system | boolean (default: `true`) | - |
+| `tumbnail-image-url` | URL of the uploaded thumbnail | string | - |
+| `large-image-url` | URL of the large uploaded banner image | string | - |
+| `original-image-url` | URL of the original image | string | - |
+| `icon-image-url` | URL of the icon image | string | - |
+| `scheduled-published-on` | - | ISO 8601 (tz-aware) | - |
+| `deleted-at` | Event deleted date  | ISO 8601 (tz-aware) | - |
+| `payment-country`  | - | string | - |
+| `payment-currency`  | - | string | - |
+| `paypal-email`  | - | string | - |
+| `tax-allow`  | Is tax allowed on event | boolean (default: `false`) | - |
+| `can-pay-by-paypal`  | - | boolean (default: `false`) | - |
+| `can-pay-by-stringipe`  | - | boolean (default: `false`) | - |
+| `can-pay-by-cheque`  | - | boolean (default: `false`) | - |
+| `can-pay-onsite`  | - | boolean (default: `false`) | - |
+| `cheque-details`  | - | string | - |
+| `bank-details`  | - | string | - |
+| `onsite-details`  | - | string | - |
+| `is-sponsors-enabled`  | - | boolean (default: `false`) | - |
+
 ## Events Collection [/events{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -289,6 +346,7 @@ These endpoints help you to create the basic event structure. To add other parts
     + filter (optional, string, `[{"has-session-speakers":"true"}]`) - Filter according to the flask-rest-jsonapi filtering system. If you want to filter by firstname and lastname, example url will /endpoint?filter=[{"firstname":"firstname","lastname":"lastname"}]Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Events [GET]
+Get a list of events.
 
 + Request
 
@@ -506,49 +564,7 @@ These endpoints help you to create the basic event structure. To add other parts
 
 
 ### Create Event [POST]
-
-+ name (string) - Name of the event **(required)**
-+ email (string) - Email of the Organizer **(required)**
-+ starts-at (datetime) - Start time of the Event **(required)**
-+ ends-at (datetime) - End time of the Event **(required)**
-+ timezone (string) - Local TImezone of the Event
-+ latitude (float) - latitude Coordinate of the Event
-+ longitude (float) - longitude Coordinate of the Event
-+ logo-url (string in URL format) - URL of the logo uploaded
-+ location-name (string) - Name of the location of the event
-+ searchable-location-name (string) - searchable name of the event's location
-+ description (string) - Description of the event
-+ thumbnail-image-url (string in URL format) - URL of the uploaded thumbnail
-+ large-image-url (string in URL format) - URL of the large uploaded banner image
-+ original-image-url (string in URL format) - URL of original image
-+ icon-image-url (string in URL format) - URL of icon image
-+ organizer-name (string) - Name of The Organizer of event
-+ show-map (Integer) -
-+ organizer-description (string) - Description of the Organizer
-+ has-session-speakers (boolean) - **(default=False)**
-+ privacy (string) - Can be ```public``` and ```private``` **(default="public")**
-+ state (string) - **(default="Draft")**
-+ type (string) -
-+ topic (string) -
-+ sub-topic (string) -
-+ ticket-url (string in URL format) -
-+ code-of-conduct (string) -
-+ schedule-published-on (datetime) -
-+ ticket-include (boolean) - **(default=False)**
-+ deleted-at (datetime) -
-+ payment-country (string) -
-+ payment-currency (string) -
-+ paypal-email (string) -
-+ tax-allow (boolean) - **(default=False)**
-+ pay-by-paypal (boolean) - **(default=False)**
-+ pay-by-stringipe (boolean) - **(default=False)**
-+ pay-by-cheque (boolean) - **(default=False)**
-+ pay-by-bank (boolean) - **(default=False)**
-+ pay-onsite (boolean) - **(default=False)**
-+ cheque-details (string) -
-+ bank-details (string) -
-+ onsite-details (string) -
-+ sponsors-enabled (boolean) - **(default=False)**
+Create a new event using a `name`, `starts-at`, `ends-at`, `timzone` and an optional content body.
 
 + Request (application/vnd.api+json)
 
@@ -682,9 +698,10 @@ These endpoints help you to create the basic event structure. To add other parts
 
 ## Event Details [/events/{event_id}]
 + Parameters
-    + event_id: 1 (integer) - ID of the ticket in the form of an integer
+    + event_id: 1 (integer) - ID of the event in the form of an integer
 
 ### Event Details [GET]
+Get a single event.
 
 + Request
 
@@ -802,53 +819,11 @@ These endpoints help you to create the basic event structure. To add other parts
 
 
 ### Update Event [PATCH]
-
-+ id (integer) ID of the record to update (required)
+Update a single event.
 
 All other fields are optional. Add attributes you want to modify.
 
-+ name (string)
-+ email (string)
-+ starts-at (datetime)
-+ ends-at (datetime)
-+ timezone (string)
-+ latitude (float)
-+ longitude (float)
-+ logo-url (string in URL format)
-+ location-name (string)
-+ searchable-location-name (string)
-+ description (string)
-+ thumbnail-image-url (string in URL format)
-+ large-image-url (string in URL format)
-+ original-image-url (string in URL format)
-+ icon-image-url (string in URL format)
-+ organizer-name (string)
-+ show-map (Integer)
-+ organizer-description (string)
-+ has-session-speakers (boolean)
-+ privacy (string) Can be ```public``` and ```private```
-+ state (string)
-+ type (string)
-+ topic (string)
-+ sub-topic (string)
-+ ticket-url (string in URL format)
-+ code-of-conduct (string)
-+ schedule-published-on (datetime)
-+ ticket-include (boolean)
-+ deleted-at (datetime)
-+ payment-country (string)
-+ payment-currency (string)
-+ paypal-email (string)
-+ tax-allow (boolean)
-+ pay-by-paypal (boolean)
-+ pay-by-stringipe (boolean)
-+ pay-by-cheque (boolean)
-+ pay-by-bank (boolean)
-+ pay-onsite (boolean)
-+ cheque-details (string)
-+ bank-details (string)
-+ onsite-details (string)
-+ sponsors-enabled (boolean)
++ `id` (integer) - ID of the record to update **(required)**
 
 + Request (application/vnd.api+json)
 
@@ -986,6 +961,7 @@ All other fields are optional. Add attributes you want to modify.
         }
 
 ### Delete Event [DELETE]
+Delete a single event.
 
 + Request
 
@@ -1008,6 +984,15 @@ All other fields are optional. Add attributes you want to modify.
 
 # Group Copyright
 Data related to event copyright information.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `holder`  | Holder name | string | - |
+| `holder-url` | URL of the holder | string | - |
+| `year` | Year till which you have copyright | ISO 8601 (tz-aware) | - |
+| `licence` | Licence text | string | - |
+| `licence-url` | URL of the licence location | string | -  |
+| `logo-url` | URL of the logo for the Licence | string | -  |
 
 ## Event Copyright [/events/{event_id}/event-copyright{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -1068,13 +1053,7 @@ Data related to event copyright information.
 
 
 ### Create Event Copyright [POST]
-
-+ holder (string) - Holder Name **(optional)**
-+ holder-url (string in proper URL) - URL of the Holder **(optional)**
-+ licence (string) - Licence text **(optional)**
-+ licence-url (string in proper URL) - URL of the Licence **(optional)**
-+ year (string) - Year till which you have copyright **(optional)**
-+ logo-url (string) - URL of the logo for the Licence **(optional)**
+Create a new Event Copyright using an event_id.
 
 + Request (application/vnd.api+json)
 
@@ -1183,15 +1162,9 @@ Data related to event copyright information.
 
 
 ### Update Event Copyright [PATCH]
+Update a single event copyright by `id`.
 
-+ id (integer) - ID of the record to update **(required)**
-
-+ holder (string) - Holder Name **(optional)**
-+ holder-url (string in proper URL) - URL of the Holder **(optional)**
-+ licence (string) - Licence text **(optional)**
-+ licence-url (string in proper URL) - URL of the Licence **(optional)**
-+ year (string) - Year till which you have copyright **(optional)**
-+ logo-url (string) - URL of the logo for the Licence **(optional)**
++ `id` (integer) - ID of the record to update **(required)**
 
 + Request (application/vnd.api+json)
 
@@ -1251,6 +1224,7 @@ Data related to event copyright information.
         }
 
 ### Delete Event Copyright [DELETE]
+Delete a single event copyright.
 
 + Request
 
@@ -1275,6 +1249,28 @@ Data related to event copyright information.
 # Group Invoices
 Data related to an invoice for the event.
 
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `status`  | Status of the event order | string | - |
+| `identifier` | Unique ID for the invoice | string | - |
+| `paypal-token` | Paypal Token for the event organizer | string | - |
+| `transaction-id` | ID for Transaction | string | - |
+| `brand` | Brand for event invoice | string | - |
+| `created-at` | Time of creation of order | ISO 8601 (tz-aware) | - |
+| `payment-mode` | Payment Mode | string | - |
+| `stripe-token` | Stripe Token for the event organizer | string | - |
+| `last4` | - | string | - |
+| `address` | Billing Address | string | - |
+| `city` | City for Billing Address | string | - |
+| `state` | State for Billing Address | string | - |
+| `country` | Country for Billing Address| string | - |
+| `zipcode` | Zipcode for Billing Address | string | - |
+| `exp-month` | Expiring Month | integer | - |
+| `exp-year` | Expiring Year  | integer | - |
+| `amount` | Amount of the order | float | - |
+| `completed-at` | Completion of Invoice Order | ISO 8601 (tz-aware) | - |
+| `paid-via` | Payment procedure | string | - |
+
 ## Event Invoices [/events/{event_id}/event-invoices{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_id: 1 (integer) - ID of the specific event in integer
@@ -1284,6 +1280,7 @@ Data related to an invoice for the event.
     + filter (optional, string, `[{"status":"pending"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### Get Event Invoices [GET]
+Get a single event invoice.
 
 + Request
 
@@ -1353,26 +1350,7 @@ Data related to an invoice for the event.
 
 
 ### Create Event Invoices [POST]
-
-+ status (string) - Status of event order **(optional)**
-+ identifier (string) - Unique ID for the invoice **(optional)**
-+ paypal-token (string) - Paypal Token for the event organizer **(optional)**
-+ transaction-id (string) - ID for Transaction **(optional)**
-+ brand (string) - Brand for event invoice **(optional)**
-+ created-at (datetime) - Time of creation of order **(optional)**
-+ payment-mode (string) - Payment Mode **(optional)**
-+ stripe-token (string) - Stripe Token for the event organizer **(optional)**
-+ last4 (string) **(optional)**
-+ address (string) - Billing Address **(optional)**
-+ city (string) - City for Billing Address **(optional)**
-+ state (string) - State for Billing Address **(optional)**
-+ country (string)- Country for Billing Address **(optional)**
-+ zipcode (string) - Zipcode for Billing Address **(optional)**
-+ exp-month (integer) - Expiring Month **(optional)**
-+ exp-year (integer) - Expiring Year  **(optional)**
-+ amount (float) - Amount of the order **(optional)**
-+ completed-at (datetime) -Completion of Invoice Order **(optional)**
-+ paid-via (string) - Payment procedure **(optional)**
+Create a new Event Invoice using an event_id.
 
 + Request (application/vnd.api+json)
 
@@ -1463,6 +1441,8 @@ Data related to an invoice for the event.
     + event_invoices_id: 1 (integer) - ID of the event invoices in the form of an integer
 
 ### Event Invoices Details [GET]
+Get a single event invoice.
+
 + Request
 
     + Headers
@@ -1520,28 +1500,9 @@ Data related to an invoice for the event.
 
 
 ### Update Event Invoices [PATCH]
+Update a single event invoice by `id`.
 
-+ id (integer) - ID of the record to update **(required)**
-
-+ status (string) - Status of event order **(optional)**
-+ identifier (string) - Unique ID for the invoice **(optional)**
-+ paypal-token (string) - Paypal Token for the event organizer **(optional)**
-+ transaction-id (string) - ID for Transaction **(optional)**
-+ brand (string) - Brand for event invoice **(optional)**
-+ created-at (datetime) - Time of creation of order **(optional)**
-+ payment-mode (string) - Payment Mode **(optional)**
-+ stripe-token (string) - Stripe Token for the event organizer **(optional)**
-+ last4 (string) **(optional)**
-+ address (string) - Billing Address **(optional)**
-+ city (string) - City for Billing Address **(optional)**
-+ state (string) - State for Billing Address **(optional)**
-+ country (string)- Country for Billing Address **(optional)**
-+ zipcode (string) - Zipcode for Billing Address **(optional)**
-+ exp-month (integer) - Expiring Month **(optional)**
-+ exp-year (integer) - Expiring Year  **(optional)**
-+ amount (float) - Amount of the order **(optional)**
-+ completed-at (datetime) -Completion of Invoice Order **(optional)**
-+ paid-via (string) - Payment procedure **(optional)**
++ `id` (integer) - ID of the record to update **(required)**
 
 + Request (application/vnd.api+json)
 
@@ -1627,6 +1588,7 @@ Data related to an invoice for the event.
         }
 
 ### Delete Event Invoices [DELETE]
+Delete a single event invoice.
 
 + Request
 
@@ -1650,6 +1612,14 @@ Data related to an invoice for the event.
 # Group Microlocations
 Data related to all the microlocations for the various sessions of the event.
 
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the microlocation| string | **yes** |
+| `latitude` |  Latitude of the microlocation | float | - |
+| `longitude` |  Longitude of the microlocation | float | - |
+| `floor` | Floor of the microlocation | integer | - |
+| `room` | Room of the microlocation | string | - |
+
 ## Microlocation Collection [/events/{event_id}/microlocations{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_id: 1 (integer) - ID of the specific event in integer
@@ -1659,6 +1629,7 @@ Data related to all the microlocations for the various sessions of the event.
     + filter (optional, string, `[{"floor":"2"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Microlocations [GET]
+Get a list of Microlocations.
 
 + Request
 
@@ -1714,12 +1685,7 @@ Data related to all the microlocations for the various sessions of the event.
 
 
 ### Create Microlocation [POST]
-
-+ name (string) - Name of the microlocation **(required)**
-+ latitude (float) - Latitude of the microlocation **(optional)**
-+ longitude (float) - Longitude of the microlocation **(optional)**
-+ floor (integer) - Floor of the microlocation **(optional)**
-+ room (string) - Room of the microlocation **(optional)**
+Create a new microlocation using an event_id.
 
 + Request (application/vnd.api+json)
 
@@ -1788,6 +1754,8 @@ Data related to all the microlocations for the various sessions of the event.
     + microlocation_id: 1 (integer) - ID of the ticket in the form of an integer
 
 ### Mictolocation Details [GET]
+Get a single microlocation.
+
 
 + Request
 
@@ -1838,13 +1806,9 @@ Data related to all the microlocations for the various sessions of the event.
 
 
 ### Update Microlocation [PATCH]
+Update a single microlocation by `id`.
 
-+ id (integer) - ID of the record to update **(required)**
-+ name (string) - Name of the microlocation **(optional)**
-+ latitude (float) - Latitude of the microlocation **(optional)**
-+ longitude (float) - Longitude of the microlocation **(optional)**
-+ floor (integer) - Floor of the microlocation **(optional)**
-+ room (string) - Room of the microlocation **(optional)**
++ `id` (integer) - ID of the record to update **(required)**
 
 + Request (application/vnd.api+json)
 
@@ -1908,6 +1872,7 @@ Data related to all the microlocations for the various sessions of the event.
         }
 
 ### Delete Microlocation [DELETE]
+Delete a single microlocation.
 
 + Request
 
@@ -1931,6 +1896,27 @@ Data related to all the microlocations for the various sessions of the event.
 # Group Sessions
 Data related to all the sessions in the event.
 
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `title`  | Title of the Session | string | **yes** |
+| `subtitle` | Subtitle of the Session | string | - |
+| `level` | Level of the Session | string | - |
+| `short-abstract` | Short Abstract of the Session | string | - |
+| `long-abstract` | Long Abstract of the Session | string | - |
+| `comments` | Comments of the Session | string | - |
+| `starts-at` | Start date of the Session | ISO 8601 (tz-aware) | **yes** |
+| `ends-at` | End date of the Session | ISO 8601 (tz-aware) | **yes** |
+| `language` | Language of the Session | string | - |
+| `slides-url` | Slide Url of the Session | string | - |
+| `videos-url` | Video Url of the Session | string | - |
+| `audios-url` | Audio Url of the Session | string | - |
+| `signup-url` | Signup Url of the Session | string | - |
+| `state` | State of the Session | string | - |
+| `created-at` | Date the session was created | ISO 8601 (tz-aware) | - |
+| `deleted-at` | Date the session was deleted | ISO 8601 (tz-aware) | - |
+| `submitted-at` | Date the session was submitted | ISO 8601 (tz-aware) | - |
+| `is-mail-sent` | Yes/No for Session accept/reject email | boolean (default: `false`) | - |
+
 ## Sessions Collection [/events/{event_id}/sessions{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_id: 1 (integer) - ID of the specific event in integer
@@ -1940,6 +1926,7 @@ Data related to all the sessions in the event.
     + filter (optional, string, `[{"level":"1"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Sessions [GET]
+Get a list of Sessions.
 
 + Request
 
@@ -2020,25 +2007,7 @@ Data related to all the sessions in the event.
 
 
 ### Create Sessions [POST]
-
-+ title (string) - Title of the Session **(required)**
-+ subtitle (string) - Subtitle of the Session **(optional)**
-+ level (integer) - Level of the Session **(optional)**
-+ short-abstract (string) - Short Abstract of the Session **(optional)**
-+ long-abstract (string) - Long Abstract of the Session **(optional)**
-+ comments (string) - COmments of the Session **(optional)**
-+ starts-at (datetime) - Start date of the Session **(required)**
-+ ends-at (datetime) - End date of the Session **(required)**
-+ language (string) - Language of the Session **(optional)**
-+ slides-url (string in proper url) - Slide Url of the Session **(optional)**
-+ videos-url (string in proper url) - Video Url of the Session **(optional)**
-+ audios-url (string in proper url) - Audio Url of the Session **(optional)**
-+ signup-url (string in proper url) - Signup Url of the Session **(optional)**
-+ state (string) - State of the Session **(optional)**
-+ created-at (datetime) - Date the Session was created **(optional)**
-+ deleted-at (datetime) - Date the Session was deleted **(optional)**
-+ submitted-at (datetime) - Date the Session was submitted **(optional)**
-+ is-mail-sent (boolean) - Yes/No for Session accept/reject email **(optional)**
+Create a new session using an event_id.
 
 + Request (application/vnd.api+json)
 
@@ -2145,6 +2114,7 @@ Data related to all the sessions in the event.
     + session_id: 1 (integer) - ID of the speaker call in the form of an integer
 
 ### Session Details [GET]
+Get a single session.
 
 + Request
 
@@ -2220,26 +2190,9 @@ Data related to all the sessions in the event.
 
 
 ### Update Session [PATCH]
+Update a single session by `id`.
 
 + id (integer) - ID of the record to update **(required)**
-+ title (string) - Title of the Session **(optional)**
-+ subtitle (string) - Subtitle of the Session **(optional)**
-+ level (integer) - Level of the Session **(optional)**
-+ short-abstract (string) - Short Abstract of the Session **(optional)**
-+ long-abstract (string) - Long Abstract of the Session **(optional)**
-+ comments (string) - COmments of the Session **(optional)**
-+ starts-at (datetime) - Start date of the Session **(optional)**
-+ ends-at (datetime) - End date of the Session **(optional)**
-+ language (string) - Language of the Session **(optional)**
-+ slides-url (string in proper url) - Slide Url of the Session **(optional)**
-+ videos-url (string in proper url) - Video Url of the Session **(optional)**
-+ audios-url (string in proper url) - Audio Url of the Session **(optional)**
-+ signup-url (string in proper url) - Signup Url of the Session **(optional)**
-+ state (string) - State of the Session **(optional)**
-+ created-at (datetime) - Date the Session was created **(optional)**
-+ deleted-at (datetime) - Date the Session was deleted **(optional)**
-+ submitted-at (datetime) - Date the Session was submitted **(optional)**
-+ is-mail-sent (boolean) - Yes/No for Session accept/reject email **(optional)**
 
 + Request (application/vnd.api+json)
 
@@ -2341,6 +2294,7 @@ Data related to all the sessions in the event.
         }
 
 ### Delete Session [DELETE]
+Delete a single session.
 
 + Request
 
@@ -2364,6 +2318,11 @@ Data related to all the sessions in the event.
 # Group Session Type
 Data related to all the session types (such as talks, workshops, lightning talks) associated with the event.
 
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the Session Type | string | **yes** |
+| `length` | Length of the Session Type | string | - |
+
 ## Session Type Collection [/events/{event_id}/session-types{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_id: 1 (integer) - ID of the specific event in integer
@@ -2373,6 +2332,7 @@ Data related to all the session types (such as talks, workshops, lightning talks
     + filter (optional, string, `[{"length":"00:30"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Session Types [GET]
+Get a list of Session Types.
 
 + Request
 
@@ -2425,9 +2385,7 @@ Data related to all the session types (such as talks, workshops, lightning talks
 
 
 ### Create Session Type [POST]
-
-+ name (string) - Name of the Session Type **(required)**
-+ length (string) - Length of the Session Type **(optional)**
+Create a new session type using an event_id.
 
 + Request (application/vnd.api+json)
 
@@ -2489,7 +2447,8 @@ Data related to all the session types (such as talks, workshops, lightning talks
 + Parameters
     + session_type_id: 1 (integer) - ID of the session_type in the form of an integer
 
-### Session Details [GET]
+### Session Type Details [GET]
+Get a single session type.
 
 + Request
 
@@ -2537,10 +2496,9 @@ Data related to all the session types (such as talks, workshops, lightning talks
 
 
 ### Update Session Type [PATCH]
+Update a single session type by `id`.
 
-+ id (integer) - ID of the record to update **(required)**
-+ name (string) - Name of the Session Type **(optional)**
-+ length (string) - Length of the Session Type **(optional)**
++ `id` (integer) - ID of the record to update **(required)**
 
 + Request (application/vnd.api+json)
 
@@ -2598,6 +2556,7 @@ Data related to all the session types (such as talks, workshops, lightning talks
         }
 
 ### Delete Session Type [DELETE]
+Delete a single session type.
 
 + Request
 
@@ -2621,6 +2580,11 @@ Data related to all the session types (such as talks, workshops, lightning talks
 # Group Social Links
 You can add various social links such as facebook, twitter, website, blog link, etc. related to the event.
 
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the Session Type | string | **yes** |
+| `link` | Url of the Social Link | string | **yes** |
+
 ## Social Links Collection [/events/{event_id}/social-links{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_id: 1 (integer) - ID of the specific event in integer
@@ -2630,6 +2594,7 @@ You can add various social links such as facebook, twitter, website, blog link, 
     + filter (optional, string, `[{"name": "facebook"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Social Links [GET]
+Get a list of Social Links.
 
 + Request
 
@@ -2675,9 +2640,7 @@ You can add various social links such as facebook, twitter, website, blog link, 
         }
 
 ### Create Social Link [POST]
-
-+ name (string) - Name of Social Link **(required)**
-+ link (string - proper url) - Url of the Social Link **(required)**
+Create a new social link using event_id.
 
 + Request (application/vnd.api+json)
 
@@ -2773,11 +2736,9 @@ You can add various social links such as facebook, twitter, website, blog link, 
 
 
 ### Update Social Link [PATCH]
+Update a single social link by `id`.
 
-+ id (integer) - ID of the record to update **(required)**
-
-+ name (string) - Name of Social Link **(optional)**
-+ link (string - proper url) - Url of the Social Link **(optional)**
++ `id` (integer) - ID of the record to update **(required)**
 
 + Request (application/vnd.api+json)
 
@@ -2829,6 +2790,7 @@ You can add various social links such as facebook, twitter, website, blog link, 
         }
 
 ### Delete Social Link [DELETE]
+Delete a single social link.
 
 + Request
 
@@ -2852,6 +2814,14 @@ You can add various social links such as facebook, twitter, website, blog link, 
 # Group Speakers Calls
 Announcement for call for speaker to accept session proposals from speakers.
 
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `announcement`  | Announcement for speakers call | string | **yes** |
+| `starts-at` | Start date of the speakers call | ISO 8601 (tz-aware) | **yes** |
+| `ends-at` | End date of the speakers call | ISO 8601 (tz-aware) | **yes** |
+| `hash` | Hash for speakers call | string | - |
+| `privacy` | Privacy of speakers call | string | - |
+
 ## Speakers Call Collection [/events/{event_id}/speakers-calls{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_id: 1 (integer) - ID of the specific event in integer
@@ -2861,6 +2831,7 @@ Announcement for call for speaker to accept session proposals from speakers.
     + filter (optional, string, `[{"announcement":"string"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Speakers Calls [GET]
+Get a list of Speaker Calls.
 
 + Request
 
@@ -2910,12 +2881,7 @@ Announcement for call for speaker to accept session proposals from speakers.
 
 
 ### Create Spearkers Call [POST]
-
-+ announcement (string) - Announcement for speakers call **(required)**
-+ starts-at (datetime) - Start date for speakers call **(required)**
-+ ends-at (datetime) - End date for speakers call **(required)**
-+ hash (string) - Hash for speakers call **(optional)**
-+ privacy (string) - Privacy of speakers call **(optional)**
+Create a new speakers call using an event_id.
 
 + Request (application/vnd.api+json)
 
@@ -2974,10 +2940,12 @@ Announcement for call for speaker to accept session proposals from speakers.
 
 
 ## Speakers Call Details [/speakers-calls/{speakers_call_id}]
+
 + Parameters
     + speakers_call_id: 1 (integer) - ID of the session in the form of an integer
 
 ### Speakers Call Details [GET]
+Get a single speakers call.
 
 + Request
 
@@ -3022,13 +2990,9 @@ Announcement for call for speaker to accept session proposals from speakers.
 
 
 ### Update Speakers Call [PATCH]
+Update a single speakers call by `id`.
 
-+ id (integer) - ID of the record to update **(required)**
-+ announcement (string) - Announcement for speakers call **(optional)**
-+ starts-at (datetime) - Start date for speakers call **(optional)**
-+ ends-at (datetime) - End date for speakers call **(optional)**
-+ hash (string) - Hash for speakers call **(optional)**
-+ privacy (string) - Privacy of speakers call **(optional)**
++ `id` (integer) - ID of the record to update **(required)**
 
 + Request (application/vnd.api+json)
 
@@ -3086,6 +3050,7 @@ Announcement for call for speaker to accept session proposals from speakers.
         }
 
 ### Delete Speakers Call [DELETE]
+Delete a single speakers call.
 
 + Request
 
@@ -3109,6 +3074,14 @@ Announcement for call for speaker to accept session proposals from speakers.
 # Group Sponsors
 Data related to the various sponsors with their level, url and images associated with a specific event.
 
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the Sponsor | string | **yes** |
+| `description` | Description of the sponsor | string | - |
+| `url` | Url of the sponsor | string | - |
+| `level` | Level of the sponsor | string | - |
+| `type` | The type of the sponsor | string | - |
+
 ## Sponsors Collection [/events/{event_id}/sponsors{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_id: 1 (integer) - ID of the specific event in integer
@@ -3118,6 +3091,7 @@ Data related to the various sponsors with their level, url and images associated
     + filter (optional, string, `[{"description":"string"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Sponsors [GET]
+Get a list of Sponsors.
 
 + Request
 
@@ -3168,12 +3142,7 @@ Data related to the various sponsors with their level, url and images associated
 
 
 ### Create Sponsor [POST]
-
-+ name (string) - Name of the user **(required)**
-+ description (string) - Description of the sponsor
-+ url (string in proper URL) - Url of the sponsor
-+ level (string) - Level of the sponsor
-+ type (string) - The type of the sponsor
+Create a new sponsor using an event_id.
 
 + Request (application/vnd.api+json)
 
@@ -3237,6 +3206,8 @@ Data related to the various sponsors with their level, url and images associated
     + sponsor_id: 1 (integer) - ID of the sponsor in the form of an integer
 
 ### Sponsor Details [GET]
+Get a single sponsor.
+
 + Request
 
     + Headers
@@ -3281,14 +3252,9 @@ Data related to the various sponsors with their level, url and images associated
 
 
 ### Update Sponsor [PATCH]
+Update a single sponsor by `id`.
 
-+ id (integer) - ID of the record to update **(required)**
-
-+ name (string) - Name of the user **(optional)**
-+ description (string) - Description of the sponsor **(optional)**
-+ url (string in proper URL) - Url of the sponsor **(optional)**
-+ level (string) - Level of the sponsor **(optional)**
-+ type (string) - The type of the sponsor **(optional)**
++ `id` (integer) - ID of the record to update **(required)**
 
 + Request (application/vnd.api+json)
 
@@ -3347,7 +3313,7 @@ Data related to the various sponsors with their level, url and images associated
         }
 
 ### Delete Sponsor [DELETE]
-
+Delete a single sponsor.
 
 + Request
 
@@ -3371,6 +3337,21 @@ Data related to the various sponsors with their level, url and images associated
 # Group Tax
 Related to any tax related information that might be related with the tickets for the event.
 
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `country`  | Country of Tax | string | - |
+| `tax-name` | Name of the Tax | string | **yes** |
+| `tax-rate` | Tax charges rate | string | **yes** |
+| `tax-id` | A string based ID | string | **yes** |
+| `registered-company` | Registered Company Name | string | - |
+| `address` | Address of the comapany | string | - |
+| `city` | City of the company | string | - |
+| `state` | State of the company | string | - |
+| `zip` | Zip Code of the company | integer | - |
+| `invoice-footer` | A text to add on the footer | string | - |
+| `is-invoice-sent` | Yes/No for Session accept/reject email | boolean (default: `false`) | - |
+| `is-tax-included` | Yes/No for Session accept/reject email | boolean (default: `false`) | - |
+
 ## Tax Collection [/events/{event_id}/tax{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_id: 1 (integer) - ID of the specific event in integer
@@ -3380,6 +3361,7 @@ Related to any tax related information that might be related with the tickets fo
     + filter (optional, string, `[{"tax-rate":"12.0"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Tax Records [GET]
+Get a list of Tax Records.
 
 + Request
 
@@ -3436,19 +3418,7 @@ Related to any tax related information that might be related with the tickets fo
 
 
 ### Create Tax [POST]
-
-+ country (string)  -  Country of Tax
-+ tax-name (string) - Name of the Tax**(required)**
-+ tax-rate (float)  - Tax charges rate**(required)**
-+ tax-id (string)  - A string based ID **(required)**
-+ is-invoice-sent (boolean) - **(default=False)**
-+ registered-company (string) - Registered Cmpany Name
-+ address (string) - Address of the company
-+ city (string) - City of the company
-+ state (string) - State of the Company
-+ zip (Integer) - Zip Code of the Company
-+ invoice-footer (string) - A text to add on the footer
-+ is-tax-included-in-price (boolean) - **(default=False)**
+Create a new tax using an event_id.
 
 + Request (application/vnd.api+json)
 
@@ -3515,6 +3485,8 @@ Related to any tax related information that might be related with the tickets fo
     + tax_id: 1 (integer) - ID of the Tax in the form of an integer
 
 ### Tax Details [GET]
+Get a single tax.
+
 + Request
 
     + Headers
@@ -3565,21 +3537,9 @@ Related to any tax related information that might be related with the tickets fo
 
 
 ### Update Tax [PATCH]
+Update a single tax by `id`.
 
-+ id (integer) - ID of the record to update **(required)**
-
-+ country (string)  -  Country of Tax**(optional)**
-+ tax-name (string) - Name of the Tax**(optional)**
-+ tax-rate (float)  - Tax charges rate**(optional)**
-+ tax-id (string)  - A string based ID **(optional)**
-+ is-invoice-sent (boolean) - **(optional)**
-+ registered-company (string) - Registered Cmpany Name**(optional)**
-+ address (string) - Address of the company**(optional)**
-+ city (string) - City of the company**(optional)**
-+ state (string) - State of the Company**(optional)**
-+ zip (Integer) - Zip Code of the Company**(optional)**
-+ invoice-footer (string) - A text to add on the footer**(optional)**
-+ is-tax-included-in-price (boolean) - **(optional)**
++ `id` (integer) - ID of the record to update **(required)**
 
 + Request (application/vnd.api+json)
 
@@ -3641,6 +3601,7 @@ Related to any tax related information that might be related with the tickets fo
         }
 
 ### Delete Tax [DELETE]
+Delete a single tax.
 
 + Request
 
@@ -3664,6 +3625,22 @@ Related to any tax related information that might be related with the tickets fo
 # Group Tickets
 Related to tickets (free, paid, donation) to the event.
 
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the ticket | string | **yes** |
+| `type` | Type of the ticket | string | **yes** |
+| `description` | Description of the ticket | string | - |
+| `price` | Price of the ticket | float | - |
+| `quantity` | Total quantity of the ticket | integer | - |
+| `min-order` | Min order of the ticket | string | - |
+| `max-order` | Max order of the ticket | string | - |
+| `position` | Position of the ticket | string | - |
+| `sales-starts-at` | Start date of ticket sale | ISO 8601 (tz-aware) | - |
+| `sales-ends-at` | End date of ticket sale | ISO 8601 (tz-aware) | - |
+| `description-toggle` | Yes/No to enter description | boolean (default: `false`) | - |
+| `is-hidden` | Yes/No to hide ticket | boolean (default: `false`) | - |
+| `is-fee-absorbed` | Yes/No for ticket absorption | boolean (default: `false`) | - |
+
 ## Tickets Collection [/events/{event_id}/tickets{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_id: 1 (integer) - ID of the specific event in integer
@@ -3673,6 +3650,7 @@ Related to tickets (free, paid, donation) to the event.
     + filter (optional, string, `[{"name":"string"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Tickets [GET]
+Get a list of Tickets.
 
 + Request
 
@@ -3730,20 +3708,7 @@ Related to tickets (free, paid, donation) to the event.
 
 
 ### Create Ticket [POST]
-
-+ name (string) - Name of the ticket **(required)**
-+ type (string) - Type of the ticket **(required)**
-+ description (string) - Description of the ticket **(optional)**
-+ price (float) - Price of the ticket **(optional)**
-+ quantity (integer) - Total quantity of tickets **(optional)**
-+ description-toggle (boolean) - Yes/No to enter description **(optional)**
-+ position (integer) - Position of the ticket **(optional)**
-+ is-fee-absorbed (boolean) - Yes/No for ticket absorption **(optional)**
-+ sales-starts-at (datetime) - Start date of ticket sale **(optional)**
-+ sales-ends-at (datetime) - End date of ticket sale **(optional)**
-+ is-hidden (boolean) - Yes/No to hide ticket **(optional)**
-+ min-order (integer) - Min order of the ticket **(optional)**
-+ max-order (integer) - Max order of the ticket **(optional)**
+Create a new ticket using an event_id.
 
 + Request (application/vnd.api+json)
 
@@ -3822,6 +3787,7 @@ Related to tickets (free, paid, donation) to the event.
     + ticket_id: 1 (integer) - ID of the ticket in the form of an integer
 
 ### Ticket Details [GET]
+Get a single ticket.
 
 + Request
 
@@ -3874,21 +3840,9 @@ Related to tickets (free, paid, donation) to the event.
 
 
 ### Update Ticket [PATCH]
+Update a single ticket by `id`.
 
-+ id (integer) - ID of the record to update **(required)**
-+ name (string) - Name of the ticket **(optional)**
-+ type (string) - Type of the ticket **(optional)**
-+ description (string) - Description of the ticket **(optional)**
-+ price (float) - Price of the ticket **(optional)**
-+ quantity (integer) - Total quantity of tickets **(optional)**
-+ description-toggle (boolean) - Yes/No to enter description **(optional)**
-+ position (integer) - Position of the ticket **(optional)**
-+ is-fee-absorbed (boolean) - Yes/No for ticket absorption **(optional)**
-+ sales-starts-at (datetime) - Start date of ticket sale **(optional)**
-+ sales-ends-at (datetime) - End date of ticket sale **(optional)**
-+ is-hidden (boolean) - Yes/No to hide ticket **(optional)**
-+ min-order (integer) - Min order of the ticket **(optional)**
-+ max-order (integer) - Max order of the ticket **(optional)**
++ `id` (integer) - ID of the record to update **(required)**
 
 + Request (application/vnd.api+json)
 
@@ -3962,6 +3916,7 @@ Related to tickets (free, paid, donation) to the event.
         }
 
 ### Delete Ticket [DELETE]
+Delete a single ticket.
 
 + Request
 
@@ -3985,11 +3940,19 @@ Related to tickets (free, paid, donation) to the event.
 # Group Tracks
 Data related to the various tracks (e.g, python, AI, etc.) associated with the various sessions in the event.
 
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the track | string | **yes** |
+| `description` | Description of the track | string | - |
+| `color` | Color code of the track | string | **yes** |
+| `font-color` | Font Color of the track **(black/white: no user role - automatically updated)** | string | - |
+
 ## Tracks Collection [/events/{event_id}/tracks]
 + Parameters
     + event_id: 1 (integer) - ID of the event in the form of an integer
 
 ### List All Tracks [GET]
+Get a list of Tracks.
 
 + Request
 
@@ -4043,11 +4006,7 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
         }
 
 ### Create Track [POST]
-
-+ name (string) - The name of the track **(required)**
-+ description (string) - Description of the track
-+ color (string) - Color code of the track **(required)**
-+ font-color (string) - Font color of the track: Black/White **(no user role - automatically updated based on color)**
+Create a new track using an event_id.
 
 + Request (application/vnd.api+json)
 
@@ -4075,11 +4034,13 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
         }
 
 
-### Track Detail [/tracks/{track_id}]
+## Track Detail [/tracks/{track_id}]
 + Parameters
     + track_id: 1 (integer) - ID of the track in the form of an integer
 
 ### Get Details [GET]
+Get a single track.
+
 + Request
 
     + Headers
@@ -4128,6 +4089,9 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
 
 
 ### Update Track [PATCH]
+Update a single track by `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
 
 + Request (application/vnd.api+json)
 
@@ -4172,6 +4136,7 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
         }
 
 ### Delete Track [DELETE]
+Delete a single track.
 
 + Request
 
@@ -4198,6 +4163,24 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
 
 To create or modify data of this data layer, you will need admin access. You can get the data without admin access as well. Image sizes basically stores the configuration for the width, height and aspect ratio for full size, thumbnail and icon version of various images that is uploaded to the server.
 
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `full-width`  | Full width of the image | integer | - |
+| `full-height` | Full height of the image  | integer | - |
+| `full-quality` | Full quality of the image  | integer | - |
+| `full-aspect` | To maintain aspect ratio of the image or not | boolean (default: `false`) | - |
+| `icon-width`  | Width of the icon | integer | - |
+| `icon-height` | Height of the icon  | integer | - |
+| `icon-quality` | Quality of the icon  | integer | - |
+| `icon-aspect` | To maintain aspect ratio of the icon or not | boolean (default: `false`) | - |
+| `thumbnail-width`  | Width of the thumbnail | integer | - |
+| `thumbnail-height` | Height of the thumbnail  | integer | - |
+| `thumbnail-quality` | Quality of the thumbnail  | integer | - |
+| `thumbnail-aspect` | To maintain aspect ratio of the thumbnail or not | boolean (default: `false`) | - |
+| `logo-width` | Width of te logo  | integer | - |
+| `logo-height` | Height of the logo | integer | - |
+| `type` | Type of the image | string | - |
+
 ## Image Size Collection [/image-sizes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -4206,6 +4189,7 @@ To create or modify data of this data layer, you will need admin access. You can
     + filter (optional, string, `[{"full-width":"1300"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List Image Sizes [GET]
+Get a list of Image Sizes.
 
 + Request
 
@@ -4257,23 +4241,7 @@ To create or modify data of this data layer, you will need admin access. You can
 
 
 ### Create Image Size [POST]
-
- (For Events and Speakers)
-+ full-width (integer)- Full width of the image
-+ full-height (integer)- Full height of the image
-+ full-aspect (boolean)- To maintain aspect ratio of the image or not
-+ full-quality (integer)- Full quality of the image
-+ icon-width (integer)- Width of the icon
-+ icon-height (integer)- Height of the icon
-+ icon-aspect (boolean)- To maintain aspect ratio of the icon or not
-+ icon-quality (integer)- Quality of the icon
-+ thumbnail-width (integer)- Width of the thumbnail
-+ thumbnail-height (integer)- Height of the thumbnail
-+ thumbnail-aspect (boolean)- To maintain aspect ratio of the thumbnail or not
-+ thumbnail-quality (integer)- Quality of the thumbnail
-+ logo-width (integer)- Width of the logo
-+ logo-height (integer)- Height of the logo
-+ type (string) - Type of the image
+Create a new general image size by admins.
 
 + Request (application/vnd.api+json)
 
@@ -4317,6 +4285,8 @@ To create or modify data of this data layer, you will need admin access. You can
     + image_size_id: 1 (integer) - ID of the image size in the form of an integer
 
 ### Get Image Size Details [GET]
+Get a single image size.
+
 + Request
 
     + Headers
@@ -4362,8 +4332,9 @@ To create or modify data of this data layer, you will need admin access. You can
 
 
 ### Update Image Size [PATCH]
+Update a single image size by `id`.
 
-+ id (integer) - ID of the record to update **(required)**
++ `id` (integer) - ID of the record to update **(required)**
 
 + Request (application/vnd.api+json)
 
@@ -4433,6 +4404,7 @@ To create or modify data of this data layer, you will need admin access. You can
         }
 
 ### Delete Image Size [DELETE]
+Delete a single image size.
 
 + Request
 
@@ -4458,6 +4430,15 @@ To create or modify data of this data layer, you will need admin access. You can
 **ADMIN**
 
 To create or modify any data of this data layer, you will need admin access. However you get the schema without admin access. Pages endpoints is used to create static pages such as about page or any other page that doesn't need to be updated frequently and only a specific content is to be shown.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the page | string | **yes** |
+| `title` | Title of the page | string | - |
+| `url` | Url of the page  | string | **yes** |
+| `description` | Description of the page | string | **yes** |
+| `language`  | Language of the page | string | - |
+| `index` | Position of the page  | integer (default: `0` ) | - |
 
 ## Page Collection [/pages{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -4510,13 +4491,7 @@ To create or modify any data of this data layer, you will need admin access. How
 
 
 ### Create Page [POST]
-
-+ name (string)- Name of the page **(required)**
-+ title (string)- Title of the page
-+ url (url)- Url of the page **(required)**
-+ description (string) - Description of the page
-+ language (string)- Language of the page
-+ index (integer)- Position of the page, default: 0
+Create a new general page by admins.
 
 + Request (application/vnd.api+json)
 
@@ -4552,6 +4527,7 @@ To create or modify any data of this data layer, you will need admin access. How
     + page_id: 1 (integer) - ID of the page in the form of an integer
 
 ### Get Page Details [GET]
+Get a single page.
 
 + Request
 
@@ -4591,8 +4567,9 @@ To create or modify any data of this data layer, you will need admin access. How
 
 
 ### Update Page [PATCH]
+Update a single page by `id`.
 
-+ id (integer) - ID of the record to update **(required)**
++ `id` (integer) - ID of the record to update **(required)**
 
 + Request (application/vnd.api+json)
 
@@ -4646,6 +4623,7 @@ To create or modify any data of this data layer, you will need admin access. How
         }
 
 ### Delete Page [DELETE]
+Delete a single page.
 
 + Request
 
@@ -4671,6 +4649,121 @@ To create or modify any data of this data layer, you will need admin access. How
 **ADMIN**
 
 To update or get any attribute of this data layer, you will need admin access. However a part of the schema is available to the general registered user without admin access.
+
+**General**
+| Parameter | Description | Type | Admin Only |
+|:----------|-------------|------|------------|
+| `app-environment`  | App Environment (Eg. Production, testing) | string | **yes** |
+| `app-name`  | Name of the application (Eg. Event Yay!, Open Event) | string | - |
+| `tagline` | Tagline (Eg. Event Management and Ticketing, Home)  | string | - |
+| `secret` | App Secret  | string | **yes** |
+
+**STORAGE**
+| Parameter | Description | Type | Admin Only |
+|:----------|-------------|------|------------|
+| `storage-place`  | Storage of App (storage place, local, s3) | string | **yes** |
+
+(S3)
+| Parameter | Description | Type | Admin Only |
+|:----------|-------------|------|------------|
+| `aws-key`  | Amazon Web Services key | string | **yes** |
+| `aws-secret`  | Amazon Web Services secret | string | **yes** |
+| `aws-bucket` | Amazon Web Services bucket name  | string | **yes** |
+| `aws-region` | Amazon Web Services region  | string | **yes** |
+
+(Google Storage)
+| Parameter | Description | Type | Admin Only |
+|:----------|-------------|------|------------|
+| `gs-key`  | Google Storage key | string | **yes** |
+| `gs-secret`  | Google Storage Services secret | string | **yes** |
+| `gs-bucket` | Google Storage bucket name  | string | **yes** |
+
+**Social Login**
+(Google Auth)
+| Parameter | Description | Type | Admin Only |
+|:----------|-------------|------|------------|
+| `google-client-id`  | Google client id | string | **yes** |
+| `google-client-secret`  | Google client secret | string | **yes** |
+
+(FB)
+| Parameter | Description | Type | Admin Only |
+|:----------|-------------|------|------------|
+| `fb-client-id`  | Facebook client id | string | **yes** |
+| `fb-client-secret`  | Facebook client secret | string | **yes** |
+
+(Twitter)
+| Parameter | Description | Type | Admin Only |
+|:----------|-------------|------|------------|
+| `tw-consumer-key`  | Twitter client id | string | **yes** |
+| `tw-consumer-secre`  | Twitter client secret | string | **yes** |
+
+(Instagram)
+| Parameter | Description | Type | Admin Only |
+|:----------|-------------|------|------------|
+| `in-client-id`  | Instagram client id | string | **yes** |
+| `in-client-secret`  | Instagram client secret | string | **yes** |
+
+**Payment Gateway**
+(Stripe Keys)
+| Parameter | Description | Type | Admin Only |
+|:----------|-------------|------|------------|
+| `stripe-client-id`  | Stripe client id | string | **yes** |
+| `stripe-secret-key`  | Stripe secret key | string | **yes** |
+| `stripe-publishable-key`  | Stripe publishable key | string | **yes** |
+
+(PayPal Credentials)
+| Parameter | Description | Type | Admin Only |
+|:----------|-------------|------|------------|
+| `paypal-mode`  | Paypal mode | string | **yes** |
+| `paypal-sandbox-username`  | Paypal sandbox username | string | **yes** |
+| `paypal-sandbox-password`  | Paypal sandbox password | string | **yes** |
+| `paypal-sandbox-signature`  | Paypal sandbox signature | string | **yes** |
+| `paypal-live-username`  | Paypal live username | string | **yes** |
+| `paypal-live-password`  | Paypal live password | string | **yes** |
+| `paypal-live-signature`  | Paypal live signature | string | **yes** |
+
+**EMAIL**
+(Email service)
+| Parameter | Description | Type | Admin Only |
+|:----------|-------------|------|------------|
+| `email-service`  | Email service | string | **yes** |
+| `email-from`  | Email from | string | **yes** |
+| `email-from-name`  | Email Sender name | string | **yes** |
+
+(Sendgrid)
+| Parameter | Description | Type | Admin Only |
+|:----------|-------------|------|------------|
+| `sengrid-key`  | Sendgrid key | string | **yes** |
+
+(SMTP)
+| Parameter | Description | Type | Admin Only |
+|:----------|-------------|------|------------|
+| `smtp-host`  | smtp host | string | **yes** |
+| `smtp-username`  | smtp  username | string | **yes** |
+| `smtp-password`  | smtp  password | string | **yes** |
+| `smtp-port`  | smtp  port | string | **yes** |
+| `smtp-encryption`  | smtp  encryption | string | **yes** |
+
+**Google Analytics**
+| Parameter | Description | Type | Admin Only |
+|:----------|-------------|------|------------|
+| `analytics-key`  | Google analytics key | string | - |
+
+**Social links**
+| Parameter | Description | Type | Admin Only |
+|:----------|-------------|------|------------|
+| `google-url`  | Google url | string | **yes** |
+| `github-url`  | Github url | string | **yes** |
+| `twitter-url`  | Twitter url | string | **yes** |
+| `support-url`  | Support url | string | **yes** |
+| `facebook-url`  | Facebook url | string | **yes** |
+| `youtube-url`  | Youtube url | string | **yes** |
+
+**Generators**
+| Parameter | Description | Type | Admin Only |
+|:----------|-------------|------|------------|
+| `android-app-url`  | Android app url | string | **yes** |
+| `web-app-url`  | Web App url | string | **yes** |
 
 ## Settings Details [/settings{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -4758,91 +4851,6 @@ To update or get any attribute of this data layer, you will need admin access. H
         }
 
 ### Update Settings [POST]
-
-**(All string)**
-
-**General**
-+ app-environment: App Environment (Eg. Production, testing) **(ADMIN)**
-+ app-name: Name of the application. (Eg. Event Yay!, Open Event) **(NON ADMIN)**
-+ tagline: Tagline for the application. (Eg. Event Management and Ticketing, Home) **(NON ADMIN)**
-+ secret: App Secret **(ADMIN)**
-
-**STORAGE**
-+ storage-place = Storage of App (storage place, local, s3) **(ADMIN)**
-
-(S3)
-+ aws-key: Amazon Web Services key **(ADMIN)**
-+ aws-secret: Amazon Web Services secret **(ADMIN)**
-+ aws-bucket-name: Amazon Web Services bucket name **(ADMIN)**
-+ aws-region: Amazon Web Services region **(ADMIN)**
-
-(Google Storage)
-+ gs-key: Google Storage key **(ADMIN)**
-+ gs-secret: Google Storage secret **(ADMIN)**
-+ gs-bucket-name: Google Storage bucket name **(ADMIN)**
-
-**Social Login**
-(Google Auth)
-+ google-client-id: Google client id **(ADMIN)**
-+ google-client-secret: Google client secret **(ADMIN)**
-
-(FB)
-+ fb-client-id: Facebook client id **(ADMIN)**
-+ fb-client-secret: Facebook client secret **(ADMIN)**
-
-(Twitter)
-+ tw-consumer-key: Twitter client id **(ADMIN)**
-+ tw-consumer-secret: Twitter client secret **(ADMIN)**
-
-(Instagram)
-+ in-client-id: Instagram client id **(ADMIN)**
-+ in-client-secret: Instagram client secret **(ADMIN)**
-
-**Payment Gateway**
-(Stripe Keys)
-+ stripe-client-id: Stripe client id **(ADMIN)**
-+ stripe-secret-key: Stripe secret key **(ADMIN)**
-+ stripe-publishable-key: Stripe publishable key **(ADMIN)**
-
-(PayPal Credentials)
-+ paypal-mode: Paypal mode **(ADMIN)**
-+ paypal-sandbox-username: Paypal sandbox username **(ADMIN)**
-+ paypal-sandbox-password: Paypal sandbox password **(ADMIN)**
-+ paypal-sandbox-signature: Paypal sandbox signature **(ADMIN)**
-+ paypal-live-username: Paypal live username **(ADMIN)**
-+ paypal-live-password: Paypal live password **(ADMIN)**
-+ paypal-live-signature: Paypal live signature **(ADMIN)**
-
-**EMAIL**
-(Email service)
-+ email-service: Email service **(ADMIN)**
-+ email-from: Email from **(ADMIN)**
-+ email-from-name: Email Sender name **(ADMIN)**
-
-(Sendgrid)
-+ sendgrid-key: Sendgrid key **(ADMIN)**
-
-(SMTP)
-+ smtp-host: smtp host **(ADMIN)**
-+ smtp-username: smtp  username **(ADMIN)**
-+ smtp-password: smtp password **(ADMIN)**
-+ smtp-port: smtp port **(ADMIN)**
-+ smtp-encryption : smtp encryption **(ADMIN)**
-
-**Google Analytics**
-+ analytics-key = Google analytics key **(NON ADMIN)**
-
-**Social links**
-+ google-url: Google url **(ADMIN)**
-+ github-url: Github url **(ADMIN)**
-+ twitter-url: Twitter url **(ADMIN)**
-+ support-url: Support url **(ADMIN)**
-+ facebook-url: Facebook url **(ADMIN)**
-+ youtube-url: Youtube url **(ADMIN)**
-
-**Generators**
-+ android-app-url: Android app url **(ADMIN)**
-+ web-app-url: Web App url **(ADMIN)**
 
 + Request (application/vnd.api+json)
 
