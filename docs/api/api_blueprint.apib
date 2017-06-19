@@ -41,7 +41,7 @@ For using the API you need(mostly) to register as an user. Registering gives you
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter(optional, string, `[{"is-super-admin":"true"]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter(optional, string, `[{"is-super-admin":"true"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Users [GET]
 
@@ -286,7 +286,7 @@ These endpoints help you to create the basic event structure. To add other parts
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. If you want to filter by firstname and lastname, example url will /endpoint?filter=[{"firstname":"firstname","lastname":"lastname"}]Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[{"has-session-speakers":"true"}]`) - Filter according to the flask-rest-jsonapi filtering system. If you want to filter by firstname and lastname, example url will /endpoint?filter=[{"firstname":"firstname","lastname":"lastname"}]Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Events [GET]
 
@@ -1015,7 +1015,7 @@ Data related to event copyright information.
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `year`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[{"year": "2017"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### Get Event Copyright [GET]
 
@@ -1281,7 +1281,7 @@ Data related to an invoice for the event.
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[{"status":"pending"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### Get Event Invoices [GET]
 
@@ -1656,7 +1656,7 @@ Data related to all the microlocations for the various sessions of the event.
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `floor`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[{"floor":"2"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Microlocations [GET]
 
@@ -1937,7 +1937,7 @@ Data related to all the sessions in the event.
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[{"level":"1"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Sessions [GET]
 
@@ -2370,7 +2370,7 @@ Data related to all the session types (such as talks, workshops, lightning talks
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[{"length":"00:30"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Session Types [GET]
 
@@ -2627,7 +2627,7 @@ You can add various social links such as facebook, twitter, website, blog link, 
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[{"name": "facebook"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Social Links [GET]
 
@@ -2858,7 +2858,7 @@ Announcement for call for speaker to accept session proposals from speakers.
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `starts-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[{"announcement":"string"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Speakers Calls [GET]
 
@@ -3115,7 +3115,7 @@ Data related to the various sponsors with their level, url and images associated
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `level`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[{"description":"string"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Sponsors [GET]
 
@@ -3377,7 +3377,7 @@ Related to any tax related information that might be related with the tickets fo
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `tax-rate`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[{"tax-rate":"12.0"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Tax Records [GET]
 
@@ -3670,7 +3670,7 @@ Related to tickets (free, paid, donation) to the event.
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `sales-starts-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[{"name":"string"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Tickets [GET]
 
@@ -4203,7 +4203,7 @@ To create or modify data of this data layer, you will need admin access. You can
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `full-width`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[{"full-width":"1300"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List Image Sizes [GET]
 
@@ -4464,7 +4464,7 @@ To create or modify any data of this data layer, you will need admin access. How
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[{"name":"string"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### Page Sizes [GET]
 
@@ -4677,7 +4677,7 @@ To update or get any attribute of this data layer, you will need admin access. H
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `app-name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[{"app-name": "Event-Yay!"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### Show Settings[GET]
 
