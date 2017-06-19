@@ -24,19 +24,20 @@ class TicketSchema(Schema):
     @validates_schema
     def validate_date(self, data):
         if data['sales_starts_at'] >= data['sales_ends_at']:
-            raise UnprocessableEntity({'pointer': 'sales_ends_at'}, "sales_ends_at should be after sales_starts_at")
+            raise UnprocessableEntity({'pointer': '/data/attributes/sales-ends-at'},
+                                      "sales-ends-at should be after sales-starts-at")
 
     @validates_schema
     def validate_order_quantity(self, data):
         if 'max_order' in data and 'min_order' in data:
             if data['max_order'] < data['min_order']:
-                raise UnprocessableEntity({'pointer': 'max_order'},
-                                          "max_order should be greater than min_order")
+                raise UnprocessableEntity({'pointer': '/data/attributes/max-order'},
+                                          "max-order should be greater than min-order")
 
         if 'quantity' in data and 'min_order' in data:
             if data['quantity'] < data['min_order']:
-                raise UnprocessableEntity({'pointer': 'quantity'},
-                                          "quantity should be greater than min_order")
+                raise UnprocessableEntity({'pointer': '/data/attributes/quantity'},
+                                          "quantity should be greater than min-order")
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)

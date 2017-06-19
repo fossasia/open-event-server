@@ -33,7 +33,7 @@ class SessionTypeSchema(Schema):
         try:
             datetime.strptime(data['length'], '%H:%M')
         except ValueError:
-            raise UnprocessableEntity({'pointer': 'length'}, "Length should be in the format %H:%M")
+            raise UnprocessableEntity({'pointer': '/data/attributes/length'}, "Length should be in the format %H:%M")
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)

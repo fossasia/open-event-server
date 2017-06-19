@@ -38,7 +38,7 @@ class EventSchema(Schema):
     @validates_schema
     def validate_date(self, data):
         if data['starts_at'] >= data['ends_at']:
-            raise UnprocessableEntity({'pointer': 'ends_at'}, "ends_at should be after starts_at")
+            raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at")
 
     @validates_schema
     def validate_timezone(self, data):
@@ -47,11 +47,11 @@ class EventSchema(Schema):
             starts_at = data['starts_at'].utcoffset().seconds
             ends_at = data['ends_at'].utcoffset().seconds
             if offset != starts_at:
-                raise UnprocessableEntity({'parameter': 'timezone'}, "timezone: {} does not match with the starts-at "
+                raise UnprocessableEntity({'pointer': '/data/attributes/timezone'}, "timezone: {} does not match with the starts-at "
                                                                      "offset {:02}:{:02}".
                                           format(data['timezone'], starts_at // 3600, starts_at % 3600 // 60))
             if offset != ends_at:
-                raise UnprocessableEntity({'parameter': 'timezone'}, "timezone: {} does not match with the ends-at "
+                raise UnprocessableEntity({'pointer': '/data/attributes/timezone'}, "timezone: {} does not match with the ends-at "
                                                                      "offset {:02}:{:02}".
                                           format(data['timezone'], ends_at // 3600, ends_at % 3600 // 60))
 

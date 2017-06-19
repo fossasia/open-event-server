@@ -31,7 +31,7 @@ class SessionSchema(Schema):
     @validates_schema
     def validate_date(self, data):
         if data['starts_at'] >= data['ends_at']:
-            raise UnprocessableEntity({'pointer': 'ends_at'}, "ends_at should be after starts_at")
+            raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at")
 
     id = fields.Str(dump_only=True)
     title = fields.Str(required=True)
