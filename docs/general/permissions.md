@@ -20,13 +20,11 @@ _fetch_ => Name of the column in the model where we will find the value of the f
 _model_ => Model to use to fetch the key value
 
 There are two optional parameters
-_methods_ => Comma separated string telling which methods are applicable for this check (default = GET,POST,DELETE,PATCH)
+`methods` => Comma separated string telling which methods are applicable for this check (default = GET,POST,DELETE,PATCH)
 
-_fetch_key_ (default=`id`) => This is identifier used to get the row containing fetch's value. This will be matched with view_kwargs to get the value and filter.
+`fetch_key_url` (default=`id`) => This is the name of URL parameter whose value will be used to find the record from database.
 
-### **Before testing it**
-The flask-rest-jsonapi module requires one changes to make this whole thing working. Before taking a local pull:
-**Please update your packages to get latest changes in flask-rest-jsonapi module**
+`fetch_key_model` => This is the name of coulmn in the database model with which the `fetch_key_url` will be matched.
 
 
 DOCS: http://flask-rest-jsonapi.readthedocs.io/en/latest/permission.html

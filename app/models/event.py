@@ -115,10 +115,9 @@ class Event(db.Model):
                  email=None,
                  description=None,
                  event_url=None,
-                 background_url=None,
-                 thumbnail=None,
-                 large=None,
-                 icon=None,
+                 thumbnail_image_url=None,
+                 large_image_url=None,
+                 icon_image_url=None,
                  organizer_name=None,
                  organizer_description=None,
                  state=None,
@@ -151,7 +150,8 @@ class Event(db.Model):
                  ical_url=None,
                  xcal_url=None,
                  discount_code_id=None,
-                 onsite_details=None):
+                 onsite_details=None,
+                 original_image_url=None):
 
         self.name = name
         self.logo = logo
@@ -164,10 +164,10 @@ class Event(db.Model):
         self.location_name = location_name
         self.description = clean_up_string(description)
         self.event_url = event_url
-        self.background_url = background_url
-        self.thumbnail = thumbnail
-        self.large = large
-        self.icon = icon
+        self.original_image_url = original_image_url
+        self.thumbnail_image_url = thumbnail_image_url
+        self.large_image_url = large_image_url
+        self.icon_image_url = icon_image_url
         self.organizer_name = organizer_name
         self.organizer_description = clean_up_string(organizer_description)
         self.state = state

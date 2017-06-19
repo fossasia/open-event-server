@@ -5,6 +5,7 @@ from marshmallow import validates_schema
 from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
+from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
 from app.models import db
@@ -72,15 +73,15 @@ class TicketSchema(Schema):
 class AllTicketList(ResourceList):
     def query(self, view_kwargs):
         query_ = self.session.query(Ticket)
-        if view_kwargs.get('id'):
-            query_ = query_.join(Event).filter(Event.id == view_kwargs['id'])
+        if view_kwargs.get('event_id'):
+            query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
         elif view_kwargs.get('identifier'):
             query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
         return query_
 
     def before_create_object(self, data, view_kwargs):
-        if view_kwargs.get('id'):
-            event = self.session.query(Event).filter_by(id=view_kwargs['id']).one()
+        if view_kwargs.get('event_id'):
+            event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
             data['event_id'] = event.id
         elif view_kwargs.get('identifier'):
             event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
@@ -110,7 +111,11 @@ class TicketDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
-    decorators = (jwt_required,)
+    decorators = (jwt_required, 
+                  api.has_permission('is_coorganizer', fetch='event_id', 
+                                                       fetch_as="event_id", 
+                                                       model=Ticket,
+                                                       methods="DELETE"), )
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket}

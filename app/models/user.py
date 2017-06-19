@@ -159,6 +159,7 @@ class User(db.Model):
             return True
 
     def is_organizer(self, event_id):
+        # type: (object) -> object
         return self._is_role(ORGANIZER, event_id)
 
     def is_coorganizer(self, event_id):
