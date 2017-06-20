@@ -1,6 +1,8 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+from sqlalchemy.orm.exc import NoResultFound
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.utilities import dasherize
 from app.models import db
@@ -43,19 +45,20 @@ class TaxList(ResourceList):
 
     def query(self, view_kwargs):
         query_ = self.session.query(Tax)
-        if view_kwargs.get('id'):
-            query_ = query_.join(Event).filter(Event.id == view_kwargs['id'])
+        if view_kwargs.get('event_id'):
+            query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
         elif view_kwargs.get('identifier'):
             query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
         return query_
 
     def before_create_object(self, data, view_kwargs):
-        if view_kwargs.get('id'):
-            event = self.session.query(Event).filter_by(id=view_kwargs['id']).one()
+        if view_kwargs.get('event_id'):
+            event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
             data['event_id'] = event.id
 
     view_kwargs = True
     decorators = (jwt_required, )
+    methods = ['POST', ]
     schema = TaxSchema
     data_layer = {'session': db.session,
                   'model': Tax,
@@ -66,10 +69,36 @@ class TaxList(ResourceList):
 
 
 class TaxDetail(ResourceDetail):
+    """
+     tax detail by id
+    """
+    def query(self, view_kwargs):
+        query_ = self.session.query(Tax)
+        if view_kwargs.get('event_id'):
+            query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
+            return query_
+
+    def before_get_object(self, view_kwargs):
+        if view_kwargs.get('event_id'):
+            try:
+                event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_id'},
+                                     "Event: {} not found".format(view_kwargs['event_id']))
+            else:
+                if event.tax:
+                    view_kwargs['id'] = event.tax.id
+                else:
+                    view_kwargs['id'] = None
+
     decorators = (jwt_required, )
     schema = TaxSchema
     data_layer = {'session': db.session,
-                  'model': Tax}
+                  'model': Tax,
+                  'methods': {
+                      'query': query,
+                      'before_get_object': before_get_object
+                  }}
 
 
 class TaxRelationship(ResourceRelationship):
