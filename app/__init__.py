@@ -120,7 +120,7 @@ def create_app():
 
     # nextgen api
     with app.app_context():
-        from app.api import api_v1
+        from app.api.bootstrap import api_v1
         from app.api.image_upload import upload_routes
         app.register_blueprint(api_v1)
         app.register_blueprint(upload_routes)

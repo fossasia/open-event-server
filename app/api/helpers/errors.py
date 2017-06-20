@@ -48,3 +48,10 @@ class ForbiddenError(ErrorResponse):
     """
     title = 'Access Forbidden'
     status = 403
+
+class NotFoundError(ErrorResponse):
+    """
+    Default class for 404 Error
+    """
+    title = 'Not Found'
+    status = 404

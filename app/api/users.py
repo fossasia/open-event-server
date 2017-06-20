@@ -1,3 +1,4 @@
+from app.api.bootstrap import api
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
@@ -71,7 +72,7 @@ class UserList(ResourceList):
     """
     List and create Users
     """
-    get = is_admin(ResourceList.get.__func__)
+    decorators = (api.has_permission('is_admin', methods="GET"),)
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User}
