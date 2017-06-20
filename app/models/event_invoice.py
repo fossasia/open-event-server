@@ -45,6 +45,7 @@ class EventInvoice(db.Model):
     stripe_token = db.Column(db.String)
     paypal_token = db.Column(db.String)
     status = db.Column(db.String)
+    invoice_pdf_url = db.Column(db.String)
 
     event = db.relationship('Event', backref='invoices')
     user = db.relationship('User', backref='invoices')
@@ -64,7 +65,8 @@ class EventInvoice(db.Model):
                  paid_via=None,
                  user_id=None,
                  discount_code_id=None,
-                 event_id=None):
+                 event_id=None,
+                 invoice_pdf_url=None):
         self.identifier = get_new_identifier()
         self.amount = amount
         self.address = address
@@ -79,6 +81,7 @@ class EventInvoice(db.Model):
         self.created_at = datetime.utcnow()
         self.discount_code_id = discount_code_id
         self.status = 'pending'
+        self.invoice_pdf_url = invoice_pdf_url
 
     def get_invoice_number(self):
         return 'I' + str(int(time.mktime(self.created_at.timetuple()))) + '-' + str(self.id)
