@@ -44,7 +44,7 @@ For using the API you need(mostly) to register as an user. Registering gives you
 | `email` | Email of the user | string | **yes** |
 
 
-## Users Collection [/users{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Users Collection [/v1/users{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
@@ -144,7 +144,7 @@ Create a new user using an email, password and an optional name.
             }
         }
 
-## User Details [/users/{user_id}]
+## User Details [/v1/users/{user_id}]
 + Parameters
     + user_id: 1 (integer) - ID of the user in the form of an integer
 
@@ -338,7 +338,7 @@ These endpoints help you to create the basic event structure. To add other parts
 | `onsite-details`  | - | string | - |
 | `is-sponsors-enabled`  | - | boolean (default: `false`) | - |
 
-## Events Collection [/events{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Events Collection [/v1/events{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
@@ -696,7 +696,7 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timzone` and an opti
         }
 
 
-## Event Details [/events/{event_id}]
+## Event Details [/v1/events/{event_id}]
 + Parameters
     + event_id: 1 (integer) - ID of the event in the form of an integer
 
@@ -994,7 +994,7 @@ Data related to event copyright information.
 | `licence-url` | URL of the licence location | string | -  |
 | `logo-url` | URL of the logo for the Licence | string | -  |
 
-## Event Copyright [/events/{event_id}/event-copyright{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Event Copyright [/v1/events/{event_id}/event-copyright{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_id: 1 (integer) - ID of the specific event in integer
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -1113,7 +1113,7 @@ Create a new Event Copyright using an event_id.
         }
 
 
-## Event Copyright Details [/event-copyright/{event_copyright_id}]
+## Event Copyright Details [/v1/event-copyright/{event_copyright_id}]
 + Parameters
     + event_copyright_id: 1 (integer) - ID of the event copyright in the form of an integer
 
@@ -1271,7 +1271,7 @@ Data related to an invoice for the event.
 | `completed-at` | Completion of Invoice Order | ISO 8601 (tz-aware) | - |
 | `paid-via` | Payment procedure | string | - |
 
-## Event Invoices [/events/{event_id}/event-invoices{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Event Invoices [/v1/events/{event_id}/event-invoices{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_id: 1 (integer) - ID of the specific event in integer
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -1436,7 +1436,7 @@ Create a new Event Invoice using an event_id.
         }
 
 
-## Event Invoices Details [/event-invoices/{event_invoices_id}]
+## Event Invoices Details [/v1/event-invoices/{event_invoices_id}]
 + Parameters
     + event_invoices_id: 1 (integer) - ID of the event invoices in the form of an integer
 
@@ -1620,7 +1620,7 @@ Data related to all the microlocations for the various sessions of the event.
 | `floor` | Floor of the microlocation | integer | - |
 | `room` | Room of the microlocation | string | - |
 
-## Microlocation Collection [/events/{event_id}/microlocations{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Microlocation Collection [/v1/events/{event_id}/microlocations{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_id: 1 (integer) - ID of the specific event in integer
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -1749,7 +1749,7 @@ Create a new microlocation using an event_id.
         }
 
 
-## Microlocation Details [/microlocations/{microlocation_id}]
+## Microlocation Details [/v1/microlocations/{microlocation_id}]
 + Parameters
     + microlocation_id: 1 (integer) - ID of the ticket in the form of an integer
 
@@ -1917,7 +1917,7 @@ Data related to all the sessions in the event.
 | `submitted-at` | Date the session was submitted | ISO 8601 (tz-aware) | - |
 | `is-mail-sent` | Yes/No for Session accept/reject email | boolean (default: `false`) | - |
 
-## Sessions Collection [/events/{event_id}/sessions{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Sessions Collection [/v1/events/{event_id}/sessions{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_id: 1 (integer) - ID of the specific event in integer
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -2109,7 +2109,7 @@ Create a new session using an event_id.
         }
 
 
-## Sessions Details [/sessions/{session_id}]
+## Sessions Details [/v1/sessions/{session_id}]
 + Parameters
     + session_id: 1 (integer) - ID of the speaker call in the form of an integer
 
@@ -2323,7 +2323,7 @@ Data related to all the session types (such as talks, workshops, lightning talks
 | `name`  | Name of the Session Type | string | **yes** |
 | `length` | Length of the Session Type | string | - |
 
-## Session Type Collection [/events/{event_id}/session-types{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Session Type Collection [/v1/events/{event_id}/session-types{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_id: 1 (integer) - ID of the specific event in integer
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -2443,7 +2443,7 @@ Create a new session type using an event_id.
         }
 
 
-## Session Type Details [/session-types/{session_type_id}]
+## Session Type Details [/v1/session-types/{session_type_id}]
 + Parameters
     + session_type_id: 1 (integer) - ID of the session_type in the form of an integer
 
@@ -2585,7 +2585,7 @@ You can add various social links such as facebook, twitter, website, blog link, 
 | `name`  | Name of the Session Type | string | **yes** |
 | `link` | Url of the Social Link | string | **yes** |
 
-## Social Links Collection [/events/{event_id}/social-links{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Social Links Collection [/v1/events/{event_id}/social-links{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_id: 1 (integer) - ID of the specific event in integer
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -2691,7 +2691,7 @@ Create a new social link using event_id.
         }
 
 
-## Social Links [/social-links/{link_id}]
+## Social Links [/v1/social-links/{link_id}]
 + Parameters
     + link_id: 1 (integer) - ID of the Social Link in the form of an integer
 
@@ -2822,7 +2822,7 @@ Announcement for call for speaker to accept session proposals from speakers.
 | `hash` | Hash for speakers call | string | - |
 | `privacy` | Privacy of speakers call | string | - |
 
-## Create Speakers Call for an Event [/events/{event_id}/speakers-calls{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Create Speakers Call for an Event [/v1/events/{event_id}/speakers-calls{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_id: 1 (integer) - ID of the specific event in integer
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -2831,7 +2831,6 @@ Announcement for call for speaker to accept session proposals from speakers.
     + filter (optional, string, `[{"announcement":"string"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 
-=======
 ### Create Speakers Call [POST]
 Create a new speakers call using an event_id.
 
@@ -2898,7 +2897,7 @@ Create a new speakers call using an event_id.
           }
         }
 
-## Get Speakers Call for an Event [/events/{event_id}/speakers-call?page,limit]
+## Get Speakers Call for an Event [/v1/events/{event_id}/speakers-call?page,limit]
 + Parameters
     + event_id (integer) - ID of the spcific event in integer
 
@@ -2948,7 +2947,7 @@ Create a new speakers call using an event_id.
 
 
 
-## Speakers Call Details [/speakers-calls/{speakers_call_id}]
+## Speakers Call Details [/v1/speakers-calls/{speakers_call_id}]
 
 + Parameters
     + speakers_call_id: 1 (integer) - ID of the session in the form of an integer
@@ -3091,7 +3090,7 @@ Data related to the various sponsors with their level, url and images associated
 | `level` | Level of the sponsor | string | - |
 | `type` | The type of the sponsor | string | - |
 
-## Sponsors Collection [/events/{event_id}/sponsors{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Sponsors Collection [/v1/events/{event_id}/sponsors{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_id: 1 (integer) - ID of the specific event in integer
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -3210,7 +3209,7 @@ Create a new sponsor using an event_id.
         }
 
 
-## Sponsor Details [/sponsors/{sponsor_id}]
+## Sponsor Details [/v1/sponsors/{sponsor_id}]
 + Parameters
     + sponsor_id: 1 (integer) - ID of the sponsor in the form of an integer
 
@@ -3361,7 +3360,7 @@ Related to any tax related information that might be related with the tickets fo
 | `is-invoice-sent` | Yes/No for Session accept/reject email | boolean (default: `false`) | - |
 | `is-tax-included` | Yes/No for Session accept/reject email | boolean (default: `false`) | - |
 
-## Tax Collection [/events/{event_id}/tax{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Tax Collection [/v1/events/{event_id}/tax{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_id: 1 (integer) - ID of the specific event in integer
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -3489,7 +3488,7 @@ Create a new tax using an event_id.
         }
 
 
-## Tax Details [/tax/{tax_id}]
+## Tax Details [/v1/tax/{tax_id}]
 + Parameters
     + tax_id: 1 (integer) - ID of the Tax in the form of an integer
 
@@ -3650,7 +3649,7 @@ Related to tickets (free, paid, donation) to the event.
 | `is-hidden` | Yes/No to hide ticket | boolean (default: `false`) | - |
 | `is-fee-absorbed` | Yes/No for ticket absorption | boolean (default: `false`) | - |
 
-## Tickets Collection [/events/{event_id}/tickets{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Tickets Collection [/v1/events/{event_id}/tickets{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_id: 1 (integer) - ID of the specific event in integer
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -3791,7 +3790,7 @@ Create a new ticket using an event_id.
         }
 
 
-## Ticket Details [/tickets/{ticket_id}]
+## Ticket Details [/v1/tickets/{ticket_id}]
 + Parameters
     + ticket_id: 1 (integer) - ID of the ticket in the form of an integer
 
@@ -3956,7 +3955,7 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
 | `color` | Color code of the track | string | **yes** |
 | `font-color` | Font Color of the track **(black/white: no user role - automatically updated)** | string | - |
 
-## Tracks Collection [/events/{event_id}/tracks]
+## Tracks Collection [/v1/events/{event_id}/tracks]
 + Parameters
     + event_id: 1 (integer) - ID of the event in the form of an integer
 
@@ -4043,7 +4042,7 @@ Create a new track using an event_id.
         }
 
 
-## Track Detail [/tracks/{track_id}]
+## Track Detail [/v1/tracks/{track_id}]
 + Parameters
     + track_id: 1 (integer) - ID of the track in the form of an integer
 
@@ -4177,7 +4176,7 @@ Notifications related to the various users about invites, ticket purchase, sessi
 | `is-read` | Yes/No for read notification | boolean (default: `false`) | - |
 | `recieved-at` | Notification recieved time | ISO 8601 (tz-aware) | - |
 
-## Notifications Collection [/users/{user_id}/notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Notifications Collection [/v1/users/{user_id}/notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + user_id: 1 (integer) - ID of the specific user in integer
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -4292,7 +4291,7 @@ Create a new notification with user_id.
         }
 
 
-## Notification Detail [/notifications/{notification_id}]
+## Notification Detail [/v1/notifications/{notification_id}]
 + Parameters
     + notification_id: 1 (integer) - ID of the notifcaiton in the form of an integer
 
@@ -4447,7 +4446,7 @@ To create or modify data of this data layer, you will need admin access. You can
 | `logo-height` | Height of the logo | integer | - |
 | `type` | Type of the image | string | - |
 
-## Image Size Collection [/image-sizes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Image Size Collection [/v1/image-sizes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
@@ -4546,7 +4545,7 @@ Create a new general image size by admins.
           "data": "data"
         }
 
-## Image Size Details [/image-sizes/{image_size_id}]
+## Image Size Details [/v1/image-sizes/{image_size_id}]
 + Parameters
     + image_size_id: 1 (integer) - ID of the image size in the form of an integer
 
@@ -4706,7 +4705,7 @@ To create or modify any data of this data layer, you will need admin access. How
 | `language`  | Language of the page | string | - |
 | `index` | Position of the page  | integer (default: `0` ) | - |
 
-## Page Collection [/pages{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Page Collection [/v1/pages{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
@@ -4788,7 +4787,7 @@ Create a new general page by admins.
           "data": "data"
         }
 
-## Page Details [/pages/{page_id}]
+## Page Details [/v1/pages/{page_id}]
 + Parameters
     + page_id: 1 (integer) - ID of the page in the form of an integer
 
@@ -5031,7 +5030,7 @@ To update or get any attribute of this data layer, you will need admin access. H
 | `android-app-url`  | Android app url | string | **yes** |
 | `web-app-url`  | Web App url | string | **yes** |
 
-## Settings Details [/settings{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Settings Details [/v1/settings{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
@@ -5250,4 +5249,37 @@ To update or get any attribute of this data layer, you will need admin access. H
           "links": {
             "self": "/v1/settings?id=1"
           }
+        }
+
+# Group Upload
+
+This group of APIs contain endpoints for uploading media files. The workflow is different for images and any other files. In image, a temporary cropped image is first uploaded using the `Image Upload` endpoint. For other files, there can be a single file or multiple files for uploading.
+
+## Image Upload [/v1/upload/image{?force_local}]
+
+A temporary cropped image is first uploaded using this endpoint. After saving the image in it's prefered storage (local, google storage, s3, etc.), the URL for the temporary image is returned as response. This URL is then sent as form data to the necessary API, where it is then downloaded and resized and stored according to the need. *`force_local` parameter can be set to __true__ to force storage in local.* 
+
+
+### Upload an Image in temporary location [POST]
+
++ Parameters
+    + force_local (optional, string, `true`) - Force storage of temporary image in local
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: JWT <access_token>
+
+    + Body
+
+            {
+                "data": "data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7"
+            }
+
++ Response 200 (application/json)
+
+        {
+            "url":"/serve_static/media/temp/images/6a6614c7-d458-43de-a9bd-5c329e273bf0/U0lLbUt2SF/4d4dae9e-0bab-4e72-ba2f-e8e633a145e5.gif"
         }
