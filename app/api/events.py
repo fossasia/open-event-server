@@ -9,6 +9,7 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound, BadRequest
 from marshmallow import validates_schema
 from flask import request
 
+from app.api.bootstrap import api
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.utilities import dasherize
 from app.models import db
@@ -208,6 +209,7 @@ class EventSchema(Schema):
 
 
 class EventList(ResourceList):
+
     def query(self, view_kwargs):
         query_ = self.session.query(Event)
         if view_kwargs.get('user_id'):
@@ -222,7 +224,7 @@ class EventList(ResourceList):
         uer = UsersEventsRoles(user, event, role)
         save_to_db(uer, 'Event Saved')
 
-    decorators = (accessible_events,)
+    decorators = (api.has_permission('accessible_role_based_events'), )
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
@@ -336,7 +338,8 @@ class EventDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_organizer', methods="PATCH,DELETE", fetch="id", fetch_as="event_id"), )
+
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
