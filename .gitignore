@@ -16,6 +16,7 @@ test.db
 app.db
 .idea/
 .bundle/
+.vscode/
 
 # Static files at 'app/static/vendor'
 app/static/vendor
