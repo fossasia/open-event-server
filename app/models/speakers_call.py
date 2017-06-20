@@ -3,9 +3,9 @@ from sqlalchemy.orm import backref
 from app.models import db
 
 
-class CallForPaper(db.Model):
+class SpeakersCall(db.Model):
     """call for paper model class"""
-    __tablename__ = 'call_for_papers'
+    __tablename__ = 'speakers_calls'
     id = db.Column(db.Integer, primary_key=True)
     announcement = db.Column(db.Text)
     starts_at = db.Column(db.DateTime(timezone=True), nullable=False)
@@ -13,7 +13,7 @@ class CallForPaper(db.Model):
     hash = db.Column(db.String, nullable=True)
     privacy = db.Column(db.String, nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-    event = db.relationship("Event", backref=backref("call_for_papers", uselist=False))
+    event = db.relationship("Event", backref=backref("speakers_call", uselist=False))
 
     def __init__(self, announcement=None, starts_at=None, ends_at=None, hash=None, privacy='public',
                  event_id=None):
@@ -25,7 +25,7 @@ class CallForPaper(db.Model):
         self.event_id = event_id
 
     def __repr__(self):
-        return '<call_for_papers %r>' % self.announcement
+        return '<speakers_call %r>' % self.announcement
 
     def __str__(self):
         return unicode(self).encode('utf-8')

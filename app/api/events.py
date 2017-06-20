@@ -20,6 +20,7 @@ from app.models.session import Session
 from app.models.session_type import SessionType
 from app.models.discount_code import DiscountCode
 from app.models.event_invoice import EventInvoice
+from app.models.speakers_call import SpeakersCall
 from app.models.user import User, ATTENDEE, ORGANIZER
 from app.models.users_events_role import UsersEventsRoles
 from app.models.role import Role
@@ -153,13 +154,13 @@ class EventSchema(Schema):
                             schema='SponsorSchema',
                             many=True,
                             type_='sponsor')
-    call_for_papers = Relationship(attribute='call_for_papers',
-                                   self_view='v1.event_call_for_paper',
-                                   self_view_kwargs={'id': '<id>'},
-                                   related_view='v1.call_for_paper_list',
-                                   related_view_kwargs={'event_id': '<id>'},
-                                   schema='CallForPaperSchema',
-                                   type_='call-for-paper')
+    speakers_call = Relationship(attribute='speakers_call',
+                                 self_view='v1.event_speakers_call',
+                                 self_view_kwargs={'id': '<id>'},
+                                 related_view='v1.speakers_call_detail',
+                                 related_view_kwargs={'id': '<id>'},
+                                 schema='SpeakersCallSchema',
+                                 type_='speakers-call')
     session_types = Relationship(attribute='session_type',
                                  self_view='v1.event_session_types',
                                  self_view_kwargs={'id': '<id>'},
@@ -325,7 +326,20 @@ class EventDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
+        if view_kwargs.get('speakers_call_id') is not None:
+            try:
+                speakers_call = self.session.query(SpeakersCall).filter_by(id=view_kwargs['speakers_call_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'speakers_call_id'},
+                                     "Speakers Call: {} not found".format(view_kwargs['speakers_call_id']))
+            else:
+                if speakers_call.event_id is not None:
+                    view_kwargs['id'] = speakers_call.event_id
+                else:
+                    view_kwargs['id'] = None
+
     decorators = (api.has_permission('is_organizer', methods="PATCH,DELETE", fetch="id", fetch_as="event_id"), )
+
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,

@@ -1,7 +1,7 @@
 from datetime import datetime
 from pytz import timezone
 
-from app.models.call_for_paper import CallForPaper
+from app.models.speakers_call import SpeakersCall
 from app.models.custom_form import CustomForms, session_form_str, speaker_form_str
 from app.models.event import Event
 from app.models.message_setting import MessageSettings
@@ -68,8 +68,8 @@ class ObjectMother(object):
                     is_admin=False)
 
     @staticmethod
-    def get_cfs(event_id=1):
-        return CallForPaper(start_date=(datetime(2003, 8, 4, 12, 30, 45)).replace(tzinfo=timezone('UTC')),
+    def get_speakers_call(event_id=1):
+        return SpeakersCall(start_date=(datetime(2003, 8, 4, 12, 30, 45)).replace(tzinfo=timezone('UTC')),
                             end_date=(datetime(2003, 9, 4, 12, 30, 45)).replace(tzinfo=timezone('UTC')),
                             announcement="Hello there!",
                             event_id=event_id)

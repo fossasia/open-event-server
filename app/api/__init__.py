@@ -8,7 +8,7 @@ from app.api.sessions import SessionList, SessionDetail, SessionRelationship
 from app.api.social_links import SocialLinkList, SocialLinkDetail, SocialLinkRelationship
 from app.api.sponsors import SponsorList, SponsorDetail, SponsorRelationship
 from app.api.tracks import TrackList, TrackDetail, TrackRelationship
-from app.api.call_for_papers import CallForPaperList, CallForPaperDetail, CallForPaperRelationship
+from app.api.speakers_calls import SpeakersCallList, SpeakersCallDetail, SpeakersCallRelationship
 from app.api.event_invoices import EventInvoiceList, EventInvoiceDetail, EventInvoiceRelationship
 from app.api.image_sizes import ImageSizeList, ImageSizeDetail
 from app.api.session_types import SessionTypeList, SessionTypeDetail, SessionTypeRelationship
@@ -63,7 +63,7 @@ api.route(EventList, 'event_list', '/events')
 api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>', '/tickets/<int:ticket_id>/event',
           '/microlocations/<int:microlocation_id>/event', '/social-links/<int:social_link_id>/event',
           '/sponsors/<int:sponsor_id>/event', '/tracks/<int:track_id>/event',
-          '/call-for-papers/<int:call_for_paper_id>/event', '/session-types/<int:session_type_id>/event',
+          '/speakers-calls/<int:speakers_call_id>/event', '/session-types/<int:session_type_id>/event',
           '/event-copyright/<int:copyright_id>/event', '/tax/<int:tax_id>/event',
           '/event-invoices/<int:event_invoice_id>/event', '/discount-codes/<int:discount_code_id>/event',
           '/sessions/<int:session_id>/event', '/ticket-tags/<int:ticket_tag_id>/event')
@@ -79,8 +79,8 @@ api.route(EventRelationship, 'event_sponsor', '/events/<int:id>/relationships/sp
           '/events/<identifier>/relationships/sponsors')
 api.route(EventRelationship, 'event_tracks', '/events/<int:id>/relationships/tracks',
           '/events/<identifier>/relationships/tracks')
-api.route(EventRelationship, 'event_call_for_paper', '/events/<int:id>/relationships/call-for-papers',
-          '/events/<identifier>/relationships/call-for-papers')
+api.route(EventRelationship, 'event_speakers_call', '/events/<int:id>/relationships/speakers-call',
+          '/events/<identifier>/relationships/speakers-call')
 api.route(EventRelationship, 'event_session_types', '/events/<int:id>/relationships/session-types',
           '/events/<identifier>/relationships/session-types')
 api.route(EventRelationship, 'event_copyright', '/events/<int:id>/relationships/event-copyright',
@@ -136,11 +136,13 @@ api.route(TrackDetail, 'track_detail', '/tracks/<int:id>', '/sessions/<int:sessi
 api.route(TrackRelationship, 'track_sessions', '/tracks/<int:id>/relationships/sessions')
 api.route(TrackRelationship, 'track_event', '/tracks/<int:id>/relationships/event')
 
-# call_for_papers
-api.route(CallForPaperList, 'call_for_paper_list', '/events/<int:event_id>/call-for-papers',
-          '/events/<identifier>/call-for-papers')
-api.route(CallForPaperDetail, 'call_for_paper_detail', '/call-for-papers/<int:id>')
-api.route(CallForPaperRelationship, 'call_for_paper_event', '/call-for-papers/<int:id>/relationships/event')
+# speakers_calls
+api.route(SpeakersCallList, 'speakers_call_list', '/events/<int:event_id>/speakers-calls',
+          '/events/<identifier>/speakers-calls')
+api.route(SpeakersCallDetail, 'speakers_call_detail', '/speakers-calls/<int:id>',
+          '/events/<int:event_id>/speakers-call')
+api.route(SpeakersCallRelationship, 'speakers_call_event',
+          '/speakers-calls/<int:id>/relationships/event')
 
 # session_types
 api.route(SessionTypeList, 'session_type_list', '/events/<int:event_id>/session-types',
