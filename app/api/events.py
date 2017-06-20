@@ -126,7 +126,7 @@ class EventSchema(Schema):
     microlocations = Relationship(attribute='microlocation',
                                   self_view='v1.event_microlocation',
                                   self_view_kwargs={'id': '<id>'},
-                                  related_view='v1.microlocation_detail',
+                                  related_view='v1.microlocation_list',
                                   related_view_kwargs={'event_id': '<id>'},
                                   schema='MicrolocationSchema',
                                   many=True,
@@ -135,7 +135,7 @@ class EventSchema(Schema):
                                 self_view='v1.event_social_link',
                                 self_view_kwargs={'id': '<id>'},
                                 related_view='v1.social_link_detail',
-                                related_view_kwargs={'event_id': '<id>'},
+                                related_view_kwargs={'id': '<id>'},
                                 schema='SocialLinkSchema',
                                 many=True,
                                 type_='social-link')
