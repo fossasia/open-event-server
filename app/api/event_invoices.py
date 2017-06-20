@@ -41,6 +41,7 @@ class EventInvoiceSchema(Schema):
     paypal_token = fields.Str()
     status = fields.Str(validate=validate.OneOf(
         choices=["expired", "deleted", "initialized" "completed", "placed", "pending", "cancelled"]))
+    invoice_pdf_url = fields.Url()
     user = Relationship(attribute='user',
                         self_view='v1.event_invoice_user',
                         self_view_kwargs={'id': '<id>'},
