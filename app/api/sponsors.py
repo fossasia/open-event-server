@@ -39,16 +39,16 @@ class SponsorList(ResourceList):
         query_ = self.session.query(Sponsor)
         if view_kwargs.get('id'):
             query_ = query_.join(Event).filter(Event.id == view_kwargs['id'])
-        elif view_kwargs.get('identifier'):
-            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
+        elif view_kwargs.get('event_identifier'):
+            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['event_identifier'])
         return query_
 
     def before_create_object(self, data, view_kwargs):
         if view_kwargs.get('id'):
             event = self.session.query(Event).filter_by(id=view_kwargs['id']).one()
             data['event_id'] = event.id
-        elif view_kwargs.get('identifier'):
-            event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
+        elif view_kwargs.get('event_identifier'):
+            event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
             data['event_id'] = event.id
 
     decorators = (jwt_required, )

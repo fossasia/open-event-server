@@ -88,6 +88,7 @@ class MicrolocationDetail(ResourceDetail):
     """
 
     def before_get_object(self, view_kwargs):
+
         if view_kwargs.get('session_id') is not None:
             try:
                 sessions = self.session.query(Session).filter_by(

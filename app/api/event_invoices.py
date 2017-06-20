@@ -72,27 +72,27 @@ class EventInvoiceList(ResourceList):
 
     def query(self, view_kwargs):
         query_ = self.session.query(EventInvoice)
-        if view_kwargs.get('event_id') is not None:
+        if view_kwargs.get('event_id'):
             query_ = query_.filter_by(event_id=view_kwargs['event_id'])
-        elif view_kwargs.get('identifier'):
-            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
-        if view_kwargs.get('user_id') is not None:
+        elif view_kwargs.get('event_identifier'):
+            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['event_identifier'])
+        if view_kwargs.get('user_id'):
             query_ = query_.filter_by(user_id=view_kwargs['user_id'])
-        if view_kwargs.get('discount_code_id') is not None:
+        if view_kwargs.get('discount_code_id'):
             query_ = query_.filter_by(discount_code_id=view_kwargs['discount_code_id'])
         return query_
 
     def before_create_object(self, data, view_kwargs):
-        if view_kwargs.get('event_id') is not None:
+        if view_kwargs.get('event_id'):
             event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
             data['event_id'] = event.id
-        elif view_kwargs.get('identifier'):
-            event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
+        elif view_kwargs.get('event_identifier'):
+            event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
             data['event_id'] = event.id
-        if view_kwargs.get('user_id') is not None:
+        if view_kwargs.get('user_id'):
             user = self.session.query(User).filter_by(id=view_kwargs['user_id']).one()
             data['user_id'] = user.id
-        if view_kwargs.get('discount_code_id') is not None:
+        if view_kwargs.get('discount_code_id'):
             discount_code = self.session.query(DiscountCode).filter_by(id=view_kwargs['discount_code_id']).one()
             data['discount_code_id'] = discount_code.id
 

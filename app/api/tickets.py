@@ -111,9 +111,9 @@ class TicketDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
-    decorators = (jwt_required, 
-                  api.has_permission('is_coorganizer', fetch='event_id', 
-                                                       fetch_as="event_id", 
+    decorators = (jwt_required,
+                  api.has_permission('is_coorganizer', fetch='event_id',
+                                                       fetch_as="event_id",
                                                        model=Ticket,
                                                        methods="DELETE"), )
     schema = TicketSchema
