@@ -3,6 +3,8 @@ from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from marshmallow import validates_schema
 import marshmallow.validate as validate
+from sqlalchemy.orm.exc import NoResultFound
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.events import Event
 from app.api.helpers.utilities import dasherize
@@ -98,10 +100,10 @@ class SessionList(ResourceList):
         if view_kwargs.get('microlocation_id') is not None:
             query_ = query_.join(Microlocation).filter(
                 Microlocation.id == view_kwargs['microlocation_id'])
-        if view_kwargs.get('id'):
-            query_ = query_.join(Event).filter(Event.id == view_kwargs['id'])
-        elif view_kwargs.get('identifier'):
-            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
+        if view_kwargs.get('event_id'):
+            query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
+        elif view_kwargs.get('event_identifier'):
+            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['event_identifier'])
         return query_
 
     def before_create_object(self, data, view_kwargs):
@@ -132,10 +134,23 @@ class SessionDetail(ResourceDetail):
     """
     Session detail by id
     """
+    def before_get_object(self, view_kwargs):
+        if view_kwargs.get('event_identifier'):
+            try:
+                event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_identifier'},
+                                     "Event: {} not found".format(view_kwargs['event_identifier']))
+            else:
+                view_kwargs['event_id'] = event.id
+
     decorators = (jwt_required, )
     schema = SessionSchema
     data_layer = {'session': db.session,
-                  'model': Session}
+                  'model': Session,
+                  'methods': {
+                      'before_get_object': before_get_object
+                  }}
 
 
 class SessionRelationship(ResourceRelationship):

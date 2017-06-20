@@ -64,13 +64,18 @@ class DiscountCodeList(ResourceList):
 
     def query(self, view_kwargs):
         query_ = self.session.query(DiscountCode)
-        if view_kwargs.get('event_id') is not None:
+        if view_kwargs.get('event_id'):
             query_ = query_.filter_by(event_id=view_kwargs['event_id'])
+        elif view_kwargs.get('event_identifier'):
+            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['event_identifier'])
         return query_
 
     def before_create_object(self, data, view_kwargs):
-        if view_kwargs.get('event_id') is not None:
+        if view_kwargs.get('event_id'):
             event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
+            data['event_id'] = event.id
+        elif view_kwargs.get('event_identifier'):
+            event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
             data['event_id'] = event.id
 
     view_kwargs = True

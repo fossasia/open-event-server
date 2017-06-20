@@ -2,6 +2,8 @@ from datetime import datetime
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+from sqlalchemy.orm.exc import NoResultFound
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
@@ -64,10 +66,24 @@ class EventCopyrightList(ResourceList):
 
 
 class EventCopyrightDetail(ResourceDetail):
+
+    def before_get_object(self, view_kwargs):
+        if view_kwargs.get('event_identifier'):
+            try:
+                event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_identifier'},
+                                     "Event: {} not found".format(view_kwargs['event_identifier']))
+            else:
+                view_kwargs['event_id'] = event.id
+
     decorators = (jwt_required, )
     schema = EventCopyrightSchema
     data_layer = {'session': db.session,
-                  'model': EventCopyright}
+                  'model': EventCopyright,
+                  'methods': {
+                      'before_get_object': before_get_object
+                  }}
 
 
 class EventCopyrightRelationship(ResourceRelationship):

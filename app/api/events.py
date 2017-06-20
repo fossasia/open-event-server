@@ -135,7 +135,7 @@ class EventSchema(Schema):
                                 self_view='v1.event_social_link',
                                 self_view_kwargs={'id': '<id>'},
                                 related_view='v1.social_link_detail',
-                                related_view_kwargs={'id': '<id>'},
+                                related_view_kwargs={'event_id': '<id>'},
                                 schema='SocialLinkSchema',
                                 many=True,
                                 type_='social-link')

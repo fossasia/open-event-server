@@ -53,8 +53,13 @@ class TaxList(ResourceList):
 
     def before_create_object(self, data, view_kwargs):
         if view_kwargs.get('event_id'):
-            event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
-            data['event_id'] = event.id
+            try:
+                event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_id'},
+                                     "Event: {} not found".format(view_kwargs['event_id']))
+            else:
+                data['event_id'] = event.id
 
     view_kwargs = True
     decorators = (jwt_required, )
@@ -72,13 +77,16 @@ class TaxDetail(ResourceDetail):
     """
      tax detail by id
     """
-    def query(self, view_kwargs):
-        query_ = self.session.query(Tax)
-        if view_kwargs.get('event_id'):
-            query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
-            return query_
-
     def before_get_object(self, view_kwargs):
+        if view_kwargs.get('event_identifier'):
+            try:
+                event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_identifier'},
+                                     "Event: {} not found".format(view_kwargs['event_identifier']))
+            else:
+                view_kwargs['event_id'] = event.id
+
         if view_kwargs.get('event_id'):
             try:
                 event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
@@ -96,7 +104,6 @@ class TaxDetail(ResourceDetail):
     data_layer = {'session': db.session,
                   'model': Tax,
                   'methods': {
-                      'query': query,
                       'before_get_object': before_get_object
                   }}
 
