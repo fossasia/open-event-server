@@ -101,6 +101,8 @@ class Event(db.Model):
     xcal_url = db.Column(db.String)
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
     discount_code = db.relationship('DiscountCode', backref='events')
+    event_type = db.relationship('EventType', backref="event")
+    event_type_id = db.Column(db.Integer, db.ForeignKey('event_types.id', ondelete='CASCADE'))
 
     def __init__(self,
                  name=None,
@@ -149,7 +151,8 @@ class Event(db.Model):
                  xcal_url=None,
                  discount_code_id=None,
                  onsite_details=None,
-                 original_image_url=None):
+                 original_image_url=None,
+                 event_type_id=None):
 
         self.name = name
         self.logo = logo
@@ -199,6 +202,7 @@ class Event(db.Model):
         self.onsite_details = onsite_details
         self.discount_code_id = discount_code_id
         self.created_at = datetime.now(pytz.utc)
+        self.event_type_id = event_type_id
 
     def __repr__(self):
         return '<Event %r>' % self.name
