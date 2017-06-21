@@ -46,8 +46,7 @@ api.route(PageDetail, 'page_detail', '/pages/<int:id>')
 
 # tickets
 api.route(AllTicketList, 'all_ticket_list', '/tickets', '/events/<int:id>/tickets', '/events/<identifier>/tickets')
-api.route(TicketDetail, 'ticket_detail', '/tickets/<int:id>', '/events/<int:event_id>/tickets',
-          '/attendees/<int:attendee_id>/ticket')
+api.route(TicketDetail, 'ticket_detail', '/tickets/<int:id>', '/attendees/<int:attendee_id>/ticket')
 api.route(TicketRelationship, 'ticket_event', '/tickets/<int:id>/relationships/event')
 api.route(TicketRelationship, 'ticket_ticket_tag', '/tickets/<int:id>/relationships/ticket-tags')
 
@@ -95,10 +94,10 @@ api.route(EventRelationship, 'event_session', '/events/<int:id>/relationships/se
           '/events/<identifier>/relationships/sessions')
 
 # microlocations
-api.route(MicrolocationList, 'microlocation_list', '/microlocations', '/sessions/<int:id>/microlocations')
+api.route(MicrolocationList, 'microlocation_list', '/microlocations', '/sessions/<int:id>/microlocations',
+          '/events/<int:event_id>/microlocations', '/events/<identifier>/microlocations')
 api.route(MicrolocationDetail, 'microlocation_detail', '/microlocations/<int:id>',
-          '/events/<int:event_id>/microlocations', '/events/<identifier>/microlocations',
-          '/sessions/<int:session_id>/microlocation')
+              '/sessions/<int:session_id>/microlocation')
 api.route(MicrolocationRelationship, 'microlocation_session',
           '/microlocations/<int:id>/relationships/sessions')
 api.route(MicrolocationRelationship, 'microlocation_event',
@@ -108,8 +107,7 @@ api.route(MicrolocationRelationship, 'microlocation_event',
 api.route(SessionList, 'session_list', '/sessions', '/events/<int:event_id>/sessions', '/events/<identifier>/sessions',
           '/tracks/<int:track_id>/sessions', '/session_types/<int:session_type_id>/sessions',
           '/microlocations/<int:microlocation_id>/sessions')
-api.route(SessionDetail, 'session_detail', '/sessions/<int:id>',
-          '/microlocations/<int:microlocation_id>/sessions', '/events/<int:event_id>/microlocations')
+api.route(SessionDetail, 'session_detail', '/sessions/<int:id>')
 api.route(SessionRelationship, 'session_microlocation',
           '/sessions/<int:id>/relationships/microlocation')
 api.route(SessionRelationship, 'session_track', '/sessions/<int:id>/relationships/track')
@@ -120,8 +118,7 @@ api.route(SessionRelationship, 'session_event',
 
 # social_links
 api.route(SocialLinkList, 'social_link_list', '/events/<int:id>/social-links', '/events/<identifier>/social-links')
-api.route(SocialLinkDetail, 'social_link_detail',
-          '/social-links/<int:id>', '/events/<int:event_id>/social-links')
+api.route(SocialLinkDetail, 'social_link_detail', '/social-links/<int:id>')
 api.route(SocialLinkRelationship, 'social_link_event',
           '/social-links/<int:id>/relationships/event')
 
@@ -161,7 +158,7 @@ api.route(EventCopyrightRelationship, 'copyright_event',
           '/event-copyright/<int:id>/relationships/event')
 
 # tax
-api.route(TaxList, 'tax_list', '/events/<int:id>/tax', '/events/<identifier>/tax')
+api.route(TaxList, 'tax_list', '/events/<int:event_id>/tax', '/events/<identifier>/tax')
 api.route(TaxDetail, 'tax_detail', '/tax/<int:id>', '/events/<int:event_id>/tax')
 api.route(TaxRelationship, 'tax_event', '/tax/<int:id>/relationships/event')
 

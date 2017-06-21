@@ -69,7 +69,7 @@ class TrackList(ResourceList):
         elif view_kwargs.get('identifier'):
             event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
             data['event_id'] = event.id
-        
+
         if data['font_color']:
             del data['font_color']
 
