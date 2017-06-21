@@ -15,6 +15,7 @@ from celery.signals import after_task_publish
 import logging
 import os.path
 from os import environ
+from envparse import env
 import sys
 from flask import Flask
 from app.settings import get_settings, get_setts
@@ -53,6 +54,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
+env.read_envfile()
+
 
 class ReverseProxied(object):
     """
@@ -78,7 +81,7 @@ def create_app():
     BlueprintsManager.register(app)
     Migrate(app, db)
 
-    app.config.from_object(environ.get('APP_CONFIG', 'config.ProductionConfig'))
+    app.config.from_object(env('APP_CONFIG', default='config.ProductionConfig'))
     db.init_app(app)
     _manager = Manager(app)
     _manager.add_command('db', MigrateCommand)
