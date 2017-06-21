@@ -53,6 +53,7 @@ from app.models.user import User, ATTENDEE
 from app.helpers.signals import sessions_modified, speakers_modified
 from app.models.user_permission import UserPermission
 from app.models.users_events_role import UsersEventsRoles
+from app.models.event_type import EventType
 
 
 class DataManager(object):
