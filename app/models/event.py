@@ -61,7 +61,7 @@ class Event(db.Model):
     large_image_url = db.Column(db.String)
     icon_image_url = db.Column(db.String)
     organizer_name = db.Column(db.String)
-    is_map_shown = db.Column(db.Integer)
+    is_map_shown = db.Column(db.Boolean)
     organizer_description = db.Column(db.String)
     is_sessions_speakers_enabled = db.Column(db.Boolean, default=False)
     track = db.relationship('Track', backref="event")
@@ -130,7 +130,7 @@ class Event(db.Model):
                  code_of_conduct=None,
                  schedule_published_on=None,
                  is_sessions_speakers_enabled=False,
-                 is_map_shown=1,
+                 is_map_shown=True,
                  searchable_location_name=None,
                  is_ticketing_enabled=None,
                  deleted_at=None,
