@@ -64,7 +64,17 @@ def after_each(transaction):
         db.session.remove()
 
 
-# USERS
+# ------------------------- Authentication -------------------------
+
+@hooks.before("Authentication > JWT Authentication > Authenticate and generate token")
+def skip_auth(transaction):
+    transaction['skip'] = True
+
+
+# ------------------------- Users -------------------------
+
+@hooks.before("Users > Users Collection > List All Users")
+def user_get_list(transaction):
 
 @hooks.before("Users > User Details > Get Details")
 def user_get_detail(transaction):
