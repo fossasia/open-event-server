@@ -170,17 +170,18 @@ def populate():
     print('Creating admin message settings...')
     create_admin_message_settings()
 
-    def populate_without_print():
-        """
-        Create defined Roles, Services and Permissions.
-        """
-        create_roles()
-        create_services()
-        create_permissions()
-        create_custom_sys_roles()
-        create_panel_permissions()
-        create_user_permissions()
-        create_admin_message_settings()
+
+def populate_without_print():
+    """
+    Create defined Roles, Services and Permissions.
+    """
+    create_roles()
+    create_services()
+    create_permissions()
+    create_custom_sys_roles()
+    create_panel_permissions()
+    create_user_permissions()
+    create_admin_message_settings()
 
     db.session.commit()
 
