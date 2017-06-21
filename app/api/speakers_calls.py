@@ -49,24 +49,25 @@ class SpeakersCallSchema(Schema):
 
 class SpeakersCallList(ResourceList):
     """
-    List and create Speakers Call
+    create Speakers Call
     """
-
-    def query(self, view_kwargs):
-        query_ = self.session.query(SpeakersCall)
-        if view_kwargs.get('event_id'):
-            query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
-        elif view_kwargs.get('event_identifier'):
-            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['event_identifier'])
-        return query_
-
     def before_create_object(self, data, view_kwargs):
         if view_kwargs.get('event_id'):
-            event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
-            data['event_id'] = event.id
+            try:
+                event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_id'},
+                                     "Event: {} not found".format(view_kwargs['event_id']))
+            else:
+                data['event_id'] = event.id
         elif view_kwargs.get('event_identifier'):
-            event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
-            data['event_id'] = event.id
+            try:
+                event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_identifier'},
+                                     "Event: {} not found".format(view_kwargs['event_identifier']))
+            else:
+                data['event_id'] = event.id
 
     view_kwargs = True
     decorators = (jwt_required, )
@@ -75,7 +76,6 @@ class SpeakersCallList(ResourceList):
     data_layer = {'session': db.session,
                   'model': SpeakersCall,
                   'methods': {
-                      'query': query,
                       'before_create_object': before_create_object
                   }}
 
