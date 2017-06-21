@@ -48,8 +48,8 @@ For using the API you need(mostly) to register as an user. Registering gives you
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
-    + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter(optional, string, `[{"is-super-admin":"true"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + sort (optional, string, `email`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter(optional, string, ``) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Users [GET]
 Get a list of Users.
@@ -65,47 +65,74 @@ Get a list of Users.
 + Response 200 (application/vnd.api+json)
 
         {
-          "meta": {
-            "count": 1
-          },
-          "data": [
-            {
-              "attributes": {
-                "created-at": "2017-06-01T01:24:47.500127+00:00",
-                "google": null,
-                "instagram": null,
-                "firstname": null,
-                "lastname": null,
-                "twitter": null,
-                "signup-at": "2017-06-01T01:25:07.385816+00:00",
-                "is-super-admin": true,
-                "thumbnail": null,
-                "email": "me@ipiyush.com",
-                "avatar": null,
-                "contact": null,
-                "is-admin": true,
-                "details": null,
-                "last-accessed-at": null,
-                "small": null,
-                "facebook": null,
-                "deleted-at": null,
-                "is-verified": true,
-                "avatar-uploaded": null,
-                "icon": null
-              },
-              "type": "user",
-              "id": "1",
-              "links": {
-                "self": "/v1/users/1"
-              }
+            "meta": {
+                "count": 2
+            },
+            "data": [
+                {
+                    "attributes": {
+                        "is-admin": true,
+                        "last-name": null,
+                        "instagram-url": null,
+                        "is-super-admin": true,
+                        "thumbnail-image-url": null,
+                        "created-at": "2017-06-21T20:18:12.827128+00:00",
+                        "last-accessed-at": null,
+                        "email": "open_event_test_user@fossasia.org",
+                        "icon-image-url": null,
+                        "contact": null,
+                        "deleted-at": null,
+                        "small-image-url": null,
+                        "facebook-url": null,
+                        "details": null,
+                        "is-verified": true,
+                        "first-name": null,
+                        "avatar-url": null,
+                        "twitter-url": null,
+                        "google-plus-url": null
+                    },
+                    "type": "user",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/users/1"
+                    }
+                },
+                {
+                    "attributes": {
+                        "is-admin": false,
+                        "last-name": "Doe",
+                        "instagram-url": "http://instagram.com/instagram",
+                        "is-super-admin": false,
+                        "thumbnail-image-url": "http://example.com/example.png",
+                        "created-at": "2017-06-21T20:33:33.186358+00:00",
+                        "last-accessed-at": null,
+                        "email": "example@example.com",
+                        "icon-image-url": "http://example.com/example.png",
+                        "contact": "example",
+                        "deleted-at": null,
+                        "small-image-url": "http://example.com/example.png",
+                        "facebook-url": "http://facebook.com/facebook",
+                        "details": "example",
+                        "is-verified": false,
+                        "first-name": "John",
+                        "avatar-url": "http://example.com/example.png",
+                        "twitter-url": "http://twitter.com/twitter",
+                        "google-plus-url": "http://plus.google.com/plus.google"
+                    },
+                    "type": "user",
+                    "id": "2",
+                    "links": {
+                        "self": "/v1/users/2"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/users"
+>>>>>>> Add correct requests and responses according to dredd testing in apib
             }
-          ],
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/users"
-          }
         }
 
 
@@ -219,53 +246,62 @@ Authorized user should be same as user in request body or must be admin.
             {
               "data": {
                 "attributes": {
-                  "name": "Open Event User",
-                  "email": "example@example.com",
-                  "password": "12345678"
+                  "password": "password1",
+                  "avatar_url": "http://example1.com/example1.png",
+                  "first-name": "Jane",
+                  "last-name": "Dough",
+                  "details": "example1",
+                  "contact": "example1",
+                  "facebook-url": "http://facebook.com/facebook1",
+                  "twitter-url": "http://twitter.com/twitter1",
+                  "instagram-url": "http://instagram.com/instagram1",
+                  "google-plus-url": "http://plus.google.com/plus.google1",
+                  "thumbnail-image-url": "http://example1.com/example1.png",
+                  "small-image-url": "http://example1.com/example1.png",
+                  "icon-image-url": "http://example1.com/example1.png"
                 },
-                "type": "user"
+                "type": "user",
+                "id": "2"
               }
             }
 
 + Response 200 (application/vnd.api+json)
 
         {
-          "data": {
-            "attributes": {
-              "created-at": "2017-06-01T01:24:47.500127+00:00",
-              "google": null,
-              "instagram": null,
-              "firstname": null,
-              "lastname": null,
-              "twitter": null,
-              "signup-at": "2017-06-01T01:25:07.385816+00:00",
-              "is-super-admin": true,
-              "thumbnail": null,
-              "email": "me@ipiyush.com",
-              "avatar": null,
-              "contact": null,
-              "is-admin": true,
-              "details": null,
-              "last-accessed-at": null,
-              "small": null,
-              "facebook": null,
-              "deleted-at": null,
-              "is-verified": true,
-              "avatar-uploaded": null,
-              "icon": null
+            "data": {
+                "attributes": {
+                    "is-admin": false,
+                    "last-name": "Dough",
+                    "instagram-url": "http://instagram.com/instagram1",
+                    "is-super-admin": false,
+                    "thumbnail-image-url": "http://example1.com/example1.png",
+                    "created-at": "2017-06-21T19:50:57.493620+00:00",
+                    "last-accessed-at": null,
+                    "email": "example@example.com",
+                    "icon-image-url": "http://example1.com/example1.png",
+                    "contact": "example1",
+                    "deleted-at": null,
+                    "small-image-url": "http://example1.com/example1.png",
+                    "facebook-url": "http://facebook.com/facebook1",
+                    "details": "example1",
+                    "is-verified": false,
+                    "first-name": "Jane",
+                    "avatar-url": "http://example1.com/example1.png",
+                    "twitter-url": "http://twitter.com/twitter1",
+                    "google-plus-url": "http://plus.google.com/plus.google1"
+                },
+                "type": "user",
+                "id": "2",
+                "links": {
+                    "self": "/v1/users/2"
+                }
             },
-            "type": "user",
-            "id": "1",
+            "jsonapi": {
+                "version": "1.0"
+            },
             "links": {
-              "self": "/v1/users/1"
+                "self": "/v1/users/2"
             }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/users/1"
-          }
         }
 
 ### Delete User [DELETE]
@@ -329,17 +365,17 @@ Get a list of Event Types.
               "relationships": {
                 "events": {
                   "links": {
-                    "self": "/v1/event-types/10/relationships/events", 
+                    "self": "/v1/event-types/10/relationships/events",
                     "related": "/v1/event-types/10/events"
                   }
                 }
-              }, 
+              },
               "attributes": {
-                "name": "Camp, Treat & Retreat", 
+                "name": "Camp, Treat & Retreat",
                 "slug": "camp-treat-retreat"
-              },   
-              "type": "event-type", 
-              "id": "10", 
+              },
+              "type": "event-type",
+              "id": "10",
               "links": {
                 "self": "/v1/event-types/10"
               }
@@ -381,24 +417,24 @@ Create a new event type with name.
               "relationships": {
                 "events": {
                   "links": {
-                    "self": "/v1/event-types/11/relationships/events", 
+                    "self": "/v1/event-types/11/relationships/events",
                     "related": "/v1/event-types/11/events"
                   }
                 }
-              }, 
+              },
               "attributes": {
-                "name": "Camp, Treat & Retreat", 
+                "name": "Camp, Treat & Retreat",
                 "slug": "camp-treat-retreat"
               }, "
-              type": "event-type", 
-              "id": "11", 
+              type": "event-type",
+              "id": "11",
               "links": {
                 "self": "/v1/event-types/11"
               }
-            }, 
+            },
             "jsonapi": {
               "version": "1.0"
-            }, 
+            },
             "links": {
               "self": "/v1/event-types/11"
             }
@@ -424,7 +460,7 @@ Get a single event type.
         {
           "data": {
             "attributes": {
-              "name": "Camp, Treat & Retreat", 
+              "name": "Camp, Treat & Retreat",
               "slug": "camp-treat-retreat"
             },
             "type": "event-type",
@@ -471,7 +507,7 @@ Authorized user must be admin.
         {
           "data": {
             "attributes": {
-              "name": "Camp, Treat & Retreat", 
+              "name": "Camp, Treat & Retreat",
               "slug": "camp-treat-retreat"
             },
             "type": "event-type",
@@ -508,7 +544,7 @@ Delete a single event type.
           "jsonapi": {
             "version": "1.0"
           }
-        }        
+        }
 
 # Group Event Topics
 
@@ -549,17 +585,17 @@ Get a list of Event Topics.
               "relationships": {
                 "events": {
                   "links": {
-                    "self": "/v1/event-topics/10/relationships/events", 
+                    "self": "/v1/event-topics/10/relationships/events",
                     "related": "/v1/event-topics/10/events"
                   }
                 }
-              }, 
+              },
               "attributes": {
-                "name": "Travel & Outdoor", 
+                "name": "Travel & Outdoor",
                 "slug": "travel-outdoor"
-              },   
-              "type": "event-topic", 
-              "id": "10", 
+              },
+              "type": "event-topic",
+              "id": "10",
               "links": {
                 "self": "/v1/event-topics/10"
               }
@@ -601,24 +637,24 @@ Create a new event topic with name.
               "relationships": {
                 "events": {
                   "links": {
-                    "self": "/v1/event-topics/11/relationships/events", 
+                    "self": "/v1/event-topics/11/relationships/events",
                     "related": "/v1/event-topics/11/events"
                   }
                 }
-              }, 
+              },
               "attributes": {
-                "name": "Travel & Outdoor", 
+                "name": "Travel & Outdoor",
                 "slug": "travel-outdoor"
               }, "
-              type": "event-topic", 
-              "id": "11", 
+              type": "event-topic",
+              "id": "11",
               "links": {
                 "self": "/v1/event-topics/11"
               }
-            }, 
+            },
             "jsonapi": {
               "version": "1.0"
-            }, 
+            },
             "links": {
               "self": "/v1/event-topics/11"
             }
@@ -644,7 +680,7 @@ Get a single event topic.
         {
           "data": {
             "attributes": {
-              "name": "Travel & Outdoor", 
+              "name": "Travel & Outdoor",
               "slug": "travel-outdoor"
             },
             "type": "event-topic",
@@ -691,7 +727,7 @@ Authorized user must be admin.
         {
           "data": {
             "attributes": {
-              "name": "Travel & Outdoor", 
+              "name": "Travel & Outdoor",
               "slug": "travel-outdoor"
             },
             "type": "event-type",
@@ -728,7 +764,7 @@ Delete a single event topic.
           "jsonapi": {
             "version": "1.0"
           }
-        } 
+        }
 
 # Group Events
 These endpoints help you to create the basic event structure. To add other parts of the event such as ticket, sponsor, copyright, etc. there are separate endpoints.
@@ -840,21 +876,21 @@ Get a list of events.
                     "related": "/v1/events/12/session-types"
                   }
                 },
-                "event-type": { 
+                "event-type": {
                   "links": {
-                    "self": "/v1/events/12/relationships/event-type", 
+                    "self": "/v1/events/12/relationships/event-type",
                     "related": "/v1/events/12/event-type"
                   }
                 },
                 "event-topic": {"
                   links": {
-                    "self": "/v1/events/12/relationships/event-topic", 
+                    "self": "/v1/events/12/relationships/event-topic",
                     "related": "/v1/events/12/event-topic"
                   }
-                }, 
+                },
                 "discount-codes": {
                   "links": {
-                    "self": "/v1/events/12/relationships/discount-codes", 
+                    "self": "/v1/events/12/relationships/discount-codes",
                     "related": "/v1/events/12/discount-codes"
                   }
                 }
@@ -952,21 +988,21 @@ Get a list of events.
                     "related": "/v1/events/11/session-types"
                   }
                 }
-                "event-type": { 
+                "event-type": {
                   "links": {
-                    "self": "/v1/events/12/relationships/event-type", 
+                    "self": "/v1/events/12/relationships/event-type",
                     "related": "/v1/events/12/event-type"
                   }
-                }, 
+                },
                 "event-topic": {"
                   links": {
-                    "self": "/v1/events/12/relationships/event-topic", 
+                    "self": "/v1/events/12/relationships/event-topic",
                     "related": "/v1/events/12/event-topic"
                   }
-                }, 
+                },
                 "discount-codes": {
                   "links": {
-                    "self": "/v1/events/12/relationships/discount-codes", 
+                    "self": "/v1/events/12/relationships/discount-codes",
                     "related": "/v1/events/12/discount-codes"
                   }
                 }
@@ -1102,21 +1138,21 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timzone` and an opti
                   "related": "/v1/events/12/session-types"
                 }
               }
-              "event-type": { 
+              "event-type": {
                 "links": {
-                  "self": "/v1/events/12/relationships/event-type", 
+                  "self": "/v1/events/12/relationships/event-type",
                   "related": "/v1/events/12/event-type"
                 }
-              }, 
+              },
               "event-topic": {"
                 links": {
-                  "self": "/v1/events/12/relationships/event-topic", 
+                  "self": "/v1/events/12/relationships/event-topic",
                   "related": "/v1/events/12/event-topic"
                 }
-              }, 
+              },
               "discount-codes": {
                 "links": {
-                  "self": "/v1/events/12/relationships/discount-codes", 
+                  "self": "/v1/events/12/relationships/discount-codes",
                   "related": "/v1/events/12/discount-codes"
                 }
               }
@@ -1241,21 +1277,21 @@ Get a single event.
                   "related": "/v1/events/13/session-types"
                 }
               }
-              "event-type": { 
+              "event-type": {
                 "links": {
-                  "self": "/v1/events/12/relationships/event-type", 
+                  "self": "/v1/events/12/relationships/event-type",
                   "related": "/v1/events/12/event-type"
                 }
               },
               "event-topic": {"
                 links": {
-                  "self": "/v1/events/12/relationships/event-topic", 
+                  "self": "/v1/events/12/relationships/event-topic",
                   "related": "/v1/events/12/event-topic"
                 }
-              },  
+              },
               "discount-codes": {
                   "links": {
-                  "self": "/v1/events/12/relationships/discount-codes", 
+                  "self": "/v1/events/12/relationships/discount-codes",
                   "related": "/v1/events/12/discount-codes"
                 }
               }
@@ -1402,21 +1438,21 @@ All other fields are optional. Add attributes you want to modify.
                   "related": "/v1/events/13/session-types"
                 }
               }
-              "event-type": { 
+              "event-type": {
                 "links": {
-                  "self": "/v1/events/12/relationships/event-type", 
+                  "self": "/v1/events/12/relationships/event-type",
                   "related": "/v1/events/12/event-type"
                 }
-              }, 
+              },
               "event-topic": {"
                 links": {
-                  "self": "/v1/events/12/relationships/event-topic", 
+                  "self": "/v1/events/12/relationships/event-topic",
                   "related": "/v1/events/12/event-topic"
                 }
-              }, 
+              },
               "discount-codes": {
                 "links": {
-                  "self": "/v1/events/12/relationships/discount-codes", 
+                  "self": "/v1/events/12/relationships/discount-codes",
                   "related": "/v1/events/12/discount-codes"
                 }
               }
