@@ -6,26 +6,30 @@ services:
 addons:
   apt:
     packages:
-    - python-dev
-    - libssl-dev
-    - libffi-dev
+      - python-dev
+      - libssl-dev
+      - libffi-dev
 python:
-  - "2.7"
+  - '2.7'
+before-install:
+  - npm -g install npm@latest
 install:
-- pip install -r requirements/tests.txt
-# Environment variables
+  - npm install -g dredd@4.0.0
+  - pip install -r requirements/tests.txt
 env:
-- APP_CONFIG="config.TestingConfig" PATH=$PATH:${HOME}/google-cloud-sdk/bin CLOUDSDK_CORE_DISABLE_PROMPTS=1
+  - >-
+    APP_CONFIG="config.TestingConfig" PATH=$PATH:${HOME}/google-cloud-sdk/bin
+    CLOUDSDK_CORE_DISABLE_PROMPTS=1
 before_script:
   - psql -c 'create database test;' -U postgres
-  - export DATABASE_URL=postgresql://postgres@localhost:5432/test
-  - python manage.py initialize_db -c open_event_test_user@fossasia.org:fossasia
-# command to run tests
+  - 'export DATABASE_URL=postgresql://postgres@localhost:5432/abc'
+  - 'export TEST_DATABASE_URL=postgresql://postgres@localhost:5432/test'
+  - 'python manage.py initialize_db -c open_event_test_user@fossasia.org:fossasia'
+  - dredd
 script:
   - nosetests tests/unittests -v --with-coverage
-# upload coverage
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - 'bash <(curl -s https://codecov.io/bash)'
   - bash scripts/push_api_docs.sh
   - bash kubernetes/travis/deploy.sh
   - bash kubernetes/travis/deploy-staging.sh

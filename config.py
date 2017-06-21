@@ -57,7 +57,7 @@ class Config(object):
     SOFT_DELETE = True
 
     if not SQLALCHEMY_DATABASE_URI:
-        print '`DATABASE_URL` either not exported or empty'
+        print('`DATABASE_URL` either not exported or empty')
         exit()
 
     BASE_DIR = basedir
@@ -113,9 +113,10 @@ class TestingConfig(Config):
     """
     The configuration for a test suit
     """
-    TESTING = False
+    TESTING = True
     CELERY_ALWAYS_EAGER = True
     CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
     SQLALCHEMY_RECORD_QUERIES = True
     DEBUG_TB_ENABLED = False
     BROKER_BACKEND = 'memory'
+    SQLALCHEMY_DATABASE_URI = env('TEST_DATABASE_URL', default=None)
