@@ -541,7 +541,7 @@ Get a list of events.
                 "bank-details": null,
                 "cheque-details": null,
                 "is-sessions-speakers-enabled": false,
-                "identifier": "cde06485",
+                "identifier": "b8324ae2",
                 "ends-at": "2017-06-04T18:30:00+00:00"
               },
               "type": "event",
@@ -574,8 +574,8 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timzone` and an opti
             {
               "data": {
                 "attributes": {
-                  "event-url": "http://eventyay.com/zbcd",
-                  "identifier": "1234",
+                  "event-url": "http://eventyay.com/b8324ae2",
+                  "identifier": "b8324ae2",
                   "name": "New Event",
                   "starts-at": "2017-06-01T18:30:00+00:00",
                   "ends-at": "2017-06-05T18:30:00+00:00"
@@ -691,9 +691,9 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timzone` and an opti
         }
 
 
-## Event Details [/v1/events/{event_id}]
+## Event Details [/v1/events/{event_identifier}]
 + Parameters
-    + event_id: 1 (integer) - ID of the event in the form of an integer
+    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
 
 ### Event Details [GET]
 Get a single event.
@@ -795,7 +795,7 @@ Get a single event.
               "bank-details": null,
               "cheque-details": null,
               "is-sessions-speakers-enabled": false,
-              "identifier": "99c4d267",
+              "identifier": "b8324ae2",
               "ends-at": "2017-06-04T18:30:00+00:00"
             },
             "type": "event",
@@ -832,8 +832,8 @@ All other fields are optional. Add attributes you want to modify.
             {
               "data": {
                 "attributes": {
-                  "event-url": "http://eventyay.com/zbcd",
-                  "identifier": "1234",
+                  "event-url": "http://eventyay.com/b8324ae2",
+                  "identifier": "b8324ae2",
                   "name": "Changed Name",
                   "starts-at": "2017-06-11T00:00:00+05:30",
                   "ends-at": "2017-06-12T00:00:00+05:30"
@@ -937,7 +937,7 @@ All other fields are optional. Add attributes you want to modify.
               "bank-details": null,
               "cheque-details": null,
               "is-sessions-speakers-enabled": false,
-              "identifier": "99c4d267",
+              "identifier": "b8324ae2",
               "ends-at": "2017-06-11T18:30:00+00:00"
             },
             "type": "event",
@@ -988,9 +988,9 @@ Data related to event copyright information.
 | `licence-url` | URL of the licence location | string | -  |
 | `logo-url` | URL of the logo for the Licence | string | -  |
 
-## Event Copyright [/v1/events/{event_id}/event-copyright{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Event Copyright [/v1/events/{event_identifier}/event-copyright{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id: 1 (integer) - ID of the specific event in integer
+    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `year`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
@@ -1265,9 +1265,9 @@ Data related to an invoice for the event.
 | `completed-at` | Completion of Invoice Order | ISO 8601 (tz-aware) | - |
 | `paid-via` | Payment procedure | string | - |
 
-## Event Invoices [/v1/events/{event_id}/event-invoices{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Event Invoices [/v1/events/{event_identifier}/event-invoices{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id: 1 (integer) - ID of the specific event in integer
+    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
@@ -1614,9 +1614,9 @@ Data related to all the microlocations for the various sessions of the event.
 | `floor` | Floor of the microlocation | integer | - |
 | `room` | Room of the microlocation | string | - |
 
-## Microlocation Collection [/v1/events/{event_id}/microlocations{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Microlocation Collection [/v1/events/{event_identifier}/microlocations{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id: 1 (integer) - ID of the specific event in integer
+    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `floor`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
@@ -1911,9 +1911,9 @@ Data related to all the sessions in the event.
 | `submitted-at` | Date the session was submitted | ISO 8601 (tz-aware) | - |
 | `is-mail-sent` | Yes/No for Session accept/reject email | boolean (default: `false`) | - |
 
-## Sessions Collection [/v1/events/{event_id}/sessions{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Sessions Collection [/v1/events/{event_identifier}/sessions{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id: 1 (integer) - ID of the specific event in integer
+    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
@@ -2317,9 +2317,9 @@ Data related to all the session types (such as talks, workshops, lightning talks
 | `name`  | Name of the Session Type | string | **yes** |
 | `length` | Length of the Session Type | string | - |
 
-## Session Type Collection [/v1/events/{event_id}/session-types{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Session Type Collection [/v1/events/{event_identifier}/session-types{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id: 1 (integer) - ID of the specific event in integer
+    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
@@ -2579,9 +2579,9 @@ You can add various social links such as facebook, twitter, website, blog link, 
 | `name`  | Name of the Session Type | string | **yes** |
 | `link` | Url of the Social Link | string | **yes** |
 
-## Social Links Collection [/v1/events/{event_id}/social-links{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Social Links Collection [/v1/events/{event_identifier}/social-links{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id: 1 (integer) - ID of the specific event in integer
+    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
@@ -2816,9 +2816,9 @@ Announcement for call for speaker to accept session proposals from speakers.
 | `hash` | Hash for speakers call | string | - |
 | `privacy` | Privacy of speakers call | string | - |
 
-## Create Speakers Call for an Event [/v1/events/{event_id}/speakers-calls{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Create Speakers Call for an Event [/v1/events/{event_identifier}/speakers-calls{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id: 1 (integer) - ID of the specific event in integer
+    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `starts-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
@@ -3087,9 +3087,9 @@ Data related to the various sponsors with their level, url and images associated
 | `level` | Level of the sponsor | string | - |
 | `type` | The type of the sponsor | string | - |
 
-## Sponsors Collection [/v1/events/{event_id}/sponsors{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Sponsors Collection [/v1/events/{event_identifier}/sponsors{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id: 1 (integer) - ID of the specific event in integer
+    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `level`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
@@ -3357,9 +3357,9 @@ Related to any tax related information that might be related with the tickets fo
 | `is-invoice-sent` | Yes/No for Session accept/reject email | boolean (default: `false`) | - |
 | `is-tax-included` | Yes/No for Session accept/reject email | boolean (default: `false`) | - |
 
-## Tax Collection [/v1/events/{event_id}/tax{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Tax Collection [/v1/events/{event_identifier}/tax{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id: 1 (integer) - ID of the specific event in integer
+    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `tax-rate`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
@@ -3646,9 +3646,9 @@ Related to tickets (free, paid, donation) to the event.
 | `is-hidden` | Yes/No to hide ticket | boolean (default: `false`) | - |
 | `is-fee-absorbed` | Yes/No for ticket absorption | boolean (default: `false`) | - |
 
-## Tickets Collection [/v1/events/{event_id}/tickets{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Tickets Collection [/v1/events/{event_identifier}/tickets{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id: 1 (integer) - ID of the specific event in integer
+    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `sales-starts-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
@@ -3952,9 +3952,9 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
 | `color` | Color code of the track | string | **yes** |
 | `font-color` | Font Color of the track **(black/white: no user role - automatically updated)** | string | - |
 
-## Tracks Collection [/v1/events/{event_id}/tracks]
+## Tracks Collection [/v1/events/{event_identifier}/tracks]
 + Parameters
-    + event_id: 1 (integer) - ID of the event in the form of an integer
+    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
 
 ### List All Tracks [GET]
 Get a list of Tracks.
@@ -4440,9 +4440,9 @@ Discount Codes related to the events.
 
 
 
-## Discount Code Collection [/events/{event_id}/discount-codes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Discount Code Collection [/v1/events/{event_identifier}/discount-codes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id: 1 (integer) - ID of the specific user in integer
+    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
@@ -4523,13 +4523,13 @@ Create a new Discount Code with event_id.
                   "discount-url": "https://my-discount-url.com",
                   "value": "100",
                   "type": "amount",
-                  "is_active": "false",
-                  "tickets_number": "404",
-                  "min_quantity": "0",
-                  "max_quantity": "100",
-                  "valid_from": "2017-06-18T18:30:00+00:00",
-                  "valid_till": "2017-06-24T18:30:00+00:00",
-                  "used_for": "Event"
+                  "is-active": "false",
+                  "tickets-number": "404",
+                  "min-quantity": "0",
+                  "max-quantity": "100",
+                  "valid-from": "2017-06-18T18:30:00+00:00",
+                  "valid-till": "2017-06-24T18:30:00+00:00",
+                  "used-for": "Event"
                 },
                 "type": "discount-code"
               }
@@ -4664,13 +4664,13 @@ Update a single discount code with `id`.
                   "discount-url": "https://my-discount-url.com",
                   "value": "50",
                   "type": "percent",
-                  "is_active": "false",
-                  "tickets_number": "404",
-                  "min_quantity": "0",
-                  "max_quantity": "100",
-                  "valid_from": "2017-06-18T18:30:00+00:00",
-                  "valid_till": "2017-06-24T18:30:00+00:00",
-                  "used_for": "Event"
+                  "is-active": "false",
+                  "tickets-number": "404",
+                  "min-quantity": "0",
+                  "max-quantity": "100",
+                  "valid-from": "2017-06-18T18:30:00+00:00",
+                  "valid-till": "2017-06-24T18:30:00+00:00",
+                  "used-for": "Event"
                 },
                 "type": "discount-code",
                 "id": "1"
