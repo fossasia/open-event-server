@@ -59,7 +59,7 @@ class Speaker(db.Model):
                  heard_from=None,
                  sponsorship_required=None,
                  event_id=None,
-                 user=None):
+                 user_id=None):
         self.name = name
         self.photo = photo
         self.thumbnail = thumbnail
@@ -86,7 +86,7 @@ class Speaker(db.Model):
         self.event_id = event_id
         # ensure links are in social fields
         self.ensure_social_links()
-        self.user = user
+        self.user_id = user_id
 
     @staticmethod
     def get_service_name():

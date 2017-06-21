@@ -5,7 +5,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.utilities import dasherize
-from app.api.helpers.permissions import jwt_required, is_coorganizer
+from app.api.helpers.permissions import jwt_required, is_coorganizer, current_identity
 from app.models import db
 from app.models.speaker import Speaker
 from app.models.session import Session
@@ -74,6 +74,10 @@ class SpeakerList(ResourceList):
             query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
         return query_
 
+    def before_post(self, data, view_kwargs):
+        # data['user_id'] = current_identity.id
+        view_kwargs['user_id'] = current_identity.id
+
     def before_create_object(self, data, view_kwargs):
         if view_kwargs.get('event_id'):
             event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
@@ -81,6 +85,8 @@ class SpeakerList(ResourceList):
         elif view_kwargs.get('identifier'):
             event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
             data['event_id'] = event.id
+        data['user_id'] = current_identity.id
+        print(data)
 
     view_kwargs = True
     decorators = (jwt_required,)
@@ -89,7 +95,8 @@ class SpeakerList(ResourceList):
                   'model': Speaker,
                   'methods': {
                       'query': query,
-                      'before_create_object': before_create_object
+                      'before_create_object': before_create_object,
+                      'before_post': before_post
                   }}
 
 

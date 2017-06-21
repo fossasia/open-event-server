@@ -90,7 +90,6 @@ class UserDetail(ResourceDetail):
     """
     User detail by id
     """
-
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('notification_id') is not None:
             try:
@@ -130,11 +129,12 @@ class UserDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
-    decorators = (is_user_itself,)
+    decorators = (api.has_permission('is_user_itself', methods="PATCH,DELETE", fetch="id", fetch_as="user_id"),)
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User,
-                  'methods': {'before_get_object': before_get_object}}
+                  'methods': {'before_get_object': before_get_object
+                              }}
 
 
 class UserRelationship(ResourceRelationship):

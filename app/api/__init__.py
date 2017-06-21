@@ -196,8 +196,8 @@ api.route(EventTypeDetail, 'event_type_detail', '/event-types/<int:id>', '/event
 api.route(EventTypeRelationship, 'event_type_event', '/event-types/<int:id>/relationships/events')
 # speakers
 api.route(SpeakerList, 'speaker_list', '/events/<int:event_id>/speakers', '/events/<identifier>/speakers')
-api.route(SpeakerDetail, 'speaker_detail', '/speakers/<int:id>', '/sessions/<int:session_id>/speakers',
-          '/users/<int:user_id>/speakers')
+api.route(SpeakerDetail, 'speaker_detail', '/speakers/<int:id>', '/sessions/<int:session_id>/speaker',
+          '/users/<int:user_id>/speaker')
 api.route(SpeakerRelationship, 'speaker_event', '/speakers/<int:id>/relationships/event')
 api.route(SpeakerRelationship, 'speaker_user', '/speakers/<int:id>/relationships/user')
 api.route(SpeakerRelationship, 'speaker_session', '/speakers/<int:id>/relationships/sessions')

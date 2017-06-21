@@ -118,6 +118,9 @@ class SessionList(ResourceList):
         if view_kwargs.get('speaker_id') is not None:
             query_ = query_.join(Speaker).filter(
                 Speaker.id == view_kwargs['speaker_id'])
+        if view_kwargs.get('speaker_id'):
+            query_ = Speaker.query.filter(Speaker.sessions.any(
+                id=view_kwargs['speaker_id']))
         return query_
 
     def before_create_object(self, data, view_kwargs):
@@ -131,14 +134,14 @@ class SessionList(ResourceList):
                 data['event_id'] = event.id
 
         if view_kwargs.get('speaker_id'):
-            speaker = self.session.query(Speaker).filter_by(
-                id=view_kwargs['speaker_id']).one()
+            speaker = Speaker.query.filter(Speaker.sessions.any(
+                id=view_kwargs['speaker_id'])).one()
             data['speaker_id'] = speaker.id
 
     view_kwargs = True
     decorators = (api.has_permission('is_coorganizer', fetch="event_id",
-                  fetch_as="event_id", methods="POST",
-                  check=lambda a: a.get('event_id') or a.get('event_identifier')), )
+                                     fetch_as="event_id", methods="POST",
+                                     check=lambda a: a.get('event_id') or a.get('event_identifier')),)
     schema = SessionSchema
     data_layer = {'session': db.session,
                   'model': Session,
@@ -152,6 +155,7 @@ class SessionDetail(ResourceDetail):
     """
     Session detail by id
     """
+
     def before_get_object(self, data, view_kwargs):
         if view_kwargs.get('event_identifier'):
             try:
@@ -163,18 +167,21 @@ class SessionDetail(ResourceDetail):
                 view_kwargs['event_id'] = event.id
 
         if view_kwargs.get('speaker_id'):
-            speaker = self.session.query(Speaker).filter_by(
-                id=view_kwargs['speaker_id']).one()
+            print("in resource detail")
+            speaker = Speaker.query.filter(Speaker.sessions.any(
+                id=view_kwargs['speaker_id'])).one()
             data['speaker_id'] = speaker.id
 
     decorators = (api.has_permission('is_coorganizer', fetch="event_id",
-                                                       fetch_as="event_id",
-                                                       model=Session,
-                                                       methods="PATCH,DELETE"),)    schema = SessionSchema
+                                     fetch_as="event_id",
+                                     model=Session,
+                                     methods="PATCH,DELETE"),)
+    schema = SessionSchema
     data_layer = {'session': db.session,
                   'model': Session,
                   'methods': {
                       'before_get_object': before_get_object}}
+
 
 class SessionRelationship(ResourceRelationship):
     """
