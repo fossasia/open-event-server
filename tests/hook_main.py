@@ -87,8 +87,6 @@ def user_get_list(transaction):
     :return:
     """
     with stash['app'].app_context():
-        super_admin = User.query.filter_by(id=1).first()
-        db.session.delete(super_admin)
         user = UserFactory()
         db.session.add(user)
         db.session.commit()
@@ -329,7 +327,7 @@ def microlation_get_detail(transaction):
 def microlocation_patch(transaction):
     """
     PATCH /microlocations/1
-    :param transcation:
+    :param transaction:
     :return:
     """
     transaction['skip'] = True
@@ -598,9 +596,19 @@ def tax_get_list(transaction):
 
 
 @hooks.before("Tax > Tax Collection > Create Tax")
-def tax_get_list(transaction):
+def tax_post(transaction):
     """
     GET /tax/1
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Tax > Tax Details > Tax Details")
+def tax_get_detail(transaction):
+    """
+    PATCH /tax/1
     :param transaction:
     :return:
     """
@@ -707,6 +715,16 @@ def track_get_detail(transaction):
     transaction['skip'] = True
 
 
+@hooks.before("Tracks > Track Detail > Update Track")
+def track_patch(transaction):
+    """
+    GET /tracks/1
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
 @hooks.before("Tracks > Track Detail > Delete Track")
 def track_delete(transaction):
     """
@@ -788,7 +806,7 @@ def image_size_post(transaction):
 
 
 @hooks.before("Image Size > Image Size Details > Get Image Size Details")
-def image_size_patch(transaction):
+def image_size_get_detail(transaction):
     """
     GET /image-sizes/1
     :param transaction:
@@ -818,7 +836,7 @@ def image_size_delete(transaction):
 
 
 @hooks.before("Pages > Page Collection > Page Sizes")
-def page_get_detail(transaction):
+def page_get_list(transaction):
     """
     GET /pages
     :param transaction:
