@@ -1,11 +1,15 @@
+import sys
+import os.path as path
 import dredd_hooks as hooks
 import requests
-from flask_migrate import Migrate, stamp
+sys.path.insert(1, path.abspath(path.join(__file__, "../..")))
 
+from flask_migrate import Migrate, stamp
 from flask import Flask
 from app.models import db
-from populate_db import populate
+from populate_db import populate_without_print
 from app.helpers.data import DataManager
+from app.factories.user_factory import UserFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -39,6 +43,8 @@ def obtain_token():
 @hooks.before_each
 def before_each(transaction):
     with stash['app'].app_context():
+        db.engine.execute("drop schema if exists public cascade")
+        db.engine.execute("create schema public")
         db.create_all()
         stamp()
         DataManager.create_super_admin(api_username, api_password)
@@ -56,5 +62,13 @@ def before_each(transaction):
 def after_each(transaction):
     with stash['app'].app_context():
         db.session.remove()
-        db.engine.execute("drop schema if exists public cascade")
-        db.engine.execute("create schema public")
+
+
+# USERS
+
+@hooks.before("Users > User Details > Get Details")
+def user_get_detail(transaction):
+    with stash['app'].app_context():
+        user = UserFactory()
+        db.session.add(user)
+        db.session.commit()
