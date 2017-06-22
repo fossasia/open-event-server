@@ -8,9 +8,7 @@ from flask_migrate import Migrate, stamp
 from flask import Flask
 from app.models import db
 from populate_db import populate_without_print
-from app.helpers.data import DataManager
-from app.factories.user_factory import UserFactory
-from app.models.user import User
+from app.factories.user import UserFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -899,6 +897,70 @@ def settings_get_list(transaction):
 def settings_post(transaction):
     """
     POST /settings
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+# ------------------------- Discount Codes -------------------------
+
+@hooks.before("Discount Codes > Discount Code Collection > List All Discount Codes")
+def discount_code_get_list(transaction):
+    """
+    GET /events/1/discount-codes
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Discount Codes > Discount Code Collection > Create Discount Code")
+def discount_code_post(transaction):
+    """
+    POST /events/1/discount-codes
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Discount Codes > Discount Code Detail > Discount Code Detail")
+def discount_code_get_detail(transaction):
+    """
+    GET /discount-codes/1
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Discount Codes > Discount Code Detail > Update Discount Code")
+def discount_code_patch(transaction):
+    """
+    PATCH /discount-codes/1
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Discount Codes > Discount Code Detail > Delete Discount Code")
+def discount_delete(transaction):
+    """
+    DELETE /discount-codes/1
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+# ------------------------- Upload -------------------------
+
+@hooks.before("Upload > Image Upload > Upload an Image in temporary location")
+def image_upload_post(transaction):
+    """
+
     :param transaction:
     :return:
     """
