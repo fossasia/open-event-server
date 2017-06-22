@@ -25,7 +25,7 @@ ssh-add deploy_key
 # clone and do
 git clone -b gh-pages "git@github.com:fossasia/open-event-orga-server.git" gh-pages
 rm -rf gh-pages/api/v1/*
-aglio --theme-variables slate -i docs/api/api_blueprint.apib -o gh-pages/api/v1/index.html
+aglio --theme-full-width --theme-variables slate -i docs/api/api_blueprint.apib -o gh-pages/api/v1/index.html
 cp -R docs/general/* gh-pages/_docs/
 cp -R docs/installation/* gh-pages/_installation/
 cd gh-pages
