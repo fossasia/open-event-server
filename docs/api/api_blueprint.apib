@@ -2891,10 +2891,13 @@ Create a new speakers call using an event_id.
           }
         }
 
-## Get Speakers Call for an Event [/v1/events/{event_id}/speakers-call?page,limit]
+## Get Speakers Call for an Event [/v1/events/{event_id}/speakers-call{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_id (integer) - ID of the specific event in integer
-
+    + event_id: 1 (integer) - ID of the specific event in integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `level`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[{"description":"string"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 ### Get Speakers Call [GET]
 
 + Request
@@ -5572,7 +5575,7 @@ This group of APIs contain endpoints for uploading media files. The workflow is 
 
 ## Image Upload [/v1/upload/image{?force_local}]
 
-A temporary cropped image is first uploaded using this endpoint. After saving the image in it's prefered storage (local, google storage, s3, etc.), the URL for the temporary image is returned as response. This URL is then sent as form data to the necessary API, where it is then downloaded and resized and stored according to the need. *`force_local` parameter can be set to __true__ to force storage in local.* 
+A temporary cropped image is first uploaded using this endpoint. After saving the image in it's prefered storage (local, google storage, s3, etc.), the URL for the temporary image is returned as response. This URL is then sent as form data to the necessary API, where it is then downloaded and resized and stored according to the need. *`force_local` parameter can be set to __true__ to force storage in local.*
 
 
 ### Upload an Image in temporary location [POST]
