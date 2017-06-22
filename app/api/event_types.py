@@ -27,7 +27,7 @@ class EventTypeSchema(Schema):
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
-    slug = fields.Str()
+    slug = fields.Str(dump_only=True)
     events = Relationship(attribute='event',
                           self_view='v1.event_type_event',
                           self_view_kwargs={'id': '<id>'},

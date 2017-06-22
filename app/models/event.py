@@ -74,7 +74,7 @@ class Event(db.Model):
     role_invites = db.relationship('RoleInvite', back_populates='event')
     privacy = db.Column(db.String, default="public")
     state = db.Column(db.String, default="Draft")
-    type = db.Column(db.String)
+    event_type_id = db.Column(db.Integer, db.ForeignKey('event_types.id', ondelete='CASCADE'))
     topic = db.Column(db.String)
     sub_topic = db.Column(db.String)
     ticket_url = db.Column(db.String)
@@ -101,8 +101,7 @@ class Event(db.Model):
     xcal_url = db.Column(db.String)
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
     discount_code = db.relationship('DiscountCode', backref='events')
-    event_type = db.relationship('EventType', backref="event")
-    event_type_id = db.Column(db.Integer, db.ForeignKey('event_types.id', ondelete='CASCADE'))
+    event_type = db.relationship('EventType', backref='event')
 
     def __init__(self,
                  name=None,
@@ -121,7 +120,7 @@ class Event(db.Model):
                  organizer_name=None,
                  organizer_description=None,
                  state=None,
-                 type=None,
+                 event_type_id=None,
                  privacy=None,
                  topic=None,
                  sub_topic=None,
@@ -151,8 +150,7 @@ class Event(db.Model):
                  xcal_url=None,
                  discount_code_id=None,
                  onsite_details=None,
-                 original_image_url=None,
-                 event_type_id=None):
+                 original_image_url=None):
 
         self.name = name
         self.logo = logo
@@ -173,7 +171,7 @@ class Event(db.Model):
         self.state = state
         self.is_map_shown = is_map_shown
         self.privacy = privacy
-        self.type = type
+        self.event_type_id = event_type_id
         self.topic = topic
         self.copyright = copyright
         self.sub_topic = sub_topic
@@ -202,7 +200,6 @@ class Event(db.Model):
         self.onsite_details = onsite_details
         self.discount_code_id = discount_code_id
         self.created_at = datetime.now(pytz.utc)
-        self.event_type_id = event_type_id
 
     def __repr__(self):
         return '<Event %r>' % self.name
