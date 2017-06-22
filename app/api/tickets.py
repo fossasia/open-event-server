@@ -22,11 +22,18 @@ class TicketSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    @validates_schema
-    def validate_date(self, data):
-        if data['sales_starts_at'] >= data['sales_ends_at']:
-            raise UnprocessableEntity({'pointer': '/data/attributes/sales-ends-at'},
-                                      "sales-ends-at should be after sales-starts-at")
+    @validates_schema(pass_original=True)
+    def validate_date(self, data, original_data):
+        ticket = Ticket.query.filter_by(id=original_data['data']['id']).one()
+
+        if 'starts_at' not in data:
+            data['starts_at'] = ticket.starts_at
+
+        if 'ends_at' not in data:
+            data['ends_at'] = ticket.ends_at
+
+        if data['starts_at'] >= data['ends_at']:
+            raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at")
 
     @validates_schema
     def validate_order_quantity(self, data):
@@ -112,13 +119,14 @@ class TicketDetail(ResourceDetail):
                     view_kwargs['id'] = None
 
     decorators = (jwt_required,
-                  api.has_permission('is_coorganizer', fetch='event_id',
-                                                       fetch_as="event_id",
-                                                       model=Ticket,
-                                                       methods="DELETE"), )
+                  api.has_permission('is_coorganizer', fetch='event_id', fetch_as="event_id", model=Ticket,
+                                     methods="DELETE"),)
     schema = TicketSchema
     data_layer = {'session': db.session,
-                  'model': Ticket}
+                  'model': Ticket,
+                  'methods':{
+                      'before_get_object': before_get_object
+                  }}
 
 
 class TicketRelationship(ResourceRelationship):
