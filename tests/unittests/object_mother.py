@@ -22,8 +22,7 @@ class ObjectMother(object):
                      location_name='India',
                      topic='Travel & Outdoor',
                      sub_topic='Climbing',
-                     is_sessions_speakers_enabled=True,
-                     type='Camp, Trip, or Retreat')
+                     is_sessions_speakers_enabled=True)
 
     @staticmethod
     def get_track(event_id=1):
