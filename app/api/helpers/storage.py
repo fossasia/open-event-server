@@ -149,7 +149,11 @@ def upload_local(uploaded_file, key, **kwargs):
     if not os.path.isdir(dir_path):
         os.makedirs(dir_path)
     uploaded_file.save(file_path)
-    return '/serve_' + file_relative_path
+    file_relative_path = '/' + file_relative_path
+    if get_settings()['static_domain']:
+        file_relative_path = get_settings()['static_domain'] + \
+            file_relative_path.replace('/static', '')
+    return file_relative_path
 
 
 def upload_to_aws(bucket_name, aws_region, aws_key, aws_secret, file, key, acl='public-read'):
