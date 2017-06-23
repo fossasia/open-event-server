@@ -153,8 +153,8 @@ api.route(SessionTypeRelationship, 'session_type_sessions', '/session-types/<int
 api.route(SessionTypeRelationship, 'session_type_event', '/session-types/<int:id>/relationships/event')
 
 # event_copyright
-api.route(EventCopyrightList, 'event_copyright_list', '/events/<int:id>/event-copyright',
-          '/events/<identifier>/event-copyright')
+api.route(EventCopyrightList, 'event_copyright_list', '/events/<int:event_id>/event-copyright',
+          '/events/<event_identifier>/event-copyright')
 api.route(EventCopyrightDetail, 'event_copyright_detail',
           '/event-copyright/<int:id>', '/events/<int:event_id>/event-copyright',
           '/events/<event_identifier>/event-copyright')

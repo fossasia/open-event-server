@@ -5,15 +5,16 @@ from marshmallow_jsonapi import fields
 from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
+from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.event_copyright import EventCopyright
 from app.models.event import Event
+from app.api.helpers.exceptions import UnprocessableEntity
 
 
 class EventCopyrightSchema(Schema):
-
     class Meta:
         type_ = 'event-copyright'
         self_view = 'v1.event_copyright_detail'
@@ -37,37 +38,50 @@ class EventCopyrightSchema(Schema):
 
 
 class EventCopyrightList(ResourceList):
-
-    def query(self, view_kwargs):
-        query_ = self.session.query(EventCopyright)
-        if view_kwargs.get('id'):
-            query_ = query_.join(Event).filter(Event.id == view_kwargs['id'])
-        elif view_kwargs.get('identifier'):
-            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
-        return query_
-
     def before_create_object(self, data, view_kwargs):
-        if view_kwargs.get('id'):
-            event = self.session.query(Event).filter_by(id=view_kwargs['id']).one()
-            data['event_id'] = event.id
-        elif view_kwargs.get('identifier'):
-            event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
+
+        # Permission Manager will ensure that event_id is fetched into
+        # view_kwargs from event_identifier
+        try:
+            event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
+        except NoResultFound:
+            raise ObjectNotFound({'parameter': 'event_identifier'},
+                                 'Event: {} not found'.format(view_kwargs['event_id']))
+        else:
             data['event_id'] = event.id
 
+        try:
+            self.session.query(EventCopyright).filter_by(event_id=data['event_id']).one()
+        except NoResultFound:
+            pass
+        else:
+            raise UnprocessableEntity({'parameter': 'event_identifier'},
+                                      "Event Copyright already exists for the provided Event ID")
+
+    methods = ['POST', ]
     view_kwargs = True
-    decorators = (jwt_required, )
+    decorators = (api.has_permission('is_coorganizer', fetch="event_id", fetch_as="event_id"),)
     schema = EventCopyrightSchema
     data_layer = {'session': db.session,
                   'model': EventCopyright,
                   'methods': {
-                      'query': query,
                       'before_create_object': before_create_object
                   }}
 
 
 class EventCopyrightDetail(ResourceDetail):
 
+    def before_patch(self, args, kwargs):
+        if kwargs.get('event_id'):
+            try:
+                event_copyright = EventCopyright.query.filter_by(event_id=kwargs['event_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event identifier'}, "Object: not found")
+            kwargs['id'] = event_copyright.id
+
+
     def before_get_object(self, view_kwargs):
+        # Permission Manager is not used for GET requests so need to fetch here the event ID 
         if view_kwargs.get('event_identifier'):
             try:
                 event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
@@ -77,7 +91,15 @@ class EventCopyrightDetail(ResourceDetail):
             else:
                 view_kwargs['event_id'] = event.id
 
-    decorators = (jwt_required, )
+        if view_kwargs.get('event_id'):
+            try:
+                event_copyright = self.session.query(EventCopyright).filter_by(event_id=view_kwargs['event_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event identifier'}, "Object: not found")
+            view_kwargs['id'] = event_copyright.id
+
+    decorators = (api.has_permission('is_coorganizer', fetch="event_id", fetch_as="event_id",
+                                     model=EventCopyright, methods="PATCH,DELETE"),)
     schema = EventCopyrightSchema
     data_layer = {'session': db.session,
                   'model': EventCopyright,
@@ -87,7 +109,7 @@ class EventCopyrightDetail(ResourceDetail):
 
 
 class EventCopyrightRelationship(ResourceRelationship):
-    decorators = (jwt_required, )
+    decorators = (jwt_required,)
     schema = EventCopyrightSchema
     data_layer = {'session': db.session,
                   'model': EventCopyright}
