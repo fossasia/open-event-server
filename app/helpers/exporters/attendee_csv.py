@@ -15,7 +15,7 @@ class AttendeeCsv:
         rows = [headers]
         for holder in holders:
             if holder['status'] != "deleted":
-                column = []
+                columns = []
                 for f in fields:
                     if type(holder.get(f, '')) == datetime.datetime:
                         columns.append(str(holder.get(f, '')))
