@@ -75,7 +75,7 @@ class Event(db.Model):
     privacy = db.Column(db.String, default="public")
     state = db.Column(db.String, default="Draft")
     event_type_id = db.Column(db.Integer, db.ForeignKey('event_types.id', ondelete='CASCADE'))
-    topic = db.Column(db.String)
+    event_topic_id = db.Column(db.Integer, db.ForeignKey('event_topics.id', ondelete='CASCADE'))
     sub_topic = db.Column(db.String)
     ticket_url = db.Column(db.String)
     db.UniqueConstraint('track.name')
@@ -102,6 +102,7 @@ class Event(db.Model):
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
     discount_code = db.relationship('DiscountCode', backref='events')
     event_type = db.relationship('EventType', backref='event')
+    event_topic = db.relationship('EventTopic', backref='event')
 
     def __init__(self,
                  name=None,
@@ -122,7 +123,7 @@ class Event(db.Model):
                  state=None,
                  event_type_id=None,
                  privacy=None,
-                 topic=None,
+                 event_topic_id=None,
                  sub_topic=None,
                  ticket_url=None,
                  copyright=None,
@@ -172,7 +173,7 @@ class Event(db.Model):
         self.is_map_shown = is_map_shown
         self.privacy = privacy
         self.event_type_id = event_type_id
-        self.topic = topic
+        self.event_topic_id = event_topic_id
         self.copyright = copyright
         self.sub_topic = sub_topic
         self.ticket_url = ticket_url

@@ -5,23 +5,23 @@ from marshmallow_jsonapi import fields
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
 from app.models import db
-from app.models.event_type import EventType
+from app.models.event_topic import EventTopic
 from app.models.event import Event
 from app.api.bootstrap import api
 from app.api.helpers.permissions import is_admin, is_user_itself, jwt_required
 
 
-class EventTypeSchema(Schema):
+class EventTopicSchema(Schema):
     """
-    Api Schema for event type model
+    Api Schema for event topic model
     """
 
     class Meta:
         """
-        Meta class for event type Api Schema
+        Meta class for event topic Api Schema
         """
-        type_ = 'event-type'
-        self_view = 'v1.event_type_detail'
+        type_ = 'event-topic'
+        self_view = 'v1.event_topic_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
@@ -29,28 +29,35 @@ class EventTypeSchema(Schema):
     name = fields.Str(required=True)
     slug = fields.Str(dump_only=True)
     events = Relationship(attribute='event',
-                          self_view='v1.event_type_event',
+                          self_view='v1.event_topic_event',
                           self_view_kwargs={'id': '<id>'},
                           related_view='v1.event_list',
-                          related_view_kwargs={'event_type_id': '<id>'},
-                          many=True,
+                          related_view_kwargs={'event_topic_id': '<id>'},
                           schema='EventSchema',
                           type_='event')
+    sub_topics = Relationship(attribute='event_sub_topic',
+                          self_view='v1.event_topic_event_sub_topic',
+                          self_view_kwargs={'id': '<id>'},
+                          related_view='v1.event_sub_topic_list',
+                          related_view_kwargs={'event_topic_id': '<id>'},
+                          many=True,
+                          schema='EventSubTopicSchema',
+                          type_='event-sub-topic')
 
-class EventTypeList(ResourceList):
+class EventTopicList(ResourceList):
 
     """
-    List and create event types
+    List and create event topics
     """
     decorators = (jwt_required, api.has_permission('is_admin', methods="POST"),)
-    schema = EventTypeSchema
+    schema = EventTopicSchema
     data_layer = {'session': db.session,
-                  'model': EventType}
+                  'model': EventTopic}
 
 
-class EventTypeDetail(ResourceDetail):
+class EventTopicDetail(ResourceDetail):
     """
-    Event type detail by id
+    Event topic detail by id
     """
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('event_identifier'):
@@ -69,25 +76,25 @@ class EventTypeDetail(ResourceDetail):
                 raise ObjectNotFound({'parameter': 'event_id'},
                                      "Event: {} not found".format(view_kwargs['event_id']))
             else:
-                if event.event_type_id:
-                    view_kwargs['id'] = event.event_type_id
+                if event.event_topic_id:
+                    view_kwargs['id'] = event.event_topic_id
                 else:
                     view_kwargs['id'] = None
 
     decorators = (jwt_required, api.has_permission('is_admin', methods="PATCH,DELETE"),)
-    schema = EventTypeSchema
+    schema = EventTopicSchema
     data_layer = {'session': db.session,
-                  'model': EventType,
+                  'model': EventTopic,
                   'methods': {
                       'before_get_object': before_get_object
                   }}
 
 
-class EventTypeRelationship(ResourceRelationship):
+class EventTopicRelationship(ResourceRelationship):
     """
-    Event type Relationship
+    Event topic Relationship
     """
     decorators = (jwt_required, )
-    schema = EventTypeSchema
+    schema = EventTopicSchema
     data_layer = {'session': db.session,
-                  'model': EventType}
+                  'model': EventTopic}
