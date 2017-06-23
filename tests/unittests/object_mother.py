@@ -86,5 +86,4 @@ class ObjectMother(object):
             user_id=user.id,
             title="test title",
             message="test msg",
-            action="Testing",
-            received_at=datetime.now().replace(tzinfo=timezone('UTC')))
+            action="Testing",)

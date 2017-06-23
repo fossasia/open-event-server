@@ -8,7 +8,10 @@ from flask_migrate import Migrate, stamp
 from flask import Flask
 from app.models import db
 from populate_db import populate_without_print
+
+# imports from factories
 from app.factories.user import UserFactory
+from app.factories.notification import NotificationFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -736,21 +739,27 @@ def track_delete(transaction):
 @hooks.before("Notifications > Notifications Collection > List All Notifications")
 def notification_get_list(transaction):
     """
-    GET /users/1/notifications
+    GET /users/2/notifications
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        notification = NotificationFactory()
+        db.session.add(notification)
+        db.session.commit()
 
 
 @hooks.before("Notifications > Notifications Collection > Create Notificaiton")
 def notification_post(transaction):
     """
-    POST /users/1/notifications
+    POST /users/2/notifications
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        user = UserFactory()
+        db.session.add(user)
+        db.session.commit()
 
 
 @hooks.before("Notifications > Notification Detail > Notification Detail")
@@ -760,7 +769,10 @@ def notification_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        notification = NotificationFactory()
+        db.session.add(notification)
+        db.session.commit()
 
 
 @hooks.before("Notifications > Notification Detail > Update Notification")
@@ -770,7 +782,10 @@ def notification_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        notification = NotificationFactory()
+        db.session.add(notification)
+        db.session.commit()
 
 
 @hooks.before("Notifications > Notification Detail > Delete Notification")
@@ -780,7 +795,10 @@ def notification_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        notification = NotificationFactory()
+        db.session.add(notification)
+        db.session.commit()
 
 
 @hooks.before("Image Size > Image Size Collection > List Image Sizes")

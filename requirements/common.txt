@@ -47,5 +47,4 @@ envparse
 wtforms
 flask-admin
 google-compute-engine
-Faker
 factory_boy
