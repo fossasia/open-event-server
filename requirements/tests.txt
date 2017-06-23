@@ -1,10 +1,4 @@
 -r dev.txt
 
 coverage>=4.2,<5
-beautifulsoup4>=4.5.1,<5
-robotframework>=3.0,<4
-robotframework-faker>=3.0.0,<4
-robotframework-selenium2library>=1.8.0,<2
-robotframework-requests>=0.4.6,<5
-robotframework-databaselibrary>=0.8.1,<1
 dredd_hooks==0.1.0

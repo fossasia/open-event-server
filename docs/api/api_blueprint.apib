@@ -4728,11 +4728,11 @@ Notifications related to the various users about invites, ticket purchase, sessi
 
 ## Notifications Collection [/v1/users/{user_id}/notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + user_id: 1 (integer) - ID of the specific user in integer
+    + user_id: 2 (integer) - ID of the specific user in integer
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
-    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[{"is_read": "true" }]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + sort (optional, string, `message`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Notifications [GET]
 Get a list of Notifications.
@@ -4748,39 +4748,38 @@ Get a list of Notifications.
 + Response 200 (application/vnd.api+json)
 
         {
-          "meta": {
-            "count": 1
-          },
-          "data": [
-            {
-              "relationships": {
-                "user": {
-                  "links": {
-                    "self": "/v1/notifications/12/relationships/user",
-                    "related": "/v1/notifications/12/user"
-                  }
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "user": {
+                            "links": {
+                                "self": "/v1/notifications/1/relationships/user",
+                                "related": "/v1/notifications/1/user"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "message": "example",
+                        "received-at": "2017-06-23T04:40:37.239724+00:00",
+                        "is-read": false,
+                        "title": "example"
+                    },
+                    "type": "notification",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/notifications/1"
+                    }
                 }
-              },
-              "attributes": {
-                "title": "Ticket-kids Purchased",
-                "message": "Ticket-kids Purchased for Classical Music Event",
-                "recieved-at": "2017-06-01T01:25:07.385816+00:00",
-                "accept": null,
-                "is-read": false
-              },
-              "type": "notification",
-              "id": "12",
-              "links": {
-                "self": "/v1/notifications/12"
-              }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/users/2/notifications"
             }
-          ],
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/users/1/notifications"
-          }
         }
 
 ### Create Notificaiton [POST]
@@ -4797,11 +4796,10 @@ Create a new notification with user_id.
             {
               "data": {
                 "attributes": {
-                  "title": "Ticket-kids Purchased",
-                  "message": "Ticket-kids Purchased for Classical Music Event",
-                  "recieved-at": "2017-06-01T01:25:07.385816+00:00",
-                  "accept": null,
-                  "is-read": false
+                  "title": "example",
+                  "message": "example",
+                  "action": "example",
+                  "is-read": "false"
                 },
                 "type": "notification"
               }
@@ -4810,34 +4808,33 @@ Create a new notification with user_id.
 + Response 201 (application/vnd.api+json)
 
         {
-          "data": {
-            "relationships": {
-              "user": {
+            "data": {
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/notifications/1/relationships/user",
+                            "related": "/v1/notifications/1/user"
+                        }
+                    }
+                },
+                "attributes": {
+                    "message": "example",
+                    "received-at": "2017-06-23T04:40:37.239724+00:00",
+                    "is-read": false,
+                    "title": "example"
+                },
+                "type": "notification",
+                "id": "1",
                 "links": {
-                  "self": "/v1/notifications/12/relationships/user",
-                  "related": "/v1/notifications/12/user"
+                    "self": "/v1/notifications/1"
                 }
-              }
             },
-            "attributes": {
-              "title": "Ticket-kids Purchased",
-              "message": "Ticket-kids Purchased for Classical Music Event",
-              "recieved-at": "2017-06-01T01:25:07.385816+00:00",
-              "accept": null,
-              "is-read": false
+            "jsonapi": {
+                "version": "1.0"
             },
-            "type": "notification",
-            "id": "12",
             "links": {
-              "self": "/v1/notifications/12"
+                "self": "/v1/notifications/1"
             }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/notifications/12"
-          }
         }
 
 
@@ -4859,34 +4856,33 @@ Get a single notification.
 + Response 200 (application/vnd.api+json)
 
         {
-          "data": {
-            "relationships": {
-              "user": {
+            "data": {
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/notifications/1/relationships/user",
+                            "related": "/v1/notifications/1/user"
+                        }
+                    }
+                },
+                "attributes": {
+                    "message": "example",
+                    "received-at": "2017-06-23T04:40:37.239724+00:00",
+                    "is-read": false,
+                    "title": "example"
+                },
+                "type": "notification",
+                "id": "1",
                 "links": {
-                  "self": "/v1/notifications/12/relationships/user",
-                  "related": "/v1/notifications/12/user"
+                    "self": "/v1/notifications/1"
                 }
-              }
             },
-            "attributes": {
-              "title": "Ticket-kids Purchased",
-              "message": "Ticket-kids Purchased for Classical Music Event",
-              "recieved-at": "2017-06-01T01:25:07.385816+00:00",
-              "accept": null,
-              "is-read": false
+            "jsonapi": {
+                "version": "1.0"
             },
-            "type": "notification",
-            "id": "1",
             "links": {
-              "self": "/v1/notifications/12"
+                "self": "/v1/notifications/1"
             }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/notifications/12"
-          }
         }
 
 
@@ -4906,48 +4902,46 @@ Update a single notification with `id`.
             {
               "data": {
                 "attributes": {
-                  "title": "Ticket-kids Purchased",
-                  "message": "Ticket-kids Purchased for Classical Music Event",
-                  "recieved-at": "2017-06-01T01:25:07.385816+00:00",
-                  "accept": null,
-                  "is-read": false
+                  "title": "example1",
+                  "message": "example1",
+                  "action": "example1",
+                  "is_read": "true"
                 },
                 "type": "notification",
-                "id": "12"
+                "id": "1"
               }
             }
 
 + Response 200 (application/vnd.api+json)
 
         {
-          "data": {
-            "relationships": {
-              "user": {
+            "data": {
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/notifications/1/relationships/user",
+                            "related": "/v1/notifications/1/user"
+                        }
+                    }
+                },
+                "attributes": {
+                    "message": "example1",
+                    "received-at": "2017-06-23T04:40:37.239724+00:00",
+                    "is-read": true,
+                    "title": "example1"
+                },
+                "type": "notification",
+                "id": "1",
                 "links": {
-                  "self": "/v1/notifications/12/relationships/user",
-                  "related": "/v1/notifications/12/user"
+                    "self": "/v1/notifications/1"
                 }
-              }
             },
-            "attributes": {
-              "title": "Ticket-kids Purchased",
-              "message": "Ticket-kids Purchased for Classical Music Event",
-              "recieved-at": "2017-06-01T01:25:07.385816+00:00",
-              "accept": null,
-              "is-read": false
+            "jsonapi": {
+                "version": "1.0"
             },
-            "type": "notification",
-            "id": "12",
             "links": {
-              "self": "/v1/notifcations/12"
+                "self": "/v1/notifications/1"
             }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/notifications/12"
-          }
         }
 
 ### Delete Notification [DELETE]

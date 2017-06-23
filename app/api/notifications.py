@@ -26,7 +26,7 @@ class NotificationSchema(Schema):
     id = fields.Str(dump_only=True)
     title = fields.Str()
     message = fields.Str()
-    received_at = fields.DateTime()
+    received_at = fields.DateTime(dump_only=True)
     accept = fields.Str()
     is_read = fields.Boolean()
     user = Relationship(attribute='user',

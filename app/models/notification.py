@@ -1,3 +1,5 @@
+from datetime import datetime
+import pytz
 from app.models import db
 
 USER_CHANGE_EMAIL = "User email"
@@ -25,7 +27,7 @@ class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
-    user = db.relationship('User', backref='notifications')
+    user = db.relationship('User', backref='notifications', foreign_keys=[user_id])
 
     title = db.Column(db.String)
     message = db.Column(db.Text)
@@ -33,12 +35,12 @@ class Notification(db.Model):
     received_at = db.Column(db.DateTime(timezone=True))
     is_read = db.Column(db.Boolean)
 
-    def __init__(self, user_id=None, title=None, message=None, action=None, received_at=None, is_read=False):
+    def __init__(self, user_id=None, title=None, message=None, action=None, is_read=False):
         self.user_id = user_id
         self.title = title
         self.message = message
         self.action = action
-        self.received_at = received_at
+        self.received_at = datetime.now(pytz.utc)
         self.is_read = is_read
 
     def __repr__(self):

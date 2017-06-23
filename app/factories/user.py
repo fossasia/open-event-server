@@ -1,4 +1,4 @@
-import factory.alchemy
+import factory
 from app.models.user import db, User
 import app.factories.common as common
 
