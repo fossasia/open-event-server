@@ -47,8 +47,7 @@ api.route(PageDetail, 'page_detail', '/pages/<int:id>')
 
 # tickets
 api.route(AllTicketList, 'all_ticket_list', '/tickets', '/events/<int:id>/tickets', '/events/<identifier>/tickets')
-api.route(TicketDetail, 'ticket_detail', '/tickets/<int:id>', '/events/<int:event_id>/tickets',
-          '/attendees/<int:attendee_id>/ticket')
+api.route(TicketDetail, 'ticket_detail', '/tickets/<int:id>', '/attendees/<int:attendee_id>/ticket')
 api.route(TicketRelationship, 'ticket_event', '/tickets/<int:id>/relationships/event')
 api.route(TicketRelationship, 'ticket_ticket_tag', '/tickets/<int:id>/relationships/ticket-tags')
 
@@ -97,21 +96,20 @@ api.route(EventRelationship, 'event_session', '/events/<int:id>/relationships/se
 api.route(EventRelationship, 'event_event_type', '/events/<int:id>/relationships/event-type')
 
 # microlocations
-api.route(MicrolocationList, 'microlocation_list', '/microlocations', '/sessions/<int:id>/microlocations')
+api.route(MicrolocationList, 'microlocation_list', '/microlocations', '/sessions/<int:id>/microlocations',
+          '/events/<int:event_id>/microlocations', '/events/<identifier>/microlocations')
 api.route(MicrolocationDetail, 'microlocation_detail', '/microlocations/<int:id>',
-          '/events/<int:event_id>/microlocations', '/events/<identifier>/microlocations',
-          '/sessions/<int:session_id>/microlocation')
+              '/sessions/<int:session_id>/microlocation')
 api.route(MicrolocationRelationship, 'microlocation_session',
           '/microlocations/<int:id>/relationships/sessions')
 api.route(MicrolocationRelationship, 'microlocation_event',
           '/microlocations/<int:id>/relationships/event')
 
 # sessions
-api.route(SessionList, 'session_list', '/sessions', '/events/<int:event_id>/sessions', '/events/<identifier>/sessions',
+api.route(SessionList, 'session_list', '/sessions', '/events/<int:event_id>/sessions', '/events/<event_identifier>/sessions',
           '/tracks/<int:track_id>/sessions', '/session_types/<int:session_type_id>/sessions',
           '/microlocations/<int:microlocation_id>/sessions')
-api.route(SessionDetail, 'session_detail', '/sessions/<int:id>',
-          '/microlocations/<int:microlocation_id>/sessions', '/events/<int:event_id>/microlocations')
+api.route(SessionDetail, 'session_detail', '/sessions/<int:id>')
 api.route(SessionRelationship, 'session_microlocation',
           '/sessions/<int:id>/relationships/microlocation')
 api.route(SessionRelationship, 'session_track', '/sessions/<int:id>/relationships/track')
@@ -128,27 +126,27 @@ api.route(SocialLinkRelationship, 'social_link_event',
           '/social-links/<int:id>/relationships/event')
 
 # sponsors
-api.route(SponsorList, 'sponsor_list', '/sponsors', '/events/<int:event_id>/sponsors', '/events/<identifier>/sponsors')
+api.route(SponsorList, 'sponsor_list', '/sponsors', '/events/<int:event_id>/sponsors', '/events/<event_identifier>/sponsors')
 api.route(SponsorDetail, 'sponsor_detail', '/sponsors/<int:id>')
 api.route(SponsorRelationship, 'sponsor_event', '/sponsors/<int:id>/relationships/event')
 
 # tracks
-api.route(TrackList, 'track_list', '/events/<int:event_id>/tracks', '/events/<identifier>/tracks')
+api.route(TrackList, 'track_list', '/events/<int:event_id>/tracks', '/events/<event_identifier>/tracks')
 api.route(TrackDetail, 'track_detail', '/tracks/<int:id>', '/sessions/<int:session_id>/track')
 api.route(TrackRelationship, 'track_sessions', '/tracks/<int:id>/relationships/sessions')
 api.route(TrackRelationship, 'track_event', '/tracks/<int:id>/relationships/event')
 
 # speakers_calls
 api.route(SpeakersCallList, 'speakers_call_list', '/events/<int:event_id>/speakers-calls',
-          '/events/<identifier>/speakers-calls')
+          '/events/<event_identifier>/speakers-calls')
 api.route(SpeakersCallDetail, 'speakers_call_detail', '/speakers-calls/<int:id>',
-          '/events/<int:event_id>/speakers-call')
+          '/events/<int:event_id>/speakers-call', '/events/<event_identifier>/speakers-call')
 api.route(SpeakersCallRelationship, 'speakers_call_event',
           '/speakers-calls/<int:id>/relationships/event')
 
 # session_types
 api.route(SessionTypeList, 'session_type_list', '/events/<int:event_id>/session-types',
-          '/events/<identifier>/session-types')
+          '/events/<event_identifier>/session-types')
 api.route(SessionTypeDetail, 'session_type_detail', '/session-types/<int:id>',
           '/sessions/<int:session_id>/session-type')
 api.route(SessionTypeRelationship, 'session_type_sessions', '/session-types/<int:id>/relationships/sessions')
@@ -158,18 +156,19 @@ api.route(SessionTypeRelationship, 'session_type_event', '/session-types/<int:id
 api.route(EventCopyrightList, 'event_copyright_list', '/events/<int:id>/event-copyright',
           '/events/<identifier>/event-copyright')
 api.route(EventCopyrightDetail, 'event_copyright_detail',
-          '/event-copyright/<int:id>', '/events/<int:event_id>/event-copyright')
+          '/event-copyright/<int:id>', '/events/<int:event_id>/event-copyright',
+          '/events/<event_identifier>/event-copyright')
 api.route(EventCopyrightRelationship, 'copyright_event',
           '/event-copyright/<int:id>/relationships/event')
 
 # tax
-api.route(TaxList, 'tax_list', '/events/<int:id>/tax', '/events/<identifier>/tax')
+api.route(TaxList, 'tax_list', '/events/<int:event_id>/tax', '/events/<identifier>/tax')
 api.route(TaxDetail, 'tax_detail', '/tax/<int:id>', '/events/<int:event_id>/tax')
 api.route(TaxRelationship, 'tax_event', '/tax/<int:id>/relationships/event')
 
 # event invoices
 api.route(EventInvoiceList, 'event_invoice_list', '/events/<int:event_id>/event-invoices',
-          '/events/<identifier>/event-invoices', '/users/<int:user_id>/event-invoices')
+          '/events/<event_identifier>/event-invoices', '/users/<int:user_id>/event-invoices')
 api.route(EventInvoiceDetail, 'event_invoice_detail', '/event-invoices/<int:id>')
 api.route(EventInvoiceRelationship, 'event_invoice_user',
           '/event-invoices/<int:id>/relationships/user')
@@ -180,7 +179,7 @@ api.route(EventInvoiceRelationship, 'event_invoice_discount_code',
 
 # discount codes
 api.route(DiscountCodeList, 'discount_code_list', '/events/<int:event_id>/discount-codes',
-          '/events/<identifier>/discount-codes')
+          '/events/<event_identifier>/discount-codes')
 api.route(DiscountCodeDetail, 'discount_code_detail', '/discount-codes/<int:id>')
 api.route(DiscountCodeRelationship, 'discount_code_event',
           '/discount-codes/<int:id>/relationships/event')

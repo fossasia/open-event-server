@@ -57,8 +57,8 @@ class TrackList(ResourceList):
         query_ = self.session.query(Track)
         if view_kwargs.get('event_id'):
             query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
-        elif view_kwargs.get('identifier'):
-            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
+        elif view_kwargs.get('event_identifier'):
+            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['event_identifier'])
         return query_
 
     def before_create_object(self, data, view_kwargs):
@@ -66,10 +66,10 @@ class TrackList(ResourceList):
             event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
             data['event_id'] = event.id
 
-        elif view_kwargs.get('identifier'):
-            event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
+        elif view_kwargs.get('event_identifier'):
+            event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
             data['event_id'] = event.id
-        
+
         if data['font_color']:
             del data['font_color']
 
@@ -90,14 +90,14 @@ class TrackDetail(ResourceDetail):
     """
 
     def before_get_object(self, view_kwargs):
-        if view_kwargs.get('session_id') is not None:
+        if view_kwargs.get('session_id'):
             try:
                 session = self.session.query(Session).filter_by(id=view_kwargs['session_id']).one()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': 'session_id'},
                                      "Session: {} not found".format(view_kwargs['session_id']))
             else:
-                if session.event_id is not None:
+                if session.event_id:
                     view_kwargs['id'] = session.track_id
                 else:
                     view_kwargs['id'] = None
