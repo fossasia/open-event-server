@@ -1,5 +1,4 @@
 from app.helpers.ticketing import TicketingManager
-import datetime
 
 
 class AttendeeCsv:
@@ -17,10 +16,10 @@ class AttendeeCsv:
             if holder['status'] != "deleted":
                 columns = []
                 for f in fields:
-                    if type(holder.get(f, '')) == datetime.datetime:
-                        columns.append(str(holder.get(f, '')))
-                    else:
+                    if type(holder.get(f, '')) == unicode:
                         columns.append(str(holder.get(f, '').encode('utf-8')))
+                    else:
+                        columns.append(str(holder.get(f, '')))
                 rows.append(','.join(columns))
 
         csv_content = '\n'.join(rows)
