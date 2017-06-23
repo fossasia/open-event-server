@@ -51,7 +51,8 @@ class Config(object):
     CSRF_ENABLED = True
     SERVER_NAME = env('SERVER_NAME', default=None)
     CORS_HEADERS = 'Content-Type'
-    SQLALCHEMY_DATABASE_URI =  env('DATABASE_URL', default=None)
+    SQLALCHEMY_DATABASE_URI = env('DATABASE_URL', default=None)
+    SERVE_STATIC = env.bool('SERVE_STATIC', default=False)
     DATABASE_QUERY_TIMEOUT = 0.1
     SOFT_DELETE = True
 
@@ -62,12 +63,13 @@ class Config(object):
     BASE_DIR = basedir
     FORCE_SSL = os.getenv('FORCE_SSL', 'no') == 'yes'
 
-    UPLOADS_FOLDER = BASE_DIR + '/static/uploads/'
-    TEMP_UPLOADS_FOLDER = BASE_DIR + '/static/uploads/temp/'
-    UPLOAD_FOLDER = UPLOADS_FOLDER
-    STATIC_URL = '/static/'
-    STATIC_ROOT = 'staticfiles'
-    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+    if SERVE_STATIC:
+        UPLOADS_FOLDER = BASE_DIR + '/static/uploads/'
+        TEMP_UPLOADS_FOLDER = BASE_DIR + '/static/uploads/temp/'
+        UPLOAD_FOLDER = UPLOADS_FOLDER
+        STATIC_URL = '/static/'
+        STATIC_ROOT = 'staticfiles'
+        STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
     if FORCE_SSL:
         PREFERRED_URL_SCHEME = 'https'
@@ -105,8 +107,6 @@ class DevelopmentConfig(Config):
 
     # Test database performance
     SQLALCHEMY_RECORD_QUERIES = True
-
-
 
 
 class TestingConfig(Config):
