@@ -395,3 +395,31 @@ DEFAULT_EVENT_IMAGES = {
     'Travel & Outdoor': 'TravelOutdoor.jpg',
     'Travel': 'Travel.jpg',
 }
+
+PAYMENT_CURRENCY_CHOICES = [
+    'AUD',
+    'BRL',
+    'CAD',
+    'CHF',
+    'CZK',
+    'DKK',
+    'EUR',
+    'GBP',
+    'HKD',
+    'HUF',
+    'ILS',
+    'INR',
+    'JPY',
+    'MXN',
+    'MYR',
+    'NOK',
+    'NZD',
+    'PHP',
+    'PLN',
+    'RUB',
+    'SEK',
+    'SGD',
+    'THB',
+    'TWD',
+    'USD'
+]

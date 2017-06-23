@@ -1,4 +1,5 @@
 from app.api.bootstrap import api
+from app.api.ticket_fees import TicketFeeList, TicketFeeDetail
 from app.api.users import UserList, UserDetail, UserRelationship
 from app.api.notifications import NotificationList, NotificationDetail, NotificationRelationship
 from app.api.tickets import AllTicketList, TicketDetail, TicketRelationship
@@ -224,3 +225,6 @@ api.route(EventSubTopicDetail, 'event_sub_topic_detail', '/event-sub-topics/<int
 api.route(EventSubTopicRelationship, 'event_sub_topic_event', '/event-sub-topics/<int:id>/relationships/events')
 api.route(EventSubTopicRelationship, 'event_sub_topic_event_topic',
           '/event-sub-topics/<int:id>/relationships/event-topic')
+# ticket_fees
+api.route(TicketFeeList, 'ticket_fee_list', '/ticket-fees')
+api.route(TicketFeeDetail, 'ticket_fee_detail', '/ticket-fees/<int:id>')
