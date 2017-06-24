@@ -1039,7 +1039,7 @@ def image_upload_post(transaction):
 @hooks.before("Event Types > Event Types Collection > List All Event Types")
 def event_type_get_list(transaction):
     """
-    GET /events/1/discount-codes
+    GET /events-types
     :param transaction:
     :return:
     """
@@ -1049,37 +1049,37 @@ def event_type_get_list(transaction):
 @hooks.before("Event Types > Event Types Collection > Create Event Type")
 def event_type_post(transaction):
     """
-    POST /events/1/discount-codes
+    POST /events-types
     :param transaction:
     :return:
     """
     transaction['skip'] = True
 
 
-@hooks.before("Event Types > Event Types Details > Get Details")
+@hooks.before("Event Types > Event Type Details > Event Type Details")
 def event_type_get_detail(transaction):
     """
-    GET /discount-codes/1
+    GET /event-types/1
     :param transaction:
     :return:
     """
     transaction['skip'] = True
 
 
-@hooks.before("Event Types > Event Types Details > Update Event Type")
+@hooks.before("Event Types > Event Type Details > Update Event Type")
 def event_type_patch(transaction):
     """
-    PATCH /discount-codes/1
+    PATCH /event-types/1
     :param transaction:
     :return:
     """
     transaction['skip'] = True
 
 
-@hooks.before("Event Types > Event Types Details > Delete Event Type")
+@hooks.before("Event Types > Event Type Details > Delete Event Type")
 def event_type_delete(transaction):
     """
-    DELETE /discount-codes/1
+    DELETE /event-types/1
     :param transaction:
     :return:
     """
@@ -1091,7 +1091,7 @@ def event_type_delete(transaction):
 @hooks.before("Event Topics > Event Topics Collection > List All Event Topics")
 def event_topic_get_list(transaction):
     """
-    GET /events/1/discount-codes
+    GET /event-topics
     :param transaction:
     :return:
     """
@@ -1101,37 +1101,89 @@ def event_topic_get_list(transaction):
 @hooks.before("Event Topics > Event Topics Collection > Create Event Topic")
 def event_topic_post(transaction):
     """
-    POST /events/1/discount-codes
+    POST /event-topics
     :param transaction:
     :return:
     """
     transaction['skip'] = True
 
 
-@hooks.before("Event Topics > Event Topics Details > Get Details")
+@hooks.before("Event Topics > Event Topic Details > Event Topic Details")
 def event_topic_get_detail(transaction):
     """
-    GET /discount-codes/1
+    GET /event-topics/1
     :param transaction:
     :return:
     """
     transaction['skip'] = True
 
 
-@hooks.before("Event Topics > Event Topics Details > Update Event Topic")
+@hooks.before("Event Topics > Event Topic Details > Update Event Topic")
 def event_topic_patch(transaction):
     """
-    PATCH /discount-codes/1
+    PATCH /event-topics/1
     :param transaction:
     :return:
     """
     transaction['skip'] = True
 
 
-@hooks.before("Event Topics > Event Topics Details > Delete Event Topic")
+@hooks.before("Event Topics > Event Topic Details > Delete Event Topic")
 def event_topic_delete(transaction):
     """
-    DELETE /discount-codes/1
+    DELETE /event-topics/1
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+# ------------------------- Event Sub Topics -------------------------
+
+@hooks.before("Event Sub Topics > Event Sub Topics Collection > List All Event Sub Topics")
+def event_sub_topic_get_list(transaction):
+    """
+    GET /event-topics/1/event-sub-topics
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Event Sub Topics > Event Sub Topics Collection > Create Event Sub Topic")
+def event_sub_topic_post(transaction):
+    """
+    POST /event-topics/1/event-sub-topics
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Event Sub Topics > Event Sub Topic Details > Event Sub Topic Details")
+def event_sub_topic_get_detail(transaction):
+    """
+    GET /event-sub-topics/1
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Event Sub Topics > Event Sub Topic Details > Update Event Sub Topic")
+def event_sub_topic_patch(transaction):
+    """
+    PATCH /event-sub-topics/1
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Event Sub Topics > Event Sub Topic Details > Delete Event Sub Topic")
+def event_sub_topic_delete(transaction):
+    """
+    DELETE /event-sub-topics/1
     :param transaction:
     :return:
     """
