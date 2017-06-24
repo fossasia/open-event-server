@@ -211,7 +211,7 @@ api.route(EventTopicRelationship, 'event_topic_event', '/event-topics/<int:id>/r
 api.route(EventTopicRelationship, 'event_topic_event_sub_topic', '/event-topics/<int:id>/relationships/event-sub-topics')
 
 # event sub topics
-api.route(EventSubTopicList, 'event_sub_topic_list','/event-topics/<int:event_topic_id>/event-subtopics')
+api.route(EventSubTopicList, 'event_sub_topic_list','/event-topics/<int:event_topic_id>/event-sub-topics')
 api.route(EventSubTopicDetail, 'event_sub_topic_detail', '/event-sub-topics/<int:id>', '/events/<int:event_id>/event-sub-topic',
           '/events/<event_identifier>/event-sub-topic')
 api.route(EventSubTopicRelationship, 'event_sub_topic_event', '/event-sub-topics/<int:id>/relationships/events')
