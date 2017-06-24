@@ -82,7 +82,7 @@ class EventSchema(Schema):
     is_sessions_speakers_enabled = fields.Bool(default=False)
     privacy = fields.Str(default="public")
     state = fields.Str(default="Draft")
-    type = fields.Str()
+    event_type_id = fields.Integer()
     topic = fields.Str()
     sub_topic = fields.Str()
     ticket_url = fields.Url()
@@ -207,6 +207,13 @@ class EventSchema(Schema):
                             schema='SessionSchema',
                             many=True,
                             type_='session')
+    event_type = Relationship(attribute='event_type',
+                              self_view='v1.event_event_type',
+                              self_view_kwargs={'id': '<id>'},
+                              related_view='v1.event_type_detail',
+                              related_view_kwargs={'event_id': '<id>'},
+                              schema='EventTypeSchema',
+                              type_='event-type')
 
 
 class EventList(ResourceList):
@@ -217,6 +224,9 @@ class EventList(ResourceList):
             if 'GET' in request.method:
                 query_ = query_.join(Event.roles).filter_by(user_id=view_kwargs['user_id']) \
                     .join(UsersEventsRoles.role).filter(Role.name != ATTENDEE)
+        elif view_kwargs.get('event_type_id'):
+            if 'GET' in request.method:
+                query_ = self.session.query(Event).filter_by(event_type_id=view_kwargs['event_type_id'])
         return query_
 
     def after_create_object(self, event, data, view_kwargs):

@@ -42,6 +42,8 @@ class SettingSchemaAdmin(Schema):
     tagline = fields.Str()
     # App secret
     secret = fields.Str()
+    # Static domain
+    static_domain = fields.Str()
 
     #
     #  STORAGE

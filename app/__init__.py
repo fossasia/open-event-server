@@ -127,6 +127,11 @@ def create_app():
 
     sa.orm.configure_mappers()
 
+    if app.config['SERVE_STATIC']:
+        app.add_url_rule('/static/<path:filename>',
+                         endpoint='static',
+                         view_func=app.send_static_file)
+
     return app, _manager, db, _jwt
 
 

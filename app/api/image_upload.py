@@ -1,8 +1,9 @@
 from flask import Blueprint
 from flask import url_for, redirect, request, current_app, jsonify
 from flask_jwt import jwt_required
+from flask import current_app as app
 from app.api.helpers.images import uploaded_image
-from app.helpers.storage import UPLOAD_PATHS, upload_local, upload
+from app.api.helpers.storage import UPLOAD_PATHS, upload_local, upload
 import uuid
 
 upload_routes = Blueprint('upload', __name__, url_prefix='/v1/upload')

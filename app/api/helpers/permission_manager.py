@@ -7,6 +7,8 @@ from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi import JsonApiException
 from flask import request
 
+from app.models.event import Event
+
 
 @jwt_required
 def is_super_admin(view, view_args, view_kwargs, *args, **kwargs):
@@ -158,6 +160,20 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
 
     if request.method not in methods:
         return view(*view_args, **view_kwargs)
+
+    # A check to ensure it is good to go ahead and check permissions
+    if 'check' in kwargs:
+        check = kwargs['check']
+        if not check(view_kwargs):
+            return ForbiddenError({'source': ''}, 'Access forbidden').respond()
+
+    # If event_identifier in route instead of event_id 
+    if 'event_identifier' in view_kwargs:
+        try:
+            event = Event.query.filter_by(identifier=view_kwargs['event_identifier']).one()
+        except NoResultFound, e:
+            return NotFoundError({'parameter': 'event_identifier'}, 'Event not found.').respond()
+        view_kwargs['event_id'] = event.id
 
     if 'fetch' in kwargs:
         if kwargs['fetch'] not in view_kwargs:
