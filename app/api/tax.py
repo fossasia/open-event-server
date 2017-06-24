@@ -94,8 +94,8 @@ class TaxDetail(ResourceDetail):
                 raise ObjectNotFound({'parameter': 'event_id'},
                                      "Event: {} not found".format(view_kwargs['event_id']))
             else:
-                if event.event_type.id:
-                    view_kwargs['id'] = event.event_type.id
+                if event.tax:
+                    view_kwargs['id'] = event.tax.id
                 else:
                     view_kwargs['id'] = None
 

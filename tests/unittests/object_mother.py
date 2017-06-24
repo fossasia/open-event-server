@@ -20,7 +20,6 @@ class ObjectMother(object):
                      starts_at=(datetime(2003, 8, 4, 12, 30, 45)).replace(tzinfo=timezone('UTC')),
                      ends_at=(datetime(2003, 9, 4, 12, 30, 45)).replace(tzinfo=timezone('UTC')),
                      location_name='India',
-                     topic='Travel & Outdoor',
                      sub_topic='Climbing',
                      is_sessions_speakers_enabled=True)
 
