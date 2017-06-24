@@ -2,6 +2,9 @@ import sys
 import os.path as path
 import dredd_hooks as hooks
 import requests
+
+# DO NOT REMOVE THIS. This adds the project root for successful imports. Imports from the project directory should be
+# placed only below this
 sys.path.insert(1, path.abspath(path.join(__file__, "../..")))
 
 from flask_migrate import Migrate, stamp
@@ -19,16 +22,6 @@ api_password = "fossasia"
 api_uri = "http://localhost:5000/auth/session"
 
 
-@hooks.before_all
-def before_all(transaction):
-    app = Flask(__name__)
-    app.config.from_object('config.TestingConfig')
-    db.init_app(app)
-    Migrate(app, db)
-    stash['app'] = app
-    stash['db'] = db
-
-
 def obtain_token():
     data = {
         "email": api_username,
@@ -42,6 +35,23 @@ def obtain_token():
     return token
 
 
+def create_super_admin(email, password):
+    user = UserFactory(email=email, password=password, is_super_admin=True, is_admin=True, is_verified=True)
+    db.session.add(user)
+    db.session.commit()
+    return user
+
+
+@hooks.before_all
+def before_all(transaction):
+    app = Flask(__name__)
+    app.config.from_object('config.TestingConfig')
+    db.init_app(app)
+    Migrate(app, db)
+    stash['app'] = app
+    stash['db'] = db
+
+
 @hooks.before_each
 def before_each(transaction):
     with stash['app'].app_context():
@@ -49,7 +59,7 @@ def before_each(transaction):
         db.engine.execute("create schema public")
         db.create_all()
         stamp()
-        DataManager.create_super_admin(api_username, api_password)
+        create_super_admin(api_username, api_password)
         populate_without_print()
 
     if 'token' in stash:
@@ -194,6 +204,8 @@ def event_delete(transaction):
     transaction['skip'] = True
 
 
+# ------------------------- Copyright -------------------------
+
 @hooks.before("Copyright > Event Copyright > Get Event Copyright")
 def copyright_get_list(transaction):
     """
@@ -243,6 +255,8 @@ def copyright_delete(transaction):
     """
     transaction['skip'] = True
 
+
+# ------------------------- Invoices -------------------------
 
 @hooks.before("Invoices > Event Invoices > Get Event Invoices")
 def invoice_get_list(transaction):
@@ -294,8 +308,10 @@ def invoice_delete(transaction):
     transaction['skip'] = True
 
 
+# ------------------------- Microlocation -------------------------
+
 @hooks.before("Microlocations > Microlocation Collection > List All Microlocations")
-def microlation_get_list(transaction):
+def microlocation_get_list(transaction):
     """
     GET /events/1/microlocations
     :param transaction:
@@ -343,6 +359,8 @@ def microlocation_delete(transaction):
     """
     transaction['skip'] = True
 
+
+# ------------------------- Sessions -------------------------
 
 @hooks.before("Sessions > Sessions Collection > List All Sessions")
 def session_get_list(transaction):
@@ -394,6 +412,8 @@ def session_delete(transaction):
     transaction['skip'] = True
 
 
+# ------------------------- Session Type -------------------------
+
 @hooks.before("Session Type > Session Type Collection > List All Session Types")
 def session_type_get_list(transaction):
     """
@@ -443,6 +463,8 @@ def session_type_delete(transaction):
     """
     transaction['skip'] = True
 
+
+# ------------------------- Social Links -------------------------
 
 @hooks.before("Social Links > Social Links Collection > List All Social Links")
 def social_link_get_list(transaction):
@@ -494,7 +516,19 @@ def social_link_delete(transaction):
     transaction['skip'] = True
 
 
-@hooks.before("Speakers Calls > Create Speakers Call for an Event > Create Speakers Call")
+# ------------------------- Speakers Calls -------------------------
+
+@hooks.before("Speakers Calls > Speakers Call Collection > Get Speakers Call")
+def speakers_call_get(transaction):
+    """
+    GET /events/1/speakers-calls
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Speakers Calls > Speakers Call Collection > Create Speakers Call")
 def speakers_call_post(transaction):
     """
     POST /events/1/speakers-calls
@@ -505,7 +539,6 @@ def speakers_call_post(transaction):
 
 
 @hooks.before("Speakers Calls > Speakers Call Details > Speakers Call Details")
-@hooks.before("Speakers Calls > Get Speakers Call for an Event > Get Speakers Call")
 def speakers_call_get_detail(transaction):
     """
     GET /v1/events/1/speakers-call
@@ -535,6 +568,8 @@ def speakers_call_delete(transaction):
     """
     transaction['skip'] = True
 
+
+# ------------------------- Sponsors -------------------------
 
 @hooks.before("Sponsors > Sponsors Collection > List All Sponsors")
 def sponsor_get_list(transaction):
@@ -586,6 +621,8 @@ def sponsor_delete(transaction):
     transaction['skip'] = True
 
 
+# ------------------------- Tax -------------------------
+
 @hooks.before("Tax > Tax Collection > List All Tax Records")
 def tax_get_list(transaction):
     """
@@ -635,6 +672,8 @@ def tax_delete(transaction):
     """
     transaction['skip'] = True
 
+
+# ------------------------- Tickets -------------------------
 
 @hooks.before("Tickets > Tickets Collection > List All Tickets")
 def ticket_get_list(transaction):
@@ -686,6 +725,8 @@ def ticket_delete(transaction):
     transaction['skip'] = True
 
 
+# ------------------------- Tracks -------------------------
+
 @hooks.before("Tracks > Tracks Collection > List All Tracks")
 def track_get_list(transaction):
     """
@@ -735,6 +776,8 @@ def track_delete(transaction):
     """
     transaction['skip'] = True
 
+
+# ------------------------- Notifications -------------------------
 
 @hooks.before("Notifications > Notifications Collection > List All Notifications")
 def notification_get_list(transaction):
@@ -801,6 +844,8 @@ def notification_delete(transaction):
         db.session.commit()
 
 
+# ------------------------- Image Size -------------------------
+
 @hooks.before("Image Size > Image Size Collection > List Image Sizes")
 def image_size_get_list(transaction):
     """
@@ -851,6 +896,8 @@ def image_size_delete(transaction):
     transaction['skip'] = True
 
 
+# ------------------------- Pages -------------------------
+
 @hooks.before("Pages > Page Collection > Page Sizes")
 def page_get_list(transaction):
     """
@@ -885,7 +932,7 @@ def page_get_detail(transaction):
 def page_patch(transaction):
     """
     PATCH /pages/1
-    :param transation:
+    :param transaction:
     :return:
     """
     transaction['skip'] = True
@@ -900,6 +947,8 @@ def page_delete(transaction):
     """
     transaction['skip'] = True
 
+
+# ------------------------- Settings -------------------------
 
 @hooks.before("Settings > Settings Details > Show Settings")
 def settings_get_list(transaction):
@@ -979,6 +1028,110 @@ def discount_delete(transaction):
 def image_upload_post(transaction):
     """
 
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+# ------------------------- Event Types -------------------------
+
+@hooks.before("Event Types > Event Types Collection > List All Event Types")
+def event_type_get_list(transaction):
+    """
+    GET /events/1/discount-codes
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Event Types > Event Types Collection > Create Event Type")
+def event_type_post(transaction):
+    """
+    POST /events/1/discount-codes
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Event Types > Event Types Details > Get Details")
+def event_type_get_detail(transaction):
+    """
+    GET /discount-codes/1
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Event Types > Event Types Details > Update Event Type")
+def event_type_patch(transaction):
+    """
+    PATCH /discount-codes/1
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Event Types > Event Types Details > Delete Event Type")
+def event_type_delete(transaction):
+    """
+    DELETE /discount-codes/1
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+# ------------------------- Event Topics -------------------------
+
+@hooks.before("Event Topics > Event Topics Collection > List All Event Topics")
+def event_topic_get_list(transaction):
+    """
+    GET /events/1/discount-codes
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Event Topics > Event Topics Collection > Create Event Topic")
+def event_topic_post(transaction):
+    """
+    POST /events/1/discount-codes
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Event Topics > Event Topics Details > Get Details")
+def event_topic_get_detail(transaction):
+    """
+    GET /discount-codes/1
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Event Topics > Event Topics Details > Update Event Topic")
+def event_topic_patch(transaction):
+    """
+    PATCH /discount-codes/1
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Event Topics > Event Topics Details > Delete Event Topic")
+def event_topic_delete(transaction):
+    """
+    DELETE /discount-codes/1
     :param transaction:
     :return:
     """
