@@ -23,7 +23,7 @@ class Speaker(db.Model):
     github = db.Column(db.String)
     linkedin = db.Column(db.String)
     organisation = db.Column(db.String)
-    featured = db.Column(db.Boolean, default=False)
+    is_featured = db.Column(db.Boolean, default=False)
     position = db.Column(db.String)
     country = db.Column(db.String)
     city = db.Column(db.String)
@@ -59,7 +59,7 @@ class Speaker(db.Model):
                  heard_from=None,
                  sponsorship_required=None,
                  event_id=None,
-                 user=None):
+                 user_id=None):
         self.name = name
         self.photo = photo
         self.thumbnail = thumbnail
@@ -86,7 +86,7 @@ class Speaker(db.Model):
         self.event_id = event_id
         # ensure links are in social fields
         self.ensure_social_links()
-        self.user = user
+        self.user_id = user_id
 
     @staticmethod
     def get_service_name():

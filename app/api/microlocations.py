@@ -70,7 +70,6 @@ class MicrolocationList(ResourceList):
             event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
             data['event_id'] = event.id
 
-
     view_kwargs = True
     decorators = (jwt_required,)
     schema = MicrolocationSchema
