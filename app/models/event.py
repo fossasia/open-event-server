@@ -76,7 +76,7 @@ class Event(db.Model):
     state = db.Column(db.String, default="Draft")
     event_type_id = db.Column(db.Integer, db.ForeignKey('event_types.id', ondelete='CASCADE'))
     event_topic_id = db.Column(db.Integer, db.ForeignKey('event_topics.id', ondelete='CASCADE'))
-    sub_topic = db.Column(db.String)
+    event_sub_topic_id = db.Column(db.Integer, db.ForeignKey('event_sub_topics.id', ondelete='CASCADE'))
     ticket_url = db.Column(db.String)
     db.UniqueConstraint('track.name')
     code_of_conduct = db.Column(db.String)
@@ -103,6 +103,7 @@ class Event(db.Model):
     discount_code = db.relationship('DiscountCode', backref='events')
     event_type = db.relationship('EventType', backref='event')
     event_topic = db.relationship('EventTopic', backref='event')
+    event_sub_topic = db.relationship('EventSubTopic', backref='event')
 
     def __init__(self,
                  name=None,
@@ -124,7 +125,7 @@ class Event(db.Model):
                  event_type_id=None,
                  privacy=None,
                  event_topic_id=None,
-                 sub_topic=None,
+                 event_sub_topic_id=None,
                  ticket_url=None,
                  copyright=None,
                  code_of_conduct=None,
@@ -175,7 +176,7 @@ class Event(db.Model):
         self.event_type_id = event_type_id
         self.event_topic_id = event_topic_id
         self.copyright = copyright
-        self.sub_topic = sub_topic
+        self.event_sub_topic_id = event_sub_topic_id
         self.ticket_url = ticket_url
         self.code_of_conduct = code_of_conduct
         self.schedule_published_on = schedule_published_on

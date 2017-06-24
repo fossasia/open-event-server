@@ -11,22 +11,26 @@ def get_new_slug(name):
     else:
         return '{}-{}'.format(slug, uuid.uuid4().hex)
 
-class EventType(db.Model):
-    """Event type object table"""
+class EventSubTopic(db.Model):
+    """Event sub topic object table"""
 
-    __tablename__ = 'event_types'
+    __tablename__ = 'event_sub_topics'
 
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     name = db.Column(db.String, nullable=False)
     slug = db.Column(db.String, unique=True, nullable=False)
-    events = db.relationship('Event', backref='event-type')
+    events = db.relationship('Event', backref='event-sub-topic')
+    event_topic = db.relationship('EventTopic', backref='event-sub-topics')
+    event_topic_id = db.Column(db.Integer, db.ForeignKey('event_topics.id', ondelete='CASCADE'))
 
     def __init__(self,
                  name=None,
-                 slug=None):
+                 slug=None,
+                 event_topic_id=None):
 
         self.name = name
         self.slug = get_new_slug(name=self.name)
+        self.event_topic_id = event_topic_id
 
     def __repr__(self):
         return '<EventType %r>' % self.name
@@ -40,4 +44,4 @@ class EventType(db.Model):
     @property
     def serialize(self):
         """Return object data in easily serializeable format"""
-        return {'id': self.id, 'name': self.name, 'slug': self.slug}
+        return {'id': self.id, 'name': self.name, 'slug': self.slug, 'event_topic_id': self.event_topic_id}
