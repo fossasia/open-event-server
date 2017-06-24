@@ -37,39 +37,65 @@
 </tbody>
 </table>
 <div id="users-users-collection" class="resource"><h3 class="resource-heading">Users Collection <a href="#users-users-collection" class="permalink">&nbsp;&para;</a></h3><div id="users-users-collection-get" class="action get"><h4 class="action-heading"><div class="name">List All Users</div><a href="#users-users-collection-get" class="method get">GET</a><code class="uri">/v1/users{?sort,filter}</code></h4><p>Get a list of Users.</p>
-<h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/users?<span class="hljs-attribute">sort=</span><span class="hljs-literal">created-at</span>&<span class="hljs-attribute">filter=</span><span class="hljs-literal">[{"is-super-admin":"true"}]</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>page[size]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>10</span></span></dd><dt>page[number]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span></dd><dt>sort</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>created-at</span></span></dd><dt>filter</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>[{&quot;is-super-admin&quot;:&quot;true&quot;}]</span></span></dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Accept</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+<h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/users?<span class="hljs-attribute">sort=</span><span class="hljs-literal">email</span>&<span class="hljs-attribute">filter=</span><span class="hljs-literal"></span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>page[size]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>10</span></span></dd><dt>page[number]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span></dd><dt>sort</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>email</span></span></dd><dt>filter</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;</dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Accept</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">meta</span>": <span class="hljs-value">{
-    "<span class="hljs-attribute">count</span>": <span class="hljs-value"><span class="hljs-number">1</span>
+    "<span class="hljs-attribute">count</span>": <span class="hljs-value"><span class="hljs-number">2</span>
   </span>}</span>,
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">[
     {
       "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T01:24:47.500127+00:00"</span></span>,
-        "<span class="hljs-attribute">google</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-        "<span class="hljs-attribute">instagram</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-        "<span class="hljs-attribute">firstname</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-        "<span class="hljs-attribute">lastname</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-        "<span class="hljs-attribute">twitter</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-        "<span class="hljs-attribute">signup-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T01:25:07.385816+00:00"</span></span>,
-        "<span class="hljs-attribute">is-super-admin</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
-        "<span class="hljs-attribute">thumbnail</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-        "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"me@ipiyush.com"</span></span>,
-        "<span class="hljs-attribute">avatar</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-        "<span class="hljs-attribute">contact</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
         "<span class="hljs-attribute">is-admin</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
-        "<span class="hljs-attribute">details</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+        "<span class="hljs-attribute">last-name</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+        "<span class="hljs-attribute">instagram-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+        "<span class="hljs-attribute">is-super-admin</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+        "<span class="hljs-attribute">thumbnail-image-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+        "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-21T20:18:12.827128+00:00"</span></span>,
         "<span class="hljs-attribute">last-accessed-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-        "<span class="hljs-attribute">small</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-        "<span class="hljs-attribute">facebook</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+        "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"open_event_test_user@fossasia.org"</span></span>,
+        "<span class="hljs-attribute">icon-image-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+        "<span class="hljs-attribute">contact</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
         "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+        "<span class="hljs-attribute">small-image-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+        "<span class="hljs-attribute">facebook-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+        "<span class="hljs-attribute">details</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
         "<span class="hljs-attribute">is-verified</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
-        "<span class="hljs-attribute">avatar-uploaded</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-        "<span class="hljs-attribute">icon</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
+        "<span class="hljs-attribute">first-name</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+        "<span class="hljs-attribute">avatar-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+        "<span class="hljs-attribute">twitter-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+        "<span class="hljs-attribute">google-plus-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"user"</span></span>,
       "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
       "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/users/1"</span>
+      </span>}
+    </span>},
+    {
+      "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">is-admin</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+        "<span class="hljs-attribute">last-name</span>": <span class="hljs-value"><span class="hljs-string">"Doe"</span></span>,
+        "<span class="hljs-attribute">instagram-url</span>": <span class="hljs-value"><span class="hljs-string">"http://instagram.com/instagram"</span></span>,
+        "<span class="hljs-attribute">is-super-admin</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+        "<span class="hljs-attribute">thumbnail-image-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example.png"</span></span>,
+        "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-21T20:33:33.186358+00:00"</span></span>,
+        "<span class="hljs-attribute">last-accessed-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+        "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"example@example.com"</span></span>,
+        "<span class="hljs-attribute">icon-image-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example.png"</span></span>,
+        "<span class="hljs-attribute">contact</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
+        "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+        "<span class="hljs-attribute">small-image-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example.png"</span></span>,
+        "<span class="hljs-attribute">facebook-url</span>": <span class="hljs-value"><span class="hljs-string">"http://facebook.com/facebook"</span></span>,
+        "<span class="hljs-attribute">details</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
+        "<span class="hljs-attribute">is-verified</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+        "<span class="hljs-attribute">first-name</span>": <span class="hljs-value"><span class="hljs-string">"John"</span></span>,
+        "<span class="hljs-attribute">avatar-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example.png"</span></span>,
+        "<span class="hljs-attribute">twitter-url</span>": <span class="hljs-value"><span class="hljs-string">"http://twitter.com/twitter"</span></span>,
+        "<span class="hljs-attribute">google-plus-url</span>": <span class="hljs-value"><span class="hljs-string">"http://plus.google.com/plus.google"</span>
+      </span>}</span>,
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"user"</span></span>,
+      "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"2"</span></span>,
+      "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/users/2"</span>
       </span>}
     </span>}
   ]</span>,
@@ -80,117 +106,161 @@
     "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/users"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div><div id="users-users-collection-post" class="action post"><h4 class="action-heading"><div class="name">Create User</div><a href="#users-users-collection-post" class="method post">POST</a><code class="uri">/v1/users{?sort,filter}</code></h4><p>Create a new user using an email, password and an optional name.</p>
-<h4>Example URI</h4><div class="definition"><span class="method post">POST</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/users?<span class="hljs-attribute">sort=</span><span class="hljs-literal">created-at</span>&<span class="hljs-attribute">filter=</span><span class="hljs-literal">[{"is-super-admin":"true"}]</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>page[size]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>10</span></span></dd><dt>page[number]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span></dd><dt>sort</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>created-at</span></span></dd><dt>filter</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>[{&quot;is-super-admin&quot;:&quot;true&quot;}]</span></span></dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+<h4>Example URI</h4><div class="definition"><span class="method post">POST</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/users?<span class="hljs-attribute">sort=</span><span class="hljs-literal">email</span>&<span class="hljs-attribute">filter=</span><span class="hljs-literal"></span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>page[size]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>10</span></span></dd><dt>page[number]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span></dd><dt>sort</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>email</span></span></dd><dt>filter</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;</dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Open Event User"</span></span>,
       "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"example@example.com"</span></span>,
-      "<span class="hljs-attribute">password</span>": <span class="hljs-value"><span class="hljs-string">"12345678"</span>
+      "<span class="hljs-attribute">password</span>": <span class="hljs-value"><span class="hljs-string">"password"</span></span>,
+      "<span class="hljs-attribute">avatar_url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example.png"</span></span>,
+      "<span class="hljs-attribute">first-name</span>": <span class="hljs-value"><span class="hljs-string">"John"</span></span>,
+      "<span class="hljs-attribute">last-name</span>": <span class="hljs-value"><span class="hljs-string">"Doe"</span></span>,
+      "<span class="hljs-attribute">details</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
+      "<span class="hljs-attribute">contact</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
+      "<span class="hljs-attribute">facebook-url</span>": <span class="hljs-value"><span class="hljs-string">"http://facebook.com/facebook"</span></span>,
+      "<span class="hljs-attribute">twitter-url</span>": <span class="hljs-value"><span class="hljs-string">"http://twitter.com/twitter"</span></span>,
+      "<span class="hljs-attribute">instagram-url</span>": <span class="hljs-value"><span class="hljs-string">"http://instagram.com/instagram"</span></span>,
+      "<span class="hljs-attribute">google-plus-url</span>": <span class="hljs-value"><span class="hljs-string">"http://plus.google.com/plus.google"</span></span>,
+      "<span class="hljs-attribute">thumbnail-image-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example.png"</span></span>,
+      "<span class="hljs-attribute">small-image-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example.png"</span></span>,
+      "<span class="hljs-attribute">icon-image-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example.png"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"user"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>201</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Open Event User"</span></span>,
-      "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"example@example.com"</span></span>,
-      "<span class="hljs-attribute">password</span>": <span class="hljs-value"><span class="hljs-string">"12345678"</span>
-    </span>}</span>,
-    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"user"</span>
-  </span>}
-</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="users-user-details" class="resource"><h3 class="resource-heading">User Details <a href="#users-user-details" class="permalink">&nbsp;&para;</a></h3><div id="users-user-details-get" class="action get"><h4 class="action-heading"><div class="name">Get Details</div><a href="#users-user-details-get" class="method get">GET</a><code class="uri">/v1/users/{user_id}</code></h4><p>Get a single user.</p>
-<h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/users/<span class="hljs-attribute" title="user_id">1</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>user_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the user in the form of an integer</p>
-</dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Accept</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
-  "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
-    "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T01:24:47.500127+00:00"</span></span>,
-      "<span class="hljs-attribute">google</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">instagram</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">firstname</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">lastname</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">twitter</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">signup-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T01:25:07.385816+00:00"</span></span>,
-      "<span class="hljs-attribute">is-super-admin</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
-      "<span class="hljs-attribute">thumbnail</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"me@ipiyush.com"</span></span>,
-      "<span class="hljs-attribute">avatar</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">contact</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">is-admin</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
-      "<span class="hljs-attribute">details</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">is-admin</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">last-name</span>": <span class="hljs-value"><span class="hljs-string">"Doe"</span></span>,
+      "<span class="hljs-attribute">instagram-url</span>": <span class="hljs-value"><span class="hljs-string">"http://instagram.com/instagram"</span></span>,
+      "<span class="hljs-attribute">is-super-admin</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">thumbnail-image-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example.png"</span></span>,
+      "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-21T12:26:09.075379+00:00"</span></span>,
       "<span class="hljs-attribute">last-accessed-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">small</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">facebook</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"example@example.com"</span></span>,
+      "<span class="hljs-attribute">icon-image-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example.png"</span></span>,
+      "<span class="hljs-attribute">contact</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">is-verified</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
-      "<span class="hljs-attribute">avatar-uploaded</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">icon</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
+      "<span class="hljs-attribute">small-image-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example.png"</span></span>,
+      "<span class="hljs-attribute">facebook-url</span>": <span class="hljs-value"><span class="hljs-string">"http://facebook.com/facebook"</span></span>,
+      "<span class="hljs-attribute">details</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
+      "<span class="hljs-attribute">is-verified</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">first-name</span>": <span class="hljs-value"><span class="hljs-string">"John"</span></span>,
+      "<span class="hljs-attribute">avatar-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example.png"</span></span>,
+      "<span class="hljs-attribute">twitter-url</span>": <span class="hljs-value"><span class="hljs-string">"http://twitter.com/twitter"</span></span>,
+      "<span class="hljs-attribute">google-plus-url</span>": <span class="hljs-value"><span class="hljs-string">"http://plus.google.com/plus.google"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"user"</span></span>,
-    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"2"</span></span>,
     "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/users/1"</span>
+      "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/users/2"</span>
     </span>}
   </span>}</span>,
   "<span class="hljs-attribute">jsonapi</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"1.0"</span>
   </span>}</span>,
   "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/users/1"</span>
+    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/users/2"</span>
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="users-user-details" class="resource"><h3 class="resource-heading">User Details <a href="#users-user-details" class="permalink">&nbsp;&para;</a></h3><div id="users-user-details-get" class="action get"><h4 class="action-heading"><div class="name">Get Details</div><a href="#users-user-details-get" class="method get">GET</a><code class="uri">/v1/users/{user_id}</code></h4><p>Get a single user.</p>
+<h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/users/<span class="hljs-attribute" title="user_id">2</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>user_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span><p>ID of the user in the form of an integer</p>
+</dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Accept</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">is-admin</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">last-name</span>": <span class="hljs-value"><span class="hljs-string">"Doe"</span></span>,
+      "<span class="hljs-attribute">instagram-url</span>": <span class="hljs-value"><span class="hljs-string">"http://instagram.com/instagram"</span></span>,
+      "<span class="hljs-attribute">is-super-admin</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">thumbnail-image-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example.png"</span></span>,
+      "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-21T12:26:09.075379+00:00"</span></span>,
+      "<span class="hljs-attribute">last-accessed-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"example@example.com"</span></span>,
+      "<span class="hljs-attribute">icon-image-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example.png"</span></span>,
+      "<span class="hljs-attribute">contact</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
+      "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">small-image-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example.png"</span></span>,
+      "<span class="hljs-attribute">facebook-url</span>": <span class="hljs-value"><span class="hljs-string">"http://facebook.com/facebook"</span></span>,
+      "<span class="hljs-attribute">details</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
+      "<span class="hljs-attribute">is-verified</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">first-name</span>": <span class="hljs-value"><span class="hljs-string">"John"</span></span>,
+      "<span class="hljs-attribute">avatar-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example.png"</span></span>,
+      "<span class="hljs-attribute">twitter-url</span>": <span class="hljs-value"><span class="hljs-string">"http://twitter.com/twitter"</span></span>,
+      "<span class="hljs-attribute">google-plus-url</span>": <span class="hljs-value"><span class="hljs-string">"http://plus.google.com/plus.google"</span>
+    </span>}</span>,
+    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"user"</span></span>,
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"2"</span></span>,
+    "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/users/2"</span>
+    </span>}
+  </span>}</span>,
+  "<span class="hljs-attribute">jsonapi</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"1.0"</span>
+  </span>}</span>,
+  "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/users/2"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div><div id="users-user-details-patch" class="action patch"><h4 class="action-heading"><div class="name">Update User</div><a href="#users-user-details-patch" class="method patch">PATCH</a><code class="uri">/v1/users/{user_id}</code></h4><ul>
 <li><code>id</code> (integer) - ID of the record to update <strong>(required)</strong></li>
 </ul>
-<p>Update a single user by setting the email, email and/or name.</p>
+<p>Update a single note by setting the email, email and/or name.</p>
 <p>Authorized user should be same as user in request body or must be admin.</p>
-<h4>Example URI</h4><div class="definition"><span class="method patch">PATCH</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/users/<span class="hljs-attribute" title="user_id">1</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>user_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the user in the form of an integer</p>
+<h4>Example URI</h4><div class="definition"><span class="method patch">PATCH</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/users/<span class="hljs-attribute" title="user_id">2</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>user_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span><p>ID of the user in the form of an integer</p>
 </dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Open Event User"</span></span>,
-      "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"example@example.com"</span></span>,
-      "<span class="hljs-attribute">password</span>": <span class="hljs-value"><span class="hljs-string">"12345678"</span>
+      "<span class="hljs-attribute">password</span>": <span class="hljs-value"><span class="hljs-string">"password1"</span></span>,
+      "<span class="hljs-attribute">avatar_url</span>": <span class="hljs-value"><span class="hljs-string">"http://example1.com/example1.png"</span></span>,
+      "<span class="hljs-attribute">first-name</span>": <span class="hljs-value"><span class="hljs-string">"Jane"</span></span>,
+      "<span class="hljs-attribute">last-name</span>": <span class="hljs-value"><span class="hljs-string">"Dough"</span></span>,
+      "<span class="hljs-attribute">details</span>": <span class="hljs-value"><span class="hljs-string">"example1"</span></span>,
+      "<span class="hljs-attribute">contact</span>": <span class="hljs-value"><span class="hljs-string">"example1"</span></span>,
+      "<span class="hljs-attribute">facebook-url</span>": <span class="hljs-value"><span class="hljs-string">"http://facebook.com/facebook1"</span></span>,
+      "<span class="hljs-attribute">twitter-url</span>": <span class="hljs-value"><span class="hljs-string">"http://twitter.com/twitter1"</span></span>,
+      "<span class="hljs-attribute">instagram-url</span>": <span class="hljs-value"><span class="hljs-string">"http://instagram.com/instagram1"</span></span>,
+      "<span class="hljs-attribute">google-plus-url</span>": <span class="hljs-value"><span class="hljs-string">"http://plus.google.com/plus.google1"</span></span>,
+      "<span class="hljs-attribute">thumbnail-image-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example1.com/example1.png"</span></span>,
+      "<span class="hljs-attribute">small-image-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example1.com/example1.png"</span></span>,
+      "<span class="hljs-attribute">icon-image-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example1.com/example1.png"</span>
     </span>}</span>,
-    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"user"</span>
+    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"user"</span></span>,
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"2"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T01:24:47.500127+00:00"</span></span>,
-      "<span class="hljs-attribute">google</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">instagram</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">firstname</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">lastname</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">twitter</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">signup-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T01:25:07.385816+00:00"</span></span>,
-      "<span class="hljs-attribute">is-super-admin</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
-      "<span class="hljs-attribute">thumbnail</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"me@ipiyush.com"</span></span>,
-      "<span class="hljs-attribute">avatar</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">contact</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">is-admin</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
-      "<span class="hljs-attribute">details</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">is-admin</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">last-name</span>": <span class="hljs-value"><span class="hljs-string">"Dough"</span></span>,
+      "<span class="hljs-attribute">instagram-url</span>": <span class="hljs-value"><span class="hljs-string">"http://instagram.com/instagram1"</span></span>,
+      "<span class="hljs-attribute">is-super-admin</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">thumbnail-image-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example1.com/example1.png"</span></span>,
+      "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-21T19:50:57.493620+00:00"</span></span>,
       "<span class="hljs-attribute">last-accessed-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">small</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">facebook</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"example@example.com"</span></span>,
+      "<span class="hljs-attribute">icon-image-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example1.com/example1.png"</span></span>,
+      "<span class="hljs-attribute">contact</span>": <span class="hljs-value"><span class="hljs-string">"example1"</span></span>,
       "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">is-verified</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
-      "<span class="hljs-attribute">avatar-uploaded</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">icon</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
+      "<span class="hljs-attribute">small-image-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example1.com/example1.png"</span></span>,
+      "<span class="hljs-attribute">facebook-url</span>": <span class="hljs-value"><span class="hljs-string">"http://facebook.com/facebook1"</span></span>,
+      "<span class="hljs-attribute">details</span>": <span class="hljs-value"><span class="hljs-string">"example1"</span></span>,
+      "<span class="hljs-attribute">is-verified</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">first-name</span>": <span class="hljs-value"><span class="hljs-string">"Jane"</span></span>,
+      "<span class="hljs-attribute">avatar-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example1.com/example1.png"</span></span>,
+      "<span class="hljs-attribute">twitter-url</span>": <span class="hljs-value"><span class="hljs-string">"http://twitter.com/twitter1"</span></span>,
+      "<span class="hljs-attribute">google-plus-url</span>": <span class="hljs-value"><span class="hljs-string">"http://plus.google.com/plus.google1"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"user"</span></span>,
-    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"2"</span></span>,
     "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/users/1"</span>
+      "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/users/2"</span>
     </span>}
   </span>}</span>,
   "<span class="hljs-attribute">jsonapi</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"1.0"</span>
   </span>}</span>,
   "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/users/1"</span>
+    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/users/2"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div><div id="users-user-details-delete" class="action delete"><h4 class="action-heading"><div class="name">Delete User</div><a href="#users-user-details-delete" class="method delete">DELETE</a><code class="uri">/v1/users/{user_id}</code></h4><p>Delete a single user.</p>
-<h4>Example URI</h4><div class="definition"><span class="method delete">DELETE</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/users/<span class="hljs-attribute" title="user_id">1</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>user_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the user in the form of an integer</p>
+<h4>Example URI</h4><div class="definition"><span class="method delete">DELETE</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/users/<span class="hljs-attribute" title="user_id">2</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>user_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span><p>ID of the user in the form of an integer</p>
 </dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Accept</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">meta</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Object successfully deleted"</span>
@@ -268,24 +338,24 @@
       "relationships": {
         "events": {
           "links": {
-            "self": "/v1/event-types/11/relationships/events", 
+            "self": "/v1/event-types/11/relationships/events",
             "related": "/v1/event-types/11/events"
           }
         }
-      }, 
+      },
       "attributes": {
-        "name": "Camp, Treat &amp; Retreat", 
+        "name": "Camp, Treat &amp; Retreat",
         "slug": "camp-treat-retreat"
       }, "
-      type": "event-type", 
-      "id": "11", 
+      type": "event-type",
+      "id": "11",
       "links": {
         "self": "/v1/event-types/11"
       }
-    }, 
+    },
     "jsonapi": {
       "version": "1.0"
-    }, 
+    },
     "links": {
       "self": "/v1/event-types/11"
     }
@@ -419,24 +489,24 @@
       "relationships": {
         "events": {
           "links": {
-            "self": "/v1/event-topics/11/relationships/events", 
+            "self": "/v1/event-topics/11/relationships/events",
             "related": "/v1/event-topics/11/events"
           }
         }
-      }, 
+      },
       "attributes": {
-        "name": "Travel &amp; Outdoor", 
+        "name": "Travel &amp; Outdoor",
         "slug": "travel-outdoor"
       }, "
-      type": "event-topic", 
-      "id": "11", 
+      type": "event-topic",
+      "id": "11",
       "links": {
         "self": "/v1/event-topics/11"
       }
-    }, 
+    },
     "jsonapi": {
       "version": "1.0"
-    }, 
+    },
     "links": {
       "self": "/v1/event-topics/11"
     }
@@ -803,21 +873,21 @@
             "related": "/v1/events/12/session-types"
           }
         },
-        "event-type": { 
+        "event-type": {
           "links": {
-            "self": "/v1/events/12/relationships/event-type", 
+            "self": "/v1/events/12/relationships/event-type",
             "related": "/v1/events/12/event-type"
           }
         },
         "event-topic": {"
           links": {
-            "self": "/v1/events/12/relationships/event-topic", 
+            "self": "/v1/events/12/relationships/event-topic",
             "related": "/v1/events/12/event-topic"
           }
-        }, 
+        },
         "discount-codes": {
           "links": {
-            "self": "/v1/events/12/relationships/discount-codes", 
+            "self": "/v1/events/12/relationships/discount-codes",
             "related": "/v1/events/12/discount-codes"
           }
         }
@@ -915,21 +985,21 @@
             "related": "/v1/events/11/session-types"
           }
         }
-        "event-type": { 
+        "event-type": {
           "links": {
-            "self": "/v1/events/12/relationships/event-type", 
+            "self": "/v1/events/12/relationships/event-type",
             "related": "/v1/events/12/event-type"
           }
-        }, 
+        },
         "event-topic": {"
           links": {
-            "self": "/v1/events/12/relationships/event-topic", 
+            "self": "/v1/events/12/relationships/event-topic",
             "related": "/v1/events/12/event-topic"
           }
-        }, 
+        },
         "discount-codes": {
           "links": {
-            "self": "/v1/events/12/relationships/discount-codes", 
+            "self": "/v1/events/12/relationships/discount-codes",
             "related": "/v1/events/12/discount-codes"
           }
         }
@@ -1047,21 +1117,21 @@
           "related": "/v1/events/12/session-types"
         }
       }
-      "event-type": { 
+      "event-type": {
         "links": {
-          "self": "/v1/events/12/relationships/event-type", 
+          "self": "/v1/events/12/relationships/event-type",
           "related": "/v1/events/12/event-type"
         }
-      }, 
+      },
       "event-topic": {"
         links": {
-          "self": "/v1/events/12/relationships/event-topic", 
+          "self": "/v1/events/12/relationships/event-topic",
           "related": "/v1/events/12/event-topic"
         }
-      }, 
+      },
       "discount-codes": {
         "links": {
-          "self": "/v1/events/12/relationships/discount-codes", 
+          "self": "/v1/events/12/relationships/discount-codes",
           "related": "/v1/events/12/discount-codes"
         }
       }
@@ -1168,21 +1238,21 @@
           "related": "/v1/events/13/session-types"
         }
       }
-      "event-type": { 
+      "event-type": {
         "links": {
-          "self": "/v1/events/12/relationships/event-type", 
+          "self": "/v1/events/12/relationships/event-type",
           "related": "/v1/events/12/event-type"
         }
       },
       "event-topic": {"
         links": {
-          "self": "/v1/events/12/relationships/event-topic", 
+          "self": "/v1/events/12/relationships/event-topic",
           "related": "/v1/events/12/event-topic"
         }
-      },  
+      },
       "discount-codes": {
           "links": {
-          "self": "/v1/events/12/relationships/discount-codes", 
+          "self": "/v1/events/12/relationships/discount-codes",
           "related": "/v1/events/12/discount-codes"
         }
       }
@@ -1312,21 +1382,21 @@
           "related": "/v1/events/13/session-types"
         }
       }
-      "event-type": { 
+      "event-type": {
         "links": {
-          "self": "/v1/events/12/relationships/event-type", 
+          "self": "/v1/events/12/relationships/event-type",
           "related": "/v1/events/12/event-type"
         }
-      }, 
+      },
       "event-topic": {"
         links": {
-          "self": "/v1/events/12/relationships/event-topic", 
+          "self": "/v1/events/12/relationships/event-topic",
           "related": "/v1/events/12/event-topic"
         }
-      }, 
+      },
       "discount-codes": {
         "links": {
-          "self": "/v1/events/12/relationships/discount-codes", 
+          "self": "/v1/events/12/relationships/discount-codes",
           "related": "/v1/events/12/discount-codes"
         }
       }
@@ -4245,8 +4315,8 @@
 </tbody>
 </table>
 <div id="notifications-notifications-collection" class="resource"><h3 class="resource-heading">Notifications Collection <a href="#notifications-notifications-collection" class="permalink">&nbsp;&para;</a></h3><div id="notifications-notifications-collection-get" class="action get"><h4 class="action-heading"><div class="name">List All Notifications</div><a href="#notifications-notifications-collection-get" class="method get">GET</a><code class="uri">/v1/users/{user_id}/notifications{?sort,filter}</code></h4><p>Get a list of Notifications.</p>
-<h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/users/<span class="hljs-attribute" title="user_id">1</span>/notifications?<span class="hljs-attribute">sort=</span><span class="hljs-literal">name</span>&<span class="hljs-attribute">filter=</span><span class="hljs-literal">[{"is_read": "true" }]</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>user_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the specific user in integer</p>
-</dd><dt>page[size]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>10</span></span></dd><dt>page[number]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span></dd><dt>sort</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>name</span></span></dd><dt>filter</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>[{&quot;is_read&quot;: &quot;true&quot; }]</span></span></dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Accept</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+<h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/users/<span class="hljs-attribute" title="user_id">2</span>/notifications?<span class="hljs-attribute">sort=</span><span class="hljs-literal">message</span>&<span class="hljs-attribute">filter=</span><span class="hljs-literal">[]</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>user_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span><p>ID of the specific user in integer</p>
+</dd><dt>page[size]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>10</span></span></dd><dt>page[number]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span></dd><dt>sort</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>message</span></span></dd><dt>filter</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>[]</span></span></dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Accept</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">meta</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">count</span>": <span class="hljs-value"><span class="hljs-number">1</span>
   </span>}</span>,
@@ -4255,22 +4325,21 @@
       "<span class="hljs-attribute">relationships</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">user</span>": <span class="hljs-value">{
           "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-            "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/12/relationships/user"</span></span>,
-            "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/12/user"</span>
+            "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/1/relationships/user"</span></span>,
+            "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/1/user"</span>
           </span>}
         </span>}
       </span>}</span>,
       "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"Ticket-kids Purchased"</span></span>,
-        "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Ticket-kids Purchased for Classical Music Event"</span></span>,
-        "<span class="hljs-attribute">recieved-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T01:25:07.385816+00:00"</span></span>,
-        "<span class="hljs-attribute">accept</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-        "<span class="hljs-attribute">is-read</span>": <span class="hljs-value"><span class="hljs-literal">false</span>
+        "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
+        "<span class="hljs-attribute">received-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-23T04:40:37.239724+00:00"</span></span>,
+        "<span class="hljs-attribute">is-read</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+        "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"example"</span>
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"notification"</span></span>,
-      "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"12"</span></span>,
+      "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
       "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/12"</span>
+        "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/1"</span>
       </span>}
     </span>}
   ]</span>,
@@ -4278,18 +4347,17 @@
     "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"1.0"</span>
   </span>}</span>,
   "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/users/1/notifications"</span>
+    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/users/2/notifications"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div><div id="notifications-notifications-collection-post" class="action post"><h4 class="action-heading"><div class="name">Create Notificaiton</div><a href="#notifications-notifications-collection-post" class="method post">POST</a><code class="uri">/v1/users/{user_id}/notifications{?sort,filter}</code></h4><p>Create a new notification with user_id.</p>
-<h4>Example URI</h4><div class="definition"><span class="method post">POST</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/users/<span class="hljs-attribute" title="user_id">1</span>/notifications?<span class="hljs-attribute">sort=</span><span class="hljs-literal">name</span>&<span class="hljs-attribute">filter=</span><span class="hljs-literal">[{"is_read": "true" }]</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>user_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the specific user in integer</p>
-</dd><dt>page[size]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>10</span></span></dd><dt>page[number]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span></dd><dt>sort</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>name</span></span></dd><dt>filter</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>[{&quot;is_read&quot;: &quot;true&quot; }]</span></span></dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+<h4>Example URI</h4><div class="definition"><span class="method post">POST</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/users/<span class="hljs-attribute" title="user_id">2</span>/notifications?<span class="hljs-attribute">sort=</span><span class="hljs-literal">message</span>&<span class="hljs-attribute">filter=</span><span class="hljs-literal">[]</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>user_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span><p>ID of the specific user in integer</p>
+</dd><dt>page[size]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>10</span></span></dd><dt>page[number]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span></dd><dt>sort</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>message</span></span></dd><dt>filter</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>[]</span></span></dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"Ticket-kids Purchased"</span></span>,
-      "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Ticket-kids Purchased for Classical Music Event"</span></span>,
-      "<span class="hljs-attribute">recieved-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T01:25:07.385816+00:00"</span></span>,
-      "<span class="hljs-attribute">accept</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">is-read</span>": <span class="hljs-value"><span class="hljs-literal">false</span>
+      "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
+      "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
+      "<span class="hljs-attribute">action</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
+      "<span class="hljs-attribute">is-read</span>": <span class="hljs-value"><span class="hljs-string">"false"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"notification"</span>
   </span>}
@@ -4298,29 +4366,28 @@
     "<span class="hljs-attribute">relationships</span>": <span class="hljs-value">{
       "<span class="hljs-attribute">user</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/12/relationships/user"</span></span>,
-          "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/12/user"</span>
+          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/1/relationships/user"</span></span>,
+          "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/1/user"</span>
         </span>}
       </span>}
     </span>}</span>,
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"Ticket-kids Purchased"</span></span>,
-      "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Ticket-kids Purchased for Classical Music Event"</span></span>,
-      "<span class="hljs-attribute">recieved-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T01:25:07.385816+00:00"</span></span>,
-      "<span class="hljs-attribute">accept</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">is-read</span>": <span class="hljs-value"><span class="hljs-literal">false</span>
+      "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
+      "<span class="hljs-attribute">received-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-23T04:40:37.239724+00:00"</span></span>,
+      "<span class="hljs-attribute">is-read</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"example"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"notification"</span></span>,
-    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"12"</span></span>,
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
     "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/12"</span>
+      "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/1"</span>
     </span>}
   </span>}</span>,
   "<span class="hljs-attribute">jsonapi</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"1.0"</span>
   </span>}</span>,
   "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/12"</span>
+    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/1"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="notifications-notification-detail" class="resource"><h3 class="resource-heading">Notification Detail <a href="#notifications-notification-detail" class="permalink">&nbsp;&para;</a></h3><div id="notifications-notification-detail-get" class="action get"><h4 class="action-heading"><div class="name">Notification Detail</div><a href="#notifications-notification-detail-get" class="method get">GET</a><code class="uri">/v1/notifications/{notification_id}</code></h4><p>Get a single notification.</p>
 <h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/notifications/<span class="hljs-attribute" title="notification_id">1</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>notification_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the notifcaiton in the form of an integer</p>
@@ -4329,29 +4396,28 @@
     "<span class="hljs-attribute">relationships</span>": <span class="hljs-value">{
       "<span class="hljs-attribute">user</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/12/relationships/user"</span></span>,
-          "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/12/user"</span>
+          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/1/relationships/user"</span></span>,
+          "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/1/user"</span>
         </span>}
       </span>}
     </span>}</span>,
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"Ticket-kids Purchased"</span></span>,
-      "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Ticket-kids Purchased for Classical Music Event"</span></span>,
-      "<span class="hljs-attribute">recieved-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T01:25:07.385816+00:00"</span></span>,
-      "<span class="hljs-attribute">accept</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">is-read</span>": <span class="hljs-value"><span class="hljs-literal">false</span>
+      "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
+      "<span class="hljs-attribute">received-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-23T04:40:37.239724+00:00"</span></span>,
+      "<span class="hljs-attribute">is-read</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"example"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"notification"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
     "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/12"</span>
+      "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/1"</span>
     </span>}
   </span>}</span>,
   "<span class="hljs-attribute">jsonapi</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"1.0"</span>
   </span>}</span>,
   "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/12"</span>
+    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/1"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div><div id="notifications-notification-detail-patch" class="action patch"><h4 class="action-heading"><div class="name">Update Notification</div><a href="#notifications-notification-detail-patch" class="method patch">PATCH</a><code class="uri">/v1/notifications/{notification_id}</code></h4><p>Update a single notification with <code>id</code>.</p>
 <ul>
@@ -4361,43 +4427,41 @@
 </dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"Ticket-kids Purchased"</span></span>,
-      "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Ticket-kids Purchased for Classical Music Event"</span></span>,
-      "<span class="hljs-attribute">recieved-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T01:25:07.385816+00:00"</span></span>,
-      "<span class="hljs-attribute">accept</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">is-read</span>": <span class="hljs-value"><span class="hljs-literal">false</span>
+      "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"example1"</span></span>,
+      "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"example1"</span></span>,
+      "<span class="hljs-attribute">action</span>": <span class="hljs-value"><span class="hljs-string">"example1"</span></span>,
+      "<span class="hljs-attribute">is_read</span>": <span class="hljs-value"><span class="hljs-string">"true"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"notification"</span></span>,
-    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"12"</span>
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">relationships</span>": <span class="hljs-value">{
       "<span class="hljs-attribute">user</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/12/relationships/user"</span></span>,
-          "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/12/user"</span>
+          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/1/relationships/user"</span></span>,
+          "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/1/user"</span>
         </span>}
       </span>}
     </span>}</span>,
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"Ticket-kids Purchased"</span></span>,
-      "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Ticket-kids Purchased for Classical Music Event"</span></span>,
-      "<span class="hljs-attribute">recieved-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T01:25:07.385816+00:00"</span></span>,
-      "<span class="hljs-attribute">accept</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">is-read</span>": <span class="hljs-value"><span class="hljs-literal">false</span>
+      "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"example1"</span></span>,
+      "<span class="hljs-attribute">received-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-23T04:40:37.239724+00:00"</span></span>,
+      "<span class="hljs-attribute">is-read</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+      "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"example1"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"notification"</span></span>,
-    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"12"</span></span>,
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
     "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifcations/12"</span>
+      "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/1"</span>
     </span>}
   </span>}</span>,
   "<span class="hljs-attribute">jsonapi</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"1.0"</span>
   </span>}</span>,
   "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/12"</span>
+    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/notifications/1"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div><div id="notifications-notification-detail-delete" class="action delete"><h4 class="action-heading"><div class="name">Delete Notification</div><a href="#notifications-notification-detail-delete" class="method delete">DELETE</a><code class="uri">/v1/notifications/{notification_id}</code></h4><p>Delete a single notification.</p>
 <h4>Example URI</h4><div class="definition"><span class="method delete">DELETE</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/notifications/<span class="hljs-attribute" title="notification_id">1</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>notification_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the notifcaiton in the form of an integer</p>
