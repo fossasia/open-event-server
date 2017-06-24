@@ -2200,7 +2200,7 @@ Data related to all the sessions in the event.
     + filter (optional, string, `[{"level":"1"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Sessions [GET]
-Get a list of Sessions.
+Get a list of Sessions **(Public)**.
 
 + Request
 
@@ -2281,7 +2281,7 @@ Get a list of Sessions.
 
 
 ### Create Sessions [POST]
-Create a new session using an event_id.
+Create a new session using an event_id **(Minimum Co-Organizer Access)**
 
 + Request (application/vnd.api+json)
 
@@ -2388,7 +2388,7 @@ Create a new session using an event_id.
     + session_id: 1 (integer) - ID of the speaker call in the form of an integer
 
 ### Session Details [GET]
-Get a single session.
+Get a single session. **(Public)**
 
 + Request
 
@@ -2464,9 +2464,12 @@ Get a single session.
 
 
 ### Update Session [PATCH]
-Update a single session by `id`.
+Update a single session by `id`. **(Minimum Co-Organizer Access)**
 
-+ id (integer) - ID of the record to update **(required)**
+| Key | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `id`  | ID of the record to update | integer | **yes** |
+
 
 + Request (application/vnd.api+json)
 
@@ -2568,7 +2571,7 @@ Update a single session by `id`.
         }
 
 ### Delete Session [DELETE]
-Delete a single session.
+Delete a single session. **(Minimum Co-Organizer Access)**
 
 + Request
 

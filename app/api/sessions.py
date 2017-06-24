@@ -1,4 +1,5 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from marshmallow import validates_schema
@@ -6,6 +7,7 @@ import marshmallow.validate as validate
 from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
+from app.api.bootstrap import api
 from app.api.events import Event
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
@@ -21,6 +23,7 @@ class SessionSchema(Schema):
     """
     Api schema for Session Model
     """
+
     class Meta:
         """
         Meta class for Session Api Schema
@@ -107,20 +110,19 @@ class SessionList(ResourceList):
         return query_
 
     def before_create_object(self, data, view_kwargs):
-        if view_kwargs.get('track_id') is not None:
-            track = self.session.query(Track).filter_by(id=view_kwargs['track_id']).one()
-            data['track_id'] = track.id
-        if view_kwargs.get('session_type_id') is not None:
-            session_type = self.session.query(SessionType).filter_by(
-                id=view_kwargs['session_type_id']).one()
-            data['session_type_id'] = session_type.id
-        if view_kwargs.get('microlocation_id') is not None:
-            microlocation = self.session.query(Microlocation).filter_by(
-                id=view_kwargs['microlocation_id']).one()
-            data['microlocation_id'] = microlocation.id
+        if view_kwargs.get('event_id') is not None:
+            try:
+                event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_id'},
+                                     "Event: {} not found".format(view_kwargs['event_id']))
+            else:
+                data['event_id'] = event.id
 
     view_kwargs = True
-    decorators = (jwt_required, )
+    decorators = (api.has_permission('is_coorganizer', fetch="event_id",
+                  fetch_as="event_id", methods="POST",
+                  check=lambda a: a.get('event_id') or a.get('event_identifier')), )
     schema = SessionSchema
     data_layer = {'session': db.session,
                   'model': Session,
@@ -144,20 +146,20 @@ class SessionDetail(ResourceDetail):
             else:
                 view_kwargs['event_id'] = event.id
 
-    decorators = (jwt_required, )
+    decorators = (api.has_permission('is_coorganizer', fetch="event_id",
+                                                       fetch_as="event_id",
+                                                       model=Session,
+                                                       methods="PATCH,DELETE"),)
     schema = SessionSchema
     data_layer = {'session': db.session,
                   'model': Session,
                   'methods': {
-                      'before_get_object': before_get_object
-                  }}
-
+                      'before_get_object': before_get_object}}
 
 class SessionRelationship(ResourceRelationship):
     """
     Session Relationship
     """
-    decorators = (jwt_required, )
     schema = SessionSchema
     data_layer = {'session': db.session,
                   'model': Session}
