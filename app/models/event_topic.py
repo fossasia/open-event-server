@@ -4,7 +4,7 @@ from app.helpers.helpers import get_count
 
 
 def get_new_slug(name):
-    slug = name.lower().replace("& ", "").replace(",", "").replace(" ","-")
+    slug = name.lower().replace("& ", "").replace(",", "").replace("/","-").replace(" ","-")
     count = get_count(EventType.query.filter_by(slug=slug))
     if count == 0:
         return slug
@@ -18,8 +18,9 @@ class EventTopic(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
     name = db.Column(db.String, nullable=False)
-    slug = db.Column(db.String, unique=True)
+    slug = db.Column(db.String, unique=True, nullable=False)
     events = db.relationship('Event', backref='event_topics')
+    event_sub_topics = db.relationship('EventSubTopic', backref='event-topic')
 
     def __init__(self,
                  name=None,

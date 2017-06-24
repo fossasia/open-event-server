@@ -83,8 +83,8 @@ class EventSchema(Schema):
     privacy = fields.Str(default="public")
     state = fields.Str(default="Draft")
     event_type_id = fields.Integer()
-    topic = fields.Str()
-    sub_topic = fields.Str()
+    event_topic_id = fields.Integer()
+    event_sub_topic = fields.Integer()
     ticket_url = fields.Url()
     code_of_conduct = fields.Str()
     schedule_published_on = fields.DateTime()
@@ -221,6 +221,13 @@ class EventSchema(Schema):
                                related_view_kwargs={'event_id': '<id>'},
                                schema='EventTopicSchema',
                                type_='event-topic')
+    event_sub_topic = Relationship(attribute='event_sub_topic',
+                               self_view='v1.event_event_sub_topic',
+                               self_view_kwargs={'id': '<id>'},
+                               related_view='v1.event_sub_topic_detail',
+                               related_view_kwargs={'event_id': '<id>'},
+                               schema='EventSubTopicSchema',
+                               type_='event-sub-topic')
 
 
 class EventList(ResourceList):
