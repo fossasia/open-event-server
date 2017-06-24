@@ -94,8 +94,10 @@ api.route(EventRelationship, 'event_discount_code', '/events/<int:id>/relationsh
           '/events/<identifier>/relationships/discount-codes')
 api.route(EventRelationship, 'event_session', '/events/<int:id>/relationships/sessions',
           '/events/<identifier>/relationships/sessions')
-api.route(EventRelationship, 'event_event_type', '/events/<int:id>/relationships/event-type')
-api.route(EventRelationship, 'event_event_topic', '/events/<int:id>/relationships/event-topic')
+api.route(EventRelationship, 'event_event_type', '/events/<int:id>/relationships/event-type',
+          '/events/<identifier>/relationships/event-type')
+api.route(EventRelationship, 'event_event_topic', '/events/<int:id>/relationships/event-topic',
+          '/events/<identifier>/relationships/event-topic')
 
 # microlocations
 api.route(MicrolocationList, 'microlocation_list', '/microlocations', '/sessions/<int:id>/microlocations',
@@ -193,10 +195,12 @@ api.route(AttendeeRelationship, 'attendee_ticket', '/attendees/<int:id>/relation
 
 # event types
 api.route(EventTypeList, 'event_type_list', '/event-types')
-api.route(EventTypeDetail, 'event_type_detail', '/event-types/<int:id>', '/events/<int:event_id>/event-type')
+api.route(EventTypeDetail, 'event_type_detail', '/event-types/<int:id>', '/events/<int:event_id>/event-type',
+          '/events/<event_identifier>/event-type')
 api.route(EventTypeRelationship, 'event_type_event', '/event-types/<int:id>/relationships/events')
 
 # event topics
 api.route(EventTopicList, 'event_topic_list', '/event-topics')
-api.route(EventTopicDetail, 'event_topic_detail', '/event-topics/<int:id>', '/events/<int:event_id>/event-topic')
+api.route(EventTopicDetail, 'event_topic_detail', '/event-topics/<int:id>', '/events/<int:event_id>/event-topic',
+          '/events/<event_identifier>/event_topic')
 api.route(EventTopicRelationship, 'event_topic_event', '/event-topics/<int:id>/relationships/events')
