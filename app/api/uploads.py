@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask import url_for, redirect, request, current_app, jsonify
+from flask import url_for, make_response, request, current_app, jsonify, abort
 from flask_jwt import jwt_required
 from flask import current_app as app
 from app.api.helpers.files import uploaded_image, uploaded_file
@@ -32,17 +32,38 @@ def upload_image():
 @upload_routes.route('/file', methods=['POST'])
 @jwt_required()
 def upload_file():
-    files = request.files['file']
-    file_uploaded = uploaded_file(files=files)
     force_local = request.args.get('force_local', 'false')
-    if force_local == 'true':
-        file_url = upload_local(
-            file_uploaded,
-            UPLOAD_PATHS['temp']['event'].format(uuid=uuid.uuid4())
-        )
+    if 'file' in request.files:
+        files = request.files['file']
+        file_uploaded = uploaded_file(files=files)
+        if force_local == 'true':
+            files_url = upload_local(
+                file_uploaded,
+                UPLOAD_PATHS['temp']['event'].format(uuid=uuid.uuid4())
+            )
+        else:
+            files_url = upload(
+                file_uploaded,
+                UPLOAD_PATHS['temp']['event'].format(uuid=uuid.uuid4())
+            )
+    elif 'files[]' in request.files:
+        files = request.files.getlist('files[]')
+        files_uploaded = uploaded_file(files=files, multiple=True)
+        files_url = []
+        for file_uploaded in files_uploaded:
+            if force_local == 'true':
+                files_url.append(upload_local(
+                    file_uploaded,
+                    UPLOAD_PATHS['temp']['event'].format(uuid=uuid.uuid4())
+                ))
+            else:
+                files_url.append(upload(
+                    file_uploaded,
+                    UPLOAD_PATHS['temp']['event'].format(uuid=uuid.uuid4())
+                ))
     else:
-        file_url = upload(
-            file_uploaded,
-            UPLOAD_PATHS['temp']['event'].format(uuid=uuid.uuid4())
+        abort(
+            make_response(jsonify(error="Bad Request"), 400)
         )
-    return jsonify({"url": file_url})
+
+    return jsonify({"url": files_url})
