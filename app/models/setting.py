@@ -2,6 +2,7 @@ from app.models import db
 
 
 class Environment:
+
     def __init__(self):
         pass
 
@@ -26,6 +27,8 @@ class Setting(db.Model):
     tagline = db.Column(db.String)
     # App secret
     secret = db.Column(db.String)
+    # Static domain
+    static_domain = db.Column(db.String)
 
     #
     #  STORAGE
@@ -128,6 +131,7 @@ class Setting(db.Model):
                  tw_consumer_secret=None, sendgrid_key=None,
                  secret=None, storage_place=None,
                  app_name=None,
+                 static_domain=None,
                  tagline=None,
                  google_url=None, github_url=None,
                  twitter_url=None, support_url=None,
@@ -169,6 +173,7 @@ class Setting(db.Model):
         self.sendgrid_key = sendgrid_key
         self.analytics_key = analytics_key
         self.app_name = app_name
+        self.static_domain = static_domain
         self.tagline = tagline
         self.secret = secret
         self.storage_place = storage_place

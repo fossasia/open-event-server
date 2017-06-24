@@ -61,7 +61,7 @@ class Event(db.Model):
     large_image_url = db.Column(db.String)
     icon_image_url = db.Column(db.String)
     organizer_name = db.Column(db.String)
-    is_map_shown = db.Column(db.Integer)
+    is_map_shown = db.Column(db.Boolean)
     organizer_description = db.Column(db.String)
     is_sessions_speakers_enabled = db.Column(db.Boolean, default=False)
     track = db.relationship('Track', backref="event")
@@ -74,7 +74,7 @@ class Event(db.Model):
     role_invites = db.relationship('RoleInvite', back_populates='event')
     privacy = db.Column(db.String, default="public")
     state = db.Column(db.String, default="Draft")
-    type = db.Column(db.String)
+    event_type_id = db.Column(db.Integer, db.ForeignKey('event_types.id', ondelete='CASCADE'))
     topic = db.Column(db.String)
     sub_topic = db.Column(db.String)
     ticket_url = db.Column(db.String)
@@ -101,6 +101,7 @@ class Event(db.Model):
     xcal_url = db.Column(db.String)
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
     discount_code = db.relationship('DiscountCode', backref='events')
+    event_type = db.relationship('EventType', backref='event')
 
     def __init__(self,
                  name=None,
@@ -119,7 +120,7 @@ class Event(db.Model):
                  organizer_name=None,
                  organizer_description=None,
                  state=None,
-                 type=None,
+                 event_type_id=None,
                  privacy=None,
                  topic=None,
                  sub_topic=None,
@@ -128,7 +129,7 @@ class Event(db.Model):
                  code_of_conduct=None,
                  schedule_published_on=None,
                  is_sessions_speakers_enabled=False,
-                 is_map_shown=1,
+                 is_map_shown=True,
                  searchable_location_name=None,
                  is_ticketing_enabled=None,
                  deleted_at=None,
@@ -170,7 +171,7 @@ class Event(db.Model):
         self.state = state
         self.is_map_shown = is_map_shown
         self.privacy = privacy
-        self.type = type
+        self.event_type_id = event_type_id
         self.topic = topic
         self.copyright = copyright
         self.sub_topic = sub_topic
