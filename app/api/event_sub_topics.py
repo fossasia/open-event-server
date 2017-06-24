@@ -3,12 +3,15 @@ from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
+from flask import request
+
 
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.event_sub_topic import EventSubTopic
 from app.models.event import Event
+from app.models.event_topic import EventTopic
 from app.api.bootstrap import api
 from app.api.helpers.permissions import is_admin, is_user_itself, jwt_required
 
@@ -53,14 +56,23 @@ class EventSubTopicList(ResourceList):
     def query(self, view_kwargs):
         query_ = self.session.query(EventSubTopic)
         if view_kwargs.get('event_topic_id'):
-            if 'GET' in request.method:
-                query_ = self.session.query(EventSubTopic).filter_by(event_topic_id=view_kwargs['event_topic_id'])
+            query_ = query_.join(EventTopic).filter(EventTopic.id == view_kwargs['event_topic_id'])
         return query_
 
+    def before_create_object(self, data, view_kwargs):
+        if view_kwargs.get('event_topic_id'):
+            event_topic = self.session.query(EventTopic).filter_by(id=view_kwargs['event_topic_id']).one()
+            data['event_topic_id'] = event_topic.id
+
+    view_kwargs = True
     decorators = (jwt_required, api.has_permission('is_admin', methods="POST"),)
     schema = EventSubTopicSchema
     data_layer = {'session': db.session,
-                  'model': EventSubTopic}
+                  'model': EventSubTopic,
+                  'methods': {
+                      'query': query,
+                      'before_create_object': before_create_object
+                  }}
 
 
 class EventSubTopicDetail(ResourceDetail):

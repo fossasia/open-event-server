@@ -5,7 +5,7 @@ from app.helpers.helpers import get_count
 
 def get_new_slug(name):
     slug = name.lower().replace("& ", "").replace(",", "").replace("/","-").replace(" ","-")
-    count = get_count(EventType.query.filter_by(slug=slug))
+    count = get_count(EventSubTopic.query.filter_by(slug=slug))
     if count == 0:
         return slug
     else:
@@ -33,7 +33,7 @@ class EventSubTopic(db.Model):
         self.event_topic_id = event_topic_id
 
     def __repr__(self):
-        return '<EventType %r>' % self.name
+        return '<EventSubTopic %r>' % self.name
 
     def __str__(self):
         return unicode(self).encode('utf-8')

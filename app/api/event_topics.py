@@ -39,13 +39,13 @@ class EventTopicSchema(Schema):
                           schema='EventSchema',
                           type_='event')
     event_sub_topics = Relationship(attribute='event_sub_topic',
-                          self_view='v1.event_topic_event_sub_topic',
-                          self_view_kwargs={'id': '<id>'},
-                          related_view='v1.event_sub_topic_list',
-                          related_view_kwargs={'event_topic_id': '<id>'},
-                          many=True,
-                          schema='EventSubTopicSchema',
-                          type_='event-sub-topic')
+                                    self_view='v1.event_topic_event_sub_topic',
+                                    self_view_kwargs={'id': '<id>'},
+                                    related_view='v1.event_sub_topic_list',
+                                    related_view_kwargs={'event_topic_id': '<id>'},
+                                    many=True,
+                                    schema='EventSubTopicSchema',
+                                    type_='event-sub-topic')
 
 class EventTopicList(ResourceList):
 
