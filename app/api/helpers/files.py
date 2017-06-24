@@ -18,3 +18,13 @@ def uploaded_image(extension='.png', file_content=None):
     file.write(file_content.split(",")[1].decode('base64'))
     file.close()
     return UploadedFile(file_path, filename)
+
+
+def uploaded_file(files):
+    filename = files.filename
+    filedir = current_app.config.get('BASE_DIR') + '/static/uploads/'
+    if not os.path.isdir(filedir):
+        os.makedirs(filedir)
+    file_path = filedir + filename
+    files.save(file_path)
+    return UploadedFile(file_path, filename)

@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask import url_for, redirect, request, current_app, jsonify
 from flask_jwt import jwt_required
 from flask import current_app as app
-from app.api.helpers.images import uploaded_image
+from app.api.helpers.files import uploaded_image, uploaded_file
 from app.api.helpers.storage import UPLOAD_PATHS, upload_local, upload
 import uuid
 
@@ -27,3 +27,22 @@ def upload_image():
             UPLOAD_PATHS['temp']['image'].format(uuid=uuid.uuid4())
         )
     return jsonify({"url": image_url})
+
+
+@upload_routes.route('/file', methods=['POST'])
+@jwt_required()
+def upload_file():
+    files = request.files['file']
+    file_uploaded = uploaded_file(files=files)
+    force_local = request.args.get('force_local', 'false')
+    if force_local == 'true':
+        file_url = upload_local(
+            file_uploaded,
+            UPLOAD_PATHS['temp']['event'].format(uuid=uuid.uuid4())
+        )
+    else:
+        file_url = upload(
+            file_uploaded,
+            UPLOAD_PATHS['temp']['event'].format(uuid=uuid.uuid4())
+        )
+    return jsonify({"url": file_url})
