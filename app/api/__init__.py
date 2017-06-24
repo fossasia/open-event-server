@@ -139,8 +139,8 @@ api.route(TrackRelationship, 'track_sessions', '/tracks/<int:id>/relationships/s
 api.route(TrackRelationship, 'track_event', '/tracks/<int:id>/relationships/event')
 
 # speakers_calls
-api.route(SpeakersCallList, 'speakers_call_list', '/events/<int:event_id>/speakers-calls',
-          '/events/<event_identifier>/speakers-calls')
+api.route(SpeakersCallList, 'speakers_call_list', '/events/<int:event_id>/speakers-call',
+          '/events/<event_identifier>/speakers-call')
 api.route(SpeakersCallDetail, 'speakers_call_detail', '/speakers-calls/<int:id>',
           '/events/<int:event_id>/speakers-call', '/events/<event_identifier>/speakers-call')
 api.route(SpeakersCallRelationship, 'speakers_call_event',
@@ -155,8 +155,8 @@ api.route(SessionTypeRelationship, 'session_type_sessions', '/session-types/<int
 api.route(SessionTypeRelationship, 'session_type_event', '/session-types/<int:id>/relationships/event')
 
 # event_copyright
-api.route(EventCopyrightList, 'event_copyright_list', '/events/<int:id>/event-copyright',
-          '/events/<identifier>/event-copyright')
+api.route(EventCopyrightList, 'event_copyright_list', '/events/<int:event_id>/event-copyright',
+          '/events/<event_identifier>/event-copyright')
 api.route(EventCopyrightDetail, 'event_copyright_detail',
           '/event-copyright/<int:id>', '/events/<int:event_id>/event-copyright',
           '/events/<event_identifier>/event-copyright')

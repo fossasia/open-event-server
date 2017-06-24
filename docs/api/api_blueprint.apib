@@ -2450,7 +2450,7 @@ Data related to all the sessions in the event.
     + filter (optional, string, `[{"level":"1"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Sessions [GET]
-Get a list of Sessions.
+Get a list of Sessions **(Public)**.
 
 + Request
 
@@ -2531,7 +2531,7 @@ Get a list of Sessions.
 
 
 ### Create Sessions [POST]
-Create a new session using an event_id.
+Create a new session using an event_id **(Minimum Co-Organizer Access)**
 
 + Request (application/vnd.api+json)
 
@@ -2638,7 +2638,7 @@ Create a new session using an event_id.
     + session_id: 1 (integer) - ID of the speaker call in the form of an integer
 
 ### Session Details [GET]
-Get a single session.
+Get a single session. **(Public)**
 
 + Request
 
@@ -2714,9 +2714,12 @@ Get a single session.
 
 
 ### Update Session [PATCH]
-Update a single session by `id`.
+Update a single session by `id`. **(Minimum Co-Organizer Access)**
 
-+ id (integer) - ID of the record to update **(required)**
+| Key | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `id`  | ID of the record to update | integer | **yes** |
+
 
 + Request (application/vnd.api+json)
 
@@ -2818,7 +2821,7 @@ Update a single session by `id`.
         }
 
 ### Delete Session [DELETE]
-Delete a single session.
+Delete a single session. **(Minimum Co-Organizer Access)**
 
 + Request
 
@@ -3346,7 +3349,8 @@ Announcement for call for speaker to accept session proposals from speakers.
 | `hash` | Hash for speakers call | string | - |
 | `privacy` | Privacy of speakers call | string | - |
 
-## Create Speakers Call for an Event [/v1/events/{event_identifier}/speakers-calls{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+
+## Speakers Call Collection [/v1/events/{event_identifier}/speakers-calls{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -3354,17 +3358,53 @@ Announcement for call for speaker to accept session proposals from speakers.
     + sort (optional, string, `starts-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[{"announcement":"string"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
+### Get Speakers Call [GET]
+Get Speakers Call for an event.
+
++ Request
+
+    + Headers
+
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/speakers-calls/1/relationships/event",
+                            "related": "/v1/speakers-calls/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "announcement": "Speaker Call Announcement",
+                    "ends-at": "2017-06-20T01:24:47.500127+00:00",
+                    "hash": "sfasd",
+                    "starts-at": "2017-06-01T01:24:47.500127+00:00",
+                    "privacy": "public"
+                },
+                "type": "speakers-call",
+                "id": "10",
+                "links": {
+                    "self": "/v1/speakers-calls/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/speakers-calls/1"
+            }
+        }
 
 ### Create Speakers Call [POST]
 Create a new speakers call using an event_id.
-
-| Parameter | Description | Type | Required |
-|:----------|-------------|------|----------|
-| `announcement`  | Announcement for speakers call | string | **yes** |
-| `starts-at` | Start date of the speakers call | ISO 8601 (tz-aware) | **yes** |
-| `ends-at` | End date of the speakers call | ISO 8601 (tz-aware) | **yes** |
-| `hash` | Hash for speakers call | string | - |
-| `privacy` | Privacy of speakers call | string | - |
 
 + Request (application/vnd.api+json)
 
@@ -3420,59 +3460,6 @@ Create a new speakers call using an event_id.
             "self": "/v1/speaker-calls/1"
           }
         }
-
-## Get Speakers Call for an Event [/v1/events/{event_id}/speakers-call{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
-+ Parameters
-    + event_id: 1 (integer) - ID of the specific event in integer
-    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
-    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
-    + sort (optional, string, `level`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[{"description":"string"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
-### Get Speakers Call [GET]
-
-+ Request
-
-    + Headers
-
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-            "data": {
-                "relationships": {
-                    "event": {
-                        "links": {
-                            "self": "/v1/speakers-calls/1/relationships/event",
-                            "related": "/v1/speakers-calls/1/event"
-                        }
-                    }
-                },
-                "attributes": {
-                    "announcement": "Speaker Call Announcement",
-                    "ends-at": "2017-06-20T01:24:47.500127+00:00",
-                    "hash": "sfasd",
-                    "starts-at": "2017-06-01T01:24:47.500127+00:00",
-                    "privacy": "public"
-                },
-                "type": "speakers-call",
-                "id": "10",
-                "links": {
-                    "self": "/v1/speakers-calls/1"
-                }
-            },
-            "jsonapi": {
-                "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/speakers-calls/1"
-            }
-        }
-
-
 
 ## Speakers Call Details [/v1/speakers-calls/{speakers_call_id}]
 
