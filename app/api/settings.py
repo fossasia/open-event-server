@@ -1,9 +1,12 @@
 from flask_rest_jsonapi import ResourceDetail
 from marshmallow_jsonapi.flask import Schema
 from marshmallow_jsonapi import fields
+from flask_jwt import current_identity as current_user, _jwt_required
+from flask import current_app as app
+from flask import request
+
+from app.api.bootstrap import api
 from app.models import db
-from app.api.helpers.permissions import jwt_required, is_admin
-from flask_jwt import current_identity
 from app.models.setting import Setting
 
 
@@ -152,6 +155,24 @@ class SettingSchemaNonAdmin(Schema):
     # Google Analytics
     analytics_key = fields.Str()
 
+    stripe_publishable_key = fields.Str()
+
+    #
+    # Social links
+    #
+    google_url = fields.Str()
+    github_url = fields.Str()
+    twitter_url = fields.Str()
+    support_url = fields.Str()
+    facebook_url = fields.Str()
+    youtube_url = fields.Str()
+
+    #
+    # Generators
+    #
+    android_app_url = fields.Str()
+    web_app_url = fields.Str()
+
 
 class SettingDetail(ResourceDetail):
     """
@@ -160,17 +181,20 @@ class SettingDetail(ResourceDetail):
 
     def before_get(self, args, kwargs):
         kwargs['id'] = 1
-        if current_identity.is_admin or current_identity.is_super_admin:
-            self.schema = SettingSchemaAdmin
-        else:
-            self.schema = SettingSchemaNonAdmin
+
+        if 'Authorization' in request.headers:
+            _jwt_required(app.config['JWT_DEFAULT_REALM'])
+
+            if current_user.is_admin or current_user.is_super_admin:
+                self.schema = SettingSchemaAdmin
+            else:
+                self.schema = SettingSchemaNonAdmin
 
     def before_patch(self, args, kwargs):
         kwargs['id'] = 1
 
-    decorators = (jwt_required, )
+    decorators = (api.has_permission('is_admin', methods="PATCH"),)
     methods = ['GET', 'PATCH']
-    patch = is_admin(ResourceDetail.patch.__func__)
-    schema = SettingSchemaAdmin
+    schema = SettingSchemaNonAdmin
     data_layer = {'session': db.session,
                   'model': Setting}

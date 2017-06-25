@@ -61,7 +61,8 @@ api.route(TicketTagRelationship, 'ticket_tag_ticket', '/ticket-tags/<int:id>/rel
 api.route(TicketTagRelationship, 'ticket_tag_event', '/ticket-tags/<int:id>/relationships/event')
 
 # events
-api.route(EventList, 'event_list', '/events', '/event-types/<int:event_type_id>/events', '/event-topics/<int:event_topic_id>/events',
+api.route(EventList, 'event_list', '/events', '/event-types/<int:event_type_id>/events',
+          '/event-topics/<int:event_topic_id>/events',
           '/event-sub-topics/<int:event_sub_topic_id>/events')
 api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>', '/tickets/<int:ticket_id>/event',
           '/microlocations/<int:microlocation_id>/event', '/social-links/<int:social_link_id>/event',
@@ -104,17 +105,18 @@ api.route(EventRelationship, 'event_event_sub_topic', '/events/<int:id>/relation
           '/events/<identifier>/relationships/event-sub-topic')
 
 # microlocations
-api.route(MicrolocationList, 'microlocation_list', '/microlocations', '/sessions/<int:id>/microlocations',
-          '/events/<int:event_id>/microlocations', '/events/<identifier>/microlocations')
+api.route(MicrolocationList, 'microlocation_list', '/microlocations', '/events/<int:event_id>/microlocations',
+          '/events/<event_identifier>/microlocations')
 api.route(MicrolocationDetail, 'microlocation_detail', '/microlocations/<int:id>',
-              '/sessions/<int:session_id>/microlocation')
+          '/sessions/<int:session_id>/microlocation')
 api.route(MicrolocationRelationship, 'microlocation_session',
           '/microlocations/<int:id>/relationships/sessions')
 api.route(MicrolocationRelationship, 'microlocation_event',
           '/microlocations/<int:id>/relationships/event')
 
 # sessions
-api.route(SessionList, 'session_list', '/sessions', '/events/<int:event_id>/sessions', '/events/<event_identifier>/sessions',
+api.route(SessionList, 'session_list', '/sessions', '/events/<int:event_id>/sessions',
+          '/events/<event_identifier>/sessions',
           '/tracks/<int:track_id>/sessions', '/session_types/<int:session_type_id>/sessions',
           '/microlocations/<int:microlocation_id>/sessions')
 api.route(SessionDetail, 'session_detail', '/sessions/<int:id>')
@@ -134,7 +136,8 @@ api.route(SocialLinkRelationship, 'social_link_event',
           '/social-links/<int:id>/relationships/event')
 
 # sponsors
-api.route(SponsorList, 'sponsor_list', '/sponsors', '/events/<int:event_id>/sponsors', '/events/<event_identifier>/sponsors')
+api.route(SponsorList, 'sponsor_list', '/sponsors', '/events/<int:event_id>/sponsors',
+          '/events/<event_identifier>/sponsors')
 api.route(SponsorDetail, 'sponsor_detail', '/sponsors/<int:id>')
 api.route(SponsorRelationship, 'sponsor_event', '/sponsors/<int:id>/relationships/event')
 
@@ -208,11 +211,14 @@ api.route(EventTopicList, 'event_topic_list', '/event-topics')
 api.route(EventTopicDetail, 'event_topic_detail', '/event-topics/<int:id>', '/events/<int:event_id>/event-topic',
           '/events/<event_identifier>/event-topic', '/event-sub-topics/<int:event_sub_topic_id>/event-topic')
 api.route(EventTopicRelationship, 'event_topic_event', '/event-topics/<int:id>/relationships/events')
-api.route(EventTopicRelationship, 'event_topic_event_sub_topic', '/event-topics/<int:id>/relationships/event-sub-topics')
+api.route(EventTopicRelationship, 'event_topic_event_sub_topic',
+          '/event-topics/<int:id>/relationships/event-sub-topics')
 
 # event sub topics
-api.route(EventSubTopicList, 'event_sub_topic_list','/event-topics/<int:event_topic_id>/event-sub-topics')
-api.route(EventSubTopicDetail, 'event_sub_topic_detail', '/event-sub-topics/<int:id>', '/events/<int:event_id>/event-sub-topic',
+api.route(EventSubTopicList, 'event_sub_topic_list', '/event-topics/<int:event_topic_id>/event-sub-topics')
+api.route(EventSubTopicDetail, 'event_sub_topic_detail', '/event-sub-topics/<int:id>',
+          '/events/<int:event_id>/event-sub-topic',
           '/events/<event_identifier>/event-sub-topic')
 api.route(EventSubTopicRelationship, 'event_sub_topic_event', '/event-sub-topics/<int:id>/relationships/events')
-api.route(EventSubTopicRelationship, 'event_sub_topic_event_topic', '/event-sub-topics/<int:id>/relationships/event-topic')
+api.route(EventSubTopicRelationship, 'event_sub_topic_event_topic',
+          '/event-sub-topics/<int:id>/relationships/event-topic')

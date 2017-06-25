@@ -2,6 +2,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 
+from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.api.helpers.permissions import is_admin
@@ -35,7 +36,7 @@ class PageList(ResourceList):
     """
     List and create page
     """
-    post = is_admin(ResourceList.post.__func__)
+    decorators = (api.has_permission('is_admin', methods="POST"),)
     schema = PageSchema
     data_layer = {'session': db.session,
                   'model': Page}
@@ -45,8 +46,7 @@ class PageDetail(ResourceDetail):
     """
     Page detail by id
     """
-    patch = is_admin(ResourceDetail.patch.__func__)
-    delete = is_admin(ResourceDetail.delete.__func__)
     schema = PageSchema
+    decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
     data_layer = {'session': db.session,
                   'model': Page}
