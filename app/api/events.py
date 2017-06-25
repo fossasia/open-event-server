@@ -264,6 +264,8 @@ class EventList(ResourceList):
         uer = UsersEventsRoles(user, event, role)
         save_to_db(uer, 'Event Saved')
 
+    # This permission decorator ensures, you are logged in to create an event
+    # and have filter ?withRole to get events associated with logged in user
     decorators = (api.has_permission('accessible_role_based_events'),)
     schema = EventSchema
     data_layer = {'session': db.session,
@@ -378,7 +380,8 @@ class EventDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
-    decorators = (api.has_permission('is_organizer', methods="PATCH,DELETE", fetch="id", fetch_as="event_id"),)
+    decorators = (api.has_permission('is_organizer', methods="PATCH,DELETE", fetch="id", fetch_as="event_id",
+                  check=lambda a: a.get('id') is not None), )
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
