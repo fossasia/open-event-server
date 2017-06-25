@@ -129,9 +129,9 @@ api.route(SessionRelationship, 'session_event',
           '/sessions/<int:id>/relationships/event')
 
 # social_links
-api.route(SocialLinkList, 'social_link_list', '/events/<int:id>/social-links', '/events/<identifier>/social-links')
-api.route(SocialLinkDetail, 'social_link_detail',
-          '/social-links/<int:id>', '/events/<int:event_id>/social-links')
+api.route(SocialLinkList, 'social_link_list', '/events/<int:event_id>/social-links',
+          '/events/<event_identifier>/social-links')
+api.route(SocialLinkDetail, 'social_link_detail', '/social-links/<int:id>')
 api.route(SocialLinkRelationship, 'social_link_event',
           '/social-links/<int:id>/relationships/event')
 

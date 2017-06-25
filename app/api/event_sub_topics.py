@@ -54,15 +54,38 @@ class EventSubTopicList(ResourceList):
     List and create event sub topics
     """
     def query(self, view_kwargs):
+        """
+        query method for event sub-topics list
+        :param view_kwargs:
+        :return:
+        """
+
         query_ = self.session.query(EventSubTopic)
         if view_kwargs.get('event_topic_id'):
-            query_ = query_.join(EventTopic).filter(EventTopic.id == view_kwargs['event_topic_id'])
+            try:
+                event_topic = self.session.query(EventTopic).filter_by(id=view_kwargs['event_topic_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_topic_id'},
+                                     "Event Topic: {} not found".format(view_kwargs['event_topic_id']))
+            else:
+                query_ = query_.join(EventTopic).filter(EventTopic.id == event_topic.id)
         return query_
 
     def before_create_object(self, data, view_kwargs):
+        """
+        method to create object before post
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         if view_kwargs.get('event_topic_id'):
-            event_topic = self.session.query(EventTopic).filter_by(id=view_kwargs['event_topic_id']).one()
-            data['event_topic_id'] = event_topic.id
+            try:
+                event_topic = self.session.query(EventTopic).filter_by(id=view_kwargs['event_topic_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_topic_id'},
+                                     "Event Topic: {} not found".format(view_kwargs['event_topic_id']))
+            else:
+                data['event_topic_id'] = event_topic.id
 
     view_kwargs = True
     decorators = (jwt_required, api.has_permission('is_admin', methods="POST"),)

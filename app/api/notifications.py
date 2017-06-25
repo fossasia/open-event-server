@@ -1,6 +1,8 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+from sqlalchemy.orm.exc import NoResultFound
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.utilities import dasherize
 from app.models import db
@@ -45,15 +47,37 @@ class NotificationList(ResourceList):
     """
 
     def query(self, view_kwargs):
+        """
+        query method for Notifications list
+        :param view_kwargs:
+        :return:
+        """
         query_ = self.session.query(Notification)
-        if view_kwargs.get('id') is not None:
-            query_ = query_.join(User).filter(User.id == view_kwargs['id'])
+        if view_kwargs.get('id'):
+            try:
+                user = self.session.query(User).filter_by(id=view_kwargs['id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'id'},
+                                     "User: {} not found".format(view_kwargs['id']))
+            else:
+                query_ = query_.join(User).filter(User.id == user.id)
         return query_
 
     def before_create_object(self, data, view_kwargs):
+        """
+        method to create object before post
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         if view_kwargs.get('id') is not None:
-            user = self.session.query(User).filter_by(id=view_kwargs['id']).one()
-            data['user_id'] = user.id
+            try:
+                user = self.session.query(User).filter_by(id=view_kwargs['id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'id'},
+                                     "User: {} not found".format(view_kwargs['id']))
+            else:
+                data['user_id'] = user.id
 
     view_kwargs = True
     decorators = (is_user_itself,)
@@ -77,6 +101,9 @@ class NotificationDetail(ResourceDetail):
 
 
 class NotificationRelationship(ResourceRelationship):
+    """
+    Notification Relationship
+    """
     decorators = (jwt_required,)
     schema = NotificationSchema
     data_layer = {'session': db.session,
