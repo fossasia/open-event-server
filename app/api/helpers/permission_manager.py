@@ -25,6 +25,7 @@ def is_super_admin(view, view_args, view_kwargs, *args, **kwargs):
 
 @jwt_required
 def is_admin(view, view_args, view_kwargs, *args, **kwargs):
+
     user = current_identity
     if not user.is_admin and not user.is_super_admin:
         return ForbiddenError({'source': ''}, 'Admin access is required').respond()
@@ -123,7 +124,7 @@ def accessible_role_based_events(view, view_args, view_kwargs, *args, **kwargs):
     if 'POST' in request.method or  'withRole' in request.args:
         _jwt_required(app.config['JWT_DEFAULT_REALM'])
         user = current_identity
-        
+
         if 'GET' in request.method and user.is_staff:
             return view(*view_args, **view_kwargs)
         view_kwargs['user_id'] = user.id
@@ -140,7 +141,7 @@ permissions = {
     'is_registrar': is_registrar,
     'is_moderator': is_moderator,
     'user_event': user_event,
-    'accessible_role_based_events': accessible_role_based_events    
+    'accessible_role_based_events': accessible_role_based_events
 }
 
 
@@ -167,7 +168,7 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         if not check(view_kwargs):
             return ForbiddenError({'source': ''}, 'Access forbidden').respond()
 
-    # If event_identifier in route instead of event_id 
+    # If event_identifier in route instead of event_id
     if 'event_identifier' in view_kwargs:
         try:
             event = Event.query.filter_by(identifier=view_kwargs['event_identifier']).one()

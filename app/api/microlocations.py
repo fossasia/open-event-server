@@ -4,6 +4,7 @@ from marshmallow_jsonapi import fields
 from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
+from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
 from app.models import db
@@ -56,20 +57,22 @@ class MicrolocationList(ResourceList):
 
     def query(self, view_kwargs):
         query_ = self.session.query(Microlocation)
-        if view_kwargs.get('id'):
-            query_ = query_.join(Event).filter(Event.id == view_kwargs['id'])
-        elif view_kwargs.get('identifier'):
-            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
+        if view_kwargs.get('event_id'):
+            query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
+        elif view_kwargs.get('event_identifier'):
+            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['event_identifier'])
+        if view_kwargs.get('session_id'):
+            query_ = query_.join(Session).filter(Session.id == view_kwargs['session_id'])
         return query_
 
     def before_create_object(self, data, view_kwargs):
-        if view_kwargs.get('id'):
-            event = self.session.query(Event).filter_by(id=view_kwargs['id']).one()
-            data['event_id'] = event.id
-        elif view_kwargs.get('identifier'):
-            event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
-            data['event_id'] = event.id
+        # Permsission Manager ensures that there is event_id if any event_identifier is provided
+        # and throws 404 if event is not found
+        event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
+        data['event_id'] = event.id
 
+    decorators = (api.has_permission('is_coorganizer', fetch='event_id', fetch_as="event_id", methods="POST",
+                  check=lambda a: a.get('event_id') or a.get('event_identifier')),)
 
     view_kwargs = True
     decorators = (jwt_required,)
@@ -102,7 +105,8 @@ class MicrolocationDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
-    decorators = (jwt_required, )
+    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE",
+                  check=lambda a: a.get('id') is not None),)
     schema = MicrolocationSchema
     data_layer = {'session': db.session,
                   'model': Microlocation,
