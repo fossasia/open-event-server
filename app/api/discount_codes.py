@@ -23,14 +23,23 @@ class DiscountCodeSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    @validates_schema
-    def validate_quantity(self, data):
-        if 'max_quantity' in data and 'min_quantity' in data:
-            if data['max_quantity'] < data['min_quantity']:
-                raise UnprocessableEntity({'pointer': '/data/attributes/max-quantity'},
-                                          "max-quantity should be greater than min-quantity")
-        if 'tickets_number' in data and 'min_quantity' in data:
-            if data['tickets_number'] < data['min_quantity']:
+    @validates_schema(pass_original=True)
+    def validate_quantity(self, data, original_data):
+        discount_code = DiscountCode.query.filter_by(id=original_data['data']['id']).one()
+        if 'min_quantity' not in data:
+            data['min_quantity'] = discount_code.min_quantity
+
+        if 'max_quantity' not in data:
+            data['max_quantity'] = discount_code.max_quantity
+
+        if 'tickets_number' not in data:
+            data['tickets_number'] = discount_code.tickets_number
+
+        if data['min_quantity'] >= data['max_quantity']:
+            raise UnprocessableEntity({'pointer': '/data/attributes/min-quantity'},
+                                      "min-quantity should be less than max-quantity")
+
+        if data['tickets_number'] < data['min_quantity']:
                 raise UnprocessableEntity({'pointer': '/data/attributes/tickets-number'},
                                           "tickets-number should be greater than min-quantity")
 
@@ -92,6 +101,7 @@ class DiscountCodeDetail(ResourceDetail):
     """
     Discount Code detail by id
     """
+
     decorators = (jwt_required,)
     schema = DiscountCodeSchema
     data_layer = {'session': db.session,

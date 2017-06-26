@@ -27,8 +27,16 @@ class SpeakersCallSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    @validates_schema
-    def validate_date(self, data):
+    @validates_schema(pass_original=True)
+    def validate_date(self, data, original_data):
+        speakers_calls = SpeakersCall.query.filter_by(id=original_data['data']['id']).one()
+
+        if 'starts_at' not in data:
+            data['starts_at'] = speakers_calls.starts_at
+
+        if 'ends_at' not in data:
+            data['ends_at'] = speakers_calls.ends_at
+
         if data['starts_at'] >= data['ends_at']:
             raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at")
 
@@ -105,7 +113,6 @@ class SpeakersCallDetail(ResourceDetail):
                     view_kwargs['id'] = event.speakers_call.id
                 else:
                     view_kwargs['id'] = None
-
 
     decorators = (jwt_required,)
     schema = SpeakersCallSchema

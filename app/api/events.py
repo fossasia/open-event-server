@@ -37,27 +37,37 @@ class EventSchema(Schema):
         self_view_many = 'v1.event_list'
         inflect = dasherize
 
-    @validates_schema
-    def validate_date(self, data):
+    @validates_schema(pass_original=True)
+    def validate_date(self, data, original_data):
+        event = Event.query.filter_by(id=original_data['data']['id']).one()
+
+        if 'starts_at' not in data:
+            data['starts_at'] = event.starts_at
+
+        if 'ends_at' not in data:
+            data['ends_at'] = event.ends_at
+
         if data['starts_at'] >= data['ends_at']:
             raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at")
 
     @validates_schema
     def validate_timezone(self, data):
-        if 'timezone' in data['timezone']:
-            offset = timezone(data['timezone']).tz.utcoffset(datetime.strptime('2014-12-01', '%Y-%m-%d')).seconds
-            starts_at = data['starts_at'].utcoffset().seconds
-            ends_at = data['ends_at'].utcoffset().seconds
-            if offset != starts_at:
-                raise UnprocessableEntity({'pointer': '/data/attributes/timezone'},
-                                          "timezone: {} does not match with the starts-at "
-                                          "offset {:02}:{:02}".
-                                          format(data['timezone'], starts_at // 3600, starts_at % 3600 // 60))
-            if offset != ends_at:
-                raise UnprocessableEntity({'pointer': '/data/attributes/timezone'},
-                                          "timezone: {} does not match with the ends-at "
-                                          "offset {:02}:{:02}".
-                                          format(data['timezone'], ends_at // 3600, ends_at % 3600 // 60))
+        if 'timezone' in data:
+            offset = timezone(data['timezone']).utcoffset(datetime.strptime('2014-12-01', '%Y-%m-%d')).seconds
+            if 'starts_at' in data:
+                starts_at = data['starts_at'].utcoffset().seconds
+                if offset != starts_at:
+                    raise UnprocessableEntity({'pointer': '/data/attributes/timezone'},
+                                              "timezone: {} does not match with the starts-at "
+                                              "offset {:02}:{:02}".
+                                              format(data['timezone'], starts_at // 3600, starts_at % 3600 // 60))
+            if 'ends_at' in data:
+                ends_at = data['ends_at'].utcoffset().seconds
+                if offset != ends_at:
+                    raise UnprocessableEntity({'pointer': '/data/attributes/timezone'},
+                                              "timezone: {} does not match with the ends-at "
+                                              "offset {:02}:{:02}".
+                                              format(data['timezone'], ends_at // 3600, ends_at % 3600 // 60))
 
     id = fields.Str(dump_only=True)
     identifier = fields.Str(dump_only=True)
@@ -231,7 +241,6 @@ class EventSchema(Schema):
 
 
 class EventList(ResourceList):
-
     def query(self, view_kwargs):
         query_ = self.session.query(Event)
         if view_kwargs.get('user_id'):
@@ -255,7 +264,7 @@ class EventList(ResourceList):
         uer = UsersEventsRoles(user, event, role)
         save_to_db(uer, 'Event Saved')
 
-    decorators = (api.has_permission('accessible_role_based_events'), )
+    decorators = (api.has_permission('accessible_role_based_events'),)
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
@@ -369,13 +378,13 @@ class EventDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
-    decorators = (api.has_permission('is_organizer', methods="PATCH,DELETE", fetch="id", fetch_as="event_id"), )
-
+    decorators = (api.has_permission('is_organizer', methods="PATCH,DELETE", fetch="id", fetch_as="event_id"),)
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
-                  'methods': {'before_get_object': before_get_object}
-                  }
+                  'methods': {
+                      'before_get_object': before_get_object
+                  }}
 
 
 class EventRelationship(ResourceRelationship):

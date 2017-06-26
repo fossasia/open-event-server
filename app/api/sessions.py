@@ -33,8 +33,16 @@ class SessionSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    @validates_schema
-    def validate_date(self, data):
+    @validates_schema(pass_original=True)
+    def validate_date(self, data, original_data):
+        session = Session.query.filter_by(id=original_data['data']['id']).one()
+
+        if 'starts_at' not in data:
+            data['starts_at'] = session.starts_at
+
+        if 'ends_at' not in data:
+            data['ends_at'] = session.ends_at
+
         if data['starts_at'] >= data['ends_at']:
             raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at")
 
@@ -147,14 +155,12 @@ class SessionDetail(ResourceDetail):
                 view_kwargs['event_id'] = event.id
 
     decorators = (api.has_permission('is_coorganizer', fetch="event_id",
-                                                       fetch_as="event_id",
-                                                       model=Session,
-                                                       methods="PATCH,DELETE"),)
+                                     fetch_as="event_id", methods="POST",
+                                     check=lambda a: a.get('event_id') or a.get('event_identifier')),)
     schema = SessionSchema
     data_layer = {'session': db.session,
                   'model': Session,
-                  'methods': {
-                      'before_get_object': before_get_object}}
+                  'methods': {'before_get_object': before_get_object}}
 
 class SessionRelationship(ResourceRelationship):
     """
