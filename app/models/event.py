@@ -101,13 +101,13 @@ class Event(db.Model):
     xcal_url = db.Column(db.String)
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
     discount_code = db.relationship('DiscountCode', backref='events')
-    event_type = db.relationship('EventType', backref='event')
-    event_topic = db.relationship('EventTopic', backref='event')
-    event_sub_topic = db.relationship('EventSubTopic', backref='event')
+    event_type = db.relationship('EventType', backref='event', foreign_keys=[event_type_id])
+    event_topic = db.relationship('EventTopic', backref='event', foreign_keys=[event_topic_id])
+    event_sub_topic = db.relationship('EventSubTopic', backref='event', foreign_keys=[event_sub_topic_id])
 
     def __init__(self,
                  name=None,
-                 logo=None,
+                 logo_url=None,
                  starts_at=None,
                  ends_at=None,
                  timezone='UTC',
@@ -152,10 +152,12 @@ class Event(db.Model):
                  xcal_url=None,
                  discount_code_id=None,
                  onsite_details=None,
-                 original_image_url=None):
+                 original_image_url=None,
+                 is_tax_enabled=None,
+                 is_sponsors_enabled=None):
 
         self.name = name
-        self.logo = logo
+        self.logo_url = logo_url
         self.starts_at = starts_at
         self.ends_at = ends_at
         self.timezone = timezone
@@ -202,6 +204,8 @@ class Event(db.Model):
         self.onsite_details = onsite_details
         self.discount_code_id = discount_code_id
         self.created_at = datetime.now(pytz.utc)
+        self.is_tax_enabled = is_tax_enabled
+        self.is_sponsors_enabled = is_sponsors_enabled
 
     def __repr__(self):
         return '<Event %r>' % self.name

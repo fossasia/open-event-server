@@ -25,23 +25,26 @@ class DiscountCodeSchema(Schema):
 
     @validates_schema(pass_original=True)
     def validate_quantity(self, data, original_data):
-        discount_code = DiscountCode.query.filter_by(id=original_data['data']['id']).one()
-        if 'min_quantity' not in data:
-            data['min_quantity'] = discount_code.min_quantity
+        if 'id' in original_data['data']:
+            discount_code = DiscountCode.query.filter_by(id=original_data['data']['id']).one()
+            if 'min_quantity' not in data:
+                data['min_quantity'] = discount_code.min_quantity
 
-        if 'max_quantity' not in data:
-            data['max_quantity'] = discount_code.max_quantity
+            if 'max_quantity' not in data:
+                data['max_quantity'] = discount_code.max_quantity
 
-        if 'tickets_number' not in data:
-            data['tickets_number'] = discount_code.tickets_number
+            if 'tickets_number' not in data:
+                data['tickets_number'] = discount_code.tickets_number
 
-        if data['min_quantity'] >= data['max_quantity']:
-            raise UnprocessableEntity({'pointer': '/data/attributes/min-quantity'},
-                                      "min-quantity should be less than max-quantity")
+        if 'min_quantity' not in data or 'max_quantity' not in data:
+            if data['min_quantity'] >= data['max_quantity']:
+                raise UnprocessableEntity({'pointer': '/data/attributes/min-quantity'},
+                                          "min-quantity should be less than max-quantity")
 
-        if data['tickets_number'] < data['min_quantity']:
-                raise UnprocessableEntity({'pointer': '/data/attributes/tickets-number'},
-                                          "tickets-number should be greater than min-quantity")
+        if 'tickets_number' not in data or 'max_quantity' not in data:
+            if data['tickets_number'] < data['min_quantity']:
+                    raise UnprocessableEntity({'pointer': '/data/attributes/tickets-number'},
+                                              "tickets-number should be greater than min-quantity")
 
     id = fields.Integer()
     code = fields.Str()
