@@ -15,6 +15,7 @@ from populate_db import populate_without_print
 # imports from factories
 from app.factories.user import UserFactory
 from app.factories.notification import NotificationFactory
+from app.factories.event import EventFactoryBasic
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -161,7 +162,10 @@ def event_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 @hooks.before("Events > Events Collection > Create Event")
@@ -181,7 +185,10 @@ def event_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 @hooks.before("Events > Event Details > Update Event")
@@ -191,7 +198,10 @@ def event_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 @hooks.before("Events > Event Details > Delete Event")
@@ -201,7 +211,10 @@ def event_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 # ------------------------- Copyright -------------------------
