@@ -61,20 +61,55 @@ class SessionTypeList(ResourceList):
     """
 
     def query(self, view_kwargs):
+        """
+        query method for Session Type List
+        :param view_kwargs:
+        :return:
+        """
         query_ = self.session.query(SessionType)
         if view_kwargs.get('event_id'):
-            query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
+            try:
+                event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_id'},
+                                     "Event: {} not found".format(view_kwargs['event_id']))
+            else:
+                query_ = query_.join(Event).filter(Event.id == event.id)
         elif view_kwargs.get('event_identifier'):
             query_ = query_.join(Event).filter(Event.identifier == view_kwargs['event_identifier'])
+            try:
+                event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_identifier'},
+                                     "Event: {} not found".format(view_kwargs['event_identifier']))
+            else:
+                query_ = query_.join(Event).filter(Event.id == event.id)
         return query_
 
     def before_create_object(self, data, view_kwargs):
+        """
+        method to create object before post
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         if view_kwargs.get('event_id'):
-            event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
-            data['event_id'] = event.id
+            try:
+                event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_id'},
+                                     "Event: {} not found".format(view_kwargs['event_id']))
+            else:
+                data['event_id'] = event.id
+
         elif view_kwargs.get('event_identifier'):
-            event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
-            data['event_id'] = event.id
+            try:
+                event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_identifier'},
+                                     "Event: {} not found".format(view_kwargs['event_identifier']))
+            else:
+                data['event_id'] = event.id
 
     view_kwargs = True
     decorators = (jwt_required,)
@@ -93,6 +128,12 @@ class SessionTypeDetail(ResourceDetail):
     """
 
     def before_get_object(self, view_kwargs):
+        """
+        before get method for session type detail
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         if view_kwargs.get('session_id'):
             try:
                 session = self.session.query(Session).filter_by(id=view_kwargs['session_id']).one()

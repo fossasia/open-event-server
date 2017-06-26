@@ -1,6 +1,8 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+from sqlalchemy.orm.exc import NoResultFound
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
@@ -10,8 +12,13 @@ from app.models.event import Event
 
 
 class SocialLinkSchema(Schema):
-
+    """
+    Social Link API Schema based on Social link model
+    """
     class Meta:
+        """
+        Meta class for social link schema
+        """
         type_ = 'social-link'
         self_view = 'v1.social_link_detail'
         self_view_kwargs = {'id': '<id>'}
@@ -30,22 +37,58 @@ class SocialLinkSchema(Schema):
 
 
 class SocialLinkList(ResourceList):
-
+    """
+    List and Create Social Links for an event
+    """
     def query(self, view_kwargs):
+        """
+        query method for social link
+        :param view_kwargs:
+        :return:
+        """
         query_ = self.session.query(SocialLink)
-        if view_kwargs.get('id'):
-            query_ = query_.join(Event).filter(Event.id == view_kwargs['id'])
-        elif view_kwargs.get('identifier'):
-            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
+        if view_kwargs.get('event_id'):
+            try:
+                event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_id'},
+                                     "Event: {} not found".format(view_kwargs['event_id']))
+            else:
+                query_ = query_.join(Event).filter(Event.id == event.id)
+        elif view_kwargs.get('event_identifier'):
+            try:
+                event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_identifier'},
+                                     "Event: {} not found".format(view_kwargs['event_identifier']))
+            else:
+                query_ = query_.join(Event).filter(Event.id == event.id)
         return query_
 
     def before_create_object(self, data, view_kwargs):
-        if view_kwargs.get('id'):
-            event = self.session.query(Event).filter_by(id=view_kwargs['id']).one()
-            data['event_id'] = event.id
-        elif view_kwargs.get('identifier'):
-            event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
-            data['event_id'] = event.id
+        """
+        method to create object before post
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
+        if view_kwargs.get('event_id'):
+            try:
+                event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_id'},
+                                     "Event: {} not found".format(view_kwargs['event_id']))
+            else:
+                data['event_id'] = event.id
+
+        elif view_kwargs.get('event_identifier'):
+            try:
+                event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_identifier'},
+                                     "Event: {} not found".format(view_kwargs['event_identifier']))
+            else:
+                data['event_id'] = event.id
 
     view_kwargs = True
     decorators = (jwt_required, )
@@ -59,6 +102,9 @@ class SocialLinkList(ResourceList):
 
 
 class SocialLinkDetail(ResourceDetail):
+    """
+    Social Link detail by id
+    """
     decorators = (jwt_required, )
     schema = SocialLinkSchema
     data_layer = {'session': db.session,
@@ -66,6 +112,9 @@ class SocialLinkDetail(ResourceDetail):
 
 
 class SocialLinkRelationship(ResourceRelationship):
+    """
+    Social Link Relationship
+    """
     decorators = (jwt_required, )
     schema = SocialLinkSchema
     data_layer = {'session': db.session,
