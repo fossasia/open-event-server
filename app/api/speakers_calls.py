@@ -29,13 +29,14 @@ class SpeakersCallSchema(Schema):
 
     @validates_schema(pass_original=True)
     def validate_date(self, data, original_data):
-        speakers_calls = SpeakersCall.query.filter_by(id=original_data['data']['id']).one()
+        if 'id' in original_data['data']:
+            speakers_calls = SpeakersCall.query.filter_by(id=original_data['data']['id']).one()
 
-        if 'starts_at' not in data:
-            data['starts_at'] = speakers_calls.starts_at
+            if 'starts_at' not in data:
+                data['starts_at'] = speakers_calls.starts_at
 
-        if 'ends_at' not in data:
-            data['ends_at'] = speakers_calls.ends_at
+            if 'ends_at' not in data:
+                data['ends_at'] = speakers_calls.ends_at
 
         if data['starts_at'] >= data['ends_at']:
             raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at")
