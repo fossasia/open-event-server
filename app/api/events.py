@@ -39,13 +39,14 @@ class EventSchema(Schema):
 
     @validates_schema(pass_original=True)
     def validate_date(self, data, original_data):
-        event = Event.query.filter_by(id=original_data['data']['id']).one()
+        if 'id' in original_data['data']:
+            event = Event.query.filter_by(id=original_data['data']['id']).one()
 
-        if 'starts_at' not in data:
-            data['starts_at'] = event.starts_at
+            if 'starts_at' not in data:
+                data['starts_at'] = event.starts_at
 
-        if 'ends_at' not in data:
-            data['ends_at'] = event.ends_at
+            if 'ends_at' not in data:
+                data['ends_at'] = event.ends_at
 
         if data['starts_at'] >= data['ends_at']:
             raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at")
@@ -92,9 +93,6 @@ class EventSchema(Schema):
     is_sessions_speakers_enabled = fields.Bool(default=False)
     privacy = fields.Str(default="public")
     state = fields.Str(default="Draft")
-    event_type_id = fields.Integer()
-    event_topic_id = fields.Integer()
-    event_sub_topic_id = fields.Integer()
     ticket_url = fields.Url()
     code_of_conduct = fields.Str()
     schedule_published_on = fields.DateTime()
