@@ -5,6 +5,7 @@ from app.api.tickets import AllTicketList, TicketDetail, TicketRelationship
 from app.api.events import EventList, EventDetail, EventRelationship
 from app.api.event_types import EventTypeList, EventTypeDetail, EventTypeRelationship
 from app.api.event_topics import EventTopicList, EventTopicDetail, EventTopicRelationship
+from app.api.event_sub_topics import EventSubTopicList, EventSubTopicDetail, EventSubTopicRelationship
 from app.api.microlocations import MicrolocationList, MicrolocationDetail, MicrolocationRelationship
 from app.api.sessions import SessionList, SessionDetail, SessionRelationship
 from app.api.social_links import SocialLinkList, SocialLinkDetail, SocialLinkRelationship
@@ -60,7 +61,8 @@ api.route(TicketTagRelationship, 'ticket_tag_ticket', '/ticket-tags/<int:id>/rel
 api.route(TicketTagRelationship, 'ticket_tag_event', '/ticket-tags/<int:id>/relationships/event')
 
 # events
-api.route(EventList, 'event_list', '/events', '/event-types/<int:event_type_id>/events', '/event-topics/<int:event_topic_id>/events')
+api.route(EventList, 'event_list', '/events', '/event-types/<int:event_type_id>/events', '/event-topics/<int:event_topic_id>/events',
+          '/event-sub-topics/<int:event_sub_topic_id>/events')
 api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>', '/tickets/<int:ticket_id>/event',
           '/microlocations/<int:microlocation_id>/event', '/social-links/<int:social_link_id>/event',
           '/sponsors/<int:sponsor_id>/event', '/tracks/<int:track_id>/event',
@@ -94,8 +96,12 @@ api.route(EventRelationship, 'event_discount_code', '/events/<int:id>/relationsh
           '/events/<identifier>/relationships/discount-codes')
 api.route(EventRelationship, 'event_session', '/events/<int:id>/relationships/sessions',
           '/events/<identifier>/relationships/sessions')
-api.route(EventRelationship, 'event_event_type', '/events/<int:id>/relationships/event-type')
-api.route(EventRelationship, 'event_event_topic', '/events/<int:id>/relationships/event-topic')
+api.route(EventRelationship, 'event_event_type', '/events/<int:id>/relationships/event-type',
+          '/events/<identifier>/relationships/event-type')
+api.route(EventRelationship, 'event_event_topic', '/events/<int:id>/relationships/event-topic',
+          '/events/<identifier>/relationships/event-topic')
+api.route(EventRelationship, 'event_event_sub_topic', '/events/<int:id>/relationships/event-sub-topic',
+          '/events/<identifier>/relationships/event-sub-topic')
 
 # microlocations
 api.route(MicrolocationList, 'microlocation_list', '/microlocations', '/sessions/<int:id>/microlocations',
@@ -193,10 +199,20 @@ api.route(AttendeeRelationship, 'attendee_ticket', '/attendees/<int:id>/relation
 
 # event types
 api.route(EventTypeList, 'event_type_list', '/event-types')
-api.route(EventTypeDetail, 'event_type_detail', '/event-types/<int:id>', '/events/<int:event_id>/event-type')
+api.route(EventTypeDetail, 'event_type_detail', '/event-types/<int:id>', '/events/<int:event_id>/event-type',
+          '/events/<event_identifier>/event-type')
 api.route(EventTypeRelationship, 'event_type_event', '/event-types/<int:id>/relationships/events')
 
 # event topics
 api.route(EventTopicList, 'event_topic_list', '/event-topics')
-api.route(EventTopicDetail, 'event_topic_detail', '/event-topics/<int:id>', '/events/<int:event_id>/event-topic')
+api.route(EventTopicDetail, 'event_topic_detail', '/event-topics/<int:id>', '/events/<int:event_id>/event-topic',
+          '/events/<event_identifier>/event-topic', '/event-sub-topics/<int:event_sub_topic_id>/event-topic')
 api.route(EventTopicRelationship, 'event_topic_event', '/event-topics/<int:id>/relationships/events')
+api.route(EventTopicRelationship, 'event_topic_event_sub_topic', '/event-topics/<int:id>/relationships/event-sub-topics')
+
+# event sub topics
+api.route(EventSubTopicList, 'event_sub_topic_list','/event-topics/<int:event_topic_id>/event-sub-topics')
+api.route(EventSubTopicDetail, 'event_sub_topic_detail', '/event-sub-topics/<int:id>', '/events/<int:event_id>/event-sub-topic',
+          '/events/<event_identifier>/event-sub-topic')
+api.route(EventSubTopicRelationship, 'event_sub_topic_event', '/event-sub-topics/<int:id>/relationships/events')
+api.route(EventSubTopicRelationship, 'event_sub_topic_event_topic', '/event-sub-topics/<int:id>/relationships/event-topic')

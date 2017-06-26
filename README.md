@@ -1,6 +1,6 @@
-#  Open Event Orga Server
+![Open Event API Server](https://storage.googleapis.com/eventyay.com/assets/branding/server_branding.png)
 
-The Open Event Orga Server enables organizers to manage events from concerts to conferences and meet-ups. It offers features for events with several tracks and venues. Event managers can create invitation forms for speakers and build schedules in a drag and drop interface. The event information is stored in a database. The system provides API endpoints to fetch the data, and to modify and update it. Organizers can import and export event data in a standard compressed file format that includes the event data in JSON and binary media files like images and audio.
+The Open Event API Server enables organizers to manage events from concerts to conferences and meet-ups. It offers features for events with several tracks and venues. Event managers can create invitation forms for speakers and build schedules in a drag and drop interface. The event information is stored in a database. The system provides API endpoints to fetch the data, and to modify and update it. Organizers can import and export event data in a standard compressed file format that includes the event data in JSON and binary media files like images and audio.
 
 [![GitHub release](https://img.shields.io/badge/release-1.0.0--alpha.10-blue.svg?style=flat-square)](https://github.com/fossasia/open-event-orga-server/releases/latest)
 [![Travis branch](https://img.shields.io/travis/fossasia/open-event-orga-server/master.svg?style=flat-square)](https://travis-ci.org/fossasia/open-event-orga-server)
@@ -8,6 +8,12 @@ The Open Event Orga Server enables organizers to manage events from concerts to 
 [![Codacy branch grade](https://img.shields.io/codacy/grade/1ac554483fac462797ffa5a8b9adf2fa/master.svg?style=flat-square)](https://www.codacy.com/app/fossasia/open-event-orga-server)
 [![Codecov branch](https://img.shields.io/codecov/c/github/fossasia/open-event-orga-server/master.svg?style=flat-square&label=Codecov+Coverage)](https://codecov.io/gh/fossasia/open-event-orga-server)
 [![Gitter](https://img.shields.io/badge/chat-on%20gitter-ff006f.svg?style=flat-square)](https://gitter.im/fossasia/open-event-orga-server)
+
+The Open Event API Server exposes a well documented [JSON:API Spec](http://jsonapi.org/) Complaint REST API that can be used by external services (like the Open Event App generators and the frontend) to access & manipulate the data.
+
+**API Documentation:**
+- Every installation of the project includes API docs, (e.g. here on the test install [https://open-event-api.herokuapp.com](https://open-event-api.herokuapp.com)).
+-  A hosted version of the API docs is available in the `gh-pages` branch of the repository at [http://dev.eventyay.com/api/v1](http://dev.eventyay.com/api/v1)
 
 ## Communication
 
@@ -18,13 +24,14 @@ Our chat channel is on Gitter here: [gitter.im/fossasia/open-event-orga-server](
 ## Demo version
 
 A demo version is automatically deployed from our repositories:
-* Deployment from the master branch - [open-event.herokuapp.com](http://open-event.herokuapp.com/)
-* Deployment from the development branch - [open-event-dev.herokuapp.com](http://open-event-dev.herokuapp.com/)
-* Developer documentation gh-pages - [dev.eventyay.com](http://dev.eventyay.com/)
+* Deployment from the `nextgen` branch - [open-event-api.herokuapp.com](http://open-event-dev.herokuapp.com/)
+* Deployment from the `master` branch - [open-event.herokuapp.com](http://open-event.herokuapp.com/)
+* Deployment from the `development` branch - [open-event-dev.herokuapp.com](http://open-event-dev.herokuapp.com/)
+* Developer documentation `gh-pages` - [dev.eventyay.com](http://dev.eventyay.com/)
 
 ## Installation
 
-The Open Event Orga Server can be easily deployed on a variety of platforms. Detailed platform specific installation instructions have been provided below.
+The Open Event API Server can be easily deployed on a variety of platforms. Detailed platform specific installation instructions have been provided below.
 
 1. [Generic Installation Instructions](/docs/installation/basic.md)
 1. [Local Installation](/docs/installation/local.md)
@@ -35,6 +42,8 @@ The Open Event Orga Server can be easily deployed on a variety of platforms. Det
 1. [Deployment on Digital Ocean](/docs/installation/digital-ocean.md)
 1. [Deployment with Docker](/docs/installation/docker.md)
 1. [Deployment on Heroku](/docs/installation/heroku.md)
+
+> The docs are outdated and will be updated for the nextgen version soon
 
 One-click Heroku deployment is also available:
 
@@ -106,22 +115,11 @@ For ticket sales the service integrates payment gateways:
 
 ## Data Access
 
-#### REST API
-
-The Open Event Orga Server exposes a well documented REST API that can be used by external services (like the Open Event App generators for example) to access the data.
-
-**API Documentation:**
-- Every installation of the project includes the API docs with Swagger, (e.g. here on the test install [http://open-event-dev.herokuapp.com/api/v1](http://open-event-dev.herokuapp.com/api/v1/)).
--  A hosted version of the API docs is available in the `gh-pages` branch of the repository at [https://fossasia.github.io/open-event-orga-server/api/v1/](https://fossasia.github.io/open-event-orga-server/api/v1/).
-- The data of events is provided over API endpoints as described [here](/docs/general/api.md).
-
-
-
 #### Import & Export
 
 **Import:**
 
-Open Event Orga server supports multiple formats as a valid source for import.
+Open Event API server supports multiple formats as a valid source for import.
 
 - A **zip archive** with JSON (matching the API structure) and binary media files. Read more about this [here](/docs/general/import-export.md).
 - The **Pentabarf XML** format is also supported as a valid import source. ([Sample file](https://archive.fosdem.org/2016/schedule/xml)).
@@ -242,8 +240,10 @@ We have the following branches
 	 PRs to must pass a build check and a unit-test check on Travis (https://open-event-dev.herokuapp.com - Is running off the development branch. It is hosted on Heroku.)
  * **master**
    This contains shipped code. After significant features/bug-fixes are accumulated on development, we make a version update, and make a release. (https://eventyay.com - Is running off the master branch. (whichever is the latest release.) Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
- * **staging**
-   This branch is mainly for testing eventyay server configurations on a staging server without affecting the production environment. Push access is restricted to the devops team.
+ * **nextgen**
+	 All development for the `nextgen` version of the Open Event Orga Server (aka Open Event API Server) goes on in this branch. If you're making a contribution, please make a pull request to _nextgen_.
+	 PRs to must pass a build check and a unit-test check on Travis (https://open-event-api.herokuapp.com - Is running off the `nextgen` branch. It is hosted on Heroku.)
+     (https://api.eventyay.com - Is running off the `nextgen` branch. Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
  * **gh-pages**
    This contains the documentation website on http://dev.eventyay.com. The site is build automatically on each commit in the development branch through a script and using travis. It includes the md files of the Readme and /docs folder. It also includes javadocs.
 

@@ -265,7 +265,7 @@ Get a single user.
 ### Update User [PATCH]
 + `id` (integer) - ID of the record to update **(required)**
 
-Update a single note by setting the email, email and/or name.
+Update a single user by setting the email, email and/or name.
 
 Authorized user should be same as user in request body or must be admin.
 
@@ -474,11 +474,11 @@ Create a new event type with name.
             }
           }
 
-## Event Types Details [/v1/event-types/{event_type_id}]
+## Event Type Details [/v1/event-types/{event_type_id}]
 + Parameters
     + event_type_id: 1 (integer) - ID of the event type in the form of an integer
 
-### Get Details [GET]
+### Event Type Details [GET]
 Get a single event type.
 
 + Request
@@ -493,6 +493,14 @@ Get a single event type.
 
         {
           "data": {
+            "relationships": {
+              "events": {
+                "links": {
+                  "self": "/v1/event-types/10/relationships/events",
+                  "related": "/v1/event-types/10/events"
+                }
+              }
+            },
             "attributes": {
               "name": "Camp, Treat & Retreat",
               "slug": "camp-treat-retreat"
@@ -515,7 +523,7 @@ Get a single event type.
 ### Update Event Type [PATCH]
 + `id` (integer) - ID of the record to update **(required)**
 
-Update a single event type by setting name and/or slug.
+Update a single event type by setting name.
 
 Authorized user must be admin.
 
@@ -540,6 +548,14 @@ Authorized user must be admin.
 
         {
           "data": {
+            "relationships": {
+              "events": {
+                "links": {
+                  "self": "/v1/event-types/10/relationships/events",
+                  "related": "/v1/event-types/10/events"
+                }
+              }
+            },
             "attributes": {
               "name": "Camp, Treat & Retreat",
               "slug": "camp-treat-retreat"
@@ -622,6 +638,12 @@ Get a list of Event Topics.
                     "self": "/v1/event-topics/10/relationships/events",
                     "related": "/v1/event-topics/10/events"
                   }
+                },
+                "event-sub-topics": {
+                  "links": {
+                    "self": "/v1/event-topics/10/relationships/event-sub-topics",
+                    "related": "/v1/event-topics/10/event-sub-topics"
+                  }
                 }
               },
               "attributes": {
@@ -674,6 +696,12 @@ Create a new event topic with name.
                     "self": "/v1/event-topics/11/relationships/events",
                     "related": "/v1/event-topics/11/events"
                   }
+                },
+                "event-sub-topics": {
+                  "links": {
+                    "self": "/v1/event-topics/10/relationships/event-sub-topics",
+                    "related": "/v1/event-topics/10/event-sub-topics"
+                  }
                 }
               },
               "attributes": {
@@ -694,11 +722,11 @@ Create a new event topic with name.
             }
           }
 
-## Event Topics Details [/v1/event-topics/{event_topic_id}]
+## Event Topic Details [/v1/event-topics/{event_topic_id}]
 + Parameters
     + event_topic_id: 1 (integer) - ID of the event topic in the form of an integer
 
-### Get Details [GET]
+### Event Topic Details [GET]
 Get a single event topic.
 
 + Request
@@ -713,6 +741,20 @@ Get a single event topic.
 
         {
           "data": {
+            "relationships": {
+              "events": {
+                "links": {
+                  "self": "/v1/event-topics/10/relationships/events",
+                  "related": "/v1/event-topics/10/events"
+                }
+              },
+              "event-sub-topics": {
+                "links": {
+                  "self": "/v1/event-topics/10/relationships/event-sub-topics",
+                  "related": "/v1/event-topics/10/event-sub-topics"
+                }
+              }
+            },
             "attributes": {
               "name": "Travel & Outdoor",
               "slug": "travel-outdoor"
@@ -735,7 +777,7 @@ Get a single event topic.
 ### Update Event Topic [PATCH]
 + `id` (integer) - ID of the record to update **(required)**
 
-Update a single event topic by setting name and/or slug.
+Update a single event topic by setting name.
 
 Authorized user must be admin.
 
@@ -760,6 +802,20 @@ Authorized user must be admin.
 
         {
           "data": {
+            "relationships": {
+              "events": {
+                "links": {
+                  "self": "/v1/event-topics/10/relationships/events",
+                  "related": "/v1/event-topics/10/events"
+                }
+              },
+              "event-sub-topics": {
+                "links": {
+                  "self": "/v1/event-topics/10/relationships/event-sub-topics",
+                  "related": "/v1/event-topics/10/event-sub-topics"
+                }
+              }
+            },
             "attributes": {
               "name": "Travel & Outdoor",
               "slug": "travel-outdoor"
@@ -780,6 +836,268 @@ Authorized user must be admin.
 
 ### Delete Event Topic [DELETE]
 Delete a single event topic.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
+# Group Event Sub Topics
+
+Event Sub Topics for Events. Can only be edited and entered by admins.
+
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the event sub topic | string | - |
+| `slug` | Slug of the event sub topic | string | - |
+| `event_topic_id` | ID of event topic for which event subtopic is related | Integer | - |
+
+## Event Sub Topics Collection [/v1/event-topics/{event_topic_id}/event-sub-topics{?page%5bsize%5d,page%5bnumber%5d,sort}]
++ Parameters
+    + event_topic_id: 1 (integer) - ID of the event topic.
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+
+### List All Event Sub Topics [GET]
+Get a list of Event Sub Topics.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          }, 
+          "data": [
+            {
+              "relationships": {
+                "events": {
+                  "links": {
+                    "self": "/v1/event-topics/5/relationships/events",
+                    "related": "/v1/event-sub-topics/5/events"
+                  }
+                }, 
+                "event-topic": {
+                  "links": {
+                    "self": "/v1/event-sub-topics/5/relationships/event-topic",
+                    "related": "/v1/event-sub-topics/5/event-topic"
+                  }
+                }
+              }, 
+              "attributes": {
+                "slug": "climbing", 
+                "name": "Climbing"
+              }, 
+              "type": "event-sub-topic",
+              "id": "5",
+              "links": {
+                "self": "/v1/event-sub-topics/5"
+              }
+            }
+          ], 
+          "jsonapi": {
+            "version": "1.0"
+          }, 
+          "links": {
+            "self": "/v1/event-topics/2/event-sub-topics"
+          }
+        }
+
+
+### Create Event Sub Topic [POST]
+Create a new event sub topic with name.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "name": "Climbing"
+                },
+                "type": "event-sub-topic"
+              }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+              "relationships": {
+                "events": {
+                  "links": {
+                    "self": "/v1/event-topics/5/relationships/events",
+                    "related": "/v1/event-sub-topics/5/events"
+                  }
+                }, 
+                "event-topic": {
+                  "links": {
+                    "self": "/v1/event-sub-topics/5/relationships/event-topic",
+                    "related": "/v1/event-sub-topics/5/event-topic"
+                  }
+                }
+              },
+              "attributes": {
+                "name": "Climbing",
+                "slug": "climbing"
+              }, "
+              type": "event-sub-topic",
+              "id": "5",
+              "links": {
+                "self": "/v1/event-sub-topics/5"
+              }
+            },
+            "jsonapi": {
+              "version": "1.0"
+            },
+            "links": {
+              "self": "/v1/event-sub-topics/5"
+            }
+          }
+
+## Event Sub Topic Details [/v1/event-sub-topics/{event_sub_topic_id}]
++ Parameters
+    + event_sub_topic_id: 1 (integer) - ID of the event sub topic in the form of an integer
+
+### Event Sub Topic Details [GET]
+Get a single event sub topic.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "events": {
+                "links": {
+                  "self": "/v1/event-topics/5/relationships/events",
+                  "related": "/v1/event-sub-topics/5/events"
+                }
+              }, 
+              "event-topic": {
+                "links": {
+                  "self": "/v1/event-sub-topics/5/relationships/event-topic",
+                  "related": "/v1/event-sub-topics/5/event-topic"
+                }
+              }
+            }, 
+            "attributes": {
+              "name": "Climbing",
+              "slug": "climbing",
+              "event_topic_id": 1
+            },
+            "type": "event-topic",
+            "id": "5",
+            "links": {
+              "self": "/v1/event-sub-topics/5"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/event-sub-topics/5"
+          }
+        }
+
+
+### Update Event Sub Topic [PATCH]
++ `id` (integer) - ID of the record to update **(required)**
+
+Update a single event topic by setting name.
+
+Authorized user must be admin.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "name": "Climbing"
+                },
+                "type": "event-sub-topic"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "events": {
+                "links": {
+                  "self": "/v1/event-topics/5/relationships/events",
+                  "related": "/v1/event-sub-topics/5/events"
+                }
+              }, 
+              "event-topic": {
+                "links": {
+                  "self": "/v1/event-sub-topics/5/relationships/event-topic",
+                  "related": "/v1/event-sub-topics/5/event-topic"
+                }
+              }
+            }, 
+            "attributes": {
+              "name": "Climbing",
+              "slug": "climbing"
+            },
+            "type": "event-sub-type",
+            "id": "5",
+            "links": {
+              "self": "/v1/event-sub-topics/5"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/event-sub-topics/5"
+          }
+        }
+
+### Delete Event Sub Topic [DELETE]
+Delete a single event sub topic.
 
 + Request
 
@@ -922,6 +1240,12 @@ Get a list of events.
                     "related": "/v1/events/12/event-topic"
                   }
                 },
+                "event-sub-topic": {
+                  "links": {
+                    "self": "/v1/events/12/relationships/event-sub-topic",
+                    "related": "/v1/events/12/event-sub-topic"
+                  }
+                },
                 "discount-codes": {
                   "links": {
                     "self": "/v1/events/12/relationships/discount-codes",
@@ -1032,6 +1356,12 @@ Get a list of events.
                   links": {
                     "self": "/v1/events/12/relationships/event-topic",
                     "related": "/v1/events/12/event-topic"
+                  }
+                },
+                "event-sub-topic": {
+                  "links": {
+                    "self": "/v1/events/12/relationships/event-sub-topic",
+                    "related": "/v1/events/12/event-sub-topic"
                   }
                 },
                 "discount-codes": {
@@ -1184,6 +1514,12 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timzone` and an opti
                   "related": "/v1/events/12/event-topic"
                 }
               },
+              "event-sub-topic": {
+                "links": {
+                  "self": "/v1/events/12/relationships/event-sub-topic",
+                  "related": "/v1/events/12/event-sub-topic"
+                }
+              },
               "discount-codes": {
                 "links": {
                   "self": "/v1/events/12/relationships/discount-codes",
@@ -1321,6 +1657,12 @@ Get a single event.
                 links": {
                   "self": "/v1/events/12/relationships/event-topic",
                   "related": "/v1/events/12/event-topic"
+                }
+              },
+              "event-sub-topic": {
+                "links": {
+                  "self": "/v1/events/12/relationships/event-sub-topic",
+                  "related": "/v1/events/12/event-sub-topic"
                 }
               },
               "discount-codes": {
@@ -1482,6 +1824,12 @@ All other fields are optional. Add attributes you want to modify.
                 links": {
                   "self": "/v1/events/12/relationships/event-topic",
                   "related": "/v1/events/12/event-topic"
+                }
+              },
+              "event-sub-topic": {
+                "links": {
+                  "self": "/v1/events/12/relationships/event-sub-topic",
+                  "related": "/v1/events/12/event-sub-topic"
                 }
               },
               "discount-codes": {
