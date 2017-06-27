@@ -146,27 +146,29 @@ Create a new user using an email, password and an optional name.
 
     + Body
 
-        {
-          "data": {
-            "attributes": {
-              "email": "example@example.com",
-              "password": "password",
-              "avatar_url": "http://example.com/example.png",
-              "first-name": "John",
-              "last-name": "Doe",
-              "details": "example",
-              "contact": "example",
-              "facebook-url": "http://facebook.com/facebook",
-              "twitter-url": "http://twitter.com/twitter",
-              "instagram-url": "http://instagram.com/instagram",
-              "google-plus-url": "http://plus.google.com/plus.google",
-              "thumbnail-image-url": "http://example.com/example.png",
-              "small-image-url": "http://example.com/example.png",
-              "icon-image-url": "http://example.com/example.png"
-            },
-            "type": "user"
-          }
-        }
+            {
+              "data":
+              {
+                "attributes":
+                {
+                  "email": "example@example.com",
+                  "password": "password",
+                  "avatar_url": "http://example.com/example.png",
+                  "first-name": "John",
+                  "last-name": "Doe",
+                  "details": "example",
+                  "contact": "example",
+                  "facebook-url": "http://facebook.com/facebook",
+                  "twitter-url": "http://twitter.com/twitter",
+                  "instagram-url": "http://instagram.com/instagram",
+                  "google-plus-url": "http://plus.google.com/plus.google",
+                  "thumbnail-image-url": "http://example.com/example.png",
+                  "small-image-url": "http://example.com/example.png",
+                  "icon-image-url": "http://example.com/example.png"
+                },
+                "type": "user"
+              }
+            }
 
 + Response 201 (application/vnd.api+json)
 
@@ -890,7 +892,7 @@ Get a list of Event Sub Topics.
         {
           "meta": {
             "count": 1
-          }, 
+          },
           "data": [
             {
               "relationships": {
@@ -899,28 +901,28 @@ Get a list of Event Sub Topics.
                     "self": "/v1/event-topics/5/relationships/events",
                     "related": "/v1/event-sub-topics/5/events"
                   }
-                }, 
+                },
                 "event-topic": {
                   "links": {
                     "self": "/v1/event-sub-topics/5/relationships/event-topic",
                     "related": "/v1/event-sub-topics/5/event-topic"
                   }
                 }
-              }, 
+              },
               "attributes": {
-                "slug": "climbing", 
+                "slug": "climbing",
                 "name": "Climbing"
-              }, 
+              },
               "type": "event-sub-topic",
               "id": "5",
               "links": {
                 "self": "/v1/event-sub-topics/5"
               }
             }
-          ], 
+          ],
           "jsonapi": {
             "version": "1.0"
-          }, 
+          },
           "links": {
             "self": "/v1/event-topics/2/event-sub-topics"
           }
@@ -957,7 +959,7 @@ Create a new event sub topic with name.
                     "self": "/v1/event-topics/5/relationships/events",
                     "related": "/v1/event-sub-topics/5/events"
                   }
-                }, 
+                },
                 "event-topic": {
                   "links": {
                     "self": "/v1/event-sub-topics/5/relationships/event-topic",
@@ -1008,14 +1010,14 @@ Get a single event sub topic.
                   "self": "/v1/event-topics/5/relationships/events",
                   "related": "/v1/event-sub-topics/5/events"
                 }
-              }, 
+              },
               "event-topic": {
                 "links": {
                   "self": "/v1/event-sub-topics/5/relationships/event-topic",
                   "related": "/v1/event-sub-topics/5/event-topic"
                 }
               }
-            }, 
+            },
             "attributes": {
               "name": "Climbing",
               "slug": "climbing",
@@ -1070,14 +1072,14 @@ Authorized user must be admin.
                   "self": "/v1/event-topics/5/relationships/events",
                   "related": "/v1/event-sub-topics/5/events"
                 }
-              }, 
+              },
               "event-topic": {
                 "links": {
                   "self": "/v1/event-sub-topics/5/relationships/event-topic",
                   "related": "/v1/event-sub-topics/5/event-topic"
                 }
               }
-            }, 
+            },
             "attributes": {
               "name": "Climbing",
               "slug": "climbing"
@@ -1169,8 +1171,8 @@ These endpoints help you to create the basic event structure. To add other parts
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
-    + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[{"has-session-speakers":"true"}]`) - Filter according to the flask-rest-jsonapi filtering system. If you want to filter by firstname and lastname, example url will /endpoint?filter=[{"firstname":"firstname","lastname":"lastname"}]Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + sort (optional, string, `identifier`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. If you want to filter by firstname and lastname, example url will /endpoint?filter=[{"firstname":"firstname","lastname":"lastname"}]Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Events [GET]
 Get a list of events.
@@ -1186,258 +1188,161 @@ Get a list of events.
 + Response 200 (application/vnd.api+json)
 
         {
-          "meta": {
-            "count": 2
-          },
-          "data": [
-            {
-              "relationships": {
-                "tax": {
-                  "links": {
-                    "self": "/v1/events/12/relationships/tax",
-                    "related": "/v1/events/12/tax"
-                  }
-                },
-                "sponsors": {
-                  "links": {
-                    "self": "/v1/events/12/relationships/sponsors",
-                    "related": "/v1/events/12/sponsors"
-                  }
-                },
-                "social-links": {
-                  "links": {
-                    "self": "/v1/events/12/relationships/social-links",
-                    "related": "/v1/events/12/social-links"
-                  }
-                },
-                "tracks": {
-                  "links": {
-                    "self": "/v1/events/12/relationships/tracks",
-                    "related": "/v1/events/12/tracks"
-                  }
-                },
-                "microlocation": {
-                  "links": {
-                    "self": "/v1/events/12/relationships/microlocations",
-                    "related": "/v1/events/12/microlocation"
-                  }
-                },
-                "session-types": {
-                  "links": {
-                    "self": "/v1/events/12/relationships/session-types",
-                    "related": "/v1/events/12/session-types"
-                  }
-                },
-                "event-type": {
-                  "links": {
-                    "self": "/v1/events/12/relationships/event-type",
-                    "related": "/v1/events/12/event-type"
-                  }
-                },
-                "event-topic": {"
-                  links": {
-                    "self": "/v1/events/12/relationships/event-topic",
-                    "related": "/v1/events/12/event-topic"
-                  }
-                },
-                "event-sub-topic": {
-                  "links": {
-                    "self": "/v1/events/12/relationships/event-sub-topic",
-                    "related": "/v1/events/12/event-sub-topic"
-                  }
-                },
-                "discount-codes": {
-                  "links": {
-                    "self": "/v1/events/12/relationships/discount-codes",
-                    "related": "/v1/events/12/discount-codes"
-                  }
-                }
-              },
-              "attributes": {
-                "payment-country": "India",
-                "paypal-email": "johndoe@example.com",
-                "code-of-conduct": "",
-                "can-pay-by-bank": false,
-                "schedule-published-on": null,
-                "payment-currency": null,
-                "organizer-description": "",
-                "xcal-url": null,
-                "original-image-url": null,
-                "topic": null,
-                "onsite-details": null,
-                "organizer-name": "John Doe",
-                "large-image-url": null,
-                "timezone": "UTC",
-                "deleted-at": null,
-                "ticket-url": null,
-                "can-pay-by-stripe": false,
-                "location-name": null,
-                "privacy": "public",
-                "state": "draft",
-                "latitude": null,
-                "tax-allow": false,
-                "can-pay-onsite": false,
-                "type": null,
-                "starts-at": "2017-05-31T18:30:00+00:00",
-                "searchable-location-name": null,
-                "description": "",
-                "pentabarf-url": null,
-                "logo-url": null,
-                "is-ticketing-enabled": false,
-                "event-url": null,
-                "ical-url": null,
-                "can-pay-by-paypal": true,
-                "is-map-shown": true,
-                "is-sponsors-enabled": false,
-                "name": "New Event 1",
-                "sub-topic": null,
-                "icon-image-url": null,
-                "thumbnail-image-url": null,
-                "created-at": "2017-06-11T06:23:39.513383+00:00",
-                "longitude": null,
-                "can-pay-by-cheque": false,
-                "bank-details": null,
-                "cheque-details": null,
-                "is-sessions-speakers-enabled": false,
-                "identifier": "b8324ae2",
-                "ends-at": "2017-06-04T18:30:00+00:00"
-              },
-              "type": "event",
-              "id": "12",
-              "links": {
-                "self": "/v1/events/12"
-              }
+            "meta": {
+                "count": 1
             },
-            {
-              "relationships": {
-                "tax": {
-                  "links": {
-                    "self": "/v1/events/11/relationships/tax",
-                    "related": "/v1/events/11/tax"
-                  }
-                },
-                "sponsors": {
-                  "links": {
-                    "self": "/v1/events/11/relationships/sponsors",
-                    "related": "/v1/events/11/sponsors"
-                  }
-                },
-                "social-links": {
-                  "links": {
-                    "self": "/v1/events/11/relationships/social-links",
-                    "related": "/v1/events/11/social-links"
-                  }
-                },
-                "tracks": {
-                  "links": {
-                    "self": "/v1/events/11/relationships/tracks",
-                    "related": "/v1/events/11/tracks"
-                  }
-                },
-                "microlocation": {
-                  "links": {
-                    "self": "/v1/events/11/relationships/microlocations",
-                    "related": "/v1/events/11/microlocation"
-                  }
-                },
-                "session-types": {
-                  "links": {
-                    "self": "/v1/events/11/relationships/session-types",
-                    "related": "/v1/events/11/session-types"
-                  }
+            "data": [
+                {
+                    "relationships": {
+                        "event-sub-topic": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/event-sub-topic",
+                                "related": "/v1/events/1/event-sub-topic"
+                            }
+                        },
+                        "speakers-call": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/speakers-call",
+                                "related": "/v1/speakers-calls/1"
+                            }
+                        },
+                        "event-copyright": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/event-copyright",
+                                "related": "/v1/events/1/event-copyright"
+                            }
+                        },
+                        "sessions": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/sessions",
+                                "related": "/v1/events/1/sessions"
+                            }
+                        },
+                        "tax": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/tax",
+                                "related": "/v1/events/1/tax"
+                            }
+                        },
+                        "event-topic": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/event-topic",
+                                "related": "/v1/events/1/event-topic"
+                            }
+                        },
+                        "social-links": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/social-links",
+                                "related": "/v1/events/1/social-links"
+                            }
+                        },
+                        "sponsors": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/sponsors",
+                                "related": "/v1/events/1/sponsors"
+                            }
+                        },
+                        "tracks": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/tracks",
+                                "related": "/v1/events/1/tracks"
+                            }
+                        },
+                        "event-invoices": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/event-invoices",
+                                "related": "/v1/events/1/event-invoices"
+                            }
+                        },
+                        "session-types": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/session-types",
+                                "related": "/v1/events/1/session-types"
+                            }
+                        },
+                        "microlocations": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/microlocations",
+                                "related": "/v1/events/1/microlocations"
+                            }
+                        },
+                        "event-type": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/event-type",
+                                "related": "/v1/events/1/event-type"
+                            }
+                        },
+                        "discount-codes": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/discount-codes",
+                                "related": "/v1/events/1/discount-codes"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "payment-country": "US",
+                        "paypal-email": "example@example.com",
+                        "thumbnail-image-url": null,
+                        "schedule-published-on": null,
+                        "payment-currency": "USD",
+                        "organizer-description": "example",
+                        "is-map-shown": true,
+                        "original-image-url": "http://example.com/example.png",
+                        "onsite-details": "example",
+                        "organizer-name": "example",
+                        "can-pay-by-stripe": true,
+                        "large-image-url": null,
+                        "timezone": "UTC",
+                        "can-pay-onsite": true,
+                        "deleted-at": null,
+                        "ticket-url": "http://example.com",
+                        "can-pay-by-paypal": true,
+                        "location-name": "example",
+                        "is-sponsors-enabled": false,
+                        "is-sessions-speakers-enabled": true,
+                        "privacy": "public",
+                        "code-of-conduct": "example",
+                        "state": "example",
+                        "latitude": 1.23456789,
+                        "starts-at": "2016-12-13T23:59:59.123456+00:00",
+                        "searchable-location-name": "example",
+                        "is-ticketing-enabled": true,
+                        "can-pay-by-cheque": true,
+                        "description": "example",
+                        "pentabarf-url": null,
+                        "xcal-url": null,
+                        "logo-url": "http://example.com/example.png",
+                        "event-url": null,
+                        "is-tax-enabled": true,
+                        "icon-image-url": null,
+                        "ical-url": null,
+                        "name": "example",
+                        "can-pay-by-bank": true,
+                        "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                        "created-at": "2017-06-26T15:22:37.205399+00:00",
+                        "longitude": 1.23456789,
+                        "bank-details": "example",
+                        "cheque-details": "example",
+                        "identifier": "b8324ae2"
+                    },
+                    "type": "event",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/events/1"
+                    }
                 }
-                "event-type": {
-                  "links": {
-                    "self": "/v1/events/12/relationships/event-type",
-                    "related": "/v1/events/12/event-type"
-                  }
-                },
-                "event-topic": {"
-                  links": {
-                    "self": "/v1/events/12/relationships/event-topic",
-                    "related": "/v1/events/12/event-topic"
-                  }
-                },
-                "event-sub-topic": {
-                  "links": {
-                    "self": "/v1/events/12/relationships/event-sub-topic",
-                    "related": "/v1/events/12/event-sub-topic"
-                  }
-                },
-                "discount-codes": {
-                  "links": {
-                    "self": "/v1/events/12/relationships/discount-codes",
-                    "related": "/v1/events/12/discount-codes"
-                  }
-                }
-              },
-              "attributes": {
-                "payment-country": null,
-                "paypal-email": null,
-                "code-of-conduct": "",
-                "can-pay-by-bank": false,
-                "schedule-published-on": null,
-                "payment-currency": null,
-                "organizer-description": "",
-                "xcal-url": null,
-                "original-image-url": null,
-                "topic": null,
-                "onsite-details": null,
-                "organizer-name": null,
-                "large-image-url": null,
-                "timezone": "UTC",
-                "deleted-at": null,
-                "ticket-url": null,
-                "can-pay-by-stripe": false,
-                "location-name": null,
-                "privacy": "public",
-                "state": "draft",
-                "latitude": null,
-                "is-tax-enabled": false,
-                "pay-onsite": false,
-                "type": null,
-                "starts-at": "2017-05-31T18:30:00+00:00",
-                "searchable-location-name": null,
-                "description": "",
-                "pentabarf-url": null,
-                "logo-url": null,
-                "is-ticketing-enabled": false,
-                "event-url": null,
-                "ical-url": null,
-                "can-pay-by-paypal": false,
-                "is-map-shown": true,
-                "is-sponsors-enabled": false,
-                "name": "New Event",
-                "sub-topic": null,
-                "icon-image-url": null,
-                "thumbnail-image-url": null,
-                "created-at": "2017-06-11T06:03:31.790343+00:00",
-                "longitude": null,
-                "can-pay-by-cheque": false,
-                "bank-details": null,
-                "cheque-details": null,
-                "is-sessions-speakers-enabled": false,
-                "identifier": "b8324ae2",
-                "ends-at": "2017-06-04T18:30:00+00:00"
-              },
-              "type": "event",
-              "id": "11",
-              "links": {
-                "self": "/v1/events/11"
-              }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/events"
             }
-          ],
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/events"
-          }
         }
 
 
 ### Create Event [POST]
-Create a new event using a `name`, `starts-at`, `ends-at`, `timzone` and an optional content body.
+Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an optional content body.
 
 + Request (application/vnd.api+json)
 
@@ -1450,11 +1355,40 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timzone` and an opti
             {
               "data": {
                 "attributes": {
-                  "event-url": "http://eventyay.com/b8324ae2",
-                  "identifier": "b8324ae2",
-                  "name": "New Event",
-                  "starts-at": "2017-06-01T18:30:00+00:00",
-                  "ends-at": "2017-06-05T18:30:00+00:00"
+                    "name": "example",
+                    "event-url": "http://example.com",
+                    "starts-at": "2016-12-13T23:59:59.123456+00:00",
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "timezone": "UTC",
+                    "latitude": "1.23456789",
+                    "longitude": "1.23456789",
+                    "logo-url": "http://example.com/example.png",
+                    "location-name": "example",
+                    "searchable-location-name": "example",
+                    "description": "example",
+                    "original-image-url": "http://example.com/example.png",
+                    "organizer-name": "example",
+                    "is-map-shown": "true",
+                    "organizer-description": "example",
+                    "is-sessions-speakers-enabled": "true",
+                    "privacy": "public",
+                    "state": "example",
+                    "ticket-url": "http://example.com",
+                    "code-of-conduct": "example",
+                    "is-ticketing-enabled": "true",
+                    "payment-country": "US",
+                    "payment-currency": "USD",
+                    "paypal-email": "example@example.com",
+                    "is-tax-enabled": "true",
+                    "can-pay-by-paypal": "true",
+                    "can-pay-by-stripe": "true",
+                    "can-pay-by-cheque": "true",
+                    "can-pay-by-bank": "true",
+                    "can-pay-onsite": "true",
+                    "cheque-details": "example",
+                    "bank-details": "example",
+                    "onsite-details": "example",
+                    "is-sponsors-enabled": "false"
                 },
                 "type": "event"
               }
@@ -1464,136 +1398,157 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timzone` and an opti
 + Response 201 (application/vnd.api+json)
 
         {
-          "data": {
-            "relationships": {
-              "tax": {
+            "data": {
+                "relationships": {
+                    "event-sub-topic": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/event-sub-topic",
+                            "related": "/v1/events/1/event-sub-topic"
+                        }
+                    },
+                    "speakers-call": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/speakers-call",
+                            "related": "/v1/speakers-calls/1"
+                        }
+                    },
+                    "event-copyright": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/event-copyright",
+                            "related": "/v1/events/1/event-copyright"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/sessions",
+                            "related": "/v1/events/1/sessions"
+                        }
+                    },
+                    "tax": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/tax",
+                            "related": "/v1/events/1/tax"
+                        }
+                    },
+                    "event-topic": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/event-topic",
+                            "related": "/v1/events/1/event-topic"
+                        }
+                    },
+                    "social-links": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/social-links",
+                            "related": "/v1/events/1/social-links"
+                        }
+                    },
+                    "sponsors": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/sponsors",
+                            "related": "/v1/events/1/sponsors"
+                        }
+                    },
+                    "tracks": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/tracks",
+                            "related": "/v1/events/1/tracks"
+                        }
+                    },
+                    "event-invoices": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/event-invoices",
+                            "related": "/v1/events/1/event-invoices"
+                        }
+                    },
+                    "session-types": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/session-types",
+                            "related": "/v1/events/1/session-types"
+                        }
+                    },
+                    "microlocations": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/microlocations",
+                            "related": "/v1/events/1/microlocations"
+                        }
+                    },
+                    "event-type": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/event-type",
+                            "related": "/v1/events/1/event-type"
+                        }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/discount-codes",
+                            "related": "/v1/events/1/discount-codes"
+                        }
+                    }
+                },
+                "attributes": {
+                    "payment-country": "US",
+                    "paypal-email": "example@example.com",
+                    "thumbnail-image-url": null,
+                    "schedule-published-on": null,
+                    "payment-currency": "USD",
+                    "organizer-description": "example",
+                    "is-map-shown": true,
+                    "original-image-url": "http://example.com/example.png",
+                    "onsite-details": "example",
+                    "organizer-name": "example",
+                    "can-pay-by-stripe": true,
+                    "large-image-url": null,
+                    "timezone": "UTC",
+                    "can-pay-onsite": true,
+                    "deleted-at": null,
+                    "ticket-url": "http://example.com",
+                    "can-pay-by-paypal": true,
+                    "location-name": "example",
+                    "is-sponsors-enabled": false,
+                    "is-sessions-speakers-enabled": true,
+                    "privacy": "public",
+                    "code-of-conduct": "example",
+                    "state": "example",
+                    "latitude": 1.23456789,
+                    "starts-at": "2016-12-13T23:59:59.123456+00:00",
+                    "searchable-location-name": "example",
+                    "is-ticketing-enabled": true,
+                    "can-pay-by-cheque": true,
+                    "description": "example",
+                    "pentabarf-url": null,
+                    "xcal-url": null,
+                    "logo-url": "http://example.com/example.png",
+                    "event-url": null,
+                    "is-tax-enabled": true,
+                    "icon-image-url": null,
+                    "ical-url": null,
+                    "name": "example",
+                    "can-pay-by-bank": true,
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "created-at": "2017-06-26T15:22:37.205399+00:00",
+                    "longitude": 1.23456789,
+                    "bank-details": "example",
+                    "cheque-details": "example",
+                    "identifier": "b8324ae2"
+                },
+                "type": "event",
+                "id": "1",
                 "links": {
-                  "self": "/v1/events/12/relationships/tax",
-                  "related": "/v1/events/12/tax"
+                    "self": "/v1/events/1"
                 }
-              },
-              "sponsors": {
-                "links": {
-                  "self": "/v1/events/12/relationships/sponsors",
-                  "related": "/v1/events/12/sponsors"
-                }
-              },
-              "social-links": {
-                "links": {
-                  "self": "/v1/events/12/relationships/social-links",
-                  "related": "/v1/events/12/social-links"
-                }
-              },
-              "tracks": {
-                "links": {
-                  "self": "/v1/events/12/relationships/tracks",
-                  "related": "/v1/events/12/tracks"
-                }
-              },
-              "microlocation": {
-                "links": {
-                  "self": "/v1/events/12/relationships/microlocations",
-                  "related": "/v1/events/12/microlocation"
-                }
-              },
-              "session-types": {
-                "links": {
-                  "self": "/v1/events/12/relationships/session-types",
-                  "related": "/v1/events/12/session-types"
-                }
-              }
-              "event-type": {
-                "links": {
-                  "self": "/v1/events/12/relationships/event-type",
-                  "related": "/v1/events/12/event-type"
-                }
-              },
-              "event-topic": {"
-                links": {
-                  "self": "/v1/events/12/relationships/event-topic",
-                  "related": "/v1/events/12/event-topic"
-                }
-              },
-              "event-sub-topic": {
-                "links": {
-                  "self": "/v1/events/12/relationships/event-sub-topic",
-                  "related": "/v1/events/12/event-sub-topic"
-                }
-              },
-              "discount-codes": {
-                "links": {
-                  "self": "/v1/events/12/relationships/discount-codes",
-                  "related": "/v1/events/12/discount-codes"
-                }
-              }
             },
-            "attributes": {
-              "payment-country": null,
-              "paypal-email": null,
-              "code-of-conduct": "",
-              "can-pay-by-bank": false,
-              "schedule-published-on": null,
-              "payment-currency": null,
-              "organizer-description": "",
-              "xcal-url": null,
-              "original-image-url": null,
-              "topic": null,
-              "onsite-details": null,
-              "organizer-name": null,
-              "large-image-url": null,
-              "timezone": "UTC",
-              "deleted-at": null,
-              "ticket-url": null,
-              "can-pay-by-stripe": false,
-              "location-name": null,
-              "privacy": "public",
-              "state": "draft",
-              "latitude": null,
-              "is-tax-enabled": false,
-              "can-pay-onsite": false,
-              "type": null,
-              "starts-at": "2017-05-31T18:30:00+00:00",
-              "searchable-location-name": null,
-              "description": "",
-              "pentabarf-url": null,
-              "logo-url": null,
-              "is-ticketing-enabled": false,
-              "event-url": null,
-              "ical-url": null,
-              "can-pay-by-paypal": false,
-              "is-map-shown": true,
-              "is-sponsors-enabled": false,
-              "name": "New Event",
-              "sub-topic": null,
-              "icon-image-url": null,
-              "thumbnail-image-url": null,
-              "created-at": "2017-06-11T06:23:39.513383+00:00",
-              "longitude": null,
-              "can-pay-by-cheque": false,
-              "bank-details": null,
-              "cheque-details": null,
-              "is-sessions-speakers-enabled": false,
-              "identifier": "b8324ae2",
-              "ends-at": "2017-06-04T18:30:00+00:00"
+            "jsonapi": {
+                "version": "1.0"
             },
-            "type": "event",
-            "id": "12",
             "links": {
-              "self": "/v1/events/12"
+                "self": "/v1/events/1"
             }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/events/12"
-          }
         }
 
 
 ## Event Details [/v1/events/{event_identifier}]
 + Parameters
-    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
 
 ### Event Details [GET]
 Get a single event.
@@ -1609,131 +1564,151 @@ Get a single event.
 + Response 200 (application/vnd.api+json)
 
         {
-          "data": {
-            "relationships": {
-              "tax": {
+            "data": {
+                "relationships": {
+                    "event-sub-topic": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/event-sub-topic",
+                            "related": "/v1/events/1/event-sub-topic"
+                        }
+                    },
+                    "speakers-call": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/speakers-call",
+                            "related": "/v1/speakers-calls/1"
+                        }
+                    },
+                    "event-copyright": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/event-copyright",
+                            "related": "/v1/events/1/event-copyright"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/sessions",
+                            "related": "/v1/events/1/sessions"
+                        }
+                    },
+                    "tax": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/tax",
+                            "related": "/v1/events/1/tax"
+                        }
+                    },
+                    "event-topic": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/event-topic",
+                            "related": "/v1/events/1/event-topic"
+                        }
+                    },
+                    "social-links": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/social-links",
+                            "related": "/v1/events/1/social-links"
+                        }
+                    },
+                    "sponsors": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/sponsors",
+                            "related": "/v1/events/1/sponsors"
+                        }
+                    },
+                    "tracks": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/tracks",
+                            "related": "/v1/events/1/tracks"
+                        }
+                    },
+                    "event-invoices": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/event-invoices",
+                            "related": "/v1/events/1/event-invoices"
+                        }
+                    },
+                    "session-types": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/session-types",
+                            "related": "/v1/events/1/session-types"
+                        }
+                    },
+                    "microlocations": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/microlocations",
+                            "related": "/v1/events/1/microlocations"
+                        }
+                    },
+                    "event-type": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/event-type",
+                            "related": "/v1/events/1/event-type"
+                        }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/discount-codes",
+                            "related": "/v1/events/1/discount-codes"
+                        }
+                    }
+                },
+                "attributes": {
+                    "payment-country": "US",
+                    "paypal-email": "example@example.com",
+                    "thumbnail-image-url": null,
+                    "schedule-published-on": null,
+                    "payment-currency": "USD",
+                    "organizer-description": "example",
+                    "is-map-shown": true,
+                    "original-image-url": "http://example.com/example.png",
+                    "onsite-details": "example",
+                    "organizer-name": "example",
+                    "can-pay-by-stripe": true,
+                    "large-image-url": null,
+                    "timezone": "UTC",
+                    "can-pay-onsite": true,
+                    "deleted-at": null,
+                    "ticket-url": "http://example.com",
+                    "can-pay-by-paypal": true,
+                    "location-name": "example",
+                    "is-sponsors-enabled": false,
+                    "is-sessions-speakers-enabled": true,
+                    "privacy": "public",
+                    "code-of-conduct": "example",
+                    "state": "example",
+                    "latitude": 1.23456789,
+                    "starts-at": "2016-12-13T23:59:59.123456+00:00",
+                    "searchable-location-name": "example",
+                    "is-ticketing-enabled": true,
+                    "can-pay-by-cheque": true,
+                    "description": "example",
+                    "pentabarf-url": null,
+                    "xcal-url": null,
+                    "logo-url": "http://example.com/example.png",
+                    "event-url": null,
+                    "is-tax-enabled": true,
+                    "icon-image-url": null,
+                    "ical-url": null,
+                    "name": "example",
+                    "can-pay-by-bank": true,
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "created-at": "2017-06-26T15:22:37.205399+00:00",
+                    "longitude": 1.23456789,
+                    "bank-details": "example",
+                    "cheque-details": "example",
+                    "identifier": "b8324ae2"
+                },
+                "type": "event",
+                "id": "1",
                 "links": {
-                  "self": "/v1/events/13/relationships/tax",
-                  "related": "/v1/events/13/tax"
+                    "self": "/v1/events/1"
                 }
-              },
-              "sponsors": {
-                "links": {
-                  "self": "/v1/events/13/relationships/sponsors",
-                  "related": "/v1/events/13/sponsors"
-                }
-              },
-              "social-links": {
-                "links": {
-                  "self": "/v1/events/13/relationships/social-links",
-                  "related": "/v1/events/13/social-links"
-                }
-              },
-              "tracks": {
-                "links": {
-                  "self": "/v1/events/13/relationships/tracks",
-                  "related": "/v1/events/13/tracks"
-                }
-              },
-              "microlocation": {
-                "links": {
-                  "self": "/v1/events/13/relationships/microlocations",
-                  "related": "/v1/events/13/microlocation"
-                }
-              },
-              "session-types": {
-                "links": {
-                  "self": "/v1/events/13/relationships/session-types",
-                  "related": "/v1/events/13/session-types"
-                }
-              }
-              "event-type": {
-                "links": {
-                  "self": "/v1/events/12/relationships/event-type",
-                  "related": "/v1/events/12/event-type"
-                }
-              },
-              "event-topic": {"
-                links": {
-                  "self": "/v1/events/12/relationships/event-topic",
-                  "related": "/v1/events/12/event-topic"
-                }
-              },
-              "event-sub-topic": {
-                "links": {
-                  "self": "/v1/events/12/relationships/event-sub-topic",
-                  "related": "/v1/events/12/event-sub-topic"
-                }
-              },
-              "discount-codes": {
-                  "links": {
-                  "self": "/v1/events/12/relationships/discount-codes",
-                  "related": "/v1/events/12/discount-codes"
-                }
-              }
             },
-            "attributes": {
-              "payment-country": null,
-              "paypal-email": null,
-              "code-of-conduct": "",
-              "can-pay-by-bank": false,
-              "schedule-published-on": null,
-              "payment-currency": null,
-              "organizer-description": "",
-              "xcal-url": null,
-              "original-image-url": null,
-              "topic": null,
-              "onsite-details": null,
-              "organizer-name": null,
-              "large-image-url": null,
-              "timezone": "UTC",
-              "deleted-at": null,
-              "ticket-url": null,
-              "can-pay-by-stripe": false,
-              "location-name": null,
-              "privacy": "public",
-              "state": "draft",
-              "latitude": null,
-              "tax-allow": false,
-              "pay-onsite": false,
-              "type": null,
-              "email": "example@example.com",
-              "starts-at": "2017-05-31T18:30:00+00:00",
-              "searchable-location-name": null,
-              "description": "",
-              "pentabarf-url": null,
-              "logo-url": null,
-              "is-ticketing-enabled": false,
-              "event-url": null,
-              "ical-url": null,
-              "can-pay-by-paypal": false,
-              "is-map-shown": true,
-              "is-sponsors-enabled": false,
-              "name": "New Event",
-              "sub-topic": null,
-              "icon-image-url": null,
-              "thumbnail-image-url": null,
-              "created-at": "2017-06-11T07:26:41.852285+00:00",
-              "longitude": null,
-              "can-pay-by-cheque": false,
-              "bank-details": null,
-              "cheque-details": null,
-              "is-sessions-speakers-enabled": false,
-              "identifier": "b8324ae2",
-              "ends-at": "2017-06-04T18:30:00+00:00"
+            "jsonapi": {
+                "version": "1.0"
             },
-            "type": "event",
-            "id": "13",
             "links": {
-              "self": "/v1/events/13"
+                "self": "/v1/events/1"
             }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/events/13"
-          }
         }
 
 
@@ -1756,150 +1731,194 @@ All other fields are optional. Add attributes you want to modify.
             {
               "data": {
                 "attributes": {
-                  "event-url": "http://eventyay.com/b8324ae2",
-                  "identifier": "b8324ae2",
-                  "name": "Changed Name",
-                  "starts-at": "2017-06-11T00:00:00+05:30",
-                  "ends-at": "2017-06-12T00:00:00+05:30"
+                    "name": "example1",
+                    "event-url": "http://example11.com",
+                    "starts-at": "2016-12-14T23:59:59.123456+05:30",
+                    "ends-at": "2016-12-15T23:59:59.123456+05:30",
+                    "timezone": "Asia/Kolkata",
+                    "latitude": "12.23456789",
+                    "longitude": "12.23456789",
+                    "logo-url": "http://example1.com/example1.png",
+                    "location-name": "example1",
+                    "searchable-location-name": "example1",
+                    "description": "example1",
+                    "original-image-url": "http://example1.com/example1.png",
+                    "organizer-name": "example1",
+                    "is-map-shown": "false",
+                    "organizer-description": "example1",
+                    "is-sessions-speakers-enabled": "false",
+                    "privacy": "private",
+                    "state": "example1",
+                    "ticket-url": "http://example1.com",
+                    "code-of-conduct": "example1",
+                    "is-ticketing-enabled": "false",
+                    "payment-country": "US",
+                    "payment-currency": "USD",
+                    "paypal-email": "example1@example1.com",
+                    "is-tax-enabled": "false",
+                    "can-pay-by-paypal": "false",
+                    "can-pay-by-stripe": "false",
+                    "can-pay-by-cheque": "false",
+                    "can-pay-by-bank": "false",
+                    "can-pay-onsite": "false",
+                    "cheque-details": "example1",
+                    "bank-details": "example1",
+                    "onsite-details": "example1",
+                    "is-sponsors-enabled": "false"
                 },
-                "type": "event",
-                "id": "13"
+                "id": "1",
+                "type": "event"
               }
             }
 
 + Response 200 (application/vnd.api+json)
 
         {
-          "data": {
-            "relationships": {
-              "discount-codes": {
+            "data": {
+                "relationships": {
+                    "event-sub-topic": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/event-sub-topic",
+                            "related": "/v1/events/1/event-sub-topic"
+                        }
+                    },
+                    "speakers-call": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/speakers-call",
+                            "related": "/v1/speakers-calls/1"
+                        }
+                    },
+                    "event-copyright": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/event-copyright",
+                            "related": "/v1/events/1/event-copyright"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/sessions",
+                            "related": "/v1/events/1/sessions"
+                        }
+                    },
+                    "tax": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/tax",
+                            "related": "/v1/events/1/tax"
+                        }
+                    },
+                    "event-topic": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/event-topic",
+                            "related": "/v1/events/1/event-topic"
+                        }
+                    },
+                    "social-links": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/social-links",
+                            "related": "/v1/events/1/social-links"
+                        }
+                    },
+                    "sponsors": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/sponsors",
+                            "related": "/v1/events/1/sponsors"
+                        }
+                    },
+                    "tracks": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/tracks",
+                            "related": "/v1/events/1/tracks"
+                        }
+                    },
+                    "event-invoices": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/event-invoices",
+                            "related": "/v1/events/1/event-invoices"
+                        }
+                    },
+                    "session-types": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/session-types",
+                            "related": "/v1/events/1/session-types"
+                        }
+                    },
+                    "microlocations": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/microlocations",
+                            "related": "/v1/events/1/microlocations"
+                        }
+                    },
+                    "event-type": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/event-type",
+                            "related": "/v1/events/1/event-type"
+                        }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/discount-codes",
+                            "related": "/v1/events/1/discount-codes"
+                        }
+                    }
+                },
+                "attributes": {
+                    "payment-country": "US",
+                    "paypal-email": "example1@example1.com",
+                    "thumbnail-image-url": null,
+                    "schedule-published-on": null,
+                    "payment-currency": "USD",
+                    "organizer-description": "example1",
+                    "is-map-shown": false,
+                    "original-image-url": "http://example1.com/example1.png",
+                    "onsite-details": "example1",
+                    "organizer-name": "example1",
+                    "can-pay-by-stripe": false,
+                    "large-image-url": null,
+                    "timezone": "Asia/Kolkata",
+                    "can-pay-onsite": false,
+                    "deleted-at": null,
+                    "ticket-url": "http://example1.com",
+                    "can-pay-by-paypal": false,
+                    "location-name": "example1",
+                    "is-sponsors-enabled": false,
+                    "is-sessions-speakers-enabled": false,
+                    "privacy": "private",
+                    "code-of-conduct": "example1",
+                    "state": "example1",
+                    "latitude": 12.23456789,
+                    "starts-at": "2016-12-14T18:29:59.123456+00:00",
+                    "searchable-location-name": "example1",
+                    "is-ticketing-enabled": false,
+                    "can-pay-by-cheque": false,
+                    "description": "example1",
+                    "pentabarf-url": null,
+                    "xcal-url": null,
+                    "logo-url": "http://example1.com/example1.png",
+                    "event-url": null,
+                    "is-tax-enabled": false,
+                    "icon-image-url": null,
+                    "ical-url": null,
+                    "name": "example1",
+                    "can-pay-by-bank": false,
+                    "ends-at": "2016-12-15T18:29:59.123456+00:00",
+                    "created-at": "2017-06-26T15:22:37.205399+00:00",
+                    "longitude": 12.23456789,
+                    "bank-details": "example1",
+                    "cheque-details": "example1",
+                    "identifier": "b8324ae2"
+                },
+                "type": "event",
+                "id": "1",
                 "links": {
-                  "self": "/v1/events/13/relationships/discount-codes",
-                  "related": "/v1/events/13/discount-codes"
+                    "self": "/v1/events/1"
                 }
-              },
-              "tax": {
-                "links": {
-                  "self": "/v1/events/13/relationships/tax",
-                  "related": "/v1/events/13/tax"
-                }
-              },
-              "sponsors": {
-                "links": {
-                  "self": "/v1/events/13/relationships/sponsors",
-                  "related": "/v1/events/13/sponsors"
-                }
-              },
-              "social-links": {
-                "links": {
-                  "self": "/v1/events/13/relationships/social-links",
-                  "related": "/v1/events/13/social-links"
-                }
-              },
-              "tracks": {
-                "links": {
-                  "self": "/v1/events/13/relationships/tracks",
-                  "related": "/v1/events/13/tracks"
-                }
-              },
-              "microlocation": {
-                "links": {
-                  "self": "/v1/events/13/relationships/microlocations",
-                  "related": "/v1/events/13/microlocation"
-                }
-              },
-              "session-types": {
-                "links": {
-                  "self": "/v1/events/13/relationships/session-types",
-                  "related": "/v1/events/13/session-types"
-                }
-              }
-              "event-type": {
-                "links": {
-                  "self": "/v1/events/12/relationships/event-type",
-                  "related": "/v1/events/12/event-type"
-                }
-              },
-              "event-topic": {"
-                links": {
-                  "self": "/v1/events/12/relationships/event-topic",
-                  "related": "/v1/events/12/event-topic"
-                }
-              },
-              "event-sub-topic": {
-                "links": {
-                  "self": "/v1/events/12/relationships/event-sub-topic",
-                  "related": "/v1/events/12/event-sub-topic"
-                }
-              },
-              "discount-codes": {
-                "links": {
-                  "self": "/v1/events/12/relationships/discount-codes",
-                  "related": "/v1/events/12/discount-codes"
-                }
-              }
             },
-            "attributes": {
-              "payment-country": null,
-              "paypal-email": null,
-              "code-of-conduct": "",
-              "can-pay-by-bank": false,
-              "schedule-published-on": null,
-              "payment-currency": null,
-              "organizer-description": "",
-              "xcal-url": null,
-              "original-image-url": null,
-              "topic": null,
-              "onsite-details": null,
-              "organizer-name": null,
-              "large-image-url": null,
-              "timezone": "UTC",
-              "deleted-at": null,
-              "ticket-url": null,
-              "can-pay-by-stripe": false,
-              "location-name": null,
-              "privacy": "public",
-              "state": "draft",
-              "latitude": null,
-              "is-tax-enabled": false,
-              "can-pay-onsite": false,
-              "type": null,
-              "starts-at": "2017-06-10T18:30:00+00:00",
-              "searchable-location-name": null,
-              "description": "",
-              "pentabarf-url": null,
-              "logo-url": null,
-              "is-ticketing-enabled": false,
-              "event-url": null,
-              "ical-url": null,
-              "can-pay-by-paypal": false,
-              "is-map-shown": true,
-              "is-sponsors-enabled": false,
-              "name": "Changed Name",
-              "sub-topic": null,
-              "icon-image-url": null,
-              "thumbnail-image-url": null,
-              "created-at": "2017-06-11T07:26:41.852285+00:00",
-              "longitude": null,
-              "can-pay-by-cheque": false,
-              "bank-details": null,
-              "cheque-details": null,
-              "is-sessions-speakers-enabled": false,
-              "identifier": "b8324ae2",
-              "ends-at": "2017-06-11T18:30:00+00:00"
+            "jsonapi": {
+                "version": "1.0"
             },
-            "type": "event",
-            "id": "13",
             "links": {
-              "self": "/v1/events/13"
+                "self": "/v1/events/1"
             }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/events/13"
-          }
         }
 
 ### Delete Event [DELETE]
@@ -1938,11 +1957,11 @@ Data related to event copyright information.
 
 ## Event Copyright [/v1/events/{event_identifier}/event-copyright{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `year`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[{"year": "2017"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### Get Event Copyright [GET]
 
@@ -2215,11 +2234,11 @@ Data related to an invoice for the event.
 
 ## Event Invoices [/v1/events/{event_identifier}/event-invoices{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[{"status":"pending"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### Get Event Invoices [GET]
 Get a single event invoice.
@@ -2564,11 +2583,11 @@ Data related to all the microlocations for the various sessions of the event.
 
 ## Microlocation Collection [/v1/events/{event_identifier}/microlocations{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `floor`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[{"floor":"2"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Microlocations [GET]
 Get a list of Microlocations.
@@ -2861,11 +2880,11 @@ Data related to all the sessions in the event.
 
 ## Sessions Collection [/v1/events/{event_identifier}/sessions{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[{"level":"1"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Sessions [GET]
 Get a list of Sessions **(Public)**.
@@ -3270,11 +3289,11 @@ Data related to all the session types (such as talks, workshops, lightning talks
 
 ## Session Type Collection [/v1/events/{event_identifier}/session-types{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[{"length":"00:30"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Session Types [GET]
 Get a list of Session Types.
@@ -3532,11 +3551,11 @@ You can add various social links such as facebook, twitter, website, blog link, 
 
 ## Social Links Collection [/v1/events/{event_identifier}/social-links{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[{"name": "facebook"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Social Links [GET]
 Get a list of Social Links.
@@ -3770,11 +3789,11 @@ Announcement for call for speaker to accept session proposals from speakers.
 
 ## Speakers Call Collection [/v1/events/{event_identifier}/speakers-calls{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `starts-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[{"announcement":"string"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### Get Speakers Call [GET]
 Get Speakers Call for an event.
@@ -4024,11 +4043,11 @@ Data related to the various sponsors with their level, url and images associated
 
 ## Sponsors Collection [/v1/events/{event_identifier}/sponsors{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `level`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[{"description":"string"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Sponsors [GET]
 Get a list of Sponsors.
@@ -4294,11 +4313,11 @@ Related to any tax related information that might be related with the tickets fo
 
 ## Tax Collection [/v1/events/{event_identifier}/tax{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `tax-rate`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[{"tax-rate":"12.0"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Tax Records [GET]
 Get a list of Tax Records.
@@ -4583,11 +4602,11 @@ Related to tickets (free, paid, donation) to the event.
 
 ## Tickets Collection [/v1/events/{event_identifier}/tickets{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `sales-starts-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[{"name":"string"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Tickets [GET]
 Get a list of Tickets.
@@ -4889,7 +4908,7 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
 
 ## Tracks Collection [/v1/events/{event_identifier}/tracks]
 + Parameters
-    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
 
 ### List All Tracks [GET]
 Get a list of Tracks.
@@ -5371,11 +5390,11 @@ Discount Codes related to the events.
 
 ## Discount Code Collection [/v1/events/{event_identifier}/discount-codes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: b8324ae2 (string) - identifier of the event. (Can also be the event ID)
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[{"type": "percent" }]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Discount Codes [GET]
 Get a list of Discount Codes.
@@ -5697,8 +5716,8 @@ To create or modify data of this data layer, you will need admin access. You can
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
-    + sort (optional, string, `full-width`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[{"full-width":"1300"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + sort (optional, string, `type`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List Image Sizes [GET]
 Get a list of Image Sizes.
@@ -5714,41 +5733,41 @@ Get a list of Image Sizes.
 + Response 200 (application/vnd.api+json)
 
         {
-          "meta": {
-            "count": 1
-          },
-          "data": [
-            {
-              "attributes": {
-                "full-width": 1300,
-                "full-height": 500,
-                "full-aspect": null,
-                "full-quality": 80,
-                "icon-width": 75,
-                "icon-height": 30,
-                "icon-aspect": null,
-                "icon-quality": 80,
-                "thumbnail-width": 500,
-                "thumbnail-height": 200,
-                "thumbnail-aspect": null,
-                "thumbnail-quality": 80,
-                "logo-width": null,
-                "logo-height": null,
-                "type": null
-              },
-              "type": "image-size",
-              "id": "1",
-              "links": {
-                "self": "/v1/image-sizes/1"
-              }
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "attributes": {
+                        "full-aspect": false,
+                        "thumbnail-height": 200,
+                        "thumbnail-aspect": true,
+                        "icon-height": 30,
+                        "icon-aspect": true,
+                        "type": "logo",
+                        "icon-width": 75,
+                        "icon-quality": 80,
+                        "logo-width": 32,
+                        "full-width": 1300,
+                        "thumbnail-width": 500,
+                        "thumbnail-quality": 80,
+                        "full-height": 500,
+                        "logo-height": 32,
+                        "full-quality": 80
+                    },
+                    "type": "image-size",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/image-sizes/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/image-sizes"
             }
-          ],
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/image-sizes"
-          }
         }
 
 
@@ -5768,19 +5787,19 @@ Create a new general image size by admins.
                 "attributes": {
                   "full-width": 1300,
                   "full-height": 500,
-                  "full-aspect": null,
+                  "full-aspect": true,
                   "full-quality": 80,
                   "icon-width": 75,
                   "icon-height": 30,
-                  "icon-aspect": null,
+                  "icon-aspect": true,
                   "icon-quality": 80,
                   "thumbnail-width": 500,
                   "thumbnail-height": 200,
-                  "thumbnail-aspect": null,
+                  "thumbnail-aspect": true,
                   "thumbnail-quality": 80,
-                  "logo-width": null,
-                  "logo-height": null,
-                  "type": null
+                  "logo-width": 32,
+                  "logo-height": 32,
+                  "type": "logo"
                 },
                 "type": "image-size"
               }
@@ -5789,7 +5808,36 @@ Create a new general image size by admins.
 + Response 201 (application/vnd.api+json)
 
         {
-          "data": "data"
+            "data": {
+                "attributes": {
+                    "full-aspect": true,
+                    "thumbnail-height": 200,
+                    "thumbnail-aspect": true,
+                    "icon-height": 30,
+                    "icon-aspect": true,
+                    "type": "logo",
+                    "icon-width": 75,
+                    "icon-quality": 80,
+                    "logo-width": 32,
+                    "full-width": 1300,
+                    "thumbnail-width": 500,
+                    "thumbnail-quality": 80,
+                    "full-height": 500,
+                    "logo-height": 32,
+                    "full-quality": 80
+                },
+                "type": "image-size",
+                "id": "1",
+                "links": {
+                    "self": "/v1/image-sizes/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/image-sizes/1"
+            }
         }
 
 ## Image Size Details [/v1/image-sizes/{image_size_id}]
@@ -5861,59 +5909,59 @@ Update a single image size by `id`.
                 "attributes": {
                   "full-width": 1300,
                   "full-height": 500,
-                  "full-aspect": null,
+                  "full-aspect": false,
                   "full-quality": 80,
                   "icon-width": 75,
                   "icon-height": 30,
-                  "icon-aspect": null,
+                  "icon-aspect": true,
                   "icon-quality": 80,
                   "thumbnail-width": 500,
                   "thumbnail-height": 200,
-                  "thumbnail-aspect": null,
+                  "thumbnail-aspect": true,
                   "thumbnail-quality": 80,
-                  "logo-width": null,
-                  "logo-height": null,
-                  "type": null
+                  "logo-width": 32,
+                  "logo-height": 32,
+                  "type": "logo"
                 },
-                "type": "image-size",
                 "id": "1",
+                "type": "image-size"
               }
             }
 
 + Response 200 (application/vnd.api+json)
 
-        {
-          "data": {
-            "attributes": {
-              "full-width": 1300,
-              "full-height": 500,
-              "full-aspect": null,
-              "full-quality": 80,
-              "icon-width": 75,
-              "icon-height": 30,
-              "icon-aspect": null,
-              "icon-quality": 80,
-              "thumbnail-width": 500,
-              "thumbnail-height": 200,
-              "thumbnail-aspect": null,
-              "thumbnail-quality": 80,
-              "logo-width": null,
-              "logo-height": null,
-              "type": null
-            },
-            "type": "image-size",
-            "id": "1",
-            "links": {
-              "self": "/v1/image-sizes/1"
+            {
+                "data": {
+                    "attributes": {
+                        "full-aspect": false,
+                        "thumbnail-height": 200,
+                        "thumbnail-aspect": true,
+                        "icon-height": 30,
+                        "icon-aspect": true,
+                        "type": "logo",
+                        "icon-width": 75,
+                        "icon-quality": 80,
+                        "logo-width": 32,
+                        "full-width": 1300,
+                        "thumbnail-width": 500,
+                        "thumbnail-quality": 80,
+                        "full-height": 500,
+                        "logo-height": 32,
+                        "full-quality": 80
+                    },
+                    "type": "image-size",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/image-sizes/1"
+                    }
+                },
+                "jsonapi": {
+                    "version": "1.0"
+                },
+                "links": {
+                    "self": "/v1/image-sizes/1"
+                }
             }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/image-sizes/1"
-          }
-        }
 
 ### Delete Image Size [DELETE]
 Delete a single image size.
@@ -5957,7 +6005,7 @@ To create or modify any data of this data layer, you will need admin access. How
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[{"name":"string"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### Page Sizes [GET]
 
@@ -5981,7 +6029,7 @@ To create or modify any data of this data layer, you will need admin access. How
                 "name": "How it works",
                 "title": "How it works",
                 "url": "/how-it-works",
-                "description": null,
+                "description": "How it works",
                 "place": "Use Open Event",
                 "language": "English",
                 "index": 0
@@ -6019,7 +6067,7 @@ Create a new general page by admins.
                   "name": "How it works",
                   "title": "How it works",
                   "url": "/how-it-works",
-                  "description": null,
+                  "description": "How it works",
                   "place": "Use Open Event",
                   "language": "English",
                   "index": 0
@@ -6057,7 +6105,7 @@ Get a single page.
               "name": "How it works",
               "title": "How it works",
               "url": "/how-it-works",
-              "description": null,
+              "description": "How it works",
               "place": "Use Open Event",
               "language": "English",
               "index": 0
@@ -6097,7 +6145,7 @@ Update a single page by `id`.
                   "name": "How it works",
                   "title": "How it works",
                   "url": "/how-it-works",
-                  "description": null,
+                  "description": "How it works",
                   "place": "Use Open Event",
                   "language": "English",
                   "index": 0
@@ -6115,7 +6163,7 @@ Update a single page by `id`.
               "name": "How it works",
               "title": "How it works",
               "url": "/how-it-works",
-              "description": null,
+              "description": "How it works",
               "place": "Use Open Event",
               "language": "English",
               "index": 0
@@ -6282,7 +6330,7 @@ To update or get any attribute of this data layer, you will need admin access. H
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `app-name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[{"app-name": "Event-Yay!"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### Show Settings[GET]
 
@@ -6524,6 +6572,28 @@ A temporary cropped image is first uploaded using this endpoint. After saving th
             {
                 "data": "data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7"
             }
+
++ Response 200 (application/json)
+
+        {
+            "url":"/serve_static/media/temp/images/6a6614c7-d458-43de-a9bd-5c329e273bf0/U0lLbUt2SF/4d4dae9e-0bab-4e72-ba2f-e8e633a145e5.gif"
+        }
+
+## File Upload [/v1/upload/files{?force_local}]
+
+This endpoint supports uploading of any kind of file or multiple files. If a single file is to be uploaded, send a single file in the keyword **file**, else if multiple files, send an array of files in the keyword **files**. After saving in it's prefered storage (local, google storage, s3, etc.), the URL or array of URLs returned as response. *`force_local` parameter can be set to __true__ to force storage in local.*
+
+
+### Upload a File [POST]
+
++ Parameters
+    + force_local (optional, string, `true`) - Force storage of temporary image in local
+
++ Request(multipart/form-data; boundary=---BOUNDARY)
+
+        -----BOUNDARY
+        Content-Disposition: form-data; name="file"; filename="test.csv"
+        Content-Type: text/csv
 
 + Response 200 (application/json)
 

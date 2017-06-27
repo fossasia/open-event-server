@@ -22,7 +22,7 @@ level: info
 timestamp: false
 silent: false
 path: []
-hooks-worker-timeout: 8000
+hooks-worker-timeout: 11000
 hooks-worker-connect-timeout: 3000
 hooks-worker-connect-retry: 500
 hooks-worker-after-connect-wait: 100

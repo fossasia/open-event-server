@@ -15,6 +15,10 @@ from populate_db import populate_without_print
 # imports from factories
 from app.factories.user import UserFactory
 from app.factories.notification import NotificationFactory
+from app.factories.event import EventFactoryBasic
+from app.factories.social_link import SocialLinkFactory
+from app.factories.image_size import ImageSizeFactory
+from app.factories.page import PageFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -36,7 +40,8 @@ def obtain_token():
 
 
 def create_super_admin(email, password):
-    user = UserFactory(email=email, password=password, is_super_admin=True, is_admin=True, is_verified=True)
+    user = UserFactory(email=email, password=password, is_super_admin=True,
+                       is_admin=True, is_verified=True)
     db.session.add(user)
     db.session.commit()
     return user
@@ -161,7 +166,10 @@ def event_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 @hooks.before("Events > Events Collection > Create Event")
@@ -181,7 +189,10 @@ def event_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 @hooks.before("Events > Event Details > Update Event")
@@ -191,7 +202,10 @@ def event_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 @hooks.before("Events > Event Details > Delete Event")
@@ -201,7 +215,10 @@ def event_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 # ------------------------- Copyright -------------------------
@@ -473,7 +490,10 @@ def social_link_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        social_link = SocialLinkFactory()
+        db.session.add(social_link)
+        db.session.commit()
 
 
 @hooks.before("Social Links > Social Links Collection > Create Social Link")
@@ -483,7 +503,10 @@ def social_link_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 @hooks.before("Social Links > Social Links > Social Link Detail")
@@ -493,7 +516,10 @@ def social_link_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        social_link = SocialLinkFactory()
+        db.session.add(social_link)
+        db.session.commit()
 
 
 @hooks.before("Social Links > Social Links > Update Social Link")
@@ -503,8 +529,10 @@ def social_link_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
-
+    with stash['app'].app_context():
+        social_link = SocialLinkFactory()
+        db.session.add(social_link)
+        db.session.commit()
 
 @hooks.before("Social Links > Social Links > Delete Social Link")
 def social_link_delete(transaction):
@@ -513,7 +541,10 @@ def social_link_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        social_link = SocialLinkFactory()
+        db.session.add(social_link)
+        db.session.commit()
 
 
 # ------------------------- Speakers Calls -------------------------
@@ -853,7 +884,10 @@ def image_size_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        image_size = ImageSizeFactory()
+        db.session.add(image_size)
+        db.session.commit()
 
 
 @hooks.before("Image Size > Image Size Collection > Create Image Size")
@@ -863,7 +897,7 @@ def image_size_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    pass
 
 
 @hooks.before("Image Size > Image Size Details > Get Image Size Details")
@@ -873,7 +907,10 @@ def image_size_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        image_size = ImageSizeFactory()
+        db.session.add(image_size)
+        db.session.commit()
 
 
 @hooks.before("Image Size > Image Size Details > Update Image Size")
@@ -883,7 +920,10 @@ def image_size_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        image_size = ImageSizeFactory()
+        db.session.add(image_size)
+        db.session.commit()
 
 
 @hooks.before("Image Size > Image Size Details > Delete Image Size")
@@ -893,7 +933,10 @@ def image_size_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        image_size = ImageSizeFactory()
+        db.session.add(image_size)
+        db.session.commit()
 
 
 # ------------------------- Pages -------------------------
@@ -905,7 +948,10 @@ def page_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        page = PageFactory()
+        db.session.add(page)
+        db.session.commit()
 
 
 @hooks.before("Pages > Page Collection > Create Page")
@@ -915,7 +961,7 @@ def page_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    pass
 
 
 @hooks.before("Pages > Page Details > Get Page Details")
@@ -925,7 +971,10 @@ def page_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        page = PageFactory()
+        db.session.add(page)
+        db.session.commit()
 
 
 @hooks.before("Pages > Page Details > Update Page")
@@ -935,7 +984,10 @@ def page_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        page = PageFactory()
+        db.session.add(page)
+        db.session.commit()
 
 
 @hooks.before("Pages > Page Details > Delete Page")
@@ -945,7 +997,10 @@ def page_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        page = PageFactory()
+        db.session.add(page)
+        db.session.commit()
 
 
 # ------------------------- Settings -------------------------
@@ -1026,6 +1081,16 @@ def discount_delete(transaction):
 
 @hooks.before("Upload > Image Upload > Upload an Image in temporary location")
 def image_upload_post(transaction):
+    """
+
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Upload > File Upload > Upload a File")
+def file_upload_post(transaction):
     """
 
     :param transaction:
