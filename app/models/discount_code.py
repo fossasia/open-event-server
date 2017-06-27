@@ -41,7 +41,8 @@ class DiscountCode(db.Model):
                  valid_till=None,
                  is_active=True,
                  used_for=None,
-                 event_id=None):
+                 event_id=None,
+                 tickets=None):
         self.code = code
         self.discount_url = discount_url
         self.type = type
@@ -55,6 +56,7 @@ class DiscountCode(db.Model):
         self.is_active = is_active
         self.created_at = datetime.utcnow()
         self.used_for = used_for
+        self.tickets = tickets
 
     @staticmethod
     def get_service_name():
