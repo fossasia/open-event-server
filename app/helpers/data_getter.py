@@ -811,7 +811,7 @@ class DataGetter(object):
 
     @staticmethod
     def get_expired_orders():
-        return Order.query.filter(Order.status != 'completed')
+        return Order.query.filter(Order.status != 'completed').filter(Order.is_reminder_mail_sent == False)
 
     @staticmethod
     def get_all_super_admins():

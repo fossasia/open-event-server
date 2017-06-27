@@ -37,6 +37,7 @@ class Order(db.Model):
     stripe_token = db.Column(db.String)
     paypal_token = db.Column(db.String)
     status = db.Column(db.String)
+    is_reminder_mail_sent = db.Column(db.Boolean, default=False)
 
     discount_code_id = db.Column(
         db.Integer, db.ForeignKey('discount_codes.id', ondelete='SET NULL'), nullable=True, default=None)
@@ -60,7 +61,8 @@ class Order(db.Model):
                  paid_via=None,
                  user_id=None,
                  discount_code_id=None,
-                 event_id=None):
+                 event_id=None,
+                 is_reminder_mail_sent=None):
         self.identifier = identifier
         self.quantity = quantity
         self.amount = amount
@@ -75,6 +77,7 @@ class Order(db.Model):
         self.paid_via = paid_via
         self.created_at = datetime.datetime.utcnow()
         self.discount_code_id = discount_code_id
+        self.is_reminder_mail_sent = is_reminder_mail_sent
 
     def __repr__(self):
         return '<Order %r>' % self.id
@@ -116,5 +119,5 @@ class Order(db.Model):
             'brand': self.brand,
             'exp_month': self.exp_month,
             'exp_year': self.exp_year,
-            'last4': self.last4,
+            'last4': self.last4
         }

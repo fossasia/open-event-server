@@ -87,7 +87,10 @@ def send_mail_to_expired_orders():
     with app.app_context():
         orders = DataGetter.get_expired_orders()
         for order in orders:
-            send_email_for_expired_orders(order.user.email, order.event.name, order.get_invoice_number(),
+            if order.user:
+                order.is_reminder_mail_sent = True
+                save_to_db(order, 'Mail reminder sent once')
+                send_email_for_expired_orders(order.user.email, order.event.name, order.get_invoice_number(),
                                           url_for('ticketing.view_order_after_payment',
                                                   order_identifier=order.identifier, _external=True))
 
