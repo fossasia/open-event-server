@@ -48,7 +48,8 @@ api.route(PageList, 'page_list', '/pages')
 api.route(PageDetail, 'page_detail', '/pages/<int:id>')
 
 # tickets
-api.route(AllTicketList, 'all_ticket_list', '/tickets', '/events/<int:id>/tickets', '/events/<identifier>/tickets')
+api.route(AllTicketList, 'all_ticket_list','/tickets', '/events/<int:event_id>/tickets',
+          '/events/<event_identifier>/tickets')
 api.route(TicketDetail, 'ticket_detail', '/tickets/<int:id>', '/attendees/<int:attendee_id>/ticket')
 api.route(TicketRelationship, 'ticket_event', '/tickets/<int:id>/relationships/event')
 api.route(TicketRelationship, 'ticket_ticket_tag', '/tickets/<int:id>/relationships/ticket-tags')
