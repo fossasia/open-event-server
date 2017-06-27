@@ -5189,28 +5189,28 @@
 </tbody>
 </table>
 <div id="image-size-image-size-collection" class="resource"><h3 class="resource-heading">Image Size Collection <a href="#image-size-image-size-collection" class="permalink">&nbsp;&para;</a></h3><div id="image-size-image-size-collection-get" class="action get"><h4 class="action-heading"><div class="name">List Image Sizes</div><a href="#image-size-image-size-collection-get" class="method get">GET</a><code class="uri">/v1/image-sizes{?sort,filter}</code></h4><p>Get a list of Image Sizes.</p>
-<h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/image-sizes?<span class="hljs-attribute">sort=</span><span class="hljs-literal">full-width</span>&<span class="hljs-attribute">filter=</span><span class="hljs-literal">[{"full-width":"1300"}]</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>page[size]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>10</span></span></dd><dt>page[number]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span></dd><dt>sort</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>full-width</span></span></dd><dt>filter</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>[{&quot;full-width&quot;:&quot;1300&quot;}]</span></span></dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Accept</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+<h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/image-sizes?<span class="hljs-attribute">sort=</span><span class="hljs-literal">type</span>&<span class="hljs-attribute">filter=</span><span class="hljs-literal">[]</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>page[size]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>10</span></span></dd><dt>page[number]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span></dd><dt>sort</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>type</span></span></dd><dt>filter</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>[]</span></span></dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Accept</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">meta</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">count</span>": <span class="hljs-value"><span class="hljs-number">1</span>
   </span>}</span>,
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">[
     {
       "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">full-width</span>": <span class="hljs-value"><span class="hljs-number">1300</span></span>,
-        "<span class="hljs-attribute">full-height</span>": <span class="hljs-value"><span class="hljs-number">500</span></span>,
-        "<span class="hljs-attribute">full-aspect</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-        "<span class="hljs-attribute">full-quality</span>": <span class="hljs-value"><span class="hljs-number">80</span></span>,
-        "<span class="hljs-attribute">icon-width</span>": <span class="hljs-value"><span class="hljs-number">75</span></span>,
-        "<span class="hljs-attribute">icon-height</span>": <span class="hljs-value"><span class="hljs-number">30</span></span>,
-        "<span class="hljs-attribute">icon-aspect</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-        "<span class="hljs-attribute">icon-quality</span>": <span class="hljs-value"><span class="hljs-number">80</span></span>,
-        "<span class="hljs-attribute">thumbnail-width</span>": <span class="hljs-value"><span class="hljs-number">500</span></span>,
+        "<span class="hljs-attribute">full-aspect</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
         "<span class="hljs-attribute">thumbnail-height</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
-        "<span class="hljs-attribute">thumbnail-aspect</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+        "<span class="hljs-attribute">thumbnail-aspect</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+        "<span class="hljs-attribute">icon-height</span>": <span class="hljs-value"><span class="hljs-number">30</span></span>,
+        "<span class="hljs-attribute">icon-aspect</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+        "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"logo"</span></span>,
+        "<span class="hljs-attribute">icon-width</span>": <span class="hljs-value"><span class="hljs-number">75</span></span>,
+        "<span class="hljs-attribute">icon-quality</span>": <span class="hljs-value"><span class="hljs-number">80</span></span>,
+        "<span class="hljs-attribute">logo-width</span>": <span class="hljs-value"><span class="hljs-number">32</span></span>,
+        "<span class="hljs-attribute">full-width</span>": <span class="hljs-value"><span class="hljs-number">1300</span></span>,
+        "<span class="hljs-attribute">thumbnail-width</span>": <span class="hljs-value"><span class="hljs-number">500</span></span>,
         "<span class="hljs-attribute">thumbnail-quality</span>": <span class="hljs-value"><span class="hljs-number">80</span></span>,
-        "<span class="hljs-attribute">logo-width</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-        "<span class="hljs-attribute">logo-height</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-        "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
+        "<span class="hljs-attribute">full-height</span>": <span class="hljs-value"><span class="hljs-number">500</span></span>,
+        "<span class="hljs-attribute">logo-height</span>": <span class="hljs-value"><span class="hljs-number">32</span></span>,
+        "<span class="hljs-attribute">full-quality</span>": <span class="hljs-value"><span class="hljs-number">80</span>
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"image-size"</span></span>,
       "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -5226,29 +5226,58 @@
     "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/image-sizes"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div><div id="image-size-image-size-collection-post" class="action post"><h4 class="action-heading"><div class="name">Create Image Size</div><a href="#image-size-image-size-collection-post" class="method post">POST</a><code class="uri">/v1/image-sizes{?sort,filter}</code></h4><p>Create a new general image size by admins.</p>
-<h4>Example URI</h4><div class="definition"><span class="method post">POST</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/image-sizes?<span class="hljs-attribute">sort=</span><span class="hljs-literal">full-width</span>&<span class="hljs-attribute">filter=</span><span class="hljs-literal">[{"full-width":"1300"}]</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>page[size]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>10</span></span></dd><dt>page[number]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span></dd><dt>sort</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>full-width</span></span></dd><dt>filter</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>[{&quot;full-width&quot;:&quot;1300&quot;}]</span></span></dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+<h4>Example URI</h4><div class="definition"><span class="method post">POST</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/image-sizes?<span class="hljs-attribute">sort=</span><span class="hljs-literal">type</span>&<span class="hljs-attribute">filter=</span><span class="hljs-literal">[]</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>page[size]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>10</span></span></dd><dt>page[number]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span></dd><dt>sort</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>type</span></span></dd><dt>filter</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>[]</span></span></dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
       "<span class="hljs-attribute">full-width</span>": <span class="hljs-value"><span class="hljs-number">1300</span></span>,
       "<span class="hljs-attribute">full-height</span>": <span class="hljs-value"><span class="hljs-number">500</span></span>,
-      "<span class="hljs-attribute">full-aspect</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">full-aspect</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
       "<span class="hljs-attribute">full-quality</span>": <span class="hljs-value"><span class="hljs-number">80</span></span>,
       "<span class="hljs-attribute">icon-width</span>": <span class="hljs-value"><span class="hljs-number">75</span></span>,
       "<span class="hljs-attribute">icon-height</span>": <span class="hljs-value"><span class="hljs-number">30</span></span>,
-      "<span class="hljs-attribute">icon-aspect</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">icon-aspect</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
       "<span class="hljs-attribute">icon-quality</span>": <span class="hljs-value"><span class="hljs-number">80</span></span>,
       "<span class="hljs-attribute">thumbnail-width</span>": <span class="hljs-value"><span class="hljs-number">500</span></span>,
       "<span class="hljs-attribute">thumbnail-height</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
-      "<span class="hljs-attribute">thumbnail-aspect</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">thumbnail-aspect</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
       "<span class="hljs-attribute">thumbnail-quality</span>": <span class="hljs-value"><span class="hljs-number">80</span></span>,
-      "<span class="hljs-attribute">logo-width</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">logo-height</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
+      "<span class="hljs-attribute">logo-width</span>": <span class="hljs-value"><span class="hljs-number">32</span></span>,
+      "<span class="hljs-attribute">logo-height</span>": <span class="hljs-value"><span class="hljs-number">32</span></span>,
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"logo"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"image-size"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>201</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
-  "<span class="hljs-attribute">data</span>": <span class="hljs-value"><span class="hljs-string">"data"</span>
+  "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">full-aspect</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+      "<span class="hljs-attribute">thumbnail-height</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
+      "<span class="hljs-attribute">thumbnail-aspect</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+      "<span class="hljs-attribute">icon-height</span>": <span class="hljs-value"><span class="hljs-number">30</span></span>,
+      "<span class="hljs-attribute">icon-aspect</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"logo"</span></span>,
+      "<span class="hljs-attribute">icon-width</span>": <span class="hljs-value"><span class="hljs-number">75</span></span>,
+      "<span class="hljs-attribute">icon-quality</span>": <span class="hljs-value"><span class="hljs-number">80</span></span>,
+      "<span class="hljs-attribute">logo-width</span>": <span class="hljs-value"><span class="hljs-number">32</span></span>,
+      "<span class="hljs-attribute">full-width</span>": <span class="hljs-value"><span class="hljs-number">1300</span></span>,
+      "<span class="hljs-attribute">thumbnail-width</span>": <span class="hljs-value"><span class="hljs-number">500</span></span>,
+      "<span class="hljs-attribute">thumbnail-quality</span>": <span class="hljs-value"><span class="hljs-number">80</span></span>,
+      "<span class="hljs-attribute">full-height</span>": <span class="hljs-value"><span class="hljs-number">500</span></span>,
+      "<span class="hljs-attribute">logo-height</span>": <span class="hljs-value"><span class="hljs-number">32</span></span>,
+      "<span class="hljs-attribute">full-quality</span>": <span class="hljs-value"><span class="hljs-number">80</span>
+    </span>}</span>,
+    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"image-size"</span></span>,
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
+    "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/image-sizes/1"</span>
+    </span>}
+  </span>}</span>,
+  "<span class="hljs-attribute">jsonapi</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"1.0"</span>
+  </span>}</span>,
+  "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/image-sizes/1"</span>
+  </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="image-size-image-size-details" class="resource"><h3 class="resource-heading">Image Size Details <a href="#image-size-image-size-details" class="permalink">&nbsp;&para;</a></h3><div id="image-size-image-size-details-get" class="action get"><h4 class="action-heading"><div class="name">Get Image Size Details</div><a href="#image-size-image-size-details-get" class="method get">GET</a><code class="uri">/v1/image-sizes/{image_size_id}</code></h4><p>Get a single image size.</p>
 <h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/image-sizes/<span class="hljs-attribute" title="image_size_id">1</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>image_size_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the image size in the form of an integer</p>
 </dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Accept</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
@@ -5292,41 +5321,41 @@
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
       "<span class="hljs-attribute">full-width</span>": <span class="hljs-value"><span class="hljs-number">1300</span></span>,
       "<span class="hljs-attribute">full-height</span>": <span class="hljs-value"><span class="hljs-number">500</span></span>,
-      "<span class="hljs-attribute">full-aspect</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">full-aspect</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">full-quality</span>": <span class="hljs-value"><span class="hljs-number">80</span></span>,
       "<span class="hljs-attribute">icon-width</span>": <span class="hljs-value"><span class="hljs-number">75</span></span>,
       "<span class="hljs-attribute">icon-height</span>": <span class="hljs-value"><span class="hljs-number">30</span></span>,
-      "<span class="hljs-attribute">icon-aspect</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">icon-aspect</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
       "<span class="hljs-attribute">icon-quality</span>": <span class="hljs-value"><span class="hljs-number">80</span></span>,
       "<span class="hljs-attribute">thumbnail-width</span>": <span class="hljs-value"><span class="hljs-number">500</span></span>,
       "<span class="hljs-attribute">thumbnail-height</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
-      "<span class="hljs-attribute">thumbnail-aspect</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">thumbnail-aspect</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
       "<span class="hljs-attribute">thumbnail-quality</span>": <span class="hljs-value"><span class="hljs-number">80</span></span>,
-      "<span class="hljs-attribute">logo-width</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">logo-height</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
+      "<span class="hljs-attribute">logo-width</span>": <span class="hljs-value"><span class="hljs-number">32</span></span>,
+      "<span class="hljs-attribute">logo-height</span>": <span class="hljs-value"><span class="hljs-number">32</span></span>,
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"logo"</span>
     </span>}</span>,
-    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"image-size"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
-  }
+    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"image-size"</span>
+  </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">full-width</span>": <span class="hljs-value"><span class="hljs-number">1300</span></span>,
-      "<span class="hljs-attribute">full-height</span>": <span class="hljs-value"><span class="hljs-number">500</span></span>,
-      "<span class="hljs-attribute">full-aspect</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">full-quality</span>": <span class="hljs-value"><span class="hljs-number">80</span></span>,
-      "<span class="hljs-attribute">icon-width</span>": <span class="hljs-value"><span class="hljs-number">75</span></span>,
-      "<span class="hljs-attribute">icon-height</span>": <span class="hljs-value"><span class="hljs-number">30</span></span>,
-      "<span class="hljs-attribute">icon-aspect</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">icon-quality</span>": <span class="hljs-value"><span class="hljs-number">80</span></span>,
-      "<span class="hljs-attribute">thumbnail-width</span>": <span class="hljs-value"><span class="hljs-number">500</span></span>,
+      "<span class="hljs-attribute">full-aspect</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">thumbnail-height</span>": <span class="hljs-value"><span class="hljs-number">200</span></span>,
-      "<span class="hljs-attribute">thumbnail-aspect</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">thumbnail-aspect</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+      "<span class="hljs-attribute">icon-height</span>": <span class="hljs-value"><span class="hljs-number">30</span></span>,
+      "<span class="hljs-attribute">icon-aspect</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"logo"</span></span>,
+      "<span class="hljs-attribute">icon-width</span>": <span class="hljs-value"><span class="hljs-number">75</span></span>,
+      "<span class="hljs-attribute">icon-quality</span>": <span class="hljs-value"><span class="hljs-number">80</span></span>,
+      "<span class="hljs-attribute">logo-width</span>": <span class="hljs-value"><span class="hljs-number">32</span></span>,
+      "<span class="hljs-attribute">full-width</span>": <span class="hljs-value"><span class="hljs-number">1300</span></span>,
+      "<span class="hljs-attribute">thumbnail-width</span>": <span class="hljs-value"><span class="hljs-number">500</span></span>,
       "<span class="hljs-attribute">thumbnail-quality</span>": <span class="hljs-value"><span class="hljs-number">80</span></span>,
-      "<span class="hljs-attribute">logo-width</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">logo-height</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
+      "<span class="hljs-attribute">full-height</span>": <span class="hljs-value"><span class="hljs-number">500</span></span>,
+      "<span class="hljs-attribute">logo-height</span>": <span class="hljs-value"><span class="hljs-number">32</span></span>,
+      "<span class="hljs-attribute">full-quality</span>": <span class="hljs-value"><span class="hljs-number">80</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"image-size"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
