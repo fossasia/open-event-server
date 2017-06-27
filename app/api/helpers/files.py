@@ -4,12 +4,12 @@ from flask import current_app
 import os
 
 
-def get_image_file_name():
+def get_file_name():
     return str(uuid.uuid4())
 
 
 def uploaded_image(extension='.png', file_content=None):
-    filename = get_image_file_name() + extension
+    filename = get_file_name() + extension
     filedir = current_app.config.get('BASE_DIR') + '/static/uploads/'
     if not os.path.isdir(filedir):
         os.makedirs(filedir)
@@ -24,7 +24,8 @@ def uploaded_file(files, multiple=False):
     if multiple:
         files_uploaded = []
         for file in files:
-            filename = file.filename
+            extension = file.filename.split('.')[1]
+            filename = get_file_name() + '.' + extension
             filedir = current_app.config.get('BASE_DIR') + '/static/uploads/'
             if not os.path.isdir(filedir):
                 os.makedirs(filedir)
@@ -33,7 +34,8 @@ def uploaded_file(files, multiple=False):
             files_uploaded.append(UploadedFile(file_path, filename))
 
     else:
-        filename = files.filename
+        extension = files.filename.split('.')[1]
+        filename = get_file_name() + '.' + extension
         filedir = current_app.config.get('BASE_DIR') + '/static/uploads/'
         if not os.path.isdir(filedir):
             os.makedirs(filedir)
