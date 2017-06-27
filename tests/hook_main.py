@@ -16,6 +16,7 @@ from populate_db import populate_without_print
 from app.factories.user import UserFactory
 from app.factories.notification import NotificationFactory
 from app.factories.event import EventFactoryBasic
+from app.factories.social_link import SocialLinkFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -486,7 +487,10 @@ def social_link_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        social_link = SocialLinkFactory()
+        db.session.add(social_link)
+        db.session.commit()
 
 
 @hooks.before("Social Links > Social Links Collection > Create Social Link")
@@ -496,7 +500,10 @@ def social_link_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        social_link = SocialLinkFactory()
+        db.session.add(social_link)
+        db.session.commit()
 
 
 @hooks.before("Social Links > Social Links > Social Link Detail")
@@ -506,7 +513,10 @@ def social_link_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        social_link = SocialLinkFactory()
+        db.session.add(social_link)
+        db.session.commit()
 
 
 @hooks.before("Social Links > Social Links > Update Social Link")
@@ -516,8 +526,10 @@ def social_link_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
-
+    with stash['app'].app_context():
+        social_link = SocialLinkFactory()
+        db.session.add(social_link)
+        db.session.commit()
 
 @hooks.before("Social Links > Social Links > Delete Social Link")
 def social_link_delete(transaction):
@@ -526,7 +538,10 @@ def social_link_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        social_link = SocialLinkFactory()
+        db.session.add(social_link)
+        db.session.commit()
 
 
 # ------------------------- Speakers Calls -------------------------
