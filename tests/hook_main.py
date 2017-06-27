@@ -39,7 +39,8 @@ def obtain_token():
 
 
 def create_super_admin(email, password):
-    user = UserFactory(email=email, password=password, is_super_admin=True, is_admin=True, is_verified=True)
+    user = UserFactory(email=email, password=password, is_super_admin=True,
+                       is_admin=True, is_verified=True)
     db.session.add(user)
     db.session.commit()
     return user
@@ -1067,6 +1068,16 @@ def discount_delete(transaction):
 
 @hooks.before("Upload > Image Upload > Upload an Image in temporary location")
 def image_upload_post(transaction):
+    """
+
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Upload > File Upload > Upload a File")
+def file_upload_post(transaction):
     """
 
     :param transaction:
