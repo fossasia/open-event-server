@@ -25,7 +25,7 @@ class PageSchema(Schema):
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
     title = fields.Str()
-    url = fields.Url(required=True)
+    url = fields.String(required=True)
     description = fields.Str()
     place = fields.Str()
     language = fields.Str()

@@ -18,6 +18,7 @@ from app.factories.notification import NotificationFactory
 from app.factories.event import EventFactoryBasic
 from app.factories.social_link import SocialLinkFactory
 from app.factories.image_size import ImageSizeFactory
+from app.factories.page import PageFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -946,7 +947,10 @@ def page_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        page = PageFactory()
+        db.session.add(page)
+        db.session.commit()
 
 
 @hooks.before("Pages > Page Collection > Create Page")
@@ -956,7 +960,7 @@ def page_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    pass
 
 
 @hooks.before("Pages > Page Details > Get Page Details")
@@ -966,7 +970,10 @@ def page_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        page = PageFactory()
+        db.session.add(page)
+        db.session.commit()
 
 
 @hooks.before("Pages > Page Details > Update Page")
@@ -976,7 +983,10 @@ def page_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        page = PageFactory()
+        db.session.add(page)
+        db.session.commit()
 
 
 @hooks.before("Pages > Page Details > Delete Page")
@@ -986,7 +996,10 @@ def page_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        page = PageFactory()
+        db.session.add(page)
+        db.session.commit()
 
 
 # ------------------------- Settings -------------------------
