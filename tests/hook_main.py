@@ -17,6 +17,7 @@ from app.factories.user import UserFactory
 from app.factories.notification import NotificationFactory
 from app.factories.event import EventFactoryBasic
 from app.factories.social_link import SocialLinkFactory
+from app.factories.image_size import ImageSizeFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -501,8 +502,8 @@ def social_link_post(transaction):
     :return:
     """
     with stash['app'].app_context():
-        social_link = SocialLinkFactory()
-        db.session.add(social_link)
+        event = EventFactoryBasic()
+        db.session.add(event)
         db.session.commit()
 
 
@@ -881,7 +882,10 @@ def image_size_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        image_size = ImageSizeFactory()
+        db.session.add(image_size)
+        db.session.commit()
 
 
 @hooks.before("Image Size > Image Size Collection > Create Image Size")
@@ -891,7 +895,7 @@ def image_size_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    pass
 
 
 @hooks.before("Image Size > Image Size Details > Get Image Size Details")
@@ -901,7 +905,10 @@ def image_size_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        image_size = ImageSizeFactory()
+        db.session.add(image_size)
+        db.session.commit()
 
 
 @hooks.before("Image Size > Image Size Details > Update Image Size")
@@ -911,7 +918,10 @@ def image_size_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        image_size = ImageSizeFactory()
+        db.session.add(image_size)
+        db.session.commit()
 
 
 @hooks.before("Image Size > Image Size Details > Delete Image Size")
@@ -921,7 +931,10 @@ def image_size_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        image_size = ImageSizeFactory()
+        db.session.add(image_size)
+        db.session.commit()
 
 
 # ------------------------- Pages -------------------------

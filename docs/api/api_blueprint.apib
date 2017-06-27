@@ -146,27 +146,29 @@ Create a new user using an email, password and an optional name.
 
     + Body
 
-        {
-          "data": {
-            "attributes": {
-              "email": "example@example.com",
-              "password": "password",
-              "avatar_url": "http://example.com/example.png",
-              "first-name": "John",
-              "last-name": "Doe",
-              "details": "example",
-              "contact": "example",
-              "facebook-url": "http://facebook.com/facebook",
-              "twitter-url": "http://twitter.com/twitter",
-              "instagram-url": "http://instagram.com/instagram",
-              "google-plus-url": "http://plus.google.com/plus.google",
-              "thumbnail-image-url": "http://example.com/example.png",
-              "small-image-url": "http://example.com/example.png",
-              "icon-image-url": "http://example.com/example.png"
-            },
-            "type": "user"
-          }
-        }
+            {
+              "data":
+              {
+                "attributes":
+                {
+                  "email": "example@example.com",
+                  "password": "password",
+                  "avatar_url": "http://example.com/example.png",
+                  "first-name": "John",
+                  "last-name": "Doe",
+                  "details": "example",
+                  "contact": "example",
+                  "facebook-url": "http://facebook.com/facebook",
+                  "twitter-url": "http://twitter.com/twitter",
+                  "instagram-url": "http://instagram.com/instagram",
+                  "google-plus-url": "http://plus.google.com/plus.google",
+                  "thumbnail-image-url": "http://example.com/example.png",
+                  "small-image-url": "http://example.com/example.png",
+                  "icon-image-url": "http://example.com/example.png"
+                },
+                "type": "user"
+              }
+            }
 
 + Response 201 (application/vnd.api+json)
 
@@ -5714,8 +5716,8 @@ To create or modify data of this data layer, you will need admin access. You can
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
-    + sort (optional, string, `full-width`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[{"full-width":"1300"}]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + sort (optional, string, `type`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List Image Sizes [GET]
 Get a list of Image Sizes.
@@ -5731,41 +5733,41 @@ Get a list of Image Sizes.
 + Response 200 (application/vnd.api+json)
 
         {
-          "meta": {
-            "count": 1
-          },
-          "data": [
-            {
-              "attributes": {
-                "full-width": 1300,
-                "full-height": 500,
-                "full-aspect": null,
-                "full-quality": 80,
-                "icon-width": 75,
-                "icon-height": 30,
-                "icon-aspect": null,
-                "icon-quality": 80,
-                "thumbnail-width": 500,
-                "thumbnail-height": 200,
-                "thumbnail-aspect": null,
-                "thumbnail-quality": 80,
-                "logo-width": null,
-                "logo-height": null,
-                "type": null
-              },
-              "type": "image-size",
-              "id": "1",
-              "links": {
-                "self": "/v1/image-sizes/1"
-              }
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "attributes": {
+                        "full-aspect": false,
+                        "thumbnail-height": 200,
+                        "thumbnail-aspect": true,
+                        "icon-height": 30,
+                        "icon-aspect": true,
+                        "type": "logo",
+                        "icon-width": 75,
+                        "icon-quality": 80,
+                        "logo-width": 32,
+                        "full-width": 1300,
+                        "thumbnail-width": 500,
+                        "thumbnail-quality": 80,
+                        "full-height": 500,
+                        "logo-height": 32,
+                        "full-quality": 80
+                    },
+                    "type": "image-size",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/image-sizes/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/image-sizes"
             }
-          ],
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/image-sizes"
-          }
         }
 
 
@@ -5785,19 +5787,19 @@ Create a new general image size by admins.
                 "attributes": {
                   "full-width": 1300,
                   "full-height": 500,
-                  "full-aspect": null,
+                  "full-aspect": true,
                   "full-quality": 80,
                   "icon-width": 75,
                   "icon-height": 30,
-                  "icon-aspect": null,
+                  "icon-aspect": true,
                   "icon-quality": 80,
                   "thumbnail-width": 500,
                   "thumbnail-height": 200,
-                  "thumbnail-aspect": null,
+                  "thumbnail-aspect": true,
                   "thumbnail-quality": 80,
-                  "logo-width": null,
-                  "logo-height": null,
-                  "type": null
+                  "logo-width": 32,
+                  "logo-height": 32,
+                  "type": "logo"
                 },
                 "type": "image-size"
               }
@@ -5806,7 +5808,36 @@ Create a new general image size by admins.
 + Response 201 (application/vnd.api+json)
 
         {
-          "data": "data"
+            "data": {
+                "attributes": {
+                    "full-aspect": true,
+                    "thumbnail-height": 200,
+                    "thumbnail-aspect": true,
+                    "icon-height": 30,
+                    "icon-aspect": true,
+                    "type": "logo",
+                    "icon-width": 75,
+                    "icon-quality": 80,
+                    "logo-width": 32,
+                    "full-width": 1300,
+                    "thumbnail-width": 500,
+                    "thumbnail-quality": 80,
+                    "full-height": 500,
+                    "logo-height": 32,
+                    "full-quality": 80
+                },
+                "type": "image-size",
+                "id": "1",
+                "links": {
+                    "self": "/v1/image-sizes/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/image-sizes/1"
+            }
         }
 
 ## Image Size Details [/v1/image-sizes/{image_size_id}]
@@ -5878,59 +5909,59 @@ Update a single image size by `id`.
                 "attributes": {
                   "full-width": 1300,
                   "full-height": 500,
-                  "full-aspect": null,
+                  "full-aspect": false,
                   "full-quality": 80,
                   "icon-width": 75,
                   "icon-height": 30,
-                  "icon-aspect": null,
+                  "icon-aspect": true,
                   "icon-quality": 80,
                   "thumbnail-width": 500,
                   "thumbnail-height": 200,
-                  "thumbnail-aspect": null,
+                  "thumbnail-aspect": true,
                   "thumbnail-quality": 80,
-                  "logo-width": null,
-                  "logo-height": null,
-                  "type": null
+                  "logo-width": 32,
+                  "logo-height": 32,
+                  "type": "logo"
                 },
-                "type": "image-size",
                 "id": "1",
+                "type": "image-size"
               }
             }
 
 + Response 200 (application/vnd.api+json)
 
-        {
-          "data": {
-            "attributes": {
-              "full-width": 1300,
-              "full-height": 500,
-              "full-aspect": null,
-              "full-quality": 80,
-              "icon-width": 75,
-              "icon-height": 30,
-              "icon-aspect": null,
-              "icon-quality": 80,
-              "thumbnail-width": 500,
-              "thumbnail-height": 200,
-              "thumbnail-aspect": null,
-              "thumbnail-quality": 80,
-              "logo-width": null,
-              "logo-height": null,
-              "type": null
-            },
-            "type": "image-size",
-            "id": "1",
-            "links": {
-              "self": "/v1/image-sizes/1"
+            {
+                "data": {
+                    "attributes": {
+                        "full-aspect": false,
+                        "thumbnail-height": 200,
+                        "thumbnail-aspect": true,
+                        "icon-height": 30,
+                        "icon-aspect": true,
+                        "type": "logo",
+                        "icon-width": 75,
+                        "icon-quality": 80,
+                        "logo-width": 32,
+                        "full-width": 1300,
+                        "thumbnail-width": 500,
+                        "thumbnail-quality": 80,
+                        "full-height": 500,
+                        "logo-height": 32,
+                        "full-quality": 80
+                    },
+                    "type": "image-size",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/image-sizes/1"
+                    }
+                },
+                "jsonapi": {
+                    "version": "1.0"
+                },
+                "links": {
+                    "self": "/v1/image-sizes/1"
+                }
             }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/image-sizes/1"
-          }
-        }
 
 ### Delete Image Size [DELETE]
 Delete a single image size.
