@@ -25,6 +25,7 @@ from app.factories.event_type import EventTypeFactory
 from app.factories.discount_code import DiscountCodeFactory
 from app.factories.event_topic import EventTopicFactory
 from app.factories.event_invoice import EventInvoiceFactory
+from app.factories.event_sub_topic import EventSubTopicFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -1272,7 +1273,10 @@ def event_sub_topic_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_sub_topic = EventSubTopicFactory()
+        db.session.add(event_sub_topic)
+        db.session.commit()
 
 
 @hooks.before("Event Sub Topics > Event Sub Topics Collection > Create Event Sub Topic")
@@ -1282,7 +1286,10 @@ def event_sub_topic_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_topic = EventTopicFactory()
+        db.session.add(event_topic)
+        db.session.commit()
 
 
 @hooks.before("Event Sub Topics > Event Sub Topic Details > Event Sub Topic Details")
@@ -1292,7 +1299,10 @@ def event_sub_topic_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_sub_topic = EventSubTopicFactory()
+        db.session.add(event_sub_topic)
+        db.session.commit()
 
 
 @hooks.before("Event Sub Topics > Event Sub Topic Details > Update Event Sub Topic")
@@ -1302,7 +1312,10 @@ def event_sub_topic_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_sub_topic = EventSubTopicFactory()
+        db.session.add(event_sub_topic)
+        db.session.commit()
 
 
 @hooks.before("Event Sub Topics > Event Sub Topic Details > Delete Event Sub Topic")
@@ -1312,4 +1325,7 @@ def event_sub_topic_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_sub_topic = EventSubTopicFactory()
+        db.session.add(event_sub_topic)
+        db.session.commit()
