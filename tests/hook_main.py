@@ -1,3 +1,5 @@
+
+
 import sys
 import os.path as path
 import dredd_hooks as hooks
@@ -20,6 +22,7 @@ from app.factories.social_link import SocialLinkFactory
 from app.factories.image_size import ImageSizeFactory
 from app.factories.page import PageFactory
 from app.factories.event_type import EventTypeFactory
+from app.factories.discount_code import DiscountCodeFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -1035,7 +1038,10 @@ def discount_code_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        discount_code = DiscountCodeFactory()
+        db.session.add(discount_code)
+        db.session.commit()
 
 
 @hooks.before("Discount Codes > Discount Code Collection > Create Discount Code")
@@ -1045,7 +1051,10 @@ def discount_code_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 @hooks.before("Discount Codes > Discount Code Detail > Discount Code Detail")
@@ -1055,7 +1064,10 @@ def discount_code_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        discount_code = DiscountCodeFactory()
+        db.session.add(discount_code)
+        db.session.commit()
 
 
 @hooks.before("Discount Codes > Discount Code Detail > Update Discount Code")
@@ -1065,7 +1077,10 @@ def discount_code_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        discount_code = DiscountCodeFactory()
+        db.session.add(discount_code)
+        db.session.commit()
 
 
 @hooks.before("Discount Codes > Discount Code Detail > Delete Discount Code")
@@ -1075,7 +1090,10 @@ def discount_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        discount_code = DiscountCodeFactory()
+        db.session.add(discount_code)
+        db.session.commit()
 
 
 # ------------------------- Upload -------------------------
