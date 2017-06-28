@@ -461,7 +461,7 @@ Create a new event type with name.
               "attributes": {
                 "name": "Camp, Treat & Retreat",
                 "slug": "camp-treat-retreat"
-              }, 
+              },
               "type": "event-type",
               "id": "1",
               "links": {
@@ -4109,12 +4109,12 @@ Get a list of Sponsors.
                 }
               },
               "attributes": {
-                "description": "Some Description",
-                "level": "Level",
+                "description": "Fossasia",
+                "level": "1",
                 "url": "http://example.com",
-                "type": "Type",
-                "logo-url": "http://placehold.it/200X200",
-                "name": "New Brand"
+                "type": "Gold",
+                "logo-url": "http://example.com/example.png",
+                "name": "Fossasia"
               },
               "type": "sponsor",
               "id": "1",
@@ -4146,10 +4146,11 @@ Create a new sponsor using an event_id.
             {
               "data": {
                 "attributes": {
-                  "name": "Open Event Sponsor",
-                  "description": "Example Description",
+                  "name": "Fossasia",
+                  "description": "Fossasia",
+                  "logo-url": "http://example.com/example.png",
                   "url": "http://example.com",
-                  "level": "Example",
+                  "level": "1",
                   "type": "Gold"
                 },
                 "type": "sponsor"
@@ -4164,30 +4165,30 @@ Create a new sponsor using an event_id.
             "relationships": {
               "event": {
                 "links": {
-                  "self": "/v1/sponsors/5/relationships/event",
-                  "related": "/v1/sponsors/5/event"
+                  "self": "/v1/sponsors/1/relationships/event",
+                  "related": "/v1/sponsors/1/event"
                 }
               }
             },
             "attributes": {
-              "description": "Example Description",
-              "level": "Example",
+              "description": "Fossasia",
+              "level": "1",
               "url": "http://example.com",
-              "logo-url": null,
+              "logo-url": "http://example.com/example.png",
               "type": "Gold",
-              "name": "Open Event Sponsor"
+              "name": "Fossasia"
             },
             "type": "sponsor",
-            "id": "5",
+            "id": "1",
             "links": {
-              "self": "/v1/sponsors/5"
+              "self": "/v1/sponsors/1"
             }
           },
           "jsonapi": {
             "version": "1.0"
           },
           "links": {
-            "self": "/v1/sponsors/5"
+            "self": "/v1/sponsors/1"
           }
         }
 
@@ -4214,30 +4215,30 @@ Get a single sponsor.
             "relationships": {
               "event": {
                 "links": {
-                  "self": "/v1/sponsors/5/relationships/event",
-                  "related": "/v1/sponsors/5/event"
+                  "self": "/v1/sponsors/1/relationships/event",
+                  "related": "/v1/sponsors/1/event"
                 }
               }
             },
             "attributes": {
-              "description": "Example Description",
-              "level": "Example",
+              "description": "Fossasia",
+              "level": "1",
               "url": "http://example.com",
-              "logo-url": null,
+              "logo-url": "http://example.com/example.png",
               "type": "Gold",
-              "name": "Open Event Sponsor"
+              "name": "Fossasia"
             },
             "type": "sponsor",
-            "id": "5",
+            "id": "1",
             "links": {
-              "self": "/v1/sponsors/5"
+              "self": "/v1/sponsors/1"
             }
           },
           "jsonapi": {
             "version": "1.0"
           },
           "links": {
-            "self": "/v1/sponsors/5"
+            "self": "/v1/sponsors/1"
           }
         }
 
@@ -4259,13 +4260,14 @@ Update a single sponsor by `id`.
               "data": {
                 "attributes": {
                   "description": "Example Description",
-                  "url": "http://example.com",
-                  "level": "Example",
-                  "type": "Gold",
-                  "name": "New Open Event Sponsor"
+                  "url": "http://example1.com",
+                  "level": "2",
+                  "type": "Silver",
+                  "name": "New Open Event Sponsor",
+                  "logo-url": "http://example.com/example1.png"
                 },
                 "type": "sponsor",
-                "id": "5"
+                "id": "1"
               }
             }
 
@@ -4276,30 +4278,30 @@ Update a single sponsor by `id`.
             "relationships": {
               "event": {
                 "links": {
-                  "self": "/v1/sponsors/5/relationships/event",
-                  "related": "/v1/sponsors/5/event"
+                  "self": "/v1/sponsors/1/relationships/event",
+                  "related": "/v1/sponsors/1/event"
                 }
               }
             },
             "attributes": {
               "description": "Example Description",
-              "level": "Example",
+              "level": "2",
               "url": "http://example.com",
-              "logo-url": null,
-              "type": "Gold",
+              "logo-url": "http://example.com/example1.png",
+              "type": "Silver",
               "name": "New Open Event Sponsor"
             },
             "type": "sponsor",
-            "id": "5",
+            "id": "1",
             "links": {
-              "self": "/v1/sponsors/5"
+              "self": "/v1/sponsors/1"
             }
           },
           "jsonapi": {
             "version": "1.0"
           },
           "links": {
-            "self": "/v1/sponsors/5"
+            "self": "/v1/sponsors/1"
           }
         }
 
