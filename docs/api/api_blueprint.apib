@@ -2326,25 +2326,21 @@ Create a new Event Invoice using an event_id.
             {
               "data": {
                 "attributes": {
-                  "status": "pending",
-                  "identifier": "3fe1aa02-34dd-41ea-a0a9-f7a0259b90b5",
-                  "paypal-token": null,
-                  "exp-year": null,
-                  "transaction-id": null,
-                  "brand": null,
-                  "created-at": "2017-06-08T11:24:57.344803+00:00",
-                  "payment-mode": null,
-                  "stripe-token": null,
-                  "last4": null,
-                  "address": null,
-                  "city": null,
-                  "state": null,
-                  "country": "India",
-                  "zipcode": null,
-                  "exp-month": null,
+                  "paypal-token": "1234",
+                  "exp-year": "2100",
+                  "transaction-id": "ae43awer",
+                  "brand": "brand",
+                  "payment-mode": "mode",
+                  "stripe-token": "fssfda432",
+                  "last4": "5445",
+                  "address": "address",
+                  "city": "city",
+                  "state": "state",
+                  "country": "US",
+                  "zipcode": "40004",
+                  "exp-month": "10",
                   "amount": 500.0,
-                  "completed-at": null,
-                  "paid-via": null
+                  "paid-via": "stripe"
                 },
                 "type": "event-invoice"
               }
@@ -2353,50 +2349,63 @@ Create a new Event Invoice using an event_id.
 
 + Response 201 (application/vnd.api+json)
 
-        {
-          "data": {
-            "relationships": {
-              "event": {
+            {
+                "data": {
+                    "relationships": {
+                        "discount-codes": {
+                            "links": {
+                                "self": "/v1/event-invoices/3/relationships/discount-codes",
+                                "related": "/v1event-invoices/3/discount-code"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/event-invoices/3/relationships/event",
+                                "related": "/v1/event-invoices/3/event"
+                            }
+                        },
+                        "user": {
+                            "links": {
+                                "self": "/v1/event-invoices/3/relationships/user",
+                                "related": "/v1/event-invoices/3/user"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "status": "pending",
+                        "city": "city",
+                        "identifier": "8e2aacda-c217-4f94-8472-9d04f2bdeeb7",
+                        "paypal-token": "1234",
+                        "invoice-pdf-url": null,
+                        "transaction-id": "ae43awer",
+                        "country": "US",
+                        "brand": "brand",
+                        "created-at": "2017-06-28T08:08:13.566681+00:00",
+                        "zipcode": "40004",
+                        "payment-mode": "mode",
+                        "stripe-token": "fssfda432",
+                        "last4": "5445",
+                        "state": "state",
+                        "address": "address",
+                        "exp-month": 10,
+                        "amount": 500,
+                        "completed-at": null,
+                        "exp-year": 2100,
+                        "paid-via": "stripe"
+                    },
+                    "type": "event-invoice",
+                    "id": "3",
+                    "links": {
+                        "self": "/v1/event-invoices/3"
+                    }
+                },
+                "jsonapi": {
+                    "version": "1.0"
+                },
                 "links": {
-                  "self": "/v1/event-invoices/5/relationships/event",
-                  "related": "/v1/event-invoices/5/event"
+                    "self": "/v1/event-invoices/3"
                 }
-              }
-            },
-            "attributes": {
-              "status": "pending",
-              "city": "India",
-              "identifier": "3fe1aa02-34dd-41ea-a0a9-f7a0259b90b5",
-              "paypal-token": null,
-              "exp-year": null,
-              "transaction-id": null,
-              "country": null,
-              "brand": null,
-              "created-at": "2017-06-08T11:24:57.344803+00:00",
-              "zipcode": null,
-              "payment-mode": null,
-              "stripe-token": null,
-              "last4": null,
-              "state": null,
-              "address": null,
-              "exp-month": null,
-              "amount": 500.0,
-              "completed-at": null,
-              "paid-via": null
-            },
-            "type": "event-invoice",
-            "id": "5",
-            "links": {
-              "self": "/v1/event-invoices/5"
             }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/event-invoices/5"
-          }
-        }
 
 
 ## Event Invoices Details [/v1/event-invoices/{event_invoices_id}]
@@ -2417,48 +2426,61 @@ Get a single event invoice.
 + Response 200 (application/vnd.api+json)
 
         {
-          "data": {
-            "relationships": {
-              "event": {
+            "data": {
+                "relationships": {
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/event-invoices/5/relationships/discount-codes",
+                            "related": "/v1event-invoices/5/discount-code"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/event-invoices/5/relationships/event",
+                            "related": "/v1/event-invoices/5/event"
+                        }
+                    },
+                    "user": {
+                        "links": {
+                            "self": "/v1/event-invoices/5/relationships/user",
+                            "related": "/v1/event-invoices/5/user"
+                        }
+                    }
+                },
+                "attributes": {
+                    "status": "pending",
+                    "city": "city",
+                    "identifier": "b88639c9-5a41-45ea-884d-977876baa08f",
+                    "paypal-token": "1234",
+                    "invoice-pdf-url": null,
+                    "transaction-id": "ae43awer",
+                    "country": "US",
+                    "brand": "brand",
+                    "created-at": "2017-06-28T08:10:14.968538+00:00",
+                    "zipcode": "40004",
+                    "payment-mode": "mode",
+                    "stripe-token": "fssfda432",
+                    "last4": "5445",
+                    "state": "state",
+                    "address": "address",
+                    "exp-month": 10,
+                    "amount": 500,
+                    "completed-at": null,
+                    "exp-year": 2100,
+                    "paid-via": "stripe"
+                },
+                "type": "event-invoice",
+                "id": "5",
                 "links": {
-                  "self": "/v1/event-invoices/5/relationships/event",
-                  "related": "/v1/event-invoices/5/event"
+                    "self": "/v1/event-invoices/5"
                 }
-              }
             },
-            "attributes": {
-              "status": "pending",
-              "city": "India",
-              "identifier": "3fe1aa02-34dd-41ea-a0a9-f7a0259b90b5",
-              "paypal-token": null,
-              "exp-year": null,
-              "transaction-id": null,
-              "country": null,
-              "brand": null,
-              "created-at": "2017-06-08T11:24:57.344803+00:00",
-              "zipcode": null,
-              "payment-mode": null,
-              "stripe-token": null,
-              "last4": null,
-              "state": null,
-              "address": null,
-              "exp-month": null,
-              "amount": 500.0,
-              "completed-at": null,
-              "paid-via": null
+            "jsonapi": {
+                "version": "1.0"
             },
-            "type": "event-invoice",
-            "id": "5",
             "links": {
-              "self": "/v1/event-invoices/5"
+                "self": "/v1/event-invoices/5"
             }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/event-invoices/5"
-          }
         }
 
 
@@ -2478,76 +2500,85 @@ Update a single event invoice by `id`.
             {
               "data": {
                 "attributes": {
-                  "status": "completed",
-                  "identifier": "3fe1aa02-34dd-41ea-a0a9-f7a0259b90b5",
-                  "paypal-token": null,
-                  "exp-year": null,
-                  "transaction-id": null,
-                  "brand": null,
-                  "created-at": "2017-06-08T11:24:57.344803+00:00",
-                  "payment-mode": null,
-                  "stripe-token": null,
-                  "last4": null,
-                  "address": null,
-                  "city": null,
-                  "state": null,
-                  "country": "India",
-                  "zipcode": null,
-                  "exp-month": null,
+                  "paypal-token": "1234",
+                  "exp-year": "2100",
+                  "transaction-id": "ae43awer",
+                  "brand": "brand",
+                  "payment-mode": "mode",
+                  "stripe-token": "fssfda432",
+                  "last4": "5445",
+                  "address": "address",
+                  "city": "city",
+                  "state": "state",
+                  "country": "US",
+                  "zipcode": "40004",
+                  "exp-month": "10",
                   "amount": 500.0,
-                  "completed-at": null,
-                  "paid-via": null
+                  "paid-via": "stripe"
                 },
                 "type": "event-invoice",
-                "id": 5
+                "id": "1"
               }
             }
 
 + Response 200 (application/vnd.api+json)
 
         {
-          "data": {
-            "relationships": {
-              "event": {
+            "data": {
+                "relationships": {
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/event-invoices/5/relationships/discount-codes",
+                            "related": "/v1event-invoices/5/discount-code"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/event-invoices/5/relationships/event",
+                            "related": "/v1/event-invoices/5/event"
+                        }
+                    },
+                    "user": {
+                        "links": {
+                            "self": "/v1/event-invoices/5/relationships/user",
+                            "related": "/v1/event-invoices/5/user"
+                        }
+                    }
+                },
+                "attributes": {
+                    "status": "pending",
+                    "city": "city",
+                    "identifier": "b88639c9-5a41-45ea-884d-977876baa08f",
+                    "paypal-token": "1234",
+                    "invoice-pdf-url": null,
+                    "transaction-id": "ae43awer",
+                    "country": "US",
+                    "brand": "brand",
+                    "created-at": "2017-06-28T08:10:14.968538+00:00",
+                    "zipcode": "40004",
+                    "payment-mode": "mode",
+                    "stripe-token": "fssfda432",
+                    "last4": "5445",
+                    "state": "state",
+                    "address": "address",
+                    "exp-month": 10,
+                    "amount": 500,
+                    "completed-at": null,
+                    "exp-year": 2100,
+                    "paid-via": "stripe"
+                },
+                "type": "event-invoice",
+                "id": "5",
                 "links": {
-                  "self": "/v1/event-invoices/5/relationships/event",
-                  "related": "/v1/event-invoices/5/event"
+                    "self": "/v1/event-invoices/5"
                 }
-              }
             },
-            "attributes": {
-              "status": "completed",
-              "city": "India",
-              "identifier": "3fe1aa02-34dd-41ea-a0a9-f7a0259b90b5",
-              "paypal-token": null,
-              "exp-year": null,
-              "transaction-id": null,
-              "country": null,
-              "brand": null,
-              "created-at": "2017-06-08T11:24:57.344803+00:00",
-              "zipcode": null,
-              "payment-mode": null,
-              "stripe-token": null,
-              "last4": null,
-              "state": null,
-              "address": null,
-              "exp-month": null,
-              "amount": 500.0,
-              "completed-at": null,
-              "paid-via": null
+            "jsonapi": {
+                "version": "1.0"
             },
-            "type": "event-invoice",
-            "id": "5",
             "links": {
-              "self": "/v1/event-invoices/5"
+                "self": "/v1/event-invoices/5"
             }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/event-invoices/5"
-          }
         }
 
 ### Delete Event Invoices [DELETE]

@@ -89,7 +89,7 @@ class EventInvoiceList(ResourceList):
                 raise ObjectNotFound({'parameter': 'event_id'},
                                      "Event: {} not found".format(view_kwargs['event_id']))
             else:
-                query_ = query_.filter_by(Event.id == event.id)
+                query_ = query_.filter(Event.id == event.id)
         elif view_kwargs.get('event_identifier'):
             try:
                 event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
