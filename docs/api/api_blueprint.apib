@@ -900,14 +900,14 @@ Get a list of Event Sub Topics.
               "relationships": {
                 "events": {
                   "links": {
-                    "self": "/v1/event-topics/5/relationships/events",
-                    "related": "/v1/event-sub-topics/5/events"
+                    "self": "/v1/event-topics/1/relationships/events",
+                    "related": "/v1/event-sub-topics/1/events"
                   }
                 },
                 "event-topic": {
                   "links": {
-                    "self": "/v1/event-sub-topics/5/relationships/event-topic",
-                    "related": "/v1/event-sub-topics/5/event-topic"
+                    "self": "/v1/event-sub-topics/1/relationships/event-topic",
+                    "related": "/v1/event-sub-topics/1/event-topic"
                   }
                 }
               },
@@ -916,9 +916,9 @@ Get a list of Event Sub Topics.
                 "name": "Climbing"
               },
               "type": "event-sub-topic",
-              "id": "5",
+              "id": "1",
               "links": {
-                "self": "/v1/event-sub-topics/5"
+                "self": "/v1/event-sub-topics/1"
               }
             }
           ],
@@ -958,32 +958,32 @@ Create a new event sub topic with name.
               "relationships": {
                 "events": {
                   "links": {
-                    "self": "/v1/event-topics/5/relationships/events",
-                    "related": "/v1/event-sub-topics/5/events"
+                    "self": "/v1/event-topics/1/relationships/events",
+                    "related": "/v1/event-sub-topics/1/events"
                   }
                 },
                 "event-topic": {
                   "links": {
-                    "self": "/v1/event-sub-topics/5/relationships/event-topic",
-                    "related": "/v1/event-sub-topics/5/event-topic"
+                    "self": "/v1/event-sub-topics/1/relationships/event-topic",
+                    "related": "/v1/event-sub-topics/1/event-topic"
                   }
                 }
               },
               "attributes": {
                 "name": "Climbing",
                 "slug": "climbing"
-              }, "
-              type": "event-sub-topic",
-              "id": "5",
+              },
+              "type": "event-sub-topic",
+              "id": "1",
               "links": {
-                "self": "/v1/event-sub-topics/5"
+                "self": "/v1/event-sub-topics/1"
               }
             },
             "jsonapi": {
               "version": "1.0"
             },
             "links": {
-              "self": "/v1/event-sub-topics/5"
+              "self": "/v1/event-sub-topics/1"
             }
           }
 
@@ -1005,40 +1005,39 @@ Get a single event sub topic.
 + Response 200 (application/vnd.api+json)
 
         {
-          "data": {
-            "relationships": {
-              "events": {
-                "links": {
-                  "self": "/v1/event-topics/5/relationships/events",
-                  "related": "/v1/event-sub-topics/5/events"
+            "data": {
+              "relationships": {
+                "events": {
+                  "links": {
+                    "self": "/v1/event-topics/1/relationships/events",
+                    "related": "/v1/event-sub-topics/1/events"
+                  }
+                },
+                "event-topic": {
+                  "links": {
+                    "self": "/v1/event-sub-topics/1/relationships/event-topic",
+                    "related": "/v1/event-sub-topics/1/event-topic"
+                  }
                 }
               },
-              "event-topic": {
-                "links": {
-                  "self": "/v1/event-sub-topics/5/relationships/event-topic",
-                  "related": "/v1/event-sub-topics/5/event-topic"
-                }
+              "attributes": {
+                "name": "Climbing",
+                "slug": "climbing",
+                "event_topic_id": 1
+              },
+              "type": "event-sub-topic",
+              "id": "1",
+              "links": {
+                "self": "/v1/event-sub-topics/1"
               }
             },
-            "attributes": {
-              "name": "Climbing",
-              "slug": "climbing",
-              "event_topic_id": 1
+            "jsonapi": {
+              "version": "1.0"
             },
-            "type": "event-topic",
-            "id": "5",
             "links": {
-              "self": "/v1/event-sub-topics/5"
+              "self": "/v1/event-sub-topics/1"
             }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/event-sub-topics/5"
           }
-        }
-
 
 ### Update Event Sub Topic [PATCH]
 + `id` (integer) - ID of the record to update **(required)**
@@ -1060,7 +1059,8 @@ Authorized user must be admin.
                 "attributes": {
                   "name": "Climbing"
                 },
-                "type": "event-sub-topic"
+                "type": "event-sub-topic",
+                "id": "1"
               }
             }
 
@@ -1071,14 +1071,14 @@ Authorized user must be admin.
             "relationships": {
               "events": {
                 "links": {
-                  "self": "/v1/event-topics/5/relationships/events",
-                  "related": "/v1/event-sub-topics/5/events"
+                  "self": "/v1/event-topics/1/relationships/events",
+                  "related": "/v1/event-sub-topics/1/events"
                 }
               },
               "event-topic": {
                 "links": {
-                  "self": "/v1/event-sub-topics/5/relationships/event-topic",
-                  "related": "/v1/event-sub-topics/5/event-topic"
+                  "self": "/v1/event-sub-topics/1/relationships/event-topic",
+                  "related": "/v1/event-sub-topics/1/event-topic"
                 }
               }
             },
@@ -1087,16 +1087,16 @@ Authorized user must be admin.
               "slug": "climbing"
             },
             "type": "event-sub-type",
-            "id": "5",
+            "id": "1",
             "links": {
-              "self": "/v1/event-sub-topics/5"
+              "self": "/v1/event-sub-topics/1"
             }
           },
           "jsonapi": {
             "version": "1.0"
           },
           "links": {
-            "self": "/v1/event-sub-topics/5"
+            "self": "/v1/event-sub-topics/1"
           }
         }
 
