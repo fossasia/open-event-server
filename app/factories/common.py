@@ -10,6 +10,7 @@ country_ = 'US'
 currency_ = 'USD'
 float_ = '1.23456789'
 timezone_ = 'UTC'
+slug_ = 'camp-trip-retreat'
 
 def socialUrl_(name):
     return 'https://{}.com/{}'.format(name, name)

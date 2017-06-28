@@ -1,3 +1,5 @@
+
+
 import sys
 import os.path as path
 import dredd_hooks as hooks
@@ -19,6 +21,9 @@ from app.factories.event import EventFactoryBasic
 from app.factories.social_link import SocialLinkFactory
 from app.factories.image_size import ImageSizeFactory
 from app.factories.page import PageFactory
+from app.factories.event_type import EventTypeFactory
+from app.factories.discount_code import DiscountCodeFactory
+from app.factories.event_topic import EventTopicFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -1034,7 +1039,10 @@ def discount_code_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        discount_code = DiscountCodeFactory()
+        db.session.add(discount_code)
+        db.session.commit()
 
 
 @hooks.before("Discount Codes > Discount Code Collection > Create Discount Code")
@@ -1044,7 +1052,10 @@ def discount_code_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 @hooks.before("Discount Codes > Discount Code Detail > Discount Code Detail")
@@ -1054,7 +1065,10 @@ def discount_code_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        discount_code = DiscountCodeFactory()
+        db.session.add(discount_code)
+        db.session.commit()
 
 
 @hooks.before("Discount Codes > Discount Code Detail > Update Discount Code")
@@ -1064,7 +1078,10 @@ def discount_code_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        discount_code = DiscountCodeFactory()
+        db.session.add(discount_code)
+        db.session.commit()
 
 
 @hooks.before("Discount Codes > Discount Code Detail > Delete Discount Code")
@@ -1074,7 +1091,10 @@ def discount_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        discount_code = DiscountCodeFactory()
+        db.session.add(discount_code)
+        db.session.commit()
 
 
 # ------------------------- Upload -------------------------
@@ -1108,7 +1128,10 @@ def event_type_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_type = EventTypeFactory()
+        db.session.add(event_type)
+        db.session.commit()
 
 
 @hooks.before("Event Types > Event Types Collection > Create Event Type")
@@ -1118,7 +1141,7 @@ def event_type_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    pass
 
 
 @hooks.before("Event Types > Event Type Details > Event Type Details")
@@ -1128,7 +1151,10 @@ def event_type_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_type = EventTypeFactory()
+        db.session.add(event_type)
+        db.session.commit()
 
 
 @hooks.before("Event Types > Event Type Details > Update Event Type")
@@ -1138,7 +1164,10 @@ def event_type_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_type = EventTypeFactory()
+        db.session.add(event_type)
+        db.session.commit()
 
 
 @hooks.before("Event Types > Event Type Details > Delete Event Type")
@@ -1148,7 +1177,10 @@ def event_type_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_type = EventTypeFactory()
+        db.session.add(event_type)
+        db.session.commit()
 
 
 # ------------------------- Event Topics -------------------------
@@ -1160,7 +1192,10 @@ def event_topic_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_topic = EventTopicFactory()
+        db.session.add(event_topic)
+        db.session.commit()
 
 
 @hooks.before("Event Topics > Event Topics Collection > Create Event Topic")
@@ -1170,7 +1205,7 @@ def event_topic_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    pass
 
 
 @hooks.before("Event Topics > Event Topic Details > Event Topic Details")
@@ -1180,7 +1215,10 @@ def event_topic_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_topic = EventTopicFactory()
+        db.session.add(event_topic)
+        db.session.commit()
 
 
 @hooks.before("Event Topics > Event Topic Details > Update Event Topic")
@@ -1190,7 +1228,10 @@ def event_topic_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_topic = EventTopicFactory()
+        db.session.add(event_topic)
+        db.session.commit()
 
 
 @hooks.before("Event Topics > Event Topic Details > Delete Event Topic")
@@ -1200,7 +1241,10 @@ def event_topic_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_topic = EventTopicFactory()
+        db.session.add(event_topic)
+        db.session.commit()
 
 
 # ------------------------- Event Sub Topics -------------------------
