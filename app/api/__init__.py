@@ -192,7 +192,8 @@ api.route(EventInvoiceRelationship, 'event_invoice_discount_code',
 # discount codes
 api.route(DiscountCodeList, 'discount_code_list', '/events/<int:event_id>/discount-codes',
           '/events/<event_identifier>/discount-codes')
-api.route(DiscountCodeDetail, 'discount_code_detail', '/discount-codes/<int:id>')
+api.route(DiscountCodeDetail, 'discount_code_detail', '/discount-codes/<int:id>',
+          'event-invoices/<int:event_invoice_id>/discount-code')
 api.route(DiscountCodeRelationship, 'discount_code_event',
           '/discount-codes/<int:id>/relationships/event')
 

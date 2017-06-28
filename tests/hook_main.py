@@ -24,6 +24,7 @@ from app.factories.page import PageFactory
 from app.factories.event_type import EventTypeFactory
 from app.factories.discount_code import DiscountCodeFactory
 from app.factories.event_topic import EventTopicFactory
+from app.factories.event_invoice import EventInvoiceFactory
 from app.factories.event_sub_topic import EventSubTopicFactory
 
 stash = {}
@@ -288,7 +289,10 @@ def invoice_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_invoice = EventInvoiceFactory()
+        db.session.add(event_invoice)
+        db.session.commit()
 
 
 @hooks.before("Invoices > Event Invoices > Create Event Invoices")
@@ -298,7 +302,10 @@ def invoice_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 @hooks.before("Invoices > Event Invoices Details > Event Invoices Details")
@@ -308,7 +315,10 @@ def invoice_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_invoice = EventInvoiceFactory()
+        db.session.add(event_invoice)
+        db.session.commit()
 
 
 @hooks.before("Invoices > Event Invoices Details > Update Event Invoices")
@@ -318,7 +328,10 @@ def invoice_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_invoice = EventInvoiceFactory()
+        db.session.add(event_invoice)
+        db.session.commit()
 
 
 @hooks.before("Invoices > Event Invoices Details > Delete Event Invoices")
@@ -328,7 +341,10 @@ def invoice_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_invoice = EventInvoiceFactory()
+        db.session.add(event_invoice)
+        db.session.commit()
 
 
 # ------------------------- Microlocation -------------------------

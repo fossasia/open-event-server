@@ -66,7 +66,15 @@ class EventInvoice(db.Model):
                  user_id=None,
                  discount_code_id=None,
                  event_id=None,
-                 invoice_pdf_url=None):
+                 invoice_pdf_url=None,
+                 payment_mode=None,
+                 brand=None,
+                 exp_month=None,
+                 exp_year=None,
+                 last4=None,
+                 stripe_token=None,
+                 paypal_token=None
+                 ):
         self.identifier = get_new_identifier()
         self.amount = amount
         self.address = address
@@ -82,6 +90,13 @@ class EventInvoice(db.Model):
         self.discount_code_id = discount_code_id
         self.status = 'pending'
         self.invoice_pdf_url = invoice_pdf_url
+        self.payment_mode = payment_mode
+        self.brand = brand
+        self.exp_month = exp_month
+        self.exp_year = exp_year
+        self.last4 = last4
+        self.stripe_token = stripe_token
+        self.paypal_token = paypal_token
 
     def get_invoice_number(self):
         return 'I' + str(int(time.mktime(self.created_at.timetuple()))) + '-' + str(self.id)
