@@ -4867,8 +4867,8 @@
 </tbody>
 </table>
 <div id="discount-codes-discount-code-collection" class="resource"><h3 class="resource-heading">Discount Code Collection <a href="#discount-codes-discount-code-collection" class="permalink">&nbsp;&para;</a></h3><div id="discount-codes-discount-code-collection-get" class="action get"><h4 class="action-heading"><div class="name">List All Discount Codes</div><a href="#discount-codes-discount-code-collection-get" class="method get">GET</a><code class="uri">/v1/events/{event_identifier}/discount-codes{?sort,filter}</code></h4><p>Get a list of Discount Codes.</p>
-<h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/events/<span class="hljs-attribute" title="event_identifier">1</span>/discount-codes?<span class="hljs-attribute">sort=</span><span class="hljs-literal">name</span>&<span class="hljs-attribute">filter=</span><span class="hljs-literal">[]</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>event_identifier</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>identifier or event id of the event. (b8324ae2 is an example of identifier)</p>
-</dd><dt>page[size]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>10</span></span></dd><dt>page[number]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span></dd><dt>sort</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>name</span></span></dd><dt>filter</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>[]</span></span></dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Accept</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+<h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/events/<span class="hljs-attribute" title="event_identifier">1</span>/discount-codes?<span class="hljs-attribute">sort=</span><span class="hljs-literal">code</span>&<span class="hljs-attribute">filter=</span><span class="hljs-literal">[]</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>event_identifier</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>identifier or event id of the event. (b8324ae2 is an example of identifier)</p>
+</dd><dt>page[size]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>10</span></span></dd><dt>page[number]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span></dd><dt>sort</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>code</span></span></dd><dt>filter</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>[]</span></span></dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Accept</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">meta</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">count</span>": <span class="hljs-value"><span class="hljs-number">1</span>
   </span>}</span>,
@@ -4883,7 +4883,7 @@
         </span>}
       </span>}</span>,
       "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">tickets</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+        "<span class="hljs-attribute">tickets</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
         "<span class="hljs-attribute">code</span>": <span class="hljs-value"><span class="hljs-string">"DC101"</span></span>,
         "<span class="hljs-attribute">valid-from</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-18T18:30:00+00:00"</span></span>,
         "<span class="hljs-attribute">min-quantity</span>": <span class="hljs-value"><span class="hljs-number">0</span></span>,
@@ -4911,8 +4911,8 @@
     "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/events/1/discount-codes"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div><div id="discount-codes-discount-code-collection-post" class="action post"><h4 class="action-heading"><div class="name">Create Discount Code</div><a href="#discount-codes-discount-code-collection-post" class="method post">POST</a><code class="uri">/v1/events/{event_identifier}/discount-codes{?sort,filter}</code></h4><p>Create a new Discount Code with event_id.</p>
-<h4>Example URI</h4><div class="definition"><span class="method post">POST</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/events/<span class="hljs-attribute" title="event_identifier">1</span>/discount-codes?<span class="hljs-attribute">sort=</span><span class="hljs-literal">name</span>&<span class="hljs-attribute">filter=</span><span class="hljs-literal">[]</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>event_identifier</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>identifier or event id of the event. (b8324ae2 is an example of identifier)</p>
-</dd><dt>page[size]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>10</span></span></dd><dt>page[number]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span></dd><dt>sort</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>name</span></span></dd><dt>filter</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>[]</span></span></dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+<h4>Example URI</h4><div class="definition"><span class="method post">POST</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/events/<span class="hljs-attribute" title="event_identifier">1</span>/discount-codes?<span class="hljs-attribute">sort=</span><span class="hljs-literal">code</span>&<span class="hljs-attribute">filter=</span><span class="hljs-literal">[]</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>event_identifier</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>identifier or event id of the event. (b8324ae2 is an example of identifier)</p>
+</dd><dt>page[size]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>10</span></span></dd><dt>page[number]</dt><dd><code>integer</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span></dd><dt>sort</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>code</span></span></dd><dt>filter</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>[]</span></span></dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
       "<span class="hljs-attribute">code</span>": <span class="hljs-value"><span class="hljs-string">"DC101"</span></span>,
@@ -4925,101 +4925,92 @@
       "<span class="hljs-attribute">max-quantity</span>": <span class="hljs-value"><span class="hljs-string">"100"</span></span>,
       "<span class="hljs-attribute">valid-from</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-18T18:30:00+00:00"</span></span>,
       "<span class="hljs-attribute">valid-till</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-24T18:30:00+00:00"</span></span>,
-      "<span class="hljs-attribute">used-for</span>": <span class="hljs-value"><span class="hljs-string">"Event"</span>
+      "<span class="hljs-attribute">used-for</span>": <span class="hljs-value"><span class="hljs-string">"Event"</span></span>,
+      "<span class="hljs-attribute">tickets</span>": <span class="hljs-value"><span class="hljs-string">"event"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"discount-code"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>201</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
-  "<span class="hljs-attribute">meta</span>": <span class="hljs-value">{
-    "<span class="hljs-attribute">count</span>": <span class="hljs-value"><span class="hljs-number">1</span>
-  </span>}</span>,
-  "<span class="hljs-attribute">data</span>": <span class="hljs-value">[
-    {
-      "<span class="hljs-attribute">relationships</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">event</span>": <span class="hljs-value">{
-          "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-            "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/discount-codes/1/relationships/event"</span></span>,
-            "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/discount-codes/1/event"</span>
-          </span>}
+  "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">relationships</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">event</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
+          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/discount-codes/4/relationships/event"</span></span>,
+          "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/discount-codes/4/event"</span>
         </span>}
-      </span>}</span>,
-      "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">tickets</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-        "<span class="hljs-attribute">code</span>": <span class="hljs-value"><span class="hljs-string">"DC101"</span></span>,
-        "<span class="hljs-attribute">valid-from</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-18T18:30:00+00:00"</span></span>,
-        "<span class="hljs-attribute">min-quantity</span>": <span class="hljs-value"><span class="hljs-number">0</span></span>,
-        "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-20T09:59:23.740772+00:00"</span></span>,
-        "<span class="hljs-attribute">tickets-number</span>": <span class="hljs-value"><span class="hljs-number">404</span></span>,
-        "<span class="hljs-attribute">value</span>": <span class="hljs-value"><span class="hljs-number">100</span></span>,
-        "<span class="hljs-attribute">max-quantity</span>": <span class="hljs-value"><span class="hljs-number">100</span></span>,
-        "<span class="hljs-attribute">is-active</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
-        "<span class="hljs-attribute">used-for</span>": <span class="hljs-value"><span class="hljs-string">"Event"</span></span>,
-        "<span class="hljs-attribute">valid-till</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-24T18:30:00+00:00"</span></span>,
-        "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"amount"</span></span>,
-        "<span class="hljs-attribute">discount-url</span>": <span class="hljs-value"><span class="hljs-string">"https://my-discount-url.com"</span>
-      </span>}</span>,
-      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"discount-code"</span></span>,
-      "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
-      "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/discount-codes/1"</span>
       </span>}
+    </span>}</span>,
+    "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">tickets</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
+      "<span class="hljs-attribute">code</span>": <span class="hljs-value"><span class="hljs-string">"DC101"</span></span>,
+      "<span class="hljs-attribute">valid-from</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-18T18:30:00+00:00"</span></span>,
+      "<span class="hljs-attribute">min-quantity</span>": <span class="hljs-value"><span class="hljs-number">0</span></span>,
+      "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-27T14:47:14.996906+00:00"</span></span>,
+      "<span class="hljs-attribute">tickets-number</span>": <span class="hljs-value"><span class="hljs-number">404</span></span>,
+      "<span class="hljs-attribute">value</span>": <span class="hljs-value"><span class="hljs-number">100</span></span>,
+      "<span class="hljs-attribute">max-quantity</span>": <span class="hljs-value"><span class="hljs-number">100</span></span>,
+      "<span class="hljs-attribute">is-active</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">used-for</span>": <span class="hljs-value"><span class="hljs-string">"Event"</span></span>,
+      "<span class="hljs-attribute">valid-till</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-24T18:30:00+00:00"</span></span>,
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"amount"</span></span>,
+      "<span class="hljs-attribute">discount-url</span>": <span class="hljs-value"><span class="hljs-string">"https://my-discount-url.com"</span>
+    </span>}</span>,
+    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"discount-code"</span></span>,
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">4</span></span>,
+    "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/discount-codes/4"</span>
     </span>}
-  ]</span>,
+  </span>}</span>,
   "<span class="hljs-attribute">jsonapi</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"1.0"</span>
   </span>}</span>,
   "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/events/1/discount-codes"</span>
+    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/discount-codes/4"</span>
   </span>}
-</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="discount-codes-discount-code-detail" class="resource"><h3 class="resource-heading">Discount Code Detail <a href="#discount-codes-discount-code-detail" class="permalink">&nbsp;&para;</a></h3><div id="discount-codes-discount-code-detail-get" class="action get"><h4 class="action-heading"><div class="name">Discount Code Detail</div><a href="#discount-codes-discount-code-detail-get" class="method get">GET</a><code class="uri">/discount-codes/{discount_code_id}</code></h4><p>Get a single discount code.</p>
-<h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/discount-codes/<span class="hljs-attribute" title="discount_code_id">1</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>discount_code_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the discount code in the form of an integer</p>
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="discount-codes-discount-code-detail" class="resource"><h3 class="resource-heading">Discount Code Detail <a href="#discount-codes-discount-code-detail" class="permalink">&nbsp;&para;</a></h3><div id="discount-codes-discount-code-detail-get" class="action get"><h4 class="action-heading"><div class="name">Discount Code Detail</div><a href="#discount-codes-discount-code-detail-get" class="method get">GET</a><code class="uri">/v1/discount-codes/{discount_code_id}</code></h4><p>Get a single discount code.</p>
+<h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/discount-codes/<span class="hljs-attribute" title="discount_code_id">1</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>discount_code_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the discount code in the form of an integer</p>
 </dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Accept</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
-  "<span class="hljs-attribute">meta</span>": <span class="hljs-value">{
-    "<span class="hljs-attribute">count</span>": <span class="hljs-value"><span class="hljs-number">1</span>
-  </span>}</span>,
-  "<span class="hljs-attribute">data</span>": <span class="hljs-value">[
-    {
-      "<span class="hljs-attribute">relationships</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">event</span>": <span class="hljs-value">{
-          "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-            "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/discount-codes/1/relationships/event"</span></span>,
-            "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/discount-codes/1/event"</span>
-          </span>}
+  "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">relationships</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">event</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
+          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/discount-codes/1/relationships/event"</span></span>,
+          "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/discount-codes/1/event"</span>
         </span>}
-      </span>}</span>,
-      "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">tickets</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-        "<span class="hljs-attribute">code</span>": <span class="hljs-value"><span class="hljs-string">"DC101"</span></span>,
-        "<span class="hljs-attribute">valid-from</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-18T18:30:00+00:00"</span></span>,
-        "<span class="hljs-attribute">min-quantity</span>": <span class="hljs-value"><span class="hljs-number">0</span></span>,
-        "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-20T09:59:23.740772+00:00"</span></span>,
-        "<span class="hljs-attribute">tickets-number</span>": <span class="hljs-value"><span class="hljs-number">404</span></span>,
-        "<span class="hljs-attribute">value</span>": <span class="hljs-value"><span class="hljs-number">100</span></span>,
-        "<span class="hljs-attribute">max-quantity</span>": <span class="hljs-value"><span class="hljs-number">100</span></span>,
-        "<span class="hljs-attribute">is-active</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
-        "<span class="hljs-attribute">used-for</span>": <span class="hljs-value"><span class="hljs-string">"Event"</span></span>,
-        "<span class="hljs-attribute">valid-till</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-24T18:30:00+00:00"</span></span>,
-        "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"amount"</span></span>,
-        "<span class="hljs-attribute">discount-url</span>": <span class="hljs-value"><span class="hljs-string">"https://my-discount-url.com"</span>
-      </span>}</span>,
-      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"discount-code"</span></span>,
-      "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
-      "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/discount-codes/1"</span>
       </span>}
+    </span>}</span>,
+    "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">tickets</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
+      "<span class="hljs-attribute">code</span>": <span class="hljs-value"><span class="hljs-string">"DC101"</span></span>,
+      "<span class="hljs-attribute">valid-from</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-18T18:30:00+00:00"</span></span>,
+      "<span class="hljs-attribute">min-quantity</span>": <span class="hljs-value"><span class="hljs-number">0</span></span>,
+      "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-27T10:43:20.840012+00:00"</span></span>,
+      "<span class="hljs-attribute">tickets-number</span>": <span class="hljs-value"><span class="hljs-number">404</span></span>,
+      "<span class="hljs-attribute">value</span>": <span class="hljs-value"><span class="hljs-number">100</span></span>,
+      "<span class="hljs-attribute">max-quantity</span>": <span class="hljs-value"><span class="hljs-number">100</span></span>,
+      "<span class="hljs-attribute">is-active</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">used-for</span>": <span class="hljs-value"><span class="hljs-string">"Event"</span></span>,
+      "<span class="hljs-attribute">valid-till</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-24T18:30:00+00:00"</span></span>,
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"amount"</span></span>,
+      "<span class="hljs-attribute">discount-url</span>": <span class="hljs-value"><span class="hljs-string">"https://my-discount-url.com"</span>
+    </span>}</span>,
+    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"discount-code"</span></span>,
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">3</span></span>,
+    "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/discount-codes/1"</span>
     </span>}
-  ]</span>,
+  </span>}</span>,
   "<span class="hljs-attribute">jsonapi</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"1.0"</span>
   </span>}</span>,
   "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/events/1/discount-codes"</span>
+    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/discount-codes/1"</span>
   </span>}
-</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div id="discount-codes-discount-code-detail-patch" class="action patch"><h4 class="action-heading"><div class="name">Update Discount Code</div><a href="#discount-codes-discount-code-detail-patch" class="method patch">PATCH</a><code class="uri">/discount-codes/{discount_code_id}</code></h4><p>Update a single discount code with <code>id</code>.</p>
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div id="discount-codes-discount-code-detail-patch" class="action patch"><h4 class="action-heading"><div class="name">Update Discount Code</div><a href="#discount-codes-discount-code-detail-patch" class="method patch">PATCH</a><code class="uri">/v1/discount-codes/{discount_code_id}</code></h4><p>Update a single discount code with <code>id</code>.</p>
 <ul>
 <li><code>id</code> (integer) - ID of the record to update <strong>(required)</strong></li>
 </ul>
-<h4>Example URI</h4><div class="definition"><span class="method patch">PATCH</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/discount-codes/<span class="hljs-attribute" title="discount_code_id">1</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>discount_code_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the discount code in the form of an integer</p>
+<h4>Example URI</h4><div class="definition"><span class="method patch">PATCH</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/discount-codes/<span class="hljs-attribute" title="discount_code_id">1</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>discount_code_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the discount code in the form of an integer</p>
 </dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
@@ -5033,7 +5024,8 @@
       "<span class="hljs-attribute">max-quantity</span>": <span class="hljs-value"><span class="hljs-string">"100"</span></span>,
       "<span class="hljs-attribute">valid-from</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-18T18:30:00+00:00"</span></span>,
       "<span class="hljs-attribute">valid-till</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-24T18:30:00+00:00"</span></span>,
-      "<span class="hljs-attribute">used-for</span>": <span class="hljs-value"><span class="hljs-string">"Event"</span>
+      "<span class="hljs-attribute">used-for</span>": <span class="hljs-value"><span class="hljs-string">"Event"</span></span>,
+      "<span class="hljs-attribute">tickets</span>": <span class="hljs-value"><span class="hljs-string">"event"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"discount-code"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span>
@@ -5049,7 +5041,7 @@
       </span>}
     </span>}</span>,
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">tickets</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">tickets</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
       "<span class="hljs-attribute">code</span>": <span class="hljs-value"><span class="hljs-string">"DC101"</span></span>,
       "<span class="hljs-attribute">valid-from</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-18T18:30:00+00:00"</span></span>,
       "<span class="hljs-attribute">min-quantity</span>": <span class="hljs-value"><span class="hljs-number">0</span></span>,
@@ -5075,8 +5067,8 @@
   "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/discount-codes/1"</span>
   </span>}
-</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div id="discount-codes-discount-code-detail-delete" class="action delete"><h4 class="action-heading"><div class="name">Delete Discount Code</div><a href="#discount-codes-discount-code-detail-delete" class="method delete">DELETE</a><code class="uri">/discount-codes/{discount_code_id}</code></h4><p>Delete a single discount code.</p>
-<h4>Example URI</h4><div class="definition"><span class="method delete">DELETE</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/discount-codes/<span class="hljs-attribute" title="discount_code_id">1</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>discount_code_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the discount code in the form of an integer</p>
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div id="discount-codes-discount-code-detail-delete" class="action delete"><h4 class="action-heading"><div class="name">Delete Discount Code</div><a href="#discount-codes-discount-code-detail-delete" class="method delete">DELETE</a><code class="uri">/v1/discount-codes/{discount_code_id}</code></h4><p>Delete a single discount code.</p>
+<h4>Example URI</h4><div class="definition"><span class="method delete">DELETE</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/discount-codes/<span class="hljs-attribute" title="discount_code_id">1</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>discount_code_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the discount code in the form of an integer</p>
 </dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Accept</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">meta</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Object successfully deleted"</span>
@@ -6243,7 +6235,7 @@
 Content-Disposition: form-data; name=<span class="hljs-string">"file"</span>; filename=<span class="hljs-string">"test.csv"</span>
 Content-Type: text/csv</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">url</span>": <span class="hljs-value"><span class="hljs-string">"/serve_static/media/temp/images/6a6614c7-d458-43de-a9bd-5c329e273bf0/U0lLbUt2SF/4d4dae9e-0bab-4e72-ba2f-e8e633a145e5.gif"</span>
-</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 27 Jun 2017</p><script>/* eslint-env browser */
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 28 Jun 2017</p><script>/* eslint-env browser */
 /* eslint quotes: [2, "single"] */
 'use strict';
 
