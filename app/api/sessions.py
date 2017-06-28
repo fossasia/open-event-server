@@ -119,6 +119,7 @@ class SessionList(ResourceList):
         return query_
 
     def before_create_object(self, data, view_kwargs):
+        # Permission Manager ensures there is event ID if any event_identifier provided
         if view_kwargs.get('event_id') is not None:
             try:
                 event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()

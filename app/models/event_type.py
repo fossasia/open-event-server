@@ -16,7 +16,7 @@ class EventType(db.Model):
 
     __tablename__ = 'event_types'
 
-    id = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String, nullable=False)
     slug = db.Column(db.String, unique=True, nullable=False)
     events = db.relationship('Event', backref='event-type')

@@ -22,7 +22,7 @@ class Ticket(db.Model):
     is_fee_absorbed = db.Column(db.Boolean)
     sales_starts_at = db.Column(db.DateTime(timezone=True))
     sales_ends_at = db.Column(db.DateTime(timezone=True))
-    hide = db.Column(db.Boolean)
+    is_hidden = db.Column(db.Boolean)
 
     min_order = db.Column(db.Integer)
     max_order = db.Column(db.Integer)
@@ -39,7 +39,7 @@ class Ticket(db.Model):
                  type=None,
                  sales_starts_at=None,
                  sales_ends_at=None,
-                 hide=False,
+                 is_hidden=False,
                  description=None,
                  description_toggle=True,
                  quantity=100,
@@ -62,7 +62,7 @@ class Ticket(db.Model):
         self.price = price
         self.sales_starts_at = sales_starts_at
         self.sales_ends_at = sales_ends_at
-        self.hide = hide
+        self.is_hidden = is_hidden
         self.min_order = min_order
         self.max_order = max_order
         self.tags = tags
