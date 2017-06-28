@@ -79,23 +79,30 @@ class TicketSchema(Schema):
 
 
 class AllTicketList(ResourceList):
+    """
+    Create and List Tickets
+    """
     def query(self, view_kwargs):
         query_ = self.session.query(Ticket)
         if view_kwargs.get('event_id'):
-            query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
-        elif view_kwargs.get('identifier'):
+            query_ = query_.filter_by(event_id=view_kwargs['event_id'])
+        elif view_kwargs.get('event_identifier'):
             query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
         return query_
 
     def before_create_object(self, data, view_kwargs):
-        if view_kwargs.get('event_id'):
-            event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
-            data['event_id'] = event.id
-        elif view_kwargs.get('identifier'):
-            event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
-            data['event_id'] = event.id
+        if view_kwargs.get('event_id') is not None:
+            try:
+                event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_identifier'},
+                                     "Event: with ID {} not found".format(view_kwargs['event_id']))
+            else:
+                data['event_id'] = event.id
 
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
+                  fetch_as="event_id", model=Ticket, methods="POST",
+                  check=lambda a: a.get('event_id') or a.get('event_identifier')), )
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket,
@@ -106,6 +113,9 @@ class AllTicketList(ResourceList):
 
 
 class TicketDetail(ResourceDetail):
+    """
+    Ticket Resource
+    """
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('attendee_id') is not None:
             try:
@@ -119,9 +129,8 @@ class TicketDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
-    decorators = (jwt_required,
-                  api.has_permission('is_coorganizer', fetch='event_id', fetch_as="event_id", model=Ticket,
-                                     methods="DELETE"),)
+    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
+                  fetch_as="event_id", model=Ticket, methods="PATCH,DELETE"), )
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket,
@@ -131,6 +140,9 @@ class TicketDetail(ResourceDetail):
 
 
 class TicketRelationship(ResourceRelationship):
+    """
+    Tickets Relationship
+    """
     decorators = (jwt_required,)
     schema = TicketSchema
     data_layer = {'session': db.session,
