@@ -21,6 +21,7 @@ from app.factories.event import EventFactoryBasic
 from app.factories.social_link import SocialLinkFactory
 from app.factories.image_size import ImageSizeFactory
 from app.factories.page import PageFactory
+from app.factories.event_type import EventTypeFactory
 from app.factories.discount_code import DiscountCodeFactory
 
 stash = {}
@@ -1126,7 +1127,10 @@ def event_type_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_type = EventTypeFactory()
+        db.session.add(event_type)
+        db.session.commit()
 
 
 @hooks.before("Event Types > Event Types Collection > Create Event Type")
@@ -1136,7 +1140,7 @@ def event_type_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    pass
 
 
 @hooks.before("Event Types > Event Type Details > Event Type Details")
@@ -1146,7 +1150,10 @@ def event_type_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_type = EventTypeFactory()
+        db.session.add(event_type)
+        db.session.commit()
 
 
 @hooks.before("Event Types > Event Type Details > Update Event Type")
@@ -1156,7 +1163,10 @@ def event_type_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_type = EventTypeFactory()
+        db.session.add(event_type)
+        db.session.commit()
 
 
 @hooks.before("Event Types > Event Type Details > Delete Event Type")
@@ -1166,7 +1176,10 @@ def event_type_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_type = EventTypeFactory()
+        db.session.add(event_type)
+        db.session.commit()
 
 
 # ------------------------- Event Topics -------------------------

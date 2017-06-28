@@ -401,8 +401,8 @@ Get a list of Event Types.
               "relationships": {
                 "events": {
                   "links": {
-                    "self": "/v1/event-types/10/relationships/events",
-                    "related": "/v1/event-types/10/events"
+                    "self": "/v1/event-types/1/relationships/events",
+                    "related": "/v1/event-types/1/events"
                   }
                 }
               },
@@ -411,9 +411,9 @@ Get a list of Event Types.
                 "slug": "camp-treat-retreat"
               },
               "type": "event-type",
-              "id": "10",
+              "id": "1",
               "links": {
-                "self": "/v1/event-types/10"
+                "self": "/v1/event-types/1"
               }
             }
           ],
@@ -453,26 +453,26 @@ Create a new event type with name.
               "relationships": {
                 "events": {
                   "links": {
-                    "self": "/v1/event-types/11/relationships/events",
-                    "related": "/v1/event-types/11/events"
+                    "self": "/v1/event-types/1/relationships/events",
+                    "related": "/v1/event-types/1/events"
                   }
                 }
               },
               "attributes": {
                 "name": "Camp, Treat & Retreat",
                 "slug": "camp-treat-retreat"
-              }, "
-              type": "event-type",
-              "id": "11",
+              }, 
+              "type": "event-type",
+              "id": "1",
               "links": {
-                "self": "/v1/event-types/11"
+                "self": "/v1/event-types/1"
               }
             },
             "jsonapi": {
               "version": "1.0"
             },
             "links": {
-              "self": "/v1/event-types/11"
+              "self": "/v1/event-types/1"
             }
           }
 
@@ -498,8 +498,8 @@ Get a single event type.
             "relationships": {
               "events": {
                 "links": {
-                  "self": "/v1/event-types/10/relationships/events",
-                  "related": "/v1/event-types/10/events"
+                  "self": "/v1/event-types/1/relationships/events",
+                  "related": "/v1/event-types/1/events"
                 }
               }
             },
@@ -508,16 +508,16 @@ Get a single event type.
               "slug": "camp-treat-retreat"
             },
             "type": "event-type",
-            "id": "11",
+            "id": "1",
             "links": {
-              "self": "/v1/event-types/11"
+              "self": "/v1/event-types/1"
             }
           },
           "jsonapi": {
             "version": "1.0"
           },
           "links": {
-            "self": "/v1/event-types/11"
+            "self": "/v1/event-types/1"
           }
         }
 
@@ -542,39 +542,40 @@ Authorized user must be admin.
                 "attributes": {
                   "name": "Camp, Treat & Retreat"
                 },
-                "type": "event-type"
+                "type": "event-type",
+                "id": "1"
               }
             }
 
 + Response 200 (application/vnd.api+json)
 
         {
-          "data": {
-            "relationships": {
-              "events": {
-                "links": {
-                  "self": "/v1/event-types/10/relationships/events",
-                  "related": "/v1/event-types/10/events"
+            "data": {
+              "relationships": {
+                "events": {
+                  "links": {
+                    "self": "/v1/event-types/1/relationships/events",
+                    "related": "/v1/event-types/1/events"
+                  }
                 }
+              },
+              "attributes": {
+                "name": "Camp, Treat & Retreat",
+                "slug": "camp-treat-retreat"
+              },
+              "type": "event-type",
+              "id": "1",
+              "links": {
+                "self": "/v1/event-types/1"
               }
             },
-            "attributes": {
-              "name": "Camp, Treat & Retreat",
-              "slug": "camp-treat-retreat"
+            "jsonapi": {
+              "version": "1.0"
             },
-            "type": "event-type",
-            "id": "11",
             "links": {
-              "self": "/v1/event-types/11"
+              "self": "/v1/event-types/1"
             }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/event-types/11"
           }
-        }
 
 ### Delete Event Type [DELETE]
 Delete a single event type.
