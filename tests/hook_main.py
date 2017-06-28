@@ -23,6 +23,7 @@ from app.factories.image_size import ImageSizeFactory
 from app.factories.page import PageFactory
 from app.factories.event_type import EventTypeFactory
 from app.factories.discount_code import DiscountCodeFactory
+from app.factories.event_topic import EventTopicFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -1191,7 +1192,10 @@ def event_topic_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_topic = EventTopicFactory()
+        db.session.add(event_topic)
+        db.session.commit()
 
 
 @hooks.before("Event Topics > Event Topics Collection > Create Event Topic")
@@ -1201,7 +1205,7 @@ def event_topic_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    pass
 
 
 @hooks.before("Event Topics > Event Topic Details > Event Topic Details")
@@ -1211,7 +1215,10 @@ def event_topic_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_topic = EventTopicFactory()
+        db.session.add(event_topic)
+        db.session.commit()
 
 
 @hooks.before("Event Topics > Event Topic Details > Update Event Topic")
@@ -1221,7 +1228,10 @@ def event_topic_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_topic = EventTopicFactory()
+        db.session.add(event_topic)
+        db.session.commit()
 
 
 @hooks.before("Event Topics > Event Topic Details > Delete Event Topic")
@@ -1231,7 +1241,10 @@ def event_topic_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event_topic = EventTopicFactory()
+        db.session.add(event_topic)
+        db.session.commit()
 
 
 # ------------------------- Event Sub Topics -------------------------
