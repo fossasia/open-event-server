@@ -471,14 +471,14 @@
       "<span class="hljs-attribute">relationships</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">events</span>": <span class="hljs-value">{
           "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-            "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/10/relationships/events"</span></span>,
-            "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/10/events"</span>
+            "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1/relationships/events"</span></span>,
+            "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1/events"</span>
           </span>}
         </span>}</span>,
         "<span class="hljs-attribute">event-sub-topics</span>": <span class="hljs-value">{
           "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-            "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/10/relationships/event-sub-topics"</span></span>,
-            "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/10/event-sub-topics"</span>
+            "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1/relationships/event-sub-topics"</span></span>,
+            "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1/event-sub-topics"</span>
           </span>}
         </span>}
       </span>}</span>,
@@ -487,9 +487,9 @@
         "<span class="hljs-attribute">slug</span>": <span class="hljs-value"><span class="hljs-string">"travel-outdoor"</span>
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event-topic"</span></span>,
-      "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
       "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/10"</span>
+        "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1"</span>
       </span>}
     </span>}
   ]</span>,
@@ -508,52 +508,18 @@
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event-topic"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>201</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
-    "data": {
-      "relationships": {
-        "events": {
-          "links": {
-            "self": "/v1/event-topics/11/relationships/events",
-            "related": "/v1/event-topics/11/events"
-          }
-        },
-        "event-sub-topics": {
-          "links": {
-            "self": "/v1/event-topics/10/relationships/event-sub-topics",
-            "related": "/v1/event-topics/10/event-sub-topics"
-          }
-        }
-      },
-      "attributes": {
-        "name": "Travel &amp; Outdoor",
-        "slug": "travel-outdoor"
-      }, "
-      type": "event-topic",
-      "id": "11",
-      "links": {
-        "self": "/v1/event-topics/11"
-      }
-    },
-    "jsonapi": {
-      "version": "1.0"
-    },
-    "links": {
-      "self": "/v1/event-topics/11"
-    }
-  }</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="event-topics-event-topic-details" class="resource"><h3 class="resource-heading">Event Topic Details <a href="#event-topics-event-topic-details" class="permalink">&nbsp;&para;</a></h3><div id="event-topics-event-topic-details-get" class="action get"><h4 class="action-heading"><div class="name">Event Topic Details</div><a href="#event-topics-event-topic-details-get" class="method get">GET</a><code class="uri">/v1/event-topics/{event_topic_id}</code></h4><p>Get a single event topic.</p>
-<h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/event-topics/<span class="hljs-attribute" title="event_topic_id">1</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>event_topic_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the event topic in the form of an integer</p>
-</dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Accept</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">relationships</span>": <span class="hljs-value">{
       "<span class="hljs-attribute">events</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/10/relationships/events"</span></span>,
-          "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/10/events"</span>
+          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1/relationships/events"</span></span>,
+          "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1/events"</span>
         </span>}
       </span>}</span>,
       "<span class="hljs-attribute">event-sub-topics</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/10/relationships/event-sub-topics"</span></span>,
-          "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/10/event-sub-topics"</span>
+          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1/relationships/event-sub-topics"</span></span>,
+          "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1/event-sub-topics"</span>
         </span>}
       </span>}
     </span>}</span>,
@@ -562,16 +528,50 @@
       "<span class="hljs-attribute">slug</span>": <span class="hljs-value"><span class="hljs-string">"travel-outdoor"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event-topic"</span></span>,
-    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"11"</span></span>,
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
     "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/11"</span>
+      "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1"</span>
     </span>}
   </span>}</span>,
   "<span class="hljs-attribute">jsonapi</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"1.0"</span>
   </span>}</span>,
   "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/11"</span>
+    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1"</span>
+  </span>}
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="event-topics-event-topic-details" class="resource"><h3 class="resource-heading">Event Topic Details <a href="#event-topics-event-topic-details" class="permalink">&nbsp;&para;</a></h3><div id="event-topics-event-topic-details-get" class="action get"><h4 class="action-heading"><div class="name">Event Topic Details</div><a href="#event-topics-event-topic-details-get" class="method get">GET</a><code class="uri">/v1/event-topics/{event_topic_id}</code></h4><p>Get a single event topic.</p>
+<h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/event-topics/<span class="hljs-attribute" title="event_topic_id">1</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>event_topic_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the event topic in the form of an integer</p>
+</dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Accept</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">relationships</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">events</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
+          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1/relationships/events"</span></span>,
+          "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1/events"</span>
+        </span>}
+      </span>}</span>,
+      "<span class="hljs-attribute">event-sub-topics</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
+          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1/relationships/event-sub-topics"</span></span>,
+          "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1/event-sub-topics"</span>
+        </span>}
+      </span>}
+    </span>}</span>,
+    "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Travel &amp; Outdoor"</span></span>,
+      "<span class="hljs-attribute">slug</span>": <span class="hljs-value"><span class="hljs-string">"travel-outdoor"</span>
+    </span>}</span>,
+    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event-topic"</span></span>,
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
+    "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1"</span>
+    </span>}
+  </span>}</span>,
+  "<span class="hljs-attribute">jsonapi</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"1.0"</span>
+  </span>}</span>,
+  "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div><div id="event-topics-event-topic-details-patch" class="action patch"><h4 class="action-heading"><div class="name">Update Event Topic</div><a href="#event-topics-event-topic-details-patch" class="method patch">PATCH</a><code class="uri">/v1/event-topics/{event_topic_id}</code></h4><ul>
 <li><code>id</code> (integer) - ID of the record to update <strong>(required)</strong></li>
@@ -584,21 +584,22 @@
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
       "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Travel &amp; Outdoor"</span>
     </span>}</span>,
-    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event-topic"</span>
+    "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event-topic"</span></span>,
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">relationships</span>": <span class="hljs-value">{
       "<span class="hljs-attribute">events</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/10/relationships/events"</span></span>,
-          "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/10/events"</span>
+          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1/relationships/events"</span></span>,
+          "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1/events"</span>
         </span>}
       </span>}</span>,
       "<span class="hljs-attribute">event-sub-topics</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/10/relationships/event-sub-topics"</span></span>,
-          "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/10/event-sub-topics"</span>
+          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1/relationships/event-sub-topics"</span></span>,
+          "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1/event-sub-topics"</span>
         </span>}
       </span>}
     </span>}</span>,
@@ -607,16 +608,16 @@
       "<span class="hljs-attribute">slug</span>": <span class="hljs-value"><span class="hljs-string">"travel-outdoor"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event-type"</span></span>,
-    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"11"</span></span>,
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
     "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/11"</span>
+      "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1"</span>
     </span>}
   </span>}</span>,
   "<span class="hljs-attribute">jsonapi</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"1.0"</span>
   </span>}</span>,
   "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/11"</span>
+    "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-topics/1"</span>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div></div><div id="event-topics-event-topic-details-delete" class="action delete"><h4 class="action-heading"><div class="name">Delete Event Topic</div><a href="#event-topics-event-topic-details-delete" class="method delete">DELETE</a><code class="uri">/v1/event-topics/{event_topic_id}</code></h4><p>Delete a single event topic.</p>
 <h4>Example URI</h4><div class="definition"><span class="method delete">DELETE</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/event-topics/<span class="hljs-attribute" title="event_topic_id">1</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>event_topic_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the event topic in the form of an integer</p>
