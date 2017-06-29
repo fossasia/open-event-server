@@ -71,11 +71,10 @@ class MicrolocationList(ResourceList):
         event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
         data['event_id'] = event.id
 
-    decorators = (api.has_permission('is_coorganizer', fetch='event_id', fetch_as="event_id", methods="POST",
-                  check=lambda a: a.get('event_id') or a.get('event_identifier')),)
 
     view_kwargs = True
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_coorganizer', fetch='event_id', fetch_as="event_id", methods="POST",
+                  check=lambda a: a.get('event_id') or a.get('event_identifier')),)
     schema = MicrolocationSchema
     data_layer = {'session': db.session,
                   'model': Microlocation,
