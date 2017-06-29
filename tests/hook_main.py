@@ -27,6 +27,8 @@ from app.factories.event_invoice import EventInvoiceFactory
 from app.factories.event_sub_topic import EventSubTopicFactory
 from app.factories.sponsor import SponsorFactory
 from app.factories.speakers_call import SpeakersCallFactory
+from app.factories.ticket_fees import TicketFeesFactory
+
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -1372,7 +1374,10 @@ def ticket_fees_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        ticket_fees = TicketFeesFactory()
+        db.session.add(ticket_fees)
+        db.session.commit()
 
 
 @hooks.before("Ticket Fees > Ticket Fees Collection > Create Ticket Fee")
@@ -1382,7 +1387,10 @@ def ticket_fees_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        ticket_fees = TicketFeesFactory()
+        db.session.add(ticket_fees)
+        db.session.commit()
 
 
 @hooks.before("Ticket Fees > Ticket Fee Details > Get Ticket Fees Details")
@@ -1392,7 +1400,10 @@ def ticket_fees_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        ticket_fees = TicketFeesFactory()
+        db.session.add(ticket_fees)
+        db.session.commit()
 
 
 @hooks.before("Ticket Fees > Ticket Fee Details > Update Ticket Fees")
@@ -1402,7 +1413,10 @@ def ticket_fees_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        ticket_fees = TicketFeesFactory()
+        db.session.add(ticket_fees)
+        db.session.commit()
 
 
 @hooks.before("Ticket Fees > Ticket Fee Details > Delete Ticket Fees")
@@ -1412,4 +1426,7 @@ def ticket_fees_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        ticket_fees = TicketFeesFactory()
+        db.session.add(ticket_fees)
+        db.session.commit()
