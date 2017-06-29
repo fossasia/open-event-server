@@ -29,6 +29,8 @@ from app.factories.event_sub_topic import EventSubTopicFactory
 from app.factories.sponsor import SponsorFactory
 from app.factories.speakers_call import SpeakersCallFactory
 from app.factories.tax import TaxFactory
+from app.factories.session import SessionFactory
+
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -413,7 +415,10 @@ def session_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        session = SessionFactory()
+        db.session.add(session)
+        db.session.commit()
 
 
 @hooks.before("Sessions > Sessions Collection > Create Sessions")
@@ -423,7 +428,10 @@ def session_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 @hooks.before("Sessions > Sessions Details > Session Details")
@@ -433,7 +441,10 @@ def session_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        session = SessionFactory()
+        db.session.add(session)
+        db.session.commit()
 
 
 @hooks.before("Sessions > Sessions Details > Update Session")
@@ -443,8 +454,10 @@ def session_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
-
+    with stash['app'].app_context():
+        session = SessionFactory()
+        db.session.add(session)
+        db.session.commit()
 
 @hooks.before("Sessions > Sessions Details > Delete Session")
 def session_delete(transaction):
@@ -453,7 +466,10 @@ def session_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        session = SessionFactory()
+        db.session.add(session)
+        db.session.commit()
 
 
 # ------------------------- Session Type -------------------------

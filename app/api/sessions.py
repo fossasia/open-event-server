@@ -50,7 +50,6 @@ class SessionSchema(Schema):
     id = fields.Str(dump_only=True)
     title = fields.Str(required=True)
     subtitle = fields.Str()
-    event_url = fields.Url()
     level = fields.Int()
     short_abstract = fields.Str()
     long_abstract = fields.Str()
@@ -58,9 +57,9 @@ class SessionSchema(Schema):
     starts_at = fields.DateTime(required=True)
     ends_at = fields.DateTime(required=True)
     language = fields.Str()
-    slides_url = fields.Url(attribute='slides')
-    videos_url = fields.Url(attribute='videos')
-    audios_url = fields.Url(attribute='audios')
+    slides_url = fields.Url()
+    video_url = fields.Url()
+    audio_url = fields.Url()
     signup_url = fields.Url()
     state = fields.Str(validate=validate.OneOf(choices=["pending", "accepted", "confirmed", "rejected", "draft"]))
     created_at = fields.DateTime(dump_only=True)
@@ -157,8 +156,7 @@ class SessionDetail(ResourceDetail):
                 view_kwargs['event_id'] = event.id
 
     decorators = (api.has_permission('is_coorganizer', fetch="event_id",
-                                     fetch_as="event_id", methods="POST",
-                                     check=lambda a: a.get('event_id') or a.get('event_identifier')),)
+                                     fetch_as="event_id", model=Session, methods="PATCH,DELETE"),)
     schema = SessionSchema
     data_layer = {'session': db.session,
                   'model': Session,
