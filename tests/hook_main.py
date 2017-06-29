@@ -26,6 +26,7 @@ from app.factories.discount_code import DiscountCodeFactory
 from app.factories.event_topic import EventTopicFactory
 from app.factories.event_invoice import EventInvoiceFactory
 from app.factories.event_sub_topic import EventSubTopicFactory
+from app.factories.sponsor import SponsorFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -631,7 +632,10 @@ def sponsor_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        sponsor = SponsorFactory()
+        db.session.add(sponsor)
+        db.session.commit()
 
 
 @hooks.before("Sponsors > Sponsors Collection > Create Sponsor")
@@ -641,7 +645,10 @@ def sponsor_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 @hooks.before("Sponsors > Sponsor Details > Sponsor Details")
@@ -651,7 +658,10 @@ def sponsor_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        sponsor = SponsorFactory()
+        db.session.add(sponsor)
+        db.session.commit()
 
 
 @hooks.before("Sponsors > Sponsor Details > Update Sponsor")
@@ -661,7 +671,10 @@ def sponsor_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        sponsor = SponsorFactory()
+        db.session.add(sponsor)
+        db.session.commit()
 
 
 @hooks.before("Sponsors > Sponsor Details > Delete Sponsor")
@@ -671,7 +684,10 @@ def sponsor_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        sponsor = SponsorFactory()
+        db.session.add(sponsor)
+        db.session.commit()
 
 
 # ------------------------- Tax -------------------------
