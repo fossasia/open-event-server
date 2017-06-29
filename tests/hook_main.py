@@ -21,6 +21,7 @@ from app.factories.event import EventFactoryBasic
 from app.factories.social_link import SocialLinkFactory
 from app.factories.image_size import ImageSizeFactory
 from app.factories.page import PageFactory
+from app.factories.event_copyright import EventCopyrightFactory
 from app.factories.event_type import EventTypeFactory
 from app.factories.discount_code import DiscountCodeFactory
 from app.factories.event_topic import EventTopicFactory
@@ -231,16 +232,6 @@ def event_delete(transaction):
 
 # ------------------------- Copyright -------------------------
 
-@hooks.before("Copyright > Event Copyright > Get Event Copyright")
-def copyright_get_list(transaction):
-    """
-    GET /events/1/event-copyright
-    :param transaction:
-    :return:
-    """
-    transaction['skip'] = True
-
-
 @hooks.before("Copyright > Event Copyright > Create Event Copyright")
 def copyright_post(transaction):
     """
@@ -248,7 +239,10 @@ def copyright_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 @hooks.before("Copyright > Event Copyright Details > Event Copyright Details")
@@ -258,7 +252,10 @@ def copyright_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        copyright = EventCopyrightFactory()
+        db.session.add(copyright)
+        db.session.commit()
 
 
 @hooks.before("Copyright > Event Copyright Details > Update Event Copyright")
@@ -268,7 +265,10 @@ def copyright_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        copyright = EventCopyrightFactory()
+        db.session.add(copyright)
+        db.session.commit()
 
 
 @hooks.before("Copyright > Event Copyright Details > Delete Event Copyright")
@@ -278,7 +278,10 @@ def copyright_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        copyright = EventCopyrightFactory()
+        db.session.add(copyright)
+        db.session.commit()
 
 
 # ------------------------- Invoices -------------------------
@@ -556,6 +559,7 @@ def social_link_patch(transaction):
         social_link = SocialLinkFactory()
         db.session.add(social_link)
         db.session.commit()
+
 
 @hooks.before("Social Links > Social Links > Delete Social Link")
 def social_link_delete(transaction):
