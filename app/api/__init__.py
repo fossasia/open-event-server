@@ -2,7 +2,7 @@ from app.api.bootstrap import api
 from app.api.ticket_fees import TicketFeeList, TicketFeeDetail
 from app.api.users import UserList, UserDetail, UserRelationship
 from app.api.notifications import NotificationList, NotificationDetail, NotificationRelationship
-from app.api.tickets import AllTicketList, TicketDetail, TicketRelationship
+from app.api.tickets import TicketList, TicketDetail, TicketRelationship
 from app.api.events import EventList, EventDetail, EventRelationship
 from app.api.event_types import EventTypeList, EventTypeDetail, EventTypeRelationship
 from app.api.event_topics import EventTopicList, EventTopicDetail, EventTopicRelationship
@@ -49,7 +49,7 @@ api.route(PageList, 'page_list', '/pages')
 api.route(PageDetail, 'page_detail', '/pages/<int:id>')
 
 # tickets
-api.route(AllTicketList, 'all_ticket_list','/tickets', '/events/<int:event_id>/tickets',
+api.route(TicketList, 'ticket_list', '/events/<int:event_id>/tickets',
           '/events/<event_identifier>/tickets')
 api.route(TicketDetail, 'ticket_detail', '/tickets/<int:id>', '/attendees/<int:attendee_id>/ticket')
 api.route(TicketRelationship, 'ticket_event', '/tickets/<int:id>/relationships/event')

@@ -1195,6 +1195,12 @@ Get a list of events.
             "data": [
                 {
                     "relationships": {
+                        "tickets": {
+                          "links": {
+                            "self": "/v1/events/1/relationships/tickets",
+                            "related": "/v1/events/1/tickets"
+                          }
+                        },
                         "event-sub-topic": {
                             "links": {
                                 "self": "/v1/events/1/relationships/event-sub-topic",
@@ -1401,6 +1407,12 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
         {
             "data": {
                 "relationships": {
+                  "tickets": {
+                      "links": {
+                        "self": "/v1/events/1/relationships/tickets",
+                        "related": "/v1/events/1/tickets"
+                      }
+                    },
                     "event-sub-topic": {
                         "links": {
                             "self": "/v1/events/1/relationships/event-sub-topic",
@@ -1567,6 +1579,12 @@ Get a single event.
         {
             "data": {
                 "relationships": {
+                    "tickets": {
+                      "links": {
+                        "self": "/v1/events/1/relationships/tickets",
+                        "related": "/v1/events/1/tickets"
+                      }
+                    },
                     "event-sub-topic": {
                         "links": {
                             "self": "/v1/events/1/relationships/event-sub-topic",
@@ -1777,6 +1795,12 @@ All other fields are optional. Add attributes you want to modify.
         {
             "data": {
                 "relationships": {
+                    "tickets": {
+                      "links": {
+                        "self": "/v1/events/1/relationships/tickets",
+                        "related": "/v1/events/1/tickets"
+                        }
+                      },
                     "event-sub-topic": {
                         "links": {
                             "self": "/v1/events/1/relationships/event-sub-topic",
@@ -4536,7 +4560,7 @@ Related to tickets (free, paid, donation) to the event.
 | `position` | Position of the ticket | string | - |
 | `sales-starts-at` | Start date of ticket sale | ISO 8601 (tz-aware) | - |
 | `sales-ends-at` | End date of ticket sale | ISO 8601 (tz-aware) | - |
-| `description-toggle` | Yes/No to enter description | boolean (default: `false`) | - |
+| `is-description-visible` | Yes/No to enter description | boolean (default: `false`) | - |
 | `is-hidden` | Yes/No to hide ticket | boolean (default: `false`) | - |
 | `is-fee-absorbed` | Yes/No for ticket absorption | boolean (default: `false`) | - |
 
@@ -4581,7 +4605,7 @@ Get a list of Tickets.
                 "type": "VIP-ticket",
                 "price": 100.00,
                 "quantity": 100,
-                "description-toggle": False,
+                "is-description-visible": False,
                 "position": null,
                 "is-fee-absorbed": null,
                 "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -4625,7 +4649,7 @@ Create a new ticket using an event_id.
                   "type": "VIP-ticket",
                   "price": 100.00,
                   "quantity": 100,
-                  "description-toggle": false,
+                  "is-description-visible": false,
                   "position": null,
                   "is-fee-absorbed": null,
                   "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -4657,7 +4681,7 @@ Create a new ticket using an event_id.
               "type": "VIP ticket",
               "price": 100.00,
               "quantity": 100,
-              "description-toggle": false,
+              "is-description-visible": false,
               "position": null,
               "is-fee-absorbed": null,
               "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -4714,7 +4738,7 @@ Get a single ticket.
               "type": "VIP ticket",
               "price": 100.00,
               "quantity": 100,
-              "description-toggle": false,
+              "is-description-visible": false,
               "position": null,
               "is-fee-absorbed": null,
               "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -4759,7 +4783,7 @@ Update a single ticket by `id`.
                   "type": "VIP ticket",
                   "price": 100.00,
                   "quantity": 100,
-                  "description-toggle": false,
+                  "is-description-visible": false,
                   "position": null,
                   "is-fee-absorbed": null,
                   "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -4791,7 +4815,7 @@ Update a single ticket by `id`.
               "type": "VIP ticket",
               "price": 100.00,
               "quantity": 100,
-              "description-toggle": false,
+              "is-description-visible": false,
               "position": null,
               "is-fee-absorbed": null,
               "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
