@@ -54,7 +54,7 @@ class TicketSchema(Schema):
     type = fields.Str(required=True)
     price = fields.Float(validate=lambda n: n >= 0)
     quantity = fields.Integer(validate=lambda n: n >= 0)
-    description_toggle = fields.Boolean(default=False)
+    is_description_visible = fields.Boolean(default=False)
     position = fields.Integer()
     is_fee_absorbed = fields.Boolean()
     sales_starts_at = fields.DateTime(required=True)
@@ -78,7 +78,7 @@ class TicketSchema(Schema):
                         type_='ticket-tag')
 
 
-class AllTicketList(ResourceList):
+class TicketList(ResourceList):
     """
     Create and List Tickets
     """
@@ -100,6 +100,7 @@ class AllTicketList(ResourceList):
             else:
                 data['event_id'] = event.id
 
+    view_kwargs = True
     decorators = (api.has_permission('is_coorganizer', fetch='event_id',
                   fetch_as="event_id", model=Ticket, methods="POST",
                   check=lambda a: a.get('event_id') or a.get('event_identifier')), )

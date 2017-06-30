@@ -17,6 +17,7 @@ from app.models.event import Event
 from app.models.sponsor import Sponsor
 from app.models.track import Track
 from app.models.session import Session
+from app.models.ticket import Ticket
 from app.models.session_type import SessionType
 from app.models.discount_code import DiscountCode
 from app.models.event_invoice import EventInvoice
@@ -115,7 +116,7 @@ class EventSchema(Schema):
     pentabarf_url = fields.Url(dump_only=True)
     ical_url = fields.Url(dump_only=True)
     xcal_url = fields.Url(dump_only=True)
-    tickets = Relationship(attribute='ticket',
+    tickets = Relationship(attribute='tickets',
                            self_view='v1.event_ticket',
                            self_view_kwargs={'id': '<id>'},
                            related_view='v1.ticket_list',
@@ -375,6 +376,18 @@ class EventDetail(ResourceDetail):
             else:
                 if speakers_call.event_id is not None:
                     view_kwargs['id'] = speakers_call.event_id
+                else:
+                    view_kwargs['id'] = None
+
+        if view_kwargs.get('ticket_id') is not None:
+            try:
+                ticket = self.session.query(Ticket).filter_by(id=view_kwargs['ticket_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'ticket_id'},
+                                     "Speakers Call: {} not found".format(view_kwargs['ticket_id']))
+            else:
+                if ticket.event_id is not None:
+                    view_kwargs['id'] = ticket.event_id
                 else:
                     view_kwargs['id'] = None
 
