@@ -5,13 +5,12 @@ from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.utilities import dasherize
-from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.event_topic import EventTopic
 from app.models.event_sub_topic import EventSubTopic
 from app.models.event import Event
 from app.api.bootstrap import api
-from app.api.helpers.permissions import is_admin, is_user_itself, jwt_required
+from app.api.helpers.permissions import jwt_required
 
 
 class EventTopicSchema(Schema):
@@ -47,12 +46,13 @@ class EventTopicSchema(Schema):
                                     schema='EventSubTopicSchema',
                                     type_='event-sub-topic')
 
+
 class EventTopicList(ResourceList):
 
     """
     List and create event topics
     """
-    decorators = (jwt_required, api.has_permission('is_admin', methods="POST"),)
+    decorators = (api.has_permission('is_admin', methods="POST"),)
     schema = EventTopicSchema
     data_layer = {'session': db.session,
                   'model': EventTopic}
@@ -95,7 +95,7 @@ class EventTopicDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
-    decorators = (jwt_required, api.has_permission('is_admin', methods="PATCH,DELETE"),)
+    decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
     schema = EventTopicSchema
     data_layer = {'session': db.session,
                   'model': EventTopic,

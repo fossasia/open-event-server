@@ -5,12 +5,11 @@ from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.utilities import dasherize
-from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.event_type import EventType
 from app.models.event import Event
 from app.api.bootstrap import api
-from app.api.helpers.permissions import is_admin, is_user_itself, jwt_required
+from app.api.helpers.permissions import jwt_required
 
 
 class EventTypeSchema(Schema):
@@ -39,12 +38,13 @@ class EventTypeSchema(Schema):
                           schema='EventSchema',
                           type_='event')
 
+
 class EventTypeList(ResourceList):
 
     """
     List and create event types
     """
-    decorators = (jwt_required, api.has_permission('is_admin', methods="POST"),)
+    decorators = (api.has_permission('is_admin', methods="POST"),)
     schema = EventTypeSchema
     data_layer = {'session': db.session,
                   'model': EventType}
@@ -76,7 +76,7 @@ class EventTypeDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
-    decorators = (jwt_required, api.has_permission('is_admin', methods="PATCH,DELETE"),)
+    decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
     schema = EventTypeSchema
     data_layer = {'session': db.session,
                   'model': EventType,

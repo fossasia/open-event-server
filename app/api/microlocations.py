@@ -71,7 +71,6 @@ class MicrolocationList(ResourceList):
         event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
         data['event_id'] = event.id
 
-
     view_kwargs = True
     decorators = (api.has_permission('is_coorganizer', fetch='event_id', fetch_as="event_id", methods="POST",
                   check=lambda a: a.get('event_id') or a.get('event_identifier')),)
@@ -104,8 +103,8 @@ class MicrolocationDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
-    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE",
-                  check=lambda a: a.get('id') is not None),)
+    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
+                                     model=Microlocation, check=lambda a: a.get('id') is not None),)
     schema = MicrolocationSchema
     data_layer = {'session': db.session,
                   'model': Microlocation,

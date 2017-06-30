@@ -79,9 +79,8 @@ class EventCopyrightDetail(ResourceDetail):
                 raise ObjectNotFound({'parameter': 'event identifier'}, "Object: not found")
             kwargs['id'] = event_copyright.id
 
-
     def before_get_object(self, view_kwargs):
-        # Permission Manager is not used for GET requests so need to fetch here the event ID 
+        # Permission Manager is not used for GET requests so need to fetch here the event ID
         if view_kwargs.get('event_identifier'):
             try:
                 event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
