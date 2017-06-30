@@ -1,5 +1,3 @@
-
-
 import sys
 import os.path as path
 import dredd_hooks as hooks
@@ -28,6 +26,7 @@ from app.factories.event_topic import EventTopicFactory
 from app.factories.event_invoice import EventInvoiceFactory
 from app.factories.event_sub_topic import EventSubTopicFactory
 from app.factories.sponsor import SponsorFactory
+from app.factories.speakers_call import SpeakersCallFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -579,32 +578,39 @@ def social_link_delete(transaction):
 @hooks.before("Speakers Calls > Speakers Call Collection > Get Speakers Call")
 def speakers_call_get(transaction):
     """
-    GET /events/1/speakers-calls
+    GET /events/1/speakers-call
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        speakers_call = SpeakersCallFactory()
+        db.session.add(speakers_call)
+        db.session.commit()
 
 
 @hooks.before("Speakers Calls > Speakers Call Collection > Create Speakers Call")
 def speakers_call_post(transaction):
     """
-    POST /events/1/speakers-calls
+    POST /events/1/speakers-call
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
-
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 @hooks.before("Speakers Calls > Speakers Call Details > Speakers Call Details")
 def speakers_call_get_detail(transaction):
     """
-    GET /v1/events/1/speakers-call
     GET /speakers-calls/1
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        speakers_call = SpeakersCallFactory()
+        db.session.add(speakers_call)
+        db.session.commit()
 
 
 @hooks.before("Speakers Calls > Speakers Call Details > Update Speakers Call")
@@ -614,7 +620,10 @@ def speakers_call_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        speakers_call = SpeakersCallFactory()
+        db.session.add(speakers_call)
+        db.session.commit()
 
 
 @hooks.before("Speakers Calls > Speakers Call Details > Delete Speakers Call")
@@ -624,7 +633,10 @@ def speakers_call_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        speakers_call = SpeakersCallFactory()
+        db.session.add(speakers_call)
+        db.session.commit()
 
 
 # ------------------------- Sponsors -------------------------

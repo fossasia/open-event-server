@@ -95,7 +95,7 @@ class SpeakersCallDetail(ResourceDetail):
     """
      speakers call detail by id
     """
-    def before_patch(self, args, kwargs):
+    def before_patch(self, args, kwargs, data):
         if kwargs.get('event_id'):
             try:
                 speakers_call = SpeakersCall.query.filter_by(event_id=kwargs['event_id']).one()
