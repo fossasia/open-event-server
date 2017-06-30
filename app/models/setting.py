@@ -120,6 +120,7 @@ class Setting(db.Model):
                  aws_key=None,
                  aws_secret=None,
                  aws_bucket_name=None,
+                 aws_region=None,
                  gs_key=None,
                  gs_secret=None,
                  gs_bucket_name=None,
@@ -157,6 +158,7 @@ class Setting(db.Model):
         self.aws_key = aws_key
         self.aws_secret = aws_secret
         self.aws_bucket_name = aws_bucket_name
+        self.aws_region = aws_region
 
         self.gs_key = gs_key
         self.gs_secret = gs_secret
