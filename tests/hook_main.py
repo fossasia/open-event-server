@@ -1,5 +1,3 @@
-
-
 import sys
 import os.path as path
 import dredd_hooks as hooks
@@ -21,12 +19,14 @@ from app.factories.event import EventFactoryBasic
 from app.factories.social_link import SocialLinkFactory
 from app.factories.image_size import ImageSizeFactory
 from app.factories.page import PageFactory
+from app.factories.event_copyright import EventCopyrightFactory
 from app.factories.event_type import EventTypeFactory
 from app.factories.discount_code import DiscountCodeFactory
 from app.factories.event_topic import EventTopicFactory
 from app.factories.event_invoice import EventInvoiceFactory
 from app.factories.event_sub_topic import EventSubTopicFactory
 from app.factories.sponsor import SponsorFactory
+from app.factories.speakers_call import SpeakersCallFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -231,16 +231,6 @@ def event_delete(transaction):
 
 # ------------------------- Copyright -------------------------
 
-@hooks.before("Copyright > Event Copyright > Get Event Copyright")
-def copyright_get_list(transaction):
-    """
-    GET /events/1/event-copyright
-    :param transaction:
-    :return:
-    """
-    transaction['skip'] = True
-
-
 @hooks.before("Copyright > Event Copyright > Create Event Copyright")
 def copyright_post(transaction):
     """
@@ -248,7 +238,10 @@ def copyright_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 @hooks.before("Copyright > Event Copyright Details > Event Copyright Details")
@@ -258,7 +251,10 @@ def copyright_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        copyright = EventCopyrightFactory()
+        db.session.add(copyright)
+        db.session.commit()
 
 
 @hooks.before("Copyright > Event Copyright Details > Update Event Copyright")
@@ -268,7 +264,10 @@ def copyright_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        copyright = EventCopyrightFactory()
+        db.session.add(copyright)
+        db.session.commit()
 
 
 @hooks.before("Copyright > Event Copyright Details > Delete Event Copyright")
@@ -278,7 +277,10 @@ def copyright_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        copyright = EventCopyrightFactory()
+        db.session.add(copyright)
+        db.session.commit()
 
 
 # ------------------------- Invoices -------------------------
@@ -557,6 +559,7 @@ def social_link_patch(transaction):
         db.session.add(social_link)
         db.session.commit()
 
+
 @hooks.before("Social Links > Social Links > Delete Social Link")
 def social_link_delete(transaction):
     """
@@ -575,32 +578,39 @@ def social_link_delete(transaction):
 @hooks.before("Speakers Calls > Speakers Call Collection > Get Speakers Call")
 def speakers_call_get(transaction):
     """
-    GET /events/1/speakers-calls
+    GET /events/1/speakers-call
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        speakers_call = SpeakersCallFactory()
+        db.session.add(speakers_call)
+        db.session.commit()
 
 
 @hooks.before("Speakers Calls > Speakers Call Collection > Create Speakers Call")
 def speakers_call_post(transaction):
     """
-    POST /events/1/speakers-calls
+    POST /events/1/speakers-call
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
-
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 @hooks.before("Speakers Calls > Speakers Call Details > Speakers Call Details")
 def speakers_call_get_detail(transaction):
     """
-    GET /v1/events/1/speakers-call
     GET /speakers-calls/1
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        speakers_call = SpeakersCallFactory()
+        db.session.add(speakers_call)
+        db.session.commit()
 
 
 @hooks.before("Speakers Calls > Speakers Call Details > Update Speakers Call")
@@ -610,7 +620,10 @@ def speakers_call_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        speakers_call = SpeakersCallFactory()
+        db.session.add(speakers_call)
+        db.session.commit()
 
 
 @hooks.before("Speakers Calls > Speakers Call Details > Delete Speakers Call")
@@ -620,7 +633,10 @@ def speakers_call_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        speakers_call = SpeakersCallFactory()
+        db.session.add(speakers_call)
+        db.session.commit()
 
 
 # ------------------------- Sponsors -------------------------
