@@ -4239,8 +4239,8 @@ Related to any tax related information that might be related with the tickets fo
 | Parameter | Description | Type | Required |
 |:----------|-------------|------|----------|
 | `country`  | Country of Tax | string | - |
-| `tax-name` | Name of the Tax | string | **yes** |
-| `tax-rate` | Tax charges rate | string | **yes** |
+| `name` | Name of the Tax | string | **yes** |
+| `rate` | Tax charges rate | string | **yes** |
 | `tax-id` | A string based ID | string | **yes** |
 | `registered-company` | Registered Company Name | string | - |
 | `address` | Address of the comapany | string | - |
@@ -4256,64 +4256,8 @@ Related to any tax related information that might be related with the tickets fo
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
-    + sort (optional, string, `tax-rate`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + sort (optional, string, `rate`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
-
-### List All Tax Records [GET]
-Get a list of Tax Records.
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-          "meta": {
-            "count": 1
-          },
-          "data": [
-            {
-              "relationships": {
-                "event": {
-                  "links": {
-                    "self": "/v1/tax/1/relationships/event",
-                    "related": "/v1/tax/1/event"
-                  }
-                }
-              },
-              "attributes": {
-                "city": null,
-                "zip": null,
-                "is-invoice-sent": false,
-                "country": null,
-                "is-tax-included-in-price": false,
-                "invoice-footer": null,
-                "state": null,
-                "tax-id": "1",
-                "tax-name": "Service Tax",
-                "registered-company": null,
-                "address": null,
-                "tax-rate": 12.0
-              },
-              "type": "tax",
-              "id": "1",
-              "links": {
-                "self": "/v1/tax/1"
-              }
-            }
-          ],
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/events/1/tax"
-          }
-        }
 
 
 ### Create Tax [POST]
@@ -4330,10 +4274,19 @@ Create a new tax using an event_id.
             {
               "data": {
                 "attributes": {
-                  "tax-name": "Service Tax",
-                  "tax-rate": "12",
-                  "tax-id": "1"
-                },
+                    "city": "example",
+                    "zip": "123456",
+                    "country": "IN",
+                    "is-tax-included-in-price": false,
+                    "invoice-footer": "example",
+                    "state": "example",
+                    "tax-id": "123456789",
+                    "name": "Service Tax",
+                    "registered-company": "fossasia",
+                    "address": "example",
+                    "rate": "1.23456789",
+                    "should-send-invoice": false
+                  },
                 "type": "tax"
               }
             }
@@ -4351,18 +4304,18 @@ Create a new tax using an event_id.
               }
             },
             "attributes": {
-              "city": null,
-              "zip": null,
-              "is-invoice-sent": false,
-              "country": null,
-              "is-tax-included-in-price": false,
-              "invoice-footer": null,
-              "state": null,
-              "tax-id": "1",
-              "tax-name": "Service Tax",
-              "registered-company": null,
-              "address": null,
-              "tax-rate": 12.0
+              "city": "example",
+               "zip": "123456",
+               "country": "IN",
+               "is-tax-included-in-price": false,
+               "invoice-footer": "example",
+               "state": "example",
+               "tax-id": "123456789",
+               "name": "Service Tax",
+               "registered-company": "fossasia",
+               "address": "example",
+               "rate": "1.23456789",
+               "should-send-invoice": false
             },
             "type": "tax",
             "id": "1",
@@ -4407,18 +4360,18 @@ Get a single tax.
               }
             },
             "attributes": {
-              "city": null,
-              "zip": null,
-              "is-invoice-sent": false,
-              "country": null,
+              "city": "example",
+              "zip": "123456",
+              "country": "IN",
               "is-tax-included-in-price": false,
-              "invoice-footer": null,
-              "state": null,
-              "tax-id": "1",
-              "tax-name": "Service Tax",
-              "registered-company": null,
-              "address": null,
-              "tax-rate": 12.0
+              "invoice-footer": "example",
+              "state": "example",
+              "tax-id": "123456789",
+              "name": "Service Tax",
+              "registered-company": "fossasia",
+              "address": "example",
+              "rate": "1.23456789",
+              "should-send-invoice": false
             },
             "type": "tax",
             "id": "1",
@@ -4451,8 +4404,18 @@ Update a single tax by `id`.
             {
               "data": {
                 "attributes": {
-                  "tax-rate": "15",
-                  "tax-name": "GST"
+                  "city": "example1",
+                  "zip": "123457",
+                  "country": "IN",
+                  "is-tax-included-in-price": false,
+                  "invoice-footer": "example1",
+                  "state": "example1",
+                  "tax-id": "123456799",
+                  "name": "GST",
+                  "registered-company": "open event",
+                  "address": "example1",
+                  "rate": "2.3456789",
+                  "should-send-invoice": false
                 },
                 "type": "tax",
                 "id": "1"
@@ -4472,18 +4435,18 @@ Update a single tax by `id`.
               }
             },
             "attributes": {
-              "city": null,
-              "zip": null,
-              "is-invoice-sent": false,
-              "country": null,
+              "city": "example1",
+              "zip": "123457",
+              "country": "IN",
               "is-tax-included-in-price": false,
-              "invoice-footer": null,
-              "state": null,
-              "tax-id": "1",
-              "tax-name": "GST",
-              "registered-company": null,
-              "address": null,
-              "tax-rate": 15.0
+              "invoice-footer": "example1",
+              "state": "example1",
+              "tax-id": "123456799",
+              "name": "GST",
+              "registered-company": "open event",
+              "address": "example1",
+              "rate": "2.3456789",
+              "should-send-invoice": false
             },
             "type": "tax",
             "id": "1",
