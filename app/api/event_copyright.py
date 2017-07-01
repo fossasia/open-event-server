@@ -15,6 +15,7 @@ from app.api.helpers.exceptions import UnprocessableEntity
 
 
 class EventCopyrightSchema(Schema):
+
     class Meta:
         type_ = 'event-copyright'
         self_view = 'v1.event_copyright_detail'
@@ -38,6 +39,7 @@ class EventCopyrightSchema(Schema):
 
 
 class EventCopyrightList(ResourceList):
+
     def before_create_object(self, data, view_kwargs):
 
         # Permission Manager will ensure that event_id is fetched into
@@ -71,7 +73,7 @@ class EventCopyrightList(ResourceList):
 
 class EventCopyrightDetail(ResourceDetail):
 
-    def before_patch(self, args, kwargs):
+    def before_patch(self, args, kwargs, data):
         if kwargs.get('event_id'):
             try:
                 event_copyright = EventCopyright.query.filter_by(event_id=kwargs['event_id']).one()
@@ -83,7 +85,8 @@ class EventCopyrightDetail(ResourceDetail):
         # Permission Manager is not used for GET requests so need to fetch here the event ID
         if view_kwargs.get('event_identifier'):
             try:
-                event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
+                event = self.session.query(Event).filter_by(
+                    identifier=view_kwargs['event_identifier']).one()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': 'event_identifier'},
                                      "Event: {} not found".format(view_kwargs['event_identifier']))
@@ -92,7 +95,8 @@ class EventCopyrightDetail(ResourceDetail):
 
         if view_kwargs.get('event_id'):
             try:
-                event_copyright = self.session.query(EventCopyright).filter_by(event_id=view_kwargs['event_id']).one()
+                event_copyright = self.session.query(EventCopyright).filter_by(
+                    event_id=view_kwargs['event_id']).one()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': 'event identifier'}, "Object: not found")
             view_kwargs['id'] = event_copyright.id

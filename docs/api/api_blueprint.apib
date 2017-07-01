@@ -1195,6 +1195,12 @@ Get a list of events.
             "data": [
                 {
                     "relationships": {
+                        "tickets": {
+                          "links": {
+                            "self": "/v1/events/1/relationships/tickets",
+                            "related": "/v1/events/1/tickets"
+                          }
+                        },
                         "event-sub-topic": {
                             "links": {
                                 "self": "/v1/events/1/relationships/event-sub-topic",
@@ -1401,6 +1407,12 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
         {
             "data": {
                 "relationships": {
+                  "tickets": {
+                      "links": {
+                        "self": "/v1/events/1/relationships/tickets",
+                        "related": "/v1/events/1/tickets"
+                      }
+                    },
                     "event-sub-topic": {
                         "links": {
                             "self": "/v1/events/1/relationships/event-sub-topic",
@@ -1567,6 +1579,12 @@ Get a single event.
         {
             "data": {
                 "relationships": {
+                    "tickets": {
+                      "links": {
+                        "self": "/v1/events/1/relationships/tickets",
+                        "related": "/v1/events/1/tickets"
+                      }
+                    },
                     "event-sub-topic": {
                         "links": {
                             "self": "/v1/events/1/relationships/event-sub-topic",
@@ -1777,6 +1795,12 @@ All other fields are optional. Add attributes you want to modify.
         {
             "data": {
                 "relationships": {
+                    "tickets": {
+                      "links": {
+                        "self": "/v1/events/1/relationships/tickets",
+                        "related": "/v1/events/1/tickets"
+                        }
+                      },
                     "event-sub-topic": {
                         "links": {
                             "self": "/v1/events/1/relationships/event-sub-topic",
@@ -1964,55 +1988,6 @@ Data related to event copyright information.
     + sort (optional, string, `year`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### Get Event Copyright [GET]
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-          "meta": {
-            "count": 1
-          },
-          "data": [
-            {
-              "relationships": {
-                "event": {
-                  "links": {
-                    "self": "/v1/event-copyright/1/relationships/event",
-                    "related": "/v1/event-copyright/1/event"
-                  }
-                }
-              },
-              "attributes": {
-                "holder": "Name of Holder",
-                "holder-url": "URL for holder",
-                "licence": "Licence text",
-                "licence-url": "Licence URL",
-                "year": "Copyright validity year",
-                "logo-url": "New Brand"
-              },
-              "type": "event-copyright",
-              "id": "1",
-              "links": {
-                "self": "/v1/event-copyright/1"
-              }
-            }
-          ],
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/event-copyright"
-          }
-        }
-
 
 ### Create Event Copyright [POST]
 Create a new Event Copyright using an event_id.
@@ -2029,11 +2004,11 @@ Create a new Event Copyright using an event_id.
               "data": {
                 "attributes": {
                   "holder": "Name of Holder",
-                  "holder-url": "URL for holder",
+                  "holder-url": "http://holder-url.com",
                   "licence": "Licence text",
-                  "licence-url": "Licence URL",
-                  "year": "Copyright validity year",
-                  "logo-url": "New Brand"
+                  "licence-url": "http://licence-url.com",
+                  "year": 2007,
+                  "logo-url": "http://logo-url.com"
                 },
                 "type": "event-copyright"
               }
@@ -2047,30 +2022,30 @@ Create a new Event Copyright using an event_id.
             "relationships": {
               "event": {
                 "links": {
-                  "self": "/v1/event-copyright/5/relationships/event",
-                  "related": "/v1/event-copyright/5/event"
+                  "self": "/v1/event-copyright/1/relationships/event",
+                  "related": "/v1/event-copyright/1/event"
                 }
               }
             },
             "attributes": {
               "holder": "Name of Holder",
-              "holder-url": "URL for holder",
+              "holder-url": "http://holder-url.com",
               "licence": "Licence text",
-              "licence-url": "Licence URL",
-              "year": "Copyright validity year",
-              "logo-url": "New Brand"
+              "licence-url": "http://licence-url.com",
+              "year": 2007,
+              "logo-url": "http://logo-url.com"
             },
             "type": "event-copyright",
-            "id": "5",
+            "id": "1",
             "links": {
-              "self": "/v1/event-copyright/5"
+              "self": "/v1/event-copyright/1"
             }
           },
           "jsonapi": {
             "version": "1.0"
           },
           "links": {
-            "self": "/v1/event-copyright/5"
+            "self": "/v1/event-copyright/1"
           }
         }
 
@@ -2095,30 +2070,30 @@ Create a new Event Copyright using an event_id.
             "relationships": {
               "event": {
                 "links": {
-                  "self": "/v1/event-copyright/5/relationships/event",
-                  "related": "/v1/event-copyright/5/event"
+                  "self": "/v1/event-copyright/1/relationships/event",
+                  "related": "/v1/event-copyright/1/event"
                 }
               }
             },
             "attributes": {
               "holder": "Name of Holder",
-              "holder-url": "URL for holder",
+              "holder-url": "http://holder-url.com",
               "licence": "Licence text",
-              "licence-url": "Licence URL",
-              "year": "Copyright validity year",
-              "logo-url": "New Brand"
+              "licence-url": "http://licence-url.com",
+              "year": 2007,
+              "logo-url": "http://logo-url.com"
             },
             "type": "event-copyright",
-            "id": "5",
+            "id": "1",
             "links": {
-              "self": "/v1/event-copyright/5"
+              "self": "/v1/event-copyright/1"
             }
           },
           "jsonapi": {
             "version": "1.0"
           },
           "links": {
-            "self": "/v1/event-copyright/5"
+            "self": "/v1/event-copyright/1"
           }
         }
 
@@ -2139,15 +2114,15 @@ Update a single event copyright by `id`.
             {
               "data": {
                 "attributes": {
-                  "holder": "Name of Holder1",
-                  "holder-url": "URL for holder1",
+                  "holder": "Name of Holder",
+                  "holder-url": "http://holder-url.com",
                   "licence": "Licence text",
-                  "licence-url": "Licence URL",
-                  "year": "Copyright validity year",
-                  "logo-url": "New Brand"
+                  "licence-url": "http://licence-url.com",
+                  "year": 2007,
+                  "logo-url": "http://logo-url.com"
                 },
                 "type": "event-copyright",
-                "id": 5
+                "id": "1"
               }
             }
 
@@ -2158,30 +2133,30 @@ Update a single event copyright by `id`.
             "relationships": {
               "event": {
                 "links": {
-                  "self": "/v1/event-copyright/5/relationships/event",
-                  "related": "/v1/event-copyright/5/event"
+                  "self": "/v1/event-copyright/1/relationships/event",
+                  "related": "/v1/event-copyright/1/event"
                 }
               }
             },
             "attributes": {
-              "holder": "Name of Holder1",
-              "holder-url": "URL for holder1",
+              "holder": "Name of Holder",
+              "holder-url": "http://holder-url.com",
               "licence": "Licence text",
-              "licence-url": "Licence URL",
-              "year": "Copyright validity year",
-              "logo-url": "New Brand"
+              "licence-url": "http://licence-url.com",
+              "year": 2007,
+              "logo-url": "http://logo-url.com"
             },
             "type": "event-copyright",
-            "id": "5",
+            "id": "1",
             "links": {
-              "self": "/v1/event-copyright/5"
+              "self": "/v1/event-copyright/1"
             }
           },
           "jsonapi": {
             "version": "1.0"
           },
           "links": {
-            "self": "/v1/event-copyright/5"
+            "self": "/v1/event-copyright/1"
           }
         }
 
@@ -3104,7 +3079,7 @@ Create a new session using an event_id **(Minimum Co-Organizer Access)**
 
 ## Sessions Details [/v1/sessions/{session_id}]
 + Parameters
-    + session_id: 1 (integer) - ID of the speaker call in the form of an integer
+    + session_id: 1 (integer) - ID of the session in the form of an integer
 
 ### Session Details [GET]
 Get a single session. **(Public)**
@@ -3819,58 +3794,13 @@ Announcement for call for speaker to accept session proposals from speakers.
 | `privacy` | Privacy of speakers call | string | - |
 
 
-## Speakers Call Collection [/v1/events/{event_identifier}/speakers-calls{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Speakers Call Collection [/v1/events/{event_identifier}/speakers-call{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `starts-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
-
-### Get Speakers Call [GET]
-Get Speakers Call for an event.
-
-+ Request
-
-    + Headers
-
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-            "data": {
-                "relationships": {
-                    "event": {
-                        "links": {
-                            "self": "/v1/speakers-calls/1/relationships/event",
-                            "related": "/v1/speakers-calls/1/event"
-                        }
-                    }
-                },
-                "attributes": {
-                    "announcement": "Speaker Call Announcement",
-                    "ends-at": "2017-06-20T01:24:47.500127+00:00",
-                    "hash": "sfasd",
-                    "starts-at": "2017-06-01T01:24:47.500127+00:00",
-                    "privacy": "public"
-                },
-                "type": "speakers-call",
-                "id": "10",
-                "links": {
-                    "self": "/v1/speakers-calls/1"
-                }
-            },
-            "jsonapi": {
-                "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/speakers-calls/1"
-            }
-        }
 
 ### Create Speakers Call [POST]
 Create a new speakers call using an event_id.
@@ -3889,8 +3819,8 @@ Create a new speakers call using an event_id.
                   "announcement": "Speaker Call Announcement",
                   "starts-at": "2017-06-01T01:24:47.500127+00:00",
                   "ends-at": "2017-06-20T01:24:47.500127+00:00",
-                  "hash": null,
-                  "private": null
+                  "hash": "hash",
+                  "privacy": "public"
                 },
                 "type": "speakers-call"
               }
@@ -3913,8 +3843,8 @@ Create a new speakers call using an event_id.
               "announcement": "Speaker Call Announcement",
               "starts-at": "2017-06-01T01:24:47.500127+00:00",
               "ends-at": "2017-06-20T01:24:47.500127+00:00",
-              "hash": null,
-              "private": null
+              "hash": "hash",
+              "privacy": "public"
             },
             "type": "speakers-call",
             "id": "1",
@@ -3962,10 +3892,10 @@ Get a single speakers call.
               "announcement": "Speaker Call Announcement",
               "starts-at": "2017-06-01T01:24:47.500127+00:00",
               "ends-at": "2017-06-20T01:24:47.500127+00:00",
-              "hash": null,
-              "private": null
+              "hash": "hash",
+              "privacy": "public"
             },
-            "type": "speakers-calls",
+            "type": "speakers-call",
             "id": "1",
             "links": {
               "self": "/v1/speakers-calls/1"
@@ -3999,8 +3929,8 @@ Update a single speakers call by `id`.
                   "announcement": "Speaker Call Announcement",
                   "starts-at": "2017-06-01T01:24:47.500127+00:00",
                   "ends-at": "2017-06-20T01:24:47.500127+00:00",
-                  "hash": null,
-                  "private": null
+                  "hash": "hash",
+                  "privacy": "public"
                 },
                 "type": "speakers-call",
                 "id": "1"
@@ -4009,36 +3939,36 @@ Update a single speakers call by `id`.
 
 + Response 200 (application/vnd.api+json)
 
-        {
-          "data": {
-            "relationships": {
-              "event": {
+            {
+                "data": {
+                    "relationships": {
+                        "event": {
+                            "links": {
+                                "self": "/v1/speakers-calls/1/relationships/event",
+                                "related": "/v1/speakers-calls/1/event"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "announcement": "Speaker Call Announcement",
+                        "ends-at": "2017-06-20T01:24:47.500127+00:00",
+                        "hash": "hash",
+                        "starts-at": "2017-06-01T01:24:47.500127+00:00",
+                        "privacy": "public"
+                    },
+                    "type": "speakers-call",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/speakers-calls/1"
+                    }
+                },
+                "jsonapi": {
+                    "version": "1.0"
+                },
                 "links": {
-                  "self": "/v1/speaker-calls/1/relationships/event",
-                  "related": "/v1/speakers-calls/1/event"
+                    "self": "/v1/speakers-calls/1"
                 }
-              },
-            },
-            "attributes": {
-              "announcement": "Speaker Call Announcement",
-              "starts-at": "2017-06-01T01:24:47.500127+00:00",
-              "ends-at": "2017-06-20T01:24:47.500127+00:00",
-              "hash": null,
-              "private": null
-            },
-            "type": "speakers-call",
-            "id": "1",
-            "links": {
-              "self": "/v1/speakers-call/1"
             }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/speakers-calls/1"
-          }
-        }
 
 ### Delete Speakers Call [DELETE]
 Delete a single speakers call.
@@ -4630,7 +4560,7 @@ Related to tickets (free, paid, donation) to the event.
 | `position` | Position of the ticket | string | - |
 | `sales-starts-at` | Start date of ticket sale | ISO 8601 (tz-aware) | - |
 | `sales-ends-at` | End date of ticket sale | ISO 8601 (tz-aware) | - |
-| `description-toggle` | Yes/No to enter description | boolean (default: `false`) | - |
+| `is-description-visible` | Yes/No to enter description | boolean (default: `false`) | - |
 | `is-hidden` | Yes/No to hide ticket | boolean (default: `false`) | - |
 | `is-fee-absorbed` | Yes/No for ticket absorption | boolean (default: `false`) | - |
 
@@ -4675,7 +4605,7 @@ Get a list of Tickets.
                 "type": "VIP-ticket",
                 "price": 100.00,
                 "quantity": 100,
-                "description-toggle": False,
+                "is-description-visible": False,
                 "position": null,
                 "is-fee-absorbed": null,
                 "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -4719,7 +4649,7 @@ Create a new ticket using an event_id.
                   "type": "VIP-ticket",
                   "price": 100.00,
                   "quantity": 100,
-                  "description-toggle": false,
+                  "is-description-visible": false,
                   "position": null,
                   "is-fee-absorbed": null,
                   "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -4751,7 +4681,7 @@ Create a new ticket using an event_id.
               "type": "VIP ticket",
               "price": 100.00,
               "quantity": 100,
-              "description-toggle": false,
+              "is-description-visible": false,
               "position": null,
               "is-fee-absorbed": null,
               "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -4808,7 +4738,7 @@ Get a single ticket.
               "type": "VIP ticket",
               "price": 100.00,
               "quantity": 100,
-              "description-toggle": false,
+              "is-description-visible": false,
               "position": null,
               "is-fee-absorbed": null,
               "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -4853,7 +4783,7 @@ Update a single ticket by `id`.
                   "type": "VIP ticket",
                   "price": 100.00,
                   "quantity": 100,
-                  "description-toggle": false,
+                  "is-description-visible": false,
                   "position": null,
                   "is-fee-absorbed": null,
                   "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -4885,7 +4815,7 @@ Update a single ticket by `id`.
               "type": "VIP ticket",
               "price": 100.00,
               "quantity": 100,
-              "description-toggle": false,
+              "is-description-visible": false,
               "position": null,
               "is-fee-absorbed": null,
               "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -4910,6 +4840,219 @@ Update a single ticket by `id`.
 
 ### Delete Ticket [DELETE]
 Delete a single ticket.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
+# Group Ticket Fees
+
+Ticket Fees basically stores the fee on a ticket
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `currency`  | Currency of the ticket | string | - |
+| `service_fee` | Service fee the ticket  | float | - |
+| `maximum_fee` | Maximum fee the ticket  | float | - |
+
+## Ticket Fees Collection [/v1/ticket-fees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to be fetched for the paginated response.
+    + sort (optional, string, `service-fee`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+
+### List Ticket Fees [GET]
+Get a list of Ticket Fees.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "attributes": {
+                        "currency": "USD",
+                        "service-fee": 3.14,
+                        "maximum-fee": 5.14
+                    },
+                    "type": "ticket-fees",
+                    "id": 2,
+                    "links": {
+                        "self": "/v1/ticket-fees/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/ticket-fees"
+            }
+        }
+
+
+### Create Ticket Fee [POST]
+Create a new ticket fee.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "type": "ticket-fees",
+                    "attributes": {
+                        "currency":"USD",
+                        "service-fee":"3.14",
+                        "maximum-fee":"5.14"
+                    }
+                }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "attributes": {
+                    "currency": "USD",
+                    "service-fee": 3.14,
+                    "maximum-fee": 5.14
+                },
+                "type": "ticket-fees",
+                "id": 1,
+                "links": {
+                    "self": "/v1/ticket-fees/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/ticket-fees/1"
+            }
+        }
+
+## Ticket Fee Details [/v1/ticket-fees/{id}]
++ Parameters
+    + id: 1 (integer) - ID of the ticket fees as an integer
+
+### Get Ticket Fees Details [GET]
+Get a single ticket fee details.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "attributes": {
+                    "currency": "USD",
+                    "service-fee": 3.14,
+                    "maximum-fee": 5.14
+                },
+                "type": "ticket-fees",
+                "id": 1,
+                "links": {
+                    "self": "/v1/ticket-fees/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/ticket-fees/1"
+            }
+        }
+
+
+### Update Ticket Fees [PATCH]
+Update a single ticket fee by `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "id": "1",
+                    "type": "ticket-fees",
+                    "attributes": {
+                        "currency":"USD",
+                        "service-fee":"2.14",
+                        "maximum-fee":"3.14"
+                    }
+                }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "attributes": {
+                    "currency": "USD",
+                    "service-fee": 2.14,
+                    "maximum-fee": 3.14
+                },
+                "type": "ticket-fees",
+                "id": 1,
+                "links": {
+                    "self": "/v1/ticket-fees/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/ticket-fees/1"
+            }
+        }
+
+### Delete Ticket Fees [DELETE]
+Delete a single ticket fee.
++ `id` (integer) - ID of the record to delete **(required)**
 
 + Request
 

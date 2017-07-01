@@ -114,7 +114,7 @@ def create_app():
     app.config['CELERY_BROKER_URL'] = environ.get('REDIS_URL', 'redis://localhost:6379/0')
     app.config['CELERY_RESULT_BACKEND'] = app.config['CELERY_BROKER_URL']
 
-    CORS(app, resources={r"/api/*": {"origins": "*"}})
+    CORS(app, resources={r"/*": {"origins": "*"}})
     AuthManager.init_login(app)
 
     if app.config['TESTING'] and app.config['PROFILE']:
