@@ -164,6 +164,7 @@ class SessionDetail(ResourceDetail):
                   'model': Session,
                   'methods': {'before_get_object': before_get_object}}
 
+
 class SessionRelationship(ResourceRelationship):
     """
     Session Relationship

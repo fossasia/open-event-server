@@ -9,6 +9,7 @@ from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.sponsor import Sponsor
 from app.models.event import Event
+from app.api.bootstrap import api
 
 
 class SponsorSchema(Schema):
@@ -95,7 +96,8 @@ class SponsorList(ResourceList):
             else:
                 data['event_id'] = event.id
 
-    decorators = (jwt_required, )
+    decorators = (api.has_permission('is_coorganizer', fetch='event_id', fetch_as="event_id", methods="POST",
+                                     check=lambda a: a.get('event_id') or a.get('event_identifier')),)
     schema = SponsorSchema
     data_layer = {'session': db.session,
                   'model': Sponsor,
@@ -109,7 +111,8 @@ class SponsorDetail(ResourceDetail):
     """
     Sponsor detail by id
     """
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
+                                     model=Sponsor, check=lambda a: a.get('id') is not None),)
     schema = SponsorSchema
     data_layer = {'session': db.session,
                   'model': Sponsor}
