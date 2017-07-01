@@ -9,6 +9,7 @@ from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.social_link import SocialLink
 from app.models.event import Event
+from app.api.bootstrap import api
 
 
 class SocialLinkSchema(Schema):
@@ -91,7 +92,8 @@ class SocialLinkList(ResourceList):
                 data['event_id'] = event.id
 
     view_kwargs = True
-    decorators = (jwt_required, )
+    decorators = (api.has_permission('is_coorganizer', fetch='event_id', fetch_as="event_id", methods="POST",
+                                     check=lambda a: a.get('event_id') or a.get('event_identifier')),)
     schema = SocialLinkSchema
     data_layer = {'session': db.session,
                   'model': SocialLink,
@@ -105,7 +107,8 @@ class SocialLinkDetail(ResourceDetail):
     """
     Social Link detail by id
     """
-    decorators = (jwt_required, )
+    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
+                                     model=SocialLink, check=lambda a: a.get('id') is not None),)
     schema = SocialLinkSchema
     data_layer = {'session': db.session,
                   'model': SocialLink}

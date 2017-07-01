@@ -13,6 +13,7 @@ from app.models.session_type import SessionType
 from app.models.event import Event
 from app.models.session import Session
 from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.bootstrap import api
 
 
 class SessionTypeSchema(Schema):
@@ -112,7 +113,8 @@ class SessionTypeList(ResourceList):
                 data['event_id'] = event.id
 
     view_kwargs = True
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_coorganizer', fetch='event_id', fetch_as="event_id", methods="POST",
+                                     check=lambda a: a.get('event_id') or a.get('event_identifier')),)
     schema = SessionTypeSchema
     data_layer = {'session': db.session,
                   'model': SessionType,
@@ -146,7 +148,8 @@ class SessionTypeDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
+                                     model=SessionType, check=lambda a: a.get('id') is not None),)
     schema = SessionTypeSchema
     data_layer = {'session': db.session,
                   'model': SessionType,
