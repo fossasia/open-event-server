@@ -8,6 +8,7 @@ from flask import request
 from app.api.bootstrap import api
 from app.models import db
 from app.models.setting import Setting
+from app.api.helpers.utilities import dasherize
 
 
 class Environment:
@@ -32,6 +33,7 @@ class SettingSchemaAdmin(Schema):
         type_ = 'setting'
         self_view = 'v1.setting_detail'
         self_view_kwargs = {'id': '<id>'}
+        inflect = dasherize
 
     id = fields.Str(dump_only=True)
     #
@@ -145,6 +147,7 @@ class SettingSchemaNonAdmin(Schema):
         type_ = 'setting'
         self_view = 'v1.setting_detail'
         self_view_kwargs = {'id': '<id>'}
+        inflect = dasherize
 
     id = fields.Str(dump_only=True)
 
@@ -189,12 +192,11 @@ class SettingDetail(ResourceDetail):
                 self.schema = SettingSchemaAdmin
             else:
                 self.schema = SettingSchemaNonAdmin
+        else:
+            self.schema = SettingSchemaNonAdmin
 
-    def before_patch(self, args, kwargs):
-        kwargs['id'] = 1
-
-    decorators = (api.has_permission('is_admin', methods="PATCH"),)
+    decorators = (api.has_permission('is_admin', methods="PATCH", id="1"),)
     methods = ['GET', 'PATCH']
-    schema = SettingSchemaNonAdmin
+    schema = SettingSchemaAdmin
     data_layer = {'session': db.session,
                   'model': Setting}

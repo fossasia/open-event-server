@@ -42,7 +42,7 @@ api.route(ImageSizeList, 'image_size_list', '/image-sizes')
 api.route(ImageSizeDetail, 'image_size_detail', '/image-sizes/<int:id>')
 
 # settings
-api.route(SettingDetail, 'setting_detail', '/settings')
+api.route(SettingDetail, 'setting_detail', '/settings/<id>', '/settings')
 
 # pages
 api.route(PageList, 'page_list', '/pages')
@@ -144,7 +144,8 @@ api.route(SponsorDetail, 'sponsor_detail', '/sponsors/<int:id>')
 api.route(SponsorRelationship, 'sponsor_event', '/sponsors/<int:id>/relationships/event')
 
 # tracks
-api.route(TrackList, 'track_list', '/events/<int:event_id>/tracks', '/events/<event_identifier>/tracks')
+api.route(TrackList, 'track_list', '/events/<int:event_id>/tracks',
+          '/events/<event_identifier>/tracks')
 api.route(TrackDetail, 'track_detail', '/tracks/<int:id>', '/sessions/<int:session_id>/track')
 api.route(TrackRelationship, 'track_sessions', '/tracks/<int:id>/relationships/sessions')
 api.route(TrackRelationship, 'track_event', '/tracks/<int:id>/relationships/event')
@@ -162,8 +163,10 @@ api.route(SessionTypeList, 'session_type_list', '/events/<int:event_id>/session-
           '/events/<event_identifier>/session-types')
 api.route(SessionTypeDetail, 'session_type_detail', '/session-types/<int:id>',
           '/sessions/<int:session_id>/session-type')
-api.route(SessionTypeRelationship, 'session_type_sessions', '/session-types/<int:id>/relationships/sessions')
-api.route(SessionTypeRelationship, 'session_type_event', '/session-types/<int:id>/relationships/event')
+api.route(SessionTypeRelationship, 'session_type_sessions',
+          '/session-types/<int:id>/relationships/sessions')
+api.route(SessionTypeRelationship, 'session_type_event',
+          '/session-types/<int:id>/relationships/event')
 
 # event_copyright
 api.route(EventCopyrightList, 'event_copyright_list', '/events/<int:event_id>/event-copyright',
@@ -199,7 +202,8 @@ api.route(DiscountCodeRelationship, 'discount_code_event',
           '/discount-codes/<int:id>/relationships/event')
 
 # attendees
-api.route(AttendeeList, 'attendee_list', '/attendees', '/orders/<int:order_id>/tickets/<int:ticket_id>/attendees')
+api.route(AttendeeList, 'attendee_list', '/attendees',
+          '/orders/<int:order_id>/tickets/<int:ticket_id>/attendees')
 api.route(AttendeeDetail, 'attendee_detail', '/attendees/<int:id>')
 api.route(AttendeeRelationship, 'attendee_ticket', '/attendees/<int:id>/relationships/ticket')
 
@@ -213,16 +217,19 @@ api.route(EventTypeRelationship, 'event_type_event', '/event-types/<int:id>/rela
 api.route(EventTopicList, 'event_topic_list', '/event-topics')
 api.route(EventTopicDetail, 'event_topic_detail', '/event-topics/<int:id>', '/events/<int:event_id>/event-topic',
           '/events/<event_identifier>/event-topic', '/event-sub-topics/<int:event_sub_topic_id>/event-topic')
-api.route(EventTopicRelationship, 'event_topic_event', '/event-topics/<int:id>/relationships/events')
+api.route(EventTopicRelationship, 'event_topic_event',
+          '/event-topics/<int:id>/relationships/events')
 api.route(EventTopicRelationship, 'event_topic_event_sub_topic',
           '/event-topics/<int:id>/relationships/event-sub-topics')
 
 # event sub topics
-api.route(EventSubTopicList, 'event_sub_topic_list', '/event-topics/<int:event_topic_id>/event-sub-topics')
+api.route(EventSubTopicList, 'event_sub_topic_list',
+          '/event-topics/<int:event_topic_id>/event-sub-topics')
 api.route(EventSubTopicDetail, 'event_sub_topic_detail', '/event-sub-topics/<int:id>',
           '/events/<int:event_id>/event-sub-topic',
           '/events/<event_identifier>/event-sub-topic')
-api.route(EventSubTopicRelationship, 'event_sub_topic_event', '/event-sub-topics/<int:id>/relationships/events')
+api.route(EventSubTopicRelationship, 'event_sub_topic_event',
+          '/event-sub-topics/<int:id>/relationships/events')
 api.route(EventSubTopicRelationship, 'event_sub_topic_event_topic',
           '/event-sub-topics/<int:id>/relationships/event-topic')
 # ticket_fees

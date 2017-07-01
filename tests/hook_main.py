@@ -20,6 +20,7 @@ from app.factories.social_link import SocialLinkFactory
 from app.factories.image_size import ImageSizeFactory
 from app.factories.page import PageFactory
 from app.factories.event_copyright import EventCopyrightFactory
+from app.factories.setting import SettingFactory
 from app.factories.event_type import EventTypeFactory
 from app.factories.discount_code import DiscountCodeFactory
 from app.factories.event_topic import EventTopicFactory
@@ -600,6 +601,7 @@ def speakers_call_post(transaction):
         db.session.add(event)
         db.session.commit()
 
+
 @hooks.before("Speakers Calls > Speakers Call Details > Speakers Call Details")
 def speakers_call_get_detail(transaction):
     """
@@ -1066,17 +1068,23 @@ def settings_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        setting = SettingFactory()
+        db.session.add(setting)
+        db.session.commit()
 
 
 @hooks.before("Settings > Settings Details > Update Settings")
-def settings_post(transaction):
+def settings_patch(transaction):
     """
-    POST /settings
+    PATCH /settings
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        setting = SettingFactory()
+        db.session.add(setting)
+        db.session.commit()
 
 
 # ------------------------- Discount Codes -------------------------
