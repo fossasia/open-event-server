@@ -4537,47 +4537,47 @@ Get a list of Tickets.
 + Response 200 (application/vnd.api+json)
 
         {
-          "meta": {
-            "count": 1
-          },
-          "data": [
-            {
-              "relationships": {
-                "event": {
-                  "links": {
-                    "self": "/v1/tickets/1/relationships/event",
-                    "related": "/v1/tickets/1/event"
-                  }
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "event": {
+                            "links": {
+                                "self": "/v1/tickets/1/relationships/event",
+                                "related": "/v1/tickets/1/event"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "description": "some description",
+                        "type": "VIP-ticket",
+                        "price": 100,
+                        "name": "ticket-name",
+                        "max-order": 100,
+                        "is-description-visible": false,
+                        "is-fee-absorbed": false,
+                        "position": 1,
+                        "quantity": 100,
+                        "is-hidden": false,
+                        "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
+                        "min-order": 1,
+                        "sales-starts-at": "2017-06-01T01:24:47.500127+00:00"
+                    },
+                    "type": "ticket",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/tickets/1"
+                    }
                 }
-              },
-              "attributes": {
-                "name": "ticket-name",
-                "description": "some description",
-                "type": "VIP-ticket",
-                "price": 100.00,
-                "quantity": 100,
-                "is-description-visible": False,
-                "position": null,
-                "is-fee-absorbed": null,
-                "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
-                "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
-                "is-hidden": False,
-                "min-order": 1,
-                "max-order": 100
-              },
-              "type": "ticket",
-              "id": "1",
-              "links": {
-                "self": "/v1/tickets/1"
-              }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/events/2/tickets"
             }
-          ],
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/tickets"
-          }
         }
 
 
@@ -4598,16 +4598,16 @@ Create a new ticket using an event_id.
                   "name": "ticket-name",
                   "description": "some description",
                   "type": "VIP-ticket",
-                  "price": 100.00,
-                  "quantity": 100,
-                  "is-description-visible": false,
-                  "position": null,
-                  "is-fee-absorbed": null,
+                  "price": "100.00",
+                  "quantity": "100",
+                  "is-description-visible": "false",
+                  "position": "1",
+                  "is-fee-absorbed": "false",
                   "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
                   "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
-                  "is-hidden": false,
-                  "min-order": 1,
-                  "max-order": 100
+                  "is-hidden": "false",
+                  "min-order": "1",
+                  "max-order": "100"
                 },
                 "type": "ticket"
               }
@@ -4617,42 +4617,42 @@ Create a new ticket using an event_id.
 + Response 201 (application/vnd.api+json)
 
         {
-          "data": {
-            "relationships": {
-              "event": {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/tickets/1/relationships/event",
+                            "related": "/v1/tickets/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "description": "some description",
+                    "type": "VIP-ticket",
+                    "price": 100,
+                    "name": "ticket-name",
+                    "max-order": 100,
+                    "is-description-visible": false,
+                    "is-fee-absorbed": false,
+                    "position": 1,
+                    "quantity": 100,
+                    "is-hidden": false,
+                    "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
+                    "min-order": 1,
+                    "sales-starts-at": "2017-06-01T01:24:47.500127+00:00"
+                },
+                "type": "ticket",
+                "id": "5",
                 "links": {
-                  "self": "/v1/tickets/2/relationships/event",
-                  "related": "/v1/tickets/2/event"
+                    "self": "/v1/tickets/1"
                 }
-              }
             },
-            "attributes": {
-              "name": "ticket name",
-              "description": "some description",
-              "type": "VIP ticket",
-              "price": 100.00,
-              "quantity": 100,
-              "is-description-visible": false,
-              "position": null,
-              "is-fee-absorbed": null,
-              "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
-              "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
-              "is-hidden": false,
-              "min-order": 1,
-              "max-order": 100
+            "jsonapi": {
+                "version": "1.0"
             },
-            "type": "ticket",
-            "id": "2",
             "links": {
-              "self": "/v1/tickets/2"
+                "self": "/v1/tickets/1"
             }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/tickets/2"
-          }
         }
 
 
@@ -4674,42 +4674,42 @@ Get a single ticket.
 + Response 200 (application/vnd.api+json)
 
         {
-          "data": {
-            "relationships": {
-              "event": {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/tickets/1/relationships/event",
+                            "related": "/v1/tickets/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "description": "some description",
+                    "type": "VIP-ticket",
+                    "price": 100,
+                    "name": "ticket-name",
+                    "max-order": 100,
+                    "is-description-visible": false,
+                    "is-fee-absorbed": false,
+                    "position": 1,
+                    "quantity": 100,
+                    "is-hidden": false,
+                    "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
+                    "min-order": 5,
+                    "sales-starts-at": "2017-06-01T01:24:47.500127+00:00"
+                },
+                "type": "ticket",
+                "id": "1",
                 "links": {
-                  "self": "/v1/tickets/2/relationships/event",
-                  "related": "/v1/tickets/2/event"
+                    "self": "/v1/tickets/1"
                 }
-              }
             },
-            "attributes": {
-              "name": "ticket name",
-              "description": "some description",
-              "type": "VIP ticket",
-              "price": 100.00,
-              "quantity": 100,
-              "is-description-visible": false,
-              "position": null,
-              "is-fee-absorbed": null,
-              "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
-              "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
-              "is-hidden": false,
-              "min-order": 1,
-              "max-order": 100
+            "jsonapi": {
+                "version": "1.0"
             },
-            "type": "ticket",
-            "id": "2",
             "links": {
-              "self": "/v1/tickets/2"
+                "self": "/v1/tickets/1"
             }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/tickets/2"
-          }
         }
 
 
@@ -4729,64 +4729,64 @@ Update a single ticket by `id`.
             {
               "data": {
                 "attributes": {
-                  "name": "ticket name",
+                  "name": "ticket-name",
                   "description": "some description",
-                  "type": "VIP ticket",
-                  "price": 100.00,
-                  "quantity": 100,
-                  "is-description-visible": false,
-                  "position": null,
-                  "is-fee-absorbed": null,
+                  "type": "VIP-ticket",
+                  "price": "100.00",
+                  "quantity": "100",
+                  "is-description-visible": "false",
+                  "position": "1",
+                  "is-fee-absorbed": "false",
                   "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
                   "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
-                  "is-hidden": false,
-                  "min-order": 1,
-                  "max-order": 100
+                  "is-hidden": "false",
+                  "min-order": "5",
+                  "max-order": "100"
                 },
                 "type": "ticket",
-                "id": "2"
+                "id": "1"
               }
             }
 
 + Response 200 (application/vnd.api+json)
 
         {
-          "data": {
-            "relationships": {
-              "event": {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/tickets/1/relationships/event",
+                            "related": "/v1/tickets/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "description": "some description",
+                    "type": "VIP-ticket",
+                    "price": 100,
+                    "name": "ticket-name",
+                    "max-order": 100,
+                    "is-description-visible": false,
+                    "is-fee-absorbed": false,
+                    "position": 1,
+                    "quantity": 100,
+                    "is-hidden": false,
+                    "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
+                    "min-order": 5,
+                    "sales-starts-at": "2017-06-01T01:24:47.500127+00:00"
+                },
+                "type": "ticket",
+                "id": "1",
                 "links": {
-                  "self": "/v1/tickets/2/relationships/event",
-                  "related": "/v1/tickets/2/event"
+                    "self": "/v1/tickets/1"
                 }
-              }
             },
-            "attributes": {
-              "name": "ticket name",
-              "description": "some description",
-              "type": "VIP ticket",
-              "price": 100.00,
-              "quantity": 100,
-              "is-description-visible": false,
-              "position": null,
-              "is-fee-absorbed": null,
-              "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
-              "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
-              "is-hidden": false,
-              "min-order": 1,
-              "max-order": 100
+            "jsonapi": {
+                "version": "1.0"
             },
-            "type": "ticket",
-            "id": "2",
             "links": {
-              "self": "/v1/tickets/2"
+                "self": "/v1/tickets/1"
             }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/tickets/2"
-          }
         }
 
 ### Delete Ticket [DELETE]
