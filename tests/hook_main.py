@@ -29,6 +29,7 @@ from app.factories.event_sub_topic import EventSubTopicFactory
 from app.factories.sponsor import SponsorFactory
 from app.factories.speakers_call import SpeakersCallFactory
 from app.factories.tax import TaxFactory
+from app.factories.ticket import TicketFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -772,7 +773,10 @@ def ticket_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        ticket = TicketFactory()
+        db.session.add(ticket)
+        db.session.commit()
 
 
 @hooks.before("Tickets > Tickets Collection > Create Ticket")
@@ -782,7 +786,11 @@ def ticket_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
 
 
 @hooks.before("Tickets > Ticket Details > Ticket Details")
@@ -792,7 +800,11 @@ def ticket_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        ticket = TicketFactory()
+        db.session.add(ticket)
+        db.session.commit()
+
 
 
 @hooks.before("Tickets > Ticket Details > Update Ticket")
@@ -802,7 +814,11 @@ def ticket_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        ticket = TicketFactory()
+        db.session.add(ticket)
+        db.session.commit()
+
 
 
 @hooks.before("Tickets > Ticket Details > Delete Ticket")
@@ -812,7 +828,11 @@ def ticket_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        ticket = TicketFactory()
+        db.session.add(ticket)
+        db.session.commit()
+
 
 
 # ------------------------- Tracks -------------------------
