@@ -14,7 +14,7 @@ class Ticket(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     description = db.Column(db.String)
-    description_toggle = db.Column(db.Boolean)
+    is_description_visible = db.Column(db.Boolean)
     type = db.Column(db.String)
     quantity = db.Column(db.Integer)
     position = db.Column(db.Integer)
@@ -28,7 +28,7 @@ class Ticket(db.Model):
     max_order = db.Column(db.Integer)
 
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-    event = db.relationship('Event', backref='tickets')
+    event = db.relationship('Event', backref='tickets_')
 
     tags = db.relationship('TicketTag', secondary=ticket_tags_table, backref='tickets')
     order_ticket = db.relationship('OrderTicket', backref="ticket", passive_deletes=True)
@@ -41,7 +41,7 @@ class Ticket(db.Model):
                  sales_ends_at=None,
                  is_hidden=False,
                  description=None,
-                 description_toggle=True,
+                 is_description_visible=True,
                  quantity=100,
                  position=1,
                  price=0,
@@ -58,7 +58,7 @@ class Ticket(db.Model):
         self.type = type
         self.event_id = event_id
         self.description = description
-        self.description_toggle = description_toggle
+        self.is_description_visible = is_description_visible
         self.price = price
         self.sales_starts_at = sales_starts_at
         self.sales_ends_at = sales_ends_at
@@ -116,7 +116,7 @@ class Ticket(db.Model):
             'quantity': self.quantity,
             'position': self.position,
             'type': self.type,
-            'description_visibility': self.description_toggle,
+            'description_visibility': self.is_description_visible,
             'description': self.description,
             'price': self.price,
             'sales_start_date': self.sales_starts_at.strftime('%m/%d/%Y') if self.sales_starts_at else '',

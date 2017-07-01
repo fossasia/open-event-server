@@ -1195,6 +1195,12 @@ Get a list of events.
             "data": [
                 {
                     "relationships": {
+                        "tickets": {
+                          "links": {
+                            "self": "/v1/events/1/relationships/tickets",
+                            "related": "/v1/events/1/tickets"
+                          }
+                        },
                         "event-sub-topic": {
                             "links": {
                                 "self": "/v1/events/1/relationships/event-sub-topic",
@@ -1401,6 +1407,12 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
         {
             "data": {
                 "relationships": {
+                  "tickets": {
+                      "links": {
+                        "self": "/v1/events/1/relationships/tickets",
+                        "related": "/v1/events/1/tickets"
+                      }
+                    },
                     "event-sub-topic": {
                         "links": {
                             "self": "/v1/events/1/relationships/event-sub-topic",
@@ -1567,6 +1579,12 @@ Get a single event.
         {
             "data": {
                 "relationships": {
+                    "tickets": {
+                      "links": {
+                        "self": "/v1/events/1/relationships/tickets",
+                        "related": "/v1/events/1/tickets"
+                      }
+                    },
                     "event-sub-topic": {
                         "links": {
                             "self": "/v1/events/1/relationships/event-sub-topic",
@@ -1777,6 +1795,12 @@ All other fields are optional. Add attributes you want to modify.
         {
             "data": {
                 "relationships": {
+                    "tickets": {
+                      "links": {
+                        "self": "/v1/events/1/relationships/tickets",
+                        "related": "/v1/events/1/tickets"
+                        }
+                      },
                     "event-sub-topic": {
                         "links": {
                             "self": "/v1/events/1/relationships/event-sub-topic",
@@ -4499,7 +4523,7 @@ Related to tickets (free, paid, donation) to the event.
 | `position` | Position of the ticket | string | - |
 | `sales-starts-at` | Start date of ticket sale | ISO 8601 (tz-aware) | - |
 | `sales-ends-at` | End date of ticket sale | ISO 8601 (tz-aware) | - |
-| `description-toggle` | Yes/No to enter description | boolean (default: `false`) | - |
+| `is-description-visible` | Yes/No to enter description | boolean (default: `false`) | - |
 | `is-hidden` | Yes/No to hide ticket | boolean (default: `false`) | - |
 | `is-fee-absorbed` | Yes/No for ticket absorption | boolean (default: `false`) | - |
 
@@ -4544,7 +4568,7 @@ Get a list of Tickets.
                 "type": "VIP-ticket",
                 "price": 100.00,
                 "quantity": 100,
-                "description-toggle": False,
+                "is-description-visible": False,
                 "position": null,
                 "is-fee-absorbed": null,
                 "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -4588,7 +4612,7 @@ Create a new ticket using an event_id.
                   "type": "VIP-ticket",
                   "price": 100.00,
                   "quantity": 100,
-                  "description-toggle": false,
+                  "is-description-visible": false,
                   "position": null,
                   "is-fee-absorbed": null,
                   "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -4620,7 +4644,7 @@ Create a new ticket using an event_id.
               "type": "VIP ticket",
               "price": 100.00,
               "quantity": 100,
-              "description-toggle": false,
+              "is-description-visible": false,
               "position": null,
               "is-fee-absorbed": null,
               "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -4677,7 +4701,7 @@ Get a single ticket.
               "type": "VIP ticket",
               "price": 100.00,
               "quantity": 100,
-              "description-toggle": false,
+              "is-description-visible": false,
               "position": null,
               "is-fee-absorbed": null,
               "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -4722,7 +4746,7 @@ Update a single ticket by `id`.
                   "type": "VIP ticket",
                   "price": 100.00,
                   "quantity": 100,
-                  "description-toggle": false,
+                  "is-description-visible": false,
                   "position": null,
                   "is-fee-absorbed": null,
                   "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -4754,7 +4778,7 @@ Update a single ticket by `id`.
               "type": "VIP ticket",
               "price": 100.00,
               "quantity": 100,
-              "description-toggle": false,
+              "is-description-visible": false,
               "position": null,
               "is-fee-absorbed": null,
               "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -4779,6 +4803,219 @@ Update a single ticket by `id`.
 
 ### Delete Ticket [DELETE]
 Delete a single ticket.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
+# Group Ticket Fees
+
+Ticket Fees basically stores the fee on a ticket
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `currency`  | Currency of the ticket | string | - |
+| `service_fee` | Service fee the ticket  | float | - |
+| `maximum_fee` | Maximum fee the ticket  | float | - |
+
+## Ticket Fees Collection [/v1/ticket-fees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to be fetched for the paginated response.
+    + sort (optional, string, `service-fee`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+
+### List Ticket Fees [GET]
+Get a list of Ticket Fees.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "attributes": {
+                        "currency": "USD",
+                        "service-fee": 3.14,
+                        "maximum-fee": 5.14
+                    },
+                    "type": "ticket-fees",
+                    "id": 2,
+                    "links": {
+                        "self": "/v1/ticket-fees/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/ticket-fees"
+            }
+        }
+
+
+### Create Ticket Fee [POST]
+Create a new ticket fee.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "type": "ticket-fees",
+                    "attributes": {
+                        "currency":"USD",
+                        "service-fee":"3.14",
+                        "maximum-fee":"5.14"
+                    }
+                }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "attributes": {
+                    "currency": "USD",
+                    "service-fee": 3.14,
+                    "maximum-fee": 5.14
+                },
+                "type": "ticket-fees",
+                "id": 1,
+                "links": {
+                    "self": "/v1/ticket-fees/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/ticket-fees/1"
+            }
+        }
+
+## Ticket Fee Details [/v1/ticket-fees/{id}]
++ Parameters
+    + id: 1 (integer) - ID of the ticket fees as an integer
+
+### Get Ticket Fees Details [GET]
+Get a single ticket fee details.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "attributes": {
+                    "currency": "USD",
+                    "service-fee": 3.14,
+                    "maximum-fee": 5.14
+                },
+                "type": "ticket-fees",
+                "id": 1,
+                "links": {
+                    "self": "/v1/ticket-fees/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/ticket-fees/1"
+            }
+        }
+
+
+### Update Ticket Fees [PATCH]
+Update a single ticket fee by `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "id": "1",
+                    "type": "ticket-fees",
+                    "attributes": {
+                        "currency":"USD",
+                        "service-fee":"2.14",
+                        "maximum-fee":"3.14"
+                    }
+                }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "attributes": {
+                    "currency": "USD",
+                    "service-fee": 2.14,
+                    "maximum-fee": 3.14
+                },
+                "type": "ticket-fees",
+                "id": 1,
+                "links": {
+                    "self": "/v1/ticket-fees/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/ticket-fees/1"
+            }
+        }
+
+### Delete Ticket Fees [DELETE]
+Delete a single ticket fee.
++ `id` (integer) - ID of the record to delete **(required)**
 
 + Request
 

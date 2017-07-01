@@ -4,7 +4,7 @@ from marshmallow_jsonapi import fields
 
 from app.api.helpers.utilities import dasherize
 from app.models import db
-from app.api.helpers.permissions import is_admin
+from app.api.bootstrap import api
 from app.models.image_size import ImageSizes
 
 
@@ -43,7 +43,7 @@ class ImageSizeList(ResourceList):
     """
     List and create image_sizes
     """
-    post = is_admin(ResourceList.post.__func__)
+    decorators = (api.has_permission('is_admin', methods="POST"),)
     schema = ImageSizeSchema
     data_layer = {'session': db.session,
                   'model': ImageSizes}
@@ -53,8 +53,7 @@ class ImageSizeDetail(ResourceDetail):
     """
     image_size detail by id
     """
-    patch = is_admin(ResourceDetail.patch.__func__)
-    delete = is_admin(ResourceDetail.delete.__func__)
+    decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
     schema = ImageSizeSchema
     data_layer = {'session': db.session,
                   'model': ImageSizes}
