@@ -869,7 +869,6 @@ Event Sub Topics for Events. Can only be edited and entered by admins.
 |:----------|-------------|------|----------|
 | `name`  | Name of the event sub topic | string | - |
 | `slug` | Slug of the event sub topic | string | - |
-| `event_topic_id` | ID of event topic for which event subtopic is related | Integer | - |
 
 ## Event Sub Topics Collection [/v1/event-topics/{event_topic_id}/event-sub-topics{?page%5bsize%5d,page%5bnumber%5d,sort}]
 + Parameters
@@ -4811,6 +4810,294 @@ Delete a single ticket.
           }
         }
 
+# Group Attendees
+Related to ticket holders(attendees) of an event (free, paid, donation) to the event.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `firstname`  | First name of the Attendee | string | **yes** |
+| `lastname` | Last name of the Attendee | string | **yes** |
+| `email` | Email of the Attendee | string | - |
+| `address` | Address of the Attendee | float | - |
+| `city` | City of the Attendee | integer | - |
+| `state` | State of the Attendee | string | - |
+| `country` | Country of the Attendee | string | - |
+| `is-checked-in` | If the attendee is checked in | boolean | - |
+| `pdf-url` | pdf url of the Attendee | url | - |
+
+## Attendees Collection [/v1/attendees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `city`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List All Attendees [GET]
+Get a list of attendees.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "ticket": {
+                            "links": {
+                                "self": "/v1/attendees/1/relationships/ticket",
+                                "related": "/v1/attendees/1/ticket"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "city": "example",
+                        "firstname": "John",
+                        "lastname": "Doe",
+                        "is-checked-in": false,
+                        "state": "example",
+                        "address": "address",
+                        "pdf-url": "http://example.com",
+                        "country": "IN",
+                        "email": "johndoe@example.com"
+                    },
+                    "type": "attendee",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/attendees/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/attendees"
+            }
+        }
+
+
+### Create Attendee [POST]
+Create a new attendee.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                    "firstname": "John",
+                    "lastname": "Doe",
+                    "email": "johndoe@example.com",
+                    "address": "address",
+                    "city": "example",
+                    "state": "example",
+                    "country": "IN",
+                    "ticket-id": "12",
+                    "is-checked_in": "false",
+                    "pdf-url": "http://example.com"
+                },
+                "type": "attendee"
+              }
+            }
+
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "ticket": {
+                        "links": {
+                            "self": "/v1/attendees/1/relationships/ticket",
+                            "related": "/v1/attendees/1/ticket"
+                        }
+                    }
+                },
+                "attributes": {
+                    "city": "example",
+                    "firstname": "John",
+                    "lastname": "Doe",
+                    "is-checked-in": false,
+                    "state": "example",
+                    "address": "address",
+                    "pdf-url": "http://example.com",
+                    "country": "IN",
+                    "email": "johndoe@example.com"
+                },
+                "type": "attendee",
+                "id": "1",
+                "links": {
+                    "self": "/v1/attendees/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/attendees/1"
+            }
+        }
+
+
+## Attendee Details [/v1/attendees/{attendee_id}]
++ Parameters
+    + attendee_id: 1 (integer) - ID of the attendee in the form of an integer
+
+### Attendee Details [GET]
+Get a single attendee.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "ticket": {
+                        "links": {
+                            "self": "/v1/attendees/1/relationships/ticket",
+                            "related": "/v1/attendees/1/ticket"
+                        }
+                    }
+                },
+                "attributes": {
+                    "city": "example",
+                    "firstname": "John",
+                    "lastname": "Doe",
+                    "is-checked-in": false,
+                    "state": "example",
+                    "address": "address",
+                    "pdf-url": "http://example.com",
+                    "country": "IN",
+                    "email": "johndoe@example.com"
+                },
+                "type": "attendee",
+                "id": "1",
+                "links": {
+                    "self": "/v1/attendees/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/attendees/1"
+            }
+        }
+
+
+### Update Attendee [PATCH]
+Update a single attendee by `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                    "firstname": "John",
+                    "lastname": "Doe",
+                    "email": "johndoe@example.com",
+                    "address": "address",
+                    "city": "example",
+                    "state": "example",
+                    "country": "IN",
+                    "ticket-id": "12",
+                    "is-checked_in": "true",
+                    "pdf-url": "http://example.com"
+                },
+                "type": "attendee",
+                "id": "1"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "ticket": {
+                        "links": {
+                            "self": "/v1/attendees/1/relationships/ticket",
+                            "related": "/v1/attendees/1/ticket"
+                        }
+                    }
+                },
+                "attributes": {
+                    "city": "example",
+                    "firstname": "John",
+                    "lastname": "Doe",
+                    "is-checked-in": true,
+                    "state": "example",
+                    "address": "address",
+                    "pdf-url": "http://example.com",
+                    "country": "IN",
+                    "email": "johndoe@example.com"
+                },
+                "type": "attendee",
+                "id": "1",
+                "links": {
+                    "self": "/v1/attendees/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/attendees/1"
+            }
+        }
+
+### Delete Attendee [DELETE]
+Delete a single attendee.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
 # Group Ticket Fees
 
 Ticket Fees basically stores the fee on a ticket
@@ -4818,8 +5105,8 @@ Ticket Fees basically stores the fee on a ticket
 | Parameter | Description | Type | Required |
 |:----------|-------------|------|----------|
 | `currency`  | Currency of the ticket | string | - |
-| `service_fee` | Service fee the ticket  | float | - |
-| `maximum_fee` | Maximum fee the ticket  | float | - |
+| `service-fee` | Service fee the ticket  | float | - |
+| `maximum-fee` | Maximum fee the ticket  | float | - |
 
 ## Ticket Fees Collection [/v1/ticket-fees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -5434,7 +5721,7 @@ Update a single notification with `id`.
                   "title": "example1",
                   "message": "example1",
                   "action": "example1",
-                  "is_read": "true"
+                  "is-read": "true"
                 },
                 "type": "notification",
                 "id": "1"

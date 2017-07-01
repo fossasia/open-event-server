@@ -136,7 +136,7 @@ class TicketDetail(ResourceDetail):
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket,
-                  'methods':{
+                  'methods': {
                       'before_get_object': before_get_object
                   }}
 

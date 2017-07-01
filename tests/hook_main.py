@@ -31,6 +31,7 @@ from app.factories.speakers_call import SpeakersCallFactory
 from app.factories.tax import TaxFactory
 from app.factories.session import SessionFactory
 from app.factories.ticket import TicketFactory
+from app.factories.attendee import AttendeeFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -94,7 +95,6 @@ def after_each(transaction):
 
 
 # ------------------------- Authentication -------------------------
-
 @hooks.before("Authentication > JWT Authentication > Authenticate and generate token")
 def skip_auth(transaction):
     """
@@ -106,7 +106,6 @@ def skip_auth(transaction):
 
 
 # ------------------------- Users -------------------------
-
 @hooks.before("Users > Users Collection > List All Users")
 def user_get_list(transaction):
     """
@@ -170,7 +169,6 @@ def user_delete(transaction):
 
 
 # ------------------------- Events -------------------------
-
 @hooks.before("Events > Events Collection > List All Events")
 def event_get_list(transaction):
     """
@@ -234,7 +232,6 @@ def event_delete(transaction):
 
 
 # ------------------------- Copyright -------------------------
-
 @hooks.before("Copyright > Event Copyright > Create Event Copyright")
 def copyright_post(transaction):
     """
@@ -288,7 +285,6 @@ def copyright_delete(transaction):
 
 
 # ------------------------- Invoices -------------------------
-
 @hooks.before("Invoices > Event Invoices > Get Event Invoices")
 def invoice_get_list(transaction):
     """
@@ -355,7 +351,6 @@ def invoice_delete(transaction):
 
 
 # ------------------------- Microlocation -------------------------
-
 @hooks.before("Microlocations > Microlocation Collection > List All Microlocations")
 def microlocation_get_list(transaction):
     """
@@ -407,7 +402,6 @@ def microlocation_delete(transaction):
 
 
 # ------------------------- Sessions -------------------------
-
 @hooks.before("Sessions > Sessions Collection > List All Sessions")
 def session_get_list(transaction):
     """
@@ -473,7 +467,6 @@ def session_delete(transaction):
 
 
 # ------------------------- Session Type -------------------------
-
 @hooks.before("Session Type > Session Type Collection > List All Session Types")
 def session_type_get_list(transaction):
     """
@@ -525,7 +518,6 @@ def session_type_delete(transaction):
 
 
 # ------------------------- Social Links -------------------------
-
 @hooks.before("Social Links > Social Links Collection > List All Social Links")
 def social_link_get_list(transaction):
     """
@@ -592,7 +584,6 @@ def social_link_delete(transaction):
 
 
 # ------------------------- Speakers Calls -------------------------
-
 @hooks.before("Speakers Calls > Speakers Call Collection > Get Speakers Call")
 def speakers_call_get(transaction):
     """
@@ -659,7 +650,6 @@ def speakers_call_delete(transaction):
 
 
 # ------------------------- Sponsors -------------------------
-
 @hooks.before("Sponsors > Sponsors Collection > List All Sponsors")
 def sponsor_get_list(transaction):
     """
@@ -726,7 +716,6 @@ def sponsor_delete(transaction):
 
 
 # ------------------------- Tax -------------------------
-
 @hooks.before("Tax > Tax Collection > Create Tax")
 def tax_post(transaction):
     """
@@ -780,7 +769,6 @@ def tax_delete(transaction):
 
 
 # ------------------------- Tickets -------------------------
-
 @hooks.before("Tickets > Tickets Collection > List All Tickets")
 def ticket_get_list(transaction):
     """
@@ -849,9 +837,70 @@ def ticket_delete(transaction):
         db.session.commit()
 
 
+# ---------------------- Attendees (Ticket Holder) ---------------------
+@hooks.before("Attendees > Attendees Collection > List All Attendees")
+def attendee_get_list(transaction):
+    """
+    GET /attendees
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        attendee = AttendeeFactory()
+        db.session.add(attendee)
+        db.session.commit()
+
+
+@hooks.before("Attendees > Attendees Collection > Create Attendee")
+def attendee_post(transaction):
+    """
+    POST /attendees
+    :param transaction:
+    :return:
+    """
+    pass
+
+
+@hooks.before("Attendees > Attendee Details > Attendee Details")
+def attendee_get_detail(transaction):
+    """
+    GET /attendees/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        attendee = AttendeeFactory()
+        db.session.add(attendee)
+        db.session.commit()
+
+
+@hooks.before("Attendees > Attendee Details > Update Attendee")
+def attendee_patch(transaction):
+    """
+    PATCH /attendees/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        attendee = AttendeeFactory()
+        db.session.add(attendee)
+        db.session.commit()
+
+
+@hooks.before("Attendees > Attendee Details > Delete Attendee")
+def attendee_delete(transaction):
+    """
+    DELETE /attendees/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        attendee = AttendeeFactory()
+        db.session.add(attendee)
+        db.session.commit()
+
 
 # ------------------------- Tracks -------------------------
-
 @hooks.before("Tracks > Tracks Collection > List All Tracks")
 def track_get_list(transaction):
     """
@@ -903,7 +952,6 @@ def track_delete(transaction):
 
 
 # ------------------------- Notifications -------------------------
-
 @hooks.before("Notifications > Notifications Collection > List All Notifications")
 def notification_get_list(transaction):
     """
@@ -970,7 +1018,6 @@ def notification_delete(transaction):
 
 
 # ------------------------- Image Size -------------------------
-
 @hooks.before("Image Size > Image Size Collection > List Image Sizes")
 def image_size_get_list(transaction):
     """
@@ -1034,7 +1081,6 @@ def image_size_delete(transaction):
 
 
 # ------------------------- Pages -------------------------
-
 @hooks.before("Pages > Page Collection > Page Sizes")
 def page_get_list(transaction):
     """
@@ -1098,7 +1144,6 @@ def page_delete(transaction):
 
 
 # ------------------------- Settings -------------------------
-
 @hooks.before("Settings > Settings Details > Show Settings")
 def settings_get_list(transaction):
     """
@@ -1126,7 +1171,6 @@ def settings_patch(transaction):
 
 
 # ------------------------- Discount Codes -------------------------
-
 @hooks.before("Discount Codes > Discount Code Collection > List All Discount Codes")
 def discount_code_get_list(transaction):
     """
@@ -1193,7 +1237,6 @@ def discount_delete(transaction):
 
 
 # ------------------------- Upload -------------------------
-
 @hooks.before("Upload > Image Upload > Upload an Image in temporary location")
 def image_upload_post(transaction):
     """
@@ -1215,7 +1258,6 @@ def file_upload_post(transaction):
 
 
 # ------------------------- Event Types -------------------------
-
 @hooks.before("Event Types > Event Types Collection > List All Event Types")
 def event_type_get_list(transaction):
     """
@@ -1279,7 +1321,6 @@ def event_type_delete(transaction):
 
 
 # ------------------------- Event Topics -------------------------
-
 @hooks.before("Event Topics > Event Topics Collection > List All Event Topics")
 def event_topic_get_list(transaction):
     """
@@ -1343,7 +1384,6 @@ def event_topic_delete(transaction):
 
 
 # ------------------------- Event Sub Topics -------------------------
-
 @hooks.before("Event Sub Topics > Event Sub Topics Collection > List All Event Sub Topics")
 def event_sub_topic_get_list(transaction):
     """
@@ -1409,8 +1449,6 @@ def event_sub_topic_delete(transaction):
         db.session.commit()
 
 # ------------------------- Ticket Fees -------------------------
-
-
 @hooks.before("Ticket Fees > Ticket Fees Collection > List Ticket Fees")
 def ticket_fees_get_list(transaction):
     """
