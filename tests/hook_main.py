@@ -28,6 +28,7 @@ from app.factories.event_invoice import EventInvoiceFactory
 from app.factories.event_sub_topic import EventSubTopicFactory
 from app.factories.sponsor import SponsorFactory
 from app.factories.speakers_call import SpeakersCallFactory
+from app.factories.tax import TaxFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -710,16 +711,6 @@ def sponsor_delete(transaction):
 
 # ------------------------- Tax -------------------------
 
-@hooks.before("Tax > Tax Collection > List All Tax Records")
-def tax_get_list(transaction):
-    """
-    GET /events/1/tax
-    :param transaction:
-    :return:
-    """
-    transaction['skip'] = True
-
-
 @hooks.before("Tax > Tax Collection > Create Tax")
 def tax_post(transaction):
     """
@@ -727,7 +718,10 @@ def tax_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 @hooks.before("Tax > Tax Details > Tax Details")
@@ -737,7 +731,10 @@ def tax_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        tax = TaxFactory()
+        db.session.add(tax)
+        db.session.commit()
 
 
 @hooks.before("Tax > Tax Details > Update Tax")
@@ -747,7 +744,10 @@ def tax_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        tax = TaxFactory()
+        db.session.add(tax)
+        db.session.commit()
 
 
 @hooks.before("Tax > Tax Details > Delete Tax")
@@ -757,7 +757,10 @@ def tax_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        tax = TaxFactory()
+        db.session.add(tax)
+        db.session.commit()
 
 
 # ------------------------- Tickets -------------------------
