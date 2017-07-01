@@ -27,14 +27,15 @@ class TicketSchema(Schema):
         if 'id' in original_data['data']:
             ticket = Ticket.query.filter_by(id=original_data['data']['id']).one()
 
-            if 'starts_at' not in data:
-                data['starts_at'] = ticket.starts_at
+            if 'sales_starts_at' not in data:
+                data['sales_starts_at'] = ticket.sales_starts_at
 
-            if 'ends_at' not in data:
-                data['ends_at'] = ticket.ends_at
+            if 'sales_ends_at' not in data:
+                data['sales_ends_at'] = ticket.sales_ends_at
 
-        if data['starts_at'] >= data['ends_at']:
-            raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at")
+        if data['sales_starts_at'] >= data['sales_ends_at']:
+            raise UnprocessableEntity({'pointer': '/data/attributes/sales-ends-at'},
+                                      "sales-ends-at should be after sales-starts-at")
 
     @validates_schema
     def validate_order_quantity(self, data):
