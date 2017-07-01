@@ -1148,7 +1148,7 @@ These endpoints help you to create the basic event structure. To add other parts
 | `ticket-url` | The ticketing URL of the event | string | - |
 | `code-of-conduct` | Event's code of conduct | string | - |
 | `is-ticketing-enabled` | Does the event use Open Event ticketing system | boolean (default: `true`) | - |
-| `tumbnail-image-url` | URL of the uploaded thumbnail | string | - |
+| `thumbnail-image-url` | URL of the uploaded thumbnail | string | - |
 | `large-image-url` | URL of the large uploaded banner image | string | - |
 | `original-image-url` | URL of the original image | string | - |
 | `icon-image-url` | URL of the icon image | string | - |
@@ -1166,6 +1166,7 @@ These endpoints help you to create the basic event structure. To add other parts
 | `bank-details`  | - | string | - |
 | `onsite-details`  | - | string | - |
 | `is-sponsors-enabled`  | - | boolean (default: `false`) | - |
+| `identifier`  | - | string | - |
 
 ## Events Collection [/v1/events{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -3279,7 +3280,7 @@ Data related to all the session types (such as talks, workshops, lightning talks
 | Parameter | Description | Type | Required |
 |:----------|-------------|------|----------|
 | `name`  | Name of the Session Type | string | **yes** |
-| `length` | Length of the Session Type | string | - |
+| `length` | Length of the Session Type | string | 00:30 |
 
 ## Session Type Collection [/v1/events/{event_identifier}/session-types{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -3311,25 +3312,25 @@ Get a list of Session Types.
               "relationships": {
                 "event": {
                   "links": {
-                    "self": "/v1/session-types/22/relationships/event",
-                    "related": "/v1/session-types/22/event"
+                    "self": "/v1/session-types/1/relationships/event",
+                    "related": "/v1/session-types/1/event"
                   }
                 },
                 "sessions": {
                   "links": {
-                    "self": "/v1/session-types/22/relationships/sessions",
-                    "related": "/v1/session-types/22/sessions"
+                    "self": "/v1/session-types/1/relationships/sessions",
+                    "related": "/v1/session-types/1/sessions"
                   }
                 }
               },
               "attributes": {
                 "name": "Workshop",
-                "length": "1:00:00"
+                "length": "00:30"
               },
               "type": "session-type",
-              "id": "22",
+              "id": "1",
               "links": {
-                "self": "/v1/session-types/22"
+                "self": "/v1/session-types/1"
               }
             }
           ],
@@ -3357,7 +3358,7 @@ Create a new session type using an event_id.
               "data": {
                 "attributes": {
                   "name": "Workshop",
-                  "length": "1:00:00"
+                  "length": "00:30"
                 },
                 "type": "session-type"
               }
@@ -3371,32 +3372,32 @@ Create a new session type using an event_id.
             "relationships": {
               "event": {
                 "links": {
-                  "self": "/v1/session-types/22/relationships/event",
-                  "related": "/v1/session-types/22/event"
+                  "self": "/v1/session-types/1/relationships/event",
+                  "related": "/v1/session-types/1/event"
                 }
               },
               "sessions": {
                 "links": {
-                  "self": "/v1/session-types/22/relationships/sessions",
-                  "related": "/v1/session-types/22/sessions"
+                  "self": "/v1/session-types/1/relationships/sessions",
+                  "related": "/v1/session-types/1/sessions"
                 }
               }
             },
             "attributes": {
               "name": "Workshop",
-              "length": "1:00:00"
+              "length": "00:30"
             },
             "type": "session-type",
-            "id": "22",
+            "id": "1",
             "links": {
-              "self": "/v1/session-types/22"
+              "self": "/v1/session-types/1"
             }
           },
           "jsonapi": {
             "version": "1.0"
           },
           "links": {
-            "self": "/v1/session-types/22"
+            "self": "/v1/session-types/1"
           }
         }
 
@@ -3423,20 +3424,20 @@ Get a single session type.
             "relationships": {
               "event": {
                 "links": {
-                  "self": "/v1/session-types/22/relationships/event",
-                  "related": "/v1/session-types/22/event"
+                  "self": "/v1/session-types/1/relationships/event",
+                  "related": "/v1/session-types/1/event"
                 }
               },
               "sessions": {
                 "links": {
-                  "self": "/v1/session-types/22/relationships/sessions",
-                  "related": "/v1/session-types/22/sessions"
+                  "self": "/v1/session-types/1/relationships/sessions",
+                  "related": "/v1/session-types/1/sessions"
                 }
               }
             },
             "attributes": {
               "name": "Workshop",
-              "length": "1:00:00"
+              "length": "00:30"
             },
             "type": "session-type",
             "id": "1",
@@ -3469,11 +3470,11 @@ Update a single session type by `id`.
             {
               "data": {
                 "attributes": {
-                  "name": "Workshop",
-                  "length": "1:00:00"
+                  "name": "Workshop 2",
+                  "length": "01:30"
                 },
                 "type": "session-type",
-                "id": "22"
+                "id": "1"
               }
             }
 
@@ -3484,32 +3485,32 @@ Update a single session type by `id`.
             "relationships": {
               "event": {
                 "links": {
-                  "self": "/v1/session-types/22/relationships/event",
-                  "related": "/v1/session-types/22/event"
+                  "self": "/v1/session-types/1/relationships/event",
+                  "related": "/v1/session-types/1/event"
                 }
               },
               "sessions": {
                 "links": {
-                  "self": "/v1/session-types/22/relationships/sessions",
-                  "related": "/v1/session-types/22/sessions"
+                  "self": "/v1/session-types/1/relationships/sessions",
+                  "related": "/v1/session-types/1/sessions"
                 }
               }
             },
             "attributes": {
-              "name": "Workshop",
-              "length": "1:00:00"
+              "name": "Workshop 2",
+              "length": "01:30"
             },
             "type": "session-type",
-            "id": "21",
+            "id": "1",
             "links": {
-              "self": "/v1/session-types/22"
+              "self": "/v1/session-types/1"
             }
           },
           "jsonapi": {
             "version": "1.0"
           },
           "links": {
-            "self": "/v1/session-types/22"
+            "self": "/v1/session-types/1"
           }
         }
 

@@ -32,6 +32,7 @@ from app.factories.tax import TaxFactory
 from app.factories.session import SessionFactory
 from app.factories.ticket import TicketFactory
 from app.factories.attendee import AttendeeFactory
+from app.factories.session_type import SessionTypeFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -474,7 +475,10 @@ def session_type_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        session_type = SessionTypeFactory()
+        db.session.add(session_type)
+        db.session.commit()
 
 
 @hooks.before("Session Type > Session Type Collection > Create Session Type")
@@ -484,7 +488,10 @@ def session_type_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 @hooks.before("Session Type > Session Type Details > Session Type Details")
@@ -494,7 +501,10 @@ def session_type_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        session_type = SessionTypeFactory()
+        db.session.add(session_type)
+        db.session.commit()
 
 
 @hooks.before("Session Type > Session Type Details > Update Session Type")
@@ -504,7 +514,10 @@ def session_type_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        session_type = SessionTypeFactory()
+        db.session.add(session_type)
+        db.session.commit()
 
 
 @hooks.before("Session Type > Session Type Details > Delete Session Type")
@@ -514,7 +527,10 @@ def session_type_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        session_type = SessionTypeFactory()
+        db.session.add(session_type)
+        db.session.commit()
 
 
 # ------------------------- Social Links -------------------------
