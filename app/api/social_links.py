@@ -65,7 +65,6 @@ class SocialLinkList(ResourceList):
         if view_kwargs.get('event_id'):
             event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
             data['event_id'] = event.id
-
         elif view_kwargs.get('event_identifier'):
             event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'identifier')
             data['event_id'] = event.id
