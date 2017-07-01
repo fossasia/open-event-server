@@ -33,9 +33,9 @@ class Session(db.Model):
     session_type_id = db.Column(db.Integer, db.ForeignKey('session_types.id', ondelete='CASCADE'))
     level = db.Column(db.String)
 
-    slides = db.Column(db.String)
-    video = db.Column(db.String)
-    audio = db.Column(db.String)
+    slides_url = db.Column(db.String)
+    video_url = db.Column(db.String)
+    audio_url = db.Column(db.String)
     signup_url = db.Column(db.String)
 
     event_id = db.Column(
@@ -61,15 +61,16 @@ class Session(db.Model):
                  speakers=None,
                  event_id=None,
                  state="pending",
-                 slides=None,
-                 video=None,
-                 audio=None,
+                 slides_url=None,
+                 video_url=None,
+                 audio_url=None,
                  signup_url=None,
                  session_type=None,
                  level=None,
                  created_at=None,
                  is_mail_sent=False,
-                 deleted_at=None):
+                 deleted_at=None,
+                 submitted_at=None):
 
         if speakers is None:
             speakers = []
@@ -87,15 +88,16 @@ class Session(db.Model):
         self.speakers = speakers
         self.event_id = event_id
         self.state = state
-        self.slides = slides
-        self.video = video
-        self.audio = audio
+        self.slides_url = slides_url
+        self.video_url = video_url
+        self.audio_url = audio_url
         self.signup_url = signup_url
         self.session_type = session_type
         self.level = level
         self.created_at = created_at
         self.deleted_at = deleted_at
         self.is_mail_sent = is_mail_sent
+        self.submitted_at = submitted_at
 
     @staticmethod
     def get_service_name():

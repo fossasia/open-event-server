@@ -2988,22 +2988,22 @@ Create a new session using an event_id **(Minimum Co-Organizer Access)**
               "data": {
                 "attributes": {
                   "title": "Micropython Session",
-                  "subtitle": null,
+                  "subtitle": "Title",
                   "level": 1,
-                  "short-abstract": null,
-                  "long-abstract": null,
-                  "comments": null,
+                  "short-abstract": "Short Abstract",
+                  "long-abstract": "The Long Abstract",
+                  "comments": "Comment",
                   "starts-at": "2017-06-01T10:00:00.500127+00:00",
                   "ends-at": "2017-06-01T11:00:00.500127+00:00",
                   "language": "English",
-                  "slides-url": null,
-                  "videos-url": null,
-                  "audios-url": null,
-                  "signup-url": null,
-                  "state": null,
+                  "slides-url": "http://example.com/example",
+                  "video-url": "http://example.com/example",
+                  "audio-url": "http://example.com/example",
+                  "signup-url": "http://example.com/example",
+                  "state": "accepted",
                   "created-at": "2017-05-01T01:24:47.500127+00:00",
                   "deleted-at": null,
-                  "submitted-at": null,
+                  "submitted-at": "2017-05-01T01:24:47.500127+00:00",
                   "is-mail-sent": false
                 },
                 "type": "session"
@@ -3052,8 +3052,8 @@ Create a new session using an event_id **(Minimum Co-Organizer Access)**
               "ends-at": "2017-06-01T11:00:00.500127+00:00",
               "language": "English",
               "slides-url": null,
-              "videos-url": null,
-              "audios-url": null,
+              "video-url": null,
+              "audio-url": null,
               "signup-url": null,
               "state": null,
               "created-at": "2017-05-01T01:24:47.500127+00:00",
@@ -3098,26 +3098,26 @@ Get a single session. **(Public)**
             "relationships": {
               "event": {
                 "links": {
-                  "self": "/v1/sessions/21/relationships/event",
-                  "related": "/v1/sessions/21/event"
+                  "self": "/v1/sessions/1/relationships/event",
+                  "related": "/v1/sessions/1/event"
                 }
               },
               "track": {
                 "links": {
-                  "self": "/v1/sessions/21/relationships/track",
-                  "related": "/v1/sessions/21/track"
+                  "self": "/v1/sessions/1/relationships/track",
+                  "related": "/v1/sessions/1/track"
                 }
               },
               "microlocation": {
                 "links": {
-                  "self": "/v1/sessions/21/relationships/microlocation",
-                  "related": "/v1/sessions/21/microlocation"
+                  "self": "/v1/sessions/1/relationships/microlocation",
+                  "related": "/v1/sessions/1/microlocation"
                 }
               },
               "session-type": {
                 "links": {
-                  "self": "/v1/sessions/21/relationships/session-type",
-                  "related": "/v1/sessions/21/session-type"
+                  "self": "/v1/sessions/1/relationships/session-type",
+                  "related": "/v1/sessions/1/session-type"
                 }
               }
             },
@@ -3132,8 +3132,8 @@ Get a single session. **(Public)**
               "ends-at": "2017-06-01T11:00:00.500127+00:00",
               "language": "English",
               "slides-url": null,
-              "videos-url": null,
-              "audios-url": null,
+              "video-url": null,
+              "audio-url": null,
               "signup-url": null,
               "state": null,
               "created-at": "2017-05-01T01:24:47.500127+00:00",
@@ -3176,26 +3176,14 @@ Update a single session by `id`. **(Minimum Co-Organizer Access)**
               "data": {
                 "attributes": {
                   "title": "Micropython Session",
-                  "subtitle": null,
                   "level": 1,
-                  "short-abstract": null,
-                  "long-abstract": null,
-                  "comments": null,
                   "starts-at": "2017-06-01T10:00:00.500127+00:00",
                   "ends-at": "2017-06-01T11:00:00.500127+00:00",
-                  "language": "English",
-                  "slides-url": null,
-                  "videos-url": null,
-                  "audios-url": null,
-                  "signup-url": null,
-                  "state": null,
                   "created-at": "2017-05-01T01:24:47.500127+00:00",
-                  "deleted-at": null,
-                  "submitted-at": null,
                   "is-mail-sent": false
                 },
                 "type": "session",
-                "id": "21"
+                "id": "1"
               }
             }
 
@@ -3206,26 +3194,26 @@ Update a single session by `id`. **(Minimum Co-Organizer Access)**
             "relationships": {
               "event": {
                 "links": {
-                  "self": "/v1/sessions/21/relationships/event",
-                  "related": "/v1/sessions/21/event"
+                  "self": "/v1/sessions/1/relationships/event",
+                  "related": "/v1/sessions/1/event"
                 }
               },
               "track": {
                 "links": {
-                  "self": "/v1/sessions/21/relationships/track",
-                  "related": "/v1/sessions/21/track"
+                  "self": "/v1/sessions/1/relationships/track",
+                  "related": "/v1/sessions/1/track"
                 }
               },
               "microlocation": {
                 "links": {
-                  "self": "/v1/sessions/21/relationships/microlocation",
-                  "related": "/v1/sessions/21/microlocation"
+                  "self": "/v1/sessions/1/relationships/microlocation",
+                  "related": "/v1/sessions/1/microlocation"
                 }
               },
               "session-type": {
                 "links": {
-                  "self": "/v1/sessions/21/relationships/session-type",
-                  "related": "/v1/sessions/21/session-type"
+                  "self": "/v1/sessions/1/relationships/session-type",
+                  "related": "/v1/sessions/1/session-type"
                 }
               }
             },
@@ -3240,8 +3228,8 @@ Update a single session by `id`. **(Minimum Co-Organizer Access)**
               "ends-at": "2017-06-01T11:00:00.500127+00:00",
               "language": "English",
               "slides-url": null,
-              "videos-url": null,
-              "audios-url": null,
+              "video-url": null,
+              "audio-url": null,
               "signup-url": null,
               "state": null,
               "created-at": "2017-05-01T01:24:47.500127+00:00",
@@ -3250,16 +3238,16 @@ Update a single session by `id`. **(Minimum Co-Organizer Access)**
               "is-mail-sent": false
             },
             "type": "session",
-            "id": "21",
+            "id": "1",
             "links": {
-              "self": "/v1/sessions/21"
+              "self": "/v1/sessions/1"
             }
           },
           "jsonapi": {
             "version": "1.0"
           },
           "links": {
-            "self": "/v1/sessions/21"
+            "self": "/v1/sessions/1"
           }
         }
 
