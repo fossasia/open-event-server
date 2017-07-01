@@ -12,12 +12,12 @@ from app.api.helpers.utilities import dasherize
 
 class AttendeeSchema(Schema):
     """
-    Api schema for Attendee Model
+    Api schema for Ticket Holder Model
     """
 
     class Meta:
         """
-        Meta class for Session Api Schema
+        Meta class for Attendee API Schema
         """
         type_ = 'attendee'
         self_view = 'v1.attendee_detail'
