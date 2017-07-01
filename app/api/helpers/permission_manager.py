@@ -114,14 +114,16 @@ def is_moderator(view, view_args, view_kwargs, *args, **kwargs):
         return view_kwargs(*view_args, **view_kwargs)
     return ForbiddenError({'source': ''}, 'Moderator Access is Required.').respond()
 
+
 @jwt_required
 def user_event(view, view_args, view_kwargs, *args, **kwargs):
     user = current_identity
     view_kwargs['user_id'] = user.id
     return view(*view_args, **view_kwargs)
 
+
 def accessible_role_based_events(view, view_args, view_kwargs, *args, **kwargs):
-    if 'POST' in request.method or  'withRole' in request.args:
+    if 'POST' in request.method or 'withRole' in request.args:
         _jwt_required(app.config['JWT_DEFAULT_REALM'])
         user = current_identity
 
@@ -156,6 +158,9 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
     """
     methods = 'GET,POST,DELETE,PATCH'
 
+    if 'id' in kwargs:
+        view_kwargs['id'] = kwargs['id']
+
     if 'methods' in kwargs:
         methods = kwargs['methods']
 
@@ -188,7 +193,8 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
             if 'fetch_key_model' in kwargs:
                 fetch_key_model = kwargs['fetch_key_model']
             try:
-                data = model.query.filter(getattr(model, fetch_key_model) == view_kwargs[fetch_key_url]).one()
+                data = model.query.filter(getattr(model, fetch_key_model)
+                                          == view_kwargs[fetch_key_url]).one()
             except NoResultFound, e:
                 return NotFoundError({'source': ''}, 'Object not found.').respond()
 
@@ -200,4 +206,3 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         return permissions[args[0]](view, view_args, view_kwargs, *args, **kwargs)
     else:
         return ForbiddenError({'source': ''}, 'Access forbidden').respond()
-
