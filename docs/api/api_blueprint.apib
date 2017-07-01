@@ -869,7 +869,6 @@ Event Sub Topics for Events. Can only be edited and entered by admins.
 |:----------|-------------|------|----------|
 | `name`  | Name of the event sub topic | string | - |
 | `slug` | Slug of the event sub topic | string | - |
-| `event_topic_id` | ID of event topic for which event subtopic is related | Integer | - |
 
 ## Event Sub Topics Collection [/v1/event-topics/{event_topic_id}/event-sub-topics{?page%5bsize%5d,page%5bnumber%5d,sort}]
 + Parameters
@@ -4835,8 +4834,8 @@ Related to ticket holders(attendees) of an event (free, paid, donation) to the e
 | `city` | City of the Attendee | integer | - |
 | `state` | State of the Attendee | string | - |
 | `country` | Country of the Attendee | string | - |
-| `is_checked_in` | If the attendee is checked in | boolean | - |
-| `pdf_url` | pdf url of the Attendee | url | - |
+| `is-checked-in` | If the attendee is checked in | boolean | - |
+| `pdf-url` | pdf url of the Attendee | url | - |
 
 ## Attendees Collection [/v1/attendees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -4920,9 +4919,9 @@ Create a new attendee.
                     "city": "example",
                     "state": "example",
                     "country": "IN",
-                    "ticket_id": "12",
-                    "is_checked_in": "false",
-                    "pdf_url": "http://example.com"
+                    "ticket-id": "12",
+                    "is-checked_in": "false",
+                    "pdf-url": "http://example.com"
                 },
                 "type": "attendee"
               }
@@ -5043,9 +5042,9 @@ Update a single attendee by `id`.
                     "city": "example",
                     "state": "example",
                     "country": "IN",
-                    "ticket_id": "12",
-                    "is_checked_in": "true",
-                    "pdf_url": "http://example.com"
+                    "ticket-id": "12",
+                    "is-checked_in": "true",
+                    "pdf-url": "http://example.com"
                 },
                 "type": "attendee",
                 "id": "1"
@@ -5118,8 +5117,8 @@ Ticket Fees basically stores the fee on a ticket
 | Parameter | Description | Type | Required |
 |:----------|-------------|------|----------|
 | `currency`  | Currency of the ticket | string | - |
-| `service_fee` | Service fee the ticket  | float | - |
-| `maximum_fee` | Maximum fee the ticket  | float | - |
+| `service-fee` | Service fee the ticket  | float | - |
+| `maximum-fee` | Maximum fee the ticket  | float | - |
 
 ## Ticket Fees Collection [/v1/ticket-fees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -5734,7 +5733,7 @@ Update a single notification with `id`.
                   "title": "example1",
                   "message": "example1",
                   "action": "example1",
-                  "is_read": "true"
+                  "is-read": "true"
                 },
                 "type": "notification",
                 "id": "1"
