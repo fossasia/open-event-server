@@ -33,6 +33,7 @@ from app.factories.tax import TaxFactory
 from app.factories.session import SessionFactory
 from app.factories.ticket import TicketFactory
 from app.factories.attendee import AttendeeFactory
+from app.factories.track import TrackFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -924,7 +925,10 @@ def track_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        track = TrackFactory()
+        db.session.add(track)
+        db.session.commit()
 
 
 @hooks.before("Tracks > Tracks Collection > Create Track")
@@ -934,7 +938,10 @@ def track_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 @hooks.before("Tracks > Track Detail > Get Details")
@@ -944,7 +951,10 @@ def track_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        track = TrackFactory()
+        db.session.add(track)
+        db.session.commit()
 
 
 @hooks.before("Tracks > Track Detail > Update Track")
@@ -954,7 +964,10 @@ def track_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        track = TrackFactory()
+        db.session.add(track)
+        db.session.commit()
 
 
 @hooks.before("Tracks > Track Detail > Delete Track")
@@ -964,7 +977,10 @@ def track_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        track = TrackFactory()
+        db.session.add(track)
+        db.session.commit()
 
 
 # ------------------------- Notifications -------------------------
