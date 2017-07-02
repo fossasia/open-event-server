@@ -17,6 +17,7 @@ from app.factories.user import UserFactory
 from app.factories.notification import NotificationFactory
 from app.factories.event import EventFactoryBasic
 from app.factories.social_link import SocialLinkFactory
+from app.factories.microlocation import MicrolocationFactory
 from app.factories.image_size import ImageSizeFactory
 from app.factories.page import PageFactory
 from app.factories.event_copyright import EventCopyrightFactory
@@ -359,7 +360,10 @@ def microlocation_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        microlocation = MicrolocationFactory()
+        db.session.add(microlocation)
+        db.session.commit()
 
 
 @hooks.before("Microlocations > Microlocation Collection > Create Microlocation")
@@ -369,7 +373,10 @@ def microlocation_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 @hooks.before("Microlocations > Microlocation Details > Mictolocation Details")
@@ -379,7 +386,10 @@ def microlation_get_detail(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        microlocation = MicrolocationFactory()
+        db.session.add(microlocation)
+        db.session.commit()
 
 
 @hooks.before("Microlocations > Microlocation Details > Update Microlocation")
@@ -389,7 +399,10 @@ def microlocation_patch(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        microlocation = MicrolocationFactory()
+        db.session.add(microlocation)
+        db.session.commit()
 
 
 @hooks.before("Microlocations > Microlocation Details > Delete Microlocation")
@@ -399,7 +412,10 @@ def microlocation_delete(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        microlocation = MicrolocationFactory()
+        db.session.add(microlocation)
+        db.session.commit()
 
 
 # ------------------------- Sessions -------------------------
