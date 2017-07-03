@@ -46,7 +46,7 @@ class SessionTypeSchema(Schema):
                          related_view_kwargs={'session_type_id': '<id>'},
                          schema='EventSchema',
                          type_='event')
-    sessions = Relationship(attribute='session',
+    sessions = Relationship(attribute='sessions',
                             self_view='v1.session_type_sessions',
                             self_view_kwargs={'id': '<id>'},
                             related_view='v1.session_list',

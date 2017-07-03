@@ -8,8 +8,8 @@ class SessionType(db.Model):
     length = db.Column(db.String, nullable=False)
     event_id = db.Column(
         db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-    events = db.relationship("Event", backref="session_type")
-    session = db.relationship('Session', backref="session_type")
+    event = db.relationship("Event", backref="session_type", foreign_keys=[event_id])
+    sessions = db.relationship('Session', backref="session_type")
 
     def __init__(self, name=None, length=None, event_id=None):
         self.name = name
