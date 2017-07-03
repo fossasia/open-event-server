@@ -98,7 +98,7 @@ class DiscountCodeList(ResourceList):
                 raise ObjectNotFound({'parameter': 'event_identifier'},
                                      "Event: {} not found".format(view_kwargs['event_identifier']))
             else:
-                query_ = query_.join(Event).filter(Event.identifier == event.id)
+                query_ = query_.join(Event).filter(Event.id == event.id)
         return query_
 
     def before_create_object(self, data, view_kwargs):
