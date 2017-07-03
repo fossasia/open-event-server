@@ -2631,9 +2631,9 @@ Get a list of Microlocations.
               },
               "attributes": {
                 "name": "microlocation-name",
-                "latitude": null,
-                "longitude": null,
-                "floor": 2,
+                "latitude": "45.00",
+                "longitude": "45.00",
+                "floor": "2",
                 "room": "room1"
               },
               "type": "microlocation",
@@ -2667,9 +2667,9 @@ Create a new microlocation using an event_id.
               "data": {
                 "attributes": {
                   "name": "microlocation-name",
-                  "latitude": null,
-                  "longitude": null,
-                  "floor": 2,
+                  "latitude": "45.00",
+                  "longitude": "45.00",
+                  "floor": "2",
                   "room": "room1"
                 },
                 "type": "microlocation"
@@ -2697,9 +2697,9 @@ Create a new microlocation using an event_id.
             },
             "attributes": {
               "name": "microlocation-name",
-              "latitude": null,
-              "longitude": null,
-              "floor": 2,
+              "latitude": "45.00",
+              "longitude": "45.00",
+              "floor": "2",
               "room": "room1"
             },
             "type": "microlocation",
@@ -2753,9 +2753,9 @@ Get a single microlocation.
             },
             "attributes": {
               "name": "microlocation-name",
-              "latitude": null,
-              "longitude": null,
-              "floor": 2,
+              "latitude": "45.00",
+              "longitude": "45.00",
+              "floor": "2",
               "room": "room1"
             },
             "type": "microlocation",
@@ -2789,11 +2789,11 @@ Update a single microlocation by `id`.
             {
               "data": {
                 "attributes": {
-                  "name": "microlocation-name",
-                  "latitude": null,
-                  "longitude": null,
-                  "floor": 2,
-                  "room": "room1"
+                  "name": "microlocation-name1",
+                  "latitude": "46.00",
+                  "longitude": "46.00",
+                  "floor": "21",
+                  "room": "room11"
                 },
                 "type": "microlocation",
                 "id": "1"
@@ -2819,11 +2819,11 @@ Update a single microlocation by `id`.
               }
             },
             "attributes": {
-              "name": "microlocation-name",
-              "latitude": null,
-              "longitude": null,
-              "floor": 2,
-              "room": "room1"
+              "name": "microlocation-name1",
+              "latitude": "46.00",
+              "longitude": "46.00",
+              "floor": "21",
+              "room": "room11"
             },
             "type": "microlocation",
             "id": "1",
@@ -5492,22 +5492,39 @@ Update a single track by `id`.
 + Response 200 (application/vnd.api+json)
 
         {
-          "data": {
-            "attributes": {
-                "name" : "Main Track",
-                "description": "description",
-                "color": "#a04b4b",
-                "font-color":"#ffffff"
-            },
-            "type": "track",
-            "id": "1",
-            "links": {
-              "self": "/v1/tracks/1"
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/tracks/1/relationships/event",
+                            "related": "/v1/tracks/1/event"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/tracks/1/relationships/sessions",
+                            "related": "/v1/tracks/1/sessions"
+                        }
+                    }
+                },
+                "attributes": {
+                    "color": "#a04b4b",
+                    "description": "description",
+                    "name": "Main Track",
+                    "font-color": "#ffffff"
+                },
+                "type": "track",
+                "id": "1",
+                "links": {
+                    "self": "/v1/tracks/1"
+                }
             },
             "jsonapi": {
                 "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/tracks/1"
             }
-          }
         }
 
 ### Delete Track [DELETE]
