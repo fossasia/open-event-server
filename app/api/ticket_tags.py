@@ -63,11 +63,18 @@ class TicketTagList(ResourceList):
         if view_kwargs.get('ticket_id'):
             ticket = self.session.query(Ticket).filter_by(id=view_kwargs['ticket_id']).one()
             data['event_id'] = ticket.event_id
+        elif view_kwargs.get('event_id'):
+            event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
+            data['event_id']=event.id
+        elif view_kwargs.get('event_identifier'):
+            event = self.session.query(Event).filter_by(id=view_kwargs['event_identifier']).one()
+            data['event_id']=event.id
 
     def after_create_object(self, obj, data, view_kwargs):
-        ticket = self.session.query(Ticket).filter_by(id=view_kwargs['ticket_id']).one()
-        ticket.tags.append(obj)
-        self.session.commit()
+        if view_kwargs.get('ticket_id'):
+            ticket = self.session.query(Ticket).filter_by(id=view_kwargs['ticket_id']).one()
+            ticket.tags.append(obj)
+            self.session.commit()
 
     view_kwargs = True
     decorators = (jwt_required,)
