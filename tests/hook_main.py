@@ -871,6 +871,72 @@ def ticket_delete(transaction):
         db.session.commit()
 
 
+# ------------------------- Ticket Tags -------------------------
+@hooks.before("Ticket Tags > Ticket Tags Collection > List All Ticket Tags")
+def ticket_tag_get_list(transaction):
+    """
+    GET /tickets/1/ticket-tags
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket_tag = TicketTagFactory()
+        db.session.add(ticket_tag)
+        db.session.commit()
+
+
+@hooks.before("Ticket Tags > Ticket Tags Collection > Create Ticket Tag")
+def ticket_tag_post(transaction):
+    """
+    POST /tickets/1/ticket-tags
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        tickets = TicketFactory()
+        db.session.add(tickets)
+        db.session.commit()
+
+
+@hooks.before("Ticket Tags > Ticket Tag Details > Ticket Tag Details")
+def ticket_tag_get_detail(transaction):
+    """
+    GET /ticket-tags/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket_tag = TicketTagFactory()
+        db.session.add(ticket_tag)
+        db.session.commit()
+
+
+@hooks.before("Ticket Tags > Ticket Tag Details > Update Ticket Tag")
+def ticket_tag_patch(transaction):
+    """
+    PATCH /ticket-tags/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket_tag = TicketTagFactory()
+        db.session.add(ticket_tag)
+        db.session.commit()
+
+
+@hooks.before("Ticket Tags > Ticket Tag Details > Delete Ticket Tag")
+def ticket_tag_delete(transaction):
+    """
+    DELETE /ticket-tags/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket_tag = TicketTagFactory()
+        db.session.add(ticket_tag)
+        db.session.commit()
+
+
 # ---------------------- Attendees (Ticket Holder) ---------------------
 @hooks.before("Attendees > Attendees Collection > List All Attendees")
 def attendee_get_list(transaction):

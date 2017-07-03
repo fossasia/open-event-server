@@ -151,7 +151,7 @@ class TicketTag(db.Model):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref='ticket_tags')
 
-    def __init__(self, name, event_id):
+    def __init__(self, name=None, event_id=None):
         self.name = name
         self.event_id = event_id
 

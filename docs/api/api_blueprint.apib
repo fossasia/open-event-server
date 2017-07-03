@@ -4823,7 +4823,7 @@ Related to tickets and event.
     + ticket_id: 1 (string) - id of the ticket.
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
-    + sort (optional, string, `sales-starts-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Ticket Tags [GET]
@@ -4848,8 +4848,8 @@ Get a list of Tickets.
                     "relationships": {
                         "event": {
                             "links": {
-                                "self": "/v1/tickets/1/relationships/event",
-                                "related": "/v1/tickets/1/event"
+                                "self": "/v1/ticket-tags/1/relationships/event",
+                                "related": "/v1/ticket-tags/1/event"
                             }
                         },
                         "tickets": {
@@ -4894,7 +4894,7 @@ Create a new ticket tag using an ticket_id.
                 "attributes": {
                   "name": "ticket-tag-name"
                 },
-                "type": "ticket"
+                "type": "ticket-tag"
               }
             }
 
@@ -4906,8 +4906,8 @@ Create a new ticket tag using an ticket_id.
                 "relationships": {
                   "event": {
                     "links": {
-                      "self": "/v1/tickets/1/relationships/event",
-                      "related": "/v1/tickets/1/event"
+                      "self": "/v1/ticket-tags/1/relationships/event",
+                      "related": "/v1/ticket-tags/1/event"
                     }
                   },
                   "tickets": {
@@ -4957,8 +4957,8 @@ Get a single ticket tag.
                 "relationships": {
                   "event": {
                     "links": {
-                      "self": "/v1/tickets/1/relationships/event",
-                      "related": "/v1/tickets/1/event"
+                      "self": "/v1/ticket-tags/1/relationships/event",
+                      "related": "/v1/ticket-tags/1/event"
                     }
                   },
                   "tickets": {
@@ -5016,8 +5016,8 @@ Update a single ticket by `id`.
                 "relationships": {
                   "event": {
                     "links": {
-                      "self": "/v1/tickets/1/relationships/event",
-                      "related": "/v1/tickets/1/event"
+                      "self": "/v1/ticket-tags/1/relationships/event",
+                      "related": "/v1/ticket-tags/1/event"
                     }
                   },
                   "tickets": {
