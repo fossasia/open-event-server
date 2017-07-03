@@ -56,6 +56,7 @@ class Config(object):
     DATABASE_QUERY_TIMEOUT = 0.1
     SOFT_DELETE = True
     PROPOGATE_ERROR = False
+    DASHERIZE_API = True
 
     if not SQLALCHEMY_DATABASE_URI:
         print('`DATABASE_URL` either not exported or empty')
