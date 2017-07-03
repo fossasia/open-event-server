@@ -51,12 +51,29 @@ class TicketTagList(ResourceList):
     def query(self, view_kwargs):
         query_ = self.session.query(TicketTag)
         if view_kwargs.get('ticket_id'):
-            ticket = self.session.query(Ticket).filter_by(id=view_kwargs['ticket_id']).one()
-            query_ = query_.join(ticket_tags_table).filter_by(ticket_id=ticket.id)
-        if view_kwargs.get('id'):
-            query_ = query_.join(Event).filter(Event.id == view_kwargs['id'])
-        elif view_kwargs.get('identifier'):
-            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
+            try:
+                ticket = self.session.query(Ticket).filter_by(id=view_kwargs['ticket_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'ticket_id'},
+                                     "Ticket: {} not found".format(view_kwargs['ticket_id']))
+            else:
+                query_ = query_.join(ticket_tags_table).filter_by(ticket_id=ticket.id)
+        if view_kwargs.get('event_id'):
+            try:
+                event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_id'},
+                                     "Event: {} not found".format(view_kwargs['event_id']))
+            else:
+                query_ = query_.join(Event).filter(Event.id == event.id)
+        elif view_kwargs.get('event_identifier'):
+            try:
+                event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_identifier'},
+                                     "Event: {} not found".format(view_kwargs['event_identifier']))
+            else:
+                query_ = query_.join(Event).filter(Event.id == event.id)
         return query_
 
     def before_create_object(self, data, view_kwargs):
