@@ -70,6 +70,7 @@ class Event(db.Model):
     speaker = db.relationship('Speaker', backref="event")
     sponsor = db.relationship('Sponsor', backref="event")
     tickets = db.relationship('Ticket', backref="event_")
+    tags = db.relationship('TicketTag', backref='events')
     users = db.relationship("EventsUsers", backref="event")
     roles = db.relationship("UsersEventsRoles", backref="event")
     role_invites = db.relationship('RoleInvite', back_populates='event')
