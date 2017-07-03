@@ -11,6 +11,7 @@ from app.models.user import User
 from app.models.notification import Notification
 from app.models.event_invoice import EventInvoice
 from app.api.helpers.permissions import is_admin, is_user_itself, jwt_required
+from app.api.helpers.exceptions import ConflictException
 
 
 class UserSchema(Schema):
@@ -72,10 +73,15 @@ class UserList(ResourceList):
     """
     List and create Users
     """
+    def before_create_object(self, data, view_kwargs):
+        if db.session.query(User.id).filter_by(email=data['email']).scalar() is not None:
+            raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")
+
     decorators = (api.has_permission('is_admin', methods="GET"),)
     schema = UserSchema
     data_layer = {'session': db.session,
-                  'model': User}
+                  'model': User,
+                  'methods': {'before_create_object': before_create_object}}
 
 
 class UserDetail(ResourceDetail):
