@@ -27,7 +27,7 @@ class TicketTagSchema(Schema):
 
     id = fields.Str(dump_only=True)
     name = fields.Str()
-    ticket = Relationship(attribute='ticket',
+    tickets = Relationship(attribute='tickets',
                           self_view='v1.ticket_tag_ticket',
                           self_view_kwargs={'id': '<id>'},
                           related_view='v1.ticket_list',
@@ -53,8 +53,8 @@ class TicketTagList(ResourceList):
         if view_kwargs.get('ticket_id'):
             ticket = self.session.query(Ticket).filter_by(id=view_kwargs['ticket_id']).one()
             query_ = query_.join(ticket_tags_table).filter_by(ticket_id=ticket.id)
-        if view_kwargs.get('id'):
-            query_ = query_.join(Event).filter(Event.id == view_kwargs['id'])
+        if view_kwargs.get('event_id'):
+            query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
         elif view_kwargs.get('identifier'):
             query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
         return query_

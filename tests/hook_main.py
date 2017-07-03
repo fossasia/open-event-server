@@ -35,6 +35,7 @@ from app.factories.ticket import TicketFactory
 from app.factories.attendee import AttendeeFactory
 from app.factories.session_type import SessionTypeFactory
 from app.factories.track import TrackFactory
+from app.factories.ticket_tag import TicketTagFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"

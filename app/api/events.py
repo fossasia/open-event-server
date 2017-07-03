@@ -22,6 +22,7 @@ from app.models.session_type import SessionType
 from app.models.discount_code import DiscountCode
 from app.models.event_invoice import EventInvoice
 from app.models.speakers_call import SpeakersCall
+from app.models.ticket import TicketTag
 from app.models.user import User, ATTENDEE, ORGANIZER
 from app.models.users_events_role import UsersEventsRoles
 from app.models.role import Role
@@ -124,7 +125,7 @@ class EventSchema(Schema):
                            schema='TicketSchema',
                            many=True,
                            type_='ticket')
-    ticket_tags = Relationship(attribute='ticket_tag',
+    ticket_tags = Relationship(attribute='ticket_tags',
                                self_view='v1.event_ticket_tag',
                                self_view_kwargs={'id': '<id>'},
                                related_view='v1.ticket_tag_list',
@@ -384,10 +385,22 @@ class EventDetail(ResourceDetail):
                 ticket = self.session.query(Ticket).filter_by(id=view_kwargs['ticket_id']).one()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': 'ticket_id'},
-                                     "Speakers Call: {} not found".format(view_kwargs['ticket_id']))
+                                     "Ticket: {} not found".format(view_kwargs['ticket_id']))
             else:
                 if ticket.event_id is not None:
                     view_kwargs['id'] = ticket.event_id
+                else:
+                    view_kwargs['id'] = None
+
+        if view_kwargs.get('ticket_tag_id') is not None:
+            try:
+                ticket_tag = self.session.query(TicketTag).filter_by(id=view_kwargs['ticket_tag_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'ticket_tag_id'},
+                                     "Ticket tag: {} not found".format(view_kwargs['ticket_tag_id']))
+            else:
+                if ticket_tag.event_id is not None:
+                    view_kwargs['id'] = ticket_tag.event_id
                 else:
                     view_kwargs['id'] = None
 
