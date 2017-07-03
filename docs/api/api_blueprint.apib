@@ -4811,6 +4811,261 @@ Delete a single ticket.
           }
         }
 
+# Group Ticket Tags
+Related to tickets and event.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the ticket tag | string | **yes** |
+
+## Ticket Tags Collection [/v1/tickets/{ticket_id}/ticket-tags{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + ticket_id: 1 (string) - id of the ticket.
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `sales-starts-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List All Ticket Tags [GET]
+Get a list of Tickets.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "event": {
+                            "links": {
+                                "self": "/v1/tickets/1/relationships/event",
+                                "related": "/v1/tickets/1/event"
+                            }
+                        },
+                        "tickets": {
+                          "links": {
+                            "self": "/v1/ticket-tags/1/relationships/tickets",
+                            "related": "/v1/ticket-tags/1/tickets"
+                          }
+                        }
+                    },
+                    "attributes": {
+                        "name": "ticket-tag-name"
+                    },
+                    "type": "ticket-tag",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/ticket-tags/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/tickets/2/ticket-tags"
+            }
+        }
+
+
+### Create Ticket Tag [POST]
+Create a new ticket tag using an ticket_id.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "name": "ticket-tag-name"
+                },
+                "type": "ticket"
+              }
+            }
+
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                  "event": {
+                    "links": {
+                      "self": "/v1/tickets/1/relationships/event",
+                      "related": "/v1/tickets/1/event"
+                    }
+                  },
+                  "tickets": {
+                    "links": {
+                      "self": "/v1/ticket-tags/1/relationships/tickets",
+                      "related": "/v1/ticket-tags/1/tickets"
+                    }
+                  }
+                },
+                "attributes": {
+                    "name": "ticket-tag-name"
+                },
+                "type": "ticket-tag",
+                "id": "5",
+                "links": {
+                    "self": "/v1/ticket-tags/5"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/ticket-tags/5"
+            }
+        }
+
+
+## Ticket Tag Details [/v1/ticket-tags/{ticket_tag_id}]
++ Parameters
+    + ticket_tag_id: 1 (integer) - ID of the ticket tag in the form of an integer
+
+### Ticket Tag Details [GET]
+Get a single ticket tag.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                  "event": {
+                    "links": {
+                      "self": "/v1/tickets/1/relationships/event",
+                      "related": "/v1/tickets/1/event"
+                    }
+                  },
+                  "tickets": {
+                    "links": {
+                      "self": "/v1/ticket-tags/1/relationships/tickets",
+                      "related": "/v1/ticket-tags/1/tickets"
+                    }
+                  }
+                },
+                "attributes": {
+                    "name": "ticket-tag-name"
+                },
+                "type": "ticket-tag",
+                "id": "1",
+                "links": {
+                    "self": "/v1/ticket-tags/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/ticket-tags/1"
+            }
+        }
+
+
+### Update Ticket Tag [PATCH]
+Update a single ticket by `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "name": "ticket-tag-name"
+                },
+                "type": "ticket-tag",
+                "id": "1"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                  "event": {
+                    "links": {
+                      "self": "/v1/tickets/1/relationships/event",
+                      "related": "/v1/tickets/1/event"
+                    }
+                  },
+                  "tickets": {
+                    "links": {
+                      "self": "/v1/ticket-tags/1/relationships/tickets",
+                      "related": "/v1/ticket-tags/1/tickets"
+                    }
+                  }
+                },
+                "attributes": {
+                    "name": "ticket-name"
+                },
+                "type": "ticket-tag",
+                "id": "1",
+                "links": {
+                    "self": "/v1/ticket-tags/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/ticket-tags/1"
+            }
+        }
+
+### Delete Ticket Tag [DELETE]
+Delete a single ticket tag.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
 # Group Attendees
 Related to ticket holders(attendees) of an event (free, paid, donation) to the event.
 
