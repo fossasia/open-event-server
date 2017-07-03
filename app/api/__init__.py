@@ -56,8 +56,8 @@ api.route(TicketRelationship, 'ticket_event', '/tickets/<int:id>/relationships/e
 api.route(TicketRelationship, 'ticket_ticket_tag', '/tickets/<int:id>/relationships/ticket-tags')
 
 # ticket_tags
-api.route(TicketTagList, 'ticket_tag_list', '/tickets/<int:ticket_id>/ticket-tags', '/events/<int:id>/ticket-tags',
-          '/events/<identifier>/ticket-tags')
+api.route(TicketTagList, 'ticket_tag_list', '/tickets/<int:ticket_id>/ticket-tags',
+          '/events/<int:event_id>/ticket-tags', '/events/<event_identifier>/ticket-tags')
 api.route(TicketTagDetail, 'ticket_tag_detail', '/ticket-tags/<int:id>')
 api.route(TicketTagRelationship, 'ticket_tag_ticket', '/ticket-tags/<int:id>/relationships/ticket')
 api.route(TicketTagRelationship, 'ticket_tag_event', '/ticket-tags/<int:id>/relationships/event')
