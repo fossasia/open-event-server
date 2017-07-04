@@ -36,6 +36,7 @@ from app.factories.attendee import AttendeeFactory
 from app.factories.session_type import SessionTypeFactory
 from app.factories.track import TrackFactory
 from app.factories.ticket_tag import TicketTagFactory
+from app.factories.role import RoleFactory
 from app.factories.module import ModuleFactory
 
 stash = {}
@@ -1193,6 +1194,69 @@ def image_size_delete(transaction):
     with stash['app'].app_context():
         image_size = ImageSizeFactory()
         db.session.add(image_size)
+        db.session.commit()
+
+
+# ------------------------- Roles -------------------------
+@hooks.before("Roles > Roles Collection > List Roles")
+def role_list(transaction):
+    """
+    GET /roles
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        role = RoleFactory()
+        db.session.add(role)
+        db.session.commit()
+
+
+@hooks.before("Roles > Roles Collection > Create Role")
+def role_post(transaction):
+    """
+    POST /roles
+    :param transaction:
+    :return:
+    """
+    pass
+
+
+@hooks.before("Roles > Role Details > Get Role Details")
+def role_detail(transaction):
+    """
+    GET /roles/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        role = RoleFactory()
+        db.session.add(role)
+        db.session.commit()
+
+
+@hooks.before("Roles > Role Details > Update Role")
+def role_patch(transaction):
+    """
+    PATCH /roles/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        role = RoleFactory()
+        db.session.add(role)
+        db.session.commit()
+
+
+@hooks.before("Roles > Role Details > Delete Role")
+def role_delete(transaction):
+    """
+    DELETE /roles/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        role = RoleFactory()
+        db.session.add(role)
         db.session.commit()
 
 
