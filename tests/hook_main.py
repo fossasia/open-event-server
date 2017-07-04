@@ -36,6 +36,7 @@ from app.factories.attendee import AttendeeFactory
 from app.factories.session_type import SessionTypeFactory
 from app.factories.track import TrackFactory
 from app.factories.ticket_tag import TicketTagFactory
+from app.factories.module import ModuleFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -1282,6 +1283,33 @@ def settings_patch(transaction):
     with stash['app'].app_context():
         setting = SettingFactory()
         db.session.add(setting)
+        db.session.commit()
+
+
+# ------------------------- Modules -------------------------
+@hooks.before("Modules > Modules Details > Show Modules")
+def modules_get_list(transaction):
+    """
+    GET /modules
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        module = ModuleFactory()
+        db.session.add(module)
+        db.session.commit()
+
+
+@hooks.before("Modules > Modules Details > Update Modules")
+def modules_patch(transaction):
+    """
+    PATCH /modules
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        module = ModuleFactory()
+        db.session.add(module)
         db.session.commit()
 
 
