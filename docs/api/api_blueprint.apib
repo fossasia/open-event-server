@@ -1167,6 +1167,8 @@ These endpoints help you to create the basic event structure. To add other parts
 | `onsite-details`  | - | string | - |
 | `is-sponsors-enabled`  | - | boolean (default: `false`) | - |
 | `identifier`  | - | string | - |
+| `external-event-url`  | - | string | - |
+| `has-organizer-info`  | - | boolean(default: `false`) | - |
 
 ## Events Collection [/v1/events{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -1306,6 +1308,7 @@ Get a list of events.
                         "can-pay-by-paypal": true,
                         "location-name": "example",
                         "is-sponsors-enabled": false,
+                        "has-organizer-info": false,
                         "is-sessions-speakers-enabled": true,
                         "privacy": "public",
                         "code-of-conduct": "example",
@@ -1319,7 +1322,7 @@ Get a list of events.
                         "pentabarf-url": null,
                         "xcal-url": null,
                         "logo-url": "http://example.com/example.png",
-                        "event-url": null,
+                        "external-event-url": null,
                         "is-tax-enabled": true,
                         "icon-image-url": null,
                         "ical-url": null,
@@ -1363,7 +1366,7 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
               "data": {
                 "attributes": {
                     "name": "example",
-                    "event-url": "http://example.com",
+                    "external-event-url": "http://example.com",
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "timezone": "UTC",
@@ -1395,7 +1398,8 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "cheque-details": "example",
                     "bank-details": "example",
                     "onsite-details": "example",
-                    "is-sponsors-enabled": "false"
+                    "is-sponsors-enabled": "false",
+                    "has-organizer-info": "false"
                 },
                 "type": "event"
               }
@@ -1518,6 +1522,7 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "can-pay-by-paypal": true,
                     "location-name": "example",
                     "is-sponsors-enabled": false,
+                    "has-organizer-info": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
                     "code-of-conduct": "example",
@@ -1531,7 +1536,7 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "pentabarf-url": null,
                     "xcal-url": null,
                     "logo-url": "http://example.com/example.png",
-                    "event-url": null,
+                    "external-event-url": null,
                     "is-tax-enabled": true,
                     "icon-image-url": null,
                     "ical-url": null,
@@ -1690,6 +1695,7 @@ Get a single event.
                     "can-pay-by-paypal": true,
                     "location-name": "example",
                     "is-sponsors-enabled": false,
+                    "has-organizer-info": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
                     "code-of-conduct": "example",
@@ -1703,7 +1709,7 @@ Get a single event.
                     "pentabarf-url": null,
                     "xcal-url": null,
                     "logo-url": "http://example.com/example.png",
-                    "event-url": null,
+                    "external-event-url": null,
                     "is-tax-enabled": true,
                     "icon-image-url": null,
                     "ical-url": null,
@@ -1751,7 +1757,7 @@ All other fields are optional. Add attributes you want to modify.
               "data": {
                 "attributes": {
                     "name": "example1",
-                    "event-url": "http://example11.com",
+                    "external-event-url": "http://example11.com",
                     "starts-at": "2016-12-14T23:59:59.123456+05:30",
                     "ends-at": "2016-12-15T23:59:59.123456+05:30",
                     "timezone": "Asia/Kolkata",
@@ -1783,7 +1789,8 @@ All other fields are optional. Add attributes you want to modify.
                     "cheque-details": "example1",
                     "bank-details": "example1",
                     "onsite-details": "example1",
-                    "is-sponsors-enabled": "false"
+                    "is-sponsors-enabled": "false",
+                    "has-organizer-info": "false"
                 },
                 "id": "1",
                 "type": "event"
@@ -1906,6 +1913,7 @@ All other fields are optional. Add attributes you want to modify.
                     "can-pay-by-paypal": false,
                     "location-name": "example1",
                     "is-sponsors-enabled": false,
+                    "has-organizer-info": false,
                     "is-sessions-speakers-enabled": false,
                     "privacy": "private",
                     "code-of-conduct": "example1",
@@ -1919,7 +1927,7 @@ All other fields are optional. Add attributes you want to modify.
                     "pentabarf-url": null,
                     "xcal-url": null,
                     "logo-url": "http://example1.com/example1.png",
-                    "event-url": null,
+                    "external-event-url": null,
                     "is-tax-enabled": false,
                     "icon-image-url": null,
                     "ical-url": null,
