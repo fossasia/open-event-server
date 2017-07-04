@@ -1,5 +1,5 @@
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from marshmallow_jsonapi.flask import Schema, Relationship
+from flask_rest_jsonapi import ResourceDetail, ResourceList
+from marshmallow_jsonapi.flask import Schema
 from marshmallow_jsonapi import fields
 
 from app.api.helpers.utilities import dasherize
