@@ -15,6 +15,7 @@ from app.api.tracks import TrackList, TrackDetail, TrackRelationship
 from app.api.speakers_calls import SpeakersCallList, SpeakersCallDetail, SpeakersCallRelationship
 from app.api.event_invoices import EventInvoiceList, EventInvoiceDetail, EventInvoiceRelationship
 from app.api.image_sizes import ImageSizeList, ImageSizeDetail
+from app.api.roles import RoleList, RoleDetail
 from app.api.session_types import SessionTypeList, SessionTypeDetail, SessionTypeRelationship
 from app.api.event_copyright import EventCopyrightList, EventCopyrightDetail, EventCopyrightRelationship
 from app.api.pages import PageList, PageDetail
@@ -47,6 +48,10 @@ api.route(SettingDetail, 'setting_detail', '/settings/<id>', '/settings')
 # pages
 api.route(PageList, 'page_list', '/pages')
 api.route(PageDetail, 'page_detail', '/pages/<int:id>')
+
+# roles
+api.route(RoleList, 'role_list', '/roles')
+api.route(RoleDetail, 'role_detail', '/roles/<int:id>')
 
 # tickets
 api.route(TicketList, 'ticket_list', '/events/<int:event_id>/tickets',
