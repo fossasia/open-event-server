@@ -27,7 +27,7 @@ class TicketTagSchema(Schema):
 
     id = fields.Str(dump_only=True)
     name = fields.Str()
-    ticket = Relationship(attribute='ticket',
+    tickets = Relationship(attribute='tickets',
                           self_view='v1.ticket_tag_ticket',
                           self_view_kwargs={'id': '<id>'},
                           related_view='v1.ticket_list',
@@ -78,13 +78,35 @@ class TicketTagList(ResourceList):
 
     def before_create_object(self, data, view_kwargs):
         if view_kwargs.get('ticket_id'):
-            ticket = self.session.query(Ticket).filter_by(id=view_kwargs['ticket_id']).one()
-            data['event_id'] = ticket.event_id
+            try:
+                ticket = self.session.query(Ticket).filter_by(id=view_kwargs['ticket_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'ticket_id'},
+                                     "Ticket: {} not found".format(view_kwargs['ticket_id']))
+            else:
+                data['event_id'] = ticket.event_id
+        if view_kwargs.get('event_id'):
+            try:
+                event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_id'},
+                                     "Event: {} not found".format(view_kwargs['event_id']))
+            else:
+                data['event_id'] = event.id
+        elif view_kwargs.get('event_identifier'):
+            try:
+                event = self.session.query(Event).filter_by(id=view_kwargs['event_identifier']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_id'},
+                                     "Event: {} not found".format(view_kwargs['event_id']))
+            else:
+                data['event_id'] = event.id
 
     def after_create_object(self, obj, data, view_kwargs):
-        ticket = self.session.query(Ticket).filter_by(id=view_kwargs['ticket_id']).one()
-        ticket.tags.append(obj)
-        self.session.commit()
+        if view_kwargs.get('ticket_id'):
+            ticket = self.session.query(Ticket).filter_by(id=view_kwargs['ticket_id']).one()
+            ticket.tags.append(obj)
+            self.session.commit()
 
     view_kwargs = True
     decorators = (jwt_required,)

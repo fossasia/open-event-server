@@ -35,6 +35,7 @@ from app.factories.ticket import TicketFactory
 from app.factories.attendee import AttendeeFactory
 from app.factories.session_type import SessionTypeFactory
 from app.factories.track import TrackFactory
+from app.factories.ticket_tag import TicketTagFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -867,6 +868,72 @@ def ticket_delete(transaction):
     with stash['app'].app_context():
         ticket = TicketFactory()
         db.session.add(ticket)
+        db.session.commit()
+
+
+# ------------------------- Ticket Tags -------------------------
+@hooks.before("Ticket Tags > Ticket Tags Collection > List All Ticket Tags")
+def ticket_tag_get_list(transaction):
+    """
+    GET /tickets/1/ticket-tags
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket_tag = TicketTagFactory()
+        db.session.add(ticket_tag)
+        db.session.commit()
+
+
+@hooks.before("Ticket Tags > Ticket Tags Collection > Create Ticket Tag")
+def ticket_tag_post(transaction):
+    """
+    POST /tickets/1/ticket-tags
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        tickets = TicketFactory()
+        db.session.add(tickets)
+        db.session.commit()
+
+
+@hooks.before("Ticket Tags > Ticket Tag Details > Ticket Tag Details")
+def ticket_tag_get_detail(transaction):
+    """
+    GET /ticket-tags/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket_tag = TicketTagFactory()
+        db.session.add(ticket_tag)
+        db.session.commit()
+
+
+@hooks.before("Ticket Tags > Ticket Tag Details > Update Ticket Tag")
+def ticket_tag_patch(transaction):
+    """
+    PATCH /ticket-tags/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket_tag = TicketTagFactory()
+        db.session.add(ticket_tag)
+        db.session.commit()
+
+
+@hooks.before("Ticket Tags > Ticket Tag Details > Delete Ticket Tag")
+def ticket_tag_delete(transaction):
+    """
+    DELETE /ticket-tags/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket_tag = TicketTagFactory()
+        db.session.add(ticket_tag)
         db.session.commit()
 
 
