@@ -32,6 +32,7 @@ from app.api.helpers.exceptions import UnprocessableEntity
 
 
 class EventSchema(Schema):
+
     class Meta:
         type_ = 'event'
         self_view = 'v1.event_detail'
@@ -51,12 +52,14 @@ class EventSchema(Schema):
                 data['ends_at'] = event.ends_at
 
         if data['starts_at'] >= data['ends_at']:
-            raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at")
+            raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'},
+                                      "ends-at should be after starts-at")
 
     @validates_schema
     def validate_timezone(self, data):
         if 'timezone' in data:
-            offset = timezone(data['timezone']).utcoffset(datetime.strptime('2014-12-01', '%Y-%m-%d')).seconds
+            offset = timezone(data['timezone']).utcoffset(
+                datetime.strptime('2014-12-01', '%Y-%m-%d')).seconds
             if 'starts_at' in data:
                 starts_at = data['starts_at'].utcoffset().seconds
                 if offset != starts_at:
@@ -75,7 +78,7 @@ class EventSchema(Schema):
     id = fields.Str(dump_only=True)
     identifier = fields.Str(dump_only=True)
     name = fields.Str(required=True)
-    event_url = fields.Url(dump_only=True)
+    external_event_url = fields.Url()
     starts_at = fields.DateTime(required=True, timezone=True)
     ends_at = fields.DateTime(required=True, timezone=True)
     timezone = fields.Str(required=True)
@@ -91,6 +94,7 @@ class EventSchema(Schema):
     icon_image_url = fields.Url(dump_only=True)
     organizer_name = fields.Str()
     is_map_shown = fields.Bool(default=False)
+    has_organizer_info = fields.Bool(default=False)
     organizer_description = fields.Str()
     is_sessions_speakers_enabled = fields.Bool(default=False)
     privacy = fields.Str(default="public")
@@ -232,15 +236,16 @@ class EventSchema(Schema):
                                schema='EventTopicSchema',
                                type_='event-topic')
     event_sub_topic = Relationship(attribute='event_sub_topic',
-                               self_view='v1.event_event_sub_topic',
-                               self_view_kwargs={'id': '<id>'},
-                               related_view='v1.event_sub_topic_detail',
-                               related_view_kwargs={'event_id': '<id>'},
-                               schema='EventSubTopicSchema',
-                               type_='event-sub-topic')
+                                   self_view='v1.event_event_sub_topic',
+                                   self_view_kwargs={'id': '<id>'},
+                                   related_view='v1.event_sub_topic_detail',
+                                   related_view_kwargs={'event_id': '<id>'},
+                                   schema='EventSubTopicSchema',
+                                   type_='event-sub-topic')
 
 
 class EventList(ResourceList):
+
     def query(self, view_kwargs):
         query_ = self.session.query(Event)
         if view_kwargs.get('user_id'):
@@ -249,13 +254,16 @@ class EventList(ResourceList):
                     .join(UsersEventsRoles.role).filter(Role.name != ATTENDEE)
         elif view_kwargs.get('event_type_id'):
             if 'GET' in request.method:
-                query_ = self.session.query(Event).filter_by(event_type_id=view_kwargs['event_type_id'])
+                query_ = self.session.query(Event).filter_by(
+                    event_type_id=view_kwargs['event_type_id'])
         elif view_kwargs.get('event_topic_id'):
             if 'GET' in request.method:
-                query_ = self.session.query(Event).filter_by(event_topic_id=view_kwargs['event_topic_id'])
+                query_ = self.session.query(Event).filter_by(
+                    event_topic_id=view_kwargs['event_topic_id'])
         elif view_kwargs.get('event_sub_topic_id'):
             if 'GET' in request.method:
-                query_ = self.session.query(Event).filter_by(event_sub_topic_id=view_kwargs['event_sub_topic_id'])
+                query_ = self.session.query(Event).filter_by(
+                    event_sub_topic_id=view_kwargs['event_sub_topic_id'])
         return query_
 
     def after_create_object(self, event, data, view_kwargs):
@@ -276,6 +284,7 @@ class EventList(ResourceList):
 
 
 class EventDetail(ResourceDetail):
+
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('identifier'):
             event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
@@ -358,7 +367,8 @@ class EventDetail(ResourceDetail):
 
         if view_kwargs.get('user_id') is not None:
             try:
-                discount_code = self.session.query(DiscountCode).filter_by(id=view_kwargs['discount_code_id']).one()
+                discount_code = self.session.query(DiscountCode).filter_by(
+                    id=view_kwargs['discount_code_id']).one()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': 'discount_code_id'},
                                      "DiscountCode: {} not found".format(view_kwargs['discount_code_id']))
@@ -370,7 +380,8 @@ class EventDetail(ResourceDetail):
 
         if view_kwargs.get('speakers_call_id') is not None:
             try:
-                speakers_call = self.session.query(SpeakersCall).filter_by(id=view_kwargs['speakers_call_id']).one()
+                speakers_call = self.session.query(SpeakersCall).filter_by(
+                    id=view_kwargs['speakers_call_id']).one()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': 'speakers_call_id'},
                                      "Speakers Call: {} not found".format(view_kwargs['speakers_call_id']))
@@ -405,7 +416,7 @@ class EventDetail(ResourceDetail):
                     view_kwargs['id'] = None
 
     decorators = (api.has_permission('is_organizer', methods="PATCH,DELETE", fetch="id", fetch_as="event_id",
-                  check=lambda a: a.get('id') is not None), )
+                                     check=lambda a: a.get('id') is not None), )
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
@@ -415,6 +426,7 @@ class EventDetail(ResourceDetail):
 
 
 class EventRelationship(ResourceRelationship):
+
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('identifier'):
             event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()

@@ -46,7 +46,7 @@ class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     identifier = db.Column(db.String)
     name = db.Column(db.String, nullable=False)
-    event_url = db.Column(db.String)
+    external_event_url = db.Column(db.String)
     logo_url = db.Column(db.String)
     starts_at = db.Column(db.DateTime(timezone=True), nullable=False)
     ends_at = db.Column(db.DateTime(timezone=True), nullable=False)
@@ -62,6 +62,7 @@ class Event(db.Model):
     icon_image_url = db.Column(db.String)
     organizer_name = db.Column(db.String)
     is_map_shown = db.Column(db.Boolean)
+    has_organizer_info = db.Column(db.Boolean)
     organizer_description = db.Column(db.String)
     is_sessions_speakers_enabled = db.Column(db.Boolean, default=False)
     track = db.relationship('Track', backref="event")
@@ -78,7 +79,8 @@ class Event(db.Model):
     state = db.Column(db.String, default="Draft")
     event_type_id = db.Column(db.Integer, db.ForeignKey('event_types.id', ondelete='CASCADE'))
     event_topic_id = db.Column(db.Integer, db.ForeignKey('event_topics.id', ondelete='CASCADE'))
-    event_sub_topic_id = db.Column(db.Integer, db.ForeignKey('event_sub_topics.id', ondelete='CASCADE'))
+    event_sub_topic_id = db.Column(db.Integer, db.ForeignKey(
+        'event_sub_topics.id', ondelete='CASCADE'))
     ticket_url = db.Column(db.String)
     db.UniqueConstraint('track.name')
     code_of_conduct = db.Column(db.String)
@@ -105,7 +107,8 @@ class Event(db.Model):
     discount_code = db.relationship('DiscountCode', backref='events')
     event_type = db.relationship('EventType', backref='event', foreign_keys=[event_type_id])
     event_topic = db.relationship('EventTopic', backref='event', foreign_keys=[event_topic_id])
-    event_sub_topic = db.relationship('EventSubTopic', backref='event', foreign_keys=[event_sub_topic_id])
+    event_sub_topic = db.relationship(
+        'EventSubTopic', backref='event', foreign_keys=[event_sub_topic_id])
 
     def __init__(self,
                  name=None,
@@ -117,7 +120,7 @@ class Event(db.Model):
                  longitude=None,
                  location_name=None,
                  description=None,
-                 event_url=None,
+                 external_event_url=None,
                  thumbnail_image_url=None,
                  large_image_url=None,
                  icon_image_url=None,
@@ -133,7 +136,8 @@ class Event(db.Model):
                  code_of_conduct=None,
                  schedule_published_on=None,
                  is_sessions_speakers_enabled=False,
-                 is_map_shown=True,
+                 is_map_shown=False,
+                 has_organizer_info=False,
                  searchable_location_name=None,
                  is_ticketing_enabled=None,
                  deleted_at=None,
@@ -167,7 +171,7 @@ class Event(db.Model):
         self.longitude = longitude
         self.location_name = location_name
         self.description = clean_up_string(description)
-        self.event_url = event_url
+        self.external_event_url = external_event_url
         self.original_image_url = original_image_url
         self.thumbnail_image_url = thumbnail_image_url
         self.large_image_url = large_image_url
@@ -176,6 +180,7 @@ class Event(db.Model):
         self.organizer_description = clean_up_string(organizer_description)
         self.state = state
         self.is_map_shown = is_map_shown
+        self.has_organizer_info = has_organizer_info
         self.privacy = privacy
         self.event_type_id = event_type_id
         self.event_topic_id = event_topic_id
@@ -259,7 +264,7 @@ class Event(db.Model):
             'longitude': self.longitude,
             'location_name': self.location_name,
             'description': self.description,
-            'event_url': self.event_url,
+            'external_event_url': self.external_event_url,
             'background_url': self.background_url,
             'thumbnail': self.thumbnail,
             'large': self.large,
