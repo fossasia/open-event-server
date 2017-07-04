@@ -50,6 +50,7 @@ hint: You may need to upgrade your pip version and install following packages if
 sudo apt-get install python-dev
 sudo apt-get install libpq-dev
 sudo apt-get install libffi6 libffi-dev
+sudo apt-get install build-essential libssl-dev libffi-dev python-dev
 ```
 
 * **Step 2** - Create the database. For that we first open the psql shell. Go the directory where your postgres file is stored.
