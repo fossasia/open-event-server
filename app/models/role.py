@@ -10,7 +10,7 @@ class Role(db.Model):
     name = db.Column(db.String, nullable=False, unique=True)
     title_name = db.Column(db.String)
 
-    def __init__(self, name, title_name):
+    def __init__(self, name=None, title_name=None):
         self.name = name
         self.title_name = title_name
 
