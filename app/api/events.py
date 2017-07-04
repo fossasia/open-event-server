@@ -173,7 +173,7 @@ class EventSchema(Schema):
                                  self_view='v1.event_speakers_call',
                                  self_view_kwargs={'id': '<id>'},
                                  related_view='v1.speakers_call_detail',
-                                 related_view_kwargs={'id': '<id>'},
+                                 related_view_kwargs={'event_id': '<id>'},
                                  schema='SpeakersCallSchema',
                                  type_='speakers-call')
     session_types = Relationship(attribute='session_type',
