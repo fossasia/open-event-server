@@ -24,9 +24,9 @@ class TicketFeesSchema(Schema):
         inflect = dasherize
 
     id = fields.Integer(dump_only=True)
-    currency = fields.Str(validate=validate.OneOf(choices=PAYMENT_CURRENCY_CHOICES))
-    service_fee = fields.Float(validate=lambda n: n >= 0)
-    maximum_fee = fields.Float(validate=lambda n: n >= 0)
+    currency = fields.Str(validate=validate.OneOf(choices=PAYMENT_CURRENCY_CHOICES), allow_none=True)
+    service_fee = fields.Float(validate=lambda n: n >= 0, allow_none=True)
+    maximum_fee = fields.Float(validate=lambda n: n >= 0, allow_none=True)
 
 
 class TicketFeeList(ResourceList):

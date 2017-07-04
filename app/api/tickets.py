@@ -51,18 +51,18 @@ class TicketSchema(Schema):
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
-    description = fields.Str()
+    description = fields.Str(allow_none=True)
     type = fields.Str(required=True)
-    price = fields.Float(validate=lambda n: n >= 0)
-    quantity = fields.Integer(validate=lambda n: n >= 0)
+    price = fields.Float(validate=lambda n: n >= 0, allow_none=True)
+    quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     is_description_visible = fields.Boolean(default=False)
-    position = fields.Integer()
+    position = fields.Integer(allow_none=True)
     is_fee_absorbed = fields.Boolean()
     sales_starts_at = fields.DateTime(required=True)
     sales_ends_at = fields.DateTime(required=True)
     is_hidden = fields.Boolean(default=False)
-    min_order = fields.Integer(validate=lambda n: n >= 0)
-    max_order = fields.Integer(validate=lambda n: n >= 0)
+    min_order = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
+    max_order = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     event = Relationship(attribute='event',
                          self_view='v1.ticket_event',
                          self_view_kwargs={'id': '<id>'},
