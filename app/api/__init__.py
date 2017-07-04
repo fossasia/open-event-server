@@ -24,6 +24,7 @@ from app.api.settings import SettingDetail
 from app.api.discount_codes import DiscountCodeList, DiscountCodeDetail, DiscountCodeRelationship
 from app.api.ticket_tags import TicketTagList, TicketTagDetail, TicketTagRelationship
 from app.api.attendees import AttendeeList, AttendeeDetail, AttendeeRelationship
+from app.api.modules import ModuleDetail
 
 # users
 api.route(UserList, 'user_list', '/users')
@@ -44,6 +45,9 @@ api.route(ImageSizeDetail, 'image_size_detail', '/image-sizes/<int:id>')
 
 # settings
 api.route(SettingDetail, 'setting_detail', '/settings/<id>', '/settings')
+
+# modules
+api.route(ModuleDetail, 'module_detail', '/modules/<id>', '/modules')
 
 # pages
 api.route(PageList, 'page_list', '/pages')
