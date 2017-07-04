@@ -57,6 +57,7 @@ class Config(object):
     SOFT_DELETE = True
     PROPOGATE_ERROR = False
     DASHERIZE_API = True
+    ETAG = True
 
     if not SQLALCHEMY_DATABASE_URI:
         print('`DATABASE_URL` either not exported or empty')
