@@ -1,14 +1,13 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
-from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.notification import Notification
 from app.models.user import User
 from app.api.helpers.permissions import is_user_itself, jwt_required
+from app.api.helpers.db import safe_query
 
 
 class NotificationSchema(Schema):
@@ -54,13 +53,8 @@ class NotificationList(ResourceList):
         """
         query_ = self.session.query(Notification)
         if view_kwargs.get('id'):
-            try:
-                user = self.session.query(User).filter_by(id=view_kwargs['id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'id'},
-                                     "User: {} not found".format(view_kwargs['id']))
-            else:
-                query_ = query_.join(User).filter(User.id == user.id)
+            user = safe_query(self, User, 'id', view_kwargs['id'], 'id')
+            query_ = query_.join(User).filter(User.id == user.id)
         return query_
 
     def before_create_object(self, data, view_kwargs):
@@ -71,13 +65,8 @@ class NotificationList(ResourceList):
         :return:
         """
         if view_kwargs.get('id') is not None:
-            try:
-                user = self.session.query(User).filter_by(id=view_kwargs['id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'id'},
-                                     "User: {} not found".format(view_kwargs['id']))
-            else:
-                data['user_id'] = user.id
+            user = safe_query(self, User, 'id', view_kwargs['id'], 'id')
+            data['user_id'] = user.id
 
     view_kwargs = True
     decorators = (is_user_itself,)

@@ -5,7 +5,6 @@ from marshmallow_jsonapi import fields
 from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
 from app.models import db
-from app.api.helpers.permissions import is_admin
 from app.models.page import Page
 
 

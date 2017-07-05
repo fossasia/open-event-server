@@ -2,16 +2,15 @@ from app.api.bootstrap import api
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
-from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.user import User
 from app.models.notification import Notification
 from app.models.event_invoice import EventInvoice
-from app.api.helpers.permissions import is_admin, is_user_itself, jwt_required
+from app.api.helpers.permissions import is_user_itself, jwt_required
 from app.api.helpers.exceptions import ConflictException
+from app.api.helpers.db import safe_query
 
 
 class UserSchema(Schema):
@@ -91,30 +90,18 @@ class UserDetail(ResourceDetail):
 
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('notification_id') is not None:
-            try:
-                notification = self.session.query(Notification).filter_by(
-                    id=view_kwargs['notification_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'notification_id'},
-                                     "Notification: {} not found".format(view_kwargs['notification_id']))
+            notification = safe_query(self, Notification, 'id', view_kwargs['notification_id'], 'notification_id')
+            if notification.user_id is not None:
+                view_kwargs['id'] = notification.user_id
             else:
-                if notification.user_id is not None:
-                    view_kwargs['id'] = notification.user_id
-                else:
-                    view_kwargs['id'] = None
+                view_kwargs['id'] = None
 
         if view_kwargs.get('event_invoice_id') is not None:
-            try:
-                event_invoice = self.session.query(EventInvoice).filter_by(
-                    id=view_kwargs['event_invoice_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event_invoice_id'},
-                                     "Event Invoice: {} not found".format(view_kwargs['event_invoice_id']))
+            event_invoice = safe_query(self, EventInvoice, 'id', view_kwargs['event_invoice_id'], 'event_invoice_id')
+            if event_invoice.user_id is not None:
+                view_kwargs['id'] = event_invoice.user_id
             else:
-                if event_invoice.user_id is not None:
-                    view_kwargs['id'] = event_invoice.user_id
-                else:
-                    view_kwargs['id'] = None
+                view_kwargs['id'] = None
 
     decorators = (is_user_itself, )
     schema = UserSchema

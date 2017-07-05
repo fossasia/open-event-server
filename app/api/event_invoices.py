@@ -2,8 +2,6 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 import marshmallow.validate as validate
-from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import is_admin
@@ -13,6 +11,7 @@ from app.models.user import User
 from app.models.event_invoice import EventInvoice
 from app.models.discount_code import DiscountCode
 from app.api.helpers.static import PAYMENT_COUNTRIES
+from app.api.helpers.db import safe_query
 
 
 class EventInvoiceSchema(Schema):
@@ -83,38 +82,17 @@ class EventInvoiceList(ResourceList):
         """
         query_ = self.session.query(EventInvoice)
         if view_kwargs.get('event_id'):
-            try:
-                event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event_id'},
-                                     "Event: {} not found".format(view_kwargs['event_id']))
-            else:
-                query_ = query_.filter(Event.id == event.id)
+            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            query_ = query_.join(Event).filter(Event.id == event.id)
         elif view_kwargs.get('event_identifier'):
-            try:
-                event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event_identifier'},
-                                     "Event: {} not found".format(view_kwargs['event_identifier']))
-            else:
-                query_ = query_.join(Event).filter(Event.id == event.id)
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            query_ = query_.join(Event).filter(Event.id == event.id)
         if view_kwargs.get('user_id'):
-            try:
-                user = self.session.query(User).filter_by(id=view_kwargs['user_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'user_id'},
-                                     "User: {} not found".format(view_kwargs['user_id']))
-            else:
-                query_ = query_.join(Event).filter(User.id == user.id)
+            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            query_ = query_.join(User).filter(User.id == user.id)
         if view_kwargs.get('discount_code_id'):
-            try:
-                discount_code = self.session.query(DiscountCode).\
-                    filter_by(discount_code_id=view_kwargs['discount_code_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'discount_code_id'},
-                                     "Discount Code: {} not found".format(view_kwargs['discount_code_id']))
-            else:
-                query_ = query_.join(Event).filter(DiscountCode.id == discount_code.id)
+            discount_code = safe_query(self, DiscountCode, 'id', view_kwargs['discount_code_id'], 'discount_code_id')
+            query_ = query_.join(DiscountCode).filter(DiscountCode.id == discount_code.id)
         return query_
 
     def before_create_object(self, data, view_kwargs):
@@ -125,38 +103,17 @@ class EventInvoiceList(ResourceList):
         :return:
         """
         if view_kwargs.get('event_id'):
-            try:
-                event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event_id'},
-                                     "Event: {} not found".format(view_kwargs['event_id']))
-            else:
-                data['event_id'] = event.id
+            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            data['event_id'] = event.id
         elif view_kwargs.get('event_identifier'):
-            try:
-                event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event_identifier'},
-                                     "Event: {} not found".format(view_kwargs['event_identifier']))
-            else:
-                data['event_id'] = event.id
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            data['event_id'] = event.id
         if view_kwargs.get('user_id'):
-            try:
-                user = self.session.query(User).filter_by(id=view_kwargs['user_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'user_id'},
-                                     "User: {} not found".format(view_kwargs['user_id']))
-            else:
-                data['user_id'] = user.id
+            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            data['user_id'] = user.id
         if view_kwargs.get('discount_code_id'):
-            try:
-                discount_code = self.session.query(DiscountCode).\
-                    filter_by(discount_code_id=view_kwargs['discount_code_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'discount_code_id'},
-                                     "Discount Code: {} not found".format(view_kwargs['discount_code_id']))
-            else:
-                data['discount_code_id'] = discount_code.id
+            discount_code = safe_query(self, DiscountCode, 'id', view_kwargs['discount_code_id'], 'discount_code_id')
+            data['discount_code_id'] = discount_code.id
 
     view_kwargs = True
     decorators = (is_admin,)

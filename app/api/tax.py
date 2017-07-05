@@ -9,6 +9,7 @@ from app.models import db
 from app.api.helpers.permissions import jwt_required
 from app.models.event import Event
 from app.models.tax import Tax
+from app.api.helpers.db import safe_query
 
 
 class TaxSchema(Schema):
@@ -46,20 +47,16 @@ class TaxList(ResourceList):
     def query(self, view_kwargs):
         query_ = self.session.query(Tax)
         if view_kwargs.get('event_id'):
-            query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
+            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            query_ = query_.join(Event).filter(Event.id == event.id)
         elif view_kwargs.get('identifier'):
-            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            query_ = query_.join(Event).filter(Event.identifier == event.id)
         return query_
 
     def before_create_object(self, data, view_kwargs):
-        if view_kwargs.get('event_id'):
-            try:
-                event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event_id'},
-                                     "Event: {} not found".format(view_kwargs['event_id']))
-            else:
-                data['event_id'] = event.id
+        event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+        data['event_id'] = event.id
 
     view_kwargs = True
     decorators = (jwt_required, )

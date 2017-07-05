@@ -1,22 +1,19 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from marshmallow import validates_schema
 import marshmallow.validate as validate
-from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
 from app.api.events import Event
 from app.api.helpers.utilities import dasherize
-from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.session import Session
 from app.models.track import Track
 from app.models.session_type import SessionType
 from app.models.microlocation import Microlocation
 from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.db import safe_query
 
 
 class SessionSchema(Schema):
@@ -104,29 +101,26 @@ class SessionList(ResourceList):
     def query(self, view_kwargs):
         query_ = self.session.query(Session)
         if view_kwargs.get('track_id') is not None:
-            query_ = query_.join(Track).filter(Track.id == view_kwargs['track_id'])
+            track = safe_query(self, Track, 'id', view_kwargs['track_id'], 'track_id')
+            query_ = query_.join(Track).filter(Track.id == track.id)
         if view_kwargs.get('session_type_id') is not None:
-            query_ = query_.join(SessionType).filter(
-                SessionType.id == view_kwargs['session_type_id'])
+            session_type = safe_query(self, SessionType, 'id', view_kwargs['session_type_id'], 'session_type_id')
+            query_ = query_.join(SessionType).filter(SessionType.id == session_type.id)
         if view_kwargs.get('microlocation_id') is not None:
-            query_ = query_.join(Microlocation).filter(
-                Microlocation.id == view_kwargs['microlocation_id'])
+            microlocation = safe_query(self, Track, 'id', view_kwargs['microlocation_id'], 'microlocation_id')
+            query_ = query_.join(Microlocation).filter(Microlocation.id == microlocation.id)
         if view_kwargs.get('event_id'):
-            query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
+            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            query_ = query_.join(Event).filter(Event.id == event.id)
         elif view_kwargs.get('event_identifier'):
-            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['event_identifier'])
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            query_ = query_.join(Event).filter(Event.identifier == event.id)
         return query_
 
     def before_create_object(self, data, view_kwargs):
         # Permission Manager ensures there is event ID if any event_identifier provided
-        if view_kwargs.get('event_id') is not None:
-            try:
-                event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event_id'},
-                                     "Event: {} not found".format(view_kwargs['event_id']))
-            else:
-                data['event_id'] = event.id
+        event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+        data['event_id'] = event.id
 
     view_kwargs = True
     decorators = (api.has_permission('is_coorganizer', fetch="event_id",
@@ -147,13 +141,8 @@ class SessionDetail(ResourceDetail):
     """
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('event_identifier'):
-            try:
-                event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event_identifier'},
-                                     "Event: {} not found".format(view_kwargs['event_identifier']))
-            else:
-                view_kwargs['event_id'] = event.id
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'identifier')
+            view_kwargs['event_id'] = event.id
 
     decorators = (api.has_permission('is_coorganizer', fetch="event_id",
                                      fetch_as="event_id", model=Session, methods="PATCH,DELETE"),)

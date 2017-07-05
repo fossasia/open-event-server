@@ -3,6 +3,8 @@
 import logging
 import traceback
 from app.models import db
+from sqlalchemy.orm.exc import NoResultFound
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 
 def save_to_db(item, msg="Saved to db", print_error=True):
@@ -24,3 +26,22 @@ def save_to_db(item, msg="Saved to db", print_error=True):
         logging.error('DB Exception! %s' % e)
         db.session.rollback()
         return False
+
+
+def safe_query(self, model, column_name, value, parameter_name):
+    """
+    Wrapper query to properly raise exception
+    :param self:
+    :param model: db Model to be queried
+    :param column_name: name of the column to be queried for the given value
+    :param value: value to be queried against the given column name, e.g view_kwargs['event_id']
+    :param parameter_name: Name of parameter to be printed in json-api error message eg 'event_id'
+    :return:
+    """
+    try:
+        record = self.session.query(model).filter(getattr(model, column_name) == value).one()
+    except NoResultFound:
+        raise ObjectNotFound({'parameter': '{}'.format(parameter_name)},
+                             "{}: {} not found".format(model.__name__, value))
+    else:
+        return record

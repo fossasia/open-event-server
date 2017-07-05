@@ -1,8 +1,6 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
-from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
@@ -11,6 +9,7 @@ from app.models import db
 from app.models.microlocation import Microlocation
 from app.models.session import Session
 from app.models.event import Event
+from app.api.helpers.db import safe_query
 
 
 class MicrolocationSchema(Schema):
@@ -58,11 +57,14 @@ class MicrolocationList(ResourceList):
     def query(self, view_kwargs):
         query_ = self.session.query(Microlocation)
         if view_kwargs.get('event_id'):
-            query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
+            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            query_ = query_.join(Event).filter(Event.id == event.id)
         elif view_kwargs.get('event_identifier'):
-            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['event_identifier'])
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            query_ = query_.join(Event).filter(Event.identifier == event.id)
         if view_kwargs.get('session_id'):
-            query_ = query_.join(Session).filter(Session.id == view_kwargs['session_id'])
+            session = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
+            query_ = query_.join(Session).filter(Session.id == session.id)
         return query_
 
     def before_create_object(self, data, view_kwargs):
@@ -91,17 +93,11 @@ class MicrolocationDetail(ResourceDetail):
     def before_get_object(self, view_kwargs):
 
         if view_kwargs.get('session_id') is not None:
-            try:
-                sessions = self.session.query(Session).filter_by(
-                    id=view_kwargs['session_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'session_id'},
-                                     "Session: {} not found".format(view_kwargs['session_id']))
+            sessions = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
+            if sessions.event_id is not None:
+                view_kwargs['id'] = sessions.event_id
             else:
-                if sessions.event_id is not None:
-                    view_kwargs['id'] = sessions.event_id
-                else:
-                    view_kwargs['id'] = None
+                view_kwargs['id'] = None
 
     decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
                                      model=Microlocation, check=lambda a: a.get('id') is not None),)
