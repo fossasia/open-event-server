@@ -52,7 +52,7 @@ class SponsorList(ResourceList):
         :return:
         """
         query_ = self.session.query(Sponsor)
-        if view_kwargs.get('id'):
+        if view_kwargs.get('event_id'):
             try:
                 event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
             except NoResultFound:
