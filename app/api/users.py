@@ -10,6 +10,7 @@ from app.models.notification import Notification
 from app.models.users_events_role import UsersEventsRoles
 from app.models.event_invoice import EventInvoice
 from app.api.helpers.permissions import is_user_itself, jwt_required
+from app.models.speaker import Speaker
 from app.api.helpers.exceptions import ConflictException
 from app.api.helpers.db import safe_query
 
@@ -67,6 +68,15 @@ class UserSchema(Schema):
         schema='EventInvoiceSchema',
         many=True,
         type_='event-invoice')
+    speakers = Relationship(
+        attribute='speaker',
+        self_view='v1.user_speaker',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.speaker_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='SpeakerSchema',
+        many=True,
+        type_='speaker')
 
 
 class UserList(ResourceList):
@@ -88,8 +98,12 @@ class UserDetail(ResourceDetail):
     """
     User detail by id
     """
-
     def before_get_object(self, view_kwargs):
+        """
+        before get method for user object
+        :param view_kwargs:
+        :return:
+        """
         if view_kwargs.get('notification_id') is not None:
             notification = safe_query(self, Notification, 'id', view_kwargs['notification_id'], 'notification_id')
             if notification.user_id is not None:
@@ -109,6 +123,11 @@ class UserDetail(ResourceDetail):
             'users_events_role_id')
             if users_events_role.user_id is not None:
                 view_kwargs['id'] = users_events_role.user_id
+
+        if view_kwargs.get('speaker_id') is not None:
+            speaker = safe_query(self, Speaker, 'id', view_kwargs['speaker_id'], 'speaker_id')
+            if speaker.user_id is not None:
+                view_kwargs['id'] = speaker.user_id
             else:
                 view_kwargs['id'] = None
 
