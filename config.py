@@ -6,7 +6,7 @@ env.read_envfile()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-VERSION_NAME = '1.0.0-alpha.10'
+VERSION_NAME = '2.0.0-alpha.1'
 
 LANGUAGES = {
     'en': 'English',
@@ -55,7 +55,7 @@ class Config(object):
     SERVE_STATIC = env.bool('SERVE_STATIC', default=False)
     DATABASE_QUERY_TIMEOUT = 0.1
     SOFT_DELETE = True
-    PROPOGATE_ERROR = False
+    PROPOGATE_ERROR = env.bool('PROPOGATE_ERROR', default=False)
     DASHERIZE_API = True
     ETAG = True
 
