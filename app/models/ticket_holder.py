@@ -10,7 +10,7 @@ class TicketHolder(db.Model):
     __tablename__ = "ticket_holders"
 
     id = db.Column(db.Integer, primary_key=True)
-    firstname = db.Column(db.String)
+    firstname = db.Column(db.String, nullable=False)
     lastname = db.Column(db.String)
     email = db.Column(db.String)
     address = db.Column(db.String)

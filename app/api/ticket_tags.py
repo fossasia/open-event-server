@@ -26,7 +26,7 @@ class TicketTagSchema(Schema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    name = fields.Str()
+    name = fields.Str(allow_none=True)
     tickets = Relationship(attribute='tickets',
                           self_view='v1.ticket_tag_ticket',
                           self_view_kwargs={'id': '<id>'},

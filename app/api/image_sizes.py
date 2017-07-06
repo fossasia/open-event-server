@@ -22,21 +22,21 @@ class ImageSizeSchema(Schema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    type = fields.Str()
-    full_width = fields.Integer(validate=lambda n: n >= 0)
-    full_height = fields.Integer(validate=lambda n: n >= 0)
+    type = fields.Str(allow_none=True)
+    full_width = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
+    full_height = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     full_aspect = fields.Boolean(default=False)
-    full_quality = fields.Integer(validate=lambda n: 0 <= n <= 100)
-    icon_width = fields.Integer(validate=lambda n: n >= 0)
-    icon_height = fields.Integer(validate=lambda n: n >= 0)
+    full_quality = fields.Integer(validate=lambda n: 0 <= n <= 100, allow_none=True)
+    icon_width = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
+    icon_height = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     icon_aspect = fields.Boolean(default=False)
-    icon_quality = fields.Integer(validate=lambda n: 0 <= n <= 100)
-    thumbnail_width = fields.Integer(validate=lambda n: n >= 0)
-    thumbnail_height = fields.Integer(validate=lambda n: n >= 0)
+    icon_quality = fields.Integer(validate=lambda n: 0 <= n <= 100, allow_none=True)
+    thumbnail_width = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
+    thumbnail_height = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     thumbnail_aspect = fields.Boolean(default=False)
-    thumbnail_quality = fields.Integer(validate=lambda n: 0 <= n <= 100)
-    logo_width = fields.Integer(validate=lambda n: n >= 0)
-    logo_height = fields.Integer(validate=lambda n: n >= 0)
+    thumbnail_quality = fields.Integer(validate=lambda n: 0 <= n <= 100, allow_none=True)
+    logo_width = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
+    logo_height = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
 
 
 class ImageSizeList(ResourceList):

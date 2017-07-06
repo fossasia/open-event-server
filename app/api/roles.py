@@ -23,7 +23,7 @@ class RoleSchema(Schema):
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
-    title_name = fields.Str()
+    title_name = fields.Str(allow_none=True)
 
 
 class RoleList(ResourceList):

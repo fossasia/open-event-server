@@ -26,12 +26,12 @@ class AttendeeSchema(Schema):
 
     id = fields.Str(dump_only=True)
     firstname = fields.Str(required=True)
-    lastname = fields.Str()
-    email = fields.Str()
-    address = fields.Str()
-    city = fields.Str()
-    state = fields.Str()
-    country = fields.Str()
+    lastname = fields.Str(allow_none=True)
+    email = fields.Str(allow_none=True)
+    address = fields.Str(allow_none=True)
+    city = fields.Str(allow_none=True)
+    state = fields.Str(allow_none=True)
+    country = fields.Str(allow_none=True)
     is_checked_in = fields.Boolean()
     pdf_url = fields.Url(required=True)
 

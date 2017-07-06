@@ -46,8 +46,8 @@ class SpeakersCallSchema(Schema):
     announcement = fields.Str(required=True)
     starts_at = fields.DateTime(required=True)
     ends_at = fields.DateTime(required=True)
-    hash = fields.Str()
-    privacy = fields.String(validate=validate.OneOf(choices=["private", "public"]))
+    hash = fields.Str(allow_none=True)
+    privacy = fields.String(validate=validate.OneOf(choices=["private", "public"]), allow_none=True)
     event = Relationship(attribute='event',
                          self_view='v1.speakers_call_event',
                          self_view_kwargs={'id': '<id>'},

@@ -5,7 +5,7 @@ class SocialLink(db.Model):
     __tablename__ = "social_links"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    link = db.Column(db.String)
+    link = db.Column(db.String, nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship("Event", backref="social_link")
 

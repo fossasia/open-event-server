@@ -44,9 +44,9 @@ class TrackSchema(Schema):
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
-    description = fields.Str()
+    description = fields.Str(allow_none=True)
     color = fields.Str(required=True)
-    font_color = fields.Str()
+    font_color = fields.Str(allow_none=True)
     event = Relationship(attribute='event',
                          self_view='v1.track_event',
                          self_view_kwargs={'id': '<id>'},
