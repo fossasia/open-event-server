@@ -4,8 +4,6 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from marshmallow import pre_load, validates_schema
-from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
@@ -15,6 +13,7 @@ from app.models.track import Track
 from app.models.session import Session
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.models.event import Event
+from app.api.helpers.db import safe_query
 
 
 class TrackSchema(Schema):
@@ -72,17 +71,20 @@ class TrackList(ResourceList):
     def query(self, view_kwargs):
         query_ = self.session.query(Track)
         if view_kwargs.get('event_id'):
-            query_ = query_.join(Event).filter(Event.id == view_kwargs['event_id'])
-        # Permission manager is disabled for GET requests
+            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            query_ = query_.join(Event).filter(Event.id == event.id)
         elif view_kwargs.get('event_identifier'):
-            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['event_identifier'])
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            query_ = query_.join(Event).filter(Event.id == event.id)
         return query_
 
     def before_create_object(self, data, view_kwargs):
-        # Permsission Manager ensures that there is event_id if any event_identifier is provided
-        # and throws 404 if event is not found
-        event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
-        data['event_id'] = event.id
+        if view_kwargs.get('event_id'):
+            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            data['event_id'] = event.id
+        elif view_kwargs.get('event_identifier'):
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            data['event_id'] = event.id
 
     view_kwargs = True
     decorators = (api.has_permission('is_track_organizer', fetch='event_id', fetch_as="event_id", methods="POST"),)
@@ -101,16 +103,11 @@ class TrackDetail(ResourceDetail):
     """
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('session_id'):
-            try:
-                session = self.session.query(Session).filter_by(id=view_kwargs['session_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'session_id'},
-                                     "Session: {} not found".format(view_kwargs['session_id']))
+            session = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
+            if session.event_id:
+                view_kwargs['id'] = session.track_id
             else:
-                if session.event_id:
-                    view_kwargs['id'] = session.track_id
-                else:
-                    view_kwargs['id'] = None
+                view_kwargs['id'] = None
 
     decorators = (api.has_permission('is_track_organizer', fetch='event_id',
                   fetch_as="event_id", model=Track, methods="PATCH,DELETE",

@@ -26,8 +26,7 @@ from app.models.ticket import TicketTag
 from app.models.user import User, ATTENDEE, ORGANIZER
 from app.models.users_events_role import UsersEventsRoles
 from app.models.role import Role
-from app.api.helpers.permissions import accessible_events, is_coorganizer
-from app.api.helpers.db import save_to_db
+from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.exceptions import UnprocessableEntity
 
 
@@ -248,22 +247,24 @@ class EventList(ResourceList):
 
     def query(self, view_kwargs):
         query_ = self.session.query(Event)
-        if view_kwargs.get('user_id'):
-            if 'GET' in request.method:
-                query_ = query_.join(Event.roles).filter_by(user_id=view_kwargs['user_id']) \
-                    .join(UsersEventsRoles.role).filter(Role.name != ATTENDEE)
-        elif view_kwargs.get('event_type_id'):
-            if 'GET' in request.method:
-                query_ = self.session.query(Event).filter_by(
-                    event_type_id=view_kwargs['event_type_id'])
-        elif view_kwargs.get('event_topic_id'):
-            if 'GET' in request.method:
-                query_ = self.session.query(Event).filter_by(
-                    event_topic_id=view_kwargs['event_topic_id'])
-        elif view_kwargs.get('event_sub_topic_id'):
-            if 'GET' in request.method:
-                query_ = self.session.query(Event).filter_by(
-                    event_sub_topic_id=view_kwargs['event_sub_topic_id'])
+        if view_kwargs.get('user_id') and 'GET' in request.method:
+            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role).\
+                filter(Role.name != ATTENDEE)
+
+        elif view_kwargs.get('event_type_id') and 'GET' in request.method:
+            event = safe_query(self, Event, 'event_type_id', view_kwargs['event_type_id'], 'event_type_id')
+            query_ = self.session.query(Event).filter_by(event_type_id=event.event_type_id)
+
+        elif view_kwargs.get('event_topic_id') and 'GET' in request.method:
+            event = safe_query(self, Event, 'event_topic_id', view_kwargs['event_topic_id'], 'event_topic_id')
+            query_ = self.session.query(Event).filter_by(event_topic_id=event.event_topic_id)
+
+        elif view_kwargs.get('event_sub_topic_id') and 'GET' in request.method:
+            event = safe_query(self, Event, 'event_sub_topic_id', view_kwargs['event_sub_topic_id'],
+                               'event_sub_topic_id')
+            query_ = self.session.query(Event).filter_by(event_sub_topic_id=event.event_sub_topic_id)
+
         return query_
 
     def after_create_object(self, event, data, view_kwargs):
@@ -287,83 +288,50 @@ class EventDetail(ResourceDetail):
 
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('identifier'):
-            event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
             view_kwargs['id'] = event.id
+
         if view_kwargs.get('sponsor_id') is not None:
-            try:
-                sponsor = self.session.query(Sponsor).filter_by(id=view_kwargs['sponsor_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'sponsor_id'},
-                                     "Sponsor: {} not found".format(view_kwargs['sponsor_id']))
+            sponsor = safe_query(self, Sponsor, 'id', view_kwargs['sponsor_id'], 'sponsor_id')
+            if sponsor.event_id is not None:
+                view_kwargs['id'] = sponsor.event_id
             else:
-                if sponsor.event_id is not None:
-                    view_kwargs['id'] = sponsor.event_id
-                else:
-                    view_kwargs['id'] = None
+                view_kwargs['id'] = None
 
         if view_kwargs.get('track_id') is not None:
-            try:
-                track = self.session.query(Track).filter_by(id=view_kwargs['track_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'track_id'},
-                                     "Track: {} not found".format(view_kwargs['track_id']))
+            track = safe_query(self, Track, 'id', view_kwargs['track_id'], 'track_id')
+            if track.event_id is not None:
+                view_kwargs['id'] = track.event_id
             else:
-                if track.event_id is not None:
-                    view_kwargs['id'] = track.event_id
-                else:
-                    view_kwargs['id'] = None
+                view_kwargs['id'] = None
 
         if view_kwargs.get('session_type_id') is not None:
-            try:
-                session_type = self.session.query(SessionType).filter_by(
-                    id=view_kwargs['session_type_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'session_type_id'},
-                                     "SessionType: {} not found".format(view_kwargs['session_type_id']))
+            session_type = safe_query(self, SessionType, 'id', view_kwargs['session_type_id'], 'session_type_id')
+            if session_type.event_id is not None:
+                view_kwargs['id'] = session_type.event_id
             else:
-                if session_type.event_id is not None:
-                    view_kwargs['id'] = session_type.event_id
-                else:
-                    view_kwargs['id'] = None
+                view_kwargs['id'] = None
 
         if view_kwargs.get('event_invoice_id') is not None:
-            try:
-                event_invoice = self.session.query(EventInvoice).filter_by(
-                    id=view_kwargs['event_invoice_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event_invoice_id'},
-                                     "Event Invoice: {} not found".format(view_kwargs['event_invoice_id']))
+            event_invoice = safe_query(self, EventInvoice, 'id', view_kwargs['event_invoice_id'], 'event_invoice_id')
+            if event_invoice.event_id is not None:
+                view_kwargs['id'] = event_invoice.event_id
             else:
-                if event_invoice.event_id is not None:
-                    view_kwargs['id'] = event_invoice.event_id
-                else:
-                    view_kwargs['id'] = None
+                view_kwargs['id'] = None
 
         if view_kwargs.get('discount_code_id') is not None:
-            try:
-                discount_code = self.session.query(DiscountCode).filter_by(
-                    id=view_kwargs['discount_code_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'discount_code_id'},
-                                     "DiscountCode: {} not found".format(view_kwargs['discount_code_id']))
+            discount_code = safe_query(self, DiscountCode, 'id', view_kwargs['discount_code_id'], 'discount_code_id')
+            if discount_code.event_id is not None:
+                view_kwargs['id'] = discount_code.event_id
             else:
-                if discount_code.event_id is not None:
-                    view_kwargs['id'] = discount_code.event_id
-                else:
-                    view_kwargs['id'] = None
+                view_kwargs['id'] = None
 
         if view_kwargs.get('session_id') is not None:
-            try:
-                sessions = self.session.query(Session).filter_by(
-                    id=view_kwargs['session_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'session_id'},
-                                     "Session: {} not found".format(view_kwargs['session_id']))
+            sessions = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
+            if sessions.event_id is not None:
+                view_kwargs['id'] = sessions.event_id
             else:
-                if sessions.event_id is not None:
-                    view_kwargs['id'] = sessions.event_id
-                else:
-                    view_kwargs['id'] = None
+                view_kwargs['id'] = None
 
         if view_kwargs.get('user_id') is not None:
             try:
@@ -379,41 +347,25 @@ class EventDetail(ResourceDetail):
                     view_kwargs['id'] = None
 
         if view_kwargs.get('speakers_call_id') is not None:
-            try:
-                speakers_call = self.session.query(SpeakersCall).filter_by(
-                    id=view_kwargs['speakers_call_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'speakers_call_id'},
-                                     "Speakers Call: {} not found".format(view_kwargs['speakers_call_id']))
+            speakers_call = safe_query(self, SpeakersCall, 'id', view_kwargs['speakers_call_id'], 'speakers_call_id')
+            if speakers_call.event_id is not None:
+                view_kwargs['id'] = speakers_call.event_id
             else:
-                if speakers_call.event_id is not None:
-                    view_kwargs['id'] = speakers_call.event_id
-                else:
-                    view_kwargs['id'] = None
+                view_kwargs['id'] = None
 
         if view_kwargs.get('ticket_id') is not None:
-            try:
-                ticket = self.session.query(Ticket).filter_by(id=view_kwargs['ticket_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'ticket_id'},
-                                     "Ticket: {} not found".format(view_kwargs['ticket_id']))
+            ticket = safe_query(self, Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
+            if ticket.event_id is not None:
+                view_kwargs['id'] = ticket.event_id
             else:
-                if ticket.event_id is not None:
-                    view_kwargs['id'] = ticket.event_id
-                else:
-                    view_kwargs['id'] = None
+                view_kwargs['id'] = None
 
         if view_kwargs.get('ticket_tag_id') is not None:
-            try:
-                ticket_tag = self.session.query(TicketTag).filter_by(id=view_kwargs['ticket_tag_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'ticket_tag_id'},
-                                     "Ticket tag: {} not found".format(view_kwargs['ticket_tag_id']))
+            ticket_tag = safe_query(self, TicketTag, 'id', view_kwargs['ticket_tag_id'], 'ticket_tag_id')
+            if ticket_tag.event_id is not None:
+                view_kwargs['id'] = ticket_tag.event_id
             else:
-                if ticket_tag.event_id is not None:
-                    view_kwargs['id'] = ticket_tag.event_id
-                else:
-                    view_kwargs['id'] = None
+                view_kwargs['id'] = None
 
     decorators = (api.has_permission('is_organizer', methods="PATCH,DELETE", fetch="id", fetch_as="event_id",
                                      check=lambda a: a.get('id') is not None), )

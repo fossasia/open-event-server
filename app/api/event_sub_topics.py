@@ -1,8 +1,6 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
-from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.utilities import dasherize
 from app.models import db
@@ -11,6 +9,7 @@ from app.models.event import Event
 from app.models.event_topic import EventTopic
 from app.api.bootstrap import api
 from app.api.helpers.permissions import jwt_required
+from app.api.helpers.db import safe_query
 
 
 class EventSubTopicSchema(Schema):
@@ -60,13 +59,8 @@ class EventSubTopicList(ResourceList):
 
         query_ = self.session.query(EventSubTopic)
         if view_kwargs.get('event_topic_id'):
-            try:
-                event_topic = self.session.query(EventTopic).filter_by(id=view_kwargs['event_topic_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event_topic_id'},
-                                     "Event Topic: {} not found".format(view_kwargs['event_topic_id']))
-            else:
-                query_ = query_.join(EventTopic).filter(EventTopic.id == event_topic.id)
+            event_topic = safe_query(self, EventTopic, 'id', view_kwargs['event_topic_id'], 'event_topic_id')
+            query_ = query_.join(EventTopic).filter(EventTopic.id == event_topic.id)
         return query_
 
     def before_create_object(self, data, view_kwargs):
@@ -77,13 +71,8 @@ class EventSubTopicList(ResourceList):
         :return:
         """
         if view_kwargs.get('event_topic_id'):
-            try:
-                event_topic = self.session.query(EventTopic).filter_by(id=view_kwargs['event_topic_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event_topic_id'},
-                                     "Event Topic: {} not found".format(view_kwargs['event_topic_id']))
-            else:
-                data['event_topic_id'] = event_topic.id
+            event_topic = safe_query(self, EventTopic, 'id', view_kwargs['event_topic_id'], 'event_topic_id')
+            data['event_topic_id'] = event_topic.id
 
     view_kwargs = True
     decorators = (api.has_permission('is_admin', methods="POST"),)
@@ -103,25 +92,15 @@ class EventSubTopicDetail(ResourceDetail):
 
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('event_identifier'):
-            try:
-                event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event_identifier'},
-                                     "Event: {} not found".format(view_kwargs['event_identifier']))
-            else:
-                view_kwargs['event_id'] = event.id
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            view_kwargs['event_id'] = event.id
 
         if view_kwargs.get('event_id'):
-            try:
-                event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event_id'},
-                                     "Event: {} not found".format(view_kwargs['event_id']))
+            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            if event.event_topic_id:
+                view_kwargs['id'] = event.event_topic_id
             else:
-                if event.event_topic_id:
-                    view_kwargs['id'] = event.event_topic_id
-                else:
-                    view_kwargs['id'] = None
+                view_kwargs['id'] = None
 
     decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
     schema = EventSubTopicSchema

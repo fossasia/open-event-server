@@ -2,8 +2,6 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from marshmallow import validates_schema
-from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
@@ -13,6 +11,7 @@ from app.models.ticket import Ticket
 from app.models.event import Event
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.models.ticket_holder import TicketHolder
+from app.api.helpers.db import safe_query
 
 
 class TicketSchema(Schema):
@@ -86,20 +85,17 @@ class TicketList(ResourceList):
     def query(self, view_kwargs):
         query_ = self.session.query(Ticket)
         if view_kwargs.get('event_id'):
-            query_ = query_.filter_by(event_id=view_kwargs['event_id'])
+            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            query_ = query_.join(Event).filter(Event.id == event.id)
         elif view_kwargs.get('event_identifier'):
-            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['identifier'])
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            query_ = query_.join(Event).filter(Event.id == event.id)
         return query_
 
     def before_create_object(self, data, view_kwargs):
         if view_kwargs.get('event_id') is not None:
-            try:
-                event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event_identifier'},
-                                     "Event: with ID {} not found".format(view_kwargs['event_id']))
-            else:
-                data['event_id'] = event.id
+            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            data['event_id'] = event.id
 
     view_kwargs = True
     decorators = (api.has_permission('is_coorganizer', fetch='event_id',
@@ -120,16 +116,11 @@ class TicketDetail(ResourceDetail):
     """
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('attendee_id') is not None:
-            try:
-                session = self.session.query(TicketHolder).filter_by(id=view_kwargs['attendee_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'attendee_id'},
-                                     "Attendee: {} not found".format(view_kwargs['attendee_id']))
+            attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
+            if attendee.ticket_id is not None:
+                view_kwargs['id'] = attendee.ticket_id
             else:
-                if session.ticket_id is not None:
-                    view_kwargs['id'] = session.ticket_id
-                else:
-                    view_kwargs['id'] = None
+                view_kwargs['id'] = None
 
     decorators = (api.has_permission('is_coorganizer', fetch='event_id',
                   fetch_as="event_id", model=Ticket, methods="PATCH,DELETE"), )
