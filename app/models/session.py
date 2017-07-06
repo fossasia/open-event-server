@@ -16,7 +16,7 @@ class Session(db.Model):
         'exclude': []
     }
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String)
+    title = db.Column(db.String, nullable=False)
     subtitle = db.Column(db.String)
     short_abstract = db.Column(db.Text)
     long_abstract = db.Column(db.Text)

@@ -23,12 +23,12 @@ class EventCopyrightSchema(Schema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    holder = fields.Str()
-    holder_url = fields.Url()
+    holder = fields.Str(allow_none=True)
+    holder_url = fields.Url(allow_none=True)
     licence = fields.Str(required=True)
-    licence_url = fields.Url()
-    year = fields.Int(validate=lambda n: 1900 <= n <= datetime.now().year)
-    logo_url = fields.Url(attribute='logo')
+    licence_url = fields.Url(allow_none=True)
+    year = fields.Int(validate=lambda n: 1900 <= n <= datetime.now().year, allow_none=True)
+    logo_url = fields.Url(attribute='logo', allow_none=True)
     event = Relationship(attribute='event',
                          self_view='v1.copyright_event',
                          self_view_kwargs={'id': '<id>'},

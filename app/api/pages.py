@@ -24,11 +24,11 @@ class PageSchema(Schema):
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
-    title = fields.Str()
+    title = fields.Str(allow_none=True)
     url = fields.String(required=True)
-    description = fields.Str()
-    place = fields.Str()
-    language = fields.Str()
+    description = fields.Str(allow_none=True)
+    place = fields.Str(allow_none=True)
+    language = fields.Str(allow_none=True)
     index = fields.Integer(default=0)
 
 
