@@ -14,7 +14,7 @@ Date.prototype.hhmm = function() {
 var SESSION_TYPE = {
     id: null,
     name: '',
-    length: '00.30'
+    length: '00:30'
 };
 
 var MICROLOCATION = {

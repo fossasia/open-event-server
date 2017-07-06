@@ -251,6 +251,11 @@ function addSessionToTimeline(sessionRef, position, shouldBroadcast) {
     delete  sessionRefObject.session.start_time.isReset;
     delete  sessionRefObject.session.end_time.isReset;
 
+    if (sessionRefObject.session.session_type) {
+        var sessionTypeDuration = sessionRefObject.session.session_type.length.split(":");
+        sessionRefObject.session.duration = (+sessionTypeDuration[0]) * 60 + (+sessionTypeDuration[1]);
+    }
+
     sessionRefObject.$sessionElement.data("temp-top", sessionRefObject.session.top);
     sessionRefObject.$sessionElement.css("top", sessionRefObject.session.top + "px");
     sessionRefObject.$sessionElement.css("height", minutesToPixels(sessionRefObject.session.duration) + "px");
@@ -495,6 +500,10 @@ function isSessionOverTimeline($sessionElement) {
 function updateSessionTimeOnTooltip($sessionElement) {
     var topTime = moment.utc({hour: dayLevelTime.start.hours, minute: dayLevelTime.start.minutes});
     var mins = pixelsToMinutes($sessionElement.outerHeight(false));
+    if ($sessionElement.data("session").session_type) {
+        var sessionTypeDuration = $sessionElement.data("session").session_type.length.split(":");
+        mins = (+sessionTypeDuration[0]) * 60 + (+sessionTypeDuration[1]);
+    }
     var topInterval = pixelsToMinutes($sessionElement.data("temp-top"), true);
 
     var startTimeString = topTime.add(topInterval, 'm').format("LT");
