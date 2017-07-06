@@ -1,8 +1,6 @@
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema, Relationship
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
@@ -10,6 +8,7 @@ from app.models import db
 from app.models.sponsor import Sponsor
 from app.models.event import Event
 from app.api.bootstrap import api
+from app.api.helpers.db import safe_query
 
 
 class SponsorSchema(Schema):
@@ -53,22 +52,11 @@ class SponsorList(ResourceList):
         """
         query_ = self.session.query(Sponsor)
         if view_kwargs.get('event_id'):
-            try:
-                event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event_id'},
-                                     "Event: {} not found".format(view_kwargs['event_id']))
-            else:
-                query_ = query_.join(Event).filter(Event.id == event.id)
+            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            query_ = query_.join(Event).filter(Event.id == event.id)
         elif view_kwargs.get('event_identifier'):
-            query_ = query_.join(Event).filter(Event.identifier == view_kwargs['event_identifier'])
-            try:
-                event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event_identifier'},
-                                     "Event: {} not found".format(view_kwargs['event_identifier']))
-            else:
-                query_ = query_.join(Event).filter(Event.id == event.id)
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            query_ = query_.join(Event).filter(Event.id == event.id)
         return query_
 
     def before_create_object(self, data, view_kwargs):
@@ -79,22 +67,12 @@ class SponsorList(ResourceList):
         :return:
         """
         if view_kwargs.get('event_id'):
-            try:
-                event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event_id'},
-                                     "Event: {} not found".format(view_kwargs['event_id']))
-            else:
-                data['event_id'] = event.id
+            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            data['event_id'] = event.id
 
         elif view_kwargs.get('event_identifier'):
-            try:
-                event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event_identifier'},
-                                     "Event: {} not found".format(view_kwargs['event_identifier']))
-            else:
-                data['event_id'] = event.id
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'identifier')
+            data['event_id'] = event.id
 
     decorators = (api.has_permission('is_coorganizer', fetch='event_id', fetch_as="event_id", methods="POST",
                                      check=lambda a: a.get('event_id') or a.get('event_identifier')),)

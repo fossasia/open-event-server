@@ -8,6 +8,7 @@ from app.models.ticket_holder import TicketHolder
 from app.models.ticket import Ticket
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.utilities import dasherize
+from app.api.helpers.db import safe_query
 
 
 class AttendeeSchema(Schema):
@@ -52,14 +53,20 @@ class AttendeeList(ResourceList):
     def query(self, view_kwargs):
         query_ = self.session.query(TicketHolder)
         if view_kwargs.get('order_id') and view_kwargs.get('ticket_id'):
-            query_ = query_.join(Order).filter(Order.id == view_kwargs['order_id'])
-            query_ = query_.join(Ticket).filter(Ticket.id == view_kwargs['ticket_id'])
+            order = safe_query(self, Order, 'id', view_kwargs['order_id'], 'order_id')
+            query_ = query_.join(Order).filter(Order.id == order.id)
+
+            ticket = safe_query(self, Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
+            query_ = query_.join(Ticket).filter(Ticket.id == ticket.id)
         return query_
 
     def before_create_object(self, data, view_kwargs):
         if view_kwargs.get('order_id') and view_kwargs.get('ticket_id'):
-            data['ticket_id'] = view_kwargs['ticket_id']
-            data['order_id'] = view_kwargs['order_id']
+            order = safe_query(self, Order, 'id', view_kwargs['order_id'], 'order_id')
+            data['order_id'] = order.id
+
+            ticket = safe_query(self, Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
+            data['ticket_id'] = ticket.id
 
     view_kwargs = True
     decorators = (jwt_required,)
