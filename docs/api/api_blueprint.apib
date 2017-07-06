@@ -6376,6 +6376,290 @@ Delete a single discount code.
           }
         }
 
+# Group Role Invites
+
+Role invites for Events. Can only be edited and entered by event organizers.
+
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `email`  | Email of the user to send role invite | string | - |
+| `hash` | hash of the role invite | string | - |
+| `created-at` | Discount Code created at | ISO 8601 (tz-aware) | - |
+| `role-id` | ID of the role the role invite was sent | integer | - |
+| `is-declined` | If the invite was declined  | boolean (default: `false`) | - |
+
+## Role Invites Collection [/v1/events/{event_identifier}/role-invites{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `role_id`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List All Role Invites [GET]
+Get a list of Role invites.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "role": {
+                  "links": {
+                    "self": "/v1/role-invites/1/relationships/role",
+                    "related": "/v1/role-invites/1/role"
+                  }
+                },
+                "event": {
+                  "links": {
+                    "self": "/v1/role-invites/1/relationships/event",
+                    "related": "/v1/role-invites/1/event"
+                  }
+                }
+              },
+              "attributes": {
+                "email": "example@example.com",
+                "hash": "ABCDefghIJKLmnop",
+                "created-at": "2017-06-20T09:59:23.740772+00:00",
+                "role-id": "1",
+                "is-declined": false
+              },
+              "type": "role-invite",
+              "id": "1",
+              "links": {
+                "self": "/v1/role-invites/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/events/1/role-invites"
+          }
+        }
+
+
+### Create Role Invite [POST]
+Create a new role invite with event_id.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "email": "example@example.com",
+                  "hash": "ABCDefghIJKLmnop",
+                  "created-at": "2017-06-20T09:59:23.740772+00:00",
+                  "role-id": "1",
+                  "is-declined": false
+                },
+                "type": "role-invite"
+              }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+              "relationships": {
+                "role": {
+                  "links": {
+                    "self": "/v1/role-invites/1/relationships/role",
+                    "related": "/v1/role-invites/1/role"
+                  }
+                },
+                "event": {
+                  "links": {
+                    "self": "/v1/role-invites/1/relationships/event",
+                    "related": "/v1/role-invites/1/event"
+                  }
+                }
+              },
+              "attributes": {
+                "email": "example@example.com",
+                "hash": "ABCDefghIJKLmnop",
+                "created-at": "2017-06-20T09:59:23.740772+00:00",
+                "role-id": "1",
+                "is-declined": false
+              },
+              "type": "role-invite",
+              "id": "1",
+              "links": {
+                "self": "/v1/role-invites/1"
+              }
+            },
+            "jsonapi": {
+              "version": "1.0"
+            },
+            "links": {
+              "self": "/v1/role-invites/1"
+            }
+          }
+
+## Role Invite Details [/v1/role-invites/{role_invite_id}]
++ Parameters
+    + role_invite_id: 1 (integer) - ID of the role invite in the form of an integer
+
+### Role Invite Details [GET]
+Get a single role invite.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+              "relationships": {
+                "role": {
+                  "links": {
+                    "self": "/v1/role-invites/1/relationships/role",
+                    "related": "/v1/role-invites/1/role"
+                  }
+                },
+                "event": {
+                  "links": {
+                    "self": "/v1/role-invites/1/relationships/event",
+                    "related": "/v1/role-invites/1/event"
+                  }
+                }
+              },
+              "attributes": {
+                "email": "example@example.com",
+                "hash": "ABCDefghIJKLmnop",
+                "created-at": "2017-06-20T09:59:23.740772+00:00",
+                "role-id": "1",
+                "is-declined": false
+              },
+              "type": "role-invite",
+              "id": "1",
+              "links": {
+                "self": "/v1/role-invites/1"
+              }
+            },
+            "jsonapi": {
+              "version": "1.0"
+            },
+            "links": {
+              "self": "/v1/role-invites/1"
+            }
+          }
+
+### Update Role Invite [PATCH]
++ `id` (integer) - ID of the record to update **(required)**
+
+Update a single invite by setting attributes.
+
+Authorized user must be admin.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "email": "example@example.com",
+                  "hash": "ABCDefghIJKLmnop",
+                  "created-at": "2017-06-20T09:59:23.740772+00:00",
+                  "role-id": "1",
+                  "is-declined": false
+                },
+                "type": "role-invite",
+                "id": "1"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "role": {
+                  "links": {
+                    "self": "/v1/role-invites/1/relationships/role",
+                    "related": "/v1/role-invites/1/role"
+                  }
+                },
+                "event": {
+                  "links": {
+                    "self": "/v1/role-invites/1/relationships/event",
+                    "related": "/v1/role-invites/1/event"
+                  }
+                }
+            },
+            "attributes": {
+              "email": "example@example.com",
+              "hash": "ABCDefghIJKLmnop",
+              "created-at": "2017-06-20T09:59:23.740772+00:00",
+              "role-id": "1",
+              "is-declined": false
+            },
+            "type": "role-invite",
+            "id": "1",
+            "links": {
+              "self": "/v1/role-invites/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/role-invites/1"
+          }
+        }
+
+### Delete Role Invite [DELETE]
+Delete a single role invite.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
 # Group Image Size
 
 **ADMIN**
@@ -6677,7 +6961,7 @@ Delete a single image size.
 
 **ADMIN**
 
-To create or modify data of this data layer, you will need admin access. You can get the data without admin access as well. Image sizes basically stores the configuration for the width, height and aspect ratio for full size, thumbnail and icon version of various images that is uploaded to the server.
+To create or modify data of this data layer, you will need admin access. You can get the data without admin access as well. 
 
 | Parameter | Description | Type | Required |
 |:----------|-------------|------|----------|
