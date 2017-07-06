@@ -15,7 +15,7 @@ timezone_ = 'UTC'
 slug_ = 'camp-trip-retreat'
 environment_ = 'production'
 secret_ = 'ABCDefghIJKLmnop'
-
+fee_ = '1.23'
 
 
 def socialUrl_(name):
