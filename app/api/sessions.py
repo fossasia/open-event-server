@@ -107,7 +107,7 @@ class SessionList(ResourceList):
             session_type = safe_query(self, SessionType, 'id', view_kwargs['session_type_id'], 'session_type_id')
             query_ = query_.join(SessionType).filter(SessionType.id == session_type.id)
         if view_kwargs.get('microlocation_id') is not None:
-            microlocation = safe_query(self, Track, 'id', view_kwargs['microlocation_id'], 'microlocation_id')
+            microlocation = safe_query(self, Microlocation, 'id', view_kwargs['microlocation_id'], 'microlocation_id')
             query_ = query_.join(Microlocation).filter(Microlocation.id == microlocation.id)
         if view_kwargs.get('event_id'):
             event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')

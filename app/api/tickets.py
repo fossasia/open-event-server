@@ -116,7 +116,7 @@ class TicketDetail(ResourceDetail):
     """
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('attendee_id') is not None:
-            attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'dttendee_id')
+            attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
             if attendee.ticket_id is not None:
                 view_kwargs['id'] = attendee.ticket_id
             else:
