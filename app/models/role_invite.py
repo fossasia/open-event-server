@@ -20,10 +20,10 @@ class RoleInvite(db.Model):
     created_at = db.Column(db.DateTime(timezone=True))
     is_declined = db.Column(db.Boolean)
 
-    def __init__(self, email, event, role, created_at, is_declined=False):
+    def __init__(self, email=None, event_id=None, role_id=None, created_at=None, is_declined=False):
         self.email = email
-        self.event = event
-        self.role = role
+        self.event_id = event_id
+        self.role_id = role_id
         self.created_at = created_at
         self.is_declined = is_declined
 
@@ -33,13 +33,13 @@ class RoleInvite(db.Model):
 
     def __repr__(self):
         return '<RoleInvite %r:%r:%r>' % (self.email,
-                                          self.event,
-                                          self.role,)
+                                          self.event_id,
+                                          self.role_id,)
 
     def __str__(self):
         return unicode(self).encode('utf-8')
 
     def __unicode__(self):
         return 'Invite for %r:%r:%r' % (self.email,
-                                        self.event,
-                                        self.role)
+                                        self.event_id,
+                                        self.role_id)

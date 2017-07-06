@@ -14,6 +14,7 @@ from app.api.sponsors import SponsorList, SponsorDetail, SponsorRelationship
 from app.api.tracks import TrackList, TrackDetail, TrackRelationship
 from app.api.speakers_calls import SpeakersCallList, SpeakersCallDetail, SpeakersCallRelationship
 from app.api.event_invoices import EventInvoiceList, EventInvoiceDetail, EventInvoiceRelationship
+from app.api.role_invites import RoleInviteList, RoleInviteDetail, RoleInviteRelationship
 from app.api.image_sizes import ImageSizeList, ImageSizeDetail
 from app.api.roles import RoleList, RoleDetail
 from app.api.session_types import SessionTypeList, SessionTypeDetail, SessionTypeRelationship
@@ -55,7 +56,14 @@ api.route(PageDetail, 'page_detail', '/pages/<int:id>')
 
 # roles
 api.route(RoleList, 'role_list', '/roles')
-api.route(RoleDetail, 'role_detail', '/roles/<int:id>')
+api.route(RoleDetail, 'role_detail', '/roles/<int:id>', '/role-invites/<int:role_invite_id>/role')
+
+# role_invites
+api.route(RoleInviteList, 'role_invite_list', '/events/<int:event_id>/role-invites',
+          '/events/<event_identifier>/role-invites')
+api.route(RoleInviteDetail, 'role_invite_detail', '/role-invites/<int:id>')
+api.route(RoleInviteRelationship, 'role_invite_event', '/role-invites/<int:id>/relationships/event')
+api.route(RoleInviteRelationship, 'role_invite_role', '/role-invites/<int:id>/relationships/role')
 
 # tickets
 api.route(TicketList, 'ticket_list', '/events/<int:event_id>/tickets',
@@ -81,7 +89,8 @@ api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>
           '/speakers-calls/<int:speakers_call_id>/event', '/session-types/<int:session_type_id>/event',
           '/event-copyright/<int:copyright_id>/event', '/tax/<int:tax_id>/event',
           '/event-invoices/<int:event_invoice_id>/event', '/discount-codes/<int:discount_code_id>/event',
-          '/sessions/<int:session_id>/event', '/ticket-tags/<int:ticket_tag_id>/event')
+          '/sessions/<int:session_id>/event', '/ticket-tags/<int:ticket_tag_id>/event',
+          '/role-invites/<int:role_invite_id>/event')
 api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/tickets',
           '/events/<identifier>/relationships/tickets')
 api.route(EventRelationship, 'event_ticket_tag', '/events/<int:id>/relationships/ticket-tags',
@@ -114,6 +123,8 @@ api.route(EventRelationship, 'event_event_topic', '/events/<int:id>/relationship
           '/events/<identifier>/relationships/event-topic')
 api.route(EventRelationship, 'event_event_sub_topic', '/events/<int:id>/relationships/event-sub-topic',
           '/events/<identifier>/relationships/event-sub-topic')
+api.route(EventRelationship, 'event_role_invite', '/events/<int:id>/relationships/role-invites',
+          '/events/<identifier>/relationships/role-invites')
 
 # microlocations
 api.route(MicrolocationList, 'microlocation_list', '/microlocations', '/events/<int:event_id>/microlocations',
