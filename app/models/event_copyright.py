@@ -12,7 +12,7 @@ class EventCopyright(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     holder = db.Column(db.String)
     holder_url = db.Column(db.String)
-    licence = db.Column(db.String)
+    licence = db.Column(db.String, nullable=False)
     licence_url = db.Column(db.String)
     year = db.Column(db.Integer)
     logo = db.Column(db.String)

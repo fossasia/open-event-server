@@ -26,11 +26,11 @@ class SponsorSchema(Schema):
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
-    description = fields.Str()
-    url = fields.Url()
-    level = fields.Str()
-    logo_url = fields.Url()
-    type = fields.Str()
+    description = fields.Str(allow_none=True)
+    url = fields.Url(allow_none=True)
+    level = fields.Str(allow_none=True)
+    logo_url = fields.Url(allow_none=True)
+    type = fields.Str(allow_none=True)
     event = Relationship(attribute='event',
                          self_view='v1.sponsor_event',
                          self_view_kwargs={'id': '<id>'},

@@ -25,10 +25,10 @@ class NotificationSchema(Schema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    title = fields.Str()
-    message = fields.Str()
+    title = fields.Str(allow_none=True)
+    message = fields.Str(allow_none=True)
     received_at = fields.DateTime(dump_only=True)
-    accept = fields.Str()
+    accept = fields.Str(allow_none=True)
     is_read = fields.Boolean()
     user = Relationship(attribute='user',
                         self_view='v1.notification_user',
