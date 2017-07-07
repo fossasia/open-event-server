@@ -20,12 +20,13 @@ class RoleInvite(db.Model):
     created_at = db.Column(db.DateTime(timezone=True))
     is_declined = db.Column(db.Boolean)
 
-    def __init__(self, email=None, event_id=None, role_id=None, created_at=None, is_declined=False):
+    def __init__(self, email=None, event_id=None, role_id=None, created_at=None, is_declined=False, hash=None):
         self.email = email
         self.event_id = event_id
         self.role_id = role_id
         self.created_at = created_at
         self.is_declined = is_declined
+        self.hash = hash
 
     def has_expired(self):
         # Check if invitation link has expired (it expires after 24 hours)

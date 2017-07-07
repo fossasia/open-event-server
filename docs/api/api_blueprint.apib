@@ -1203,6 +1203,12 @@ Get a list of events.
                             "related": "/v1/events/1/tickets"
                           }
                         },
+                        "role-invites": {
+                          "links": {
+                            "self": "/v1/events/20/relationships/role-invites",
+                            "related": "/v1/events/20/role-invites"
+                          }
+                        },
                         "event-sub-topic": {
                             "links": {
                                 "self": "/v1/events/1/relationships/event-sub-topic",
@@ -1417,6 +1423,12 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                         "related": "/v1/events/1/tickets"
                       }
                     },
+                    "role-invites": {
+                      "links": {
+                        "self": "/v1/events/20/relationships/role-invites",
+                        "related": "/v1/events/20/role-invites"
+                      }
+                    },
                     "event-sub-topic": {
                         "links": {
                             "self": "/v1/events/1/relationships/event-sub-topic",
@@ -1588,6 +1600,12 @@ Get a single event.
                       "links": {
                         "self": "/v1/events/1/relationships/tickets",
                         "related": "/v1/events/1/tickets"
+                      }
+                    },
+                    "role-invites": {
+                      "links": {
+                        "self": "/v1/events/20/relationships/role-invites",
+                        "related": "/v1/events/20/role-invites"
                       }
                     },
                     "event-sub-topic": {
@@ -1806,8 +1824,14 @@ All other fields are optional. Add attributes you want to modify.
                       "links": {
                         "self": "/v1/events/1/relationships/tickets",
                         "related": "/v1/events/1/tickets"
-                        }
-                      },
+                      }
+                    },
+                    "role-invites": {
+                      "links": {
+                        "self": "/v1/events/20/relationships/role-invites",
+                        "related": "/v1/events/20/role-invites"
+                      }
+                    },
                     "event-sub-topic": {
                         "links": {
                             "self": "/v1/events/1/relationships/event-sub-topic",
@@ -6383,10 +6407,10 @@ Role invites for Events. Can only be edited and entered by event organizers.
 
 | Parameter | Description | Type | Required |
 |:----------|-------------|------|----------|
-| `email`  | Email of the user to send role invite | string | - |
+| `email`  | Email of the user to send role invite | string | **yes** |
 | `hash` | hash of the role invite | string | - |
 | `created-at` | Discount Code created at | ISO 8601 (tz-aware) | - |
-| `role-id` | ID of the role the role invite was sent | integer | - |
+| `role-id` | ID of the role the role invite was sent | integer | **yes** |
 | `is-declined` | If the invite was declined  | boolean (default: `false`) | - |
 
 ## Role Invites Collection [/v1/events/{event_identifier}/role-invites{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
@@ -6573,7 +6597,7 @@ Get a single role invite.
 ### Update Role Invite [PATCH]
 + `id` (integer) - ID of the record to update **(required)**
 
-Update a single invite by setting attributes.
+Update a single role invite by setting attributes.
 
 Authorized user must be admin.
 

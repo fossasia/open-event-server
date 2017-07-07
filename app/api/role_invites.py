@@ -1,12 +1,9 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
-from datetime import datetime
-from pytz import timezone
 
 from app.api.helpers.utilities import dasherize
 from app.models import db
-from app.models.role import Role
 from app.models.event import Event
 from app.models.role_invite import RoleInvite
 from app.api.bootstrap import api
@@ -29,10 +26,10 @@ class RoleInviteSchema(Schema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    email = fields.Str()
-    hash = fields.Str()
+    email = fields.Str(required=True)
+    hash = fields.Str(allow_none=True)
     created_at = fields.DateTime(dump_only=True, timezone=True)
-    role_id = fields.Integer()
+    role_id = fields.Integer(required=True)
     is_declined = fields.Bool(default=False)
     event = Relationship(attribute='event',
                          self_view='v1.role_invite_event',
@@ -103,7 +100,7 @@ class RoleInviteDetail(ResourceDetail):
     Role invite detail by id
     """
 
-    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
+    decorators = (api.has_permission('is_organizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
                                      model=RoleInvite, check=lambda a: a.get('id') is not None),)
     schema = RoleInviteSchema
     data_layer = {'session': db.session,
