@@ -55,7 +55,14 @@ api.route(PageDetail, 'page_detail', '/pages/<int:id>')
 
 # roles
 api.route(RoleList, 'role_list', '/roles')
-api.route(RoleDetail, 'role_detail', '/roles/<int:id>')
+api.route(RoleDetail, 'role_detail', '/roles/<int:id>', '/role-invites/<int:role_invite_id>/role')
+
+# role_invites
+api.route(RoleInviteList, 'role_invite_list', '/events/<int:event_id>/role-invites',
+          '/events/<event_identifier>/role-invites')
+api.route(RoleInviteDetail, 'role_invite_detail', '/role-invites/<int:id>')
+api.route(RoleInviteRelationship, 'role_invite_event', '/role-invites/<int:id>/relationships/event')
+api.route(RoleInviteRelationship, 'role_invite_role', '/role-invites/<int:id>/relationships/role')
 
 # tickets
 api.route(TicketList, 'ticket_list', '/events/<int:event_id>/tickets',
