@@ -7,6 +7,7 @@ from app.models import db
 from app.api.bootstrap import api
 from app.models.role import Role
 from app.models.role_invite import RoleInvite
+from app.models.users_events_role import UsersEventsRoles
 from app.api.helpers.db import safe_query
 
 
@@ -47,6 +48,14 @@ class RoleDetail(ResourceDetail):
                 role_invite = safe_query(self, RoleInvite, 'id', view_kwargs['role_invite_id'], 'role_invite_id')
                 if role_invite.role_id is not None:
                     view_kwargs['id'] = role_invite.role_id
+                else:
+                    view_kwargs['id'] = None
+
+        if view_kwargs.get('users_events_role_id') is not None:
+                users_events_role = safe_query(self, UsersEventsRoles, 'id', view_kwargs['users_events_role_id'],
+                'users_events_role_id')
+                if users_events_role.role_id is not None:
+                    view_kwargs['id'] = users_events_role.role_id
                 else:
                     view_kwargs['id'] = None
 

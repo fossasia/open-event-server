@@ -7,6 +7,7 @@ from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.user import User
 from app.models.notification import Notification
+from app.models.users_events_role import UsersEventsRoles
 from app.models.event_invoice import EventInvoice
 from app.api.helpers.permissions import is_user_itself, jwt_required
 from app.api.helpers.exceptions import ConflictException
@@ -100,6 +101,14 @@ class UserDetail(ResourceDetail):
             event_invoice = safe_query(self, EventInvoice, 'id', view_kwargs['event_invoice_id'], 'event_invoice_id')
             if event_invoice.user_id is not None:
                 view_kwargs['id'] = event_invoice.user_id
+            else:
+                view_kwargs['id'] = None
+
+        if view_kwargs.get('users_events_role_id') is not None:
+            users_events_role = safe_query(self, UsersEventsRoles, 'id', view_kwargs['users_events_role_id'],
+            'users_events_role_id')
+            if users_events_role.user_id is not None:
+                view_kwargs['id'] = users_events_role.user_id
             else:
                 view_kwargs['id'] = None
 

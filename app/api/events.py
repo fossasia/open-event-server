@@ -23,6 +23,7 @@ from app.models.discount_code import DiscountCode
 from app.models.event_invoice import EventInvoice
 from app.models.speakers_call import SpeakersCall
 from app.models.role_invite import RoleInvite
+from app.models.users_events_role import UsersEventsRoles
 from app.models.ticket import TicketTag
 from app.models.user import User, ATTENDEE, ORGANIZER
 from app.models.users_events_role import UsersEventsRoles
@@ -249,6 +250,13 @@ class EventSchema(Schema):
                                 related_view_kwargs={'event_id': '<id>'},
                                 schema='RoleInviteSchema',
                                 type_='role-invite')
+    users_events_roles = Relationship(attribute='users_events_role',
+                                      self_view='v1.event_users_events_role',
+                                      self_view_kwargs={'id': '<id>'},
+                                      related_view='v1.users_events_role_list',
+                                      related_view_kwargs={'event_id': '<id>'},
+                                      schema='UsersEventsRolesSchema',
+                                      type_='users-events-role')
 
 
 class EventList(ResourceList):
@@ -296,7 +304,7 @@ class EventDetail(ResourceDetail):
 
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            event = safe_query(self, Event, 'identifier', view_kwargs['identifier'], 'identifier')
             view_kwargs['id'] = event.id
 
         if view_kwargs.get('sponsor_id') is not None:
@@ -382,6 +390,14 @@ class EventDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
+        if view_kwargs.get('users_events_role_id') is not None:
+            users_events_role = safe_query(self, UsersEventsRoles, 'id', view_kwargs['users_events_role_id'],
+              'users_events_role_id')
+            if users_events_role.event_id is not None:
+                view_kwargs['id'] = users_events_role.event_id
+            else:
+                view_kwargs['id'] = None
+
     decorators = (api.has_permission('is_organizer', methods="PATCH,DELETE", fetch="id", fetch_as="event_id",
                                      check=lambda a: a.get('id') is not None), )
     schema = EventSchema
@@ -396,7 +412,7 @@ class EventRelationship(ResourceRelationship):
 
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('identifier'):
-            event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
+            event = safe_query(self, Event, 'identifier', view_kwargs['identifier'], 'identifier')
             view_kwargs['id'] = event.id
 
     decorators = (jwt_required,)
