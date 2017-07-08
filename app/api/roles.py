@@ -6,6 +6,8 @@ from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.api.bootstrap import api
 from app.models.role import Role
+from app.models.role_invite import RoleInvite
+from app.api.helpers.db import safe_query
 
 
 class RoleSchema(Schema):
@@ -40,7 +42,18 @@ class RoleDetail(ResourceDetail):
     """
     Role detail by id
     """
+    def before_get_object(self, view_kwargs):
+        if view_kwargs.get('role_invite_id') is not None:
+                role_invite = safe_query(self, RoleInvite, 'id', view_kwargs['role_invite_id'], 'role_invite_id')
+                if role_invite.role_id is not None:
+                    view_kwargs['id'] = role_invite.role_id
+                else:
+                    view_kwargs['id'] = None
+
     decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
     schema = RoleSchema
     data_layer = {'session': db.session,
-                  'model': Role}
+                  'model': Role,
+                  'methods': {
+                      'before_get_object': before_get_object
+                  }}
