@@ -1,7 +1,12 @@
 from datetime import datetime, timedelta
 import pytz
 from app.models import db
+import random
 
+
+def generate_hash():
+    hash_ = random.getrandbits(128)
+    return str(hash_)
 
 class RoleInvite(db.Model):
     __tablename__ = 'role_invites'
@@ -18,15 +23,15 @@ class RoleInvite(db.Model):
 
     hash = db.Column(db.String)
     created_at = db.Column(db.DateTime(timezone=True))
-    is_declined = db.Column(db.Boolean)
+    status = db.Column(db.String, default="pending")
 
-    def __init__(self, email=None, event_id=None, role_id=None, created_at=None, is_declined=False, hash=None):
+    def __init__(self, email=None, event_id=None, role_id=None, created_at=None, status="pending", hash=None):
         self.email = email
         self.event_id = event_id
         self.role_id = role_id
         self.created_at = created_at
-        self.is_declined = is_declined
-        self.hash = hash
+        self.status = status
+        self.hash = generate_hash()
 
     def has_expired(self):
         # Check if invitation link has expired (it expires after 24 hours)

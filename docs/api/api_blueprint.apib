@@ -6458,8 +6458,7 @@ Get a list of Role invites.
                 "email": "example@example.com",
                 "hash": "ABCDefghIJKLmnop",
                 "created-at": "2017-06-20T09:59:23.740772+00:00",
-                "role-id": "1",
-                "is-declined": false
+                "status": "pending"
               },
               "type": "role-invite",
               "id": "1",
@@ -6492,11 +6491,17 @@ Create a new role invite with event_id.
               "data": {
                 "attributes": {
                   "email": "example@example.com",
-                  "hash": "ABCDefghIJKLmnop",
                   "created-at": "2017-06-20T09:59:23.740772+00:00",
-                  "role-id": "1",
-                  "is-declined": false
+                  "status": "pending"
                 },
+                "relationships": {
+                  "role": {
+                    "data": {
+                      "type": "role",
+                      "id": "1"
+                    }
+                  }
+                }
                 "type": "role-invite"
               }
             }
@@ -6521,10 +6526,9 @@ Create a new role invite with event_id.
               },
               "attributes": {
                 "email": "example@example.com",
-                "hash": "ABCDefghIJKLmnop",
-                "created-at": "2017-06-20T09:59:23.740772+00:00",
-                "role-id": "1",
-                "is-declined": false
+                "hash": "149889783495332276669212664484219865405",
+                "created-at": "2017-06-20T09:59:23.740772+00:00"
+                "status": "pending"
               },
               "type": "role-invite",
               "id": "1",
@@ -6577,8 +6581,7 @@ Get a single role invite.
                 "email": "example@example.com",
                 "hash": "ABCDefghIJKLmnop",
                 "created-at": "2017-06-20T09:59:23.740772+00:00",
-                "role-id": "1",
-                "is-declined": false
+                "status": "pending"
               },
               "type": "role-invite",
               "id": "1",
@@ -6615,8 +6618,7 @@ Authorized user must be admin.
                   "email": "example@example.com",
                   "hash": "ABCDefghIJKLmnop",
                   "created-at": "2017-06-20T09:59:23.740772+00:00",
-                  "role-id": "1",
-                  "is-declined": false
+                  "status": "pending"
                 },
                 "type": "role-invite",
                 "id": "1"
@@ -6645,8 +6647,7 @@ Authorized user must be admin.
               "email": "example@example.com",
               "hash": "ABCDefghIJKLmnop",
               "created-at": "2017-06-20T09:59:23.740772+00:00",
-              "role-id": "1",
-              "is-declined": false
+              "status": "pending"
             },
             "type": "role-invite",
             "id": "1",

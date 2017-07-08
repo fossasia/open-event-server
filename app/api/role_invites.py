@@ -27,9 +27,8 @@ class RoleInviteSchema(Schema):
 
     id = fields.Str(dump_only=True)
     email = fields.Str(required=True)
-    hash = fields.Str(allow_none=True)
+    hash = fields.Str(dump_only=True)
     created_at = fields.DateTime(dump_only=True, timezone=True)
-    role_id = fields.Integer(required=True)
     is_declined = fields.Bool(default=False)
     event = Relationship(attribute='event',
                          self_view='v1.role_invite_event',

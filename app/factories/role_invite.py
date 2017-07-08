@@ -14,4 +14,4 @@ class RoleInviteFactory(factory.alchemy.SQLAlchemyModelFactory):
     hash = common.string_
     created_at = common.date_
     role_id = common.int_
-    is_declined = False
+    status = common.string_
