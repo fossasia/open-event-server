@@ -59,7 +59,6 @@ class RoleInviteList(ResourceList):
         :param view_kwargs:
         :return:
         """
-
         query_ = self.session.query(RoleInvite)
         if view_kwargs.get('event_id'):
             event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
