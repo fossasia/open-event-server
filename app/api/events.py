@@ -288,7 +288,7 @@ class EventDetail(ResourceDetail):
 
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            event = safe_query(self, Event, 'identifier', view_kwargs['identifier'], 'identifier')
             view_kwargs['id'] = event.id
 
         if view_kwargs.get('sponsor_id') is not None:
@@ -381,7 +381,7 @@ class EventRelationship(ResourceRelationship):
 
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('identifier'):
-            event = self.session.query(Event).filter_by(identifier=view_kwargs['identifier']).one()
+            event = safe_query(self, Event, 'identifier', view_kwargs['identifier'], 'identifier')
             view_kwargs['id'] = event.id
 
     decorators = (jwt_required,)
