@@ -22,6 +22,7 @@ from app.models.session_type import SessionType
 from app.models.discount_code import DiscountCode
 from app.models.event_invoice import EventInvoice
 from app.models.speakers_call import SpeakersCall
+from app.models.role_invite import RoleInvite
 from app.models.ticket import TicketTag
 from app.models.user import User, ATTENDEE, ORGANIZER
 from app.models.users_events_role import UsersEventsRoles
@@ -241,6 +242,13 @@ class EventSchema(Schema):
                                    related_view_kwargs={'event_id': '<id>'},
                                    schema='EventSubTopicSchema',
                                    type_='event-sub-topic')
+    role_invites = Relationship(attribute='role_invites',
+                                self_view='v1.event_role_invite',
+                                self_view_kwargs={'id': '<id>'},
+                                related_view='v1.role_invite_list',
+                                related_view_kwargs={'event_id': '<id>'},
+                                schema='RoleInviteSchema',
+                                type_='role-invite')
 
 
 class EventList(ResourceList):
@@ -364,6 +372,13 @@ class EventDetail(ResourceDetail):
             ticket_tag = safe_query(self, TicketTag, 'id', view_kwargs['ticket_tag_id'], 'ticket_tag_id')
             if ticket_tag.event_id is not None:
                 view_kwargs['id'] = ticket_tag.event_id
+            else:
+                view_kwargs['id'] = None
+
+        if view_kwargs.get('role_invite_id') is not None:
+            role_invite = safe_query(self, RoleInvite, 'id', view_kwargs['role_invite_id'], 'role_invite_id')
+            if role_invite.event_id is not None:
+                view_kwargs['id'] = role_invite.event_id
             else:
                 view_kwargs['id'] = None
 
