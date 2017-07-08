@@ -9,7 +9,7 @@ The Open Event API Server enables organizers to manage events from concerts to c
 [![Codecov branch](https://img.shields.io/codecov/c/github/fossasia/open-event-orga-server/master.svg?style=flat-square&label=Codecov+Coverage)](https://codecov.io/gh/fossasia/open-event-orga-server)
 [![Gitter](https://img.shields.io/badge/chat-on%20gitter-ff006f.svg?style=flat-square)](https://gitter.im/fossasia/open-event-orga-server)
 
-The Open Event API Server exposes a well documented [JSON:API Spec](http://jsonapi.org/) Complaint REST API that can be used by external services (like the Open Event App generators and the frontend) to access & manipulate the data.
+The Open Event API Server exposes a well documented [JSON:API Spec](http://jsonapi.org/) Compliant REST API that can be used by external services (like the Open Event App generators and the frontend) to access & manipulate the data.
 
 **API Documentation:**
 - Every installation of the project includes API docs, (e.g. here on the test install [https://open-event-api.herokuapp.com](https://open-event-api.herokuapp.com)).

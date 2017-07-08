@@ -39,6 +39,7 @@ from app.factories.ticket_tag import TicketTagFactory
 from app.factories.role import RoleFactory
 from app.factories.module import ModuleFactory
 from app.factories.role_invite import RoleInviteFactory
+from app.factories.ticket_fee import TicketFeesFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -832,7 +833,6 @@ def ticket_post(transaction):
         db.session.commit()
 
 
-
 @hooks.before("Tickets > Ticket Details > Ticket Details")
 def ticket_get_detail(transaction):
     """
@@ -844,7 +844,6 @@ def ticket_get_detail(transaction):
         ticket = TicketFactory()
         db.session.add(ticket)
         db.session.commit()
-
 
 
 @hooks.before("Tickets > Ticket Details > Update Ticket")
@@ -860,7 +859,6 @@ def ticket_patch(transaction):
         db.session.commit()
 
 
-
 @hooks.before("Tickets > Ticket Details > Delete Ticket")
 def ticket_delete(transaction):
     """
@@ -871,6 +869,70 @@ def ticket_delete(transaction):
     with stash['app'].app_context():
         ticket = TicketFactory()
         db.session.add(ticket)
+        db.session.commit()
+
+# ------------------------- Ticket Fees -------------------------
+
+
+@hooks.before("Ticket Fees > Ticket Fees Collection > List Ticket Fees")
+def ticket_fees_get_list(transaction):
+    """
+    GET /ticket-fees
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket_fees = TicketFeesFactory()
+        db.session.add(ticket_fees)
+        db.session.commit()
+
+
+@hooks.before("Ticket Fees > Ticket Fees Collection > Create Ticket Fee")
+def ticket_fees_post(transaction):
+    """
+    POST /ticket-fees
+    :param transaction:
+    :return:
+    """
+    pass
+
+
+@hooks.before("Ticket Fees > Ticket Fee Details > Get Ticket Fees Details")
+def ticket_fees_get_detail(transaction):
+    """
+    GET /ticket-fees/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket_fees = TicketFeesFactory()
+        db.session.add(ticket_fees)
+        db.session.commit()
+
+
+@hooks.before("Ticket Fees > Ticket Fee Details > Update Ticket Fees")
+def ticket_fees_patch(transaction):
+    """
+    PATCH /ticket-fees/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket_fees = TicketFeesFactory()
+        db.session.add(ticket_fees)
+        db.session.commit()
+
+
+@hooks.before("Ticket Fees > Ticket Fee Details > Delete Ticket Fees")
+def ticket_fees_delete(transaction):
+    """
+    DELETE /ticket-fees/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket_fees = TicketFeesFactory()
+        db.session.add(ticket_fees)
         db.session.commit()
 
 
