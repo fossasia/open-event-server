@@ -83,8 +83,9 @@ api.route(TicketTagRelationship, 'ticket_tag_event', '/ticket-tags/<int:id>/rela
 api.route(EventList, 'event_list', '/events', '/event-types/<int:event_type_id>/events',
           '/event-topics/<int:event_topic_id>/events',
           '/event-sub-topics/<int:event_sub_topic_id>/events')
-api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>', '/tickets/<int:ticket_id>/event',
-          '/microlocations/<int:microlocation_id>/event', '/social-links/<int:social_link_id>/event',
+api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>',
+          '/tickets/<int:ticket_id>/event', '/microlocations/<int:microlocation_id>/event',
+          '/social-links/<int:social_link_id>/event',
           '/sponsors/<int:sponsor_id>/event', '/tracks/<int:track_id>/event',
           '/speakers-calls/<int:speakers_call_id>/event', '/session-types/<int:session_type_id>/event',
           '/event-copyright/<int:copyright_id>/event', '/tax/<int:tax_id>/event',
