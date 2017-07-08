@@ -39,6 +39,7 @@ from app.factories.ticket_tag import TicketTagFactory
 from app.factories.role import RoleFactory
 from app.factories.module import ModuleFactory
 from app.factories.ticket_fee import TicketFeesFactory
+from app.factories.role_invite import RoleInviteFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -1502,6 +1503,72 @@ def discount_delete(transaction):
     with stash['app'].app_context():
         discount_code = DiscountCodeFactory()
         db.session.add(discount_code)
+        db.session.commit()
+
+
+# ------------------------- Role Invites -------------------------
+@hooks.before("Role Invites > Role Invites Collection > List All Role Invites")
+def role_invite_get_list(transaction):
+    """
+    GET /events/1/role-invites
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        role_invite = RoleInviteFactory()
+        db.session.add(role_invite)
+        db.session.commit()
+
+
+@hooks.before("Role Invites > Role Invites Collection > Create Role Invite")
+def role_invite_post(transaction):
+    """
+    POST /events/1/role-invites
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Role Invites > Role Invite Details > Role Invite Details")
+def role_invite_get_detail(transaction):
+    """
+    GET /role-invites/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        role_invite = RoleInviteFactory()
+        db.session.add(role_invite)
+        db.session.commit()
+
+
+@hooks.before("Role Invites > Role Invite Details > Update Role Invite")
+def role_invite_patch(transaction):
+    """
+    PATCH /role-invites/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        role_invite = RoleInviteFactory()
+        db.session.add(role_invite)
+        db.session.commit()
+
+
+@hooks.before("Role Invites > Role Invite Details > Delete Role Invite")
+def role_invite_delete(transaction):
+    """
+    DELETE /role-invites/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        role_invite = RoleInviteFactory()
+        db.session.add(role_invite)
         db.session.commit()
 
 
