@@ -9,6 +9,7 @@ from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.ticket import Ticket, TicketTag, ticket_tags_table
 from app.models.access_code import AccessCode
+from app.models.order import Order
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.models.ticket_holder import TicketHolder
 from app.api.helpers.db import safe_query
@@ -128,6 +129,16 @@ class TicketList(ResourceList):
             access_code = safe_query(self, AccessCode, 'id', view_kwargs['access_code_id'], 'access_code_id')
             # access_code - ticket :: many-to-many relationship
             query_ = Ticket.query.filter(Ticket.access_codes.any(id=access_code.id))
+
+        if view_kwargs.get('order_identifier'):
+            view_kwargs['order_id'] = safe_query(self, Order, 'identifer', view_kwargs['order_identifier'],
+                                                 'order_identifer').id
+        if view_kwargs.get('order_id'):
+            order = safe_query(self, Order, 'id', view_kwargs['order_id'], 'order_id')
+            ticket_ids = []
+            for ticket in order.tickets:
+                ticket_ids.append(ticket.id)
+            query_ = query_.filter(Ticket.id.in_(tuple(ticket_ids)))
 
         return query_
 

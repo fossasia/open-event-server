@@ -40,6 +40,7 @@ class AttendeeSchema(Schema):
     city = fields.Str(allow_none=True)
     state = fields.Str(allow_none=True)
     country = fields.Str(allow_none=True)
+    ticket_id = fields.Str(allow_none=True)
     is_checked_in = fields.Boolean()
     pdf_url = fields.Url(required=True)
     ticket = Relationship(attribute='ticket',
@@ -85,6 +86,7 @@ class AttendeeList(ResourceList):
         if view_kwargs.get('order_id'):
             order = safe_query(self, Order, 'id', view_kwargs['order_id'], 'order_id')
             query_ = query_.join(Order).filter(Order.id == order.id)
+
         if view_kwargs.get('ticket_id'):
             ticket = safe_query(self, Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
             query_ = query_.join(Ticket).filter(Ticket.id == ticket.id)

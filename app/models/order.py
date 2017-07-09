@@ -1,7 +1,18 @@
 import datetime
 import time
+import uuid
 
+from app.api.helpers.db import get_count
 from app.models import db
+
+
+def get_new_order_identifier():
+    identifier = str(uuid.uuid4())
+    count = get_count(Order.query.filter_by(identifier=identifier))
+    if count == 0:
+        return identifier
+    else:
+        return get_new_order_identifier()
 
 
 class OrderTicket(db.Model):
@@ -46,10 +57,10 @@ class Order(db.Model):
     event = db.relationship('Event', backref='orders')
     user = db.relationship('User', backref='orders', foreign_keys=[user_id])
     marketer = db.relationship('User', backref='marketed_orders', foreign_keys=[marketer_id])
-    tickets = db.relationship("OrderTicket", backref='order')
+    tickets = db.relationship("Ticket", secondary='orders_tickets', backref='order')
+    order_tickets = db.relationship("OrderTicket", backref='order')
 
     def __init__(self,
-                 identifier=None,
                  quantity=None,
                  amount=None,
                  address=None,
@@ -61,8 +72,10 @@ class Order(db.Model):
                  paid_via=None,
                  user_id=None,
                  discount_code_id=None,
-                 event_id=None):
-        self.identifier = identifier
+                 event_id=None,
+                 status='pending',
+                 payment_mode=None):
+        self.identifier = get_new_order_identifier()
         self.quantity = quantity
         self.amount = amount
         self.city = city
@@ -76,6 +89,8 @@ class Order(db.Model):
         self.paid_via = paid_via
         self.created_at = datetime.datetime.utcnow()
         self.discount_code_id = discount_code_id
+        self.status = status
+        self.payment_mode = payment_mode
 
     def __repr__(self):
         return '<Order %r>' % self.id
@@ -95,7 +110,7 @@ class Order(db.Model):
 
     def get_tickets_count(self):
         count = 0
-        for order_ticket in self.tickets:
+        for order_ticket in self.order_tickets:
             count += order_ticket.quantity
         return count
 

@@ -9,6 +9,7 @@ from itsdangerous import Serializer
 from app.api.helpers.exceptions import UnprocessableEntity
 
 
+
 def dasherize(text):
     return text.replace('_', '-')
 
@@ -39,3 +40,11 @@ def get_serializer(secret_key='secret_key'):
 
 def str_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
+
+
+def represents_int(value):
+    try:
+        int(value)
+        return True
+    except:
+        return False
