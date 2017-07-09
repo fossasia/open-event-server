@@ -5,7 +5,7 @@ from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from pytz import timezone
 from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound, BadRequest
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validates_schema
 from flask import request
 
@@ -26,6 +26,7 @@ from app.models.speakers_call import SpeakersCall
 from app.models.role_invite import RoleInvite
 from app.models.users_events_role import UsersEventsRoles
 from app.models.ticket import TicketTag
+from app.models.access_code import AccessCode
 from app.models.user import User, ATTENDEE, ORGANIZER
 from app.models.users_events_role import UsersEventsRoles
 from app.models.role import Role
@@ -259,6 +260,13 @@ class EventSchema(Schema):
                                 related_view_kwargs={'event_id': '<id>'},
                                 schema='RoleInviteSchema',
                                 type_='role-invite')
+    access_codes = Relationship(attribute='access_codes',
+                                self_view='v1.event_access_codes',
+                                self_view_kwargs={'id': '<id>'},
+                                related_view='v1.access_code_list',
+                                related_view_kwargs={'event_id': '<id>'},
+                                schema='AccessCodeSchema',
+                                type_='access-code')
 
 
 class EventList(ResourceList):
@@ -401,6 +409,11 @@ class EventDetail(ResourceDetail):
             'users_events_role_id')
             if users_events_role.event_id is not None:
                 view_kwargs['id'] = users_events_role.event_id
+
+        if view_kwargs.get('access_code_id') is not None:
+            access_code = safe_query(self, AccessCode, 'id', view_kwargs['access_code_id'], 'access_code_id')
+            if access_code.event_id is not None:
+                view_kwargs['id'] = access_code.event_id
             else:
                 view_kwargs['id'] = None
 

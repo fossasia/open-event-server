@@ -1,6 +1,12 @@
 from app.models.order import OrderTicket, Order
 from app.models import db
 
+access_codes_tickets = db.Table('access_codes_tickets',
+                                db.Column('access_code_id', db.Integer, db.ForeignKey(
+                                    'access_codes.id', ondelete='CASCADE')),
+                                db.Column('ticket_id', db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE')),
+                                db.PrimaryKeyConstraint('access_code_id', 'ticket_id'))
+
 ticket_tags_table = db.Table('association', db.Model.metadata,
                              db.Column('ticket_id', db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE')),
                              db.Column('ticket_tag_id', db.Integer, db.ForeignKey('ticket_tag.id', ondelete='CASCADE'))
@@ -32,6 +38,8 @@ class Ticket(db.Model):
 
     tags = db.relationship('TicketTag', secondary=ticket_tags_table, backref='tickets')
     order_ticket = db.relationship('OrderTicket', backref="ticket", passive_deletes=True)
+
+    access_codes = db.relationship('AccessCode', secondary=access_codes_tickets, backref='tickets')
 
     def __init__(self,
                  name=None,

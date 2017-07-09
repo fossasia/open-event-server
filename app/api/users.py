@@ -9,6 +9,7 @@ from app.models.user import User
 from app.models.notification import Notification
 from app.models.users_events_role import UsersEventsRoles
 from app.models.event_invoice import EventInvoice
+from app.models.access_code import AccessCode
 from app.api.helpers.permissions import is_user_itself, jwt_required
 from app.models.speaker import Speaker
 from app.api.helpers.exceptions import ConflictException
@@ -77,6 +78,14 @@ class UserSchema(Schema):
         schema='SpeakerSchema',
         many=True,
         type_='speaker')
+    access_codes = Relationship(
+        attribute='access_codes',
+        self_view='v1.user_access_codes',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.access_code_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='AccessCodeSchema',
+        type_='access-codes')
 
 
 class UserList(ResourceList):
@@ -128,6 +137,13 @@ class UserDetail(ResourceDetail):
             speaker = safe_query(self, Speaker, 'id', view_kwargs['speaker_id'], 'speaker_id')
             if speaker.user_id is not None:
                 view_kwargs['id'] = speaker.user_id
+            else:
+                view_kwargs['id'] = None
+
+        if view_kwargs.get('access_code_id') is not None:
+            access_code = safe_query(self, AccessCode, 'id', view_kwargs['access_code_id'], 'access_code_id')
+            if access_code.marketer_id is not None:
+                view_kwargs['id'] = access_code.marketer_id
             else:
                 view_kwargs['id'] = None
 

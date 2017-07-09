@@ -18,7 +18,6 @@ class AccessCode(db.Model):
     max_quantity = db.Column(db.Integer)  # For event level access this holds the months for which it is valid
     valid_from = db.Column(db.DateTime(timezone=True), nullable=True)
     valid_till = db.Column(db.DateTime(timezone=True), nullable=True)
-    tickets = db.Column(db.String)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref='access_codes', foreign_keys=[event_id])
     created_at = db.Column(db.DateTime(timezone=True))
@@ -37,7 +36,8 @@ class AccessCode(db.Model):
                  valid_till=None,
                  is_active=True,
                  used_for=None,
-                 event_id=None):
+                 event_id=None,
+                 user_id=None):
         self.code = code
         self.access_url = access_url
         self.tickets_number = tickets_number
@@ -49,6 +49,7 @@ class AccessCode(db.Model):
         self.is_active = is_active
         self.created_at = datetime.utcnow()
         self.used_for = used_for
+        self.marketer_id = user_id
 
     @staticmethod
     def get_service_name():
@@ -68,7 +69,7 @@ class AccessCode(db.Model):
         """Return object data in easily serializable format"""
         return {'id': self.id,
                 'code': self.code,
-                'access_url': access_url,
+                'access_url': self.access_url,
                 'tickets_number': self.tickets_number,
                 'min_quantity': self.min_quantity,
                 'max_quantity': self.max_quantity,
