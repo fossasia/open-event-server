@@ -11128,8 +11128,15 @@ Create a new attendee using an event_id.
             {
               "data": {
                 "attributes": {
-                  "firstname": "Open Event User",
-                  "pdf_url": "http://example.com",
+                    "firstname": "John",
+                    "lastname": "Doe",
+                    "email": "johndoe@example.com",
+                    "address": "address",
+                    "city": "example",
+                    "state": "example",
+                    "country": "IN",
+                    "is-checked-in": "false",
+                    "pdf-url": "http://example.com"
                 },
                 "type": "attendee",
                 "relationships": {
@@ -11270,7 +11277,6 @@ Update a single attendee by `id`.
                     "city": "example",
                     "state": "example",
                     "country": "IN",
-                    "ticket-id": "12",
                     "is-checked-in": "true",
                     "pdf-url": "http://example.com"
                 },
