@@ -110,7 +110,11 @@ def skip_auth(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    transaction['request']['headers']['Authorization'] = ""
+    with stash['app'].app_context():
+        user = UserFactory(email="email@example.com", password="password", is_verified=True)
+        db.session.add(user)
+        db.session.commit()
 
 
 # ------------------------- Users -------------------------
