@@ -250,13 +250,6 @@ class EventSchema(Schema):
                                 related_view_kwargs={'event_id': '<id>'},
                                 schema='RoleInviteSchema',
                                 type_='role-invite')
-    users_events_roles = Relationship(attribute='users_events_role',
-                                      self_view='v1.event_users_events_role',
-                                      self_view_kwargs={'id': '<id>'},
-                                      related_view='v1.users_events_role_list',
-                                      related_view_kwargs={'event_id': '<id>'},
-                                      schema='UsersEventsRolesSchema',
-                                      type_='users-events-role')
 
 
 class EventList(ResourceList):
@@ -392,7 +385,7 @@ class EventDetail(ResourceDetail):
 
         if view_kwargs.get('users_events_role_id') is not None:
             users_events_role = safe_query(self, UsersEventsRoles, 'id', view_kwargs['users_events_role_id'],
-              'users_events_role_id')
+            'users_events_role_id')
             if users_events_role.event_id is not None:
                 view_kwargs['id'] = users_events_role.event_id
             else:
