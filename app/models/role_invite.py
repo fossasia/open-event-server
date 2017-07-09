@@ -13,7 +13,7 @@ class RoleInvite(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    email = db.Column(db.String)
+    email = db.Column(db.String, nullable=False)
 
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', back_populates='role_invites')
