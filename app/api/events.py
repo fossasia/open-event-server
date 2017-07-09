@@ -23,6 +23,7 @@ from app.models.discount_code import DiscountCode
 from app.models.event_invoice import EventInvoice
 from app.models.speakers_call import SpeakersCall
 from app.models.role_invite import RoleInvite
+from app.models.users_events_role import UsersEventsRoles
 from app.models.ticket import TicketTag
 from app.models.user import User, ATTENDEE, ORGANIZER
 from app.models.users_events_role import UsersEventsRoles
@@ -379,6 +380,14 @@ class EventDetail(ResourceDetail):
             role_invite = safe_query(self, RoleInvite, 'id', view_kwargs['role_invite_id'], 'role_invite_id')
             if role_invite.event_id is not None:
                 view_kwargs['id'] = role_invite.event_id
+            else:
+                view_kwargs['id'] = None
+
+        if view_kwargs.get('users_events_role_id') is not None:
+            users_events_role = safe_query(self, UsersEventsRoles, 'id', view_kwargs['users_events_role_id'],
+            'users_events_role_id')
+            if users_events_role.event_id is not None:
+                view_kwargs['id'] = users_events_role.event_id
             else:
                 view_kwargs['id'] = None
 

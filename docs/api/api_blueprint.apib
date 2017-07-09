@@ -1205,8 +1205,8 @@ Get a list of events.
                         },
                         "role-invites": {
                           "links": {
-                            "self": "/v1/events/20/relationships/role-invites",
-                            "related": "/v1/events/20/role-invites"
+                            "self": "/v1/events/1/relationships/role-invites",
+                            "related": "/v1/events/1/role-invites"
                           }
                         },
                         "event-sub-topic": {
@@ -1425,8 +1425,8 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     },
                     "role-invites": {
                       "links": {
-                        "self": "/v1/events/20/relationships/role-invites",
-                        "related": "/v1/events/20/role-invites"
+                        "self": "/v1/events/1/relationships/role-invites",
+                        "related": "/v1/events/1/role-invites"
                       }
                     },
                     "event-sub-topic": {
@@ -1604,8 +1604,8 @@ Get a single event.
                     },
                     "role-invites": {
                       "links": {
-                        "self": "/v1/events/20/relationships/role-invites",
-                        "related": "/v1/events/20/role-invites"
+                        "self": "/v1/events/1/relationships/role-invites",
+                        "related": "/v1/events/1/role-invites"
                       }
                     },
                     "event-sub-topic": {
@@ -1828,8 +1828,8 @@ All other fields are optional. Add attributes you want to modify.
                     },
                     "role-invites": {
                       "links": {
-                        "self": "/v1/events/20/relationships/role-invites",
-                        "related": "/v1/events/20/role-invites"
+                        "self": "/v1/events/1/relationships/role-invites",
+                        "related": "/v1/events/1/role-invites"
                       }
                     },
                     "event-sub-topic": {
@@ -6498,7 +6498,7 @@ Create a new role invite with event_id.
                   "role": {
                     "data": {
                       "type": "role",
-                      "id": "1"
+                      "id": "2"
                     }
                   }
                 },
@@ -6602,7 +6602,7 @@ Get a single role invite.
 
 Update a single role invite by setting attributes.
 
-Authorized user must be admin.
+Authorized user must be the event's organizer.
 
 + Request (application/vnd.api+json)
 
@@ -6665,6 +6665,293 @@ Authorized user must be admin.
 
 ### Delete Role Invite [DELETE]
 Delete a single role invite.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
+# Group Users Events Roles
+
+Relations between users, events and roles. No attributes- Posted using relationships.
+
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| None  | None | None | None |
+
+
+## Users Events Roles Collection [/v1/events/{event_identifier}/users-events-roles{?page%5bsize%5d,page%5bnumber%5d}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+
+### List All Users Events Roles [GET]
+Get a list of users events roles.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "role": {
+                  "links": {
+                    "self": "/v1/users-events-roles/1/relationships/role",
+                    "related": "/v1/users-events-roles/1/role"
+                  }
+                },
+                "event": {
+                  "links": {
+                    "self": "/v1/users-events-roles/1/relationships/event",
+                    "related": "/v1/users-events-roles/1/event"
+                  }
+                },
+                "user": {
+                  "links": {
+                    "self": "/v1/users-events-roles/1/relationships/user",
+                    "related": "/v1/users-events-roles/1/user"
+                  }
+                }
+              },
+              "type": "users-events-role",
+              "id": "1", 
+              "links": {
+                "self": "/v1/users-events-roles/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/users-events-roles/1"
+          }
+        }
+
+
+### Create Users Events Role [POST]
+Create a new users events role with event_id.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+        {
+            "data": {
+              "relationships": {
+                "role": {
+                  "data": {
+                    "type": "role",
+                    "id": "1"
+                  }
+                },
+                "user": {
+                  "data":{
+                    "type": "user",
+                    "id": "2"
+                  }
+                }
+              },
+              "type":"users-events-role"
+            }
+          }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+              "relationships": {
+                "role": {
+                  "links": {
+                    "self": "/v1/users-events-roles/1/relationships/role",
+                    "related": "/v1/users-events-roles/1/role"
+                  }
+                },
+                "event": {
+                  "links": {
+                    "self": "/v1/users-events-roles/1/relationships/event",
+                    "related": "/v1/users-events-roles/1/event"
+                  }
+                },
+                "user": {
+                  "links": {
+                    "self": "/v1/users-events-roles/1/relationships/user",
+                    "related": "/v1/users-events-roles/1/user"
+                  }
+                }
+              },
+              "type": "users-events-role",
+              "id": "1", 
+              "links": {
+                "self": "/v1/users-events-roles/1"
+              }
+            },
+            "jsonapi": {
+              "version": "1.0"
+            },
+            "links": {
+              "self": "/v1/users-events-roles/1"
+            }
+          }
+
+## Users Events Role Details [/v1/users-events-roles/{users_events_role_id}]
++ Parameters
+    + users_events_role_id: 1 (integer) - ID of the users events role in the form of an integer
+
+### Users Events Role Details [GET]
+Get a single users events role.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+              "relationships": {
+                "role": {
+                  "links": {
+                    "self": "/v1/users-events-roles/1/relationships/role",
+                    "related": "/v1/users-events-roles/1/role"
+                  }
+                },
+                "event": {
+                  "links": {
+                    "self": "/v1/users-events-roles/1/relationships/event",
+                    "related": "/v1/users-events-roles/1/event"
+                  }
+                },
+                "user": {
+                  "links": {
+                    "self": "/v1/users-events-roles/1/relationships/user",
+                    "related": "/v1/users-events-roles/1/user"
+                  }
+                }
+              },
+              "type": "users-events-role",
+              "id": "1", 
+              "links": {
+                "self": "/v1/users-events-roles/1"
+              }
+            },
+            "jsonapi": {
+              "version": "1.0"
+            },
+            "links": {
+              "self": "/v1/users-events-roles/1"
+            }
+          }
+
+### Update Users Events Role [PATCH]
++ `id` (integer) - ID of the record to update **(required)**
+
+Update a single users events role.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "relationships": {
+                  "role": {
+                    "data": {
+                      "type": "role",
+                      "id": "1"
+                    }
+                  },
+                  "user": {
+                    "data":{
+                      "type": "user", 
+                      "id": "1"
+                    }
+                  }
+                },
+                "type": "users-events-role",
+                "id": "1"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "role": {
+                "links": {
+                  "self": "/v1/users-events-roles/1/relationships/role",
+                  "related": "/v1/users-events-roles/1/role"
+                }
+              },
+              "event": {
+                "links": {
+                  "self": "/v1/users-events-roles/1/relationships/event",
+                  "related": "/v1/users-events-roles/1/event"
+                }
+              },
+              "user": {
+                "links": {
+                  "self": "/v1/users-events-roles/1/relationships/user",
+                  "related": "/v1/users-events-roles/1/user"
+                }
+              }
+            },
+            "type": "users-events-role",
+            "id": "1",
+            "links": {
+              "self": "/v1/users-events-roles/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/users-events-role/1"
+          }
+        }
+
+### Delete Users Events Role [DELETE]
+Delete a single users events role.
 
 + Request
 
