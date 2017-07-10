@@ -24,6 +24,7 @@ from app.factories.event_copyright import EventCopyrightFactory
 from app.factories.setting import SettingFactory
 from app.factories.event_type import EventTypeFactory
 from app.factories.discount_code import DiscountCodeFactory
+from app.factories.access_code import AccessCodeFactory
 from app.factories.event_topic import EventTopicFactory
 from app.factories.event_invoice import EventInvoiceFactory
 from app.factories.event_sub_topic import EventSubTopicFactory
@@ -1598,6 +1599,72 @@ def discount_delete(transaction):
     with stash['app'].app_context():
         discount_code = DiscountCodeFactory()
         db.session.add(discount_code)
+        db.session.commit()
+
+
+# ------------------------- Access Codes -------------------------
+@hooks.before("Access Codes > Access Code Collection > List All Access Codes")
+def access_code_get_list(transaction):
+    """
+    GET /events/1/access-codes
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        access_code = AccessCodeFactory()
+        db.session.add(access_code)
+        db.session.commit()
+
+
+@hooks.before("Access Codes > Access Code Collection > Create Access Code")
+def access_code_post(transaction):
+    """
+    POST /events/1/access-codes
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Access Codes > Access Code Detail > Access Code Detail")
+def access_code_get_detail(transaction):
+    """
+    GET /access-codes/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        access_code = AccessCodeFactory()
+        db.session.add(access_code)
+        db.session.commit()
+
+
+@hooks.before("Access Codes > Access Code Detail > Update Access Code")
+def access_code_patch(transaction):
+    """
+    PATCH /access-codes/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        access_code = AccessCodeFactory()
+        db.session.add(access_code)
+        db.session.commit()
+
+
+@hooks.before("Access Codes > Access Code Detail > Delete Access Code")
+def access_delete(transaction):
+    """
+    DELETE /access-codes/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        access_code = AccessCodeFactory()
+        db.session.add(access_code)
         db.session.commit()
 
 
