@@ -1,9 +1,9 @@
 from app import current_app
 from app.models import db
-from app.helpers.data import get_or_create  # , save_to_db
+from app.api.helpers.db import get_or_create  # , save_to_db
 
 # Admin message settings
-from app.helpers.system_mails import MAILS
+from app.api.helpers.system_mails import MAILS
 from app.models.message_setting import MessageSettings
 
 # Event Role-Service Permissions
