@@ -1,6 +1,5 @@
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models import db
-from app.api.helpers.utilities import ensure_social_link
 
 
 class Speaker(db.Model):
@@ -83,8 +82,6 @@ class Speaker(db.Model):
         self.heard_from = heard_from
         self.sponsorship_required = sponsorship_required
         self.event_id = event_id
-        # ensure links are in social fields
-        self.ensure_social_links()
         self.user_id = user_id
 
     @staticmethod
@@ -140,9 +137,3 @@ class Speaker(db.Model):
             'sessions': session_data
         }
 
-    def ensure_social_links(self):
-        """convert usernames in social network fields to full links"""
-        self.twitter = ensure_social_link('https://twitter.com', self.twitter)
-        self.facebook = ensure_social_link('https://www.facebook.com', self.facebook)
-        self.github = ensure_social_link('https://github.com', self.github)
-        self.linkedin = ensure_social_link('https://www.linkedin.com/in', self.linkedin)
