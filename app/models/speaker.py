@@ -23,7 +23,7 @@ class Speaker(db.Model):
     github = db.Column(db.String)
     linkedin = db.Column(db.String)
     organisation = db.Column(db.String)
-    featured = db.Column(db.Boolean, default=False)
+    is_featured = db.Column(db.Boolean, default=False)
     position = db.Column(db.String)
     country = db.Column(db.String)
     city = db.Column(db.String)
@@ -32,14 +32,13 @@ class Speaker(db.Model):
     sponsorship_required = db.Column(db.Text)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='SET NULL'))
-    user = db.relationship('User', backref='speakers')
 
     def __init__(self,
                  name=None,
-                 photo=None,
-                 thumbnail=None,
-                 small=None,
-                 icon=None,
+                 photo_url=None,
+                 thumbnail_image_url=None,
+                 small_image_url=None,
+                 icon_image_url=None,
                  short_biography=None,
                  long_biography=None,
                  speaking_experience=None,
@@ -51,7 +50,7 @@ class Speaker(db.Model):
                  github=None,
                  linkedin=None,
                  organisation=None,
-                 featured=False,
+                 is_featured=False,
                  position=None,
                  country=None,
                  city=None,
@@ -59,12 +58,12 @@ class Speaker(db.Model):
                  heard_from=None,
                  sponsorship_required=None,
                  event_id=None,
-                 user=None):
+                 user_id=None):
         self.name = name
-        self.photo = photo
-        self.thumbnail = thumbnail
-        self.small = small
-        self.icon = icon
+        self.photo = photo_url
+        self.thumbnail = thumbnail_image_url
+        self.small = small_image_url
+        self.icon = icon_image_url
         self.short_biography = short_biography
         self.long_biography = long_biography
         self.speaking_experience = speaking_experience
@@ -75,7 +74,7 @@ class Speaker(db.Model):
         self.facebook = facebook
         self.github = github
         self.linkedin = linkedin
-        self.featured = featured
+        self.is_featured = is_featured
         self.organisation = organisation
         self.position = position
         self.country = country
@@ -86,7 +85,7 @@ class Speaker(db.Model):
         self.event_id = event_id
         # ensure links are in social fields
         self.ensure_social_links()
-        self.user = user
+        self.user_id = user_id
 
     @staticmethod
     def get_service_name():
