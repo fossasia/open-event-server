@@ -129,9 +129,13 @@ class SessionList(ResourceList):
         return query_
 
     def before_create_object(self, data, view_kwargs):
-        # Permission Manager ensures there is event ID if any event_identifier provided
-        event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-        data['event_id'] = event.id
+        event = None
+        if view_kwargs.get('event_id'):
+            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+        elif view_kwargs.get('event_identifier'):
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+        if event:
+            data['event_id'] = event.id
 
     view_kwargs = True
     decorators = (api.has_permission('is_coorganizer', fetch="event_id",
