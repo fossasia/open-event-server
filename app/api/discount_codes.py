@@ -46,9 +46,9 @@ class DiscountCodeSchemaTicket(Schema):
                                           "min-quantity should be less than max-quantity")
 
         if 'tickets_number' in data and 'max_quantity' in data:
-            if data['tickets_number'] < data['min_quantity']:
+            if data['tickets_number'] < data['max_quantity']:
                     raise UnprocessableEntity({'pointer': '/data/attributes/tickets-number'},
-                                              "tickets-number should be greater than min-quantity")
+                                              "tickets-number should be greater than max-quantity")
 
     id = fields.Integer()
     code = fields.Str(required=True)
