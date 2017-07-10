@@ -31,6 +31,7 @@ from app.factories.sponsor import SponsorFactory
 from app.factories.speakers_call import SpeakersCallFactory
 from app.factories.tax import TaxFactory
 from app.factories.session import SessionFactory
+from app.factories.speaker import SpeakerFactory
 from app.factories.ticket import TicketFactory
 from app.factories.attendee import AttendeeFactory
 from app.factories.session_type import SessionTypeFactory
@@ -557,6 +558,72 @@ def session_type_delete(transaction):
     with stash['app'].app_context():
         session_type = SessionTypeFactory()
         db.session.add(session_type)
+        db.session.commit()
+
+
+# ------------------------- Speaker -------------------------
+@hooks.before("Speakers > Speakers Collection > List All Speakers")
+def speaker_get_list(transaction):
+    """
+    GET /events/1/speakers
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        speaker = SpeakerFactory()
+        db.session.add(speaker)
+        db.session.commit()
+
+
+@hooks.before("Speakers > Speakers Collection > Create Speaker")
+def speaker_post(transaction):
+    """
+    POST /events/1/speakers
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Speakers > Speaker > Speaker Details")
+def speaker_get_detail(transaction):
+    """
+    GET /speakers/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        speaker = SpeakerFactory()
+        db.session.add(speaker)
+        db.session.commit()
+
+
+@hooks.before("Speakers > Speaker > Update Speaker")
+def speaker_patch(transaction):
+    """
+    PATCH /speakers/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        speaker = SpeakerFactory()
+        db.session.add(speaker)
+        db.session.commit()
+
+
+@hooks.before("Speakers > Speaker > Delete Speaker")
+def speaker_delete(transaction):
+    """
+    DELETE /speakers/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        speaker = SpeakerFactory()
+        db.session.add(speaker)
         db.session.commit()
 
 

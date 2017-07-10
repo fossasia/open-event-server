@@ -17,6 +17,7 @@ from app.models.event import Event
 from app.models.sponsor import Sponsor
 from app.models.track import Track
 from app.models.session import Session
+from app.models.speaker import Speaker
 from app.models.ticket import Ticket
 from app.models.session_type import SessionType
 from app.models.discount_code import DiscountCode
@@ -222,6 +223,14 @@ class EventSchema(Schema):
                             schema='SessionSchema',
                             many=True,
                             type_='session')
+    speakers = Relationship(attribute='speaker',
+                            self_view='v1.event_speaker',
+                            self_view_kwargs={'id': '<id>'},
+                            related_view='v1.speaker_list',
+                            related_view_kwargs={'event_id': '<id>'},
+                            schema='SpeakerSchema',
+                            many=True,
+                            type_='speaker')
     event_type = Relationship(attribute='event_type',
                               self_view='v1.event_event_type',
                               self_view_kwargs={'id': '<id>'},
@@ -390,6 +399,18 @@ class EventDetail(ResourceDetail):
                 view_kwargs['id'] = users_events_role.event_id
             else:
                 view_kwargs['id'] = None
+
+        if view_kwargs.get('speaker_id'):
+            try:
+                speaker = self.session.query(Speaker).filter_by(id=view_kwargs['speaker_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'speaker_id'},
+                                     "Speaker: {} not found".format(view_kwargs['speaker_id']))
+            else:
+                if speaker.event_id:
+                    view_kwargs['id'] = speaker.event_id
+                else:
+                    view_kwargs['id'] = None
 
     decorators = (api.has_permission('is_organizer', methods="PATCH,DELETE", fetch="id", fetch_as="event_id",
                                      check=lambda a: a.get('id') is not None), )

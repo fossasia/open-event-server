@@ -4,9 +4,10 @@ from app.helpers.date_formatter import DateFormatter
 from app.helpers.versioning import clean_up_string, clean_html
 from app.models import db
 
-speakers_sessions = db.Table('speakers_sessions', db.Column(
-    'speaker_id', db.Integer, db.ForeignKey('speaker.id', ondelete='CASCADE')), db.Column(
-    'session_id', db.Integer, db.ForeignKey('sessions.id', ondelete='CASCADE')))
+speakers_sessions = db.Table('speakers_sessions',
+                             db.Column('speaker_id', db.Integer, db.ForeignKey('speaker.id', ondelete='CASCADE')),
+                             db.Column('session_id', db.Integer, db.ForeignKey('sessions.id', ondelete='CASCADE')),
+                             db.PrimaryKeyConstraint('speaker_id', 'session_id'))
 
 
 class Session(db.Model):
@@ -21,25 +22,23 @@ class Session(db.Model):
     short_abstract = db.Column(db.Text)
     long_abstract = db.Column(db.Text)
     comments = db.Column(db.Text)
+    language = db.Column(db.String)
+    level = db.Column(db.String)
     starts_at = db.Column(db.DateTime(timezone=True), nullable=False)
     ends_at = db.Column(db.DateTime(timezone=True), nullable=False)
     track_id = db.Column(db.Integer, db.ForeignKey('tracks.id', ondelete='CASCADE'))
-    speakers = db.relationship(
-        'Speaker',
-        secondary=speakers_sessions,
-        backref=db.backref('sessions', lazy='dynamic'))
-    language = db.Column(db.String)
     microlocation_id = db.Column(db.Integer, db.ForeignKey('microlocations.id', ondelete='CASCADE'))
     session_type_id = db.Column(db.Integer, db.ForeignKey('session_types.id', ondelete='CASCADE'))
-    level = db.Column(db.String)
+    speakers = db.relationship('Speaker',
+                               secondary=speakers_sessions,
+                               backref=db.backref('sessions', lazy='dynamic'))
 
     slides_url = db.Column(db.String)
     video_url = db.Column(db.String)
     audio_url = db.Column(db.String)
     signup_url = db.Column(db.String)
 
-    event_id = db.Column(
-        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     state = db.Column(db.String, default="pending")
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow)
     deleted_at = db.Column(db.DateTime(timezone=True))

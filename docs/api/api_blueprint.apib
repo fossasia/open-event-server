@@ -3568,6 +3568,387 @@ Delete a single session type.
           }
         }
 
+# Group Speakers
+Data related to the various speakers associated with the various sessions in the event.
+
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name` | The name of the speaker | string | **yes** |
+| `email` | The email of the speaker | string | **yes** |
+| `photo-url` | URL of the photo of the speaker | string | - |
+| `thumbnail-image-url` | Thumbnail image's URL of the speaker | string | - |
+| `small-image-url` | Small image's URL of the speaker | string | - |
+| `icon-image-url` | Icon image's URL of the speaker | string | - |
+| `short-biography` | Short biography of the speaker | string | - |
+| `long-biography` | Long biography of the speaker | string | - |
+| `speaking-experience` | Speaking experience of the speaker | string | - |
+| `mobile` | Mobile number of the speaker | string | - |
+| `location` | Name of the location of track | string | - |
+| `website` | Personal website of the speaker | string | - |
+| `twitter` | Twitter profile link of the speaker | string | - |
+| `facebook` | Facebook profile link of the speaker | string | - |
+| `github` | Github profile link of the speaker | string | - |
+| `linkedin` |  Linkedin profile link of the speakers | string | - |
+| `organisation` | Name of the organisation which the speaker belongs to | string | - |
+| `is-featured` | To state whether a speaker is a featured speaker in an event | boolean (default: `false`) | - |
+| `position` | The speaker's position in his/her organisation | string | - |
+| `country` | Country where the speaker lives | string | - |
+| `city` | City where the speaker lives | string | - |
+| `gender` | Gender of the speaker | string | - |
+| `heard-from` | How did the speaker get info about the event | string | - |
+| `sponsorship-required` | If any kind of sponsorship is required by the speaker | string | - |
+
+## Speakers Collection [/v1/events/{event_identifier}/speakers{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `speaking-experience`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List All Speakers [GET]
+Get a list of all speakers.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "user": {
+                            "links": {
+                                "self": "/v1/speakers/3/relationships/user",
+                                "related": "/v1/speakers/3/user"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/speakers/3/relationships/event",
+                                "related": "/v1/speakers/3/event"
+                            }
+                        },
+                        "sessions": {
+                            "links": {
+                                "self": "/v1/speakers/3/relationships/session",
+                                "related": "/v1/speakers/3/sessions"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "website": "https://firstSpeaker.com",
+                        "city": "Delhi",
+                        "short-biography": "",
+                        "name": "firstSpeaker",
+                        "speaking-experience": "",
+                        "country": "India",
+                        "twitter": null,
+                        "is-featured": false,
+                        "linkedin": null,
+                        "email": "firstSpeaker@gmail.com",
+                        "long-biography": "",
+                        "mobile": null,
+                        "github": null,
+                        "facebook": null,
+                        "gender": "Male",
+                        "position": null,
+                        "organisation": null,
+                        "sponsorship-required": "",
+                        "heard-from": null
+                    },
+                    "type": "speaker",
+                    "id": "3",
+                    "links": {
+                        "self": "/v1/speakers/3"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/events/1/speakers"
+            }
+        }
+
+### Create Speaker [POST]
+Create a Speaker profile for an event using event identifier
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+              "type": "speaker",
+                "attributes": {
+                        "name":"firstSpeaker",
+                        "email":"firstSpeaker@gmail.com",
+                        "website":"https://firstSpeaker.com",
+                        "city":"Delhi",
+                        "gender":"Male",
+                        "country":"India"
+                    }
+                }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/speakers/1/relationships/user",
+                            "related": "/v1/speakers/1/user"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/speakers/1/relationships/event",
+                            "related": "/v1/speakers/1/event"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/speakers/1/relationships/session",
+                            "related": "/v1/speakers/1/sessions"
+                        }
+                    }
+                },
+                "attributes": {
+                    "website": "https://firstSpeaker.com",
+                    "city": "Delhi",
+                    "short-biography": "",
+                    "name": "firstSpeaker",
+                    "speaking-experience": "",
+                    "country": "India",
+                    "twitter": null,
+                    "is-featured": false,
+                    "linkedin": null,
+                    "email": "firstSpeaker@gmail.com",
+                    "long-biography": "",
+                    "mobile": null,
+                    "github": null,
+                    "facebook": null,
+                    "gender": "Male",
+                    "position": null,
+                    "organisation": null,
+                    "sponsorship-required": "",
+                    "heard-from": null
+                },
+                "type": "speaker",
+                "id": "1",
+                "links": {
+                    "self": "/v1/speakers/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/speakers/1"
+            }
+        }
+
+
+### Speaker [/v1/speakers/{speaker_id}]
++ Parameters
+    + speaker_id: 1 (integer) - ID of the Speaker in the form of an integer
+
+### Speaker Details [GET]
+Get a single Speaker profile
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/speakers/1/relationships/user",
+                            "related": "/v1/speakers/1/user"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/speakers/1/relationships/event",
+                            "related": "/v1/speakers/1/event"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/speakers/1/relationships/session",
+                            "related": "/v1/speakers/1/sessions"
+                        }
+                    }
+                },
+                "attributes": {
+                    "website": "https://firstSpeaker.com",
+                    "city": "Delhi",
+                    "short-biography": "",
+                    "name": "firstSpeaker",
+                    "speaking-experience": "",
+                    "country": "India",
+                    "twitter": null,
+                    "is-featured": false,
+                    "linkedin": null,
+                    "email": "firstSpeaker@gmail.com",
+                    "long-biography": "",
+                    "mobile": null,
+                    "github": null,
+                    "facebook": null,
+                    "gender": "Male",
+                    "position": null,
+                    "organisation": null,
+                    "sponsorship-required": "",
+                    "heard-from": null
+                },
+                "type": "speaker",
+                "id": "1",
+                "links": {
+                    "self": "/v1/speakers/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/speakers/1"
+            }
+        }
+
+
+### Update Speaker [PATCH]
+Update a single speaker by `id`.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                        "name":"firstSpeaker-Patched",
+                        "email":"firstSpeaker_Patched@gmail.com",
+                        "website":"https://firstSpeaker-Patched.com",
+                        "city":"Delhi",
+                        "gender":"Male",
+                        "country":"India"
+                    },
+                    "type": "speaker",
+                    "id":"1"
+                }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/speakers/1/relationships/user",
+                            "related": "/v1/speakers/1/user"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/speakers/1/relationships/event",
+                            "related": "/v1/speakers/1/event"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/speakers/1/relationships/session",
+                            "related": "/v1/speakers/1/sessions"
+                        }
+                    }
+                },
+                "attributes": {
+                    "website": "https://firstSpeaker-Patched.com",
+                    "city": "Delhi",
+                    "short-biography": "",
+                    "name": "firstSpeaker-Patched",
+                    "speaking-experience": "",
+                    "country": "India",
+                    "twitter": null,
+                    "is-featured": false,
+                    "linkedin": null,
+                    "email": "firstSpeaker_Patched@gmail.com",
+                    "long-biography": "",
+                    "mobile": null,
+                    "github": null,
+                    "facebook": null,
+                    "gender": "Male",
+                    "position": null,
+                    "organisation": null,
+                    "sponsorship-required": "",
+                    "heard-from": null
+                },
+                "type": "speaker",
+                "id": "1",
+                "links": {
+                    "self": "/v1/speakers/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/speakers/1"
+            }
+        }
+
+### Delete Speaker [DELETE]
+Delete a single speaker by id.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "message": "Object successfully deleted"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
 # Group Social Links
 You can add various social links such as facebook, twitter, website, blog link, etc. related to the event.
 
