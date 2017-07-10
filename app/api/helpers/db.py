@@ -3,6 +3,8 @@
 import logging
 import traceback
 
+from sqlalchemy import func
+
 from app.models import db
 from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
@@ -46,3 +48,22 @@ def safe_query(self, model, column_name, value, parameter_name):
                              "{}: {} not found".format(model.__name__, value))
     else:
         return record
+
+
+def get_or_create(model, **kwargs):
+    was_created = False
+    instance = db.session.query(model).filter_by(**kwargs).first()
+    if instance:
+        return instance, was_created
+    else:
+        instance = model(**kwargs)
+        db.session.add(instance)
+        db.session.commit()
+        was_created = True
+        return instance, was_created
+
+
+def get_count(q):
+    count_q = q.statement.with_only_columns([func.count()]).order_by(None)
+    count = q.session.execute(count_q).scalar()
+    return count

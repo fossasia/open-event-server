@@ -7,9 +7,6 @@ warnings.simplefilter('ignore', ExtDeprecationWarning)
 
 from pytz import utc
 
-from app.helpers.scheduled_jobs import send_mail_to_expired_orders, empty_trash, send_after_event_mail, \
-    send_event_fee_notification, send_event_fee_notification_followup
-
 from celery import Celery
 from celery.signals import after_task_publish
 import logging
@@ -31,24 +28,15 @@ import sqlalchemy as sa
 
 import stripe
 from app.settings import get_settings
-from app.helpers.flask_ext.helpers import SilentUndefined, camel_case, slugify, MiniJSONEncoder
-from app.helpers.payment import forex
 from app.models import db
-from app.models.user import User
-from app.models.event import Event
-from app.models.session import Session
 from app.api.helpers.jwt import jwt_authenticate, jwt_identity
-from helpers.formatter import operation_name
-from app.helpers.data_getter import DataGetter
-from app.helpers.flask_ext.errors import NotFoundError, PermissionDeniedError, ServerError, ValidationError
-from apscheduler.schedulers.background import BackgroundScheduler
-from app.helpers.data import DataManager, delete_from_db
-from app.helpers.helpers import send_after_event
-from app.helpers.cache import cache
-from helpers.helpers import send_email_for_expired_orders
+from app.api.helpers.cache import cache
 from werkzeug.contrib.profiler import ProfilerMiddleware
 from app.views import BlueprintsManager
-from app.helpers.auth import AuthManager
+from app.api.helpers.auth import AuthManager
+from app.models.event import Event, EventsUsers
+from app.models.role_invite import RoleInvite
+
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -94,16 +82,11 @@ def create_app():
 
     stripe.api_key = 'SomeStripeKey'
     app.secret_key = 'super secret key'
-    app.json_encoder = MiniJSONEncoder
     app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
     app.config['FILE_SYSTEM_STORAGE_FILE_VIEW'] = 'static'
 
     app.logger.addHandler(logging.StreamHandler(sys.stdout))
     app.logger.setLevel(logging.ERROR)
-    app.jinja_env.add_extension('jinja2.ext.do')
-    app.jinja_env.add_extension('jinja2.ext.loopcontrols')
-    app.jinja_env.undefined = SilentUndefined
-    app.jinja_env.filters['operation_name'] = operation_name
 
     # set up jwt
     app.config['JWT_AUTH_USERNAME_KEY'] = 'email'
@@ -191,16 +174,16 @@ def update_sent_state(sender=None, body=None, **kwargs):
 # it is important to register them after celery is defined to resolve circular imports
 
 #import api.helpers.tasks
-import helpers.tasks
+# import helpers.tasks
 
 
-scheduler = BackgroundScheduler(timezone=utc)
-scheduler.add_job(send_mail_to_expired_orders, 'interval', hours=5)
-scheduler.add_job(empty_trash, 'cron', hour=5, minute=30)
-scheduler.add_job(send_after_event_mail, 'cron', hour=5, minute=30)
-scheduler.add_job(send_event_fee_notification, 'cron', day=1)
-scheduler.add_job(send_event_fee_notification_followup, 'cron', day=15)
-scheduler.start()
+# scheduler = BackgroundScheduler(timezone=utc)
+# scheduler.add_job(send_mail_to_expired_orders, 'interval', hours=5)
+# scheduler.add_job(empty_trash, 'cron', hour=5, minute=30)
+# scheduler.add_job(send_after_event_mail, 'cron', hour=5, minute=30)
+# scheduler.add_job(send_event_fee_notification, 'cron', day=1)
+# scheduler.add_job(send_event_fee_notification_followup, 'cron', day=15)
+# scheduler.start()
 
 if __name__ == '__main__':
     current_app.run()

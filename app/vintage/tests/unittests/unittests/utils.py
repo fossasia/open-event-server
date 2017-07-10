@@ -1,7 +1,7 @@
 import unittest
 
 from tests.unittests.setup_database import Setup
-from app.helpers.data_getter import DataGetter
+from app.api.helpers.data_getter import DataGetter
 from tests.unittests.auth_helper import create_super_admin
 
 

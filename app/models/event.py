@@ -6,9 +6,9 @@ import pytz
 import flask_login as login
 from sqlalchemy import event
 
-from app.helpers.date_formatter import DateFormatter
-from app.helpers.helpers import get_count
-from app.helpers.versioning import clean_up_string, clean_html
+from app.models.helpers.date_formatter import DateFormatter
+from app.api.helpers.db import get_count
+from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.email_notification import EmailNotification
 from app.models.user import ATTENDEE
 from app.models.custom_form import CustomForms, session_form_str, speaker_form_str

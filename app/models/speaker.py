@@ -1,6 +1,6 @@
-from app.helpers.versioning import clean_up_string, clean_html
+from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models import db
-from app.helpers.helpers import ensure_social_link
+from app.api.helpers.utilities import ensure_social_link
 
 
 class Speaker(db.Model):

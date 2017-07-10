@@ -1,7 +1,7 @@
 import unittest
 
 from app import current_app as app
-from app.helpers.data import update_version
+from app.api.helpers.data import update_version
 from app.models import db
 from app.models.version import Version
 from tests.unittests.object_mother import ObjectMother

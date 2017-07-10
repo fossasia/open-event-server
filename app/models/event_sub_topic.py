@@ -1,6 +1,6 @@
 import uuid
 from app.models import db
-from app.helpers.helpers import get_count
+from app.api.helpers.db import get_count
 
 
 def get_new_slug(name):

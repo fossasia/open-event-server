@@ -7,7 +7,7 @@ from sqlalchemy import event, desc
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from sqlalchemy.ext.hybrid import hybrid_property
-from app.helpers.helpers import get_count
+from app.api.helpers.db import get_count
 from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models import db
@@ -19,7 +19,7 @@ from app.models.custom_system_role import UserSystemRole
 from app.models.user_permission import UserPermission
 from app.models.users_events_role import UsersEventsRoles as UER
 from app.models.panel_permission import PanelPermission
-from app.helpers.versioning import clean_up_string, clean_html
+from app.models.helpers.versioning import clean_up_string, clean_html
 
 # System-wide
 ADMIN = 'admin'

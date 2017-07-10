@@ -1,7 +1,7 @@
 from flask import url_for
 
-from app.helpers.data import DataManager, save_to_db
-from app.helpers.helpers import get_serializer
+from app.api.helpers.data import DataManager, save_to_db
+from app.api.helpers.helpers import get_serializer
 
 
 def login(app, email, password):
