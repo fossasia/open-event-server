@@ -56,10 +56,13 @@ class Ticket(db.Model):
                  min_order=1,
                  max_order=10,
                  is_fee_absorbed=False,
-                 tags=None):
+                 tags=None,
+                 access_codes=None):
 
         if tags is None:
             tags = []
+        if access_codes is None:
+            access_codes = []
         self.name = name
         self.quantity = quantity
         self.position = position
@@ -75,6 +78,7 @@ class Ticket(db.Model):
         self.max_order = max_order
         self.tags = tags
         self.is_fee_absorbed = is_fee_absorbed
+        self.access_codes = access_codes
 
     def has_order_tickets(self):
         """Returns True if ticket has already placed orders.

@@ -1,5 +1,6 @@
 import factory
 from app.models.access_code import db, AccessCode
+from app.factories.ticket import TicketFactory
 from app.factories.event import EventFactoryBasic
 import app.factories.common as common
 
@@ -9,6 +10,7 @@ class AccessCodeFactory(factory.alchemy.SQLAlchemyModelFactory):
         model = AccessCode
         sqlalchemy_session = db.session
 
+    tickets = factory.RelatedFactory(TicketFactory)
     event = factory.RelatedFactory(EventFactoryBasic)
     code = common.string_
     access_url = common.url_

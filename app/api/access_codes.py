@@ -3,7 +3,6 @@ from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from marshmallow import validates_schema
 
-from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required, current_identity
 from app.models import db
@@ -130,22 +129,32 @@ class AccessCodeList(ResourceList):
         kwargs['user_id'] = current_identity.id
 
     def before_create_object(self, data, view_kwargs):
-        # Permsission Manager ensures that there is event_id if any event_identifier is provided
-        # and throws 404 if event is not found
-        event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
-        data['event_id'] = event.id
-
+        if view_kwargs.get('ticket_id'):
+            ticket = safe_query(self, Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
+            data['event_id'] = ticket.event_id
+        if view_kwargs.get('event_id'):
+            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            data['event_id'] = event.id
+        elif view_kwargs.get('event_identifier'):
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            data['event_id'] = event.id
         data['user_id'] = current_identity.id
 
+    def after_create_object(self, obj, data, view_kwargs):
+        if view_kwargs.get('ticket_id'):
+            ticket = safe_query(self, Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
+            ticket.access_codes.append(obj)
+            self.session.commit()
+
     view_kwargs = True
-    decorators = (api.has_permission('is_coorganizer', fetch='event_id', fetch_as="event_id", methods="POST",
-                  check=lambda a: a.get('event_id') or a.get('event_identifier')),)
+    decorators = (jwt_required, )
     schema = AccessCodeSchema
     data_layer = {'session': db.session,
                   'model': AccessCode,
                   'methods': {
                       'query': query,
-                      'before_create_object': before_create_object
+                      'before_create_object': before_create_object,
+                      'after_create_object': after_create_object
                   }}
 
 
@@ -161,8 +170,7 @@ class AccessCodeDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
-    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
-                                     model=AccessCode, check=lambda a: a.get('id') is not None),)
+    decorators = (jwt_required, )
     schema = AccessCodeSchema
     data_layer = {'session': db.session,
                   'model': AccessCode,
