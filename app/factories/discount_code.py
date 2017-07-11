@@ -20,5 +20,5 @@ class DiscountCodeFactory(factory.alchemy.SQLAlchemyModelFactory):
     max_quantity = 10
     valid_from = common.date_
     valid_till = common.dateEnd_
-    used_for = common.string_
+    used_for = "event"
     tickets = "event"

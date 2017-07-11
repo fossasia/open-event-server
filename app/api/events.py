@@ -214,7 +214,6 @@ class EventSchema(Schema):
                                   related_view='v1.discount_code_list',
                                   related_view_kwargs={'event_id': '<id>'},
                                   schema='DiscountCodeSchema',
-                                  many=True,
                                   type_='discount-code')
     sessions = Relationship(attribute='session',
                             self_view='v1.event_session',
@@ -271,23 +270,19 @@ class EventList(ResourceList):
             query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role).\
                 filter(Role.name != ATTENDEE)
 
-        elif view_kwargs.get('event_type_id') and 'GET' in request.method:
-            event = safe_query(self, Event, 'event_type_id', view_kwargs['event_type_id'], 'event_type_id')
-            query_ = self.session.query(Event).filter_by(event_type_id=event.event_type_id)
+        if view_kwargs.get('event_type_id') and 'GET' in request.method:
+            query_ = self.session.query(Event).filter(getattr(Event, 'event_type_id') == view_kwargs['event_type_id'])
 
-        elif view_kwargs.get('event_topic_id') and 'GET' in request.method:
-            event = safe_query(self, Event, 'event_topic_id', view_kwargs['event_topic_id'], 'event_topic_id')
-            query_ = self.session.query(Event).filter_by(event_topic_id=event.event_topic_id)
+        if view_kwargs.get('event_topic_id') and 'GET' in request.method:
+            query_ = self.session.query(Event).filter(getattr(Event, 'event_topic_id') == view_kwargs['event_topic_id'])
 
-        elif view_kwargs.get('event_sub_topic_id') and 'GET' in request.method:
-            event = safe_query(self, Event, 'event_sub_topic_id', view_kwargs['event_sub_topic_id'],
-                               'event_sub_topic_id')
-            query_ = self.session.query(Event).filter_by(event_sub_topic_id=event.event_sub_topic_id)
+        if view_kwargs.get('event_sub_topic_id') and 'GET' in request.method:
+            query_ = self.session.query(Event).filter(getattr(Event,
+              'event_sub_topic_id') == view_kwargs['event_sub_topic_id'])
 
-        elif view_kwargs.get('discount_code_id') and 'GET' in request.method:
-            event = safe_query(self, Event, 'discount_code_id', view_kwargs['discount_code_id'],
-                               'discount_code_id')
-            query_ = self.session.query(Event).filter_by(discount_code_id=event.discount_code_id)
+        if view_kwargs.get('discount_code_id') and 'GET' in request.method:
+            query_ = self.session.query(Event).filter(getattr(Event,
+              'discount_code_id') == view_kwargs['discount_code_id'])
 
         return query_
 

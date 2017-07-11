@@ -1513,8 +1513,31 @@ def modules_patch(transaction):
 
 
 # ------------------------- Discount Codes -------------------------
-@hooks.before("Discount Codes > Discount Code Collection > List All Discount Codes")
-def discount_code_get_list(transaction):
+@hooks.before("Discount Codes > Event Discount Code Collection > List All Event Discount Codes")
+def event_discount_code_get_list(transaction):
+    """
+    GET /discount-codes
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        discount_code = DiscountCodeFactory()
+        db.session.add(discount_code)
+        db.session.commit()
+
+
+@hooks.before("Discount Codes > Event Discount Code Collection > Create Event Discount Code")
+def event_discount_code_post(transaction):
+    """
+    POST /discount-codes
+    :param transaction:
+    :return:
+    """
+    pass
+
+
+@hooks.before("Discount Codes > Ticket Discount Code Collection > List All Ticket Discount Codes")
+def ticket_discount_code_get_list(transaction):
     """
     GET /events/1/discount-codes
     :param transaction:
@@ -1526,8 +1549,8 @@ def discount_code_get_list(transaction):
         db.session.commit()
 
 
-@hooks.before("Discount Codes > Discount Code Collection > Create Discount Code")
-def discount_code_post(transaction):
+@hooks.before("Discount Codes > Ticket Discount Code Collection > Create Ticket Discount Code")
+def ticket_discount_code_post(transaction):
     """
     POST /events/1/discount-codes
     :param transaction:
