@@ -31,6 +31,7 @@ from app.models.users_events_role import UsersEventsRoles
 from app.models.role import Role
 from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.files import create_save_image_sizes
 
 
 class EventSchema(Schema):
@@ -290,6 +291,9 @@ class EventList(ResourceList):
         user = User.query.filter_by(id=view_kwargs['user_id']).first()
         uer = UsersEventsRoles(user, event, role)
         save_to_db(uer, 'Event Saved')
+        if data.get('original_image_url'):
+            uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
+            self.session.query(Event).filter_by(id=event.id).update(uploaded_images)
 
     # This permission decorator ensures, you are logged in to create an event
     # and have filter ?withRole to get events associated with logged in user
@@ -412,13 +416,29 @@ class EventDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
+    def before_update_object(self, event, data, view_kwargs):
+        if data.get('original_image_url') and data['original_image_url'] != event.original_image_url:
+            uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
+            data['original_image_url'] = uploaded_images['original_image_url']
+            data['large_image_url'] = uploaded_images['large_image_url']
+            data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
+            data['icon_image_url'] = uploaded_images['icon_image_url']
+        else:
+            if data.get('large_image_url'):
+                del data['large_image_url']
+            if data.get('thumbnail_image_url'):
+                del data['thumbnail_image_url']
+            if data.get('icon_image_url'):
+                del data['icon_image_url']
+
     decorators = (api.has_permission('is_organizer', methods="PATCH,DELETE", fetch="id", fetch_as="event_id",
                                      check=lambda a: a.get('id') is not None), )
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
                   'methods': {
-                      'before_get_object': before_get_object
+                      'before_get_object': before_get_object,
+                      'before_update_object': before_update_object
                   }}
 
 
