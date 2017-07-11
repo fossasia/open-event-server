@@ -104,7 +104,9 @@ class Event(db.Model):
     ical_url = db.Column(db.String)
     xcal_url = db.Column(db.String)
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
-    discount_code = db.relationship('DiscountCode', backref='events')
+    discount_code_id = db.Column(db.Integer, db.ForeignKey(
+        'discount_codes.id', ondelete='CASCADE'))
+    discount_code = db.relationship('DiscountCode', backref='events', foreign_keys=[discount_code_id])
     event_type = db.relationship('EventType', backref='event', foreign_keys=[event_type_id])
     event_topic = db.relationship('EventTopic', backref='event', foreign_keys=[event_topic_id])
     event_sub_topic = db.relationship(

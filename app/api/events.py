@@ -274,6 +274,11 @@ class EventList(ResourceList):
                                'event_sub_topic_id')
             query_ = self.session.query(Event).filter_by(event_sub_topic_id=event.event_sub_topic_id)
 
+        elif view_kwargs.get('discount_code_id') and 'GET' in request.method:
+            event = safe_query(self, Event, 'discount_code_id', view_kwargs['discount_code_id'],
+                               'discount_code_id')
+            query_ = self.session.query(Event).filter_by(discount_code_id=event.discount_code_id)
+
         return query_
 
     def after_create_object(self, event, data, view_kwargs):

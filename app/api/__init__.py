@@ -92,7 +92,7 @@ api.route(TicketTagRelationship, 'ticket_tag_event', '/ticket-tags/<int:id>/rela
 # events
 api.route(EventList, 'event_list', '/events', '/event-types/<int:event_type_id>/events',
           '/event-topics/<int:event_topic_id>/events',
-          '/event-sub-topics/<int:event_sub_topic_id>/events')
+          '/event-sub-topics/<int:event_sub_topic_id>/events', '/discount-codes/<int:discount_code_id>/events')
 api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>',
           '/tickets/<int:ticket_id>/event', '/microlocations/<int:microlocation_id>/event',
           '/social-links/<int:social_link_id>/event',
@@ -227,12 +227,14 @@ api.route(EventInvoiceRelationship, 'event_invoice_discount_code',
           '/event-invoices/<int:id>/relationships/discount-codes')
 
 # discount codes
-api.route(DiscountCodeList, 'discount_code_list', '/events/<int:event_id>/discount-codes',
+api.route(DiscountCodeList, 'discount_code_list', '/discount-codes', '/events/<int:event_id>/discount-codes',
           '/events/<event_identifier>/discount-codes')
 api.route(DiscountCodeDetail, 'discount_code_detail', '/discount-codes/<int:id>',
           'event-invoices/<int:event_invoice_id>/discount-code')
 api.route(DiscountCodeRelationship, 'discount_code_event',
           '/discount-codes/<int:id>/relationships/event')
+api.route(DiscountCodeRelationship, 'discount_code_events',
+          '/discount-codes/<int:id>/relationships/events')
 
 # attendees
 api.route(AttendeeList, 'attendee_list', '/attendees',
