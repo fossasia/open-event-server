@@ -116,6 +116,9 @@ class SpeakerList(ResourceList):
         :param view_kwargs:
         :return:
         """
+        if view_kwargs.get('session_id'):
+            session = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
+            data['event_id'] = session.event_id
         if view_kwargs.get('event_id'):
             event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
             data['event_id'] = event.id
@@ -123,6 +126,12 @@ class SpeakerList(ResourceList):
             event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
             data['event_id'] = event.id
         data['user_id'] = current_identity.id
+
+    def after_create_object(self, obj, data, view_kwargs):
+        if view_kwargs.get('session_id'):
+            session = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
+            session.speakers.append(obj)
+            self.session.commit()
 
     view_kwargs = True
     decorators = (api.has_permission('accessible_role_based_events'),)
@@ -132,7 +141,8 @@ class SpeakerList(ResourceList):
                   'methods': {
                       'query': query,
                       'before_create_object': before_create_object,
-                      'before_post': before_post
+                      'before_post': before_post,
+                      'after_create_object': after_create_object
                   }}
 
 
