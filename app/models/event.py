@@ -123,6 +123,7 @@ class Event(db.Model):
                  location_name=None,
                  description=None,
                  external_event_url=None,
+                 original_image_url=None,
                  thumbnail_image_url=None,
                  large_image_url=None,
                  icon_image_url=None,
@@ -160,7 +161,6 @@ class Event(db.Model):
                  xcal_url=None,
                  discount_code_id=None,
                  onsite_details=None,
-                 original_image_url=None,
                  is_tax_enabled=None,
                  is_sponsors_enabled=None):
 

@@ -67,6 +67,7 @@ class User(db.Model):
     last_accessed_at = db.Column(db.DateTime(timezone=True))
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(pytz.utc))
     deleted_at = db.Column(db.DateTime(timezone=True))
+    speaker = db.relationship('Speaker', backref="user")
 
     @hybrid_property
     def password(self):

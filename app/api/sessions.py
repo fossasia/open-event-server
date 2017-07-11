@@ -92,6 +92,14 @@ class SessionSchema(Schema):
                          related_view_kwargs={'session_id': '<id>'},
                          schema='EventSchema',
                          type_='event')
+    speakers = Relationship(
+        attribute='speakers',
+        self_view='v1.session_speaker',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.speaker_list',
+        related_view_kwargs={'session_id': '<id>'},
+        schema='SpeakerSchema',
+        type_='speaker')
 
 
 class SessionList(ResourceList):
@@ -116,12 +124,18 @@ class SessionList(ResourceList):
         elif view_kwargs.get('event_identifier'):
             event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
             query_ = query_.join(Event).filter(Event.identifier == event.id)
+        if view_kwargs.get('speaker_id'):
+            query_ = Session.query.filter(Session.speakers.any(id=view_kwargs['speaker_id']))
         return query_
 
     def before_create_object(self, data, view_kwargs):
-        # Permission Manager ensures there is event ID if any event_identifier provided
-        event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-        data['event_id'] = event.id
+        event = None
+        if view_kwargs.get('event_id'):
+            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+        elif view_kwargs.get('event_identifier'):
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+        if event:
+            data['event_id'] = event.id
 
     view_kwargs = True
     decorators = (api.has_permission('is_coorganizer', fetch="event_id",

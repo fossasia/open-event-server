@@ -9,6 +9,7 @@ from app.api.event_topics import EventTopicList, EventTopicDetail, EventTopicRel
 from app.api.event_sub_topics import EventSubTopicList, EventSubTopicDetail, EventSubTopicRelationship
 from app.api.microlocations import MicrolocationList, MicrolocationDetail, MicrolocationRelationship
 from app.api.sessions import SessionList, SessionDetail, SessionRelationship
+from app.api.speakers import SpeakerList, SpeakerDetail, SpeakerRelationship
 from app.api.social_links import SocialLinkList, SocialLinkDetail, SocialLinkRelationship
 from app.api.sponsors import SponsorList, SponsorDetail, SponsorRelationship
 from app.api.tracks import TrackList, TrackDetail, TrackRelationship
@@ -31,9 +32,11 @@ from app.api.modules import ModuleDetail
 # users
 api.route(UserList, 'user_list', '/users')
 api.route(UserDetail, 'user_detail', '/users/<int:id>', '/notifications/<int:notification_id>/user',
-          '/event-invoices/<int:event_invoice_id>/user', '/users-events-roles/<int:users_events_role_id>/user')
+          '/event-invoices/<int:event_invoice_id>/user', '/users-events-roles/<int:users_events_role_id>/user',
+          '/speakers/<int:speaker_id>/user')
 api.route(UserRelationship, 'user_notification', '/users/<int:id>/relationships/notifications')
 api.route(UserRelationship, 'user_event_invoices', '/users/<int:id>/relationships/event-invoices')
+api.route(UserRelationship, 'user_speaker', '/users/<int:id>/relationships/speakers')
 
 # notifications
 api.route(NotificationList, 'notification_list', '/users/<int:id>/notifications')
@@ -101,7 +104,8 @@ api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>
           '/event-copyright/<int:copyright_id>/event', '/tax/<int:tax_id>/event',
           '/event-invoices/<int:event_invoice_id>/event', '/discount-codes/<int:discount_code_id>/event',
           '/sessions/<int:session_id>/event', '/ticket-tags/<int:ticket_tag_id>/event',
-          '/role-invites/<int:role_invite_id>/event', '/users-events-roles/<int:users_events_role_id>/event')
+          '/role-invites/<int:role_invite_id>/event', '/users-events-roles/<int:users_events_role_id>/event',
+          '/speakers/<int:speaker_id>/event')
 api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/tickets',
           '/events/<identifier>/relationships/tickets')
 api.route(EventRelationship, 'event_ticket_tag', '/events/<int:id>/relationships/ticket-tags',
@@ -138,6 +142,8 @@ api.route(EventRelationship, 'event_role_invite', '/events/<int:id>/relationship
           '/events/<identifier>/relationships/role-invites')
 api.route(EventRelationship, 'event_users_events_role', '/events/<int:id>/relationships/users-events-roles',
           '/events/<identifier>/relationships/users-events-roles')
+api.route(EventRelationship, 'event_speaker', '/events/<int:id>/relationships/speakers',
+          '/events/<identifier>/relationships/speakers')
 
 # microlocations
 api.route(MicrolocationList, 'microlocation_list', '/microlocations', '/events/<int:event_id>/microlocations',
@@ -153,7 +159,7 @@ api.route(MicrolocationRelationship, 'microlocation_event',
 api.route(SessionList, 'session_list', '/sessions', '/events/<int:event_id>/sessions',
           '/events/<event_identifier>/sessions',
           '/tracks/<int:track_id>/sessions', '/session_types/<int:session_type_id>/sessions',
-          '/microlocations/<int:microlocation_id>/sessions')
+          '/microlocations/<int:microlocation_id>/sessions', '/speakers/<int:speaker_id>/sessions')
 api.route(SessionDetail, 'session_detail', '/sessions/<int:id>')
 api.route(SessionRelationship, 'session_microlocation',
           '/sessions/<int:id>/relationships/microlocation')
@@ -162,6 +168,8 @@ api.route(SessionRelationship, 'session_session_type',
           '/sessions/<int:id>/relationships/session-type')
 api.route(SessionRelationship, 'session_event',
           '/sessions/<int:id>/relationships/event')
+api.route(SessionRelationship, 'session_speaker',
+          '/sessions/<int:id>/relationships/speakers')
 
 # social_links
 api.route(SocialLinkList, 'social_link_list', '/events/<int:event_id>/social-links',
@@ -200,6 +208,14 @@ api.route(SessionTypeRelationship, 'session_type_sessions',
           '/session-types/<int:id>/relationships/sessions')
 api.route(SessionTypeRelationship, 'session_type_event',
           '/session-types/<int:id>/relationships/event')
+
+# speakers
+api.route(SpeakerList, 'speaker_list', '/events/<int:event_id>/speakers', '/events/<event_identifier>/speakers',
+          '/sessions/<int:session_id>/speakers', '/users/<int:user_id>/speakers')
+api.route(SpeakerDetail, 'speaker_detail', '/speakers/<int:id>')
+api.route(SpeakerRelationship, 'speaker_event', '/speakers/<int:id>/relationships/event')
+api.route(SpeakerRelationship, 'speaker_user', '/speakers/<int:id>/relationships/user')
+api.route(SpeakerRelationship, 'speaker_session', '/speakers/<int:id>/relationships/sessions')
 
 # event_copyright
 api.route(EventCopyrightList, 'event_copyright_list', '/events/<int:event_id>/event-copyright',

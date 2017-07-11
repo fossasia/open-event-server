@@ -2,6 +2,7 @@
 
 import logging
 import traceback
+
 from app.models import db
 from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
