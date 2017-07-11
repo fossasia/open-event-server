@@ -6,6 +6,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
+from app.api.helpers.db import safe_query
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
 from app.models import db
@@ -41,15 +42,12 @@ class EventCopyrightSchema(Schema):
 class EventCopyrightList(ResourceList):
 
     def before_create_object(self, data, view_kwargs):
-
-        # Permission Manager will ensure that event_id is fetched into
-        # view_kwargs from event_identifier
-        try:
-            event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
-        except NoResultFound:
-            raise ObjectNotFound({'parameter': 'event_identifier'},
-                                 'Event: {} not found'.format(view_kwargs['event_id']))
-        else:
+        event = None
+        if view_kwargs.get('event_id'):
+            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+        elif view_kwargs.get('event_identifier'):
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+        if event:
             data['event_id'] = event.id
 
         try:
@@ -74,31 +72,25 @@ class EventCopyrightList(ResourceList):
 class EventCopyrightDetail(ResourceDetail):
 
     def before_patch(self, args, kwargs, data):
+        event = None
         if kwargs.get('event_id'):
-            try:
-                event_copyright = EventCopyright.query.filter_by(event_id=kwargs['event_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event identifier'}, "Object: not found")
+            event = safe_query(self, Event, 'id', kwargs['event_id'], 'event_id')
+        elif kwargs.get('event_identifier'):
+            event = safe_query(self, Event, 'identifier', kwargs['event_identifier'], 'event_identifier')
+
+        if event:
+            event_copyright = safe_query(self, EventCopyright, 'event_id', event.id, 'event_id')
             kwargs['id'] = event_copyright.id
 
     def before_get_object(self, view_kwargs):
-        # Permission Manager is not used for GET requests so need to fetch here the event ID
-        if view_kwargs.get('event_identifier'):
-            try:
-                event = self.session.query(Event).filter_by(
-                    identifier=view_kwargs['event_identifier']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event_identifier'},
-                                     "Event: {} not found".format(view_kwargs['event_identifier']))
-            else:
-                view_kwargs['event_id'] = event.id
-
+        event = None
         if view_kwargs.get('event_id'):
-            try:
-                event_copyright = self.session.query(EventCopyright).filter_by(
-                    event_id=view_kwargs['event_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event identifier'}, "Object: not found")
+            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+        elif view_kwargs.get('event_identifier'):
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+
+        if event:
+            event_copyright = safe_query(self, EventCopyright, 'event_id', event.id, 'event_id')
             view_kwargs['id'] = event_copyright.id
 
     decorators = (api.has_permission('is_coorganizer', fetch="event_id", fetch_as="event_id",

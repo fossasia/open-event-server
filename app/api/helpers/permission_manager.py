@@ -72,6 +72,25 @@ def is_user_itself(view, view_args, view_kwargs, *args, **kwargs):
 
 
 @jwt_required
+def is_coorganizer_or_user_itself(view, view_args, view_kwargs, *args, **kwargs):
+    """
+    Allows admin and super admin access to any resource irrespective of id.
+    Otherwise the user can only access his/her resource.
+    """
+    user = current_identity
+    if user.is_admin or user.is_super_admin or user.id == kwargs['user_id']:
+        return view(*view_args, **view_kwargs)
+
+    if user.is_staff:
+        return view(*view_args, **view_kwargs)
+
+    if user.is_organizer(kwargs['event_id']) or user.is_coorganizer(kwargs['event_id']):
+        return view(*view_args, **view_kwargs)
+
+    return ForbiddenError({'source': ''}, 'Co-organizer access is required.').respond()
+
+
+@jwt_required
 def is_registrar(view, view_args, view_kwargs, *args, **kwargs):
     """
     Allows Organizer, Co-organizer and registrar to access the event resources.x`
@@ -135,7 +154,6 @@ def accessible_role_based_events(view, view_args, view_kwargs, *args, **kwargs):
 
 
 permissions = {
-
     'is_admin': is_admin,
     'is_organizer': is_organizer,
     'is_coorganizer': is_coorganizer,
@@ -143,7 +161,8 @@ permissions = {
     'is_registrar': is_registrar,
     'is_moderator': is_moderator,
     'user_event': user_event,
-    'accessible_role_based_events': accessible_role_based_events
+    'accessible_role_based_events': accessible_role_based_events,
+    'is_coorganizer_or_user_itself': is_coorganizer_or_user_itself
 }
 
 

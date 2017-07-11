@@ -24,6 +24,7 @@ before_script:
   - psql -c 'create database test;' -U postgres
   - export DATABASE_URL=postgresql://postgres@localhost:5432/abc
   - export TEST_DATABASE_URL=postgresql://postgres@localhost:5432/test
+  - bash scripts/test_multiple_heads.sh
   - dredd
 script:
   - nosetests tests/unittests -v --with-coverage
