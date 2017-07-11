@@ -1,5 +1,8 @@
+#
+# Deployment of the Server and celery worker
+#
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1beta1
 metadata:
   name: web
 spec:
@@ -9,6 +12,9 @@ spec:
       labels:
         app: web
     spec:
+      volumes:
+      - name: data-store
+        emptyDir: {}
       containers:
       - name: web
         image: eventyay/api-server:latest
@@ -18,8 +24,8 @@ spec:
           httpGet:
             path: /health-check/
             port: 8080
-          initialDelaySeconds: 15
-          timeoutSeconds: 1
+          initialDelaySeconds: 30
+          timeoutSeconds: 3
         ports:
         - containerPort: 8080
           protocol: TCP
@@ -33,10 +39,18 @@ spec:
         - name: FORCE_SSL
           value: 'yes'
         volumeMounts:
-          - mountPath: /opev/open_event/static/uploads/
-            name: nfs-storage
+        - mountPath: /opev/open_event/static/uploads/
+          name: data-store
+      - name: celery
+        image: eventyay/api-server:latest
+        command: ["/bin/sh","-c"]
+        args: ["./kubernetes/run.sh"]
+        env:
+        - name: C_FORCE_ROOT
+          value: 'true'
+        - name: DEPLOYMENT
+          value: 'celery'
+        volumeMounts:
+        - mountPath: /opev/open_event/static/uploads/
+          name: data-store
       restartPolicy: Always
-      volumes:
-        - name: nfs-storage
-          persistentVolumeClaim:
-            claimName: nfs-claim
