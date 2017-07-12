@@ -58,6 +58,7 @@ class Config(object):
     PROPOGATE_ERROR = env.bool('PROPOGATE_ERROR', default=False)
     DASHERIZE_API = True
     ETAG = True
+    SENTRY_DSN = env('SENTRY_DSN', default=None)
 
     if not SQLALCHEMY_DATABASE_URI:
         print('`DATABASE_URL` either not exported or empty')
