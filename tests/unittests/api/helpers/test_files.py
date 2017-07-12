@@ -29,6 +29,36 @@ class TestFilesHelperValidation(OpenEventTestCase):
             self.assertEqual(1, 2)
             self.assertTrue(os.path.exists(file_path))
 
-  
+    def test_upload_single_file(self):
+
+        class FileObj(StringIO):
+
+            def close(self):
+                pass
+
+        class MyRequest(Request):
+            def _get_file_stream(*args, **kwargs):
+                return FileObj()
+
+        app.request_class = MyRequest
+
+        @app.route("/test_upload", methods=['POST'])
+        def upload():
+            files = request.files['file']
+            file_uploaded = uploaded_file(files=files)
+            return jsonify(
+                {'path': file_uploaded.file_path,
+                 'name': file_uploaded.filename})
+
+        with app.test_request_context():
+            client = app.test_client()
+            resp = client.post('/test_upload', data = {'file': (StringIO('1,2,3,4'), 'test_file.csv')})
+            data = json.loads(resp.data)
+            file_path = data['path']
+            filename = data['name']
+            actual_file_path = app.config.get('BASE_DIR') + '/static/uploads/' + filename
+            self.assertEqual(file_path, actual_file_path)
+            self.assertTrue(os.path.exists(file_path))
+
 if __name__ == '__main__':
     unittest.main()
