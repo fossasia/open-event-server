@@ -1,7 +1,5 @@
 #!/bin/bash
 echo "[LOG] Deploying ${DEPLOYMENT}"
-export REDIS_URL=redis://redis.redis:6379/0
-export DATABASE_URL=postgresql://postgres:test@postgres.postgres:5432/opev
 echo "[LOG] Using database: ${DATABASE_URL}"
 echo "[LOG] Using redis: ${REDIS_URL}"
 if [ "$DEPLOYMENT" == "api" ]
