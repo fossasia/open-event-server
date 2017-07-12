@@ -6,11 +6,11 @@ from app import manager
 from app import current_app as app
 from app.models import db
 from app.models.speaker import Speaker
-# from app.helpers.data import DataManager
-# from app.helpers.data_getter import DataGetter
 from populate_db import populate
 from flask_migrate import stamp
 from sqlalchemy.engine import reflection
+
+from tests.unittests.auth_helper import create_super_admin
 
 
 @manager.command
@@ -34,20 +34,6 @@ def add_event_identifier():
     for event in events:
         event.identifier = get_new_event_identifier()
         save_to_db(event)
-
-
-# @manager.command
-# def fix_session_owners():
-#     speakers = Speaker.query.all()
-#     for speaker in speakers:
-#         if not speaker.user or speaker.user.email != speaker.email:
-#             speaker.user = DataGetter.get_or_create_user_by_email(speaker.email, {
-#                 'firstname': speaker.name,
-#                 'lastname': ''
-#             })
-#             db.session.add(speaker)
-#             print "Processed - " + str(speaker.id)
-#     db.session.commit()
 
 
 @manager.option('-e', '--event', help='Event ID. Eg. 1')
@@ -74,29 +60,29 @@ def fix_speaker_images(event):
     db.session.commit()
 
 
-# @manager.option('-c', '--credentials', help='Super admin credentials. Eg. username:password')
-# def initialize_db(credentials):
-#     with app.app_context():
-#         populate_data = True
-#         inspector = reflection.Inspector.from_engine(db.engine)
-#         table_name = 'events'
-#         table_names = inspector.get_table_names()
-#         print "[LOG] Existing tables:"
-#         print "[LOG] " + ','.join(table_names)
-#         if table_name not in table_names:
-#             print "[LOG] Table not found. Attempting creation"
-#             try:
-#                 db.create_all()
-#                 stamp()
-#             except:
-#                 populate_data = False
-#                 print "[LOG] Could not create tables. Either database does not exist or tables already created"
-#             if populate_data:
-#                 credentials = credentials.split(":")
-#                 DataManager.create_super_admin(credentials[0], credentials[1])
-#                 populate()
-#         else:
-#             print "[LOG] Tables already exist. Skipping data population & creation."
+@manager.option('-c', '--credentials', help='Super admin credentials. Eg. username:password')
+def initialize_db(credentials):
+    with app.app_context():
+        populate_data = True
+        inspector = reflection.Inspector.from_engine(db.engine)
+        table_name = 'events'
+        table_names = inspector.get_table_names()
+        print "[LOG] Existing tables:"
+        print "[LOG] " + ','.join(table_names)
+        if table_name not in table_names:
+            print "[LOG] Table not found. Attempting creation"
+            try:
+                db.create_all()
+                stamp()
+            except:
+                populate_data = False
+                print "[LOG] Could not create tables. Either database does not exist or tables already created"
+            if populate_data:
+                credentials = credentials.split(":")
+                create_super_admin(credentials[0], credentials[1])
+                populate()
+        else:
+            print "[LOG] Tables already exist. Skipping data population & creation."
 
 
 @manager.command
