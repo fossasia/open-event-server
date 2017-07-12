@@ -25,6 +25,7 @@ from flask_login import current_user
 from flask_jwt import JWT
 from datetime import timedelta
 from flask_cors import CORS
+from raven.contrib.flask import Sentry
 
 import sqlalchemy as sa
 
@@ -134,6 +135,11 @@ def create_app():
         app.add_url_rule('/static/<path:filename>',
                          endpoint='static',
                          view_func=app.send_static_file)
+
+    # sentry
+    if app.config['SENTRY_DSN']:
+        sentry = Sentry(dsn=app.config['SENTRY_DSN'])
+        sentry.init_app(app)
 
     return app, _manager, db, _jwt
 
