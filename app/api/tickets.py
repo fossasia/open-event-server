@@ -9,6 +9,7 @@ from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.ticket import Ticket, TicketTag, ticket_tags_table
 from app.models.event import Event
+from app.models.access_code import AccessCode
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.models.ticket_holder import TicketHolder
 from app.api.helpers.db import safe_query
@@ -76,6 +77,14 @@ class TicketSchema(Schema):
                                related_view_kwargs={'ticket_id': '<id>'},
                                schema='TicketTagSchema',
                                type_='ticket-tag')
+    access_codes = Relationship(attribute='access_codes',
+                                self_view='v1.ticket_access_code',
+                                self_view_kwargs={'id': '<id>'},
+                                related_view='v1.access_code_list',
+                                related_view_kwargs={'ticket_id': '<id>'},
+                                schema='AccessCodeSchema',
+                                many=True,
+                                type_='access-code')
 
 
 class TicketList(ResourceList):
@@ -93,6 +102,11 @@ class TicketList(ResourceList):
         elif view_kwargs.get('event_identifier'):
             event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
             query_ = query_.join(Event).filter(Event.id == event.id)
+        if view_kwargs.get('access_code_id'):
+            access_code = safe_query(self, AccessCode, 'id', view_kwargs['access_code_id'], 'access_code_id')
+            # access_code - ticket :: many-to-many relationship
+            query_ = Ticket.query.filter(Ticket.access_codes.any(id=access_code.id))
+
         return query_
 
     def before_create_object(self, data, view_kwargs):
