@@ -37,7 +37,7 @@ class TicketSchema(Schema):
                                       "sales-ends-at should be after sales-starts-at")
 
     @validates_schema
-    def validate_order_quantity(self, data):
+    def validate_quantity(self, data):
         if 'max_order' in data and 'min_order' in data:
             if data['max_order'] < data['min_order']:
                 raise UnprocessableEntity({'pointer': '/data/attributes/max-order'},

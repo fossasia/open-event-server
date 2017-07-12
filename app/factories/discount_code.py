@@ -15,9 +15,9 @@ class DiscountCodeFactory(factory.alchemy.SQLAlchemyModelFactory):
     value = common.float_
     type = "amount"
     is_active = True
-    tickets_number = 10
+    tickets_number = 30
     min_quantity = 10
-    max_quantity = 10
+    max_quantity = 20
     valid_from = common.date_
     valid_till = common.dateEnd_
     used_for = "event"
