@@ -154,6 +154,7 @@ def accessible_role_based_events(view, view_args, view_kwargs, *args, **kwargs):
 
 
 permissions = {
+    'is_super_admin': is_super_admin,
     'is_admin': is_admin,
     'is_organizer': is_organizer,
     'is_coorganizer': is_coorganizer,
@@ -192,6 +193,12 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         if not check(view_kwargs):
             return ForbiddenError({'source': ''}, 'Access forbidden').respond()
 
+    # leave_if checks if we have to bypass this request on the basis of lambda function
+    if 'leave_if' in kwargs:
+        check = kwargs['leave_if']
+        if check(view_kwargs):
+            return view(*view_args, **view_kwargs)
+
     # If event_identifier in route instead of event_id
     if 'event_identifier' in view_kwargs:
         try:
@@ -225,3 +232,11 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         return permissions[args[0]](view, view_args, view_kwargs, *args, **kwargs)
     else:
         return ForbiddenError({'source': ''}, 'Access forbidden').respond()
+
+
+def has_access(access_level, **kwargs):
+    if access_level in permissions:
+        auth = permissions[access_level](lambda *a, **b: True, (), {}, (), **kwargs)
+        if type(auth) is bool and auth is True:
+            return True
+    return False
