@@ -7,7 +7,7 @@ import marshmallow.validate as validate
 from app.api.helpers.utilities import dasherize
 from flask_jwt import current_identity as current_user
 from app.api.helpers.permissions import jwt_required
-from app.api.helpers.errors import NotFoundError
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 from app.models import db
 from app.models.event import Event
@@ -245,7 +245,7 @@ class DiscountCodeDetail(ResourceDetail):
         if view_kwargs.get('id'):
             discount = self.session.query(DiscountCode).filter_by(id=view_kwargs.get('id')).one()
             if not discount:
-                raise NotFoundError()
+                raise ObjectNotFound({'parameter': '{id}'}, "DiscountCode:  not found")
 
             if discount.used_for == 'ticket' and current_user.is_coorganizer(discount.event_id):
                 self.schema = DiscountCodeSchemaTicket
@@ -270,7 +270,7 @@ class DiscountCodeDetail(ResourceDetail):
         """
         discount = self.session.query(DiscountCode).filter_by(id=view_kwargs.get('id')).one()
         if not discount:
-            raise NotFoundError()
+            raise ObjectNotFound({'parameter': '{id}'}, "DiscountCode:  not found")
 
         if 'used_for' in data:
             used_for = data['used_for']
@@ -295,7 +295,7 @@ class DiscountCodeDetail(ResourceDetail):
         """
         discount = self.session.query(DiscountCode).filter_by(id=view_kwargs.get('id')).one()
         if not discount:
-            raise NotFoundError()
+            raise ObjectNotFound({'parameter': '{id}'}, "DiscountCode:  not found")
 
         if discount.used_for == 'ticket' and (current_user.is_coorganizer(view_kwargs.get('event_id'))
            or current_user.is_organizer(view_kwargs.get('event_id')) or current_user.is_admin):
@@ -327,7 +327,7 @@ class DiscountCodeRelationship(ResourceRelationship):
         """
         discount = db.session.query(DiscountCode).filter_by(id=kwargs.get('id')).one()
         if not discount:
-            raise NotFoundError()
+            raise ObjectNotFound({'parameter': '{id}'}, "DiscountCode:  not found")
         if discount.used_for == 'ticket':
             self.schema = DiscountCodeSchemaTicket
         if discount.used_for == 'event':
