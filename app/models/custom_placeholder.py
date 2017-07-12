@@ -1,4 +1,10 @@
 from app.models import db
+from sqlalchemy.orm import backref
+
+
+# ensures that if the image resizing fails somehow, respective image fields do not
+def image_default(context):
+    return context.current_parameters.get('original_image_url')
 
 
 class CustomPlaceholder(db.Model):
@@ -7,20 +13,28 @@ class CustomPlaceholder(db.Model):
     id = db.Column(db.Integer,
                    primary_key=True)
     name = db.Column(db.String)
-    url = db.Column(db.String)
-    thumbnail = db.Column(db.String)
+    original_image_url = db.Column(db.String, nullable=False)
+    thumbnail_image_url = db.Column(db.String, nullable=False, default=image_default)
+    large_image_url = db.Column(db.String, nullable=False, default=image_default)
+    icon_image_url = db.Column(db.String, nullable=False, default=image_default)
     copyright = db.Column(db.String)
     origin = db.Column(db.String)
+    event_sub_topic_id = db.Column(db.Integer, db.ForeignKey('event_sub_topics.id', ondelete='CASCADE'))
+    event_sub_topic = db.relationship('EventSubTopic', backref=backref('custom_placeholder', uselist=False))
 
     def __init__(self,
                  name=None,
-                 url=None,
-                 thumbnail=None,
+                 original_image_url=None,
+                 thumbnail_image_url=None,
+                 large_image_url=None,
+                 icon_image_url=None,
                  copyright=None,
                  origin=None):
         self.name = name
-        self.url = url
-        self.thumbnail = thumbnail
+        self.original_image_url = original_image_url
+        self.thumbnail_image_url = thumbnail_image_url
+        self.large_image_url = large_image_url
+        self.icon_image_url = icon_image_url
         self.copyright = copyright
         self.origin = origin
 

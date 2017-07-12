@@ -29,6 +29,7 @@ from app.api.ticket_tags import TicketTagList, TicketTagDetail, TicketTagRelatio
 from app.api.attendees import AttendeeList, AttendeeDetail, AttendeeRelationship
 from app.api.access_codes import AccessCodeList, AccessCodeDetail, AccessCodeRelationship
 from app.api.modules import ModuleDetail
+from app.api.custom_placeholders import CustomPlaceholderDetail, CustomPlaceholderList, CustomPlaceholderRelationship
 
 # users
 api.route(UserList, 'user_list', '/users')
@@ -232,6 +233,14 @@ api.route(EventCopyrightDetail, 'event_copyright_detail',
 api.route(EventCopyrightRelationship, 'copyright_event',
           '/event-copyright/<int:id>/relationships/event')
 
+# custom_placeholder
+api.route(CustomPlaceholderList, 'custom_placeholder_list',
+          '/custom-placeholders')
+api.route(CustomPlaceholderDetail, 'custom_placeholder_detail',
+          '/custom-placeholders/<int:id>', '/event-sub-topics/<int:event_sub_topic_id>/custom-placeholder')
+api.route(CustomPlaceholderRelationship, 'custom_placeholder_event_sub_topic',
+          '/custom-placeholders/<int:id>/relationships/event-sub-topic')
+
 # tax
 api.route(TaxList, 'tax_list', '/events/<int:event_id>/tax', '/events/<identifier>/tax')
 api.route(TaxDetail, 'tax_detail', '/tax/<int:id>', '/events/<int:event_id>/tax')
@@ -284,11 +293,14 @@ api.route(EventSubTopicList, 'event_sub_topic_list',
           '/event-topics/<int:event_topic_id>/event-sub-topics')
 api.route(EventSubTopicDetail, 'event_sub_topic_detail', '/event-sub-topics/<int:id>',
           '/events/<int:event_id>/event-sub-topic',
-          '/events/<event_identifier>/event-sub-topic')
+          '/events/<event_identifier>/event-sub-topic',
+          '/custom-placeholders/<int:custom_placeholder_id>/event-sub-topic')
 api.route(EventSubTopicRelationship, 'event_sub_topic_event',
           '/event-sub-topics/<int:id>/relationships/events')
 api.route(EventSubTopicRelationship, 'event_sub_topic_event_topic',
           '/event-sub-topics/<int:id>/relationships/event-topic')
+api.route(EventSubTopicRelationship, 'event_sub_topic_custom_placeholder',
+          '/event-sub-topics/<int:id>/relationships/custom-placeholder')
 
 # ticket_fees
 api.route(TicketFeeList, 'ticket_fee_list', '/ticket-fees')
