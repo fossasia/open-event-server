@@ -164,7 +164,7 @@ api.route(MicrolocationRelationship, 'microlocation_event',
 # sessions
 api.route(SessionList, 'session_list', '/sessions', '/events/<int:event_id>/sessions',
           '/events/<event_identifier>/sessions',
-          '/tracks/<int:track_id>/sessions', '/session_types/<int:session_type_id>/sessions',
+          '/tracks/<int:track_id>/sessions', '/session-types/<int:session_type_id>/sessions',
           '/microlocations/<int:microlocation_id>/sessions', '/speakers/<int:speaker_id>/sessions')
 api.route(SessionDetail, 'session_detail', '/sessions/<int:id>')
 api.route(SessionRelationship, 'session_microlocation',
