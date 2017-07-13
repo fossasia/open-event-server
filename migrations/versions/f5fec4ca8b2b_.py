@@ -35,14 +35,19 @@ def upgrade():
                     type_=sa.DateTime(timezone=True),
                     existing_nullable=True)
 
-    # There were some invalid data entries with a string named 'string' in the db, this makes sure that they are defaulted to utc here
-    op.execute("UPDATE call_for_papers SET timezone = 'UTC' where timezone='string'", execution_options=None)
-    op.execute("UPDATE events SET timezone = 'UTC' where timezone='string'", execution_options=None)
-    op.execute("UPDATE events_version SET timezone = 'UTC' where timezone='string'", execution_options=None)
+    # There were some invalid data entries in the db, this makes sure that they are defaulted to utc here
+    op.execute("UPDATE call_for_papers SET timezone = 'UTC' where timezone not in (SELECT name from pg_timezone_names)",
+               execution_options=None)
+    op.execute("UPDATE events SET timezone = 'UTC' where timezone not in (SELECT name from pg_timezone_names)",
+               execution_options=None)
+    op.execute("UPDATE events_version SET timezone = 'UTC' where timezone not in (SELECT name from pg_timezone_names)",
+               execution_options=None)
 
-    op.execute("ALTER TABLE call_for_papers ALTER COLUMN start_date TYPE TIMESTAMP WITH TIME ZONE USING start_date AT TIME ZONE timezone",
+    op.execute(
+        "ALTER TABLE call_for_papers ALTER COLUMN start_date TYPE TIMESTAMP WITH TIME ZONE USING start_date AT TIME ZONE timezone",
         execution_options=None)
-    op.execute("ALTER TABLE call_for_papers ALTER COLUMN end_date TYPE TIMESTAMP WITH TIME ZONE USING start_date AT TIME ZONE timezone",
+    op.execute(
+        "ALTER TABLE call_for_papers ALTER COLUMN end_date TYPE TIMESTAMP WITH TIME ZONE USING start_date AT TIME ZONE timezone",
         execution_options=None)
     op.alter_column('discount_codes', 'created_at',
                     existing_type=postgresql.TIMESTAMP(),
@@ -72,21 +77,25 @@ def upgrade():
                     existing_type=postgresql.TIMESTAMP(),
                     type_=sa.DateTime(timezone=True),
                     existing_nullable=True)
-    op.execute("ALTER TABLE events ALTER COLUMN ends_at TYPE TIMESTAMP WITH TIME ZONE USING ends_at AT TIME ZONE timezone",
+    op.execute(
+        "ALTER TABLE events ALTER COLUMN ends_at TYPE TIMESTAMP WITH TIME ZONE USING ends_at AT TIME ZONE timezone",
         execution_options=None)
     op.alter_column('events', 'schedule_published_on',
                     existing_type=postgresql.TIMESTAMP(),
                     type_=sa.DateTime(timezone=True),
                     existing_nullable=True)
-    op.execute("ALTER TABLE events ALTER COLUMN starts_at TYPE TIMESTAMP WITH TIME ZONE USING starts_at AT TIME ZONE timezone",
+    op.execute(
+        "ALTER TABLE events ALTER COLUMN starts_at TYPE TIMESTAMP WITH TIME ZONE USING starts_at AT TIME ZONE timezone",
         execution_options=None)
     op.alter_column('events_version', 'deleted_at',
                     existing_type=postgresql.TIMESTAMP(),
                     type_=sa.DateTime(timezone=True),
                     existing_nullable=True)
-    op.execute("ALTER TABLE events_version ALTER COLUMN ends_at TYPE TIMESTAMP WITH TIME ZONE USING ends_at AT TIME ZONE timezone",
+    op.execute(
+        "ALTER TABLE events_version ALTER COLUMN ends_at TYPE TIMESTAMP WITH TIME ZONE USING ends_at AT TIME ZONE timezone",
         execution_options=None)
-    op.execute("ALTER TABLE events_version ALTER COLUMN starts_at TYPE TIMESTAMP WITH TIME ZONE USING starts_at AT TIME ZONE timezone",
+    op.execute(
+        "ALTER TABLE events_version ALTER COLUMN starts_at TYPE TIMESTAMP WITH TIME ZONE USING starts_at AT TIME ZONE timezone",
         execution_options=None)
     op.alter_column('export_jobs', 'starts_at',
                     existing_type=postgresql.TIMESTAMP(),
