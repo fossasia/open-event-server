@@ -58,6 +58,7 @@ class User(db.Model):
     twitter_url = db.Column(db.String)
     instagram_url = db.Column(db.String)
     google_plus_url = db.Column(db.String)
+    original_image_url = db.Column(db.String, nullable=True, default=None)
     thumbnail_image_url = db.Column(db.String)
     small_image_url = db.Column(db.String)
     icon_image_url = db.Column(db.String)
