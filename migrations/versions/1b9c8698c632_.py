@@ -23,6 +23,7 @@ class ReplaceableObject(object):
 # function to find a and replace a string(the whole string should match, not substring)
 # across all the columns of a table.
 # If run is true then the function executes the query.
+# This will work only for nullable columns
 replace_in_table = ReplaceableObject(
     "replace_in_table(table_name text, original text, replacement text, run boolean)",
     """
@@ -42,6 +43,7 @@ replace_in_table = ReplaceableObject(
                 and (atttypid = 25
                 or atttypid = 1042
                 or atttypid = 1043)
+                and not attnotnull
             order by attnum
         loop
             q = format($fmt$%supdate %s set %s = %s where %s = %s;$fmt$,
