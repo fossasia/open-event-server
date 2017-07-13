@@ -64,33 +64,6 @@ class TestEventValidation(OpenEventTestCase):
             data = {}
             EventSchema.validate_date(schema, data, original_data)
 
-    def test_timezone_pass(self):
-        """
-        Events Validate Timezone - Tests if the function runs without an exception
-        :return:
-        """
-        schema = EventSchema()
-        data = {
-            'starts_at': datetime(2003, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
-            'ends_at': datetime(2003, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
-            'timezone': 'UTC'
-        }
-        EventSchema.validate_timezone(schema, data)
-
-    def test_timezone_fail(self):
-        """
-        Events Validate Timezone - Tests if the function raises an exception
-        :return:
-        """
-        schema = EventSchema()
-        data = {
-            'starts_at': datetime(2003, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
-            'ends_at': datetime(2003, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
-            'timezone': 'Asia/Kolkata'
-        }
-        with self.assertRaises(UnprocessableEntity):
-            EventSchema.validate_timezone(schema, data)
-
 
 if __name__ == '__main__':
     unittest.main()

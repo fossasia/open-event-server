@@ -69,24 +69,6 @@ class EventSchema(Schema):
                                       "Unknown timezone: '{}'".
                                       format(data['timezone']))
 
-        if 'timezone' in data:
-            offset = timezone(data['timezone']).utcoffset(
-                datetime.strptime('2014-12-01', '%Y-%m-%d')).seconds
-            if 'starts_at' in data:
-                starts_at = data['starts_at'].utcoffset().seconds
-                if offset != starts_at:
-                    raise UnprocessableEntity({'pointer': '/data/attributes/timezone'},
-                                              "timezone: {} does not match with the starts-at "
-                                              "offset {:02}:{:02}".
-                                              format(data['timezone'], starts_at // 3600, starts_at % 3600 // 60))
-            if 'ends_at' in data:
-                ends_at = data['ends_at'].utcoffset().seconds
-                if offset != ends_at:
-                    raise UnprocessableEntity({'pointer': '/data/attributes/timezone'},
-                                              "timezone: {} does not match with the ends-at "
-                                              "offset {:02}:{:02}".
-                                              format(data['timezone'], ends_at // 3600, ends_at % 3600 // 60))
-
     id = fields.Str(dump_only=True)
     identifier = fields.Str(dump_only=True)
     name = fields.Str(required=True)
