@@ -75,8 +75,7 @@ def create_save_resized_image(image_file, basewidth, maintain_aspect, height_siz
 
     # Convert to jpeg for lower file size.
     if im.format is not 'JPEG':
-        img = Image.new("RGB", im.size, (255, 255, 255))
-        img.paste(im, (0, 0), im)
+        img = im.convert('RGB')
     else:
         img = im
 

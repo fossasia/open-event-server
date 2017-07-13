@@ -43,6 +43,7 @@ from app.factories.module import ModuleFactory
 from app.factories.ticket_fee import TicketFeesFactory
 from app.factories.role_invite import RoleInviteFactory
 from app.factories.users_events_role import UsersEventsRoleFactory
+from app.factories.custom_placeholder import CustomPlaceholderFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -2018,4 +2019,67 @@ def event_sub_topic_delete(transaction):
     with stash['app'].app_context():
         event_sub_topic = EventSubTopicFactory()
         db.session.add(event_sub_topic)
+        db.session.commit()
+
+
+# ------------------------- Custom Placeholders -------------------------
+@hooks.before("Custom Placeholders > Custom Placeholders Collection > List All Event Custom Placeholders")
+def custom_placeholder_get_list(transaction):
+    """
+    GET /custom-placeholders
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        custom_placeholder = CustomPlaceholderFactory()
+        db.session.add(custom_placeholder)
+        db.session.commit()
+
+
+@hooks.before("Custom Placeholders > Custom Placeholders Collection > Create Custom Placeholder")
+def custom_placeholder_post(transaction):
+    """
+    POST /custom-placeholders
+    :param transaction:
+    :return:
+    """
+    pass
+
+
+@hooks.before("Custom Placeholders > Custom Placeholder Details > Custom Placeholder Details")
+def custom_placeholder_get_detail(transaction):
+    """
+    GET /custom-placeholders/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        custom_placeholder = CustomPlaceholderFactory()
+        db.session.add(custom_placeholder)
+        db.session.commit()
+
+
+@hooks.before("Custom Placeholders > Custom Placeholder Details > Update Custom Placeholder")
+def custom_placeholder_patch(transaction):
+    """
+    PATCH /custom-placeholders/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        custom_placeholder = CustomPlaceholderFactory()
+        db.session.add(custom_placeholder)
+        db.session.commit()
+
+
+@hooks.before("Custom Placeholders > Custom Placeholder Details > Delete Custom Placeholder")
+def custom_placeholder_delete(transaction):
+    """
+    DELETE /custom-placeholders/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        custom_placeholder = CustomPlaceholderFactory()
+        db.session.add(custom_placeholder)
         db.session.commit()

@@ -10,6 +10,7 @@ from app.models.event_topic import EventTopic
 from app.api.bootstrap import api
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.db import safe_query
+from app.api.custom_placeholders import CustomPlaceholder
 
 
 class EventSubTopicSchema(Schema):
@@ -43,6 +44,13 @@ class EventSubTopicSchema(Schema):
                                related_view_kwargs={'event_sub_topic_id': '<id>'},
                                schema='EventTopicSchema',
                                type_='event-topic')
+    custom_placeholder = Relationship(attribute='custom_placeholder',
+                                      self_view='v1.event_sub_topic_custom_placeholder',
+                                      self_view_kwargs={'id': '<id>'},
+                                      related_view='v1.custom_placeholder_detail',
+                                      related_view_kwargs={'event_sub_topic_id': '<id>'},
+                                      schema='CustomPlaceholderSchema',
+                                      type_='custom-placeholder')
 
 
 class EventSubTopicList(ResourceList):
@@ -97,8 +105,16 @@ class EventSubTopicDetail(ResourceDetail):
 
         if view_kwargs.get('event_id'):
             event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-            if event.event_topic_id:
-                view_kwargs['id'] = event.event_topic_id
+            if event.event_sub_topic_id:
+                view_kwargs['id'] = event.event_sub_topic_id
+            else:
+                view_kwargs['id'] = None
+
+        if view_kwargs.get('custom_placeholder_id'):
+            custom_placeholder = safe_query(self, CustomPlaceholder, 'id', view_kwargs['custom_placeholder_id'],
+                                            'custom_placeholder_id')
+            if custom_placeholder.event_sub_topic_id:
+                view_kwargs['id'] = custom_placeholder.event_sub_topic_id
             else:
                 view_kwargs['id'] = None
 
