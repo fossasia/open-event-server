@@ -10,6 +10,7 @@ from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.session import Session
 from app.models.track import Track
+from app.models.speaker import Speaker
 from app.models.session_type import SessionType
 from app.models.microlocation import Microlocation
 from app.api.helpers.exceptions import UnprocessableEntity
@@ -125,7 +126,9 @@ class SessionList(ResourceList):
             event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
             query_ = query_.join(Event).filter(Event.identifier == event.id)
         if view_kwargs.get('speaker_id'):
-            query_ = Session.query.filter(Session.speakers.any(id=view_kwargs['speaker_id']))
+            speaker = safe_query(self, Speaker, 'id', view_kwargs['speaker_id'], 'speaker_id')
+            # session-speaker :: many-to-many relationship
+            query_ = Session.query.filter(Session.speakers.any(id=speaker.id))
         return query_
 
     def before_create_object(self, data, view_kwargs):

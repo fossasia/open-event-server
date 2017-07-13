@@ -14,7 +14,7 @@ import os.path
 from os import environ
 from envparse import env
 import sys
-from flask import Flask
+from flask import Flask, json, make_response
 from app.settings import get_settings, get_setts
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
@@ -23,6 +23,8 @@ from flask_jwt import JWT
 from datetime import timedelta
 from flask_cors import CORS
 from raven.contrib.flask import Sentry
+from flask_rest_jsonapi.errors import jsonapi_errors
+from flask_rest_jsonapi.exceptions import JsonApiException
 
 import sqlalchemy as sa
 
@@ -184,6 +186,17 @@ def update_sent_state(sender=None, body=None, **kwargs):
 # scheduler.add_job(send_event_fee_notification, 'cron', day=1)
 # scheduler.add_job(send_event_fee_notification_followup, 'cron', day=15)
 # scheduler.start()
+
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    if current_app.config['PROPOGATE_ERROR'] is True:
+        exc = JsonApiException({'pointer': ''}, str(error))
+    else:
+        exc = JsonApiException({'pointer': ''}, 'Unknown error')
+    return make_response(json.dumps(jsonapi_errors([exc.to_dict()])), exc.status,
+                         {'Content-Type': 'application/vnd.api+json'})
+
 
 if __name__ == '__main__':
     current_app.run()

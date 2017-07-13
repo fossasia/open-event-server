@@ -24,6 +24,7 @@ from app.factories.event_copyright import EventCopyrightFactory
 from app.factories.setting import SettingFactory
 from app.factories.event_type import EventTypeFactory
 from app.factories.discount_code import DiscountCodeFactory
+from app.factories.access_code import AccessCodeFactory
 from app.factories.event_topic import EventTopicFactory
 from app.factories.event_invoice import EventInvoiceFactory
 from app.factories.event_sub_topic import EventSubTopicFactory
@@ -42,6 +43,7 @@ from app.factories.module import ModuleFactory
 from app.factories.ticket_fee import TicketFeesFactory
 from app.factories.role_invite import RoleInviteFactory
 from app.factories.users_events_role import UsersEventsRoleFactory
+from app.factories.custom_placeholder import CustomPlaceholderFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -1601,6 +1603,72 @@ def discount_delete(transaction):
         db.session.commit()
 
 
+# ------------------------- Access Codes -------------------------
+@hooks.before("Access Codes > Access Code Collection > List All Access Codes")
+def access_code_get_list(transaction):
+    """
+    GET /events/1/access-codes
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        access_code = AccessCodeFactory()
+        db.session.add(access_code)
+        db.session.commit()
+
+
+@hooks.before("Access Codes > Access Code Collection > Create Access Code")
+def access_code_post(transaction):
+    """
+    POST /events/1/access-codes
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Access Codes > Access Code Detail > Access Code Detail")
+def access_code_get_detail(transaction):
+    """
+    GET /access-codes/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        access_code = AccessCodeFactory()
+        db.session.add(access_code)
+        db.session.commit()
+
+
+@hooks.before("Access Codes > Access Code Detail > Update Access Code")
+def access_code_patch(transaction):
+    """
+    PATCH /access-codes/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        access_code = AccessCodeFactory()
+        db.session.add(access_code)
+        db.session.commit()
+
+
+@hooks.before("Access Codes > Access Code Detail > Delete Access Code")
+def access_delete(transaction):
+    """
+    DELETE /access-codes/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        access_code = AccessCodeFactory()
+        db.session.add(access_code)
+        db.session.commit()
+
+
 # ------------------------- Role Invites -------------------------
 @hooks.before("Role Invites > Role Invites Collection > List All Role Invites")
 def role_invite_get_list(transaction):
@@ -1951,4 +2019,67 @@ def event_sub_topic_delete(transaction):
     with stash['app'].app_context():
         event_sub_topic = EventSubTopicFactory()
         db.session.add(event_sub_topic)
+        db.session.commit()
+
+
+# ------------------------- Custom Placeholders -------------------------
+@hooks.before("Custom Placeholders > Custom Placeholders Collection > List All Event Custom Placeholders")
+def custom_placeholder_get_list(transaction):
+    """
+    GET /custom-placeholders
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        custom_placeholder = CustomPlaceholderFactory()
+        db.session.add(custom_placeholder)
+        db.session.commit()
+
+
+@hooks.before("Custom Placeholders > Custom Placeholders Collection > Create Custom Placeholder")
+def custom_placeholder_post(transaction):
+    """
+    POST /custom-placeholders
+    :param transaction:
+    :return:
+    """
+    pass
+
+
+@hooks.before("Custom Placeholders > Custom Placeholder Details > Custom Placeholder Details")
+def custom_placeholder_get_detail(transaction):
+    """
+    GET /custom-placeholders/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        custom_placeholder = CustomPlaceholderFactory()
+        db.session.add(custom_placeholder)
+        db.session.commit()
+
+
+@hooks.before("Custom Placeholders > Custom Placeholder Details > Update Custom Placeholder")
+def custom_placeholder_patch(transaction):
+    """
+    PATCH /custom-placeholders/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        custom_placeholder = CustomPlaceholderFactory()
+        db.session.add(custom_placeholder)
+        db.session.commit()
+
+
+@hooks.before("Custom Placeholders > Custom Placeholder Details > Delete Custom Placeholder")
+def custom_placeholder_delete(transaction):
+    """
+    DELETE /custom-placeholders/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        custom_placeholder = CustomPlaceholderFactory()
+        db.session.add(custom_placeholder)
         db.session.commit()

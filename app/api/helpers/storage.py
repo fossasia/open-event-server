@@ -59,6 +59,12 @@ UPLOAD_PATHS = {
         'pentabarf': 'exports/{event_id}/pentabarf',
         'ical': 'exports/{event_id}/ical',
         'xcal': 'exports/{event_id}/xcal'
+    },
+    'custom-placeholders': {
+        'original': 'custom-placeholders/{identifier}/original',
+        'thumbnail': 'custom-placeholders/{identifier}/thumbnail',
+        'large': 'custom-placeholders/{identifier}/large',
+        'icon': 'custom-placeholders/{identifier}/icon'
     }
 }
 

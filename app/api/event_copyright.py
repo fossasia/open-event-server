@@ -70,18 +70,6 @@ class EventCopyrightList(ResourceList):
 
 
 class EventCopyrightDetail(ResourceDetail):
-
-    def before_patch(self, args, kwargs, data):
-        event = None
-        if kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', kwargs['event_id'], 'event_id')
-        elif kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', kwargs['event_identifier'], 'event_identifier')
-
-        if event:
-            event_copyright = safe_query(self, EventCopyright, 'event_id', event.id, 'event_id')
-            kwargs['id'] = event_copyright.id
-
     def before_get_object(self, view_kwargs):
         event = None
         if view_kwargs.get('event_id'):
