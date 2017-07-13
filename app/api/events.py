@@ -1,4 +1,5 @@
 from datetime import datetime
+import pytz
 
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
@@ -61,6 +62,13 @@ class EventSchema(Schema):
 
     @validates_schema
     def validate_timezone(self, data):
+        try:
+            timezone(data['timezone'])
+        except pytz.exceptions.UnknownTimeZoneError:
+            raise UnprocessableEntity({'pointer': '/data/attributes/timezone'},
+                                      "Unknown timezone: '{}'".
+                                      format(data['timezone']))
+
         if 'timezone' in data:
             offset = timezone(data['timezone']).utcoffset(
                 datetime.strptime('2014-12-01', '%Y-%m-%d')).seconds
