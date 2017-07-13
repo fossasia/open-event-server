@@ -32,8 +32,8 @@ def set_settings(**kwargs):
     if 'service_fee' in kwargs:
         ticket_service_fees = kwargs.get('service_fee')
         ticket_maximum_fees = kwargs.get('maximum_fee')
-        from app.helpers.data_getter import DataGetter
-        from app.helpers.data import save_to_db
+        from app.api.helpers.data_getter import DataGetter
+        from app.api.helpers.db import save_to_db
         currencies = DataGetter.get_payment_currencies()
         ticket_fees = DataGetter.get_fee_settings()
         if not ticket_fees:
@@ -61,7 +61,7 @@ def set_settings(**kwargs):
         else:
             for key, value in kwargs.iteritems():
                 setattr(setting, key, value)
-        from app.helpers.data import save_to_db
+        from app.api.helpers.db import save_to_db
         save_to_db(setting, 'Setting saved')
         current_app.secret_key = setting.secret
         stripe.api_key = setting.stripe_secret_key

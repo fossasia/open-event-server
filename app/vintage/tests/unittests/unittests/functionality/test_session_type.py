@@ -3,7 +3,7 @@ from datetime import datetime
 from pytz import timezone
 
 from app import current_app as app
-from app.helpers.data import save_to_db
+from app.api.helpers.db import save_to_db
 from app.models.session import Session
 from app.models.session_type import SessionType
 from tests.unittests.object_mother import ObjectMother

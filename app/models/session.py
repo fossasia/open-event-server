@@ -1,7 +1,6 @@
 import datetime
 
-from app.helpers.date_formatter import DateFormatter
-from app.helpers.versioning import clean_up_string, clean_html
+from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models import db
 
 speakers_sessions = db.Table('speakers_sessions',
@@ -105,28 +104,6 @@ class Session(db.Model):
     @property
     def is_accepted(self):
         return self.state == "accepted"
-
-    @property
-    def serialize(self):
-        """Return object data in easily serializeable format"""
-        return {
-            'id': self.id,
-            'title': self.title,
-            'subtitle': self.subtitle,
-            'short_abstract': self.short_abstract,
-            'long_abstract': self.long_abstract,
-            'comments': self.comments,
-            'begin': DateFormatter().format_date(self.starts_at),
-            'end': DateFormatter().format_date(self.ends_at),
-            'track': self.track.id if self.track else None,
-            'speakers': [
-                {'id': speaker.id,
-                 'name': speaker.name} for speaker in self.speakers
-            ],
-            'level': self.level,
-            'microlocation': self.microlocation.id
-            if self.microlocation else None
-        }
 
     def __repr__(self):
         return '<Session %r>' % self.title

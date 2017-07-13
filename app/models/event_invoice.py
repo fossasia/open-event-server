@@ -2,7 +2,7 @@ import time
 import uuid
 from datetime import datetime
 
-from app.helpers.helpers import get_count
+from app.api.helpers.db import get_count
 from app.models import db
 
 
