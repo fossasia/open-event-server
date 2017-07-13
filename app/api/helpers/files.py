@@ -117,15 +117,15 @@ def create_save_image_sizes(image_file, image_sizes_type, unique_identifier=None
     try:
         image_sizes = ImageSizes.query.filter_by(type=image_sizes_type).one()
     except NoResultFound:
-        image_sizes = ImageSizes('event', 1300, 500, True, 100, 500, 200, True, 100, 75, 30, True, 100)
+        image_sizes = ImageSizes(image_sizes_type, 1300, 500, True, 100, 500, 200, True, 100, 75, 30, True, 100)
 
     # Get an unique identifier from uuid if not provided
     if unique_identifier is None:
         unique_identifier = get_file_name()
 
-    large_aspect = image_sizes.full_aspect
-    large_basewidth = image_sizes.full_width
-    large_height_size = image_sizes.full_height
+    large_aspect = image_sizes.full_aspect if image_sizes.full_aspect else True
+    large_basewidth = image_sizes.full_width if image_sizes.full_width else 1300
+    large_height_size = image_sizes.full_height if image_sizes.full_width else 500
 
     thumbnail_aspect = image_sizes.thumbnail_aspect
     thumbnail_basewidth = image_sizes.thumbnail_width
@@ -148,6 +148,7 @@ def create_save_image_sizes(image_file, image_sizes_type, unique_identifier=None
     icon_upload_path = UPLOAD_PATHS[image_sizes_type]['icon'].format(
         identifier=unique_identifier
     )
+
     new_images = {
         'original_image_url': create_save_resized_image(image_file, 0, 0, 0, original_upload_path, resize=False),
         'large_image_url': create_save_resized_image(image_file, large_basewidth, large_aspect, large_height_size,

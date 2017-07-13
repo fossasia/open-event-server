@@ -46,10 +46,11 @@ UPLOAD_PATHS = {
     },
     'user': {
         'avatar': 'users/{user_id}/avatar',
-        'thumbnail': 'users/{user_id}/thumbnail',
-        'small': 'users/{user_id}/small',
-        'icon': 'users/{user_id}/icon'
-    },
+        'thumbnail': 'users/{identifier}/thumbnail',
+        'original': 'users/{identifier}/original',
+        'large': 'users/{identifier}/large',
+        'icon': 'users/{identifier}/icon'
+},
     'temp': {
         'event': 'events/temp/{uuid}',
         'image': 'temp/images/{uuid}'
