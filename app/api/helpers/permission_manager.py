@@ -187,17 +187,17 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
     if request.method not in methods:
         return view(*view_args, **view_kwargs)
 
-    # A check to ensure it is good to go ahead and check permissions
-    if 'check' in kwargs:
-        check = kwargs['check']
-        if not check(view_kwargs):
-            return ForbiddenError({'source': ''}, 'Access forbidden').respond()
-
     # leave_if checks if we have to bypass this request on the basis of lambda function
     if 'leave_if' in kwargs:
         check = kwargs['leave_if']
         if check(view_kwargs):
             return view(*view_args, **view_kwargs)
+
+    # A check to ensure it is good to go ahead and check permissions
+    if 'check' in kwargs:
+        check = kwargs['check']
+        if not check(view_kwargs):
+            return ForbiddenError({'source': ''}, 'Access forbidden').respond()
 
     # If event_identifier in route instead of event_id
     if 'event_identifier' in view_kwargs:
