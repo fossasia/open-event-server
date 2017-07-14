@@ -1,12 +1,14 @@
 import unittest
 import os
 import json
+import urllib
+from PIL import Image
 
 from flask import Request, request, jsonify
 from StringIO import StringIO
 from app import current_app as app
 from tests.unittests.utils import OpenEventTestCase
-from app.api.helpers.files import uploaded_image, uploaded_file 
+from app.api.helpers.files import uploaded_image, uploaded_file
 from app.api.helpers.files import create_save_resized_image, create_save_image_sizes
 from tests.unittests.setup_database import Setup
 
@@ -14,6 +16,11 @@ from tests.unittests.setup_database import Setup
 class TestFilesHelperValidation(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
+
+    def getsizes(self, file):
+        # get file size *and* image size (None if not known)
+        im = Image.open(file)
+        return im.size
 
     def test_uploaded_image_local(self):
         with app.test_request_context():
@@ -94,6 +101,20 @@ class TestFilesHelperValidation(OpenEventTestCase):
                 actual_file_path = app.config.get('BASE_DIR') + '/static/uploads/' + filename
                 self.assertEqual(file_path, actual_file_path)
                 self.assertTrue(os.path.exists(file_path))
+
+    def test_create_save_resized_image(self):
+        with app.test_request_context():
+            image_url_test = 'https://cdn.pixabay.com/photo/2014/09/08/17/08/hot-air-balloons-439331_960_720.jpg'
+            width = 500
+            height = 200
+            aspect_ratio = False
+            upload_path = 'test'
+            resized_image_url = create_save_resized_image(image_url_test, width, aspect_ratio, height, upload_path, ext='png')
+            resized_image_file = app.config.get('BASE_DIR') + resized_image_url.split('/localhost')[1]
+            resized_width, resized_height = self.getsizes(resized_image_file)
+            self.assertTrue(os.path.exists(resized_image_file))
+            self.assertEqual(resized_width, width)
+            self.assertEqual(resized_height, height)
 
 
 if __name__ == '__main__':
