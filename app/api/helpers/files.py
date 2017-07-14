@@ -117,7 +117,7 @@ def create_save_image_sizes(image_file, image_sizes_type, unique_identifier=None
     try:
         image_sizes = ImageSizes.query.filter_by(type=image_sizes_type).one()
     except NoResultFound:
-        image_sizes = ImageSizes(image_sizes_type, 1300, 500, True, 100, 500, 200, True, 100, 75, 30, True, 100)
+        image_sizes = ImageSizes(image_sizes_type, 1300, 500, True, 100, 75, 30, True, 100, 500, 200, True, 100)
 
     # Get an unique identifier from uuid if not provided
     if unique_identifier is None:
