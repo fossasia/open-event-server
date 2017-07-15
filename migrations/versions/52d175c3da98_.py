@@ -32,11 +32,11 @@ def upgrade():
     op.execute('INSERT INTO event_sub_topics(name, slug, event_topic_id) SELECT DISTINCT event_sub_topic_id, lower(replace(regexp_replace(event_sub_topic_id, \'& |,\', \'\', \'g\'), \' \', \'-\')), event_topic_id\
                FROM events where not exists (SELECT 1 FROM event_sub_topics where event_sub_topics.name=events.event_sub_topic_id) and event_sub_topic_id is not null')
     op.execute(
-        'UPDATE events SET event_sub_topic_id = (SELECT id FROM event_sub_topics WHERE event_sub_topics.name=events.event_sub_topic_id)')
+        'UPDATE events SET event_sub_topic_id = (SELECT id FROM event_sub_topics WHERE event_sub_topics.name=events.event_sub_topic_id ORDER BY id DESC LIMIT 1)')
     op.execute('ALTER TABLE events ALTER COLUMN event_sub_topic_id TYPE integer USING event_sub_topic_id::integer')
     op.create_foreign_key(None, 'events', 'event_sub_topics', ['event_sub_topic_id'], ['id'], ondelete='CASCADE')
     op.execute(
-        'UPDATE events_version SET event_sub_topic_id = (SELECT id FROM event_sub_topics WHERE event_sub_topics.name=events_version.event_sub_topic_id)')
+        'UPDATE events_version SET event_sub_topic_id = (SELECT id FROM event_sub_topics WHERE event_sub_topics.name=events_version.event_sub_topic_id ORDER BY id DESC LIMIT 1)')
     op.execute(
         'ALTER TABLE events_version ALTER COLUMN event_sub_topic_id TYPE integer USING event_sub_topic_id::integer')
     op.execute('UPDATE event_types set slug=replace(slug, \'/\', \'-\') where slug like \'%/%\'')
