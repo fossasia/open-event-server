@@ -1,7 +1,6 @@
 import unittest
 import os
 import json
-import urllib
 from PIL import Image
 
 from flask import Request, request, jsonify
@@ -115,6 +114,35 @@ class TestFilesHelperValidation(OpenEventTestCase):
             self.assertTrue(os.path.exists(resized_image_file))
             self.assertEqual(resized_width, width)
             self.assertEqual(resized_height, height)
+
+    def test_create_save_image_sizes(self):
+        with app.test_request_context():
+            image_url_test = 'https://cdn.pixabay.com/photo/2014/09/08/17/08/hot-air-balloons-439331_960_720.jpg'
+            image_sizes_type = "event"
+            width_large = 1300
+            width_thumbnail = 500
+            width_icon = 75
+            image_sizes = create_save_image_sizes(image_url_test, image_sizes_type)
+
+            resized_image_url = image_sizes['original_image_url']
+            resized_image_url_large = image_sizes['large_image_url']
+            resized_image_url_thumbnail = image_sizes['thumbnail_image_url']
+            resized_image_url_icon = image_sizes['icon_image_url']
+
+            resized_image_file = app.config.get('BASE_DIR') + resized_image_url.split('/localhost')[1]
+            resized_image_file_large = app.config.get('BASE_DIR') + resized_image_url_large.split('/localhost')[1]
+            resized_image_file_thumbnail = app.config.get('BASE_DIR') + resized_image_url_thumbnail.split('/localhost')[1]
+            resized_image_file_icon = app.config.get('BASE_DIR') + resized_image_url_icon.split('/localhost')[1]
+
+            resized_width_large, _ = self.getsizes(resized_image_file_large)
+            resized_width_thumbnail, _ = self.getsizes(resized_image_file_thumbnail)
+            resized_width_icon, _ = self.getsizes(resized_image_file_icon)
+
+            self.assertTrue(os.path.exists(resized_image_file))
+            self.assertEqual(resized_width_large, width_large)
+            self.assertEqual(resized_width_thumbnail, width_thumbnail)
+            self.assertEqual(resized_width_icon, width_icon)
+
 
 
 if __name__ == '__main__':
