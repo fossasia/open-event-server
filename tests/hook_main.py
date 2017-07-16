@@ -19,6 +19,7 @@ from app.factories.event import EventFactoryBasic
 from app.factories.social_link import SocialLinkFactory
 from app.factories.microlocation import MicrolocationFactory
 from app.factories.image_size import ImageSizeFactory
+from app.factories.image_config import ImageConfigFactory
 from app.factories.page import PageFactory
 from app.factories.event_copyright import EventCopyrightFactory
 from app.factories.setting import SettingFactory
@@ -1331,6 +1332,69 @@ def image_size_delete(transaction):
     with stash['app'].app_context():
         image_size = ImageSizeFactory()
         db.session.add(image_size)
+        db.session.commit()
+
+
+# ------------------------- Image Config -------------------------
+@hooks.before("Image Config > Image Config Collection > List Image Config")
+def image_config_get_list(transaction):
+    """
+    GET /image-config
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        image_config = ImageConfigFactory()
+        db.session.add(image_config)
+        db.session.commit()
+
+
+@hooks.before("Image Config > Image Config Collection > Create Image Config")
+def image_config_post(transaction):
+    """
+    POST /image-config
+    :param transaction:
+    :return:
+    """
+    pass
+
+
+@hooks.before("Image Config > Image Config Details > Get Image Config Details")
+def image_config_get_detail(transaction):
+    """
+    GET /image-config/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        image_config = ImageConfigFactory()
+        db.session.add(image_config)
+        db.session.commit()
+
+
+@hooks.before("Image Config > Image Config Details > Update Image Config")
+def image_config_patch(transaction):
+    """
+    PATCH /image-config/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        image_config = ImageConfigFactory()
+        db.session.add(image_config)
+        db.session.commit()
+
+
+@hooks.before("Image Config > Image Config Details > Delete Image Config")
+def image_config_delete(transaction):
+    """
+    DELETE /image-config/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        image_config = ImageConfigFactory()
+        db.session.add(image_config)
         db.session.commit()
 
 

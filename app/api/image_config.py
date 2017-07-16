@@ -25,7 +25,8 @@ class ImageConfigSchema(Schema):
     page = fields.Str(required=True)
     size = fields.Str(required=True)
 
-class ImageConfigeList(ResourceList):
+
+class ImageConfigList(ResourceList):
     """
     List and create image config
     """
