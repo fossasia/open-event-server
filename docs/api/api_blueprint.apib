@@ -8352,6 +8352,212 @@ Delete a single image size.
           }
         }
 
+# Group Image Config
+
+**ADMIN**
+
+To create or modify data of this data layer, you will need admin access. You can get the data without admin access as well. Image sizes basically stores the configuration for the width, height and aspect ratio for full size, thumbnail and icon version of various images that is uploaded to the server.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `page`  | Page name | string | **yes** |
+| `size` | Size of the page (example: thumbnail)  | string | **yes** |
+
+## Image Config Collection [/v1/image-config{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `size`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List Image Config [GET]
+Get a list of Image config.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "attributes": {
+                        "page": "Home",
+                        "size": "large"
+                    },
+                    "type": "image-config",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/image-config/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/image-config"
+            }
+        }
+
+
+### Create Image Config [POST]
+Create a new general image config by admins.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "page": "Home",
+                  "size": "large"
+                },
+                "type": "image-config"
+              }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "attributes": {
+                    "page": "Home",
+                    "size": "large"
+                },
+                "type": "image-config",
+                "id": "1",
+                "links": {
+                    "self": "/v1/image-config/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/image-config/1"
+            }
+        }
+
+## Image Config Details [/v1/image-config/{image_config_id}]
++ Parameters
+    + image_config_id: 1 (integer) - ID of the image config in the form of an integer
+
+### Get Image Config Details [GET]
+Get a single image config.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "page": "Home",
+              "size": "large"
+            },
+            "type": "image-config",
+            "id": "1",
+            "links": {
+              "self": "/v1/image-config/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/image-config/1"
+          }
+        }
+
+
+### Update Image Config [PATCH]
+Update a single image config by `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "page": "Home",
+                  "size": "large"
+                },
+                "id": "1",
+                "type": "image-config"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+            {
+                "data": {
+                    "attributes": {
+                        "page": "Home",
+                        "size": "large"
+                    },
+                    "type": "image-config",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/image-config/1"
+                    }
+                },
+                "jsonapi": {
+                    "version": "1.0"
+                },
+                "links": {
+                    "self": "/v1/image-config/1"
+                }
+            }
+
+### Delete Image Config [DELETE]
+Delete a single image config.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
 # Group Roles
 
 **ADMIN**
