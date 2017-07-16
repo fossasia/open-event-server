@@ -22,6 +22,7 @@ from app.api.roles import RoleList, RoleDetail
 from app.api.session_types import SessionTypeList, SessionTypeDetail, SessionTypeRelationship
 from app.api.event_copyright import EventCopyrightList, EventCopyrightDetail, EventCopyrightRelationship
 from app.api.pages import PageList, PageDetail
+from app.api.user_permission import UserPermissionList, UserPermissionDetail
 from app.api.tax import TaxList, TaxDetail, TaxRelationship
 from app.api.settings import SettingDetail
 from app.api.discount_codes import DiscountCodeList, DiscountCodeDetail, DiscountCodeRelationship
@@ -60,6 +61,10 @@ api.route(ModuleDetail, 'module_detail', '/modules/<id>', '/modules')
 # pages
 api.route(PageList, 'page_list', '/pages')
 api.route(PageDetail, 'page_detail', '/pages/<int:id>')
+
+# user-permissions
+api.route(UserPermissionList, 'user_permission_list', '/user-permissions')
+api.route(UserPermissionDetail, 'user_permission_detail', '/user-permissions/<int:id>')
 
 # roles
 api.route(RoleList, 'role_list', '/roles')

@@ -44,6 +44,7 @@ from app.factories.ticket_fee import TicketFeesFactory
 from app.factories.role_invite import RoleInviteFactory
 from app.factories.users_events_role import UsersEventsRoleFactory
 from app.factories.custom_placeholder import CustomPlaceholderFactory
+from app.factories.user_permission import UserPermissionFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -205,7 +206,7 @@ def event_post(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    pass
 
 
 @hooks.before("Events > Event Details > Event Details")
@@ -2082,4 +2083,67 @@ def custom_placeholder_delete(transaction):
     with stash['app'].app_context():
         custom_placeholder = CustomPlaceholderFactory()
         db.session.add(custom_placeholder)
+        db.session.commit()
+
+
+# ------------------------- User Permissions -------------------------
+@hooks.before("User Permissions > User Permission Collection > List all user permissions")
+def user_permission_get_list(transaction):
+    """
+    GET /user-permissions
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_permission = UserPermissionFactory()
+        db.session.add(user_permission)
+        db.session.commit()
+
+
+@hooks.before("User Permissions > User Permission Collection > Create User Permission")
+def user_permission_post(transaction):
+    """
+    POST /user-permissions
+    :param transaction:
+    :return:
+    """
+    pass
+
+
+@hooks.before("User Permissions > User Permission Details > Get User Permission Details")
+def user_permission_get_detail(transaction):
+    """
+    GET /user-permissions/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_permission = UserPermissionFactory()
+        db.session.add(user_permission)
+        db.session.commit()
+
+
+@hooks.before("User Permissions > User Permission Details > Update User Permission")
+def user_permission_patch(transaction):
+    """
+    PATCH /user-permissions/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_permission = UserPermissionFactory()
+        db.session.add(user_permission)
+        db.session.commit()
+
+
+@hooks.before("User Permissions > User Permission Details > Delete User Permission")
+def user_permission_delete(transaction):
+    """
+    DELETE /user-permissions/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_permission = UserPermissionFactory()
+        db.session.add(user_permission)
         db.session.commit()

@@ -153,6 +153,21 @@ def accessible_role_based_events(view, view_args, view_kwargs, *args, **kwargs):
     return view(*view_args, **view_kwargs)
 
 
+def create_event(view, view_args, view_kwargs, *args, **kwargs):
+    if 'POST' in request.method or 'withRole' in request.args:
+        _jwt_required(app.config['JWT_DEFAULT_REALM'])
+        user = current_identity
+
+        if user.can_create_event is False:
+            return ForbiddenError({'source': ''}, 'Please verify your email').respond()
+
+        if 'GET' in request.method and user.is_staff:
+            return view(*view_args, **view_kwargs)
+        view_kwargs['user_id'] = user.id
+
+    return view(*view_args, **view_kwargs)
+
+
 permissions = {
     'is_super_admin': is_super_admin,
     'is_admin': is_admin,
@@ -163,7 +178,8 @@ permissions = {
     'is_moderator': is_moderator,
     'user_event': user_event,
     'accessible_role_based_events': accessible_role_based_events,
-    'is_coorganizer_or_user_itself': is_coorganizer_or_user_itself
+    'is_coorganizer_or_user_itself': is_coorganizer_or_user_itself,
+    'create_event': create_event
 }
 
 
