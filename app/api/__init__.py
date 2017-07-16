@@ -18,6 +18,7 @@ from app.api.event_invoices import EventInvoiceList, EventInvoiceDetail, EventIn
 from app.api.role_invites import RoleInviteList, RoleInviteDetail, RoleInviteRelationship
 from app.api.users_events_roles import UsersEventsRolesList, UsersEventsRolesDetail, UsersEventsRolesRelationship
 from app.api.image_sizes import ImageSizeList, ImageSizeDetail
+from app.api.image_config import ImageConfigList, ImageConfigDetail
 from app.api.roles import RoleList, RoleDetail
 from app.api.session_types import SessionTypeList, SessionTypeDetail, SessionTypeRelationship
 from app.api.event_copyright import EventCopyrightList, EventCopyrightDetail, EventCopyrightRelationship
@@ -50,6 +51,10 @@ api.route(NotificationRelationship, 'notification_user',
 # image_sizes
 api.route(ImageSizeList, 'image_size_list', '/image-sizes')
 api.route(ImageSizeDetail, 'image_size_detail', '/image-sizes/<int:id>')
+
+# image_config
+api.route(ImageConfigList, 'image_config_list', '/image-config')
+api.route(ImageConfigDetail, 'image_config_detail', '/image-config/<int:id>')
 
 # settings
 api.route(SettingDetail, 'setting_detail', '/settings/<id>', '/settings')
