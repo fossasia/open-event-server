@@ -295,7 +295,7 @@ class EventList(ResourceList):
 
     # This permission decorator ensures, you are logged in to create an event
     # and have filter ?withRole to get events associated with logged in user
-    decorators = (api.has_permission('accessible_role_based_events'),)
+    decorators = (api.has_permission('create_event'),)
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
