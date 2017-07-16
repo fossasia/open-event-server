@@ -22,6 +22,7 @@ test.db
 app.db
 .idea/
 .bundle/
+app/vintage
 
 # Static files at 'app/static/vendor'
 app/static/vendor
