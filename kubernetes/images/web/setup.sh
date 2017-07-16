@@ -8,7 +8,7 @@ if [ -v COMMIT_HASH ]; then
 fi
 
 pip install --no-cache-dir -r requirements.txt
-bower install --allow-root && bower cache clean --allow-root
+rm -rf app/vintage
 touch .env
 chmod +x ./kubernetes/run.sh
 chmod -R 0777 ./static
