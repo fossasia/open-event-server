@@ -1,7 +1,6 @@
 import factory
 from app.models.email_notification import db, EmailNotification
 from app.factories.user import UserFactory
-import app.factories.common as common
 
 
 class EmailNotificationFactory(factory.alchemy.SQLAlchemyModelFactory):

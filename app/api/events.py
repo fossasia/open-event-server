@@ -423,7 +423,8 @@ class EventDetail(ResourceDetail):
 
         if view_kwargs.get('email_notification_id'):
             try:
-                email_notification = self.session.query(EmailNotification).filter_by(id=view_kwargs['email_notification_id']).one()
+                email_notification = self.session.query(EmailNotification).filter_by(
+                                     id=view_kwargs['email_notification_id']).one()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': 'email_notification_id'},
                                      "Email Notification: {} not found".format(view_kwargs['email_notification_id']))
