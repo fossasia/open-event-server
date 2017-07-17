@@ -47,6 +47,7 @@ class EmailNotificationSchema(Schema):
                         type_='user'
                         )
 
+
 class EmailNotificationList(ResourceList):
     """
     List all the email notification

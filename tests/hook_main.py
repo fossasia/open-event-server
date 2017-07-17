@@ -1295,8 +1295,10 @@ def email_notification_post(transaction):
     :return:
     """
     with stash['app'].app_context():
+        event = EventFactoryBasic()
         user = UserFactory()
         db.session.add(user)
+        db.session.add(event)
         db.session.commit()
 
 
@@ -1327,7 +1329,7 @@ def email_notification_patch(transaction):
 
 
 @hooks.before("Email Notifications > Email Notification Detail > Delete Email Notification")
-def notification_delete(transaction):
+def email_notification_delete(transaction):
     """
     DELETE /email-notifications/1
     :param transaction:
