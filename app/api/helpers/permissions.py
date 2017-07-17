@@ -1,8 +1,11 @@
 from functools import wraps
 from flask import current_app as app
 from flask_jwt import _jwt_required, current_identity
-from app.api.helpers.errors import ForbiddenError
+from app.api.helpers.errors import ForbiddenError, NotFoundError
 from flask import request
+from sqlalchemy.orm.exc import NoResultFound
+from app.models import db
+from app.models.email_notification import EmailNotification
 
 
 def second_order_decorator(inner_dec):
@@ -92,6 +95,12 @@ def is_user_itself(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         user = current_identity
+        if 'email_notification_id' in kwargs:
+            try:
+                email_notification = EmailNotification.query.filter_by(id=kwargs['email_notification_id']).one()
+            except NoResultFound, e:
+                return NotFoundError({'parameter': 'email_notification_id'}, 'EmailNotification not found.').respond()
+            kwargs['id'] = email_notification.user_id
         if not user.is_admin and not user.is_super_admin and user.id != kwargs['id']:
             return ForbiddenError({'source': ''}, 'Access Forbidden').respond()
         return f(*args, **kwargs)
