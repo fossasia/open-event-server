@@ -87,7 +87,7 @@ api.route(RoleDetail, 'role_detail', '/roles/<int:id>', '/role-invites/<int:role
           '/users-events-roles/<int:users_events_role_id>/role')
 
 # role_invites
-api.route(RoleInviteList, 'role_invite_list', '/role-invites' '/events/<int:event_id>/role-invites',
+api.route(RoleInviteList, 'role_invite_list', '/role-invites', '/events/<int:event_id>/role-invites',
           '/events/<event_identifier>/role-invites')
 api.route(RoleInviteDetail, 'role_invite_detail', '/role-invites/<int:id>')
 api.route(RoleInviteRelationship, 'role_invite_event', '/role-invites/<int:id>/relationships/event')
@@ -103,7 +103,7 @@ api.route(UsersEventsRolesRelationship, 'users_events_role_role', '/users-events
 api.route(UsersEventsRolesRelationship, 'users_events_role_user', '/users-events-roles/<int:id>/relationships/user')
 
 # tickets
-api.route(TicketList, 'ticket_list', '/tickets' '/events/<int:event_id>/tickets',
+api.route(TicketList, 'ticket_list', '/tickets', '/events/<int:event_id>/tickets',
           '/events/<event_identifier>/tickets', '/ticket-tags/<int:ticket_tag_id>/tickets',
           '/access-codes/<int:access_code_id>/tickets')
 api.route(TicketDetail, 'ticket_detail', '/tickets/<int:id>', '/attendees/<int:attendee_id>/ticket')
@@ -112,7 +112,7 @@ api.route(TicketRelationshipOptional, 'ticket_ticket_tag', '/tickets/<int:id>/re
 api.route(TicketRelationshipOptional, 'ticket_access_code', '/tickets/<int:id>/relationships/access-codes')
 
 # ticket_tags
-api.route(TicketTagList, 'ticket_tag_list', '/ticket-tags' '/tickets/<int:ticket_id>/ticket-tags',
+api.route(TicketTagList, 'ticket_tag_list', '/ticket-tags', '/tickets/<int:ticket_id>/ticket-tags',
           '/events/<int:event_id>/ticket-tags', '/events/<event_identifier>/ticket-tags')
 api.route(TicketTagDetail, 'ticket_tag_detail', '/ticket-tags/<int:id>')
 api.route(TicketTagRelationshipOptional, 'ticket_tag_ticket', '/ticket-tags/<int:id>/relationships/tickets')
@@ -214,7 +214,7 @@ api.route(SponsorDetail, 'sponsor_detail', '/sponsors/<int:id>')
 api.route(SponsorRelationship, 'sponsor_event', '/sponsors/<int:id>/relationships/event')
 
 # tracks
-api.route(TrackList, 'track_list', '/tracks' '/events/<int:event_id>/tracks',
+api.route(TrackList, 'track_list', '/tracks', '/events/<int:event_id>/tracks',
           '/events/<event_identifier>/tracks')
 api.route(TrackDetail, 'track_detail', '/tracks/<int:id>', '/sessions/<int:session_id>/track')
 api.route(TrackRelationshipOptional, 'track_sessions', '/tracks/<int:id>/relationships/sessions')
@@ -265,7 +265,7 @@ api.route(CustomPlaceholderRelationship, 'custom_placeholder_event_sub_topic',
           '/custom-placeholders/<int:id>/relationships/event-sub-topic')
 
 # tax
-api.route(TaxList, 'tax_list', '/tax' '/events/<int:event_id>/tax', '/events/<identifier>/tax')
+api.route(TaxList, 'tax_list', '/tax', '/events/<int:event_id>/tax', '/events/<identifier>/tax')
 api.route(TaxDetail, 'tax_detail', '/tax/<int:id>', '/events/<int:event_id>/tax')
 api.route(TaxRelationship, 'tax_event', '/tax/<int:id>/relationships/event')
 

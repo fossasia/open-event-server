@@ -179,4 +179,3 @@ class SpeakerRelationshipOptional(ResourceRelationship):
     schema = SpeakerSchema
     data_layer = {'session': db.session,
                   'model': Speaker}
-
