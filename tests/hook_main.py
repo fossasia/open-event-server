@@ -45,6 +45,7 @@ from app.factories.role_invite import RoleInviteFactory
 from app.factories.users_events_role import UsersEventsRoleFactory
 from app.factories.custom_placeholder import CustomPlaceholderFactory
 from app.factories.user_permission import UserPermissionFactory
+from app.factories.email_notification import EmailNotificationFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -1269,6 +1270,74 @@ def notification_delete(transaction):
     with stash['app'].app_context():
         notification = NotificationFactory()
         db.session.add(notification)
+        db.session.commit()
+
+
+# ------------------------- Email Notifications -------------------------
+@hooks.before("Email Notifications > Email Notifications Collection > List All Email Notifications")
+def email_notification_get_list(transaction):
+    """
+    GET /users/2/email-notifications
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        email_notification = EmailNotificationFactory()
+        db.session.add(email_notification)
+        db.session.commit()
+
+
+@hooks.before("Email Notifications > Email Notifications Collection > Create Email Notificaiton")
+def email_notification_post(transaction):
+    """
+    POST /users/2/email-notifications
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        user = UserFactory()
+        db.session.add(user)
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Email Notifications > Email Notification Detail > Email Notification Detail")
+def email_notification_get_detail(transaction):
+    """
+    GET /email-notifications/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        email_notification = EmailNotificationFactory()
+        db.session.add(email_notification)
+        db.session.commit()
+
+
+@hooks.before("Email Notifications > Email Notification Detail > Update Email Notification")
+def email_notification_patch(transaction):
+    """
+    PATCH /email-notifications/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        email_notification = EmailNotificationFactory()
+        db.session.add(email_notification)
+        db.session.commit()
+
+
+@hooks.before("Email Notifications > Email Notification Detail > Delete Email Notification")
+def email_notification_delete(transaction):
+    """
+    DELETE /email-notifications/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        email_notification = EmailNotificationFactory()
+        db.session.add(email_notification)
         db.session.commit()
 
 
