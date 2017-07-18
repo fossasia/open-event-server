@@ -3,7 +3,6 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
@@ -13,6 +12,7 @@ from app.models import db
 from app.models.event_copyright import EventCopyright
 from app.models.event import Event
 from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.utilities import require_relationship
 
 
 class EventCopyrightSchema(Schema):
@@ -40,6 +40,8 @@ class EventCopyrightSchema(Schema):
 
 
 class EventCopyrightList(ResourceList):
+    def before_post(self, args, kwargs, data):
+        require_relationship(['event'], data)
 
     def before_create_object(self, data, view_kwargs):
         event = None
@@ -93,6 +95,7 @@ class EventCopyrightDetail(ResourceDetail):
 
 class EventCopyrightRelationship(ResourceRelationship):
     decorators = (jwt_required,)
+    methods = ['GET', 'PATCH']
     schema = EventCopyrightSchema
     data_layer = {'session': db.session,
                   'model': EventCopyright}

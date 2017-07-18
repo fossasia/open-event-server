@@ -13,6 +13,7 @@ from app.models.access_code import AccessCode
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.models.ticket_holder import TicketHolder
 from app.api.helpers.db import safe_query
+from app.api.helpers.utilities import require_relationship
 
 
 class TicketSchema(Schema):
@@ -91,6 +92,9 @@ class TicketList(ResourceList):
     """
     Create and List Tickets
     """
+    def before_post(self, args, kwargs, data):
+        require_relationship(['event'], data)
+
     def query(self, view_kwargs):
         query_ = self.session.query(Ticket)
         if view_kwargs.get('ticket_tag_id'):
@@ -153,9 +157,20 @@ class TicketDetail(ResourceDetail):
                   }}
 
 
-class TicketRelationship(ResourceRelationship):
+class TicketRelationshipRequired(ResourceRelationship):
     """
-    Tickets Relationship
+    Tickets Relationship (Required)
+    """
+    decorators = (jwt_required,)
+    methods = ['GET', 'PATCH']
+    schema = TicketSchema
+    data_layer = {'session': db.session,
+                  'model': Ticket}
+
+
+class TicketRelationshipOptional(ResourceRelationship):
+    """
+    Tickets Relationship (Optional)
     """
     decorators = (jwt_required,)
     schema = TicketSchema
