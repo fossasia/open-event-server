@@ -115,7 +115,8 @@ api.route(TicketTagRelationship, 'ticket_tag_event', '/ticket-tags/<int:id>/rela
 # events
 api.route(EventList, 'event_list', '/events', '/event-types/<int:event_type_id>/events',
           '/event-topics/<int:event_topic_id>/events',
-          '/event-sub-topics/<int:event_sub_topic_id>/events', '/discount-codes/<int:discount_code_id>/events')
+          '/event-sub-topics/<int:event_sub_topic_id>/events', '/discount-codes/<int:discount_code_id>/events',
+          '/users/<int:user_id>/events')
 api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>',
           '/tickets/<int:ticket_id>/event', '/microlocations/<int:microlocation_id>/event',
           '/social-links/<int:social_link_id>/event',
