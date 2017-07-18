@@ -121,6 +121,7 @@ def skip_auth(transaction):
         user = UserFactory(email="email@example.com", password="password", is_verified=True)
         db.session.add(user)
         db.session.commit()
+        print('User Created')
 
 
 # ------------------------- Users -------------------------
