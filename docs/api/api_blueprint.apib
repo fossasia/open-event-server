@@ -5761,15 +5761,16 @@ Related to ticket holders(attendees) of an event (free, paid, donation) to the e
 | `is-checked-in` | If the attendee is checked in | boolean | - |
 | `pdf-url` | pdf url of the Attendee | url | - |
 
-## Attendees Collection [/v1/attendees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Attendees Collection [/v1/events/{event_identifier}/attendees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
-    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
     + sort (optional, string, `city`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Attendees [GET]
-Get a list of attendees.
+Get a list of attendees of an event.
 
 + Request
 
@@ -5792,6 +5793,12 @@ Get a list of attendees.
                             "links": {
                                 "self": "/v1/attendees/1/relationships/ticket",
                                 "related": "/v1/attendees/1/ticket"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/attendees/1/relationships/event",
+                                "related": "/v1/attendees/1/event"
                             }
                         }
                     },
@@ -5817,13 +5824,13 @@ Get a list of attendees.
                 "version": "1.0"
             },
             "links": {
-                "self": "/v1/attendees"
+                "self": "/v1/events/21eb2c8f/attendees"
             }
         }
 
 
 ### Create Attendee [POST]
-Create a new attendee.
+Create a new attendee using an event_id.
 
 + Request (application/vnd.api+json)
 
@@ -5836,16 +5843,16 @@ Create a new attendee.
             {
               "data": {
                 "attributes": {
-                    "firstname": "John",
-                    "lastname": "Doe",
-                    "email": "johndoe@example.com",
-                    "address": "address",
-                    "city": "example",
-                    "state": "example",
-                    "country": "IN",
-                    "ticket-id": "12",
-                    "is-checked_in": "false",
-                    "pdf-url": "http://example.com"
+                  "firstname": "John",
+                  "lastname": "Doe",
+                  "email": "johndoe@example.com",
+                  "address": "address",
+                  "city": "example",
+                  "state": "example",
+                  "country": "IN",
+                  "ticket-id": "12",
+                  "is-checked-in": "false",
+                  "pdf-url": "http://example.com"
                 },
                 "type": "attendee"
               }
@@ -5861,6 +5868,12 @@ Create a new attendee.
                         "links": {
                             "self": "/v1/attendees/1/relationships/ticket",
                             "related": "/v1/attendees/1/ticket"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/attendees/1/relationships/event",
+                            "related": "/v1/attendees/1/event"
                         }
                     }
                 },
@@ -6779,7 +6792,7 @@ Get a list of Notifications.
                                 "self": "/v1/email-notifications/1/relationships/user",
                                 "related": "/v1/email-notifications/1/user"
                             }
-                        }, 
+                        },
                         "event": {
                             "links": {
                                 "self": "/v1/email-notifications/1/relationships/event",
@@ -6851,7 +6864,7 @@ Create a new email notification with user_id.
                             "self": "/v1/email-notifications/1/relationships/user",
                             "related": "/v1/email-notifications/1/user"
                         }
-                    }, 
+                    },
                     "event": {
                         "links": {
                             "self": "/v1/email-notifications/1/relationships/event",
@@ -6906,7 +6919,7 @@ Get a single email notification.
                             "self": "/v1/email-notifications/1/relationships/user",
                             "related": "/v1/email-notifications/1/user"
                         }
-                    }, 
+                    },
                     "event": {
                         "links": {
                             "self": "/v1/email-notifications/1/relationships/event",
@@ -6973,7 +6986,7 @@ Update a single email notification with `id`.
                             "self": "/v1/email-notifications/1/relationships/user",
                             "related": "/v1/email-notifications/1/user"
                         }
-                    }, 
+                    },
                     "event": {
                         "links": {
                             "self": "/v1/email-notifications/1/relationships/event",
@@ -9178,6 +9191,7 @@ To create or modify any data of this data layer, you will need admin access. How
             "self": "/v1/user-permissions/3"
           }
         }
+
 
 ## User Permission Details [/v1/user-permissions/{id}]
 + Parameters
