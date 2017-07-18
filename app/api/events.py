@@ -34,6 +34,8 @@ from app.models.role import Role
 from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.files import create_save_image_sizes
+from app.models.microlocation import Microlocation
+from app.models.email_notification import EmailNotification
 
 
 class EventSchema(Schema):
@@ -418,6 +420,32 @@ class EventDetail(ResourceDetail):
                     view_kwargs['id'] = speaker.event_id
                 else:
                     view_kwargs['id'] = None
+
+        if view_kwargs.get('email_notification_id'):
+            try:
+                email_notification = self.session.query(EmailNotification).filter_by(
+                                     id=view_kwargs['email_notification_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'email_notification_id'},
+                                     "Email Notification: {} not found".format(view_kwargs['email_notification_id']))
+            else:
+                if email_notification.event_id:
+                    view_kwargs['id'] = email_notification.event_id
+                else:
+                    view_kwargs['id'] = None
+
+        if view_kwargs.get('microlocation_id'):
+            try:
+                microlocation = self.session.query(Microlocation).filter_by(id=view_kwargs['microlocation_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'microlocation_id'},
+                                     "Microlocation: {} not found".format(view_kwargs['microlocation_id']))
+            else:
+                if microlocation.event_id:
+                    view_kwargs['id'] = microlocation.event_id
+                else:
+                    view_kwargs['id'] = None
+
 
     def before_update_object(self, event, data, view_kwargs):
         if data.get('original_image_url') and data['original_image_url'] != event.original_image_url:
