@@ -1,4 +1,3 @@
-from datetime import datetime
 import pytz
 
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
