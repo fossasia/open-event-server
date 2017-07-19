@@ -183,6 +183,15 @@ permissions = {
 }
 
 
+def is_multiple(data):
+    if type(data) is list:
+        return True
+    if type(data) is str:
+        if data.find(",") > 0:
+            return True
+    return False
+
+
 def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
     """The function use to check permissions
 
@@ -232,12 +241,30 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
             fetch_key_model = 'id'
             if 'fetch_key_url' in kwargs:
                 fetch_key_url = kwargs['fetch_key_url']
+
             if 'fetch_key_model' in kwargs:
                 fetch_key_model = kwargs['fetch_key_model']
-            try:
-                data = model.query.filter(getattr(model, fetch_key_model)
-                                          == view_kwargs[fetch_key_url]).one()
-            except NoResultFound, e:
+
+            if not is_multiple(model):
+                model = [model]
+
+            if is_multiple(fetch_key_url):
+                fetch_key_url = fetch_key_url.split(",")
+
+            found = False
+            for index, mod in enumerate(model):
+                if is_multiple(fetch_key_url):
+                    f_url = fetch_key_url[index]
+                else:
+                    f_url = fetch_key_url
+                try:
+                    data = mod.query.filter(getattr(mod, fetch_key_model) == view_kwargs[f_url]).one()
+                except NoResultFound, e:
+                    pass
+                else:
+                    found = True
+
+            if not found:
                 return NotFoundError({'source': ''}, 'Object not found.').respond()
 
             kwargs[fetch_as] = getattr(data, fetch)
