@@ -1,10 +1,8 @@
-from functools import wraps
 from flask import current_app as app
 from flask_jwt import _jwt_required, current_identity
 from app.api.helpers.errors import ForbiddenError, NotFoundError
 from app.api.helpers.permissions import jwt_required
 from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi import JsonApiException
 from flask import request
 
 from app.models.event import Event
@@ -293,7 +291,7 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
             kwargs[kwargs['fetch_as']] = fetched
         else:
             return NotFoundError({'source': ''}, 'Object not found.~').respond()
-    print "kwargs => ", kwargs
+
     if args[0] in permissions:
         return permissions[args[0]](view, view_args, view_kwargs, *args, **kwargs)
     else:

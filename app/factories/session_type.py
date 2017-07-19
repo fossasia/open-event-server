@@ -12,3 +12,4 @@ class SessionTypeFactory(factory.alchemy.SQLAlchemyModelFactory):
     event = factory.RelatedFactory(EventFactoryBasic)
     name = common.string_
     length = '00:30'
+    event_id = 1
