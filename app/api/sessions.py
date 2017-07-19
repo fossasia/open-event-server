@@ -15,6 +15,7 @@ from app.models.session_type import SessionType
 from app.models.microlocation import Microlocation
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.db import safe_query
+from app.api.helpers.utilities import require_relationship
 
 
 class SessionSchema(Schema):
@@ -107,6 +108,8 @@ class SessionList(ResourceList):
     """
     List and create Sessions
     """
+    def before_post(self, args, kwargs, data):
+        require_relationship(['event'], data)
 
     def query(self, view_kwargs):
         query_ = self.session.query(Session)
@@ -170,7 +173,17 @@ class SessionDetail(ResourceDetail):
                   'methods': {'before_get_object': before_get_object}}
 
 
-class SessionRelationship(ResourceRelationship):
+class SessionRelationshipRequired(ResourceRelationship):
+    """
+    Session Relationship
+    """
+    schema = SessionSchema
+    methods = ['GET', 'PATCH']
+    data_layer = {'session': db.session,
+                  'model': Session}
+
+
+class SessionRelationshipOptional(ResourceRelationship):
     """
     Session Relationship
     """
