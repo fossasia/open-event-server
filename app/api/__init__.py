@@ -36,8 +36,8 @@ from app.api.attendees import AttendeeList, AttendeeDetail, AttendeeRelationship
 from app.api.access_codes import AccessCodeList, AccessCodeDetail, AccessCodeRelationshipRequired, \
     AccessCodeRelationshipOptional
 from app.api.modules import ModuleDetail
-from app.api.custom_placeholders import CustomPlaceholderDetail, CustomPlaceholderList, CustomPlaceholderRelationship
-
+from app.api.custom_placeholders import CustomPlaceholderList, CustomPlaceholderDetail, CustomPlaceholderRelationship
+from app.api.activities import ActivityList, ActivityDetail
 # users
 api.route(UserList, 'user_list', '/users')
 api.route(UserDetail, 'user_detail', '/users/<int:id>', '/notifications/<int:notification_id>/user',
@@ -341,3 +341,7 @@ api.route(AccessCodeRelationshipOptional, 'access_code_user',
           '/access-codes/<int:id>/relationships/user')
 api.route(AccessCodeRelationshipOptional, 'access_code_tickets',
           '/access-codes/<int:id>/relationships/tickets')
+
+# ticket_fees
+api.route(ActivityList, 'activity_list', '/activities')
+api.route(ActivityDetail, 'activity_detail', '/activities/<int:id>')
