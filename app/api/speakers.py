@@ -71,6 +71,7 @@ class SpeakerSchema(Schema):
                             related_view='v1.session_list',
                             related_view_kwargs={'speaker_id': '<id>'},
                             schema='SessionSchema',
+                            many=True,
                             type_='session')
 
 
