@@ -16,6 +16,8 @@ from app.models.microlocation import Microlocation
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.db import safe_query
 from app.api.helpers.utilities import require_relationship
+from app.api.helpers.permission_manager import has_access
+from app.api.helpers.exceptions import ForbiddenException
 
 
 class SessionSchema(Schema):
@@ -46,6 +48,19 @@ class SessionSchema(Schema):
         if data['starts_at'] >= data['ends_at']:
             raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at")
 
+        if 'state' in data:
+            if data['state'] is not 'draft' or not 'pending':
+                if not has_access('is_coorganizer', event_id=data['event']):
+                    return ForbiddenException({'source': ''}, 'Co-organizer access is required.')
+
+        if 'track' in data:
+            if not has_access('is_coorganizer', event_id=data['event']):
+                return ForbiddenException({'source': ''}, 'Co-organizer access is required.')
+
+        if 'microlocation' in data:
+            if not has_access('is_coorganizer', event_id=data['event']):
+                return ForbiddenException({'source': ''}, 'Co-organizer access is required.')
+
     id = fields.Str(dump_only=True)
     title = fields.Str(required=True)
     subtitle = fields.Str(allow_none=True)
@@ -61,7 +76,7 @@ class SessionSchema(Schema):
     audio_url = fields.Url(allow_none=True)
     signup_url = fields.Url(allow_none=True)
     state = fields.Str(validate=validate.OneOf(choices=["pending", "accepted", "confirmed", "rejected", "draft"]),
-                       allow_none=True)
+                       allow_none=True, default='draft')
     created_at = fields.DateTime(dump_only=True)
     deleted_at = fields.DateTime(dump_only=True)
     submitted_at = fields.DateTime(allow_none=True)
@@ -104,12 +119,23 @@ class SessionSchema(Schema):
         type_='speaker')
 
 
-class SessionList(ResourceList):
+class SessionListPost(ResourceList):
     """
-    List and create Sessions
+    List Sessions
     """
     def before_post(self, args, kwargs, data):
         require_relationship(['event'], data)
+
+    decorators = (api.has_permission('create_event'),)
+    schema = SessionSchema
+    data_layer = {'session': db.session,
+                  'model': Session}
+
+
+class SessionList(ResourceList):
+    """
+    List Sessions
+    """
 
     def query(self, view_kwargs):
         query_ = self.session.query(Session)
@@ -134,25 +160,13 @@ class SessionList(ResourceList):
             query_ = Session.query.filter(Session.speakers.any(id=speaker.id))
         return query_
 
-    def before_create_object(self, data, view_kwargs):
-        event = None
-        if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-        if event:
-            data['event_id'] = event.id
-
     view_kwargs = True
-    decorators = (api.has_permission('is_coorganizer', fetch="event_id",
-                  fetch_as="event_id", methods="POST",
-                  check=lambda a: a.get('event_id') or a.get('event_identifier')), )
+    methods = ['GET']
     schema = SessionSchema
     data_layer = {'session': db.session,
                   'model': Session,
                   'methods': {
-                      'query': query,
-                      'before_create_object': before_create_object
+                      'query': query
                   }}
 
 
@@ -165,8 +179,7 @@ class SessionDetail(ResourceDetail):
             event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'identifier')
             view_kwargs['event_id'] = event.id
 
-    decorators = (api.has_permission('is_coorganizer', fetch="event_id",
-                                     fetch_as="event_id", model=Session, methods="PATCH,DELETE"),)
+    decorators = (api.has_permission('is_speaker_for_session', methods="PATCH,DELETE"),)
     schema = SessionSchema
     data_layer = {'session': db.session,
                   'model': Session,
