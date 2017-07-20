@@ -8,8 +8,8 @@ from app.api.events import EventList, EventDetail, EventRelationship
 from app.api.event_types import EventTypeList, EventTypeDetail, EventTypeRelationship
 from app.api.event_topics import EventTopicList, EventTopicDetail, EventTopicRelationship
 from app.api.event_sub_topics import EventSubTopicList, EventSubTopicDetail, EventSubTopicRelationship
-from app.api.microlocations import MicrolocationList, MicrolocationDetail, MicrolocationRelationshipRequired, \
-    MicrolocationRelationshipOptional
+from app.api.microlocations import MicrolocationList, MicrolocationListPost, MicrolocationDetail, \
+    MicrolocationRelationshipRequired, MicrolocationRelationshipOptional
 from app.api.sessions import SessionList, SessionDetail, SessionRelationshipRequired, SessionRelationshipOptional
 from app.api.speakers import SpeakerList, SpeakerDetail, SpeakerRelationshipRequired, SpeakerRelationshipOptional
 from app.api.social_links import SocialLinkList, SocialLinkDetail, SocialLinkRelationship
@@ -176,8 +176,9 @@ api.route(EventRelationship, 'event_access_codes', '/events/<int:id>/relationshi
           '/events/<identifier>/relationships/access-codes')
 
 # microlocations
-api.route(MicrolocationList, 'microlocation_list', '/microlocations', '/events/<int:event_id>/microlocations',
+api.route(MicrolocationList, 'microlocation_list', '/events/<int:event_id>/microlocations',
           '/events/<event_identifier>/microlocations')
+api.route(MicrolocationListPost, 'microlocation_list_post', '/microlocations')
 api.route(MicrolocationDetail, 'microlocation_detail', '/microlocations/<int:id>',
           '/sessions/<int:session_id>/microlocation')
 api.route(MicrolocationRelationshipOptional, 'microlocation_session',
