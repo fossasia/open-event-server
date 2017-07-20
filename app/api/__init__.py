@@ -10,7 +10,8 @@ from app.api.event_topics import EventTopicList, EventTopicDetail, EventTopicRel
 from app.api.event_sub_topics import EventSubTopicList, EventSubTopicDetail, EventSubTopicRelationship
 from app.api.microlocations import MicrolocationList, MicrolocationListPost, MicrolocationDetail, \
     MicrolocationRelationshipRequired, MicrolocationRelationshipOptional
-from app.api.sessions import SessionList, SessionDetail, SessionRelationshipRequired, SessionRelationshipOptional
+from app.api.sessions import SessionList, SessionListPost, SessionDetail, SessionRelationshipRequired, \
+    SessionRelationshipOptional
 from app.api.speakers import SpeakerList, SpeakerDetail, SpeakerRelationshipRequired, SpeakerRelationshipOptional
 from app.api.social_links import SocialLinkList, SocialLinkDetail, SocialLinkRelationship
 from app.api.sponsors import SponsorList, SponsorDetail, SponsorRelationship
@@ -39,6 +40,7 @@ from app.api.access_codes import AccessCodeList, AccessCodeDetail, AccessCodeRel
 from app.api.modules import ModuleDetail
 from app.api.custom_placeholders import CustomPlaceholderList, CustomPlaceholderDetail, CustomPlaceholderRelationship
 from app.api.activities import ActivityList, ActivityDetail
+
 # users
 api.route(UserList, 'user_list', '/users')
 api.route(VerifyUser, 'verify_user', '/users/<int:user_id>/verify')
@@ -192,6 +194,7 @@ api.route(MicrolocationRelationshipRequired, 'microlocation_event',
           '/microlocations/<int:id>/relationships/event')
 
 # sessions
+api.route(SessionListPost, 'session_list_post', '/sessions')
 api.route(SessionList, 'session_list', '/sessions', '/events/<int:event_id>/sessions',
           '/events/<event_identifier>/sessions',
           '/tracks/<int:track_id>/sessions', '/session-types/<int:session_type_id>/sessions',
