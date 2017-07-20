@@ -10,6 +10,7 @@ from app.models.microlocation import Microlocation
 from app.models.session import Session
 from app.models.event import Event
 from app.api.helpers.db import safe_query
+from app.api.helpers.utilities import require_relationship
 
 
 class MicrolocationSchema(Schema):
@@ -53,6 +54,8 @@ class MicrolocationList(ResourceList):
     """
     List and create Microlocations
     """
+    def before_post(self, args, kwargs, data):
+        require_relationship(['event'], data)
 
     def query(self, view_kwargs):
         query_ = self.session.query(Microlocation)
@@ -110,7 +113,18 @@ class MicrolocationDetail(ResourceDetail):
                   'methods': {'before_get_object': before_get_object}}
 
 
-class MicrolocationRelationship(ResourceRelationship):
+class MicrolocationRelationshipRequired(ResourceRelationship):
+    """
+    Microlocation Relationship
+    """
+    decorators = (jwt_required,)
+    methods = ['GET', 'PATCH']
+    schema = MicrolocationSchema
+    data_layer = {'session': db.session,
+                  'model': Microlocation}
+
+
+class MicrolocationRelationshipOptional(ResourceRelationship):
     """
     Microlocation Relationship
     """

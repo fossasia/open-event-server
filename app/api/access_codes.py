@@ -12,6 +12,7 @@ from app.models.user import User
 from app.models.event import Event
 from app.models.ticket import Ticket
 from app.api.helpers.db import safe_query
+from app.api.helpers.utilities import require_relationship
 
 
 class AccessCodeSchema(Schema):
@@ -96,6 +97,9 @@ class AccessCodeList(ResourceList):
     """
     List and create AccessCodes
     """
+    def before_post(self, args, kwargs, data):
+        require_relationship(['event'], data)
+
     def query(self, view_kwargs):
         """
         query method for access code list
@@ -179,7 +183,18 @@ class AccessCodeDetail(ResourceDetail):
                   }}
 
 
-class AccessCodeRelationship(ResourceRelationship):
+class AccessCodeRelationshipRequired(ResourceRelationship):
+    """
+    AccessCode Relationship
+    """
+    decorators = (jwt_required,)
+    methods = ['GET', 'PATCH']
+    schema = AccessCodeSchema
+    data_layer = {'session': db.session,
+                  'model': AccessCode}
+
+
+class AccessCodeRelationshipOptional(ResourceRelationship):
     """
     AccessCode Relationship
     """

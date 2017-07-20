@@ -9,6 +9,7 @@ from app.models.sponsor import Sponsor
 from app.models.event import Event
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
+from app.api.helpers.utilities import require_relationship
 
 
 class SponsorSchema(Schema):
@@ -44,6 +45,9 @@ class SponsorList(ResourceList):
     """
     List and create Sponsors
     """
+    def before_post(self, args, kwargs, data):
+        require_relationship(['event'], data)
+
     def query(self, view_kwargs):
         """
         query method for Sponsor List
@@ -101,6 +105,7 @@ class SponsorRelationship(ResourceRelationship):
     Sponsor Schema Relation
     """
     decorators = (jwt_required, )
+    methods = ['GET', 'PATCH']
     schema = SponsorSchema
     data_layer = {'session': db.session,
                   'model': Sponsor}
