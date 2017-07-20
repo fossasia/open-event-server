@@ -14,6 +14,7 @@ from app.models.session import Session
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.models.event import Event
 from app.api.helpers.db import safe_query
+from app.api.helpers.utilities import require_relationship
 
 
 class TrackSchema(Schema):
@@ -67,6 +68,8 @@ class TrackList(ResourceList):
     """
     List and create Tracks
     """
+    def before_post(self, args, kwargs, data):
+        require_relationship(['event'], data)
 
     def query(self, view_kwargs):
         query_ = self.session.query(Track)
@@ -118,7 +121,18 @@ class TrackDetail(ResourceDetail):
                   'methods': {'before_get_object': before_get_object}}
 
 
-class TrackRelationship(ResourceRelationship):
+class TrackRelationshipRequired(ResourceRelationship):
+    """
+    Track Relationship
+    """
+    decorators = (jwt_required,)
+    methods = ['GET', 'PATCH']
+    schema = TrackSchema
+    data_layer = {'session': db.session,
+                  'model': Track}
+
+
+class TrackRelationshipOptional(ResourceRelationship):
     """
     Track Relationship
     """

@@ -2,3 +2,4 @@
 omit =
     */migrations/*
     */site-packages/*
+    */vintage/*

@@ -10,14 +10,14 @@ class DiscountCode(db.Model):
     __tablename__ = "discount_codes"
 
     id = db.Column(db.Integer, primary_key=True)
-    code = db.Column(db.String)
+    code = db.Column(db.String, nullable=False)
     discount_url = db.Column(db.String)
-    value = db.Column(db.Float)
-    type = db.Column(db.String)
-    is_active = db.Column(db.Boolean)
-    tickets_number = db.Column(db.Integer)  # For event level discount this holds the max. uses
-    min_quantity = db.Column(db.Integer)
-    max_quantity = db.Column(db.Integer)  # For event level discount this holds the months for which it is valid
+    value = db.Column(db.Float, nullable=False)
+    type = db.Column(db.String, nullable=False)
+    is_active = db.Column(db.Boolean, default=True)
+    tickets_number = db.Column(db.Integer)
+    min_quantity = db.Column(db.Integer, default=1)
+    max_quantity = db.Column(db.Integer, default=100)
     valid_from = db.Column(db.DateTime(timezone=True), nullable=True)
     valid_till = db.Column(db.DateTime(timezone=True), nullable=True)
     tickets = db.Column(db.String)
@@ -27,7 +27,7 @@ class DiscountCode(db.Model):
     marketer_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     marketer = db.relationship('User', backref='discount_codes')
 
-    used_for = db.Column(db.String)
+    used_for = db.Column(db.String, nullable=False)
 
     def __init__(self,
                  code=None,

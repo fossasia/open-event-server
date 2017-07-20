@@ -10,10 +10,12 @@ from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.session import Session
 from app.models.track import Track
+from app.models.speaker import Speaker
 from app.models.session_type import SessionType
 from app.models.microlocation import Microlocation
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.db import safe_query
+from app.api.helpers.utilities import require_relationship
 
 
 class SessionSchema(Schema):
@@ -92,12 +94,22 @@ class SessionSchema(Schema):
                          related_view_kwargs={'session_id': '<id>'},
                          schema='EventSchema',
                          type_='event')
+    speakers = Relationship(
+        attribute='speakers',
+        self_view='v1.session_speaker',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.speaker_list',
+        related_view_kwargs={'session_id': '<id>'},
+        schema='SpeakerSchema',
+        type_='speaker')
 
 
 class SessionList(ResourceList):
     """
     List and create Sessions
     """
+    def before_post(self, args, kwargs, data):
+        require_relationship(['event'], data)
 
     def query(self, view_kwargs):
         query_ = self.session.query(Session)
@@ -116,12 +128,20 @@ class SessionList(ResourceList):
         elif view_kwargs.get('event_identifier'):
             event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
             query_ = query_.join(Event).filter(Event.identifier == event.id)
+        if view_kwargs.get('speaker_id'):
+            speaker = safe_query(self, Speaker, 'id', view_kwargs['speaker_id'], 'speaker_id')
+            # session-speaker :: many-to-many relationship
+            query_ = Session.query.filter(Session.speakers.any(id=speaker.id))
         return query_
 
     def before_create_object(self, data, view_kwargs):
-        # Permission Manager ensures there is event ID if any event_identifier provided
-        event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-        data['event_id'] = event.id
+        event = None
+        if view_kwargs.get('event_id'):
+            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+        elif view_kwargs.get('event_identifier'):
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+        if event:
+            data['event_id'] = event.id
 
     view_kwargs = True
     decorators = (api.has_permission('is_coorganizer', fetch="event_id",
@@ -153,7 +173,17 @@ class SessionDetail(ResourceDetail):
                   'methods': {'before_get_object': before_get_object}}
 
 
-class SessionRelationship(ResourceRelationship):
+class SessionRelationshipRequired(ResourceRelationship):
+    """
+    Session Relationship
+    """
+    schema = SessionSchema
+    methods = ['GET', 'PATCH']
+    data_layer = {'session': db.session,
+                  'model': Session}
+
+
+class SessionRelationshipOptional(ResourceRelationship):
     """
     Session Relationship
     """

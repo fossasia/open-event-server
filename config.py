@@ -54,9 +54,13 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = env('DATABASE_URL', default=None)
     SERVE_STATIC = env.bool('SERVE_STATIC', default=False)
     DATABASE_QUERY_TIMEOUT = 0.1
+    SENTRY_DSN = env('SENTRY_DSN', default=None)
+
+    # API configs
     SOFT_DELETE = True
     PROPOGATE_ERROR = env.bool('PROPOGATE_ERROR', default=False)
     DASHERIZE_API = True
+    API_PROPOGATE_UNCAUGHT_EXCEPTIONS = env.bool('API_PROPOGATE_UNCAUGHT_EXCEPTIONS', default=True)
     ETAG = True
 
     if not SQLALCHEMY_DATABASE_URI:

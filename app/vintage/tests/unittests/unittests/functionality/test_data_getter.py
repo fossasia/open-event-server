@@ -1,8 +1,8 @@
 import unittest
 
 from app import current_app as app
-from app.helpers.data import save_to_db
-from app.helpers.data_getter import DataGetter
+from app.api.helpers.db import save_to_db
+from app.api.helpers.data_getter import DataGetter
 from tests.unittests.object_mother import ObjectMother
 from tests.unittests.utils import OpenEventTestCase
 

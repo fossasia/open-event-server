@@ -7,7 +7,7 @@ from sqlalchemy import event, desc
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from sqlalchemy.ext.hybrid import hybrid_property
-from app.helpers.helpers import get_count
+from app.api.helpers.db import get_count
 from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models import db
@@ -19,7 +19,7 @@ from app.models.custom_system_role import UserSystemRole
 from app.models.user_permission import UserPermission
 from app.models.users_events_role import UsersEventsRoles as UER
 from app.models.panel_permission import PanelPermission
-from app.helpers.versioning import clean_up_string, clean_html
+from app.models.helpers.versioning import clean_up_string, clean_html
 
 # System-wide
 ADMIN = 'admin'
@@ -58,6 +58,7 @@ class User(db.Model):
     twitter_url = db.Column(db.String)
     instagram_url = db.Column(db.String)
     google_plus_url = db.Column(db.String)
+    original_image_url = db.Column(db.String, nullable=True, default=None)
     thumbnail_image_url = db.Column(db.String)
     small_image_url = db.Column(db.String)
     icon_image_url = db.Column(db.String)
@@ -67,6 +68,7 @@ class User(db.Model):
     last_accessed_at = db.Column(db.DateTime(timezone=True))
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(pytz.utc))
     deleted_at = db.Column(db.DateTime(timezone=True))
+    speaker = db.relationship('Speaker', backref="user")
 
     @hybrid_property
     def password(self):
@@ -117,10 +119,7 @@ class User(db.Model):
         if not perm:
             return self.is_verified
 
-        if self.is_verified:
-            return perm.verified_user
-        else:
-            return perm.unverified_user
+        return perm.unverified_user
 
     def can_create_event(self):
         """Checks if User can create an event
@@ -129,10 +128,10 @@ class User(db.Model):
         if not perm:
             return self.is_verified
 
-        if self.is_verified:
-            return perm.verified_user
-        else:
+        if self.is_verified is False:
             return perm.unverified_user
+
+        return True
 
     def has_role(self, event_id):
         """Checks if user has any of the Roles at an Event.

@@ -30,6 +30,9 @@ spec:
         ports:
         - containerPort: 8080
           protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: api-server
         env:
         - name: C_FORCE_ROOT
           value: 'true'
@@ -46,6 +49,9 @@ spec:
         image: eventyay/nextgen-api-server:latest
         command: ["/bin/sh","-c"]
         args: ["./kubernetes/run.sh"]
+        envFrom:
+        - configMapRef:
+            name: api-server
         env:
         - name: C_FORCE_ROOT
           value: 'true'

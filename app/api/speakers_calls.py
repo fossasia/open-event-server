@@ -7,12 +7,14 @@ from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
+from app.api.helpers.db import safe_query
 from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.api.helpers.permissions import jwt_required
 from app.models.event import Event
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.models.speakers_call import SpeakersCall
+from app.api.helpers.utilities import require_relationship
 
 
 class SpeakersCallSchema(Schema):
@@ -61,15 +63,16 @@ class SpeakersCallList(ResourceList):
     """
     create Speakers Call
     """
+    def before_post(self, args, kwargs, data):
+        require_relationship(['event'], data)
+
     def before_create_object(self, data, view_kwargs):
-        # Permission Manager will ensure that event_id is fetched into
-        # view_kwargs from event_identifier
-        try:
-            event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
-        except NoResultFound:
-            raise ObjectNotFound({'parameter': 'event_identifier'},
-                                 "Event: with ID {} not found".format(view_kwargs['event_id']))
-        else:
+        event = None
+        if view_kwargs.get('event_id'):
+            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+        elif view_kwargs.get('event_identifier'):
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+        if event:
             data['event_id'] = event.id
 
         try:
@@ -137,5 +140,6 @@ class SpeakersCallRelationship(ResourceRelationship):
     """
     decorators = (jwt_required,)
     schema = SpeakersCallSchema
+    methods = ['GET', 'PATCH']
     data_layer = {'session': db.session,
                   'model': SpeakersCall}

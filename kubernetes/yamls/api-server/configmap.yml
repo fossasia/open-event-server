@@ -1,0 +1,10 @@
+apiVersion: v1
+data:
+  REDIS_URL: "redis://redis.redis:6379/0"
+  DATABASE_URL: "postgresql://postgres:test@postgres.postgres:5432/opev"
+  POSTGRES_DB: "opev"
+  SENTRY_DSN: "https://dummy@app.getsentry.com/dummy"
+kind: ConfigMap
+metadata:
+  namespace: web
+  name: api-server

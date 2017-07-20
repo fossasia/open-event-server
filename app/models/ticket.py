@@ -1,6 +1,12 @@
 from app.models.order import OrderTicket, Order
 from app.models import db
 
+access_codes_tickets = db.Table('access_codes_tickets',
+                                db.Column('access_code_id', db.Integer, db.ForeignKey(
+                                    'access_codes.id', ondelete='CASCADE')),
+                                db.Column('ticket_id', db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE')),
+                                db.PrimaryKeyConstraint('access_code_id', 'ticket_id'))
+
 ticket_tags_table = db.Table('association', db.Model.metadata,
                              db.Column('ticket_id', db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE')),
                              db.Column('ticket_tag_id', db.Integer, db.ForeignKey('ticket_tag.id', ondelete='CASCADE'))
@@ -33,6 +39,8 @@ class Ticket(db.Model):
     tags = db.relationship('TicketTag', secondary=ticket_tags_table, backref='tickets')
     order_ticket = db.relationship('OrderTicket', backref="ticket", passive_deletes=True)
 
+    access_codes = db.relationship('AccessCode', secondary=access_codes_tickets, backref='tickets')
+
     def __init__(self,
                  name=None,
                  event_id=None,
@@ -48,10 +56,13 @@ class Ticket(db.Model):
                  min_order=1,
                  max_order=10,
                  is_fee_absorbed=False,
-                 tags=None):
+                 tags=None,
+                 access_codes=None):
 
         if tags is None:
             tags = []
+        if access_codes is None:
+            access_codes = []
         self.name = name
         self.quantity = quantity
         self.position = position
@@ -67,12 +78,13 @@ class Ticket(db.Model):
         self.max_order = max_order
         self.tags = tags
         self.is_fee_absorbed = is_fee_absorbed
+        self.access_codes = access_codes
 
     def has_order_tickets(self):
         """Returns True if ticket has already placed orders.
         Else False.
         """
-        from app.helpers.helpers import get_count
+        from app.api.helpers.db import get_count
         orders = Order.id.in_(OrderTicket.query.with_entities(OrderTicket.order_id).filter_by(ticket_id=self.id).all())
         count = get_count(Order.query.filter(orders).filter(Order.status != 'deleted'))
         # Count is zero if no completed orders are present

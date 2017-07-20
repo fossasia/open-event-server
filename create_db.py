@@ -4,9 +4,9 @@ import getpass
 
 from app import current_app
 from flask_migrate import stamp
-from app.helpers.data import DataManager
 from app.models import db
 from populate_db import populate
+from tests.unittests.auth_helper import create_super_admin
 
 
 def _validate_email(email):
@@ -27,7 +27,7 @@ def create_default_user():
     _validate_email(email)
     password = getpass.getpass("Enter password for super_admin : ")
     _validate_password(password)
-    DataManager.create_super_admin(email, password)
+    create_super_admin(email, password)
 
 
 if __name__ == "__main__":

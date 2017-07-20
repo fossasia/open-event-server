@@ -1,11 +1,11 @@
-from datetime import datetime
+import pytz
 
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from pytz import timezone
 from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound, BadRequest
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validates_schema
 from flask import request
 
@@ -17,6 +17,7 @@ from app.models.event import Event
 from app.models.sponsor import Sponsor
 from app.models.track import Track
 from app.models.session import Session
+from app.models.speaker import Speaker
 from app.models.ticket import Ticket
 from app.models.session_type import SessionType
 from app.models.discount_code import DiscountCode
@@ -25,11 +26,15 @@ from app.models.speakers_call import SpeakersCall
 from app.models.role_invite import RoleInvite
 from app.models.users_events_role import UsersEventsRoles
 from app.models.ticket import TicketTag
+from app.models.access_code import AccessCode
 from app.models.user import User, ATTENDEE, ORGANIZER
 from app.models.users_events_role import UsersEventsRoles
 from app.models.role import Role
 from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.files import create_save_image_sizes
+from app.models.microlocation import Microlocation
+from app.models.email_notification import EmailNotification
 
 
 class EventSchema(Schema):
@@ -58,23 +63,12 @@ class EventSchema(Schema):
 
     @validates_schema
     def validate_timezone(self, data):
-        if 'timezone' in data:
-            offset = timezone(data['timezone']).utcoffset(
-                datetime.strptime('2014-12-01', '%Y-%m-%d')).seconds
-            if 'starts_at' in data:
-                starts_at = data['starts_at'].utcoffset().seconds
-                if offset != starts_at:
-                    raise UnprocessableEntity({'pointer': '/data/attributes/timezone'},
-                                              "timezone: {} does not match with the starts-at "
-                                              "offset {:02}:{:02}".
-                                              format(data['timezone'], starts_at // 3600, starts_at % 3600 // 60))
-            if 'ends_at' in data:
-                ends_at = data['ends_at'].utcoffset().seconds
-                if offset != ends_at:
-                    raise UnprocessableEntity({'pointer': '/data/attributes/timezone'},
-                                              "timezone: {} does not match with the ends-at "
-                                              "offset {:02}:{:02}".
-                                              format(data['timezone'], ends_at // 3600, ends_at % 3600 // 60))
+        try:
+            timezone(data['timezone'])
+        except pytz.exceptions.UnknownTimeZoneError:
+            raise UnprocessableEntity({'pointer': '/data/attributes/timezone'},
+                                      "Unknown timezone: '{}'".
+                                      format(data['timezone']))
 
     id = fields.Str(dump_only=True)
     identifier = fields.Str(dump_only=True)
@@ -212,7 +206,6 @@ class EventSchema(Schema):
                                   related_view='v1.discount_code_list',
                                   related_view_kwargs={'event_id': '<id>'},
                                   schema='DiscountCodeSchema',
-                                  many=True,
                                   type_='discount-code')
     sessions = Relationship(attribute='session',
                             self_view='v1.event_session',
@@ -222,6 +215,14 @@ class EventSchema(Schema):
                             schema='SessionSchema',
                             many=True,
                             type_='session')
+    speakers = Relationship(attribute='speaker',
+                            self_view='v1.event_speaker',
+                            self_view_kwargs={'id': '<id>'},
+                            related_view='v1.speaker_list',
+                            related_view_kwargs={'event_id': '<id>'},
+                            schema='SpeakerSchema',
+                            many=True,
+                            type_='speaker')
     event_type = Relationship(attribute='event_type',
                               self_view='v1.event_event_type',
                               self_view_kwargs={'id': '<id>'},
@@ -250,6 +251,13 @@ class EventSchema(Schema):
                                 related_view_kwargs={'event_id': '<id>'},
                                 schema='RoleInviteSchema',
                                 type_='role-invite')
+    access_codes = Relationship(attribute='access_codes',
+                                self_view='v1.event_access_codes',
+                                self_view_kwargs={'id': '<id>'},
+                                related_view='v1.access_code_list',
+                                related_view_kwargs={'event_id': '<id>'},
+                                schema='AccessCodeSchema',
+                                type_='access-code')
 
 
 class EventList(ResourceList):
@@ -261,18 +269,19 @@ class EventList(ResourceList):
             query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role).\
                 filter(Role.name != ATTENDEE)
 
-        elif view_kwargs.get('event_type_id') and 'GET' in request.method:
-            event = safe_query(self, Event, 'event_type_id', view_kwargs['event_type_id'], 'event_type_id')
-            query_ = self.session.query(Event).filter_by(event_type_id=event.event_type_id)
+        if view_kwargs.get('event_type_id') and 'GET' in request.method:
+            query_ = self.session.query(Event).filter(getattr(Event, 'event_type_id') == view_kwargs['event_type_id'])
 
-        elif view_kwargs.get('event_topic_id') and 'GET' in request.method:
-            event = safe_query(self, Event, 'event_topic_id', view_kwargs['event_topic_id'], 'event_topic_id')
-            query_ = self.session.query(Event).filter_by(event_topic_id=event.event_topic_id)
+        if view_kwargs.get('event_topic_id') and 'GET' in request.method:
+            query_ = self.session.query(Event).filter(getattr(Event, 'event_topic_id') == view_kwargs['event_topic_id'])
 
-        elif view_kwargs.get('event_sub_topic_id') and 'GET' in request.method:
-            event = safe_query(self, Event, 'event_sub_topic_id', view_kwargs['event_sub_topic_id'],
-                               'event_sub_topic_id')
-            query_ = self.session.query(Event).filter_by(event_sub_topic_id=event.event_sub_topic_id)
+        if view_kwargs.get('event_sub_topic_id') and 'GET' in request.method:
+            query_ = self.session.query(Event).filter(getattr(Event,
+              'event_sub_topic_id') == view_kwargs['event_sub_topic_id'])
+
+        if view_kwargs.get('discount_code_id') and 'GET' in request.method:
+            query_ = self.session.query(Event).filter(getattr(Event,
+              'discount_code_id') == view_kwargs['discount_code_id'])
 
         return query_
 
@@ -281,10 +290,13 @@ class EventList(ResourceList):
         user = User.query.filter_by(id=view_kwargs['user_id']).first()
         uer = UsersEventsRoles(user, event, role)
         save_to_db(uer, 'Event Saved')
+        if data.get('original_image_url'):
+            uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
+            self.session.query(Event).filter_by(id=event.id).update(uploaded_images)
 
     # This permission decorator ensures, you are logged in to create an event
     # and have filter ?withRole to get events associated with logged in user
-    decorators = (api.has_permission('accessible_role_based_events'),)
+    decorators = (api.has_permission('create_event'),)
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
@@ -388,8 +400,66 @@ class EventDetail(ResourceDetail):
             'users_events_role_id')
             if users_events_role.event_id is not None:
                 view_kwargs['id'] = users_events_role.event_id
+
+        if view_kwargs.get('access_code_id') is not None:
+            access_code = safe_query(self, AccessCode, 'id', view_kwargs['access_code_id'], 'access_code_id')
+            if access_code.event_id is not None:
+                view_kwargs['id'] = access_code.event_id
             else:
                 view_kwargs['id'] = None
+
+        if view_kwargs.get('speaker_id'):
+            try:
+                speaker = self.session.query(Speaker).filter_by(id=view_kwargs['speaker_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'speaker_id'},
+                                     "Speaker: {} not found".format(view_kwargs['speaker_id']))
+            else:
+                if speaker.event_id:
+                    view_kwargs['id'] = speaker.event_id
+                else:
+                    view_kwargs['id'] = None
+
+        if view_kwargs.get('email_notification_id'):
+            try:
+                email_notification = self.session.query(EmailNotification).filter_by(
+                                     id=view_kwargs['email_notification_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'email_notification_id'},
+                                     "Email Notification: {} not found".format(view_kwargs['email_notification_id']))
+            else:
+                if email_notification.event_id:
+                    view_kwargs['id'] = email_notification.event_id
+                else:
+                    view_kwargs['id'] = None
+
+        if view_kwargs.get('microlocation_id'):
+            try:
+                microlocation = self.session.query(Microlocation).filter_by(id=view_kwargs['microlocation_id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'microlocation_id'},
+                                     "Microlocation: {} not found".format(view_kwargs['microlocation_id']))
+            else:
+                if microlocation.event_id:
+                    view_kwargs['id'] = microlocation.event_id
+                else:
+                    view_kwargs['id'] = None
+
+
+    def before_update_object(self, event, data, view_kwargs):
+        if data.get('original_image_url') and data['original_image_url'] != event.original_image_url:
+            uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
+            data['original_image_url'] = uploaded_images['original_image_url']
+            data['large_image_url'] = uploaded_images['large_image_url']
+            data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
+            data['icon_image_url'] = uploaded_images['icon_image_url']
+        else:
+            if data.get('large_image_url'):
+                del data['large_image_url']
+            if data.get('thumbnail_image_url'):
+                del data['thumbnail_image_url']
+            if data.get('icon_image_url'):
+                del data['icon_image_url']
 
     decorators = (api.has_permission('is_organizer', methods="PATCH,DELETE", fetch="id", fetch_as="event_id",
                                      check=lambda a: a.get('id') is not None), )
@@ -397,7 +467,8 @@ class EventDetail(ResourceDetail):
     data_layer = {'session': db.session,
                   'model': Event,
                   'methods': {
-                      'before_get_object': before_get_object
+                      'before_get_object': before_get_object,
+                      'before_update_object': before_update_object
                   }}
 
 

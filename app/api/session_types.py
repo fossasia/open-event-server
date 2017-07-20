@@ -13,6 +13,7 @@ from app.models.session import Session
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
+from app.api.helpers.utilities import require_relationship
 
 
 class SessionTypeSchema(Schema):
@@ -59,6 +60,8 @@ class SessionTypeList(ResourceList):
     """
     List and create sessions
     """
+    def before_post(self, args, kwargs, data):
+        require_relationship(['event'], data)
 
     def query(self, view_kwargs):
         """
@@ -131,7 +134,18 @@ class SessionTypeDetail(ResourceDetail):
                   }}
 
 
-class SessionTypeRelationship(ResourceRelationship):
+class SessionTypeRelationshipRequired(ResourceRelationship):
+    """
+    SessionType Relationship
+    """
+    decorators = (jwt_required,)
+    methods = ['GET', 'PATCH']
+    schema = SessionTypeSchema
+    data_layer = {'session': db.session,
+                  'model': SessionType}
+
+
+class SessionTypeRelationshipOptional(ResourceRelationship):
     """
     SessionType Relationship
     """

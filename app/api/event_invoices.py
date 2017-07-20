@@ -12,6 +12,7 @@ from app.models.event_invoice import EventInvoice
 from app.models.discount_code import DiscountCode
 from app.api.helpers.static import PAYMENT_COUNTRIES
 from app.api.helpers.db import safe_query
+from app.api.helpers.utilities import require_relationship
 
 
 class EventInvoiceSchema(Schema):
@@ -74,6 +75,8 @@ class EventInvoiceList(ResourceList):
     """
     List and Create Event Invoices
     """
+    def before_post(self, args, kwargs, data):
+        require_relationship(['event'], data)
 
     def query(self, view_kwargs):
         """
@@ -136,7 +139,18 @@ class EventInvoiceDetail(ResourceDetail):
                   'model': EventInvoice}
 
 
-class EventInvoiceRelationship(ResourceRelationship):
+class EventInvoiceRelationshipRequired(ResourceRelationship):
+    """
+    Event Invoice Relationship
+    """
+    decorators = (is_admin,)
+    methods = ['GET', 'PATCH']
+    schema = EventInvoiceSchema
+    data_layer = {'session': db.session,
+                  'model': EventInvoice}
+
+
+class EventInvoiceRelationshipOptional(ResourceRelationship):
     """
     Event Invoice Relationship
     """

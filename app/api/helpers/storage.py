@@ -9,7 +9,8 @@ from boto.s3.connection import S3Connection, OrdinaryCallingFormat
 from boto.s3.key import Key
 from flask_scrypt import generate_password_hash
 from werkzeug.utils import secure_filename
-from flask import current_app as app
+from flask import current_app as app, request
+from urlparse import urlparse
 
 from app.settings import get_settings
 
@@ -32,9 +33,10 @@ UPLOAD_PATHS = {
     'event': {
         'logo': 'events/{event_id}/logo',
         'background_url': 'events/{event_id}/background',
-        'thumbnail': 'events/{event_id}/thumbnail',
-        'large': 'events/{event_id}/large',
-        'icon': 'events/{event_id}/icon'
+        'original': 'events/{identifier}/original',
+        'thumbnail': 'events/{identifier}/thumbnail',
+        'large': 'events/{identifier}/large',
+        'icon': 'events/{identifier}/icon'
     },
     'sponsors': {
         'logo': 'events/{event_id}/sponsors/{id}/logo'
@@ -44,10 +46,11 @@ UPLOAD_PATHS = {
     },
     'user': {
         'avatar': 'users/{user_id}/avatar',
-        'thumbnail': 'users/{user_id}/thumbnail',
-        'small': 'users/{user_id}/small',
-        'icon': 'users/{user_id}/icon'
-    },
+        'thumbnail': 'users/{identifier}/thumbnail',
+        'original': 'users/{identifier}/original',
+        'large': 'users/{identifier}/large',
+        'icon': 'users/{identifier}/icon'
+},
     'temp': {
         'event': 'events/temp/{uuid}',
         'image': 'temp/images/{uuid}'
@@ -57,6 +60,12 @@ UPLOAD_PATHS = {
         'pentabarf': 'exports/{event_id}/pentabarf',
         'ical': 'exports/{event_id}/ical',
         'xcal': 'exports/{event_id}/xcal'
+    },
+    'custom-placeholders': {
+        'original': 'custom-placeholders/{identifier}/original',
+        'thumbnail': 'custom-placeholders/{identifier}/thumbnail',
+        'large': 'custom-placeholders/{identifier}/large',
+        'icon': 'custom-placeholders/{identifier}/icon'
     }
 }
 
@@ -151,9 +160,10 @@ def upload_local(uploaded_file, key, **kwargs):
     uploaded_file.save(file_path)
     file_relative_path = '/' + file_relative_path
     if get_settings()['static_domain']:
-        file_relative_path = get_settings()['static_domain'] + \
+        return get_settings()['static_domain'] + \
             file_relative_path.replace('/static', '')
-    return file_relative_path
+    url = urlparse(request.url)
+    return url.scheme + '://' + url.hostname + file_relative_path
 
 
 def upload_to_aws(bucket_name, aws_region, aws_key, aws_secret, file, key, acl='public-read'):

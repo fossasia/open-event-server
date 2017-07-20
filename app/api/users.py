@@ -3,13 +3,16 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 
+from app.api.helpers.files import create_save_image_sizes
 from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.user import User
 from app.models.notification import Notification
 from app.models.users_events_role import UsersEventsRoles
 from app.models.event_invoice import EventInvoice
+from app.models.access_code import AccessCode
 from app.api.helpers.permissions import is_user_itself, jwt_required
+from app.models.speaker import Speaker
 from app.api.helpers.exceptions import ConflictException
 from app.api.helpers.db import safe_query
 
@@ -46,9 +49,10 @@ class UserSchema(Schema):
     twitter_url = fields.Url(allow_none=True)
     instagram_url = fields.Url(allow_none=True)
     google_plus_url = fields.Url(allow_none=True)
-    thumbnail_image_url = fields.Url(attribute='thumbnail_image_url', allow_none=True)
-    small_image_url = fields.Url(attribute='small_image_url', allow_none=True)
-    icon_image_url = fields.Url(attribute='icon_image_url', allow_none=True)
+    original_image_url = fields.Url(allow_none=True)
+    thumbnail_image_url = fields.Url(dump_only=True, allow_none=True)
+    small_image_url = fields.Url(dump_only=True, allow_none=True)
+    icon_image_url = fields.Url(dump_only=True, allow_none=True)
     notification = Relationship(
         attribute='notification',
         self_view='v1.user_notification',
@@ -67,6 +71,23 @@ class UserSchema(Schema):
         schema='EventInvoiceSchema',
         many=True,
         type_='event-invoice')
+    speakers = Relationship(
+        attribute='speaker',
+        self_view='v1.user_speaker',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.speaker_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='SpeakerSchema',
+        many=True,
+        type_='speaker')
+    access_codes = Relationship(
+        attribute='access_codes',
+        self_view='v1.user_access_codes',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.access_code_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='AccessCodeSchema',
+        type_='access-codes')
 
 
 class UserList(ResourceList):
@@ -77,19 +98,33 @@ class UserList(ResourceList):
         if db.session.query(User.id).filter_by(email=data['email']).scalar() is not None:
             raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")
 
+    def after_create_object(self, user, data, view_kwargs):
+        if data.get('original_image_url'):
+            uploaded_images = create_save_image_sizes(data['original_image_url'], 'user', user.id)
+            uploaded_images['small_image_url'] = uploaded_images['thumbnail_image_url']
+            del uploaded_images['large_image_url']
+            self.session.query(User).filter_by(id=user.id).update(uploaded_images)
+
     decorators = (api.has_permission('is_admin', methods="GET"),)
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User,
-                  'methods': {'before_create_object': before_create_object}}
+                  'methods': {
+                      'before_create_object': before_create_object,
+                      'after_create_object': after_create_object
+                  }}
 
 
 class UserDetail(ResourceDetail):
     """
     User detail by id
     """
-
     def before_get_object(self, view_kwargs):
+        """
+        before get method for user object
+        :param view_kwargs:
+        :return:
+        """
         if view_kwargs.get('notification_id') is not None:
             notification = safe_query(self, Notification, 'id', view_kwargs['notification_id'], 'notification_id')
             if notification.user_id is not None:
@@ -109,14 +144,44 @@ class UserDetail(ResourceDetail):
             'users_events_role_id')
             if users_events_role.user_id is not None:
                 view_kwargs['id'] = users_events_role.user_id
+
+        if view_kwargs.get('speaker_id') is not None:
+            speaker = safe_query(self, Speaker, 'id', view_kwargs['speaker_id'], 'speaker_id')
+            if speaker.user_id is not None:
+                view_kwargs['id'] = speaker.user_id
             else:
                 view_kwargs['id'] = None
+
+        if view_kwargs.get('access_code_id') is not None:
+            access_code = safe_query(self, AccessCode, 'id', view_kwargs['access_code_id'], 'access_code_id')
+            if access_code.marketer_id is not None:
+                view_kwargs['id'] = access_code.marketer_id
+            else:
+                view_kwargs['id'] = None
+
+    def before_update_object(self, user, data, view_kwargs):
+        if data.get('original_image_url') and data['original_image_url'] != user.original_image_url:
+            uploaded_images = create_save_image_sizes(data['original_image_url'], 'user', user.id)
+            data['original_image_url'] = uploaded_images['original_image_url']
+            data['small_image_url'] = uploaded_images['thumbnail_image_url']
+            data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
+            data['icon_image_url'] = uploaded_images['icon_image_url']
+        else:
+            if data.get('small_image_url'):
+                del data['small_image_url']
+            if data.get('thumbnail_image_url'):
+                del data['thumbnail_image_url']
+            if data.get('icon_image_url'):
+                del data['icon_image_url']
 
     decorators = (is_user_itself, )
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User,
-                  'methods': {'before_get_object': before_get_object}}
+                  'methods': {
+                      'before_get_object': before_get_object,
+                      'before_update_object': before_update_object
+                  }}
 
 
 class UserRelationship(ResourceRelationship):

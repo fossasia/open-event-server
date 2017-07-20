@@ -8,6 +8,7 @@ from app.models import db
 from app.models.ticket import Ticket, TicketTag, ticket_tags_table
 from app.models.event import Event
 from app.api.helpers.db import safe_query
+from app.api.helpers.utilities import require_relationship
 
 
 class TicketTagSchema(Schema):
@@ -27,12 +28,13 @@ class TicketTagSchema(Schema):
     id = fields.Str(dump_only=True)
     name = fields.Str(allow_none=True)
     tickets = Relationship(attribute='tickets',
-                          self_view='v1.ticket_tag_ticket',
-                          self_view_kwargs={'id': '<id>'},
-                          related_view='v1.ticket_list',
-                          related_view_kwargs={'ticket_tag_id': '<id>'},
-                          schema='TicketSchema',
-                          type_='ticket')
+                           self_view='v1.ticket_tag_ticket',
+                           self_view_kwargs={'id': '<id>'},
+                           related_view='v1.ticket_list',
+                           related_view_kwargs={'ticket_tag_id': '<id>'},
+                           schema='TicketSchema',
+                           many=True,
+                           type_='ticket')
     event = Relationship(attribute='event',
                          self_view='v1.ticket_tag_event',
                          self_view_kwargs={'id': '<id>'},
@@ -46,6 +48,8 @@ class TicketTagList(ResourceList):
     """
     List and create TicketTag
     """
+    def before_post(self, args, kwargs, data):
+        require_relationship(['event'], data)
 
     def query(self, view_kwargs):
         query_ = self.session.query(TicketTag)
@@ -93,13 +97,24 @@ class TicketTagDetail(ResourceDetail):
     """
     TicketTag detail by id
     """
-    decorators = (jwt_required, )
+    decorators = (jwt_required,)
     schema = TicketTagSchema
     data_layer = {'session': db.session,
                   'model': TicketTag}
 
 
-class TicketTagRelationship(ResourceRelationship):
+class TicketTagRelationshipRequired(ResourceRelationship):
+    """
+    TicketTag Relationship
+    """
+    decorators = (jwt_required,)
+    methods = ['GET', 'PATCH']
+    schema = TicketTagSchema
+    data_layer = {'session': db.session,
+                  'model': TicketTag}
+
+
+class TicketTagRelationshipOptional(ResourceRelationship):
     """
     TicketTag Relationship
     """

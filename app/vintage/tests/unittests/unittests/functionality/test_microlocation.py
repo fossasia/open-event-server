@@ -1,7 +1,7 @@
 import unittest
 
 from app import current_app as app
-from app.helpers.data import save_to_db
+from app.api.helpers.db import save_to_db
 from app.models.microlocation import Microlocation
 from tests.unittests.object_mother import ObjectMother
 from tests.unittests.setup_database import Setup

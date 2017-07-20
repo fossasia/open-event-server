@@ -75,6 +75,25 @@ def is_user_itself(view, view_args, view_kwargs, *args, **kwargs):
 
 
 @jwt_required
+def is_coorganizer_or_user_itself(view, view_args, view_kwargs, *args, **kwargs):
+    """
+    Allows admin and super admin access to any resource irrespective of id.
+    Otherwise the user can only access his/her resource.
+    """
+    user = current_identity
+    if user.is_admin or user.is_super_admin or user.id == kwargs['user_id']:
+        return view(*view_args, **view_kwargs)
+
+    if user.is_staff:
+        return view(*view_args, **view_kwargs)
+
+    if user.is_organizer(kwargs['event_id']) or user.is_coorganizer(kwargs['event_id']):
+        return view(*view_args, **view_kwargs)
+
+    return ForbiddenError({'source': ''}, 'Co-organizer access is required.').respond()
+
+
+@jwt_required
 def is_registrar(view, view_args, view_kwargs, *args, **kwargs):
     """
     Allows Organizer, Co-organizer and registrar to access the event resources.x`
@@ -137,8 +156,23 @@ def accessible_role_based_events(view, view_args, view_kwargs, *args, **kwargs):
     return view(*view_args, **view_kwargs)
 
 
-permissions = {
+def create_event(view, view_args, view_kwargs, *args, **kwargs):
+    if 'POST' in request.method or 'withRole' in request.args:
+        _jwt_required(app.config['JWT_DEFAULT_REALM'])
+        user = current_identity
 
+        if user.can_create_event is False:
+            return ForbiddenError({'source': ''}, 'Please verify your email').respond()
+
+        if 'GET' in request.method and user.is_staff:
+            return view(*view_args, **view_kwargs)
+        view_kwargs['user_id'] = user.id
+
+    return view(*view_args, **view_kwargs)
+
+
+permissions = {
+    'is_super_admin': is_super_admin,
     'is_admin': is_admin,
     'is_organizer': is_organizer,
     'is_coorganizer': is_coorganizer,
@@ -147,8 +181,19 @@ permissions = {
     'is_moderator': is_moderator,
     'user_event': user_event,
     'accessible_role_based_events': accessible_role_based_events,
-    'auth_required': auth_required
+    'auth_required': auth_required,
+    'is_coorganizer_or_user_itself': is_coorganizer_or_user_itself,
+    'create_event': create_event
 }
+
+
+def is_multiple(data):
+    if type(data) is list:
+        return True
+    if type(data) is str:
+        if data.find(",") > 0:
+            return True
+    return False
 
 
 def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
@@ -170,6 +215,12 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
 
     if request.method not in methods:
         return view(*view_args, **view_kwargs)
+
+    # leave_if checks if we have to bypass this request on the basis of lambda function
+    if 'leave_if' in kwargs:
+        check = kwargs['leave_if']
+        if check(view_kwargs):
+            return view(*view_args, **view_kwargs)
 
     # A check to ensure it is good to go ahead and check permissions
     if 'check' in kwargs:
@@ -194,12 +245,30 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
             fetch_key_model = 'id'
             if 'fetch_key_url' in kwargs:
                 fetch_key_url = kwargs['fetch_key_url']
+
             if 'fetch_key_model' in kwargs:
                 fetch_key_model = kwargs['fetch_key_model']
-            try:
-                data = model.query.filter(getattr(model, fetch_key_model)
-                                          == view_kwargs[fetch_key_url]).one()
-            except NoResultFound, e:
+
+            if not is_multiple(model):
+                model = [model]
+
+            if is_multiple(fetch_key_url):
+                fetch_key_url = fetch_key_url.split(",")
+
+            found = False
+            for index, mod in enumerate(model):
+                if is_multiple(fetch_key_url):
+                    f_url = fetch_key_url[index]
+                else:
+                    f_url = fetch_key_url
+                try:
+                    data = mod.query.filter(getattr(mod, fetch_key_model) == view_kwargs[f_url]).one()
+                except NoResultFound, e:
+                    pass
+                else:
+                    found = True
+
+            if not found:
                 return NotFoundError({'source': ''}, 'Object not found.').respond()
 
             kwargs[fetch_as] = getattr(data, fetch)
@@ -210,3 +279,11 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         return permissions[args[0]](view, view_args, view_kwargs, *args, **kwargs)
     else:
         return ForbiddenError({'source': ''}, 'Access forbidden').respond()
+
+
+def has_access(access_level, **kwargs):
+    if access_level in permissions:
+        auth = permissions[access_level](lambda *a, **b: True, (), {}, (), **kwargs)
+        if type(auth) is bool and auth is True:
+            return True
+    return False

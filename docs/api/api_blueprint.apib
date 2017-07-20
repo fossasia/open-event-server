@@ -162,9 +162,7 @@ Create a new user using an email, password and an optional name.
                   "twitter-url": "http://twitter.com/twitter",
                   "instagram-url": "http://instagram.com/instagram",
                   "google-plus-url": "http://plus.google.com/plus.google",
-                  "thumbnail-image-url": "http://example.com/example.png",
-                  "small-image-url": "http://example.com/example.png",
-                  "icon-image-url": "http://example.com/example.png"
+                  "original-image-url": "https://cdn.pixabay.com/photo/2013/11/23/16/25/birds-216412_1280.jpg"
                 },
                 "type": "user"
               }
@@ -179,21 +177,22 @@ Create a new user using an email, password and an optional name.
                     "last-name": "Doe",
                     "instagram-url": "http://instagram.com/instagram",
                     "is-super-admin": false,
-                    "thumbnail-image-url": "http://example.com/example.png",
                     "created-at": "2017-06-21T12:26:09.075379+00:00",
                     "last-accessed-at": null,
                     "email": "example@example.com",
-                    "icon-image-url": "http://example.com/example.png",
                     "contact": "example",
                     "deleted-at": null,
-                    "small-image-url": "http://example.com/example.png",
                     "facebook-url": "http://facebook.com/facebook",
                     "details": "example",
                     "is-verified": false,
                     "first-name": "John",
                     "avatar-url": "http://example.com/example.png",
                     "twitter-url": "http://twitter.com/twitter",
-                    "google-plus-url": "http://plus.google.com/plus.google"
+                    "google-plus-url": "http://plus.google.com/plus.google",
+                    "thumbnail-image-url": "http://localhost/static/media/users/17/thumbnail/YWVqaGRVd0/dafaa8a2-6445-42b2-895b-815fd81bbffd.jpg",
+                    "original-image-url": "http://localhost/static/media/users/17/original/ZEYxOWZHQU/39218f01-b82a-44ca-ad74-bfbf2342486f.jpg",
+                    "icon-image-url": "http://localhost/static/media/users/17/icon/L3NsT28yM0/23629af8-d3b5-4d42-9a42-8df342f9cce3.jpg",
+                    "small-image-url": "http://localhost/static/media/users/17/thumbnail/YWVqaGRVd0/dafaa8a2-6445-42b2-895b-815fd81bbffd.jpg"
                 },
                 "type": "user",
                 "id": "2",
@@ -1120,6 +1119,274 @@ Delete a single event sub topic.
           }
         }
 
+
+# Group Custom Placeholders
+Data related to custom placeholder information.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name | string | **yes** |
+| `original-image-url` | Url of the original image | string | **yes** |
+| `copyright` | Copyright for the image | string | - |
+| `origin` | origin of image | string | - |
+| `thumbnail-image-url` | Thumbnail version of original image | string | -  |
+| `large-image-url` | Large version of original image | string | -  |
+| `icon-image-url` | Icon version of original image | string | -  |
+
+## Custom Placeholders Collection [/v1/custom-placeholders{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+
+### List All Custom Placeholders [GET]
+Get a list of resources
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "event-sub-topic": {
+                            "links": {
+                                "self": "/v1/custom-placeholders/1/relationships/event-sub-topic",
+                                "related": "/v1/custom-placeholders/1/event-sub-topic"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "origin": "example",
+                        "thumbnail-image-url": "http://localhost/static/media/custom-placeholders/1/thumbnail/Zk1mMHBHQV/b5ec1116-8671-4b75-8c65-387c8b114784.jpg",
+                        "name": "example",
+                        "copyright": "example",
+                        "original-image-url": "http://localhost/static/media/custom-placeholders/1/original/UXYwdXcySV/e33a2f08-0d8c-47df-aa7d-47b132acf3a5.jpg",
+                        "icon-image-url": "http://localhost/static/media/custom-placeholders/1/icon/bEY5Wk9ZNk/641c6ab8-a9fc-4759-afc9-e36579ae3ec9.jpg",
+                        "large-image-url": "http://localhost/static/media/custom-placeholders/1/large/ak01T2xDTW/e5f0b4a3-f045-439a-89b5-7d1085fdaeb1.jpg"
+                    },
+                    "type": "custom-placeholder",
+                    "id": 1,
+                    "links": {
+                        "self": "/v1/custom-placeholders/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/custom-placeholders"
+            }
+        }
+
+
+### Create Custom Placeholder [POST]
+Create a new Custom Placeholder
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                        "name": "example",
+                        "origin": "example",
+                        "copyright": "example",
+                        "original_image_url": "https://www.w3schools.com/html/pic_mountain.jpg"
+                    },
+                    "type": "custom-placeholder"
+              }
+            }
+
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event-sub-topic": {
+                        "links": {
+                            "self": "/v1/custom-placeholders/1/relationships/event-sub-topic",
+                            "related": "/v1/custom-placeholders/1/event-sub-topic"
+                        }
+                    }
+                },
+                "attributes": {
+                    "origin": "example",
+                    "thumbnail-image-url": "http://localhost/static/media/custom-placeholders/1/thumbnail/Zk1mMHBHQV/b5ec1116-8671-4b75-8c65-387c8b114784.jpg",
+                    "name": "example",
+                    "copyright": "example",
+                    "original-image-url": "http://localhost/static/media/custom-placeholders/1/original/UXYwdXcySV/e33a2f08-0d8c-47df-aa7d-47b132acf3a5.jpg",
+                    "icon-image-url": "http://localhost/static/media/custom-placeholders/1/icon/bEY5Wk9ZNk/641c6ab8-a9fc-4759-afc9-e36579ae3ec9.jpg",
+                    "large-image-url": "http://localhost/static/media/custom-placeholders/1/large/ak01T2xDTW/e5f0b4a3-f045-439a-89b5-7d1085fdaeb1.jpg"
+                },
+                "type": "custom-placeholder",
+                "id": 1,
+                "links": {
+                    "self": "/v1/custom-placeholders/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/custom-placeholders/1"
+            }
+        }
+
+
+## Custom Placeholder Details [/v1/custom-placeholders/{id}]
++ Parameters
+    + id: 1 (integer) - ID of the Custom Placeholder in the form of an integer
+
+### Custom Placeholder Details [GET]
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event-sub-topic": {
+                        "links": {
+                            "self": "/v1/custom-placeholders/1/relationships/event-sub-topic",
+                            "related": "/v1/custom-placeholders/1/event-sub-topic"
+                        }
+                    }
+                },
+                "attributes": {
+                    "origin": "example",
+                    "thumbnail-image-url": "http://localhost/static/media/custom-placeholders/1/thumbnail/Zk1mMHBHQV/b5ec1116-8671-4b75-8c65-387c8b114784.jpg",
+                    "name": "example",
+                    "copyright": "example",
+                    "original-image-url": "http://localhost/static/media/custom-placeholders/1/original/UXYwdXcySV/e33a2f08-0d8c-47df-aa7d-47b132acf3a5.jpg",
+                    "icon-image-url": "http://localhost/static/media/custom-placeholders/1/icon/bEY5Wk9ZNk/641c6ab8-a9fc-4759-afc9-e36579ae3ec9.jpg",
+                    "large-image-url": "http://localhost/static/media/custom-placeholders/1/large/ak01T2xDTW/e5f0b4a3-f045-439a-89b5-7d1085fdaeb1.jpg"
+                },
+                "type": "custom-placeholder",
+                "id": 1,
+                "links": {
+                    "self": "/v1/custom-placeholders/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/custom-placeholders/1"
+            }
+        }
+
+
+### Update Custom Placeholder [PATCH]
+Update a single custom placeholder by `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                        "name": "example",
+                        "origin": "example",
+                        "copyright": "example",
+                        "original_image_url": "https://www.w3schools.com/html/pic_mountain.jpg"
+                    },
+                    "type": "custom-placeholder",
+                    "id": "1"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event-sub-topic": {
+                        "links": {
+                            "self": "/v1/custom-placeholders/1/relationships/event-sub-topic",
+                            "related": "/v1/custom-placeholders/1/event-sub-topic"
+                        }
+                    }
+                },
+                "attributes": {
+                    "origin": "example",
+                    "thumbnail-image-url": "http://localhost/static/media/custom-placeholders/1/thumbnail/Zk1mMHBHQV/b5ec1116-8671-4b75-8c65-387c8b114784.jpg",
+                    "name": "example",
+                    "copyright": "example",
+                    "original-image-url": "http://localhost/static/media/custom-placeholders/1/original/UXYwdXcySV/e33a2f08-0d8c-47df-aa7d-47b132acf3a5.jpg",
+                    "icon-image-url": "http://localhost/static/media/custom-placeholders/1/icon/bEY5Wk9ZNk/641c6ab8-a9fc-4759-afc9-e36579ae3ec9.jpg",
+                    "large-image-url": "http://localhost/static/media/custom-placeholders/1/large/ak01T2xDTW/e5f0b4a3-f045-439a-89b5-7d1085fdaeb1.jpg"
+                },
+                "type": "custom-placeholder",
+                "id": 1,
+                "links": {
+                    "self": "/v1/custom-placeholders/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/custom-placeholders/1"
+            }
+        }
+
+### Delete Custom Placeholder [DELETE]
+Delete a single resource.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
+
 # Group Events
 These endpoints help you to create the basic event structure. To add other parts of the event such as ticket, sponsor, copyright, etc. there are separate endpoints.
 
@@ -1382,7 +1649,7 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "location-name": "example",
                     "searchable-location-name": "example",
                     "description": "example",
-                    "original-image-url": "http://example.com/example.png",
+                    "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "organizer-name": "example",
                     "is-map-shown": "true",
                     "organizer-description": "example",
@@ -1785,7 +2052,7 @@ All other fields are optional. Add attributes you want to modify.
                     "location-name": "example1",
                     "searchable-location-name": "example1",
                     "description": "example1",
-                    "original-image-url": "http://example1.com/example1.png",
+                    "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "organizer-name": "example1",
                     "is-map-shown": "false",
                     "organizer-description": "example1",
@@ -2620,7 +2887,7 @@ Data related to all the microlocations for the various sessions of the event.
 | `floor` | Floor of the microlocation | integer | - |
 | `room` | Room of the microlocation | string | - |
 
-## Microlocation Collection [/v1/events/{event_identifier}/microlocations{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Microlocation Collection [/v1/microlocations{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -2697,6 +2964,14 @@ Create a new microlocation using an event_id.
 
             {
               "data": {
+                 "relationships":{
+                  "event":{
+                    "data":{
+                      "type":"event",
+                      "id":"1"
+                    }
+                  }
+                },
                 "attributes": {
                   "name": "microlocation-name",
                   "latitude": "45.00",
@@ -3566,6 +3841,387 @@ Delete a single session type.
           "jsonapi": {
             "version": "1.0"
           }
+        }
+
+# Group Speakers
+Data related to the various speakers associated with the various sessions in the event.
+
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name` | The name of the speaker | string | **yes** |
+| `email` | The email of the speaker | string | **yes** |
+| `photo-url` | URL of the photo of the speaker | string | - |
+| `thumbnail-image-url` | Thumbnail image's URL of the speaker | string | - |
+| `small-image-url` | Small image's URL of the speaker | string | - |
+| `icon-image-url` | Icon image's URL of the speaker | string | - |
+| `short-biography` | Short biography of the speaker | string | - |
+| `long-biography` | Long biography of the speaker | string | - |
+| `speaking-experience` | Speaking experience of the speaker | string | - |
+| `mobile` | Mobile number of the speaker | string | - |
+| `location` | Name of the location of track | string | - |
+| `website` | Personal website of the speaker | string | - |
+| `twitter` | Twitter profile link of the speaker | string | - |
+| `facebook` | Facebook profile link of the speaker | string | - |
+| `github` | Github profile link of the speaker | string | - |
+| `linkedin` |  Linkedin profile link of the speakers | string | - |
+| `organisation` | Name of the organisation which the speaker belongs to | string | - |
+| `is-featured` | To state whether a speaker is a featured speaker in an event | boolean (default: `false`) | - |
+| `position` | The speaker's position in his/her organisation | string | - |
+| `country` | Country where the speaker lives | string | - |
+| `city` | City where the speaker lives | string | - |
+| `gender` | Gender of the speaker | string | - |
+| `heard-from` | How did the speaker get info about the event | string | - |
+| `sponsorship-required` | If any kind of sponsorship is required by the speaker | string | - |
+
+## Speakers Collection [/v1/events/{event_identifier}/speakers{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `speaking-experience`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List All Speakers [GET]
+Get a list of all speakers.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "user": {
+                            "links": {
+                                "self": "/v1/speakers/3/relationships/user",
+                                "related": "/v1/speakers/3/user"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/speakers/3/relationships/event",
+                                "related": "/v1/speakers/3/event"
+                            }
+                        },
+                        "sessions": {
+                            "links": {
+                                "self": "/v1/speakers/3/relationships/session",
+                                "related": "/v1/speakers/3/sessions"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "website": "https://firstSpeaker.com",
+                        "city": "Delhi",
+                        "short-biography": "",
+                        "name": "firstSpeaker",
+                        "speaking-experience": "",
+                        "country": "India",
+                        "twitter": null,
+                        "is-featured": false,
+                        "linkedin": null,
+                        "email": "firstSpeaker@gmail.com",
+                        "long-biography": "",
+                        "mobile": null,
+                        "github": null,
+                        "facebook": null,
+                        "gender": "Male",
+                        "position": null,
+                        "organisation": null,
+                        "sponsorship-required": "",
+                        "heard-from": null
+                    },
+                    "type": "speaker",
+                    "id": "3",
+                    "links": {
+                        "self": "/v1/speakers/3"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/events/1/speakers"
+            }
+        }
+
+### Create Speaker [POST]
+Create a Speaker profile for an event using event identifier
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+              "type": "speaker",
+                "attributes": {
+                        "name":"firstSpeaker",
+                        "email":"firstSpeaker@gmail.com",
+                        "website":"https://firstSpeaker.com",
+                        "city":"Delhi",
+                        "gender":"Male",
+                        "country":"India"
+                    }
+                }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/speakers/1/relationships/user",
+                            "related": "/v1/speakers/1/user"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/speakers/1/relationships/event",
+                            "related": "/v1/speakers/1/event"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/speakers/1/relationships/session",
+                            "related": "/v1/speakers/1/sessions"
+                        }
+                    }
+                },
+                "attributes": {
+                    "website": "https://firstSpeaker.com",
+                    "city": "Delhi",
+                    "short-biography": "",
+                    "name": "firstSpeaker",
+                    "speaking-experience": "",
+                    "country": "India",
+                    "twitter": null,
+                    "is-featured": false,
+                    "linkedin": null,
+                    "email": "firstSpeaker@gmail.com",
+                    "long-biography": "",
+                    "mobile": null,
+                    "github": null,
+                    "facebook": null,
+                    "gender": "Male",
+                    "position": null,
+                    "organisation": null,
+                    "sponsorship-required": "",
+                    "heard-from": null
+                },
+                "type": "speaker",
+                "id": "1",
+                "links": {
+                    "self": "/v1/speakers/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/speakers/1"
+            }
+        }
+
+
+### Speaker [/v1/speakers/{speaker_id}]
++ Parameters
+    + speaker_id: 1 (integer) - ID of the Speaker in the form of an integer
+
+### Speaker Details [GET]
+Get a single Speaker profile
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/speakers/1/relationships/user",
+                            "related": "/v1/speakers/1/user"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/speakers/1/relationships/event",
+                            "related": "/v1/speakers/1/event"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/speakers/1/relationships/session",
+                            "related": "/v1/speakers/1/sessions"
+                        }
+                    }
+                },
+                "attributes": {
+                    "website": "https://firstSpeaker.com",
+                    "city": "Delhi",
+                    "short-biography": "",
+                    "name": "firstSpeaker",
+                    "speaking-experience": "",
+                    "country": "India",
+                    "twitter": null,
+                    "is-featured": false,
+                    "linkedin": null,
+                    "email": "firstSpeaker@gmail.com",
+                    "long-biography": "",
+                    "mobile": null,
+                    "github": null,
+                    "facebook": null,
+                    "gender": "Male",
+                    "position": null,
+                    "organisation": null,
+                    "sponsorship-required": "",
+                    "heard-from": null
+                },
+                "type": "speaker",
+                "id": "1",
+                "links": {
+                    "self": "/v1/speakers/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/speakers/1"
+            }
+        }
+
+
+### Update Speaker [PATCH]
+Update a single speaker by `id`.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                        "name":"firstSpeaker-Patched",
+                        "email":"firstSpeaker_Patched@gmail.com",
+                        "website":"https://firstSpeaker-Patched.com",
+                        "city":"Delhi",
+                        "gender":"Male",
+                        "country":"India"
+                    },
+                    "type": "speaker",
+                    "id":"1"
+                }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/speakers/1/relationships/user",
+                            "related": "/v1/speakers/1/user"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/speakers/1/relationships/event",
+                            "related": "/v1/speakers/1/event"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/speakers/1/relationships/session",
+                            "related": "/v1/speakers/1/sessions"
+                        }
+                    }
+                },
+                "attributes": {
+                    "website": "https://firstSpeaker-Patched.com",
+                    "city": "Delhi",
+                    "short-biography": "",
+                    "name": "firstSpeaker-Patched",
+                    "speaking-experience": "",
+                    "country": "India",
+                    "twitter": null,
+                    "is-featured": false,
+                    "linkedin": null,
+                    "email": "firstSpeaker_Patched@gmail.com",
+                    "long-biography": "",
+                    "mobile": null,
+                    "github": null,
+                    "facebook": null,
+                    "gender": "Male",
+                    "position": null,
+                    "organisation": null,
+                    "sponsorship-required": "",
+                    "heard-from": null
+                },
+                "type": "speaker",
+                "id": "1",
+                "links": {
+                    "self": "/v1/speakers/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/speakers/1"
+            }
+        }
+
+### Delete Speaker [DELETE]
+Delete a single speaker by id.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "message": "Object successfully deleted"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
         }
 
 # Group Social Links
@@ -6087,15 +6743,304 @@ Delete a single notification.
           }
         }
 
+# Group Email Notifications
+To turn Email Notifications ON/OFF related to the various events, session approval etc.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `next-event`  | Next event email notification | integer | - |
+| `new-paper` | New paper email notification | integer | - |
+| `session-accept-reject` | Session Accept/Reject email notification | integer | - |
+| `session-schedule` | Session schedule email notification | integer | - |
+| `after-ticket-purchase` | Email notification after ticket purchase | integer | - |
+
+## Email Notifications Collection [/v1/users/{user_id}/email-notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + user_id: 2 (integer) - ID of the specific user in integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `next-event`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List All Email Notifications [GET]
+Get a list of Notifications.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "user": {
+                            "links": {
+                                "self": "/v1/email-notifications/1/relationships/user",
+                                "related": "/v1/email-notifications/1/user"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/email-notifications/1/relationships/event",
+                                "related": "/v1/email-notifications/1/event"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "next-event": 0,
+                        "new-paper": 0,
+                        "session-accept-reject": 0,
+                        "session-schedule": 1,
+                        "after-ticket-purchase": 1
+                    },
+                    "type": "email-notification",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/email-notifications/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/users/2/email-notifications"
+            }
+        }
+
+### Create Email Notificaiton [POST]
+Create a new email notification with user_id.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "relationships":{
+                  "event":{
+                    "data":{
+                      "type":"event",
+                      "id":"1"
+                    }
+                  }
+                },
+                "attributes": {
+                  "next-event": 0,
+                  "new-paper": 0,
+                  "session-accept-reject": 0,
+                  "session-schedule": 1,
+                  "after-ticket-purchase": 1
+                },
+                "type": "email-notification"
+              }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/email-notifications/1/relationships/user",
+                            "related": "/v1/email-notifications/1/user"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/email-notifications/1/relationships/event",
+                            "related": "/v1/email-notifications/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "next-event": 0,
+                    "new-paper": 0,
+                    "session-accept-reject": 0,
+                    "session-schedule": 1,
+                    "after-ticket-purchase": 1
+                },
+                "type": "email-notification",
+                "id": "1",
+                "links": {
+                    "self": "/v1/email-notifications/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/email-notifications/1"
+            }
+        }
+
+
+## Email Notification Detail [/v1/email-notifications/{email_notification_id}]
++ Parameters
+    + email_notification_id: 1 (integer) - ID of the email_notifcaiton in the form of an integer
+
+### Email Notification Detail [GET]
+Get a single email notification.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/email-notifications/1/relationships/user",
+                            "related": "/v1/email-notifications/1/user"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/email-notifications/1/relationships/event",
+                            "related": "/v1/email-notifications/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "next-event": 0,
+                    "new-paper": 0,
+                    "session-accept-reject": 0,
+                    "session-schedule": 1,
+                    "after-ticket-purchase": 1
+                },
+                "type": "email-notification",
+                "id": "1",
+                "links": {
+                    "self": "/v1/email-notifications/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/email-notifications/1"
+            }
+        }
+
+
+### Update Email Notification [PATCH]
+Update a single email notification with `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "next-event": 0,
+                  "new-paper": 0,
+                  "session-accept-reject": 0,
+                  "session-schedule": 1,
+                  "after-ticket-purchase": 1
+                },
+                "type": "email-notification",
+                "id": "1"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/email-notifications/1/relationships/user",
+                            "related": "/v1/email-notifications/1/user"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/email-notifications/1/relationships/event",
+                            "related": "/v1/email-notifications/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "next-event": 0,
+                    "new-paper": 0,
+                    "session-accept-reject": 0,
+                    "session-schedule": 1,
+                    "after-ticket-purchase": 1
+                },
+                "type": "email-notification",
+                "id": "1",
+                "links": {
+                    "self": "/v1/email-notifications/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/email-notifications/1"
+            }
+        }
+
+### Delete Email Notification [DELETE]
+Delete a single email notification.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
 # Group Discount Codes
 Discount Codes related to the events.
 
 | Parameter | Description | Type | Required |
 |:----------|-------------|------|----------|
-| `code`  | Discount Code | string | - |
+| `code`  | Discount Code | string | **yes** |
 | `discount-url` | URL of the discount | string | - |
-| `value` | Value of the discount | float | - |
-| `type` | Amount or Percentage | string | - |
+| `value` | Value of the discount | float | **yes** |
+| `type` | Amount or Percentage | string | **yes** |
 | `is-active` | If the discount code is active | boolean | - |
 | `tickets-number` | Tickets Number for Discount Code | integer (>=0) | - |
 | `min-quantity` | Minimum number of tickets for Discount Code | integer (>=0) | - |
@@ -6104,11 +7049,146 @@ Discount Codes related to the events.
 | `valid-till` | Discount Code valid till | ISO 8601 (tz-aware) | - |
 | `created-at` | Discount Code created at | ISO 8601 (tz-aware) | - |
 | `tickets` | Event or Ticket | String | - |
-| `used-for` | Discount Code used for | String | - |
+| `used-for` | Discount Code used for: tickets or events | String | **yes** |
 
 
+## Event Discount Code Collection[/v1/discount-codes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `code`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-## Discount Code Collection [/v1/events/{event_identifier}/discount-codes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+### List All Event Discount Codes [GET]
+Get a list of Discount Codes.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+              "count": 1
+          },
+          "data": [
+              {
+                  "relationships": {
+                      "event": {
+                          "links": {
+                              "self": "/v1/discount-codes/1/relationships/events",
+                              "related": "/v1/discount-codes/1/events"
+                          }
+                      }
+                  },
+                  "attributes": {
+                      "tickets": "event",
+                      "code": "DC101",
+                      "valid-from": "2017-06-18T18:30:00+00:00",
+                      "min-quantity": 0,
+                      "created-at": "2017-06-20T09:59:23.740772+00:00",
+                      "tickets-number": 404,
+                      "value": 100,
+                      "max-quantity": 100,
+                      "is-active": false,
+                      "used-for": "event",
+                      "valid-till": "2017-06-24T18:30:00+00:00",
+                      "type": "amount",
+                      "discount-url": "https://my-discount-url.com"
+                  },
+                  "type": "discount-code",
+                  "id": 1,
+                  "links": {
+                      "self": "/v1/discount-codes/1"
+                  }
+              }
+          ],
+          "jsonapi": {
+              "version": "1.0"
+          },
+          "links": {
+              "self": "/v1/events/1/discount-codes"
+          }
+         }
+
+### Create Event Discount Code [POST]
+Create a new Discount Code for event. (Only Admin)
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "code": "DC101",
+                  "discount-url": "https://my-discount-url.com",
+                  "value": "100",
+                  "type": "amount",
+                  "is-active": "false",
+                  "tickets-number": "404",
+                  "min-quantity": "0",
+                  "max-quantity": "100",
+                  "valid-from": "2017-06-18T18:30:00+00:00",
+                  "valid-till": "2017-06-24T18:30:00+00:00",
+                  "used-for": "event",
+                  "tickets": "event"
+                },
+                "type": "discount-code"
+              }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/discount-codes/4/relationships/events",
+                            "related": "/v1/discount-codes/4/events"
+                        }
+                    }
+                },
+                "attributes": {
+                    "tickets": "event",
+                    "code": "DC101",
+                    "valid-from": "2017-06-18T18:30:00+00:00",
+                    "min-quantity": 0,
+                    "created-at": "2017-06-27T14:47:14.996906+00:00",
+                    "tickets-number": 404,
+                    "value": 100,
+                    "max-quantity": 100,
+                    "is-active": false,
+                    "used-for": "event",
+                    "valid-till": "2017-06-24T18:30:00+00:00",
+                    "type": "amount",
+                    "discount-url": "https://my-discount-url.com"
+                },
+                "type": "discount-code",
+                "id": 4,
+                "links": {
+                    "self": "/v1/discount-codes/4"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/discount-codes/4"
+            }
+        }
+
+## Ticket Discount Code Collection[/v1/events/{event_identifier}/discount-codes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -6116,7 +7196,7 @@ Discount Codes related to the events.
     + sort (optional, string, `code`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List All Discount Codes [GET]
+### List All Ticket Discount Codes [GET]
 Get a list of Discount Codes.
 
 + Request
@@ -6153,7 +7233,7 @@ Get a list of Discount Codes.
                       "value": 100,
                       "max-quantity": 100,
                       "is-active": false,
-                      "used-for": "Event",
+                      "used-for": "ticket",
                       "valid-till": "2017-06-24T18:30:00+00:00",
                       "type": "amount",
                       "discount-url": "https://my-discount-url.com"
@@ -6173,7 +7253,7 @@ Get a list of Discount Codes.
           }
          }
 
-### Create Discount Code [POST]
+### Create Ticket Discount Code [POST]
 Create a new Discount Code with event_id.
 
 + Request (application/vnd.api+json)
@@ -6197,7 +7277,7 @@ Create a new Discount Code with event_id.
                   "max-quantity": "100",
                   "valid-from": "2017-06-18T18:30:00+00:00",
                   "valid-till": "2017-06-24T18:30:00+00:00",
-                  "used-for": "Event",
+                  "used-for": "ticket",
                   "tickets": "event"
                 },
                 "type": "discount-code"
@@ -6209,7 +7289,7 @@ Create a new Discount Code with event_id.
         {
             "data": {
                 "relationships": {
-                    "event": {
+                    "events": {
                         "links": {
                             "self": "/v1/discount-codes/4/relationships/event",
                             "related": "/v1/discount-codes/4/event"
@@ -6226,7 +7306,7 @@ Create a new Discount Code with event_id.
                     "value": 100,
                     "max-quantity": 100,
                     "is-active": false,
-                    "used-for": "Event",
+                    "used-for": "ticket",
                     "valid-till": "2017-06-24T18:30:00+00:00",
                     "type": "amount",
                     "discount-url": "https://my-discount-url.com"
@@ -6266,10 +7346,10 @@ Get a single discount code.
         {
             "data": {
                 "relationships": {
-                    "event": {
+                    "events": {
                         "links": {
-                            "self": "/v1/discount-codes/1/relationships/event",
-                            "related": "/v1/discount-codes/1/event"
+                            "self": "/v1/discount-codes/1/relationships/events",
+                            "related": "/v1/discount-codes/1/events"
                         }
                     }
                 },
@@ -6283,13 +7363,13 @@ Get a single discount code.
                     "value": 100,
                     "max-quantity": 100,
                     "is-active": false,
-                    "used-for": "Event",
+                    "used-for": "event",
                     "valid-till": "2017-06-24T18:30:00+00:00",
                     "type": "amount",
                     "discount-url": "https://my-discount-url.com"
                 },
                 "type": "discount-code",
-                "id": 3,
+                "id": 1,
                 "links": {
                     "self": "/v1/discount-codes/1"
                 }
@@ -6304,7 +7384,7 @@ Get a single discount code.
 
 
 ### Update Discount Code [PATCH]
-Update a single discount code with `id`.
+Update a single discount code with `id` (Check permission to edit).
 
 + `id` (integer) - ID of the record to update **(required)**
 
@@ -6329,7 +7409,7 @@ Update a single discount code with `id`.
                   "max-quantity": "100",
                   "valid-from": "2017-06-18T18:30:00+00:00",
                   "valid-till": "2017-06-24T18:30:00+00:00",
-                  "used-for": "Event",
+                  "used-for": "event",
                   "tickets": "event"
                 },
                 "type": "discount-code",
@@ -6341,45 +7421,45 @@ Update a single discount code with `id`.
 
         {
           "data": {
-              "relationships": {
-                  "event": {
-                      "links": {
-                          "self": "/v1/discount-codes/1/relationships/event",
-                          "related": "/v1/discount-codes/1/event"
-                      }
-                  }
-              },
-              "attributes": {
-                  "tickets": "event",
-                  "code": "DC101",
-                  "valid-from": "2017-06-18T18:30:00+00:00",
-                  "min-quantity": 0,
-                  "created-at": "2017-06-20T09:59:23.740772+00:00",
-                  "tickets-number": 404,
-                  "value": 50,
-                  "max-quantity": 100,
-                  "is-active": false,
-                  "used-for": "Event",
-                  "valid-till": "2017-06-24T18:30:00+00:00",
-                  "type": "percent",
-                  "discount-url": "https://my-discount-url.com"
-              },
-              "type": "discount-code",
-              "id": 1,
-              "links": {
-                  "self": "/v1/discount-codes/1"
+            "relationships": {
+              "events": {
+                "links": {
+                  "self": "/v1/discount-codes/1/relationships/events",
+                  "related": "/v1/discount-codes/1/events"
+                }
               }
+            },
+            "attributes": {
+              "tickets": "event",
+              "code": "DC101",
+              "valid-from": "2017-06-18T18:30:00+00:00",
+              "min-quantity": 0,
+              "created-at": "2017-06-20T09:59:23.740772+00:00",
+              "tickets-number": 404,
+              "value": 50,
+              "max-quantity": 100,
+              "is-active": false,
+              "used-for": "event",
+              "valid-till": "2017-06-24T18:30:00+00:00",
+              "type": "percent",
+              "discount-url": "https://my-discount-url.com"
+            },
+            "type": "discount-code",
+            "id": 1,
+            "links": {
+              "self": "/v1/discount-codes/1"
+            }
           },
           "jsonapi": {
-              "version": "1.0"
+            "version": "1.0"
           },
           "links": {
-              "self": "/v1/discount-codes/1"
+            "self": "/v1/discount-codes/1"
           }
         }
 
 ### Delete Discount Code [DELETE]
-Delete a single discount code.
+Delete a single discount code (Check permission to delete).
 
 + Request
 
@@ -6399,6 +7479,298 @@ Delete a single discount code.
             "version": "1.0"
           }
         }
+
+# Group Access Codes
+Access Codes related to the events.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `code`  | Access Code | string | - |
+| `access-url` | URL of the access code | string | - |
+| `type` | Amount or Percentage | string | - |
+| `is-active` | If the access code is active | boolean | - |
+| `tickets-number` | Tickets Number for Access Code | integer (>=0) | - |
+| `min-quantity` | Minimum number of tickets for Access Code | integer (>=0) | - |
+| `max-quantity` | Maximum number of tickets for Access Code | integer (>=0) | - |
+| `valid-from` | Access Code valid from | ISO 8601 (tz-aware) | - |
+| `valid-till` | Access Code valid till | ISO 8601 (tz-aware) | - |
+| `created-at` | Access Code created at | ISO 8601 (tz-aware) | - |
+| `tickets` | Event or Ticket | String | - |
+| `used-for` | Access Code used for | String | - |
+
+
+
+## Access Code Collection [/v1/events/{event_identifier}/access-codes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `code`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List All Access Codes [GET]
+Get a list of Access Codes.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+              "count": 1
+          },
+          "data": [
+              {
+                  "relationships": {
+                      "event": {
+                          "links": {
+                              "self": "/v1/access-codes/1/relationships/event",
+                              "related": "/v1/access-codes/1/event"
+                          }
+                      }
+                  },
+                  "attributes": {
+                      "code": "AC101",
+                      "valid-from": "2017-06-18T18:30:00+00:00",
+                      "access-url": "https://my-access-code-url.com",
+                      "min-quantity": 0,
+                      "tickets-number": 404,
+                      "max-quantity": 100,
+                      "is-active": false,
+                      "used-for": "Event",
+                      "valid-till": "2017-06-24T18:30:00+00:00"
+                  },
+                  "type": "access-code",
+                  "id": 1,
+                  "links": {
+                      "self": "/v1/access-codes/1"
+                  }
+              }
+          ],
+          "jsonapi": {
+              "version": "1.0"
+          },
+          "links": {
+              "self": "/v1/events/1/access-codes"
+          }
+        }
+
+### Create Access Code [POST]
+Create a new Access Code with event_id.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+              "type": "access-code",
+              "attributes": {
+                      "code": "AC101",
+                      "access-url": "https://my-access-code-url.com",
+                      "is-active": "false",
+                      "tickets-number": "404",
+                      "min-quantity": "0",
+                      "max-quantity": "100",
+                      "valid-from": "2017-06-18T18:30:00+00:00",
+                      "valid-till": "2017-06-24T18:30:00+00:00",
+                      "used-for": "Event"
+                  }
+                }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                      "event": {
+                          "links": {
+                              "self": "/v1/access-codes/1/relationships/event",
+                              "related": "/v1/access-codes/1/event"
+                          }
+                      }
+                  },
+                  "attributes": {
+                      "code": "AC101",
+                      "valid-from": "2017-06-18T18:30:00+00:00",
+                      "access-url": "https://my-access-code-url.com",
+                      "min-quantity": 0,
+                      "tickets-number": 404,
+                      "max-quantity": 100,
+                      "is-active": false,
+                      "used-for": "Event",
+                      "valid-till": "2017-06-24T18:30:00+00:00"
+                  },
+                  "type": "access-code",
+                  "id": 1,
+                  "links": {
+                      "self": "/v1/access-codes/1"
+                  }
+          },
+          "jsonapi": {
+              "version": "1.0"
+          },
+          "links": {
+              "self": "/v1/events/1/access-codes"
+          }
+        }
+
+
+## Access Code Detail [/v1/access-codes/{access_code_id}]
++ Parameters
+    + access_code_id: 1 (integer) - ID of the access code in the form of an integer
+
+### Access Code Detail [GET]
+Get a single access code.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/access-codes/1/relationships/event",
+                            "related": "/v1/access-codes/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "code": "AC101",
+                    "valid-from": "2017-06-18T18:30:00+00:00",
+                    "access-url": "https://my-access-code-url.com",
+                    "min-quantity": 0,
+                    "tickets-number": 404,
+                    "max-quantity": 100,
+                    "is-active": false,
+                    "used-for": "Event",
+                    "valid-till": "2017-06-24T18:30:00+00:00"
+                },
+                "type": "access-code",
+                "id": 1,
+                "links": {
+                    "self": "/v1/access-codes/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/access-codes/1"
+            }
+        }
+
+
+### Update Access Code [PATCH]
+Update a single access code with `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+              "attributes": {
+                      "code": "AC101",
+                      "access-url": "https://my-access-code-url.com",
+                      "is-active": "true",
+                      "tickets-number": "404",
+                      "min-quantity": "0",
+                      "max-quantity": "100",
+                      "valid-from": "2017-06-18T18:30:00+00:00",
+                      "valid-till": "2017-06-24T18:30:00+00:00",
+                      "used-for": "Event"
+                  },
+              "type": "access-code",
+              "id": "1"
+              }
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/access-codes/1/relationships/event",
+                            "related": "/v1/access-codes/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "code": "AC101",
+                    "valid-from": "2017-06-18T18:30:00+00:00",
+                    "access-url": "https://my-access-code-url.com",
+                    "min-quantity": 0,
+                    "tickets-number": 404,
+                    "max-quantity": 100,
+                    "is-active": true,
+                    "used-for": "Event",
+                    "valid-till": "2017-06-24T18:30:00+00:00"
+                },
+                "type": "access-code",
+                "id": 1,
+                "links": {
+                    "self": "/v1/access-codes/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/access-codes/1"
+            }
+        }
+
+### Delete Access Code [DELETE]
+Delete a single Access code.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
 
 # Group Role Invites
 
@@ -6741,7 +8113,7 @@ Get a list of users events roles.
                 }
               },
               "type": "users-events-role",
-              "id": "1", 
+              "id": "1",
               "links": {
                 "self": "/v1/users-events-roles/1"
               }
@@ -6812,7 +8184,7 @@ Create a new users events role with event_id.
                 }
               },
               "type": "users-events-role",
-              "id": "1", 
+              "id": "1",
               "links": {
                 "self": "/v1/users-events-roles/1"
               }
@@ -6865,7 +8237,7 @@ Get a single users events role.
                 }
               },
               "type": "users-events-role",
-              "id": "1", 
+              "id": "1",
               "links": {
                 "self": "/v1/users-events-roles/1"
               }
@@ -6902,7 +8274,7 @@ Update a single users events role.
                   },
                   "user": {
                     "data":{
-                      "type": "user", 
+                      "type": "user",
                       "id": "1"
                     }
                   }
@@ -7273,7 +8645,7 @@ Delete a single image size.
 
 **ADMIN**
 
-To create or modify data of this data layer, you will need admin access. You can get the data without admin access as well. 
+To create or modify data of this data layer, you will need admin access. You can get the data without admin access as well.
 
 | Parameter | Description | Type | Required |
 |:----------|-------------|------|----------|
@@ -7694,6 +9066,239 @@ Delete a single page.
             "version": "1.0"
           }
         }
+
+
+# Group User Permissions
+
+**ADMIN**
+
+To create or modify any data of this data layer, you will need admin access. However you get the schema without admin access.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the user permission | string | **yes** |
+| `description` | Description | string | - |
+| `unverified-user` | allow for unverified user if set to true  | boolean | - |
+| `anonymous-user` | allow for ananymous user if set to true | boolean | **yes** |
+
+## User permission Collection [/v1/user-permissions{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List all user permissions [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 2
+            },
+            "data": [
+                {
+                    "attributes": {
+                        "description": "Publish event (make event live)",
+                        "unverified-user": false,
+                        "name": "publish_event",
+                        "anonymous-user": false
+                    },
+                    "type": "user-permission",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/user-permissions/1"
+                    }
+                },
+                {
+                    "attributes": {
+                        "description": "Create event",
+                        "unverified-user": true,
+                        "name": "create_event",
+                        "anonymous-user": false
+                    },
+                    "type": "user-permission",
+                    "id": "2",
+                    "links": {
+                        "self": "/v1/user-permissions/2"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/user-permissions"
+            }
+        }
+
+
+### Create User Permission [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                    "name": "example",
+                    "description": "example",
+                    "unverified-user": "false",
+                    "anonymous-user": "false"
+              },
+                "type": "user-permission"
+              }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+                "name": "example",
+                "description": "example",
+                "unverified-user": "false",
+                "anonymous-user": "false"
+              },
+            "type": "user-permission",
+            "id": "3",
+            "links": {
+              "self": "/v1/user-permissions/3"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/user-permissions/3"
+          }
+        }
+
+## User Permission Details [/v1/user-permissions/{id}]
++ Parameters
+    + id: 3 (integer) - ID of the page in the form of an integer
+
+### Get User Permission Details [GET]
+Get a single resource.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+                "name": "example",
+                "description": "example",
+                "unverified-user": "false",
+                "anonymous-user": "false"
+              },
+            "type": "user-permission",
+            "id": "3",
+            "links": {
+              "self": "/v1/user-permissions/3"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/user-permissions/3"
+          }
+        }
+
+
+### Update User Permission [PATCH]
+Update a single resource by `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                    "name": "example",
+                    "description": "example",
+                    "unverified-user": "false",
+                    "anonymous-user": "false"
+                 },
+                "type": "user-permission",
+                "id": "3"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+                "name": "example",
+                "description": "example",
+                "unverified-user": "false",
+                "anonymous-user": "false"
+              },
+            "type": "user-permission",
+            "id": "3",
+            "links": {
+              "self": "/v1/user-permissions/3"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/user-permissions/3"
+          }
+        }
+
+### Delete User Permission [DELETE]
+Delete a single resource.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
 
 # Group Settings
 
@@ -8160,7 +9765,7 @@ A temporary cropped image is first uploaded using this endpoint. After saving th
     + Headers
 
             Content-Type: application/json
-            Authorization: JWT <access_token>
+            Authorization: JWT <Auth Key>
 
     + Body
 

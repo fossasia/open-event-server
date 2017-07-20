@@ -7,11 +7,13 @@ from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
 from app.models import db
-from app.models.ticket import Ticket
+from app.models.ticket import Ticket, TicketTag, ticket_tags_table
 from app.models.event import Event
+from app.models.access_code import AccessCode
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.models.ticket_holder import TicketHolder
 from app.api.helpers.db import safe_query
+from app.api.helpers.utilities import require_relationship
 
 
 class TicketSchema(Schema):
@@ -37,7 +39,7 @@ class TicketSchema(Schema):
                                       "sales-ends-at should be after sales-starts-at")
 
     @validates_schema
-    def validate_order_quantity(self, data):
+    def validate_quantity(self, data):
         if 'max_order' in data and 'min_order' in data:
             if data['max_order'] < data['min_order']:
                 raise UnprocessableEntity({'pointer': '/data/attributes/max-order'},
@@ -76,25 +78,48 @@ class TicketSchema(Schema):
                                related_view_kwargs={'ticket_id': '<id>'},
                                schema='TicketTagSchema',
                                type_='ticket-tag')
+    access_codes = Relationship(attribute='access_codes',
+                                self_view='v1.ticket_access_code',
+                                self_view_kwargs={'id': '<id>'},
+                                related_view='v1.access_code_list',
+                                related_view_kwargs={'ticket_id': '<id>'},
+                                schema='AccessCodeSchema',
+                                many=True,
+                                type_='access-code')
 
 
 class TicketList(ResourceList):
     """
     Create and List Tickets
     """
+    def before_post(self, args, kwargs, data):
+        require_relationship(['event'], data)
+
     def query(self, view_kwargs):
         query_ = self.session.query(Ticket)
+        if view_kwargs.get('ticket_tag_id'):
+            ticket_tag = safe_query(self, TicketTag, 'id', view_kwargs['ticket_tag_id'], 'ticket_tag_id')
+            query_ = query_.join(ticket_tags_table).filter_by(ticket_tag_id=ticket_tag.id)
         if view_kwargs.get('event_id'):
             event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
             query_ = query_.join(Event).filter(Event.id == event.id)
         elif view_kwargs.get('event_identifier'):
             event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
             query_ = query_.join(Event).filter(Event.id == event.id)
+        if view_kwargs.get('access_code_id'):
+            access_code = safe_query(self, AccessCode, 'id', view_kwargs['access_code_id'], 'access_code_id')
+            # access_code - ticket :: many-to-many relationship
+            query_ = Ticket.query.filter(Ticket.access_codes.any(id=access_code.id))
+
         return query_
 
     def before_create_object(self, data, view_kwargs):
-        if view_kwargs.get('event_id') is not None:
+        event = None
+        if view_kwargs.get('event_id'):
             event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+        elif view_kwargs.get('event_identifier'):
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+        if event:
             data['event_id'] = event.id
 
     view_kwargs = True
@@ -132,9 +157,20 @@ class TicketDetail(ResourceDetail):
                   }}
 
 
-class TicketRelationship(ResourceRelationship):
+class TicketRelationshipRequired(ResourceRelationship):
     """
-    Tickets Relationship
+    Tickets Relationship (Required)
+    """
+    decorators = (jwt_required,)
+    methods = ['GET', 'PATCH']
+    schema = TicketSchema
+    data_layer = {'session': db.session,
+                  'model': Ticket}
+
+
+class TicketRelationshipOptional(ResourceRelationship):
+    """
+    Tickets Relationship (Optional)
     """
     decorators = (jwt_required,)
     schema = TicketSchema

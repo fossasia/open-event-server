@@ -6,9 +6,8 @@ import pytz
 import flask_login as login
 from sqlalchemy import event
 
-from app.helpers.date_formatter import DateFormatter
-from app.helpers.helpers import get_count
-from app.helpers.versioning import clean_up_string, clean_html
+from app.api.helpers.db import get_count
+from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.email_notification import EmailNotification
 from app.models.user import ATTENDEE
 from app.models.custom_form import CustomForms, session_form_str, speaker_form_str
@@ -104,7 +103,9 @@ class Event(db.Model):
     ical_url = db.Column(db.String)
     xcal_url = db.Column(db.String)
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
-    discount_code = db.relationship('DiscountCode', backref='events')
+    discount_code_id = db.Column(db.Integer, db.ForeignKey(
+        'discount_codes.id', ondelete='CASCADE'))
+    discount_code = db.relationship('DiscountCode', backref='events', foreign_keys=[discount_code_id])
     event_type = db.relationship('EventType', backref='event', foreign_keys=[event_type_id])
     event_topic = db.relationship('EventTopic', backref='event', foreign_keys=[event_topic_id])
     event_sub_topic = db.relationship(
@@ -121,6 +122,7 @@ class Event(db.Model):
                  location_name=None,
                  description=None,
                  external_event_url=None,
+                 original_image_url=None,
                  thumbnail_image_url=None,
                  large_image_url=None,
                  icon_image_url=None,
@@ -158,7 +160,6 @@ class Event(db.Model):
                  xcal_url=None,
                  discount_code_id=None,
                  onsite_details=None,
-                 original_image_url=None,
                  is_tax_enabled=None,
                  is_sponsors_enabled=None):
 
@@ -249,34 +250,6 @@ class Event(db.Model):
     def get_staff_roles(self):
         """returns only roles which are staff i.e. not attendee"""
         return [role for role in self.roles if role.role.name != ATTENDEE]
-
-    @property
-    def serialize(self):
-        """Return object data in easily serializable format"""
-        return {
-            'id': self.id,
-            'name': self.name,
-            'logo': self.logo,
-            'begin': DateFormatter().format_date(self.starts_at),
-            'end': DateFormatter().format_date(self.ends_at),
-            'timezone': self.timezone,
-            'latitude': self.latitude,
-            'longitude': self.longitude,
-            'location_name': self.location_name,
-            'description': self.description,
-            'external_event_url': self.external_event_url,
-            'background_url': self.background_url,
-            'thumbnail': self.thumbnail,
-            'large': self.large,
-            'icon': self.icon,
-            'organizer_name': self.organizer_name,
-            'organizer_description': self.organizer_description,
-            'is_sessions_speakers_enabled': self.is_sessions_speakers_enabled,
-            'privacy': self.privacy,
-            'ticket_url': self.ticket_url,
-            'code_of_conduct': self.code_of_conduct,
-            'schedule_published_on': self.schedule_published_on
-        }
 
 
 # LISTENERS

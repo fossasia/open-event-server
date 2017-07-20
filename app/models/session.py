@@ -1,12 +1,12 @@
 import datetime
 
-from app.helpers.date_formatter import DateFormatter
-from app.helpers.versioning import clean_up_string, clean_html
+from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models import db
 
-speakers_sessions = db.Table('speakers_sessions', db.Column(
-    'speaker_id', db.Integer, db.ForeignKey('speaker.id', ondelete='CASCADE')), db.Column(
-    'session_id', db.Integer, db.ForeignKey('sessions.id', ondelete='CASCADE')))
+speakers_sessions = db.Table('speakers_sessions',
+                             db.Column('speaker_id', db.Integer, db.ForeignKey('speaker.id', ondelete='CASCADE')),
+                             db.Column('session_id', db.Integer, db.ForeignKey('sessions.id', ondelete='CASCADE')),
+                             db.PrimaryKeyConstraint('speaker_id', 'session_id'))
 
 
 class Session(db.Model):
@@ -21,25 +21,23 @@ class Session(db.Model):
     short_abstract = db.Column(db.Text)
     long_abstract = db.Column(db.Text)
     comments = db.Column(db.Text)
+    language = db.Column(db.String)
+    level = db.Column(db.String)
     starts_at = db.Column(db.DateTime(timezone=True), nullable=False)
     ends_at = db.Column(db.DateTime(timezone=True), nullable=False)
     track_id = db.Column(db.Integer, db.ForeignKey('tracks.id', ondelete='CASCADE'))
-    speakers = db.relationship(
-        'Speaker',
-        secondary=speakers_sessions,
-        backref=db.backref('sessions', lazy='dynamic'))
-    language = db.Column(db.String)
     microlocation_id = db.Column(db.Integer, db.ForeignKey('microlocations.id', ondelete='CASCADE'))
     session_type_id = db.Column(db.Integer, db.ForeignKey('session_types.id', ondelete='CASCADE'))
-    level = db.Column(db.String)
+    speakers = db.relationship('Speaker',
+                               secondary=speakers_sessions,
+                               backref=db.backref('sessions', lazy='dynamic'))
 
     slides_url = db.Column(db.String)
     video_url = db.Column(db.String)
     audio_url = db.Column(db.String)
     signup_url = db.Column(db.String)
 
-    event_id = db.Column(
-        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     state = db.Column(db.String, default="pending")
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow)
     deleted_at = db.Column(db.DateTime(timezone=True))
@@ -106,28 +104,6 @@ class Session(db.Model):
     @property
     def is_accepted(self):
         return self.state == "accepted"
-
-    @property
-    def serialize(self):
-        """Return object data in easily serializeable format"""
-        return {
-            'id': self.id,
-            'title': self.title,
-            'subtitle': self.subtitle,
-            'short_abstract': self.short_abstract,
-            'long_abstract': self.long_abstract,
-            'comments': self.comments,
-            'begin': DateFormatter().format_date(self.starts_at),
-            'end': DateFormatter().format_date(self.ends_at),
-            'track': self.track.id if self.track else None,
-            'speakers': [
-                {'id': speaker.id,
-                 'name': speaker.name} for speaker in self.speakers
-            ],
-            'level': self.level,
-            'microlocation': self.microlocation.id
-            if self.microlocation else None
-        }
 
     def __repr__(self):
         return '<Session %r>' % self.title

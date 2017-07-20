@@ -4,7 +4,7 @@ from datetime import datetime
 from pytz import timezone
 
 from app import current_app as app
-from app.helpers.data import save_to_db
+from app.api.helpers.db import save_to_db
 from app.models.event import Event
 from app.models.microlocation import Microlocation
 from app.models.session import Session
