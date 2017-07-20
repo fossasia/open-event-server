@@ -313,7 +313,7 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
                     break
 
             if not found:
-                return NotFoundError({'source': ''}, 'Object not found.~~').respond()
+                return NotFoundError({'source': ''}, 'Object not found.').respond()
 
             fetched = None
             if is_multiple(fetch):
@@ -327,7 +327,7 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         if fetched:
             kwargs[kwargs['fetch_as']] = fetched
         else:
-            return NotFoundError({'source': ''}, 'Object not found.~').respond()
+            return NotFoundError({'source': ''}, 'Object not found.').respond()
 
     if args[0] in permissions:
         return permissions[args[0]](view, view_args, view_kwargs, *args, **kwargs)

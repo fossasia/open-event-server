@@ -22,3 +22,4 @@ class TaxFactory(factory.alchemy.SQLAlchemyModelFactory):
     zip = "123456"
     invoice_footer = common.string_
     is_tax_included_in_price = False
+    event_id = 1
