@@ -14,7 +14,7 @@ from app.api.sessions import SessionList, SessionDetail, SessionRelationshipRequ
 from app.api.speakers import SpeakerList, SpeakerDetail, SpeakerRelationshipRequired, SpeakerRelationshipOptional
 from app.api.social_links import SocialLinkList, SocialLinkDetail, SocialLinkRelationship
 from app.api.sponsors import SponsorList, SponsorDetail, SponsorRelationship
-from app.api.tracks import TrackList, TrackDetail, TrackRelationshipOptional, TrackRelationshipRequired
+from app.api.tracks import TrackList, TrackListPost, TrackDetail, TrackRelationshipOptional, TrackRelationshipRequired
 from app.api.speakers_calls import SpeakersCallList, SpeakersCallDetail, SpeakersCallRelationship
 from app.api.event_invoices import EventInvoiceList, EventInvoiceDetail, EventInvoiceRelationshipRequired, \
     EventInvoiceRelationshipOptional
@@ -216,7 +216,8 @@ api.route(SponsorDetail, 'sponsor_detail', '/sponsors/<int:id>')
 api.route(SponsorRelationship, 'sponsor_event', '/sponsors/<int:id>/relationships/event')
 
 # tracks
-api.route(TrackList, 'track_list', '/tracks', '/events/<int:event_id>/tracks',
+api.route(TrackListPost, 'track_list_post', '/tracks')
+api.route(TrackList, 'track_list', '/events/<int:event_id>/tracks',
           '/events/<event_identifier>/tracks')
 api.route(TrackDetail, 'track_detail', '/tracks/<int:id>', '/sessions/<int:session_id>/track')
 api.route(TrackRelationshipOptional, 'track_sessions', '/tracks/<int:id>/relationships/sessions')
