@@ -27,7 +27,7 @@ from app.api.session_types import SessionTypeList, SessionTypeDetail, SessionTyp
 from app.api.event_copyright import EventCopyrightList, EventCopyrightDetail, EventCopyrightRelationship
 from app.api.pages import PageList, PageDetail
 from app.api.user_permission import UserPermissionList, UserPermissionDetail
-from app.api.tax import TaxList, TaxDetail, TaxRelationship
+from app.api.tax import TaxList, TaxListPost, TaxDetail, TaxRelationship
 from app.api.settings import SettingDetail
 from app.api.discount_codes import DiscountCodeList, DiscountCodeDetail, DiscountCodeRelationship
 from app.api.ticket_tags import TicketTagList, TicketTagDetail, TicketTagRelationshipOptional, \
@@ -273,6 +273,7 @@ api.route(CustomPlaceholderRelationship, 'custom_placeholder_event_sub_topic',
           '/custom-placeholders/<int:id>/relationships/event-sub-topic')
 
 # tax
+api.route(TaxListPost, 'tax_list_post', '/tax')
 api.route(TaxList, 'tax_list', '/tax', '/events/<int:event_id>/tax', '/events/<identifier>/tax')
 api.route(TaxDetail, 'tax_detail', '/tax/<int:id>', '/events/<int:event_id>/tax')
 api.route(TaxRelationship, 'tax_event', '/tax/<int:id>/relationships/event')

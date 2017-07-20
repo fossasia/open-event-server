@@ -4935,24 +4935,23 @@ Delete a single sponsor.
 # Group Tax
 Related to any tax related information that might be related with the tickets for the event.
 
-| Parameter | Description | Type | Required |
-|:----------|-------------|------|----------|
-| `country`  | Country of Tax | string | - |
-| `name` | Name of the Tax | string | **yes** |
-| `rate` | Tax charges rate | string | **yes** |
-| `tax-id` | A string based ID | string | **yes** |
-| `registered-company` | Registered Company Name | string | - |
-| `address` | Address of the comapany | string | - |
-| `city` | City of the company | string | - |
-| `state` | State of the company | string | - |
-| `zip` | Zip Code of the company | integer | - |
+| Parameter | Description | Type | Required | Public |
+|:----------|-------------|------|----------|--------|
+| `country`  | Country of Tax | string | - | - |
+| `name` | Name of the Tax | string | **yes** | **yes** |
+| `rate` | Tax charges rate | string | **yes** | **yes** |
+| `tax-id` | A string based ID | string | **yes** | - |
+| `registered-company` | Registered Company Name | string | - | - |
+| `address` | Address of the comapany | string | - | - |
+| `city` | City of the company | string | - | - |
+| `state` | State of the company | string | - | - |
+| `zip` | Zip Code of the company | integer | - | - |
 | `invoice-footer` | A text to add on the footer | string | - |
-| `is-invoice-sent` | Yes/No for Session accept/reject email | boolean (default: `false`) | - |
-| `is-tax-included` | Yes/No for Session accept/reject email | boolean (default: `false`) | - |
+| `is-invoice-sent` | Yes/No for Session accept/reject email | boolean (default: `false`) | - | - |
+| `is-tax-included` | Yes/No for Session accept/reject email | boolean (default: `false`) | - | **yes** |
 
-## Tax Collection [/v1/events/{event_identifier}/tax{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Tax Collection [/v1/tax{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `rate`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
@@ -4972,6 +4971,14 @@ Create a new tax using an event_id.
 
             {
               "data": {
+                "relationships":{
+                  "event":{
+                    "data":{
+                      "type":"event",
+                      "id":"1"
+                    }
+                  }
+                },
                 "attributes": {
                     "city": "example",
                     "zip": "123456",
