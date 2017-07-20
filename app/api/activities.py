@@ -33,7 +33,7 @@ class ActivityList(ResourceList):
     """
     schema = ActivitySchema
     methods = ['GET', ]
-    decorators = (api.has_permission('is_admin', methods="GET"),)
+    decorators = (api.has_permission('is_admin', ),)
     data_layer = {'session': db.session,
                   'model': Activity}
 
@@ -44,6 +44,6 @@ class ActivityDetail(ResourceDetail):
     """
     schema = ActivitySchema
     methods = ['GET', ]
-    decorators = (api.has_permission('is_admin', methods="GET"),)
+    decorators = (api.has_permission('is_admin', ),)
     data_layer = {'session': db.session,
                   'model': Activity}

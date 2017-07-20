@@ -16,8 +16,8 @@ from app.api.social_links import SocialLinkList, SocialLinkDetail, SocialLinkRel
 from app.api.sponsors import SponsorList, SponsorDetail, SponsorRelationship
 from app.api.tracks import TrackList, TrackListPost, TrackDetail, TrackRelationshipOptional, TrackRelationshipRequired
 from app.api.speakers_calls import SpeakersCallList, SpeakersCallDetail, SpeakersCallRelationship
-from app.api.event_invoices import EventInvoiceList, EventInvoiceDetail, EventInvoiceRelationshipRequired, \
-    EventInvoiceRelationshipOptional
+from app.api.event_invoices import EventInvoiceList, EventInvoiceListPost, EventInvoiceDetail, \
+    EventInvoiceRelationshipRequired, EventInvoiceRelationshipOptional
 from app.api.role_invites import RoleInviteList, RoleInviteDetail, RoleInviteRelationship
 from app.api.users_events_roles import UsersEventsRolesList, UsersEventsRolesDetail, UsersEventsRolesRelationship
 from app.api.image_sizes import ImageSizeList, ImageSizeDetail
@@ -278,10 +278,11 @@ api.route(TaxDetail, 'tax_detail', '/tax/<int:id>', '/events/<int:event_id>/tax'
 api.route(TaxRelationship, 'tax_event', '/tax/<int:id>/relationships/event')
 
 # event invoices
-api.route(EventInvoiceList, 'event_invoice_list', '/event-invoices', '/events/<int:event_id>/event-invoices',
+api.route(EventInvoiceListPost, '/event-invoices')
+api.route(EventInvoiceList, 'event_invoice_list', '/events/<int:event_id>/event-invoices',
           '/events/<event_identifier>/event-invoices', '/users/<int:user_id>/event-invoices')
 api.route(EventInvoiceDetail, 'event_invoice_detail', '/event-invoices/<int:id>')
-api.route(EventInvoiceRelationshipOptional, 'event_invoice_user',
+api.route(EventInvoiceRelationshipRequired, 'event_invoice_user',
           '/event-invoices/<int:id>/relationships/user')
 api.route(EventInvoiceRelationshipRequired, 'event_invoice_event',
           '/event-invoices/<int:id>/relationships/event')
