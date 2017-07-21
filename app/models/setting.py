@@ -115,6 +115,9 @@ class Setting(db.Model):
     android_app_url = db.Column(db.String)
     web_app_url = db.Column(db.String)
 
+    frontend_url = db.Column(db.String, default="http://eventyay.com")
+
+
     def __init__(self,
                  app_environment=Environment.PRODUCTION,
                  aws_key=None,
@@ -152,6 +155,7 @@ class Setting(db.Model):
                  smtp_password=None,
                  smtp_port=None,
                  smtp_encryption=None,
+                 frontend_url=None,
                  facebook_url=None, youtube_url=None, android_app_url=None, web_app_url=None):
 
         self.app_environment = app_environment
@@ -205,6 +209,7 @@ class Setting(db.Model):
         self.smtp_encryption = smtp_encryption
         self.email_from = email_from
         self.email_from_name = email_from_name
+        self.frontend_url = frontend_url
 
     def __repr__(self):
         return 'Settings'
