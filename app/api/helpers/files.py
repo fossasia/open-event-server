@@ -9,6 +9,7 @@ from flask import current_app
 from flask import current_app as app
 from sqlalchemy.orm.exc import NoResultFound
 
+from app import get_settings
 from app.models.image_size import ImageSizes
 from app.api.helpers.storage import UploadedFile, upload, generate_hash, UPLOAD_PATHS
 
@@ -160,3 +161,13 @@ def create_save_image_sizes(image_file, image_sizes_type, unique_identifier=None
     }
 
     return new_images
+
+
+def make_fe_url(settings=None, path=None):
+    """
+    Create URL for frontend
+    """
+    if settings is None:
+        settings = get_settings()
+    fe_host = settings['frontend_url']
+    return fe_host if path is None else (fe_host + path)

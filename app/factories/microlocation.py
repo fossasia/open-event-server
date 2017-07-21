@@ -15,3 +15,4 @@ class MicrolocationFactory(factory.alchemy.SQLAlchemyModelFactory):
     longitude = common.float_
     floor = common.int_
     room = common.string_
+    event_id = 1

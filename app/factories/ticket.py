@@ -23,3 +23,4 @@ class TicketFactory(factory.alchemy.SQLAlchemyModelFactory):
     is_hidden = True
     min_order = 0
     max_order = 10
+    event_id = 1
