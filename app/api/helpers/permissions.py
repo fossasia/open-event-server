@@ -95,12 +95,6 @@ def is_user_itself(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         user = current_identity
-        if 'email_notification_id' in kwargs:
-            try:
-                email_notification = EmailNotification.query.filter_by(id=kwargs['email_notification_id']).one()
-            except NoResultFound, e:
-                return NotFoundError({'parameter': 'email_notification_id'}, 'EmailNotification not found.').respond()
-            kwargs['id'] = email_notification.user_id
         if not user.is_admin and not user.is_super_admin and user.id != kwargs['id']:
             return ForbiddenError({'source': ''}, 'Access Forbidden').respond()
         return f(*args, **kwargs)
