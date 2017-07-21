@@ -241,7 +241,7 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
                     break
         elif kwargs['fetch'] in view_kwargs:
             fetched = view_kwargs[kwargs['fetch']]
-        elif not fetched:
+        if not fetched:
             model = kwargs['model']
             fetch = kwargs['fetch']
             fetch_as = kwargs['fetch_as']
