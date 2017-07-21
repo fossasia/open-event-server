@@ -8,8 +8,8 @@ from app.api.events import EventList, EventDetail, EventRelationship
 from app.api.event_types import EventTypeList, EventTypeDetail, EventTypeRelationship
 from app.api.event_topics import EventTopicList, EventTopicDetail, EventTopicRelationship
 from app.api.event_sub_topics import EventSubTopicList, EventSubTopicDetail, EventSubTopicRelationship
-from app.api.microlocations import MicrolocationList, MicrolocationDetail, MicrolocationRelationshipRequired, \
-    MicrolocationRelationshipOptional
+from app.api.microlocations import MicrolocationList, MicrolocationListPost, MicrolocationDetail, \
+    MicrolocationRelationshipRequired, MicrolocationRelationshipOptional
 from app.api.sessions import SessionList, SessionDetail, SessionRelationshipRequired, SessionRelationshipOptional
 from app.api.speakers import SpeakerList, SpeakerDetail, SpeakerRelationshipRequired, SpeakerRelationshipOptional
 from app.api.social_links import SocialLinkList, SocialLinkDetail, SocialLinkRelationship
@@ -37,8 +37,8 @@ from app.api.attendees import AttendeeList, AttendeeDetail, AttendeeRelationship
 from app.api.access_codes import AccessCodeList, AccessCodeDetail, AccessCodeRelationshipRequired, \
     AccessCodeRelationshipOptional
 from app.api.modules import ModuleDetail
-from app.api.custom_placeholders import CustomPlaceholderDetail, CustomPlaceholderList, CustomPlaceholderRelationship
-
+from app.api.custom_placeholders import CustomPlaceholderList, CustomPlaceholderDetail, CustomPlaceholderRelationship
+from app.api.activities import ActivityList, ActivityDetail
 # users
 api.route(UserList, 'user_list', '/users')
 api.route(UserDetail, 'user_detail', '/users/<int:id>', '/notifications/<int:notification_id>/user',
@@ -180,8 +180,9 @@ api.route(EventRelationship, 'event_attendees', '/events/<int:id>/relationships/
           '/events/<identifier>/relationships/attendees')
 
 # microlocations
-api.route(MicrolocationList, 'microlocation_list', '/microlocations', '/events/<int:event_id>/microlocations',
+api.route(MicrolocationList, 'microlocation_list', '/events/<int:event_id>/microlocations',
           '/events/<event_identifier>/microlocations')
+api.route(MicrolocationListPost, 'microlocation_list_post', '/microlocations')
 api.route(MicrolocationDetail, 'microlocation_detail', '/microlocations/<int:id>',
           '/sessions/<int:session_id>/microlocation')
 api.route(MicrolocationRelationshipOptional, 'microlocation_session',
@@ -346,3 +347,7 @@ api.route(AccessCodeRelationshipOptional, 'access_code_user',
           '/access-codes/<int:id>/relationships/user')
 api.route(AccessCodeRelationshipOptional, 'access_code_tickets',
           '/access-codes/<int:id>/relationships/tickets')
+
+# ticket_fees
+api.route(ActivityList, 'activity_list', '/activities')
+api.route(ActivityDetail, 'activity_detail', '/activities/<int:id>')
