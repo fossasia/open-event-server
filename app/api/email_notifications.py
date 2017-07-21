@@ -1,6 +1,7 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+from app.api.bootstrap import api
 
 from app.api.helpers.utilities import dasherize
 from app.models import db
@@ -30,6 +31,7 @@ class EmailNotificationSchema(Schema):
     session_accept_reject = fields.Integer(default=0, allow_none=True)
     session_schedule = fields.Integer(default=0, allow_none=True)
     after_ticket_purchase = fields.Integer(default=0, allow_none=True)
+    event_id = fields.Integer(allow_none=True)
     event = Relationship(attribute='event',
                          self_view='v1.email_notification_event',
                          self_view_kwargs={'id': '<id>'},
@@ -91,7 +93,8 @@ class EmailNotificationDetail(ResourceDetail):
     """
     Email notification detail by ID
     """
-    decorators = (is_user_itself,)
+    decorators = (api.has_permission('is_user_itself', fetch="user_id", fetch_as="id",
+                  model=EmailNotification),)
     schema = EmailNotificationSchema
     data_layer = {'session': db.session,
                   'model': EmailNotification}
