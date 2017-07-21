@@ -76,13 +76,13 @@ class AccessCodeSchema(Schema):
                          related_view_kwargs={'access_code_id': '<id>'},
                          schema='EventSchema',
                          type_='event')
-    user = Relationship(attribute='user',
-                        self_view='v1.access_code_user',
-                        self_view_kwargs={'id': '<id>'},
-                        related_view='v1.user_detail',
-                        related_view_kwargs={'access_code_id': '<id>'},
-                        schema='UserSchema',
-                        type_='user')
+    marketer = Relationship(attribute='user',
+                            self_view='v1.access_code_user',
+                            self_view_kwargs={'id': '<id>'},
+                            related_view='v1.user_detail',
+                            related_view_kwargs={'access_code_id': '<id>'},
+                            schema='UserSchema',
+                            type_='user')
     tickets = Relationship(attribute='tickets',
                            self_view='v1.access_code_tickets',
                            self_view_kwargs={'id': '<id>'},

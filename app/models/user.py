@@ -12,6 +12,8 @@ from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models import db
 from app.models.notification import Notification
+from app.models.access_code import AccessCode
+from app.models.discount_code import DiscountCode
 from app.models.permission import Permission
 from app.models.role import Role
 from app.models.service import Service
@@ -69,6 +71,8 @@ class User(db.Model):
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(pytz.utc))
     deleted_at = db.Column(db.DateTime(timezone=True))
     speaker = db.relationship('Speaker', backref="user")
+    access_codes = db.relationship('AccessCode', backref="user")
+    discount_codes = db.relationship('DiscountCode', backref="user")
 
     @hybrid_property
     def password(self):

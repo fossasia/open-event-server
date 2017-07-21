@@ -5,11 +5,12 @@ from marshmallow import validates_schema
 import marshmallow.validate as validate
 
 from app.api.helpers.utilities import dasherize
-from app.api.helpers.permissions import jwt_required
+from app.api.helpers.permissions import jwt_required, current_identity
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 from app.models import db
 from app.models.event import Event
+from app.models.user import User
 from app.models.discount_code import DiscountCode
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.db import safe_query
@@ -71,6 +72,13 @@ class DiscountCodeSchemaTicket(Schema):
                          related_view_kwargs={'discount_code_id': '<id>'},
                          schema='EventSchema',
                          type_='event')
+    marketer = Relationship(attribute='user',
+                            self_view='v1.discount_code_user',
+                            self_view_kwargs={'id': '<id>'},
+                            related_view='v1.user_detail',
+                            related_view_kwargs={'discount_code_id': '<id>'},
+                            schema='UserSchema',
+                            type_='user')
 
 
 class DiscountCodeSchemaEvent(Schema):
@@ -141,6 +149,10 @@ class DiscountCodeList(ResourceList):
         :return:
         """
         query_ = self.session.query(DiscountCode)
+        if view_kwargs.get('user_id'):
+            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            query_ = query_.join(User).filter(User.id == user.id)
+
         if view_kwargs.get('event_identifier'):
             event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
             view_kwargs['event_id'] = event.id
@@ -193,6 +205,7 @@ class DiscountCodeList(ResourceList):
         else:
             raise UnprocessableEntity({'source': ''},
                                       "Please check used_for and endpoint and verify your permission")
+        data['user_id'] = current_identity.id
 
     decorators = (jwt_required,)
     schema = DiscountCodeSchemaEvent
@@ -207,6 +220,37 @@ class DiscountCodeDetail(ResourceDetail):
     """
     Discount Code detail by id
     """
+    def before_get(self, args, kwargs):
+        if kwargs.get('event_identifier'):
+            event = safe_query(db, Event, 'identifier', kwargs['event_identifier'], 'event_identifier')
+            kwargs['event_id'] = event.id
+
+        if kwargs.get('event_id') and has_access('is_admin'):
+            event = safe_query(db, Event, 'id', kwargs['event_id'], 'event_id')
+            if event.discount_code_id:
+                kwargs['id'] = event.discount_code_id
+            else:
+                kwargs['id'] = None
+
+        if kwargs.get('id'):
+            discount = db.session.query(DiscountCode).filter_by(id=kwargs.get('id')).one()
+            if not discount:
+                raise ObjectNotFound({'parameter': '{id}'}, "DiscountCode:  not found")
+
+            if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=discount.event_id):
+                self.schema = DiscountCodeSchemaTicket
+
+            elif discount.used_for == 'event' and has_access('is_admin'):
+                self.schema = DiscountCodeSchemaEvent
+            else:
+                raise UnprocessableEntity({'source': ''},
+                                          "Please check used_for and endpoint and verify your permission")
+
+        else:
+            raise UnprocessableEntity({'source': ''},
+                                      "Please verify your permission. You must be admin to view event\
+                                      discount code details")
+
     def before_get_object(self, view_kwargs):
         """
         query method for Discount Code detail
@@ -289,7 +333,25 @@ class DiscountCodeDetail(ResourceDetail):
                     'before_update_object': before_update_object}}
 
 
-class DiscountCodeRelationship(ResourceRelationship):
+class DiscountCodeRelationshipRequired(ResourceRelationship):
+    """
+    Discount Code Relationship
+    """
+    def before_get(self, args, kwargs):
+        """
+        Method for get relationship
+        :param args:
+        :param kwargs:
+        :return:
+        """
+    decorators = (jwt_required,)
+    methods = ['GET', 'PATCH']
+    schema = DiscountCodeSchemaTicket
+    data_layer = {'session': db.session,
+                  'model': DiscountCode}
+
+
+class DiscountCodeRelationshipOptional(ResourceRelationship):
     """
     Discount Code Relationship
     """
