@@ -1,6 +1,7 @@
 import factory
 from app.models.ticket_holder import db, TicketHolder
 import app.factories.common as common
+from app.factories.event import EventFactoryBasic
 
 
 class AttendeeFactory(factory.alchemy.SQLAlchemyModelFactory):
@@ -8,6 +9,7 @@ class AttendeeFactory(factory.alchemy.SQLAlchemyModelFactory):
         model = TicketHolder
         sqlalchemy_session = db.session
 
+    event = factory.RelatedFactory(EventFactoryBasic)
     firstname = common.string_
     lastname = common.string_
     email = common.email_

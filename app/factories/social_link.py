@@ -12,3 +12,4 @@ class SocialLinkFactory(factory.alchemy.SQLAlchemyModelFactory):
     event = factory.RelatedFactory(EventFactoryBasic)
     name = common.string_
     link = common.socialUrl_('facebook')
+    event_id = 1

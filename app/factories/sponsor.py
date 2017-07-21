@@ -16,3 +16,4 @@ class SponsorFactory(factory.alchemy.SQLAlchemyModelFactory):
     level = 1
     logo_url = common.imageUrl_
     type = 'Gold'
+    event_id = 1

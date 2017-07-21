@@ -17,3 +17,4 @@ class EventCopyrightFactory(factory.alchemy.SQLAlchemyModelFactory):
     licence_url = common.url_
     year = 2007
     logo = common.url_
+    event_id = 1

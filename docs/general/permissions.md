@@ -56,6 +56,6 @@ Since they point to same resource and if you want to ensure that logged in user 
 **model=**[Notification, Order]
 Permission manager will always match indexes in both options i.e, first key of fetch_key_url will be only used for first key of model and so on.
 **fetch_key_url** is an optional parameter and even in multiple mode you can provide single value as well.  But if you provide multiple comma separated values make sure you provide all values i.e, no of values in **fetch_key_url** and **model** must be equal.
-
+Now **fetch** also accepts comma separated string. **Please note that the values in fetch string are checked as logical OR so if anyone gets the match then it stops there and use it.**
 
 DOCS: http://flask-rest-jsonapi.readthedocs.io/en/latest/permission.html
