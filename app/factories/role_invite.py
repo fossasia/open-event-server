@@ -14,3 +14,4 @@ class RoleInviteFactory(factory.alchemy.SQLAlchemyModelFactory):
     created_at = common.date_
     hash = common.string_
     status = common.string_
+    event_id = 1

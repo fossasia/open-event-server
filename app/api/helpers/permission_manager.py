@@ -1,10 +1,8 @@
-from functools import wraps
 from flask import current_app as app
 from flask_jwt import _jwt_required, current_identity
 from app.api.helpers.errors import ForbiddenError, NotFoundError
 from app.api.helpers.permissions import jwt_required
 from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi import JsonApiException
 from flask import request
 
 from app.models.event import Event
@@ -179,7 +177,8 @@ permissions = {
     'user_event': user_event,
     'accessible_role_based_events': accessible_role_based_events,
     'is_coorganizer_or_user_itself': is_coorganizer_or_user_itself,
-    'create_event': create_event
+    'create_event': create_event,
+    'is_user_itself': is_user_itself
 }
 
 
@@ -233,7 +232,16 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         view_kwargs['event_id'] = event.id
 
     if 'fetch' in kwargs:
-        if kwargs['fetch'] not in view_kwargs:
+        fetched = None
+        if is_multiple(kwargs['fetch']):
+            kwargs['fetch'] = [f.strip() for f in kwargs['fetch'].split(",")]
+            for f in kwargs['fetch']:
+               if f in view_kwargs:
+                    fetched = view_kwargs.get(f)
+                    break
+        elif kwargs['fetch'] in view_kwargs:
+            fetched = view_kwargs[kwargs['fetch']]
+        if not fetched:
             model = kwargs['model']
             fetch = kwargs['fetch']
             fetch_as = kwargs['fetch_as']
@@ -254,22 +262,35 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
             found = False
             for index, mod in enumerate(model):
                 if is_multiple(fetch_key_url):
-                    f_url = fetch_key_url[index]
+                    f_url = fetch_key_url[index].strip()
                 else:
                     f_url = fetch_key_url
+                if not view_kwargs.get(f_url):
+                    continue
                 try:
                     data = mod.query.filter(getattr(mod, fetch_key_model) == view_kwargs[f_url]).one()
                 except NoResultFound, e:
                     pass
                 else:
                     found = True
+                    break
 
             if not found:
-                return NotFoundError({'source': ''}, 'Object not found.').respond()
+                return NotFoundError({'source': ''}, 'Object not found.~~').respond()
 
-            kwargs[fetch_as] = getattr(data, fetch)
+            fetched = None
+            if is_multiple(fetch):
+                for f in fetch:
+                    if hasattr(data, f):
+                        fetched = getattr(data, f)
+                        break
+            else:
+                fetched = getattr(data, fetch) if hasattr(data, fetch) else None
+
+        if fetched:
+            kwargs[kwargs['fetch_as']] = fetched
         else:
-            kwargs[kwargs['fetch_as']] = view_kwargs[kwargs['fetch']]
+            return NotFoundError({'source': ''}, 'Object not found.~').respond()
 
     if args[0] in permissions:
         return permissions[args[0]](view, view_args, view_kwargs, *args, **kwargs)

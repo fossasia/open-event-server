@@ -46,6 +46,7 @@ from app.factories.users_events_role import UsersEventsRoleFactory
 from app.factories.custom_placeholder import CustomPlaceholderFactory
 from app.factories.user_permission import UserPermissionFactory
 from app.factories.email_notification import EmailNotificationFactory
+from app.factories.activities import ActivityFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -121,6 +122,7 @@ def skip_auth(transaction):
         user = UserFactory(email="email@example.com", password="password", is_verified=True)
         db.session.add(user)
         db.session.commit()
+        print('User Created')
 
 
 # ------------------------- Users -------------------------
@@ -395,9 +397,6 @@ def microlocation_post(transaction):
     :param transaction:
     :return:
     """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
-
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
@@ -1122,7 +1121,7 @@ def ticket_tag_delete(transaction):
 @hooks.before("Attendees > Attendees Collection > List All Attendees")
 def attendee_get_list(transaction):
     """
-    GET /attendees
+    GET /events/1/attendees
     :param transaction:
     :return:
     """
@@ -1135,11 +1134,12 @@ def attendee_get_list(transaction):
 @hooks.before("Attendees > Attendees Collection > Create Attendee")
 def attendee_post(transaction):
     """
-    POST /attendees
+    POST /events/1/attendees
     :param transaction:
     :return:
     """
-    pass
+    # Skip until docs for direct endpoints added
+    transaction['skip'] = True
 
 
 @hooks.before("Attendees > Attendee Details > Attendee Details")
@@ -1510,6 +1510,33 @@ def role_delete(transaction):
     with stash['app'].app_context():
         role = RoleFactory()
         db.session.add(role)
+        db.session.commit()
+
+
+# ------------------------- Activities -------------------------
+@hooks.before("Activity > Activity Collection > List all Activities")
+def activity_get_list(transaction):
+    """
+    GET /activities
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        activity = ActivityFactory()
+        db.session.add(activity)
+        db.session.commit()
+
+
+@hooks.before("Activity > Activity Details > Get Activity Details")
+def activity_get_detail(transaction):
+    """
+    GET /activities/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        activity = ActivityFactory()
+        db.session.add(activity)
         db.session.commit()
 
 

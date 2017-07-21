@@ -23,6 +23,8 @@ class TicketHolder(db.Model):
     order = db.relationship('Order', backref='ticket_holders')
     ticket = db.relationship('Ticket', backref='ticket_holders')
     is_checked_in = db.Column(db.Boolean, default=False)
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    event = db.relationship('Event', backref='ticket_holders')
 
     def __init__(self,
                  firstname=None,
@@ -35,7 +37,8 @@ class TicketHolder(db.Model):
                  ticket_id=None,
                  is_checked_in=False,
                  order_id=None,
-                 pdf_url=None):
+                 pdf_url=None,
+                 event_id=None):
         self.firstname = firstname
         self.lastname = lastname
         self.email = email
@@ -47,6 +50,7 @@ class TicketHolder(db.Model):
         self.order_id = order_id
         self.is_checked_in = is_checked_in
         self.pdf_url = pdf_url
+        self.event_id = event_id
 
     def __repr__(self):
         return '<TicketHolder %r>' % self.id
