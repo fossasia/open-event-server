@@ -9,6 +9,11 @@ from app.models.event import Event
 
 
 @jwt_required
+def auth_required(view, view_args, view_kwargs, *args, **kwargs):
+    return view(*view_args, **view_kwargs)
+
+
+@jwt_required
 def is_super_admin(view, view_args, view_kwargs, *args, **kwargs):
     """
     Permission function for things allowed exclusively to super admin.
@@ -176,6 +181,7 @@ permissions = {
     'is_moderator': is_moderator,
     'user_event': user_event,
     'accessible_role_based_events': accessible_role_based_events,
+    'auth_required': auth_required,
     'is_coorganizer_or_user_itself': is_coorganizer_or_user_itself,
     'create_event': create_event,
     'is_user_itself': is_user_itself

@@ -493,7 +493,7 @@ class EventRelationship(ResourceRelationship):
             event = safe_query(self, Event, 'identifier', view_kwargs['identifier'], 'identifier')
             view_kwargs['id'] = event.id
 
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('auth_required', methods="POST,PATCH,DELETE"),)
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
