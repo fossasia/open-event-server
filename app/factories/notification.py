@@ -14,4 +14,5 @@ class NotificationFactory(factory.alchemy.SQLAlchemyModelFactory):
     message = common.string_
     action = common.string_
     is_read = False
+    user_id = 1
 
