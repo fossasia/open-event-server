@@ -1,6 +1,7 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+from app.api.bootstrap import api
 
 from app.api.helpers.utilities import dasherize
 from app.models import db
@@ -87,7 +88,8 @@ class NotificationDetail(ResourceDetail):
     """
     Notification detail by ID
     """
-    decorators = (is_user_itself,)
+    decorators = (api.has_permission('is_user_itself', fetch="user_id", fetch_as="id",
+                  model=Notification),)
     schema = NotificationSchema
     data_layer = {'session': db.session,
                   'model': Notification}
