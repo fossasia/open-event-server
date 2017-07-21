@@ -1121,7 +1121,7 @@ def ticket_tag_delete(transaction):
 @hooks.before("Attendees > Attendees Collection > List All Attendees")
 def attendee_get_list(transaction):
     """
-    GET /attendees
+    GET /events/1/attendees
     :param transaction:
     :return:
     """
@@ -1134,11 +1134,12 @@ def attendee_get_list(transaction):
 @hooks.before("Attendees > Attendees Collection > Create Attendee")
 def attendee_post(transaction):
     """
-    POST /attendees
+    POST /events/1/attendees
     :param transaction:
     :return:
     """
-    pass
+    # Skip until docs for direct endpoints added
+    transaction['skip'] = True
 
 
 @hooks.before("Attendees > Attendee Details > Attendee Details")
