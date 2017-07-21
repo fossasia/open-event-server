@@ -1,6 +1,6 @@
 from app.api.bootstrap import api
 from app.api.ticket_fees import TicketFeeList, TicketFeeDetail
-from app.api.users import UserList, UserDetail, UserRelationship
+from app.api.users import UserList, UserDetail, UserRelationship, VerifyUser
 from app.api.notifications import NotificationList, NotificationDetail, NotificationRelationship
 from app.api.email_notifications import EmailNotificationList, EmailNotificationDetail, EmailNotificationRelationship
 from app.api.tickets import TicketList, TicketDetail, TicketRelationshipRequired, TicketRelationshipOptional
@@ -41,6 +41,7 @@ from app.api.custom_placeholders import CustomPlaceholderList, CustomPlaceholder
 from app.api.activities import ActivityList, ActivityDetail
 # users
 api.route(UserList, 'user_list', '/users')
+api.route(VerifyUser, 'verify_user', '/users/<int:user_id>/verify')
 api.route(UserDetail, 'user_detail', '/users/<int:id>', '/notifications/<int:notification_id>/user',
           '/event-invoices/<int:event_invoice_id>/user', '/users-events-roles/<int:users_events_role_id>/user',
           '/speakers/<int:speaker_id>/user', '/access-codes/<int:access_code_id>/user',

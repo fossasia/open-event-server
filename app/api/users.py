@@ -3,8 +3,10 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 
-from app.api.helpers.files import create_save_image_sizes
-from app.api.helpers.utilities import dasherize
+from app.api.data_layers.VerifyUserLayer import VerifyUserLayer
+from app.api.helpers.files import create_save_image_sizes, make_fe_url
+from app.api.helpers.mail import send_email_confirmation
+from app.api.helpers.utilities import dasherize, get_serializer, str_generator
 from app.models import db
 from app.models.user import User
 from app.models.notification import Notification
@@ -101,11 +103,16 @@ class UserList(ResourceList):
             raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")
 
     def after_create_object(self, user, data, view_kwargs):
+        s = get_serializer()
+        hash = s.dumps([user.email, str_generator()])
+        link = make_fe_url(path='/email/verify?token={token}'.format(token=hash))
+        send_email_confirmation(user.email, link)
         if data.get('original_image_url'):
             uploaded_images = create_save_image_sizes(data['original_image_url'], 'user', user.id)
             uploaded_images['small_image_url'] = uploaded_images['thumbnail_image_url']
             del uploaded_images['large_image_url']
             self.session.query(User).filter_by(id=user.id).update(uploaded_images)
+
 
     decorators = (api.has_permission('is_admin', methods="GET"),)
     schema = UserSchema
@@ -203,3 +210,28 @@ class UserRelationship(ResourceRelationship):
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User}
+
+
+class VerifyUserSchema(Schema):
+    class Meta:
+        """
+        Meta class for Verify User Schema
+        """
+        type_ = 'verify-user'
+        self_view = 'v1.verify_user'
+        self_view_kwargs = {'user_id': '<id>'}
+        inflect = dasherize
+
+    id = fields.Str(dump_only=True)
+    token = fields.Str(required=True)
+
+
+class VerifyUser(ResourceList):
+
+    methods = ['POST', ]
+    decorators = (jwt_required,)
+    schema = VerifyUserSchema
+    data_layer = {
+        'class': VerifyUserLayer,
+        'session': db.session
+    }
