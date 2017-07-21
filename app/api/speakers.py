@@ -11,6 +11,7 @@ from app.models.user import User
 from app.models.event import Event
 from app.api.helpers.db import safe_query
 from app.api.bootstrap import api
+from app.api.helpers.utilities import require_relationship
 
 
 class SpeakerSchema(Schema):
@@ -70,6 +71,7 @@ class SpeakerSchema(Schema):
                             related_view='v1.session_list',
                             related_view_kwargs={'speaker_id': '<id>'},
                             schema='SessionSchema',
+                            many=True,
                             type_='session')
 
 
@@ -77,6 +79,7 @@ class SpeakerList(ResourceList):
     """
     List and create speakers
     """
+
     def query(self, view_kwargs):
         """
         query method for speakers list class
@@ -107,6 +110,7 @@ class SpeakerList(ResourceList):
         :param data:
         :return:
         """
+        require_relationship(['event', 'user'], data)
         kwargs['user_id'] = current_identity.id
 
     def before_create_object(self, data, view_kwargs):
@@ -157,7 +161,18 @@ class SpeakerDetail(ResourceDetail):
                   'model': Speaker}
 
 
-class SpeakerRelationship(ResourceRelationship):
+class SpeakerRelationshipRequired(ResourceRelationship):
+    """
+    Speaker Relationship class
+    """
+    decorators = (jwt_required,)
+    methods = ['GET', 'PATCH']
+    schema = SpeakerSchema
+    data_layer = {'session': db.session,
+                  'model': Speaker}
+
+
+class SpeakerRelationshipOptional(ResourceRelationship):
     """
     Speaker Relationship class
     """

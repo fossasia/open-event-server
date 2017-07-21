@@ -12,6 +12,7 @@ from app.models.users_events_role import UsersEventsRoles
 from app.models.role_invite import RoleInvite
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.db import safe_query
+from app.api.helpers.utilities import require_relationship
 
 
 class UsersEventsRolesSchema(Schema):
@@ -56,6 +57,8 @@ class UsersEventsRolesList(ResourceList):
     """
     List and create user-events-roles
     """
+    def before_post(self, args, kwargs, data):
+        require_relationship(['event', 'role', 'user'], data)
 
     def query(self, view_kwargs):
         """
@@ -137,6 +140,7 @@ class UsersEventsRolesRelationship(ResourceRelationship):
     User-events-role Relationship
     """
     decorators = (jwt_required,)
+    methods = ['GET', 'PATCH']
     schema = UsersEventsRolesSchema
     data_layer = {'session': db.session,
                   'model': UsersEventsRoles}

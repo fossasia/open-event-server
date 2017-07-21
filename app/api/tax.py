@@ -10,6 +10,7 @@ from app.api.helpers.permissions import jwt_required
 from app.models.event import Event
 from app.models.tax import Tax
 from app.api.helpers.db import safe_query
+from app.api.helpers.utilities import require_relationship
 
 
 class TaxSchema(Schema):
@@ -43,6 +44,8 @@ class TaxSchema(Schema):
 
 
 class TaxList(ResourceList):
+    def before_post(self, args, kwargs, data):
+        require_relationship(['event'], data)
 
     def query(self, view_kwargs):
         query_ = self.session.query(Tax)
@@ -112,6 +115,7 @@ class TaxDetail(ResourceDetail):
 
 class TaxRelationship(ResourceRelationship):
     decorators = (jwt_required, )
+    methods = ['GET', 'PATCH']
     schema = TaxSchema
     data_layer = {'session': db.session,
                   'model': Tax}

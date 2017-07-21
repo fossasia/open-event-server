@@ -46,6 +46,7 @@ from app.factories.users_events_role import UsersEventsRoleFactory
 from app.factories.custom_placeholder import CustomPlaceholderFactory
 from app.factories.user_permission import UserPermissionFactory
 from app.factories.email_notification import EmailNotificationFactory
+from app.factories.activities import ActivityFactory
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -258,6 +259,9 @@ def copyright_post(transaction):
     :param transaction:
     :return:
     """
+    # Skip until docs for direct endpoints added
+    transaction['skip'] = True
+
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
@@ -324,6 +328,9 @@ def invoice_post(transaction):
     :param transaction:
     :return:
     """
+    # Skip until docs for direct endpoints added
+    transaction['skip'] = True
+
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
@@ -456,6 +463,9 @@ def session_post(transaction):
     :param transaction:
     :return:
     """
+    # Skip until docs for direct endpoints added
+    transaction['skip'] = True
+
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
@@ -486,6 +496,7 @@ def session_patch(transaction):
         session = SessionFactory()
         db.session.add(session)
         db.session.commit()
+
 
 @hooks.before("Sessions > Sessions Details > Delete Session")
 def session_delete(transaction):
@@ -521,6 +532,9 @@ def session_type_post(transaction):
     :param transaction:
     :return:
     """
+    # Skip until docs for direct endpoints added
+    transaction['skip'] = True
+
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
@@ -587,6 +601,9 @@ def speaker_post(transaction):
     :param transaction:
     :return:
     """
+    # Skip until docs for direct endpoints added
+    transaction['skip'] = True
+
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
@@ -653,6 +670,9 @@ def social_link_post(transaction):
     :param transaction:
     :return:
     """
+    # Skip until docs for direct endpoints added
+    transaction['skip'] = True
+
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
@@ -719,6 +739,9 @@ def speakers_call_post(transaction):
     :param transaction:
     :return:
     """
+    # Skip until docs for direct endpoints added
+    transaction['skip'] = True
+
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
@@ -785,6 +808,9 @@ def sponsor_post(transaction):
     :param transaction:
     :return:
     """
+    # Skip until docs for direct endpoints added
+    transaction['skip'] = True
+
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
@@ -811,6 +837,9 @@ def sponsor_patch(transaction):
     :param transaction:
     :return:
     """
+    # Skip until docs for direct endpoints added
+    transaction['skip'] = True
+
     with stash['app'].app_context():
         sponsor = SponsorFactory()
         db.session.add(sponsor)
@@ -838,6 +867,9 @@ def tax_post(transaction):
     :param transaction:
     :return:
     """
+    # Skip until docs for direct endpoints added
+    transaction['skip'] = True
+
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
@@ -904,6 +936,9 @@ def ticket_post(transaction):
     :param transaction:
     :return:
     """
+    # Skip until docs for direct endpoints added
+    transaction['skip'] = True
+
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
@@ -1034,6 +1069,9 @@ def ticket_tag_post(transaction):
     :param transaction:
     :return:
     """
+    # Skip until docs for direct endpoints added
+    transaction['skip'] = True
+
     with stash['app'].app_context():
         tickets = TicketFactory()
         db.session.add(tickets)
@@ -1163,6 +1201,9 @@ def track_post(transaction):
     :param transaction:
     :return:
     """
+    # Skip until docs for direct endpoints added
+    transaction['skip'] = True
+
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
@@ -1229,6 +1270,9 @@ def notification_post(transaction):
     :param transaction:
     :return:
     """
+    # Skip until docs for direct endpoints added
+    transaction['skip'] = True
+
     with stash['app'].app_context():
         user = UserFactory()
         db.session.add(user)
@@ -1468,6 +1512,33 @@ def role_delete(transaction):
         db.session.commit()
 
 
+# ------------------------- Activities -------------------------
+@hooks.before("Activity > Activity Collection > List all Activities")
+def activity_get_list(transaction):
+    """
+    GET /activities
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        activity = ActivityFactory()
+        db.session.add(activity)
+        db.session.commit()
+
+
+@hooks.before("Activity > Activity Details > Get Activity Details")
+def activity_get_detail(transaction):
+    """
+    GET /activities/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        activity = ActivityFactory()
+        db.session.add(activity)
+        db.session.commit()
+
+
 # ------------------------- Pages -------------------------
 @hooks.before("Pages > Page Collection > Page Sizes")
 def page_get_list(transaction):
@@ -1695,6 +1766,9 @@ def access_code_post(transaction):
     :param transaction:
     :return:
     """
+    # Skip until docs for direct endpoints added
+    transaction['skip'] = True
+
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
@@ -1761,6 +1835,9 @@ def role_invite_post(transaction):
     :param transaction:
     :return:
     """
+    # Skip until docs for direct endpoints added
+    transaction['skip'] = True
+
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
@@ -1827,6 +1904,9 @@ def users_events_role_post(transaction):
     :param transaction:
     :return:
     """
+    # Skip until docs for direct endpoints added
+    transaction['skip'] = True
+
     with stash['app'].app_context():
         event = EventFactoryBasic()
         role_invite = RoleInviteFactory()

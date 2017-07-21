@@ -14,6 +14,7 @@ from app.api.helpers.permissions import jwt_required
 from app.models.event import Event
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.models.speakers_call import SpeakersCall
+from app.api.helpers.utilities import require_relationship
 
 
 class SpeakersCallSchema(Schema):
@@ -62,6 +63,9 @@ class SpeakersCallList(ResourceList):
     """
     create Speakers Call
     """
+    def before_post(self, args, kwargs, data):
+        require_relationship(['event'], data)
+
     def before_create_object(self, data, view_kwargs):
         event = None
         if view_kwargs.get('event_id'):
@@ -136,5 +140,6 @@ class SpeakersCallRelationship(ResourceRelationship):
     """
     decorators = (jwt_required,)
     schema = SpeakersCallSchema
+    methods = ['GET', 'PATCH']
     data_layer = {'session': db.session,
                   'model': SpeakersCall}

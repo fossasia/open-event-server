@@ -9,6 +9,7 @@ from app.models.social_link import SocialLink
 from app.models.event import Event
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
+from app.api.helpers.utilities import require_relationship
 
 
 class SocialLinkSchema(Schema):
@@ -40,6 +41,9 @@ class SocialLinkList(ResourceList):
     """
     List and Create Social Links for an event
     """
+    def before_post(self, args, kwargs, data):
+        require_relationship(['event'], data)
+
     def query(self, view_kwargs):
         """
         query method for social link
@@ -98,6 +102,7 @@ class SocialLinkRelationship(ResourceRelationship):
     Social Link Relationship
     """
     decorators = (jwt_required, )
+    methods = ['GET', 'PATCH']
     schema = SocialLinkSchema
     data_layer = {'session': db.session,
                   'model': SocialLink}

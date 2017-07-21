@@ -3,7 +3,7 @@ import unittest
 from app import current_app as app
 from tests.unittests.utils import OpenEventTestCase
 from app.factories.event import EventFactoryBasic
-from app.api.helpers.db import save_to_db, safe_query
+from app.api.helpers.db import save_to_db, safe_query, get_or_create, get_count
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from app.models import db
 from app.models.event import Event
@@ -33,6 +33,23 @@ class TestDBHelperValidation(OpenEventTestCase):
         with app.test_request_context():
             self.assertRaises(ObjectNotFound, lambda: safe_query(db, Event, 'id', 1, 'event_id'))
 
+    def test_get_or_create(self):
+        with app.test_request_context():
+            event = EventFactoryBasic()
+            save_to_db(event)
+            obj, is_created = get_or_create(Event, name=event.name)
+            self.assertEqual(event.id, obj.id)
+            self.assertFalse(is_created)
+
+            obj, is_created = get_or_create(Event, name="new event", starts_at=event.starts_at, ends_at=event.ends_at)
+            self.assertNotEqual(event.id, obj.id)
+            self.assertTrue(is_created)
+
+    def test_get_count(self):
+        with app.test_request_context():
+            event = EventFactoryBasic()
+            save_to_db(event)
+            self.assertEqual(get_count(Event.query), 1)
 
 if __name__ == '__main__':
     unittest.main()

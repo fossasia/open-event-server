@@ -10,6 +10,7 @@ from app.models.role_invite import RoleInvite
 from app.api.bootstrap import api
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.db import safe_query
+from app.api.helpers.utilities import require_relationship
 
 
 class RoleInviteSchema(Schema):
@@ -52,6 +53,9 @@ class RoleInviteList(ResourceList):
     """
     List and create role invites
     """
+
+    def before_post(self, args, kwargs, data):
+        require_relationship(['event', 'role'], data)
 
     def query(self, view_kwargs):
         """
@@ -112,6 +116,7 @@ class RoleInviteRelationship(ResourceRelationship):
     Role invite Relationship
     """
     decorators = (jwt_required,)
+    methods = ['GET', 'PATCH']
     schema = RoleInviteSchema
     data_layer = {'session': db.session,
                   'model': RoleInvite}
