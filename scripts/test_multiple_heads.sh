@@ -1,6 +1,7 @@
 lines=`python manage.py db heads | wc | awk '{print $1}'`
 if [ $lines -ne 1 ]
 then
+    echo "Error: Multiple Migration Heads"
 	exit 1
 else
 	exit 0
