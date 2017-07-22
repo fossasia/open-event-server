@@ -18,7 +18,7 @@ class TicketFeesSchema(Schema):
         """
         Meta class for image_size Api Schema
         """
-        type_ = 'ticket-fees'
+        type_ = 'ticket-fee'
         self_view = 'v1.ticket_fee_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
