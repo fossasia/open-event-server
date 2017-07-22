@@ -7,10 +7,15 @@ from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.event import Event
 from app.models.role_invite import RoleInvite
+from app.models.users_events_role import UsersEventsRoles
+from app.models.role import Role
+from app.models.user import User
 from app.api.bootstrap import api
 from app.api.helpers.permissions import jwt_required
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.utilities import require_relationship
+from app.api.helpers.permission_manager import has_access
+from app.api.helpers.exceptions import UnprocessableEntity
 
 
 class RoleInviteSchema(Schema):
@@ -31,6 +36,8 @@ class RoleInviteSchema(Schema):
     email = fields.Str(required=True)
     hash = fields.Str(dump_only=True)
     created_at = fields.DateTime(dump_only=True, timezone=True)
+    role_name = fields.Str(validate=validate.OneOf(choices=["organizer", "coorganizer", "track_organizer",
+                           "moderator", "attendee", "registrar"]))
     status = fields.Str(validate=validate.OneOf(choices=["pending", "accepted", "declined"]),
                         default="pending")
     event = Relationship(attribute='event',
@@ -87,6 +94,16 @@ class RoleInviteList(ResourceList):
             event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
             data['event_id'] = event.id
 
+    def after_create_object(self, role_invite, data, view_kwargs):
+        user = User.query.filter_by(email=role_invite.email).first()
+        if 'status' in data and data['status'] == 'accepted':
+            role = Role.query.filter_by(name=role_invite.role_name).first()
+            event = Event.query.filter_by(id=role_invite.event_id).first()
+            uer = UsersEventsRoles.query.filter_by(user=user).filter_by(event=event).filter_by(role=role).first()
+            if not uer:
+                uer = UsersEventsRoles(user, event, role)
+                save_to_db(uer, 'Role Invite accepted')
+
     view_kwargs = True
     decorators = (api.has_permission('is_organizer', fetch='event_id', fetch_as="event_id", methods="POST",
                                      check=lambda a: a.get('event_id') or a.get('event_identifier')),)
@@ -95,7 +112,8 @@ class RoleInviteList(ResourceList):
                   'model': RoleInvite,
                   'methods': {
                       'query': query,
-                      'before_create_object': before_create_object
+                      'before_create_object': before_create_object,
+                      'after_create_object': after_create_object
                   }}
 
 
@@ -103,12 +121,39 @@ class RoleInviteDetail(ResourceDetail):
     """
     Role invite detail by id
     """
+    def before_update_object(self, role_invite, data, view_kwargs):
+        """
+        Method to edit object
+        :param role_invite:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
+        user = User.query.filter_by(email=role_invite.email).first()
+        if user:
+            if not has_access('is_user_itself', id=user.id):
+                raise UnprocessableEntity({'source': ''}, "Only users can edit their own status")
+        if not user and not has_access('is_organizer', event_id=role_invite.event_id):
+            raise UnprocessableEntity({'source': ''}, "User not registered")
+        if not has_access('is_organizer', event_id=role_invite.event_id) and (len(data.keys())>1 or 'status' not in data):
+            raise UnprocessableEntity({'source': ''}, "You can only change your status")
 
-    decorators = (api.has_permission('is_organizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
+    def after_update_object(self, role_invite, data, view_kwargs):
+        user = User.query.filter_by(email=role_invite.email).first()
+        if 'status' in data and data['status'] == 'accepted':
+            role = Role.query.filter_by(name=role_invite.role_name).first()
+            event = Event.query.filter_by(id=role_invite.event_id).first()
+            uer = UsersEventsRoles.query.filter_by(user=user).filter_by(event=event).filter_by(role=role).first()
+            if not uer:
+                uer = UsersEventsRoles(user, event, role)
+                save_to_db(uer, 'Role Invite accepted')
+    decorators = (api.has_permission('is_organizer', methods="DELETE", fetch="event_id", fetch_as="event_id",
                                      model=RoleInvite, check=lambda a: a.get('id') is not None),)
     schema = RoleInviteSchema
     data_layer = {'session': db.session,
-                  'model': RoleInvite}
+                  'model': RoleInvite,
+                  'methods': {'before_update_object': before_update_object,
+                              'after_update_object': after_update_object}}
 
 
 class RoleInviteRelationship(ResourceRelationship):

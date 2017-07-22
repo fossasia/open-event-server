@@ -42,7 +42,6 @@ from app.factories.role import RoleFactory
 from app.factories.module import ModuleFactory
 from app.factories.ticket_fee import TicketFeesFactory
 from app.factories.role_invite import RoleInviteFactory
-from app.factories.users_events_role import UsersEventsRoleFactory
 from app.factories.custom_placeholder import CustomPlaceholderFactory
 from app.factories.user_permission import UserPermissionFactory
 from app.factories.email_notification import EmailNotificationFactory
@@ -1878,83 +1877,6 @@ def role_invite_delete(transaction):
     with stash['app'].app_context():
         role_invite = RoleInviteFactory()
         db.session.add(role_invite)
-        db.session.commit()
-
-
-# ------------------------- Users Events Roles -------------------------
-@hooks.before("Users Events Roles > Users Events Roles Collection > List All Users Events Roles")
-def users_events_role_get_list(transaction):
-    """
-    GET /events/1/users-events-roles
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        users_events_role = UsersEventsRoleFactory()
-        db.session.add(users_events_role)
-        db.session.commit()
-
-
-@hooks.before("Users Events Roles > Users Events Roles Collection > Create Users Events Role")
-def users_events_role_post(transaction):
-    """
-    POST /events/1/users-events-roles
-    :param transaction:
-    :return:
-    """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
-
-    with stash['app'].app_context():
-        event = EventFactoryBasic()
-        role_invite = RoleInviteFactory()
-        role = RoleFactory()
-        user = UserFactory()
-        db.session.add(event)
-        db.session.add(role)
-        db.session.add(user)
-        role_invite.role_id = 1
-        role_invite.event_id = 1
-        db.session.add(role_invite)
-        db.session.commit()
-
-
-@hooks.before("Users Events Roles > Users Events Role Details > Users Events Role Details")
-def users_events_role_get_detail(transaction):
-    """
-    GET /users-events-roles/1
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        users_events_role = UsersEventsRoleFactory()
-        db.session.add(users_events_role)
-        db.session.commit()
-
-
-@hooks.before("Users Events Roles > Users Events Role Details > Update Users Events Role")
-def users_events_role_patch(transaction):
-    """
-    PATCH /users-events-roles/1
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        users_events_role = UsersEventsRoleFactory()
-        db.session.add(users_events_role)
-        db.session.commit()
-
-
-@hooks.before("Users Events Roles > Users Events Role Details > Delete Users Events Role")
-def users_events_role_delete(transaction):
-    """
-    DELETE /users-events-roles/1
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        users_events_role = UsersEventsRoleFactory()
-        db.session.add(users_events_role)
         db.session.commit()
 
 
