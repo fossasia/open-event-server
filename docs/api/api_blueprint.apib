@@ -2902,7 +2902,6 @@ Data related to all the microlocations for the various sessions of the event.
 
 ## Microlocation Collection [/v1/microlocations{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `floor`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
@@ -5782,15 +5781,16 @@ Related to ticket holders(attendees) of an event (free, paid, donation) to the e
 | `is-checked-in` | If the attendee is checked in | boolean | - |
 | `pdf-url` | pdf url of the Attendee | url | - |
 
-## Attendees Collection [/v1/attendees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Attendees Collection [/v1/events/{event_identifier}/attendees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
-    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
     + sort (optional, string, `city`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Attendees [GET]
-Get a list of attendees.
+Get a list of attendees of an event.
 
 + Request
 
@@ -5813,6 +5813,12 @@ Get a list of attendees.
                             "links": {
                                 "self": "/v1/attendees/1/relationships/ticket",
                                 "related": "/v1/attendees/1/ticket"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/attendees/1/relationships/event",
+                                "related": "/v1/attendees/1/event"
                             }
                         }
                     },
@@ -5838,13 +5844,13 @@ Get a list of attendees.
                 "version": "1.0"
             },
             "links": {
-                "self": "/v1/attendees"
+                "self": "/v1/events/21eb2c8f/attendees"
             }
         }
 
 
 ### Create Attendee [POST]
-Create a new attendee.
+Create a new attendee using an event_id.
 
 + Request (application/vnd.api+json)
 
@@ -5857,16 +5863,16 @@ Create a new attendee.
             {
               "data": {
                 "attributes": {
-                    "firstname": "John",
-                    "lastname": "Doe",
-                    "email": "johndoe@example.com",
-                    "address": "address",
-                    "city": "example",
-                    "state": "example",
-                    "country": "IN",
-                    "ticket-id": "12",
-                    "is-checked_in": "false",
-                    "pdf-url": "http://example.com"
+                  "firstname": "John",
+                  "lastname": "Doe",
+                  "email": "johndoe@example.com",
+                  "address": "address",
+                  "city": "example",
+                  "state": "example",
+                  "country": "IN",
+                  "ticket-id": "12",
+                  "is-checked-in": "false",
+                  "pdf-url": "http://example.com"
                 },
                 "type": "attendee"
               }
@@ -5882,6 +5888,12 @@ Create a new attendee.
                         "links": {
                             "self": "/v1/attendees/1/relationships/ticket",
                             "related": "/v1/attendees/1/ticket"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/attendees/1/relationships/event",
+                            "related": "/v1/attendees/1/event"
                         }
                     }
                 },
@@ -5988,7 +6000,7 @@ Update a single attendee by `id`.
                     "state": "example",
                     "country": "IN",
                     "ticket-id": "12",
-                    "is-checked_in": "true",
+                    "is-checked-in": "true",
                     "pdf-url": "http://example.com"
                 },
                 "type": "attendee",
@@ -6278,9 +6290,12 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
 | `color` | Color code of the track | string | **yes** |
 | `font-color` | Font Color of the track **(black/white: no user role - automatically updated)** | string | - |
 
-## Tracks Collection [/v1/events/{event_identifier}/tracks]
+## Tracks Collection [/v1/tracks{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to be fetched for the paginated response.
+    + sort (optional, string, `color`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html
 
 ### List All Tracks [GET]
 Get a list of Tracks.
@@ -6349,6 +6364,14 @@ Create a new track using an event_id.
 
             {
               "data": {
+                "relationships":{
+                  "event":{
+                    "data":{
+                      "type":"event",
+                      "id":"1"
+                    }
+                  }
+                },
                 "attributes": {
                   "name" : "Main Track",
                   "description": "description",
@@ -6361,7 +6384,39 @@ Create a new track using an event_id.
 + Response 201 (application/vnd.api+json)
 
         {
-            "data": "data"
+            "data": {
+                "relationships": {
+                  "event": {
+                    "links": {
+                      "self": "/v1/tracks/1/relationships/event",
+                      "related": "/v1/tracks/1/event"
+                    }
+                  },
+                  "sessions": {
+                    "links": {
+                      "self": "/v1/tracks/1/relationships/sessions",
+                      "related": "/v1/tracks/1/sessions"
+                    }
+                  }
+                },
+                "attributes": {
+                  "name" : "Main Track",
+                  "description": "description",
+                  "color": "#a04b4b",
+                  "font-color":"#ffffff"
+                },
+                "type": "track",
+                "id": "1",
+                "links": {
+                  "self": "/v1/tracks/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/tracks/1"
+            }
         }
 
 
@@ -6766,6 +6821,7 @@ To turn Email Notifications ON/OFF related to the various events, session approv
 | `session-accept-reject` | Session Accept/Reject email notification | integer | - |
 | `session-schedule` | Session schedule email notification | integer | - |
 | `after-ticket-purchase` | Email notification after ticket purchase | integer | - |
+| `event-id` | Event specific notification preferences | integer | - |
 
 ## Email Notifications Collection [/v1/users/{user_id}/email-notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -6813,7 +6869,8 @@ Get a list of Notifications.
                         "new-paper": 0,
                         "session-accept-reject": 0,
                         "session-schedule": 1,
-                        "after-ticket-purchase": 1
+                        "after-ticket-purchase": 1,
+                        "event-id": 1
                     },
                     "type": "email-notification",
                     "id": "1",
@@ -6843,20 +6900,21 @@ Create a new email notification with user_id.
 
             {
               "data": {
-                "relationships":{
-                  "event":{
-                    "data":{
-                      "type":"event",
-                      "id":"1"
-                    }
-                  }
-                },
                 "attributes": {
                   "next-event": 0,
                   "new-paper": 0,
                   "session-accept-reject": 0,
                   "session-schedule": 1,
-                  "after-ticket-purchase": 1
+                  "after-ticket-purchase": 1,
+                  "event-id": 1
+                },
+                "relationships": {
+                  "event": {
+                    "data": {
+                      "type": "event",
+                      "id": "1"
+                    }
+                  }
                 },
                 "type": "email-notification"
               }
@@ -6885,7 +6943,8 @@ Create a new email notification with user_id.
                     "new-paper": 0,
                     "session-accept-reject": 0,
                     "session-schedule": 1,
-                    "after-ticket-purchase": 1
+                    "after-ticket-purchase": 1,
+                    "event-id": 1
                 },
                 "type": "email-notification",
                 "id": "1",
@@ -6940,7 +6999,8 @@ Get a single email notification.
                     "new-paper": 0,
                     "session-accept-reject": 0,
                     "session-schedule": 1,
-                    "after-ticket-purchase": 1
+                    "after-ticket-purchase": 1,
+                    "event-id": 1
                 },
                 "type": "email-notification",
                 "id": "1",
@@ -6977,7 +7037,16 @@ Update a single email notification with `id`.
                   "new-paper": 0,
                   "session-accept-reject": 0,
                   "session-schedule": 1,
-                  "after-ticket-purchase": 1
+                  "after-ticket-purchase": 1,
+                  "event-id": 1
+                },
+                "relationships": {
+                  "event": {
+                    "data": {
+                      "type": "event",
+                      "id": "1"
+                    }
+                  }
                 },
                 "type": "email-notification",
                 "id": "1"
@@ -7007,7 +7076,8 @@ Update a single email notification with `id`.
                     "new-paper": 0,
                     "session-accept-reject": 0,
                     "session-schedule": 1,
-                    "after-ticket-purchase": 1
+                    "after-ticket-purchase": 1,
+                    "event-id": 1
                 },
                 "type": "email-notification",
                 "id": "1",
@@ -9298,6 +9368,7 @@ To create or modify any data of this data layer, you will need admin access. How
           }
         }
 
+
 ## User Permission Details [/v1/user-permissions/{id}]
 + Parameters
     + id: 3 (integer) - ID of the page in the form of an integer
@@ -9435,7 +9506,7 @@ To update or get any attribute of this data layer, you will need admin access. H
 |:----------|-------------|------|------------|
 | `aws-key`  | Amazon Web Services key | string | **yes** |
 | `aws-secret`  | Amazon Web Services secret | string | **yes** |
-| `aws-bucket` | Amazon Web Services bucket name  | string | **yes** |
+| `aws-bucket-name` | Amazon Web Services bucket name  | string | **yes** |
 | `aws-region` | Amazon Web Services region  | string | **yes** |
 
 (Google Storage)
@@ -9443,7 +9514,7 @@ To update or get any attribute of this data layer, you will need admin access. H
 |:----------|-------------|------|------------|
 | `gs-key`  | Google Storage key | string | **yes** |
 | `gs-secret`  | Google Storage Services secret | string | **yes** |
-| `gs-bucket` | Google Storage bucket name  | string | **yes** |
+| `gs-bucket-name` | Google Storage bucket name  | string | **yes** |
 
 **Social Login**
 (Google Auth)
@@ -9462,7 +9533,7 @@ To update or get any attribute of this data layer, you will need admin access. H
 | Parameter | Description | Type | Admin Only |
 |:----------|-------------|------|------------|
 | `tw-consumer-key`  | Twitter client id | string | **yes** |
-| `tw-consumer-secre`  | Twitter client secret | string | **yes** |
+| `tw-consumer-secret`  | Twitter client secret | string | **yes** |
 
 (Instagram)
 | Parameter | Description | Type | Admin Only |

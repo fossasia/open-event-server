@@ -15,3 +15,4 @@ class SpeakersCallFactory(factory.alchemy.SQLAlchemyModelFactory):
     ends_at = common.dateEnd_
     hash = common.string_
     privacy = "public"
+    event_id = 1

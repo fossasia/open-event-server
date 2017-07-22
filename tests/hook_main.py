@@ -122,6 +122,7 @@ def skip_auth(transaction):
         user = UserFactory(email="email@example.com", password="password", is_verified=True)
         db.session.add(user)
         db.session.commit()
+        print('User Created')
 
 
 # ------------------------- Users -------------------------
@@ -1117,7 +1118,7 @@ def ticket_tag_delete(transaction):
 @hooks.before("Attendees > Attendees Collection > List All Attendees")
 def attendee_get_list(transaction):
     """
-    GET /attendees
+    GET /events/1/attendees
     :param transaction:
     :return:
     """
@@ -1130,11 +1131,12 @@ def attendee_get_list(transaction):
 @hooks.before("Attendees > Attendees Collection > Create Attendee")
 def attendee_post(transaction):
     """
-    POST /attendees
+    POST /events/1/attendees
     :param transaction:
     :return:
     """
-    pass
+    # Skip until docs for direct endpoints added
+    transaction['skip'] = True
 
 
 @hooks.before("Attendees > Attendee Details > Attendee Details")
@@ -1197,9 +1199,6 @@ def track_post(transaction):
     :param transaction:
     :return:
     """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
-
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)

@@ -30,6 +30,7 @@ from app.models.access_code import AccessCode
 from app.models.user import User, ATTENDEE, ORGANIZER
 from app.models.users_events_role import UsersEventsRoles
 from app.models.role import Role
+from app.models.ticket_holder import TicketHolder
 from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.files import create_save_image_sizes
@@ -57,12 +58,21 @@ class EventSchema(Schema):
             if 'ends_at' not in data:
                 data['ends_at'] = event.ends_at
 
+        if 'starts_at' not in data or 'ends_at' not in data:
+            raise UnprocessableEntity({'pointer': '/data/attributes/date'},
+                                      "enter required fields starts-at/ends-at")
+
         if data['starts_at'] >= data['ends_at']:
             raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'},
                                       "ends-at should be after starts-at")
 
-    @validates_schema
-    def validate_timezone(self, data):
+    @validates_schema(pass_original=True)
+    def validate_timezone(self, data, original_data):
+        if 'id' in original_data['data']:
+            event = Event.query.filter_by(id=original_data['data']['id']).one()
+
+            if 'timezone' not in data:
+                data['timezone'] = event.timezone
         try:
             timezone(data['timezone'])
         except pytz.exceptions.UnknownTimeZoneError:
@@ -258,6 +268,13 @@ class EventSchema(Schema):
                                 related_view_kwargs={'event_id': '<id>'},
                                 schema='AccessCodeSchema',
                                 type_='access-code')
+    attendees = Relationship(attribute='attendees',
+                             self_view='v1.event_attendees',
+                             self_view_kwargs={'id': '<id>'},
+                             related_view='v1.attendee_list',
+                             related_view_kwargs={'event_id': '<id>'},
+                             schema='AttendeeSchema',
+                             type_='attendee')
 
 
 class EventList(ResourceList):
@@ -445,8 +462,15 @@ class EventDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
+        if view_kwargs.get('attendee_id'):
+            attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
+            if attendee.event_id is not None:
+                view_kwargs['id'] = attendee.event_id
+            else:
+                view_kwargs['id'] = None
 
     def before_update_object(self, event, data, view_kwargs):
+
         if data.get('original_image_url') and data['original_image_url'] != event.original_image_url:
             uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
             data['original_image_url'] = uploaded_images['original_image_url']
@@ -479,7 +503,7 @@ class EventRelationship(ResourceRelationship):
             event = safe_query(self, Event, 'identifier', view_kwargs['identifier'], 'identifier')
             view_kwargs['id'] = event.id
 
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('auth_required', methods="POST,PATCH,DELETE"),)
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
