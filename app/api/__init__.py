@@ -40,7 +40,7 @@ from app.api.discount_codes import DiscountCodeList, DiscountCodeDetail, Discoun
 from app.api.ticket_tags import TicketTagList, TicketTagListPost, TicketTagDetail, TicketTagRelationshipOptional, \
     TicketTagRelationshipRequired
 from app.api.attendees import AttendeeList, AttendeeDetail, AttendeeRelationshipOptional, \
-    AttendeeRelationshipRequired
+    AttendeeRelationshipRequired, AttendeeListPost
 from app.api.access_codes import AccessCodeList, AccessCodeDetail, AccessCodeRelationshipRequired, \
     AccessCodeRelationshipOptional
 from app.api.custom_forms import CustomFormList, CustomFormDetail, CustomFormRelationshipRequired
@@ -116,6 +116,7 @@ api.route(TicketDetail, 'ticket_detail', '/tickets/<int:id>', '/attendees/<int:a
 api.route(TicketRelationshipRequired, 'ticket_event', '/tickets/<int:id>/relationships/event')
 api.route(TicketRelationshipOptional, 'ticket_ticket_tag', '/tickets/<int:id>/relationships/ticket-tags')
 api.route(TicketRelationshipOptional, 'ticket_access_code', '/tickets/<int:id>/relationships/access-codes')
+api.route(TicketRelationshipOptional, 'ticket_attendees', '/tickets/<int:id>/relationships/attendees')
 
 # ticket_tags
 api.route(TicketTagListPost, 'ticket_tag_list_post', '/ticket-tags')
@@ -310,7 +311,8 @@ api.route(DiscountCodeRelationshipOptional, 'discount_code_user',
           '/discount-codes/<int:id>/relationships/marketer')
 
 # attendees
-api.route(AttendeeList, 'attendee_list', '/attendees', '/events/<int:event_id>/attendees',
+api.route(AttendeeListPost, 'attendee_list_post', '/attendees')
+api.route(AttendeeList, 'attendee_list', '/events/<int:event_id>/attendees',
           '/events/<event_identifier>/attendees', '/orders/<int:order_id>/tickets/<int:ticket_id>/attendees')
 api.route(AttendeeDetail, 'attendee_detail', '/attendees/<int:id>')
 api.route(AttendeeRelationshipOptional, 'attendee_ticket', '/attendees/<int:id>/relationships/ticket')

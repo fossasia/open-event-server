@@ -194,6 +194,26 @@ def is_registrar(view, view_args, view_kwargs, *args, **kwargs):
 
 
 @jwt_required
+def is_registrar_or_user_itself(view, view_args, view_kwargs, *args, **kwargs):
+    """
+    Allows admin and super admin access to any resource irrespective of id.
+    Otherwise the user can only access his/her resource.
+    """
+    user = current_identity
+    if user.is_admin or user.is_super_admin or user.id == kwargs['user_id']:
+        return view(*view_args, **view_kwargs)
+
+    if user.is_staff:
+        return view(*view_args, **view_kwargs)
+
+    event_id = kwargs['event_id']
+    if user.is_registrar(event_id) or user.is_organizer(event_id) or user.is_coorganizer(event_id):
+        return view(*view_args, **view_kwargs)
+
+    return ForbiddenError({'source': ''}, 'Registrar access is required.').respond()
+
+
+@jwt_required
 def is_track_organizer(view, view_args, view_kwargs, *args, **kwargs):
     """
     Allows Organizer, Co-organizer and Track Organizer to access the resource(s).
@@ -227,6 +247,7 @@ def user_event(view, view_args, view_kwargs, *args, **kwargs):
     user = current_identity
     view_kwargs['user_id'] = user.id
     return view(*view_args, **view_kwargs)
+
 
 
 def accessible_role_based_events(view, view_args, view_kwargs, *args, **kwargs):
@@ -272,7 +293,8 @@ permissions = {
     'is_coorganizer_or_user_itself': is_coorganizer_or_user_itself,
     'create_event': create_event,
     'is_user_itself': is_user_itself,
-    'is_coorganizer_endpoint_related_to_event': is_coorganizer_endpoint_related_to_event
+    'is_coorganizer_endpoint_related_to_event': is_coorganizer_endpoint_related_to_event,
+    'is_registrar_or_user_itself': is_registrar_or_user_itself
 }
 
 

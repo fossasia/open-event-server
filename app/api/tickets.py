@@ -87,6 +87,14 @@ class TicketSchema(Schema):
                                 schema='AccessCodeSchema',
                                 many=True,
                                 type_='access-code')
+    attendees = Relationship(attribute='ticket_holders',
+                             self_view='v1.ticket_attendees',
+                             self_view_kwargs={'id': '<id>'},
+                             related_view='v1.attendee_list_post',
+                             related_view_kwargs={'ticket_id': '<id>'},
+                             schema='AttendeeSchema',
+                             many=True,
+                             type_='attendee')
 
 
 class TicketListPost(ResourceList):
@@ -95,7 +103,6 @@ class TicketListPost(ResourceList):
     """
     def before_post(self, args, kwargs, data):
         require_relationship(['event'], data)
-
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ObjectNotFound({'parameter': 'event_id'},
                                  "Event: {} not found".format(data['event_id']))
@@ -110,8 +117,6 @@ class TicketList(ResourceList):
     """
     List Tickets based on different params
     """
-    def before_post(self, args, kwargs, data):
-        require_relationship(['event'], data)
 
     def query(self, view_kwargs):
         query_ = self.session.query(Ticket)
@@ -128,6 +133,9 @@ class TicketList(ResourceList):
 
     view_kwargs = True
     methods = ['GET', ]
+    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
+                  fetch_as="event_id", model=Ticket, methods="POST",
+                  check=lambda a: a.get('event_id') or a.get('event_identifier')),)
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket,
@@ -140,6 +148,7 @@ class TicketDetail(ResourceDetail):
     """
     Ticket Resource
     """
+
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('attendee_id') is not None:
             attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
@@ -149,7 +158,7 @@ class TicketDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
     decorators = (api.has_permission('is_coorganizer', fetch='event_id',
-                  fetch_as="event_id", model=Ticket, methods="PATCH,DELETE"), )
+                  fetch_as="event_id", model=Ticket, methods="PATCH,DELETE"),)
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket,
