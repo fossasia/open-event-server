@@ -58,12 +58,21 @@ class EventSchema(Schema):
             if 'ends_at' not in data:
                 data['ends_at'] = event.ends_at
 
+        if 'starts_at' not in data or 'ends_at' not in data:
+            raise UnprocessableEntity({'pointer': '/data/attributes/date'},
+                                      "enter required fields starts-at/ends-at")
+
         if data['starts_at'] >= data['ends_at']:
             raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'},
                                       "ends-at should be after starts-at")
 
-    @validates_schema
-    def validate_timezone(self, data):
+    @validates_schema(pass_original=True)
+    def validate_timezone(self, data, original_data):
+        if 'id' in original_data['data']:
+            event = Event.query.filter_by(id=original_data['data']['id']).one()
+
+            if 'timezone' not in data:
+                data['timezone'] = event.timezone
         try:
             timezone(data['timezone'])
         except pytz.exceptions.UnknownTimeZoneError:
@@ -461,6 +470,7 @@ class EventDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
     def before_update_object(self, event, data, view_kwargs):
+
         if data.get('original_image_url') and data['original_image_url'] != event.original_image_url:
             uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
             data['original_image_url'] = uploaded_images['original_image_url']
