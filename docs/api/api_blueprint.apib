@@ -11046,7 +11046,7 @@ Related to ticket holders(attendees) of an event (free, paid, donation) to the e
 | `is-checked-in` | If the attendee is checked in | boolean | - |
 | `pdf-url` | pdf url of the Attendee | url | - |
 
-## Attendees Collection [/v1/events/{event_identifier}/attendees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Attendees Collection [/v1/attendees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -11128,63 +11128,69 @@ Create a new attendee using an event_id.
             {
               "data": {
                 "attributes": {
-                  "firstname": "John",
-                  "lastname": "Doe",
-                  "email": "johndoe@example.com",
-                  "address": "address",
-                  "city": "example",
-                  "state": "example",
-                  "country": "IN",
-                  "ticket-id": "12",
-                  "is-checked-in": "false",
-                  "pdf-url": "http://example.com"
+                  "firstname": "Open Event User",
+                  "pdf_url": "http://example.com",
                 },
-                "type": "attendee"
+                "type": "attendee",
+                "relationships": {
+                  "event": {
+                    "data": {
+                      "id": "1",
+                      "type": "event"
+                    }
+                  },
+                  "ticket": {
+                    "data": {
+                      "id": "1",
+                      "type": "ticket"
+                    }
+                  }
+                }
               }
             }
 
 
 + Response 201 (application/vnd.api+json)
 
-        {
-            "data": {
-                "relationships": {
-                    "ticket": {
-                        "links": {
-                            "self": "/v1/attendees/1/relationships/ticket",
-                            "related": "/v1/attendees/1/ticket"
-                        }
-                    },
-                    "event": {
-                        "links": {
-                            "self": "/v1/attendees/1/relationships/event",
-                            "related": "/v1/attendees/1/event"
-                        }
-                    }
-                },
-                "attributes": {
-                    "city": "example",
-                    "firstname": "John",
-                    "lastname": "Doe",
-                    "is-checked-in": false,
-                    "state": "example",
-                    "address": "address",
-                    "pdf-url": "http://example.com",
-                    "country": "IN",
-                    "email": "johndoe@example.com"
-                },
-                "type": "attendee",
-                "id": "1",
+         {
+          "data": {
+            "relationships": {
+              "ticket": {
                 "links": {
-                    "self": "/v1/attendees/1"
+                  "self": "/v1/attendees/1/relationships/ticket",
+                  "related": "/v1/attendees/1/ticket"
                 }
+              },
+              "event": {
+                "links": {
+                  "self": "/v1/attendees/1/relationships/event",
+                  "related": "/v1/attendees/1/event"
+                }
+              }
             },
-            "jsonapi": {
-                "version": "1.0"
+            "attributes": {
+              "city": null,
+              "firstname": "Open Event User",
+              "lastname": null,
+              "is-checked-in": false,
+              "state": null,
+              "address": null,
+              "pdf-url": "http://example.com",
+              "country": null,
+              "email": null
             },
+            "type": "attendee",
+            "id": "1",
             "links": {
-                "self": "/v1/attendees/1"
+              "self": "/v1/attendees/1"
             }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/attendees/1"
+          }
         }
 
 
