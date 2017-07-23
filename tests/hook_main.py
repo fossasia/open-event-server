@@ -25,6 +25,7 @@ from app.factories.setting import SettingFactory
 from app.factories.event_type import EventTypeFactory
 from app.factories.discount_code import DiscountCodeFactory
 from app.factories.access_code import AccessCodeFactory
+from app.factories.custom_form import CustomFormFactory
 from app.factories.event_topic import EventTopicFactory
 from app.factories.event_invoice import EventInvoiceFactory
 from app.factories.event_sub_topic import EventSubTopicFactory
@@ -42,7 +43,6 @@ from app.factories.role import RoleFactory
 from app.factories.module import ModuleFactory
 from app.factories.ticket_fee import TicketFeesFactory
 from app.factories.role_invite import RoleInviteFactory
-from app.factories.users_events_role import UsersEventsRoleFactory
 from app.factories.custom_placeholder import CustomPlaceholderFactory
 from app.factories.user_permission import UserPermissionFactory
 from app.factories.email_notification import EmailNotificationFactory
@@ -328,9 +328,6 @@ def invoice_post(transaction):
     :param transaction:
     :return:
     """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
-
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
@@ -1797,7 +1794,7 @@ def access_code_patch(transaction):
 
 
 @hooks.before("Access Codes > Access Code Detail > Delete Access Code")
-def access_delete(transaction):
+def access_code_delete(transaction):
     """
     DELETE /access-codes/1
     :param transaction:
@@ -1806,6 +1803,69 @@ def access_delete(transaction):
     with stash['app'].app_context():
         access_code = AccessCodeFactory()
         db.session.add(access_code)
+        db.session.commit()
+
+
+# ------------------------- Custom Forms -------------------------
+@hooks.before("Custom Forms > Custom Form Collection > List All Custom Forms")
+def custom_form_get_list(transaction):
+    """
+    GET /events/1/custom-forms
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        custom_form = CustomFormFactory()
+        db.session.add(custom_form)
+        db.session.commit()
+
+
+@hooks.before("Custom Forms > Custom Form Collection > Create Custom Form")
+def custom_form_post(transaction):
+    """
+    POST /events/1/custom-forms
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Custom Forms > Custom Form Detail > Custom Form Detail")
+def custom_form_get_detail(transaction):
+    """
+    GET /custom-forms/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        custom_form = CustomFormFactory()
+        db.session.add(custom_form)
+        db.session.commit()
+
+
+@hooks.before("Custom Forms > Custom Form Detail > Update Custom Form")
+def custom_form_patch(transaction):
+    """
+    PATCH /custom-forms/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        custom_form = CustomFormFactory()
+        db.session.add(custom_form)
+        db.session.commit()
+
+
+@hooks.before("Custom Forms > Custom Form Detail > Delete Custom Form")
+def custom_form_delete(transaction):
+    """
+    DELETE /custom-forms/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        custom_form = CustomFormFactory()
+        db.session.add(custom_form)
         db.session.commit()
 
 
@@ -1875,83 +1935,6 @@ def role_invite_delete(transaction):
     with stash['app'].app_context():
         role_invite = RoleInviteFactory()
         db.session.add(role_invite)
-        db.session.commit()
-
-
-# ------------------------- Users Events Roles -------------------------
-@hooks.before("Users Events Roles > Users Events Roles Collection > List All Users Events Roles")
-def users_events_role_get_list(transaction):
-    """
-    GET /events/1/users-events-roles
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        users_events_role = UsersEventsRoleFactory()
-        db.session.add(users_events_role)
-        db.session.commit()
-
-
-@hooks.before("Users Events Roles > Users Events Roles Collection > Create Users Events Role")
-def users_events_role_post(transaction):
-    """
-    POST /events/1/users-events-roles
-    :param transaction:
-    :return:
-    """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
-
-    with stash['app'].app_context():
-        event = EventFactoryBasic()
-        role_invite = RoleInviteFactory()
-        role = RoleFactory()
-        user = UserFactory()
-        db.session.add(event)
-        db.session.add(role)
-        db.session.add(user)
-        role_invite.role_id = 1
-        role_invite.event_id = 1
-        db.session.add(role_invite)
-        db.session.commit()
-
-
-@hooks.before("Users Events Roles > Users Events Role Details > Users Events Role Details")
-def users_events_role_get_detail(transaction):
-    """
-    GET /users-events-roles/1
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        users_events_role = UsersEventsRoleFactory()
-        db.session.add(users_events_role)
-        db.session.commit()
-
-
-@hooks.before("Users Events Roles > Users Events Role Details > Update Users Events Role")
-def users_events_role_patch(transaction):
-    """
-    PATCH /users-events-roles/1
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        users_events_role = UsersEventsRoleFactory()
-        db.session.add(users_events_role)
-        db.session.commit()
-
-
-@hooks.before("Users Events Roles > Users Events Role Details > Delete Users Events Role")
-def users_events_role_delete(transaction):
-    """
-    DELETE /users-events-roles/1
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        users_events_role = UsersEventsRoleFactory()
-        db.session.add(users_events_role)
         db.session.commit()
 
 

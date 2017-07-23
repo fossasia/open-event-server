@@ -106,10 +106,8 @@ class User(db.Model):
         :param email:
         :return:
         """
-        if self._email is None:
-            self._email = email
-        else:
-            raise AttributeError("Email cannot be modified")
+        self._email = email
+        self.is_verified = False
 
     # User Permissions
     def can_publish_event(self):

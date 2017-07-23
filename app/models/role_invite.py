@@ -14,6 +14,7 @@ class RoleInvite(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     email = db.Column(db.String, nullable=False)
+    role_name = db.Column(db.String, nullable=False)
 
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', back_populates='role_invites')
@@ -25,8 +26,9 @@ class RoleInvite(db.Model):
     created_at = db.Column(db.DateTime(timezone=True))
     status = db.Column(db.String, default="pending")
 
-    def __init__(self, email=None, event_id=None, role_id=None, created_at=None, status="pending", hash=None):
+    def __init__(self, email=None, role_name=None, event_id=None, role_id=None, created_at=None, status="pending", hash=None):
         self.email = email
+        self.role_name = role_name
         self.event_id = event_id
         self.role_id = role_id
         self.created_at = created_at

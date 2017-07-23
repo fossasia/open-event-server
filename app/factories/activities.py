@@ -10,4 +10,4 @@ class ActivityFactory(factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session = db.session
 
     actor = common.string_
-    action = common.url_
+    action = common.string_
