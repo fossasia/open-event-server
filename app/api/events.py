@@ -24,6 +24,7 @@ from app.models.discount_code import DiscountCode
 from app.models.event_invoice import EventInvoice
 from app.models.speakers_call import SpeakersCall
 from app.models.role_invite import RoleInvite
+from app.models.custom_form import CustomForms
 from app.models.users_events_role import UsersEventsRoles
 from app.models.ticket import TicketTag
 from app.models.access_code import AccessCode
@@ -275,6 +276,13 @@ class EventSchema(Schema):
                              related_view_kwargs={'event_id': '<id>'},
                              schema='AttendeeSchema',
                              type_='attendee')
+    custom_forms = Relationship(attribute='custom_form',
+                                self_view='v1.event_custom_forms',
+                                self_view_kwargs={'id': '<id>'},
+                                related_view='v1.custom_form_list',
+                                related_view_kwargs={'event_id': '<id>'},
+                                schema='CustomFormSchema',
+                                type_='custom-form')
 
 
 class EventList(ResourceList):
@@ -287,18 +295,20 @@ class EventList(ResourceList):
                 filter(Role.name != ATTENDEE)
 
         if view_kwargs.get('event_type_id') and 'GET' in request.method:
-            query_ = self.session.query(Event).filter(getattr(Event, 'event_type_id') == view_kwargs['event_type_id'])
+            query_ = self.session.query(Event).filter(
+                getattr(Event, 'event_type_id') == view_kwargs['event_type_id'])
 
         if view_kwargs.get('event_topic_id') and 'GET' in request.method:
-            query_ = self.session.query(Event).filter(getattr(Event, 'event_topic_id') == view_kwargs['event_topic_id'])
+            query_ = self.session.query(Event).filter(
+                getattr(Event, 'event_topic_id') == view_kwargs['event_topic_id'])
 
         if view_kwargs.get('event_sub_topic_id') and 'GET' in request.method:
-            query_ = self.session.query(Event).filter(getattr(Event,
-              'event_sub_topic_id') == view_kwargs['event_sub_topic_id'])
+            query_ = self.session.query(Event).filter(
+                getattr(Event, 'event_sub_topic_id') == view_kwargs['event_sub_topic_id'])
 
         if view_kwargs.get('discount_code_id') and 'GET' in request.method:
-            query_ = self.session.query(Event).filter(getattr(Event,
-              'discount_code_id') == view_kwargs['discount_code_id'])
+            query_ = self.session.query(Event).filter(
+                getattr(Event, 'discount_code_id') == view_kwargs['discount_code_id'])
 
         return query_
 
@@ -414,7 +424,7 @@ class EventDetail(ResourceDetail):
 
         if view_kwargs.get('users_events_role_id') is not None:
             users_events_role = safe_query(self, UsersEventsRoles, 'id', view_kwargs['users_events_role_id'],
-            'users_events_role_id')
+                                           'users_events_role_id')
             if users_events_role.event_id is not None:
                 view_kwargs['id'] = users_events_role.event_id
 
@@ -466,6 +476,11 @@ class EventDetail(ResourceDetail):
             attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
             if attendee.event_id is not None:
                 view_kwargs['id'] = attendee.event_id
+
+        if view_kwargs.get('custom_form_id') is not None:
+            custom_form = safe_query(self, CustomForms, 'id', view_kwargs['custom_form_id'], 'custom_form_id')
+            if custom_form.event_id is not None:
+                view_kwargs['id'] = custom_form.event_id
             else:
                 view_kwargs['id'] = None
 

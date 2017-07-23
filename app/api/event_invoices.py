@@ -13,6 +13,9 @@ from app.models.discount_code import DiscountCode
 from app.api.helpers.static import PAYMENT_COUNTRIES
 from app.api.helpers.db import safe_query
 from app.api.helpers.utilities import require_relationship
+from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.permission_manager import has_access
+from app.api.bootstrap import api
 
 
 class EventInvoiceSchema(Schema):
@@ -71,6 +74,21 @@ class EventInvoiceSchema(Schema):
                                   type_='discount-code')
 
 
+class EventInvoiceListPost(ResourceList):
+    """
+    List and create Tracks
+    """
+    def before_post(self, args, kwargs, data):
+        require_relationship(['user', 'event'], data)
+
+        if not has_access('is_admin'):
+            raise ForbiddenException({'source': ''}, 'Admin access is required.')
+
+    schema = EventInvoiceSchema
+    data_layer = {'session': db.session,
+                  'model': EventInvoice}
+
+
 class EventInvoiceList(ResourceList):
     """
     List and Create Event Invoices
@@ -99,34 +117,15 @@ class EventInvoiceList(ResourceList):
             query_ = query_.join(DiscountCode).filter(DiscountCode.id == discount_code.id)
         return query_
 
-    def before_create_object(self, data, view_kwargs):
-        """
-        method to create object before post
-        :param data:
-        :param view_kwargs:
-        :return:
-        """
-        if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-            data['event_id'] = event.id
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-            data['event_id'] = event.id
-        if view_kwargs.get('user_id'):
-            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
-            data['user_id'] = user.id
-        if view_kwargs.get('discount_code_id'):
-            discount_code = safe_query(self, DiscountCode, 'id', view_kwargs['discount_code_id'], 'discount_code_id')
-            data['discount_code_id'] = discount_code.id
-
     view_kwargs = True
-    decorators = (is_admin,)
+    methods = ['GET', ]
+    decorators = (api.has_permission('is_organizer', ), )
     schema = EventInvoiceSchema
     data_layer = {'session': db.session,
                   'model': EventInvoice,
                   'methods': {
-                      'query': query,
-                      'before_create_object': before_create_object}}
+                      'query': query
+                  }}
 
 
 class EventInvoiceDetail(ResourceDetail):
