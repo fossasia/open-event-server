@@ -250,22 +250,3 @@ class Event(db.Model):
     def get_staff_roles(self):
         """returns only roles which are staff i.e. not attendee"""
         return [role for role in self.roles if role.role.name != ATTENDEE]
-
-
-# LISTENERS
-
-@event.listens_for(Event, 'after_insert')
-def receive_init(mapper, conn, target):
-    custom_form = CustomForms(
-        event_id=target.id,
-        session_form=session_form_str,
-        speaker_form=speaker_form_str
-    )
-    target.custom_forms.append(custom_form)
-
-
-@event.listens_for(Event, 'after_insert')
-def create_version_info(mapper, conn, target):
-    """create version instance after event created"""
-    version = Version(event_id=target.id)
-    target.version = version
