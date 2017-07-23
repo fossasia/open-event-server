@@ -15,6 +15,8 @@ from app.api.helpers.exceptions import UnprocessableEntity
 from app.models.event import Event
 from app.api.helpers.db import safe_query
 from app.api.helpers.utilities import require_relationship
+from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.permission_manager import has_access
 
 
 class TrackSchema(Schema):
@@ -64,13 +66,24 @@ class TrackSchema(Schema):
                             type_='session')
 
 
-class TrackList(ResourceList):
+class TrackListPost(ResourceList):
     """
     List and create Tracks
     """
     def before_post(self, args, kwargs, data):
         require_relationship(['event'], data)
+        if not has_access('is_track_organizer', event_id=data['event']):
+            raise ForbiddenException({'source': ''}, 'Track-organizer access is required.')
 
+    schema = TrackSchema
+    data_layer = {'session': db.session,
+                  'model': Track}
+
+
+class TrackList(ResourceList):
+    """
+    List and create Tracks
+    """
     def query(self, view_kwargs):
         query_ = self.session.query(Track)
         if view_kwargs.get('event_id'):
@@ -81,22 +94,13 @@ class TrackList(ResourceList):
             query_ = query_.join(Event).filter(Event.id == event.id)
         return query_
 
-    def before_create_object(self, data, view_kwargs):
-        if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-            data['event_id'] = event.id
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-            data['event_id'] = event.id
-
     view_kwargs = True
-    decorators = (api.has_permission('is_track_organizer', fetch='event_id', fetch_as="event_id", methods="POST"),)
+    methods = ['GET']
     schema = TrackSchema
     data_layer = {'session': db.session,
                   'model': Track,
                   'methods': {
-                      'query': query,
-                      'before_create_object': before_create_object
+                      'query': query
                   }}
 
 
