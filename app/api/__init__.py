@@ -10,7 +10,8 @@ from app.api.event_topics import EventTopicList, EventTopicDetail, EventTopicRel
 from app.api.event_sub_topics import EventSubTopicList, EventSubTopicDetail, EventSubTopicRelationship
 from app.api.microlocations import MicrolocationList, MicrolocationListPost, MicrolocationDetail, \
     MicrolocationRelationshipRequired, MicrolocationRelationshipOptional
-from app.api.sessions import SessionList, SessionDetail, SessionRelationshipRequired, SessionRelationshipOptional
+from app.api.sessions import SessionList, SessionListPost, SessionDetail, SessionRelationshipRequired, \
+    SessionRelationshipOptional
 from app.api.speakers import SpeakerList, SpeakerDetail, SpeakerRelationshipRequired, SpeakerRelationshipOptional
 from app.api.social_links import SocialLinkList, SocialLinkDetail, SocialLinkRelationship
 from app.api.sponsors import SponsorList, SponsorDetail, SponsorRelationship
@@ -40,6 +41,7 @@ from app.api.custom_forms import CustomFormList, CustomFormDetail, CustomFormRel
 from app.api.modules import ModuleDetail
 from app.api.custom_placeholders import CustomPlaceholderList, CustomPlaceholderDetail, CustomPlaceholderRelationship
 from app.api.activities import ActivityList, ActivityDetail
+
 # users
 api.route(UserList, 'user_list', '/users')
 api.route(VerifyUser, 'verify_user', '/users/<int:user_id>/verify')
@@ -52,6 +54,7 @@ api.route(UserRelationship, 'user_event_invoices', '/users/<int:id>/relationship
 api.route(UserRelationship, 'user_speaker', '/users/<int:id>/relationships/speakers')
 api.route(UserRelationship, 'user_access_codes', '/users/<int:id>/relationships/access-codes')
 api.route(UserRelationship, 'user_discount_codes', '/users/<int:id>/relationships/discount-codes')
+api.route(UserRelationship, 'user_email_notifications', '/users/<int:id>/relationships/email-notifications')
 
 # notifications
 api.route(NotificationList, 'notification_list', '/notifications', '/users/<int:id>/notifications')
@@ -183,6 +186,7 @@ api.route(MicrolocationRelationshipRequired, 'microlocation_event',
           '/microlocations/<int:id>/relationships/event')
 
 # sessions
+api.route(SessionListPost, 'session_list_post', '/sessions')
 api.route(SessionList, 'session_list', '/sessions', '/events/<int:event_id>/sessions',
           '/events/<event_identifier>/sessions',
           '/tracks/<int:track_id>/sessions', '/session-types/<int:session_type_id>/sessions',

@@ -14,7 +14,7 @@ class EmailNotification(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship("Event")
-    user = db.relationship("User")
+    user = db.relationship("User", backref="email_notifications")
 
     def __init__(self,
                  next_event=0,
