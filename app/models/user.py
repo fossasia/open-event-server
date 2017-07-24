@@ -106,12 +106,14 @@ class User(db.Model):
     @email.setter
     def email(self, email):
         """
-        Setter for _email, can be only set once
+        Setter for _email,
+        set user to 'not verified' if email is updated
         :param email:
         :return:
         """
-        self._email = email
-        self.is_verified = False
+        if self._email != email:
+            self._email = email
+            self.is_verified = False
 
     # User Permissions
     def can_publish_event(self):
