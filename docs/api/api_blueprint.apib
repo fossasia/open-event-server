@@ -5527,7 +5527,6 @@ Related to tickets and event.
 
 ## Ticket Tags Collection [/v1/tickets/{ticket_id}/ticket-tags{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + ticket_id: 1 (string) - id of the ticket.
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
@@ -5598,6 +5597,23 @@ Create a new ticket tag using an ticket_id.
 
             {
               "data": {
+                "relationships":{
+                   "event":{
+                     "data":
+                         {
+                           "type":"event",
+                           "id":"2"
+                         }
+                   },
+                   "tickets":{
+                     "data":[
+                           {
+                           "type":"ticket",
+                           "id":"1"
+                           }
+                     ]
+                   }
+                },
                 "attributes": {
                   "name": "ticket-tag-name"
                 },

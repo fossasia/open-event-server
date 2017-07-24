@@ -124,8 +124,8 @@ class TicketList(ResourceList):
 
     view_kwargs = True
     decorators = (api.has_permission('is_coorganizer', fetch='event_id',
-                  fetch_as="event_id", model=Ticket, methods="POST",
-                  check=lambda a: a.get('event_id') or a.get('event_identifier')), )
+                                     fetch_as="event_id", model=Ticket, methods="POST",
+                                     check=lambda a: a.get('event_id') or a.get('event_identifier')),)
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket,
