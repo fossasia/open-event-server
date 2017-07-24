@@ -575,32 +575,18 @@ def session_type_delete(transaction):
 
 
 # ------------------------- Speaker -------------------------
-@hooks.before("Speakers > Speakers Collection > List All Speakers")
-def speaker_get_list(transaction):
-    """
-    GET /events/1/speakers
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        speaker = SpeakerFactory()
-        db.session.add(speaker)
-        db.session.commit()
-
-
 @hooks.before("Speakers > Speakers Collection > Create Speaker")
 def speaker_post(transaction):
     """
-    POST /events/1/speakers
+    POST /speakers
     :param transaction:
     :return:
     """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
-
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
+        session = SessionFactory()
+        db.session.add(session)
         db.session.commit()
 
 

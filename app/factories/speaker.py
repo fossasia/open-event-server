@@ -1,6 +1,8 @@
 import factory
 from app.models.speaker import db, Speaker
 from app.factories.event import EventFactoryBasic
+from app.factories.user import UserFactory
+from app.factories.session import SessionFactory
 import app.factories.common as common
 
 
@@ -10,6 +12,8 @@ class SpeakerFactory(factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session = db.session
 
     event = factory.RelatedFactory(EventFactoryBasic)
+    user = factory.RelatedFactory(UserFactory)
+    session = factory.RelatedFactory(SessionFactory)
     name = common.string_
     email = common.email_
     photo_url = common.url_

@@ -13,7 +13,8 @@ from app.api.microlocations import MicrolocationList, MicrolocationListPost, Mic
     MicrolocationRelationshipRequired, MicrolocationRelationshipOptional
 from app.api.sessions import SessionList, SessionListPost, SessionDetail, SessionRelationshipRequired, \
     SessionRelationshipOptional
-from app.api.speakers import SpeakerList, SpeakerDetail, SpeakerRelationshipRequired, SpeakerRelationshipOptional
+from app.api.speakers import SpeakerList, SpeakerListPost, SpeakerDetail, SpeakerRelationshipRequired,\
+    SpeakerRelationshipOptional
 from app.api.social_links import SocialLinkList, SocialLinkDetail, SocialLinkRelationship
 from app.api.sponsors import SponsorList, SponsorListPost, SponsorDetail, SponsorRelationship
 from app.api.tracks import TrackList, TrackListPost, TrackDetail, TrackRelationshipOptional, TrackRelationshipRequired
@@ -247,7 +248,8 @@ api.route(SessionTypeRelationshipRequired, 'session_type_event',
           '/session-types/<int:id>/relationships/event')
 
 # speakers
-api.route(SpeakerList, 'speaker_list', '/speakers', '/events/<int:event_id>/speakers',
+api.route(SpeakerListPost, 'speaker_list_post', '/speakers')
+api.route(SpeakerList, 'speaker_list', '/events/<int:event_id>/speakers',
           '/events/<event_identifier>/speakers',
           '/sessions/<int:session_id>/speakers', '/users/<int:user_id>/speakers')
 api.route(SpeakerDetail, 'speaker_detail', '/speakers/<int:id>')

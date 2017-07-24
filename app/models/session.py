@@ -38,6 +38,7 @@ class Session(db.Model):
     signup_url = db.Column(db.String)
 
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    creator_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     state = db.Column(db.String, default="pending")
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow)
     deleted_at = db.Column(db.DateTime(timezone=True))
@@ -58,6 +59,7 @@ class Session(db.Model):
                  microlocation=None,
                  speakers=None,
                  event_id=None,
+                 creator_id=None,
                  state="pending",
                  slides_url=None,
                  video_url=None,
@@ -85,6 +87,7 @@ class Session(db.Model):
         self.microlocation = microlocation
         self.speakers = speakers
         self.event_id = event_id
+        self.creator_id = creator_id
         self.state = state
         self.slides_url = slides_url
         self.video_url = video_url

@@ -3,7 +3,7 @@ from marshmallow_jsonapi.flask import Schema, Relationship
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.helpers.utilities import dasherize
-from app.api.helpers.permissions import jwt_required, current_identity
+from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.speaker import Speaker
 from app.models.session import Session
@@ -12,12 +12,15 @@ from app.models.event import Event
 from app.api.helpers.db import safe_query
 from app.api.bootstrap import api
 from app.api.helpers.utilities import require_relationship
+from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.permission_manager import has_access
 
 
 class SpeakerSchema(Schema):
     """
     Speaker Schema based on Speaker Model
     """
+
     class Meta:
         """
         Meta class for speaker schema
@@ -75,32 +78,10 @@ class SpeakerSchema(Schema):
                             type_='session')
 
 
-class SpeakerList(ResourceList):
+class SpeakerListPost(ResourceList):
     """
     List and create speakers
     """
-
-    def query(self, view_kwargs):
-        """
-        query method for speakers list class
-        :param view_kwargs:
-        :return:
-        """
-        query_ = self.session.query(Speaker)
-        if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-            query_ = query_.join(Event).filter(Event.id == event.id)
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-            query_ = query_.join(Event).filter(Event.id == event.id)
-        if view_kwargs.get('user_id'):
-            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
-            query_ = query_.join(User).filter(User.id == user.id)
-        if view_kwargs.get('session_id'):
-            session = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
-            # session-speaker :: many-to-many relationship
-            query_ = Speaker.query.filter(Speaker.sessions.any(id=session.id))
-        return query_
 
     def before_post(self, args, kwargs, data):
         """
@@ -111,42 +92,68 @@ class SpeakerList(ResourceList):
         :return:
         """
         require_relationship(['event', 'user'], data)
-        kwargs['user_id'] = current_identity.id
 
-    def before_create_object(self, data, view_kwargs):
+        if not has_access('is_coorganizer', event_id=data['event']):
+            if has_access('is_user_itself'):
+                event = safe_query(self, Event, 'id', data['event'], 'event_id')
+                if event.state == "draft":
+                    raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
+
+        if 'sessions' in data:
+            session_ids = data['sessions']
+            for session_id in session_ids:
+                if not has_access('is_session_self_submitted', session_id=session_id):
+                    raise ForbiddenException({'source': ''}, 'Session must be self submitted.')
+
+    schema = SpeakerSchema
+    methods = ['POST', ]
+    data_layer = {'session': db.session,
+                  'model': Speaker
+                  }
+
+
+class SpeakerList(ResourceList):
+    """
+    List speakers based on different params from view_kwargs
+    """
+
+    def query(self, view_kwargs):
         """
-        before create object method for speaker list class
-        :param data:
+        query method for speakers list class
         :param view_kwargs:
         :return:
         """
-        if view_kwargs.get('session_id'):
-            session = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
-            data['event_id'] = session.event_id
+        query_ = self.session.query(Speaker)
+        if view_kwargs.get('event_identifier'):
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            view_kwargs['event_id'] = event.id
         if view_kwargs.get('event_id'):
             event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-            data['event_id'] = event.id
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-            data['event_id'] = event.id
-        data['user_id'] = current_identity.id
+            query_ = query_.join(Event).filter(Event.id == event.id)
+            if not has_access('is_coorganizer', event_id=event.id):
+                query_ = query_.filter(Event.state == "published")
 
-    def after_create_object(self, obj, data, view_kwargs):
+        if view_kwargs.get('user_id'):
+            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            query_ = query_.join(User).filter(User.id == user.id)
+
         if view_kwargs.get('session_id'):
             session = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
-            session.speakers.append(obj)
-            self.session.commit()
+            # session-speaker :: many-to-many relationship
+            query_ = Speaker.query.filter(Speaker.sessions.any(id=session.id))
+            if not has_access('is_coorganizer', event_id=session.event_id):
+                if not has_access('is_session_self_submitted', session_id=session.id):
+                    query_ = query_.filter(Session.state == "approved" or Session.state == "accepted")
+
+        return query_
 
     view_kwargs = True
-    decorators = (api.has_permission('accessible_role_based_events'),)
     schema = SpeakerSchema
+    methods = ['GET', ]
     data_layer = {'session': db.session,
                   'model': Speaker,
                   'methods': {
                       'query': query,
-                      'before_create_object': before_create_object,
-                      'before_post': before_post,
-                      'after_create_object': after_create_object
                   }}
 
 
