@@ -39,7 +39,7 @@ from app.views import BlueprintsManager
 from app.api.helpers.auth import AuthManager
 from app.models.event import Event, EventsUsers
 from app.models.role_invite import RoleInvite
-from app.views.healthcheck import health_check_celery, health_check_db, get_safe_config
+from app.views.healthcheck import health_check_celery, health_check_db
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -166,7 +166,6 @@ health = HealthCheck(current_app, "/health-check")
 envdump = EnvironmentDump(current_app, "/environment", include_config=False)
 health.add_check(health_check_celery)
 health.add_check(health_check_db)
-envdump.add_section("config", get_safe_config)
 
 
 # http://stackoverflow.com/questions/9824172/find-out-whether-celery-task-exists
