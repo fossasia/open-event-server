@@ -1585,7 +1585,7 @@ Get a list of events.
                         "is-sessions-speakers-enabled": true,
                         "privacy": "public",
                         "code-of-conduct": "example",
-                        "state": "example",
+                        "state": "draft",
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "example",
@@ -1655,7 +1655,7 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "organizer-description": "example",
                     "is-sessions-speakers-enabled": "true",
                     "privacy": "public",
-                    "state": "example",
+                    "state": "draft",
                     "ticket-url": "http://example.com",
                     "code-of-conduct": "example",
                     "is-ticketing-enabled": "true",
@@ -1805,7 +1805,7 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
                     "code-of-conduct": "example",
-                    "state": "example",
+                    "state": "draft",
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "example",
@@ -1984,7 +1984,7 @@ Get a single event.
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
                     "code-of-conduct": "example",
-                    "state": "example",
+                    "state": "draft",
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "example",
@@ -2058,7 +2058,7 @@ All other fields are optional. Add attributes you want to modify.
                     "organizer-description": "example1",
                     "is-sessions-speakers-enabled": "false",
                     "privacy": "private",
-                    "state": "example1",
+                    "state": "published",
                     "ticket-url": "http://example1.com",
                     "code-of-conduct": "example1",
                     "is-ticketing-enabled": "false",
@@ -2208,7 +2208,7 @@ All other fields are optional. Add attributes you want to modify.
                     "is-sessions-speakers-enabled": false,
                     "privacy": "private",
                     "code-of-conduct": "example1",
-                    "state": "example1",
+                    "state": "published",
                     "latitude": 12.23456789,
                     "starts-at": "2016-12-14T18:29:59.123456+00:00",
                     "searchable-location-name": "example1",
@@ -3893,91 +3893,15 @@ Data related to the various speakers associated with the various sessions in the
 | `heard-from` | How did the speaker get info about the event | string | - |
 | `sponsorship-required` | If any kind of sponsorship is required by the speaker | string | - |
 
-## Speakers Collection [/v1/events/{event_identifier}/speakers{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Speakers Collection [/v1/speakers{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
     + sort (optional, string, `speaking-experience`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List All Speakers [GET]
-Get a list of all speakers.
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-            "meta": {
-                "count": 1
-            },
-            "data": [
-                {
-                    "relationships": {
-                        "user": {
-                            "links": {
-                                "self": "/v1/speakers/3/relationships/user",
-                                "related": "/v1/speakers/3/user"
-                            }
-                        },
-                        "event": {
-                            "links": {
-                                "self": "/v1/speakers/3/relationships/event",
-                                "related": "/v1/speakers/3/event"
-                            }
-                        },
-                        "sessions": {
-                            "links": {
-                                "self": "/v1/speakers/3/relationships/session",
-                                "related": "/v1/speakers/3/sessions"
-                            }
-                        }
-                    },
-                    "attributes": {
-                        "website": "https://firstSpeaker.com",
-                        "city": "Delhi",
-                        "short-biography": "",
-                        "name": "firstSpeaker",
-                        "speaking-experience": "",
-                        "country": "India",
-                        "twitter": null,
-                        "is-featured": false,
-                        "linkedin": null,
-                        "email": "firstSpeaker@gmail.com",
-                        "long-biography": "",
-                        "mobile": null,
-                        "github": null,
-                        "facebook": null,
-                        "gender": "Male",
-                        "position": null,
-                        "organisation": null,
-                        "sponsorship-required": "",
-                        "heard-from": null
-                    },
-                    "type": "speaker",
-                    "id": "3",
-                    "links": {
-                        "self": "/v1/speakers/3"
-                    }
-                }
-            ],
-            "jsonapi": {
-                "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/events/1/speakers"
-            }
-        }
-
 ### Create Speaker [POST]
-Create a Speaker profile for an event using event identifier
+Create a Speaker profile
 
 + Request (application/vnd.api+json)
 
@@ -3989,14 +3913,36 @@ Create a Speaker profile for an event using event identifier
 
             {
               "data": {
-              "type": "speaker",
+                "type": "speaker",
+                "relationships":{
+                     "event":{
+                       "data":{
+                         "type":"event",
+                         "id":"1"
+                       }
+                     },
+                     "user":{
+                       "data":{
+                         "type":"user",
+                         "id":"1"
+                       }
+                     },
+                     "sessions":{
+                       "data":[
+                           {
+                             "type":"session",
+                             "id":"1"
+                           }
+                        ]
+                     }
+                    },
                 "attributes": {
-                        "name":"firstSpeaker",
-                        "email":"firstSpeaker@gmail.com",
-                        "website":"https://firstSpeaker.com",
-                        "city":"Delhi",
-                        "gender":"Male",
-                        "country":"India"
+                    "name":"firstSpeaker",
+                    "email":"firstSpeaker@gmail.com",
+                    "website":"https://firstSpeaker.com",
+                    "city":"Delhi",
+                    "gender":"Male",
+                    "country":"India"
                     }
                 }
             }

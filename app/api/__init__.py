@@ -12,7 +12,8 @@ from app.api.microlocations import MicrolocationList, MicrolocationListPost, Mic
     MicrolocationRelationshipRequired, MicrolocationRelationshipOptional
 from app.api.sessions import SessionList, SessionListPost, SessionDetail, SessionRelationshipRequired, \
     SessionRelationshipOptional
-from app.api.speakers import SpeakerList, SpeakerDetail, SpeakerRelationshipRequired, SpeakerRelationshipOptional
+from app.api.speakers import SpeakerList, SpeakerListPost, SpeakerDetail, SpeakerRelationshipRequired,\
+    SpeakerRelationshipOptional
 from app.api.social_links import SocialLinkList, SocialLinkDetail, SocialLinkRelationship
 from app.api.sponsors import SponsorList, SponsorDetail, SponsorRelationship
 from app.api.tracks import TrackList, TrackListPost, TrackDetail, TrackRelationshipOptional, TrackRelationshipRequired
@@ -46,8 +47,8 @@ from app.api.activities import ActivityList, ActivityDetail
 api.route(UserList, 'user_list', '/users')
 api.route(VerifyUser, 'verify_user', '/users/<int:user_id>/verify')
 api.route(UserDetail, 'user_detail', '/users/<int:id>', '/notifications/<int:notification_id>/user',
-          '/event-invoices/<int:event_invoice_id>/user', '/speakers/<int:speaker_id>/user', 
-          '/access-codes/<int:access_code_id>/marketer', '/email-notifications/<int:email_notification_id>/user', 
+          '/event-invoices/<int:event_invoice_id>/user', '/speakers/<int:speaker_id>/user',
+          '/access-codes/<int:access_code_id>/marketer', '/email-notifications/<int:email_notification_id>/user',
           '/discount-codes/<int:discount_code_id>/marketer')
 api.route(UserRelationship, 'user_notification', '/users/<int:id>/relationships/notifications')
 api.route(UserRelationship, 'user_event_invoices', '/users/<int:id>/relationships/event-invoices')
@@ -243,7 +244,8 @@ api.route(SessionTypeRelationshipRequired, 'session_type_event',
           '/session-types/<int:id>/relationships/event')
 
 # speakers
-api.route(SpeakerList, 'speaker_list', '/speakers', '/events/<int:event_id>/speakers',
+api.route(SpeakerListPost, 'speaker_list_post', '/speakers')
+api.route(SpeakerList, 'speaker_list', '/events/<int:event_id>/speakers',
           '/events/<event_identifier>/speakers',
           '/sessions/<int:session_id>/speakers', '/users/<int:user_id>/speakers')
 api.route(SpeakerDetail, 'speaker_detail', '/speakers/<int:id>')

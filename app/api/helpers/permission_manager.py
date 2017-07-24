@@ -124,6 +124,33 @@ def is_speaker_for_session(view, view_args, view_kwargs, *args, **kwargs):
 
 
 @jwt_required
+def is_session_self_submitted(view, view_args, view_kwargs, *args, **kwargs):
+    """
+    Allows admin and super admin access to any resource irrespective of id.
+    Otherwise the user can only access his/her resource.
+    """
+    user = current_identity
+    if user.is_admin or user.is_super_admin:
+        return view(*view_args, **view_kwargs)
+
+    if user.is_staff:
+        return view(*view_args, **view_kwargs)
+
+    try:
+        session = Session.query.filter(Session.id == kwargs['session_id']).one()
+    except NoResultFound:
+        return NotFoundError({'parameter': 'session_id'}, 'Session not found.').respond()
+
+    if user.is_organizer(session.event_id) or user.is_coorganizer(session.event_id):
+        return view(*view_args, **view_kwargs)
+
+    if session.creator_id == user.id:
+        return view(*view_args, **view_kwargs)
+
+    return ForbiddenError({'source': ''}, 'Access denied.').respond()
+
+
+@jwt_required
 def is_registrar(view, view_args, view_kwargs, *args, **kwargs):
     """
     Allows Organizer, Co-organizer and registrar to access the event resources.x`
@@ -213,6 +240,7 @@ permissions = {
     'accessible_role_based_events': accessible_role_based_events,
     'auth_required': auth_required,
     'is_speaker_for_session': is_speaker_for_session,
+    'is_session_self_submitted': is_session_self_submitted,
     'is_coorganizer_or_user_itself': is_coorganizer_or_user_itself,
     'create_event': create_event,
     'is_user_itself': is_user_itself

@@ -25,7 +25,7 @@ class EventFactoryBasic(factory.alchemy.SQLAlchemyModelFactory):
     organizer_description = common.string_
     is_sessions_speakers_enabled = True
     privacy = "public"
-    state = common.string_
+    state = "draft"
     ticket_url = common.url_
     code_of_conduct = common.string_
     is_ticketing_enabled = True

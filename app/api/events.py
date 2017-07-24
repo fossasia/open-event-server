@@ -8,6 +8,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validates_schema
 from flask import request
+import marshmallow.validate as validate
 
 from app.api.bootstrap import api
 from app.api.helpers.permissions import jwt_required
@@ -104,7 +105,7 @@ class EventSchema(Schema):
     organizer_description = fields.Str(allow_none=True)
     is_sessions_speakers_enabled = fields.Bool(default=False)
     privacy = fields.Str(default="public")
-    state = fields.Str(default="Draft")
+    state = fields.Str(validate=validate.OneOf(choices=["published", "draft"]), allow_none=True, default='draft')
     ticket_url = fields.Url(allow_none=True)
     code_of_conduct = fields.Str(allow_none=True)
     schedule_published_on = fields.DateTime(allow_none=True)
