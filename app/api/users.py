@@ -92,6 +92,16 @@ class UserSchema(Schema):
         related_view_kwargs={'user_id': '<id>'},
         schema='AccessCodeSchema',
         type_='access-codes')
+    email_notifications = Relationship(
+        attribute='email_notifications',
+        self_view='v1.user_email_notifications',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.email_notification_list',
+        related_view_kwargs={'id': '<id>'},
+        schema='EmailNotificationSchema',
+        many=True,
+        type_='email-notification'
+    )
 
 
 class UserList(ResourceList):

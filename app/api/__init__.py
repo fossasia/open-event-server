@@ -49,6 +49,7 @@ api.route(UserRelationship, 'user_notification', '/users/<int:id>/relationships/
 api.route(UserRelationship, 'user_event_invoices', '/users/<int:id>/relationships/event-invoices')
 api.route(UserRelationship, 'user_speaker', '/users/<int:id>/relationships/speakers')
 api.route(UserRelationship, 'user_access_codes', '/users/<int:id>/relationships/access-codes')
+api.route(UserRelationship, 'user_email_notifications', '/users/<int:id>/relationships/email-notifications')
 
 # notifications
 api.route(NotificationList, 'notification_list', '/notifications', '/users/<int:id>/notifications')
