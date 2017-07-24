@@ -2507,16 +2507,15 @@ Data related to an invoice for the event.
 | `completed-at` | Completion of Invoice Order | ISO 8601 (tz-aware) | - |
 | `paid-via` | Payment procedure | string | - |
 
-## Event Invoices [/v1/events/{event_identifier}/event-invoices{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
-+ Parameters
-    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+## Event Invoices [/v1/event-invoices{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### Get Event Invoices [GET]
-Get a single event invoice.
+Get a list of event invoices.
 
 + Request
 
@@ -2598,6 +2597,20 @@ Create a new Event Invoice using an event_id.
 
             {
               "data": {
+                "relationships":{
+                  "event":{
+                    "data":{
+                      "type":"event",
+                      "id":"1"
+                    }
+                  },
+                  "user":{
+                    "data":{
+                      "type":"user",
+                      "id":"1"
+                    }
+                  }
+                },
                 "attributes": {
                   "paypal-token": "1234",
                   "exp-year": "2100",
@@ -6096,7 +6109,7 @@ Get a list of Ticket Fees.
                         "service-fee": 3.14,
                         "maximum-fee": 5.14
                     },
-                    "type": "ticket-fees",
+                    "type": "ticket-fee",
                     "id": 2,
                     "links": {
                         "self": "/v1/ticket-fees/1"
@@ -6125,7 +6138,7 @@ Create a new ticket fee.
 
             {
                 "data": {
-                    "type": "ticket-fees",
+                    "type": "ticket-fee",
                     "attributes": {
                         "currency":"USD",
                         "service-fee":"3.14",
@@ -6143,7 +6156,7 @@ Create a new ticket fee.
                     "service-fee": 3.14,
                     "maximum-fee": 5.14
                 },
-                "type": "ticket-fees",
+                "type": "ticket-fee",
                 "id": 1,
                 "links": {
                     "self": "/v1/ticket-fees/1"
@@ -6181,7 +6194,7 @@ Get a single ticket fee details.
                     "service-fee": 3.14,
                     "maximum-fee": 5.14
                 },
-                "type": "ticket-fees",
+                "type": "ticket-fee",
                 "id": 1,
                 "links": {
                     "self": "/v1/ticket-fees/1"
@@ -6212,7 +6225,7 @@ Update a single ticket fee by `id`.
             {
                 "data": {
                     "id": "1",
-                    "type": "ticket-fees",
+                    "type": "ticket-fee",
                     "attributes": {
                         "currency":"USD",
                         "service-fee":"2.14",
@@ -6230,7 +6243,7 @@ Update a single ticket fee by `id`.
                     "service-fee": 2.14,
                     "maximum-fee": 3.14
                 },
-                "type": "ticket-fees",
+                "type": "ticket-fee",
                 "id": 1,
                 "links": {
                     "self": "/v1/ticket-fees/1"
@@ -7853,6 +7866,7 @@ Role invites for Events. Can only be edited and entered by event organizers.
 | `hash` | hash of the role invite | string | - |
 | `status` | Status the invite.  | string (default: `pending`) | - |
 | `created-at` | Discount Code created at | ISO 8601 (tz-aware) | - |
+| `role-name` | Name of the role.  | string (example: `attendee`) | - |
 
 
 ## Role Invites Collection [/v1/events/{event_identifier}/role-invites{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
@@ -7900,7 +7914,8 @@ Get a list of Role invites.
                 "email": "example@example.com",
                 "hash": "149889783495332276669212664484219865405",
                 "created-at": "2017-06-20T09:59:23.740772+00:00",
-                "status": "pending"
+                "status": "pending",
+                "role-name": "attendee"
               },
               "type": "role-invite",
               "id": "1",
@@ -7934,7 +7949,8 @@ Create a new role invite with event_id.
                 "attributes": {
                   "email": "example@example.com",
                   "created-at": "2017-06-20T09:59:23.740772+00:00",
-                  "status": "pending"
+                  "status": "pending",
+                  "role-name": "attendee"
                 },
                 "relationships": {
                   "role": {
@@ -7970,7 +7986,8 @@ Create a new role invite with event_id.
                 "email": "example@example.com",
                 "hash": "149889783495332276669212664484219865405",
                 "created-at": "2017-06-20T09:59:23.740772+00:00",
-                "status": "pending"
+                "status": "pending",
+                "role-name": "attendee"
               },
               "type": "role-invite",
               "id": "1",
@@ -8023,7 +8040,8 @@ Get a single role invite.
                 "email": "example@example.com",
                 "hash": "149889783495332276669212664484219865405",
                 "created-at": "2017-06-20T09:59:23.740772+00:00",
-                "status": "pending"
+                "status": "pending",
+                "role-name": "attendee"
               },
               "type": "role-invite",
               "id": "1",
@@ -8060,7 +8078,8 @@ Authorized user must be the event's organizer.
                   "email": "example@example.com",
                   "hash": "149889783495332276669212664484219865405",
                   "created-at": "2017-06-20T09:59:23.740772+00:00",
-                  "status": "pending"
+                  "status": "pending",
+                  "role-name": "attendee"
                 },
                 "type": "role-invite",
                 "id": "1"
@@ -8089,7 +8108,8 @@ Authorized user must be the event's organizer.
               "email": "example@example.com",
               "hash": "149889783495332276669212664484219865405",
               "created-at": "2017-06-20T09:59:23.740772+00:00",
-              "status": "pending"
+              "status": "pending",
+              "role-name": "attendee"
             },
             "type": "role-invite",
             "id": "1",
@@ -8127,292 +8147,6 @@ Delete a single role invite.
           }
         }
 
-# Group Users Events Roles
-
-Relations between users, events and roles. No attributes- Posted using relationships.
-
-
-| Parameter | Description | Type | Required |
-|:----------|-------------|------|----------|
-| None  | None | None | None |
-
-
-## Users Events Roles Collection [/v1/events/{event_identifier}/users-events-roles{?page%5bsize%5d,page%5bnumber%5d}]
-+ Parameters
-    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
-    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
-    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
-
-### List All Users Events Roles [GET]
-Get a list of users events roles.
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-          "meta": {
-            "count": 1
-          },
-          "data": [
-            {
-              "relationships": {
-                "role": {
-                  "links": {
-                    "self": "/v1/users-events-roles/1/relationships/role",
-                    "related": "/v1/users-events-roles/1/role"
-                  }
-                },
-                "event": {
-                  "links": {
-                    "self": "/v1/users-events-roles/1/relationships/event",
-                    "related": "/v1/users-events-roles/1/event"
-                  }
-                },
-                "user": {
-                  "links": {
-                    "self": "/v1/users-events-roles/1/relationships/user",
-                    "related": "/v1/users-events-roles/1/user"
-                  }
-                }
-              },
-              "type": "users-events-role",
-              "id": "1",
-              "links": {
-                "self": "/v1/users-events-roles/1"
-              }
-            }
-          ],
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/users-events-roles/1"
-          }
-        }
-
-
-### Create Users Events Role [POST]
-Create a new users events role with event_id.
-
-+ Request (application/vnd.api+json)
-
-    + Headers
-
-            Authorization: JWT <Auth Key>
-
-    + Body
-
-        {
-            "data": {
-              "relationships": {
-                "role": {
-                  "data": {
-                    "type": "role",
-                    "id": "1"
-                  }
-                },
-                "user": {
-                  "data":{
-                    "type": "user",
-                    "id": "2"
-                  }
-                }
-              },
-              "type":"users-events-role"
-            }
-          }
-
-+ Response 201 (application/vnd.api+json)
-
-        {
-            "data": {
-              "relationships": {
-                "role": {
-                  "links": {
-                    "self": "/v1/users-events-roles/1/relationships/role",
-                    "related": "/v1/users-events-roles/1/role"
-                  }
-                },
-                "event": {
-                  "links": {
-                    "self": "/v1/users-events-roles/1/relationships/event",
-                    "related": "/v1/users-events-roles/1/event"
-                  }
-                },
-                "user": {
-                  "links": {
-                    "self": "/v1/users-events-roles/1/relationships/user",
-                    "related": "/v1/users-events-roles/1/user"
-                  }
-                }
-              },
-              "type": "users-events-role",
-              "id": "1",
-              "links": {
-                "self": "/v1/users-events-roles/1"
-              }
-            },
-            "jsonapi": {
-              "version": "1.0"
-            },
-            "links": {
-              "self": "/v1/users-events-roles/1"
-            }
-          }
-
-## Users Events Role Details [/v1/users-events-roles/{users_events_role_id}]
-+ Parameters
-    + users_events_role_id: 1 (integer) - ID of the users events role in the form of an integer
-
-### Users Events Role Details [GET]
-Get a single users events role.
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-            "data": {
-              "relationships": {
-                "role": {
-                  "links": {
-                    "self": "/v1/users-events-roles/1/relationships/role",
-                    "related": "/v1/users-events-roles/1/role"
-                  }
-                },
-                "event": {
-                  "links": {
-                    "self": "/v1/users-events-roles/1/relationships/event",
-                    "related": "/v1/users-events-roles/1/event"
-                  }
-                },
-                "user": {
-                  "links": {
-                    "self": "/v1/users-events-roles/1/relationships/user",
-                    "related": "/v1/users-events-roles/1/user"
-                  }
-                }
-              },
-              "type": "users-events-role",
-              "id": "1",
-              "links": {
-                "self": "/v1/users-events-roles/1"
-              }
-            },
-            "jsonapi": {
-              "version": "1.0"
-            },
-            "links": {
-              "self": "/v1/users-events-roles/1"
-            }
-          }
-
-### Update Users Events Role [PATCH]
-+ `id` (integer) - ID of the record to update **(required)**
-
-Update a single users events role.
-
-+ Request (application/vnd.api+json)
-
-    + Headers
-
-            Authorization: JWT <Auth Key>
-
-    + Body
-
-            {
-              "data": {
-                "relationships": {
-                  "role": {
-                    "data": {
-                      "type": "role",
-                      "id": "1"
-                    }
-                  },
-                  "user": {
-                    "data":{
-                      "type": "user",
-                      "id": "1"
-                    }
-                  }
-                },
-                "type": "users-events-role",
-                "id": "1"
-              }
-            }
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-          "data": {
-            "relationships": {
-              "role": {
-                "links": {
-                  "self": "/v1/users-events-roles/1/relationships/role",
-                  "related": "/v1/users-events-roles/1/role"
-                }
-              },
-              "event": {
-                "links": {
-                  "self": "/v1/users-events-roles/1/relationships/event",
-                  "related": "/v1/users-events-roles/1/event"
-                }
-              },
-              "user": {
-                "links": {
-                  "self": "/v1/users-events-roles/1/relationships/user",
-                  "related": "/v1/users-events-roles/1/user"
-                }
-              }
-            },
-            "type": "users-events-role",
-            "id": "1",
-            "links": {
-              "self": "/v1/users-events-roles/1"
-            }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/users-events-role/1"
-          }
-        }
-
-### Delete Users Events Role [DELETE]
-Delete a single users events role.
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-          "meta": {
-            "message": "Object successfully deleted"
-          },
-          "jsonapi": {
-            "version": "1.0"
-          }
-        }
 
 # Group Image Size
 
@@ -9215,6 +8949,258 @@ Update a single page by `id`.
 
 ### Delete Page [DELETE]
 Delete a single page.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
+
+# Group Custom Forms
+Custom Forms related to the events.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `form`  | Custom Form | string | **yes** |
+| `type` | Custom Form type | string | **yes** |
+| `is-required` | If the custom form is required | boolean | - |
+| `is-included` | If the custom form is included | boolean | - |
+| `is-fixed` | If the custom form is fixed | boolean | - |
+| `tickets-number` | Tickets Number for custom form | integer (>=0) | - |
+
+
+
+## Custom Form Collection [/v1/events/{event_identifier}/custom-forms{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `type`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/iltering.html for more.
+
+### List All Custom Forms [GET]
+Get a list of Custom Forms.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "event": {
+                            "links": {
+                                "self": "/v1/custom-forms/1/relationships/event",
+                                "related": "/v1/custom-forms/1/event"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "is-required": true,
+                        "form": "form",
+                        "field-identifier": "abc123",
+                        "is-included": false,
+                        "is-fixed": false,
+                        "type": "text"
+                    },
+                    "type": "custom_form",
+                    "id": 1,
+                    "links": {
+                        "self": "/v1/custom-forms/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/events/1/custom-forms"
+            }
+        }
+
+### Create Custom Form [POST]
+Create a new Custom Form with event_id.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "type": "custom_form",
+                "attributes": {
+                  "form": "form",
+                  "type": "text",
+                  "field-identifier": "abc123",
+                  "is-required": "true",
+                  "is-included": "false",
+                  "is-fixed": "false"
+                }
+              }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/custom-forms/1/relationships/event",
+                            "related": "/v1/custom-forms/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "is-required": true,
+                    "form": "form",
+                    "field-identifier": "abc123",
+                    "is-included": false,
+                    "is-fixed": false,
+                    "type": "text"
+                },
+                "type": "custom_form",
+                "id": 1,
+                "links": {
+                    "self": "/v1/custom-forms/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/custom-forms/1"
+            }
+        }
+
+
+## Custom Form Detail [/v1/custom-forms/{custom_form_id}]
++ Parameters
+    + custom_form_id: 1 (integer) - ID of the custom form in the form of an integer
+
+### Custom Form Detail [GET]
+Get a single custom form.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "attributes": {
+                    "is-required": false,
+                    "form": "form",
+                    "field-identifier": "abc123",
+                    "is-included": false,
+                    "is-fixed": false,
+                    "type": "text"
+                },
+                "type": "custom_form",
+                "id": 1,
+                "links": {
+                    "self": "/v1/custom-forms/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/custom-forms/1"
+            }
+        }
+
+
+### Update Custom Form [PATCH]
+Update a single custom form with `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "type": "custom_form",
+                "attributes": {
+                    "form": "form",
+                    "field-identifier": "abc123",
+                    "type": "text",
+                    "is-required": "false",
+                    "is-included": "false",
+                    "is-fixed": "false"
+                },
+                "id": "1"
+              }
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+              "attributes": {
+                  "is-required": true,
+                  "form": "form",
+                  "field-identifier": "abc123",
+                  "is-included": false,
+                  "is-fixed": false,
+                  "type": "text"
+              },
+              "type": "custom_form",
+              "id": 1,
+              "links": {
+                  "self": "/v1/custom-forms/1"
+              }
+          },
+          "jsonapi": {
+              "version": "1.0"
+          },
+          "links": {
+              "self": "/v1/custom-forms/1"
+          }
+        }
+
+### Delete Custom Form [DELETE]
+Delete a single Access code.
 
 + Request
 

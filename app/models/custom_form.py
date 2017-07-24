@@ -1,6 +1,7 @@
 import json
 
 from app.models import db
+from sqlalchemy.schema import UniqueConstraint
 
 SESSION_FORM = {
     "title": {"include": 1, "require": 1},
@@ -40,16 +41,33 @@ speaker_form_str = json.dumps(SPEAKER_FORM, separators=(',', ':'))
 class CustomForms(db.Model):
     """custom form model class"""
     __tablename__ = 'custom_forms'
+    __table_args__ = (UniqueConstraint('event_id', 'field_identifier', 'form', name='custom_form_identifier'), )
     id = db.Column(db.Integer, primary_key=True)
-    session_form = db.Column(db.String, nullable=False)
-    speaker_form = db.Column(db.String, nullable=False)
+    field_identifier = db.Column(db.String, nullable=False)
+    form = db.Column(db.String, nullable=False)
+    type = db.Column(db.String, nullable=False)
+    is_required = db.Column(db.Boolean)
+    is_included = db.Column(db.Boolean)
+    is_fixed = db.Column(db.Boolean)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-    events = db.relationship("Event", backref="custom_forms")
+    event = db.relationship("Event", backref="custom_forms")
 
-    def __init__(self, event_id=None, session_form=None, speaker_form=None):
+    def __init__(self,
+                 event_id=None,
+                 field_identifier=None,
+                 form=None,
+                 type=None,
+                 is_required=None,
+                 is_included=None,
+                 is_fixed=None):
         self.event_id = event_id
-        self.session_form = session_form
-        self.speaker_form = speaker_form
+        self.field_identifier = field_identifier,
+        self.form = form,
+        self.type = type,
+        self.is_required = is_required,
+        self.is_included = is_included,
+        self.is_fixed = is_fixed
+
 
     def __repr__(self):
         return '<CustomForm %r>' % self.id
@@ -64,4 +82,12 @@ class CustomForms(db.Model):
     def serialize(self):
         """Return object data in easily serializeable format"""
 
-        return {'id': self.id, 'session_form': self.session_form, 'speaker_form': self.speaker_form}
+        return {
+            'id': self.id,
+            'field_identifier': self.field_identifier,
+            'form': self.form,
+            'type': self.type,
+            'is_required': self.is_required,
+            'is_included': self.is_included,
+            'is_fixed': self.is_fixed
+        }
