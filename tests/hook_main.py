@@ -1864,7 +1864,7 @@ def custom_form_delete(transaction):
 
 
 # ------------------------- Role Invites -------------------------
-@hooks.before("Role Invites > Role Invites Collection > List All Role Invites")
+@hooks.before("Role Invites > Role Invites Collection List > List All Role Invites")
 def role_invite_get_list(transaction):
     """
     GET /events/1/role-invites
@@ -1880,13 +1880,10 @@ def role_invite_get_list(transaction):
 @hooks.before("Role Invites > Role Invites Collection > Create Role Invite")
 def role_invite_post(transaction):
     """
-    POST /events/1/role-invites
+    POST /role-invites
     :param transaction:
     :return:
     """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
-
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)

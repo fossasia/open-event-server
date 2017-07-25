@@ -2,6 +2,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 import marshmallow.validate as validate
+from marshmallow import validates_schema
 
 from app.api.helpers.utilities import dasherize
 from app.models import db
@@ -16,6 +17,7 @@ from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.utilities import require_relationship
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.exceptions import ForbiddenException
 
 
 class RoleInviteSchema(Schema):
@@ -31,6 +33,24 @@ class RoleInviteSchema(Schema):
         self_view = 'v1.role_invite_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
+
+    @validates_schema(pass_original=True)
+    def validate_satus(self, data, original_data):
+        if 'role' in data and 'role_name' in data:
+            role = Role.query.filter_by(id=data['role']).one()
+            if role.name != data['role_name']:
+                raise UnprocessableEntity({'pointer': '/data/attributes/role'},
+                                          "Role id do not match role name")
+        if 'id' in original_data['data']:
+            role_invite = RoleInvite.query.filter_by(id=original_data['data']['id']).one()
+            if 'role' not in data:
+                data['role'] = role_invite.role.id
+            if 'role_name' in data:
+                role = Role.query.filter_by(id=data['role']).one()
+                if role.name != data['role_name']:
+                    raise UnprocessableEntity({'pointer': '/data/attributes/role'},
+                                              "Role id do not match role name")
+
 
     id = fields.Str(dump_only=True)
     email = fields.Str(required=True)
@@ -56,14 +76,40 @@ class RoleInviteSchema(Schema):
                         type_='role')
 
 
-class RoleInviteList(ResourceList):
+class RoleInviteListPost(ResourceList):
     """
-    List and create role invites
+    Create role invites
     """
 
     def before_post(self, args, kwargs, data):
         require_relationship(['event', 'role'], data)
+        if not has_access('is_organizer', event_id=data['event']):
+            raise ForbiddenException({'source': ''}, 'Organizer access is required.')
 
+    def after_create_object(self, role_invite, data, view_kwargs):
+        user = User.query.filter_by(email=role_invite.email).first()
+        if 'status' in data and data['status'] == 'accepted':
+            role = Role.query.filter_by(name=role_invite.role_name).first()
+            event = Event.query.filter_by(id=role_invite.event_id).first()
+            uer = UsersEventsRoles.query.filter_by(user=user).filter_by(event=event).filter_by(role=role).first()
+            if not uer:
+                uer = UsersEventsRoles(user, event, role)
+                save_to_db(uer, 'Role Invite accepted')
+
+    view_kwargs = True
+    decorators = (api.has_permission('is_admin', methods="GET"),)
+    schema = RoleInviteSchema
+    data_layer = {'session': db.session,
+                  'model': RoleInvite,
+                  'methods': {
+                      'after_create_object': after_create_object
+                  }}
+
+
+class RoleInviteList(ResourceList):
+    """
+    List role invites based on event_id
+    """
     def query(self, view_kwargs):
         """
         query method for role invites list
@@ -79,41 +125,15 @@ class RoleInviteList(ResourceList):
             query_ = query_.join(Event).filter(Event.id == event.id)
         return query_
 
-    def before_create_object(self, data, view_kwargs):
-        """
-        method to create object before post
-        :param data:
-        :param view_kwargs:
-        :return:
-        """
-        if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-            data['event_id'] = event.id
-
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-            data['event_id'] = event.id
-
-    def after_create_object(self, role_invite, data, view_kwargs):
-        user = User.query.filter_by(email=role_invite.email).first()
-        if 'status' in data and data['status'] == 'accepted':
-            role = Role.query.filter_by(name=role_invite.role_name).first()
-            event = Event.query.filter_by(id=role_invite.event_id).first()
-            uer = UsersEventsRoles.query.filter_by(user=user).filter_by(event=event).filter_by(role=role).first()
-            if not uer:
-                uer = UsersEventsRoles(user, event, role)
-                save_to_db(uer, 'Role Invite accepted')
-
     view_kwargs = True
-    decorators = (api.has_permission('is_organizer', fetch='event_id', fetch_as="event_id", methods="POST",
+    methods = ['GET']
+    decorators = (api.has_permission('is_organizer', fetch='event_id', fetch_as="event_id",
                                      check=lambda a: a.get('event_id') or a.get('event_identifier')),)
     schema = RoleInviteSchema
     data_layer = {'session': db.session,
                   'model': RoleInvite,
                   'methods': {
-                      'query': query,
-                      'before_create_object': before_create_object,
-                      'after_create_object': after_create_object
+                      'query': query
                   }}
 
 
