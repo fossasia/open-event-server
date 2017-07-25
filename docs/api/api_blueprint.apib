@@ -1135,7 +1135,6 @@ Data related to custom placeholder information.
 
 ## Custom Placeholders Collection [/v1/custom-placeholders{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
@@ -9977,4 +9976,267 @@ This endpoint supports uploading of any kind of file or multiple files. If a sin
 
         {
             "url":"/serve_static/media/temp/images/6a6614c7-d458-43de-a9bd-5c329e273bf0/U0lLbUt2SF/4d4dae9e-0bab-4e72-ba2f-e8e633a145e5.gif"
+        }
+
+
+# Group StripeAuthorization
+
+**Event ADMIN**
+
+To update or get any attribute of this data layer, you will need event admin access.
+
+| Parameter | Type | Required |
+|:----------|-------------|------|------------|
+| `stripe_secret_key`  | string | **yes** |
+| `stripe_refresh_token`  | string | **yes** |
+| `stripe_publishable_key`  | string | **yes** |
+| `stripe_user_id`  | string | **yes** |
+| `stripe_email`  | string | **yes** |
+
+## StripeAuthorization Collection[/v1/stripe-authorization{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `app-name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List all Stripe Authorizations [GET]
+Requires super admin access in Orga Server
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "event": {
+                  "links": {
+                    "self": "/v1/stripe-authorization/1/relationships/event",
+                    "related": "/v1/events/1"
+                  }
+                }
+              },
+              "attributes": {
+                "stripe-email": "example@example.com",
+                "stripe-secret-key": "example",
+                "stripe-user-id": "example",
+                "stripe-publishable-key": "example",
+                "stripe-refresh-token": "example"
+              },
+              "type": "stripe-authorization",
+              "id": "1",
+              "links": {
+                "self": "/v1/stripe-authorization/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/stripe-authorization"
+          }
+        }
+
+### Create Stripe Authorization [POST]
+Requires Co-Organizer Access
+
++ Request (application/vnd.api+json)
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "stripe-secret-key": "example",
+                  "stripe-refresh-token": "example",
+                  "stripe-publishable-key": "example",
+                  "stripe-user-id": "example",
+                  "stripe-email": "example@example.com"
+                },
+                "type": "stripe-authorization",
+                "relationships": {
+                  "event": {
+                    "data": {
+                      "id": "1",
+                      "type": "event"
+                    }
+                  }
+                }
+              }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/stripe-authorization/1/relationships/event",
+                  "related": "/v1/events/1"
+                }
+              }
+            },
+            "attributes": {
+              "stripe-email": "example@example.com",
+              "stripe-secret-key": "example",
+              "stripe-user-id": "example",
+              "stripe-publishable-key": "example",
+              "stripe-refresh-token": "example"
+            },
+            "type": "stripe-authorization",
+            "id": "1",
+            "links": {
+              "self": "/v1/stripe-authorization/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/stripe-authorization/1"
+          }
+        }
+
+
+## Stripe Authorization Details [/v1/stripe-authorization/{id}]
+Requires Event Co-Organizer Access
++ Parameters
+    + id: 1 (integer) - ID of the stripe-authorization
+
+### Get Stripe Authorization[GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/stripe-authorization/1/relationships/event",
+                  "related": "/v1/events/1"
+                }
+              }
+            },
+            "attributes": {
+              "stripe-email": "example@example.com",
+              "stripe-secret-key": "example",
+              "stripe-user-id": "example",
+              "stripe-publishable-key": "example",
+              "stripe-refresh-token": "example"
+            },
+            "type": "stripe-authorization",
+            "id": "1",
+            "links": {
+              "self": "/v1/stripe-authorization/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/stripe-authorization/1"
+          }
+        }
+
+
+### Update Stripe Authorization[PATCH]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "stripe-secret-key": "example",
+                  "stripe-refresh-token": "example",
+                  "stripe-publishable-key": "example",
+                  "stripe-user-id": "example",
+                  "stripe-email": "example@example.com"
+                },
+                "type": "stripe-authorization",
+                "id": "1"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/stripe-authorization/1/relationships/event",
+                  "related": "/v1/events/1"
+                }
+              }
+            },
+            "attributes": {
+              "stripe-email": "example@example.com",
+              "stripe-secret-key": "example",
+              "stripe-user-id": "example",
+              "stripe-publishable-key": "example",
+              "stripe-refresh-token": "example"
+            },
+            "type": "stripe-authorization",
+            "id": "1",
+            "links": {
+              "self": "/v1/stripe-authorization/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/stripe-authorization/1"
+          }
+        }
+
+### Delete Stripe Authorization[DELETE]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
         }

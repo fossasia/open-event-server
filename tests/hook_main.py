@@ -47,6 +47,8 @@ from app.factories.custom_placeholder import CustomPlaceholderFactory
 from app.factories.user_permission import UserPermissionFactory
 from app.factories.email_notification import EmailNotificationFactory
 from app.factories.activities import ActivityFactory
+from app.factories.stripe_authorization import StripeAuthorizationFactory
+
 
 stash = {}
 api_username = "open_event_test_user@fossasia.org"
@@ -2271,4 +2273,70 @@ def user_permission_delete(transaction):
     with stash['app'].app_context():
         user_permission = UserPermissionFactory()
         db.session.add(user_permission)
+        db.session.commit()
+
+
+# ------------------------- Stripe Authorizations -------------------------
+@hooks.before("StripeAuthorization > StripeAuthorization Collection > List all Stripe Authorizations")
+def stripe_authorization_get_list(transaction):
+    """
+    GET /events/1/stripe
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        stripe = StripeAuthorizationFactory()
+        db.session.add(stripe)
+        db.session.commit()
+
+
+@hooks.before("StripeAuthorization > StripeAuthorization Collection > Create Stripe Authorization")
+def stripe_authorization_post(transaction):
+    """
+    POST /events/1/stripe
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("StripeAuthorization > Stripe Authorization Details > Get Stripe Authorization")
+def stripe_authorization_get_detail(transaction):
+    """
+    GET /stripe-authorization/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        stripe = StripeAuthorizationFactory()
+        db.session.add(stripe)
+        db.session.commit()
+
+
+@hooks.before("StripeAuthorization > Stripe Authorization Details > Update Stripe Authorization")
+def stripe_authorization_patch(transaction):
+    """
+    PATCH /stripe-authorization/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        stripe = StripeAuthorizationFactory()
+        db.session.add(stripe)
+        db.session.commit()
+
+
+@hooks.before("StripeAuthorization > Stripe Authorization Details > Delete Stripe Authorization")
+def stripe_authorization_delete(transaction):
+    """
+    DELETE /stripe-authorization/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        stripe = StripeAuthorizationFactory()
+        db.session.add(stripe)
         db.session.commit()

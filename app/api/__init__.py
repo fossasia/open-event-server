@@ -1,4 +1,6 @@
 from app.api.bootstrap import api
+from app.api.stripe_authorization import StripeAuthorizationList, StripeAuthorizationDetail, \
+    StripeAuthorizationRelationship, StripeAuthorizationListPost
 from app.api.ticket_fees import TicketFeeList, TicketFeeDetail
 from app.api.users import UserList, UserDetail, UserRelationship, VerifyUser
 from app.api.notifications import NotificationList, NotificationDetail, NotificationRelationship
@@ -46,8 +48,8 @@ from app.api.activities import ActivityList, ActivityDetail
 api.route(UserList, 'user_list', '/users')
 api.route(VerifyUser, 'verify_user', '/users/<int:user_id>/verify')
 api.route(UserDetail, 'user_detail', '/users/<int:id>', '/notifications/<int:notification_id>/user',
-          '/event-invoices/<int:event_invoice_id>/user', '/speakers/<int:speaker_id>/user', 
-          '/access-codes/<int:access_code_id>/marketer', '/email-notifications/<int:email_notification_id>/user', 
+          '/event-invoices/<int:event_invoice_id>/user', '/speakers/<int:speaker_id>/user',
+          '/access-codes/<int:access_code_id>/marketer', '/email-notifications/<int:email_notification_id>/user',
           '/discount-codes/<int:discount_code_id>/marketer')
 api.route(UserRelationship, 'user_notification', '/users/<int:id>/relationships/notifications')
 api.route(UserRelationship, 'user_event_invoices', '/users/<int:id>/relationships/event-invoices')
@@ -359,3 +361,12 @@ api.route(CustomFormList, 'custom_form_list', '/custom-forms', '/events/<int:eve
 api.route(CustomFormDetail, 'custom_form_detail', '/custom-forms/<int:id>')
 api.route(CustomFormRelationshipRequired, 'custom_form_event',
           '/custom-forms/<int:id>/relationships/event')
+
+# Stripe Authorization API
+api.route(StripeAuthorizationListPost, 'stripe_authorization_list_post', '/stripe-authorization')
+api.route(StripeAuthorizationList, 'stripe_authorization_list', '/events/<int:event_id>/stripe-authorization',
+          '/events/<event_identifier>/stripe-authorization')
+api.route(StripeAuthorizationDetail, 'stripe_authorization_detail',  '/stripe-authorization/<int:id>',
+          '/events/<int:event_id>/stripe-authorization', '/events/<event_identifier>/stripe-authorization')
+api.route(StripeAuthorizationRelationship, 'stripe_authorization_event',
+          '/stripe-authorization/<int:id>/relationships/event')
