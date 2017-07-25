@@ -1,6 +1,8 @@
 import unittest
 
 from app import current_app as app
+from app.factories.attendee import AttendeeFactory
+from app.models.ticket_holder import TicketHolder
 from tests.unittests.utils import OpenEventTestCase
 from app.factories.event import EventFactoryBasic
 from app.api.helpers.db import save_to_db, safe_query, get_or_create, get_count
@@ -47,9 +49,9 @@ class TestDBHelperValidation(OpenEventTestCase):
 
     def test_get_count(self):
         with app.test_request_context():
-            event = EventFactoryBasic()
-            save_to_db(event)
-            self.assertEqual(get_count(Event.query), 1)
+            attendee = AttendeeFactory()
+            save_to_db(attendee)
+            self.assertEqual(get_count(TicketHolder.query), 1)
 
 if __name__ == '__main__':
     unittest.main()

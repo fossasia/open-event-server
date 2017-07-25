@@ -1,4 +1,6 @@
 from app.api.bootstrap import api
+from app.api.stripe_authorization import StripeAuthorizationList, StripeAuthorizationDetail, \
+    StripeAuthorizationRelationship, StripeAuthorizationListPost
 from app.api.ticket_fees import TicketFeeList, TicketFeeDetail
 from app.api.users import UserList, UserDetail, UserRelationship, VerifyUser
 from app.api.notifications import NotificationList, NotificationDetail, NotificationRelationship
@@ -370,3 +372,12 @@ api.route(CustomFormList, 'custom_form_list', '/custom-forms', '/events/<int:eve
 api.route(CustomFormDetail, 'custom_form_detail', '/custom-forms/<int:id>')
 api.route(CustomFormRelationshipRequired, 'custom_form_event',
           '/custom-forms/<int:id>/relationships/event')
+
+# Stripe Authorization API
+api.route(StripeAuthorizationListPost, 'stripe_authorization_list_post', '/stripe-authorization')
+api.route(StripeAuthorizationList, 'stripe_authorization_list', '/events/<int:event_id>/stripe-authorization',
+          '/events/<event_identifier>/stripe-authorization')
+api.route(StripeAuthorizationDetail, 'stripe_authorization_detail',  '/stripe-authorization/<int:id>',
+          '/events/<int:event_id>/stripe-authorization', '/events/<event_identifier>/stripe-authorization')
+api.route(StripeAuthorizationRelationship, 'stripe_authorization_event',
+          '/stripe-authorization/<int:id>/relationships/event')
