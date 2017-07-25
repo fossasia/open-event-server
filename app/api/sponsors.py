@@ -1,6 +1,8 @@
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema, Relationship
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from flask_rest_jsonapi.exceptions import ObjectNotFound
+from flask import request
 
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
@@ -10,12 +12,15 @@ from app.models.event import Event
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
 from app.api.helpers.utilities import require_relationship
+from app.api.helpers.permission_manager import has_access
+from app.api.helpers.exceptions import ForbiddenException
 
 
 class SponsorSchema(Schema):
     """
     Sponsors API schema based on Sponsors model
     """
+
     class Meta:
         """
         Meta class for Sponsor schema
@@ -41,12 +46,25 @@ class SponsorSchema(Schema):
                          type_='event')
 
 
-class SponsorList(ResourceList):
+class SponsorListPost(ResourceList):
     """
     List and create Sponsors
     """
     def before_post(self, args, kwargs, data):
         require_relationship(['event'], data)
+        if not has_access('is_coorganizer', event_id=data['event']):
+            raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
+
+    methods = ['POST']
+    schema = SponsorSchema
+    data_layer = {'session': db.session,
+                  'model': Sponsor}
+
+
+class SponsorList(ResourceList):
+    """
+    List Sponsors
+    """
 
     def query(self, view_kwargs):
         """
@@ -57,35 +75,33 @@ class SponsorList(ResourceList):
         query_ = self.session.query(Sponsor)
         if view_kwargs.get('event_id'):
             event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-            query_ = query_.join(Event).filter(Event.id == event.id)
+            if event.state != 'published':
+                if 'Authorization' in request.headers and has_access('is_coorganizer', event_id=event.id):
+                    query_ = query_.join(Event).filter(Event.id == event.id)
+                else:
+                    raise ObjectNotFound({'parameter': 'event_id'},
+                                         "Event: {} not found".format(view_kwargs['event_identifier']))
+            else:
+                query_ = query_.join(Event).filter(Event.id == event.id)
         elif view_kwargs.get('event_identifier'):
             event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-            query_ = query_.join(Event).filter(Event.id == event.id)
+            if event.state != 'published':
+                if 'Authorization' in request.headers and has_access('is_coorganizer', event_id=event.id):
+                    query_ = query_.join(Event).filter(Event.id == event.id)
+                else:
+                    raise ObjectNotFound({'parameter': 'event_identifier'},
+                                         "Event: {} not found".format(view_kwargs['event_identifier']))
+            else:
+                query_ = query_.join(Event).filter(Event.id == event.id)
         return query_
 
-    def before_create_object(self, data, view_kwargs):
-        """
-        method to create object before post
-        :param data:
-        :param view_kwargs:
-        :return:
-        """
-        if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-            data['event_id'] = event.id
-
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'identifier')
-            data['event_id'] = event.id
-
-    decorators = (api.has_permission('is_coorganizer', fetch='event_id', fetch_as="event_id", methods="POST",
-                                     check=lambda a: a.get('event_id') or a.get('event_identifier')),)
+    view_kwargs = True
+    methods = ['GET']
     schema = SponsorSchema
     data_layer = {'session': db.session,
                   'model': Sponsor,
                   'methods': {
-                      'query': query,
-                      'before_create_object': before_create_object
+                      'query': query
                   }}
 
 
@@ -104,7 +120,7 @@ class SponsorRelationship(ResourceRelationship):
     """
     Sponsor Schema Relation
     """
-    decorators = (jwt_required, )
+    decorators = (jwt_required,)
     methods = ['GET', 'PATCH']
     schema = SponsorSchema
     data_layer = {'session': db.session,

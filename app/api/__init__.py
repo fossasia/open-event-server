@@ -14,7 +14,7 @@ from app.api.sessions import SessionList, SessionListPost, SessionDetail, Sessio
     SessionRelationshipOptional
 from app.api.speakers import SpeakerList, SpeakerDetail, SpeakerRelationshipRequired, SpeakerRelationshipOptional
 from app.api.social_links import SocialLinkList, SocialLinkDetail, SocialLinkRelationship
-from app.api.sponsors import SponsorList, SponsorDetail, SponsorRelationship
+from app.api.sponsors import SponsorList, SponsorListPost, SponsorDetail, SponsorRelationship
 from app.api.tracks import TrackList, TrackListPost, TrackDetail, TrackRelationshipOptional, TrackRelationshipRequired
 from app.api.speakers_calls import SpeakersCallList, SpeakersCallDetail, SpeakersCallRelationship
 from app.api.event_invoices import EventInvoiceList, EventInvoiceListPost, EventInvoiceDetail, \
@@ -46,8 +46,8 @@ from app.api.activities import ActivityList, ActivityDetail
 api.route(UserList, 'user_list', '/users')
 api.route(VerifyUser, 'verify_user', '/users/<int:user_id>/verify')
 api.route(UserDetail, 'user_detail', '/users/<int:id>', '/notifications/<int:notification_id>/user',
-          '/event-invoices/<int:event_invoice_id>/user', '/speakers/<int:speaker_id>/user', 
-          '/access-codes/<int:access_code_id>/marketer', '/email-notifications/<int:email_notification_id>/user', 
+          '/event-invoices/<int:event_invoice_id>/user', '/speakers/<int:speaker_id>/user',
+          '/access-codes/<int:access_code_id>/marketer', '/email-notifications/<int:email_notification_id>/user',
           '/discount-codes/<int:discount_code_id>/marketer')
 api.route(UserRelationship, 'user_notification', '/users/<int:id>/relationships/notifications')
 api.route(UserRelationship, 'user_event_invoices', '/users/<int:id>/relationships/event-invoices')
@@ -211,7 +211,8 @@ api.route(SocialLinkRelationship, 'social_link_event',
           '/social-links/<int:id>/relationships/event')
 
 # sponsors
-api.route(SponsorList, 'sponsor_list', '/sponsors', '/events/<int:event_id>/sponsors',
+api.route(SponsorListPost, 'sponsor_list_post', '/sponsors')
+api.route(SponsorList, 'sponsor_list', '/events/<int:event_id>/sponsors',
           '/events/<event_identifier>/sponsors')
 api.route(SponsorDetail, 'sponsor_detail', '/sponsors/<int:id>')
 api.route(SponsorRelationship, 'sponsor_event', '/sponsors/<int:id>/relationships/event')
