@@ -25,7 +25,7 @@ class DiscountCode(db.Model):
     event = db.relationship('Event', backref='discount_codes', foreign_keys=[event_id])
     created_at = db.Column(db.DateTime(timezone=True))
     marketer_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
-    marketer = db.relationship('User', backref='discount_codes')
+    marketer = db.relationship('User', backref='discount_codes_')
 
     used_for = db.Column(db.String, nullable=False)
 
@@ -42,7 +42,8 @@ class DiscountCode(db.Model):
                  is_active=True,
                  used_for=None,
                  event_id=None,
-                 tickets=None):
+                 tickets=None,
+                 user_id=None):
         self.code = code
         self.discount_url = discount_url
         self.type = type
@@ -57,6 +58,7 @@ class DiscountCode(db.Model):
         self.created_at = datetime.utcnow()
         self.used_for = used_for
         self.tickets = tickets
+        self.marketer_id = user_id
 
     @staticmethod
     def get_service_name():

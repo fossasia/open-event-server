@@ -24,6 +24,7 @@ from app.models.discount_code import DiscountCode
 from app.models.event_invoice import EventInvoice
 from app.models.speakers_call import SpeakersCall
 from app.models.role_invite import RoleInvite
+from app.models.custom_form import CustomForms
 from app.models.users_events_role import UsersEventsRoles
 from app.models.ticket import TicketTag
 from app.models.access_code import AccessCode
@@ -58,12 +59,21 @@ class EventSchema(Schema):
             if 'ends_at' not in data:
                 data['ends_at'] = event.ends_at
 
+        if 'starts_at' not in data or 'ends_at' not in data:
+            raise UnprocessableEntity({'pointer': '/data/attributes/date'},
+                                      "enter required fields starts-at/ends-at")
+
         if data['starts_at'] >= data['ends_at']:
             raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'},
                                       "ends-at should be after starts-at")
 
-    @validates_schema
-    def validate_timezone(self, data):
+    @validates_schema(pass_original=True)
+    def validate_timezone(self, data, original_data):
+        if 'id' in original_data['data']:
+            event = Event.query.filter_by(id=original_data['data']['id']).one()
+
+            if 'timezone' not in data:
+                data['timezone'] = event.timezone
         try:
             timezone(data['timezone'])
         except pytz.exceptions.UnknownTimeZoneError:
@@ -266,6 +276,13 @@ class EventSchema(Schema):
                              related_view_kwargs={'event_id': '<id>'},
                              schema='AttendeeSchema',
                              type_='attendee')
+    custom_forms = Relationship(attribute='custom_form',
+                                self_view='v1.event_custom_forms',
+                                self_view_kwargs={'id': '<id>'},
+                                related_view='v1.custom_form_list',
+                                related_view_kwargs={'event_id': '<id>'},
+                                schema='CustomFormSchema',
+                                type_='custom-form')
 
 
 class EventList(ResourceList):
@@ -278,18 +295,20 @@ class EventList(ResourceList):
                 filter(Role.name != ATTENDEE)
 
         if view_kwargs.get('event_type_id') and 'GET' in request.method:
-            query_ = self.session.query(Event).filter(getattr(Event, 'event_type_id') == view_kwargs['event_type_id'])
+            query_ = self.session.query(Event).filter(
+                getattr(Event, 'event_type_id') == view_kwargs['event_type_id'])
 
         if view_kwargs.get('event_topic_id') and 'GET' in request.method:
-            query_ = self.session.query(Event).filter(getattr(Event, 'event_topic_id') == view_kwargs['event_topic_id'])
+            query_ = self.session.query(Event).filter(
+                getattr(Event, 'event_topic_id') == view_kwargs['event_topic_id'])
 
         if view_kwargs.get('event_sub_topic_id') and 'GET' in request.method:
-            query_ = self.session.query(Event).filter(getattr(Event,
-              'event_sub_topic_id') == view_kwargs['event_sub_topic_id'])
+            query_ = self.session.query(Event).filter(
+                getattr(Event, 'event_sub_topic_id') == view_kwargs['event_sub_topic_id'])
 
         if view_kwargs.get('discount_code_id') and 'GET' in request.method:
-            query_ = self.session.query(Event).filter(getattr(Event,
-              'discount_code_id') == view_kwargs['discount_code_id'])
+            query_ = self.session.query(Event).filter(
+                getattr(Event, 'discount_code_id') == view_kwargs['discount_code_id'])
 
         return query_
 
@@ -405,7 +424,7 @@ class EventDetail(ResourceDetail):
 
         if view_kwargs.get('users_events_role_id') is not None:
             users_events_role = safe_query(self, UsersEventsRoles, 'id', view_kwargs['users_events_role_id'],
-            'users_events_role_id')
+                                           'users_events_role_id')
             if users_events_role.event_id is not None:
                 view_kwargs['id'] = users_events_role.event_id
 
@@ -457,10 +476,16 @@ class EventDetail(ResourceDetail):
             attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
             if attendee.event_id is not None:
                 view_kwargs['id'] = attendee.event_id
+
+        if view_kwargs.get('custom_form_id') is not None:
+            custom_form = safe_query(self, CustomForms, 'id', view_kwargs['custom_form_id'], 'custom_form_id')
+            if custom_form.event_id is not None:
+                view_kwargs['id'] = custom_form.event_id
             else:
                 view_kwargs['id'] = None
 
     def before_update_object(self, event, data, view_kwargs):
+
         if data.get('original_image_url') and data['original_image_url'] != event.original_image_url:
             uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
             data['original_image_url'] = uploaded_images['original_image_url']

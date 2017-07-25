@@ -169,5 +169,5 @@ def make_fe_url(settings=None, path=None):
     """
     if settings is None:
         settings = get_settings()
-    fe_host = settings['frontend_url']
-    return fe_host if path is None else (fe_host + path)
+    front_end_host = settings['frontend_url'] if settings['frontend_url'] else ""
+    return front_end_host if path is None else (front_end_host + path)

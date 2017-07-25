@@ -1,10 +1,11 @@
 from flask import current_app as app
 from flask_jwt import _jwt_required, current_identity
-from app.api.helpers.errors import ForbiddenError, NotFoundError
-from app.api.helpers.permissions import jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 from flask import request
 
+from app.api.helpers.errors import ForbiddenError, NotFoundError
+from app.api.helpers.permissions import jwt_required
+from app.models.session import Session
 from app.models.event import Event
 
 
@@ -91,6 +92,35 @@ def is_coorganizer_or_user_itself(view, view_args, view_kwargs, *args, **kwargs)
         return view(*view_args, **view_kwargs)
 
     return ForbiddenError({'source': ''}, 'Co-organizer access is required.').respond()
+
+
+@jwt_required
+def is_speaker_for_session(view, view_args, view_kwargs, *args, **kwargs):
+    """
+    Allows admin and super admin access to any resource irrespective of id.
+    Otherwise the user can only access his/her resource.
+    """
+    user = current_identity
+    if user.is_admin or user.is_super_admin:
+        return view(*view_args, **view_kwargs)
+
+    if user.is_staff:
+        return view(*view_args, **view_kwargs)
+
+    try:
+        session = Session.query.filter(Session.id == view_kwargs['id']).one()
+    except NoResultFound:
+        return NotFoundError({'parameter': 'id'}, 'Session not found.').respond()
+
+    if user.is_organizer(session.event_id) or user.is_coorganizer(session.event_id):
+        return view(*view_args, **view_kwargs)
+
+    if session.speakers:
+        for speaker in session.speakers:
+            if speaker.user_id == user.id:
+                return view(*view_args, **view_kwargs)
+
+    return ForbiddenError({'source': ''}, 'Access denied.').respond()
 
 
 @jwt_required
@@ -182,6 +212,7 @@ permissions = {
     'user_event': user_event,
     'accessible_role_based_events': accessible_role_based_events,
     'auth_required': auth_required,
+    'is_speaker_for_session': is_speaker_for_session,
     'is_coorganizer_or_user_itself': is_coorganizer_or_user_itself,
     'create_event': create_event,
     'is_user_itself': is_user_itself

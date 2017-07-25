@@ -10,16 +10,16 @@ from app.api.event_topics import EventTopicList, EventTopicDetail, EventTopicRel
 from app.api.event_sub_topics import EventSubTopicList, EventSubTopicDetail, EventSubTopicRelationship
 from app.api.microlocations import MicrolocationList, MicrolocationListPost, MicrolocationDetail, \
     MicrolocationRelationshipRequired, MicrolocationRelationshipOptional
-from app.api.sessions import SessionList, SessionDetail, SessionRelationshipRequired, SessionRelationshipOptional
+from app.api.sessions import SessionList, SessionListPost, SessionDetail, SessionRelationshipRequired, \
+    SessionRelationshipOptional
 from app.api.speakers import SpeakerList, SpeakerDetail, SpeakerRelationshipRequired, SpeakerRelationshipOptional
 from app.api.social_links import SocialLinkList, SocialLinkDetail, SocialLinkRelationship
 from app.api.sponsors import SponsorList, SponsorDetail, SponsorRelationship
 from app.api.tracks import TrackList, TrackListPost, TrackDetail, TrackRelationshipOptional, TrackRelationshipRequired
 from app.api.speakers_calls import SpeakersCallList, SpeakersCallDetail, SpeakersCallRelationship
-from app.api.event_invoices import EventInvoiceList, EventInvoiceDetail, EventInvoiceRelationshipRequired, \
-    EventInvoiceRelationshipOptional
+from app.api.event_invoices import EventInvoiceList, EventInvoiceListPost, EventInvoiceDetail, \
+    EventInvoiceRelationshipRequired, EventInvoiceRelationshipOptional
 from app.api.role_invites import RoleInviteList, RoleInviteDetail, RoleInviteRelationship
-from app.api.users_events_roles import UsersEventsRolesList, UsersEventsRolesDetail, UsersEventsRolesRelationship
 from app.api.image_sizes import ImageSizeList, ImageSizeDetail
 from app.api.roles import RoleList, RoleDetail
 from app.api.session_types import SessionTypeList, SessionTypeDetail, SessionTypeRelationshipRequired, \
@@ -29,27 +29,32 @@ from app.api.pages import PageList, PageDetail
 from app.api.user_permission import UserPermissionList, UserPermissionDetail
 from app.api.tax import TaxList, TaxDetail, TaxRelationship
 from app.api.settings import SettingDetail
-from app.api.discount_codes import DiscountCodeList, DiscountCodeDetail, DiscountCodeRelationship
-from app.api.ticket_tags import TicketTagList, TicketTagDetail, TicketTagRelationshipOptional, \
+from app.api.discount_codes import DiscountCodeList, DiscountCodeDetail, DiscountCodeRelationshipOptional, \
+    DiscountCodeRelationshipRequired
+from app.api.ticket_tags import TicketTagList, TicketTagListPost, TicketTagDetail, TicketTagRelationshipOptional, \
     TicketTagRelationshipRequired
 from app.api.attendees import AttendeeList, AttendeeDetail, AttendeeRelationshipOptional, \
     AttendeeRelationshipRequired
 from app.api.access_codes import AccessCodeList, AccessCodeDetail, AccessCodeRelationshipRequired, \
     AccessCodeRelationshipOptional
+from app.api.custom_forms import CustomFormList, CustomFormDetail, CustomFormRelationshipRequired
 from app.api.modules import ModuleDetail
 from app.api.custom_placeholders import CustomPlaceholderList, CustomPlaceholderDetail, CustomPlaceholderRelationship
 from app.api.activities import ActivityList, ActivityDetail
+
 # users
 api.route(UserList, 'user_list', '/users')
 api.route(VerifyUser, 'verify_user', '/users/<int:user_id>/verify')
 api.route(UserDetail, 'user_detail', '/users/<int:id>', '/notifications/<int:notification_id>/user',
-          '/event-invoices/<int:event_invoice_id>/user', '/users-events-roles/<int:users_events_role_id>/user',
-          '/speakers/<int:speaker_id>/user', '/access-codes/<int:access_code_id>/user',
-          '/email-notifications/<int:email_notification_id>/user')
+          '/event-invoices/<int:event_invoice_id>/user', '/speakers/<int:speaker_id>/user', 
+          '/access-codes/<int:access_code_id>/marketer', '/email-notifications/<int:email_notification_id>/user', 
+          '/discount-codes/<int:discount_code_id>/marketer')
 api.route(UserRelationship, 'user_notification', '/users/<int:id>/relationships/notifications')
 api.route(UserRelationship, 'user_event_invoices', '/users/<int:id>/relationships/event-invoices')
 api.route(UserRelationship, 'user_speaker', '/users/<int:id>/relationships/speakers')
 api.route(UserRelationship, 'user_access_codes', '/users/<int:id>/relationships/access-codes')
+api.route(UserRelationship, 'user_discount_codes', '/users/<int:id>/relationships/discount-codes')
+api.route(UserRelationship, 'user_email_notifications', '/users/<int:id>/relationships/email-notifications')
 
 # notifications
 api.route(NotificationList, 'notification_list', '/notifications', '/users/<int:id>/notifications')
@@ -85,8 +90,7 @@ api.route(UserPermissionDetail, 'user_permission_detail', '/user-permissions/<in
 
 # roles
 api.route(RoleList, 'role_list', '/roles')
-api.route(RoleDetail, 'role_detail', '/roles/<int:id>', '/role-invites/<int:role_invite_id>/role',
-          '/users-events-roles/<int:users_events_role_id>/role')
+api.route(RoleDetail, 'role_detail', '/roles/<int:id>', '/role-invites/<int:role_invite_id>/role')
 
 # role_invites
 api.route(RoleInviteList, 'role_invite_list', '/role-invites', '/events/<int:event_id>/role-invites',
@@ -94,15 +98,6 @@ api.route(RoleInviteList, 'role_invite_list', '/role-invites', '/events/<int:eve
 api.route(RoleInviteDetail, 'role_invite_detail', '/role-invites/<int:id>')
 api.route(RoleInviteRelationship, 'role_invite_event', '/role-invites/<int:id>/relationships/event')
 api.route(RoleInviteRelationship, 'role_invite_role', '/role-invites/<int:id>/relationships/role')
-
-# users_events_roles
-api.route(UsersEventsRolesList, 'users_events_role_list', '/users-events-roles',
-          '/events/<int:event_id>/users-events-roles',
-          '/events/<event_identifier>/users-events-roles')
-api.route(UsersEventsRolesDetail, 'users_events_role_detail', '/users-events-roles/<int:id>')
-api.route(UsersEventsRolesRelationship, 'users_events_role_event', '/users-events-roles/<int:id>/relationships/event')
-api.route(UsersEventsRolesRelationship, 'users_events_role_role', '/users-events-roles/<int:id>/relationships/role')
-api.route(UsersEventsRolesRelationship, 'users_events_role_user', '/users-events-roles/<int:id>/relationships/user')
 
 # tickets
 api.route(TicketList, 'ticket_list', '/tickets', '/events/<int:event_id>/tickets',
@@ -114,7 +109,8 @@ api.route(TicketRelationshipOptional, 'ticket_ticket_tag', '/tickets/<int:id>/re
 api.route(TicketRelationshipOptional, 'ticket_access_code', '/tickets/<int:id>/relationships/access-codes')
 
 # ticket_tags
-api.route(TicketTagList, 'ticket_tag_list', '/ticket-tags', '/tickets/<int:ticket_id>/ticket-tags',
+api.route(TicketTagListPost, 'ticket_tag_list_post', '/ticket-tags')
+api.route(TicketTagList, 'ticket_tag_list', '/tickets/<int:ticket_id>/ticket-tags',
           '/events/<int:event_id>/ticket-tags', '/events/<event_identifier>/ticket-tags')
 api.route(TicketTagDetail, 'ticket_tag_detail', '/ticket-tags/<int:id>')
 api.route(TicketTagRelationshipOptional, 'ticket_tag_ticket', '/ticket-tags/<int:id>/relationships/tickets')
@@ -133,10 +129,9 @@ api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>
           '/event-copyright/<int:copyright_id>/event', '/tax/<int:tax_id>/event',
           '/event-invoices/<int:event_invoice_id>/event', '/discount-codes/<int:discount_code_id>/event',
           '/sessions/<int:session_id>/event', '/ticket-tags/<int:ticket_tag_id>/event',
-          '/role-invites/<int:role_invite_id>/event', '/users-events-roles/<int:users_events_role_id>/event',
-          '/speakers/<int:speaker_id>/event', '/access-codes/<int:access_code_id>/event',
-          '/email-notifications/<int:email_notification_id>/event',
-          '/attendees/<int:attendee_id>/event')
+          '/role-invites/<int:role_invite_id>/event', '/speakers/<int:speaker_id>/event',
+          '/access-codes/<int:access_code_id>/event', '/email-notifications/<int:email_notification_id>/event',
+          '/attendees/<int:attendee_id>/event', '/custom-forms/<int:custom_form_id>/event')
 api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/tickets',
           '/events/<identifier>/relationships/tickets')
 api.route(EventRelationship, 'event_ticket_tag', '/events/<int:id>/relationships/ticket-tags',
@@ -171,14 +166,14 @@ api.route(EventRelationship, 'event_event_sub_topic', '/events/<int:id>/relation
           '/events/<identifier>/relationships/event-sub-topic')
 api.route(EventRelationship, 'event_role_invite', '/events/<int:id>/relationships/role-invites',
           '/events/<identifier>/relationships/role-invites')
-api.route(EventRelationship, 'event_users_events_role', '/events/<int:id>/relationships/users-events-roles',
-          '/events/<identifier>/relationships/users-events-roles')
 api.route(EventRelationship, 'event_speaker', '/events/<int:id>/relationships/speakers',
           '/events/<identifier>/relationships/speakers')
 api.route(EventRelationship, 'event_access_codes', '/events/<int:id>/relationships/access-codes',
           '/events/<identifier>/relationships/access-codes')
 api.route(EventRelationship, 'event_attendees', '/events/<int:id>/relationships/attendees',
           '/events/<identifier>/relationships/attendees')
+api.route(EventRelationship, 'event_custom_forms', '/events/<int:id>/relationships/custom-forms',
+          '/events/<identifier>/relationships/custom-forms')
 
 # microlocations
 api.route(MicrolocationList, 'microlocation_list', '/events/<int:event_id>/microlocations',
@@ -192,6 +187,7 @@ api.route(MicrolocationRelationshipRequired, 'microlocation_event',
           '/microlocations/<int:id>/relationships/event')
 
 # sessions
+api.route(SessionListPost, 'session_list_post', '/sessions')
 api.route(SessionList, 'session_list', '/sessions', '/events/<int:event_id>/sessions',
           '/events/<event_identifier>/sessions',
           '/tracks/<int:track_id>/sessions', '/session-types/<int:session_type_id>/sessions',
@@ -278,10 +274,11 @@ api.route(TaxDetail, 'tax_detail', '/tax/<int:id>', '/events/<int:event_id>/tax'
 api.route(TaxRelationship, 'tax_event', '/tax/<int:id>/relationships/event')
 
 # event invoices
-api.route(EventInvoiceList, 'event_invoice_list', '/event-invoices', '/events/<int:event_id>/event-invoices',
+api.route(EventInvoiceListPost, '/event-invoices')
+api.route(EventInvoiceList, 'event_invoice_list', '/events/<int:event_id>/event-invoices',
           '/events/<event_identifier>/event-invoices', '/users/<int:user_id>/event-invoices')
 api.route(EventInvoiceDetail, 'event_invoice_detail', '/event-invoices/<int:id>')
-api.route(EventInvoiceRelationshipOptional, 'event_invoice_user',
+api.route(EventInvoiceRelationshipRequired, 'event_invoice_user',
           '/event-invoices/<int:id>/relationships/user')
 api.route(EventInvoiceRelationshipRequired, 'event_invoice_event',
           '/event-invoices/<int:id>/relationships/event')
@@ -290,13 +287,15 @@ api.route(EventInvoiceRelationshipOptional, 'event_invoice_discount_code',
 
 # discount codes
 api.route(DiscountCodeList, 'discount_code_list', '/discount-codes', '/events/<int:event_id>/discount-codes',
-          '/events/<event_identifier>/discount-codes')
+          '/events/<event_identifier>/discount-codes', '/users/<int:user_id>/discount-codes')
 api.route(DiscountCodeDetail, 'discount_code_detail', '/discount-codes/<int:id>',
           '/events/<int:event_id>/discount-code', 'event-invoices/<int:event_invoice_id>/discount-code')
-api.route(DiscountCodeRelationship, 'discount_code_event',
+api.route(DiscountCodeRelationshipRequired, 'discount_code_event',
           '/discount-codes/<int:id>/relationships/event')
-api.route(DiscountCodeRelationship, 'discount_code_events',
+api.route(DiscountCodeRelationshipOptional, 'discount_code_events',
           '/discount-codes/<int:id>/relationships/events')
+api.route(DiscountCodeRelationshipOptional, 'discount_code_user',
+          '/discount-codes/<int:id>/relationships/marketer')
 
 # attendees
 api.route(AttendeeList, 'attendee_list', '/attendees', '/events/<int:event_id>/attendees',
@@ -346,10 +345,17 @@ api.route(AccessCodeDetail, 'access_code_detail', '/access-codes/<int:id>')
 api.route(AccessCodeRelationshipRequired, 'access_code_event',
           '/access-codes/<int:id>/relationships/event')
 api.route(AccessCodeRelationshipOptional, 'access_code_user',
-          '/access-codes/<int:id>/relationships/user')
+          '/access-codes/<int:id>/relationships/marketer')
 api.route(AccessCodeRelationshipOptional, 'access_code_tickets',
           '/access-codes/<int:id>/relationships/tickets')
 
-# ticket_fees
+# activity
 api.route(ActivityList, 'activity_list', '/activities')
 api.route(ActivityDetail, 'activity_detail', '/activities/<int:id>')
+
+# custom form
+api.route(CustomFormList, 'custom_form_list', '/custom-forms', '/events/<int:event_id>/custom-forms',
+          '/events/<event_identifier>/custom-forms')
+api.route(CustomFormDetail, 'custom_form_detail', '/custom-forms/<int:id>')
+api.route(CustomFormRelationshipRequired, 'custom_form_event',
+          '/custom-forms/<int:id>/relationships/event')
