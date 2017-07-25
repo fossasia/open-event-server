@@ -311,7 +311,7 @@ def copyright_delete(transaction):
 @hooks.before("Invoices > Event Invoices > Get Event Invoices")
 def invoice_get_list(transaction):
     """
-    GET /events/1/event-invoices
+    GET /event-invoices
     :param transaction:
     :return:
     """
@@ -324,7 +324,7 @@ def invoice_get_list(transaction):
 @hooks.before("Invoices > Event Invoices > Create Event Invoices")
 def invoice_post(transaction):
     """
-    POST /events/1/event-invoices
+    POST /event-invoices
     :param transaction:
     :return:
     """
@@ -460,9 +460,6 @@ def session_post(transaction):
     :param transaction:
     :return:
     """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
-
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
@@ -1046,7 +1043,7 @@ def ticket_fees_delete(transaction):
 @hooks.before("Ticket Tags > Ticket Tags Collection > List All Ticket Tags")
 def ticket_tag_get_list(transaction):
     """
-    GET /tickets/1/ticket-tags
+    GET /ticket-tags
     :param transaction:
     :return:
     """
@@ -1059,13 +1056,10 @@ def ticket_tag_get_list(transaction):
 @hooks.before("Ticket Tags > Ticket Tags Collection > Create Ticket Tag")
 def ticket_tag_post(transaction):
     """
-    POST /tickets/1/ticket-tags
+    POST /ticket-tags
     :param transaction:
     :return:
     """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
-
     with stash['app'].app_context():
         tickets = TicketFactory()
         db.session.add(tickets)

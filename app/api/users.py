@@ -32,7 +32,6 @@ class UserSchema(Schema):
         type_ = 'user'
         self_view = 'v1.user_detail'
         self_view_kwargs = {'id': '<id>'}
-        self_view_many = 'v1.user_list'
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
@@ -92,6 +91,23 @@ class UserSchema(Schema):
         related_view_kwargs={'user_id': '<id>'},
         schema='AccessCodeSchema',
         type_='access-codes')
+    discount_codes = Relationship(
+        attribute='discount_codes',
+        self_view='v1.user_discount_codes',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.discount_code_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='DiscountCodeSchema',
+        type_='discount-codes')
+    email_notifications = Relationship(
+        attribute='email_notifications',
+        self_view='v1.user_email_notifications',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.email_notification_list',
+        related_view_kwargs={'id': '<id>'},
+        schema='EmailNotificationSchema',
+        many=True,
+        type_='email-notification')
 
 
 class UserList(ResourceList):
@@ -165,6 +181,13 @@ class UserDetail(ResourceDetail):
             access_code = safe_query(self, AccessCode, 'id', view_kwargs['access_code_id'], 'access_code_id')
             if access_code.marketer_id is not None:
                 view_kwargs['id'] = access_code.marketer_id
+            else:
+                view_kwargs['id'] = None
+
+        if view_kwargs.get('discount_code_id') is not None:
+            discount_code = safe_query(self, DiscountCode, 'id', view_kwargs['discount_code_id'], 'discount_code_id')
+            if discount_code.marketer_id is not None:
+                view_kwargs['id'] = discount_code.marketer_id
             else:
                 view_kwargs['id'] = None
 
