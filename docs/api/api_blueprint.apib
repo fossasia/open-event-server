@@ -5532,64 +5532,12 @@ Related to tickets and event.
 |:----------|-------------|------|----------|
 | `name`  | Name of the ticket tag | string | **yes** |
 
-## Ticket Tags Collection [/v1/tickets/{ticket_id}/ticket-tags{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Ticket Tags Collection [/v1/ticket-tags{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
-
-### List All Ticket Tags [GET]
-Get a list of Tickets.
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-            "meta": {
-                "count": 1
-            },
-            "data": [
-                {
-                    "relationships": {
-                        "event": {
-                            "links": {
-                                "self": "/v1/ticket-tags/1/relationships/event",
-                                "related": "/v1/ticket-tags/1/event"
-                            }
-                        },
-                        "tickets": {
-                          "links": {
-                            "self": "/v1/ticket-tags/1/relationships/tickets",
-                            "related": "/v1/ticket-tags/1/tickets"
-                          }
-                        }
-                    },
-                    "attributes": {
-                        "name": "ticket-tag-name"
-                    },
-                    "type": "ticket-tag",
-                    "id": "1",
-                    "links": {
-                        "self": "/v1/ticket-tags/1"
-                    }
-                }
-            ],
-            "jsonapi": {
-                "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/tickets/2/ticket-tags"
-            }
-        }
-
 
 ### Create Ticket Tag [POST]
 Create a new ticket tag using an ticket_id.
@@ -5609,7 +5557,7 @@ Create a new ticket tag using an ticket_id.
                      "data":
                          {
                            "type":"event",
-                           "id":"2"
+                           "id":"1"
                          }
                    },
                    "tickets":{
@@ -5651,16 +5599,16 @@ Create a new ticket tag using an ticket_id.
                     "name": "ticket-tag-name"
                 },
                 "type": "ticket-tag",
-                "id": "5",
+                "id": "1",
                 "links": {
-                    "self": "/v1/ticket-tags/5"
+                    "self": "/v1/ticket-tags/1"
                 }
             },
             "jsonapi": {
                 "version": "1.0"
             },
             "links": {
-                "self": "/v1/ticket-tags/5"
+                "self": "/v1/ticket-tags/1"
             }
         }
 
@@ -5795,6 +5743,124 @@ Delete a single ticket tag.
             "version": "1.0"
           }
         }
+
+## List Ticket Tags under an Event [/v1/events/{event_identifier}/ticket-tags{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List all Ticket Tags [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "tickets": {
+                            "links": {
+                                "self": "/v1/ticket-tags/1/relationships/tickets",
+                                "related": "/v1/ticket-tags/1/tickets"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/ticket-tags/1/relationships/event",
+                                "related": "/v1/ticket-tags/1/event"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "name": "ticket-tag-name"
+                    },
+                    "type": "ticket-tag",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/ticket-tags/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/events/1/ticket-tags"
+            }
+        }
+
+
+## List Ticket Tags for a Ticket [/v1/tickets/{ticket_id}/ticket-tags{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + ticket_id: 1 (integer) - ID of the event in the form of an integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List all Ticket Tags [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "tickets": {
+                            "links": {
+                                "self": "/v1/ticket-tags/1/relationships/tickets",
+                                "related": "/v1/ticket-tags/1/tickets"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/ticket-tags/1/relationships/event",
+                                "related": "/v1/ticket-tags/1/event"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "name": "ticket-tag-name"
+                    },
+                    "type": "ticket-tag",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/ticket-tags/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/tickets/1/ticket-tags"
+            }
+        }
+
 
 # Group Attendees
 Related to ticket holders(attendees) of an event (free, paid, donation) to the event.

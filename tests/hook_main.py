@@ -1040,19 +1040,6 @@ def ticket_fees_delete(transaction):
 
 
 # ------------------------- Ticket Tags -------------------------
-@hooks.before("Ticket Tags > Ticket Tags Collection > List All Ticket Tags")
-def ticket_tag_get_list(transaction):
-    """
-    GET /ticket-tags
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        ticket_tag = TicketTagFactory()
-        db.session.add(ticket_tag)
-        db.session.commit()
-
-
 @hooks.before("Ticket Tags > Ticket Tags Collection > Create Ticket Tag")
 def ticket_tag_post(transaction):
     """
@@ -1096,6 +1083,32 @@ def ticket_tag_patch(transaction):
 def ticket_tag_delete(transaction):
     """
     DELETE /ticket-tags/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket_tag = TicketTagFactory()
+        db.session.add(ticket_tag)
+        db.session.commit()
+
+
+@hooks.before("Ticket Tags > List Ticket Tags under an Event > List all Ticket Tags")
+def ticket_tag_event(transaction):
+    """
+    GET /events/1/ticket-tags
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket_tag = TicketTagFactory()
+        db.session.add(ticket_tag)
+        db.session.commit()
+
+
+@hooks.before("Ticket Tags > List Ticket Tags for a Ticket > List all Ticket Tags")
+def ticket_tag_ticket(transaction):
+    """
+    GET /tickets/1/ticket-tags
     :param transaction:
     :return:
     """
