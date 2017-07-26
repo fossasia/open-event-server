@@ -229,7 +229,7 @@ class UserDetail(ResourceDetail):
 
 class UserRelationship(ResourceRelationship):
 
-    decorators = (jwt_required, )
+    decorators = (is_user_itself, )
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User}
