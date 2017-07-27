@@ -2,6 +2,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 
+from app.api.bootstrap import api
 from app.models import db
 from app.models.order import Order
 from app.models.ticket_holder import TicketHolder
@@ -133,7 +134,7 @@ class AttendeeRelationshipOptional(ResourceRelationship):
     """
     Attendee Relationship(Optional)
     """
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_user_itself', fetch="user_id", fetch_as="id", model=TicketHolder),)
     schema = AttendeeSchema
     data_layer = {'session': db.session,
                   'model': TicketHolder}
