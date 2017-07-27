@@ -39,7 +39,7 @@ from app.views import BlueprintsManager
 from app.api.helpers.auth import AuthManager
 from app.models.event import Event, EventsUsers
 from app.models.role_invite import RoleInvite
-from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations
+from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations, check_migrations
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -166,6 +166,8 @@ health = HealthCheck(current_app, "/health-check")
 envdump = EnvironmentDump(current_app, "/environment", include_config=False)
 health.add_check(health_check_celery)
 health.add_check(health_check_db)
+with current_app.app_context():
+    current_app.config['MIGRATION_STATUS'] = check_migrations()
 health.add_check(health_check_migrations)
 
 
