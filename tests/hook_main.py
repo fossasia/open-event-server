@@ -1305,7 +1305,7 @@ def notification_delete(transaction):
 
 
 # ------------------------- Email Notifications -------------------------
-@hooks.before("Email Notifications > Email Notifications Collection > List All Email Notifications")
+@hooks.before("Email Notifications > Email Notifications Collection Get > List All Email Notifications")
 def email_notification_get_list(transaction):
     """
     GET /users/2/email-notifications
@@ -1318,10 +1318,10 @@ def email_notification_get_list(transaction):
         db.session.commit()
 
 
-@hooks.before("Email Notifications > Email Notifications Collection > Create Email Notificaiton")
+@hooks.before("Email Notifications > Email Notifications Collection Post > Create Email Notificaiton")
 def email_notification_post(transaction):
     """
-    POST /users/2/email-notifications
+    POST /email-notifications
     :param transaction:
     :return:
     """

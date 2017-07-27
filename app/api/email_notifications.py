@@ -9,6 +9,10 @@ from app.models.email_notification import EmailNotification
 from app.models.user import User
 from app.api.helpers.permissions import is_user_itself, jwt_required
 from app.api.helpers.db import safe_query
+from app.api.helpers.utilities import require_relationship
+from app.api.helpers.permission_manager import has_access
+from app.api.helpers.exceptions import ForbiddenException
+
 
 
 class EmailNotificationSchema(Schema):
@@ -50,6 +54,23 @@ class EmailNotificationSchema(Schema):
                         )
 
 
+class EmailNotificationListPost(ResourceList):
+    """
+    List and create email notifications
+    """
+
+    def before_post(self, args, kwargs, data):
+        require_relationship(['user'], data)
+        if not has_access('is_user_itself', id=data['user']):
+            raise ForbiddenException({'source': ''}, 'You need to be the user.')
+
+    view_kwargs = True
+    methods = ['POST', ]
+    schema = EmailNotificationSchema
+    data_layer = {'session': db.session,
+                  'model': EmailNotification}
+
+
 class EmailNotificationList(ResourceList):
     """
     List all the email notification
@@ -67,25 +88,14 @@ class EmailNotificationList(ResourceList):
             query_ = query_.join(User).filter(User.id == user.id)
         return query_
 
-    def before_create_object(self, data, view_kwargs):
-        """
-        method to create object before post
-        :param data:
-        :param view_kwargs:
-        :return:
-        """
-        if view_kwargs.get('id') is not None:
-            user = safe_query(self, User, 'id', view_kwargs['id'], 'id')
-            data['user_id'] = user.id
-
     view_kwargs = True
+    methods = ['GET', ]
     decorators = (is_user_itself,)
     schema = EmailNotificationSchema
     data_layer = {'session': db.session,
                   'model': EmailNotification,
                   'methods': {
-                      'query': query,
-                      'before_create_object': before_create_object
+                      'query': query
                   }}
 
 
@@ -100,9 +110,20 @@ class EmailNotificationDetail(ResourceDetail):
                   'model': EmailNotification}
 
 
-class EmailNotificationRelationship(ResourceRelationship):
+class EmailNotificationRelationshipRequired(ResourceRelationship):
     """
-    Email notification Relationship
+    Email notification Relationship (Required)
+    """
+    decorators = (jwt_required,)
+    methods = ['GET', 'PATCH']
+    schema = EmailNotificationSchema
+    data_layer = {'session': db.session,
+                  'model': EmailNotification}
+
+
+class EmailNotificationRelationshipOptional(ResourceRelationship):
+    """
+    Email notification Relationship (Optional)
     """
     decorators = (jwt_required,)
     schema = EmailNotificationSchema
