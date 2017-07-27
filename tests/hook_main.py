@@ -782,7 +782,7 @@ def speakers_call_delete(transaction):
 
 
 # ------------------------- Sponsors -------------------------
-@hooks.before("Sponsors > Sponsors Collection > List All Sponsors")
+@hooks.before("Sponsors > Sponsors Get Collection > List All Sponsors")
 def sponsor_get_list(transaction):
     """
     GET /events/1/sponsors
@@ -795,16 +795,13 @@ def sponsor_get_list(transaction):
         db.session.commit()
 
 
-@hooks.before("Sponsors > Sponsors Collection > Create Sponsor")
+@hooks.before("Sponsors > Sponsors Post Collection > Create Sponsor")
 def sponsor_post(transaction):
     """
-    POST /events/1/sponsors
+    POST /sponsors
     :param transaction:
     :return:
     """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
-
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
