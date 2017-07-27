@@ -929,29 +929,13 @@ def tax_delete(transaction):
 
 
 # ------------------------- Tickets -------------------------
-@hooks.before("Tickets > Tickets Collection > List All Tickets")
-def ticket_get_list(transaction):
-    """
-    GET /events/1/tickets
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        ticket = TicketFactory()
-        db.session.add(ticket)
-        db.session.commit()
-
-
 @hooks.before("Tickets > Tickets Collection > Create Ticket")
 def ticket_post(transaction):
     """
-    POST /events/1/tickets
+    POST /tickets
     :param transaction:
     :return:
     """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
-
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
@@ -996,9 +980,47 @@ def ticket_delete(transaction):
         db.session.add(ticket)
         db.session.commit()
 
+
+@hooks.before("Tickets > List Tickets under an Event > List Tickets")
+def event_ticket(transaction):
+    """
+    GET /events/1/tickets
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket = TicketFactory()
+        db.session.add(ticket)
+        db.session.commit()
+
+
+@hooks.before("Tickets > List Tickets under a Ticket-tag > List Tickets")
+def tikcet_tag_ticket(transaction):
+    """
+    GET /tikcet-tags/1/tickets
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket_tag = TicketTagFactory()
+        db.session.add(ticket_tag)
+        db.session.commit()
+
+
+@hooks.before("Tickets > List Tickets for an Access Code > List Tickets")
+def access_code_ticket(transaction):
+    """
+    GET /access-codes/1/tickets
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        access_code = AccessCodeFactory()
+        db.session.add(access_code)
+        db.session.commit()
+
+
 # ------------------------- Ticket Fees -------------------------
-
-
 @hooks.before("Ticket Fees > Ticket Fees Collection > List Ticket Fees")
 def ticket_fees_get_list(transaction):
     """
