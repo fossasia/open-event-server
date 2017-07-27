@@ -139,7 +139,11 @@ class TaxDetail(ResourceDetail):
 
 
 class TaxRelationship(ResourceRelationship):
-    decorators = (jwt_required,)
+    """
+        Tax Relationship Resource
+    """
+    decorators = (api.has_permission('is_coorganizer', fetch="event_id",
+                                     fetch_as="event_id", model=Tax, methods="PATCH,DELETE"),)
     methods = ['GET', 'PATCH']
     schema = TaxSchema
     data_layer = {'session': db.session,

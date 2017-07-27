@@ -138,8 +138,8 @@ class SessionTypeRelationshipRequired(ResourceRelationship):
     """
     SessionType Relationship
     """
-    decorators = (jwt_required,)
-    methods = ['GET', 'PATCH']
+    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
+                                     model=SessionType),)
     schema = SessionTypeSchema
     data_layer = {'session': db.session,
                   'model': SessionType}
@@ -149,6 +149,8 @@ class SessionTypeRelationshipOptional(ResourceRelationship):
     """
     SessionType Relationship
     """
+    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
+                                     model=SessionType),)
     decorators = (jwt_required,)
     schema = SessionTypeSchema
     data_layer = {'session': db.session,

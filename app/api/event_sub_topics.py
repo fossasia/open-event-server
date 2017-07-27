@@ -131,7 +131,7 @@ class EventSubTopicRelationship(ResourceRelationship):
     """
     Event sub topic Relationship
     """
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
     schema = EventSubTopicSchema
     data_layer = {'session': db.session,
                   'model': EventSubTopic}

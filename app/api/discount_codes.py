@@ -335,7 +335,7 @@ class DiscountCodeDetail(ResourceDetail):
 
 class DiscountCodeRelationshipRequired(ResourceRelationship):
     """
-    Discount Code Relationship
+    Discount Code Relationship for required entities
     """
     def before_get(self, args, kwargs):
         """
@@ -344,8 +344,19 @@ class DiscountCodeRelationshipRequired(ResourceRelationship):
         :param kwargs:
         :return:
         """
-    decorators = (jwt_required,)
+        discount = db.session.query(DiscountCode).filter_by(id=kwargs.get('id')).one()
+        if not discount:
+            raise ObjectNotFound({'parameter': '{id}'}, "DiscountCode:  not found")
+        if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=discount.event_id):
+            self.schema = DiscountCodeSchemaTicket
+
+        elif discount.used_for == 'event' and has_access('is_admin'):
+            self.schema = DiscountCodeSchemaEvent
+        else:
+            raise UnprocessableEntity({'source': ''},
+                                      "Please check used_for and endpoint and verify your permission")
     methods = ['GET', 'PATCH']
+    decorators = (jwt_required,)
     schema = DiscountCodeSchemaTicket
     data_layer = {'session': db.session,
                   'model': DiscountCode}
@@ -365,10 +376,15 @@ class DiscountCodeRelationshipOptional(ResourceRelationship):
         discount = db.session.query(DiscountCode).filter_by(id=kwargs.get('id')).one()
         if not discount:
             raise ObjectNotFound({'parameter': '{id}'}, "DiscountCode:  not found")
-        if discount.used_for == 'ticket':
+
+        if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=discount.event_id):
             self.schema = DiscountCodeSchemaTicket
-        if discount.used_for == 'event':
+
+        elif discount.used_for == 'event' and has_access('is_admin'):
             self.schema = DiscountCodeSchemaEvent
+        else:
+            raise UnprocessableEntity({'source': ''},
+                                      "Please check used_for and endpoint and verify your permission")
     decorators = (jwt_required,)
     schema = DiscountCodeSchemaEvent
     data_layer = {'session': db.session,

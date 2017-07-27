@@ -101,7 +101,8 @@ class SocialLinkRelationship(ResourceRelationship):
     """
     Social Link Relationship
     """
-    decorators = (jwt_required, )
+    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
+                                     model=SocialLink),)
     methods = ['GET', 'PATCH']
     schema = SocialLinkSchema
     data_layer = {'session': db.session,

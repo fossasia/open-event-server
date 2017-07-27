@@ -161,7 +161,8 @@ class TicketRelationshipRequired(ResourceRelationship):
     """
     Tickets Relationship (Required)
     """
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
+                                     fetch_as="event_id", model=Ticket, methods="PATCH"),)
     methods = ['GET', 'PATCH']
     schema = TicketSchema
     data_layer = {'session': db.session,
@@ -172,7 +173,8 @@ class TicketRelationshipOptional(ResourceRelationship):
     """
     Tickets Relationship (Optional)
     """
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
+                                     fetch_as="event_id", model=Ticket, methods="PATCH,DELETE"),)
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket}

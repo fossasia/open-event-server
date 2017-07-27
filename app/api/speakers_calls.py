@@ -138,7 +138,8 @@ class SpeakersCallRelationship(ResourceRelationship):
     """
     speakers call Relationship
     """
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_coorganizer', fetch="event_id", fetch_as="event_id",
+                                     model=SpeakersCall, methods="PATCH,DELETE"),)
     schema = SpeakersCallSchema
     methods = ['GET', 'PATCH']
     data_layer = {'session': db.session,

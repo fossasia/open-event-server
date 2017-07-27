@@ -2,6 +2,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 
+from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
 from app.models import db
@@ -105,7 +106,9 @@ class TicketTagDetail(ResourceDetail):
     """
     TicketTag detail by id
     """
-    decorators = (jwt_required,)
+
+    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
+                                     model=TicketTag),)
     schema = TicketTagSchema
     data_layer = {'session': db.session,
                   'model': TicketTag}
@@ -115,7 +118,9 @@ class TicketTagRelationshipRequired(ResourceRelationship):
     """
     TicketTag Relationship
     """
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
+                                     model=TicketTag),)
+    schema = TicketTagSchema
     methods = ['GET', 'PATCH']
     schema = TicketTagSchema
     data_layer = {'session': db.session,
@@ -126,7 +131,9 @@ class TicketTagRelationshipOptional(ResourceRelationship):
     """
     TicketTag Relationship
     """
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
+                                     model=TicketTag),)
+    schema = TicketTagSchema
     schema = TicketTagSchema
     data_layer = {'session': db.session,
                   'model': TicketTag}

@@ -13,3 +13,4 @@ class TicketTagFactory(factory.alchemy.SQLAlchemyModelFactory):
     tickets = factory.RelatedFactory(TicketFactory)
     event = factory.RelatedFactory(EventFactoryBasic)
     name = common.string_
+    event_id = 1

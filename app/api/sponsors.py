@@ -73,23 +73,19 @@ class SponsorList(ResourceList):
         :return:
         """
         query_ = self.session.query(Sponsor)
+        event = None
+
         if view_kwargs.get('event_id'):
             event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+        elif view_kwargs.get('event_identifier'):
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+
+        if event:
             if event.state != 'published':
                 if 'Authorization' in request.headers and has_access('is_coorganizer', event_id=event.id):
                     query_ = query_.join(Event).filter(Event.id == event.id)
                 else:
                     raise ObjectNotFound({'parameter': 'event_id'},
-                                         "Event: {} not found".format(view_kwargs['event_identifier']))
-            else:
-                query_ = query_.join(Event).filter(Event.id == event.id)
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-            if event.state != 'published':
-                if 'Authorization' in request.headers and has_access('is_coorganizer', event_id=event.id):
-                    query_ = query_.join(Event).filter(Event.id == event.id)
-                else:
-                    raise ObjectNotFound({'parameter': 'event_identifier'},
                                          "Event: {} not found".format(view_kwargs['event_identifier']))
             else:
                 query_ = query_.join(Event).filter(Event.id == event.id)
@@ -120,7 +116,8 @@ class SponsorRelationship(ResourceRelationship):
     """
     Sponsor Schema Relation
     """
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
+                                     model=Sponsor),)
     methods = ['GET', 'PATCH']
     schema = SponsorSchema
     data_layer = {'session': db.session,
