@@ -3,6 +3,7 @@ from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
+from flask import request
 
 from app.api.helpers.utilities import dasherize
 from app.models import db
@@ -11,10 +12,32 @@ from app.models.event import Event
 from app.models.tax import Tax
 from app.api.helpers.db import safe_query
 from app.api.helpers.utilities import require_relationship
+from app.api.bootstrap import api
+from app.api.helpers.permission_manager import has_access
+from app.api.helpers.exceptions import ForbiddenException
+
+
+class TaxSchemaPublic(Schema):
+    class Meta:
+        type_ = 'tax'
+        self_view = 'v1.tax_detail'
+        self_view_kwargs = {'id': '<id>'}
+        inflect = dasherize
+
+    id = fields.Str(dump_only=True)
+    name = fields.Str(required=True)
+    rate = fields.Float(validate=lambda n: 0 <= n <= 100, required=True)
+    is_tax_included_in_price = fields.Boolean(default=False)
+    event = Relationship(attribute='event',
+                         self_view='v1.tax_event',
+                         self_view_kwargs={'id': '<id>'},
+                         related_view='v1.event_detail',
+                         related_view_kwargs={'tax_id': '<id>'},
+                         schema='EventSchema',
+                         type_='event')
 
 
 class TaxSchema(Schema):
-
     class Meta:
         type_ = 'tax'
         self_view = 'v1.tax_detail'
@@ -43,9 +66,38 @@ class TaxSchema(Schema):
                          type_='event')
 
 
-class TaxList(ResourceList):
+class TaxListPost(ResourceList):
     def before_post(self, args, kwargs, data):
         require_relationship(['event'], data)
+        if not has_access('is_coorganizer', event_id=data['event']):
+            raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
+
+    def before_get(self, args, kwargs):
+        if 'Authorization' in request.headers and has_access('is_admin'):
+            self.schema = TaxSchema
+        else:
+            self.schema = TaxSchemaPublic
+
+    schema = TaxSchema
+    data_layer = {'session': db.session,
+                  'model': Tax}
+
+
+class TaxList(ResourceList):
+    def before_get(self, args, view_kwargs):
+        if view_kwargs.get('event_identifier'):
+            try:
+                event = Tax.query.filter_by(identifier=view_kwargs['id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': 'event_identifier'},
+                                     "Event: {} not found".format(view_kwargs['event_identifier']))
+            else:
+                view_kwargs['event_id'] = event.id
+
+        if has_access('is_coorganizer', event_id=view_kwargs['event_id']):
+            self.schema = TaxSchema
+        else:
+            self.schema = TaxSchemaPublic
 
     def query(self, view_kwargs):
         query_ = self.session.query(Tax)
@@ -57,24 +109,13 @@ class TaxList(ResourceList):
             query_ = query_.join(Event).filter(Event.identifier == event.id)
         return query_
 
-    def before_create_object(self, data, view_kwargs):
-        event = None
-        if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-        if event:
-            data['event_id'] = event.id
-
     view_kwargs = True
-    decorators = (jwt_required, )
-    methods = ['POST', ]
+    methods = ['GET', ]
     schema = TaxSchema
     data_layer = {'session': db.session,
                   'model': Tax,
                   'methods': {
-                      'query': query,
-                      'before_create_object': before_create_object
+                      'query': query
                   }}
 
 
@@ -82,39 +123,23 @@ class TaxDetail(ResourceDetail):
     """
      tax detail by id
     """
-    def before_get_object(self, view_kwargs):
-        if view_kwargs.get('event_identifier'):
-            try:
-                event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event_identifier'},
-                                     "Event: {} not found".format(view_kwargs['event_identifier']))
-            else:
-                view_kwargs['event_id'] = event.id
 
-        if view_kwargs.get('event_id'):
-            try:
-                event = self.session.query(Event).filter_by(id=view_kwargs['event_id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'parameter': 'event_id'},
-                                     "Event: {} not found".format(view_kwargs['event_id']))
-            else:
-                if event.tax:
-                    view_kwargs['id'] = event.tax.id
-                else:
-                    view_kwargs['id'] = None
+    def before_get(self, args, kwargs):
+        tax = Tax.query.filter_by(id=kwargs['id']).one()
+        if 'Authorization' in request.headers and has_access('is_coorganizer', event_id=tax.event_id):
+            self.schema = TaxSchema
+        else:
+            self.schema = TaxSchemaPublic
 
-    decorators = (jwt_required, )
+    decorators = (api.has_permission('is_coorganizer', fetch="event_id",
+                                     fetch_as="event_id", model=Tax, methods="PATCH,DELETE"),)
     schema = TaxSchema
     data_layer = {'session': db.session,
-                  'model': Tax,
-                  'methods': {
-                      'before_get_object': before_get_object
-                  }}
+                  'model': Tax}
 
 
 class TaxRelationship(ResourceRelationship):
-    decorators = (jwt_required, )
+    decorators = (jwt_required,)
     methods = ['GET', 'PATCH']
     schema = TaxSchema
     data_layer = {'session': db.session,
