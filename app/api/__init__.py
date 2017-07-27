@@ -19,7 +19,7 @@ from app.api.tracks import TrackList, TrackListPost, TrackDetail, TrackRelations
 from app.api.speakers_calls import SpeakersCallList, SpeakersCallDetail, SpeakersCallRelationship
 from app.api.event_invoices import EventInvoiceList, EventInvoiceListPost, EventInvoiceDetail, \
     EventInvoiceRelationshipRequired, EventInvoiceRelationshipOptional
-from app.api.role_invites import RoleInviteList, RoleInviteDetail, RoleInviteRelationship
+from app.api.role_invites import RoleInviteListPost, RoleInviteList, RoleInviteDetail, RoleInviteRelationship
 from app.api.image_sizes import ImageSizeList, ImageSizeDetail
 from app.api.roles import RoleList, RoleDetail
 from app.api.session_types import SessionTypeList, SessionTypeDetail, SessionTypeRelationshipRequired, \
@@ -93,7 +93,8 @@ api.route(RoleList, 'role_list', '/roles')
 api.route(RoleDetail, 'role_detail', '/roles/<int:id>', '/role-invites/<int:role_invite_id>/role')
 
 # role_invites
-api.route(RoleInviteList, 'role_invite_list', '/role-invites', '/events/<int:event_id>/role-invites',
+api.route(RoleInviteListPost, 'role_invite_list_post', '/role-invites')
+api.route(RoleInviteList, 'role_invite_list', '/events/<int:event_id>/role-invites',
           '/events/<event_identifier>/role-invites')
 api.route(RoleInviteDetail, 'role_invite_detail', '/role-invites/<int:id>')
 api.route(RoleInviteRelationship, 'role_invite_event', '/role-invites/<int:id>/relationships/event')

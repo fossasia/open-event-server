@@ -7896,19 +7896,18 @@ Role invites for Events. Can only be edited and entered by event organizers.
 | `hash` | hash of the role invite | string | - |
 | `status` | Status the invite.  | string (default: `pending`) | - |
 | `created-at` | Discount Code created at | ISO 8601 (tz-aware) | - |
-| `role-name` | Name of the role.  | string (example: `attendee`) | - |
+| `role-name` | Name of the role.  | string (example: `attendee`) | **yes`** |
 
 
-## Role Invites Collection [/v1/events/{event_identifier}/role-invites{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Role Invites Collection [/v1/role-invites{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `status`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Role Invites [GET]
-Get a list of Role invites.
+Get a list of Role invites (Only Admin).
 
 + Request
 
@@ -7980,13 +7979,19 @@ Create a new role invite with event_id.
                   "email": "example@example.com",
                   "created-at": "2017-06-20T09:59:23.740772+00:00",
                   "status": "pending",
-                  "role-name": "attendee"
+                  "role-name": "organizer"
                 },
                 "relationships": {
                   "role": {
                     "data": {
                       "type": "role",
-                      "id": "2"
+                      "id": "1"
+                    }
+                  },
+                  "event": {
+                    "data": {
+                      "type": "event",
+                      "id": "1"
                     }
                   }
                 },
@@ -8017,7 +8022,7 @@ Create a new role invite with event_id.
                 "hash": "149889783495332276669212664484219865405",
                 "created-at": "2017-06-20T09:59:23.740772+00:00",
                 "status": "pending",
-                "role-name": "attendee"
+                "role-name": "organizer"
               },
               "type": "role-invite",
               "id": "1",
@@ -8032,6 +8037,69 @@ Create a new role invite with event_id.
               "self": "/v1/role-invites/1"
             }
           }
+
+## Role Invites Collection List [/v1/events/{event_identifier}/role-invites{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `status`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List All Role Invites [GET]
+Get a list of Role invites.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "role": {
+                  "links": {
+                    "self": "/v1/role-invites/1/relationships/role",
+                    "related": "/v1/role-invites/1/role"
+                  }
+                },
+                "event": {
+                  "links": {
+                    "self": "/v1/role-invites/1/relationships/event",
+                    "related": "/v1/role-invites/1/event"
+                  }
+                }
+              },
+              "attributes": {
+                "email": "example@example.com",
+                "hash": "149889783495332276669212664484219865405",
+                "created-at": "2017-06-20T09:59:23.740772+00:00",
+                "status": "pending",
+                "role-name": "organizer"
+              },
+              "type": "role-invite",
+              "id": "1",
+              "links": {
+                "self": "/v1/role-invites/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/events/1/role-invites"
+          }
+        }
 
 ## Role Invite Details [/v1/role-invites/{role_invite_id}]
 + Parameters
@@ -8106,10 +8174,9 @@ Authorized user must be the event's organizer.
               "data": {
                 "attributes": {
                   "email": "example@example.com",
-                  "hash": "149889783495332276669212664484219865405",
                   "created-at": "2017-06-20T09:59:23.740772+00:00",
                   "status": "pending",
-                  "role-name": "attendee"
+                  "role-name": "organizer"
                 },
                 "type": "role-invite",
                 "id": "1"
@@ -8139,7 +8206,7 @@ Authorized user must be the event's organizer.
               "hash": "149889783495332276669212664484219865405",
               "created-at": "2017-06-20T09:59:23.740772+00:00",
               "status": "pending",
-              "role-name": "attendee"
+              "role-name": "organizer"
             },
             "type": "role-invite",
             "id": "1",
