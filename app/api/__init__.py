@@ -2,7 +2,8 @@ from app.api.bootstrap import api
 from app.api.ticket_fees import TicketFeeList, TicketFeeDetail
 from app.api.users import UserList, UserDetail, UserRelationship, VerifyUser
 from app.api.notifications import NotificationList, NotificationDetail, NotificationRelationship
-from app.api.email_notifications import EmailNotificationList, EmailNotificationDetail, EmailNotificationRelationship
+from app.api.email_notifications import EmailNotificationList, EmailNotificationListPost, EmailNotificationDetail,\
+    EmailNotificationRelationshipOptional, EmailNotificationRelationshipRequired
 from app.api.tickets import TicketList, TicketDetail, TicketRelationshipRequired, TicketRelationshipOptional
 from app.api.events import EventList, EventDetail, EventRelationship
 from app.api.event_types import EventTypeList, EventTypeDetail, EventTypeRelationship
@@ -63,11 +64,12 @@ api.route(NotificationRelationship, 'notification_user',
           '/notifications/<int:id>/relationships/user')
 
 # email_notifications
+api.route(EmailNotificationListPost, 'email_notification_list_post', '/email-notifications')
 api.route(EmailNotificationList, 'email_notification_list', '/users/<int:id>/email-notifications')
 api.route(EmailNotificationDetail, 'email_notification_detail', '/email-notifications/<int:id>')
-api.route(EmailNotificationRelationship, 'email_notification_user',
+api.route(EmailNotificationRelationshipRequired, 'email_notification_user',
           '/email-notifications/<int:id>/relationships/user')
-api.route(EmailNotificationRelationship, 'email_notification_event',
+api.route(EmailNotificationRelationshipOptional, 'email_notification_event',
           '/email-notifications/<int:id>/relationships/event')
 
 # image_sizes
