@@ -1,6 +1,7 @@
 from app.models import db
 from celery.task.control import inspect
 from errno import errorcode
+from flask import current_app
 
 
 def health_check_celery():
@@ -34,11 +35,12 @@ def health_check_db():
         return False, 'Error connecting to database'
 
 
-def health_check_migrations():
+def check_migrations():
     """
     Checks whether database is up to date with migrations by performing a select query on each model
     :return:
     """
+    print("Checking if migrations are up to date.....")
     # Get all the models in the db, all models should have a explicit __tablename__
     classes, models, table_names = [], [], []
     # noinspection PyProtectedMember
@@ -55,6 +57,24 @@ def health_check_migrations():
     for model in models:
         try:
             db.session.query(model).first()
-        except:
-            return False, '{} model out of date with migrations'.format(model)
-    return True, 'database up to date with migrations'
+        except Exception as e:
+            print(e)
+            print("failure: {} model out of date with migrations.....".format(model))
+            return 'failure,{} model out of date with migrations'.format(model)
+    print("success: database up to date with migrations.....")
+    return 'success,database up to date with migrations'
+
+
+def health_check_migrations():
+    """
+    Parses config var 'MIGRATION_STATUS' obtained from check_migrations function
+    :return:
+    """
+    if 'MIGRATION_STATUS' in current_app.config:
+        result = current_app.config['MIGRATION_STATUS'].split(',')
+        if result[0] == 'success':
+            return True, result[1]
+        else:
+            return False, result[0]
+    else:
+        return False, 'The health_check_migration test is still running'
