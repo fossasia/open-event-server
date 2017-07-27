@@ -1,6 +1,7 @@
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema, Relationship
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
@@ -12,7 +13,6 @@ from app.models.event import Event
 from app.api.helpers.db import safe_query
 from app.api.bootstrap import api
 from app.api.helpers.utilities import require_relationship
-from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.permission_manager import has_access
 
 
@@ -94,16 +94,17 @@ class SpeakerListPost(ResourceList):
         require_relationship(['event', 'user'], data)
 
         if not has_access('is_coorganizer', event_id=data['event']):
-            if has_access('is_user_itself'):
                 event = safe_query(self, Event, 'id', data['event'], 'event_id')
                 if event.state == "draft":
-                    raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
+                    raise ObjectNotFound({'parameter': 'event_id'},
+                                         "Event: {} not found".format(data['event_id']))
 
         if 'sessions' in data:
             session_ids = data['sessions']
             for session_id in session_ids:
                 if not has_access('is_session_self_submitted', session_id=session_id):
-                    raise ForbiddenException({'source': ''}, 'Session must be self submitted.')
+                    raise ObjectNotFound({'parameter': 'session_id'},
+                                         "Session: {} not found".format(session_id))
 
     schema = SpeakerSchema
     methods = ['POST', ]
