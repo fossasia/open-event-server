@@ -807,7 +807,7 @@ def speakers_call_delete(transaction):
 
 
 # ------------------------- Sponsors -------------------------
-@hooks.before("Sponsors > Sponsors Collection > List All Sponsors")
+@hooks.before("Sponsors > Sponsors Get Collection > List All Sponsors")
 def sponsor_get_list(transaction):
     """
     GET /events/1/sponsors
@@ -820,16 +820,13 @@ def sponsor_get_list(transaction):
         db.session.commit()
 
 
-@hooks.before("Sponsors > Sponsors Collection > Create Sponsor")
+@hooks.before("Sponsors > Sponsors Post Collection > Create Sponsor")
 def sponsor_post(transaction):
     """
-    POST /events/1/sponsors
+    POST /sponsors
     :param transaction:
     :return:
     """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
-
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
@@ -1065,19 +1062,6 @@ def ticket_fees_delete(transaction):
 
 
 # ------------------------- Ticket Tags -------------------------
-@hooks.before("Ticket Tags > Ticket Tags Collection > List All Ticket Tags")
-def ticket_tag_get_list(transaction):
-    """
-    GET /ticket-tags
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        ticket_tag = TicketTagFactory()
-        db.session.add(ticket_tag)
-        db.session.commit()
-
-
 @hooks.before("Ticket Tags > Ticket Tags Collection > Create Ticket Tag")
 def ticket_tag_post(transaction):
     """
@@ -1121,6 +1105,32 @@ def ticket_tag_patch(transaction):
 def ticket_tag_delete(transaction):
     """
     DELETE /ticket-tags/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket_tag = TicketTagFactory()
+        db.session.add(ticket_tag)
+        db.session.commit()
+
+
+@hooks.before("Ticket Tags > List Ticket Tags under an Event > List all Ticket Tags")
+def ticket_tag_event(transaction):
+    """
+    GET /events/1/ticket-tags
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket_tag = TicketTagFactory()
+        db.session.add(ticket_tag)
+        db.session.commit()
+
+
+@hooks.before("Ticket Tags > List Ticket Tags for a Ticket > List all Ticket Tags")
+def ticket_tag_ticket(transaction):
+    """
+    GET /tickets/1/ticket-tags
     :param transaction:
     :return:
     """
@@ -1330,7 +1340,7 @@ def notification_delete(transaction):
 
 
 # ------------------------- Email Notifications -------------------------
-@hooks.before("Email Notifications > Email Notifications Collection > List All Email Notifications")
+@hooks.before("Email Notifications > Email Notifications Collection Get > List All Email Notifications")
 def email_notification_get_list(transaction):
     """
     GET /users/2/email-notifications
@@ -1343,10 +1353,10 @@ def email_notification_get_list(transaction):
         db.session.commit()
 
 
-@hooks.before("Email Notifications > Email Notifications Collection > Create Email Notificaiton")
+@hooks.before("Email Notifications > Email Notifications Collection Post > Create Email Notificaiton")
 def email_notification_post(transaction):
     """
-    POST /users/2/email-notifications
+    POST /email-notifications
     :param transaction:
     :return:
     """
@@ -1889,7 +1899,7 @@ def custom_form_delete(transaction):
 
 
 # ------------------------- Role Invites -------------------------
-@hooks.before("Role Invites > Role Invites Collection > List All Role Invites")
+@hooks.before("Role Invites > Role Invites Collection List > List All Role Invites")
 def role_invite_get_list(transaction):
     """
     GET /events/1/role-invites
@@ -1905,13 +1915,10 @@ def role_invite_get_list(transaction):
 @hooks.before("Role Invites > Role Invites Collection > Create Role Invite")
 def role_invite_post(transaction):
     """
-    POST /events/1/role-invites
+    POST /role-invites
     :param transaction:
     :return:
     """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
-
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)

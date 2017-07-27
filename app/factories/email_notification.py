@@ -17,4 +17,4 @@ class EmailNotificationFactory(factory.alchemy.SQLAlchemyModelFactory):
     session_schedule = 1
     after_ticket_purchase = 1
     event_id = 1
-    user_id = 1
+    user_id = 2

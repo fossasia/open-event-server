@@ -4899,7 +4899,77 @@ Data related to the various sponsors with their level, url and images associated
 | `level` | Level of the sponsor | string | - |
 | `type` | The type of the sponsor | string | - |
 
-## Sponsors Collection [/v1/events/{event_identifier}/sponsors{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Sponsors Post Collection [/v1/sponsors]
+
+### Create Sponsor [POST]
+Create a new sponsor using an event_id.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "relationships":{
+                  "event":{
+                    "data":{
+                      "type":"event",
+                      "id":"1"
+                    }
+                  }
+                },
+                "attributes": {
+                  "name": "Fossasia",
+                  "description": "Fossasia",
+                  "logo-url": "http://example.com/example.png",
+                  "url": "http://example.com",
+                  "level": "1",
+                  "type": "Gold"
+                },
+                "type": "sponsor"
+              }
+            }
+
+
++ Response 201 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/sponsors/1/relationships/event",
+                  "related": "/v1/sponsors/1/event"
+                }
+              }
+            },
+            "attributes": {
+              "description": "Fossasia",
+              "level": "1",
+              "url": "http://example.com",
+              "logo-url": "http://example.com/example.png",
+              "type": "Gold",
+              "name": "Fossasia"
+            },
+            "type": "sponsor",
+            "id": "1",
+            "links": {
+              "self": "/v1/sponsors/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/sponsors/1"
+          }
+        }
+
+## Sponsors Get Collection [/v1/events/{event_identifier}/sponsors{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -4953,68 +5023,7 @@ Get a list of Sponsors.
             "version": "1.0"
           },
           "links": {
-            "self": "/v1/sponsors"
-          }
-        }
-
-
-### Create Sponsor [POST]
-Create a new sponsor using an event_id.
-
-+ Request (application/vnd.api+json)
-
-    + Headers
-
-            Authorization: JWT <Auth Key>
-
-    + Body
-
-            {
-              "data": {
-                "attributes": {
-                  "name": "Fossasia",
-                  "description": "Fossasia",
-                  "logo-url": "http://example.com/example.png",
-                  "url": "http://example.com",
-                  "level": "1",
-                  "type": "Gold"
-                },
-                "type": "sponsor"
-              }
-            }
-
-
-+ Response 201 (application/vnd.api+json)
-
-        {
-          "data": {
-            "relationships": {
-              "event": {
-                "links": {
-                  "self": "/v1/sponsors/1/relationships/event",
-                  "related": "/v1/sponsors/1/event"
-                }
-              }
-            },
-            "attributes": {
-              "description": "Fossasia",
-              "level": "1",
-              "url": "http://example.com",
-              "logo-url": "http://example.com/example.png",
-              "type": "Gold",
-              "name": "Fossasia"
-            },
-            "type": "sponsor",
-            "id": "1",
-            "links": {
-              "self": "/v1/sponsors/1"
-            }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/sponsors/1"
+            "self": "/v1/events/1/sponsors"
           }
         }
 
@@ -5733,64 +5742,12 @@ Related to tickets and event.
 |:----------|-------------|------|----------|
 | `name`  | Name of the ticket tag | string | **yes** |
 
-## Ticket Tags Collection [/v1/tickets/{ticket_id}/ticket-tags{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Ticket Tags Collection [/v1/ticket-tags{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
-
-### List All Ticket Tags [GET]
-Get a list of Tickets.
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-            "meta": {
-                "count": 1
-            },
-            "data": [
-                {
-                    "relationships": {
-                        "event": {
-                            "links": {
-                                "self": "/v1/ticket-tags/1/relationships/event",
-                                "related": "/v1/ticket-tags/1/event"
-                            }
-                        },
-                        "tickets": {
-                          "links": {
-                            "self": "/v1/ticket-tags/1/relationships/tickets",
-                            "related": "/v1/ticket-tags/1/tickets"
-                          }
-                        }
-                    },
-                    "attributes": {
-                        "name": "ticket-tag-name"
-                    },
-                    "type": "ticket-tag",
-                    "id": "1",
-                    "links": {
-                        "self": "/v1/ticket-tags/1"
-                    }
-                }
-            ],
-            "jsonapi": {
-                "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/tickets/2/ticket-tags"
-            }
-        }
-
 
 ### Create Ticket Tag [POST]
 Create a new ticket tag using an ticket_id.
@@ -5810,7 +5767,7 @@ Create a new ticket tag using an ticket_id.
                      "data":
                          {
                            "type":"event",
-                           "id":"2"
+                           "id":"1"
                          }
                    },
                    "tickets":{
@@ -5852,16 +5809,16 @@ Create a new ticket tag using an ticket_id.
                     "name": "ticket-tag-name"
                 },
                 "type": "ticket-tag",
-                "id": "5",
+                "id": "1",
                 "links": {
-                    "self": "/v1/ticket-tags/5"
+                    "self": "/v1/ticket-tags/1"
                 }
             },
             "jsonapi": {
                 "version": "1.0"
             },
             "links": {
-                "self": "/v1/ticket-tags/5"
+                "self": "/v1/ticket-tags/1"
             }
         }
 
@@ -5996,6 +5953,124 @@ Delete a single ticket tag.
             "version": "1.0"
           }
         }
+
+## List Ticket Tags under an Event [/v1/events/{event_identifier}/ticket-tags{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List all Ticket Tags [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "tickets": {
+                            "links": {
+                                "self": "/v1/ticket-tags/1/relationships/tickets",
+                                "related": "/v1/ticket-tags/1/tickets"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/ticket-tags/1/relationships/event",
+                                "related": "/v1/ticket-tags/1/event"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "name": "ticket-tag-name"
+                    },
+                    "type": "ticket-tag",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/ticket-tags/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/events/1/ticket-tags"
+            }
+        }
+
+
+## List Ticket Tags for a Ticket [/v1/tickets/{ticket_id}/ticket-tags{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + ticket_id: 1 (integer) - ID of the event in the form of an integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List all Ticket Tags [GET]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "tickets": {
+                            "links": {
+                                "self": "/v1/ticket-tags/1/relationships/tickets",
+                                "related": "/v1/ticket-tags/1/tickets"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/ticket-tags/1/relationships/event",
+                                "related": "/v1/ticket-tags/1/event"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "name": "ticket-tag-name"
+                    },
+                    "type": "ticket-tag",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/ticket-tags/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/tickets/1/ticket-tags"
+            }
+        }
+
 
 # Group Attendees
 Related to ticket holders(attendees) of an event (free, paid, donation) to the event.
@@ -7054,7 +7129,94 @@ To turn Email Notifications ON/OFF related to the various events, session approv
 | `after-ticket-purchase` | Email notification after ticket purchase | integer | - |
 | `event-id` | Event specific notification preferences | integer | - |
 
-## Email Notifications Collection [/v1/users/{user_id}/email-notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Email Notifications Collection Post [/v1/email-notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `next-event`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### Create Email Notificaiton [POST]
+Create a new email notification.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "next-event": 0,
+                  "new-paper": 0,
+                  "session-accept-reject": 0,
+                  "session-schedule": 1,
+                  "after-ticket-purchase": 1,
+                  "event-id": 1
+                },
+                "relationships": {
+                  "user": {
+                    "data": {
+                      "type": "user",
+                      "id": "2"
+                    }
+                  },
+                  "event": {
+                    "data": {
+                      "type": "event",
+                      "id": "1"
+                    }
+                  }
+                },
+                "type": "email-notification"
+              }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/email-notifications/1/relationships/user",
+                            "related": "/v1/email-notifications/1/user"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/email-notifications/1/relationships/event",
+                            "related": "/v1/email-notifications/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "next-event": 0,
+                    "new-paper": 0,
+                    "session-accept-reject": 0,
+                    "session-schedule": 1,
+                    "after-ticket-purchase": 1,
+                    "event-id": 1
+                },
+                "type": "email-notification",
+                "id": "1",
+                "links": {
+                    "self": "/v1/email-notifications/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/email-notifications/1"
+            }
+        }
+
+
+## Email Notifications Collection Get [/v1/users/{user_id}/email-notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + user_id: 2 (integer) - ID of the specific user in integer
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -7117,80 +7279,6 @@ Get a list of Notifications.
                 "self": "/v1/users/2/email-notifications"
             }
         }
-
-### Create Email Notificaiton [POST]
-Create a new email notification with user_id.
-
-+ Request (application/vnd.api+json)
-
-    + Headers
-
-            Authorization: JWT <Auth Key>
-
-    + Body
-
-            {
-              "data": {
-                "attributes": {
-                  "next-event": 0,
-                  "new-paper": 0,
-                  "session-accept-reject": 0,
-                  "session-schedule": 1,
-                  "after-ticket-purchase": 1,
-                  "event-id": 1
-                },
-                "relationships": {
-                  "event": {
-                    "data": {
-                      "type": "event",
-                      "id": "1"
-                    }
-                  }
-                },
-                "type": "email-notification"
-              }
-            }
-
-+ Response 201 (application/vnd.api+json)
-
-        {
-            "data": {
-                "relationships": {
-                    "user": {
-                        "links": {
-                            "self": "/v1/email-notifications/1/relationships/user",
-                            "related": "/v1/email-notifications/1/user"
-                        }
-                    },
-                    "event": {
-                        "links": {
-                            "self": "/v1/email-notifications/1/relationships/event",
-                            "related": "/v1/email-notifications/1/event"
-                        }
-                    }
-                },
-                "attributes": {
-                    "next-event": 0,
-                    "new-paper": 0,
-                    "session-accept-reject": 0,
-                    "session-schedule": 1,
-                    "after-ticket-purchase": 1,
-                    "event-id": 1
-                },
-                "type": "email-notification",
-                "id": "1",
-                "links": {
-                    "self": "/v1/email-notifications/1"
-                }
-            },
-            "jsonapi": {
-                "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/email-notifications/1"
-            }
-        }
-
 
 ## Email Notification Detail [/v1/email-notifications/{email_notification_id}]
 + Parameters
@@ -8097,19 +8185,18 @@ Role invites for Events. Can only be edited and entered by event organizers.
 | `hash` | hash of the role invite | string | - |
 | `status` | Status the invite.  | string (default: `pending`) | - |
 | `created-at` | Discount Code created at | ISO 8601 (tz-aware) | - |
-| `role-name` | Name of the role.  | string (example: `attendee`) | - |
+| `role-name` | Name of the role.  | string (example: `attendee`) | **yes`** |
 
 
-## Role Invites Collection [/v1/events/{event_identifier}/role-invites{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Role Invites Collection [/v1/role-invites{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `status`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List All Role Invites [GET]
-Get a list of Role invites.
+Get a list of Role invites (Only Admin).
 
 + Request
 
@@ -8181,13 +8268,19 @@ Create a new role invite with event_id.
                   "email": "example@example.com",
                   "created-at": "2017-06-20T09:59:23.740772+00:00",
                   "status": "pending",
-                  "role-name": "attendee"
+                  "role-name": "organizer"
                 },
                 "relationships": {
                   "role": {
                     "data": {
                       "type": "role",
-                      "id": "2"
+                      "id": "1"
+                    }
+                  },
+                  "event": {
+                    "data": {
+                      "type": "event",
+                      "id": "1"
                     }
                   }
                 },
@@ -8218,7 +8311,7 @@ Create a new role invite with event_id.
                 "hash": "149889783495332276669212664484219865405",
                 "created-at": "2017-06-20T09:59:23.740772+00:00",
                 "status": "pending",
-                "role-name": "attendee"
+                "role-name": "organizer"
               },
               "type": "role-invite",
               "id": "1",
@@ -8233,6 +8326,69 @@ Create a new role invite with event_id.
               "self": "/v1/role-invites/1"
             }
           }
+
+## Role Invites Collection List [/v1/events/{event_identifier}/role-invites{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `status`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List All Role Invites [GET]
+Get a list of Role invites.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "role": {
+                  "links": {
+                    "self": "/v1/role-invites/1/relationships/role",
+                    "related": "/v1/role-invites/1/role"
+                  }
+                },
+                "event": {
+                  "links": {
+                    "self": "/v1/role-invites/1/relationships/event",
+                    "related": "/v1/role-invites/1/event"
+                  }
+                }
+              },
+              "attributes": {
+                "email": "example@example.com",
+                "hash": "149889783495332276669212664484219865405",
+                "created-at": "2017-06-20T09:59:23.740772+00:00",
+                "status": "pending",
+                "role-name": "organizer"
+              },
+              "type": "role-invite",
+              "id": "1",
+              "links": {
+                "self": "/v1/role-invites/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/events/1/role-invites"
+          }
+        }
 
 ## Role Invite Details [/v1/role-invites/{role_invite_id}]
 + Parameters
@@ -8307,10 +8463,9 @@ Authorized user must be the event's organizer.
               "data": {
                 "attributes": {
                   "email": "example@example.com",
-                  "hash": "149889783495332276669212664484219865405",
                   "created-at": "2017-06-20T09:59:23.740772+00:00",
                   "status": "pending",
-                  "role-name": "attendee"
+                  "role-name": "organizer"
                 },
                 "type": "role-invite",
                 "id": "1"
@@ -8340,7 +8495,7 @@ Authorized user must be the event's organizer.
               "hash": "149889783495332276669212664484219865405",
               "created-at": "2017-06-20T09:59:23.740772+00:00",
               "status": "pending",
-              "role-name": "attendee"
+              "role-name": "organizer"
             },
             "type": "role-invite",
             "id": "1",
