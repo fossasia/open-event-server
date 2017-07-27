@@ -52,7 +52,6 @@ def check_migrations():
     Checks whether database is up to date with migrations by performing a select query on each model
     :return:
     """
-    print("Checking if migrations are up to date.....")
     # Get all the models in the db, all models should have a explicit __tablename__
     classes, models, table_names = [], [], []
     # noinspection PyProtectedMember
@@ -71,9 +70,7 @@ def check_migrations():
             db.session.query(model).first()
         except:
             sentry.captureException()
-            print("failure: {} model out of date with migrations.....".format(model))
             return 'failure,{} model out of date with migrations'.format(model)
-    print("success: database up to date with migrations.....")
     return 'success,database up to date with migrations'
 
 
