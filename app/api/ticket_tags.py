@@ -1,8 +1,6 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
-from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
@@ -65,32 +63,10 @@ class TicketTagListPost(ResourceList):
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
 
-    def after_create_object(self, obj, data, view_kwargs):
-        """
-        method to add ticket tags and ticket in association table
-        :param obj:
-        :param data:
-        :param view_kwargs:
-        :return:
-        """
-        if 'tickets' in data:
-            ticket_ids = data['tickets']
-            for ticket_id in ticket_ids:
-                try:
-                    ticket = Ticket.query.filter_by(id=ticket_id).one()
-                except NoResultFound:
-                    raise ObjectNotFound({'parameter': 'ticket_id'},
-                                         "Ticket: {} not found".format(ticket_id))
-                else:
-                    ticket.tags.append(obj)
-                    self.session.commit()
-
     schema = TicketTagSchema
+    methods = ['POST', ]
     data_layer = {'session': db.session,
-                  'model': TicketTag,
-                  'methods': {
-                    'after_create_object': after_create_object
-                  }}
+                  'model': TicketTag}
 
 
 class TicketTagList(ResourceList):

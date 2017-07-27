@@ -41,10 +41,10 @@ from app.models.event import Event, EventsUsers
 from app.models.role_invite import RoleInvite
 from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations
 
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-app = Flask(__name__)
+static_dir = os.path.dirname(os.path.dirname(__file__)) + "/static"
+app = Flask(__name__, static_folder=static_dir)
 
 env.read_envfile()
 
@@ -183,7 +183,7 @@ def update_sent_state(sender=None, body=None, **kwargs):
 # register celery tasks. removing them will cause the tasks to not function. so don't remove them
 # it is important to register them after celery is defined to resolve circular imports
 
-#import api.helpers.tasks
+# import api.helpers.tasks
 # import helpers.tasks
 
 
