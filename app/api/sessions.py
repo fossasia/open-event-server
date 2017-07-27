@@ -193,6 +193,7 @@ class SessionRelationshipRequired(ResourceRelationship):
     Session Relationship
     """
     schema = SessionSchema
+    decorators = (api.has_permission('is_speaker_for_session', methods="PATCH,DELETE"),)
     methods = ['GET', 'PATCH']
     data_layer = {'session': db.session,
                   'model': Session}
@@ -203,5 +204,6 @@ class SessionRelationshipOptional(ResourceRelationship):
     Session Relationship
     """
     schema = SessionSchema
+    decorators = (api.has_permission('is_speaker_for_session', methods="PATCH,DELETE"),)
     data_layer = {'session': db.session,
                   'model': Session}

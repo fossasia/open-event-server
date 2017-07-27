@@ -90,7 +90,7 @@ class EmailNotificationList(ResourceList):
 
     view_kwargs = True
     methods = ['GET', ]
-    decorators = (is_user_itself,)
+    decorators = (api.has_permission('is_user_itself', fetch="id", fetch_as="id"),)
     schema = EmailNotificationSchema
     data_layer = {'session': db.session,
                   'model': EmailNotification,
@@ -125,7 +125,8 @@ class EmailNotificationRelationshipOptional(ResourceRelationship):
     """
     Email notification Relationship (Optional)
     """
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_user_itself', fetch="user_id", fetch_as="id",
+                                     model=EmailNotification),)
     schema = EmailNotificationSchema
     data_layer = {'session': db.session,
                   'model': EmailNotification}

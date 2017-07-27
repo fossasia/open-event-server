@@ -99,7 +99,8 @@ class NotificationRelationship(ResourceRelationship):
     """
     Notification Relationship
     """
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_user_itself', fetch="user_id", fetch_as="id",
+                                     model=Notification),)
     schema = NotificationSchema
     methods = ['GET', 'PATCH']
     data_layer = {'session': db.session,

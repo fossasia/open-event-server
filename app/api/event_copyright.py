@@ -94,7 +94,9 @@ class EventCopyrightDetail(ResourceDetail):
 
 
 class EventCopyrightRelationship(ResourceRelationship):
-    decorators = (jwt_required,)
+
+    decorators = (api.has_permission('is_coorganizer', fetch="event_id", fetch_as="event_id",
+                                     model=EventCopyright, methods="PATCH"),)
     methods = ['GET', 'PATCH']
     schema = EventCopyrightSchema
     data_layer = {'session': db.session,

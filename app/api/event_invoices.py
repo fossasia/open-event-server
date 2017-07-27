@@ -140,7 +140,7 @@ class EventInvoiceDetail(ResourceDetail):
 
 class EventInvoiceRelationshipRequired(ResourceRelationship):
     """
-    Event Invoice Relationship
+    Event Invoice Relationship for required entities
     """
     decorators = (is_admin,)
     methods = ['GET', 'PATCH']

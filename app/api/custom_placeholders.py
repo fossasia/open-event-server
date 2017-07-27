@@ -130,7 +130,7 @@ class CustomPlaceholderRelationship(ResourceRelationship):
     """
     Relationship
     """
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
     schema = CustomPlaceholderSchema
     data_layer = {'session': db.session,
                   'model': CustomPlaceholder}

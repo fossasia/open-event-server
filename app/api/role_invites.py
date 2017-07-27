@@ -180,7 +180,6 @@ class RoleInviteRelationship(ResourceRelationship):
     """
     Role invite Relationship
     """
-    decorators = (jwt_required,)
     methods = ['GET', 'PATCH']
     schema = RoleInviteSchema
     data_layer = {'session': db.session,

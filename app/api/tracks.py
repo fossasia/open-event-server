@@ -129,7 +129,8 @@ class TrackRelationshipRequired(ResourceRelationship):
     """
     Track Relationship
     """
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_track_organizer', fetch='event_id',
+                                     fetch_as="event_id", model=Track, methods="PATCH"),)
     methods = ['GET', 'PATCH']
     schema = TrackSchema
     data_layer = {'session': db.session,
@@ -140,7 +141,8 @@ class TrackRelationshipOptional(ResourceRelationship):
     """
     Track Relationship
     """
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_track_organizer', fetch='event_id',
+                                     fetch_as="event_id", model=Track, methods="PATCH,DELETE",),)
     schema = TrackSchema
     data_layer = {'session': db.session,
                   'model': Track}

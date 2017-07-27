@@ -184,9 +184,10 @@ class SpeakerDetail(ResourceDetail):
 
 class SpeakerRelationshipRequired(ResourceRelationship):
     """
-    Speaker Relationship class
+    Speaker Relationship class for required entities
     """
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_coorganizer_or_user_itself', methods="PATCH,DELETE", fetch="event_id",
+                                     fetch_as="event_id", model=Speaker),)
     methods = ['GET', 'PATCH']
     schema = SpeakerSchema
     data_layer = {'session': db.session,
@@ -197,7 +198,8 @@ class SpeakerRelationshipOptional(ResourceRelationship):
     """
     Speaker Relationship class
     """
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_coorganizer_or_user_itself', methods="PATCH,DELETE", fetch="event_id",
+                                     fetch_as="event_id", model=Speaker),)
     schema = SpeakerSchema
     data_layer = {'session': db.session,
                   'model': Speaker}

@@ -117,9 +117,10 @@ class MicrolocationDetail(ResourceDetail):
 
 class MicrolocationRelationshipRequired(ResourceRelationship):
     """
-    Microlocation Relationship
+    Microlocation Relationship for required entities
     """
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_coorganizer', methods="PATCH", fetch="event_id", fetch_as="event_id",
+                                     model=Microlocation),)
     methods = ['GET', 'PATCH']
     schema = MicrolocationSchema
     data_layer = {'session': db.session,
@@ -130,7 +131,8 @@ class MicrolocationRelationshipOptional(ResourceRelationship):
     """
     Microlocation Relationship
     """
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
+                                     model=Microlocation),)
     schema = MicrolocationSchema
     data_layer = {'session': db.session,
                   'model': Microlocation}

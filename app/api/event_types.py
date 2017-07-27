@@ -78,7 +78,7 @@ class EventTypeRelationship(ResourceRelationship):
     """
     Event type Relationship
     """
-    decorators = (jwt_required, )
+    decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
     schema = EventTypeSchema
     data_layer = {'session': db.session,
                   'model': EventType}
