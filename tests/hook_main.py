@@ -629,6 +629,45 @@ def speaker_delete(transaction):
         db.session.commit()
 
 
+@hooks.before("Speakers > List Speakers for an Event > List Speakers")
+def event_speakers(transaction):
+    """
+    GET /events/1/speakers
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        speaker = SpeakerFactory()
+        db.session.add(speaker)
+        db.session.commit()
+
+
+@hooks.before("Speakers > List Speakers under a Session > List Speakers")
+def sessions_speakers(transaction):
+    """
+    GET /sessions/1/speakers
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        speaker = SpeakerFactory()
+        db.session.add(speaker)
+        db.session.commit()
+
+
+@hooks.before("Speakers > List Speaker Profiles for a User > List Speakers")
+def user_speakers(transaction):
+    """
+    GET /users/1/speakers
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        speaker = SpeakerFactory()
+        db.session.add(speaker)
+        db.session.commit()
+
+
 # ------------------------- Social Links -------------------------
 @hooks.before("Social Links > Social Links Collection > List All Social Links")
 def social_link_get_list(transaction):
