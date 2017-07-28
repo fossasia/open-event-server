@@ -97,7 +97,7 @@ class RoleInviteListPost(ResourceList):
                 save_to_db(uer, 'Role Invite accepted')
 
     view_kwargs = True
-    decorators = (api.has_permission('is_admin', methods="GET"),)
+    methods = ['POST']
     schema = RoleInviteSchema
     data_layer = {'session': db.session,
                   'model': RoleInvite,
