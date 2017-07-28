@@ -8382,62 +8382,6 @@ Role invites for Events. Can only be edited and entered by event organizers.
     + sort (optional, string, `status`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List All Role Invites [GET]
-Get a list of Role invites (Only Admin).
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-          "meta": {
-            "count": 1
-          },
-          "data": [
-            {
-              "relationships": {
-                "role": {
-                  "links": {
-                    "self": "/v1/role-invites/1/relationships/role",
-                    "related": "/v1/role-invites/1/role"
-                  }
-                },
-                "event": {
-                  "links": {
-                    "self": "/v1/role-invites/1/relationships/event",
-                    "related": "/v1/role-invites/1/event"
-                  }
-                }
-              },
-              "attributes": {
-                "email": "example@example.com",
-                "hash": "149889783495332276669212664484219865405",
-                "created-at": "2017-06-20T09:59:23.740772+00:00",
-                "status": "pending",
-                "role-name": "attendee"
-              },
-              "type": "role-invite",
-              "id": "1",
-              "links": {
-                "self": "/v1/role-invites/1"
-              }
-            }
-          ],
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/events/1/role-invites"
-          }
-        }
-
-
 ### Create Role Invite [POST]
 Create a new role invite with event_id.
 
