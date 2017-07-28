@@ -56,8 +56,8 @@ class UserSchema(Schema):
     thumbnail_image_url = fields.Url(dump_only=True, allow_none=True)
     small_image_url = fields.Url(dump_only=True, allow_none=True)
     icon_image_url = fields.Url(dump_only=True, allow_none=True)
-    notification = Relationship(
-        attribute='notification',
+    notifications = Relationship(
+        attribute='notifications',
         self_view='v1.user_notification',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.notification_list',
