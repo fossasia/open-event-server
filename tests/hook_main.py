@@ -669,7 +669,7 @@ def user_speakers(transaction):
 
 
 # ------------------------- Social Links -------------------------
-@hooks.before("Social Links > Social Links Collection > List All Social Links")
+@hooks.before("Social Links > Social Links Get Collection > List All Social Links")
 def social_link_get_list(transaction):
     """
     GET /events/1/social-links
@@ -682,16 +682,13 @@ def social_link_get_list(transaction):
         db.session.commit()
 
 
-@hooks.before("Social Links > Social Links Collection > Create Social Link")
+@hooks.before("Social Links > Social Links Post Collection > Create Social Link")
 def social_link_post(transaction):
     """
     POST /events/1/social-links
     :param transaction:
     :return:
     """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
-
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)

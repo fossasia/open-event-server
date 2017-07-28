@@ -4444,6 +4444,176 @@ Delete a single speaker by id.
         }
 
 
+## List Speakers under a Session  [/v1/sessions/{session_id}/speakers{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + session_id: 1 (integer) - ID of the session in the form of an integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `speaking-experience`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+
+### List Speakers [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "user": {
+                            "links": {
+                                "self": "/v1/speakers/1/relationships/user",
+                                "related": "/v1/speakers/1/user"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/speakers/1/relationships/event",
+                                "related": "/v1/speakers/1/event"
+                            }
+                        },
+                        "sessions": {
+                            "links": {
+                                "self": "/v1/speakers/1/relationships/sessions",
+                                "related": "/v1/speakers/1/sessions"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "website": "https://firstSpeaker.com",
+                        "city": "Delhi",
+                        "short-biography": "",
+                        "name": "firstSpeaker",
+                        "speaking-experience": "",
+                        "country": "India",
+                        "twitter": null,
+                        "is-featured": false,
+                        "linkedin": null,
+                        "email": "firstSpeaker@gmail.com",
+                        "long-biography": "",
+                        "mobile": null,
+                        "github": null,
+                        "facebook": null,
+                        "gender": "Male",
+                        "position": null,
+                        "organisation": null,
+                        "sponsorship-required": "",
+                        "heard-from": null
+                    },
+                    "type": "speaker",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/speakers/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/sessions/1/speakers"
+            }
+        }
+
+
+## List Speaker Profiles for a User [/v1/users/{user_id}/speakers{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + user_id: 1 (integer) - ID of the user in the form of an integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `speaking-experience`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+
+### List Speakers [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "user": {
+                            "links": {
+                                "self": "/v1/speakers/1/relationships/user",
+                                "related": "/v1/speakers/1/user"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/speakers/1/relationships/event",
+                                "related": "/v1/speakers/1/event"
+                            }
+                        },
+                        "sessions": {
+                            "links": {
+                                "self": "/v1/speakers/1/relationships/sessions",
+                                "related": "/v1/speakers/1/sessions"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "website": "https://firstSpeaker.com",
+                        "city": "Delhi",
+                        "short-biography": "",
+                        "name": "firstSpeaker",
+                        "speaking-experience": "",
+                        "country": "India",
+                        "twitter": null,
+                        "is-featured": false,
+                        "linkedin": null,
+                        "email": "firstSpeaker@gmail.com",
+                        "long-biography": "",
+                        "mobile": null,
+                        "github": null,
+                        "facebook": null,
+                        "gender": "Male",
+                        "position": null,
+                        "organisation": null,
+                        "sponsorship-required": "",
+                        "heard-from": null
+                    },
+                    "type": "speaker",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/speakers/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/users/1/speakers"
+            }
+        }
+
+
 # Group Social Links
 You can add various social links such as facebook, twitter, website, blog link, etc. related to the event.
 
@@ -4452,13 +4622,81 @@ You can add various social links such as facebook, twitter, website, blog link, 
 | `name`  | Name of the Session Type | string | **yes** |
 | `link` | Url of the Social Link | string | **yes** |
 
-## Social Links Collection [/v1/events/{event_identifier}/social-links{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Social Links Post Collection [/v1/social-links{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+
+### Create Social Link [POST]
+Create a new social link using event_id.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "relationships":{
+                  "event":{
+                    "data":{
+                      "type":"event",
+                      "id":"1"
+                    }
+                  }
+                },
+                "attributes": {
+                  "name": "Facebook Url",
+                  "link": "http://facebook.com/facebook"
+                },
+                "type": "social-link"
+              }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "event": {
+                "links": {
+                  "self": "/v1/social-links/1/relationships/event",
+                  "related": "/v1/social-links/1/event"
+                }
+              }
+            },
+            "attributes": {
+              "link": "http://facebook.com/facebook",
+              "name": "Facebook Url"
+            },
+            "type": "social-link",
+            "id": "1",
+            "links": {
+              "self": "/v1/social-links/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/social-links/1"
+          }
+        }
+
+## Social Links Get Collection [/v1/events/{event_identifier}/social-links{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
 
 ### List All Social Links [GET]
 Get a list of Social Links.
@@ -4503,57 +4741,6 @@ Get a list of Social Links.
           },
           "links": {
             "self": "/v1/events/1/social-links"
-          }
-        }
-
-### Create Social Link [POST]
-Create a new social link using event_id.
-
-+ Request (application/vnd.api+json)
-
-    + Headers
-
-            Authorization: JWT <Auth Key>
-
-    + Body
-
-            {
-              "data": {
-                "attributes": {
-                  "name": "Facebook Url",
-                  "link": "http://facebook.com/facebook"
-                },
-                "type": "social-link"
-              }
-            }
-
-+ Response 201 (application/vnd.api+json)
-
-        {
-          "data": {
-            "relationships": {
-              "event": {
-                "links": {
-                  "self": "/v1/social-links/1/relationships/event",
-                  "related": "/v1/social-links/1/event"
-                }
-              }
-            },
-            "attributes": {
-              "link": "http://facebook.com/facebook",
-              "name": "Facebook Url"
-            },
-            "type": "social-link",
-            "id": "1",
-            "links": {
-              "self": "/v1/social-links/1"
-            }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/social-links/1"
           }
         }
 
