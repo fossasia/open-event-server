@@ -30,11 +30,11 @@ class EmailNotificationSchema(Schema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    next_event = fields.Integer(default=0, allow_none=True)
-    new_paper = fields.Integer(default=0, allow_none=True)
-    session_accept_reject = fields.Integer(default=0, allow_none=True)
-    session_schedule = fields.Integer(default=0, allow_none=True)
-    after_ticket_purchase = fields.Integer(default=0, allow_none=True)
+    next_event = fields.Boolean(default=False, allow_none=True)
+    new_paper = fields.Boolean(default=False, allow_none=True)
+    session_accept_reject = fields.Boolean(default=False, allow_none=True)
+    session_schedule = fields.Boolean(default=False, allow_none=True)
+    after_ticket_purchase = fields.Boolean(default=True, allow_none=True)
     event_id = fields.Integer(allow_none=True)
     event = Relationship(attribute='event',
                          self_view='v1.email_notification_event',

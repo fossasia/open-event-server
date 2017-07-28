@@ -2,6 +2,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema, Relationship
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
+from flask import request
 
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import jwt_required
@@ -125,14 +126,26 @@ class SpeakerList(ResourceList):
         :return:
         """
         query_ = self.session.query(Speaker)
-        if view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-            view_kwargs['event_id'] = event.id
         if view_kwargs.get('event_id'):
             event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-            query_ = query_.join(Event).filter(Event.id == event.id)
-            if not has_access('is_coorganizer', event_id=event.id):
-                query_ = query_.filter(Event.state == "published")
+            if event.state != 'published':
+                if 'Authorization' in request.headers and has_access('is_coorganizer', event_id=event.id):
+                    query_ = query_.join(Event).filter(Event.id == event.id)
+                else:
+                    raise ObjectNotFound({'parameter': 'event_id'},
+                                         "Event: {} not found".format(view_kwargs['event_identifier']))
+            else:
+                query_ = query_.join(Event).filter(Event.id == event.id)
+        elif view_kwargs.get('event_identifier'):
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            if event.state != 'published':
+                if 'Authorization' in request.headers and has_access('is_coorganizer', event_id=event.id):
+                    query_ = query_.join(Event).filter(Event.id == event.id)
+                else:
+                    raise ObjectNotFound({'parameter': 'event_identifier'},
+                                         "Event: {} not found".format(view_kwargs['event_identifier']))
+            else:
+                query_ = query_.join(Event).filter(Event.id == event.id)
 
         if view_kwargs.get('user_id'):
             user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
@@ -142,7 +155,7 @@ class SpeakerList(ResourceList):
             session = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
             # session-speaker :: many-to-many relationship
             query_ = Speaker.query.filter(Speaker.sessions.any(id=session.id))
-            if not has_access('is_coorganizer', event_id=session.event_id):
+            if 'Authorization' in request.headers and not has_access('is_coorganizer', event_id=session.event_id):
                 if not has_access('is_session_self_submitted', session_id=session.id):
                     query_ = query_.filter(Session.state == "approved" or Session.state == "accepted")
 

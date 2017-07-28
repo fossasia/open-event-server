@@ -7122,11 +7122,11 @@ To turn Email Notifications ON/OFF related to the various events, session approv
 
 | Parameter | Description | Type | Required |
 |:----------|-------------|------|----------|
-| `next-event`  | Next event email notification | integer | - |
-| `new-paper` | New paper email notification | integer | - |
-| `session-accept-reject` | Session Accept/Reject email notification | integer | - |
-| `session-schedule` | Session schedule email notification | integer | - |
-| `after-ticket-purchase` | Email notification after ticket purchase | integer | - |
+| `next-event`  | Next event email notification | boolean (default=`false`) | - |
+| `new-paper` | New paper email notification | boolean (default=`false`) | - |
+| `session-accept-reject` | Session Accept/Reject email notification | boolean (default=`false`) | - |
+| `session-schedule` | Session schedule email notification | boolean (default=`false`) | - |
+| `after-ticket-purchase` | Email notification after ticket purchase | boolean (default=`true`) | - |
 | `event-id` | Event specific notification preferences | integer | - |
 
 ## Email Notifications Collection Post [/v1/email-notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
@@ -7150,11 +7150,11 @@ Create a new email notification.
             {
               "data": {
                 "attributes": {
-                  "next-event": 0,
-                  "new-paper": 0,
-                  "session-accept-reject": 0,
-                  "session-schedule": 1,
-                  "after-ticket-purchase": 1,
+                  "next-event": false,
+                  "new-paper": false,
+                  "session-accept-reject": false,
+                  "session-schedule": true,
+                  "after-ticket-purchase": true,
                   "event-id": 1
                 },
                 "relationships": {
@@ -7194,11 +7194,11 @@ Create a new email notification.
                     }
                 },
                 "attributes": {
-                    "next-event": 0,
-                    "new-paper": 0,
-                    "session-accept-reject": 0,
-                    "session-schedule": 1,
-                    "after-ticket-purchase": 1,
+                    "next-event": false,
+                    "new-paper": false,
+                    "session-accept-reject": false,
+                    "session-schedule": true,
+                    "after-ticket-purchase": true,
                     "event-id": 1
                 },
                 "type": "email-notification",
@@ -7258,11 +7258,11 @@ Get a list of Notifications.
                         }
                     },
                     "attributes": {
-                        "next-event": 0,
-                        "new-paper": 0,
-                        "session-accept-reject": 0,
-                        "session-schedule": 1,
-                        "after-ticket-purchase": 1,
+                        "next-event": false,
+                        "new-paper": false,
+                        "session-accept-reject": false,
+                        "session-schedule": true,
+                        "after-ticket-purchase": true,
                         "event-id": 1
                     },
                     "type": "email-notification",
@@ -7314,11 +7314,11 @@ Get a single email notification.
                     }
                 },
                 "attributes": {
-                    "next-event": 0,
-                    "new-paper": 0,
-                    "session-accept-reject": 0,
-                    "session-schedule": 1,
-                    "after-ticket-purchase": 1,
+                    "next-event": false,
+                    "new-paper": false,
+                    "session-accept-reject": false,
+                    "session-schedule": true,
+                    "after-ticket-purchase": true,
                     "event-id": 1
                 },
                 "type": "email-notification",
@@ -7352,11 +7352,11 @@ Update a single email notification with `id`.
             {
               "data": {
                 "attributes": {
-                  "next-event": 0,
-                  "new-paper": 0,
-                  "session-accept-reject": 0,
-                  "session-schedule": 1,
-                  "after-ticket-purchase": 1,
+                  "next-event": false,
+                  "new-paper": false,
+                  "session-accept-reject": false,
+                  "session-schedule": true,
+                  "after-ticket-purchase": true,
                   "event-id": 1
                 },
                 "relationships": {
@@ -7391,11 +7391,11 @@ Update a single email notification with `id`.
                     }
                 },
                 "attributes": {
-                    "next-event": 0,
-                    "new-paper": 0,
-                    "session-accept-reject": 0,
-                    "session-schedule": 1,
-                    "after-ticket-purchase": 1,
+                    "next-event": false,
+                    "new-paper": false,
+                    "session-accept-reject": false,
+                    "session-schedule": true,
+                    "after-ticket-purchase": true,
                     "event-id": 1
                 },
                 "type": "email-notification",

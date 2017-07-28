@@ -11,10 +11,10 @@ class EmailNotificationFactory(factory.alchemy.SQLAlchemyModelFactory):
 
     user = factory.RelatedFactory(UserFactory)
     event = factory.RelatedFactory(EventFactoryBasic)
-    next_event = 0
-    new_paper = 0
-    session_accept_reject = 0
-    session_schedule = 1
-    after_ticket_purchase = 1
+    next_event = False
+    new_paper = False
+    session_accept_reject = False
+    session_schedule = True
+    after_ticket_purchase = True
     event_id = 1
     user_id = 2
