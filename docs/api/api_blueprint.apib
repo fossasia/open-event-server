@@ -2278,9 +2278,8 @@ Data related to event copyright information.
 | `licence-url` | URL of the licence location | string | -  |
 | `logo-url` | URL of the logo for the Licence | string | -  |
 
-## Event Copyright [/v1/events/{event_identifier}/event-copyright{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Event Copyright [/v1/event-copyrights{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `year`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
@@ -2288,7 +2287,7 @@ Data related to event copyright information.
 
 
 ### Create Event Copyright [POST]
-Create a new Event Copyright using an event_id.
+Create a new Event Copyright.
 
 + Request (application/vnd.api+json)
 
@@ -2300,6 +2299,14 @@ Create a new Event Copyright using an event_id.
 
             {
               "data": {
+                "relationships":{
+                  "event":{
+                    "data": {
+                      "type": "event", 
+                      "id": "1"
+                    }
+                  }
+                },
                 "attributes": {
                   "holder": "Name of Holder",
                   "holder-url": "http://holder-url.com",

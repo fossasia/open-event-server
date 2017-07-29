@@ -255,13 +255,10 @@ def event_delete(transaction):
 @hooks.before("Copyright > Event Copyright > Create Event Copyright")
 def copyright_post(transaction):
     """
-    POST /events/1/event-copyright
+    POST /event-copyrights
     :param transaction:
     :return:
     """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
-
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
