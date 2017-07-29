@@ -4,7 +4,8 @@ from app.api.users import UserList, UserDetail, UserRelationship, VerifyUser
 from app.api.notifications import NotificationList, NotificationDetail, NotificationRelationship
 from app.api.email_notifications import EmailNotificationList, EmailNotificationListPost, EmailNotificationDetail,\
     EmailNotificationRelationshipOptional, EmailNotificationRelationshipRequired
-from app.api.tickets import TicketList, TicketDetail, TicketRelationshipRequired, TicketRelationshipOptional
+from app.api.tickets import TicketList, TicketListPost, TicketDetail, TicketRelationshipRequired,\
+    TicketRelationshipOptional
 from app.api.events import EventList, EventDetail, EventRelationship
 from app.api.event_types import EventTypeList, EventTypeDetail, EventTypeRelationship
 from app.api.event_topics import EventTopicList, EventTopicDetail, EventTopicRelationship
@@ -104,7 +105,8 @@ api.route(RoleInviteRelationship, 'role_invite_event', '/role-invites/<int:id>/r
 api.route(RoleInviteRelationship, 'role_invite_role', '/role-invites/<int:id>/relationships/role')
 
 # tickets
-api.route(TicketList, 'ticket_list', '/tickets', '/events/<int:event_id>/tickets',
+api.route(TicketListPost, 'ticket_list_post', '/tickets')
+api.route(TicketList, 'ticket_list', '/events/<int:event_id>/tickets',
           '/events/<event_identifier>/tickets', '/ticket-tags/<int:ticket_tag_id>/tickets',
           '/access-codes/<int:access_code_id>/tickets')
 api.route(TicketDetail, 'ticket_detail', '/tickets/<int:id>', '/attendees/<int:attendee_id>/ticket')

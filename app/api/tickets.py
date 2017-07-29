@@ -2,6 +2,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 from marshmallow import validates_schema
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
@@ -14,6 +15,7 @@ from app.api.helpers.exceptions import UnprocessableEntity
 from app.models.ticket_holder import TicketHolder
 from app.api.helpers.db import safe_query
 from app.api.helpers.utilities import require_relationship
+from app.api.helpers.permission_manager import has_access
 
 
 class TicketSchema(Schema):
@@ -88,9 +90,26 @@ class TicketSchema(Schema):
                                 type_='access-code')
 
 
-class TicketList(ResourceList):
+class TicketListPost(ResourceList):
     """
     Create and List Tickets
+    """
+    def before_post(self, args, kwargs, data):
+        require_relationship(['event'], data)
+
+        if not has_access('is_coorganizer', event_id=data['event']):
+            raise ObjectNotFound({'parameter': 'event_id'},
+                                 "Event: {} not found".format(data['event_id']))
+
+    schema = TicketSchema
+    methods = ['POST', ]
+    data_layer = {'session': db.session,
+                  'model': Ticket}
+
+
+class TicketList(ResourceList):
+    """
+    List Tickets based on different params
     """
     def before_post(self, args, kwargs, data):
         require_relationship(['event'], data)
@@ -113,25 +132,13 @@ class TicketList(ResourceList):
 
         return query_
 
-    def before_create_object(self, data, view_kwargs):
-        event = None
-        if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-        if event:
-            data['event_id'] = event.id
-
     view_kwargs = True
-    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
-                                     fetch_as="event_id", model=Ticket, methods="POST",
-                                     check=lambda a: a.get('event_id') or a.get('event_identifier')),)
+    methods = ['GET', ]
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket,
                   'methods': {
                       'query': query,
-                      'before_create_object': before_create_object
                   }}
 
 
