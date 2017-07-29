@@ -69,8 +69,8 @@ class NotificationList(ResourceList):
         :param view_kwargs:
         :return:
         """
-        if view_kwargs.get('id') is not None:
-            user = safe_query(self, User, 'id', view_kwargs['id'], 'id')
+        if view_kwargs.get('user_id') is not None:
+            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
             data['user_id'] = user.id
 
     view_kwargs = True
