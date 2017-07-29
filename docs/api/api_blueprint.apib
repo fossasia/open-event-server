@@ -2302,7 +2302,7 @@ Create a new Event Copyright.
                 "relationships":{
                   "event":{
                     "data": {
-                      "type": "event", 
+                      "type": "event",
                       "id": "1"
                     }
                   }
@@ -4956,9 +4956,8 @@ Announcement for call for speaker to accept session proposals from speakers.
 | `privacy` | Privacy of speakers call | string | - |
 
 
-## Speakers Call Collection [/v1/events/{event_identifier}/speakers-call{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Speakers Call Collection [/v1/speakers-calls{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `starts-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
@@ -4977,6 +4976,14 @@ Create a new speakers call using an event_id.
 
             {
               "data": {
+                "relationships":{
+                  "event":{
+                    "data":{
+                      "type":"event",
+                      "id":"1"
+                    }
+                  }
+                },
                 "attributes": {
                   "announcement": "Speaker Call Announcement",
                   "starts-at": "2017-06-01T01:24:47.500127+00:00",

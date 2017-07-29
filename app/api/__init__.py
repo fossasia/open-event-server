@@ -233,8 +233,7 @@ api.route(TrackRelationshipOptional, 'track_sessions', '/tracks/<int:id>/relatio
 api.route(TrackRelationshipRequired, 'track_event', '/tracks/<int:id>/relationships/event')
 
 # speakers_calls
-api.route(SpeakersCallList, 'speakers_call_list', '/speakers-calls', '/events/<int:event_id>/speakers-call',
-          '/events/<event_identifier>/speakers-call')
+api.route(SpeakersCallList, 'speakers_call_list', '/speakers-calls')
 api.route(SpeakersCallDetail, 'speakers_call_detail', '/speakers-calls/<int:id>',
           '/events/<int:event_id>/speakers-call', '/events/<event_identifier>/speakers-call')
 api.route(SpeakersCallRelationship, 'speakers_call_event',

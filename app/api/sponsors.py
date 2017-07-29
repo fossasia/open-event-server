@@ -5,7 +5,6 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from flask import request
 
 from app.api.helpers.utilities import dasherize
-from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.sponsor import Sponsor
 from app.models.event import Event

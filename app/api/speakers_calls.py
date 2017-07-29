@@ -7,14 +7,14 @@ from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
 from app.api.helpers.utilities import dasherize
 from app.models import db
-from app.api.helpers.permissions import jwt_required
 from app.models.event import Event
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.models.speakers_call import SpeakersCall
 from app.api.helpers.utilities import require_relationship
+from app.api.helpers.permission_manager import has_access
+from app.api.helpers.exceptions import ForbiddenException
 
 
 class SpeakersCallSchema(Schema):
@@ -65,33 +65,13 @@ class SpeakersCallList(ResourceList):
     """
     def before_post(self, args, kwargs, data):
         require_relationship(['event'], data)
+        if not has_access('is_coorganizer', event_id=data['event']):
+            raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
 
-    def before_create_object(self, data, view_kwargs):
-        event = None
-        if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-        if event:
-            data['event_id'] = event.id
-
-        try:
-            self.session.query(SpeakersCall).filter_by(event_id=data['event_id']).one()
-        except NoResultFound:
-            pass
-        else:
-            raise UnprocessableEntity({'source': 'event_identifier'},
-                                      "SpeakersCall already exists for the provided Event ID")
-
-    view_kwargs = True
-    decorators = (api.has_permission('is_coorganizer', fetch="event_id", fetch_as="event_id"),)
     schema = SpeakersCallSchema
     methods = ['POST', ]
     data_layer = {'session': db.session,
-                  'model': SpeakersCall,
-                  'methods': {
-                      'before_create_object': before_create_object
-                  }}
+                  'model': SpeakersCall}
 
 
 class SpeakersCallDetail(ResourceDetail):
