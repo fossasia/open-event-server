@@ -25,8 +25,8 @@ from app.api.event_invoices import EventInvoiceList, EventInvoiceListPost, Event
 from app.api.role_invites import RoleInviteListPost, RoleInviteList, RoleInviteDetail, RoleInviteRelationship
 from app.api.image_sizes import ImageSizeList, ImageSizeDetail
 from app.api.roles import RoleList, RoleDetail
-from app.api.session_types import SessionTypeList, SessionTypeDetail, SessionTypeRelationshipRequired, \
-    SessionTypeRelationshipOptional
+from app.api.session_types import SessionTypeList, SessionTypeListPost, SessionTypeDetail,\
+    SessionTypeRelationshipRequired, SessionTypeRelationshipOptional
 from app.api.event_copyright import EventCopyrightList, EventCopyrightDetail, EventCopyrightRelationship
 from app.api.pages import PageList, PageDetail
 from app.api.user_permission import UserPermissionList, UserPermissionDetail
@@ -241,7 +241,8 @@ api.route(SpeakersCallRelationship, 'speakers_call_event',
           '/speakers-calls/<int:id>/relationships/event')
 
 # session_types
-api.route(SessionTypeList, 'session_type_list', '/session-types', '/events/<int:event_id>/session-types',
+api.route(SessionTypeListPost, 'session_type_list_post', '/session-types')
+api.route(SessionTypeList, 'session_type_list', '/events/<int:event_id>/session-types',
           '/events/<event_identifier>/session-types')
 api.route(SessionTypeDetail, 'session_type_detail', '/session-types/<int:id>',
           '/sessions/<int:session_id>/session-type')
