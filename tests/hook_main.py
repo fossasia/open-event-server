@@ -506,29 +506,13 @@ def session_delete(transaction):
 
 
 # ------------------------- Session Type -------------------------
-@hooks.before("Session Type > Session Type Collection > List All Session Types")
-def session_type_get_list(transaction):
-    """
-    GET /events/1/session-types
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        session_type = SessionTypeFactory()
-        db.session.add(session_type)
-        db.session.commit()
-
-
 @hooks.before("Session Type > Session Type Collection > Create Session Type")
 def session_type_post(transaction):
     """
-    POST /events/1/session-types
+    POST /session-types
     :param transaction:
     :return:
     """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
-
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
@@ -571,6 +555,32 @@ def session_type_delete(transaction):
     with stash['app'].app_context():
         session_type = SessionTypeFactory()
         db.session.add(session_type)
+        db.session.commit()
+
+
+@hooks.before("Session Type > List Session Types under an Event > List Session Types")
+def event_session_type(transaction):
+    """
+    GET /events/1/session-types
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        session_type = SessionTypeFactory()
+        db.session.add(session_type)
+        db.session.commit()
+
+
+@hooks.before("Session Type > Get Session Type of a Session > Get Session Type Details")
+def session_session_type(transaction):
+    """
+    GET /sessions/1/session-type
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        session = SessionFactory()
+        db.session.add(session)
         db.session.commit()
 
 
