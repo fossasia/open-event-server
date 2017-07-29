@@ -3607,65 +3607,12 @@ Data related to all the session types (such as talks, workshops, lightning talks
 | `name`  | Name of the Session Type | string | **yes** |
 | `length` | Length of the Session Type | string | 00:30 |
 
-## Session Type Collection [/v1/events/{event_identifier}/session-types{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Session Type Collection [/v1/session-types{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
-
-### List All Session Types [GET]
-Get a list of Session Types.
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-          "meta": {
-            "count": 1
-          },
-          "data": [
-            {
-              "relationships": {
-                "event": {
-                  "links": {
-                    "self": "/v1/session-types/1/relationships/event",
-                    "related": "/v1/session-types/1/event"
-                  }
-                },
-                "sessions": {
-                  "links": {
-                    "self": "/v1/session-types/1/relationships/sessions",
-                    "related": "/v1/session-types/1/sessions"
-                  }
-                }
-              },
-              "attributes": {
-                "name": "Workshop",
-                "length": "00:30"
-              },
-              "type": "session-type",
-              "id": "1",
-              "links": {
-                "self": "/v1/session-types/1"
-              }
-            }
-          ],
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/session-types"
-          }
-        }
 
 
 ### Create Session Type [POST]
@@ -3681,11 +3628,19 @@ Create a new session type using an event_id.
 
             {
               "data": {
-                "attributes": {
-                  "name": "Workshop",
-                  "length": "00:30"
-                },
-                "type": "session-type"
+                  "relationships":{
+                      "event":{
+                        "data":{
+                          "type":"event",
+                          "id":"1"
+                        }
+                      }
+                    },
+                    "attributes": {
+                      "name": "Workshop",
+                      "length": "00:30"
+                    },
+                    "type": "session-type"
               }
             }
 
@@ -3860,6 +3815,124 @@ Delete a single session type.
             "version": "1.0"
           }
         }
+
+
+## List Session Types under an Event [/v1/events/{event_identifier}/session-types{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+
+### List Session Types [GET]
+
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "event": {
+                            "links": {
+                                "self": "/v1/session-types/1/relationships/event",
+                                "related": "/v1/session-types/1/event"
+                            }
+                        },
+                        "sessions": {
+                            "links": {
+                                "self": "/v1/session-types/1/relationships/sessions",
+                                "related": "/v1/session-types/1/sessions"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "length": "00:30",
+                        "name": "Workshop"
+                    },
+                    "type": "session-type",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/session-types/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/events/1/session-types"
+            }
+        }
+
+
+## Get Session Type of a Session [/v1/sessions/{session_id}/session-type]
++ Parameters
+    + session_id: 1 (integer) - ID of the session in the form of an integer
+
+### Get Session Type Details [GET]
+Get a single session type.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/session-types/1/relationships/event",
+                            "related": "/v1/session-types/1/event"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/session-types/1/relationships/sessions",
+                            "related": "/v1/session-types/1/sessions"
+                        }
+                    }
+                },
+                "attributes": {
+                    "length": "00:30",
+                    "name": "Workshop"
+                },
+                "type": "session-type",
+                "id": "1",
+                "links": {
+                    "self": "/v1/session-types/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/session-types/1"
+            }
+        }
+
 
 # Group Speakers
 Data related to the various speakers associated with the various sessions in the event.
@@ -4618,7 +4691,7 @@ You can add various social links such as facebook, twitter, website, blog link, 
 
 | Parameter | Description | Type | Required |
 |:----------|-------------|------|----------|
-| `name`  | Name of the Session Type | string | **yes** |
+| `name`  | Name of the Social Link | string | **yes** |
 | `link` | Url of the Social Link | string | **yes** |
 
 ## Social Links Post Collection [/v1/social-links{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]

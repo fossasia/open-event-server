@@ -54,9 +54,9 @@ class Session(db.Model):
                  comments=None,
                  starts_at=None,
                  ends_at=None,
-                 track=None,
+                 track_id=None,
                  language=None,
-                 microlocation=None,
+                 microlocation_id=None,
                  speakers=None,
                  event_id=None,
                  creator_id=None,
@@ -65,7 +65,7 @@ class Session(db.Model):
                  video_url=None,
                  audio_url=None,
                  signup_url=None,
-                 session_type=None,
+                 session_type_id=None,
                  level=None,
                  created_at=None,
                  is_mail_sent=False,
@@ -82,9 +82,9 @@ class Session(db.Model):
         self.comments = comments
         self.starts_at = starts_at
         self.ends_at = ends_at
-        self.track = track
+        self.track_id = track_id
         self.language = language
-        self.microlocation = microlocation
+        self.microlocation_id = microlocation_id
         self.speakers = speakers
         self.event_id = event_id
         self.creator_id = creator_id
@@ -93,7 +93,7 @@ class Session(db.Model):
         self.video_url = video_url
         self.audio_url = audio_url
         self.signup_url = signup_url
-        self.session_type = session_type
+        self.session_type_id = session_type_id
         self.level = level
         self.created_at = created_at
         self.deleted_at = deleted_at

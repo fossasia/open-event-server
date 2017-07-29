@@ -2,6 +2,7 @@ import factory
 from app.models.session import db, Session
 import app.factories.common as common
 from app.factories.event import EventFactoryBasic
+from app.factories.session_type import SessionTypeFactory
 
 
 class SessionFactory(factory.alchemy.SQLAlchemyModelFactory):
@@ -10,6 +11,7 @@ class SessionFactory(factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session = db.session
 
     event = factory.RelatedFactory(EventFactoryBasic)
+    session_type = factory.RelatedFactory(SessionTypeFactory)
     title = common.string_
     subtitle = common.string_
     level = common.int_
@@ -28,3 +30,4 @@ class SessionFactory(factory.alchemy.SQLAlchemyModelFactory):
     submitted_at = common.date_
     is_mail_sent = True
     event_id = 1
+    session_type_id = 1
