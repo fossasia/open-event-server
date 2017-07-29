@@ -16,7 +16,7 @@ from app.api.sessions import SessionList, SessionListPost, SessionDetail, Sessio
     SessionRelationshipOptional
 from app.api.speakers import SpeakerList, SpeakerListPost, SpeakerDetail, SpeakerRelationshipRequired,\
     SpeakerRelationshipOptional
-from app.api.social_links import SocialLinkList, SocialLinkDetail, SocialLinkRelationship
+from app.api.social_links import SocialLinkList, SocialLinkListPost, SocialLinkDetail, SocialLinkRelationship
 from app.api.sponsors import SponsorList, SponsorListPost, SponsorDetail, SponsorRelationship
 from app.api.tracks import TrackList, TrackListPost, TrackDetail, TrackRelationshipOptional, TrackRelationshipRequired
 from app.api.speakers_calls import SpeakersCallList, SpeakersCallDetail, SpeakersCallRelationship
@@ -210,7 +210,8 @@ api.route(SessionRelationshipOptional, 'session_speaker',
           '/sessions/<int:id>/relationships/speakers')
 
 # social_links
-api.route(SocialLinkList, 'social_link_list', '/social-links', '/events/<int:event_id>/social-links',
+api.route(SocialLinkListPost, 'social_link_list_post', '/social-links')
+api.route(SocialLinkList, 'social_link_list', '/events/<int:event_id>/social-links',
           '/events/<event_identifier>/social-links')
 api.route(SocialLinkDetail, 'social_link_detail', '/social-links/<int:id>')
 api.route(SocialLinkRelationship, 'social_link_event',

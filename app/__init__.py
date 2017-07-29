@@ -5,8 +5,6 @@ from flask.exthook import ExtDeprecationWarning
 warnings.simplefilter('ignore', ExtDeprecationWarning)
 # Keep it before flask extensions are imported
 
-from pytz import utc
-
 from celery import Celery
 from celery.signals import after_task_publish
 import logging
@@ -22,7 +20,6 @@ from flask_login import current_user
 from flask_jwt import JWT
 from datetime import timedelta
 from flask_cors import CORS
-from raven.contrib.flask import Sentry
 from flask_rest_jsonapi.errors import jsonapi_errors
 from flask_rest_jsonapi.exceptions import JsonApiException
 from healthcheck import HealthCheck, EnvironmentDump
@@ -39,7 +36,8 @@ from app.views import BlueprintsManager
 from app.api.helpers.auth import AuthManager
 from app.models.event import Event, EventsUsers
 from app.models.role_invite import RoleInvite
-from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations
+from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations, check_migrations
+from app.views.sentry import sentry
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -123,9 +121,8 @@ def create_app():
                          view_func=app.send_static_file)
 
     # sentry
-    if app.config['SENTRY_DSN']:
-        sentry = Sentry(dsn=app.config['SENTRY_DSN'])
-        sentry.init_app(app)
+    if 'SENTRY_DSN' in app.config:
+        sentry.init_app(app, dsn=app.config['SENTRY_DSN'])
 
     return app, _manager, db, _jwt
 
@@ -166,6 +163,8 @@ health = HealthCheck(current_app, "/health-check")
 envdump = EnvironmentDump(current_app, "/environment", include_config=False)
 health.add_check(health_check_celery)
 health.add_check(health_check_db)
+with current_app.app_context():
+    current_app.config['MIGRATION_STATUS'] = check_migrations()
 health.add_check(health_check_migrations)
 
 
