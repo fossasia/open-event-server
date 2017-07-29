@@ -27,7 +27,7 @@ from app.api.image_sizes import ImageSizeList, ImageSizeDetail
 from app.api.roles import RoleList, RoleDetail
 from app.api.session_types import SessionTypeList, SessionTypeListPost, SessionTypeDetail,\
     SessionTypeRelationshipRequired, SessionTypeRelationshipOptional
-from app.api.event_copyright import EventCopyrightList, EventCopyrightDetail, EventCopyrightRelationship
+from app.api.event_copyright import EventCopyrightListPost, EventCopyrightDetail, EventCopyrightRelationshipRequired
 from app.api.pages import PageList, PageDetail
 from app.api.user_permission import UserPermissionList, UserPermissionDetail
 from app.api.tax import TaxList, TaxListPost, TaxDetail, TaxRelationship
@@ -262,12 +262,11 @@ api.route(SpeakerRelationshipRequired, 'speaker_user', '/speakers/<int:id>/relat
 api.route(SpeakerRelationshipOptional, 'speaker_session', '/speakers/<int:id>/relationships/sessions')
 
 # event_copyright
-api.route(EventCopyrightList, 'event_copyright_list', '/event-copyrights', '/events/<int:event_id>/event-copyright',
-          '/events/<event_identifier>/event-copyright')
+api.route(EventCopyrightListPost, 'event_copyright_list_post', '/event-copyrights')
 api.route(EventCopyrightDetail, 'event_copyright_detail',
           '/event-copyright/<int:id>', '/events/<int:event_id>/event-copyright',
           '/events/<event_identifier>/event-copyright')
-api.route(EventCopyrightRelationship, 'copyright_event',
+api.route(EventCopyrightRelationshipRequired, 'copyright_event',
           '/event-copyright/<int:id>/relationships/event')
 
 # custom_placeholder

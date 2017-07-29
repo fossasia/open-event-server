@@ -13,6 +13,8 @@ from app.models.event_copyright import EventCopyright
 from app.models.event import Event
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import require_relationship
+from app.api.helpers.permission_manager import has_access
+from app.api.helpers.exceptions import ForbiddenException
 
 
 class EventCopyrightSchema(Schema):
@@ -39,21 +41,15 @@ class EventCopyrightSchema(Schema):
                          type_='event')
 
 
-class EventCopyrightList(ResourceList):
+class EventCopyrightListPost(ResourceList):
     def before_post(self, args, kwargs, data):
         require_relationship(['event'], data)
+        if not has_access('is_coorganizer', event_id=data['event']):
+            raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
 
     def before_create_object(self, data, view_kwargs):
-        event = None
-        if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-        if event:
-            data['event_id'] = event.id
-
         try:
-            self.session.query(EventCopyright).filter_by(event_id=data['event_id']).one()
+            self.session.query(EventCopyright).filter_by(event_id=data['event']).one()
         except NoResultFound:
             pass
         else:
@@ -62,7 +58,6 @@ class EventCopyrightList(ResourceList):
 
     methods = ['POST', ]
     view_kwargs = True
-    decorators = (api.has_permission('is_coorganizer', fetch="event_id", fetch_as="event_id"),)
     schema = EventCopyrightSchema
     data_layer = {'session': db.session,
                   'model': EventCopyright,
@@ -93,7 +88,7 @@ class EventCopyrightDetail(ResourceDetail):
                   }}
 
 
-class EventCopyrightRelationship(ResourceRelationship):
+class EventCopyrightRelationshipRequired(ResourceRelationship):
 
     decorators = (api.has_permission('is_coorganizer', fetch="event_id", fetch_as="event_id",
                                      model=EventCopyright, methods="PATCH"),)
