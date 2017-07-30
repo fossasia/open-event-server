@@ -10,7 +10,7 @@ class Sponsor(db.Model):
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
     url = db.Column(db.String)
-    level = db.Column(db.String)
+    level = db.Column(db.Integer)
     logo_url = db.Column(db.String)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     type = db.Column(db.String)
