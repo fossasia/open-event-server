@@ -869,7 +869,7 @@ Event Sub Topics for Events. Can only be edited and entered by admins.
 | `name`  | Name of the event sub topic | string | - |
 | `slug` | Slug of the event sub topic | string | - |
 
-## Event Sub Topics Collection [/v1/event-topics/{event_topic_id}/event-sub-topics{?page%5bsize%5d,page%5bnumber%5d,sort}]
+## Event Sub Topics Collection Get [/v1/event-topics/{event_topic_id}/event-sub-topics{?page%5bsize%5d,page%5bnumber%5d,sort}]
 + Parameters
     + event_topic_id: 1 (integer) - ID of the event topic.
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -929,6 +929,12 @@ Get a list of Event Sub Topics.
         }
 
 
+## Event Sub Topics Collection Post [/v1/event-sub-topics{?page%5bsize%5d,page%5bnumber%5d,sort}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+
 ### Create Event Sub Topic [POST]
 Create a new event sub topic with name.
 
@@ -942,6 +948,14 @@ Create a new event sub topic with name.
 
             {
               "data": {
+                "relationships":{
+                    "event-topic":{
+                        "data":{
+                          "type":"event-topic",
+                          "id":"1"
+                        }
+                    }
+                },
                 "attributes": {
                   "name": "Climbing"
                 },
