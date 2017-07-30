@@ -12,3 +12,4 @@ class EventSubTopicFactory(factory.alchemy.SQLAlchemyModelFactory):
     event_topic = factory.RelatedFactory(EventTopicFactory)
     name = common.string_
     slug = common.slug_
+    event_topic_id = 1

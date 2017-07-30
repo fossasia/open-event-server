@@ -9,7 +9,8 @@ from app.api.tickets import TicketList, TicketListPost, TicketDetail, TicketRela
 from app.api.events import EventList, EventDetail, EventRelationship
 from app.api.event_types import EventTypeList, EventTypeDetail, EventTypeRelationship
 from app.api.event_topics import EventTopicList, EventTopicDetail, EventTopicRelationship
-from app.api.event_sub_topics import EventSubTopicList, EventSubTopicDetail, EventSubTopicRelationship
+from app.api.event_sub_topics import EventSubTopicList, EventSubTopicListPost, EventSubTopicDetail,\
+    EventSubTopicRelationshipRequired, EventSubTopicRelationshipOptional
 from app.api.microlocations import MicrolocationList, MicrolocationListPost, MicrolocationDetail, \
     MicrolocationRelationshipRequired, MicrolocationRelationshipOptional
 from app.api.sessions import SessionList, SessionListPost, SessionDetail, SessionRelationshipRequired, \
@@ -329,17 +330,18 @@ api.route(EventTopicRelationship, 'event_topic_event_sub_topic',
           '/event-topics/<int:id>/relationships/event-sub-topics')
 
 # event sub topics
+api.route(EventSubTopicListPost, 'event_sub_topic_list_post', '/event-sub-topics')
 api.route(EventSubTopicList, 'event_sub_topic_list',
           '/event-topics/<int:event_topic_id>/event-sub-topics')
 api.route(EventSubTopicDetail, 'event_sub_topic_detail', '/event-sub-topics/<int:id>',
           '/events/<int:event_id>/event-sub-topic',
           '/events/<event_identifier>/event-sub-topic',
           '/custom-placeholders/<int:custom_placeholder_id>/event-sub-topic')
-api.route(EventSubTopicRelationship, 'event_sub_topic_event',
+api.route(EventSubTopicRelationshipOptional, 'event_sub_topic_event',
           '/event-sub-topics/<int:id>/relationships/events')
-api.route(EventSubTopicRelationship, 'event_sub_topic_event_topic',
+api.route(EventSubTopicRelationshipRequired, 'event_sub_topic_event_topic',
           '/event-sub-topics/<int:id>/relationships/event-topic')
-api.route(EventSubTopicRelationship, 'event_sub_topic_custom_placeholder',
+api.route(EventSubTopicRelationshipOptional, 'event_sub_topic_custom_placeholder',
           '/event-sub-topics/<int:id>/relationships/custom-placeholder')
 
 # ticket_fees

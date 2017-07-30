@@ -11,6 +11,9 @@ from app.api.bootstrap import api
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.db import safe_query
 from app.api.custom_placeholders import CustomPlaceholder
+from app.api.helpers.utilities import require_relationship
+from app.api.helpers.permission_manager import has_access
+from app.api.helpers.exceptions import ForbiddenException
 
 
 class EventSubTopicSchema(Schema):
@@ -53,9 +56,25 @@ class EventSubTopicSchema(Schema):
                                       type_='custom-placeholder')
 
 
+class EventSubTopicListPost(ResourceList):
+    """
+    Create event sub topics
+    """
+    def before_post(self, args, kwargs, data):
+        require_relationship(['event_topic'], data)
+        if not has_access('is_admin'):
+            raise ForbiddenException({'source': ''}, 'Admin access is required.')
+
+    view_kwargs = True
+    methods = ['POST', ]
+    schema = EventSubTopicSchema
+    data_layer = {'session': db.session,
+                  'model': EventSubTopic}
+
+
 class EventSubTopicList(ResourceList):
     """
-    List and create event sub topics
+    List event sub topics
     """
 
     def query(self, view_kwargs):
@@ -71,25 +90,13 @@ class EventSubTopicList(ResourceList):
             query_ = query_.join(EventTopic).filter(EventTopic.id == event_topic.id)
         return query_
 
-    def before_create_object(self, data, view_kwargs):
-        """
-        method to create object before post
-        :param data:
-        :param view_kwargs:
-        :return:
-        """
-        if view_kwargs.get('event_topic_id'):
-            event_topic = safe_query(self, EventTopic, 'id', view_kwargs['event_topic_id'], 'event_topic_id')
-            data['event_topic_id'] = event_topic.id
-
     view_kwargs = True
-    decorators = (api.has_permission('is_admin', methods="POST"),)
+    methods = ['GET', ]
     schema = EventSubTopicSchema
     data_layer = {'session': db.session,
                   'model': EventSubTopic,
                   'methods': {
-                      'query': query,
-                      'before_create_object': before_create_object
+                      'query': query
                   }}
 
 
@@ -127,7 +134,18 @@ class EventSubTopicDetail(ResourceDetail):
                   }}
 
 
-class EventSubTopicRelationship(ResourceRelationship):
+class EventSubTopicRelationshipRequired(ResourceRelationship):
+    """
+    Event sub topic Relationship
+    """
+    decorators = (api.has_permission('is_admin', methods="PATCH"),)
+    methods = ['GET', 'PATCH']
+    schema = EventSubTopicSchema
+    data_layer = {'session': db.session,
+                  'model': EventSubTopic}
+
+
+class EventSubTopicRelationshipOptional(ResourceRelationship):
     """
     Event sub topic Relationship
     """

@@ -2187,7 +2187,7 @@ def event_topic_delete(transaction):
 
 
 # ------------------------- Event Sub Topics -------------------------
-@hooks.before("Event Sub Topics > Event Sub Topics Collection > List All Event Sub Topics")
+@hooks.before("Event Sub Topics > Event Sub Topics Collection Get > List All Event Sub Topics")
 def event_sub_topic_get_list(transaction):
     """
     GET /event-topics/1/event-sub-topics
@@ -2200,10 +2200,10 @@ def event_sub_topic_get_list(transaction):
         db.session.commit()
 
 
-@hooks.before("Event Sub Topics > Event Sub Topics Collection > Create Event Sub Topic")
+@hooks.before("Event Sub Topics > Event Sub Topics Collection Post > Create Event Sub Topic")
 def event_sub_topic_post(transaction):
     """
-    POST /event-topics/1/event-sub-topics
+    POST /event-sub-topics
     :param transaction:
     :return:
     """
