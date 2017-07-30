@@ -437,19 +437,6 @@ def microlocation_delete(transaction):
 
 
 # ------------------------- Sessions -------------------------
-@hooks.before("Sessions > Sessions Collection > List All Sessions")
-def session_get_list(transaction):
-    """
-    GET /events/1/sessions
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        session = SessionFactory()
-        db.session.add(session)
-        db.session.commit()
-
-
 @hooks.before("Sessions > Sessions Collection > Create Sessions")
 def session_post(transaction):
     """
@@ -499,6 +486,71 @@ def session_delete(transaction):
     with stash['app'].app_context():
         session = SessionFactory()
         db.session.add(session)
+        db.session.commit()
+
+
+@hooks.before("Sessions > List Sessions under an Event > List Sessions")
+def event_session(transaction):
+    """
+    GET /events/1/sessions
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        session = SessionFactory()
+        db.session.add(session)
+        db.session.commit()
+
+
+@hooks.before("Sessions > List Sessions under a Track > List Sessions")
+def track_session(transaction):
+    """
+    GET /tracks/1/sessions
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        session = SessionFactory()
+        db.session.add(session)
+        db.session.commit()
+
+
+@hooks.before("Sessions > List Sessions under a Session Type > List Sessions")
+def session_type_session(transaction):
+    """
+    GET /session-types/1/sessions
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        session = SessionFactory()
+        db.session.add(session)
+        db.session.commit()
+
+
+@hooks.before("Sessions > List Sessions under a Microlocation > List Sessions")
+def microlocation_session(transaction):
+    """
+    GET /microlations/1/sessions
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        session = SessionFactory()
+        db.session.add(session)
+        db.session.commit()
+
+
+@hooks.before("Sessions > List Sessions under a Speaker > List Sessions")
+def speaker_session(transaction):
+    """
+    GET /speakers/1/sessions
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        speaker = SpeakerFactory()
+        db.session.add(speaker)
         db.session.commit()
 
 
