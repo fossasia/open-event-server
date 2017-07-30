@@ -29,3 +29,4 @@ class EventInvoiceFactory(factory.alchemy.SQLAlchemyModelFactory):
     last4 = "1234"
     stripe_token = common.string_
     paypal_token = common.string_
+    event_id = 1

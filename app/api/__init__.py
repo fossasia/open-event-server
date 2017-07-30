@@ -135,7 +135,7 @@ api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>
           '/social-links/<int:social_link_id>/event',
           '/sponsors/<int:sponsor_id>/event', '/tracks/<int:track_id>/event',
           '/speakers-calls/<int:speakers_call_id>/event', '/session-types/<int:session_type_id>/event',
-          '/event-copyright/<int:copyright_id>/event', '/tax/<int:tax_id>/event',
+          '/event-copyrights/<int:copyright_id>/event', '/tax/<int:tax_id>/event',
           '/event-invoices/<int:event_invoice_id>/event', '/discount-codes/<int:discount_code_id>/event',
           '/sessions/<int:session_id>/event', '/ticket-tags/<int:ticket_tag_id>/event',
           '/role-invites/<int:role_invite_id>/event', '/speakers/<int:speaker_id>/event',

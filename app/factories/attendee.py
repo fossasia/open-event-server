@@ -19,3 +19,4 @@ class AttendeeFactory(factory.alchemy.SQLAlchemyModelFactory):
     country = "IN"
     is_checked_in = True
     pdf_url = common.url_
+    event_id = 1

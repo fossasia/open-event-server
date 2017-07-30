@@ -11,7 +11,6 @@ from flask import request
 import marshmallow.validate as validate
 
 from app.api.bootstrap import api
-from app.api.helpers.permissions import jwt_required
 from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.event import Event
@@ -26,7 +25,6 @@ from app.models.event_invoice import EventInvoice
 from app.models.speakers_call import SpeakersCall
 from app.models.role_invite import RoleInvite
 from app.models.custom_form import CustomForms
-from app.models.users_events_role import UsersEventsRoles
 from app.models.ticket import TicketTag
 from app.models.access_code import AccessCode
 from app.models.user import User, ATTENDEE, ORGANIZER
@@ -38,6 +36,9 @@ from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.files import create_save_image_sizes
 from app.models.microlocation import Microlocation
 from app.models.email_notification import EmailNotification
+from app.models.social_link import SocialLink
+from app.models.tax import Tax
+from app.models.event_copyright import EventCopyright
 
 
 class EventSchema(Schema):
@@ -347,6 +348,13 @@ class EventDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
+        if view_kwargs.get('copyright_id') is not None:
+            copyright = safe_query(self, EventCopyright, 'id', view_kwargs['copyright_id'], 'copyright_id')
+            if copyright.event_id is not None:
+                view_kwargs['id'] = copyright.event_id
+            else:
+                view_kwargs['id'] = None
+
         if view_kwargs.get('track_id') is not None:
             track = safe_query(self, Track, 'id', view_kwargs['track_id'], 'track_id')
             if track.event_id is not None:
@@ -379,6 +387,20 @@ class EventDetail(ResourceDetail):
             sessions = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
             if sessions.event_id is not None:
                 view_kwargs['id'] = sessions.event_id
+            else:
+                view_kwargs['id'] = None
+
+        if view_kwargs.get('social_link_id') is not None:
+            social_link = safe_query(self, SocialLink, 'id', view_kwargs['social_link_id'], 'social_link_id')
+            if social_link.event_id is not None:
+                view_kwargs['id'] = social_link.event_id
+            else:
+                view_kwargs['id'] = None
+
+        if view_kwargs.get('tax_id') is not None:
+            tax = safe_query(self, Tax, 'id', view_kwargs['tax_id'], 'tax_id')
+            if tax.event_id is not None:
+                view_kwargs['id'] = tax.event_id
             else:
                 view_kwargs['id'] = None
 
