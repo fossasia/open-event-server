@@ -2913,62 +2913,6 @@ Data related to all the microlocations for the various sessions of the event.
     + sort (optional, string, `floor`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List All Microlocations [GET]
-Get a list of Microlocations.
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-          "meta": {
-            "count": 1
-          },
-          "data": [
-            {
-              "relationships": {
-                "event": {
-                  "links": {
-                    "self": "/v1/microlocations/1/relationships/event",
-                    "related": "/v1/microlocations/1/event"
-                  }
-                },
-                 "sessions": {
-                  "links": {
-                    "self": "/v1/microlocations/1/relationships/sessions",
-                    "related": "/v1/microlocations/1/sessions"
-                  }
-                }
-              },
-              "attributes": {
-                "name": "microlocation-name",
-                "latitude": "45.00",
-                "longitude": "45.00",
-                "floor": "2",
-                "room": "room1"
-              },
-              "type": "microlocation",
-              "id": "1",
-              "links": {
-                "self": "/v1/microlocations/1"
-              }
-            }
-          ],
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/microlocations"
-          }
-        }
-
-
 ### Create Microlocation [POST]
 Create a new microlocation using an event_id.
 
@@ -3216,87 +3160,6 @@ Data related to all the sessions in the event.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
-
-### List All Sessions [GET]
-Get a list of Sessions **(Public)**.
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-          "meta": {
-            "count": 1
-          },
-          "data": [
-            {
-              "relationships": {
-                "event": {
-                  "links": {
-                    "self": "/v1/sessions/21/relationships/event",
-                    "related": "/v1/sessions/21/event"
-                  }
-                },
-                "track": {
-                  "links": {
-                    "self": "/v1/sessions/21/relationships/track",
-                    "related": "/v1/sessions/21/track"
-                  }
-                },
-                "microlocation": {
-                  "links": {
-                    "self": "/v1/sessions/21/relationships/microlocation",
-                    "related": "/v1/sessions/21/microlocation"
-                  }
-                },
-                "session-type": {
-                  "links": {
-                    "self": "/v1/sessions/21/relationships/session-type",
-                    "related": "/v1/sessions/21/session-type"
-                  }
-                }
-              },
-              "attributes": {
-                "title": "Micropython Session",
-                "subtitle": null,
-                "level": 1,
-                "short-abstract": null,
-                "long-abstract": null,
-                "comments": null,
-                "starts-at": "2017-06-01T10:00:00.500127+00:00",
-                "ends-at": "2017-06-01T11:00:00.500127+00:00",
-                "language": "English",
-                "slides-url": null,
-                "videos-url": null,
-                "audios-url": null,
-                "signup-url": null,
-                "state": null,
-                "created-at": "2017-05-01T01:24:47.500127+00:00",
-                "deleted-at": null,
-                "submitted-at": null,
-                "is-mail-sent": false
-              },
-              "type": "session",
-              "id": "21",
-              "links": {
-                "self": "/v1/sessions/21"
-              }
-            }
-          ],
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/sessions"
-          }
-        }
-
 
 ### Create Sessions [POST]
 Create a new session using an event_id **(Minimum Co-Organizer Access)**
@@ -3605,6 +3468,481 @@ Delete a single session. **(Minimum Co-Organizer Access)**
             "version": "1.0"
           }
         }
+
+## List Sessions under an Event [/v1/events/{event_identifier}/sessions{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List Sessions [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+    {
+        "meta": {
+            "count": 1
+        },
+        "data": [
+            {
+                "relationships": {
+                    "track": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/track",
+                            "related": "/v1/sessions/1/track"
+                        }
+                    },
+                    "speakers": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/speakers",
+                            "related": "/v1/sessions/1/speakers"
+                        }
+                    },
+                    "microlocation": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/microlocation",
+                            "related": "/v1/sessions/1/microlocation"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/event",
+                            "related": "/v1/sessions/1/event"
+                        }
+                    },
+                    "session-type": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/session-type",
+                            "related": "/v1/sessions/1/session-type"
+                        }
+                    }
+                },
+                "attributes": {
+                    "audio-url": "http://example.com/example",
+                    "subtitle": "Title",
+                    "ends-at": "2017-06-01T11:00:00.500127+00:00",
+                    "language": "English",
+                    "short-abstract": "Short Abstract",
+                    "slides-url": "http://example.com/example",
+                    "title": "Micropython Session",
+                    "created-at": "2017-07-25T02:22:35.010307+00:00",
+                    "signup-url": "http://example.com/example",
+                    "long-abstract": "The Long Abstract",
+                    "state": "draft",
+                    "submitted-at": "2017-05-01T01:24:47.500127+00:00",
+                    "comments": "Comment",
+                    "video-url": "http://example.com/example",
+                    "level": 1,
+                    "deleted-at": null,
+                    "starts-at": "2017-06-01T10:00:00.500127+00:00",
+                    "is-mail-sent": false
+                },
+                "type": "session",
+                "id": "1",
+                "links": {
+                    "self": "/v1/sessions/1"
+                }
+            }
+        ],
+        "jsonapi": {
+            "version": "1.0"
+        },
+        "links": {
+            "self": "/v1/events/1/sessions"
+        }
+    }
+
+
+## List Sessions under a Track [/v1/tracks/{track_id}/sessions{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + track_id: 1 (integer) - ID of the track in the form of an integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List Sessions [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+    {
+        "meta": {
+            "count": 1
+        },
+        "data": [
+            {
+                "relationships": {
+                    "track": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/track",
+                            "related": "/v1/sessions/1/track"
+                        }
+                    },
+                    "speakers": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/speakers",
+                            "related": "/v1/sessions/1/speakers"
+                        }
+                    },
+                    "microlocation": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/microlocation",
+                            "related": "/v1/sessions/1/microlocation"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/event",
+                            "related": "/v1/sessions/1/event"
+                        }
+                    },
+                    "session-type": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/session-type",
+                            "related": "/v1/sessions/1/session-type"
+                        }
+                    }
+                },
+                "attributes": {
+                    "audio-url": "http://example.com/example",
+                    "subtitle": "Title",
+                    "ends-at": "2017-06-01T11:00:00.500127+00:00",
+                    "language": "English",
+                    "short-abstract": "Short Abstract",
+                    "slides-url": "http://example.com/example",
+                    "title": "Micropython Session",
+                    "created-at": "2017-07-25T02:22:35.010307+00:00",
+                    "signup-url": "http://example.com/example",
+                    "long-abstract": "The Long Abstract",
+                    "state": "draft",
+                    "submitted-at": "2017-05-01T01:24:47.500127+00:00",
+                    "comments": "Comment",
+                    "video-url": "http://example.com/example",
+                    "level": 1,
+                    "deleted-at": null,
+                    "starts-at": "2017-06-01T10:00:00.500127+00:00",
+                    "is-mail-sent": false
+                },
+                "type": "session",
+                "id": "1",
+                "links": {
+                    "self": "/v1/sessions/1"
+                }
+            }
+        ],
+        "jsonapi": {
+            "version": "1.0"
+        },
+        "links": {
+            "self": "/v1/tracks/1/sessions"
+        }
+    }
+
+
+## List Sessions under a Session Type [/v1/session-types/{session_type_id}/sessions{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + session_type_id: 1 (integer) - ID of the session_type in the form of an integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List Sessions [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+    {
+        "meta": {
+            "count": 1
+        },
+        "data": [
+            {
+                "relationships": {
+                    "track": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/track",
+                            "related": "/v1/sessions/1/track"
+                        }
+                    },
+                    "speakers": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/speakers",
+                            "related": "/v1/sessions/1/speakers"
+                        }
+                    },
+                    "microlocation": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/microlocation",
+                            "related": "/v1/sessions/1/microlocation"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/event",
+                            "related": "/v1/sessions/1/event"
+                        }
+                    },
+                    "session-type": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/session-type",
+                            "related": "/v1/sessions/1/session-type"
+                        }
+                    }
+                },
+                "attributes": {
+                    "audio-url": "http://example.com/example",
+                    "subtitle": "Title",
+                    "ends-at": "2017-06-01T11:00:00.500127+00:00",
+                    "language": "English",
+                    "short-abstract": "Short Abstract",
+                    "slides-url": "http://example.com/example",
+                    "title": "Micropython Session",
+                    "created-at": "2017-07-25T02:22:35.010307+00:00",
+                    "signup-url": "http://example.com/example",
+                    "long-abstract": "The Long Abstract",
+                    "state": "draft",
+                    "submitted-at": "2017-05-01T01:24:47.500127+00:00",
+                    "comments": "Comment",
+                    "video-url": "http://example.com/example",
+                    "level": 1,
+                    "deleted-at": null,
+                    "starts-at": "2017-06-01T10:00:00.500127+00:00",
+                    "is-mail-sent": false
+                },
+                "type": "session",
+                "id": "1",
+                "links": {
+                    "self": "/v1/sessions/1"
+                }
+            }
+        ],
+        "jsonapi": {
+            "version": "1.0"
+        },
+        "links": {
+            "self": "/v1/session-types/1/sessions"
+        }
+    }
+
+
+## List Sessions under a Microlocation [/v1/microlocations/{microlocation_id}/sessions{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + microlocation_id: 1 (integer) - ID of the ticket in the form of an integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List Sessions [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+    {
+        "meta": {
+            "count": 1
+        },
+        "data": [
+            {
+                "relationships": {
+                    "track": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/track",
+                            "related": "/v1/sessions/1/track"
+                        }
+                    },
+                    "speakers": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/speakers",
+                            "related": "/v1/sessions/1/speakers"
+                        }
+                    },
+                    "microlocation": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/microlocation",
+                            "related": "/v1/sessions/1/microlocation"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/event",
+                            "related": "/v1/sessions/1/event"
+                        }
+                    },
+                    "session-type": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/session-type",
+                            "related": "/v1/sessions/1/session-type"
+                        }
+                    }
+                },
+                "attributes": {
+                    "audio-url": "http://example.com/example",
+                    "subtitle": "Title",
+                    "ends-at": "2017-06-01T11:00:00.500127+00:00",
+                    "language": "English",
+                    "short-abstract": "Short Abstract",
+                    "slides-url": "http://example.com/example",
+                    "title": "Micropython Session",
+                    "created-at": "2017-07-25T02:22:35.010307+00:00",
+                    "signup-url": "http://example.com/example",
+                    "long-abstract": "The Long Abstract",
+                    "state": "draft",
+                    "submitted-at": "2017-05-01T01:24:47.500127+00:00",
+                    "comments": "Comment",
+                    "video-url": "http://example.com/example",
+                    "level": 1,
+                    "deleted-at": null,
+                    "starts-at": "2017-06-01T10:00:00.500127+00:00",
+                    "is-mail-sent": false
+                },
+                "type": "session",
+                "id": "1",
+                "links": {
+                    "self": "/v1/sessions/1"
+                }
+            }
+        ],
+        "jsonapi": {
+            "version": "1.0"
+        },
+        "links": {
+            "self": "/v1/microlocations/1/sessions"
+        }
+    }
+
+
+## List Sessions under a Speaker [/v1/speakers/{speaker_id}/sessions{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + speaker_id: 1 (integer) - ID of the Speaker in the form of an integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List Sessions [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+    {
+        "meta": {
+            "count": 1
+        },
+        "data": [
+            {
+                "relationships": {
+                    "track": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/track",
+                            "related": "/v1/sessions/1/track"
+                        }
+                    },
+                    "speakers": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/speakers",
+                            "related": "/v1/sessions/1/speakers"
+                        }
+                    },
+                    "microlocation": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/microlocation",
+                            "related": "/v1/sessions/1/microlocation"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/event",
+                            "related": "/v1/sessions/1/event"
+                        }
+                    },
+                    "session-type": {
+                        "links": {
+                            "self": "/v1/sessions/1/relationships/session-type",
+                            "related": "/v1/sessions/1/session-type"
+                        }
+                    }
+                },
+                "attributes": {
+                    "audio-url": "http://example.com/example",
+                    "subtitle": "Title",
+                    "ends-at": "2017-06-01T11:00:00.500127+00:00",
+                    "language": "English",
+                    "short-abstract": "Short Abstract",
+                    "slides-url": "http://example.com/example",
+                    "title": "Micropython Session",
+                    "created-at": "2017-07-25T02:22:35.010307+00:00",
+                    "signup-url": "http://example.com/example",
+                    "long-abstract": "The Long Abstract",
+                    "state": "draft",
+                    "submitted-at": "2017-05-01T01:24:47.500127+00:00",
+                    "comments": "Comment",
+                    "video-url": "http://example.com/example",
+                    "level": 1,
+                    "deleted-at": null,
+                    "starts-at": "2017-06-01T10:00:00.500127+00:00",
+                    "is-mail-sent": false
+                },
+                "type": "session",
+                "id": "1",
+                "links": {
+                    "self": "/v1/sessions/1"
+                }
+            }
+        ],
+        "jsonapi": {
+            "version": "1.0"
+        },
+        "links": {
+            "self": "/v1/speakers/1/sessions"
+        }
+    }
+
 
 # Group Session Type
 Data related to all the session types (such as talks, workshops, lightning talks) associated with the event.

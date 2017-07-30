@@ -3,6 +3,8 @@ from app.models.session import db, Session
 import app.factories.common as common
 from app.factories.event import EventFactoryBasic
 from app.factories.session_type import SessionTypeFactory
+from app.factories.track import TrackFactory
+from app.factories.microlocation import MicrolocationFactory
 
 
 class SessionFactory(factory.alchemy.SQLAlchemyModelFactory):
@@ -12,6 +14,8 @@ class SessionFactory(factory.alchemy.SQLAlchemyModelFactory):
 
     event = factory.RelatedFactory(EventFactoryBasic)
     session_type = factory.RelatedFactory(SessionTypeFactory)
+    track = factory.RelatedFactory(TrackFactory)
+    microlocation = factory.RelatedFactory(MicrolocationFactory)
     title = common.string_
     subtitle = common.string_
     level = common.int_
@@ -31,3 +35,5 @@ class SessionFactory(factory.alchemy.SQLAlchemyModelFactory):
     is_mail_sent = True
     event_id = 1
     session_type_id = 1
+    track_id = 1
+    microlocation_id = 1

@@ -61,6 +61,7 @@ class MicrolocationListPost(ResourceList):
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
 
+    methods = ['POST', ]
     schema = MicrolocationSchema
     data_layer = {'session': db.session,
                   'model': Microlocation}
