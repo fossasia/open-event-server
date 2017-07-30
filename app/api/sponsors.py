@@ -33,7 +33,7 @@ class SponsorSchema(Schema):
     name = fields.Str(required=True)
     description = fields.Str(allow_none=True)
     url = fields.Url(allow_none=True)
-    level = fields.Str(allow_none=True)
+    level = fields.Integer(allow_none=True)
     logo_url = fields.Url(allow_none=True)
     type = fields.Str(allow_none=True)
     event = Relationship(attribute='event',
