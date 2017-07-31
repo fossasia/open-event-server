@@ -502,7 +502,7 @@ class EventDetail(ResourceDetail):
                 del data['icon_image_url']
 
     decorators = (api.has_permission('is_organizer', methods="PATCH,DELETE", fetch="id", fetch_as="event_id",
-                                     check=lambda a: a.get('id') is not None), )
+                                     model=Event), )
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,

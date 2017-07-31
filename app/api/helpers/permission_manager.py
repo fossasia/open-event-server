@@ -293,8 +293,16 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         try:
             event = Event.query.filter_by(identifier=view_kwargs['event_identifier']).one()
         except NoResultFound, e:
-            return NotFoundError({'parameter': 'event_identifier'}, 'Event not found.').respond()
+            return NotFoundError({'parameter': 'event_identifier'}, 'Event not found').respond()
         view_kwargs['event_id'] = event.id
+
+    # Only for events API
+    if 'identifier' in view_kwargs:
+        try:
+            event = Event.query.filter_by(identifier=view_kwargs['identifier']).one()
+        except NoResultFound, e:
+            return NotFoundError({'parameter': 'identifier'}, 'Event not found').respond()
+        view_kwargs['id'] = event.id
 
     if 'fetch' in kwargs:
         fetched = None
