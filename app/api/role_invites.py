@@ -127,8 +127,7 @@ class RoleInviteList(ResourceList):
 
     view_kwargs = True
     methods = ['GET']
-    decorators = (api.has_permission('is_organizer', fetch='event_id', fetch_as="event_id",
-                                     check=lambda a: a.get('event_id') or a.get('event_identifier')),)
+    decorators = (api.has_permission('is_organizer', fetch='event_id', fetch_as="event_id"),)
     schema = RoleInviteSchema
     data_layer = {'session': db.session,
                   'model': RoleInvite,
@@ -168,7 +167,7 @@ class RoleInviteDetail(ResourceDetail):
                 uer = UsersEventsRoles(user, event, role)
                 save_to_db(uer, 'Role Invite accepted')
     decorators = (api.has_permission('is_organizer', methods="DELETE", fetch="event_id", fetch_as="event_id",
-                                     model=RoleInvite, check=lambda a: a.get('id') is not None),)
+                                     model=RoleInvite),)
     schema = RoleInviteSchema
     data_layer = {'session': db.session,
                   'model': RoleInvite,

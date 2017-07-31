@@ -117,8 +117,7 @@ class TrackDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
     decorators = (api.has_permission('is_track_organizer', fetch='event_id',
-                  fetch_as="event_id", model=Track, methods="PATCH,DELETE",
-                  check=lambda a: a.get('id') is not None), )
+                  fetch_as="event_id", model=Track, methods="PATCH,DELETE"), )
     schema = TrackSchema
     data_layer = {'session': db.session,
                   'model': Track,
