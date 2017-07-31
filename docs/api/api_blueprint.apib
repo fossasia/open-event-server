@@ -7781,61 +7781,6 @@ Get a list of Notifications.
             }
         }
 
-### Create Notificaiton [POST]
-Create a new notification with user_id.
-
-+ Request (application/vnd.api+json)
-
-    + Headers
-
-            Authorization: JWT <Auth Key>
-
-    + Body
-
-            {
-              "data": {
-                "attributes": {
-                  "title": "example",
-                  "message": "example",
-                  "action": "example",
-                  "is-read": "false"
-                },
-                "type": "notification"
-              }
-            }
-
-+ Response 201 (application/vnd.api+json)
-
-        {
-            "data": {
-                "relationships": {
-                    "user": {
-                        "links": {
-                            "self": "/v1/notifications/1/relationships/user",
-                            "related": "/v1/notifications/1/user"
-                        }
-                    }
-                },
-                "attributes": {
-                    "message": "example",
-                    "received-at": "2017-06-23T04:40:37.239724+00:00",
-                    "is-read": false,
-                    "title": "example"
-                },
-                "type": "notification",
-                "id": "1",
-                "links": {
-                    "self": "/v1/notifications/1"
-                }
-            },
-            "jsonapi": {
-                "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/notifications/1"
-            }
-        }
-
 
 ## Notification Detail [/v1/notifications/{notification_id}]
 + Parameters
