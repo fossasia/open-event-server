@@ -109,7 +109,7 @@ class MicrolocationDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
     decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
-                                     model=Microlocation, check=lambda a: a.get('id') is not None),)
+                                     model=Microlocation),)
     schema = MicrolocationSchema
     data_layer = {'session': db.session,
                   'model': Microlocation,

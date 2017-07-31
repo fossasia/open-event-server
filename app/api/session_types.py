@@ -122,7 +122,7 @@ class SessionTypeDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
     decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
-                                     model=SessionType, check=lambda a: a.get('id') is not None),)
+                                     model=SessionType),)
     schema = SessionTypeSchema
     data_layer = {'session': db.session,
                   'model': SessionType,

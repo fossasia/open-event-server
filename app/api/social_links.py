@@ -101,7 +101,7 @@ class SocialLinkDetail(ResourceDetail):
     Social Link detail by id
     """
     decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
-                                     model=SocialLink, check=lambda a: a.get('id') is not None),)
+                                     model=SocialLink),)
     schema = SocialLinkSchema
     data_layer = {'session': db.session,
                   'model': SocialLink}
