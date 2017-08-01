@@ -27,10 +27,10 @@ class NotificationSchema(Schema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    title = fields.Str(allow_none=True)
-    message = fields.Str(allow_none=True)
+    title = fields.Str(allow_none=True, dump_only=True)
+    message = fields.Str(allow_none=True, dump_only=True)
     received_at = fields.DateTime(dump_only=True)
-    accept = fields.Str(allow_none=True)
+    accept = fields.Str(allow_none=True, dump_only=True)
     is_read = fields.Boolean()
     user = Relationship(attribute='user',
                         self_view='v1.notification_user',
@@ -46,9 +46,6 @@ class NotificationList(ResourceList):
     """
     List all the Notification
     """
-
-    def before_post(self, args, kwargs, data):
-        require_relationship(['user'], data)
 
     def query(self, view_kwargs):
         """
@@ -75,6 +72,7 @@ class NotificationList(ResourceList):
 
     view_kwargs = True
     decorators = (api.has_permission('is_user_itself', fetch="user_id", fetch_as="id", model=Notification),)
+    methods = ['GET']
     schema = NotificationSchema
     data_layer = {'session': db.session,
                   'model': Notification,

@@ -1359,22 +1359,6 @@ def notification_get_list(transaction):
         db.session.commit()
 
 
-@hooks.before("Notifications > Notifications Collection > Create Notificaiton")
-def notification_post(transaction):
-    """
-    POST /users/2/notifications
-    :param transaction:
-    :return:
-    """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
-
-    with stash['app'].app_context():
-        user = UserFactory()
-        db.session.add(user)
-        db.session.commit()
-
-
 @hooks.before("Notifications > Notification Detail > Notification Detail")
 def notification_get_detail(transaction):
     """
