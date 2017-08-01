@@ -30,3 +30,4 @@ class EventInvoiceFactory(factory.alchemy.SQLAlchemyModelFactory):
     stripe_token = common.string_
     paypal_token = common.string_
     event_id = 1
+    user_id = 2

@@ -190,6 +190,84 @@ def user_delete(transaction):
         db.session.commit()
 
 
+@hooks.before("Users > Get User Details for a Notification > Get Details")
+def user_notification(transaction):
+    """
+    GET /notifications/1/user
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        notification = NotificationFactory()
+        db.session.add(notification)
+        db.session.commit()
+
+
+@hooks.before("Users > Get User Details for an Event Invoice > Get Details")
+def user_event_invoice(transaction):
+    """
+    GET /event-invoices/1/user
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_invoice = EventInvoiceFactory()
+        db.session.add(event_invoice)
+        db.session.commit()
+
+
+@hooks.before("Users > Get User Details for an Access Code > Get Details")
+def user_access_code(transaction):
+    """
+    GET /access-codes/1/user
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        access_code = AccessCodeFactory()
+        db.session.add(access_code)
+        db.session.commit()
+
+
+@hooks.before("Users > Get User Details for an Email Notification > Get Details")
+def user_email_notification(transaction):
+    """
+    GET /email-notifications/1/user
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        email_notification = EmailNotificationFactory()
+        db.session.add(email_notification)
+        db.session.commit()
+
+
+@hooks.before("Users > Get User Details for a Discount Code > Get Details")
+def user_discount_code(transaction):
+    """
+    GET /discount-codes/1/user
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        discount_code = DiscountCodeFactory()
+        db.session.add(discount_code)
+        db.session.commit()
+
+
+@hooks.before("Users > Get User Details for a Speaker > Get Details")
+def user_speaker(transaction):
+    """
+    GET /speakers/1/user
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        speaker = SpeakerFactory()
+        db.session.add(speaker)
+        db.session.commit()
+
+
 # ------------------------- Events -------------------------
 @hooks.before("Events > Events Collection > List All Events")
 def event_get_list(transaction):

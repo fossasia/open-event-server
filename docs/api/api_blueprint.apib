@@ -361,6 +361,553 @@ Delete a single user.
           }
         }
 
+## Get User Details for a Notification [/v1/notifications/{notification_id}/user]
++ Parameters
+    + notification_id: 1 (integer) - ID of the notification in the form of an integer
+
+
+### Get Details [GET]
+Get the details of the user.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+    {
+        "data": {
+            "relationships": {
+                "email-notifications": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/email-notifications",
+                        "related": "/v1/users/1/email-notifications"
+                    }
+                },
+                "notifications": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/notifications",
+                        "related": "/v1/users/1/notifications"
+                    }
+                },
+                "discount-codes": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/discount-codes",
+                        "related": "/v1/users/1/discount-codes"
+                    }
+                },
+                "access-codes": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/access-codes",
+                        "related": "/v1/users/1/access-codes"
+                    }
+                },
+                "speakers": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/speakers",
+                        "related": "/v1/users/1/speakers"
+                    }
+                }
+            },
+            "attributes": {
+                "is-admin": true,
+                "thumbnail-image-url": null,
+                "last-name": null,
+                "icon-image-url": null,
+                "instagram-url": null,
+                "is-super-admin": true,
+                "original-image-url": null,
+                "created-at": "2017-07-21T15:06:20.741290+00:00",
+                "last-accessed-at": null,
+                "avatar-url": null,
+                "email": "enigmaeth@gmail.com",
+                "contact": null,
+                "google-plus-url": null,
+                "twitter-url": null,
+                "facebook-url": null,
+                "is-verified": true,
+                "first-name": null,
+                "deleted-at": null,
+                "small-image-url": null,
+                "details": null
+            },
+            "type": "user",
+            "id": "1",
+            "links": {
+                "self": "/v1/users/1"
+            }
+        },
+        "jsonapi": {
+            "version": "1.0"
+        },
+        "links": {
+            "self": "/v1/users/1"
+        }
+    }
+
+
+## Get User Details for an Event Invoice [/v1/event-invoices/{event_invoice_id}/user]
++ Parameters
+    + event_invoice_id: 1 (integer) - ID of the event invoice in the form of an integer
+
+
+### Get Details [GET]
+Get the details of the user.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+    {
+        "data": {
+            "relationships": {
+                "email-notifications": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/email-notifications",
+                        "related": "/v1/users/1/email-notifications"
+                    }
+                },
+                "notifications": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/notifications",
+                        "related": "/v1/users/1/notifications"
+                    }
+                },
+                "discount-codes": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/discount-codes",
+                        "related": "/v1/users/1/discount-codes"
+                    }
+                },
+                "access-codes": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/access-codes",
+                        "related": "/v1/users/1/access-codes"
+                    }
+                },
+                "speakers": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/speakers",
+                        "related": "/v1/users/1/speakers"
+                    }
+                }
+            },
+            "attributes": {
+                "is-admin": true,
+                "thumbnail-image-url": null,
+                "last-name": null,
+                "icon-image-url": null,
+                "instagram-url": null,
+                "is-super-admin": true,
+                "original-image-url": null,
+                "created-at": "2017-07-21T15:06:20.741290+00:00",
+                "last-accessed-at": null,
+                "avatar-url": null,
+                "email": "enigmaeth@gmail.com",
+                "contact": null,
+                "google-plus-url": null,
+                "twitter-url": null,
+                "facebook-url": null,
+                "is-verified": true,
+                "first-name": null,
+                "deleted-at": null,
+                "small-image-url": null,
+                "details": null
+            },
+            "type": "user",
+            "id": "1",
+            "links": {
+                "self": "/v1/users/1"
+            }
+        },
+        "jsonapi": {
+            "version": "1.0"
+        },
+        "links": {
+            "self": "/v1/users/1"
+        }
+    }
+
+
+## Get User Details for a Speaker [/v1/speakers/{speaker_id}/user]
++ Parameters
+    + speaker_id: 1 (integer) - ID of the speaker in the form of an integer
+
+
+### Get Details [GET]
+Get the details of the user.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+    {
+        "data": {
+            "relationships": {
+                "email-notifications": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/email-notifications",
+                        "related": "/v1/users/1/email-notifications"
+                    }
+                },
+                "notifications": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/notifications",
+                        "related": "/v1/users/1/notifications"
+                    }
+                },
+                "discount-codes": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/discount-codes",
+                        "related": "/v1/users/1/discount-codes"
+                    }
+                },
+                "access-codes": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/access-codes",
+                        "related": "/v1/users/1/access-codes"
+                    }
+                },
+                "speakers": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/speakers",
+                        "related": "/v1/users/1/speakers"
+                    }
+                }
+            },
+            "attributes": {
+                "is-admin": true,
+                "thumbnail-image-url": null,
+                "last-name": null,
+                "icon-image-url": null,
+                "instagram-url": null,
+                "is-super-admin": true,
+                "original-image-url": null,
+                "created-at": "2017-07-21T15:06:20.741290+00:00",
+                "last-accessed-at": null,
+                "avatar-url": null,
+                "email": "enigmaeth@gmail.com",
+                "contact": null,
+                "google-plus-url": null,
+                "twitter-url": null,
+                "facebook-url": null,
+                "is-verified": true,
+                "first-name": null,
+                "deleted-at": null,
+                "small-image-url": null,
+                "details": null
+            },
+            "type": "user",
+            "id": "1",
+            "links": {
+                "self": "/v1/users/1"
+            }
+        },
+        "jsonapi": {
+            "version": "1.0"
+        },
+        "links": {
+            "self": "/v1/users/1"
+        }
+    }
+
+
+## Get User Details for an Access Code [/v1/access-codes/{access_code_id}/marketer]
++ Parameters
+    + access_code_id: 1 (integer) - ID of the access code in the form of an integer
+
+
+### Get Details [GET]
+Get the details of the user.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+    {
+        "data": {
+            "relationships": {
+                "email-notifications": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/email-notifications",
+                        "related": "/v1/users/1/email-notifications"
+                    }
+                },
+                "notifications": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/notifications",
+                        "related": "/v1/users/1/notifications"
+                    }
+                },
+                "discount-codes": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/discount-codes",
+                        "related": "/v1/users/1/discount-codes"
+                    }
+                },
+                "access-codes": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/access-codes",
+                        "related": "/v1/users/1/access-codes"
+                    }
+                },
+                "speakers": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/speakers",
+                        "related": "/v1/users/1/speakers"
+                    }
+                }
+            },
+            "attributes": {
+                "is-admin": true,
+                "thumbnail-image-url": null,
+                "last-name": null,
+                "icon-image-url": null,
+                "instagram-url": null,
+                "is-super-admin": true,
+                "original-image-url": null,
+                "created-at": "2017-07-21T15:06:20.741290+00:00",
+                "last-accessed-at": null,
+                "avatar-url": null,
+                "email": "enigmaeth@gmail.com",
+                "contact": null,
+                "google-plus-url": null,
+                "twitter-url": null,
+                "facebook-url": null,
+                "is-verified": true,
+                "first-name": null,
+                "deleted-at": null,
+                "small-image-url": null,
+                "details": null
+            },
+            "type": "user",
+            "id": "1",
+            "links": {
+                "self": "/v1/users/1"
+            }
+        },
+        "jsonapi": {
+            "version": "1.0"
+        },
+        "links": {
+            "self": "/v1/users/1"
+        }
+    }
+
+
+## Get User Details for an Email Notification [/v1/email-notifications/{email_notification_id}/user]
++ Parameters
+    + email_notification_id : 1 (integer) - ID of the email notification in the form of an integer
+
+
+### Get Details [GET]
+Get the details of the user.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+    {
+        "data": {
+            "relationships": {
+                "email-notifications": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/email-notifications",
+                        "related": "/v1/users/1/email-notifications"
+                    }
+                },
+                "notifications": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/notifications",
+                        "related": "/v1/users/1/notifications"
+                    }
+                },
+                "discount-codes": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/discount-codes",
+                        "related": "/v1/users/1/discount-codes"
+                    }
+                },
+                "access-codes": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/access-codes",
+                        "related": "/v1/users/1/access-codes"
+                    }
+                },
+                "speakers": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/speakers",
+                        "related": "/v1/users/1/speakers"
+                    }
+                }
+            },
+            "attributes": {
+                "is-admin": true,
+                "thumbnail-image-url": null,
+                "last-name": null,
+                "icon-image-url": null,
+                "instagram-url": null,
+                "is-super-admin": true,
+                "original-image-url": null,
+                "created-at": "2017-07-21T15:06:20.741290+00:00",
+                "last-accessed-at": null,
+                "avatar-url": null,
+                "email": "enigmaeth@gmail.com",
+                "contact": null,
+                "google-plus-url": null,
+                "twitter-url": null,
+                "facebook-url": null,
+                "is-verified": true,
+                "first-name": null,
+                "deleted-at": null,
+                "small-image-url": null,
+                "details": null
+            },
+            "type": "user",
+            "id": "1",
+            "links": {
+                "self": "/v1/users/1"
+            }
+        },
+        "jsonapi": {
+            "version": "1.0"
+        },
+        "links": {
+            "self": "/v1/users/1"
+        }
+    }
+
+
+## Get User Details for a Discount Code [/v1/discount-codes/{discount_code_id}/marketer]
++ Parameters
+    + discount_code_id: 1 (integer) - ID of the discount code in the form of an integer
+
+
+### Get Details [GET]
+Get the details of the user.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+    {
+        "data": {
+            "relationships": {
+                "email-notifications": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/email-notifications",
+                        "related": "/v1/users/1/email-notifications"
+                    }
+                },
+                "notifications": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/notifications",
+                        "related": "/v1/users/1/notifications"
+                    }
+                },
+                "discount-codes": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/discount-codes",
+                        "related": "/v1/users/1/discount-codes"
+                    }
+                },
+                "access-codes": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/access-codes",
+                        "related": "/v1/users/1/access-codes"
+                    }
+                },
+                "speakers": {
+                    "links": {
+                        "self": "/v1/users/1/relationships/speakers",
+                        "related": "/v1/users/1/speakers"
+                    }
+                }
+            },
+            "attributes": {
+                "is-admin": true,
+                "thumbnail-image-url": null,
+                "last-name": null,
+                "icon-image-url": null,
+                "instagram-url": null,
+                "is-super-admin": true,
+                "original-image-url": null,
+                "created-at": "2017-07-21T15:06:20.741290+00:00",
+                "last-accessed-at": null,
+                "avatar-url": null,
+                "email": "enigmaeth@gmail.com",
+                "contact": null,
+                "google-plus-url": null,
+                "twitter-url": null,
+                "facebook-url": null,
+                "is-verified": true,
+                "first-name": null,
+                "deleted-at": null,
+                "small-image-url": null,
+                "details": null
+            },
+            "type": "user",
+            "id": "1",
+            "links": {
+                "self": "/v1/users/1"
+            }
+        },
+        "jsonapi": {
+            "version": "1.0"
+        },
+        "links": {
+            "self": "/v1/users/1"
+        }
+    }
+
+
+
 # Group Event Types
 
 Event Types for Events. Can only be edited and entered by admins.
