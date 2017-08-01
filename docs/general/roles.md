@@ -1,6 +1,4 @@
----
-title: Roles
----
+# Roles
 
 The system has two kind of role types: System Roles and Event Roles.
 
@@ -21,11 +19,11 @@ The Super Admin can access all user features.
 
 | Function | Role | View | Create, Edit, Assign, Unassign | Delete | BaseURLs |
 | --- | --- | --- | --- | --- | --- |
-| MANAGE OWN PROFILE | Super Admin | YES | YES | YES | /profile
-| MANAGE OWN EVENTS | Super Admin | YES | YES | YES | /create, /events, /events/ID
-| IMPORT/EXPORT OWN EVENTS | Super Admin | YES | YES | YES |
-| MANAGE OWN SESSIONS | Super Admin | YES | YES | YES |
-| MANAGE SESSIONS OF OWN EVENTS | Super Admin | YES | YES | YES |
+| MANAGE OWN PROFILE | Super Admin | YES | YES | YES | /profile |
+| MANAGE OWN EVENTS | Super Admin | YES | YES | YES | /create, /events, /events/ID |
+| IMPORT/EXPORT OWN EVENTS | Super Admin | YES | YES | YES| |
+| MANAGE OWN SESSIONS | Super Admin | YES | YES | YES| |
+| MANAGE SESSIONS OF OWN EVENTS | Super Admin | YES | YES | YES | |
 
 ### 1.2 Access to Admin Panels
 
@@ -33,19 +31,19 @@ The Super Admin and Admin can access all admin panels.
 
 | Function | Role | View | Create, Edit, Assign, Unassign | Delete | BaseURLs |
 | --- | --- | --- | --- | --- | --- |
-| ALL ROLES PERMISSIONS | Super Admin / Admin | YES | YES |  YES | /admin/permissions
-| EVENTS AND SCHEDULES | Super Admin | YES | YES |  YES |
-| ADMINISTRATION | Super Admin / Admin | YES | YES |  YES | /admin/*
-| ALL EVENTS | Super Admin / Admin | YES | YES |  YES | /admin/events/
-| IMPORT/EXPORT OF ALL EVENTS / Admin | Super Admin | YES | YES |  YES | /admin/events/
-| ALL SESSIONS | Super Admin / Admin | YES | YES |  YES | /admin/sessions/
-| ALL USERS | Super Admin / Admin | YES | YES |  YES | /admin/users/
-| ALL REPORTS | Super Admin / Admin | YES | YES |  YES | /admin/reports
-| ALL SALES | Super Admin / Admin | YES | YES |  YES | /admin/sales
-| ALL MESSAGES | Super Admin / Admin | YES | YES |  YES | /admin/messages
-| ALL SETTINGS | Super Admin / Admin | YES | YES |  YES | /admin/settings
-| ALL MODULES | Super Admin / Admin | YES | YES |  YES | /admin/modules
-| ALL Content | Super Admin / Admin | YES | YES |  YES | /admin/content
+| ALL ROLES PERMISSIONS | Super Admin / Admin | YES | YES |  YES | /admin/permissions |
+| EVENTS AND SCHEDULES | Super Admin | YES | YES |  YES | |
+| ADMINISTRATION | Super Admin / Admin | YES | YES |  YES | /admin/* |
+| ALL EVENTS | Super Admin / Admin | YES | YES |  YES | /admin/events/|
+| IMPORT/EXPORT OF ALL EVENTS / Admin | Super Admin | YES | YES |  YES | /admin/events/ |
+| ALL SESSIONS | Super Admin / Admin | YES | YES |  YES | /admin/sessions/ |
+| ALL USERS | Super Admin / Admin | YES | YES |  YES | /admin/users/ |
+| ALL REPORTS | Super Admin / Admin | YES | YES |  YES | /admin/reports |
+| ALL SALES | Super Admin / Admin | YES | YES |  YES | /admin/sales |
+| ALL MESSAGES | Super Admin / Admin | YES | YES |  YES | /admin/messages |
+| ALL SETTINGS | Super Admin / Admin | YES | YES |  YES | /admin/settings |
+| ALL MODULES | Super Admin / Admin | YES | YES |  YES | /admin/modules |
+| ALL Content | Super Admin / Admin | YES | YES |  YES | /admin/content |
 
 The Sales Admin can only access the Sales Panel.
 
@@ -128,7 +126,7 @@ Organizer can access:
  - SEE EVENT AND SCHEDULE
 
 
-# Using Permissions system
+## Using Permissions system
 
 After running `create_db.py` Event-specific-Roles, Services and Permissions are created.
 
@@ -287,4 +285,3 @@ True
 >>> u.can_delete(Track, 1)
 False
 ```
-

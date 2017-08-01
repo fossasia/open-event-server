@@ -1,6 +1,4 @@
----
-title: GCE Kubernetes
----
+# GCE Kubernetes
 
 ## Setup
 
@@ -60,7 +58,7 @@ title: GCE Kubernetes
     ```
     ls /dev/disk/by-id
     ```
-    
+
     ```
     google-example-instance       scsi-0Google_PersistentDisk_example-instance
     google-example-instance-part1 scsi-0Google_PersistentDisk_example-instance-part1
@@ -68,7 +66,7 @@ title: GCE Kubernetes
     ```
 
     where `[DISK_NAME]` is the name of the persistent disk that you attached to the instance.
-    
+
     The disk ID usually includes the name of your persistent disk with a `google-` prefix or a `scsi-0Google_PersistentDisk_` prefix. You can use either ID to specify your disk, but this example uses the ID with the `google-` prefix
 
 
@@ -78,7 +76,7 @@ title: GCE Kubernetes
     sudo mkfs.ext4 -F -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/disk/by-id/google-[DISK_NAME]
     ```
 
-- The disk is formatted and ready. 
+- The disk is formatted and ready.
 - Now exit the SSH session and Detach the disk from the instance by running
 
     ```
@@ -101,16 +99,16 @@ _You can delete the instance if your not planning to use it for anything else. B
     gcloud container clusters get-credentials opev-cluster
     ```
 
-## Pre deployment steps 
+## Pre deployment steps
 - A domain name (Eg. eventyay.com, google.com, hello.io). - A free domain can be registered at http://www.freenom.com .
-- Reserve a static external IP address 
-	
+- Reserve a static external IP address
+
 	```bash
 	gcloud compute addresses create testip --region us-west1
 	```
-	
-	The response would be similar to 
-	
+
+	The response would be similar to
+
 	```
 	address: 123.123.123.123
 	creationTimestamp: '2017-05-16T05:26:24.894-07:00'
@@ -120,8 +118,8 @@ _You can delete the instance if your not planning to use it for anything else. B
 	name: test
 	selfLink: https://www.googleapis.com/compute/v1/projects/eventyay/global/addresses/test
 	status: RESERVED
-	```	
-	
+	```
+
 	Note down the address. (In this case `123.123.123.123`). We'll call this **External IP Address One**.
 - Add the **External IP Address One** as an `A` record to your domain's DNS Zone.
 - Add the **External IP Address One** to `kubernetes/yamls/nginx/service.yml` for the parameter `loadBalancerIP`.
@@ -137,11 +135,11 @@ _You can delete the instance if your not planning to use it for anything else. B
     ./kubernetes/deploy.sh create all
     ```
 
-- The Kubernetes master creates the load balancer and related Compute Engine forwarding rules, target pools, and firewall rules to make the service fully accessible from outside of Google Cloud Platform. 
-- Wait for a few minutes for all the containers to be created and the SSL Certificates to be generated and loaded. 
+- The Kubernetes master creates the load balancer and related Compute Engine forwarding rules, target pools, and firewall rules to make the service fully accessible from outside of Google Cloud Platform.
+- Wait for a few minutes for all the containers to be created and the SSL Certificates to be generated and loaded.
 - You can track the progress using the Web GUI as mentioned below.
 - Once deployed, your instance will be accessible at your domain name.
-    
+
 
 ## Other handy commands
 
@@ -150,15 +148,15 @@ _You can delete the instance if your not planning to use it for anything else. B
     ```
     ./kubernetes/deploy.sh delete all
     ```
-    
+
 -  Access The Kubernetes dashboard Web GUI
 
     Run the following command to start a proxy.
-    
+
     ```
     kubectl proxy
     ```
-    
+
     and Goto [http://localhost:8001/ui](http://localhost:8001/ui)
 
 - Deleting the cluster

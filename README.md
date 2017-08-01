@@ -156,7 +156,7 @@ export APP_CONFIG=config.DevelopmentConfig
 
 When writing changes to models. Use migrations.
 
- ```
+```
  # To generate a migration after doing a model update
  python manage.py db migrate
 
@@ -165,7 +165,7 @@ When writing changes to models. Use migrations.
 
  # To rollback
  python manage.py db downgrade
- ```
+```
 
 When checking in code for models, please update migrations as well.
 
