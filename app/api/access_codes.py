@@ -13,6 +13,7 @@ from app.models.event import Event
 from app.models.ticket import Ticket
 from app.api.helpers.db import safe_query
 from app.api.helpers.utilities import require_relationship
+from app.api.helpers.query import event_query
 
 
 class AccessCodeSchema(Schema):
@@ -107,12 +108,7 @@ class AccessCodeList(ResourceList):
         :return:
         """
         query_ = self.session.query(AccessCode)
-        if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-            query_ = query_.join(Event).filter(Event.id == event.id)
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-            query_ = query_.join(Event).filter(Event.identifier == event.id)
+        query_ = event_query(self, query_, view_kwargs)
         if view_kwargs.get('user_id'):
             user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(User).filter(User.id == user.id)

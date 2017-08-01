@@ -6,7 +6,6 @@ import marshmallow.validate as validate
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.permissions import is_admin
 from app.models import db
-from app.models.event import Event
 from app.models.user import User
 from app.models.event_invoice import EventInvoice
 from app.models.discount_code import DiscountCode
@@ -16,6 +15,7 @@ from app.api.helpers.utilities import require_relationship
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.permission_manager import has_access
 from app.api.bootstrap import api
+from app.api.helpers.query import event_query
 
 
 class EventInvoiceSchema(Schema):
@@ -103,12 +103,7 @@ class EventInvoiceList(ResourceList):
         :return:
         """
         query_ = self.session.query(EventInvoice)
-        if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-            query_ = query_.join(Event).filter(Event.id == event.id)
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-            query_ = query_.join(Event).filter(Event.id == event.id)
+        query_ = event_query(self, query_, view_kwargs)
         if view_kwargs.get('user_id'):
             user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(User).filter(User.id == user.id)

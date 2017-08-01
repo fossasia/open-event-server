@@ -4,14 +4,13 @@ from marshmallow_jsonapi import fields
 
 from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
-from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.ticket import Ticket, TicketTag, ticket_tags_table
-from app.models.event import Event
 from app.api.helpers.db import safe_query
 from app.api.helpers.utilities import require_relationship
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.permission_manager import has_access
+from app.api.helpers.query import event_query
 
 
 class TicketTagSchema(Schema):
@@ -84,12 +83,7 @@ class TicketTagList(ResourceList):
         if view_kwargs.get('ticket_id'):
             ticket = safe_query(self, Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
             query_ = query_.join(ticket_tags_table).filter_by(ticket_id=ticket.id)
-        if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-            query_ = query_.join(Event).filter(Event.id == event.id)
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-            query_ = query_.join(Event).filter(Event.id == event.id)
+        query_ = event_query(self, query_, view_kwargs)
         return query_
 
     view_kwargs = True

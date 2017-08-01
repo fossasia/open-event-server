@@ -27,7 +27,7 @@ class ErrorResponse:
 
     def respond(self):
         """
-        :return: a jsonapi compliant respose object
+        :return: a jsonapi compliant response object
         """
         dict_ = self.to_dict()
         return make_response(json.dumps(jsonapi_errors([dict_])), self.status, self.headers)
