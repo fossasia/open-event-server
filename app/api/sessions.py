@@ -8,6 +8,7 @@ from app.api.bootstrap import api
 from app.api.events import Event
 from app.api.helpers.utilities import dasherize
 from app.models import db
+from app.settings import get_settings
 from app.models.session import Session
 from app.models.track import Track
 from app.models.speaker import Speaker
@@ -19,6 +20,7 @@ from app.api.helpers.utilities import require_relationship
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.permissions import current_identity
+from app.api.helpers.mail import send_email_new_session
 
 
 class SessionSchema(Schema):
@@ -128,10 +130,21 @@ class SessionListPost(ResourceList):
         require_relationship(['event'], data)
         data['creator_id'] = current_identity.id
 
+    def after_create_object(self, session, data, view_kwargs):
+        if session.event.get_organizer():
+            event_name = session.event.name
+            organizer_email = session.event.get_organizer().email
+            frontend_url = get_settings()['frontend_url']
+            link = "{}/{}/sessions/{}"\
+                .format(frontend_url, session.event_id, session.id)
+            send_email_new_session(organizer_email, event_name, link)
+
     decorators = (api.has_permission('create_event'),)
     schema = SessionSchema
     data_layer = {'session': db.session,
-                  'model': Session}
+                  'model': Session,
+                  'methods': {'after_create_object': after_create_object
+                              }}
 
 
 class SessionList(ResourceList):

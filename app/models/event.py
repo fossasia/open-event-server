@@ -9,7 +9,7 @@ from sqlalchemy import event
 from app.api.helpers.db import get_count
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.email_notification import EmailNotification
-from app.models.user import ATTENDEE
+from app.models.user import ATTENDEE, ORGANIZER
 from app.models.custom_form import CustomForms, session_form_str, speaker_form_str
 from app.models.version import Version
 from app.models import db
@@ -237,6 +237,13 @@ class Event(db.Model):
                 filter_by(event_id=self.id).first()
         except:
             return None
+
+    def get_organizer(self):
+        """returns organizer of an event"""
+        for role in self.roles:
+            if role.role.name == ORGANIZER:
+                return role.user
+        return None
 
     def has_staff_access(self, user_id):
         """does user have role other than attendee"""
