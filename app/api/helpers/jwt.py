@@ -39,13 +39,13 @@ def get_identity():
     To be used only if identity for expired tokens is required, otherwise use current_identity from flask_jwt
     :return:
     """
-    token_second_sengment = _default_request_handler().split('.')[1]
-    missing_padding = len(token_second_sengment) % 4
+    token_second_segment = _default_request_handler().split('.')[1]
+    missing_padding = len(token_second_segment) % 4
 
     # ensures the string is correctly padded to be a multiple of 4
     if missing_padding != 0:
-        token_second_sengment += b'=' * (4 - missing_padding)
+        token_second_segment += b'=' * (4 - missing_padding)
 
-    payload = json.loads(token_second_sengment.decode('base64'))
+    payload = json.loads(token_second_segment.decode('base64'))
     user = jwt_identity(payload)
     return user

@@ -55,6 +55,13 @@ class TestPermissionManager(OpenEventTestCase):
             save_to_db(uer)
             self.assertTrue(has_access('is_coorganizer', event_id=1))
 
+    def test_is_coorganizer_endpoint_related_to_event(self):
+        with app.test_request_context(headers=self.auth, method="POST"):
+            uer, is_created = get_or_create(UsersEventsRoles, user_id=1, event_id=1)
+            uer.role_id = 2
+            save_to_db(uer)
+            self.assertTrue(has_access('is_coorganizer', event_id=1))
+
     def test_is_moderator(self):
         with app.test_request_context(headers=self.auth, method="POST"):
             uer, is_created = get_or_create(UsersEventsRoles, user_id=1, event_id=1)
