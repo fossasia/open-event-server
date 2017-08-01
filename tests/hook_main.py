@@ -253,6 +253,261 @@ def event_delete(transaction):
         db.session.commit()
 
 
+@hooks.before("Events > Get Event for a Ticket > Event Details")
+def event_ticket(transaction):
+    """
+    GET /tickets/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+
+        ticket = TicketFactory()
+        db.session.add(ticket)
+        db.session.commit()
+
+
+@hooks.before("Events > Get Event for a Microlocation > Event Details")
+def event_microlocation(transaction):
+    """
+    GET /microlocations/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        microlocation = MicrolocationFactory()
+        db.session.add(microlocation)
+        db.session.commit()
+
+
+@hooks.before("Events > Get Event for a Social Link > Event Details")
+def event_social_link(transaction):
+    """
+    GET /social-links/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        social_link = SocialLinkFactory()
+        db.session.add(social_link)
+        db.session.commit()
+
+
+@hooks.before("Events > Get Event for a Sponsor > Event Details")
+def event_sponsor(transaction):
+    """
+    GET /sponsors/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        sponsor = SponsorFactory()
+        db.session.add(sponsor)
+        db.session.commit()
+
+
+@hooks.before("Events > Get Event for a Speakers Call > Event Details")
+def event_speakers_call(transaction):
+    """
+    GET /speakers-calls/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        speakers_call = SpeakersCallFactory()
+        db.session.add(speakers_call)
+        db.session.commit()
+
+
+@hooks.before("Events > Get Event for a Track > Event Details")
+def event_track(transaction):
+    """
+    GET /tracks/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        track = TrackFactory()
+        db.session.add(track)
+        db.session.commit()
+
+
+@hooks.before("Events > Get Event for a Session Type > Event Details")
+def event_session_types(transaction):
+    """
+    GET /session-types/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+
+        session_type = SessionTypeFactory()
+        db.session.add(session_type)
+        db.session.commit()
+
+
+@hooks.before("Events > Get Event for an Event Copyright > Event Details")
+def event_event_copyright(transaction):
+    """
+    GET /event-copyrights/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+
+        event_copyright = EventCopyrightFactory()
+        db.session.add(event_copyright)
+        db.session.commit()
+
+
+@hooks.before("Events > Get Event for a Tax > Event Details")
+def event_tax(transaction):
+    """
+    GET /tax/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+
+        tax = TaxFactory()
+        db.session.add(tax)
+        db.session.commit()
+
+
+@hooks.before("Events > Get Event for an Event Invoice > Event Details")
+def event_event_invoice(transaction):
+    """
+    GET /event-invoices/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_invoice = EventInvoiceFactory()
+        db.session.add(event_invoice)
+        db.session.commit()
+
+
+@hooks.before("Events > Get Event for a Discount Code > Event Details")
+def event_discount_code(transaction):
+    """
+    GET /discount-codes/1/event
+    :param transaction:
+    :return:
+    """
+
+    transaction['skip'] = True
+
+    with stash['app'].app_context():
+        discount_code = DiscountCodeFactory()
+        db.session.add(discount_code)
+        db.session.commit()
+
+
+@hooks.before("Events > Get Event for a Session > Event Details")
+def event_sessions(transaction):
+    """
+    GET /sessions/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        session = SessionFactory()
+        db.session.add(session)
+        db.session.commit()
+
+
+@hooks.before("Events > Get Event for a Ticket Tag > Event Details")
+def event_ticket_tag(transaction):
+    """
+    GET /ticket-tags/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket_tag = TicketTagFactory()
+        db.session.add(ticket_tag)
+        db.session.commit()
+
+
+@hooks.before("Events > Get Event for a Role Invite > Event Details")
+def event_role_invite(transaction):
+    """
+    GET /role-invites/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+
+        role_invite = RoleInviteFactory()
+        db.session.add(role_invite)
+        db.session.commit()
+
+
+@hooks.before("Events > Get Event for a Speaker > Event Details")
+def event_speaker(transaction):
+    """
+    GET /speakers/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        speaker = SpeakerFactory()
+        db.session.add(speaker)
+        db.session.commit()
+
+
+@hooks.before("Events > Get Event for an Email Notification > Event Details")
+def event_email_notification(transaction):
+    """
+    GET /email-notifications/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        email_notification = EmailNotificationFactory()
+        db.session.add(email_notification)
+        db.session.commit()
+
+
+@hooks.before("Events > Get Event for an Attendee > Event Details")
+def event_attendee(transaction):
+    """
+    GET /attendees/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+
+        attendee = AttendeeFactory()
+        db.session.add(attendee)
+        db.session.commit()
+
+
+@hooks.before("Events > Get Event for a Custom Form > Event Details")
+def event_custom_form(transaction):
+    """
+    GET /custom-forms/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        custom_form = CustomFormFactory()
+        db.session.add(custom_form)
+        db.session.commit()
+
+
 # ------------------------- Copyright -------------------------
 @hooks.before("Copyright > Event Copyright > Create Event Copyright")
 def copyright_post(transaction):
@@ -1037,7 +1292,7 @@ def ticket_delete(transaction):
 
 
 @hooks.before("Tickets > List Tickets under an Event > List Tickets")
-def event_ticket(transaction):
+def ticket_event(transaction):
     """
     GET /events/1/tickets
     :param transaction:
