@@ -12,6 +12,7 @@ from app.api.helpers.permissions import jwt_required
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.db import safe_query
 from app.api.helpers.utilities import require_relationship
+from app.api.helpers.query import event_query
 
 
 class AttendeeSchema(Schema):
@@ -53,6 +54,7 @@ class AttendeeSchema(Schema):
                          schema='EventSchema',
                          type_='event')
 
+
 class AttendeeList(ResourceList):
     """
     List and create Attendees
@@ -69,12 +71,7 @@ class AttendeeList(ResourceList):
 
             ticket = safe_query(self, Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
             query_ = query_.join(Ticket).filter(Ticket.id == ticket.id)
-        if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-            query_ = query_.filter_by(event_id=event.id)
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-            query_ = query_.filter_by(event_id=event.id)
+        query_ = event_query(self, query_, view_kwargs)
         return query_
 
     def before_create_object(self, data, view_kwargs):

@@ -7,6 +7,7 @@ from app.api.helpers.errors import ForbiddenError, NotFoundError
 from app.api.helpers.permissions import jwt_required
 from app.models.session import Session
 from app.models.event import Event
+from app.api.helpers.jwt import get_identity
 
 
 @jwt_required
@@ -63,6 +64,32 @@ def is_coorganizer(view, view_args, view_kwargs, *args, **kwargs):
     return ForbiddenError({'source': ''}, 'Co-organizer access is required.').respond()
 
 
+def is_coorganizer_endpoint_related_to_event(view, view_args, view_kwargs, *args, **kwargs):
+    """
+     If the authorization header is present (but expired) and the event being accessed is not published
+     - And the user is related to the event (organizer, co-organizer etc) show a 401
+     - Else show a 404
+
+    :param view:
+    :param view_args:
+    :param view_kwargs:
+    :param args:
+    :param kwargs:
+    :return:
+    """
+    user = get_identity()
+
+    if user.is_staff:
+        _jwt_required(app.config['JWT_DEFAULT_REALM'])
+        return view(*view_args, **view_kwargs)
+
+    if user.is_organizer(kwargs['event_id']) or user.is_coorganizer(kwargs['event_id']):
+        _jwt_required(app.config['JWT_DEFAULT_REALM'])
+        return view(*view_args, **view_kwargs)
+
+    return ForbiddenError({'source': ''}, 'Co-organizer access is required.').respond()
+
+
 @jwt_required
 def is_user_itself(view, view_args, view_kwargs, *args, **kwargs):
     """
@@ -82,6 +109,7 @@ def is_coorganizer_or_user_itself(view, view_args, view_kwargs, *args, **kwargs)
     Otherwise the user can only access his/her resource.
     """
     user = current_identity
+
     if user.is_admin or user.is_super_admin or user.id == kwargs['user_id']:
         return view(*view_args, **view_kwargs)
 
@@ -243,7 +271,8 @@ permissions = {
     'is_session_self_submitted': is_session_self_submitted,
     'is_coorganizer_or_user_itself': is_coorganizer_or_user_itself,
     'create_event': create_event,
-    'is_user_itself': is_user_itself
+    'is_user_itself': is_user_itself,
+    'is_coorganizer_endpoint_related_to_event': is_coorganizer_endpoint_related_to_event
 }
 
 

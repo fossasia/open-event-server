@@ -7,12 +7,11 @@ from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.email_notification import EmailNotification
 from app.models.user import User
-from app.api.helpers.permissions import is_user_itself, jwt_required
+from app.api.helpers.permissions import jwt_required
 from app.api.helpers.db import safe_query
 from app.api.helpers.utilities import require_relationship
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.exceptions import ForbiddenException
-
 
 
 class EmailNotificationSchema(Schema):

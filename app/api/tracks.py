@@ -7,16 +7,15 @@ from marshmallow import pre_load, validates_schema
 
 from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
-from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.track import Track
 from app.models.session import Session
 from app.api.helpers.exceptions import UnprocessableEntity
-from app.models.event import Event
 from app.api.helpers.db import safe_query
 from app.api.helpers.utilities import require_relationship
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.permission_manager import has_access
+from app.api.helpers.query import event_query
 
 
 class TrackSchema(Schema):
@@ -86,12 +85,7 @@ class TrackList(ResourceList):
     """
     def query(self, view_kwargs):
         query_ = self.session.query(Track)
-        if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-            query_ = query_.join(Event).filter(Event.id == event.id)
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-            query_ = query_.join(Event).filter(Event.id == event.id)
+        query_ = event_query(self, query_, view_kwargs)
         return query_
 
     view_kwargs = True

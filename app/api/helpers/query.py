@@ -6,7 +6,8 @@ from app.models.event import Event
 from app.api.helpers.permission_manager import has_access
 
 
-def event_query(self, query_, view_kwargs, event_id, event_identifier, permission):
+def event_query(self, query_, view_kwargs, event_id='event_id', event_identifier='event_identifier',
+                permission='is_coorganizer_endpoint_related_to_event'):
     """
     Queries the event according to 'event_id' and 'event_identifier' and joins for the query
     For draft events, if the user is not logged in or does not have required permissions, a 404 is raised
@@ -15,7 +16,7 @@ def event_query(self, query_, view_kwargs, event_id, event_identifier, permissio
     :param event_identifier: String representing event_identifier in the view_kwargs
     :param query_: Query object
     :param view_kwargs: view_kwargs from the API
-    :param permission: the name of the permission to be applied as a string
+    :param permission: the name of the permission to be applied as a string. Default: is_coorganizer
     :return:
     """
     if view_kwargs.get(event_id):
