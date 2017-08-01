@@ -215,9 +215,9 @@ class UserDetail(ResourceDetail):
 
     decorators = (api.has_permission('is_user_itself', fetch="user_id,id", fetch_as="id",
                   model=[Notification, UsersEventsRoles, EventInvoice, AccessCode,
-                         DiscountCode, EmailNotification, User],
+                         DiscountCode, EmailNotification, Speaker, User],
                   fetch_key_url="notification_id, users_events_role_id,\
-                  event_invoice_id, access_code_id, discount_code_id, email_notification_id, id"),)
+                  event_invoice_id, access_code_id, discount_code_id, email_notification_id, speaker_id, id"),)
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User,

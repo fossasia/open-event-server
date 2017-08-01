@@ -1,7 +1,9 @@
+import factory
+
 # use camelCase for naming variables
 
 string_ = 'example'
-email_ = 'example@example.com'
+email_ = factory.Sequence(lambda n: 'user{0}@example.com'.format(n))
 integer_ = 25
 url_ = 'http://example.com'
 imageUrl_ = 'https://www.w3schools.com/html/pic_mountain.jpg'

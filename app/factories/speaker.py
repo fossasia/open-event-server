@@ -38,3 +38,4 @@ class SpeakerFactory(factory.alchemy.SQLAlchemyModelFactory):
     heard_from = common.string_
     sponsorship_required = common.string_
     event_id = 1
+    user_id = 2
