@@ -7,8 +7,10 @@ from pytz import timezone
 from sqlalchemy.orm.exc import NoResultFound
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validates_schema
-from flask import request
+from flask import request, current_app
 import marshmallow.validate as validate
+from flask_jwt import current_identity, _jwt_required
+from sqlalchemy import or_
 
 from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
@@ -27,7 +29,7 @@ from app.models.role_invite import RoleInvite
 from app.models.custom_form import CustomForms
 from app.models.ticket import TicketTag
 from app.models.access_code import AccessCode
-from app.models.user import User, ATTENDEE, ORGANIZER
+from app.models.user import User, ATTENDEE, ORGANIZER, COORGANIZER
 from app.models.users_events_role import UsersEventsRoles
 from app.models.role import Role
 from app.models.ticket_holder import TicketHolder
@@ -290,7 +292,14 @@ class EventSchema(Schema):
 class EventList(ResourceList):
 
     def query(self, view_kwargs):
-        query_ = self.session.query(Event)
+        query_ = self.session.query(Event).filter_by(state='published')
+        if 'Authorization' in request.headers:
+            _jwt_required(current_app.config['JWT_DEFAULT_REALM'])
+            query2 = self.session.query(Event)
+            query2 = query2.join(Event.roles).filter_by(user_id=current_identity.id).join(UsersEventsRoles.role). \
+                filter(or_(Role.name == COORGANIZER, Role.name == ORGANIZER))
+            query_ = query_.union(query2)
+
         if view_kwargs.get('user_id') and 'GET' in request.method:
             user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role).\

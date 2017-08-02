@@ -21,22 +21,15 @@ def event_query(self, query_, view_kwargs, event_id='event_id', event_identifier
     """
     if view_kwargs.get(event_id):
         event = safe_query(self, Event, 'id', view_kwargs[event_id], event_id)
-        if event.state != 'published':
-            if 'Authorization' in request.headers and has_access(permission, event_id=event.id):
-                query_ = query_.join(Event).filter(Event.id == event.id)
-            else:
-                raise ObjectNotFound({'parameter': event_id},
-                                     "Event: {} not found".format(view_kwargs[event_id]))
-        else:
-            query_ = query_.join(Event).filter(Event.id == event.id)
+        if event.state != 'published' and (
+                    'Authorization' not in request.headers or not has_access(permission, event_id=event.id)):
+            raise ObjectNotFound({'parameter': event_id}, "Event: {} not found".format(view_kwargs[event_id]))
+        query_ = query_.join(Event).filter(Event.id == event.id)
     elif view_kwargs.get(event_identifier):
         event = safe_query(self, Event, 'identifier', view_kwargs[event_identifier], event_identifier)
-        if event.state != 'published':
-            if 'Authorization' in request.headers and has_access(permission, event_id=event.id):
-                query_ = query_.join(Event).filter(Event.id == event.id)
-            else:
-                raise ObjectNotFound({'parameter': event_identifier},
-                                     "Event: {} not found".format(view_kwargs[event_identifier]))
-        else:
-            query_ = query_.join(Event).filter(Event.id == event.id)
+        if event.state != 'published' and (
+                'Authorization' not in request.headers or not has_access(permission, event_id=event.id)):
+            raise ObjectNotFound({'parameter': event_identifier},
+                                 "Event: {} not found".format(view_kwargs[event_identifier]))
+        query_ = query_.join(Event).filter(Event.id == event.id)
     return query_
