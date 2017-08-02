@@ -1,6 +1,5 @@
----
-title: Logging
----
+# Logging
+
 
 Certain information is being logged and stored in the database for future reference, resolving conflicts in case of hacks and for maintaining an overview of the system.
 These are -

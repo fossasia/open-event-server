@@ -1,6 +1,4 @@
----
-title: Vagrant
----
+# Vagrant
 
 * Navigate to [Vagrant Download Page](http://www.vagrantup.com/downloads.html)
 * Click on the proper package for your operating system and architecture, we will be using MAC OSX
@@ -31,7 +29,7 @@ title: Vagrant
 
 ![Vagrant-Summary](https://cloud.githubusercontent.com/assets/9834624/11853320/5e54d70c-a40b-11e5-9483-2fe1a3b51fe6.png)
 
-* If the installation was successful you can close the installer and get ready to setup VirtualBox. 
+* If the installation was successful you can close the installer and get ready to setup VirtualBox.
 
 ![Vbox-Downloads](https://cloud.githubusercontent.com/assets/9834624/11853321/5e553a3a-a40b-11e5-892b-51b906225cee.png)
 * Navigate to the [Virtualbox Download Page](https://www.virtualbox.org/wiki/Downloads).
@@ -69,7 +67,7 @@ title: Vagrant
 after entering commands in Terminal press the "Enter" key.
 
 ![Terminal-clone](https://cloud.githubusercontent.com/assets/9834624/11853331/5e75a66c-a40b-11e5-8984-00dd1b57730f.png)
-* Then type or copy and paste 
+* Then type or copy and paste
 ```cd open-event-orga-server```
  (cd means change directory)
 
@@ -119,7 +117,7 @@ This will bring you to the root directory of the Virtual Machine.
 ![Terminal-Appcreate](https://cloud.githubusercontent.com/assets/9834624/11853335/5e7f398e-a40b-11e5-99d3-e3b9662b1819.png)
 
 
-* Notice that the top of the Terminal window no longer says “bash”. Now type 
+* Notice that the top of the Terminal window no longer says “bash”. Now type
 ```cd /vagrant```
 
 ![Terminal-Server](https://cloud.githubusercontent.com/assets/9834624/11853337/5e830226-a40b-11e5-8816-4f735307f902.png)
@@ -130,9 +128,9 @@ This will bring you to the root directory of the Virtual Machine.
 ![screen shot 2015-12-13 at 7 20 13 pm](https://cloud.githubusercontent.com/assets/9834624/11853339/5e89fcca-a40b-11e5-9b3d-64b0d2429398.png)
 
 
-* To run the app, type 
+* To run the app, type
 ```python create_db.py```
-this step should exit normally without raising any errors. If Terminal does report an error type 
+this step should exit normally without raising any errors. If Terminal does report an error type
 ```echo $DATABASE_URL```
 to double check your database configuration.
 
@@ -146,7 +144,7 @@ to double check your database configuration.
 
 
 * Now your server is up and running. To view the admin page go to [localhost:8001](localhost:8001)
-* Congratulations! If you see the admin page you have successfully configured the application! 
+* Congratulations! If you see the admin page you have successfully configured the application!
 * If you want to shutdown the server press “CTRL + C”.
 
 ![screen shot 2015-12-13 at 7 23 06 pm](https://cloud.githubusercontent.com/assets/9834624/11853345/5eb0e1b4-a40b-11e5-9995-f5bba6255064.png)

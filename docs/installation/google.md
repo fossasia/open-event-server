@@ -1,6 +1,4 @@
----
-title: Google Compute Engine
----
+# Google Compute Engine
 
 ## Initialization
 
@@ -24,14 +22,14 @@ Under this we will create a Project using Google Cloud Platform, that will hold 
 
 <img width="792" alt="instance-config" src="https://cloud.githubusercontent.com/assets/7330961/19032835/9b834092-8979-11e6-9052-4fba991443ad.png">
 
-* We'll take Ubuntu 16.04LTS as the Base disk with the Default disk size or you can use SSD if willing to. You can choose any zone you want, but choosing nearest geagraphical location will serve better ssh and ping times. You can use any amount of memory or RAM her, default would be good enough. You also need to Allow HTTP and HTTPS traffic. 
+* We'll take Ubuntu 16.04LTS as the Base disk with the Default disk size or you can use SSD if willing to. You can choose any zone you want, but choosing nearest geagraphical location will serve better ssh and ping times. You can use any amount of memory or RAM her, default would be good enough. You also need to Allow HTTP and HTTPS traffic.
 
 * After you are done with configuring the Instance, click on Create, this will take some more minutes.[Get a 🍩]
 
 * Once this is done, and you are on instances page, an Ephemeral IP is allotted to your Instance which will be used to connect to your instance.
 <img width="710" alt="screen shot 2016-10-03 at 15 06 38" src="https://cloud.githubusercontent.com/assets/7330961/19033621/eeb10076-897c-11e6-95f2-0471a4d372fd.png">
 
-* Finally, Go to the Metadata section of your project and add an SSH key. For that, 
+* Finally, Go to the Metadata section of your project and add an SSH key. For that,
 ```sh
 pbcopy < ~/.ssh/id_rsa.pub
 ```
