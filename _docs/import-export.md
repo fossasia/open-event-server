@@ -1,6 +1,5 @@
----
-title: Import/Export
----
+# Import/Export
+
 
 Import/Export feature of Open Event allows you to export an event with all its data in a zip file.
 You can then use the zip to import back the event on an another system.

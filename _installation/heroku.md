@@ -1,6 +1,4 @@
----
-title: Heroku
----
+# Heroku
 
 One-click Heroku deployment is available:
 
