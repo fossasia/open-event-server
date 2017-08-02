@@ -1,17 +1,13 @@
 import binascii
 import os
-from datetime import datetime
 import pytz
-
 import flask_login as login
-from sqlalchemy import event
+from datetime import datetime
 
 from app.api.helpers.db import get_count
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.email_notification import EmailNotification
 from app.models.user import ATTENDEE, ORGANIZER
-from app.models.custom_form import CustomForms, session_form_str, speaker_form_str
-from app.models.version import Version
 from app.models import db
 
 
@@ -247,12 +243,11 @@ class Event(db.Model):
 
     def has_staff_access(self, user_id):
         """does user have role other than attendee"""
-        access = False
         for _ in self.roles:
             if _.user_id == (login.current_user.id if not user_id else int(user_id)):
                 if _.role.name != ATTENDEE:
-                    access = True
-        return access
+                    return True
+        return False
 
     def get_staff_roles(self):
         """returns only roles which are staff i.e. not attendee"""
