@@ -7,7 +7,7 @@ from app.api.helpers.db import save_to_db
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_mails import MAILS
 from app.api.helpers.utilities import string_empty
-from app.models.mail import Mail, USER_CONFIRM, NEW_SESSION
+from app.models.mail import Mail, USER_CONFIRM, NEW_SESSION, SESSION_ACCEPT_REJECT
 
 
 def send_email(to, action, subject, html):
@@ -96,6 +96,26 @@ def send_email_new_session(email, event_name, link):
         html=MAILS[NEW_SESSION]['message'].format(
             email=email,
             event_name=event_name,
+            link=link
+        )
+    )
+
+
+def send_email_session_accept_reject(email, session, link):
+    """email for new session"""
+    session_name = session.title
+    session_acceptance = session.state
+    send_email(
+        to=email,
+        action=SESSION_ACCEPT_REJECT,
+        subject=MAILS[SESSION_ACCEPT_REJECT]['subject'].format(
+            session_name=session_name,
+            acceptance=session_acceptance
+        ),
+        html=MAILS[SESSION_ACCEPT_REJECT]['message'].format(
+            email=email,
+            session_name=session_name,
+            acceptance=session_acceptance,
             link=link
         )
     )
