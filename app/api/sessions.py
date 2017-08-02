@@ -21,6 +21,7 @@ from app.api.helpers.permission_manager import has_access
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.permissions import current_identity
 from app.api.helpers.mail import send_email_new_session, send_email_session_accept_reject
+from app.api.helpers.query import event_query
 
 
 class SessionSchema(Schema):
@@ -166,12 +167,7 @@ class SessionList(ResourceList):
         if view_kwargs.get('microlocation_id') is not None:
             microlocation = safe_query(self, Microlocation, 'id', view_kwargs['microlocation_id'], 'microlocation_id')
             query_ = query_.join(Microlocation).filter(Microlocation.id == microlocation.id)
-        if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-            query_ = query_.join(Event).filter(Event.id == event.id)
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-            query_ = query_.join(Event).filter(Event.identifier == event.id)
+        query_ = event_query(self, query_, view_kwargs)
         if view_kwargs.get('speaker_id'):
             speaker = safe_query(self, Speaker, 'id', view_kwargs['speaker_id'], 'speaker_id')
             # session-speaker :: many-to-many relationship

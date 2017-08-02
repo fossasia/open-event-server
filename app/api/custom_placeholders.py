@@ -5,7 +5,6 @@ from marshmallow_jsonapi import fields
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
 from app.api.helpers.utilities import dasherize
-from app.api.helpers.permissions import jwt_required
 from app.models import db
 from app.models.custom_placeholder import CustomPlaceholder
 from app.models.event_sub_topic import EventSubTopic
