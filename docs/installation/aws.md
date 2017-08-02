@@ -1,6 +1,4 @@
----
-title: Amazon Web Services
----
+# Amazon Web Services
 
 ## Phase 1
 

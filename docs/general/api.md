@@ -1,6 +1,4 @@
----
-title: API
----
+# API
 
 All the APIs of nextgen branch are right now hosted in `/v1/`.
 

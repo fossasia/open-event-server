@@ -1,6 +1,4 @@
----
-title: macOS
----
+# macOS
 
 ## Dependencies required to run Orga Server
 
@@ -118,4 +116,3 @@ python manage.py runserver
 * **Step 8** - Rejoice. Go to `localhost:5000` in your web browser to see the application live.
 
 ---
-

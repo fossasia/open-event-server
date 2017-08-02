@@ -1,6 +1,4 @@
----
-title: Generic
----
+# Generic
 
 ## Dependencies required to run Orga Server
 

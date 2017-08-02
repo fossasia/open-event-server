@@ -1,6 +1,4 @@
----
-title: Local
----
+# Local
 
 ## Dependencies required to run Orga Server
 

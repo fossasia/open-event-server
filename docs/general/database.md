@@ -1,6 +1,5 @@
----
-title: Database Structure
----
+# Database Structure
+
 
 ## Naming schema
 

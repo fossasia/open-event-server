@@ -1,7 +1,3 @@
----
-title: Amazon S3
----
-
 # Amazon S3
 
 ## What is S3 ? Basic concepts

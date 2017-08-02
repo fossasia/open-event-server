@@ -1,3 +1,5 @@
+# Permission manager
+
 ## **What is permission manager?**
 Simply checking for the permission for each method. Instead of making decorators work on different views. The use of permission manager is based on the concept that "First prepare the things that permission decorator require to test the validation and then pass it to permission decorator"
 
