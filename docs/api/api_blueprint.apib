@@ -366,7 +366,7 @@ Delete a single user.
     + notification_id: 1 (integer) - ID of the notification in the form of an integer
 
 
-### Get Details [GET]
+### Get User Details for a Notification [GET]
 Get the details of the user.
 
 + Request
@@ -457,7 +457,7 @@ Get the details of the user.
     + event_invoice_id: 1 (integer) - ID of the event invoice in the form of an integer
 
 
-### Get Details [GET]
+### Get User Details for an Event Invoice [GET]
 Get the details of the user.
 
 + Request
@@ -548,7 +548,7 @@ Get the details of the user.
     + speaker_id: 1 (integer) - ID of the speaker in the form of an integer
 
 
-### Get Details [GET]
+### Get User Details for a Speaker [GET]
 Get the details of the user.
 
 + Request
@@ -639,7 +639,7 @@ Get the details of the user.
     + access_code_id: 1 (integer) - ID of the access code in the form of an integer
 
 
-### Get Details [GET]
+### Get User Details for an Access Code [GET]
 Get the details of the user.
 
 + Request
@@ -730,7 +730,7 @@ Get the details of the user.
     + email_notification_id : 1 (integer) - ID of the email notification in the form of an integer
 
 
-### Get Details [GET]
+### Get User Details for an Email Notification [GET]
 Get the details of the user.
 
 + Request
@@ -821,7 +821,7 @@ Get the details of the user.
     + discount_code_id: 1 (integer) - ID of the discount code in the form of an integer
 
 
-### Get Details [GET]
+### Get User Details for a Discount Code [GET]
 Get the details of the user.
 
 + Request
@@ -2832,7 +2832,7 @@ Delete a single event.
 + Parameters
     + ticket_id: 1 (integer) - ID of the ticket in the form of an integer
 
-### Event Details [GET]
+### Event Details for a Ticket [GET]
 
 + Request
 
@@ -3029,7 +3029,7 @@ Delete a single event.
 + Parameters
     + microlocation_id: 1 (integer) - ID of the microlocation in the form of an integer
 
-### Event Details [GET]
+### Event Details for a Microlocation [GET]
 
 + Request
 
@@ -3227,7 +3227,7 @@ Delete a single event.
 + Parameters
     + social_link_id: 1 (integer) - ID of the social link in the form of an integer
 
-### Event Details [GET]
+### Event Details for a Social Link [GET]
 
 + Request
 
@@ -3425,7 +3425,7 @@ Delete a single event.
 + Parameters
     + sponsor_id: 1 (integer) - ID of the sponsor link in the form of an integer
 
-### Event Details [GET]
+### Event Details for a Sponsor [GET]
 
 + Request
 
@@ -3623,7 +3623,7 @@ Delete a single event.
 + Parameters
     + speakers_call_id: 1 (integer) - ID of the speakers call link in the form of an integer
 
-### Event Details [GET]
+### Event Details for a Speakers Call [GET]
 
 + Request
 
@@ -3821,7 +3821,7 @@ Delete a single event.
 + Parameters
     + track_id: 1 (integer) - ID of the track in the form of an integer
 
-### Event Details [GET]
+### Event Details for a Track [GET]
 
 + Request
 
@@ -4019,7 +4019,7 @@ Delete a single event.
 + Parameters
     + session_type_id: 1 (integer) - ID of the Session Type in the form of an integer
 
-### Event Details [GET]
+### Event Details for a Session Type [GET]
 
 + Request
 
@@ -4217,7 +4217,7 @@ Delete a single event.
 + Parameters
     + event_copyright_id: 1 (integer) - ID of the Event Copyright in the form of an integer
 
-### Event Details [GET]
+### Event Details for an Event Copyright [GET]
 
 + Request
 
@@ -4415,7 +4415,7 @@ Delete a single event.
 + Parameters
     + tax_id: 1 (integer) - ID of the tax in the form of an integer
 
-### Event Details [GET]
+### Event Details for a Tax [GET]
 
 + Request
 
@@ -4613,7 +4613,7 @@ Delete a single event.
 + Parameters
     + event_invoice_id: 1 (integer) - ID of the Event Invoice in the form of an integer
 
-### Event Details [GET]
+### Event Details for an Event Invoice [GET]
 
 + Request
 
@@ -4811,7 +4811,7 @@ Delete a single event.
 + Parameters
     + discount_code_id: 1 (integer) - ID of the discount code in the form of an integer
 
-### Event Details [GET]
+### Event Details for a Discount Code [GET]
 
 + Request
 
@@ -5009,7 +5009,7 @@ Delete a single event.
 + Parameters
     + session_id: 1 (integer) - ID of the session in the form of an integer
 
-### Event Details [GET]
+### Event Details for a Session [GET]
 
 + Request
 
@@ -5207,7 +5207,7 @@ Delete a single event.
 + Parameters
     + ticket_tag_id: 1 (integer) - ID of the ticket tag in the form of an integer
 
-### Event Details [GET]
+### Event Details for a Ticket Tag [GET]
 
 + Request
 
@@ -5405,7 +5405,7 @@ Delete a single event.
 + Parameters
     + role_invite_id: 1 (integer) - ID of the role invite in the form of an integer
 
-### Event Details [GET]
+### Event Details for a Role Invite [GET]
 
 + Request
 
@@ -5603,7 +5603,7 @@ Delete a single event.
 + Parameters
     + speaker_id: 1 (integer) - ID of the speaker in the form of an integer
 
-### Event Details [GET]
+### Event Details for a Speaker [GET]
 
 + Request
 
@@ -5801,7 +5801,7 @@ Delete a single event.
 + Parameters
     + email_notification_id: 1 (integer) - ID of the email notification in the form of an integer
 
-### Event Details [GET]
+### Event Details for an Email Notification [GET]
 
 + Request
 
@@ -5999,7 +5999,7 @@ Delete a single event.
 + Parameters
     + attendee_id: 1 (integer) - ID of the attendee in the form of an integer
 
-### Event Details [GET]
+### Event Details for an Attendee [GET]
 
 + Request
 
@@ -6197,7 +6197,7 @@ Delete a single event.
 + Parameters
     + custom_form_id: 1 (integer) - ID of the custom form in the form of an integer
 
-### Event Details [GET]
+### Event Details for a Custom Form [GET]
 
 + Request
 
@@ -13883,6 +13883,44 @@ Delete a single Role.
           "jsonapi": {
             "version": "1.0"
           }
+        }
+
+
+## Get Role for a Role Invite [/v1/role-invites/{role_invite_id}/role]
++ Parameters
+    + role_invite_id: 1 (integer) - ID of the role invite in the form of an integer
+
+### Get Role Details for a Role Invite [GET]
+Get a single role.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "attributes": {
+                    "title-name": "Organizer",
+                    "name": "organizer"
+                },
+                "type": "role",
+                "id": "1",
+                "links": {
+                    "self": "/v1/roles/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/roles/1"
+            }
         }
 
 
