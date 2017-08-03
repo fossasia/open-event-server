@@ -6,6 +6,7 @@ from marshmallow import validates_schema
 
 from app.api.helpers.utilities import dasherize
 from app.models import db
+from app.settings import get_settings
 from app.models.event import Event
 from app.models.role_invite import RoleInvite
 from app.models.users_events_role import UsersEventsRoles
@@ -18,6 +19,7 @@ from app.api.helpers.permission_manager import has_access
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.query import event_query
+from app.api.helpers.mail import send_email_role_invite
 
 
 class RoleInviteSchema(Schema):
@@ -95,6 +97,13 @@ class RoleInviteListPost(ResourceList):
             if not uer:
                 uer = UsersEventsRoles(user, event, role)
                 save_to_db(uer, 'Role Invite accepted')
+
+        event = Event.query.filter_by(id=role_invite.event_id).first()
+        frontend_url = get_settings()['frontend_url']
+        link = "{}/events/{}/role-invites/{}" \
+            .format(frontend_url, event.id, role_invite.hash)
+        send_email_role_invite(role_invite.email, role_invite.role_name, event.name, link)
+
 
     view_kwargs = True
     methods = ['POST']
