@@ -36,7 +36,7 @@ from app.api.user_permission import UserPermissionList, UserPermissionDetail
 from app.api.tax import TaxList, TaxListPost, TaxDetail, TaxRelationship
 from app.api.settings import SettingDetail
 from app.api.discount_codes import DiscountCodeList, DiscountCodeDetail, DiscountCodeRelationshipOptional, \
-    DiscountCodeRelationshipRequired
+    DiscountCodeRelationshipRequired, DiscountCodeListPost
 from app.api.ticket_tags import TicketTagList, TicketTagListPost, TicketTagDetail, TicketTagRelationshipOptional, \
     TicketTagRelationshipRequired
 from app.api.attendees import AttendeeList, AttendeeDetail, AttendeeRelationshipOptional, \
@@ -301,7 +301,8 @@ api.route(EventInvoiceRelationshipOptional, 'event_invoice_discount_code',
           '/event-invoices/<int:id>/relationships/discount-codes')
 
 # discount codes
-api.route(DiscountCodeList, 'discount_code_list', '/discount-codes', '/events/<int:event_id>/discount-codes',
+api.route(DiscountCodeListPost, 'discount_code_list_post', '/discount-codes')
+api.route(DiscountCodeList, 'discount_code_list', '/events/<int:event_id>/discount-codes',
           '/events/<event_identifier>/discount-codes', '/users/<int:user_id>/discount-codes')
 api.route(DiscountCodeDetail, 'discount_code_detail', '/discount-codes/<int:id>',
           '/events/<int:event_id>/discount-code', 'event-invoices/<int:event_invoice_id>/discount-code')
