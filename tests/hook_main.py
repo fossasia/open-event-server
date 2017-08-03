@@ -639,6 +639,19 @@ def copyright_delete(transaction):
         db.session.commit()
 
 
+@hooks.before("Copyright > Get Event Copyright for an Event > Event Copyright Details")
+def event_copyright(transaction):
+    """
+    GET /events/1/event-copyright
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        copyright = EventCopyrightFactory()
+        db.session.add(copyright)
+        db.session.commit()
+
+
 # ------------------------- Invoices -------------------------
 @hooks.before("Invoices > Event Invoices > Get Event Invoices")
 def invoice_get_list(transaction):
