@@ -190,7 +190,7 @@ def user_delete(transaction):
         db.session.commit()
 
 
-@hooks.before("Users > Get User Details for a Notification > Get Details")
+@hooks.before("Users > Get User Details for a Notification > Get User Details for a Notification")
 def user_notification(transaction):
     """
     GET /notifications/1/user
@@ -203,7 +203,7 @@ def user_notification(transaction):
         db.session.commit()
 
 
-@hooks.before("Users > Get User Details for an Event Invoice > Get Details")
+@hooks.before("Users > Get User Details for an Event Invoice > Get User Details for an Event Invoice")
 def user_event_invoice(transaction):
     """
     GET /event-invoices/1/user
@@ -216,7 +216,7 @@ def user_event_invoice(transaction):
         db.session.commit()
 
 
-@hooks.before("Users > Get User Details for an Access Code > Get Details")
+@hooks.before("Users > Get User Details for an Access Code > Get User Details for an Access Code")
 def user_access_code(transaction):
     """
     GET /access-codes/1/user
@@ -229,7 +229,7 @@ def user_access_code(transaction):
         db.session.commit()
 
 
-@hooks.before("Users > Get User Details for an Email Notification > Get Details")
+@hooks.before("Users > Get User Details for an Email Notification > Get User Details for an Email Notification")
 def user_email_notification(transaction):
     """
     GET /email-notifications/1/user
@@ -242,7 +242,7 @@ def user_email_notification(transaction):
         db.session.commit()
 
 
-@hooks.before("Users > Get User Details for a Discount Code > Get Details")
+@hooks.before("Users > Get User Details for a Discount Code > Get User Details for a Discount Code")
 def user_discount_code(transaction):
     """
     GET /discount-codes/1/user
@@ -255,7 +255,7 @@ def user_discount_code(transaction):
         db.session.commit()
 
 
-@hooks.before("Users > Get User Details for a Speaker > Get Details")
+@hooks.before("Users > Get User Details for a Speaker > Get User Details for a Speaker")
 def user_speaker(transaction):
     """
     GET /speakers/1/user
@@ -331,7 +331,7 @@ def event_delete(transaction):
         db.session.commit()
 
 
-@hooks.before("Events > Get Event for a Ticket > Event Details")
+@hooks.before("Events > Get Event for a Ticket > Event Details for a Ticket")
 def event_ticket(transaction):
     """
     GET /tickets/1/event
@@ -347,7 +347,7 @@ def event_ticket(transaction):
         db.session.commit()
 
 
-@hooks.before("Events > Get Event for a Microlocation > Event Details")
+@hooks.before("Events > Get Event for a Microlocation > Event Details for a Microlocation")
 def event_microlocation(transaction):
     """
     GET /microlocations/1/event
@@ -360,7 +360,7 @@ def event_microlocation(transaction):
         db.session.commit()
 
 
-@hooks.before("Events > Get Event for a Social Link > Event Details")
+@hooks.before("Events > Get Event for a Social Link > Event Details for a Social Link")
 def event_social_link(transaction):
     """
     GET /social-links/1/event
@@ -373,7 +373,7 @@ def event_social_link(transaction):
         db.session.commit()
 
 
-@hooks.before("Events > Get Event for a Sponsor > Event Details")
+@hooks.before("Events > Get Event for a Sponsor > Event Details for a Sponsor")
 def event_sponsor(transaction):
     """
     GET /sponsors/1/event
@@ -386,7 +386,7 @@ def event_sponsor(transaction):
         db.session.commit()
 
 
-@hooks.before("Events > Get Event for a Speakers Call > Event Details")
+@hooks.before("Events > Get Event for a Speakers Call > Event Details for a Speakers Call")
 def event_speakers_call(transaction):
     """
     GET /speakers-calls/1/event
@@ -399,7 +399,7 @@ def event_speakers_call(transaction):
         db.session.commit()
 
 
-@hooks.before("Events > Get Event for a Track > Event Details")
+@hooks.before("Events > Get Event for a Track > Event Details for a Track")
 def event_track(transaction):
     """
     GET /tracks/1/event
@@ -412,7 +412,7 @@ def event_track(transaction):
         db.session.commit()
 
 
-@hooks.before("Events > Get Event for a Session Type > Event Details")
+@hooks.before("Events > Get Event for a Session Type > Event Details for a Session Type")
 def event_session_types(transaction):
     """
     GET /session-types/1/event
@@ -428,7 +428,7 @@ def event_session_types(transaction):
         db.session.commit()
 
 
-@hooks.before("Events > Get Event for an Event Copyright > Event Details")
+@hooks.before("Events > Get Event for an Event Copyright > Event Details for an Event Copyright")
 def event_event_copyright(transaction):
     """
     GET /event-copyrights/1/event
@@ -444,7 +444,7 @@ def event_event_copyright(transaction):
         db.session.commit()
 
 
-@hooks.before("Events > Get Event for a Tax > Event Details")
+@hooks.before("Events > Get Event for a Tax > Event Details for a Tax")
 def event_tax(transaction):
     """
     GET /tax/1/event
@@ -460,7 +460,7 @@ def event_tax(transaction):
         db.session.commit()
 
 
-@hooks.before("Events > Get Event for an Event Invoice > Event Details")
+@hooks.before("Events > Get Event for an Event Invoice > Event Details for an Event Invoice")
 def event_event_invoice(transaction):
     """
     GET /event-invoices/1/event
@@ -473,7 +473,7 @@ def event_event_invoice(transaction):
         db.session.commit()
 
 
-@hooks.before("Events > Get Event for a Discount Code > Event Details")
+@hooks.before("Events > Get Event for a Discount Code > Event Details for a Discount Code")
 def event_discount_code(transaction):
     """
     GET /discount-codes/1/event
@@ -489,7 +489,7 @@ def event_discount_code(transaction):
         db.session.commit()
 
 
-@hooks.before("Events > Get Event for a Session > Event Details")
+@hooks.before("Events > Get Event for a Session > Event Details for a Session")
 def event_sessions(transaction):
     """
     GET /sessions/1/event
@@ -502,7 +502,7 @@ def event_sessions(transaction):
         db.session.commit()
 
 
-@hooks.before("Events > Get Event for a Ticket Tag > Event Details")
+@hooks.before("Events > Get Event for a Ticket Tag > Event Details for a Ticket Tag")
 def event_ticket_tag(transaction):
     """
     GET /ticket-tags/1/event
@@ -515,7 +515,7 @@ def event_ticket_tag(transaction):
         db.session.commit()
 
 
-@hooks.before("Events > Get Event for a Role Invite > Event Details")
+@hooks.before("Events > Get Event for a Role Invite > Event Details for a Role Invite")
 def event_role_invite(transaction):
     """
     GET /role-invites/1/event
@@ -531,7 +531,7 @@ def event_role_invite(transaction):
         db.session.commit()
 
 
-@hooks.before("Events > Get Event for a Speaker > Event Details")
+@hooks.before("Events > Get Event for a Speaker > Event Details for a Speaker")
 def event_speaker(transaction):
     """
     GET /speakers/1/event
@@ -544,7 +544,7 @@ def event_speaker(transaction):
         db.session.commit()
 
 
-@hooks.before("Events > Get Event for an Email Notification > Event Details")
+@hooks.before("Events > Get Event for an Email Notification > Event Details for an Email Notification")
 def event_email_notification(transaction):
     """
     GET /email-notifications/1/event
@@ -557,7 +557,7 @@ def event_email_notification(transaction):
         db.session.commit()
 
 
-@hooks.before("Events > Get Event for an Attendee > Event Details")
+@hooks.before("Events > Get Event for an Attendee > Event Details for an Attendee")
 def event_attendee(transaction):
     """
     GET /attendees/1/event
@@ -565,15 +565,12 @@ def event_attendee(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
-        db.session.add(event)
-
         attendee = AttendeeFactory()
         db.session.add(attendee)
         db.session.commit()
 
 
-@hooks.before("Events > Get Event for a Custom Form > Event Details")
+@hooks.before("Events > Get Event for a Custom Form > Event Details for a Custom Form")
 def event_custom_form(transaction):
     """
     GET /custom-forms/1/event
@@ -1926,6 +1923,18 @@ def role_delete(transaction):
         db.session.add(role)
         db.session.commit()
 
+
+@hooks.before("Roles > Get Role for a Role Invite > Get Role Details for a Role Invite")
+def role_role_invite(transaction):
+    """
+    GET /role-invites/1/role
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        role_invite = RoleInviteFactory()
+        db.session.add(role_invite)
+        db.session.commit()
 
 # ------------------------- Activities -------------------------
 @hooks.before("Activity > Activity Collection > List all Activities")
