@@ -361,6 +361,7 @@ Delete a single user.
           }
         }
 
+
 ## Get User Details for a Notification [/v1/notifications/{notification_id}/user]
 + Parameters
     + notification_id: 1 (integer) - ID of the notification in the form of an integer
@@ -905,7 +906,6 @@ Get the details of the user.
             "self": "/v1/users/1"
         }
     }
-
 
 
 # Group Event Types
@@ -12455,7 +12455,15 @@ Create a new Discount Code for event. (Only Admin)
                   "used-for": "event",
                   "tickets": "event"
                 },
-                "type": "discount-code"
+                "type": "discount-code",
+                "relationships": {
+                  "event": {
+                    "data": {
+                      "id": "1",
+                      "type": "event"
+                    }
+                  }
+                }
               }
             }
 
@@ -12464,7 +12472,7 @@ Create a new Discount Code for event. (Only Admin)
         {
             "data": {
                 "relationships": {
-                    "events": {
+                    "event": {
                         "links": {
                             "self": "/v1/discount-codes/4/relationships/events",
                             "related": "/v1/discount-codes/4/events"
@@ -12482,6 +12490,88 @@ Create a new Discount Code for event. (Only Admin)
                     "max-quantity": 100,
                     "is-active": false,
                     "used-for": "event",
+                    "valid-till": "2017-06-24T18:30:00+00:00",
+                    "type": "amount",
+                    "discount-url": "https://my-discount-url.com"
+                },
+                "type": "discount-code",
+                "id": 4,
+                "links": {
+                    "self": "/v1/discount-codes/4"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/discount-codes/4"
+            }
+        }
+
+
+
+### Create Ticket Discount Code [POST]
+Create a new Discount Code with event (requires Organizer access)
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "code": "DC101",
+                  "discount-url": "https://my-discount-url.com",
+                  "value": "100",
+                  "type": "amount",
+                  "is-active": "false",
+                  "tickets-number": "404",
+                  "min-quantity": "0",
+                  "max-quantity": "100",
+                  "valid-from": "2017-06-18T18:30:00+00:00",
+                  "valid-till": "2017-06-24T18:30:00+00:00",
+                  "used-for": "ticket",
+                  "tickets": "event"
+                },
+                "type": "discount-code",
+                "relationships": {
+                  "event": {
+                    "data": {
+                      "id": "1",
+                      "type": "event"
+                    }
+                  }
+                }
+              }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/discount-codes/4/relationships/event",
+                            "related": "/v1/discount-codes/4/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "tickets": "event",
+                    "code": "DC101",
+                    "valid-from": "2017-06-18T18:30:00+00:00",
+                    "min-quantity": 0,
+                    "created-at": "2017-06-27T14:47:14.996906+00:00",
+                    "tickets-number": 404,
+                    "value": 100,
+                    "max-quantity": 100,
+                    "is-active": false,
+                    "used-for": "ticket",
                     "valid-till": "2017-06-24T18:30:00+00:00",
                     "type": "amount",
                     "discount-url": "https://my-discount-url.com"
@@ -12565,78 +12655,6 @@ Get a list of Discount Codes.
           }
          }
 
-### Create Ticket Discount Code [POST]
-Create a new Discount Code with event_id.
-
-+ Request (application/vnd.api+json)
-
-    + Headers
-
-            Authorization: JWT <Auth Key>
-
-    + Body
-
-            {
-              "data": {
-                "attributes": {
-                  "code": "DC101",
-                  "discount-url": "https://my-discount-url.com",
-                  "value": "100",
-                  "type": "amount",
-                  "is-active": "false",
-                  "tickets-number": "404",
-                  "min-quantity": "0",
-                  "max-quantity": "100",
-                  "valid-from": "2017-06-18T18:30:00+00:00",
-                  "valid-till": "2017-06-24T18:30:00+00:00",
-                  "used-for": "ticket",
-                  "tickets": "event"
-                },
-                "type": "discount-code"
-              }
-            }
-
-+ Response 201 (application/vnd.api+json)
-
-        {
-            "data": {
-                "relationships": {
-                    "events": {
-                        "links": {
-                            "self": "/v1/discount-codes/4/relationships/event",
-                            "related": "/v1/discount-codes/4/event"
-                        }
-                    }
-                },
-                "attributes": {
-                    "tickets": "event",
-                    "code": "DC101",
-                    "valid-from": "2017-06-18T18:30:00+00:00",
-                    "min-quantity": 0,
-                    "created-at": "2017-06-27T14:47:14.996906+00:00",
-                    "tickets-number": 404,
-                    "value": 100,
-                    "max-quantity": 100,
-                    "is-active": false,
-                    "used-for": "ticket",
-                    "valid-till": "2017-06-24T18:30:00+00:00",
-                    "type": "amount",
-                    "discount-url": "https://my-discount-url.com"
-                },
-                "type": "discount-code",
-                "id": 4,
-                "links": {
-                    "self": "/v1/discount-codes/4"
-                }
-            },
-            "jsonapi": {
-                "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/discount-codes/4"
-            }
-        }
-
 
 ## Discount Code Detail [/v1/discount-codes/{discount_code_id}]
 + Parameters
@@ -12658,7 +12676,7 @@ Get a single discount code.
         {
             "data": {
                 "relationships": {
-                    "events": {
+                    "event": {
                         "links": {
                             "self": "/v1/discount-codes/1/relationships/events",
                             "related": "/v1/discount-codes/1/events"
@@ -12734,7 +12752,7 @@ Update a single discount code with `id` (Check permission to edit).
         {
           "data": {
             "relationships": {
-              "events": {
+              "event": {
                 "links": {
                   "self": "/v1/discount-codes/1/relationships/events",
                   "related": "/v1/discount-codes/1/events"

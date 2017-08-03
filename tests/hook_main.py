@@ -2101,7 +2101,23 @@ def event_discount_code_post(transaction):
     :param transaction:
     :return:
     """
-    pass
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Discount Codes > Event Discount Code Collection > Create Ticket Discount Code")
+def ticket_discount_code_post(transaction):
+    """
+    POST /events/1/discount-codes
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 @hooks.before("Discount Codes > Ticket Discount Code Collection > List All Ticket Discount Codes")
@@ -2114,19 +2130,6 @@ def ticket_discount_code_get_list(transaction):
     with stash['app'].app_context():
         discount_code = DiscountCodeFactory()
         db.session.add(discount_code)
-        db.session.commit()
-
-
-@hooks.before("Discount Codes > Ticket Discount Code Collection > Create Ticket Discount Code")
-def ticket_discount_code_post(transaction):
-    """
-    POST /events/1/discount-codes
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        event = EventFactoryBasic()
-        db.session.add(event)
         db.session.commit()
 
 
