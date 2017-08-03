@@ -508,6 +508,8 @@ class EventDetail(ResourceDetail):
             attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
             if attendee.event_id is not None:
                 view_kwargs['id'] = attendee.event_id
+            else:
+                view_kwargs['id'] = None
 
         if view_kwargs.get('custom_form_id') is not None:
             custom_form = safe_query(self, CustomForms, 'id', view_kwargs['custom_form_id'], 'custom_form_id')
