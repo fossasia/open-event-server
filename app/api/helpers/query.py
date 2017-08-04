@@ -1,8 +1,11 @@
 from flask import request
 from flask_rest_jsonapi.exceptions import ObjectNotFound
+import datetime
 
 from app.api.helpers.db import safe_query
 from app.models.event import Event
+from app.models.role import Role
+from app.models.users_events_role import UsersEventsRoles
 from app.api.helpers.permission_manager import has_access
 
 
@@ -33,3 +36,13 @@ def event_query(self, query_, view_kwargs, event_id='event_id', event_identifier
                                  "Event: {} not found".format(view_kwargs[event_identifier]))
         query_ = query_.join(Event).filter(Event.id == event.id)
     return query_
+
+
+def get_upcoming_events():
+    return Event.query.filter(Event.starts_at >= datetime.datetime.now()).filter(
+        Event.ends_at >= datetime.datetime.now()).filter_by(deleted_at=None)
+
+
+def get_user_event_roles_by_role_name(event_id, role_name):
+    role = Role.query.filter_by(name=role_name).first()
+    return UsersEventsRoles.query.filter_by(event_id=event_id).filter(UsersEventsRoles.role == role)

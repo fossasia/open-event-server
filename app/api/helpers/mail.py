@@ -7,7 +7,8 @@ from app.api.helpers.db import save_to_db
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_mails import MAILS
 from app.api.helpers.utilities import string_empty
-from app.models.mail import Mail, USER_CONFIRM, NEW_SESSION, SESSION_ACCEPT_REJECT, EVENT_ROLE
+from app.models.mail import Mail, USER_CONFIRM, NEW_SESSION, SESSION_ACCEPT_REJECT,\
+    EVENT_ROLE, AFTER_EVENT
 
 
 def send_email(to, action, subject, html):
@@ -135,5 +136,21 @@ def send_email_role_invite(email, role_name, event_name, link):
             role=role_name,
             event=event_name,
             link=link
+        )
+    )
+
+
+def send_email_after_event(email, event_name, upcoming_events):
+    """email for role invite"""
+    send_email(
+        to=email,
+        action=AFTER_EVENT,
+        subject=MAILS[AFTER_EVENT]['subject'].format(
+            event_name=event_name
+        ),
+        html=MAILS[AFTER_EVENT]['message'].format(
+            email=email,
+            event_name=event_name,
+            upcoming_events=upcoming_events
         )
     )
