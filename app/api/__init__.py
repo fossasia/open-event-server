@@ -4,7 +4,7 @@ from app.api.stripe_authorization import StripeAuthorizationList, StripeAuthoriz
 from app.api.ticket_fees import TicketFeeList, TicketFeeDetail
 from app.api.users import UserList, UserDetail, UserRelationship, VerifyUser
 from app.api.notifications import NotificationList, NotificationListAdmin, NotificationDetail, NotificationRelationship
-from app.api.email_notifications import EmailNotificationList, EmailNotificationListPost, EmailNotificationDetail,\
+from app.api.email_notifications import EmailNotificationList, EmailNotificationListAdmin, EmailNotificationDetail,\
     EmailNotificationRelationshipOptional, EmailNotificationRelationshipRequired
 from app.api.tickets import TicketList, TicketListPost, TicketDetail, TicketRelationshipRequired,\
     TicketRelationshipOptional
@@ -71,7 +71,7 @@ api.route(NotificationRelationship, 'notification_user',
           '/notifications/<int:id>/relationships/user')
 
 # email_notifications
-api.route(EmailNotificationListPost, 'email_notification_list_post', '/email-notifications')
+api.route(EmailNotificationListAdmin, 'email_notification_list_admin', '/email-notifications')
 api.route(EmailNotificationList, 'email_notification_list', '/users/<int:id>/email-notifications')
 api.route(EmailNotificationDetail, 'email_notification_detail', '/email-notifications/<int:id>')
 api.route(EmailNotificationRelationshipRequired, 'email_notification_user',
