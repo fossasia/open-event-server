@@ -1717,6 +1717,19 @@ def notification_get_list(transaction):
         db.session.commit()
 
 
+@hooks.before("Notifications > Notifications Admin Collection > List All Notifications")
+def notification_get_list(transaction):
+    """
+    GET /users/2/notifications
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        notification = NotificationFactory()
+        db.session.add(notification)
+        db.session.commit()
+
+
 @hooks.before("Notifications > Notification Detail > Notification Detail")
 def notification_get_detail(transaction):
     """
