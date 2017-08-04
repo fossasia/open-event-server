@@ -1718,9 +1718,9 @@ def notification_get_list(transaction):
 
 
 @hooks.before("Notifications > Notifications Admin Collection > List All Notifications")
-def notification_get_list(transaction):
+def notification_get_admin_list(transaction):
     """
-    GET /users/2/notifications
+    GET /notifications
     :param transaction:
     :return:
     """
@@ -1770,7 +1770,20 @@ def notification_delete(transaction):
 
 
 # ------------------------- Email Notifications -------------------------
-@hooks.before("Email Notifications > Email Notifications Collection Get > List All Email Notifications")
+@hooks.before("Email Notifications > Email Notifications Admin Collection > List All Email Notifications")
+def email_notification_get_admin_list(transaction):
+    """
+    GET /email-notifications
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        email_notification = EmailNotificationFactory()
+        db.session.add(email_notification)
+        db.session.commit()
+
+
+@hooks.before("Email Notifications > Email Notifications Collection > List All Email Notifications")
 def email_notification_get_list(transaction):
     """
     GET /users/2/email-notifications
