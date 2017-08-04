@@ -1191,6 +1191,19 @@ def speakers_call_delete(transaction):
         db.session.commit()
 
 
+@hooks.before("Speakers Calls > Get Speakers Call for an Event > Get Speakers Call Details for an Event")
+def speakers_call_event(transaction):
+    """
+    GET /events/1/speakers-call
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        speakers_call = SpeakersCallFactory()
+        db.session.add(speakers_call)
+        db.session.commit()
+
+
 # ------------------------- Sponsors -------------------------
 @hooks.before("Sponsors > Sponsors Get Collection > List All Sponsors")
 def sponsor_get_list(transaction):
