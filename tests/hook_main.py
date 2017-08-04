@@ -2770,3 +2770,18 @@ def stripe_authorization_delete(transaction):
         stripe = StripeAuthorizationFactory()
         db.session.add(stripe)
         db.session.commit()
+
+
+# ------------------------- Event Statistics -------------------------
+
+@hooks.before("Event Statistics > Event Statistics Details > Show Event Statistics General")
+def event_statistics_general_get(transaction):
+    """
+    GET /events/1/general-statistics
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
