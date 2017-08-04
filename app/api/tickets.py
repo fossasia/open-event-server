@@ -9,6 +9,7 @@ from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.ticket import Ticket, TicketTag, ticket_tags_table
 from app.models.access_code import AccessCode
+from app.models.order import Order
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.models.ticket_holder import TicketHolder
 from app.api.helpers.db import safe_query
@@ -87,6 +88,14 @@ class TicketSchema(Schema):
                                 schema='AccessCodeSchema',
                                 many=True,
                                 type_='access-code')
+    attendees = Relationship(attribute='ticket_holders',
+                             self_view='v1.ticket_attendees',
+                             self_view_kwargs={'id': '<id>'},
+                             related_view='v1.attendee_list_post',
+                             related_view_kwargs={'ticket_id': '<id>'},
+                             schema='AttendeeSchema',
+                             many=True,
+                             type_='attendee')
 
 
 class TicketListPost(ResourceList):
@@ -95,7 +104,6 @@ class TicketListPost(ResourceList):
     """
     def before_post(self, args, kwargs, data):
         require_relationship(['event'], data)
-
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ObjectNotFound({'parameter': 'event_id'},
                                  "Event: {} not found".format(data['event_id']))
@@ -110,8 +118,6 @@ class TicketList(ResourceList):
     """
     List Tickets based on different params
     """
-    def before_post(self, args, kwargs, data):
-        require_relationship(['event'], data)
 
     def query(self, view_kwargs):
         query_ = self.session.query(Ticket)
@@ -124,10 +130,23 @@ class TicketList(ResourceList):
             # access_code - ticket :: many-to-many relationship
             query_ = Ticket.query.filter(Ticket.access_codes.any(id=access_code.id))
 
+        if view_kwargs.get('order_identifier'):
+            view_kwargs['order_id'] = safe_query(self, Order, 'identifer', view_kwargs['order_identifier'],
+                                                 'order_identifer').id
+        if view_kwargs.get('order_id'):
+            order = safe_query(self, Order, 'id', view_kwargs['order_id'], 'order_id')
+            ticket_ids = []
+            for ticket in order.tickets:
+                ticket_ids.append(ticket.id)
+            query_ = query_.filter(Ticket.id.in_(tuple(ticket_ids)))
+
         return query_
 
     view_kwargs = True
     methods = ['GET', ]
+    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
+                  fetch_as="event_id", model=Ticket, methods="POST",
+                  check=lambda a: a.get('event_id') or a.get('event_identifier')),)
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket,
@@ -140,6 +159,7 @@ class TicketDetail(ResourceDetail):
     """
     Ticket Resource
     """
+
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('attendee_id') is not None:
             attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
@@ -149,7 +169,7 @@ class TicketDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
     decorators = (api.has_permission('is_coorganizer', fetch='event_id',
-                  fetch_as="event_id", model=Ticket, methods="PATCH,DELETE"), )
+                  fetch_as="event_id", model=Ticket, methods="PATCH,DELETE"),)
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket,

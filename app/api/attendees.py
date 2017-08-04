@@ -1,8 +1,11 @@
+from flask_jwt import current_identity
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 
 from app.api.bootstrap import api
+from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.permission_manager import has_access
 from app.models import db
 from app.models.order import Order
 from app.models.ticket_holder import TicketHolder
@@ -37,6 +40,7 @@ class AttendeeSchema(Schema):
     city = fields.Str(allow_none=True)
     state = fields.Str(allow_none=True)
     country = fields.Str(allow_none=True)
+    ticket_id = fields.Str(allow_none=True)
     is_checked_in = fields.Boolean()
     pdf_url = fields.Url(required=True)
     ticket = Relationship(attribute='ticket',
@@ -55,65 +59,78 @@ class AttendeeSchema(Schema):
                          type_='event')
 
 
-class AttendeeList(ResourceList):
+class AttendeeListPost(ResourceList):
     """
-    List and create Attendees
+       List and create Attendees through direct URL
     """
 
     def before_post(self, args, kwargs, data):
-        require_relationship(['event'], data)
+        require_relationship(['ticket', 'event'], data)
 
+    def before_get(self, args, kwargs):
+        if not has_access('is_admin'):
+            raise ForbiddenException({'source': ''}, 'You are not authorized to access this.')
+
+    decorators = (jwt_required,)
+    schema = AttendeeSchema
+    data_layer = {'session': db.session,
+                  'model': TicketHolder}
+
+
+class AttendeeList(ResourceList):
+    """
+    List Attendees
+    """
     def query(self, view_kwargs):
         query_ = self.session.query(TicketHolder)
-        if view_kwargs.get('order_id') and view_kwargs.get('ticket_id'):
+        if view_kwargs.get('order_id'):
             order = safe_query(self, Order, 'id', view_kwargs['order_id'], 'order_id')
             query_ = query_.join(Order).filter(Order.id == order.id)
 
+        if view_kwargs.get('ticket_id'):
             ticket = safe_query(self, Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
             query_ = query_.join(Ticket).filter(Ticket.id == ticket.id)
         query_ = event_query(self, query_, view_kwargs)
         return query_
 
-    def before_create_object(self, data, view_kwargs):
-        """
-        method to create object before post
-        :param data:
-        :param view_kwargs:
-        :return:
-        """
-        if view_kwargs.get('order_id') and view_kwargs.get('ticket_id'):
-            order = safe_query(self, Order, 'id', view_kwargs['order_id'], 'order_id')
-            data['order_id'] = order.id
-
-            ticket = safe_query(self, Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
-            data['ticket_id'] = ticket.id
-
-        event = None
-        if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-        if event:
-            data['event_id'] = event.id
-
     view_kwargs = True
-    decorators = (jwt_required,)
+    decorators = (api.has_permission('is_registrar', fetch="event_id", fetch_as="event_id", fetch_key_url="order_id",
+                                     model=Order),)
+    methods = ['GET', ]
     schema = AttendeeSchema
     data_layer = {'session': db.session,
                   'model': TicketHolder,
                   'methods': {
-                      'query': query,
-                      'before_create_object': before_create_object}}
+                      'query': query
+                  }}
 
 
 class AttendeeDetail(ResourceDetail):
     """
     Attendee detail by id
     """
+    def before_get_object(self, view_kwargs):
+        attendee = safe_query(self, TicketHolder, 'id', view_kwargs['id'], 'attendee_id')
+        if not has_access('is_registrar_or_user_itself', user_id=current_identity.id, event_id=attendee.event_id):
+            raise ForbiddenException({'source': 'User'}, 'You are not authorized to access this.')
+
+    def before_delete_object(self, obj, kwargs):
+        if not has_access('is_registrar', event_id=obj.event_id):
+            raise ForbiddenException({'source': 'User'}, 'You are not authorized to access this.')
+
+    def before_update_object(self, obj, data, kwargs):
+        if not has_access('is_registrar', event_id=obj.event_id):
+            raise ForbiddenException({'source': 'User'}, 'You are not authorized to access this.')
+
     decorators = (jwt_required,)
     schema = AttendeeSchema
     data_layer = {'session': db.session,
-                  'model': TicketHolder}
+                  'model': TicketHolder,
+                  'methods': {
+                      'before_get_object': before_get_object,
+                      'before_update_object': before_update_object,
+                      'before_delete_object': before_delete_object
+                  }}
 
 
 class AttendeeRelationshipRequired(ResourceRelationship):

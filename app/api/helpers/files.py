@@ -14,6 +14,16 @@ from app.models.image_size import ImageSizes
 from app.api.helpers.storage import UploadedFile, upload, generate_hash, UPLOAD_PATHS
 
 
+def make_fe_url(settings=None, path=None):
+    """
+    Create URL for frontend
+    """
+    if settings is None:
+        settings = get_settings()
+    fe_host = settings['frontend_url']
+    return fe_host if path is None else (fe_host + path)
+
+
 def get_file_name():
     return str(uuid.uuid4())
 

@@ -30,7 +30,6 @@ def is_super_admin(view, view_args, view_kwargs, *args, **kwargs):
 
 @jwt_required
 def is_admin(view, view_args, view_kwargs, *args, **kwargs):
-
     user = current_identity
     if not user.is_admin and not user.is_super_admin:
         return ForbiddenError({'source': ''}, 'Admin access is required').respond()
@@ -194,6 +193,26 @@ def is_registrar(view, view_args, view_kwargs, *args, **kwargs):
 
 
 @jwt_required
+def is_registrar_or_user_itself(view, view_args, view_kwargs, *args, **kwargs):
+    """
+    Allows admin and super admin access to any resource irrespective of id.
+    Otherwise the user can only access his/her resource.
+    """
+    user = current_identity
+    if user.is_admin or user.is_super_admin or user.id == kwargs['user_id']:
+        return view(*view_args, **view_kwargs)
+
+    if user.is_staff:
+        return view(*view_args, **view_kwargs)
+
+    event_id = kwargs['event_id']
+    if user.is_registrar(event_id) or user.is_organizer(event_id) or user.is_coorganizer(event_id):
+        return view(*view_args, **view_kwargs)
+
+    return ForbiddenError({'source': ''}, 'Registrar access is required.').respond()
+
+
+@jwt_required
 def is_track_organizer(view, view_args, view_kwargs, *args, **kwargs):
     """
     Allows Organizer, Co-organizer and Track Organizer to access the resource(s).
@@ -227,6 +246,7 @@ def user_event(view, view_args, view_kwargs, *args, **kwargs):
     user = current_identity
     view_kwargs['user_id'] = user.id
     return view(*view_args, **view_kwargs)
+
 
 
 def accessible_role_based_events(view, view_args, view_kwargs, *args, **kwargs):
@@ -272,7 +292,8 @@ permissions = {
     'is_coorganizer_or_user_itself': is_coorganizer_or_user_itself,
     'create_event': create_event,
     'is_user_itself': is_user_itself,
-    'is_coorganizer_endpoint_related_to_event': is_coorganizer_endpoint_related_to_event
+    'is_coorganizer_endpoint_related_to_event': is_coorganizer_endpoint_related_to_event,
+    'is_registrar_or_user_itself': is_registrar_or_user_itself
 }
 
 
@@ -316,6 +337,12 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         check = kwargs['check']
         if not check(view_kwargs):
             return ForbiddenError({'source': ''}, 'Access forbidden').respond()
+
+    # leave_if checks if we have to bypass this request on the basis of lambda function
+    if 'leave_if' in kwargs:
+        check = kwargs['leave_if']
+        if check(view_kwargs):
+            return view(*view_args, **view_kwargs)
 
     # If event_identifier in route instead of event_id
     if 'event_identifier' in view_kwargs:
@@ -401,6 +428,13 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
 
 
 def has_access(access_level, **kwargs):
+    """
+    The method to check if the logged in user has specified access
+    level or nor
+    :param string access_level: name of access level
+    :param dict kwargs: This is directly passed to permission manager
+    :return: bool: True if passes the access else False
+    """
     if access_level in permissions:
         auth = permissions[access_level](lambda *a, **b: True, (), {}, (), **kwargs)
         if type(auth) is bool and auth is True:

@@ -37,7 +37,6 @@ def jwt_required(fn, realm=None):
     :param fn: function to be decorated
     :param realm: an optional realm
     """
-
     @wraps(fn)
     def decorator(*args, **kwargs):
         _jwt_required(realm or app.config['JWT_DEFAULT_REALM'])
