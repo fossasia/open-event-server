@@ -9624,6 +9624,56 @@ Delete a single speakers call.
           }
         }
 
+## Get Speakers Call for an Event [/v1/events/{event_identifier}/speakers-call]
+
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+
+### Get Speakers Call Details for an Event [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/speakers-calls/1/relationships/event",
+                            "related": "/v1/speakers-calls/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "announcement": "Speaker Call Announcement",
+                    "ends-at": "2017-06-20T01:24:47.500127+00:00",
+                    "hash": "hash",
+                    "starts-at": "2017-06-01T01:24:47.500127+00:00",
+                    "privacy": "public"
+                },
+                "type": "speakers-call",
+                "id": "1",
+                "links": {
+                    "self": "/v1/speakers-calls/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/speakers-calls/1"
+            }
+        }
+
+
 # Group Sponsors
 Data related to the various sponsors with their level, url and images associated with a specific event.
 
