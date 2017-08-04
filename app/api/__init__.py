@@ -48,6 +48,7 @@ from app.api.modules import ModuleDetail
 from app.api.custom_placeholders import CustomPlaceholderList, CustomPlaceholderDetail, CustomPlaceholderRelationship
 from app.api.activities import ActivityList, ActivityDetail
 from app.api.orders import OrdersList, OrderDetail, OrderRelationship, ChargeList, OrdersListPost
+from app.api.event_statistics import EventStatisticsGeneralDetail
 
 # users
 api.route(UserList, 'user_list', '/users')
@@ -386,11 +387,13 @@ api.route(StripeAuthorizationDetail, 'stripe_authorization_detail',  '/stripe-au
 api.route(StripeAuthorizationRelationship, 'stripe_authorization_event',
           '/stripe-authorization/<int:id>/relationships/event')
 
+
 # Orders API
 api.route(OrdersListPost, 'order_list_post', '/orders')
 api.route(OrdersList, 'orders_list', '/orders', '/events/<int:event_id>/orders',
           '/events/<event_identifier>/orders')
 api.route(OrderDetail, 'order_detail', '/orders/<identifier>')
+
 # Charges API
 api.route(ChargeList, 'charge_list', '/orders/<identifier>/charge', '/orders/<identifier>/charge')
 api.route(OrderRelationship, 'order_attendee', '/orders/<identifier>/relationships/attendee')
@@ -399,3 +402,7 @@ api.route(OrderRelationship, 'order_user', '/orders/<identifier>/relationships/u
 api.route(OrderRelationship, 'order_event', '/orders/<identifier>/relationships/event')
 api.route(OrderRelationship, 'order_marketer', '/orders/<identifier>/relationships/marketer')
 api.route(OrderRelationship, 'order_discount', '/orders/<identifier>/relationships/discount-code')
+
+# Event Statistics API
+api.route(EventStatisticsGeneralDetail, 'event_statistics_general_detail', '/events/<int:id>/general-statistics',
+          '/events/<identifier>/general-statistics')
