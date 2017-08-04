@@ -42,6 +42,17 @@ class NotificationSchema(Schema):
                         )
 
 
+class NotificationListAdmin(ResourceList):
+    """
+    List all the Notification
+    """
+    decorators = (api.has_permission('is_admin'),)
+    methods = ['GET']
+    schema = NotificationSchema
+    data_layer = {'session': db.session,
+                  'model': Notification}
+
+
 class NotificationList(ResourceList):
     """
     List all the Notification
