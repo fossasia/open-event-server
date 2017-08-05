@@ -7,9 +7,7 @@ from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.notification import Notification
 from app.models.user import User
-from app.api.helpers.permissions import is_user_itself, jwt_required
 from app.api.helpers.db import safe_query
-from app.api.helpers.utilities import require_relationship
 
 
 class NotificationSchema(Schema):

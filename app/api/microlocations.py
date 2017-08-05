@@ -36,6 +36,7 @@ class MicrolocationSchema(Schema):
     floor = fields.Integer(allow_none=True)
     room = fields.Str(allow_none=True)
     sessions = Relationship(attribute='session',
+                            many=True,
                             self_view='v1.microlocation_session',
                             self_view_kwargs={'id': '<id>'},
                             related_view='v1.session_list',

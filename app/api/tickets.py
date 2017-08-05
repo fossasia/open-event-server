@@ -79,6 +79,7 @@ class TicketSchema(Schema):
                                related_view='v1.ticket_tag_list',
                                related_view_kwargs={'ticket_id': '<id>'},
                                schema='TicketTagSchema',
+                               many=True,
                                type_='ticket-tag')
     access_codes = Relationship(attribute='access_codes',
                                 self_view='v1.ticket_access_code',
