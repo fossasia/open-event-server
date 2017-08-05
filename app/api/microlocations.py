@@ -26,7 +26,7 @@ class MicrolocationSchema(Schema):
         type_ = 'microlocation'
         self_view = 'v1.microlocation_detail'
         self_view_kwargs = {'id': '<id>'}
-        self_view_many = 'v1.session_list'
+        self_view_many = 'v1.microlocation_list_post'
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
