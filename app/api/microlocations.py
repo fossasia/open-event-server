@@ -26,7 +26,7 @@ class MicrolocationSchema(Schema):
         type_ = 'microlocation'
         self_view = 'v1.microlocation_detail'
         self_view_kwargs = {'id': '<id>'}
-        self_view_many = 'v1.session_list'
+        self_view_many = 'v1.microlocation_list_post'
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
@@ -36,6 +36,7 @@ class MicrolocationSchema(Schema):
     floor = fields.Integer(allow_none=True)
     room = fields.Str(allow_none=True)
     sessions = Relationship(attribute='session',
+                            many=True,
                             self_view='v1.microlocation_session',
                             self_view_kwargs={'id': '<id>'},
                             related_view='v1.session_list',
