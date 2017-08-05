@@ -63,8 +63,8 @@ class NotificationList(ResourceList):
         :return:
         """
         query_ = self.session.query(Notification)
-        if view_kwargs.get('id'):
-            user = safe_query(self, User, 'id', view_kwargs['id'], 'id')
+        if view_kwargs.get('user_id'):
+            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(User).filter(User.id == user.id)
         return query_
 
