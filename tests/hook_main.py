@@ -636,6 +636,19 @@ def copyright_delete(transaction):
         db.session.commit()
 
 
+@hooks.before("Copyright > Get Event Copyright for an Event > Event Copyright Details")
+def event_copyright(transaction):
+    """
+    GET /events/1/event-copyright
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        copyright = EventCopyrightFactory()
+        db.session.add(copyright)
+        db.session.commit()
+
+
 # ------------------------- Invoices -------------------------
 @hooks.before("Invoices > Event Invoices > Get Event Invoices")
 def invoice_get_list(transaction):
@@ -1191,6 +1204,19 @@ def speakers_call_delete(transaction):
         db.session.commit()
 
 
+@hooks.before("Speakers Calls > Get Speakers Call for an Event > Get Speakers Call Details for an Event")
+def speakers_call_event(transaction):
+    """
+    GET /events/1/speakers-call
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        speakers_call = SpeakersCallFactory()
+        db.session.add(speakers_call)
+        db.session.commit()
+
+
 # ------------------------- Sponsors -------------------------
 @hooks.before("Sponsors > Sponsors Get Collection > List All Sponsors")
 def sponsor_get_list(transaction):
@@ -1691,6 +1717,19 @@ def notification_get_list(transaction):
         db.session.commit()
 
 
+@hooks.before("Notifications > Notifications Admin Collection > List All Notifications")
+def notification_get_admin_list(transaction):
+    """
+    GET /notifications
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        notification = NotificationFactory()
+        db.session.add(notification)
+        db.session.commit()
+
+
 @hooks.before("Notifications > Notification Detail > Notification Detail")
 def notification_get_detail(transaction):
     """
@@ -1731,7 +1770,20 @@ def notification_delete(transaction):
 
 
 # ------------------------- Email Notifications -------------------------
-@hooks.before("Email Notifications > Email Notifications Collection Get > List All Email Notifications")
+@hooks.before("Email Notifications > Email Notifications Admin Collection > List All Email Notifications")
+def email_notification_get_admin_list(transaction):
+    """
+    GET /email-notifications
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        email_notification = EmailNotificationFactory()
+        db.session.add(email_notification)
+        db.session.commit()
+
+
+@hooks.before("Email Notifications > Email Notifications Collection > List All Email Notifications")
 def email_notification_get_list(transaction):
     """
     GET /users/2/email-notifications

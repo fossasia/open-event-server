@@ -129,7 +129,6 @@ class UserList(ResourceList):
             del uploaded_images['large_image_url']
             self.session.query(User).filter_by(id=user.id).update(uploaded_images)
 
-
     decorators = (api.has_permission('is_admin', methods="GET"),)
     schema = UserSchema
     data_layer = {'session': db.session,

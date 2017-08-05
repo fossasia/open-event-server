@@ -23,6 +23,8 @@ from flask_cors import CORS
 from flask_rest_jsonapi.errors import jsonapi_errors
 from flask_rest_jsonapi.exceptions import JsonApiException
 from healthcheck import HealthCheck, EnvironmentDump
+from apscheduler.schedulers.background import BackgroundScheduler
+from pytz import utc
 
 import sqlalchemy as sa
 
@@ -34,6 +36,8 @@ from app.api.helpers.cache import cache
 from werkzeug.contrib.profiler import ProfilerMiddleware
 from app.views import BlueprintsManager
 from app.api.helpers.auth import AuthManager
+from app.api.helpers.scheduled_jobs import send_after_event_mail, send_event_fee_notification, \
+    send_event_fee_notification_followup
 from app.models.event import Event, EventsUsers
 from app.models.role_invite import RoleInvite
 from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations, check_migrations
@@ -182,17 +186,17 @@ def update_sent_state(sender=None, body=None, **kwargs):
 # register celery tasks. removing them will cause the tasks to not function. so don't remove them
 # it is important to register them after celery is defined to resolve circular imports
 
-# import api.helpers.tasks
+import api.helpers.tasks
 # import helpers.tasks
 
 
-# scheduler = BackgroundScheduler(timezone=utc)
+scheduler = BackgroundScheduler(timezone=utc)
 # scheduler.add_job(send_mail_to_expired_orders, 'interval', hours=5)
 # scheduler.add_job(empty_trash, 'cron', hour=5, minute=30)
-# scheduler.add_job(send_after_event_mail, 'cron', hour=5, minute=30)
-# scheduler.add_job(send_event_fee_notification, 'cron', day=1)
-# scheduler.add_job(send_event_fee_notification_followup, 'cron', day=15)
-# scheduler.start()
+scheduler.add_job(send_after_event_mail, 'cron', hour=5, minute=30)
+scheduler.add_job(send_event_fee_notification, 'cron', day=1)
+scheduler.add_job(send_event_fee_notification_followup, 'cron', day=15)
+scheduler.start()
 
 
 @app.errorhandler(500)

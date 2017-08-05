@@ -272,6 +272,7 @@ class EventSchema(Schema):
                                 related_view='v1.access_code_list',
                                 related_view_kwargs={'event_id': '<id>'},
                                 schema='AccessCodeSchema',
+                                many=True,
                                 type_='access-code')
     attendees = Relationship(attribute='attendees',
                              self_view='v1.event_attendees',

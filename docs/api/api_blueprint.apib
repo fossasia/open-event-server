@@ -6613,6 +6613,60 @@ Delete a single event copyright.
         }
 
 
+## Get Event Copyright for an Event [/v1/events/{event_identifier}/event-copyright{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `year`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+
+### Event Copyright Details [GET]
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/event-copyright/1/relationships/event",
+                            "related": "/v1/event-copyrights/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "logo-url": "http://logo-url.com",
+                    "holder-url": "http://holder-url.com",
+                    "licence": "Licence text",
+                    "year": 2007,
+                    "licence-url": "http://licence-url.com",
+                    "holder": "Name of Holder"
+                },
+                "type": "event-copyright",
+                "id": "1",
+                "links": {
+                    "self": "/v1/event-copyright/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/event-copyright/1"
+            }
+        }
+
+
 # Group Invoices
 Data related to an invoice for the event.
 
@@ -9624,6 +9678,56 @@ Delete a single speakers call.
           }
         }
 
+## Get Speakers Call for an Event [/v1/events/{event_identifier}/speakers-call]
+
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+
+### Get Speakers Call Details for an Event [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/speakers-calls/1/relationships/event",
+                            "related": "/v1/speakers-calls/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "announcement": "Speaker Call Announcement",
+                    "ends-at": "2017-06-20T01:24:47.500127+00:00",
+                    "hash": "hash",
+                    "starts-at": "2017-06-01T01:24:47.500127+00:00",
+                    "privacy": "public"
+                },
+                "type": "speakers-call",
+                "id": "1",
+                "links": {
+                    "self": "/v1/speakers-calls/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/speakers-calls/1"
+            }
+        }
+
+
 # Group Sponsors
 Data related to the various sponsors with their level, url and images associated with a specific event.
 
@@ -11905,6 +12009,62 @@ Get a list of Notifications.
         }
 
 
+## Notifications Admin Collection [/v1/notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `message`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List All Notifications [GET]
+Get a list of Notifications.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "user": {
+                            "links": {
+                                "self": "/v1/notifications/1/relationships/user",
+                                "related": "/v1/notifications/1/user"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "message": "example",
+                        "received-at": "2017-06-23T04:40:37.239724+00:00",
+                        "is-read": false,
+                        "title": "example"
+                    },
+                    "type": "notification",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/notifications/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/notifications"
+            }
+        }
+
+
 ## Notification Detail [/v1/notifications/{notification_id}]
 + Parameters
     + notification_id: 1 (integer) - ID of the notifcaiton in the form of an integer
@@ -12034,6 +12194,7 @@ Delete a single notification.
         }
 
 # Group Email Notifications
+
 To turn Email Notifications ON/OFF related to the various events, session approval etc.
 
 | Parameter | Description | Type | Required |
@@ -12045,94 +12206,72 @@ To turn Email Notifications ON/OFF related to the various events, session approv
 | `after-ticket-purchase` | Email notification after ticket purchase | boolean (default=`true`) | - |
 | `event-id` | Event specific notification preferences | integer | - |
 
-## Email Notifications Collection Post [/v1/email-notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+
+## Email Notifications Admin Collection [/v1/email-notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `next-event`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### Create Email Notificaiton [POST]
-Create a new email notification.
+### List All Email Notifications [GET]
+Get a list of Notifications.
 
-+ Request (application/vnd.api+json)
++ Request
 
     + Headers
 
+            Accept: application/vnd.api+json
+
             Authorization: JWT <Auth Key>
 
-    + Body
-
-            {
-              "data": {
-                "attributes": {
-                  "next-event": false,
-                  "new-paper": false,
-                  "session-accept-reject": false,
-                  "session-schedule": true,
-                  "after-ticket-purchase": true,
-                  "event-id": 1
-                },
-                "relationships": {
-                  "user": {
-                    "data": {
-                      "type": "user",
-                      "id": "2"
-                    }
-                  },
-                  "event": {
-                    "data": {
-                      "type": "event",
-                      "id": "1"
-                    }
-                  }
-                },
-                "type": "email-notification"
-              }
-            }
-
-+ Response 201 (application/vnd.api+json)
++ Response 200 (application/vnd.api+json)
 
         {
-            "data": {
-                "relationships": {
-                    "user": {
-                        "links": {
-                            "self": "/v1/email-notifications/1/relationships/user",
-                            "related": "/v1/email-notifications/1/user"
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "user": {
+                            "links": {
+                                "self": "/v1/email-notifications/1/relationships/user",
+                                "related": "/v1/email-notifications/1/user"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/email-notifications/1/relationships/event",
+                                "related": "/v1/email-notifications/1/event"
+                            }
                         }
                     },
-                    "event": {
-                        "links": {
-                            "self": "/v1/email-notifications/1/relationships/event",
-                            "related": "/v1/email-notifications/1/event"
-                        }
+                    "attributes": {
+                        "next-event": false,
+                        "new-paper": false,
+                        "session-accept-reject": false,
+                        "session-schedule": true,
+                        "after-ticket-purchase": true,
+                        "event-id": 1
+                    },
+                    "type": "email-notification",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/email-notifications/1"
                     }
-                },
-                "attributes": {
-                    "next-event": false,
-                    "new-paper": false,
-                    "session-accept-reject": false,
-                    "session-schedule": true,
-                    "after-ticket-purchase": true,
-                    "event-id": 1
-                },
-                "type": "email-notification",
-                "id": "1",
-                "links": {
-                    "self": "/v1/email-notifications/1"
                 }
-            },
+            ],
             "jsonapi": {
                 "version": "1.0"
             },
             "links": {
-                "self": "/v1/email-notifications/1"
+                "self": "/v1/email-notifications"
             }
         }
 
 
-## Email Notifications Collection Get [/v1/users/{user_id}/email-notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Email Notifications Collection [/v1/users/{user_id}/email-notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + user_id: 2 (integer) - ID of the specific user in integer
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -12195,6 +12334,7 @@ Get a list of Notifications.
                 "self": "/v1/users/2/email-notifications"
             }
         }
+
 
 ## Email Notification Detail [/v1/email-notifications/{email_notification_id}]
 + Parameters

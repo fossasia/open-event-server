@@ -8,7 +8,6 @@ from app.models.event_sub_topic import EventSubTopic
 from app.models.event import Event
 from app.models.event_topic import EventTopic
 from app.api.bootstrap import api
-from app.api.helpers.permissions import jwt_required
 from app.api.helpers.db import safe_query
 from app.api.custom_placeholders import CustomPlaceholder
 from app.api.helpers.utilities import require_relationship
@@ -34,6 +33,7 @@ class EventSubTopicSchema(Schema):
     name = fields.Str(required=True)
     slug = fields.Str(dump_only=True)
     events = Relationship(attribute='event',
+                          many=True,
                           self_view='v1.event_topic_event',
                           self_view_kwargs={'id': '<id>'},
                           related_view='v1.event_list',

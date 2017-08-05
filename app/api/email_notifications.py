@@ -9,9 +9,6 @@ from app.models.email_notification import EmailNotification
 from app.models.user import User
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.db import safe_query
-from app.api.helpers.utilities import require_relationship
-from app.api.helpers.permission_manager import has_access
-from app.api.helpers.exceptions import ForbiddenException
 
 
 class EmailNotificationSchema(Schema):
@@ -53,19 +50,13 @@ class EmailNotificationSchema(Schema):
                         )
 
 
-class EmailNotificationListPost(ResourceList):
+class EmailNotificationListAdmin(ResourceList):
     """
     List and create email notifications
     """
-
-    def before_post(self, args, kwargs, data):
-        require_relationship(['user'], data)
-        if not has_access('is_user_itself', id=data['user']):
-            raise ForbiddenException({'source': ''}, 'You need to be the user.')
-
-    view_kwargs = True
-    methods = ['POST', ]
+    methods = ['GET', ]
     schema = EmailNotificationSchema
+    decorators = (api.has_permission('is_admin'),)
     data_layer = {'session': db.session,
                   'model': EmailNotification}
 

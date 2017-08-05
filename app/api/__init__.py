@@ -3,8 +3,8 @@ from app.api.stripe_authorization import StripeAuthorizationList, StripeAuthoriz
     StripeAuthorizationRelationship, StripeAuthorizationListPost
 from app.api.ticket_fees import TicketFeeList, TicketFeeDetail
 from app.api.users import UserList, UserDetail, UserRelationship, VerifyUser
-from app.api.notifications import NotificationList, NotificationDetail, NotificationRelationship
-from app.api.email_notifications import EmailNotificationList, EmailNotificationListPost, EmailNotificationDetail,\
+from app.api.notifications import NotificationList, NotificationListAdmin, NotificationDetail, NotificationRelationship
+from app.api.email_notifications import EmailNotificationList, EmailNotificationListAdmin, EmailNotificationDetail,\
     EmailNotificationRelationshipOptional, EmailNotificationRelationshipRequired
 from app.api.tickets import TicketList, TicketListPost, TicketDetail, TicketRelationshipRequired,\
     TicketRelationshipOptional
@@ -65,13 +65,14 @@ api.route(UserRelationship, 'user_discount_codes', '/users/<int:id>/relationship
 api.route(UserRelationship, 'user_email_notifications', '/users/<int:id>/relationships/email-notifications')
 
 # notifications
+api.route(NotificationListAdmin, 'notification_list_admin', '/notifications')
 api.route(NotificationList, 'notification_list', '/users/<int:user_id>/notifications')
 api.route(NotificationDetail, 'notification_detail', '/notifications/<int:id>')
 api.route(NotificationRelationship, 'notification_user',
           '/notifications/<int:id>/relationships/user')
 
 # email_notifications
-api.route(EmailNotificationListPost, 'email_notification_list_post', '/email-notifications')
+api.route(EmailNotificationListAdmin, 'email_notification_list_admin', '/email-notifications')
 api.route(EmailNotificationList, 'email_notification_list', '/users/<int:id>/email-notifications')
 api.route(EmailNotificationDetail, 'email_notification_detail', '/email-notifications/<int:id>')
 api.route(EmailNotificationRelationshipRequired, 'email_notification_user',
