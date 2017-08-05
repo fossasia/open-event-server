@@ -7,7 +7,6 @@ from app.models import db
 from app.models.event_type import EventType
 from app.models.event import Event
 from app.api.bootstrap import api
-from app.api.helpers.permissions import jwt_required
 from app.api.helpers.db import safe_query
 
 

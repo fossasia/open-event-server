@@ -53,7 +53,6 @@ class RoleInviteSchema(Schema):
                     raise UnprocessableEntity({'pointer': '/data/attributes/role'},
                                               "Role id do not match role name")
 
-
     id = fields.Str(dump_only=True)
     email = fields.Str(required=True)
     hash = fields.Str(dump_only=True)
