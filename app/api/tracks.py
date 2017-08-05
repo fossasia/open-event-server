@@ -32,12 +32,6 @@ class TrackSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    @pre_load
-    def remove_font_color(self, data):
-        if data.get('font_color'):
-            del data['font_color']
-        return data
-
     @validates_schema
     def valid_color(self, data):
         if not re.search(r'^#(?:[0-9a-fA-F]{3}){1,2}$', data['color']):
@@ -47,7 +41,7 @@ class TrackSchema(Schema):
     name = fields.Str(required=True)
     description = fields.Str(allow_none=True)
     color = fields.Str(required=True)
-    font_color = fields.Str(allow_none=True)
+    font_color = fields.Str(allow_none=True, dump_only=True)
     event = Relationship(attribute='event',
                          self_view='v1.track_event',
                          self_view_kwargs={'id': '<id>'},
