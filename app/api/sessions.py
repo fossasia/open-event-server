@@ -118,6 +118,7 @@ class SessionSchema(Schema):
                          type_='event')
     speakers = Relationship(
         attribute='speakers',
+        many=True,
         self_view='v1.session_speaker',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.speaker_list',

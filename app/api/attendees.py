@@ -10,7 +10,6 @@ from app.models import db
 from app.models.order import Order
 from app.models.ticket_holder import TicketHolder
 from app.models.ticket import Ticket
-from app.models.event import Event
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.utilities import dasherize
 from app.api.helpers.db import safe_query
