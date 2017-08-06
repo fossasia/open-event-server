@@ -51,6 +51,8 @@ from app.api.orders import OrdersList, OrderDetail, OrderRelationship, ChargeLis
 from app.api.event_statistics import EventStatisticsGeneralDetail
 from app.api.mails import MailList, MailDetail
 from app.api.admin_statistics_api.sessions import AdminStatisticsSessionDetail
+from app.api.admin_statistics_api.events import AdminStatisticsEventDetail
+from app.api.admin_statistics_api.users import AdminStatisticsUserDetail
 
 
 # users
@@ -415,4 +417,8 @@ api.route(OrderRelationship, 'order_discount', '/orders/<identifier>/relationshi
 api.route(EventStatisticsGeneralDetail, 'event_statistics_general_detail', '/events/<int:id>/general-statistics',
           '/events/<identifier>/general-statistics')
 
+# Admin Statistics API
 api.route(AdminStatisticsSessionDetail, 'admin_statistics_session_detail', '/admin/statistics/sessions')
+api.route(AdminStatisticsEventDetail, 'admin_statistics_event_detail', '/admin/statistics/events')
+api.route(AdminStatisticsUserDetail, 'admin_statistics_user_detail', '/admin/statistics/users')
+
