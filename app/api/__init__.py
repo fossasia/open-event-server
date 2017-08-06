@@ -50,6 +50,8 @@ from app.api.activities import ActivityList, ActivityDetail
 from app.api.orders import OrdersList, OrderDetail, OrderRelationship, ChargeList, OrdersListPost
 from app.api.event_statistics import EventStatisticsGeneralDetail
 from app.api.mails import MailList, MailDetail
+from app.api.admin_statistics_api.sessions import AdminStatisticsSessionDetail
+
 
 # users
 api.route(UserList, 'user_list', '/users')
@@ -412,3 +414,5 @@ api.route(OrderRelationship, 'order_discount', '/orders/<identifier>/relationshi
 # Event Statistics API
 api.route(EventStatisticsGeneralDetail, 'event_statistics_general_detail', '/events/<int:id>/general-statistics',
           '/events/<identifier>/general-statistics')
+
+api.route(AdminStatisticsSessionDetail, 'admin_statistics_session_detail', '/admin/statistics/sessions')
