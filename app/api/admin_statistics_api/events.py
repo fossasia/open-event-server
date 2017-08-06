@@ -9,6 +9,7 @@ from app.api.bootstrap import api
 from app.models import db
 from app.models.event import Event
 from app.api.data_layers.NoModelLayer import NoModelLayer
+from app.api.helpers.db import get_count
 
 
 class AdminStatisticsEventSchema(Schema):
@@ -27,19 +28,15 @@ class AdminStatisticsEventSchema(Schema):
     draft = fields.Method("events_draft_count")
     published = fields.Method("events_published_count")
     past = fields.Method("events_past_count")
-    total = fields.Method("events_total_count")
 
     def events_draft_count(self, obj):
-        return Event.query.filter_by(state='draft').count()
+        return get_count(Event.query.filter_by(state='draft'))
 
     def events_published_count(self, obj):
-        return Event.query.filter_by(state='published').count()
+        return get_count(Event.query.filter_by(state='published'))
 
     def events_past_count(self, obj):
-        return Event.query.filter(Event.ends_at < datetime.now(pytz.utc)).count()
-
-    def events_total_count(self, obj):
-        return Event.query.count()
+        return get_count(Event.query.filter(Event.ends_at < datetime.now(pytz.utc)))
 
 
 class AdminStatisticsEventDetail(ResourceDetail):

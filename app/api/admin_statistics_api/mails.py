@@ -9,6 +9,7 @@ from app.api.bootstrap import api
 from app.models import db
 from app.models.mail import Mail
 from app.api.data_layers.NoModelLayer import NoModelLayer
+from app.api.helpers.db import get_count
 
 
 class AdminStatisticsMailSchema(Schema):
@@ -28,22 +29,18 @@ class AdminStatisticsMailSchema(Schema):
     three_days = fields.Method("mail_last_3_days")
     seven_days = fields.Method("mail_last_7_days")
     thirty_days = fields.Method("mail_last_30_days")
-    total = fields.Method("mail_total")
 
     def mail_last_1_day(self, obj):
-        return Mail.query.filter(datetime.now(pytz.utc) - Mail.time <= timedelta(days=1)).count()
+        return get_count(Mail.query.filter(datetime.now(pytz.utc) - Mail.time <= timedelta(days=1)))
 
     def mail_last_3_days(self, obj):
-        return Mail.query.filter(datetime.now(pytz.utc) - Mail.time <= timedelta(days=3)).count()
+        return get_count(Mail.query.filter(datetime.now(pytz.utc) - Mail.time <= timedelta(days=3)))
 
     def mail_last_7_days(self, obj):
-        return Mail.query.filter(datetime.now(pytz.utc) - Mail.time <= timedelta(days=7)).count()
+        return get_count(Mail.query.filter(datetime.now(pytz.utc) - Mail.time <= timedelta(days=7)))
 
     def mail_last_30_days(self, obj):
-        return Mail.query.filter(datetime.now(pytz.utc) - Mail.time <= timedelta(days=30)).count()
-
-    def mail_total(self, obj):
-        return Mail.query.count()
+        return get_count(Mail.query.filter(datetime.now(pytz.utc) - Mail.time <= timedelta(days=30)))
 
 
 class AdminStatisticsMailDetail(ResourceDetail):
