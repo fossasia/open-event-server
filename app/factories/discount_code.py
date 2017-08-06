@@ -25,3 +25,4 @@ class DiscountCodeFactory(factory.alchemy.SQLAlchemyModelFactory):
     used_for = "event"
     tickets = "event"
     user_id = 1
+    event_id = None
