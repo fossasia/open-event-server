@@ -1,6 +1,7 @@
 import os
 import cStringIO
 import urllib
+import urlparse
 import uuid
 
 import PIL
@@ -163,11 +164,17 @@ def create_save_image_sizes(image_file, image_sizes_type, unique_identifier=None
     return new_images
 
 
-def make_frontend_url(path=None, parameters=None):
+def make_frontend_url(path, parameters=None):
     """
     Create URL for frontend
     """
     settings = get_settings()
-    query_string = '?' + urllib.urlencode(parameters) if parameters else ''
-    front_end_host = settings['frontend_url'] if settings['frontend_url'] else ""
-    return front_end_host + query_string if path is None else (front_end_host + path + query_string)
+    frontend_url = urlparse.urlparse(settings['frontend_url'] if settings['frontend_url'] else '')
+    return urlparse.urlunparse((
+        frontend_url.scheme,
+        frontend_url.netloc,
+        path,
+        '',
+        urllib.urlencode(parameters) if parameters else '',
+        ''
+    ))
