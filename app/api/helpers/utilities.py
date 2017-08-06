@@ -58,3 +58,31 @@ def represents_int(value):
         return True
     except:
         return False
+
+
+def is_downloadable(url):
+    """
+    Does the url contain a downloadable resource
+    """
+    h = requests.head(url, allow_redirects=True)
+    header = h.headers
+    content_type = header.get('content-type')
+    # content_length = header.get('content-length', 1e10)
+    if 'text' in content_type.lower():
+        return False
+    if 'html' in content_type.lower():
+        return False
+    return True
+
+
+def get_filename_from_cd(cd):
+    """
+    Get filename and ext from content-disposition
+    """
+    if not cd:
+        return '', ''
+    fname = re.findall('filename=(.+)', cd)
+    if len(fname) == 0:
+        return '', ''
+    fn = fname[0].rsplit('.', 1)
+    return fn[0], '' if len(fn) == 1 else ('.' + fn[1])
