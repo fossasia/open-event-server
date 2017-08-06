@@ -93,3 +93,7 @@ def get_filename_from_cd(cd):
 # store task results in case of testing
 # state and info
 TASK_RESULTS = {}
+
+
+class EmptyObject(object):
+    pass
