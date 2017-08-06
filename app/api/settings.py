@@ -135,6 +135,9 @@ class SettingSchemaAdmin(Schema):
     android_app_url = fields.Str(allow_none=True)
     web_app_url = fields.Str(allow_none=True)
 
+    # Url of Frontend
+    frontend_url = fields.Url(allow_none=True)
+
 
 class SettingSchemaNonAdmin(Schema):
     """
@@ -175,6 +178,9 @@ class SettingSchemaNonAdmin(Schema):
     #
     android_app_url = fields.Str(allow_none=True)
     web_app_url = fields.Str(allow_none=True)
+
+    # Url of Frontend
+    frontend_url = fields.Url(allow_none=True)
 
 
 class SettingDetail(ResourceDetail):

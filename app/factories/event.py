@@ -45,3 +45,6 @@ class EventFactoryBasic(factory.alchemy.SQLAlchemyModelFactory):
     pentabarf_url = common.url_
     ical_url = common.url_
     xcal_url = common.url_
+    event_type_id = None
+    event_topic_id = None
+    event_sub_topic_id = None

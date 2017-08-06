@@ -331,6 +331,84 @@ def event_delete(transaction):
         db.session.commit()
 
 
+@hooks.before("Events > Events of an Event Type > List All Events of an Event Type")
+def evnt_type_event_get_list(transaction):
+    """
+    GET /event-types/1/events
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_type = EventTypeFactory()
+        db.session.add(event_type)
+
+        event = EventFactoryBasic(event_type_id=1)
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Events > Events under an Event Topic > List All Events under an Event Topic")
+def evnt_topic_event_get_list(transaction):
+    """
+    GET /event-topics/1/events
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_topic = EventTopicFactory()
+        db.session.add(event_topic)
+
+        event = EventFactoryBasic(event_topic_id=1)
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Events > Events under an Event Sub-topic > List All Events under an Event Sub-topic")
+def evnt_sub_topic_event_get_list(transaction):
+    """
+    GET /event-sub-topics/1/events
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_sub_topic = EventSubTopicFactory()
+        db.session.add(event_sub_topic)
+
+        event = EventFactoryBasic(event_sub_topic_id=1)
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Events > Events under a User > List All Events under a User")
+def user_event_get_list(transaction):
+    """
+    GET /users/1/events
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Events > Events for a Discount Code > List All Events for a Discount Code")
+def discount_code_event_get_list(transaction):
+    """
+    GET /discount-codes/1/events
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+        discount_code = DiscountCodeFactory(event_id=1)
+        db.session.add(discount_code)
+        db.session.commit()
+
+
 @hooks.before("Events > Get Event for a Ticket > Event Details for a Ticket")
 def event_ticket(transaction):
     """
@@ -627,6 +705,19 @@ def copyright_patch(transaction):
 def copyright_delete(transaction):
     """
     DELETE /event-copyright/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        copyright = EventCopyrightFactory()
+        db.session.add(copyright)
+        db.session.commit()
+
+
+@hooks.before("Copyright > Get Event Copyright for an Event > Event Copyright Details")
+def event_copyright(transaction):
+    """
+    GET /events/1/event-copyright
     :param transaction:
     :return:
     """
@@ -1191,6 +1282,19 @@ def speakers_call_delete(transaction):
         db.session.commit()
 
 
+@hooks.before("Speakers Calls > Get Speakers Call for an Event > Get Speakers Call Details for an Event")
+def speakers_call_event(transaction):
+    """
+    GET /events/1/speakers-call
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        speakers_call = SpeakersCallFactory()
+        db.session.add(speakers_call)
+        db.session.commit()
+
+
 # ------------------------- Sponsors -------------------------
 @hooks.before("Sponsors > Sponsors Get Collection > List All Sponsors")
 def sponsor_get_list(transaction):
@@ -1691,6 +1795,19 @@ def notification_get_list(transaction):
         db.session.commit()
 
 
+@hooks.before("Notifications > Notifications Admin Collection > List All Notifications")
+def notification_get_admin_list(transaction):
+    """
+    GET /notifications
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        notification = NotificationFactory()
+        db.session.add(notification)
+        db.session.commit()
+
+
 @hooks.before("Notifications > Notification Detail > Notification Detail")
 def notification_get_detail(transaction):
     """
@@ -1731,7 +1848,20 @@ def notification_delete(transaction):
 
 
 # ------------------------- Email Notifications -------------------------
-@hooks.before("Email Notifications > Email Notifications Collection Get > List All Email Notifications")
+@hooks.before("Email Notifications > Email Notifications Admin Collection > List All Email Notifications")
+def email_notification_get_admin_list(transaction):
+    """
+    GET /email-notifications
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        email_notification = EmailNotificationFactory()
+        db.session.add(email_notification)
+        db.session.commit()
+
+
+@hooks.before("Email Notifications > Email Notifications Collection > List All Email Notifications")
 def email_notification_get_list(transaction):
     """
     GET /users/2/email-notifications

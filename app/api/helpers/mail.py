@@ -7,7 +7,8 @@ from app.api.helpers.db import save_to_db
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_mails import MAILS
 from app.api.helpers.utilities import string_empty
-from app.models.mail import Mail, USER_CONFIRM, NEW_SESSION, SESSION_ACCEPT_REJECT, EVENT_ROLE
+from app.models.mail import Mail, USER_CONFIRM, NEW_SESSION, SESSION_ACCEPT_REJECT,\
+    EVENT_ROLE, AFTER_EVENT, MONTHLY_PAYMENT_EMAIL, MONTHLY_PAYMENT_FOLLOWUP_EMAIL
 
 
 def send_email(to, action, subject, html):
@@ -135,5 +136,61 @@ def send_email_role_invite(email, role_name, event_name, link):
             role=role_name,
             event=event_name,
             link=link
+        )
+    )
+
+
+def send_email_after_event(email, event_name, upcoming_events):
+    """email for role invite"""
+    send_email(
+        to=email,
+        action=AFTER_EVENT,
+        subject=MAILS[AFTER_EVENT]['subject'].format(
+            event_name=event_name
+        ),
+        html=MAILS[AFTER_EVENT]['message'].format(
+            email=email,
+            event_name=event_name,
+            upcoming_events=upcoming_events
+        )
+    )
+
+
+def send_email_for_monthly_fee_payment(email, event_name, previous_month, amount, app_name, link):
+    """email for monthly fee payment"""
+    send_email(
+        to=email,
+        action=MONTHLY_PAYMENT_EMAIL,
+        subject=MAILS[MONTHLY_PAYMENT_EMAIL]['subject'].format(
+            date=previous_month,
+            event_name=event_name
+        ),
+        html=MAILS[MONTHLY_PAYMENT_EMAIL]['message'].format(
+            email=email,
+            event_name=event_name,
+            date=previous_month,
+            amount=amount,
+            app_name=app_name,
+            payment_url=link
+        )
+    )
+
+
+def send_followup_email_for_monthly_fee_payment(email, event_name, previous_month, amount, app_name, link):
+    """followup email for monthly fee payment"""
+    send_email(
+        to=email,
+        action=MONTHLY_PAYMENT_FOLLOWUP_EMAIL,
+        subject=MAILS[MONTHLY_PAYMENT_FOLLOWUP_EMAIL]['subject'].format(
+            date=previous_month,
+            event_name=event_name
+        ),
+        html=MAILS[MONTHLY_PAYMENT_FOLLOWUP_EMAIL]['message'].format(
+            email=email,
+            event_name=event_name,
+            date=previous_month,
+            amount=amount,
+            app_name=app_name,
+            payment_url=link
         )
     )

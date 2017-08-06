@@ -30,7 +30,6 @@ def is_super_admin(view, view_args, view_kwargs, *args, **kwargs):
 
 @jwt_required
 def is_admin(view, view_args, view_kwargs, *args, **kwargs):
-
     user = current_identity
     if not user.is_admin and not user.is_super_admin:
         return ForbiddenError({'source': ''}, 'Admin access is required').respond()
@@ -339,6 +338,12 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         if not check(view_kwargs):
             return ForbiddenError({'source': ''}, 'Access forbidden').respond()
 
+    # leave_if checks if we have to bypass this request on the basis of lambda function
+    if 'leave_if' in kwargs:
+        check = kwargs['leave_if']
+        if check(view_kwargs):
+            return view(*view_args, **view_kwargs)
+
     # If event_identifier in route instead of event_id
     if 'event_identifier' in view_kwargs:
         try:
@@ -423,6 +428,13 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
 
 
 def has_access(access_level, **kwargs):
+    """
+    The method to check if the logged in user has specified access
+    level or nor
+    :param string access_level: name of access level
+    :param dict kwargs: This is directly passed to permission manager
+    :return: bool: True if passes the access else False
+    """
     if access_level in permissions:
         auth = permissions[access_level](lambda *a, **b: True, (), {}, (), **kwargs)
         if type(auth) is bool and auth is True:

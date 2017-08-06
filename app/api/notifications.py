@@ -7,9 +7,7 @@ from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.notification import Notification
 from app.models.user import User
-from app.api.helpers.permissions import is_user_itself, jwt_required
 from app.api.helpers.db import safe_query
-from app.api.helpers.utilities import require_relationship
 
 
 class NotificationSchema(Schema):
@@ -42,6 +40,17 @@ class NotificationSchema(Schema):
                         )
 
 
+class NotificationListAdmin(ResourceList):
+    """
+    List all the Notification
+    """
+    decorators = (api.has_permission('is_admin'),)
+    methods = ['GET']
+    schema = NotificationSchema
+    data_layer = {'session': db.session,
+                  'model': Notification}
+
+
 class NotificationList(ResourceList):
     """
     List all the Notification
@@ -54,8 +63,8 @@ class NotificationList(ResourceList):
         :return:
         """
         query_ = self.session.query(Notification)
-        if view_kwargs.get('id'):
-            user = safe_query(self, User, 'id', view_kwargs['id'], 'id')
+        if view_kwargs.get('user_id'):
+            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(User).filter(User.id == user.id)
         return query_
 

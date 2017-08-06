@@ -17,3 +17,11 @@ class ForbiddenException(JsonApiException):
     """
     title = 'Access Forbidden'
     status = 403
+
+
+class MethodNotAllowed(JsonApiException):
+    """
+    Default Class to throw HTTP 405 Exception
+    """
+    title = "Method Not Allowed"
+    status = 405

@@ -9,6 +9,7 @@ from itsdangerous import Serializer
 from app.api.helpers.exceptions import UnprocessableEntity
 
 
+
 def dasherize(text):
     return text.replace('_', '-')
 
@@ -39,3 +40,21 @@ def get_serializer(secret_key='secret_key'):
 
 def str_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
+
+
+# From http://stackoverflow.com/a/3425124
+def monthdelta(date, delta):
+    m, y = (date.month + delta) % 12, date.year + (date.month + delta - 1) // 12
+    if not m:
+        m = 12
+    d = min(date.day, [31,
+                       29 if y % 4 == 0 and not y % 400 == 0 else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m - 1])
+    return date.replace(day=d, month=m, year=y)
+
+
+def represents_int(value):
+    try:
+        int(value)
+        return True
+    except:
+        return False

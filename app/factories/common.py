@@ -14,10 +14,10 @@ currency_ = 'USD'
 int_ = '1'
 float_ = '1.23456789'
 timezone_ = 'UTC'
-slug_ = 'camp-trip-retreat'
 environment_ = 'production'
 secret_ = 'ABCDefghIJKLmnop'
 fee_ = '1.23'
+slug_ = factory.Sequence(lambda n: 'example_slug{0}'.format(n))
 
 
 def socialUrl_(name):

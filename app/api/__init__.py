@@ -3,8 +3,8 @@ from app.api.stripe_authorization import StripeAuthorizationList, StripeAuthoriz
     StripeAuthorizationRelationship, StripeAuthorizationListPost
 from app.api.ticket_fees import TicketFeeList, TicketFeeDetail
 from app.api.users import UserList, UserDetail, UserRelationship, VerifyUser
-from app.api.notifications import NotificationList, NotificationDetail, NotificationRelationship
-from app.api.email_notifications import EmailNotificationList, EmailNotificationListPost, EmailNotificationDetail,\
+from app.api.notifications import NotificationList, NotificationListAdmin, NotificationDetail, NotificationRelationship
+from app.api.email_notifications import EmailNotificationList, EmailNotificationListAdmin, EmailNotificationDetail,\
     EmailNotificationRelationshipOptional, EmailNotificationRelationshipRequired
 from app.api.tickets import TicketList, TicketListPost, TicketDetail, TicketRelationshipRequired,\
     TicketRelationshipOptional
@@ -47,6 +47,7 @@ from app.api.custom_forms import CustomFormList, CustomFormDetail, CustomFormRel
 from app.api.modules import ModuleDetail
 from app.api.custom_placeholders import CustomPlaceholderList, CustomPlaceholderDetail, CustomPlaceholderRelationship
 from app.api.activities import ActivityList, ActivityDetail
+from app.api.orders import OrdersList, OrderDetail, OrderRelationship, ChargeList, OrdersListPost
 
 # users
 api.route(UserList, 'user_list', '/users')
@@ -63,13 +64,14 @@ api.route(UserRelationship, 'user_discount_codes', '/users/<int:id>/relationship
 api.route(UserRelationship, 'user_email_notifications', '/users/<int:id>/relationships/email-notifications')
 
 # notifications
+api.route(NotificationListAdmin, 'notification_list_admin', '/notifications')
 api.route(NotificationList, 'notification_list', '/users/<int:user_id>/notifications')
 api.route(NotificationDetail, 'notification_detail', '/notifications/<int:id>')
 api.route(NotificationRelationship, 'notification_user',
           '/notifications/<int:id>/relationships/user')
 
 # email_notifications
-api.route(EmailNotificationListPost, 'email_notification_list_post', '/email-notifications')
+api.route(EmailNotificationListAdmin, 'email_notification_list_admin', '/email-notifications')
 api.route(EmailNotificationList, 'email_notification_list', '/users/<int:id>/email-notifications')
 api.route(EmailNotificationDetail, 'email_notification_detail', '/email-notifications/<int:id>')
 api.route(EmailNotificationRelationshipRequired, 'email_notification_user',
@@ -111,7 +113,7 @@ api.route(RoleInviteRelationship, 'role_invite_role', '/role-invites/<int:id>/re
 api.route(TicketListPost, 'ticket_list_post', '/tickets')
 api.route(TicketList, 'ticket_list', '/events/<int:event_id>/tickets',
           '/events/<event_identifier>/tickets', '/ticket-tags/<int:ticket_tag_id>/tickets',
-          '/access-codes/<int:access_code_id>/tickets')
+          '/access-codes/<int:access_code_id>/tickets', '/orders/<int:order_id>/tickets')
 api.route(TicketDetail, 'ticket_detail', '/tickets/<int:id>', '/attendees/<int:attendee_id>/ticket')
 api.route(TicketRelationshipRequired, 'ticket_event', '/tickets/<int:id>/relationships/event')
 api.route(TicketRelationshipOptional, 'ticket_ticket_tag', '/tickets/<int:id>/relationships/ticket-tags')
@@ -384,3 +386,17 @@ api.route(StripeAuthorizationDetail, 'stripe_authorization_detail',  '/stripe-au
           '/events/<int:event_id>/stripe-authorization', '/events/<event_identifier>/stripe-authorization')
 api.route(StripeAuthorizationRelationship, 'stripe_authorization_event',
           '/stripe-authorization/<int:id>/relationships/event')
+
+# Orders API
+api.route(OrdersListPost, 'order_list_post', '/orders')
+api.route(OrdersList, 'orders_list', '/orders', '/events/<int:event_id>/orders',
+          '/events/<event_identifier>/orders')
+api.route(OrderDetail, 'order_detail', '/orders/<identifier>')
+# Charges API
+api.route(ChargeList, 'charge_list', '/orders/<identifier>/charge', '/orders/<identifier>/charge')
+api.route(OrderRelationship, 'order_attendee', '/orders/<identifier>/relationships/attendee')
+api.route(OrderRelationship, 'order_ticket', '/orders/<identifier>/relationships/ticket')
+api.route(OrderRelationship, 'order_user', '/orders/<identifier>/relationships/user')
+api.route(OrderRelationship, 'order_event', '/orders/<identifier>/relationships/event')
+api.route(OrderRelationship, 'order_marketer', '/orders/<identifier>/relationships/marketer')
+api.route(OrderRelationship, 'order_discount', '/orders/<identifier>/relationships/discount-code')
