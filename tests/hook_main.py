@@ -331,6 +331,84 @@ def event_delete(transaction):
         db.session.commit()
 
 
+@hooks.before("Events > Events of an Event Type > List All Events of an Event Type")
+def evnt_type_event_get_list(transaction):
+    """
+    GET /event-types/1/events
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_type = EventTypeFactory()
+        db.session.add(event_type)
+
+        event = EventFactoryBasic(event_type_id=1)
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Events > Events under an Event Topic > List All Events under an Event Topic")
+def evnt_topic_event_get_list(transaction):
+    """
+    GET /event-topics/1/events
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_topic = EventTopicFactory()
+        db.session.add(event_topic)
+
+        event = EventFactoryBasic(event_topic_id=1)
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Events > Events under an Event Sub-topic > List All Events under an Event Sub-topic")
+def evnt_sub_topic_event_get_list(transaction):
+    """
+    GET /event-sub-topics/1/events
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_sub_topic = EventSubTopicFactory()
+        db.session.add(event_sub_topic)
+
+        event = EventFactoryBasic(event_sub_topic_id=1)
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Events > Events under a User > List All Events under a User")
+def user_event_get_list(transaction):
+    """
+    GET /users/1/events
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Events > Events for a Discount Code > List All Events for a Discount Code")
+def discount_code_event_get_list(transaction):
+    """
+    GET /discount-codes/1/events
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+        discount_code = DiscountCodeFactory(event_id=1)
+        db.session.add(discount_code)
+        db.session.commit()
+
+
 @hooks.before("Events > Get Event for a Ticket > Event Details for a Ticket")
 def event_ticket(transaction):
     """
