@@ -12,4 +12,3 @@ class NoModelLayer(BaseDataLayer):
         obj = EmptyObject()
         obj.id = 1
         return obj
-

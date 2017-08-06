@@ -10,6 +10,7 @@ from app.api.data_layers.NoModelLayer import NoModelLayer
 from app.models.event import Event
 from app.models.users_events_role import UsersEventsRoles
 from app.models.role import Role
+from app.api.helpers.db import get_count
 
 
 class AdminStatisticsUserSchema(Schema):
@@ -33,23 +34,18 @@ class AdminStatisticsUserSchema(Schema):
     coorganizer = fields.Method("coorganizer_count")
     attendee = fields.Method("attendee_count")
     track_organizer = fields.Method("track_organizer_count")
-    total = fields.Method("total_count")
-
 
     def super_admin_count(self, obj):
-        return User.query.filter_by(is_super_admin=True).count()
+        return get_count(User.query.filter_by(is_super_admin=True))
 
     def admin_count(self, obj):
-        return User.query.filter_by(is_admin=True).count()
+        return get_count(User.query.filter_by(is_admin=True))
 
     def verified_count(self, obj):
-        return User.query.filter_by(is_verified=True).count()
+        return get_count(User.query.filter_by(is_verified=True))
 
     def unverified_count(self, obj):
-        return User.query.filter_by(is_verified=False).count()
-
-    def total_count(self, obj):
-        return User.query.count()
+        return get_count(User.query.filter_by(is_verified=False))
 
     def get_all_user_roles(self, role_name):
         role = Role.query.filter_by(name=role_name).first()
@@ -58,16 +54,16 @@ class AdminStatisticsUserSchema(Schema):
         return uers
 
     def organizer_count(self, obj):
-        return self.get_all_user_roles('organizer').count()
+        return get_count(self.get_all_user_roles('organizer'))
 
     def coorganizer_count(self, obj):
-        return self.get_all_user_roles('coorganizer').count()
+        return get_count(self.get_all_user_roles('coorganizer'))
 
     def track_organizer_count(self, obj):
-        return self.get_all_user_roles('track_organizer').count()
+        return get_count(self.get_all_user_roles('track_organizer'))
 
     def attendee_count(self, obj):
-        return self.get_all_user_roles('attendee').count()
+        return get_count(self.get_all_user_roles('attendee'))
 
 
 class AdminStatisticsUserDetail(ResourceDetail):
