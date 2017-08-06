@@ -2,7 +2,7 @@ from app.api.bootstrap import api
 from app.api.stripe_authorization import StripeAuthorizationList, StripeAuthorizationDetail, \
     StripeAuthorizationRelationship, StripeAuthorizationListPost
 from app.api.ticket_fees import TicketFeeList, TicketFeeDetail
-from app.api.users import UserList, UserDetail, UserRelationship, VerifyUser
+from app.api.users import UserList, UserDetail, UserRelationship
 from app.api.notifications import NotificationList, NotificationListAdmin, NotificationDetail, NotificationRelationship
 from app.api.email_notifications import EmailNotificationList, EmailNotificationListAdmin, EmailNotificationDetail,\
     EmailNotificationRelationshipOptional, EmailNotificationRelationshipRequired
@@ -52,7 +52,6 @@ from app.api.event_statistics import EventStatisticsGeneralDetail
 
 # users
 api.route(UserList, 'user_list', '/users')
-api.route(VerifyUser, 'verify_user', '/users/<int:user_id>/verify')
 api.route(UserDetail, 'user_detail', '/users/<int:id>', '/notifications/<int:notification_id>/user',
           '/event-invoices/<int:event_invoice_id>/user', '/speakers/<int:speaker_id>/user',
           '/access-codes/<int:access_code_id>/marketer', '/email-notifications/<int:email_notification_id>/user',

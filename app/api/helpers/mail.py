@@ -221,6 +221,6 @@ def send_followup_email_for_monthly_fee_payment(email, event_name, previous_mont
 def send_email_change_user_email(user, email):
     s = get_serializer()
     hash = base64.b64encode(s.dumps([email, str_generator()]))
-    link = make_frontend_url('/users/{id}/verify'.format(id=user.id), {'token': hash})
+    link = make_frontend_url('/email/verify'.format(id=user.id), {'token': hash})
     send_email_with_action(user.email, USER_CONFIRM, email=user.email, link=link)
     send_email_with_action(email, USER_CHANGE_EMAIL, email=email, new_email=user.email)

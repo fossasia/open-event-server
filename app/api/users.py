@@ -1,12 +1,10 @@
 import base64
-import urllib
 
 from app.api.bootstrap import api
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 
-from app.api.data_layers.VerifyUserLayer import VerifyUserLayer
 from app.api.helpers.files import create_save_image_sizes, make_frontend_url
 from app.api.helpers.mail import send_email_confirmation, send_email_change_user_email
 from app.api.helpers.utilities import dasherize, get_serializer, str_generator
@@ -18,7 +16,7 @@ from app.models.email_notification import EmailNotification
 from app.models.event_invoice import EventInvoice
 from app.models.access_code import AccessCode
 from app.models.discount_code import DiscountCode
-from app.api.helpers.permissions import is_user_itself, jwt_required
+from app.api.helpers.permissions import is_user_itself
 from app.models.speaker import Speaker
 from app.api.helpers.exceptions import ConflictException
 from app.api.helpers.db import safe_query
@@ -123,8 +121,8 @@ class UserList(ResourceList):
 
     def after_create_object(self, user, data, view_kwargs):
         s = get_serializer()
-        hash = urllib.quote(base64.b64encode(s.dumps([user.email, str_generator()])))
-        link = make_frontend_url(path='/users/{id}/verify?token={token}'.format(token=hash, id=user.id))
+        hash = base64.b64encode(s.dumps([user.email, str_generator()]))
+        link = make_frontend_url('/email/verify'.format(id=user.id), {'token': hash})
         send_email_confirmation(user.email, link)
 
         if data.get('original_image_url'):
@@ -244,28 +242,3 @@ class UserRelationship(ResourceRelationship):
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User}
-
-
-class VerifyUserSchema(Schema):
-    class Meta:
-        """
-        Meta class for Verify User Schema
-        """
-        type_ = 'verify-user'
-        self_view = 'v1.verify_user'
-        self_view_kwargs = {'user_id': '<id>'}
-        inflect = dasherize
-
-    id = fields.Str(dump_only=True)
-    token = fields.Str(required=True)
-
-
-class VerifyUser(ResourceList):
-
-    methods = ['POST', ]
-    decorators = (jwt_required,)
-    schema = VerifyUserSchema
-    data_layer = {
-        'class': VerifyUserLayer,
-        'session': db.session
-    }
