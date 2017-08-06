@@ -7,6 +7,7 @@ from app.api.bootstrap import api
 from app.models import db
 from app.models.session import Session
 from app.api.data_layers.NoModelLayer import NoModelLayer
+from app.api.helpers.db import get_count
 
 
 class AdminStatisticsSessionSchema(Schema):
@@ -28,28 +29,24 @@ class AdminStatisticsSessionSchema(Schema):
     confirmed = fields.Method("sessions_confirmed_count")
     pending = fields.Method("sessions_pending_count")
     rejected = fields.Method("sessions_rejected_count")
-    total = fields.Method("sessions_count")
 
     def sessions_draft_count(self, obj):
-        return Session.query.filter_by(state='draft').count()
+        return get_count(Session.query.filter_by(state='draft'))
 
     def sessions_submitted_count(self, obj):
-        return Session.query.filter_by(state='submitted').count()
+        return get_count(Session.query.filter_by(state='submitted'))
 
     def sessions_accepted_count(self, obj):
-        return Session.query.filter_by(state='accepted').count()
+        return get_count(Session.query.filter_by(state='accepted'))
 
     def sessions_confirmed_count(self, obj):
-        return Session.query.filter_by(state='confirmed').count()
+        return get_count(Session.query.filter_by(state='confirmed'))
 
     def sessions_pending_count(self, obj):
-        return Session.query.filter_by(state='pending').count()
+        return get_count(Session.query.filter_by(state='pending'))
 
     def sessions_rejected_count(self, obj):
-        return Session.query.filter_by(state='rejected').count()
-
-    def sessions_count(self, obj):
-        return Session.query.filter_by().count()
+        return get_count(Session.query.filter_by(state='rejected'))
 
 
 class AdminStatisticsSessionDetail(ResourceDetail):

@@ -423,4 +423,3 @@ api.route(AdminStatisticsSessionDetail, 'admin_statistics_session_detail', '/adm
 api.route(AdminStatisticsEventDetail, 'admin_statistics_event_detail', '/admin/statistics/events')
 api.route(AdminStatisticsUserDetail, 'admin_statistics_user_detail', '/admin/statistics/users')
 api.route(AdminStatisticsMailDetail, 'admin_statistics_mail_detail', '/admin/statistics/mails')
-
