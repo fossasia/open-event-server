@@ -16808,6 +16808,69 @@ Requires Event Co-Organizer Access
         }
 
 
+# Group Event Export
+
+This group of APIs help you to start a task for exporting a particular event and downloading the zip containing json files for all the event related data.
+
+## Start Event Export [/v1/events/{event_id}/export/json]
+
+Start a celery task to export the event with the event_id as a collection of json files and archive it to get it ready for downloading. Returns the task url
+to get the status of the export task.
+
+
+### Start a Task to Export an Event [GET]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "image": true,
+                "video": true,
+                "document": true,
+                "audio": true
+            }
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
+
+
+# Group Celery Tasks
+
+This API helps you to get the status of a celery task and the response
+
+## Task Details [/v1/tasks/{task_id}]
+
+Get the task status and the final result of the task as response
+
+
+### Get Task Result [GET]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "result": {
+                "download_url": "/v1/events/1/exports/http://localhost/static/media/exports/1/zip/OGpMM0w2RH/event1.zip"
+            },
+            "state": "SUCCESS"
+        }
+
+
 # Group Event Statistics
 
 **General:**
