@@ -75,21 +75,6 @@ class EventInvoiceSchema(Schema):
                                   type_='discount-code')
 
 
-class EventInvoiceListPost(ResourceList):
-    """
-    List and create Tracks
-    """
-    def before_post(self, args, kwargs, data):
-        require_relationship(['user', 'event'], data)
-
-        if not has_access('is_admin'):
-            raise ForbiddenException({'source': ''}, 'Admin access is required.')
-
-    schema = EventInvoiceSchema
-    data_layer = {'session': db.session,
-                  'model': EventInvoice}
-
-
 class EventInvoiceList(ResourceList):
     """
     List and Create Event Invoices

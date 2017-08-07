@@ -23,7 +23,7 @@ from app.api.social_links import SocialLinkList, SocialLinkListPost, SocialLinkD
 from app.api.sponsors import SponsorList, SponsorListPost, SponsorDetail, SponsorRelationship
 from app.api.tracks import TrackList, TrackListPost, TrackDetail, TrackRelationshipOptional, TrackRelationshipRequired
 from app.api.speakers_calls import SpeakersCallList, SpeakersCallDetail, SpeakersCallRelationship
-from app.api.event_invoices import EventInvoiceList, EventInvoiceListPost, EventInvoiceDetail, \
+from app.api.event_invoices import EventInvoiceList, EventInvoiceDetail, \
     EventInvoiceRelationshipRequired, EventInvoiceRelationshipOptional
 from app.api.role_invites import RoleInviteListPost, RoleInviteList, RoleInviteDetail, RoleInviteRelationship
 from app.api.image_sizes import ImageSizeList, ImageSizeDetail
@@ -36,7 +36,7 @@ from app.api.user_permission import UserPermissionList, UserPermissionDetail
 from app.api.tax import TaxList, TaxListPost, TaxDetail, TaxRelationship
 from app.api.settings import SettingDetail
 from app.api.discount_codes import DiscountCodeList, DiscountCodeDetail, DiscountCodeRelationshipOptional, \
-    DiscountCodeRelationshipRequired
+    DiscountCodeRelationshipRequired, DiscountCodeListPost
 from app.api.ticket_tags import TicketTagList, TicketTagListPost, TicketTagDetail, TicketTagRelationshipOptional, \
     TicketTagRelationshipRequired
 from app.api.attendees import AttendeeList, AttendeeDetail, AttendeeRelationshipOptional, \
@@ -290,8 +290,7 @@ api.route(TaxDetail, 'tax_detail', '/tax/<int:id>', '/events/<int:event_id>/tax'
 api.route(TaxRelationship, 'tax_event', '/tax/<int:id>/relationships/event')
 
 # event invoices
-api.route(EventInvoiceListPost, '/event-invoices')
-api.route(EventInvoiceList, 'event_invoice_list', '/events/<int:event_id>/event-invoices',
+api.route(EventInvoiceList, 'event_invoice_list', '/event-invoices', '/events/<int:event_id>/event-invoices',
           '/events/<event_identifier>/event-invoices', '/users/<int:user_id>/event-invoices')
 api.route(EventInvoiceDetail, 'event_invoice_detail', '/event-invoices/<int:id>')
 api.route(EventInvoiceRelationshipRequired, 'event_invoice_user',
@@ -302,7 +301,8 @@ api.route(EventInvoiceRelationshipOptional, 'event_invoice_discount_code',
           '/event-invoices/<int:id>/relationships/discount-codes')
 
 # discount codes
-api.route(DiscountCodeList, 'discount_code_list', '/discount-codes', '/events/<int:event_id>/discount-codes',
+api.route(DiscountCodeListPost, 'discount_code_list_post', '/discount-codes')
+api.route(DiscountCodeList, 'discount_code_list', '/events/<int:event_id>/discount-codes',
           '/events/<event_identifier>/discount-codes', '/users/<int:user_id>/discount-codes')
 api.route(DiscountCodeDetail, 'discount_code_detail', '/discount-codes/<int:id>',
           '/events/<int:event_id>/discount-code', 'event-invoices/<int:event_invoice_id>/discount-code')
