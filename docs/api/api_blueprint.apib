@@ -1406,6 +1406,111 @@ Delete a single event topic.
           }
         }
 
+
+## Event Topic of an Event  [/v1/events/{event_identifier}/event-topic]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+
+### Event Topic Details of an Event [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "relationships": {
+                    "events": {
+                        "links": {
+                            "self": "/v1/event-topics/1/relationships/events",
+                            "related": "/v1/event-topics/1/events"
+                        }
+                    },
+                    "event-sub-topics": {
+                        "links": {
+                            "self": "/v1/event-topics/1/relationships/event-sub-topics",
+                            "related": "/v1/event-topics/1/event-sub-topics"
+                        }
+                    }
+                },
+                "attributes": {
+                    "slug": "travel-outdoor",
+                    "name": "Travel & Outdoor"
+                },
+                "type": "event-topic",
+                "id": "1",
+                "links": {
+                    "self": "/v1/event-topics/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/event-topics/1"
+            }
+        }
+
+
+## Event Topic of a Sub Topic  [/v1/event-sub-topics/{event_sub_topic_id}/event-topic]
++ Parameters
+    + event_sub_topic_id: 1 (integer) - ID of the event sub topic in the form of an integer
+
+### Event Topic Details of a Sub Topic [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "relationships": {
+                    "events": {
+                        "links": {
+                            "self": "/v1/event-topics/1/relationships/events",
+                            "related": "/v1/event-topics/1/events"
+                        }
+                    },
+                    "event-sub-topics": {
+                        "links": {
+                            "self": "/v1/event-topics/1/relationships/event-sub-topics",
+                            "related": "/v1/event-topics/1/event-sub-topics"
+                        }
+                    }
+                },
+                "attributes": {
+                    "slug": "travel-outdoor",
+                    "name": "Travel & Outdoor"
+                },
+                "type": "event-topic",
+                "id": "1",
+                "links": {
+                    "self": "/v1/event-topics/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/event-topics/1"
+            }
+        }
+
+
 # Group Event Sub Topics
 
 Event Sub Topics for Events. Can only be edited and entered by admins.
