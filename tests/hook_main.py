@@ -2726,6 +2726,39 @@ def event_sub_topic_delete(transaction):
         db.session.commit()
 
 
+@hooks.before("Event Sub Topics > Event Sub Topic of an Event > Event Sub Topic Details of an Event")
+def event_event_sub_topic_get_detail(transaction):
+    """
+    GET /events/1/event-sub-topic
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_sub_topic = EventSubTopicFactory()
+        db.session.add(event_sub_topic)
+
+        event = EventFactoryBasic(event_sub_topic_id=1)
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Sub Topics > Event Sub Topic of Custom Placeholder > Event Sub Topic Details of Custom Placeholder")
+def custom_placeholder_sub_topic_get_detail(transaction):
+    """
+    GET /custom-placeholders/1/event-sub-topic
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_sub_topic = EventSubTopicFactory()
+        db.session.add(event_sub_topic)
+
+        custom_placeholder = CustomPlaceholderFactory(event_sub_topic_id=1)
+        db.session.add(custom_placeholder)
+        db.session.commit()
+
+
 # ------------------------- Custom Placeholders -------------------------
 @hooks.before("Custom Placeholders > Custom Placeholders Collection > List All Event Custom Placeholders")
 def custom_placeholder_get_list(transaction):

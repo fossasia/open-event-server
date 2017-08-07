@@ -1786,6 +1786,123 @@ Delete a single event sub topic.
         }
 
 
+## Event Sub Topic of an Event [/v1/events/{event_identifier}/event-sub-topic]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+
+### Event Sub Topic Details of an Event [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "relationships": {
+                    "events": {
+                        "links": {
+                            "self": "/v1/event-topics/1/relationships/events",
+                            "related": "/v1/event-sub-topics/1/events"
+                        }
+                    },
+                    "event-topic": {
+                        "links": {
+                            "self": "/v1/event-sub-topics/1/relationships/event-topic",
+                            "related": "/v1/event-sub-topics/1/event-topic"
+                        }
+                    },
+                    "custom-placeholder": {
+                        "links": {
+                            "self": "/v1/event-sub-topics/1/relationships/custom-placeholder",
+                            "related": "/v1/event-sub-topics/1/custom-placeholder"
+                        }
+                    }
+                },
+                "attributes": {
+                    "name": "Climbing",
+                    "slug": "climbing"
+                },
+                "type": "event-sub-topic",
+                "id": "1",
+                "links": {
+                    "self": "/v1/event-sub-topics/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/event-sub-topics/1"
+            }
+        }
+
+
+
+## Event Sub Topic of Custom Placeholder [/v1/custom-placeholders/{custom_placeholder_id}/event-sub-topic]
++ Parameters
+    + custom_placeholder_id: 1 (integer) - ID of the Custom Placeholder in the form of an integer
+
+### Event Sub Topic Details of Custom Placeholder [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "relationships": {
+                    "events": {
+                        "links": {
+                            "self": "/v1/event-topics/1/relationships/events",
+                            "related": "/v1/event-sub-topics/1/events"
+                        }
+                    },
+                    "event-topic": {
+                        "links": {
+                            "self": "/v1/event-sub-topics/1/relationships/event-topic",
+                            "related": "/v1/event-sub-topics/1/event-topic"
+                        }
+                    },
+                    "custom-placeholder": {
+                        "links": {
+                            "self": "/v1/event-sub-topics/1/relationships/custom-placeholder",
+                            "related": "/v1/event-sub-topics/1/custom-placeholder"
+                        }
+                    }
+                },
+                "attributes": {
+                    "name": "Climbing",
+                    "slug": "climbing"
+                },
+                "type": "event-sub-topic",
+                "id": "1",
+                "links": {
+                    "self": "/v1/event-sub-topics/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/event-sub-topics/1"
+            }
+        }
+
+
 # Group Custom Placeholders
 Data related to custom placeholder information.
 
