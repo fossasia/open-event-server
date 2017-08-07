@@ -741,19 +741,6 @@ def invoice_get_list(transaction):
         db.session.commit()
 
 
-@hooks.before("Invoices > Event Invoices > Create Event Invoices")
-def invoice_post(transaction):
-    """
-    POST /event-invoices
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        event = EventFactoryBasic()
-        db.session.add(event)
-        db.session.commit()
-
-
 @hooks.before("Invoices > Event Invoices Details > Event Invoices Details")
 def invoice_get_detail(transaction):
     """
