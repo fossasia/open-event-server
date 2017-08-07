@@ -114,8 +114,12 @@ def create_app():
     with app.app_context():
         from app.api.bootstrap import api_v1
         from app.api.uploads import upload_routes
+        from app.api.exports import export_routes
+        from app.api.celery_tasks import celery_routes
         app.register_blueprint(api_v1)
         app.register_blueprint(upload_routes)
+        app.register_blueprint(export_routes)
+        app.register_blueprint(celery_routes)
 
     sa.orm.configure_mappers()
 
