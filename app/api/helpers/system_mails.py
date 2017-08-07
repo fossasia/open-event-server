@@ -88,7 +88,6 @@ MAILS = {
         'message': (
             u"Your Account Has Been Created! Congratulations!" +
             u"<br/> <strong>Your login:</strong><br><strong>Email:</strong> {email}<br>"
-            u"<strong>Password:</strong> {password}<br><br> Please login and change your password as soon as possible"
         )
     },
     USER_CONFIRM: {
