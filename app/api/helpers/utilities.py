@@ -5,6 +5,8 @@ import string
 
 import bleach
 from itsdangerous import Serializer
+import requests
+import re
 
 from app.api.helpers.exceptions import UnprocessableEntity
 
@@ -86,6 +88,7 @@ def get_filename_from_cd(cd):
         return '', ''
     fn = fname[0].rsplit('.', 1)
     return fn[0], '' if len(fn) == 1 else ('.' + fn[1])
+
 
 # store task results in case of testing
 # state and info

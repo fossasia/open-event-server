@@ -2902,6 +2902,30 @@ def stripe_authorization_delete(transaction):
         db.session.commit()
 
 
+# ------------------------- Export -------------------------
+@hooks.before(
+    "Event Export > Start Event Export > Start a Task to Export an Event")
+def event_export_post(transaction):
+    """
+
+    :param transaction:
+    :return:
+    """
+    pass
+
+
+# ------------------------- Celery Task -------------------------
+@hooks.before(
+    "Celery Tasks > Task Details > Get Task Result")
+def celery_task_get(transaction):
+    """
+
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
 # ------------------------- Event Statistics -------------------------
 
 @hooks.before("Event Statistics > Event Statistics Details > Show Event Statistics General")
