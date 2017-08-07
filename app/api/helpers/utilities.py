@@ -86,3 +86,7 @@ def get_filename_from_cd(cd):
         return '', ''
     fn = fname[0].rsplit('.', 1)
     return fn[0], '' if len(fn) == 1 else ('.' + fn[1])
+
+# store task results in case of testing
+# state and info
+TASK_RESULTS = {}

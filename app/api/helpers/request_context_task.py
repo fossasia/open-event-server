@@ -93,4 +93,3 @@ class RequestContextTask(Task):
             if hasattr(g, z):
                 d[z] = getattr(g, z)
         kwargs[self.GLOBALS_ARG_NAME] = d
-.

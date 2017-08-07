@@ -9,7 +9,7 @@ from flask import current_app as app
 from flask import request, g, url_for
 
 from app.api.helpers.db import save_to_db
-# from app.helpers.helpers import send_email_after_export, send_notif_after_export
+from app.models import db
 from app.models.event import Event
 from app.models.session import Session
 from app.models.speaker import Speaker
@@ -27,20 +27,20 @@ from app.settings import get_settings
 FIELD_ORDER = {
     'event': [
         'id', 'name', 'latitude', 'longitude', 'location_name', 'starts_at', 'ends_at',
-        'timezone', 'description', 'background_image', 'logo', 'organizer_name',
-        'organizer_description', 'event_url', 'social_links', 'ticket_url', 'privacy', 'type',
-        'topic', 'sub_topic', 'code_of_conduct', 'copyright'
+        'timezone', 'description', 'original_image_url', 'logo_url', 'organizer_name',
+        'organizer_description', 'external_event_url', 'ticket_url', 'privacy', 'event_type_id',
+        'event_topic_id', 'event_sub_topic_id', 'code_of_conduct'
     ],
     'microlocations': ['id', 'name', 'floor'],
     'sessions': [
         'id', 'title', 'subtitle', 'short_abstract', 'long_abstract', 'starts_at', 'ends_at',
-        'session_type', 'track', 'comments', 'language', 'slides', 'audio', 'video'
+        'session_type_id', 'track_id', 'comments', 'language', 'slides_url', 'audio_url', 'video_url'
     ],
     'speakers': [
         'id', 'name', 'email', 'mobile', 'photo', 'organisation', 'position', 'country',
         'short_biography', 'long_biography', 'website', 'twitter', 'facebook', 'github', 'linkedin'
     ],
-    'sponsors': ['id', 'name', 'logo', 'level', 'sponsor_type', 'url', 'description'],
+    'sponsors': ['id', 'name', 'logo_url', 'level', 'type', 'url', 'description'],
     'tracks': ['id', 'name', 'color', 'font_color'],
     'session_types': ['id', 'name', 'length'],
     'forms': []
@@ -49,24 +49,23 @@ FIELD_ORDER = {
 # keep sync with storage.UPLOAD_PATHS
 DOWNLOAD_FIEDLS = {
     'sessions': {
-        'video': ['video', '/videos/session_%d'],
-        'audio': ['audio', '/audios/session_%d'],
-        'slides': ['document', '/slides/session_%d']
+        'video_url': ['video', '/videos/session_%d'],
+        'audio_url': ['audio', '/audios/session_%d'],
+        'slides_url': ['document', '/slides/session_%d']
     },
     'speakers': {
         'photo': ['image', '/images/speakers/%s_%d']
     },
     'event': {
-        'logo': ['image', '/images/logo'],
-        'background_image': ['image', '/images/background']
+        'logo_url': ['image', '/images/logo'],
+        'external_event_url': ['image', '/images/background']
     },
     'sponsors': {
-        'logo': ['image', '/images/sponsors/%s_%d']
-    },
-    'tracks': {
-        'track_image_url': ['image', '/images/tracks/image_%d']
+        'logo_url': ['image', '/images/sponsors/%s_%d']
     }
 }
+
+DATE_FIELDS = ['starts_at', 'ends_at', 'created_at', 'deleted_at', 'submitted_at']
 
 EXPORTS = [
     ('event', Event),
@@ -78,13 +77,6 @@ EXPORTS = [
     ('session_types', SessionType),
     ('forms', CustomForms)
 ]
-
-EXPORT_SETTING = {
-    'image': False,
-    'video': False,
-    'document': False,
-    'audio': False
-}
 
 # strings to remove in a filename
 FILENAME_EXCLUDE = '<>:"/\|?*;'
@@ -112,14 +104,26 @@ def _order_json(data, srv):
     If some keys are not included in FIELD_ORDER, they go at last, sorted alphabetically
     """
     new_data = OrderedDict()
+    data.pop('_sa_instance_state', None)
     for field in FIELD_ORDER[srv[0]]:
-        new_data[field] = sorted_dict(data[field])
+        if field in DATE_FIELDS and data[field] and type(data[field]) != str:
+            new_data[field] = sorted_dict(data[field].isoformat())
+        elif field == 'font_color' and 'id' in new_data:
+            track = db.session.query(Track).filter(Track.id == new_data['id']).first()
+            new_data[field] = track.font_color
+        else:
+            new_data[field] = sorted_dict(data[field])
         data.pop(field, None)
+
     # remaining fields, sort and add
     # https://docs.python.org/2/library/collections.html#collections.OrderedDict
     data = OrderedDict(sorted(data.items(), key=lambda t: t[0]))
     for key in data:
-        new_data[key] = sorted_dict(data[key])
+        if key in DATE_FIELDS and data[key] and type(data[key]) != str:
+            new_data[key] = sorted_dict(data[key].isoformat())
+        else:
+            new_data[key] = sorted_dict(data[key])
+
     return new_data
 
 
@@ -181,18 +185,21 @@ def export_event_json(event_id, settings):
     exports_dir = app.config['BASE_DIR'] + '/static/uploads/exports/'
     if not os.path.isdir(exports_dir):
         os.mkdir(exports_dir)
-    dir_path = exports_dir + 'event%d' % event_id
+    dir_path = exports_dir + 'event%d' % int(event_id)
     if os.path.isdir(dir_path):
         shutil.rmtree(dir_path, ignore_errors=True)
     os.mkdir(dir_path)
     # save to directory
     for e in EXPORTS:
-        print e[1].__dict__
         if e[0] == 'event':
-            data = _order_json(marshal(e[1].get(event_id), e[2]), e)
+            query_obj = db.session.query(e[1]).filter(
+                e[1].id == event_id).first()
+            data = _order_json(dict(query_obj.__dict__), e)
             _download_media(data, 'event', dir_path, settings)
         else:
-            data = marshal(e[1].list(event_id), e[2])
+            query_objs = db.session.query(e[1]).filter(
+                e[1].event_id == event_id).all()
+            data = [_order_json(dict(query_obj.__dict__), e) for query_obj in query_objs]
             for count in range(len(data)):
                 data[count] = _order_json(data[count], e)
                 _download_media(data[count], e[0], dir_path, settings)
@@ -213,13 +220,11 @@ def export_event_json(event_id, settings):
     dir_path = dir_path + ".zip"
 
     storage_path = UPLOAD_PATHS['exports']['zip'].format(
-        event_id = event_id
+        event_id=event_id
     )
     uploaded_file = UploadedFile(dir_path, dir_path.rsplit('/', 1)[1])
     storage_url = upload(uploaded_file, storage_path)
 
-    if get_settings()['storage_place'] != "s3" and get_settings()['storage_place'] != 'gs':
-        storage_url = app.config['BASE_DIR'] + storage_url.replace("/serve_","/")
     return storage_url
 
 
@@ -230,7 +235,7 @@ def create_export_job(task_id, event_id):
     Create export job for an export that is going to start
     """
     export_job = ExportJob.query.filter_by(event_id=event_id).first()
-    task_url = url_for('api.extras_celery_task', task_id=task_id)
+    task_url = url_for('tasks.celery_task', task_id=task_id)
     if export_job:
         export_job.task = task_url
         export_job.user_email = g.user.email
@@ -242,23 +247,6 @@ def create_export_job(task_id, event_id):
             event=Event.query.get(event_id)
         )
     save_to_db(export_job, 'ExportJob saved')
-
-
-# def send_export_mail(event_id, result):
-#     """
-#     send export event mail after the process is complete
-#     """
-#     job = DataGetter.get_export_jobs(event_id)
-#     if not job:  # job not stored, happens in case of CELERY_ALWAYS_EAGER
-#         return
-#     event = Event.query.get(event_id)
-#     if not event:
-#         event_name = '(Undefined)'
-#     else:
-#         event_name = event.name
-#     send_email_after_export(job.user_email, event_name, result)
-#     user = DataGetter.get_user_by_email(job.user_email)
-#     send_notif_after_export(user, event_name, result)
 
 
 # FIELD DATA FORMATTERS
