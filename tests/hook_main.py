@@ -558,11 +558,11 @@ def event_discount_code(transaction):
     :param transaction:
     :return:
     """
-
-    transaction['skip'] = True
-
     with stash['app'].app_context():
-        discount_code = DiscountCodeFactory()
+        event = EventFactoryBasic()
+        db.session.add(event)
+
+        discount_code = DiscountCodeFactory(event_id=1)
         db.session.add(discount_code)
         db.session.commit()
 
@@ -738,19 +738,6 @@ def invoice_get_list(transaction):
     with stash['app'].app_context():
         event_invoice = EventInvoiceFactory()
         db.session.add(event_invoice)
-        db.session.commit()
-
-
-@hooks.before("Invoices > Event Invoices > Create Event Invoices")
-def invoice_post(transaction):
-    """
-    POST /event-invoices
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        event = EventFactoryBasic()
-        db.session.add(event)
         db.session.commit()
 
 
@@ -2647,6 +2634,35 @@ def event_topic_delete(transaction):
         db.session.commit()
 
 
+@hooks.before("Event Topics > Event Topic of an Event > Event Topic Details of an Event")
+def event_event_topic_get_detail(transaction):
+    """
+    GET /events/1/event-topic
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_topic = EventTopicFactory()
+        db.session.add(event_topic)
+
+        event = EventFactoryBasic(event_topic_id=1)
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Event Topics > Event Topic of a Sub Topic > Event Topic Details of a Sub Topic")
+def sub_topic_event_topic_get_detail(transaction):
+    """
+    GET /sub-topics/1/event-topic
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_sub_topic = EventSubTopicFactory()
+        db.session.add(event_sub_topic)
+        db.session.commit()
+
+
 # ------------------------- Event Sub Topics -------------------------
 @hooks.before("Event Sub Topics > Event Sub Topics Collection Get > List All Event Sub Topics")
 def event_sub_topic_get_list(transaction):
@@ -2710,6 +2726,39 @@ def event_sub_topic_delete(transaction):
     with stash['app'].app_context():
         event_sub_topic = EventSubTopicFactory()
         db.session.add(event_sub_topic)
+        db.session.commit()
+
+
+@hooks.before("Event Sub Topics > Event Sub Topic of an Event > Event Sub Topic Details of an Event")
+def event_event_sub_topic_get_detail(transaction):
+    """
+    GET /events/1/event-sub-topic
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_sub_topic = EventSubTopicFactory()
+        db.session.add(event_sub_topic)
+
+        event = EventFactoryBasic(event_sub_topic_id=1)
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Sub Topics > Event Sub Topic of Custom Placeholder > Event Sub Topic Details of Custom Placeholder")
+def custom_placeholder_sub_topic_get_detail(transaction):
+    """
+    GET /custom-placeholders/1/event-sub-topic
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_sub_topic = EventSubTopicFactory()
+        db.session.add(event_sub_topic)
+
+        custom_placeholder = CustomPlaceholderFactory(event_sub_topic_id=1)
+        db.session.add(custom_placeholder)
         db.session.commit()
 
 
