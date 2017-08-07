@@ -558,11 +558,11 @@ def event_discount_code(transaction):
     :param transaction:
     :return:
     """
-
-    transaction['skip'] = True
-
     with stash['app'].app_context():
-        discount_code = DiscountCodeFactory()
+        event = EventFactoryBasic()
+        db.session.add(event)
+
+        discount_code = DiscountCodeFactory(event_id=1)
         db.session.add(discount_code)
         db.session.commit()
 
@@ -2641,6 +2641,35 @@ def event_topic_delete(transaction):
     with stash['app'].app_context():
         event_topic = EventTopicFactory()
         db.session.add(event_topic)
+        db.session.commit()
+
+
+@hooks.before("Event Topics > Event Topic of an Event > Event Topic Details of an Event")
+def event_event_topic_get_detail(transaction):
+    """
+    GET /events/1/event-topic
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_topic = EventTopicFactory()
+        db.session.add(event_topic)
+
+        event = EventFactoryBasic(event_topic_id=1)
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Event Topics > Event Topic of a Sub Topic > Event Topic Details of a Sub Topic")
+def sub_topic_event_topic_get_detail(transaction):
+    """
+    GET /sub-topics/1/event-topic
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_sub_topic = EventSubTopicFactory()
+        db.session.add(event_sub_topic)
         db.session.commit()
 
 
