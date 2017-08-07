@@ -29,7 +29,8 @@ class CustomPlaceholder(db.Model):
                  large_image_url=None,
                  icon_image_url=None,
                  copyright=None,
-                 origin=None):
+                 origin=None,
+                 event_sub_topic_id=None):
         self.name = name
         self.original_image_url = original_image_url
         self.thumbnail_image_url = thumbnail_image_url
@@ -37,6 +38,7 @@ class CustomPlaceholder(db.Model):
         self.icon_image_url = icon_image_url
         self.copyright = copyright
         self.origin = origin
+        self.event_sub_topic_id = event_sub_topic_id
 
     def __str__(self):
         return 'Name:' + unicode(self.name).encode('utf-8')

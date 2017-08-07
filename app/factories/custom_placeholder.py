@@ -12,3 +12,4 @@ class CustomPlaceholderFactory(factory.alchemy.SQLAlchemyModelFactory):
     origin = common.string_
     copyright = common.string_
     original_image_url = common.imageUrl_
+    event_sub_topic_id = None
