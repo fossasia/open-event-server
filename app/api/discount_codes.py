@@ -198,7 +198,7 @@ class DiscountCodeList(ResourceList):
             query_ = query_.join(User).filter(User.id == user.id)
 
         if view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
             view_kwargs['event_id'] = event.id
 
         if view_kwargs.get('event_id') and has_access('is_coorganizer', event_id=view_kwargs['event_id']):
