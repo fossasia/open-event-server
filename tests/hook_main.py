@@ -2571,6 +2571,21 @@ def event_type_delete(transaction):
         db.session.commit()
 
 
+@hooks.before("Event Types > Event Type of an Event > Event Type Details of an Event")
+def event_event_type_get_detail(transaction):
+    """
+    GET /event/1/event-type
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_type = EventTypeFactory()
+        db.session.add(event_type)
+
+        event = EventFactoryBasic(event_type_id=1)
+        db.session.add(event)
+        db.session.commit()
+
 # ------------------------- Event Topics -------------------------
 @hooks.before("Event Topics > Event Topics Collection > List All Event Topics")
 def event_topic_get_list(transaction):
