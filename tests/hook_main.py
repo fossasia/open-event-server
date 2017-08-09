@@ -48,6 +48,7 @@ from app.factories.user_permission import UserPermissionFactory
 from app.factories.email_notification import EmailNotificationFactory
 from app.factories.activities import ActivityFactory
 from app.factories.stripe_authorization import StripeAuthorizationFactory
+from app.factories.mail import MailFactory
 
 
 stash = {}
@@ -2166,6 +2167,33 @@ def page_delete(transaction):
     with stash['app'].app_context():
         page = PageFactory()
         db.session.add(page)
+        db.session.commit()
+
+
+# ------------------------- Mails -------------------------
+@hooks.before("Mails > Mail Collection > Show all mails")
+def mail_get_list(transaction):
+    """
+    GET /mails
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        mail = MailFactory()
+        db.session.add(mail)
+        db.session.commit()
+
+
+@hooks.before("Mails > Mail Details > Get Mail Details")
+def mail_get_detail(transaction):
+    """
+    GET /mails/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        mail = MailFactory()
+        db.session.add(mail)
         db.session.commit()
 
 

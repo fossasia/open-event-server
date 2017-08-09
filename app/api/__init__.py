@@ -49,6 +49,7 @@ from app.api.custom_placeholders import CustomPlaceholderList, CustomPlaceholder
 from app.api.activities import ActivityList, ActivityDetail
 from app.api.orders import OrdersList, OrderDetail, OrderRelationship, ChargeList, OrdersListPost
 from app.api.event_statistics import EventStatisticsGeneralDetail
+from app.api.mails import MailList, MailDetail
 
 # users
 api.route(UserList, 'user_list', '/users')
@@ -92,6 +93,11 @@ api.route(ModuleDetail, 'module_detail', '/modules/<id>', '/modules')
 # pages
 api.route(PageList, 'page_list', '/pages')
 api.route(PageDetail, 'page_detail', '/pages/<int:id>')
+
+
+# Mails API
+api.route(MailList, 'mail_list', '/mails')
+api.route(MailDetail, 'mail_detail', '/mails/<int:id>')
 
 # user-permissions
 api.route(UserPermissionList, 'user_permission_list', '/user-permissions')
@@ -401,6 +407,7 @@ api.route(OrderRelationship, 'order_user', '/orders/<identifier>/relationships/u
 api.route(OrderRelationship, 'order_event', '/orders/<identifier>/relationships/event')
 api.route(OrderRelationship, 'order_marketer', '/orders/<identifier>/relationships/marketer')
 api.route(OrderRelationship, 'order_discount', '/orders/<identifier>/relationships/discount-code')
+
 
 # Event Statistics API
 api.route(EventStatisticsGeneralDetail, 'event_statistics_general_detail', '/events/<int:id>/general-statistics',
