@@ -3,10 +3,12 @@ import os
 import shutil
 from collections import OrderedDict
 from datetime import datetime
+import pytz
 
 import requests
 from flask import current_app as app
-from flask import request, g, url_for
+from flask import request, url_for
+from flask_jwt import current_identity
 
 from app.api.helpers.db import save_to_db
 from app.models import db
@@ -237,13 +239,14 @@ def create_export_job(task_id, event_id):
     export_job = ExportJob.query.filter_by(event_id=event_id).first()
     task_url = url_for('tasks.celery_task', task_id=task_id)
     if export_job:
+
         export_job.task = task_url
-        export_job.user_email = g.user.email
+        export_job.user_email = current_identity.email
         export_job.event = Event.query.get(event_id)
-        export_job.starts_at = datetime.now()
+        export_job.starts_at = datetime.now(pytz.utc)
     else:
         export_job = ExportJob(
-            task=task_url, user_email=g.user.email,
+            task=task_url, user_email=current_identity.email,
             event=Event.query.get(event_id)
         )
     save_to_db(export_job, 'ExportJob saved')
