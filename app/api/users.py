@@ -1,11 +1,12 @@
+import base64
+
 from app.api.bootstrap import api
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 
-from app.api.data_layers.VerifyUserLayer import VerifyUserLayer
-from app.api.helpers.files import create_save_image_sizes, make_fe_url
-from app.api.helpers.mail import send_email_confirmation
+from app.api.helpers.files import create_save_image_sizes, make_frontend_url
+from app.api.helpers.mail import send_email_confirmation, send_email_change_user_email
 from app.api.helpers.utilities import dasherize, get_serializer, str_generator
 from app.models import db
 from app.models.user import User
@@ -15,7 +16,7 @@ from app.models.email_notification import EmailNotification
 from app.models.event_invoice import EventInvoice
 from app.models.access_code import AccessCode
 from app.models.discount_code import DiscountCode
-from app.api.helpers.permissions import is_user_itself, jwt_required
+from app.api.helpers.permissions import is_user_itself
 from app.models.speaker import Speaker
 from app.api.helpers.exceptions import ConflictException
 from app.api.helpers.db import safe_query
@@ -120,9 +121,10 @@ class UserList(ResourceList):
 
     def after_create_object(self, user, data, view_kwargs):
         s = get_serializer()
-        hash = s.dumps([user.email, str_generator()])
-        link = make_fe_url(path='/email/verify?token={token}'.format(token=hash))
+        hash = base64.b64encode(s.dumps([user.email, str_generator()]))
+        link = make_frontend_url('/email/verify'.format(id=user.id), {'token': hash})
         send_email_confirmation(user.email, link)
+
         if data.get('original_image_url'):
             uploaded_images = create_save_image_sizes(data['original_image_url'], 'user', user.id)
             uploaded_images['small_image_url'] = uploaded_images['thumbnail_image_url']
@@ -212,6 +214,13 @@ class UserDetail(ResourceDetail):
             if data.get('icon_image_url'):
                 del data['icon_image_url']
 
+        if data.get('email') and data['email'] != user.email:
+            view_kwargs['email_changed'] = user.email
+
+    def after_update_object(self, user, data, view_kwargs):
+        if view_kwargs.get('email_changed'):
+            send_email_change_user_email(user.email, view_kwargs.get('email_changed'))
+
     decorators = (api.has_permission('is_user_itself', fetch="user_id,id", fetch_as="id",
                   model=[Notification, UsersEventsRoles, EventInvoice, AccessCode,
                          DiscountCode, EmailNotification, Speaker, User],
@@ -222,7 +231,8 @@ class UserDetail(ResourceDetail):
                   'model': User,
                   'methods': {
                       'before_get_object': before_get_object,
-                      'before_update_object': before_update_object
+                      'before_update_object': before_update_object,
+                      'after_update_object': after_update_object
                   }}
 
 
@@ -232,28 +242,3 @@ class UserRelationship(ResourceRelationship):
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User}
-
-
-class VerifyUserSchema(Schema):
-    class Meta:
-        """
-        Meta class for Verify User Schema
-        """
-        type_ = 'verify-user'
-        self_view = 'v1.verify_user'
-        self_view_kwargs = {'user_id': '<id>'}
-        inflect = dasherize
-
-    id = fields.Str(dump_only=True)
-    token = fields.Str(required=True)
-
-
-class VerifyUser(ResourceList):
-
-    methods = ['POST', ]
-    decorators = (jwt_required,)
-    schema = VerifyUserSchema
-    data_layer = {
-        'class': VerifyUserLayer,
-        'session': db.session
-    }
