@@ -12,8 +12,6 @@ from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models import db
 from app.models.notification import Notification
-from app.models.access_code import AccessCode
-from app.models.discount_code import DiscountCode
 from app.models.permission import Permission
 from app.models.role import Role
 from app.models.service import Service

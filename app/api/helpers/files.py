@@ -1,6 +1,7 @@
 import os
 import cStringIO
 import urllib
+import urlparse
 import uuid
 
 import PIL
@@ -12,16 +13,6 @@ from sqlalchemy.orm.exc import NoResultFound
 from app import get_settings
 from app.models.image_size import ImageSizes
 from app.api.helpers.storage import UploadedFile, upload, generate_hash, UPLOAD_PATHS
-
-
-def make_fe_url(settings=None, path=None):
-    """
-    Create URL for frontend
-    """
-    if settings is None:
-        settings = get_settings()
-    fe_host = settings['frontend_url']
-    return fe_host if path is None else (fe_host + path)
 
 
 def get_file_name():
@@ -173,11 +164,17 @@ def create_save_image_sizes(image_file, image_sizes_type, unique_identifier=None
     return new_images
 
 
-def make_fe_url(settings=None, path=None):
+def make_frontend_url(path, parameters=None):
     """
     Create URL for frontend
     """
-    if settings is None:
-        settings = get_settings()
-    front_end_host = settings['frontend_url'] if settings['frontend_url'] else ""
-    return front_end_host if path is None else (front_end_host + path)
+    settings = get_settings()
+    frontend_url = urlparse.urlparse(settings['frontend_url'] if settings['frontend_url'] else '')
+    return urlparse.urlunparse((
+        frontend_url.scheme,
+        frontend_url.netloc,
+        path,
+        '',
+        urllib.urlencode(parameters) if parameters else '',
+        ''
+    ))

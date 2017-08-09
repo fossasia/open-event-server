@@ -1,14 +1,17 @@
+import base64
 from datetime import datetime
 
 from flask import current_app
 
 from app import get_settings
 from app.api.helpers.db import save_to_db
+from app.api.helpers.files import make_frontend_url
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_mails import MAILS
-from app.api.helpers.utilities import string_empty
-from app.models.mail import Mail, USER_CONFIRM, NEW_SESSION, SESSION_ACCEPT_REJECT,\
-    EVENT_ROLE, AFTER_EVENT, MONTHLY_PAYMENT_EMAIL, MONTHLY_PAYMENT_FOLLOWUP_EMAIL
+from app.api.helpers.utilities import string_empty, get_serializer, str_generator
+from app.models.mail import Mail, USER_CONFIRM, NEW_SESSION, USER_CHANGE_EMAIL, SESSION_ACCEPT_REJECT, EVENT_ROLE, \
+    AFTER_EVENT, MONTHLY_PAYMENT_EMAIL, MONTHLY_PAYMENT_FOLLOWUP_EMAIL
+from app.models.user import User
 
 
 def send_email(to, action, subject, html):
@@ -72,6 +75,25 @@ def send_email(to, action, subject, html):
         save_to_db(mail, 'Mail Recorded')
         record_activity('mail_event', email=to, action=action, subject=subject)
     return True
+
+
+def send_email_with_action(user, action, **kwargs):
+    """
+    A general email helper to use in the APIs
+    :param user: email or user to which email is to be sent
+    :param action:
+    :param kwargs:
+    :return:
+    """
+    if isinstance(user, User):
+        user = user.email
+
+    send_email(
+        to=user,
+        action=action,
+        subject=MAILS[action]['subject'].format(**kwargs),
+        html=MAILS[action]['message'].format(**kwargs)
+    )
 
 
 def send_email_confirmation(email, link):
@@ -194,3 +216,11 @@ def send_followup_email_for_monthly_fee_payment(email, event_name, previous_mont
             payment_url=link
         )
     )
+
+
+def send_email_change_user_email(user, email):
+    s = get_serializer()
+    hash = base64.b64encode(s.dumps([email, str_generator()]))
+    link = make_frontend_url('/email/verify'.format(id=user.id), {'token': hash})
+    send_email_with_action(user.email, USER_CONFIRM, email=user.email, link=link)
+    send_email_with_action(email, USER_CHANGE_EMAIL, email=email, new_email=user.email)

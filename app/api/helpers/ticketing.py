@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from app.api.helpers.db import save_to_db, get_count
-from app.api.helpers.files import make_fe_url
+from app.api.helpers.files import make_frontend_url
 from app.api.helpers.payment import StripePaymentsManager, PayPalPaymentsManager
 from app.models import db
 from app.models.ticket_fee import TicketFees
@@ -89,7 +89,7 @@ class TicketingManager(object):
             save_to_db(order)
 
             invoice_id = order.get_invoice_number()
-            order_url = make_fe_url(path="/{identifier}/view/".format(identifier=order.identifier))
+            order_url = make_frontend_url(path="/{identifier}/view/".format(identifier=order.identifier))
             # send_email_for_after_purchase(order.user.email, invoice_id, order_url, order.event.name,
                                           # order.event.organizer_name)
             # send_notif_for_after_purchase(order.user, invoice_id, order_url)
@@ -111,7 +111,7 @@ class TicketingManager(object):
                 save_to_db(order)
 
                 invoice_id = order.get_invoice_number()
-                order_url = make_fe_url(path="/{identifier}/view/".format(identifier=order.identifier))
+                order_url = make_frontend_url(path="/{identifier}/view/".format(identifier=order.identifier))
 
                 # trigger_after_purchase_notifications(order.user.email, order.event_id, order.event, invoice_id,
                 # order_url)
