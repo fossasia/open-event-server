@@ -10,7 +10,7 @@ import stripe
 from app.api.helpers.cache import cache
 from app.api.helpers.db import safe_query, save_to_db
 
-from app.api.helpers.files import make_fe_url
+from app.api.helpers.files import make_frontend_url
 from app.api.helpers.utilities import represents_int
 from app.models.stripe_authorization import StripeAuthorization
 from app.models.ticket_fee import TicketFees
@@ -171,8 +171,10 @@ class PayPalPaymentsManager(object):
             'PAYMENTREQUEST_0_PAYMENTACTION': 'SALE',
             'PAYMENTREQUEST_0_AMT': order.amount,
             'PAYMENTREQUEST_0_CURRENCYCODE': currency,
-            'RETURNURL': make_fe_url(path='/orders/{identifier}/payment/success'.format(identifier=order.identifier)),
-            'CANCELURL': make_fe_url(path='/orders/{identifier}/payment/cancelled'.format(identifier=order.identifier))
+            'RETURNURL': make_frontend_url(path='/orders/{identifier}/payment/success'.
+                                           format(identifier=order.identifier)),
+            'CANCELURL': make_frontend_url(path='/orders/{identifier}/payment/cancelled'.
+                                           format(identifier=order.identifier))
         }
 
         count = 1

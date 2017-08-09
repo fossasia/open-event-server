@@ -5,6 +5,7 @@ from flask import send_file, make_response, jsonify, url_for, \
 
 from app.api.helpers.export_helpers import export_event_json, create_export_job
 from app.api.helpers.utilities import TASK_RESULTS
+from flask_jwt import jwt_required
 
 export_routes = Blueprint('exports', __name__, url_prefix='/v1')
 
@@ -17,6 +18,7 @@ EXPORT_SETTING = {
 
 
 @export_routes.route('/events/<string:event_id>/export/json', methods=['POST'])
+@jwt_required()
 def export_event(event_id):
     from helpers.tasks import export_event_task
 
@@ -29,10 +31,8 @@ def export_event(event_id):
     task = export_event_task.delay(
         event_id, settings)
     # create Job
-    try:
-        create_export_job(task.id, event_id)
-    except Exception:
-        pass
+    create_export_job(task.id, event_id)
+
     # in case of testing
     if current_app.config.get('CELERY_ALWAYS_EAGER'):
         # send_export_mail(event_id, task.get())
@@ -46,6 +46,7 @@ def export_event(event_id):
 
 
 @export_routes.route('/events/<string:event_id>/exports/<path:path>')
+@jwt_required()
 def export_download(event_id, path):
     if not path.startswith('/'):
         path = '/' + path

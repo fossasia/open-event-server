@@ -780,6 +780,32 @@ def invoice_delete(transaction):
         db.session.commit()
 
 
+@hooks.before("Invoices > Event Invoice List of an Event > List Event Invoices of an Event")
+def event_event_invoice_get_list(transaction):
+    """
+    GET /events/1/event-invoices
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_invoice = EventInvoiceFactory()
+        db.session.add(event_invoice)
+        db.session.commit()
+
+
+@hooks.before("Invoices > Event Invoice List of a User > List Event Invoices of a User")
+def user_event_invoice_get_list(transaction):
+    """
+    GET /users/1/event-invoices
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_invoice = EventInvoiceFactory()
+        db.session.add(event_invoice)
+        db.session.commit()
+
+
 # ------------------------- Microlocation -------------------------
 @hooks.before("Microlocations > Microlocation Collection > List All Microlocations")
 def microlocation_get_list(transaction):
