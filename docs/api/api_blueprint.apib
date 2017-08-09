@@ -1145,6 +1145,54 @@ Delete a single event type.
           }
         }
 
+
+## Event Type of an Event [/v1/events/{event_identifier}/event-type]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+
+### Event Type Details of an Event [GET]
+Get a single event type.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "relationships": {
+                    "events": {
+                        "links": {
+                            "self": "/v1/event-types/1/relationships/events",
+                            "related": "/v1/event-types/1/events"
+                        }
+                    }
+                },
+                "attributes": {
+                    "name": "Camp, Treat & Retreat",
+                    "slug": "camp-treat-retreat"
+                },
+                "type": "event-type",
+                "id": "1",
+                "links": {
+                    "self": "/v1/event-types/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/event-types/1"
+            }
+        }
+
+
 # Group Event Topics
 
 Event Topics for Events. Can only be edited and entered by admins.
