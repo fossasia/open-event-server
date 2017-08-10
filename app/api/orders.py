@@ -113,7 +113,7 @@ class OrderSchema(Schema):
 
 class OrdersListPost(ResourceList):
     def before_post(self, args, kwargs, data=None):
-        require_relationship(['event'], data)
+        require_relationship(['event', 'attendees'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
             data['status'] = 'pending'
 
