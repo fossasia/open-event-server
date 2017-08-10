@@ -49,6 +49,7 @@ class Order(db.Model):
     stripe_token = db.Column(db.String)
     paypal_token = db.Column(db.String)
     status = db.Column(db.String)
+    cancel_note = db.Column(db.String, nullable=True)
 
     discount_code_id = db.Column(
         db.Integer, db.ForeignKey('discount_codes.id', ondelete='SET NULL'), nullable=True, default=None)
