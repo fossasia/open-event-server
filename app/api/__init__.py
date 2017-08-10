@@ -328,7 +328,8 @@ api.route(DiscountCodeRelationshipOptional, 'discount_code_user',
 # attendees
 api.route(AttendeeListPost, 'attendee_list_post', '/attendees')
 api.route(AttendeeList, 'attendee_list', '/events/<int:event_id>/attendees',
-          '/events/<event_identifier>/attendees', '/orders/<int:order_id>/tickets/<int:ticket_id>/attendees')
+          '/events/<event_identifier>/attendees', '/orders/<int:order_id>/attendees',
+          '/tickets/<int:ticket_id>/attendees')
 api.route(AttendeeDetail, 'attendee_detail', '/attendees/<int:id>')
 api.route(AttendeeRelationshipOptional, 'attendee_ticket', '/attendees/<int:id>/relationships/ticket')
 api.route(AttendeeRelationshipRequired, 'attendee_event', '/attendees/<int:id>/relationships/event')
@@ -405,7 +406,7 @@ api.route(StripeAuthorizationRelationship, 'stripe_authorization_event',
 api.route(OrdersListPost, 'order_list_post', '/orders')
 api.route(OrdersList, 'orders_list', '/orders', '/events/<int:event_id>/orders',
           '/events/<event_identifier>/orders')
-api.route(OrderDetail, 'order_detail', '/orders/<identifier>')
+api.route(OrderDetail, 'order_detail', '/orders/<identifier>', '/orders/<int:id>')
 
 # Charges API
 api.route(ChargeList, 'charge_list', '/orders/<identifier>/charge', '/orders/<identifier>/charge')

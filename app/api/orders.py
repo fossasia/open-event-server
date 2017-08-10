@@ -55,7 +55,7 @@ class OrderSchema(Schema):
     zipcode = fields.Str()
     completed_at = fields.DateTime(dump_only=True)
     transaction_id = fields.Str(dump_only=True)
-    payment_mode = fields.Str()
+    payment_mode = fields.Str(default="free", required=True)
     paid_via = fields.Str(dump_only=True)
     brand = fields.Str(dump_only=True)
     exp_month = fields.Str(dump_only=True)
@@ -113,7 +113,7 @@ class OrderSchema(Schema):
 
 class OrdersListPost(ResourceList):
     def before_post(self, args, kwargs, data=None):
-        require_relationship(['event', 'attendees'], data)
+        require_relationship(['event', 'ticket_holders'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
             data['status'] = 'pending'
 
