@@ -3031,7 +3031,6 @@ def stripe_authorization_delete(transaction):
     "Event Export > Start Event Export > Start a Task to Export an Event")
 def event_export_post(transaction):
     """
-
     :param transaction:
     :return:
     """
@@ -3046,12 +3045,10 @@ def event_export_post(transaction):
     "Event Import > Start Event Import > Start a Task to Import an Event")
 def event_import_post(transaction):
     """
-
     :param transaction:
     :return:
     """
     transaction['skip'] = True
-
 
 
 # ------------------------- Celery Task -------------------------
@@ -3107,3 +3104,55 @@ def order_statistics_ticket_get(transaction):
         ticket = TicketFactory()
         db.session.add(ticket)
         db.session.commit()
+
+
+# ------------------------- Orders -------------------------
+
+@hooks.before("Orders > Orders Collection > List All Orders")
+def orders_get_collection(transaction):
+    """
+    GET /orders
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Orders > Orders Collection > Create Order")
+def create_order(transaction):
+    """
+    GET /orders
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Orders > Order Detail > Get Order Detail")
+def order_detail(transaction):
+    """
+    GET /orders
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Orders > Order Detail > Update Order")
+def update_order(transaction):
+    """
+    GET /orders
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Orders > Order Detail > Delete Order")
+def delete_order(transaction):
+    """
+    GET /orders
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
