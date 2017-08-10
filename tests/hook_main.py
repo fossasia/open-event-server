@@ -48,6 +48,7 @@ from app.factories.user_permission import UserPermissionFactory
 from app.factories.email_notification import EmailNotificationFactory
 from app.factories.activities import ActivityFactory
 from app.factories.stripe_authorization import StripeAuthorizationFactory
+from app.factories.mail import MailFactory
 
 
 stash = {}
@@ -771,6 +772,32 @@ def invoice_patch(transaction):
 def invoice_delete(transaction):
     """
     DELETE /event-invoices/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_invoice = EventInvoiceFactory()
+        db.session.add(event_invoice)
+        db.session.commit()
+
+
+@hooks.before("Invoices > Event Invoice List of an Event > List Event Invoices of an Event")
+def event_event_invoice_get_list(transaction):
+    """
+    GET /events/1/event-invoices
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_invoice = EventInvoiceFactory()
+        db.session.add(event_invoice)
+        db.session.commit()
+
+
+@hooks.before("Invoices > Event Invoice List of a User > List Event Invoices of a User")
+def user_event_invoice_get_list(transaction):
+    """
+    GET /users/1/event-invoices
     :param transaction:
     :return:
     """
@@ -2143,6 +2170,33 @@ def page_delete(transaction):
         db.session.commit()
 
 
+# ------------------------- Mails -------------------------
+@hooks.before("Mails > Mail Collection > Show all mails")
+def mail_get_list(transaction):
+    """
+    GET /mails
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        mail = MailFactory()
+        db.session.add(mail)
+        db.session.commit()
+
+
+@hooks.before("Mails > Mail Details > Get Mail Details")
+def mail_get_detail(transaction):
+    """
+    GET /mails/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        mail = MailFactory()
+        db.session.add(mail)
+        db.session.commit()
+
+
 # ------------------------- Settings -------------------------
 @hooks.before("Settings > Settings Details > Show Settings")
 def settings_get_list(transaction):
@@ -2570,6 +2624,21 @@ def event_type_delete(transaction):
         db.session.add(event_type)
         db.session.commit()
 
+
+@hooks.before("Event Types > Event Type of an Event > Event Type Details of an Event")
+def event_event_type_get_detail(transaction):
+    """
+    GET /event/1/event-type
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_type = EventTypeFactory()
+        db.session.add(event_type)
+
+        event = EventFactoryBasic(event_type_id=1)
+        db.session.add(event)
+        db.session.commit()
 
 # ------------------------- Event Topics -------------------------
 @hooks.before("Event Topics > Event Topics Collection > List All Event Topics")
