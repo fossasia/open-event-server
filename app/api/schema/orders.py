@@ -52,6 +52,7 @@ class OrderSchema(Schema):
     status = fields.Str(validate=validate.OneOf(choices=["pending", "cancelled", "confirmed", "deleted"]))
     discount_code_id = fields.Str()
     payment_url = fields.Str(dump_only=True)
+    cancel_note = fields.Str()
 
     attendees = Relationship(attribute='ticket_holders',
                              self_view='v1.order_attendee',

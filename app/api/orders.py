@@ -14,6 +14,7 @@ from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.notification import send_notif_to_attendees
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.notification import send_notif_ticket_purchase_organizer
+from app.api.helpers.mail import send_order_cancel_email
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
@@ -33,6 +34,9 @@ class OrdersListPost(ResourceList):
             data['status'] = 'pending'
 
     def before_create_object(self, data, view_kwargs):
+        if data.get('cancel_note'):
+            del data['cancel_note']
+
         # Apply discount only if the user is not event admin
         if data.get('discount') and not has_access('is_coorganizer', event_id=data['event']):
             discount_code = safe_query(self, DiscountCode, 'id', data['discount'], 'discount_code_id')
@@ -122,12 +126,19 @@ class OrderDetail(ResourceDetail):
             view_kwargs['order_identifier'] = attendee.order.identifier
 
     def before_update_object(self, order, data, view_kwargs):
+        if data.get('cancel_note'):
+            del data['cancel_note']
+
         if data.get('status'):
             if has_access('is_coorganizer', event_id=order.event.id):
                 pass
             else:
                 raise ForbiddenException({'pointer': 'data/status'},
                                          "To update status minimum Co-organizer access required")
+
+    def after_update_object(self, order, data, view_kwargs):
+        if order.status == 'cancelled':
+            send_order_cancel_email(order)
 
     decorators = (api.has_permission('is_coorganizer', fetch="event_id", fetch_as="event_id",
                                      fetch_key_model="identifier", fetch_key_url="order_identifier", model=Order),)
@@ -137,9 +148,8 @@ class OrderDetail(ResourceDetail):
                   'model': Order,
                   'url_field': 'order_identifier',
                   'id_field': 'identifier',
-                  'methods': {
-                      'before_update_object': before_update_object
-                  }}
+                  'methods': {'before_update_object': before_update_object,
+                              'after_update_object': after_update_object}}
 
 
 class OrderRelationship(ResourceRelationship):
