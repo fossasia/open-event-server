@@ -10,7 +10,7 @@ from app.api.helpers.log import record_activity
 from app.api.helpers.system_mails import MAILS
 from app.api.helpers.utilities import string_empty, get_serializer, str_generator
 from app.models.mail import Mail, USER_CONFIRM, NEW_SESSION, USER_CHANGE_EMAIL, SESSION_ACCEPT_REJECT, EVENT_ROLE, \
-    AFTER_EVENT, MONTHLY_PAYMENT_EMAIL, MONTHLY_PAYMENT_FOLLOWUP_EMAIL
+    AFTER_EVENT, MONTHLY_PAYMENT_EMAIL, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_EXPORTED, EVENT_EXPORT_FAIL
 from app.models.user import User
 
 
@@ -216,6 +216,32 @@ def send_followup_email_for_monthly_fee_payment(email, event_name, previous_mont
             payment_url=link
         )
     )
+
+
+def send_export_mail(email, event_name, error_text=None, download_url=None):
+    """followup export link in email"""
+    if error_text:
+        send_email(
+            to=email,
+            action=EVENT_EXPORT_FAIL,
+            subject=MAILS[EVENT_EXPORT_FAIL]['subject'].format(
+                event_name=event_name
+            ),
+            html=MAILS[EVENT_EXPORT_FAIL]['message'].format(
+                error_text=error_text
+            )
+        )
+    elif download_url:
+        send_email(
+            to=email,
+            action=EVENT_EXPORTED,
+            subject=MAILS[EVENT_EXPORTED]['subject'].format(
+                event_name=event_name
+            ),
+            html=MAILS[EVENT_EXPORTED]['message'].format(
+                download_url=download_url
+            )
+        )
 
 
 def send_email_change_user_email(user, email):
