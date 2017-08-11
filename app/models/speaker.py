@@ -7,10 +7,10 @@ class Speaker(db.Model):
     __tablename__ = 'speaker'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    photo = db.Column(db.String)
-    thumbnail = db.Column(db.String)
-    small = db.Column(db.String)
-    icon = db.Column(db.String)
+    photo_url = db.Column(db.String)
+    thumbnail_image_url = db.Column(db.String)
+    small_image_url = db.Column(db.String)
+    icon_image_url = db.Column(db.String)
     short_biography = db.Column(db.Text)
     long_biography = db.Column(db.Text)
     speaking_experience = db.Column(db.Text)
@@ -59,10 +59,10 @@ class Speaker(db.Model):
                  event_id=None,
                  user_id=None):
         self.name = name
-        self.photo = photo_url
-        self.thumbnail = thumbnail_image_url
-        self.small = small_image_url
-        self.icon = icon_image_url
+        self.photo_url = photo_url
+        self.thumbnail_image_url = thumbnail_image_url
+        self.small_image_url = small_image_url
+        self.icon_image_url = icon_image_url
         self.short_biography = short_biography
         self.long_biography = long_biography
         self.speaking_experience = speaking_experience
@@ -113,10 +113,10 @@ class Speaker(db.Model):
         return {
             'id': self.id,
             'name': self.name,
-            'photo': self.photo,
-            'thumbnail': self.thumbnail,
-            'small': self.small,
-            'icon': self.icon,
+            'photo_url': self.photo_url,
+            'thumbnail_image_url': self.thumbnail_image_url,
+            'small_image_url': self.small_image_url,
+            'icon_image_url': self.icon_image_url,
             'short_biography': self.short_biography,
             'long_biography': self.long_biography,
             'speaking_experience': self.speaking_experience,
