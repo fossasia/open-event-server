@@ -14,8 +14,10 @@ import traceback
 from flask import url_for
 
 from app.api.helpers.request_context_task import RequestContextTask
-# from errors import BaseError, ServerError
-# from export_helpers import send_export_mail
+from app.api.helpers.mail import send_export_mail
+from app.api.helpers.db import safe_query
+from app.models.event import Event
+from app.models import db
 from app.api.exports import event_export_task_base
 from app.settings import get_settings
 
@@ -53,25 +55,23 @@ def send_mail_via_smtp_task(config, payload):
 
 
 @celery.task(base=RequestContextTask, name='export.event', bind=True)
-def export_event_task(self, event_id, settings):
+def export_event_task(self, email, event_id, settings):
+    event = safe_query(db, Event, 'id', event_id, 'event_id')
     try:
         logging.info('Exporting started')
         path = event_export_task_base(event_id, settings)
         # task_id = self.request.id.__str__()  # str(async result)
-        if get_settings()['storage_place'] == 'local' or get_settings()['storage_place'] == None:
-            download_url = url_for(
-                'exports.export_download', event_id=event_id, path=path
-            )
-        else:
-            download_url = path
+        download_url = path
 
         result = {
             'download_url': download_url
         }
+        logging.info('Exporting done.. sending email')
+        send_export_mail(email=email, event_name=event.name, download_url=download_url)
     except Exception as e:
         print(traceback.format_exc())
-        result = {'__error': True, 'result': e}
-    logging.info('Exporting done.. sending email')
-    # send email
-    # send_export_mail(event_id, result)
+        result = {'__error': True, 'result': str(e)}
+        logging.info('Error in exporting.. sending email')
+        send_export_mail(email=email, event_name=event.name, error_text=str(e))
+
     return result
