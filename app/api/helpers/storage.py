@@ -32,7 +32,6 @@ UPLOAD_PATHS = {
     },
     'event': {
         'logo': 'events/{event_id}/logo',
-        'background_url': 'events/{event_id}/background',
         'original': 'events/{identifier}/original',
         'thumbnail': 'events/{identifier}/thumbnail',
         'large': 'events/{identifier}/large',
