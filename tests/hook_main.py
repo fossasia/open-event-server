@@ -3079,3 +3079,18 @@ def event_statistics_general_get(transaction):
         event = EventFactoryBasic()
         db.session.add(event)
         db.session.commit()
+
+
+# ------------------------- Event Statistics -------------------------
+
+@hooks.before("Ticket Statistics > Ticket Statistics Details By Event > Show Ticket Statistics By Event")
+def ticket_statistics_event_get(transaction):
+    """
+    GET /events/1/ticket-statistics
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
