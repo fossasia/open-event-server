@@ -15898,6 +15898,7 @@ To create or modify any data of this data layer, you will need admin access. How
 | `description` | Description of the page | string | **yes** |
 | `language`  | Language of the page | string | - |
 | `index` | Position of the page  | integer (default: `0` ) | - |
+| `place`  | Place where the page will be located, currently `footer` and `event` are accepted | string | - |
 
 ## Page Collection [/v1/pages{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -15929,7 +15930,7 @@ To create or modify any data of this data layer, you will need admin access. How
                 "title": "How it works",
                 "url": "/how-it-works",
                 "description": "How it works",
-                "place": "Use Open Event",
+                "place": "footer",
                 "language": "English",
                 "index": 0
               },
@@ -15967,7 +15968,7 @@ Create a new general page by admins.
                   "title": "How it works",
                   "url": "/how-it-works",
                   "description": "How it works",
-                  "place": "Use Open Event",
+                  "place": "footer",
                   "language": "English",
                   "index": 0
                 },
@@ -16005,7 +16006,7 @@ Get a single page.
               "title": "How it works",
               "url": "/how-it-works",
               "description": "How it works",
-              "place": "Use Open Event",
+              "place": "footer",
               "language": "English",
               "index": 0
             },
@@ -16045,7 +16046,7 @@ Update a single page by `id`.
                   "title": "How it works",
                   "url": "/how-it-works",
                   "description": "How it works",
-                  "place": "Use Open Event",
+                  "place": "footer",
                   "language": "English",
                   "index": 0
                 },
@@ -16063,7 +16064,7 @@ Update a single page by `id`.
               "title": "How it works",
               "url": "/how-it-works",
               "description": "How it works",
-              "place": "Use Open Event",
+              "place": "footer",
               "language": "English",
               "index": 0
             },
