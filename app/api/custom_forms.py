@@ -33,7 +33,7 @@ class CustomFormSchema(Schema):
     field_identifier = fields.Str(required=True)
     form = fields.Str(required=True)
     type = fields.Str(default="text", validate=validate.OneOf(
-        choices=["text", "checkbox", "select", "file", "image"]))
+        choices=["text", "checkbox", "select", "file", "image", "email"]))
     is_required = fields.Boolean(default=False)
     is_included = fields.Boolean(default=False)
     is_fixed = fields.Boolean(default=False)
