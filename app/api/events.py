@@ -280,6 +280,7 @@ class EventSchema(Schema):
                              related_view='v1.attendee_list',
                              related_view_kwargs={'event_id': '<id>'},
                              schema='AttendeeSchema',
+                             many=True,
                              type_='attendee')
     custom_forms = Relationship(attribute='custom_form',
                                 self_view='v1.event_custom_forms',
@@ -287,6 +288,7 @@ class EventSchema(Schema):
                                 related_view='v1.custom_form_list',
                                 related_view_kwargs={'event_id': '<id>'},
                                 schema='CustomFormSchema',
+                                many=True,
                                 type_='custom-form')
 
 
