@@ -56,3 +56,8 @@ class NotFoundError(ErrorResponse):
     """
     title = 'Not Found'
     status = 404
+
+
+class ServerError(ErrorResponse):
+    status = 500
+    title = 'Internal Server Error'

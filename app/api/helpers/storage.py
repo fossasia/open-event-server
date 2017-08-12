@@ -32,7 +32,6 @@ UPLOAD_PATHS = {
     },
     'event': {
         'logo': 'events/{event_id}/logo',
-        'background_url': 'events/{event_id}/background',
         'original': 'events/{identifier}/original',
         'thumbnail': 'events/{identifier}/thumbnail',
         'large': 'events/{identifier}/large',
@@ -40,9 +39,6 @@ UPLOAD_PATHS = {
     },
     'sponsors': {
         'logo': 'events/{event_id}/sponsors/{id}/logo'
-    },
-    'tracks': {
-        'track_image_url': 'events/{event_id}/tracks/{id}/track_image'
     },
     'user': {
         'avatar': 'users/{user_id}/avatar',

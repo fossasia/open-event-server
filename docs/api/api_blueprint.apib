@@ -17499,7 +17499,9 @@ Start a celery task to export the event with the event_id as a collection of jso
 to get the status of the export task.
 
 
-### Start a Task to Export an Event [GET]
+### Start a Task to Export an Event [POST]
++ Parameters
+    + event_id: 1 (integer) - ID of the event
 
 + Request
 
@@ -17516,6 +17518,31 @@ to get the status of the export task.
                 "document": true,
                 "audio": true
             }
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
+
+
+# Group Event Import
+
+This group of APIs help you to start a task for importing zip containing JSON files into the server.
+
+## Start Event Import [/v1/events/import/json]
+
+Start a celery task to import event along with all other import related data such as microlocation, session, speakers, etc.
+from the different json files present inside the zip file and save it inside a database.
+
+
+### Start a Task to Import an Event [POST]
+
++ Request(multipart/form-data; boundary=---BOUNDARY)
+
+        -----BOUNDARY
+        Content-Disposition: form-data; name="file"; filename="event1.zip"
+        Content-Type: application/zip
 
 + Response 200 (application/json)
 
