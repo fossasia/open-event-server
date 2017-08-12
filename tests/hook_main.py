@@ -2413,27 +2413,17 @@ def access_code_delete(transaction):
 
 
 # ------------------------- Custom Forms -------------------------
-@hooks.before("Custom Forms > Custom Form Collection > List All Custom Forms")
-def custom_form_get_list(transaction):
+@hooks.before("Custom Forms > Custom Form Collection > Create Custom Form")
+def custom_form_post(transaction):
     """
-    GET /events/1/custom-forms
+    POST /custom-forms
     :param transaction:
     :return:
     """
     with stash['app'].app_context():
-        custom_form = CustomFormFactory()
-        db.session.add(custom_form)
+        event = EventFactoryBasic()
+        db.session.add(event)
         db.session.commit()
-
-
-@hooks.before("Custom Forms > Custom Form Collection > Create Custom Form")
-def custom_form_post(transaction):
-    """
-    POST /events/1/custom-forms
-    :param transaction:
-    :return:
-    """
-    transaction['skip'] = True
 
 
 @hooks.before("Custom Forms > Custom Form Detail > Custom Form Detail")
@@ -2466,6 +2456,19 @@ def custom_form_patch(transaction):
 def custom_form_delete(transaction):
     """
     DELETE /custom-forms/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        custom_form = CustomFormFactory()
+        db.session.add(custom_form)
+        db.session.commit()
+
+
+@hooks.before("Custom Forms > Event Custom Form Collection > List All Custom Forms for an Event")
+def custom_form_get_list(transaction):
+    """
+    GET /events/1/custom-forms
     :param transaction:
     :return:
     """
