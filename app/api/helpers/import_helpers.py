@@ -40,7 +40,7 @@ IMPORT_SERIES = [
 
 DELETE_FIELDS = {
     'event': ['creator', 'created_at'],
-    'tracks': ['sessions'],
+    'tracks': ['sessions', 'font_color'],
     'speakers': ['sessions']
 }
 
@@ -48,7 +48,6 @@ RELATED_FIELDS = {
     'sessions': [
         ('track', 'track_id', 'tracks'),
         ('microlocation', 'microlocation_id', 'microlocations'),
-        ('speakers', 'speaker_ids', 'speakers'),
         ('session_type', 'session_type_id', 'session_types')
     ]
 }
@@ -98,7 +97,7 @@ def get_file_from_request(ext=None, folder=None, name='file'):
         if 'UPLOAD_FOLDER' in app.config:
             folder = app.config['UPLOAD_FOLDER']
         else:
-            folder = UPLOAD_PATHS['temp']['event'].format(uuid=uuid.uuid4())
+            folder = 'static/uploads/' + UPLOAD_PATHS['temp']['event'].format(uuid=uuid.uuid4())
     else:
         with app.app_context():
             folder = app.config['BASE_DIR'] + folder
@@ -183,14 +182,17 @@ def _upload_media(task_handle, event_id, base_path):
         ct += 1
         update_state(task_handle, 'Uploading media (%d/%d)' % (ct, total))
         # get upload infos
-        name, dao = i['srv']
+        name, model = i['srv']
         id_ = i['id']
         if name == 'event':
-            item = dao.get(event_id)
+            item = db.session.query(model).filter_by(id=event_id).first()
         else:
-            item = dao.get(event_id, id_)
+            item = db.session.query(model).filter_by(event_id=event_id).filter_by(id=id_).first()
         # get cur file
-        field = i['field']
+        if i['field'] in ['original', 'large', 'thumbnail', 'small', 'icon']:
+            field = '{}_image_url'.format(i['field'])
+        else:
+            field = '{}_url'.format(i['field'])
         path = getattr(item, field)
         if path.startswith('/'):
             # relative files
@@ -223,10 +225,10 @@ def _upload_media(task_handle, event_id, base_path):
                 key = key.format(event_id=event_id)
             else:
                 key = key.format(event_id=event_id, id=id_)
-            print key
+            print(key)
             new_url = upload(file, key)
         except Exception:
-            print traceback.format_exc()
+            print(traceback.format_exc())
             new_url = None
         setattr(item, field, new_url)
         save_to_db(item, msg='Url updated')
@@ -297,12 +299,11 @@ def create_service_from_json(task_handle, data, srv, event_id, service_ids=None)
         obj = _delete_fields(srv, obj)
         # related
         obj = _fix_related_fields(srv, obj, service_ids)
+        obj['event_id'] = event_id
         # create object
-        print srv[1]
         new_obj = srv[1](**obj)
         db.session.add(new_obj)
         db.session.commit()
-        print new_obj.__dict__
         ids[old_id] = new_obj.id
         # add uploads to queue
         _upload_media_queue(srv, new_obj)
@@ -326,7 +327,6 @@ def import_event_json(task_handle, zip_path):
     # extract files from zip
     with zipfile.ZipFile(zip_path, "r") as z:
         z.extractall(path)
-    path = path + "/" + zip_path.split("/")[-1].split(".")[0]
     # create event
     try:
         update_state(task_handle, 'Importing event core')
@@ -366,7 +366,7 @@ def import_event_json(task_handle, zip_path):
         raise make_error(item[0], er=ServerError(source='Zip Upload',
                                                  detail='Invalid json'))
     except Exception:
-        print traceback.format_exc()
+        print(traceback.format_exc())
         db.session.delete(new_event)
         db.session.commit()
         raise make_error(item[0], id_=CUR_ID)

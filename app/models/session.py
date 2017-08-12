@@ -68,6 +68,7 @@ class Session(db.Model):
                  session_type_id=None,
                  level=None,
                  created_at=None,
+                 submission_modifier=None,
                  is_mail_sent=False,
                  deleted_at=None,
                  submitted_at=None):
@@ -99,6 +100,7 @@ class Session(db.Model):
         self.deleted_at = deleted_at
         self.is_mail_sent = is_mail_sent
         self.submitted_at = submitted_at
+        self.submission_modifier = submission_modifier
 
     @staticmethod
     def get_service_name():

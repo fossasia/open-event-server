@@ -3035,7 +3035,23 @@ def event_export_post(transaction):
     :param transaction:
     :return:
     """
-    pass
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+# ------------------------- Import -------------------------
+@hooks.before(
+    "Event Import > Start Event Import > Start a Task to Import an Event")
+def event_import_post(transaction):
+    """
+
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
 
 
 # ------------------------- Celery Task -------------------------
