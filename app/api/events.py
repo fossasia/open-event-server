@@ -290,10 +290,44 @@ class EventSchema(Schema):
                                 schema='CustomFormSchema',
                                 many=True,
                                 type_='custom-form')
+    organizers = Relationship(attribute='organizers',
+                              self_view='v1.event_organizers',
+                              self_view_kwargs={'id': '<id>'},
+                              related_view='v1.user_list',
+                              schema='UserSchema',
+                              type_='user',
+                              many=True)
+    coorganizers = Relationship(attribute='coorganizers',
+                                self_view='v1.event_coorganizers',
+                                self_view_kwargs={'id': '<id>'},
+                                related_view='v1.user_list',
+                                schema='UserSchema',
+                                type_='user',
+                                many=True)
+    track_organizers = Relationship(attribute='track_organizers',
+                                    self_view='v1.event_track_organizers',
+                                    self_view_kwargs={'id': '<id>'},
+                                    related_view='v1.user_list',
+                                    schema='UserSchema',
+                                    type_='user',
+                                    many=True)
+    moderators = Relationship(attribute='moderators',
+                              self_view='v1.event_moderators',
+                              self_view_kwargs={'id': '<id>'},
+                              related_view='v1.user_list',
+                              schema='UserSchema',
+                              type_='user',
+                              many=True)
+    registrars = Relationship(attribute='registrars',
+                              self_view='v1.event_registrars',
+                              self_view_kwargs={'id': '<id>'},
+                              related_view='v1.user_list',
+                              schema='UserSchema',
+                              type_='user',
+                              many=True)
 
 
 class EventList(ResourceList):
-
     def query(self, view_kwargs):
         query_ = self.session.query(Event).filter_by(state='published')
         if 'Authorization' in request.headers:
@@ -305,7 +339,7 @@ class EventList(ResourceList):
 
         if view_kwargs.get('user_id') and 'GET' in request.method:
             user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
-            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role).\
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
                 filter(Role.name != ATTENDEE)
 
         if view_kwargs.get('event_type_id') and 'GET' in request.method:
@@ -347,7 +381,6 @@ class EventList(ResourceList):
 
 
 class EventDetail(ResourceDetail):
-
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('identifier'):
             event = safe_query(self, Event, 'identifier', view_kwargs['identifier'], 'identifier')
@@ -537,7 +570,7 @@ class EventDetail(ResourceDetail):
             if data.get('icon_image_url'):
                 del data['icon_image_url']
 
-    decorators = (api.has_permission('is_organizer', methods="PATCH,DELETE", fetch="id", fetch_as="event_id",
+    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="id", fetch_as="event_id",
                                      model=Event), )
     schema = EventSchema
     data_layer = {'session': db.session,
@@ -555,7 +588,8 @@ class EventRelationship(ResourceRelationship):
             event = safe_query(self, Event, 'identifier', view_kwargs['identifier'], 'identifier')
             view_kwargs['id'] = event.id
 
-    decorators = (api.has_permission('auth_required', methods="POST,PATCH,DELETE"),)
+    decorators = (api.has_permission('is_coorganizer', fetch="id", fetch_as="event_id",
+                                     model=Event),)
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
