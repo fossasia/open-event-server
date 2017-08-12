@@ -17847,7 +17847,7 @@ Get the task status and the final result of the task as response
 
 # Group Ticket Statistics
 
-## Ticket Statistics Details By Event [/v1/events/{event_identifier}/ticket-statistics]
+## Ticket Statistics Details By Event [/v1/events/{event_identifier}/order-statistics]
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
 
@@ -17915,16 +17915,16 @@ Get the task status and the final result of the task as response
                     "pending": 0
                 }
             },
-            "type": "ticket-statistics-event",
+            "type": "order-statistics-event",
             "id": "1",
             "links": {
-                "self": "/v1/events/1/ticket-statistics"
+                "self": "/v1/events/1/order-statistics"
             }
         },
         "jsonapi": {
             "version": "1.0"
         },
         "links": {
-            "self": "/v1/events/1/ticket-statistics"
+            "self": "/v1/events/1/order-statistics"
         }
     }

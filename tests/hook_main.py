@@ -3086,7 +3086,7 @@ def event_statistics_general_get(transaction):
 @hooks.before("Ticket Statistics > Ticket Statistics Details By Event > Show Ticket Statistics By Event")
 def ticket_statistics_event_get(transaction):
     """
-    GET /events/1/ticket-statistics
+    GET /events/1/order-statistics
     :param transaction:
     :return:
     """
