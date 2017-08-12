@@ -108,6 +108,42 @@ class Event(db.Model):
     event_topic = db.relationship('EventTopic', backref='event', foreign_keys=[event_topic_id])
     event_sub_topic = db.relationship(
         'EventSubTopic', backref='event', foreign_keys=[event_sub_topic_id])
+    organizers = db.relationship('User',
+                                 viewonly=True,
+                                 secondary='join(UsersEventsRoles, Role,'
+                                           ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "organizer"))',
+                                 primaryjoin='UsersEventsRoles.event_id == Event.id',
+                                 secondaryjoin='User.id == UsersEventsRoles.user_id',
+                                 backref='organizer_of_events')
+    coorganizers = db.relationship('User',
+                                   viewonly=True,
+                                   secondary='join(UsersEventsRoles, Role,'
+                                             ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "coorganizer"))',
+                                   primaryjoin='UsersEventsRoles.event_id == Event.id',
+                                   secondaryjoin='User.id == UsersEventsRoles.user_id',
+                                   backref='coorganizer_of_events')
+    track_organizers = db.relationship('User',
+                                       viewonly=True,
+                                       secondary='join(UsersEventsRoles, Role,'
+                                                 ' and_(Role.id == UsersEventsRoles.role_id,'
+                                                 ' Role.name == "track_organizer"))',
+                                       primaryjoin='UsersEventsRoles.event_id == Event.id',
+                                       secondaryjoin='User.id == UsersEventsRoles.user_id',
+                                       backref='track_organizer_of_events')
+    registrars = db.relationship('User',
+                                 viewonly=True,
+                                 secondary='join(UsersEventsRoles, Role,'
+                                           ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "registrar"))',
+                                 primaryjoin='UsersEventsRoles.event_id == Event.id',
+                                 secondaryjoin='User.id == UsersEventsRoles.user_id',
+                                 backref='registrar_of_events')
+    moderators = db.relationship('User',
+                                 viewonly=True,
+                                 secondary='join(UsersEventsRoles, Role,'
+                                           ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "moderator"))',
+                                 primaryjoin='UsersEventsRoles.event_id == Event.id',
+                                 secondaryjoin='User.id == UsersEventsRoles.user_id',
+                                 backref='moderator_of_events')
 
     def __init__(self,
                  name=None,
@@ -231,7 +267,7 @@ class Event(db.Model):
     def notification_settings(self, user_id):
         try:
             return EmailNotification.query.filter_by(
-                user_id=(login.current_user.id if not user_id else int(user_id))).\
+                user_id=(login.current_user.id if not user_id else int(user_id))). \
                 filter_by(event_id=self.id).first()
         except:
             return None

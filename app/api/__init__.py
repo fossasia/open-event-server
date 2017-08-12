@@ -199,6 +199,19 @@ api.route(EventRelationship, 'event_attendees', '/events/<int:id>/relationships/
           '/events/<identifier>/relationships/attendees')
 api.route(EventRelationship, 'event_custom_forms', '/events/<int:id>/relationships/custom-forms',
           '/events/<identifier>/relationships/custom-forms')
+# Events -> roles:
+api.route(EventRelationship, 'event_organizers', '/events/<int:id>/relationships/organizers',
+          '/events/<identifier>/relationships/organizers')
+api.route(EventRelationship, 'event_coorganizers', '/events/<int:id>/relationships/coorganizers',
+          '/events/<identifier>/relationships/coorganizers')
+api.route(EventRelationship, 'event_track_organizers', '/events/<int:id>/relationships/track-organizers',
+          '/events/<identifier>/relationships/track-organizers')
+api.route(EventRelationship, 'event_moderators', '/events/<int:id>/relationships/moderators',
+          '/events/<identifier>/relationships/moderators')
+api.route(EventRelationship, 'event_registrars', '/events/<int:id>/relationships/registrars',
+          '/events/<identifier>/relationships/registrars')
+
+
 
 # microlocations
 api.route(MicrolocationList, 'microlocation_list', '/events/<int:event_id>/microlocations',
