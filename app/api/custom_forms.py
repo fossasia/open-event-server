@@ -24,7 +24,7 @@ class CustomFormSchema(Schema):
         """
         Meta class for CustomForm Schema
         """
-        type_ = 'custom_form'
+        type_ = 'custom-form'
         self_view = 'v1.custom_form_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
