@@ -107,13 +107,6 @@ class CustomPlaceholderDetail(ResourceDetail):
             data['large_image_url'] = uploaded_images['large_image_url']
             data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
             data['icon_image_url'] = uploaded_images['icon_image_url']
-        else:
-            if data.get('large_image_url'):
-                del data['large_image_url']
-            if data.get('thumbnail_image_url'):
-                del data['thumbnail_image_url']
-            if data.get('icon_image_url'):
-                del data['icon_image_url']
 
     decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
     schema = CustomPlaceholderSchema
