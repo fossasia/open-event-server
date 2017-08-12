@@ -209,13 +209,6 @@ class UserDetail(ResourceDetail):
             data['small_image_url'] = uploaded_images['thumbnail_image_url']
             data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
             data['icon_image_url'] = uploaded_images['icon_image_url']
-        else:
-            if data.get('small_image_url'):
-                del data['small_image_url']
-            if data.get('thumbnail_image_url'):
-                del data['thumbnail_image_url']
-            if data.get('icon_image_url'):
-                del data['icon_image_url']
 
         if data.get('email') and data['email'] != user.email:
             view_kwargs['email_changed'] = user.email
