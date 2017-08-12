@@ -1,6 +1,7 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
+import marshmallow.validate as validate
 
 from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
@@ -26,7 +27,7 @@ class PageSchema(Schema):
     title = fields.Str(allow_none=True)
     url = fields.String(required=True)
     description = fields.Str(allow_none=True)
-    place = fields.Str(allow_none=True)
+    place = fields.Str(validate=validate.OneOf(choices=["footer", "event"]), allow_none=True)
     language = fields.Str(allow_none=True)
     index = fields.Integer(default=0)
 
