@@ -50,7 +50,6 @@ class CustomForms(db.Model):
     is_included = db.Column(db.Boolean)
     is_fixed = db.Column(db.Boolean)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-    event = db.relationship("Event", backref="custom_forms")
 
     def __init__(self,
                  event_id=None,

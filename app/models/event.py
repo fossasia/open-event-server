@@ -70,6 +70,8 @@ class Event(db.Model):
     users = db.relationship("EventsUsers", backref="event")
     roles = db.relationship("UsersEventsRoles", backref="event")
     role_invites = db.relationship('RoleInvite', back_populates='event')
+    custom_form = db.relationship('CustomForms', backref="event")
+    attendees = db.relationship('TicketHolder', backref="event")
     privacy = db.Column(db.String, default="public")
     state = db.Column(db.String, default="Draft")
     event_type_id = db.Column(db.Integer, db.ForeignKey('event_types.id', ondelete='CASCADE'))

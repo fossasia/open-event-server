@@ -2,6 +2,8 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
 import marshmallow.validate as validate
+from app.api.helpers.permissions import jwt_required
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
@@ -10,6 +12,7 @@ from app.models.custom_form import CustomForms
 from app.models.event import Event
 from app.api.helpers.db import safe_query
 from app.api.helpers.utilities import require_relationship
+from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
 
 
@@ -43,7 +46,7 @@ class CustomFormSchema(Schema):
                          type_='event')
 
 
-class CustomFormList(ResourceList):
+class CustomFormListPost(ResourceList):
     """
     Create and List Custom Forms
     """
@@ -57,7 +60,21 @@ class CustomFormList(ResourceList):
         :return:
         """
         require_relationship(['event'], data)
+        if not has_access('is_coorganizer', event_id=data['event']):
+            raise ObjectNotFound({'parameter': 'event_id'},
+                                 "Event: {} not found".format(data['event_id']))
 
+    schema = CustomFormSchema
+    methods = ['POST', ]
+    data_layer = {'session': db.session,
+                  'model': CustomForms
+                  }
+
+
+class CustomFormList(ResourceList):
+    """
+    Create and List Custom Forms
+    """
     def query(self, view_kwargs):
         """
         query method for different view_kwargs
@@ -68,30 +85,14 @@ class CustomFormList(ResourceList):
         query_ = event_query(self, query_, view_kwargs)
         return query_
 
-    def before_create_object(self, data, view_kwargs):
-        """
-        before create method for object
-        :param data:
-        :param view_kwargs:
-        :return:
-        """
-        event = None
-        if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-        if event:
-            data['event_id'] = event.id
-
     view_kwargs = True
-    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
-                  fetch_as="event_id", model=CustomForms, methods="POST",), )
+    decorators = (jwt_required, )
+    methods = ['GET', ]
     schema = CustomFormSchema
     data_layer = {'session': db.session,
                   'model': CustomForms,
                   'methods': {
-                      'query': query,
-                      'before_create_object': before_create_object
+                      'query': query
                   }}
 
 
