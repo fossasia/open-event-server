@@ -10,7 +10,7 @@ import re
 
 from app.api.helpers.exceptions import UnprocessableEntity
 
-
+from flask import current_app
 
 def dasherize(text):
     return text.replace('_', '-')
@@ -89,6 +89,24 @@ def get_filename_from_cd(cd):
     fn = fname[0].rsplit('.', 1)
     return fn[0], '' if len(fn) == 1 else ('.' + fn[1])
 
+
+def write_file(file, data):
+    """simple write to file"""
+    fp = open(file, 'w')
+    fp.write(data)
+    fp.close()
+
+
+def update_state(task_handle, state, result=None):
+    """
+    Update state of celery task
+    """
+    if result is None:
+        result = {}
+    if not current_app.config.get('CELERY_ALWAYS_EAGER'):
+        task_handle.update_state(
+            state=state, meta=result
+        )
 
 # store task results in case of testing
 # state and info

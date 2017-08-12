@@ -19,6 +19,7 @@ from app.api.helpers.db import safe_query
 from app.models.event import Event
 from app.models import db
 from app.api.exports import event_export_task_base
+from app.api.imports import import_event_task_base
 from app.settings import get_settings
 
 
@@ -73,5 +74,20 @@ def export_event_task(self, email, event_id, settings):
         result = {'__error': True, 'result': str(e)}
         logging.info('Error in exporting.. sending email')
         send_export_mail(email=email, event_name=event.name, error_text=str(e))
+
+    return result
+
+
+@celery.task(base=RequestContextTask, name='import.event', bind=True)
+def import_event_task(self, file, source_type, creator_id):
+    """Import Event Task"""
+    task_id = self.request.id.__str__()  # str(async result)
+    try:
+        logging.info('Importing started')
+        result = import_event_task_base(self, file, source_type, creator_id)
+        logging.info('Importing done..')
+    except Exception as e:
+        print(traceback.format_exc())
+        result = {'__error': True, 'result': str(e)}
 
     return result

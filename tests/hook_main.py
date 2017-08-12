@@ -3035,7 +3035,23 @@ def event_export_post(transaction):
     :param transaction:
     :return:
     """
-    pass
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+# ------------------------- Import -------------------------
+@hooks.before(
+    "Event Import > Start Event Import > Start a Task to Import an Event")
+def event_import_post(transaction):
+    """
+
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
 
 
 # ------------------------- Celery Task -------------------------
@@ -3056,6 +3072,21 @@ def celery_task_get(transaction):
 def event_statistics_general_get(transaction):
     """
     GET /events/1/general-statistics
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+# ------------------------- Event Statistics -------------------------
+
+@hooks.before("Ticket Statistics > Ticket Statistics Details By Event > Show Ticket Statistics By Event")
+def ticket_statistics_event_get(transaction):
+    """
+    GET /events/1/ticket-statistics
     :param transaction:
     :return:
     """
