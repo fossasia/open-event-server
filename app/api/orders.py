@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import request
+from flask import request, render_template
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow_jsonapi import fields
@@ -11,6 +11,8 @@ from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
+from app.api.helpers.files import create_save_pdf
+from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.payment import PayPalPaymentsManager
 from app.api.helpers.ticketing import TicketingManager
 from app.api.helpers.permission_manager import has_access
@@ -138,6 +140,9 @@ class OrdersListPost(ResourceList):
     def after_create_object(self, order, data, view_kwargs):
         order_tickets = {}
         for holder in order.ticket_holders:
+            pdf = create_save_pdf(render_template('/pdf/ticket_attendee.html', order=order, holder=holder))
+            holder.pdf_url = pdf
+            save_to_db(holder)
             if order_tickets.get(holder.ticket_id) is None:
                 order_tickets[holder.ticket_id] = 1
             else:
@@ -149,6 +154,7 @@ class OrdersListPost(ResourceList):
         save_to_db(order)
         if not has_access('is_coorganizer', **view_kwargs):
             TicketingManager.calculate_update_amount(order)
+        send_email_to_attendees(order)
 
         data['user_id'] = current_user.id
 

@@ -46,7 +46,8 @@ from app.views.sentry import sentry
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 static_dir = os.path.dirname(os.path.dirname(__file__)) + "/static"
-app = Flask(__name__, static_folder=static_dir)
+template_dir = os.path.dirname(__file__) + "/templates"
+app = Flask(__name__, static_folder=static_dir, template_folder=template_dir)
 
 env.read_envfile()
 
