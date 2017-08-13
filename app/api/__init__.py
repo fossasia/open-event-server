@@ -54,7 +54,8 @@ from app.api.admin_statistics_api.sessions import AdminStatisticsSessionDetail
 from app.api.admin_statistics_api.events import AdminStatisticsEventDetail
 from app.api.admin_statistics_api.users import AdminStatisticsUserDetail
 from app.api.admin_statistics_api.mails import AdminStatisticsMailDetail
-from app.api.ticket_statistics.events import TicketStatisticsEventDetail
+from app.api.order_statistics.events import OrderStatisticsEventDetail
+from app.api.order_statistics.tickets import OrderStatisticsTicketDetail
 
 
 # users
@@ -434,8 +435,9 @@ api.route(EventStatisticsGeneralDetail, 'event_statistics_general_detail', '/eve
           '/events/<identifier>/general-statistics')
 
 # Ticket statistics API
-api.route(TicketStatisticsEventDetail, 'ticket_statistics_event_detail', '/events/<int:id>/ticket-statistics',
-          '/events/<identifier>/ticket-statistics')
+api.route(OrderStatisticsEventDetail, 'order_statistics_event_detail', '/events/<int:id>/order-statistics',
+          '/events/<identifier>/order-statistics')
+api.route(OrderStatisticsTicketDetail, 'order_statistics_ticket_detail', '/tickets/<int:id>/order-statistics')
 
 # Admin Statistics API
 api.route(AdminStatisticsSessionDetail, 'admin_statistics_session_detail', '/admin/statistics/sessions')

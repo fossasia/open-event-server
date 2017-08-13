@@ -3083,14 +3083,27 @@ def event_statistics_general_get(transaction):
 
 # ------------------------- Event Statistics -------------------------
 
-@hooks.before("Ticket Statistics > Ticket Statistics Details By Event > Show Ticket Statistics By Event")
-def ticket_statistics_event_get(transaction):
+@hooks.before("Order Statistics > Order Statistics Details By Event > Show Order Statistics By Event")
+def order_statistics_event_get(transaction):
     """
-    GET /events/1/ticket-statistics
+    GET /events/1/order-statistics
     :param transaction:
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
-        db.session.add(event)
+        ticket = TicketFactory()
+        db.session.add(ticket)
+        db.session.commit()
+
+
+@hooks.before("Order Statistics > Order Statistics Details By Ticket > Show Order Statistics By Ticket")
+def order_statistics_ticket_get(transaction):
+    """
+    GET /tickets/1/order-statistics
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        ticket = TicketFactory()
+        db.session.add(ticket)
         db.session.commit()
