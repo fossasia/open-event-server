@@ -9,6 +9,7 @@ import uuid
 import requests
 from flask import current_app as app
 from flask import request
+from flask_jwt import current_identity
 from werkzeug import secure_filename
 
 from app.api.helpers.db import save_to_db
@@ -17,6 +18,7 @@ from app.api.helpers.storage import UploadedFile, upload, UploadedMemory, \
     UPLOAD_PATHS
 from app.api.helpers.errors import ErrorResponse, ServerError, NotFoundError
 from app.models import db
+from app.models.import_job import ImportJob
 from app.models.event import Event
 from app.models.social_link import SocialLink
 from app.models.session import Session
@@ -140,6 +142,23 @@ def _delete_fields(srv, data):
             if i in data:
                 del data[i]
     return data
+
+
+def create_import_job(task):
+    """create import record in db"""
+    ij = ImportJob(task=task,
+                   user=current_identity)
+    save_to_db(ij, 'Import job saved')
+
+
+def update_import_job(task, result, result_status):
+    """update import job status"""
+    ij = ImportJob.query.filter_by(task=task).first()
+    if not ij:
+        return
+    ij.result = result
+    ij.result_status = result_status
+    save_to_db(ij, 'Import job updated')
 
 
 def _upload_media_queue(srv, obj):
