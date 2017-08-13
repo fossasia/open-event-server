@@ -41,6 +41,7 @@ from app.models.email_notification import EmailNotification
 from app.models.social_link import SocialLink
 from app.models.tax import Tax
 from app.models.event_copyright import EventCopyright
+from app.models.order import Order
 
 
 class EventSchema(Schema):
@@ -325,6 +326,13 @@ class EventSchema(Schema):
                               schema='UserSchema',
                               type_='user',
                               many=True)
+    orders = Relationship(attribute='orders',
+                          self_view='v1.event_orders',
+                          self_view_kwargs={'id': '<id>'},
+                          related_view='v1.orders_list',
+                          schema='OrderSchema',
+                          type_='order',
+                          many=True)
 
 
 class EventList(ResourceList):
@@ -551,6 +559,13 @@ class EventDetail(ResourceDetail):
             custom_form = safe_query(self, CustomForms, 'id', view_kwargs['custom_form_id'], 'custom_form_id')
             if custom_form.event_id is not None:
                 view_kwargs['id'] = custom_form.event_id
+            else:
+                view_kwargs['id'] = None
+
+        if view_kwargs.get('order_identifier') is not None:
+            order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
+            if order.event_id is not None:
+                view_kwargs['id'] = order.event_id
             else:
                 view_kwargs['id'] = None
 
