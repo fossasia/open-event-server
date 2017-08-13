@@ -12,7 +12,7 @@ from app.models.event import Event
 from app.api.helpers.db import get_count
 
 
-class TicketStatisticsEventSchema(Schema):
+class OrderStatisticsEventSchema(Schema):
     """
     Api schema for general statistics of event
     """
@@ -21,8 +21,8 @@ class TicketStatisticsEventSchema(Schema):
         """
         Meta class
         """
-        type_ = 'ticket-statistics-event'
-        self_view = 'v1.ticket_statistics_event_detail'
+        type_ = 'order-statistics-event'
+        self_view = 'v1.order_statistics_event_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
@@ -98,7 +98,7 @@ class TicketStatisticsEventSchema(Schema):
         return result
 
 
-class TicketStatisticsEventDetail(ResourceDetail):
+class OrderStatisticsEventDetail(ResourceDetail):
     """
     Event statistics detail by id
     """
@@ -110,7 +110,7 @@ class TicketStatisticsEventDetail(ResourceDetail):
 
     methods = ['GET']
     decorators = (api.has_permission('is_coorganizer', fetch="id", fetch_as="event_id", model=Event),)
-    schema = TicketStatisticsEventSchema
+    schema = OrderStatisticsEventSchema
     data_layer = {'session': db.session,
                   'model': Event,
                   'methods': {
