@@ -14,7 +14,7 @@ import traceback
 from flask import url_for
 
 from app.api.helpers.request_context_task import RequestContextTask
-from app.api.helpers.mail import send_export_mail
+from app.api.helpers.mail import send_export_mail, send_import_mail
 from app.api.helpers.db import safe_query
 from import_helpers import update_import_job
 from app.models.event import Event
@@ -80,17 +80,19 @@ def export_event_task(self, email, event_id, settings):
 
 
 @celery.task(base=RequestContextTask, name='import.event', bind=True)
-def import_event_task(self, file, source_type, creator_id):
+def import_event_task(self, email, file, source_type, creator_id):
     """Import Event Task"""
     task_id = self.request.id.__str__()  # str(async result)
     try:
         logging.info('Importing started')
         result = import_event_task_base(self, file, source_type, creator_id)
-        update_import_job(task_id, result, 'SUCCESS')
-        logging.info('Importing done..')
+        update_import_job(task_id, result['id'], 'SUCCESS')
+        logging.info('Importing done..Sending email')
+        send_import_mail(email=email, event_name=result['event_name'], event_url=result['url'])
     except Exception as e:
         print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
         update_import_job(task_id, str(e), e.status if hasattr(e, 'status') else 'FAILURE')
+        send_import_mail(email=email, error_text=str(e))
 
     return result
