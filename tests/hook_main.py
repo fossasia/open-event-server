@@ -2413,27 +2413,17 @@ def access_code_delete(transaction):
 
 
 # ------------------------- Custom Forms -------------------------
-@hooks.before("Custom Forms > Custom Form Collection > List All Custom Forms")
-def custom_form_get_list(transaction):
+@hooks.before("Custom Forms > Custom Form Collection > Create Custom Form")
+def custom_form_post(transaction):
     """
-    GET /events/1/custom-forms
+    POST /custom-forms
     :param transaction:
     :return:
     """
     with stash['app'].app_context():
-        custom_form = CustomFormFactory()
-        db.session.add(custom_form)
+        event = EventFactoryBasic()
+        db.session.add(event)
         db.session.commit()
-
-
-@hooks.before("Custom Forms > Custom Form Collection > Create Custom Form")
-def custom_form_post(transaction):
-    """
-    POST /events/1/custom-forms
-    :param transaction:
-    :return:
-    """
-    transaction['skip'] = True
 
 
 @hooks.before("Custom Forms > Custom Form Detail > Custom Form Detail")
@@ -2466,6 +2456,19 @@ def custom_form_patch(transaction):
 def custom_form_delete(transaction):
     """
     DELETE /custom-forms/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        custom_form = CustomFormFactory()
+        db.session.add(custom_form)
+        db.session.commit()
+
+
+@hooks.before("Custom Forms > Event Custom Form Collection > List All Custom Forms for an Event")
+def custom_form_get_list(transaction):
+    """
+    GET /events/1/custom-forms
     :param transaction:
     :return:
     """
@@ -3032,7 +3035,23 @@ def event_export_post(transaction):
     :param transaction:
     :return:
     """
-    pass
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+# ------------------------- Import -------------------------
+@hooks.before(
+    "Event Import > Start Event Import > Start a Task to Import an Event")
+def event_import_post(transaction):
+    """
+
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
 
 
 # ------------------------- Celery Task -------------------------
@@ -3053,6 +3072,21 @@ def celery_task_get(transaction):
 def event_statistics_general_get(transaction):
     """
     GET /events/1/general-statistics
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+# ------------------------- Event Statistics -------------------------
+
+@hooks.before("Ticket Statistics > Ticket Statistics Details By Event > Show Ticket Statistics By Event")
+def ticket_statistics_event_get(transaction):
+    """
+    GET /events/1/ticket-statistics
     :param transaction:
     :return:
     """

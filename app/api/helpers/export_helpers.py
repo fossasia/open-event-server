@@ -39,7 +39,7 @@ FIELD_ORDER = {
         'session_type_id', 'track_id', 'comments', 'language', 'slides_url', 'audio_url', 'video_url'
     ],
     'speakers': [
-        'id', 'name', 'email', 'mobile', 'photo', 'organisation', 'position', 'country',
+        'id', 'name', 'email', 'mobile', 'photo_url', 'organisation', 'position', 'country',
         'short_biography', 'long_biography', 'website', 'twitter', 'facebook', 'github', 'linkedin'
     ],
     'sponsors': ['id', 'name', 'logo_url', 'level', 'type', 'url', 'description'],
@@ -56,7 +56,7 @@ DOWNLOAD_FIEDLS = {
         'slides_url': ['document', '/slides/session_%d']
     },
     'speakers': {
-        'photo': ['image', '/images/speakers/%s_%d']
+        'photo_url': ['image', '/images/speakers/%s_%d']
     },
     'event': {
         'logo_url': ['image', '/images/logo'],

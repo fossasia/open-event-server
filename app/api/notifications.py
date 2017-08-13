@@ -22,6 +22,7 @@ class NotificationSchema(Schema):
         type_ = 'notification'
         self_view = 'v1.notification_detail'
         self_view_kwargs = {'id': '<id>'}
+        self_view_many = 'v1.microlocation_list_post'
         inflect = dasherize
 
     id = fields.Str(dump_only=True)

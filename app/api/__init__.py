@@ -43,7 +43,7 @@ from app.api.attendees import AttendeeList, AttendeeDetail, AttendeeRelationship
     AttendeeRelationshipRequired, AttendeeListPost
 from app.api.access_codes import AccessCodeList, AccessCodeDetail, AccessCodeRelationshipRequired, \
     AccessCodeRelationshipOptional
-from app.api.custom_forms import CustomFormList, CustomFormDetail, CustomFormRelationshipRequired
+from app.api.custom_forms import CustomFormList, CustomFormListPost, CustomFormDetail, CustomFormRelationshipRequired
 from app.api.modules import ModuleDetail
 from app.api.custom_placeholders import CustomPlaceholderList, CustomPlaceholderDetail, CustomPlaceholderRelationship
 from app.api.activities import ActivityList, ActivityDetail
@@ -54,6 +54,7 @@ from app.api.admin_statistics_api.sessions import AdminStatisticsSessionDetail
 from app.api.admin_statistics_api.events import AdminStatisticsEventDetail
 from app.api.admin_statistics_api.users import AdminStatisticsUserDetail
 from app.api.admin_statistics_api.mails import AdminStatisticsMailDetail
+from app.api.ticket_statistics.events import TicketStatisticsEventDetail
 
 
 # users
@@ -382,7 +383,8 @@ api.route(ActivityList, 'activity_list', '/activities')
 api.route(ActivityDetail, 'activity_detail', '/activities/<int:id>')
 
 # custom form
-api.route(CustomFormList, 'custom_form_list', '/custom-forms', '/events/<int:event_id>/custom-forms',
+api.route(CustomFormListPost, 'custom_form_list_post', '/custom-forms')
+api.route(CustomFormList, 'custom_form_list', '/events/<int:event_id>/custom-forms',
           '/events/<event_identifier>/custom-forms')
 api.route(CustomFormDetail, 'custom_form_detail', '/custom-forms/<int:id>')
 api.route(CustomFormRelationshipRequired, 'custom_form_event',
@@ -417,6 +419,10 @@ api.route(OrderRelationship, 'order_discount', '/orders/<identifier>/relationshi
 # Event Statistics API
 api.route(EventStatisticsGeneralDetail, 'event_statistics_general_detail', '/events/<int:id>/general-statistics',
           '/events/<identifier>/general-statistics')
+
+# Ticket statistics API
+api.route(TicketStatisticsEventDetail, 'ticket_statistics_event_detail', '/events/<int:id>/ticket-statistics',
+          '/events/<identifier>/ticket-statistics')
 
 # Admin Statistics API
 api.route(AdminStatisticsSessionDetail, 'admin_statistics_session_detail', '/admin/statistics/sessions')

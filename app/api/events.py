@@ -280,6 +280,7 @@ class EventSchema(Schema):
                              related_view='v1.attendee_list',
                              related_view_kwargs={'event_id': '<id>'},
                              schema='AttendeeSchema',
+                             many=True,
                              type_='attendee')
     custom_forms = Relationship(attribute='custom_form',
                                 self_view='v1.event_custom_forms',
@@ -287,6 +288,7 @@ class EventSchema(Schema):
                                 related_view='v1.custom_form_list',
                                 related_view_kwargs={'event_id': '<id>'},
                                 schema='CustomFormSchema',
+                                many=True,
                                 type_='custom-form')
 
 
@@ -527,13 +529,6 @@ class EventDetail(ResourceDetail):
             data['large_image_url'] = uploaded_images['large_image_url']
             data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
             data['icon_image_url'] = uploaded_images['icon_image_url']
-        else:
-            if data.get('large_image_url'):
-                del data['large_image_url']
-            if data.get('thumbnail_image_url'):
-                del data['thumbnail_image_url']
-            if data.get('icon_image_url'):
-                del data['icon_image_url']
 
     decorators = (api.has_permission('is_organizer', methods="PATCH,DELETE", fetch="id", fetch_as="event_id",
                                      model=Event), )
