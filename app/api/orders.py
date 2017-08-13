@@ -25,7 +25,7 @@ class OrderSchema(Schema):
     class Meta:
         type_ = 'order'
         self_view = 'v1.order_detail'
-        self_view_kwargs = {'id': '<id>'}
+        self_view_kwargs = {'order_identifier': '<identifier>'}
         inflect = dasherize
 
     @post_dump
@@ -55,7 +55,7 @@ class OrderSchema(Schema):
     zipcode = fields.Str()
     completed_at = fields.DateTime(dump_only=True)
     transaction_id = fields.Str(dump_only=True)
-    payment_mode = fields.Str()
+    payment_mode = fields.Str(default="free", required=True)
     paid_via = fields.Str(dump_only=True)
     brand = fields.Str(dump_only=True)
     exp_month = fields.Str(dump_only=True)
@@ -67,7 +67,7 @@ class OrderSchema(Schema):
 
     attendees = Relationship(attribute='ticket_holders',
                              self_view='v1.order_attendee',
-                             self_view_kwargs={'identifier': '<identifier>'},
+                             self_view_kwargs={'order_identifier': '<identifier>'},
                              related_view='v1.attendee_list',
                              related_view_kwargs={'order_id': '<id>'},
                              schema='AttendeeSchema',
@@ -75,7 +75,7 @@ class OrderSchema(Schema):
                              type_='attendee')
 
     tickets = Relationship(self_view='v1.order_ticket',
-                           self_view_kwargs={'identifier': '<identifier>'},
+                           self_view_kwargs={'order_identifier': '<identifier>'},
                            related_view='v1.ticket_list',
                            related_view_kwargs={'order_id': '<id>'},
                            schema='TicketSchema',
@@ -83,28 +83,28 @@ class OrderSchema(Schema):
                            type_="ticket")
 
     user = Relationship(self_view='v1.order_user',
-                        self_view_kwargs={'identifier': '<identifier>'},
+                        self_view_kwargs={'order_identifier': '<identifier>'},
                         related_view='v1.user_detail',
                         related_view_kwargs={'id': '<user_id>'},
                         schema='UserSchema',
                         type_="user")
 
     event = Relationship(self_view='v1.order_event',
-                         self_view_kwargs={'identifier': '<identifier>'},
+                         self_view_kwargs={'order_identifier': '<identifier>'},
                          related_view='v1.event_detail',
                          related_view_kwargs={'id': '<event_id>'},
                          schema='EventSchema',
                          type_="event")
 
     marketer = Relationship(self_view='v1.order_marketer',
-                            self_view_kwargs={'identifier': '<identifier>'},
+                            self_view_kwargs={'order_identifier': '<identifier>'},
                             related_view='v1.user_detail',
                             related_view_kwargs={'id': '<marketer_id>'},
                             schema='UserSchema',
                             type_="user")
 
     discount_code = Relationship(self_view='v1.order_discount',
-                                 self_view_kwargs={'identifier': '<identifier>'},
+                                 self_view_kwargs={'order_identifier': '<identifier>'},
                                  related_view='v1.discount_code_detail',
                                  related_view_kwargs={'id': '<discount_code_id>'},
                                  schema='DiscountCodeSchema',
@@ -113,7 +113,7 @@ class OrderSchema(Schema):
 
 class OrdersListPost(ResourceList):
     def before_post(self, args, kwargs, data=None):
-        require_relationship(['event', 'attendees'], data)
+        require_relationship(['event', 'ticket_holders'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
             data['status'] = 'pending'
 
@@ -179,11 +179,6 @@ class OrdersList(ResourceList):
 
 
 class OrderDetail(ResourceDetail):
-    def before_get_object(self, view_kwargs):
-        if view_kwargs.get('identifier'):
-            order = safe_query(self, Order, 'identifier', view_kwargs['identifier'], 'order_identifier')
-            view_kwargs['id'] = order.id
-
     def before_update_object(self, order, data, view_kwargs):
         if data.get('status'):
             if has_access('is_coorganizer', event_id=order.event.id):
@@ -192,12 +187,17 @@ class OrderDetail(ResourceDetail):
                 raise ForbiddenException({'pointer': 'data/status'},
                                          "To update status minimum Co-organizer access required")
 
-    decorators = (api.has_permission('is_coorganizer', fetch="event_id", fetch_as="event_id", model=Order),)
+    decorators = (api.has_permission('is_coorganizer', fetch="event_id", fetch_as="event_id",
+                                     fetch_key_model="identifier", fetch_key_url="order_identifier", model=Order),)
 
     schema = OrderSchema
     data_layer = {'session': db.session,
                   'model': Order,
-                  'methods': {'before_update_object': before_update_object}}
+                  'url_field': 'order_identifier',
+                  'id_field': 'identifier',
+                  'methods': {
+                      'before_update_object': before_update_object
+                  }}
 
 
 class OrderRelationship(ResourceRelationship):
