@@ -16,6 +16,7 @@ from flask import url_for
 from app.api.helpers.request_context_task import RequestContextTask
 from app.api.helpers.mail import send_export_mail
 from app.api.helpers.db import safe_query
+from import_helpers import update_import_job
 from app.models.event import Event
 from app.models import db
 from app.api.exports import event_export_task_base
@@ -85,9 +86,11 @@ def import_event_task(self, file, source_type, creator_id):
     try:
         logging.info('Importing started')
         result = import_event_task_base(self, file, source_type, creator_id)
+        update_import_job(task_id, result, 'SUCCESS')
         logging.info('Importing done..')
     except Exception as e:
         print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        update_import_job(task_id, str(e), e.status if hasattr(e, 'status') else 'FAILURE')
 
     return result
