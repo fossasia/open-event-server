@@ -5,6 +5,8 @@ from flask import send_file, make_response, jsonify, url_for, \
 
 from app.api.helpers.export_helpers import export_event_json, create_export_job
 from app.api.helpers.utilities import TASK_RESULTS
+from app.models.event import Event
+from app.models import db
 from flask_jwt import jwt_required, current_identity
 
 export_routes = Blueprint('exports', __name__, url_prefix='/v1')
@@ -17,9 +19,9 @@ EXPORT_SETTING = {
 }
 
 
-@export_routes.route('/events/<string:event_id>/export/json', methods=['POST'])
+@export_routes.route('/events/<string:event_identifier>/export/json', methods=['POST'])
 @jwt_required()
-def export_event(event_id):
+def export_event(event_identifier):
     from helpers.tasks import export_event_task
 
     settings = EXPORT_SETTING
@@ -27,6 +29,12 @@ def export_event(event_id):
     settings['video'] = request.json.get('video', False)
     settings['document'] = request.json.get('document', False)
     settings['audio'] = request.json.get('audio', False)
+
+    if not event_identifier.isdigit():
+        event = db.session.query(Event).filter_by(identifier=event_identifier).first()
+        event_id = event.id
+    else:
+        event_id = event_identifier
     # queue task
     task = export_event_task.delay(
         current_identity.email, event_id, settings)
