@@ -29,7 +29,7 @@ def celery_task(task_id):
         if type(info) == dict:
             # check if is error
             if '__error' in info:
-                return info['result'], info['result']['code']
+                return info['result']
         # return normal
         return jsonify(state='SUCCESS', result=info)
     elif state == 'FAILURE':

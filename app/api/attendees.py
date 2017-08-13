@@ -82,8 +82,8 @@ class AttendeeList(ResourceList):
     """
     def query(self, view_kwargs):
         query_ = self.session.query(TicketHolder)
-        if view_kwargs.get('order_id'):
-            order = safe_query(self, Order, 'id', view_kwargs['order_id'], 'order_id')
+        if view_kwargs.get('order_identifier'):
+            order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
             query_ = query_.join(Order).filter(Order.id == order.id)
 
         if view_kwargs.get('ticket_id'):

@@ -2300,6 +2300,36 @@ Get a list of events.
                             "related": "/v1/events/1/tickets"
                           }
                         },
+                        "organizers": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/organizers",
+                                "related": "/v1/users"
+                            }
+                        },
+                        "coorganizers": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/coorganizers",
+                                "related": "/v1/users"
+                            }
+                        },
+                        "track-organizers": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/track-coorganizers",
+                                "related": "/v1/users"
+                            }
+                        },
+                        "registrars": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/registrars",
+                                "related": "/v1/users"
+                            }
+                        },
+                        "moderators": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/moderators",
+                                "related": "/v1/users"
+                            }
+                        },
                         "custom-forms": {
                             "links": {
                                 "self": "/v1/events/1/relationships/custom-forms",
@@ -2532,6 +2562,36 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                         "related": "/v1/events/1/tickets"
                       }
                     },
+                    "organizers": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/organizers",
+                            "related": "/v1/users"
+                        }
+                    },
+                    "coorganizers": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/coorganizers",
+                            "related": "/v1/users"
+                        }
+                    },
+                    "track-organizers": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/track-coorganizers",
+                            "related": "/v1/users"
+                        }
+                    },
+                    "registrars": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/registrars",
+                            "related": "/v1/users"
+                        }
+                    },
+                    "moderators": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/moderators",
+                            "related": "/v1/users"
+                        }
+                    },
                     "custom-forms": {
                         "links": {
                             "self": "/v1/events/1/relationships/custom-forms",
@@ -2722,6 +2782,36 @@ Get a single event.
                         "self": "/v1/events/1/relationships/tickets",
                         "related": "/v1/events/1/tickets"
                       }
+                    },
+                    "organizers": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/organizers",
+                            "related": "/v1/users"
+                        }
+                    },
+                    "coorganizers": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/coorganizers",
+                            "related": "/v1/users"
+                        }
+                    },
+                    "track-organizers": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/track-coorganizers",
+                            "related": "/v1/users"
+                        }
+                    },
+                    "registrars": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/registrars",
+                            "related": "/v1/users"
+                        }
+                    },
+                    "moderators": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/moderators",
+                            "related": "/v1/users"
+                        }
                     },
                     "custom-forms": {
                         "links": {
@@ -2958,6 +3048,36 @@ All other fields are optional. Add attributes you want to modify.
                         "self": "/v1/events/1/relationships/tickets",
                         "related": "/v1/events/1/tickets"
                       }
+                    },
+                    "organizers": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/organizers",
+                            "related": "/v1/users"
+                        }
+                    },
+                    "coorganizers": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/coorganizers",
+                            "related": "/v1/users"
+                        }
+                    },
+                    "track-organizers": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/track-coorganizers",
+                            "related": "/v1/users"
+                        }
+                    },
+                    "registrars": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/registrars",
+                            "related": "/v1/users"
+                        }
+                    },
+                    "moderators": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/moderators",
+                            "related": "/v1/users"
+                        }
                     },
                     "custom-forms": {
                         "links": {
@@ -16211,7 +16331,7 @@ Custom Forms related to the events.
 |:----------|-------------|------|----------|
 | `form`  | Custom Form | string | **yes** |
 | `field-identifier` | Identifier for the custom form field | string | **yes** |
-| `type` | Custom Form type | string | **yes** |
+| `type` | Custom Form type, allowed: "text", "checkbox", "select", "file", "image", "email" | string | **yes** |
 | `is-required` | If the custom form is required | boolean | - |
 | `is-included` | If the custom form is included | boolean | - |
 | `is-fixed` | If the custom form is fixed | boolean | - |
@@ -17495,17 +17615,14 @@ Requires Event Co-Organizer Access
 This group of APIs help you to start a task for exporting a particular event and downloading the zip containing json files for all the event related data.
 
 ## Start Event Export [/v1/events/{event_identifier}/export/json]
-
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
-    
+
 Start a celery task to export the event with the event_id as a collection of json files and archive it to get it ready for downloading. Returns the task url
 to get the status of the export task.
 
 
 ### Start a Task to Export an Event [POST]
-+ Parameters
-    + event_id: 1 (integer) - ID of the event
 
 + Request
 
@@ -17991,3 +18108,409 @@ Get the task status and the final result of the task as response
             "self": "/v1/tickets/1/order-statistics"
         }
     }
+
+
+# Group Orders
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `amount`  | Total Amount of Order | Float | - |
+| `address` | Address Of Purchaser | string | - |
+| `city` | City of Purchaser | string | **yes** |
+| `state` | If the custom form is included | boolean | - |
+| `country` | Country of the purchaser | boolean | **yes** |
+| `zipcode` | Zipcode of the address | string | - |
+| `payment-mode` | Mode of payment (free,stripe,paypal) | string | **yes** |
+| `status` | Status of the order | string (default=pending) | - |
+| `discount_code_id` | ID of the discount code | string | - |
+
+## Orders Collection [/v1/orders{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `type`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/iltering.html for more.
+
+### List All Orders [GET]
+Get a list of all orders
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 0
+          },
+          "data": [],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/orders"
+          }
+        }
+
+### Create Order [POST]
+Create a new Order
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+        {
+          "data": {
+            "attributes": {
+              "payment-mode": "paypal",
+              "country": "India",
+              "status": "pending",
+              "amount": "10"
+            },
+            "type": "order",
+            "relationships": {
+              "attendees": {
+                "data": [
+                  {
+                    "id": "1",
+                    "type": "attendee"
+                  }
+                ]
+              },
+              "event": {
+                "data": {
+                  "id": "1",
+                  "type": "event"
+                }
+              }
+            }
+          }
+        }
++ Response 201 (application/vnd.api+json)
+
+        {
+          "included": [
+            {
+              "relationships": {
+                "ticket": {
+                  "links": {
+                    "self": "/v1/attendees/1/relationships/ticket",
+                    "related": "/v1/attendees/1/ticket"
+                  }
+                },
+                "event": {
+                  "links": {
+                    "self": "/v1/attendees/1/relationships/event",
+                    "related": "/v1/attendees/1/event"
+                  }
+                }
+              },
+              "attributes": {
+                "city": null,
+                "firstname": "Open Event User",
+                "lastname": null,
+                "ticket-id": "1",
+                "is-checked-in": false,
+                "state": null,
+                "address": null,
+                "pdf-url": "http://example.com",
+                "country": null,
+                "email": null
+              },
+              "type": "attendee",
+              "id": "1",
+              "links": {
+                "self": "/v1/attendees/1"
+              }
+            }
+          ],
+          "data": {
+            "relationships": {
+              "tickets": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/ticket",
+                  "related": "/v1/orders/11/tickets"
+                }
+              },
+              "attendees": {
+                "data": [
+                  {
+                    "type": "attendee",
+                    "id": "1"
+                  }
+                ],
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/attendee",
+                  "related": "/v1/orders/11/attendees"
+                }
+              },
+              "marketer": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/marketer"
+                }
+              },
+              "user": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/user"
+                }
+              },
+              "discount-code": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/discount-code"
+                }
+              },
+              "event": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/event",
+                  "related": "/v1/events/1"
+                }
+              }
+            },
+            "attributes": {
+              "status": "pending",
+              "city": null,
+              "identifier": "617ed24c-9a07-4084-b076-ed73552db27e",
+              "paid-via": null,
+              "exp-year": null,
+              "transaction-id": null,
+              "discount-code-id": null,
+              "brand": null,
+              "zipcode": null,
+              "payment-mode": "paypal",
+              "last4": null,
+              "state": null,
+              "payment-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?token=EC-62113287PK247472B&cmd=_express-checkout",
+              "address": null,
+              "exp-month": null,
+              "amount": 10.0,
+              "country": "India",
+              "completed-at": null
+            },
+            "type": "order",
+            "id": "11",
+            "links": {
+              "self": "/v1/orders/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/orders/11"
+          }
+        }
+
+## Order Detail [/v1/orders/{identifier}]
++ Parameters
+    + identifier: 1 - the identifier of the order.
+
+### Get Order Detail [GET]
+Get a single Order detail.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "tickets": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/ticket",
+                  "related": "/v1/orders/1/tickets"
+                }
+              },
+              "attendees": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/attendee",
+                  "related": "/v1/orders/1/attendees"
+                }
+              },
+              "marketer": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/marketer"
+                }
+              },
+              "user": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/user"
+                }
+              },
+              "discount-code": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/discount-code"
+                }
+              },
+              "event": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/event",
+                  "related": "/v1/events/1"
+                }
+              }
+            },
+            "attributes": {
+              "status": "confirmed",
+              "city": null,
+              "identifier": "ab25a170-f36d-4dd6-b99c-9c202e693afc",
+              "paid-via": null,
+              "exp-year": null,
+              "transaction-id": null,
+              "discount-code-id": null,
+              "brand": null,
+              "zipcode": null,
+              "payment-mode": "paypal",
+              "last4": null,
+              "state": null,
+              "address": null,
+              "exp-month": null,
+              "amount": 10.0,
+              "country": "India",
+              "completed-at": null
+            },
+            "type": "order",
+            "id": "1",
+            "links": {
+              "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc"
+          }
+        }
+
+
+### Update Order [PATCH]
+Update a single custom form with `id`.
+
++ `id` (integer) - Identifier of the order record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+        {
+          "data": {
+            "attributes": {
+              "status": "confirmed"
+            },
+            "type": "order",
+            "id": "ab25a170-f36d-4dd6-b99c-9c202e693afc"
+          }
+        }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "tickets": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/ticket",
+                  "related": "/v1/orders/1/tickets"
+                }
+              },
+              "attendees": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/attendee",
+                  "related": "/v1/orders/1/attendees"
+                }
+              },
+              "marketer": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/marketer"
+                }
+              },
+              "user": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/user"
+                }
+              },
+              "discount-code": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/discount-code"
+                }
+              },
+              "event": {
+                "links": {
+                  "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc/relationships/event",
+                  "related": "/v1/events/1"
+                }
+              }
+            },
+            "attributes": {
+              "status": "confirmed",
+              "city": null,
+              "identifier": "ab25a170-f36d-4dd6-b99c-9c202e693afc",
+              "paid-via": null,
+              "exp-year": null,
+              "transaction-id": null,
+              "discount-code-id": null,
+              "brand": null,
+              "zipcode": null,
+              "payment-mode": "paypal",
+              "last4": null,
+              "state": null,
+              "address": null,
+              "exp-month": null,
+              "amount": 10.0,
+              "country": "India",
+              "completed-at": null
+            },
+            "type": "order",
+            "id": "1",
+            "links": {
+              "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/orders/ab25a170-f36d-4dd6-b99c-9c202e693afc"
+          }
+        }
+
+### Delete Order [DELETE]
+Delete a single Order.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
