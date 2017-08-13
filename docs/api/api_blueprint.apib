@@ -17494,8 +17494,11 @@ Requires Event Co-Organizer Access
 
 This group of APIs help you to start a task for exporting a particular event and downloading the zip containing json files for all the event related data.
 
-## Start Event Export [/v1/events/{event_id}/export/json]
+## Start Event Export [/v1/events/{event_identifier}/export/json]
 
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    
 Start a celery task to export the event with the event_id as a collection of json files and archive it to get it ready for downloading. Returns the task url
 to get the status of the export task.
 
