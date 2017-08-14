@@ -63,10 +63,11 @@ api.route(UserList, 'user_list', '/users')
 api.route(UserDetail, 'user_detail', '/users/<int:id>', '/notifications/<int:notification_id>/user',
           '/event-invoices/<int:event_invoice_id>/user', '/speakers/<int:speaker_id>/user',
           '/access-codes/<int:access_code_id>/marketer', '/email-notifications/<int:email_notification_id>/user',
-          '/discount-codes/<int:discount_code_id>/marketer')
+          '/discount-codes/<int:discount_code_id>/marketer', '/sessions/<int:session_id>/creator')
 api.route(UserRelationship, 'user_notification', '/users/<int:id>/relationships/notifications')
 api.route(UserRelationship, 'user_event_invoices', '/users/<int:id>/relationships/event-invoices')
 api.route(UserRelationship, 'user_speaker', '/users/<int:id>/relationships/speakers')
+api.route(UserRelationship, 'user_session', '/users/<int:id>/relationships/sessions')
 api.route(UserRelationship, 'user_access_codes', '/users/<int:id>/relationships/access-codes')
 api.route(UserRelationship, 'user_discount_codes', '/users/<int:id>/relationships/discount-codes')
 api.route(UserRelationship, 'user_email_notifications', '/users/<int:id>/relationships/email-notifications')
@@ -227,7 +228,7 @@ api.route(MicrolocationRelationshipRequired, 'microlocation_event',
 # sessions
 api.route(SessionListPost, 'session_list_post', '/sessions')
 api.route(SessionList, 'session_list', '/events/<int:event_id>/sessions',
-          '/events/<event_identifier>/sessions',
+          '/events/<event_identifier>/sessions', '/users/<int:user_id>/sessions',
           '/tracks/<int:track_id>/sessions', '/session-types/<int:session_type_id>/sessions',
           '/microlocations/<int:microlocation_id>/sessions', '/speakers/<int:speaker_id>/sessions')
 api.route(SessionDetail, 'session_detail', '/sessions/<int:id>')
@@ -238,6 +239,8 @@ api.route(SessionRelationshipOptional, 'session_session_type',
           '/sessions/<int:id>/relationships/session-type')
 api.route(SessionRelationshipRequired, 'session_event',
           '/sessions/<int:id>/relationships/event')
+api.route(SessionRelationshipRequired, 'session_user',
+          '/sessions/<int:id>/relationships/creator')
 api.route(SessionRelationshipOptional, 'session_speaker',
           '/sessions/<int:id>/relationships/speakers')
 
