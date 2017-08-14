@@ -15,6 +15,8 @@ from app.models.notification import (
     TICKET_RESEND_ORGANIZER,
     EVENT_EXPORT_FAIL,
     EVENT_EXPORTED,
+    EVENT_IMPORT_FAIL,
+    EVENT_IMPORTED,
     TICKET_PURCHASED_ORGANIZER
 )
 
@@ -30,6 +32,22 @@ NOTIFS = {
     EVENT_EXPORT_FAIL: {
         'recipient': 'User',
         'title': u'Export of event {event_name} failed',
+        'message': (
+            u"The following error occurred:<br>"
+            u"<pre>{error_text}</pre>"
+        )
+    },
+    EVENT_IMPORTED: {
+        'recipient': 'User',
+        'title': u'Event {event_name} has been exported',
+        'message': (
+            u"Event <strong>{event_name}</strong> has been exported successfully."
+            u"<br><br><a href='{event_url}' class='btn btn-info btn-sm'>View Event</a>"
+        )
+    },
+    EVENT_IMPORT_FAIL: {
+        'recipient': 'User',
+        'title': u'Import of event failed',
         'message': (
             u"The following error occurred:<br>"
             u"<pre>{error_text}</pre>"
