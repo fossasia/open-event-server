@@ -1,8 +1,8 @@
-from marshmallow import validates_schema, validate, validate
+from marshmallow import validates_schema, validate
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema, Relationship
 
-from app import RoleInvite
+from app.models.role_invite import RoleInvite
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import dasherize
 from app.models.role import Role

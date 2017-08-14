@@ -4,12 +4,12 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema, Relationship
 from pytz import timezone
 
-from app import Event
+from app.models.event import Event
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import dasherize
 
 
-class EventSchema(Schema):
+class EventSchemaPublic(Schema):
 
     class Meta:
         type_ = 'event'
@@ -173,21 +173,6 @@ class EventSchema(Schema):
                        related_view_kwargs={'event_id': '<id>'},
                        schema='TaxSchema',
                        type_='tax')
-    event_invoices = Relationship(attribute='invoices',
-                                  self_view='v1.event_event_invoice',
-                                  self_view_kwargs={'id': '<id>'},
-                                  related_view='v1.event_invoice_list',
-                                  related_view_kwargs={'event_id': '<id>'},
-                                  schema='EventInvoiceSchema',
-                                  many=True,
-                                  type_='event-invoice')
-    discount_codes = Relationship(attribute='discount_code',
-                                  self_view='v1.event_discount_code',
-                                  self_view_kwargs={'id': '<id>'},
-                                  related_view='v1.discount_code_list',
-                                  related_view_kwargs={'event_id': '<id>'},
-                                  schema='DiscountCodeSchema',
-                                  type_='discount-code')
     sessions = Relationship(attribute='session',
                             self_view='v1.event_session',
                             self_view_kwargs={'id': '<id>'},
@@ -225,29 +210,6 @@ class EventSchema(Schema):
                                    related_view_kwargs={'event_id': '<id>'},
                                    schema='EventSubTopicSchema',
                                    type_='event-sub-topic')
-    role_invites = Relationship(attribute='role_invites',
-                                self_view='v1.event_role_invite',
-                                self_view_kwargs={'id': '<id>'},
-                                related_view='v1.role_invite_list',
-                                related_view_kwargs={'event_id': '<id>'},
-                                schema='RoleInviteSchema',
-                                type_='role-invite')
-    access_codes = Relationship(attribute='access_codes',
-                                self_view='v1.event_access_codes',
-                                self_view_kwargs={'id': '<id>'},
-                                related_view='v1.access_code_list',
-                                related_view_kwargs={'event_id': '<id>'},
-                                schema='AccessCodeSchema',
-                                many=True,
-                                type_='access-code')
-    attendees = Relationship(attribute='attendees',
-                             self_view='v1.event_attendees',
-                             self_view_kwargs={'id': '<id>'},
-                             related_view='v1.attendee_list',
-                             related_view_kwargs={'event_id': '<id>'},
-                             schema='AttendeeSchema',
-                             many=True,
-                             type_='attendee')
     custom_forms = Relationship(attribute='custom_form',
                                 self_view='v1.event_custom_forms',
                                 self_view_kwargs={'id': '<id>'},
@@ -256,6 +218,31 @@ class EventSchema(Schema):
                                 schema='CustomFormSchema',
                                 many=True,
                                 type_='custom-form')
+
+
+class EventSchema(EventSchemaPublic):
+    class Meta:
+        type_ = 'event'
+        self_view = 'v1.event_detail'
+        self_view_kwargs = {'id': '<id>'}
+        self_view_many = 'v1.event_list'
+        inflect = dasherize
+
+    event_invoices = Relationship(attribute='invoices',
+                                  self_view='v1.event_event_invoice',
+                                  self_view_kwargs={'id': '<id>'},
+                                  related_view='v1.event_invoice_list',
+                                  related_view_kwargs={'event_id': '<id>'},
+                                  schema='EventInvoiceSchema',
+                                  many=True,
+                                  type_='event-invoice')
+    discount_codes = Relationship(attribute='discount_code',
+                                  self_view='v1.event_discount_code',
+                                  self_view_kwargs={'id': '<id>'},
+                                  related_view='v1.discount_code_list',
+                                  related_view_kwargs={'event_id': '<id>'},
+                                  schema='DiscountCodeSchema',
+                                  type_='discount-code')
     organizers = Relationship(attribute='organizers',
                               self_view='v1.event_organizers',
                               self_view_kwargs={'id': '<id>'},
@@ -298,3 +285,26 @@ class EventSchema(Schema):
                           schema='OrderSchema',
                           type_='order',
                           many=True)
+    role_invites = Relationship(attribute='role_invites',
+                                self_view='v1.event_role_invite',
+                                self_view_kwargs={'id': '<id>'},
+                                related_view='v1.role_invite_list',
+                                related_view_kwargs={'event_id': '<id>'},
+                                schema='RoleInviteSchema',
+                                type_='role-invite')
+    access_codes = Relationship(attribute='access_codes',
+                                self_view='v1.event_access_codes',
+                                self_view_kwargs={'id': '<id>'},
+                                related_view='v1.access_code_list',
+                                related_view_kwargs={'event_id': '<id>'},
+                                schema='AccessCodeSchema',
+                                many=True,
+                                type_='access-code')
+    attendees = Relationship(attribute='attendees',
+                             self_view='v1.event_attendees',
+                             self_view_kwargs={'id': '<id>'},
+                             related_view='v1.attendee_list',
+                             related_view_kwargs={'event_id': '<id>'},
+                             schema='AttendeeSchema',
+                             many=True,
+                             type_='attendee')

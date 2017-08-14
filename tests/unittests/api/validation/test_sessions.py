@@ -4,7 +4,7 @@ from pytz import timezone
 
 from app import current_app as app
 from tests.unittests.utils import OpenEventTestCase
-from app.api.sessions import UnprocessableEntity
+from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.schema.sessions import SessionSchema
 from app.factories.session import SessionFactory
 from app.models import db
