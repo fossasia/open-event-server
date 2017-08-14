@@ -4,6 +4,7 @@ from sqlalchemy.ext.serializer import dumps
 
 from app.api.helpers.import_helpers import get_file_from_request, import_event_json, create_import_job
 from app.api.helpers.utilities import TASK_RESULTS
+from app.api.helpers.files import make_frontend_url
 
 import_routes = Blueprint('imports', __name__, url_prefix='/v1')
 
@@ -17,8 +18,8 @@ def import_event(source_type):
         file_path = None
         abort(404)
     from helpers.tasks import import_event_task
-    task = import_event_task.delay(
-        file=file_path, source_type=source_type, creator_id=current_identity.id)
+    task = import_event_task.delay(email=current_identity.email, file=file_path,
+                                   source_type=source_type, creator_id=current_identity.id)
     # create import job
     create_import_job(task.id)
 
@@ -38,6 +39,10 @@ def import_event_task_base(task_handle, file_path, source_type='json', creator_i
     if source_type == 'json':
         new_event = import_event_json(task_handle, file_path)
     if new_event:
-        return url_for('v1.event_detail', id=new_event.id)
+        url = make_frontend_url(path='/events/{identifier}'.format(identifier=new_event.identifier))
+        return {'url': url,
+                'id': new_event.id,
+                'event_name': new_event.name}
+
     else:
         return None
