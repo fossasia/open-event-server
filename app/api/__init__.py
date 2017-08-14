@@ -157,7 +157,8 @@ api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>
           '/sessions/<int:session_id>/event', '/ticket-tags/<int:ticket_tag_id>/event',
           '/role-invites/<int:role_invite_id>/event', '/speakers/<int:speaker_id>/event',
           '/access-codes/<int:access_code_id>/event', '/email-notifications/<int:email_notification_id>/event',
-          '/attendees/<int:attendee_id>/event', '/custom-forms/<int:custom_form_id>/event')
+          '/attendees/<int:attendee_id>/event', '/custom-forms/<int:custom_form_id>/event',
+          '/orders/<order_identifier>/event')
 api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/tickets',
           '/events/<identifier>/relationships/tickets')
 api.route(EventRelationship, 'event_ticket_tag', '/events/<int:id>/relationships/ticket-tags',
@@ -200,6 +201,8 @@ api.route(EventRelationship, 'event_attendees', '/events/<int:id>/relationships/
           '/events/<identifier>/relationships/attendees')
 api.route(EventRelationship, 'event_custom_forms', '/events/<int:id>/relationships/custom-forms',
           '/events/<identifier>/relationships/custom-forms')
+api.route(EventRelationship, 'event_orders', '/events/<int:id>/relationships/orders',
+          '/events/<identifier>/relationships/orders')
 # Events -> roles:
 api.route(EventRelationship, 'event_organizers', '/events/<int:id>/relationships/organizers',
           '/events/<identifier>/relationships/organizers')
