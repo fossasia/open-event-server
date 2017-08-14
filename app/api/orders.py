@@ -1,6 +1,5 @@
 from datetime import datetime
 from flask import request, render_template
-from flask import request
 from flask_jwt import current_identity as current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
