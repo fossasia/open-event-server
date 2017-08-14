@@ -19,6 +19,7 @@ from app.models.access_code import AccessCode
 from app.models.discount_code import DiscountCode
 from app.api.helpers.permissions import is_user_itself
 from app.models.speaker import Speaker
+from app.models.session import Session
 from app.api.helpers.exceptions import ConflictException
 from app.api.helpers.db import safe_query
 
@@ -85,6 +86,15 @@ class UserSchema(Schema):
         schema='SpeakerSchema',
         many=True,
         type_='speaker')
+    sessions = Relationship(
+        attribute='session',
+        self_view='v1.user_session',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.session_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='SessionSchema',
+        many=True,
+        type_='session')
     access_codes = Relationship(
         attribute='access_codes',
         self_view='v1.user_access_codes',
@@ -181,6 +191,13 @@ class UserDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
+        if view_kwargs.get('session_id') is not None:
+            session = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
+            if session.creator_id is not None:
+                view_kwargs['id'] = session.creator_id
+            else:
+                view_kwargs['id'] = None
+
         if view_kwargs.get('access_code_id') is not None:
             access_code = safe_query(self, AccessCode, 'id', view_kwargs['access_code_id'], 'access_code_id')
             if access_code.marketer_id is not None:
@@ -218,9 +235,9 @@ class UserDetail(ResourceDetail):
             send_email_change_user_email(user.email, view_kwargs.get('email_changed'))
 
     decorators = (api.has_permission('is_user_itself', fetch="user_id,id", fetch_as="id",
-                  model=[Notification, UsersEventsRoles, EventInvoice, AccessCode,
+                  model=[Notification, UsersEventsRoles, Session, EventInvoice, AccessCode,
                          DiscountCode, EmailNotification, Speaker, User],
-                  fetch_key_url="notification_id, users_events_role_id,\
+                  fetch_key_url="notification_id, users_events_role_id, session_id, \
                   event_invoice_id, access_code_id, discount_code_id, email_notification_id, speaker_id, id"),)
     schema = UserSchema
     data_layer = {'session': db.session,
