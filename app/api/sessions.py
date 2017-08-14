@@ -126,6 +126,13 @@ class SessionSchema(Schema):
         related_view_kwargs={'session_id': '<id>'},
         schema='SpeakerSchema',
         type_='speaker')
+    creator = Relationship(attribute='user',
+                           self_view='v1.session_user',
+                           self_view_kwargs={'id': '<id>'},
+                           related_view='v1.user_detail',
+                           related_view_kwargs={'session_id': '<id>'},
+                           schema='UserSchema',
+                           type_='user')
 
 
 class SessionListPost(ResourceList):
