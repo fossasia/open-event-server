@@ -1,32 +1,12 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList
-from marshmallow_jsonapi.flask import Schema
-from marshmallow_jsonapi import fields
 
-from app.api.helpers.utilities import dasherize
-from app.models import db
 from app.api.bootstrap import api
+from app.api.helpers.db import safe_query
+from app.api.schema.roles import RoleSchema
+from app.models import db
 from app.models.role import Role
 from app.models.role_invite import RoleInvite
 from app.models.users_events_role import UsersEventsRoles
-from app.api.helpers.db import safe_query
-
-
-class RoleSchema(Schema):
-    """
-    Api schema for role Model
-    """
-    class Meta:
-        """
-        Meta class for role Api Schema
-        """
-        type_ = 'role'
-        self_view = 'v1.role_detail'
-        self_view_kwargs = {'id': '<id>'}
-        inflect = dasherize
-
-    id = fields.Str(dump_only=True)
-    name = fields.Str(required=True)
-    title_name = fields.Str(allow_none=True)
 
 
 class RoleList(ResourceList):

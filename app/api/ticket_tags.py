@@ -1,49 +1,14 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from marshmallow_jsonapi.flask import Schema, Relationship
-from marshmallow_jsonapi import fields
 
 from app.api.bootstrap import api
-from app.api.helpers.utilities import dasherize
-from app.models import db
-from app.models.ticket import Ticket, TicketTag, ticket_tags_table
 from app.api.helpers.db import safe_query
-from app.api.helpers.utilities import require_relationship
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
-
-
-class TicketTagSchema(Schema):
-    """
-    Api schema for TicketTag Model
-    """
-
-    class Meta:
-        """
-        Meta class for TicketTag Api Schema
-        """
-        type_ = 'ticket-tag'
-        self_view = 'v1.ticket_tag_detail'
-        self_view_kwargs = {'id': '<id>'}
-        inflect = dasherize
-
-    id = fields.Str(dump_only=True)
-    name = fields.Str(allow_none=True)
-    tickets = Relationship(attribute='tickets',
-                           self_view='v1.ticket_tag_ticket',
-                           self_view_kwargs={'id': '<id>'},
-                           related_view='v1.ticket_list',
-                           related_view_kwargs={'ticket_tag_id': '<id>'},
-                           schema='TicketSchema',
-                           many=True,
-                           type_='ticket')
-    event = Relationship(attribute='event',
-                         self_view='v1.ticket_tag_event',
-                         self_view_kwargs={'id': '<id>'},
-                         related_view='v1.event_detail',
-                         related_view_kwargs={'ticket_tag_id': '<id>'},
-                         schema='EventSchema',
-                         type_='event')
+from app.api.helpers.utilities import require_relationship
+from app.api.schema.ticket_tags import TicketTagSchema
+from app.models import db
+from app.models.ticket import Ticket, TicketTag, ticket_tags_table
 
 
 class TicketTagListPost(ResourceList):
