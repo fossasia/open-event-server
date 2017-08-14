@@ -12,8 +12,8 @@ class AccessCodeFactory(factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session = db.session
 
     tickets = factory.RelatedFactory(TicketFactory)
-    event = factory.RelatedFactory(EventFactoryBasic)
     user = factory.RelatedFactory(UserFactory)
+    event = factory.RelatedFactory(EventFactoryBasic)
     code = common.string_
     access_url = common.url_
     is_active = True
@@ -23,4 +23,5 @@ class AccessCodeFactory(factory.alchemy.SQLAlchemyModelFactory):
     valid_from = common.date_
     valid_till = common.dateEnd_
     used_for = common.string_
-    user_id = 2
+    user_id = 1
+    event_id = 1
