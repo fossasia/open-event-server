@@ -1,43 +1,16 @@
-from datetime import datetime
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from marshmallow_jsonapi.flask import Schema, Relationship
-from marshmallow_jsonapi import fields
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
-from app.api.helpers.utilities import dasherize
-from app.models import db
-from app.models.event_copyright import EventCopyright
-from app.models.event import Event
-from app.api.helpers.exceptions import UnprocessableEntity
-from app.api.helpers.utilities import require_relationship
-from app.api.helpers.permission_manager import has_access
 from app.api.helpers.exceptions import ForbiddenException
-
-
-class EventCopyrightSchema(Schema):
-
-    class Meta:
-        type_ = 'event-copyright'
-        self_view = 'v1.event_copyright_detail'
-        self_view_kwargs = {'id': '<id>'}
-        inflect = dasherize
-
-    id = fields.Str(dump_only=True)
-    holder = fields.Str(allow_none=True)
-    holder_url = fields.Url(allow_none=True)
-    licence = fields.Str(required=True)
-    licence_url = fields.Url(allow_none=True)
-    year = fields.Int(validate=lambda n: 1900 <= n <= datetime.now().year, allow_none=True)
-    logo_url = fields.Url(attribute='logo', allow_none=True)
-    event = Relationship(attribute='event',
-                         self_view='v1.copyright_event',
-                         self_view_kwargs={'id': '<id>'},
-                         related_view='v1.event_detail',
-                         related_view_kwargs={'copyright_id': '<id>'},
-                         schema='EventSchema',
-                         type_='event')
+from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.helpers.permission_manager import has_access
+from app.api.helpers.utilities import require_relationship
+from app.api.schema.event_copyright import EventCopyrightSchema
+from app.models import db
+from app.models.event import Event
+from app.models.event_copyright import EventCopyright
 
 
 class EventCopyrightListPost(ResourceList):

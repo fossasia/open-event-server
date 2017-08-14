@@ -1,49 +1,16 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from marshmallow_jsonapi.flask import Schema, Relationship
-from marshmallow_jsonapi import fields
-import marshmallow.validate as validate
-from app.api.helpers.permissions import jwt_required
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
-from app.api.helpers.utilities import dasherize
+from app.api.helpers.db import safe_query
+from app.api.helpers.permission_manager import has_access
+from app.api.helpers.permissions import jwt_required
+from app.api.helpers.query import event_query
+from app.api.helpers.utilities import require_relationship
+from app.api.schema.custom_forms import CustomFormSchema
 from app.models import db
 from app.models.custom_form import CustomForms
 from app.models.event import Event
-from app.api.helpers.db import safe_query
-from app.api.helpers.utilities import require_relationship
-from app.api.helpers.permission_manager import has_access
-from app.api.helpers.query import event_query
-
-
-class CustomFormSchema(Schema):
-    """
-    API Schema for Custom Forms database model
-    """
-    class Meta:
-        """
-        Meta class for CustomForm Schema
-        """
-        type_ = 'custom-form'
-        self_view = 'v1.custom_form_detail'
-        self_view_kwargs = {'id': '<id>'}
-        inflect = dasherize
-
-    id = fields.Integer(dump_only=True)
-    field_identifier = fields.Str(required=True)
-    form = fields.Str(required=True)
-    type = fields.Str(default="text", validate=validate.OneOf(
-        choices=["text", "checkbox", "select", "file", "image", "email"]))
-    is_required = fields.Boolean(default=False)
-    is_included = fields.Boolean(default=False)
-    is_fixed = fields.Boolean(default=False)
-    event = Relationship(attribute='event',
-                         self_view='v1.custom_form_event',
-                         self_view_kwargs={'id': '<id>'},
-                         related_view='v1.event_detail',
-                         related_view_kwargs={'custom_form_id': '<id>'},
-                         schema='EventSchema',
-                         type_='event')
 
 
 class CustomFormListPost(ResourceList):

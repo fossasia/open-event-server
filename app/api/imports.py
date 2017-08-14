@@ -1,6 +1,5 @@
 from flask import jsonify, url_for, current_app, Blueprint, abort
 from flask_jwt import jwt_required, current_identity
-from sqlalchemy.ext.serializer import dumps
 
 from app.api.helpers.import_helpers import get_file_from_request, import_event_json, create_import_job
 from app.api.helpers.utilities import TASK_RESULTS
