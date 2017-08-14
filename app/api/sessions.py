@@ -21,6 +21,7 @@ from app.api.helpers.permission_manager import has_access
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.permissions import current_identity
 from app.api.helpers.mail import send_email_new_session, send_email_session_accept_reject
+from app.api.helpers.notification import send_notif_new_session_organizer, send_notif_session_accept_reject
 from app.api.helpers.query import event_query
 
 
@@ -145,11 +146,13 @@ class SessionListPost(ResourceList):
     def after_create_object(self, session, data, view_kwargs):
         if session.event.get_organizer():
             event_name = session.event.name
-            organizer_email = session.event.get_organizer().email
+            organizer = session.event.get_organizer()
+            organizer_email = organizer.email
             frontend_url = get_settings()['frontend_url']
             link = "{}/events/{}/sessions/{}"\
                 .format(frontend_url, session.event_id, session.id)
             send_email_new_session(organizer_email, event_name, link)
+            send_notif_new_session_organizer(organizer, event_name, link)
 
     decorators = (api.has_permission('create_event'),)
     schema = SessionSchema
@@ -211,15 +214,20 @@ class SessionDetail(ResourceDetail):
                 link = "{}/events/{}/sessions/{}" \
                     .format(frontend_url, session.event_id, session.id)
                 send_email_session_accept_reject(speaker.email, session, link)
+                send_notif_session_accept_reject(speaker, session.title, session.state, link)
 
             # Email for organizer
             if session.event.get_organizer():
-                organizer_email = session.event.get_organizer().email
+                organizer = session.event.get_organizer()
+                organizer_email = organizer.email
                 frontend_url = get_settings()['frontend_url']
                 link = "{}/events/{}/sessions/{}" \
                     .format(frontend_url, session.event_id, session.id)
                 send_email_session_accept_reject(organizer_email, session,
                                                  link)
+                send_notif_session_accept_reject(organizer, session.title,
+                                                 session.state, link)
+
 
     decorators = (api.has_permission('is_speaker_for_session', methods="PATCH,DELETE"),)
     schema = SessionSchema

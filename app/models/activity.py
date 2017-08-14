@@ -35,7 +35,8 @@ ACTIVITIES = {
 
     'invite_user': 'Invitation sent to user {user_id} for event {event_id}',
     'system_admin': 'User {user} {status} system admin',
-    'mail_event': 'Mail send to {email}, action: {action}, subject: {subject}'
+    'mail_event': 'Mail sent to {email}, action: {action}, subject: {subject}',
+    'notification_event': 'Notification sent to {user}, action: {action}, title: {title}'
 }
 
 
