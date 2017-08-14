@@ -9,6 +9,7 @@ from PIL import Image
 from flask import current_app
 from flask import current_app as app
 from sqlalchemy.orm.exc import NoResultFound
+from xhtml2pdf import pisa
 
 from app import get_settings
 from app.models.image_size import ImageSizes
@@ -178,3 +179,30 @@ def make_frontend_url(path, parameters=None):
         urllib.urlencode(parameters) if parameters else '',
         ''
     ))
+
+
+def create_save_pdf(pdf_data):
+    """
+    Create and Saves PDFs from html
+    :param pdf_data:
+    :return:
+    """
+    filedir = current_app.config.get('BASE_DIR') + '/static/uploads/pdf/tickets/'
+
+    if not os.path.isdir(filedir):
+        os.makedirs(filedir)
+
+    filename = get_file_name() + '.pdf'
+    dest = filedir + filename
+
+    file = open(dest, "wb")
+    pisa.CreatePDF(cStringIO.StringIO(pdf_data.encode('utf-8')), file)
+    file.close()
+
+    uploaded_file = UploadedFile(dest, filename)
+    upload_path = UPLOAD_PATHS['pdf']['ticket_attendee'].format(identifier=get_file_name())
+    new_file = upload(uploaded_file, upload_path)
+    # Removing old file created
+    os.remove(dest)
+
+    return new_file

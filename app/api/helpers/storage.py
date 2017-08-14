@@ -62,6 +62,9 @@ UPLOAD_PATHS = {
         'thumbnail': 'custom-placeholders/{identifier}/thumbnail',
         'large': 'custom-placeholders/{identifier}/large',
         'icon': 'custom-placeholders/{identifier}/icon'
+    },
+    'pdf': {
+        'ticket_attendee': 'attendees/tickets/pdf/{identifier}'
     }
 }
 

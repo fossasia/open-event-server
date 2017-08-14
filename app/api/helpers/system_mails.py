@@ -6,7 +6,8 @@ from app.models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
     USER_REGISTER, PASSWORD_RESET, EVENT_ROLE, SESSION_ACCEPT_REJECT, \
     SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH, AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, \
     TICKET_PURCHASED, EVENT_EXPORTED, EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_EMAIL, \
-    MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER, TICKET_CANCELLED
+    MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER, TICKET_CANCELLED, \
+    TICKET_PURCHASED_ATTENDEE
 
 MAILS = {
     EVENT_PUBLISH: {
@@ -134,6 +135,17 @@ MAILS = {
             u"<br/>Login to manage your orders at https://eventyay.com </em>"
         )
     },
+    TICKET_PURCHASED_ATTENDEE: {
+        'recipient': 'Attendee',
+        'subject': u'Your tickets for {event_name} ({invoice_id}) ',
+        'message': (
+            u"Hi, this is a confirmation mail of your tickets for the event {event_name}"
+            u"<br/>Your order has been processed successfully." +
+            u"<br/> <a href='{pdf_url}'>Click here</a> to view/download your ticket."
+            u"<br><br><em>Looking forward to seeing you at the event."
+        )
+    },
+
     TICKET_PURCHASED_ORGANIZER: {
         'recipient': 'Organizer, Coorganizer',
         'subject': u'New ticket purchase for {event_name} by {buyer_email} ({invoice_id}) ',
