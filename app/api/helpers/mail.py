@@ -10,7 +10,8 @@ from app.api.helpers.log import record_activity
 from app.api.helpers.system_mails import MAILS
 from app.api.helpers.utilities import string_empty, get_serializer, str_generator
 from app.models.mail import Mail, USER_CONFIRM, NEW_SESSION, USER_CHANGE_EMAIL, SESSION_ACCEPT_REJECT, EVENT_ROLE, \
-    AFTER_EVENT, MONTHLY_PAYMENT_EMAIL, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_EXPORTED, EVENT_EXPORT_FAIL
+    AFTER_EVENT, MONTHLY_PAYMENT_EMAIL, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_EXPORTED, EVENT_EXPORT_FAIL, \
+    EVENT_IMPORTED, EVENT_IMPORT_FAIL
 from app.models.user import User
 
 
@@ -240,6 +241,30 @@ def send_export_mail(email, event_name, error_text=None, download_url=None):
             ),
             html=MAILS[EVENT_EXPORTED]['message'].format(
                 download_url=download_url
+            )
+        )
+
+
+def send_import_mail(email, event_name=None, error_text=None, event_url=None):
+    """followup export link in email"""
+    if error_text:
+        send_email(
+            to=email,
+            action=EVENT_IMPORT_FAIL,
+            subject=MAILS[EVENT_IMPORT_FAIL]['subject'],
+            html=MAILS[EVENT_IMPORT_FAIL]['message'].format(
+                error_text=error_text
+            )
+        )
+    elif event_url:
+        send_email(
+            to=email,
+            action=EVENT_IMPORTED,
+            subject=MAILS[EVENT_IMPORTED]['subject'].format(
+                event_name=event_name
+            ),
+            html=MAILS[EVENT_IMPORTED]['message'].format(
+                event_url=event_url
             )
         )
 
