@@ -21,6 +21,7 @@ from app.api.helpers.permission_manager import has_access
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.permissions import current_identity
 from app.api.helpers.mail import send_email_new_session, send_email_session_accept_reject
+from app.api.helpers.notification import send_notif_new_session_organizer
 from app.api.helpers.query import event_query
 
 
@@ -143,6 +144,7 @@ class SessionListPost(ResourceList):
             link = "{}/events/{}/sessions/{}"\
                 .format(frontend_url, session.event_id, session.id)
             send_email_new_session(organizer_email, event_name, link)
+            send_notif_new_session_organizer(organizer_email, event_name, link)
 
     decorators = (api.has_permission('create_event'),)
     schema = SessionSchema
