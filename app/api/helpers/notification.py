@@ -2,7 +2,7 @@ from flask import current_app
 
 from app.api.helpers.db import save_to_db
 from app.models.notification import Notification, NEW_SESSION, SESSION_ACCEPT_REJECT, \
-    EVENT_IMPORTED, EVENT_IMPORT_FAIL
+    EVENT_IMPORTED, EVENT_IMPORT_FAIL, EVENT_EXPORTED, EVENT_EXPORT_FAIL
 from app.models.message_setting import MessageSettings
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_notifications import NOTIFS
@@ -56,11 +56,31 @@ def send_notif_after_import(user, event_name=None, event_url=None, error_text=No
             message=NOTIFS[EVENT_IMPORT_FAIL]['message'].format(
                 error_text=error_text)
         )
-    else:
+    elif event_name:
         send_notification(
             user=user,
             action=EVENT_IMPORTED,
             title=NOTIFS[EVENT_IMPORTED]['title'].format(event_name=event_name),
             message=NOTIFS[EVENT_IMPORTED]['message'].format(
                 event_name=event_name, event_url=event_url)
+        )
+
+
+def send_notif_after_export(user, event_name, download_url=None, error_text=None):
+    """send notification after event import"""
+    if error_text:
+        send_notification(
+            user=user,
+            action=EVENT_EXPORT_FAIL,
+            title=NOTIFS[EVENT_EXPORT_FAIL]['title'].format(event_name=event_name),
+            message=NOTIFS[EVENT_EXPORT_FAIL]['message'].format(
+                error_text=error_text)
+        )
+    elif download_url:
+        send_notification(
+            user=user,
+            action=EVENT_EXPORTED,
+            title=NOTIFS[EVENT_EXPORTED]['title'].format(event_name=event_name),
+            message=NOTIFS[EVENT_EXPORTED]['message'].format(
+                event_name=event_name, download_url=download_url)
         )

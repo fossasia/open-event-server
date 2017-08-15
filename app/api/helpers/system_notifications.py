@@ -39,9 +39,9 @@ NOTIFS = {
     },
     EVENT_IMPORTED: {
         'recipient': 'User',
-        'title': u'Event {event_name} has been exported',
+        'title': u'Event {event_name} has been imported',
         'message': (
-            u"Event <strong>{event_name}</strong> has been exported successfully."
+            u"Event <strong>{event_name}</strong> has been imported successfully."
             u"<br><br><a href='{event_url}' class='btn btn-info btn-sm'>View Event</a>"
         )
     },
