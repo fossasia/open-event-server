@@ -66,7 +66,7 @@ class AccessCodeSchema(Schema):
                          self_view_kwargs={'id': '<id>'},
                          related_view='v1.event_detail',
                          related_view_kwargs={'access_code_id': '<id>'},
-                         schema='EventSchema',
+                         schema='EventSchemaPublic',
                          type_='event')
     marketer = Relationship(attribute='user',
                             self_view='v1.access_code_user',

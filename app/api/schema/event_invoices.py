@@ -51,7 +51,7 @@ class EventInvoiceSchema(Schema):
                          self_view_kwargs={'id': '<id>'},
                          related_view='v1.event_detail',
                          related_view_kwargs={'event_invoice_id': '<id>'},
-                         schema='EventSchema',
+                         schema='EventSchemaPublic',
                          type_='event')
     discount_codes = Relationship(attribute='discount_code',
                                   many=True,

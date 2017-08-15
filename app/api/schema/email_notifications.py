@@ -30,7 +30,7 @@ class EmailNotificationSchema(Schema):
                          self_view_kwargs={'id': '<id>'},
                          related_view='v1.event_detail',
                          related_view_kwargs={'email_notification_id': '<id>'},
-                         schema='EventSchema',
+                         schema='EventSchemaPublic',
                          type_='event'
                          )
     user = Relationship(attribute='user',

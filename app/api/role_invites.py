@@ -44,7 +44,6 @@ class RoleInviteListPost(ResourceList):
             .format(frontend_url, event.id, role_invite.hash)
         send_email_role_invite(role_invite.email, role_invite.role_name, event.name, link)
 
-
     view_kwargs = True
     methods = ['POST']
     schema = RoleInviteSchema

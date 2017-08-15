@@ -27,5 +27,5 @@ class EventTypeSchema(Schema):
                           related_view='v1.event_list',
                           related_view_kwargs={'event_type_id': '<id>'},
                           many=True,
-                          schema='EventSchema',
+                          schema='EventSchemaPublic',
                           type_='event')
