@@ -22,6 +22,9 @@ from app.api.helpers.exceptions import ConflictException
 from app.api.helpers.db import safe_query
 from app.models.user import User
 from app.models.users_events_role import UsersEventsRoles
+from app.models.ticket_holder import TicketHolder
+from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.permission_manager import has_access
 
 
 class UserList(ResourceList):
@@ -73,6 +76,15 @@ class UserDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
+        if view_kwargs.get('attendee_id') is not None:
+            attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
+            if attendee.user is not None:
+                if not has_access('is_user_itself', user_id=attendee.user.id) or not has_access('is_coorganizer', event_id=attendee.event_id):
+                    raise ForbiddenException({'source': ''}, 'Access Forbidden')
+                view_kwargs['id'] = attendee.user.id
+            else:
+                view_kwargs['id'] = None
+
         if view_kwargs.get('event_invoice_id') is not None:
             event_invoice = safe_query(self, EventInvoice, 'id', view_kwargs['event_invoice_id'], 'event_invoice_id')
             if event_invoice.user_id is not None:
@@ -82,7 +94,7 @@ class UserDetail(ResourceDetail):
 
         if view_kwargs.get('users_events_role_id') is not None:
             users_events_role = safe_query(self, UsersEventsRoles, 'id', view_kwargs['users_events_role_id'],
-            'users_events_role_id')
+                                           'users_events_role_id')
             if users_events_role.user_id is not None:
                 view_kwargs['id'] = users_events_role.user_id
 
@@ -115,7 +127,8 @@ class UserDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
         if view_kwargs.get('email_notification_id') is not None:
-            email_notification = safe_query(self, EmailNotification, 'id', view_kwargs['email_notification_id'], 'email_notification_id')
+            email_notification = safe_query(self, EmailNotification, 'id', view_kwargs['email_notification_id'],
+                                            'email_notification_id')
             if email_notification.user_id is not None:
                 view_kwargs['id'] = email_notification.user_id
             else:
@@ -140,7 +153,8 @@ class UserDetail(ResourceDetail):
                   model=[Notification, UsersEventsRoles, Session, EventInvoice, AccessCode,
                          DiscountCode, EmailNotification, Speaker, User],
                   fetch_key_url="notification_id, users_events_role_id, session_id, \
-                  event_invoice_id, access_code_id, discount_code_id, email_notification_id, speaker_id, id"),)
+                  event_invoice_id, access_code_id, discount_code_id, email_notification_id, speaker_id, id",
+                                     leave_if=lambda a: a.get('attendee_id')), )
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User,
