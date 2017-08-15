@@ -282,6 +282,7 @@ class EventSchema(EventSchemaPublic):
                           self_view='v1.event_orders',
                           self_view_kwargs={'id': '<id>'},
                           related_view='v1.orders_list',
+                          related_view_kwargs={'event_id': '<id>'},
                           schema='OrderSchema',
                           type_='order',
                           many=True)
