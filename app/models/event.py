@@ -114,14 +114,14 @@ class Event(db.Model):
                                            ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "organizer"))',
                                  primaryjoin='UsersEventsRoles.event_id == Event.id',
                                  secondaryjoin='User.id == UsersEventsRoles.user_id',
-                                 backref='organizer_of_events')
+                                 backref='organizer_events')
     coorganizers = db.relationship('User',
                                    viewonly=True,
                                    secondary='join(UsersEventsRoles, Role,'
                                              ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "coorganizer"))',
                                    primaryjoin='UsersEventsRoles.event_id == Event.id',
                                    secondaryjoin='User.id == UsersEventsRoles.user_id',
-                                   backref='coorganizer_of_events')
+                                   backref='coorganizer_events')
     track_organizers = db.relationship('User',
                                        viewonly=True,
                                        secondary='join(UsersEventsRoles, Role,'
@@ -129,21 +129,21 @@ class Event(db.Model):
                                                  ' Role.name == "track_organizer"))',
                                        primaryjoin='UsersEventsRoles.event_id == Event.id',
                                        secondaryjoin='User.id == UsersEventsRoles.user_id',
-                                       backref='track_organizer_of_events')
+                                       backref='track_organizer_events')
     registrars = db.relationship('User',
                                  viewonly=True,
                                  secondary='join(UsersEventsRoles, Role,'
                                            ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "registrar"))',
                                  primaryjoin='UsersEventsRoles.event_id == Event.id',
                                  secondaryjoin='User.id == UsersEventsRoles.user_id',
-                                 backref='registrar_of_events')
+                                 backref='registrar_events')
     moderators = db.relationship('User',
                                  viewonly=True,
                                  secondary='join(UsersEventsRoles, Role,'
                                            ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "moderator"))',
                                  primaryjoin='UsersEventsRoles.event_id == Event.id',
                                  secondaryjoin='User.id == UsersEventsRoles.user_id',
-                                 backref='moderator_of_events')
+                                 backref='moderator_events')
 
     def __init__(self,
                  name=None,
