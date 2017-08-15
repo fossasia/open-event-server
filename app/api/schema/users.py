@@ -96,7 +96,7 @@ class UserSchema(UserSchemaPublic):
         self_view_kwargs={'id': '<id>'},
         related_view='v1.discount_code_list',
         related_view_kwargs={'user_id': '<id>'},
-        schema='DiscountCodeSchema',
+        schema='DiscountCodeSchemaPublic',
         type_='discount-codes')
     email_notifications = Relationship(
         attribute='email_notifications',

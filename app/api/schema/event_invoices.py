@@ -59,5 +59,5 @@ class EventInvoiceSchema(Schema):
                                   self_view_kwargs={'id': '<id>'},
                                   related_view='v1.discount_code_detail',
                                   related_view_kwargs={'event_invoice_id': '<id>'},
-                                  schema='DiscountCodeSchema',
+                                  schema='DiscountCodeSchemaPublic',
                                   type_='discount-code')
