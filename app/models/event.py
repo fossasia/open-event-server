@@ -67,7 +67,6 @@ class Event(db.Model):
     sponsor = db.relationship('Sponsor', backref="event")
     tickets = db.relationship('Ticket', backref="event_")
     tags = db.relationship('TicketTag', backref='events')
-    users = db.relationship("EventsUsers", backref="event")
     roles = db.relationship("UsersEventsRoles", backref="event")
     role_invites = db.relationship('RoleInvite', back_populates='event')
     custom_form = db.relationship('CustomForms', backref="event")
@@ -144,6 +143,14 @@ class Event(db.Model):
                                  primaryjoin='UsersEventsRoles.event_id == Event.id',
                                  secondaryjoin='User.id == UsersEventsRoles.user_id',
                                  backref='moderator_events')
+    # staff
+    users = db.relationship('User',
+                            viewonly=True,
+                            secondary='join(UsersEventsRoles, Role,'
+                                      ' and_(Role.id == UsersEventsRoles.role_id, Role.name != "attendee"))',
+                            primaryjoin='UsersEventsRoles.event_id == Event.id',
+                            secondaryjoin='User.id == UsersEventsRoles.user_id',
+                            backref='events')
 
     def __init__(self,
                  name=None,

@@ -78,6 +78,7 @@ api.route(UserRelationship, 'user_track_organizer_event', '/users/<int:id>/relat
 api.route(UserRelationship, 'user_registrar_event', '/users/<int:id>/relationships/registrar-events')
 api.route(UserRelationship, 'user_moderator_event', '/users/<int:id>/relationships/moderator-events')
 api.route(UserRelationship, 'user_attendees', '/users/<int:id>/relationships/attendees')
+api.route(UserRelationship, 'user_events', '/users/<int:id>/relationships/events')
 
 # notifications
 api.route(NotificationListAdmin, 'notification_list_admin', '/notifications')
