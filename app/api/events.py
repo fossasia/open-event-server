@@ -85,6 +85,7 @@ class EventList(ResourceList):
         if data.get('original_image_url'):
             uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
             self.session.query(Event).filter_by(id=event.id).update(uploaded_images)
+            self.session.commit()
 
     # This permission decorator ensures, you are logged in to create an event
     # and have filter ?withRole to get events associated with logged in user
