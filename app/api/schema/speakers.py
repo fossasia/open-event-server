@@ -54,7 +54,7 @@ class SpeakerSchema(Schema):
                         self_view_kwargs={'id': '<id>'},
                         related_view='v1.user_detail',
                         related_view_kwargs={'speaker_id': '<id>'},
-                        schema='UserSchema',
+                        schema='UserSchemaPublic',
                         type_='user')
     sessions = Relationship(attribute='sessions',
                             self_view='v1.speaker_session',

@@ -74,7 +74,7 @@ class OrderSchema(Schema):
                         self_view_kwargs={'order_identifier': '<identifier>'},
                         related_view='v1.user_detail',
                         related_view_kwargs={'id': '<user_id>'},
-                        schema='UserSchema',
+                        schema='UserSchemaPublic',
                         type_="user")
 
     event = Relationship(self_view='v1.order_event',
@@ -88,7 +88,7 @@ class OrderSchema(Schema):
                             self_view_kwargs={'order_identifier': '<identifier>'},
                             related_view='v1.user_detail',
                             related_view_kwargs={'id': '<marketer_id>'},
-                            schema='UserSchema',
+                            schema='UserSchemaPublic',
                             type_="user")
 
     discount_code = Relationship(self_view='v1.order_discount',
