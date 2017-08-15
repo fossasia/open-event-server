@@ -24,6 +24,8 @@ class TicketHolder(db.Model):
     ticket = db.relationship('Ticket', backref='ticket_holders')
     is_checked_in = db.Column(db.Boolean, default=False)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+    user = db.relationship('User', foreign_keys=[email], primaryjoin='User.email == TicketHolder.email', viewonly=True,
+                           backref='attendees')
 
     def __init__(self,
                  firstname=None,
