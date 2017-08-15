@@ -114,5 +114,5 @@ class SessionSchema(Schema):
                            self_view_kwargs={'id': '<id>'},
                            related_view='v1.user_detail',
                            related_view_kwargs={'session_id': '<id>'},
-                           schema='UserSchema',
+                           schema='UserSchemaPublic',
                            type_='user')

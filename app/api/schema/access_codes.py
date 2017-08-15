@@ -73,7 +73,7 @@ class AccessCodeSchema(Schema):
                             self_view_kwargs={'id': '<id>'},
                             related_view='v1.user_detail',
                             related_view_kwargs={'access_code_id': '<id>'},
-                            schema='UserSchema',
+                            schema='UserSchemaPublic',
                             type_='user')
     tickets = Relationship(attribute='tickets',
                            self_view='v1.access_code_tickets',
