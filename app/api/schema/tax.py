@@ -20,7 +20,7 @@ class TaxSchemaPublic(Schema):
                          self_view_kwargs={'id': '<id>'},
                          related_view='v1.event_detail',
                          related_view_kwargs={'tax_id': '<id>'},
-                         schema='EventSchema',
+                         schema='EventSchemaPublic',
                          type_='event')
 
 
@@ -49,5 +49,5 @@ class TaxSchema(Schema):
                          self_view_kwargs={'id': '<id>'},
                          related_view='v1.event_detail',
                          related_view_kwargs={'tax_id': '<id>'},
-                         schema='EventSchema',
+                         schema='EventSchemaPublic',
                          type_='event')
