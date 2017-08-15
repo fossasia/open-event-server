@@ -52,7 +52,7 @@ class RoleInviteSchema(Schema):
                          self_view_kwargs={'id': '<id>'},
                          related_view='v1.event_detail',
                          related_view_kwargs={'role_invite_id': '<id>'},
-                         schema='EventSchema',
+                         schema='EventSchemaPublic',
                          type_='event')
     role = Relationship(attribute='role',
                         self_view='v1.role_invite_role',

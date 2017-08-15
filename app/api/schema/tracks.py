@@ -37,7 +37,7 @@ class TrackSchema(Schema):
                          self_view_kwargs={'id': '<id>'},
                          related_view='v1.event_detail',
                          related_view_kwargs={'track_id': '<id>'},
-                         schema='EventSchema',
+                         schema='EventSchemaPublic',
                          type_='event')
     sessions = Relationship(attribute='sessions',
                             self_view='v1.track_sessions',
