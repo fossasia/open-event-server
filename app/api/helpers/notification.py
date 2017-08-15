@@ -3,7 +3,7 @@ from flask import current_app
 from app.api.helpers.db import save_to_db
 from app.models.notification import Notification, NEW_SESSION, SESSION_ACCEPT_REJECT, \
     EVENT_IMPORTED, EVENT_IMPORT_FAIL, EVENT_EXPORTED, EVENT_EXPORT_FAIL, MONTHLY_PAYMENT_NOTIF, \
-    MONTHLY_PAYMENT_FOLLOWUP_NOTIF
+    MONTHLY_PAYMENT_FOLLOWUP_NOTIF, EVENT_ROLE_INVITE, AFTER_EVENT
 from app.models.message_setting import MessageSettings
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_notifications import NOTIFS
@@ -118,6 +118,39 @@ def send_followup_notif_monthly_fee_payment(user, event_name, previous_month, am
             amount=amount,
             app_name=app_name,
             payment_url=link
+        )
+
+        send_notification(user, action, title, message)
+
+
+def send_notif_event_role(user, role_name, event_name, link):
+    message_settings = MessageSettings.query.filter_by(action=EVENT_ROLE_INVITE).first()
+    if not message_settings or message_settings.notification_status == 1:
+        notif = NOTIFS[EVENT_ROLE_INVITE]
+        action = EVENT_ROLE_INVITE
+        title = notif['title'].format(
+            role_name=role_name,
+            event_name=event_name
+        )
+        message = notif['message'].format(
+            role_name=role_name,
+            event_name=event_name,
+            link=link
+        )
+
+        send_notification(user, action, title, message)
+
+
+def send_notif_after_event(user, event_name):
+    message_settings = MessageSettings.query.filter_by(action=AFTER_EVENT).first()
+    if not message_settings or message_settings.notification_status == 1:
+        notif = NOTIFS[AFTER_EVENT]
+        action = AFTER_EVENT
+        title = notif['title'].format(
+            event_name=event_name
+        )
+        message = notif['message'].format(
+            event_name=event_name
         )
 
         send_notification(user, action, title, message)

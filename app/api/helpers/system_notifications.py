@@ -122,8 +122,7 @@ NOTIFS = {
         'title': u'Invitation to be {role_name} at {event_name}',
         'message': u"""You've been invited to be a <strong>{role_name}</strong>
             at <strong>{event_name}</strong>.<br><br>
-            <a href='{accept_link}' class='btn btn-success btn-sm invite'>Accept</a>
-            <a href='{decline_link}' class='btn btn-danger btn-sm invite'>Decline</a>""",
+            To accept the role please sign up using the following link: <a href='{link}' target='_blank'>Link</a>.""",
         'recipient': 'User',
     },
     NEW_SESSION: {
