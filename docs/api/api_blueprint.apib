@@ -13079,6 +13079,12 @@ Get a list of attendees of an event.
                                 "self": "/v1/attendees/1/relationships/event",
                                 "related": "/v1/attendees/1/event"
                             }
+                        },
+                        "order": {
+                            "links": {
+                                "self": "/v1/attendees/2/relationships/order",
+                                "related": "/v1/attendees/2/order"
+                            }
                         }
                     },
                     "attributes": {
@@ -13167,6 +13173,12 @@ Create a new attendee using an event_id.
                   "self": "/v1/attendees/1/relationships/event",
                   "related": "/v1/attendees/1/event"
                 }
+              },
+              "order": {
+                "links": {
+                  "self": "/v1/attendees/1/relationships/order",
+                  "related": "/v1/attendees/1/order"
+                }
               }
             },
             "attributes": {
@@ -13219,6 +13231,12 @@ Get a single attendee.
                         "links": {
                             "self": "/v1/attendees/1/relationships/ticket",
                             "related": "/v1/attendees/1/ticket"
+                        }
+                    },
+                    "order": {
+                        "links": {
+                          "self": "/v1/attendees/1/relationships/order",
+                          "related": "/v1/attendees/1/order"
                         }
                     }
                 },

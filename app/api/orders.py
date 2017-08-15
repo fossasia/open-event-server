@@ -20,6 +20,7 @@ from app.api.schema.orders import OrderSchema
 from app.models import db
 from app.models.discount_code import DiscountCode, TICKET
 from app.models.order import Order, OrderTicket
+from app.models.ticket_holder import TicketHolder
 
 
 class OrdersListPost(ResourceList):
@@ -104,6 +105,11 @@ class OrdersList(ResourceList):
 
 
 class OrderDetail(ResourceDetail):
+    def before_get_object(self, view_kwargs):
+        if view_kwargs.get('attendee_id'):
+            attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
+            view_kwargs['order_identifier'] = attendee.order.identifier
+
     def before_update_object(self, order, data, view_kwargs):
         if data.get('status'):
             if has_access('is_coorganizer', event_id=order.event.id):

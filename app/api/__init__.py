@@ -352,6 +352,7 @@ api.route(AttendeeList, 'attendee_list', '/events/<int:event_id>/attendees',
 api.route(AttendeeDetail, 'attendee_detail', '/attendees/<int:id>')
 api.route(AttendeeRelationshipOptional, 'attendee_ticket', '/attendees/<int:id>/relationships/ticket')
 api.route(AttendeeRelationshipRequired, 'attendee_event', '/attendees/<int:id>/relationships/event')
+api.route(AttendeeRelationshipRequired, 'attendee_order', '/attendees/<int:id>/relationships/order')
 
 # event types
 api.route(EventTypeList, 'event_type_list', '/event-types')
@@ -425,7 +426,8 @@ api.route(StripeAuthorizationRelationship, 'stripe_authorization_event',
 api.route(OrdersListPost, 'order_list_post', '/orders')
 api.route(OrdersList, 'orders_list', '/orders', '/events/<int:event_id>/orders',
           '/events/<event_identifier>/orders')
-api.route(OrderDetail, 'order_detail', '/orders/<order_identifier>')
+api.route(OrderDetail, 'order_detail', '/orders/<order_identifier>',
+          '/attendees/<int:attendee_id>/order')
 
 # Charges API
 api.route(ChargeList, 'charge_list', '/orders/<identifier>/charge', '/orders/<order_identifier>/charge')
