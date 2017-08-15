@@ -57,7 +57,7 @@ class OrderSchema(Schema):
                              self_view='v1.order_attendee',
                              self_view_kwargs={'order_identifier': '<identifier>'},
                              related_view='v1.attendee_list',
-                             related_view_kwargs={'order_id': '<id>'},
+                             related_view_kwargs={'order_identifier': '<identifier>'},
                              schema='AttendeeSchema',
                              many=True,
                              type_='attendee')
@@ -65,7 +65,7 @@ class OrderSchema(Schema):
     tickets = Relationship(self_view='v1.order_ticket',
                            self_view_kwargs={'order_identifier': '<identifier>'},
                            related_view='v1.ticket_list',
-                           related_view_kwargs={'order_id': '<id>'},
+                           related_view_kwargs={'order_identifier': '<identifier>'},
                            schema='TicketSchema',
                            many=True,
                            type_="ticket")

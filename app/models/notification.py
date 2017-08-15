@@ -18,6 +18,8 @@ AFTER_EVENT = 'After Event'
 EVENT_PUBLISH = 'Event Published'
 TICKET_PURCHASED_ORGANIZER = 'Ticket(s) Purchased to Organizer'
 TICKET_RESEND_ORGANIZER = 'Ticket Resend'
+MONTHLY_PAYMENT_NOTIF = 'Monthly Payment Notification'
+MONTHLY_PAYMENT_FOLLOWUP_NOTIF = 'Monthly Payment Follow Up Notification'
 
 
 class Notification(db.Model):
