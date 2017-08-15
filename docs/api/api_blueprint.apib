@@ -71,6 +71,18 @@ Get a list of Users.
             "data": [
                 {
                     "relationships": {
+                        "events": {
+                            "links": {
+                                "self": "/v1/users/3/relationships/events",
+                                "related": "/v1/users/3/events"
+                            }
+                        },
+                        "attendees": {
+                            "links": {
+                                "self": "/v1/users/3/relationships/attendees",
+                                "related": "/v1/users/3/attendees"
+                            }
+                        },
                         "email-notifications": {
                             "links": {
                                 "self": "/v1/users/2/relationships/email-notifications",
@@ -213,6 +225,18 @@ Create a new user using an email, password and an optional name.
         {
             "data": {
                 "relationships": {
+                    "events": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/events",
+                            "related": "/v1/users/3/events"
+                        }
+                    },
+                    "attendees": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/attendees",
+                            "related": "/v1/users/3/attendees"
+                        }
+                    },
                     "email-notifications": {
                         "links": {
                             "self": "/v1/users/2/relationships/email-notifications",
@@ -329,6 +353,18 @@ Get a single user.
         {
             "data": {
                 "relationships": {
+                    "events": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/events",
+                            "related": "/v1/users/3/events"
+                        }
+                    },
+                    "attendees": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/attendees",
+                            "related": "/v1/users/3/attendees"
+                        }
+                    },
                     "email-notifications": {
                         "links": {
                             "self": "/v1/users/2/relationships/email-notifications",
@@ -468,6 +504,18 @@ Authorized user should be same as user in request body or must be admin.
         {
             "data": {
                 "relationships": {
+                    "events": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/events",
+                            "related": "/v1/users/3/events"
+                        }
+                    },
+                    "attendees": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/attendees",
+                            "related": "/v1/users/3/attendees"
+                        }
+                    },
                     "email-notifications": {
                         "links": {
                             "self": "/v1/users/2/relationships/email-notifications",

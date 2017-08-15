@@ -20,18 +20,6 @@ def get_new_event_identifier(length=8):
         return get_new_event_identifier()
 
 
-class EventsUsers(db.Model):
-    """Many to Many table Event Users"""
-    __tablename__ = 'event_user'
-    id = db.Column(db.Integer, primary_key=True)
-    event_id = db.Column(
-        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
-    editor = db.Column(db.Boolean)
-    admin = db.Column(db.Boolean)
-    user = db.relationship("User", backref="events_assocs")
-
-
 class Event(db.Model):
     """Event object table"""
     __tablename__ = 'events'
