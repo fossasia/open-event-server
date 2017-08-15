@@ -81,7 +81,7 @@ class OrderSchema(Schema):
                          self_view_kwargs={'order_identifier': '<identifier>'},
                          related_view='v1.event_detail',
                          related_view_kwargs={'id': '<event_id>'},
-                         schema='EventSchema',
+                         schema='EventSchemaPublic',
                          type_="event")
 
     marketer = Relationship(self_view='v1.order_marketer',

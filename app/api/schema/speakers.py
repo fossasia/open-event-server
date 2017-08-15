@@ -47,7 +47,7 @@ class SpeakerSchema(Schema):
                          self_view_kwargs={'id': '<id>'},
                          related_view='v1.event_detail',
                          related_view_kwargs={'speaker_id': '<id>'},
-                         schema='EventSchema',
+                         schema='EventSchemaPublic',
                          type_='event')
     user = Relationship(attribute='user',
                         self_view='v1.speaker_user',
