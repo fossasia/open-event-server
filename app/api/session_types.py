@@ -1,61 +1,16 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from marshmallow_jsonapi.flask import Schema, Relationship
-from marshmallow_jsonapi import fields
-from datetime import datetime
-from marshmallow import validates_schema
 
-from app.api.helpers.utilities import dasherize
-from app.models import db
-from app.api.helpers.permissions import jwt_required
-from app.models.session_type import SessionType
-from app.models.session import Session
-from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
-from app.api.helpers.utilities import require_relationship
-from app.api.helpers.permission_manager import has_access
 from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.permission_manager import has_access
+from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
-
-
-class SessionTypeSchema(Schema):
-    """
-    Api Schema for session type model
-    """
-    class Meta:
-        """
-        Meta class for SessionTypeSchema
-        """
-        type_ = 'session-type'
-        self_view = 'v1.session_type_detail'
-        self_view_kwargs = {'id': '<id>'}
-        inflect = dasherize
-
-    @validates_schema
-    def validate_length(self, data):
-        try:
-            datetime.strptime(data['length'], '%H:%M')
-        except ValueError:
-            raise UnprocessableEntity({'pointer': '/data/attributes/length'}, "Length should be in the format %H:%M")
-
-    id = fields.Str(dump_only=True)
-    name = fields.Str(required=True)
-    length = fields.Str(required=True)
-    event = Relationship(attribute='event',
-                         self_view='v1.session_type_event',
-                         self_view_kwargs={'id': '<id>'},
-                         related_view='v1.event_detail',
-                         related_view_kwargs={'session_type_id': '<id>'},
-                         schema='EventSchema',
-                         type_='event')
-    sessions = Relationship(attribute='sessions',
-                            self_view='v1.session_type_sessions',
-                            self_view_kwargs={'id': '<id>'},
-                            related_view='v1.session_list',
-                            related_view_kwargs={'session_type_id': '<id>'},
-                            schema='SessionSchema',
-                            many=True,
-                            type_='session')
+from app.api.helpers.utilities import require_relationship
+from app.api.schema.session_types import SessionTypeSchema
+from app.models import db
+from app.models.session import Session
+from app.models.session_type import SessionType
 
 
 class SessionTypeListPost(ResourceList):
