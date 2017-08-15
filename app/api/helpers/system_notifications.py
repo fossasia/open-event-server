@@ -17,6 +17,8 @@ from app.models.notification import (
     EVENT_EXPORTED,
     EVENT_IMPORT_FAIL,
     EVENT_IMPORTED,
+    MONTHLY_PAYMENT_NOTIF,
+    MONTHLY_PAYMENT_FOLLOWUP_NOTIF,
     TICKET_PURCHASED_ORGANIZER
 )
 
@@ -52,6 +54,28 @@ NOTIFS = {
             u"The following error occurred:<br>"
             u"<pre>{error_text}</pre>"
         )
+    },
+    MONTHLY_PAYMENT_NOTIF: {
+        'recipient': 'Organizer',
+        'subject': u'{date} - Monthly service fee invoice for {event_name}',
+        'message': (
+            u"The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}." +
+            u"<br/> That payment for the same has to be made in two weeks. <a href='{payment_url}'>Click here</a> to "
+            u"view your invoice and complete the payment."
+            u"<br><br><em>Thank you for using {app_name}.</em>"
+        ),
+        'sent_at': '1st day of the month'
+    },
+    MONTHLY_PAYMENT_FOLLOWUP_NOTIF: {
+        'recipient': 'Organizer',
+        'subject': u'Past Due: {date} - Monthly service fee invoice for {event_name}',
+        'message': (
+            u"The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}." +
+            u"<br/> That payment for the same is past the due date. <a href='{payment_url}'>Click here</a> to "
+            u"view your invoice and complete the payment to prevent loss of functionality."
+            u"<br><br><em>Thank you for using {app_name}.</em>"
+        ),
+        'sent_at': '15th day of the month'
     },
     TICKET_PURCHASED: {
         'recipient': 'User',
