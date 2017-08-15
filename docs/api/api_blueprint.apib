@@ -8288,7 +8288,7 @@ Create a new Event Copyright.
         }
 
 
-## Event Copyright Details [/v1/event-copyright/{event_copyright_id}]
+## Event Copyright Details [/v1/event-copyrights/{event_copyright_id}]
 + Parameters
     + event_copyright_id: 1 (integer) - ID of the event copyright in the form of an integer
 
@@ -11910,7 +11910,7 @@ Related to any tax related information that might be related with the tickets fo
 | `is-invoice-sent` | Yes/No for Session accept/reject email | boolean (default: `false`) | - | - |
 | `is-tax-included` | Yes/No for Session accept/reject email | boolean (default: `false`) | - | **yes** |
 
-## Tax Collection [/v1/tax{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Tax Collection [/v1/taxes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
@@ -11998,7 +11998,7 @@ Create a new tax using an event_id.
         }
 
 
-## Tax Details [/v1/tax/{tax_id}]
+## Tax Details [/v1/taxes/{tax_id}]
 + Parameters
     + tax_id: 1 (integer) - ID of the Tax in the form of an integer
 
