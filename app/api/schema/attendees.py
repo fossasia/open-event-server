@@ -41,7 +41,7 @@ class AttendeeSchema(Schema):
                          self_view_kwargs={'id': '<id>'},
                          related_view='v1.event_detail',
                          related_view_kwargs={'attendee_id': '<id>'},
-                         schema='EventSchema',
+                         schema='EventSchemaPublic',
                          type_='event')
 
     order = Relationship(self_view='v1.attendee_order',

@@ -33,5 +33,5 @@ class TicketTagSchema(Schema):
                          self_view_kwargs={'id': '<id>'},
                          related_view='v1.event_detail',
                          related_view_kwargs={'ticket_tag_id': '<id>'},
-                         schema='EventSchema',
+                         schema='EventSchemaPublic',
                          type_='event')

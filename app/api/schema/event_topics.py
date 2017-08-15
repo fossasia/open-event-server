@@ -27,7 +27,7 @@ class EventTopicSchema(Schema):
                           self_view_kwargs={'id': '<id>'},
                           related_view='v1.event_list',
                           related_view_kwargs={'event_topic_id': '<id>'},
-                          schema='EventSchema',
+                          schema='EventSchemaPublic',
                           type_='event')
     event_sub_topics = Relationship(attribute='event_sub_topics',
                                     self_view='v1.event_topic_event_sub_topic',

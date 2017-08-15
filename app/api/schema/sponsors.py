@@ -30,5 +30,5 @@ class SponsorSchema(Schema):
                          self_view_kwargs={'id': '<id>'},
                          related_view='v1.event_detail',
                          related_view_kwargs={'sponsor_id': '<id>'},
-                         schema='EventSchema',
+                         schema='EventSchemaPublic',
                          type_='event')
