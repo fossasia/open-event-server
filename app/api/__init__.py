@@ -301,10 +301,10 @@ api.route(SpeakerRelationshipOptional, 'speaker_session', '/speakers/<int:id>/re
 # event_copyright
 api.route(EventCopyrightListPost, 'event_copyright_list_post', '/event-copyrights')
 api.route(EventCopyrightDetail, 'event_copyright_detail',
-          '/event-copyright/<int:id>', '/events/<int:event_id>/event-copyright',
+          '/event-copyrights/<int:id>', '/events/<int:event_id>/event-copyright',
           '/events/<event_identifier>/event-copyright')
 api.route(EventCopyrightRelationshipRequired, 'copyright_event',
-          '/event-copyright/<int:id>/relationships/event')
+          '/event-copyrights/<int:id>/relationships/event')
 
 # custom_placeholder
 api.route(CustomPlaceholderList, 'custom_placeholder_list',
@@ -315,10 +315,10 @@ api.route(CustomPlaceholderRelationship, 'custom_placeholder_event_sub_topic',
           '/custom-placeholders/<int:id>/relationships/event-sub-topic')
 
 # tax
-api.route(TaxListPost, 'tax_list_post', '/tax')
-api.route(TaxList, 'tax_list', '/tax', '/events/<int:event_id>/tax', '/events/<identifier>/tax')
-api.route(TaxDetail, 'tax_detail', '/tax/<int:id>', '/events/<int:event_id>/tax')
-api.route(TaxRelationship, 'tax_event', '/tax/<int:id>/relationships/event')
+api.route(TaxListPost, 'tax_list_post', '/taxes')
+api.route(TaxList, 'tax_list', '/taxes', '/events/<int:event_id>/tax', '/events/<identifier>/tax')
+api.route(TaxDetail, 'tax_detail', '/taxes/<int:id>', '/events/<int:event_id>/tax')
+api.route(TaxRelationship, 'tax_event', '/taxes/<int:id>/relationships/event')
 
 # event invoices
 api.route(EventInvoiceList, 'event_invoice_list', '/event-invoices', '/events/<int:event_id>/event-invoices',

@@ -679,7 +679,7 @@ def copyright_post(transaction):
 @hooks.before("Copyright > Event Copyright Details > Event Copyright Details")
 def copyright_get_detail(transaction):
     """
-    GET /event-copyright/1
+    GET /event-copyrights/1
     :param transaction:
     :return:
     """
@@ -692,7 +692,7 @@ def copyright_get_detail(transaction):
 @hooks.before("Copyright > Event Copyright Details > Update Event Copyright")
 def copyright_patch(transaction):
     """
-    PATCH /event-copyright/1
+    PATCH /event-copyrights/1
     :param transaction:
     :return:
     """
@@ -705,7 +705,7 @@ def copyright_patch(transaction):
 @hooks.before("Copyright > Event Copyright Details > Delete Event Copyright")
 def copyright_delete(transaction):
     """
-    DELETE /event-copyright/1
+    DELETE /event-copyrights/1
     :param transaction:
     :return:
     """
@@ -1382,7 +1382,7 @@ def sponsor_delete(transaction):
 @hooks.before("Tax > Tax Collection > Create Tax")
 def tax_post(transaction):
     """
-    GET /tax/1
+    GET /taxes/1
     :param transaction:
     :return:
     """
@@ -1395,7 +1395,7 @@ def tax_post(transaction):
 @hooks.before("Tax > Tax Details > Tax Details")
 def tax_get_detail(transaction):
     """
-    PATCH /tax/1
+    PATCH /taxes/1
     :param transaction:
     :return:
     """
@@ -1408,7 +1408,7 @@ def tax_get_detail(transaction):
 @hooks.before("Tax > Tax Details > Update Tax")
 def tax_patch(transaction):
     """
-    PATCH /tax/1
+    PATCH /taxes/1
     :param transaction:
     :return:
     """
@@ -1421,7 +1421,7 @@ def tax_patch(transaction):
 @hooks.before("Tax > Tax Details > Delete Tax")
 def tax_delete(transaction):
     """
-    DELETE /tax/1
+    DELETE /taxes/1
     :param transaction:
     :return:
     """

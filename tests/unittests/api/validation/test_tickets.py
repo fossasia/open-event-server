@@ -4,7 +4,8 @@ from pytz import timezone
 
 from app import current_app as app
 from tests.unittests.utils import OpenEventTestCase
-from app.api.tickets import TicketSchema, UnprocessableEntity
+from app.api.helpers.exceptions import UnprocessableEntity
+from app.api.schema.tickets import TicketSchema
 from app.factories.ticket import TicketFactory
 from app.models import db
 from tests.unittests.setup_database import Setup

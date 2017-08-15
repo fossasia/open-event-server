@@ -1,39 +1,12 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
-from marshmallow_jsonapi.flask import Schema, Relationship
-from marshmallow_jsonapi import fields
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
-from app.api.helpers.utilities import dasherize
+from app.api.helpers.files import create_save_image_sizes
+from app.api.schema.custom_placeholders import CustomPlaceholderSchema
 from app.models import db
 from app.models.custom_placeholder import CustomPlaceholder
 from app.models.event_sub_topic import EventSubTopic
-from app.api.helpers.files import create_save_image_sizes
-
-
-class CustomPlaceholderSchema(Schema):
-    class Meta:
-        type_ = 'custom-placeholder'
-        self_view = 'v1.custom_placeholder_detail'
-        self_view_kwargs = {'id': '<id>'}
-        self_view_many = 'v1.custom_placeholder_list'
-        inflect = dasherize
-
-    id = fields.Integer(dump_only=True)
-    name = fields.String(required=True)
-    original_image_url = fields.Url(required=True)
-    thumbnail_image_url = fields.Url(dump_only=True)
-    large_image_url = fields.Url(dump_only=True)
-    icon_image_url = fields.Url(dump_only=True)
-    copyright = fields.String(allow_none=True)
-    origin = fields.String(allow_none=True)
-    event_sub_topic = Relationship(attribute='event_sub_topic',
-                                   self_view='v1.custom_placeholder_event_sub_topic',
-                                   self_view_kwargs={'id': '<id>'},
-                                   related_view='v1.event_sub_topic_detail',
-                                   related_view_kwargs={'custom_placeholder_id': '<id>'},
-                                   schema='EventSubTopicSchema',
-                                   type_='event-sub-topic')
 
 
 class CustomPlaceholderList(ResourceList):
