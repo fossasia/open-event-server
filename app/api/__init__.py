@@ -71,6 +71,11 @@ api.route(UserRelationship, 'user_session', '/users/<int:id>/relationships/sessi
 api.route(UserRelationship, 'user_access_codes', '/users/<int:id>/relationships/access-codes')
 api.route(UserRelationship, 'user_discount_codes', '/users/<int:id>/relationships/discount-codes')
 api.route(UserRelationship, 'user_email_notifications', '/users/<int:id>/relationships/email-notifications')
+api.route(UserRelationship, 'user_organizer_event', '/users/<int:id>/relationships/organizer-events')
+api.route(UserRelationship, 'user_coorganizer_event', '/users/<int:id>/relationships/coorganizer-events')
+api.route(UserRelationship, 'user_track_organizer_event', '/users/<int:id>/relationships/track-organizer-events')
+api.route(UserRelationship, 'user_registrar_event', '/users/<int:id>/relationships/registrar-events')
+api.route(UserRelationship, 'user_moderator_event', '/users/<int:id>/relationships/moderator-events')
 
 # notifications
 api.route(NotificationListAdmin, 'notification_list_admin', '/notifications')
