@@ -159,3 +159,11 @@ class UserSchema(UserSchemaPublic):
         schema='AttendeeSchema',
         many=True,
         type_='attendee')
+    events = Relationship(
+        self_view='v1.user_events',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='EventSchema',
+        many=True,
+        type_='event')
