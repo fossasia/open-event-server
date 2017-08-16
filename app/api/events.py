@@ -2,10 +2,14 @@ from flask import request, current_app
 from flask_jwt import current_identity, _jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
+from marshmallow_jsonapi.flask import Schema
+from marshmallow_jsonapi import fields
 from sqlalchemy import or_
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
+from app.api.data_layers.EventCopyLayer import EventCopyLayer
+from app.api.helpers.utilities import dasherize
 from app.api.schema.events import EventSchemaPublic, EventSchema
 from app.api.helpers.permission_manager import has_access
 # models
@@ -325,3 +329,22 @@ class EventRelationship(ResourceRelationship):
                   'model': Event,
                   'methods': {'before_get_object': before_get_object}
                   }
+
+
+class EventCopySchema(Schema):
+    class Meta:
+        type_ = 'event-copy'
+        inflect = dasherize
+        self_view = 'v1.event_copy'
+        self_view_kwargs = {'identifier': '<id>'}
+
+    id = fields.Str(dump_only=True)
+    identifier = fields.Str(dump_only=True)
+
+
+class EventCopyResource(ResourceList):
+
+    schema = EventCopySchema
+    methods = ['POST', ]
+    data_layer = {'class': EventCopyLayer,
+                  'session': db.Session}

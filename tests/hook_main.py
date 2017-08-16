@@ -3166,3 +3166,16 @@ def delete_order(transaction):
     :return:
     """
     transaction['skip'] = True
+
+
+@hooks.before("Event Copy > Create Event Copy > Create Copy")
+def create_event_copy(transaction):
+    """
+    GET /v1/events/{identifier}/copy
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()

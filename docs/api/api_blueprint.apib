@@ -19040,3 +19040,52 @@ Delete a single Order.
             "version": "1.0"
           }
         }
+
+
+# Group Event Copy
+
+To create copy of an event
+
+## Create Event Copy [/v1/events/{identifier}/copy]
++ Parameters
+    + identifier: 1 - Identifier of the event or ID of the event to copy
+
+Creates the copy. Requires Co-Organizer access
+
+### Create Copy [POST]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/vnd.api+json
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+        {
+          "data": {
+            "type": "event-copy"
+          }
+        }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "identifier": "129b65ae"
+            },
+            "type": "event-copy",
+            "id": "1",
+            "links": {
+              "self": "/v1/events/1/copy"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/events/1/copy"
+          }
+        }
