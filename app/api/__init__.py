@@ -338,6 +338,8 @@ api.route(EventInvoiceRelationshipRequired, 'event_invoice_event',
           '/event-invoices/<int:id>/relationships/event')
 api.route(EventInvoiceRelationshipOptional, 'event_invoice_discount_code',
           '/event-invoices/<int:id>/relationships/discount-codes')
+api.route(EventInvoiceRelationshipOptional, 'event_invoice_orders',
+          '/event-invoices/<int:id>/relationships/orders')
 
 # discount codes
 api.route(DiscountCodeListPost, 'discount_code_list_post', '/discount-codes')
@@ -447,7 +449,7 @@ api.route(OrderRelationship, 'order_user', '/orders/<order_identifier>/relations
 api.route(OrderRelationship, 'order_event', '/orders/<order_identifier>/relationships/event')
 api.route(OrderRelationship, 'order_marketer', '/orders/<order_identifier>/relationships/marketer')
 api.route(OrderRelationship, 'order_discount', '/orders/<order_identifier>/relationships/discount-code')
-
+api.route(OrderRelationship, 'order_event_invoice', '/orders/<order_identifier>/relationships/event-invoice')
 
 # Event Statistics API
 api.route(EventStatisticsGeneralDetail, 'event_statistics_general_detail', '/events/<int:id>/general-statistics',
