@@ -2897,6 +2897,23 @@ def custom_placeholder_delete(transaction):
         db.session.commit()
 
 
+@hooks.before("Custom Placeholders > Custom Placeholder Details of Event Sub-topic >"
+              " Custom Placeholder Details of Event Sub-topic")
+def event_sub_topic_custom_placeholder_get_detail(transaction):
+    """
+    GET /event-sub-topics/1/custom-placeholder
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_sub_topic = EventSubTopicFactory()
+        db.session.add(event_sub_topic)
+
+        custom_placeholder = CustomPlaceholderFactory(event_sub_topic_id=1)
+        db.session.add(custom_placeholder)
+        db.session.commit()
+
+
 # ------------------------- User Permissions -------------------------
 @hooks.before("User Permissions > User Permission Collection > List all user permissions")
 def user_permission_get_list(transaction):
