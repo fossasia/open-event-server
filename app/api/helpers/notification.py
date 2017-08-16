@@ -3,7 +3,7 @@ from flask import current_app
 from app.api.helpers.db import save_to_db
 from app.models.notification import Notification, NEW_SESSION, SESSION_ACCEPT_REJECT, \
     EVENT_IMPORTED, EVENT_IMPORT_FAIL, EVENT_EXPORTED, EVENT_EXPORT_FAIL, MONTHLY_PAYMENT_NOTIF, \
-    MONTHLY_PAYMENT_FOLLOWUP_NOTIF, EVENT_ROLE_INVITE, AFTER_EVENT
+    MONTHLY_PAYMENT_FOLLOWUP_NOTIF, EVENT_ROLE_INVITE, AFTER_EVENT, TICKET_PURCHASED_ORGANIZER
 from app.models.message_setting import MessageSettings
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_notifications import NOTIFS
@@ -154,3 +154,18 @@ def send_notif_after_event(user, event_name):
         )
 
         send_notification(user, action, title, message)
+
+
+def send_notif_ticket_purchase_organizer(user, invoice_id, order_url, event_name):
+    """Send notification with order invoice link after purchase"""
+    send_notification(
+        user=user,
+        action=TICKET_PURCHASED_ORGANIZER,
+        title=NOTIFS[TICKET_PURCHASED_ORGANIZER]['title'].format(
+            invoice_id=invoice_id,
+            event_name=event_name
+        ),
+        message=NOTIFS[TICKET_PURCHASED_ORGANIZER]['message'].format(
+            order_url=order_url
+        )
+    )
