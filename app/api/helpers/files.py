@@ -58,7 +58,7 @@ def uploaded_file(files, multiple=False):
     return files_uploaded
 
 
-def create_save_resized_image(image_file, basewidth, maintain_aspect, height_size, upload_path,
+def create_save_resized_image(image_file, basewidth=None, maintain_aspect=None, height_size=None, upload_path=None,
                               ext='jpg', remove_after_upload=False, resize=True):
     """
     Create and Save the resized version of the background image

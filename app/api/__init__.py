@@ -8,7 +8,7 @@ from app.api.email_notifications import EmailNotificationList, EmailNotification
     EmailNotificationRelationshipOptional, EmailNotificationRelationshipRequired
 from app.api.tickets import TicketList, TicketListPost, TicketDetail, TicketRelationshipRequired,\
     TicketRelationshipOptional
-from app.api.events import EventList, EventDetail, EventRelationship
+from app.api.events import EventList, EventDetail, EventRelationship, EventCopyResource
 from app.api.event_types import EventTypeList, EventTypeDetail, EventTypeRelationship
 from app.api.event_topics import EventTopicList, EventTopicDetail, EventTopicRelationship
 from app.api.event_sub_topics import EventSubTopicList, EventSubTopicListPost, EventSubTopicDetail,\
@@ -223,6 +223,8 @@ api.route(EventRelationship, 'event_moderators', '/events/<int:id>/relationships
 api.route(EventRelationship, 'event_registrars', '/events/<int:id>/relationships/registrars',
           '/events/<identifier>/relationships/registrars')
 
+# Event Copy API
+api.route(EventCopyResource, 'event_copy', '/events/<identifier>/copy')
 
 
 # microlocations
