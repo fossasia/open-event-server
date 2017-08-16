@@ -13,12 +13,14 @@ from app.api.helpers.files import create_save_pdf
 from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
+from app.api.helpers.query import event_query
 from app.api.helpers.ticketing import TicketingManager
 from app.api.helpers.utilities import dasherize, require_relationship
 from app.api.schema.orders import OrderSchema
 from app.models import db
 from app.models.discount_code import DiscountCode, TICKET
 from app.models.order import Order, OrderTicket
+from app.models.ticket_holder import TicketHolder
 
 
 class OrdersListPost(ResourceList):
@@ -86,13 +88,28 @@ class OrdersList(ResourceList):
         elif not has_access('is_coorganizer', event_id=kwargs['event_id']):
             raise ForbiddenException({'source': ''}, "Co-Organizer Access Required")
 
+    def query(self, view_kwargs):
+        query_ = self.session.query(Order)
+        query_ = event_query(self, query_, view_kwargs)
+
+        return query_
+
     decorators = (jwt_required,)
+    methods = ['GET', ]
     schema = OrderSchema
     data_layer = {'session': db.session,
-                  'model': Order}
+                  'model': Order,
+                  'methods': {
+                      'query': query
+                  }}
 
 
 class OrderDetail(ResourceDetail):
+    def before_get_object(self, view_kwargs):
+        if view_kwargs.get('attendee_id'):
+            attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
+            view_kwargs['order_identifier'] = attendee.order.identifier
+
     def before_update_object(self, order, data, view_kwargs):
         if data.get('status'):
             if has_access('is_coorganizer', event_id=order.event.id):

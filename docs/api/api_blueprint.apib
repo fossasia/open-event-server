@@ -66,38 +66,90 @@ Get a list of Users.
 
         {
             "meta": {
-                "count": 2
+                "count": 1
             },
             "data": [
                 {
-                    "attributes": {
-                        "is-admin": true,
-                        "last-name": null,
-                        "instagram-url": null,
-                        "is-super-admin": true,
-                        "thumbnail-image-url": null,
-                        "created-at": "2017-06-21T20:18:12.827128+00:00",
-                        "last-accessed-at": null,
-                        "email": "open_event_test_user@fossasia.org",
-                        "icon-image-url": null,
-                        "contact": null,
-                        "deleted-at": null,
-                        "small-image-url": null,
-                        "facebook-url": null,
-                        "details": null,
-                        "is-verified": true,
-                        "first-name": null,
-                        "avatar-url": null,
-                        "twitter-url": null,
-                        "google-plus-url": null
+                    "relationships": {
+                        "events": {
+                            "links": {
+                                "self": "/v1/users/3/relationships/events",
+                                "related": "/v1/users/3/events"
+                            }
+                        },
+                        "attendees": {
+                            "links": {
+                                "self": "/v1/users/3/relationships/attendees",
+                                "related": "/v1/users/3/attendees"
+                            }
+                        },
+                        "email-notifications": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/email-notifications",
+                                "related": "/v1/users/2/email-notifications"
+                            }
+                        },
+                        "discount-codes": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/discount-codes",
+                                "related": "/v1/users/2/discount-codes"
+                            }
+                        },
+                        "sessions": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/sessions",
+                                "related": "/v1/users/2/sessions"
+                            }
+                        },
+                        "coorganizer-events": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/coorganizer-events",
+                                "related": "/v1/events"
+                            }
+                        },
+                        "speakers": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/speakers",
+                                "related": "/v1/users/2/speakers"
+                            }
+                        },
+                        "moderator-events": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/moderator-events",
+                                "related": "/v1/events"
+                            }
+                        },
+                        "notifications": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/notifications",
+                                "related": "/v1/users/2/notifications"
+                            }
+                        },
+                        "track-organizer-events": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/track-organizer-events",
+                                "related": "/v1/events"
+                            }
+                        },
+                        "access-codes": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/access-codes",
+                                "related": "/v1/users/2/access-codes"
+                            }
+                        },
+                        "organizer-events": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/organizer-events",
+                                "related": "/v1/events"
+                            }
+                        },
+                        "registrar-events": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/registrar-events",
+                                "related": "/v1/events"
+                            }
+                        }
                     },
-                    "type": "user",
-                    "id": "1",
-                    "links": {
-                        "self": "/v1/users/1"
-                    }
-                },
-                {
                     "attributes": {
                         "is-admin": false,
                         "last-name": "Doe",
@@ -172,39 +224,112 @@ Create a new user using an email, password and an optional name.
 
         {
             "data": {
+                "relationships": {
+                    "events": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/events",
+                            "related": "/v1/users/3/events"
+                        }
+                    },
+                    "attendees": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/attendees",
+                            "related": "/v1/users/3/attendees"
+                        }
+                    },
+                    "email-notifications": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/email-notifications",
+                            "related": "/v1/users/2/email-notifications"
+                        }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/discount-codes",
+                            "related": "/v1/users/2/discount-codes"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/sessions",
+                            "related": "/v1/users/2/sessions"
+                        }
+                    },
+                    "coorganizer-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/coorganizer-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "speakers": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/speakers",
+                            "related": "/v1/users/2/speakers"
+                        }
+                    },
+                    "moderator-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/moderator-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "notifications": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/notifications",
+                            "related": "/v1/users/2/notifications"
+                        }
+                    },
+                    "track-organizer-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/track-organizer-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "access-codes": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/access-codes",
+                            "related": "/v1/users/2/access-codes"
+                        }
+                    },
+                    "organizer-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/organizer-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "registrar-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/registrar-events",
+                            "related": "/v1/events"
+                        }
+                    }
+                },
                 "attributes": {
                     "is-admin": false,
                     "last-name": "Doe",
                     "instagram-url": "http://instagram.com/instagram",
                     "is-super-admin": false,
-                    "created-at": "2017-06-21T12:26:09.075379+00:00",
+                    "thumbnail-image-url": "http://example.com/example.png",
+                    "created-at": "2017-06-21T20:33:33.186358+00:00",
                     "last-accessed-at": null,
                     "email": "example@example.com",
+                    "icon-image-url": "http://example.com/example.png",
                     "contact": "example",
                     "deleted-at": null,
+                    "small-image-url": "http://example.com/example.png",
                     "facebook-url": "http://facebook.com/facebook",
                     "details": "example",
                     "is-verified": false,
                     "first-name": "John",
                     "avatar-url": "http://example.com/example.png",
                     "twitter-url": "http://twitter.com/twitter",
-                    "google-plus-url": "http://plus.google.com/plus.google",
-                    "thumbnail-image-url": "http://localhost/static/media/users/17/thumbnail/YWVqaGRVd0/dafaa8a2-6445-42b2-895b-815fd81bbffd.jpg",
-                    "original-image-url": "http://localhost/static/media/users/17/original/ZEYxOWZHQU/39218f01-b82a-44ca-ad74-bfbf2342486f.jpg",
-                    "icon-image-url": "http://localhost/static/media/users/17/icon/L3NsT28yM0/23629af8-d3b5-4d42-9a42-8df342f9cce3.jpg",
-                    "small-image-url": "http://localhost/static/media/users/17/thumbnail/YWVqaGRVd0/dafaa8a2-6445-42b2-895b-815fd81bbffd.jpg"
+                    "google-plus-url": "http://plus.google.com/plus.google"
                 },
                 "type": "user",
                 "id": "2",
                 "links": {
                     "self": "/v1/users/2"
                 }
-            },
-            "jsonapi": {
-                "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/users/2"
             }
         }
 
@@ -227,13 +352,93 @@ Get a single user.
 
         {
             "data": {
+                "relationships": {
+                    "events": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/events",
+                            "related": "/v1/users/3/events"
+                        }
+                    },
+                    "attendees": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/attendees",
+                            "related": "/v1/users/3/attendees"
+                        }
+                    },
+                    "email-notifications": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/email-notifications",
+                            "related": "/v1/users/2/email-notifications"
+                        }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/discount-codes",
+                            "related": "/v1/users/2/discount-codes"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/sessions",
+                            "related": "/v1/users/2/sessions"
+                        }
+                    },
+                    "coorganizer-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/coorganizer-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "speakers": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/speakers",
+                            "related": "/v1/users/2/speakers"
+                        }
+                    },
+                    "moderator-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/moderator-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "notifications": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/notifications",
+                            "related": "/v1/users/2/notifications"
+                        }
+                    },
+                    "track-organizer-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/track-organizer-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "access-codes": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/access-codes",
+                            "related": "/v1/users/2/access-codes"
+                        }
+                    },
+                    "organizer-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/organizer-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "registrar-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/registrar-events",
+                            "related": "/v1/events"
+                        }
+                    }
+                },
                 "attributes": {
                     "is-admin": false,
                     "last-name": "Doe",
                     "instagram-url": "http://instagram.com/instagram",
                     "is-super-admin": false,
                     "thumbnail-image-url": "http://example.com/example.png",
-                    "created-at": "2017-06-21T12:26:09.075379+00:00",
+                    "created-at": "2017-06-21T20:33:33.186358+00:00",
                     "last-accessed-at": null,
                     "email": "example@example.com",
                     "icon-image-url": "http://example.com/example.png",
@@ -253,12 +458,6 @@ Get a single user.
                 "links": {
                     "self": "/v1/users/2"
                 }
-            },
-            "jsonapi": {
-                "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/users/2"
             }
         }
 
@@ -281,19 +480,19 @@ Authorized user should be same as user in request body or must be admin.
             {
               "data": {
                 "attributes": {
-                  "password": "password1",
-                  "avatar_url": "http://example1.com/example1.png",
-                  "first-name": "Jane",
-                  "last-name": "Dough",
+                  "password": "password",
+                  "avatar_url": "http://example.com/example.png",
+                  "first-name": "John",
+                  "last-name": "Doe",
                   "details": "example1",
                   "contact": "example1",
-                  "facebook-url": "http://facebook.com/facebook1",
-                  "twitter-url": "http://twitter.com/twitter1",
-                  "instagram-url": "http://instagram.com/instagram1",
-                  "google-plus-url": "http://plus.google.com/plus.google1",
-                  "thumbnail-image-url": "http://example1.com/example1.png",
-                  "small-image-url": "http://example1.com/example1.png",
-                  "icon-image-url": "http://example1.com/example1.png"
+                  "facebook-url": "http://facebook.com/facebook",
+                  "twitter-url": "http://twitter.com/twitter",
+                  "instagram-url": "http://instagram.com/instagram",
+                  "google-plus-url": "http://plus.google.com/plus.google",
+                  "thumbnail-image-url": "http://example.com/example.png",
+                  "small-image-url": "http://example.com/example.png",
+                  "icon-image-url": "http://example.com/example.png"
                 },
                 "type": "user",
                 "id": "2"
@@ -304,38 +503,112 @@ Authorized user should be same as user in request body or must be admin.
 
         {
             "data": {
+                "relationships": {
+                    "events": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/events",
+                            "related": "/v1/users/3/events"
+                        }
+                    },
+                    "attendees": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/attendees",
+                            "related": "/v1/users/3/attendees"
+                        }
+                    },
+                    "email-notifications": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/email-notifications",
+                            "related": "/v1/users/2/email-notifications"
+                        }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/discount-codes",
+                            "related": "/v1/users/2/discount-codes"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/sessions",
+                            "related": "/v1/users/2/sessions"
+                        }
+                    },
+                    "coorganizer-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/coorganizer-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "speakers": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/speakers",
+                            "related": "/v1/users/2/speakers"
+                        }
+                    },
+                    "moderator-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/moderator-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "notifications": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/notifications",
+                            "related": "/v1/users/2/notifications"
+                        }
+                    },
+                    "track-organizer-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/track-organizer-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "access-codes": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/access-codes",
+                            "related": "/v1/users/2/access-codes"
+                        }
+                    },
+                    "organizer-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/organizer-events",
+                            "related": "/v1/events"
+                        }
+                    },
+                    "registrar-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/registrar-events",
+                            "related": "/v1/events"
+                        }
+                    }
+                },
                 "attributes": {
                     "is-admin": false,
-                    "last-name": "Dough",
-                    "instagram-url": "http://instagram.com/instagram1",
+                    "last-name": "Doe",
+                    "instagram-url": "http://instagram.com/instagram",
                     "is-super-admin": false,
-                    "thumbnail-image-url": "http://example1.com/example1.png",
-                    "created-at": "2017-06-21T19:50:57.493620+00:00",
+                    "thumbnail-image-url": "http://example.com/example.png",
+                    "created-at": "2017-06-21T20:33:33.186358+00:00",
                     "last-accessed-at": null,
                     "email": "example@example.com",
-                    "icon-image-url": "http://example1.com/example1.png",
-                    "contact": "example1",
+                    "icon-image-url": "http://example.com/example.png",
+                    "contact": "example",
                     "deleted-at": null,
-                    "small-image-url": "http://example1.com/example1.png",
-                    "facebook-url": "http://facebook.com/facebook1",
-                    "details": "example1",
+                    "small-image-url": "http://example.com/example.png",
+                    "facebook-url": "http://facebook.com/facebook",
+                    "details": "example",
                     "is-verified": false,
-                    "first-name": "Jane",
-                    "avatar-url": "http://example1.com/example1.png",
-                    "twitter-url": "http://twitter.com/twitter1",
-                    "google-plus-url": "http://plus.google.com/plus.google1"
+                    "first-name": "John",
+                    "avatar-url": "http://example.com/example.png",
+                    "twitter-url": "http://twitter.com/twitter",
+                    "google-plus-url": "http://plus.google.com/plus.google"
                 },
                 "type": "user",
                 "id": "2",
                 "links": {
                     "self": "/v1/users/2"
                 }
-            },
-            "jsonapi": {
-                "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/users/2"
             }
         }
 
@@ -13048,65 +13321,6 @@ Related to ticket holders(attendees) of an event (free, paid, donation) to the e
     + sort (optional, string, `city`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List All Attendees [GET]
-Get a list of attendees of an event.
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-            "meta": {
-                "count": 1
-            },
-            "data": [
-                {
-                    "relationships": {
-                        "ticket": {
-                            "links": {
-                                "self": "/v1/attendees/1/relationships/ticket",
-                                "related": "/v1/attendees/1/ticket"
-                            }
-                        },
-                        "event": {
-                            "links": {
-                                "self": "/v1/attendees/1/relationships/event",
-                                "related": "/v1/attendees/1/event"
-                            }
-                        }
-                    },
-                    "attributes": {
-                        "city": "example",
-                        "firstname": "John",
-                        "lastname": "Doe",
-                        "is-checked-in": false,
-                        "state": "example",
-                        "address": "address",
-                        "pdf-url": "http://example.com",
-                        "country": "IN",
-                        "email": "johndoe@example.com"
-                    },
-                    "type": "attendee",
-                    "id": "1",
-                    "links": {
-                        "self": "/v1/attendees/1"
-                    }
-                }
-            ],
-            "jsonapi": {
-                "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/events/21eb2c8f/attendees"
-            }
-        }
-
 
 ### Create Attendee [POST]
 Create a new attendee using an event_id.
@@ -13167,6 +13381,12 @@ Create a new attendee using an event_id.
                   "self": "/v1/attendees/1/relationships/event",
                   "related": "/v1/attendees/1/event"
                 }
+              },
+              "order": {
+                "links": {
+                  "self": "/v1/attendees/1/relationships/order",
+                  "related": "/v1/attendees/1/order"
+                }
               }
             },
             "attributes": {
@@ -13219,6 +13439,12 @@ Get a single attendee.
                         "links": {
                             "self": "/v1/attendees/1/relationships/ticket",
                             "related": "/v1/attendees/1/ticket"
+                        }
+                    },
+                    "order": {
+                        "links": {
+                          "self": "/v1/attendees/1/relationships/order",
+                          "related": "/v1/attendees/1/order"
                         }
                     }
                 },

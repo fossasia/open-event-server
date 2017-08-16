@@ -5,6 +5,7 @@ from app.api.helpers.db import save_to_db
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.mail import send_email_role_invite
+from app.api.helpers.notification import send_notif_event_role
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
@@ -33,7 +34,8 @@ class RoleInviteListPost(ResourceList):
         if 'status' in data and data['status'] == 'accepted':
             role = Role.query.filter_by(name=role_invite.role_name).first()
             event = Event.query.filter_by(id=role_invite.event_id).first()
-            uer = UsersEventsRoles.query.filter_by(user=user).filter_by(event=event).filter_by(role=role).first()
+            uer = UsersEventsRoles.query.filter_by(user=user).filter_by(
+                event=event).filter_by(role=role).first()
             if not uer:
                 uer = UsersEventsRoles(user, event, role)
                 save_to_db(uer, 'Role Invite accepted')
@@ -42,8 +44,10 @@ class RoleInviteListPost(ResourceList):
         frontend_url = get_settings()['frontend_url']
         link = "{}/events/{}/role-invites/{}" \
             .format(frontend_url, event.id, role_invite.hash)
-        send_email_role_invite(role_invite.email, role_invite.role_name, event.name, link)
 
+        send_email_role_invite(role_invite.email, role_invite.role_name, event.name, link)
+        if user:
+            send_notif_event_role(user, role_invite.role_name, event.name, link)
 
     view_kwargs = True
     methods = ['POST']
@@ -59,6 +63,7 @@ class RoleInviteList(ResourceList):
     """
     List role invites based on event_id
     """
+
     def query(self, view_kwargs):
         """
         query method for role invites list
@@ -84,6 +89,7 @@ class RoleInviteDetail(ResourceDetail):
     """
     Role invite detail by id
     """
+
     def before_update_object(self, role_invite, data, view_kwargs):
         """
         Method to edit object
@@ -98,7 +104,7 @@ class RoleInviteDetail(ResourceDetail):
                 raise UnprocessableEntity({'source': ''}, "Only users can edit their own status")
         if not user and not has_access('is_organizer', event_id=role_invite.event_id):
             raise UnprocessableEntity({'source': ''}, "User not registered")
-        if not has_access('is_organizer', event_id=role_invite.event_id) and (len(data.keys())>1 or 'status' not in data):
+        if not has_access('is_organizer', event_id=role_invite.event_id) and (len(data.keys()) > 1 or 'status' not in data):
             raise UnprocessableEntity({'source': ''}, "You can only change your status")
 
     def after_update_object(self, role_invite, data, view_kwargs):
@@ -106,7 +112,8 @@ class RoleInviteDetail(ResourceDetail):
         if 'status' in data and data['status'] == 'accepted':
             role = Role.query.filter_by(name=role_invite.role_name).first()
             event = Event.query.filter_by(id=role_invite.event_id).first()
-            uer = UsersEventsRoles.query.filter_by(user=user).filter_by(event=event).filter_by(role=role).first()
+            uer = UsersEventsRoles.query.filter_by(user=user).filter_by(
+                event=event).filter_by(role=role).first()
             if not uer:
                 uer = UsersEventsRoles(user, event, role)
                 save_to_db(uer, 'Role Invite accepted')

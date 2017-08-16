@@ -1666,19 +1666,6 @@ def ticket_tag_ticket(transaction):
 
 
 # ---------------------- Attendees (Ticket Holder) ---------------------
-@hooks.before("Attendees > Attendees Collection > List All Attendees")
-def attendee_get_list(transaction):
-    """
-    GET /events/1/attendees
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        attendee = AttendeeFactory()
-        db.session.add(attendee)
-        db.session.commit()
-
-
 @hooks.before("Attendees > Attendees Collection > Create Attendee")
 def attendee_post(transaction):
     """

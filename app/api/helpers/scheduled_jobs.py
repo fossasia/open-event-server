@@ -5,6 +5,8 @@ from app.models.ticket import Ticket
 from app.api.helpers.query import get_upcoming_events, get_user_event_roles_by_role_name
 from app.api.helpers.mail import send_email_after_event, send_email_for_monthly_fee_payment, \
     send_followup_email_for_monthly_fee_payment
+from app.api.helpers.notification import send_notif_monthly_fee_payment, send_followup_notif_monthly_fee_payment, \
+    send_notif_after_event
 from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.utilities import monthdelta
 from app.api.helpers.payment import get_fee
@@ -32,12 +34,15 @@ def send_after_event_mail():
             speakers = get_user_event_roles_by_role_name(event.id, 'speaker')
             current_time = datetime.datetime.now(pytz.timezone(event.timezone))
             time_difference = current_time - event.ends_at
-            time_difference_minutes = (time_difference.days * 24 * 60) + (time_difference.seconds / 60)
+            time_difference_minutes = (time_difference.days * 24 * 60) + \
+                (time_difference.seconds / 60)
             if current_time > event.ends_at and time_difference_minutes < 1440:
                 for speaker in speakers:
-                    send_email_after_event(speaker.user.email, event.id, upcoming_event_links)
+                    send_email_after_event(speaker.user.email, event.name, upcoming_event_links)
+                    send_notif_after_event(speaker.user, event.name)
                 for organizer in organizers:
-                    send_email_after_event(organizer.user.email, event.id, upcoming_event_links)
+                    send_email_after_event(organizer.user.email, event.name, upcoming_event_links)
+                    send_notif_after_event(organizer.user.email, event.name)
 
 
 def send_event_fee_notification():
@@ -45,7 +50,8 @@ def send_event_fee_notification():
     with app.app_context():
         events = Event.query.all()
         for event in events:
-            latest_invoice = EventInvoice.query.filter_by(event_id=event.id).order_by(EventInvoice.created_at.desc()).first()
+            latest_invoice = EventInvoice.query.filter_by(
+                event_id=event.id).order_by(EventInvoice.created_at.desc()).first()
 
             if latest_invoice:
                 orders = Order.query \
@@ -53,7 +59,8 @@ def send_event_fee_notification():
                     .filter_by(status='completed') \
                     .filter(Order.completed_at > latest_invoice.created_at).all()
             else:
-                orders = Order.query.filter_by(event_id=event.id).filter_by(status='completed').all()
+                orders = Order.query.filter_by(
+                    event_id=event.id).filter_by(status='completed').all()
 
             fee_total = 0
             for order in orders:
@@ -65,16 +72,19 @@ def send_event_fee_notification():
 
             if fee_total > 0:
                 organizer = get_user_event_roles_by_role_name(event.id, 'organizer').first()
-                new_invoice = EventInvoice(amount=fee_total, event_id=event.id, user_id=organizer.user.id)
+                new_invoice = EventInvoice(
+                    amount=fee_total, event_id=event.id, user_id=organizer.user.id)
 
                 if event.discount_code_id and event.discount_code:
                     r = relativedelta(datetime.utcnow(), event.created_at)
                     if r <= event.discount_code.valid_till:
-                        new_invoice.amount = fee_total - (fee_total * (event.discount_code.value / 100.0))
+                        new_invoice.amount = fee_total - \
+                            (fee_total * (event.discount_code.value / 100.0))
                         new_invoice.discount_code_id = event.discount_code_id
 
                 save_to_db(new_invoice)
-                prev_month = monthdelta(new_invoice.created_at, 1).strftime("%b %Y")  # Displayed as Aug 2016
+                prev_month = monthdelta(new_invoice.created_at, 1).strftime(
+                    "%b %Y")  # Displayed as Aug 2016
                 app_name = get_settings()['app_name']
                 frontend_url = get_settings()['frontend_url']
                 link = '{}/invoices/{}'.format(frontend_url, new_invoice.identifier)
@@ -84,6 +94,12 @@ def send_event_fee_notification():
                                                    new_invoice.amount,
                                                    app_name,
                                                    link)
+                send_notif_monthly_fee_payment(new_invoice.user,
+                                               event.name,
+                                               prev_month,
+                                               new_invoice.amount,
+                                               app_name,
+                                               link)
 
 
 def send_event_fee_notification_followup():
@@ -92,7 +108,8 @@ def send_event_fee_notification_followup():
         incomplete_invoices = EventInvoice.query.filter(EventInvoice.status != 'completed').all()
         for incomplete_invoice in incomplete_invoices:
             if incomplete_invoice.amount > 0:
-                prev_month = monthdelta(incomplete_invoice.created_at, 1).strftime("%b %Y")  # Displayed as Aug 2016
+                prev_month = monthdelta(incomplete_invoice.created_at, 1).strftime(
+                    "%b %Y")  # Displayed as Aug 2016
                 app_name = get_settings()['app_name']
                 frontend_url = get_settings()['frontend_url']
                 link = '{}/invoices/{}'.format(frontend_url,
@@ -103,3 +120,9 @@ def send_event_fee_notification_followup():
                                                             incomplete_invoice.amount,
                                                             app_name,
                                                             link)
+                send_followup_notif_monthly_fee_payment(incomplete_invoice.user,
+                                                        incomplete_invoice.event.name,
+                                                        prev_month,
+                                                        incomplete_invoice.amount,
+                                                        app_name,
+                                                        link)
