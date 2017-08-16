@@ -41,7 +41,7 @@ from app.api.ticket_tags import TicketTagList, TicketTagListPost, TicketTagDetai
     TicketTagRelationshipRequired
 from app.api.attendees import AttendeeList, AttendeeDetail, AttendeeRelationshipOptional, \
     AttendeeRelationshipRequired, AttendeeListPost
-from app.api.access_codes import AccessCodeList, AccessCodeDetail, AccessCodeRelationshipRequired, \
+from app.api.access_codes import AccessCodeList, AccessCodeListPost, AccessCodeDetail, AccessCodeRelationshipRequired, \
     AccessCodeRelationshipOptional
 from app.api.custom_forms import CustomFormList, CustomFormListPost, CustomFormDetail, CustomFormRelationshipRequired
 from app.api.modules import ModuleDetail
@@ -398,7 +398,8 @@ api.route(TicketFeeList, 'ticket_fee_list', '/ticket-fees')
 api.route(TicketFeeDetail, 'ticket_fee_detail', '/ticket-fees/<int:id>')
 
 # access code
-api.route(AccessCodeList, 'access_code_list', '/access-codes', '/events/<int:event_id>/access-codes',
+api.route(AccessCodeListPost, 'access_code_list_post', '/access-codes')
+api.route(AccessCodeList, 'access_code_list', '/events/<int:event_id>/access-codes',
           '/events/<event_identifier>/access-codes', '/users/<int:user_id>/access-codes',
           '/tickets/<int:ticket_id>/access-codes')
 api.route(AccessCodeDetail, 'access_code_detail', '/access-codes/<int:id>')

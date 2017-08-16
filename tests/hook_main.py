@@ -2331,29 +2331,13 @@ def discount_delete(transaction):
 
 
 # ------------------------- Access Codes -------------------------
-@hooks.before("Access Codes > Access Code Collection > List All Access Codes")
-def access_code_get_list(transaction):
-    """
-    GET /events/1/access-codes
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        access_code = AccessCodeFactory()
-        db.session.add(access_code)
-        db.session.commit()
-
-
 @hooks.before("Access Codes > Access Code Collection > Create Access Code")
 def access_code_post(transaction):
     """
-    POST /events/1/access-codes
+    POST /access-codes
     :param transaction:
     :return:
     """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
-
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
@@ -2390,6 +2374,45 @@ def access_code_patch(transaction):
 def access_code_delete(transaction):
     """
     DELETE /access-codes/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        access_code = AccessCodeFactory()
+        db.session.add(access_code)
+        db.session.commit()
+
+
+@hooks.before("Access Codes > Get Access Codes for an Event > List All Access Codes of an Event")
+def event_access_code_get_list(transaction):
+    """
+    GET /events/1/access-codes
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        access_code = AccessCodeFactory()
+        db.session.add(access_code)
+        db.session.commit()
+
+
+@hooks.before("Access Codes > Get Access Codes for a User > List All Access Codes for a User")
+def user_access_code_get_list(transaction):
+    """
+    GET /users/1/access-codes
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        access_code = AccessCodeFactory()
+        db.session.add(access_code)
+        db.session.commit()
+
+
+@hooks.before("Access Codes > Get Access Codes for a Ticket > List All Access Codes for a Ticket")
+def ticket_access_code_get_list(transaction):
+    """
+    GET /tickets/1/access-codes
     :param transaction:
     :return:
     """

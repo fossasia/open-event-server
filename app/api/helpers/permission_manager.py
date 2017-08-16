@@ -63,6 +63,16 @@ def is_coorganizer(view, view_args, view_kwargs, *args, **kwargs):
     return ForbiddenError({'source': ''}, 'Co-organizer access is required.').respond()
 
 
+@jwt_required
+def is_coorganizer_but_not_admin(view, view_args, view_kwargs, *args, **kwargs):
+    user = current_identity
+
+    if user.is_organizer(kwargs['event_id']) or user.is_coorganizer(kwargs['event_id']):
+        return view(*view_args, **view_kwargs)
+
+    return ForbiddenError({'source': ''}, 'Co-organizer access is required.').respond()
+
+
 def is_coorganizer_endpoint_related_to_event(view, view_args, view_kwargs, *args, **kwargs):
     """
      If the authorization header is present (but expired) and the event being accessed is not published
@@ -293,7 +303,8 @@ permissions = {
     'create_event': create_event,
     'is_user_itself': is_user_itself,
     'is_coorganizer_endpoint_related_to_event': is_coorganizer_endpoint_related_to_event,
-    'is_registrar_or_user_itself': is_registrar_or_user_itself
+    'is_registrar_or_user_itself': is_registrar_or_user_itself,
+    'is_coorganizer_but_not_admin': is_coorganizer_but_not_admin
 }
 
 
