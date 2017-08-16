@@ -66,7 +66,7 @@ class OrderSchema(Schema):
                            self_view_kwargs={'order_identifier': '<identifier>'},
                            related_view='v1.ticket_list',
                            related_view_kwargs={'order_identifier': '<identifier>'},
-                           schema='TicketSchema',
+                           schema='TicketSchemaPublic',
                            many=True,
                            type_="ticket")
 
