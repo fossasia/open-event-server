@@ -64,7 +64,7 @@ class OrdersListPost(ResourceList):
             save_to_db(od)
         order.quantity = order.get_tickets_count()
         save_to_db(order)
-        if not has_access('is_coorganizer', **view_kwargs):
+        if not has_access('is_coorganizer', event_id=data['event']):
             TicketingManager.calculate_update_amount(order)
         send_email_to_attendees(order)
 
