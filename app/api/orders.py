@@ -125,32 +125,44 @@ class OrderDetail(ResourceDetail):
             attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
             view_kwargs['order_identifier'] = attendee.order.identifier
 
-    def before_update_object(self, order, data, view_kwargs):
-        if data.get('cancel_note'):
-            del data['cancel_note']
+        order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
 
-        if data.get('status'):
-            if has_access('is_coorganizer', event_id=order.event.id):
-                pass
-            else:
-                raise ForbiddenException({'pointer': 'data/status'},
-                                         "To update status minimum Co-organizer access required")
+        if not has_access('is_coorganizer_or_user_itself', event_id=order.event_id, user_id=order.user_id):
+            return ForbiddenException({'source': ''}, 'Access Forbidden')
+
+
+    def before_update_object(self, order, data, view_kwargs):
+        if not has_access('is_admin'):
+            for element in data:
+                if element != 'status':
+                    setattr(data, element, getattr(order, element))
+
+        if not has_access('is_coorganizer', event_id=order.event.id):
+            raise ForbiddenException({'pointer': 'data/status'},
+                                     "To update status minimum Co-organizer access required")
 
     def after_update_object(self, order, data, view_kwargs):
         if order.status == 'cancelled':
             send_order_cancel_email(order)
             send_notif_ticket_cancel(order)
 
-    decorators = (api.has_permission('is_coorganizer', fetch="event_id", fetch_as="event_id",
-                                     fetch_key_model="identifier", fetch_key_url="order_identifier", model=Order),)
+    def before_delete_object(self, order, view_kwargs):
+        if not has_access('is_coorganizer', event_id=order.event.id):
+            raise ForbiddenException({'source': ''}, 'Access Forbidden')
+
+    decorators = (jwt_required,)
 
     schema = OrderSchema
     data_layer = {'session': db.session,
                   'model': Order,
                   'url_field': 'order_identifier',
                   'id_field': 'identifier',
-                  'methods': {'before_update_object': before_update_object,
-                              'after_update_object': after_update_object}}
+                  'methods': {
+                      'before_update_object': before_update_object,
+                      'before_delete_object': before_delete_object,
+                      'before_get_object': before_get_object,
+                      'after_update_object': after_update_object
+                  }}
 
 
 class OrderRelationship(ResourceRelationship):
