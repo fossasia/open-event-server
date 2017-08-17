@@ -31,53 +31,40 @@ class StripeAuthorizationListPost(ResourceList):
             raise ConflictException({'pointer': '/data/relationships/event'},
                                     "Stripe Authorization already exists for this event")
 
-    def before_get(self, args, kwargs):
-        if not has_access('is_super_admin'):
-            raise ForbiddenException({'source': ''}, "Super Admin Access Required")
-
     schema = StripeAuthorizationSchema
     decorators = (jwt_required, )
+    methods = ['POST']
     data_layer = {'session': db.session,
                   'model': StripeAuthorization}
-
-
-class StripeAuthorizationList(ResourceList):
-    """
-    Stripe Authorization List Resource
-    """
-
-    def query(self, view_kwargs):
-        query_ = self.session.query(StripeAuthorization)
-        if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-            query_ = query_.filter_by(event_id=event.id)
-
-        if view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['identifier'], 'event_identifier')
-            query_ = query_.filter_by(event_id=event.id)
-        return query_
-
-    view_kwargs = True
-    methods = ['GET', ]
-    decorators = (api.has_permission('is_organizer', fetch="event_id", fetch_as="event_id"), )
-    schema = StripeAuthorizationSchema
-    data_layer = {'session': db.session,
-                  'model': StripeAuthorization,
-                  'methods': {
-                      'query': query
-                  }}
 
 
 class StripeAuthorizationDetail(ResourceDetail):
     """
     Stripe Authorization Detail Resource by ID
     """
+    def before_get_object(self, view_kwargs):
+        """
+        method to get id of stripe authorization related to an event
+        :param view_kwargs:
+        :return:
+        """
+        if view_kwargs.get('event_identifier'):
+            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+            view_kwargs['event_id'] = event.id
+
+        if view_kwargs.get('event_id'):
+            stripe_authorization = self.session.query(StripeAuthorization).\
+                filter_by(event_id=view_kwargs['event_id']).one()
+            view_kwargs['id'] = stripe_authorization.id
 
     decorators = (api.has_permission('is_coorganizer', fetch="event_id",
                                      fetch_as="event_id", model=StripeAuthorization),)
     schema = StripeAuthorizationSchema
     data_layer = {'session': db.session,
-                  'model': StripeAuthorization}
+                  'model': StripeAuthorization,
+                  'methods': {
+                      'before_get_object': before_get_object
+                  }}
 
 
 class StripeAuthorizationRelationship(ResourceDetail):
