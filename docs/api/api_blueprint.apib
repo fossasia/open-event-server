@@ -17658,7 +17658,7 @@ This endpoint supports uploading of any kind of file or multiple files. If a sin
 To update or get any attribute of this data layer, you will need event admin access.
 
 | Parameter | Type | Required |
-|:----------|-------------|------|------------|
+|:----------|------|----------|
 | `stripe_secret_key`  | string | **yes** |
 | `stripe_refresh_token`  | string | **yes** |
 | `stripe_publishable_key`  | string | **yes** |
@@ -17672,59 +17672,11 @@ To update or get any attribute of this data layer, you will need event admin acc
     + sort (optional, string, `app-name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List all Stripe Authorizations [GET]
-Requires super admin access in Orga Server
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-          "meta": {
-            "count": 1
-          },
-          "data": [
-            {
-              "relationships": {
-                "event": {
-                  "links": {
-                    "self": "/v1/stripe-authorization/1/relationships/event",
-                    "related": "/v1/events/1"
-                  }
-                }
-              },
-              "attributes": {
-                "stripe-email": "example@example.com",
-                "stripe-secret-key": "example",
-                "stripe-user-id": "example",
-                "stripe-publishable-key": "example",
-                "stripe-refresh-token": "example"
-              },
-              "type": "stripe-authorization",
-              "id": "1",
-              "links": {
-                "self": "/v1/stripe-authorization/1"
-              }
-            }
-          ],
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/stripe-authorization"
-          }
-        }
-
 ### Create Stripe Authorization [POST]
 Requires Co-Organizer Access
 
 + Request (application/vnd.api+json)
+
     + Headers
 
             Authorization: JWT <Auth Key>
@@ -17911,6 +17863,55 @@ Requires Event Co-Organizer Access
           "jsonapi": {
             "version": "1.0"
           }
+        }
+
+
+## Stripe Authorization for an Event [/v1/events/{event_identifier}/stripe-authorization]
+Requires event admin access in Orga Server
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+
+### Get Stripe Authorization Details of an Event [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/stripe-authorization/1/relationships/event",
+                            "related": "/v1/events/1"
+                        }
+                    }
+                },
+                "attributes": {
+                    "stripe-email": "example@example.com",
+                    "stripe-secret-key": "example",
+                    "stripe-user-id": "example",
+                    "stripe-publishable-key": "example",
+                    "stripe-refresh-token": "example"
+                },
+                "type": "stripe-authorization",
+                "id": "1",
+                "links": {
+                    "self": "/v1/stripe-authorization/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/stripe-authorization/1"
+            }
         }
 
 

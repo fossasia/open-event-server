@@ -2948,23 +2948,10 @@ def user_permission_delete(transaction):
 
 
 # ------------------------- Stripe Authorizations -------------------------
-@hooks.before("StripeAuthorization > StripeAuthorization Collection > List all Stripe Authorizations")
-def stripe_authorization_get_list(transaction):
-    """
-    GET /events/1/stripe
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        stripe = StripeAuthorizationFactory()
-        db.session.add(stripe)
-        db.session.commit()
-
-
 @hooks.before("StripeAuthorization > StripeAuthorization Collection > Create Stripe Authorization")
 def stripe_authorization_post(transaction):
     """
-    POST /events/1/stripe
+    POST /stripe-authorization
     :param transaction:
     :return:
     """
@@ -3004,6 +2991,19 @@ def stripe_authorization_patch(transaction):
 def stripe_authorization_delete(transaction):
     """
     DELETE /stripe-authorization/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        stripe = StripeAuthorizationFactory()
+        db.session.add(stripe)
+        db.session.commit()
+
+
+@hooks.before("StripeAuthorization > Stripe Authorization for an Event > Get Stripe Authorization Details of an Event")
+def event_stripe_authorization_get_detail(transaction):
+    """
+    GET /events/1/stripe-authorization
     :param transaction:
     :return:
     """
