@@ -38,7 +38,7 @@ from app.views import BlueprintsManager
 from app.api.helpers.auth import AuthManager
 from app.api.helpers.scheduled_jobs import send_after_event_mail, send_event_fee_notification, \
     send_event_fee_notification_followup
-from app.models.event import Event, EventsUsers
+from app.models.event import Event
 from app.models.role_invite import RoleInvite
 from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations, check_migrations
 from app.views.sentry import sentry

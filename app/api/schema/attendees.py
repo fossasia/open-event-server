@@ -34,19 +34,25 @@ class AttendeeSchema(Schema):
                           self_view_kwargs={'id': '<id>'},
                           related_view='v1.ticket_detail',
                           related_view_kwargs={'attendee_id': '<id>'},
-                          schema='TicketSchema',
+                          schema='TicketSchemaPublic',
                           type_='ticket')
     event = Relationship(attribute='event',
                          self_view='v1.attendee_event',
                          self_view_kwargs={'id': '<id>'},
                          related_view='v1.event_detail',
                          related_view_kwargs={'attendee_id': '<id>'},
-                         schema='EventSchemaPublic',
+                         schema='EventSchema',
                          type_='event')
-
     order = Relationship(self_view='v1.attendee_order',
                          self_view_kwargs={'id': '<id>'},
                          related_view='v1.order_detail',
                          related_view_kwargs={'attendee_id': '<id>'},
                          schema='OrderSchema',
                          type_='order')
+    user = Relationship(attribute='user',
+                        self_view='v1.attendee_user',
+                        self_view_kwargs={'id': '<id>'},
+                        related_view='v1.user_detail',
+                        related_view_kwargs={'attendee_id': '<id>'},
+                        schema='UserSchemaPublic',
+                        type_='user')

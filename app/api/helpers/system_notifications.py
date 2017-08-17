@@ -87,7 +87,7 @@ NOTIFS = {
     },
     TICKET_PURCHASED_ORGANIZER: {
         'recipient': 'Organizer',
-        'title': u'New ticket purchase for {event_name} by {buyer_email} ({invoice_id}) ',
+        'title': u'New ticket purchase for {event_name} : ({invoice_id}) ',
         'message': (
             u"The order has been processed successfully."
             u"<br><br><a href='{order_url}' class='btn btn-info btn-sm'>View Invoice</a>"

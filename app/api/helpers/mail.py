@@ -287,6 +287,7 @@ def send_email_to_attendees(order):
                 invoice_id=order.invoice_number
             ),
             html= MAILS[TICKET_PURCHASED_ATTENDEE]['message'].format(
-                pdf_url=holder.pdf_url
+                pdf_url=holder.pdf_url,
+                event_name=order.event.name
             )
         )

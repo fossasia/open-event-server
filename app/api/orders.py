@@ -11,6 +11,8 @@ from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.mail import send_email_to_attendees
+from app.api.helpers.files import make_frontend_url
+from app.api.helpers.notification import send_notif_ticket_purchase_organizer
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
@@ -62,9 +64,13 @@ class OrdersListPost(ResourceList):
             save_to_db(od)
         order.quantity = order.get_tickets_count()
         save_to_db(order)
-        if not has_access('is_coorganizer', **view_kwargs):
+        if not has_access('is_coorganizer', event_id=data['event']):
             TicketingManager.calculate_update_amount(order)
         send_email_to_attendees(order)
+
+        order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
+        for organizer in order.event.organizers:
+            send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name)
 
         data['user_id'] = current_user.id
 

@@ -20,18 +20,6 @@ def get_new_event_identifier(length=8):
         return get_new_event_identifier()
 
 
-class EventsUsers(db.Model):
-    """Many to Many table Event Users"""
-    __tablename__ = 'event_user'
-    id = db.Column(db.Integer, primary_key=True)
-    event_id = db.Column(
-        db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
-    editor = db.Column(db.Boolean)
-    admin = db.Column(db.Boolean)
-    user = db.relationship("User", backref="events_assocs")
-
-
 class Event(db.Model):
     """Event object table"""
     __tablename__ = 'events'
@@ -67,7 +55,6 @@ class Event(db.Model):
     sponsor = db.relationship('Sponsor', backref="event")
     tickets = db.relationship('Ticket', backref="event_")
     tags = db.relationship('TicketTag', backref='events')
-    users = db.relationship("EventsUsers", backref="event")
     roles = db.relationship("UsersEventsRoles", backref="event")
     role_invites = db.relationship('RoleInvite', back_populates='event')
     custom_form = db.relationship('CustomForms', backref="event")
@@ -114,14 +101,14 @@ class Event(db.Model):
                                            ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "organizer"))',
                                  primaryjoin='UsersEventsRoles.event_id == Event.id',
                                  secondaryjoin='User.id == UsersEventsRoles.user_id',
-                                 backref='organizer_of_events')
+                                 backref='organizer_events')
     coorganizers = db.relationship('User',
                                    viewonly=True,
                                    secondary='join(UsersEventsRoles, Role,'
                                              ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "coorganizer"))',
                                    primaryjoin='UsersEventsRoles.event_id == Event.id',
                                    secondaryjoin='User.id == UsersEventsRoles.user_id',
-                                   backref='coorganizer_of_events')
+                                   backref='coorganizer_events')
     track_organizers = db.relationship('User',
                                        viewonly=True,
                                        secondary='join(UsersEventsRoles, Role,'
@@ -129,21 +116,29 @@ class Event(db.Model):
                                                  ' Role.name == "track_organizer"))',
                                        primaryjoin='UsersEventsRoles.event_id == Event.id',
                                        secondaryjoin='User.id == UsersEventsRoles.user_id',
-                                       backref='track_organizer_of_events')
+                                       backref='track_organizer_events')
     registrars = db.relationship('User',
                                  viewonly=True,
                                  secondary='join(UsersEventsRoles, Role,'
                                            ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "registrar"))',
                                  primaryjoin='UsersEventsRoles.event_id == Event.id',
                                  secondaryjoin='User.id == UsersEventsRoles.user_id',
-                                 backref='registrar_of_events')
+                                 backref='registrar_events')
     moderators = db.relationship('User',
                                  viewonly=True,
                                  secondary='join(UsersEventsRoles, Role,'
                                            ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "moderator"))',
                                  primaryjoin='UsersEventsRoles.event_id == Event.id',
                                  secondaryjoin='User.id == UsersEventsRoles.user_id',
-                                 backref='moderator_of_events')
+                                 backref='moderator_events')
+    # staff
+    users = db.relationship('User',
+                            viewonly=True,
+                            secondary='join(UsersEventsRoles, Role,'
+                                      ' and_(Role.id == UsersEventsRoles.role_id, Role.name != "attendee"))',
+                            primaryjoin='UsersEventsRoles.event_id == Event.id',
+                            secondaryjoin='User.id == UsersEventsRoles.user_id',
+                            backref='events')
 
     def __init__(self,
                  name=None,
