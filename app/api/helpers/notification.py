@@ -3,7 +3,8 @@ from flask import current_app
 from app.api.helpers.db import save_to_db
 from app.models.notification import Notification, NEW_SESSION, SESSION_ACCEPT_REJECT, \
     EVENT_IMPORTED, EVENT_IMPORT_FAIL, EVENT_EXPORTED, EVENT_EXPORT_FAIL, MONTHLY_PAYMENT_NOTIF, \
-    MONTHLY_PAYMENT_FOLLOWUP_NOTIF, EVENT_ROLE_INVITE, AFTER_EVENT, TICKET_PURCHASED_ORGANIZER
+    MONTHLY_PAYMENT_FOLLOWUP_NOTIF, EVENT_ROLE_INVITE, AFTER_EVENT, TICKET_PURCHASED_ORGANIZER, \
+    TICKET_PURCHASED_ATTENDEE, TICKET_PURCHASED
 from app.models.message_setting import MessageSettings
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_notifications import NOTIFS
@@ -169,3 +170,29 @@ def send_notif_ticket_purchase_organizer(user, invoice_id, order_url, event_name
             order_url=order_url
         )
     )
+
+
+def send_notif_to_attendees(order, purchaser_id):
+    for holder in order.ticket_holders:
+        if holder.id != purchaser_id:
+            send_notification(
+                user=holder,
+                action=TICKET_PURCHASED_ATTENDEE,
+                title=NOTIFS[TICKET_PURCHASED_ATTENDEE]['title'].format(
+                    event_name=order.event.name
+                ),
+                message=NOTIFS[TICKET_PURCHASED_ATTENDEE]['message'].format(
+                    pdf_url=holder.pdf_url
+                )
+            )
+        else:
+            send_notification(
+                user=holder,
+                action=TICKET_PURCHASED,
+                title=NOTIFS[TICKET_PURCHASED]['title'].format(
+                    invoice_id=order.invoice_number
+                ),
+                message=NOTIFS[TICKET_PURCHASED]['message'].format(
+                    pdf_url=holder.pdf_url
+                )
+            )

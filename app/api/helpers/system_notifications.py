@@ -19,7 +19,8 @@ from app.models.notification import (
     EVENT_IMPORTED,
     MONTHLY_PAYMENT_NOTIF,
     MONTHLY_PAYMENT_FOLLOWUP_NOTIF,
-    TICKET_PURCHASED_ORGANIZER
+    TICKET_PURCHASED_ORGANIZER,
+    TICKET_PURCHASED_ATTENDEE
 )
 
 NOTIFS = {
@@ -83,6 +84,14 @@ NOTIFS = {
         'message': (
             u"Your order has been processed successfully."
             u"<br><br><a href='{order_url}' class='btn btn-info btn-sm'>View Invoice</a>"
+        )
+    },
+    TICKET_PURCHASED_ATTENDEE: {
+        'recipient': 'User',
+        'title': u'Your ticket for {event_name}',
+        'message': (
+            u"Your order has been processed successfully."
+            u"<br><br><a href='{pdf_url}' class='btn btn-info btn-sm'>View PDF</a>"
         )
     },
     TICKET_PURCHASED_ORGANIZER: {
