@@ -187,6 +187,8 @@ class PayPalPaymentsManager(object):
                 count += 1
 
         response = requests.post(credentials['SERVER'], data=data)
+        if 'TOKEN' not in dict(urlparse.parse_qsl(response.text)):
+            raise Exception('PayPal Token could not be retrieved')
         token = dict(urlparse.parse_qsl(response.text))['TOKEN']
         order.paypal_token = token
         save_to_db(order)
