@@ -97,3 +97,10 @@ class OrderSchema(Schema):
                                  related_view_kwargs={'id': '<discount_code_id>'},
                                  schema='DiscountCodeSchemaPublic',
                                  type_="discount-code")
+
+    event_invoice = Relationship(self_view='v1.order_event_invoice',
+                                 self_view_kwargs={'order_identifier': '<identifier>'},
+                                 related_view='v1.event_invoice_detail',
+                                 related_view_kwargs={'id': '<event_invoice_id>'},
+                                 schema='EventInvoiceSchema',
+                                 type_="event-invoice")

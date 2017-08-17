@@ -35,6 +35,7 @@ class Order(db.Model):
     zipcode = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='SET NULL'))
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='SET NULL'))
+    event_invoice_id = db.Column(db.Integer, db.ForeignKey('event_invoices.id', ondelete='SET NULL'))
     marketer_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='SET NULL'))
     created_at = db.Column(db.DateTime(timezone=True))
     completed_at = db.Column(db.DateTime(timezone=True), nullable=True, default=None)
@@ -55,6 +56,7 @@ class Order(db.Model):
     discount_code = db.relationship('DiscountCode', backref='orders')
 
     event = db.relationship('Event', backref='orders')
+    event_invoice = db.relationship('EventInvoice', backref='orders')
     user = db.relationship('User', backref='orders', foreign_keys=[user_id])
     marketer = db.relationship('User', backref='marketed_orders', foreign_keys=[marketer_id])
     tickets = db.relationship("Ticket", secondary='orders_tickets', backref='order')
