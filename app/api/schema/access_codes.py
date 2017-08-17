@@ -80,6 +80,6 @@ class AccessCodeSchema(Schema):
                            self_view_kwargs={'id': '<id>'},
                            related_view='v1.ticket_list',
                            related_view_kwargs={'access_code_id': '<id>'},
-                           schema='TicketSchema',
+                           schema='TicketSchemaPublic',
                            many=True,
                            type_='ticket')

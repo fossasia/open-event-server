@@ -2526,6 +2526,55 @@ Delete a single resource.
         }
 
 
+## Custom Placeholder Details of Event Sub-topic [/v1/event-sub-topics/{event_sub_topic_id}/custom-placeholder]
++ Parameters
+    + event_sub_topic_id: 1 (integer) - ID of the event sub-topic in the form of an integer
+
+### Custom Placeholder Details of Event Sub-topic [GET]
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event-sub-topic": {
+                        "links": {
+                            "self": "/v1/custom-placeholders/1/relationships/event-sub-topic",
+                            "related": "/v1/custom-placeholders/1/event-sub-topic"
+                        }
+                    }
+                },
+                "attributes": {
+                    "origin": "example",
+                    "thumbnail-image-url": "http://localhost/static/media/custom-placeholders/1/thumbnail/Zk1mMHBHQV/b5ec1116-8671-4b75-8c65-387c8b114784.jpg",
+                    "name": "example",
+                    "copyright": "example",
+                    "original-image-url": "http://localhost/static/media/custom-placeholders/1/original/UXYwdXcySV/e33a2f08-0d8c-47df-aa7d-47b132acf3a5.jpg",
+                    "icon-image-url": "http://localhost/static/media/custom-placeholders/1/icon/bEY5Wk9ZNk/641c6ab8-a9fc-4759-afc9-e36579ae3ec9.jpg",
+                    "large-image-url": "http://localhost/static/media/custom-placeholders/1/large/ak01T2xDTW/e5f0b4a3-f045-439a-89b5-7d1085fdaeb1.jpg"
+                },
+                "type": "custom-placeholder",
+                "id": 1,
+                "links": {
+                    "self": "/v1/custom-placeholders/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/event-sub-topics/1/custom-placeholder"
+            }
+        }
+
+
 # Group Events
 These endpoints help you to create the basic event structure. To add other parts of the event such as ticket, sponsor, copyright, etc. there are separate endpoints.
 
