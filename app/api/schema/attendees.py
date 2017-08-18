@@ -34,7 +34,7 @@ class AttendeeSchema(Schema):
                           self_view_kwargs={'id': '<id>'},
                           related_view='v1.ticket_detail',
                           related_view_kwargs={'attendee_id': '<id>'},
-                          schema='TicketSchema',
+                          schema='TicketSchemaPublic',
                           type_='ticket')
     event = Relationship(attribute='event',
                          self_view='v1.attendee_event',

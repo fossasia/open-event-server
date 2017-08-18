@@ -3,7 +3,8 @@ from flask import current_app
 from app.api.helpers.db import save_to_db
 from app.models.notification import Notification, NEW_SESSION, SESSION_ACCEPT_REJECT, \
     EVENT_IMPORTED, EVENT_IMPORT_FAIL, EVENT_EXPORTED, EVENT_EXPORT_FAIL, MONTHLY_PAYMENT_NOTIF, \
-    MONTHLY_PAYMENT_FOLLOWUP_NOTIF, EVENT_ROLE_INVITE, AFTER_EVENT
+    MONTHLY_PAYMENT_FOLLOWUP_NOTIF, EVENT_ROLE_INVITE, AFTER_EVENT, TICKET_PURCHASED_ORGANIZER, \
+    TICKET_PURCHASED_ATTENDEE, TICKET_PURCHASED, TICKET_CANCELLED, TICKET_CANCELLED_ORGANIZER
 from app.models.message_setting import MessageSettings
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_notifications import NOTIFS
@@ -154,3 +155,72 @@ def send_notif_after_event(user, event_name):
         )
 
         send_notification(user, action, title, message)
+
+
+def send_notif_ticket_purchase_organizer(user, invoice_id, order_url, event_name):
+    """Send notification with order invoice link after purchase"""
+    send_notification(
+        user=user,
+        action=TICKET_PURCHASED_ORGANIZER,
+        title=NOTIFS[TICKET_PURCHASED_ORGANIZER]['title'].format(
+            invoice_id=invoice_id,
+            event_name=event_name
+        ),
+        message=NOTIFS[TICKET_PURCHASED_ORGANIZER]['message'].format(
+            order_url=order_url
+        )
+    )
+
+
+def send_notif_to_attendees(order, purchaser_id):
+    for holder in order.ticket_holders:
+        if holder.id != purchaser_id:
+            send_notification(
+                user=holder,
+                action=TICKET_PURCHASED_ATTENDEE,
+                title=NOTIFS[TICKET_PURCHASED_ATTENDEE]['title'].format(
+                    event_name=order.event.name
+                ),
+                message=NOTIFS[TICKET_PURCHASED_ATTENDEE]['message'].format(
+                    pdf_url=holder.pdf_url
+                )
+            )
+        else:
+            send_notification(
+                user=holder,
+                action=TICKET_PURCHASED,
+                title=NOTIFS[TICKET_PURCHASED]['title'].format(
+                    invoice_id=order.invoice_number
+                ),
+                message=NOTIFS[TICKET_PURCHASED]['message'].format(
+                    pdf_url=holder.pdf_url
+                )
+            )
+
+
+def send_notif_ticket_cancel(order):
+    """Send notification with order invoice link after cancel"""
+    send_notification(
+        user=order.user,
+        action=TICKET_CANCELLED,
+        title=NOTIFS[TICKET_CANCELLED]['title'].format(
+            invoice_id=order.invoice_number,
+            event_name=order.event.name
+        ),
+        message=NOTIFS[TICKET_CANCELLED]['message'].format(
+            cancel_note=order.cancel_note,
+            event_name=order.event.name
+        )
+    )
+    for organizer in order.event.organizers:
+        send_notification(
+            user=organizer,
+            action=TICKET_CANCELLED_ORGANIZER,
+            title=NOTIFS[TICKET_CANCELLED_ORGANIZER]['title'].format(
+                invoice_id=order.invoice_number
+            ),
+            message=NOTIFS[TICKET_CANCELLED_ORGANIZER]['message'].format(
+                cancel_note=order.cancel_note,
+                invoice_id=order.invoice_number
+            )
+        )

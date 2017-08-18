@@ -6,7 +6,7 @@ from app.api.helpers.db import safe_query
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
-from app.api.schema.tickets import TicketSchema
+from app.api.schema.tickets import TicketSchema, TicketSchemaPublic
 from app.models import db
 from app.models.access_code import AccessCode
 from app.models.order import Order
@@ -34,9 +34,12 @@ class TicketList(ResourceList):
     """
     List Tickets based on different params
     """
+    def before_get(self, args, view_kwargs):
+        if view_kwargs.get('ticket_tag_id') or view_kwargs.get('access_code_id') or view_kwargs.get('order_identifier'):
+            self.schema = TicketSchemaPublic
 
     def query(self, view_kwargs):
-        query_ = self.session.query(Ticket)
+        query_ = self.session.query(Ticket).filter_by(is_hidden=False)
         if view_kwargs.get('ticket_tag_id'):
             ticket_tag = safe_query(self, TicketTag, 'id', view_kwargs['ticket_tag_id'], 'ticket_tag_id')
             query_ = query_.join(ticket_tags_table).filter_by(ticket_tag_id=ticket_tag.id)
@@ -47,8 +50,7 @@ class TicketList(ResourceList):
             query_ = Ticket.query.filter(Ticket.access_codes.any(id=access_code.id))
 
         if view_kwargs.get('order_identifier'):
-            order = safe_query(self, Order, 'identifer', view_kwargs['order_identifier'],
-                                                 'order_identifer')
+            order = safe_query(self, Order, 'identifer', view_kwargs['order_identifier'], 'order_identifer')
             ticket_ids = []
             for ticket in order.tickets:
                 ticket_ids.append(ticket.id)
@@ -73,6 +75,9 @@ class TicketDetail(ResourceDetail):
     """
     Ticket Resource
     """
+    def before_get(self, args, view_kwargs):
+        if view_kwargs.get('attendee_id'):
+            self.schema = TicketSchemaPublic
 
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('attendee_id') is not None:

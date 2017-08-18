@@ -19,7 +19,10 @@ from app.models.notification import (
     EVENT_IMPORTED,
     MONTHLY_PAYMENT_NOTIF,
     MONTHLY_PAYMENT_FOLLOWUP_NOTIF,
-    TICKET_PURCHASED_ORGANIZER
+    TICKET_PURCHASED_ORGANIZER,
+    TICKET_PURCHASED_ATTENDEE,
+    TICKET_CANCELLED,
+    TICKET_CANCELLED_ORGANIZER
 )
 
 NOTIFS = {
@@ -85,9 +88,17 @@ NOTIFS = {
             u"<br><br><a href='{order_url}' class='btn btn-info btn-sm'>View Invoice</a>"
         )
     },
+    TICKET_PURCHASED_ATTENDEE: {
+        'recipient': 'User',
+        'title': u'Your ticket for {event_name}',
+        'message': (
+            u"Your order has been processed successfully."
+            u"<br><br><a href='{pdf_url}' class='btn btn-info btn-sm'>View PDF</a>"
+        )
+    },
     TICKET_PURCHASED_ORGANIZER: {
         'recipient': 'Organizer',
-        'title': u'New ticket purchase for {event_name} by {buyer_email} ({invoice_id}) ',
+        'title': u'New ticket purchase for {event_name} : ({invoice_id}) ',
         'message': (
             u"The order has been processed successfully."
             u"<br><br><a href='{order_url}' class='btn btn-info btn-sm'>View Invoice</a>"
@@ -98,6 +109,23 @@ NOTIFS = {
         'title': u'Email resent for {event_name} by {buyer_email} ({invoice_id}) ',
         'message': (
             u"Email has been sent successfully."
+        )
+    },
+    TICKET_CANCELLED: {
+        'recipient': 'User',
+        'subject': u'Your order for {event_name} has been cancelled ({invoice_id})',
+        'message': (
+            u"Your order for {event_name} has been cancelled by the organizer"
+            u"<br/>Please contact the organizer for more info" +
+            u"<br/>Message from the organizer: {cancel_note}."
+        )
+    },
+    TICKET_CANCELLED_ORGANIZER: {
+        'recipient': 'User',
+        'subject': u'Order ({invoice_id}) has been cancelled',
+        'message': (
+            u"Order ({invoice_id}) has been cancelled"
+            u"<br/>Cancel Note: {cancel_note}."
         )
     },
     USER_CHANGE_EMAIL: {

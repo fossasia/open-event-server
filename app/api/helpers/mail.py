@@ -11,7 +11,7 @@ from app.api.helpers.system_mails import MAILS
 from app.api.helpers.utilities import string_empty, get_serializer, str_generator
 from app.models.mail import Mail, USER_CONFIRM, NEW_SESSION, USER_CHANGE_EMAIL, SESSION_ACCEPT_REJECT, EVENT_ROLE, \
     AFTER_EVENT, MONTHLY_PAYMENT_EMAIL, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_EXPORTED, EVENT_EXPORT_FAIL, \
-    EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ATTENDEE
+    EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ATTENDEE, TICKET_CANCELLED
 from app.models.user import User
 
 
@@ -287,6 +287,22 @@ def send_email_to_attendees(order):
                 invoice_id=order.invoice_number
             ),
             html= MAILS[TICKET_PURCHASED_ATTENDEE]['message'].format(
-                pdf_url=holder.pdf_url
+                pdf_url=holder.pdf_url,
+                event_name=order.event.name
             )
         )
+
+def send_order_cancel_email(order):
+    send_email(
+        to=order.user.email,
+        action=TICKET_CANCELLED,
+        subject=MAILS[TICKET_CANCELLED]['subject'].format(
+            event_name=order.event.name,
+            invoice_id=order.invoice_number
+        ),
+        html=MAILS[TICKET_CANCELLED]['message'].format(
+            event_name=order.event.name,
+            order_url=make_frontend_url('/orders/{identifier}'.format(identifier=order.identifier)),
+            cancel_note=order.cancel_note
+        )
+    )

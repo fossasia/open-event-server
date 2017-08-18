@@ -175,32 +175,3 @@ class TicketTag(db.Model):
 
     def __unicode__(self):
         return self.name
-
-
-class BookedTicket(db.Model):
-    __tablename__ = 'booked_ticket'
-    __table_args__ = (db.UniqueConstraint('user_id',
-                                          'ticket_id',
-                                          name='user_ticket_uc'),)
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
-    user = db.relationship('User', backref='booked_ticket')
-    ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE'))
-    ticket = db.relationship('Ticket', backref='booked_ticket')
-    quantity = db.Column(db.Integer)
-
-    def __init__(self, user, ticket, quantity):
-        self.user = user
-        self.ticket = ticket
-        self.quantity = quantity
-
-    def __repr__(self):
-        return '<BookedTicket %r by %r' % (self.ticket,
-                                           self.user,)
-
-    def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return self.ticket

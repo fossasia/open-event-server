@@ -11,6 +11,10 @@ from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.mail import send_email_to_attendees
+from app.api.helpers.notification import send_notif_to_attendees, send_notif_ticket_purchase_organizer, \
+    send_notif_ticket_cancel
+from app.api.helpers.files import make_frontend_url
+from app.api.helpers.mail import send_order_cancel_email
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
@@ -30,6 +34,9 @@ class OrdersListPost(ResourceList):
             data['status'] = 'pending'
 
     def before_create_object(self, data, view_kwargs):
+        if data.get('cancel_note'):
+            del data['cancel_note']
+
         # Apply discount only if the user is not event admin
         if data.get('discount') and not has_access('is_coorganizer', event_id=data['event']):
             discount_code = safe_query(self, DiscountCode, 'id', data['discount'], 'discount_code_id')
@@ -50,7 +57,10 @@ class OrdersListPost(ResourceList):
     def after_create_object(self, order, data, view_kwargs):
         order_tickets = {}
         for holder in order.ticket_holders:
-            pdf = create_save_pdf(render_template('/pdf/ticket_attendee.html', order=order, holder=holder))
+            if holder.id != current_user.id:
+                pdf = create_save_pdf(render_template('/pdf/ticket_attendee.html', order=order, holder=holder))
+            else:
+                pdf = create_save_pdf(render_template('/pdf/ticket_purchaser.html', order=order))
             holder.pdf_url = pdf
             save_to_db(holder)
             if order_tickets.get(holder.ticket_id) is None:
@@ -62,9 +72,14 @@ class OrdersListPost(ResourceList):
             save_to_db(od)
         order.quantity = order.get_tickets_count()
         save_to_db(order)
-        if not has_access('is_coorganizer', **view_kwargs):
+        if not has_access('is_coorganizer', event_id=data['event']):
             TicketingManager.calculate_update_amount(order)
         send_email_to_attendees(order)
+        send_notif_to_attendees(order, current_user.id)
+
+        order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
+        for organizer in order.event.organizers:
+            send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name)
 
         data['user_id'] = current_user.id
 
@@ -111,12 +126,20 @@ class OrderDetail(ResourceDetail):
             view_kwargs['order_identifier'] = attendee.order.identifier
 
     def before_update_object(self, order, data, view_kwargs):
+        if data.get('cancel_note'):
+            del data['cancel_note']
+
         if data.get('status'):
             if has_access('is_coorganizer', event_id=order.event.id):
                 pass
             else:
                 raise ForbiddenException({'pointer': 'data/status'},
                                          "To update status minimum Co-organizer access required")
+
+    def after_update_object(self, order, data, view_kwargs):
+        if order.status == 'cancelled':
+            send_order_cancel_email(order)
+            send_notif_ticket_cancel(order)
 
     decorators = (api.has_permission('is_coorganizer', fetch="event_id", fetch_as="event_id",
                                      fetch_key_model="identifier", fetch_key_url="order_identifier", model=Order),)
@@ -126,9 +149,8 @@ class OrderDetail(ResourceDetail):
                   'model': Order,
                   'url_field': 'order_identifier',
                   'id_field': 'identifier',
-                  'methods': {
-                      'before_update_object': before_update_object
-                  }}
+                  'methods': {'before_update_object': before_update_object,
+                              'after_update_object': after_update_object}}
 
 
 class OrderRelationship(ResourceRelationship):
