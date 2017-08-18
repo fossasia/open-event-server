@@ -9363,7 +9363,7 @@ Create a new microlocation using an event_id.
 + Parameters
     + microlocation_id: 1 (integer) - ID of the ticket in the form of an integer
 
-### Mictolocation Details [GET]
+### Microlocation Details [GET]
 Get a single microlocation.
 
 
@@ -9512,7 +9512,7 @@ Delete a single microlocation.
     + sort (optional, string, `floor`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### Get List of Mictolocations under an Event [GET]
+### Get List of Microlocations under an Event [GET]
 Get a single microlocation.
 
 
@@ -9573,7 +9573,7 @@ Get a single microlocation.
 + Parameters
     + session_id: 1 (integer) - ID of the session in the form of an integer
 
-### Get Mictolocation Details of a Session [GET]
+### Get Microlocation Details of a Session [GET]
 Get a single microlocation.
 
 
@@ -11628,7 +11628,7 @@ Create a new social link using event_id.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 
-### List All Social Links [GET]
+### List All Social Links under an Event [GET]
 Get a list of Social Links.
 
 + Request
@@ -13965,60 +13965,6 @@ Data related to the various tracks (e.g, python, AI, etc.) associated with the v
     + sort (optional, string, `color`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html
 
-### List All Tracks [GET]
-Get a list of Tracks.
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-          "meta": {
-            "count": 1
-          },
-          "data": [
-            {
-              "relationships": {
-                "event": {
-                  "links": {
-                    "self": "/v1/tracks/1/relationships/event",
-                    "related": "/v1/tracks/1/event"
-                  }
-                },
-                "sessions": {
-                  "links": {
-                    "self": "/v1/tracks/1/relationships/sessions",
-                    "related": "/v1/tracks/1/sessions"
-                  }
-                }
-              },
-              "attributes": {
-                "name" : "Main Track",
-                "description": "description",
-                "color": "#a04b4b",
-                "font-color":"#ffffff"
-              },
-              "type": "track",
-              "id": "1",
-              "links": {
-                "self": "/v1/tracks/1"
-              }
-            }
-          ],
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/trackss"
-          }
-        }
-
 ### Create Track [POST]
 Create a new track using an event_id.
 
@@ -14227,6 +14173,126 @@ Delete a single track.
             "version": "1.0"
           }
         }
+
+
+## Tracks under an Event [/v1/events/{event_identifier}/tracks{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### Get List of Tracks under an Event [GET]
+Get a single track.
+
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "event": {
+                            "links": {
+                                "self": "/v1/tracks/1/relationships/event",
+                                "related": "/v1/tracks/1/event"
+                            }
+                        },
+                        "sessions": {
+                            "links": {
+                                "self": "/v1/tracks/1/relationships/sessions",
+                                "related": "/v1/tracks/1/sessions"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "color": "#a04b4b",
+                        "description": "description",
+                        "name": "Main Track",
+                        "font-color": "#ffffff"
+                    },
+                    "type": "track",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/tracks/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/events/1/tracks"
+            }
+        }
+
+
+## Tracks Details of a Session [/v1/sessions/{session_id}/track]
++ Parameters
+    + session_id: 1 (integer) - ID of the session in the form of an integer
+
+### Get Track Details of a Session [GET]
+Get a single track.
+
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/tracks/1/relationships/event",
+                            "related": "/v1/tracks/1/event"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/tracks/1/relationships/sessions",
+                            "related": "/v1/tracks/1/sessions"
+                        }
+                    }
+                },
+                "attributes": {
+                    "color": "#a04b4b",
+                    "description": "description",
+                    "name": "Main Track",
+                    "font-color": "#ffffff"
+                },
+                "type": "track",
+                "id": "1",
+                "links": {
+                    "self": "/v1/tracks/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/tracks/1"
+            }
+        }
+
 
 # Group Notifications
 Notifications related to the various users about invites, ticket purchase, session proposal etc.
