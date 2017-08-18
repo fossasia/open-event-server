@@ -21,7 +21,8 @@ from app.models.notification import (
     MONTHLY_PAYMENT_FOLLOWUP_NOTIF,
     TICKET_PURCHASED_ORGANIZER,
     TICKET_PURCHASED_ATTENDEE,
-    TICKET_CANCELLED
+    TICKET_CANCELLED,
+    TICKET_CANCELLED_ORGANIZER
 )
 
 NOTIFS = {
@@ -117,6 +118,14 @@ NOTIFS = {
             u"Your order for {event_name} has been cancelled by the organizer"
             u"<br/>Please contact the organizer for more info" +
             u"<br/>Message from the organizer: {cancel_note}."
+        )
+    },
+    TICKET_CANCELLED_ORGANIZER: {
+        'recipient': 'User',
+        'subject': u'Order ({invoice_id}) has been cancelled',
+        'message': (
+            u"Order ({invoice_id}) has been cancelled"
+            u"<br/>Cancel Note: {cancel_note}."
         )
     },
     USER_CHANGE_EMAIL: {

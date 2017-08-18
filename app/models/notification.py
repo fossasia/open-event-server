@@ -20,6 +20,7 @@ EVENT_PUBLISH = 'Event Published'
 TICKET_PURCHASED_ORGANIZER = 'Ticket(s) Purchased to Organizer'
 TICKET_RESEND_ORGANIZER = 'Ticket Resend'
 TICKET_CANCELLED = 'Ticket(s) cancelled'
+TICKET_CANCELLED_ORGANIZER = 'Ticket(s) cancelled organizer'
 MONTHLY_PAYMENT_NOTIF = 'Monthly Payment Notification'
 MONTHLY_PAYMENT_FOLLOWUP_NOTIF = 'Monthly Payment Follow Up Notification'
 
