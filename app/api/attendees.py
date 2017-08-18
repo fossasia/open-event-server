@@ -42,7 +42,7 @@ class AttendeeList(ResourceList):
         if view_kwargs.get('order_identifier'):
             order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
             if not has_access('is_registrar', event_id=order.event_id) or not has_access('is_user_itself',
-                                                                                         user_id=order.user_id):
+                                                                                         id=order.user_id):
                 raise ForbiddenException({'source': ''}, 'Access Forbidden')
             query_ = query_.join(Order).filter(Order.id == order.id)
 
