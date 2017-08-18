@@ -11,9 +11,9 @@ from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.mail import send_email_to_attendees
-from app.api.helpers.notification import send_notif_to_attendees
+from app.api.helpers.notification import send_notif_to_attendees, send_notif_ticket_purchase_organizer, \
+    send_notif_ticket_cancel
 from app.api.helpers.files import make_frontend_url
-from app.api.helpers.notification import send_notif_ticket_purchase_organizer
 from app.api.helpers.mail import send_order_cancel_email
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
@@ -139,6 +139,7 @@ class OrderDetail(ResourceDetail):
     def after_update_object(self, order, data, view_kwargs):
         if order.status == 'cancelled':
             send_order_cancel_email(order)
+            send_notif_ticket_cancel(order)
 
     decorators = (api.has_permission('is_coorganizer', fetch="event_id", fetch_as="event_id",
                                      fetch_key_model="identifier", fetch_key_url="order_identifier", model=Order),)
