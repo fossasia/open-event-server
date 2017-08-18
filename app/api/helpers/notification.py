@@ -4,7 +4,7 @@ from app.api.helpers.db import save_to_db
 from app.models.notification import Notification, NEW_SESSION, SESSION_ACCEPT_REJECT, \
     EVENT_IMPORTED, EVENT_IMPORT_FAIL, EVENT_EXPORTED, EVENT_EXPORT_FAIL, MONTHLY_PAYMENT_NOTIF, \
     MONTHLY_PAYMENT_FOLLOWUP_NOTIF, EVENT_ROLE_INVITE, AFTER_EVENT, TICKET_PURCHASED_ORGANIZER, \
-    TICKET_PURCHASED_ATTENDEE, TICKET_PURCHASED
+    TICKET_PURCHASED_ATTENDEE, TICKET_PURCHASED, TICKET_CANCELLED
 from app.models.message_setting import MessageSettings
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_notifications import NOTIFS
@@ -196,3 +196,19 @@ def send_notif_to_attendees(order, purchaser_id):
                     pdf_url=holder.pdf_url
                 )
             )
+
+
+def send_notif_ticket_cancel(order):
+    """Send notification with order invoice link after purchase"""
+    send_notification(
+        user=order.user,
+        action=TICKET_CANCELLED,
+        title=NOTIFS[TICKET_CANCELLED]['title'].format(
+            invoice_id=order.invoice_number,
+            event_name=order.event.name
+        ),
+        message=NOTIFS[TICKET_CANCELLED]['message'].format(
+            cancel_note=order.cancel_note,
+            event_name=order.event.name
+        )
+    )
