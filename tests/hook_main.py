@@ -808,19 +808,6 @@ def user_event_invoice_get_list(transaction):
 
 
 # ------------------------- Microlocation -------------------------
-@hooks.before("Microlocations > Microlocation Collection > List All Microlocations")
-def microlocation_get_list(transaction):
-    """
-    GET /events/1/microlocations
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        microlocation = MicrolocationFactory()
-        db.session.add(microlocation)
-        db.session.commit()
-
-
 @hooks.before("Microlocations > Microlocation Collection > Create Microlocation")
 def microlocation_post(transaction):
     """
@@ -870,6 +857,32 @@ def microlocation_delete(transaction):
     with stash['app'].app_context():
         microlocation = MicrolocationFactory()
         db.session.add(microlocation)
+        db.session.commit()
+
+
+@hooks.before("Microlocations > Microlocations under an Event > Get List of Mictolocations under an Event")
+def event_microlocation_get_list(transaction):
+    """
+    GET /events/1/microlocations
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        microlocation = MicrolocationFactory()
+        db.session.add(microlocation)
+        db.session.commit()
+
+
+@hooks.before("Microlocations > Microlocation Details of a Session > Get Mictolocation Details of a Session")
+def session_microlocation_get_detail(transaction):
+    """
+    GET /sessions/1/microlocation
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        session = SessionFactory()
+        db.session.add(session)
         db.session.commit()
 
 

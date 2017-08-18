@@ -228,9 +228,9 @@ api.route(EventCopyResource, 'event_copy', '/events/<identifier>/copy')
 
 
 # microlocations
+api.route(MicrolocationListPost, 'microlocation_list_post', '/microlocations')
 api.route(MicrolocationList, 'microlocation_list', '/events/<int:event_id>/microlocations',
           '/events/<event_identifier>/microlocations')
-api.route(MicrolocationListPost, 'microlocation_list_post', '/microlocations')
 api.route(MicrolocationDetail, 'microlocation_detail', '/microlocations/<int:id>',
           '/sessions/<int:session_id>/microlocation')
 api.route(MicrolocationRelationshipOptional, 'microlocation_session',
