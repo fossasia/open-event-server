@@ -59,7 +59,7 @@ class OrderSchema(Schema):
                              self_view_kwargs={'order_identifier': '<identifier>'},
                              related_view='v1.attendee_list',
                              related_view_kwargs={'order_identifier': '<identifier>'},
-                             schema='AttendeeSchema',
+                             schema='AttendeeSchemaPublic',
                              many=True,
                              type_='attendee')
 
