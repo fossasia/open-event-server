@@ -1,5 +1,6 @@
 import base64
 from flask import request, jsonify, abort, make_response, Blueprint
+from flask_jwt import current_identity as current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
 from app import get_settings
@@ -72,4 +73,32 @@ def reset_password_patch():
         "id": user.id,
         "email": user.email,
         "name": user.name if user.get('name') else None
+    })
+
+
+@auth_routes.route('/change-password', methods=['POST'])
+@jwt_required()
+def change_password():
+    old_password = request.json['data']['old-password']
+    new_password = request.json['data']['new-password']
+
+    try:
+        user = User.query.filter_by(id=current_user.id).one()
+    except NoResultFound:
+        return abort(
+            make_response(jsonify(error="User not found"), 404)
+        )
+    else:
+        if user.is_correct_password(old_password):
+
+            user.password = new_password
+            save_to_db(user)
+        else:
+            return make_response(jsonify(error="Wrong Password"), 400)
+
+    return jsonify({
+        "id": user.id,
+        "email": user.email,
+        "name": user.fullname if user.fullname else None,
+        "password_changed": True
     })
