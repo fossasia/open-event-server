@@ -9503,6 +9503,128 @@ Delete a single microlocation.
           }
         }
 
+
+## Microlocations under an Event [/v1/events/{event_identifier}/microlocations{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `floor`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### Get List of Mictolocations under an Event [GET]
+Get a single microlocation.
+
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "event": {
+                            "links": {
+                                "self": "/v1/microlocations/1/relationships/event",
+                                "related": "/v1/microlocations/1/event"
+                            }
+                        },
+                        "sessions": {
+                            "links": {
+                                "self": "/v1/microlocations/1/relationships/sessions",
+                                "related": "/v1/microlocations/1/sessions"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "latitude": 45,
+                        "room": "room1",
+                        "name": "microlocation-name",
+                        "longitude": 45,
+                        "floor": 2
+                    },
+                    "type": "microlocation",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/microlocations/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/events/1/microlocations"
+            }
+        }
+
+
+## Microlocation Details of a Session [/v1/sessions/{session_id}/microlocation]
++ Parameters
+    + session_id: 1 (integer) - ID of the session in the form of an integer
+
+### Get Mictolocation Details of a Session [GET]
+Get a single microlocation.
+
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/microlocations/1/relationships/event",
+                            "related": "/v1/microlocations/1/event"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/microlocations/1/relationships/sessions",
+                            "related": "/v1/microlocations/1/sessions"
+                        }
+                    }
+                },
+                "attributes": {
+                    "latitude": 45,
+                    "room": "room1",
+                    "name": "microlocation-name",
+                    "longitude": 45,
+                    "floor": 2
+                },
+                "type": "microlocation",
+                "id": "1",
+                "links": {
+                    "self": "/v1/microlocations/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/microlocations/1"
+            }
+        }
+
+
 # Group Sessions
 Data related to all the sessions in the event.
 

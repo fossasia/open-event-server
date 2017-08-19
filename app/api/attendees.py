@@ -8,7 +8,7 @@ from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
-from app.api.schema.attendees import AttendeeSchema
+from app.api.schema.attendees import AttendeeSchema, AttendeeSchemaPublic
 from app.models import db
 from app.models.order import Order
 from app.models.ticket import Ticket
@@ -36,13 +36,17 @@ class AttendeeList(ResourceList):
     """
     List Attendees
     """
+    def before_get(self, args, kwargs):
+        if kwargs.get('user_id'):
+            self.schema = AttendeeSchemaPublic
+
     def query(self, view_kwargs):
         query_ = self.session.query(TicketHolder)
 
         if view_kwargs.get('order_identifier'):
             order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
             if not has_access('is_registrar', event_id=order.event_id) or not has_access('is_user_itself',
-                                                                                         user_id=order.user_id):
+                                                                                         id=order.user_id):
                 raise ForbiddenException({'source': ''}, 'Access Forbidden')
             query_ = query_.join(Order).filter(Order.id == order.id)
 
