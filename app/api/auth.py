@@ -35,6 +35,8 @@ def verify_email():
         )
     else:
         user.is_verified = True
+        save_to_db(user)
+        return make_response(jsonify(message="Email Verified"), 200)
 
 
 @auth_routes.route('/reset-password', methods=['POST'])
@@ -94,7 +96,9 @@ def change_password():
             user.password = new_password
             save_to_db(user)
         else:
-            return make_response(jsonify(error="Wrong Password"), 400)
+            return abort(
+                make_response(jsonify(error="Wrong Password"), 400)
+            )
 
     return jsonify({
         "id": user.id,
