@@ -224,3 +224,20 @@ def send_notif_ticket_cancel(order):
                 invoice_id=order.invoice_number
             )
         )
+
+
+def send_notification_with_action(user, action, **kwargs):
+    """
+    A general notif helper to use in auth APIs
+    :param user: user to which notif is to be sent
+    :param action:
+    :param kwargs:
+    :return:
+    """
+
+    send_notification(
+        user=user,
+        action=action,
+        title=NOTIFS[action]['subject'].format(**kwargs),
+        message=NOTIFS[action]['message'].format(**kwargs)
+    )
