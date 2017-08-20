@@ -19300,29 +19300,12 @@ Creates the copy. Requires Co-Organizer access
 
     + Body
 
-        {
-          "data": {
-            "type": "event-copy"
-          }
-        }
+        {}
 
-+ Response 201 (application/vnd.api+json)
++ Response 200 (application/json)
 
-        {
-          "data": {
-            "attributes": {
-              "identifier": "129b65ae"
-            },
-            "type": "event-copy",
-            "id": "1",
-            "links": {
-              "self": "/v1/events/1/copy"
-            }
-          },
-          "jsonapi": {
-            "version": "1.0"
-          },
-          "links": {
-            "self": "/v1/events/1/copy"
-          }
-        }
+    {
+      "copied": true,
+      "id": 25,
+      "identifier": "52d69149"
+    }
