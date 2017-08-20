@@ -821,7 +821,7 @@ def microlocation_post(transaction):
         db.session.commit()
 
 
-@hooks.before("Microlocations > Microlocation Details > Mictolocation Details")
+@hooks.before("Microlocations > Microlocation Details > Microlocation Details")
 def microlation_get_detail(transaction):
     """
     GET /microlocations/1
@@ -860,7 +860,7 @@ def microlocation_delete(transaction):
         db.session.commit()
 
 
-@hooks.before("Microlocations > Microlocations under an Event > Get List of Mictolocations under an Event")
+@hooks.before("Microlocations > Microlocations under an Event > Get List of Microlocations under an Event")
 def event_microlocation_get_list(transaction):
     """
     GET /events/1/microlocations
@@ -873,7 +873,7 @@ def event_microlocation_get_list(transaction):
         db.session.commit()
 
 
-@hooks.before("Microlocations > Microlocation Details of a Session > Get Mictolocation Details of a Session")
+@hooks.before("Microlocations > Microlocation Details of a Session > Get Microlocation Details of a Session")
 def session_microlocation_get_detail(transaction):
     """
     GET /sessions/1/microlocation
@@ -1178,7 +1178,7 @@ def user_speakers(transaction):
 
 
 # ------------------------- Social Links -------------------------
-@hooks.before("Social Links > Social Links Get Collection > List All Social Links")
+@hooks.before("Social Links > Social Links Get Collection > List All Social Links under an Event")
 def social_link_get_list(transaction):
     """
     GET /events/1/social-links
@@ -1730,19 +1730,6 @@ def attendee_delete(transaction):
 
 
 # ------------------------- Tracks -------------------------
-@hooks.before("Tracks > Tracks Collection > List All Tracks")
-def track_get_list(transaction):
-    """
-    GET /events/1/tracks
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        track = TrackFactory()
-        db.session.add(track)
-        db.session.commit()
-
-
 @hooks.before("Tracks > Tracks Collection > Create Track")
 def track_post(transaction):
     """
@@ -1792,6 +1779,32 @@ def track_delete(transaction):
     with stash['app'].app_context():
         track = TrackFactory()
         db.session.add(track)
+        db.session.commit()
+
+
+@hooks.before("Tracks > Tracks under an Event > Get List of Tracks under an Event")
+def event_track_get_list(transaction):
+    """
+    GET /events/1/tracks
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        track = TrackFactory()
+        db.session.add(track)
+        db.session.commit()
+
+
+@hooks.before("Tracks > Tracks Details of a Session > Get Track Details of a Session")
+def session_track_get_detail(transaction):
+    """
+    GET /sessions/1/track
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        session = SessionFactory()
+        db.session.add(session)
         db.session.commit()
 
 

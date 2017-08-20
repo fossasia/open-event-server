@@ -36,10 +36,6 @@ class AttendeeList(ResourceList):
     """
     List Attendees
     """
-    def before_get(self, args, kwargs):
-        if kwargs.get('user_id'):
-            self.schema = AttendeeSchemaPublic
-
     def query(self, view_kwargs):
         query_ = self.session.query(TicketHolder)
 
