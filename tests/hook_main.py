@@ -3581,3 +3581,17 @@ def get_attendees_from_order(transaction):
         order.identifier = "7201904e"
         db.session.add(order)
         db.session.commit()
+
+
+@hooks.before("Change Password > Reset Forgotten Password > Reset Password from Token")
+def reset_password_patch(transaction):
+    """
+    PATCH /v1/auth/reset-password
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user = UserFactory(is_verified=True)
+        user.reset_password = 'token'
+        db.session.add(user)
+        db.session.commit()
