@@ -9,6 +9,8 @@ kubectl create -f ${DIR}/yamls/lego
 kubectl create -f ${DIR}/yamls/nginx
 # Start postgres persistent volume, deployment & service
 kubectl create -f ${DIR}/yamls/postgres
+# Start Elasticsearch deployment and service
+kubectl create -f ${DIR}/yamls/elasticsearch
 # Start the redirector deployment & service
 kubectl create -f ${DIR}/yamls/redirector
 # Start Redis deployment & service
