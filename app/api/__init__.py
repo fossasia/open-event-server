@@ -223,9 +223,6 @@ api.route(EventRelationship, 'event_moderators', '/events/<int:id>/relationships
 api.route(EventRelationship, 'event_registrars', '/events/<int:id>/relationships/registrars',
           '/events/<identifier>/relationships/registrars')
 
-# Event Copy API
-api.route(EventCopyResource, 'event_copy', '/events/<identifier>/copy')
-
 
 # microlocations
 api.route(MicrolocationListPost, 'microlocation_list_post', '/microlocations')

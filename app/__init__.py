@@ -119,8 +119,10 @@ def create_app():
         from app.api.imports import import_routes
         from app.api.celery_tasks import celery_routes
         from app.api.auth import auth_routes
+        from app.api.event_copy import event_copy
 
         app.register_blueprint(api_v1)
+        app.register_blueprint(event_copy)
         app.register_blueprint(upload_routes)
         app.register_blueprint(export_routes)
         app.register_blueprint(import_routes)
