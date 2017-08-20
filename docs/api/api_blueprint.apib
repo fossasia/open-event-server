@@ -21185,7 +21185,7 @@ Get the task status and the final result of the task as response
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
-    + sort (optional, string, `type`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + sort (optional, string) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/iltering.html for more.
 
 ### List All Orders [GET]
@@ -21598,8 +21598,93 @@ Creates the copy. Requires Co-Organizer access
 
 + Response 200 (application/json)
 
-    {
-      "copied": true,
-      "id": 25,
-      "identifier": "52d69149"
-    }
+        {
+          "copied": true,
+          "id": 25,
+          "identifier": "52d69149"
+        }
+
+
+# Group Change Password
+
+This Groups APIs are used for change password request of the user.
+
+## Change Password [/v1/auth/change-password]
+
+### Change password using old password [POST]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "old-password": "fossasia",
+                    "new-password": "eventyay"
+                }
+            }
+
++ Response 200 (application/json)
+
+       {
+          "email": "example@example.com",
+          "id": "1",
+          "name": "example",
+          "password-changed": true
+       }
+
+## Reset Forgotten Password [/v1/auth/reset-password]
+Change password through token received via email.
+
+### Get Reset Password Token [POST]
+Sends the token to reset the account associated with the provided email id via email.
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            {
+                "data": {
+                    "email": "open_event_test_user@fossasia.org"
+                }
+            }
+
++ Response 200 (application/json)
+
+        {
+          "message": "Email Sent"
+        }
+
+
+### Reset Password from Token [PATCH]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            {
+                "data": {
+                    "token": "token",
+                    "password": "new password"
+                }
+            }
+
++ Response 200 (application/json)
+
+        {
+              "id": "1",
+              "email": "example@example.com",
+              "name": "John Doe"
+        }
