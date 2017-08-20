@@ -7,9 +7,11 @@ from app import get_settings
 from app.api.helpers.db import save_to_db
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_with_action
+from app.api.helpers.notification import send_notification_with_action
 
 from app.api.helpers.utilities import get_serializer
-from app.models.mail import PASSWORD_RESET
+from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE
+from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
 
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
@@ -74,7 +76,7 @@ def reset_password_patch():
     return jsonify({
         "id": user.id,
         "email": user.email,
-        "name": user.name if user.get('name') else None
+        "name": user.fullname if user.fullname else None
     })
 
 
@@ -95,6 +97,10 @@ def change_password():
 
             user.password = new_password
             save_to_db(user)
+            send_email_with_action(user, PASSWORD_CHANGE,
+                                   app_name=get_settings()['app_name'])
+            send_notification_with_action(user, PASSWORD_CHANGE_NOTIF,
+                                   app_name=get_settings()['app_name'])
         else:
             return abort(
                 make_response(jsonify(error="Wrong Password"), 400)
@@ -104,5 +110,5 @@ def change_password():
         "id": user.id,
         "email": user.email,
         "name": user.fullname if user.fullname else None,
-        "password_changed": True
+        "password-changed": True
     })
