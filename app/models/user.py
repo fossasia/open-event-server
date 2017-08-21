@@ -263,6 +263,13 @@ class User(db.Model):
     def get_id(self):
         return self.id
 
+    def is_correct_password(self, password):
+        salt = self.salt
+        password = generate_password_hash(password, salt)
+        if password == self._password:
+            return True
+        return False
+
     @property
     def is_staff(self):
         return self.is_super_admin or self.is_admin
@@ -325,8 +332,8 @@ class User(db.Model):
 
     @property
     def fullname(self):
-        firstname = self.firstname if self.firstname else ''
-        lastname = self.lastname if self.lastname else ''
+        firstname = self.first_name if self.first_name else ''
+        lastname = self.last_name if self.last_name else ''
         if firstname and lastname:
             return u'{} {}'.format(firstname, lastname)
         else:

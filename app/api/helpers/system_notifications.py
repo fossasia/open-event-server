@@ -11,6 +11,7 @@ from app.models.notification import (
     AFTER_EVENT,
     EVENT_PUBLISH,
     USER_CHANGE_EMAIL,
+    PASSWORD_CHANGE,
     TICKET_PURCHASED,
     TICKET_RESEND_ORGANIZER,
     EVENT_EXPORT_FAIL,
@@ -133,6 +134,13 @@ NOTIFS = {
         'title': u'Your email has been changed',
         'message': (
             u"Your email has been changed from {email} to {new_email}.<br>Please verify your new email."
+        )
+    },
+    PASSWORD_CHANGE: {
+        'recipient': 'User',
+        'subject': u'{app_name}: Password Change',
+        'message': (
+            u"Your password has been successfully changed."
         )
     },
     AFTER_EVENT: {
