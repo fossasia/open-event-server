@@ -12594,6 +12594,72 @@ Delete a single tax.
           }
         }
 
+
+## Get Taxes under an Event [/v1/events/{event_identifier}/tax{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `rate`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### Get Taxes under an Event [GET]
+Get list of taxes for an event.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "event": {
+                            "links": {
+                                "self": "/v1/taxes/1/relationships/event",
+                                "related": "/v1/tax/1/event"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "city": null,
+                        "name": "asd",
+                        "zip": null,
+                        "should-send-invoice": null,
+                        "country": null,
+                        "address": null,
+                        "state": null,
+                        "invoice-footer": null,
+                        "rate": 2,
+                        "is-tax-included-in-price": null,
+                        "registered-company": null,
+                        "tax-id": "32"
+                    },
+                    "type": "tax",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/taxes/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/events/1/tax"
+            }
+        }
+
+
 # Group Tickets
 Related to tickets (free, paid, donation) to the event.
 
