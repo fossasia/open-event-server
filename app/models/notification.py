@@ -3,6 +3,7 @@ import pytz
 from app.models import db
 
 USER_CHANGE_EMAIL = "User email"
+PASSWORD_CHANGE = 'Change Password'
 TICKET_PURCHASED = 'Ticket(s) Purchased'
 TICKET_PURCHASED_ATTENDEE = 'Ticket Purchased to Attendee'
 EVENT_ROLE_INVITE = 'Event Role Invitation'
