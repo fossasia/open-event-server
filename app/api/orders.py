@@ -74,7 +74,7 @@ class OrdersListPost(ResourceList):
         save_to_db(order)
         if not has_access('is_coorganizer', event_id=data['event']):
             TicketingManager.calculate_update_amount(order)
-        send_email_to_attendees(order)
+        send_email_to_attendees(order, current_user.id)
         send_notif_to_attendees(order, current_user.id)
 
         order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
