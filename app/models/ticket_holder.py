@@ -17,6 +17,22 @@ class TicketHolder(db.Model):
     city = db.Column(db.String)
     state = db.Column(db.String)
     country = db.Column(db.String)
+    job_title = db.Column(db.String)
+    phone = db.Column(db.String)
+    tax_business_info = db.Column(db.String)
+    billing_address = db.Column(db.String)
+    home_address = db.Column(db.String)
+    shipping_address = db.Column(db.String)
+    company = db.Column(db.String)
+    work_address = db.Column(db.String)
+    work_phone = db.Column(db.String)
+    website = db.Column(db.String)
+    blog = db.Column(db.String)
+    twitter = db.Column(db.String)
+    facebook = db.Column(db.String)
+    github = db.Column(db.String)
+    gender = db.Column(db.String)
+    birth_date = db.Column(db.DateTime(timezone=True))
     pdf_url = db.Column(db.String, nullable=False)
     ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE'))
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id', ondelete='CASCADE'))
@@ -35,6 +51,22 @@ class TicketHolder(db.Model):
                  city=None,
                  state=None,
                  country=None,
+                 job_title=None,
+                 phone=None,
+                 tax_business_info=None,
+                 billing_address=None,
+                 home_address=None,
+                 shipping_address=None,
+                 company=None,
+                 work_address=None,
+                 work_phone=None,
+                 website=None,
+                 blog=None,
+                 twitter=None,
+                 facebook=None,
+                 github=None,
+                 gender=None,
+                 birth_date=None,
                  ticket_id=None,
                  is_checked_in=False,
                  order_id=None,
@@ -48,6 +80,22 @@ class TicketHolder(db.Model):
         self.state = state
         self.ticket_id = ticket_id
         self.country = country
+        self.job_title = job_title
+        self.phone = phone
+        self.tax_business_info = tax_business_info
+        self.billing_address = billing_address
+        self.home_address = home_address
+        self.shipping_address = shipping_address
+        self.company = company
+        self.work_address = work_address
+        self.work_phone = work_phone
+        self.website = website
+        self.blog = blog
+        self.twitter = twitter
+        self.facebook = facebook
+        self.github = github
+        self.gender = gender
+        self.birth_date = birth_date
         self.order_id = order_id
         self.is_checked_in = is_checked_in
         self.pdf_url = pdf_url
