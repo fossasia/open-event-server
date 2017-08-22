@@ -102,10 +102,10 @@ class EventInvoice(db.Model):
         return 'I' + str(int(time.mktime(self.created_at.timetuple()))) + '-' + str(self.id)
 
     def __repr__(self):
-        return '<EventInvoice %r>' % self.stripe_user_id
+        return '<EventInvoice %r>' % self.invoice_pdf_url
 
     def __str__(self):
         return unicode(self).encode('utf-8')
 
     def __unicode__(self):
-        return self.stripe_user_id
+        return self.invoice_pdf_url
