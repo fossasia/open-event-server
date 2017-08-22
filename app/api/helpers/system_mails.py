@@ -7,7 +7,7 @@ from app.models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
     SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH, AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, \
     TICKET_PURCHASED, EVENT_EXPORTED, EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_EMAIL, \
     MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER, TICKET_CANCELLED, \
-    TICKET_PURCHASED_ATTENDEE
+    TICKET_PURCHASED_ATTENDEE, PASSWORD_CHANGE
 
 MAILS = {
     EVENT_PUBLISH: {
@@ -114,6 +114,13 @@ MAILS = {
             u"Please use the following link to reset your password.<br> {link}"
         )
     },
+    PASSWORD_CHANGE: {
+        'recipient': 'User',
+        'subject': u'{app_name}: Password Change',
+        'message': (
+            u"Your password has been successfully changed. Please login with your new password."
+        )
+    },
     EVENT_ROLE: {
         'recipient': 'User',
         'subject': u'Invitation to be {role} at {event}',
@@ -128,9 +135,8 @@ MAILS = {
         'subject': u'Your order invoice and tickets for {event_name} ({invoice_id}) ',
         'message': (
             u"Hi, this is a confirmation mail of your tickets for the event {event_name}"
-            u"<br/>The event is organised by {event_organiser}"
             u"<br/>Your order has been processed successfully." +
-            u"<br/> <a href='{order_url}'>Click here</a> to view/download your invoice."
+            u"<br/> <a href='{pdf_url}'>Click here</a> to view/download your invoice."
             u"<br><br><em>Looking forward to seeing you at the event."
             u"<br/>Login to manage your orders at https://eventyay.com </em>"
         )

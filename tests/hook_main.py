@@ -1395,7 +1395,7 @@ def sponsor_delete(transaction):
 @hooks.before("Tax > Tax Collection > Create Tax")
 def tax_post(transaction):
     """
-    GET /taxes/1
+    POST /taxes
     :param transaction:
     :return:
     """
@@ -1408,7 +1408,7 @@ def tax_post(transaction):
 @hooks.before("Tax > Tax Details > Tax Details")
 def tax_get_detail(transaction):
     """
-    PATCH /taxes/1
+    GET /taxes/1
     :param transaction:
     :return:
     """
@@ -1435,6 +1435,19 @@ def tax_patch(transaction):
 def tax_delete(transaction):
     """
     DELETE /taxes/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        tax = TaxFactory()
+        db.session.add(tax)
+        db.session.commit()
+
+
+@hooks.before("Tax > Get Taxes under an Event > Get Taxes under an Event")
+def event_tax_get_list(transaction):
+    """
+    GET /taxes/1
     :param transaction:
     :return:
     """
@@ -3014,23 +3027,10 @@ def user_permission_delete(transaction):
 
 
 # ------------------------- Stripe Authorizations -------------------------
-@hooks.before("StripeAuthorization > StripeAuthorization Collection > List all Stripe Authorizations")
-def stripe_authorization_get_list(transaction):
-    """
-    GET /events/1/stripe
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        stripe = StripeAuthorizationFactory()
-        db.session.add(stripe)
-        db.session.commit()
-
-
 @hooks.before("StripeAuthorization > StripeAuthorization Collection > Create Stripe Authorization")
 def stripe_authorization_post(transaction):
     """
-    POST /events/1/stripe
+    POST /stripe-authorization
     :param transaction:
     :return:
     """
@@ -3070,6 +3070,19 @@ def stripe_authorization_patch(transaction):
 def stripe_authorization_delete(transaction):
     """
     DELETE /stripe-authorization/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        stripe = StripeAuthorizationFactory()
+        db.session.add(stripe)
+        db.session.commit()
+
+
+@hooks.before("StripeAuthorization > Stripe Authorization for an Event > Get Stripe Authorization Details of an Event")
+def event_stripe_authorization_get_detail(transaction):
+    """
+    GET /events/1/stripe-authorization
     :param transaction:
     :return:
     """
