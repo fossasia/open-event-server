@@ -7,6 +7,7 @@ from app.models import db
 from app.models.role import Role
 from app.models.role_invite import RoleInvite
 from app.models.users_events_role import UsersEventsRoles
+from app.api.helpers.exceptions import UnprocessableEntity
 
 
 class RoleList(ResourceList):
@@ -38,6 +39,22 @@ class RoleDetail(ResourceDetail):
                     view_kwargs['id'] = users_events_role.role_id
                 else:
                     view_kwargs['id'] = None
+
+    def before_update_object(self, role, data, view_kwargs):
+        """
+        Method to edit object
+        :param role:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
+        if data.get('name'):
+            if data['name'] in ['organizer', 'coorganizer', 'registrar', 'moderator', 'attendee', 'track_organizer']:
+                raise UnprocessableEntity({'data': 'name'}, "The given name cannot be updated")
+
+    def before_delete_object(self, obj, kwargs):
+        if obj.name in ['organizer', 'coorganizer', 'registrar', 'moderator', 'attendee', 'track_organizer']:
+            raise UnprocessableEntity({'data': 'name'}, "The resource with given name cannot be deleted")
 
     decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
     schema = RoleSchema
