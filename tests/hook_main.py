@@ -1395,7 +1395,7 @@ def sponsor_delete(transaction):
 @hooks.before("Tax > Tax Collection > Create Tax")
 def tax_post(transaction):
     """
-    GET /taxes/1
+    POST /taxes
     :param transaction:
     :return:
     """
@@ -1408,7 +1408,7 @@ def tax_post(transaction):
 @hooks.before("Tax > Tax Details > Tax Details")
 def tax_get_detail(transaction):
     """
-    PATCH /taxes/1
+    GET /taxes/1
     :param transaction:
     :return:
     """
@@ -1435,6 +1435,19 @@ def tax_patch(transaction):
 def tax_delete(transaction):
     """
     DELETE /taxes/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        tax = TaxFactory()
+        db.session.add(tax)
+        db.session.commit()
+
+
+@hooks.before("Tax > Get Taxes under an Event > Get Taxes under an Event")
+def event_tax_get_list(transaction):
+    """
+    GET /taxes/1
     :param transaction:
     :return:
     """
