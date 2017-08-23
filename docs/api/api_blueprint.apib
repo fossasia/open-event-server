@@ -8899,9 +8899,9 @@ Get a list of event invoices.
         }
 
 
-## Event Invoices Details [/v1/event-invoices/{event_invoices_id}]
+## Event Invoices Details [/v1/event-invoices/{event_invoice_id}]
 + Parameters
-    + event_invoices_id: 1 (integer) - ID of the event invoices in the form of an integer
+    + event_invoice_id: 1 (integer) - ID of the event invoice in the form of an integer
 
 ### Event Invoices Details [GET]
 Get a single event invoice.
@@ -8919,9 +8919,9 @@ Get a single event invoice.
         {
             "data": {
                 "relationships": {
-                    "discount-codes": {
+                    "discount-code": {
                         "links": {
-                            "self": "/v1/event-invoices/5/relationships/discount-codes",
+                            "self": "/v1/event-invoices/5/relationships/discount-code",
                             "related": "/v1event-invoices/5/discount-code"
                         }
                     },
@@ -9017,9 +9017,9 @@ Update a single event invoice by `id`.
         {
             "data": {
                 "relationships": {
-                    "discount-codes": {
+                    "discount-code": {
                         "links": {
-                            "self": "/v1/event-invoices/5/relationships/discount-codes",
+                            "self": "/v1/event-invoices/5/relationships/discount-code",
                             "related": "/v1event-invoices/5/discount-code"
                         }
                     },
@@ -9124,9 +9124,9 @@ Get a single event invoice.
             "data": [
                 {
                     "relationships": {
-                        "discount-codes": {
+                        "discount-code": {
                             "links": {
-                                "self": "/v1/event-invoices/1/relationships/discount-codes",
+                                "self": "/v1/event-invoices/1/relationships/discount-code",
                                 "related": "/v1event-invoices/1/discount-code"
                             }
                         },
@@ -9211,9 +9211,9 @@ Get a single event invoice.
             "data": [
                 {
                     "relationships": {
-                        "discount-codes": {
+                        "discount-code": {
                             "links": {
-                                "self": "/v1/event-invoices/1/relationships/discount-codes",
+                                "self": "/v1/event-invoices/1/relationships/discount-code",
                                 "related": "/v1event-invoices/1/discount-code"
                             }
                         },
@@ -15022,11 +15022,11 @@ Create a new Discount Code for event. (Only Admin)
                 },
                 "type": "discount-code",
                 "relationships": {
-                  "event": {
-                    "data": {
+                  "events": {
+                    "data": [{
                       "id": "1",
                       "type": "event"
-                    }
+                    }]
                   }
                 }
               }
@@ -15037,7 +15037,7 @@ Create a new Discount Code for event. (Only Admin)
         {
             "data": {
                 "relationships": {
-                    "event": {
+                    "events": {
                         "links": {
                             "self": "/v1/discount-codes/4/relationships/events",
                             "related": "/v1/discount-codes/4/events"
