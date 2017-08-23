@@ -54,7 +54,7 @@ class AttendeeList(ResourceList):
 
         if view_kwargs.get('user_id'):
             user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
-            if not has_access('is_user_itself', user_id=user.id):
+            if not has_access('is_user_itself', id=user.id):
                 raise ForbiddenException({'source': ''}, 'Access Forbidden')
             query_ = query_.join(User, User.email == TicketHolder.email).filter(User.id == user.id)
 
