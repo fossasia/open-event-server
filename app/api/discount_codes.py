@@ -11,6 +11,7 @@ from app.api.schema.discount_codes import DiscountCodeSchemaTicket, DiscountCode
 from app.models import db
 from app.models.discount_code import DiscountCode
 from app.models.event import Event
+from app.models.event_invoice import EventInvoice
 from app.models.user import User
 
 
@@ -20,28 +21,35 @@ class DiscountCodeListPost(ResourceList):
     """
 
     def before_post(self, args, kwargs, data):
-        require_relationship(['event'], data)
-        if not has_access('is_coorganizer', event_id=data['event']):
-            raise ForbiddenException({'source': ''}, 'You are not authorized')
-
         if data['used_for'] == 'ticket':
             self.schema = DiscountCodeSchemaTicket
-        elif data['used_for'] == 'event' and has_access('is_admin'):
+            require_relationship(['event'], data)
+            if not has_access('is_coorganizer', event_id=data['event']):
+                raise ForbiddenException({'source': ''}, 'You are not authorized')
+        elif data['used_for'] == 'event' and has_access('is_admin') and 'events' in data:
             self.schema = DiscountCodeSchemaEvent
         else:
-            raise UnprocessableEntity({'source': ''}, "Please check used_for and endpoint and verify your permission")
+            raise UnprocessableEntity({'source': ''}, "Please verify your permission or check your relationship")
 
         data['user_id'] = current_identity.id
 
     def before_create_object(self, data, view_kwargs):
-        if data['used_for'] == 'ticket':
-            try:
-                self.session.query(DiscountCode).filter_by(event_id=data['event']).filter_by(used_for='event').one()
-            except NoResultFound:
-                pass
-            else:
-                raise UnprocessableEntity({'parameter': 'event_id'},
-                                          "Discount Code already exists for the provided Event ID")
+        if data['used_for'] == 'event' and 'events' in data:
+            for event in data['events']:
+                try:
+                    event_now = db.session.query(Event).filter_by(id=event).one()
+                except NoResultFound:
+                    raise UnprocessableEntity({'event_id': event},
+                                              "Event does not exist")
+                if event_now.discount_code_id:
+                    raise UnprocessableEntity({'event_id': event},
+                                              "A Discount Code already exists for the provided Event ID")
+
+    def after_create_object(self, discount, data, view_kwargs):
+        if data['used_for'] == 'event' and 'events' in data:
+            for event_id in data['events']:
+                event = safe_query(self, Event, 'id', event_id, 'event_id')
+                event.discount_code_id = discount.id
 
     def before_get(self, args, kwargs):
         if has_access('is_admin'):
@@ -54,7 +62,8 @@ class DiscountCodeListPost(ResourceList):
     data_layer = {'session': db.session,
                   'model': DiscountCode,
                   'methods': {
-                      'before_create_object': before_create_object}}
+                      'before_create_object': before_create_object,
+                      'after_create_object': after_create_object}}
 
 
 class DiscountCodeList(ResourceList):
@@ -81,17 +90,12 @@ class DiscountCodeList(ResourceList):
             self.schema = DiscountCodeSchemaTicket
             query_ = query_.filter_by(event_id=view_kwargs['event_id'])
 
-        elif not view_kwargs.get('event_id') and has_access('is_admin'):
-            self.schema = DiscountCodeSchemaEvent
-        else:
-            raise UnprocessableEntity({'source': ''}, "Please check used_for and endpoint and verify your permission")
-
         return query_
 
     decorators = (jwt_required,)
     methods = ['GET', ]
     view_kwargs = True
-    schema = DiscountCodeSchemaEvent
+    schema = DiscountCodeSchemaTicket
     data_layer = {'session': db.session,
                   'model': DiscountCode,
                   'methods': {
@@ -127,9 +131,9 @@ class DiscountCodeDetail(ResourceDetail):
                 self.schema = DiscountCodeSchemaEvent
             else:
                 raise UnprocessableEntity({'source': ''},
-                                          "Please check used_for and endpoint and verify your permission")
+                                          "Please verify your permission")
 
-        else:
+        elif not kwargs.get('id') and not has_access('is_admin'):
             raise UnprocessableEntity({'source': ''},
                                       "Please verify your permission. You must be admin to view event\
                                       discount code details")
@@ -151,6 +155,13 @@ class DiscountCodeDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
+        if view_kwargs.get('event_invoice_id') and has_access('is_admin'):
+            event_invoice = safe_query(self, EventInvoice, 'id', view_kwargs['event_invoice_id'], 'event_invoice_id')
+            if event_invoice.discount_code_id:
+                view_kwargs['id'] = event_invoice.discount_code_id
+            else:
+                view_kwargs['id'] = None
+
         if view_kwargs.get('id'):
             discount = self.session.query(DiscountCode).filter_by(id=view_kwargs.get('id')).one()
             if not discount:
@@ -163,9 +174,9 @@ class DiscountCodeDetail(ResourceDetail):
                 self.schema = DiscountCodeSchemaEvent
             else:
                 raise UnprocessableEntity({'source': ''},
-                                          "Please check used_for and endpoint and verify your permission")
+                                          "Please verify your permission")
 
-        else:
+        elif not view_kwargs.get('id') and not has_access('is_admin'):
             raise UnprocessableEntity({'source': ''},
                                       "Please verify your permission. You must be admin to view event\
                                       discount code details")
@@ -190,7 +201,7 @@ class DiscountCodeDetail(ResourceDetail):
         elif discount.used_for == 'event' and has_access('is_admin') and used_for != 'ticket':
             self.schema = DiscountCodeSchemaEvent
         else:
-            raise UnprocessableEntity({'source': ''}, "Please check used_for and endpoint and verify your permission")
+            raise UnprocessableEntity({'source': ''}, "Please verify your permission")
 
     def before_delete_object(self, discount, view_kwargs):
         """
@@ -205,7 +216,7 @@ class DiscountCodeDetail(ResourceDetail):
         elif discount.used_for == 'event' and has_access('is_admin'):
             self.schema = DiscountCodeSchemaEvent
         else:
-            raise UnprocessableEntity({'source': ''}, "Please check used_for and endpoint and verify your permission")
+            raise UnprocessableEntity({'source': ''}, "Please verify your permission")
 
     decorators = (jwt_required,)
     schema = DiscountCodeSchemaEvent
@@ -213,7 +224,8 @@ class DiscountCodeDetail(ResourceDetail):
                   'model': DiscountCode,
                   'methods': {
                       'before_get_object': before_get_object,
-                      'before_update_object': before_update_object}}
+                      'before_update_object': before_update_object,
+                      'before_delete_object': before_delete_object}}
 
 
 class DiscountCodeRelationshipRequired(ResourceRelationship):
@@ -238,7 +250,7 @@ class DiscountCodeRelationshipRequired(ResourceRelationship):
             self.schema = DiscountCodeSchemaEvent
         else:
             raise UnprocessableEntity({'source': ''},
-                                      "Please check used_for and endpoint and verify your permission")
+                                      "Please verify your permission")
 
     methods = ['GET', 'PATCH']
     decorators = (jwt_required,)
@@ -270,7 +282,7 @@ class DiscountCodeRelationshipOptional(ResourceRelationship):
             self.schema = DiscountCodeSchemaEvent
         else:
             raise UnprocessableEntity({'source': ''},
-                                      "Please check used_for and endpoint and verify your permission")
+                                      "Please verify your permission")
 
     decorators = (jwt_required,)
     schema = DiscountCodeSchemaEvent

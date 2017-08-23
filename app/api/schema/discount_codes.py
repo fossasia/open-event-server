@@ -25,6 +25,14 @@ class DiscountCodeSchemaPublic(Schema):
     value = fields.Float(required=True)
     type = fields.Str(validate=validate.OneOf(choices=["amount", "percent"]), required=True)
     is_active = fields.Boolean()
+    tickets_number = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
+    min_quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
+    max_quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
+    valid_from = fields.DateTime(allow_none=True)
+    valid_till = fields.DateTime(allow_none=True)
+    used_for = fields.Str(validate=validate.OneOf(choices=["event", "ticket"]), allow_none=False)
+    created_at = fields.DateTime(allow_none=True)
+    tickets = fields.Str(allow_none=True)
     event = Relationship(attribute='event',
                          self_view='v1.discount_code_event',
                          self_view_kwargs={'id': '<id>'},
@@ -68,17 +76,17 @@ class DiscountCodeSchemaEvent(DiscountCodeSchemaPublic):
                 raise UnprocessableEntity({'pointer': '/data/attributes/tickets-number'},
                                           "tickets-number should be greater than max-quantity")
 
-    tickets_number = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
-    min_quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
-    max_quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
-    valid_from = fields.DateTime(allow_none=True)
-    valid_till = fields.DateTime(allow_none=True)
-    tickets = fields.Str(validate=validate.OneOf(choices=["event", "ticket"]), allow_none=True)
-    created_at = fields.DateTime(allow_none=True)
-    used_for = fields.Str(required=True)
+    events = Relationship(attribute='events',
+                          self_view='v1.discount_code_events',
+                          self_view_kwargs={'id': '<id>'},
+                          related_view='v1.event_list',
+                          related_view_kwargs={'discount_code_id': '<id>'},
+                          schema='EventSchemaPublic',
+                          many=True,
+                          type_='event')
 
 
-class DiscountCodeSchemaTicket(DiscountCodeSchemaEvent):
+class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
     """
     API Schema for discount_code Model
     """

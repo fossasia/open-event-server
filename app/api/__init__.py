@@ -336,14 +336,14 @@ api.route(EventInvoiceRelationshipRequired, 'event_invoice_user',
 api.route(EventInvoiceRelationshipRequired, 'event_invoice_event',
           '/event-invoices/<int:id>/relationships/event')
 api.route(EventInvoiceRelationshipOptional, 'event_invoice_discount_code',
-          '/event-invoices/<int:id>/relationships/discount-codes')
+          '/event-invoices/<int:id>/relationships/discount-code')
 
 # discount codes
 api.route(DiscountCodeListPost, 'discount_code_list_post', '/discount-codes')
 api.route(DiscountCodeList, 'discount_code_list', '/events/<int:event_id>/discount-codes',
           '/events/<event_identifier>/discount-codes', '/users/<int:user_id>/discount-codes')
 api.route(DiscountCodeDetail, 'discount_code_detail', '/discount-codes/<int:id>',
-          '/events/<int:event_id>/discount-code', 'event-invoices/<int:event_invoice_id>/discount-code')
+          '/events/<int:event_id>/discount-code', '/event-invoices/<int:event_invoice_id>/discount-code')
 api.route(DiscountCodeRelationshipRequired, 'discount_code_event',
           '/discount-codes/<int:id>/relationships/event')
 api.route(DiscountCodeRelationshipOptional, 'discount_code_events',
