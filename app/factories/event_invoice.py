@@ -13,7 +13,7 @@ class EventInvoiceFactory(factory.alchemy.SQLAlchemyModelFactory):
 
     event = factory.RelatedFactory(EventFactoryBasic)
     user = factory.RelatedFactory(UserFactory)
-    discount_codes = factory.RelatedFactory(DiscountCodeFactory)
+    discount_code = factory.RelatedFactory(DiscountCodeFactory)
     amount = common.float_
     address = common.string_
     city = common.string_
@@ -31,3 +31,4 @@ class EventInvoiceFactory(factory.alchemy.SQLAlchemyModelFactory):
     paypal_token = common.string_
     event_id = 1
     user_id = 2
+    discount_code_id = 1

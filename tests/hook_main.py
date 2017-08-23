@@ -2286,8 +2286,14 @@ def event_discount_code_get_list(transaction):
     :return:
     """
     with stash['app'].app_context():
-        discount_code = DiscountCodeFactory()
-        db.session.add(discount_code)
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+        discount_code_event = DiscountCodeFactory(event_id=1)
+        db.session.add(discount_code_event)
+        discount_code_ticket = DiscountCodeFactory(event_id=1, used_for="ticket")
+        db.session.add(discount_code_ticket)
         db.session.commit()
 
 
@@ -2325,7 +2331,11 @@ def ticket_discount_code_get_list(transaction):
     :return:
     """
     with stash['app'].app_context():
-        discount_code = DiscountCodeFactory()
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+        discount_code = DiscountCodeFactory(event_id=1)
         db.session.add(discount_code)
         db.session.commit()
 
@@ -2338,7 +2348,11 @@ def discount_code_get_detail(transaction):
     :return:
     """
     with stash['app'].app_context():
-        discount_code = DiscountCodeFactory()
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+        discount_code = DiscountCodeFactory(event_id=1)
         db.session.add(discount_code)
         db.session.commit()
 
@@ -2351,7 +2365,11 @@ def discount_code_patch(transaction):
     :return:
     """
     with stash['app'].app_context():
-        discount_code = DiscountCodeFactory()
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+        discount_code = DiscountCodeFactory(event_id=1)
         db.session.add(discount_code)
         db.session.commit()
 
@@ -2364,8 +2382,64 @@ def discount_delete(transaction):
     :return:
     """
     with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+        discount_code = DiscountCodeFactory(event_id=1)
+        db.session.add(discount_code)
+        db.session.commit()
+
+
+@hooks.before("Discount Codes > List Discount Codes under a User > List All Discount Codes under a User")
+def user_discount_code_get_list(transaction):
+    """
+    GET /users/1/discount-codes
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+        discount_code = DiscountCodeFactory(event_id=1)
+        db.session.add(discount_code)
+        db.session.commit()
+
+
+@hooks.before("Discount Codes > Get Discount Code Detail of an Event > Get Discount Code Detail of an Event")
+def event_discount_code_get_detail(transaction):
+    """
+    GET /events/1/discount-code
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
         discount_code = DiscountCodeFactory()
         db.session.add(discount_code)
+        db.session.commit()
+
+        event = EventFactoryBasic(discount_code_id=1)
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Discount Codes > Get Discount Code Detail of an Event Invoice > "
+              "Get Discount Code Detail of an Event Invoice")
+def event_invoice_discount_code_get_detail(transaction):
+    """
+    GET /event-invoices/1/discount-code
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+        event_invoice = EventInvoiceFactory()
+        db.session.add(event_invoice)
         db.session.commit()
 
 

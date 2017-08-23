@@ -1,6 +1,5 @@
 import factory
 from app.models.discount_code import db, DiscountCode
-from app.factories.event import EventFactoryBasic
 from app.factories.user import UserFactory
 import app.factories.common as common
 
@@ -10,7 +9,6 @@ class DiscountCodeFactory(factory.alchemy.SQLAlchemyModelFactory):
         model = DiscountCode
         sqlalchemy_session = db.session
 
-    event = factory.RelatedFactory(EventFactoryBasic)
     user = factory.RelatedFactory(UserFactory)
     code = common.string_
     discount_url = common.url_
