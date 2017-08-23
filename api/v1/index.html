@@ -8005,14 +8005,14 @@
   "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-invoices"</span>
   </span>}
-</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="invoices-event-invoices-details" class="resource"><h3 class="resource-heading">Event Invoices Details <a href="#invoices-event-invoices-details" class="permalink">&nbsp;&para;</a></h3><div id="invoices-event-invoices-details-get" class="action get"><h4 class="action-heading"><div class="name">Event Invoices Details</div><a href="#invoices-event-invoices-details-get" class="method get">GET</a><code class="uri">/v1/event-invoices/{event_invoices_id}</code></h4><p>Get a single event invoice.</p>
-<h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/event-invoices/<span class="hljs-attribute" title="event_invoices_id">1</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>event_invoices_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the event invoices in the form of an integer</p>
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div><div id="invoices-event-invoices-details" class="resource"><h3 class="resource-heading">Event Invoices Details <a href="#invoices-event-invoices-details" class="permalink">&nbsp;&para;</a></h3><div id="invoices-event-invoices-details-get" class="action get"><h4 class="action-heading"><div class="name">Event Invoices Details</div><a href="#invoices-event-invoices-details-get" class="method get">GET</a><code class="uri">/v1/event-invoices/{event_invoice_id}</code></h4><p>Get a single event invoice.</p>
+<h4>Example URI</h4><div class="definition"><span class="method get">GET</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/event-invoices/<span class="hljs-attribute" title="event_invoice_id">1</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>event_invoice_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the event invoice in the form of an integer</p>
 </dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Accept</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">relationships</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">discount-codes</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">discount-code</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-invoices/5/relationships/discount-codes"</span></span>,
+          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-invoices/5/relationships/discount-code"</span></span>,
           "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1event-invoices/5/discount-code"</span>
         </span>}
       </span>}</span>,
@@ -8063,11 +8063,11 @@
   "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-invoices/5"</span>
   </span>}
-</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div id="invoices-event-invoices-details-patch" class="action patch"><h4 class="action-heading"><div class="name">Update Event Invoices</div><a href="#invoices-event-invoices-details-patch" class="method patch">PATCH</a><code class="uri">/v1/event-invoices/{event_invoices_id}</code></h4><p>Update a single event invoice by <code>id</code>.</p>
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div id="invoices-event-invoices-details-patch" class="action patch"><h4 class="action-heading"><div class="name">Update Event Invoices</div><a href="#invoices-event-invoices-details-patch" class="method patch">PATCH</a><code class="uri">/v1/event-invoices/{event_invoice_id}</code></h4><p>Update a single event invoice by <code>id</code>.</p>
 <ul>
 <li><code>id</code> (integer) - ID of the record to update <strong>(required)</strong></li>
 </ul>
-<h4>Example URI</h4><div class="definition"><span class="method patch">PATCH</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/event-invoices/<span class="hljs-attribute" title="event_invoices_id">1</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>event_invoices_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the event invoices in the form of an integer</p>
+<h4>Example URI</h4><div class="definition"><span class="method patch">PATCH</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/event-invoices/<span class="hljs-attribute" title="event_invoice_id">1</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>event_invoice_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the event invoice in the form of an integer</p>
 </dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
@@ -8093,9 +8093,9 @@
 </span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">relationships</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">discount-codes</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">discount-code</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-invoices/5/relationships/discount-codes"</span></span>,
+          "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-invoices/5/relationships/discount-code"</span></span>,
           "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1event-invoices/5/discount-code"</span>
         </span>}
       </span>}</span>,
@@ -8146,8 +8146,8 @@
   "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-invoices/5"</span>
   </span>}
-</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div id="invoices-event-invoices-details-delete" class="action delete"><h4 class="action-heading"><div class="name">Delete Event Invoices</div><a href="#invoices-event-invoices-details-delete" class="method delete">DELETE</a><code class="uri">/v1/event-invoices/{event_invoices_id}</code></h4><p>Delete a single event invoice.</p>
-<h4>Example URI</h4><div class="definition"><span class="method delete">DELETE</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/event-invoices/<span class="hljs-attribute" title="event_invoices_id">1</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>event_invoices_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the event invoices in the form of an integer</p>
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div><div id="invoices-event-invoices-details-delete" class="action delete"><h4 class="action-heading"><div class="name">Delete Event Invoices</div><a href="#invoices-event-invoices-details-delete" class="method delete">DELETE</a><code class="uri">/v1/event-invoices/{event_invoice_id}</code></h4><p>Delete a single event invoice.</p>
+<h4>Example URI</h4><div class="definition"><span class="method delete">DELETE</span>&nbsp;<span class="uri"><span class="hostname">https://api.eventyay.com</span>/v1/event-invoices/<span class="hljs-attribute" title="event_invoice_id">1</span></span></div><div class="title"><strong>URI Parameters</strong><div class="collapse-button show"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><dl class="inner"><dt>event_invoice_id</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>1</span></span><p>ID of the event invoice in the form of an integer</p>
 </dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Accept</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">meta</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Object successfully deleted"</span>
@@ -8164,9 +8164,9 @@
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">[
     {
       "<span class="hljs-attribute">relationships</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">discount-codes</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">discount-code</span>": <span class="hljs-value">{
           "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-            "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-invoices/1/relationships/discount-codes"</span></span>,
+            "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-invoices/1/relationships/discount-code"</span></span>,
             "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1event-invoices/1/discount-code"</span>
           </span>}
         </span>}</span>,
@@ -8227,9 +8227,9 @@
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">[
     {
       "<span class="hljs-attribute">relationships</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">discount-codes</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">discount-code</span>": <span class="hljs-value">{
           "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
-            "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-invoices/1/relationships/discount-codes"</span></span>,
+            "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/event-invoices/1/relationships/discount-code"</span></span>,
             "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1event-invoices/1/discount-code"</span>
           </span>}
         </span>}</span>,
@@ -13102,18 +13102,20 @@
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"discount-code"</span></span>,
     "<span class="hljs-attribute">relationships</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">event</span>": <span class="hljs-value">{
-        "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
-          "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
-          "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span>
-        </span>}
+      "<span class="hljs-attribute">events</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">data</span>": <span class="hljs-value">[
+          {
+            "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
+            "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span>
+          </span>}
+        ]
       </span>}
     </span>}
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>201</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">relationships</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">event</span>": <span class="hljs-value">{
+      "<span class="hljs-attribute">events</span>": <span class="hljs-value">{
         "<span class="hljs-attribute">links</span>": <span class="hljs-value">{
           "<span class="hljs-attribute">self</span>": <span class="hljs-value"><span class="hljs-string">"/v1/discount-codes/4/relationships/events"</span></span>,
           "<span class="hljs-attribute">related</span>": <span class="hljs-value"><span class="hljs-string">"/v1/discount-codes/4/events"</span>
