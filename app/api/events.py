@@ -16,6 +16,7 @@ from app.api.helpers.permission_manager import has_access
 from app.models import db
 from app.models.access_code import AccessCode
 from app.models.custom_form import CustomForms
+from app.models.faq import Faq
 from app.models.discount_code import DiscountCode
 from app.models.event import Event
 from app.models.event_invoice import EventInvoice
@@ -272,6 +273,13 @@ def get_id(view_kwargs):
         custom_form = safe_query(db, CustomForms, 'id', view_kwargs['custom_form_id'], 'custom_form_id')
         if custom_form.event_id is not None:
             view_kwargs['id'] = custom_form.event_id
+        else:
+            view_kwargs['id'] = None
+
+    if view_kwargs.get('faq_id') is not None:
+        faq = safe_query(db, Faq, 'id', view_kwargs['faq_id'], 'faq_id')
+        if faq.event_id is not None:
+            view_kwargs['id'] = faq.event_id
         else:
             view_kwargs['id'] = None
 
