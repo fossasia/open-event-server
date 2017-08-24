@@ -1,6 +1,8 @@
 from marshmallow import validates_schema, validate
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema, Relationship
+from sqlalchemy.orm.exc import NoResultFound
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.models.role_invite import RoleInvite
 from app.api.helpers.exceptions import UnprocessableEntity
@@ -25,16 +27,25 @@ class RoleInviteSchema(Schema):
     @validates_schema(pass_original=True)
     def validate_satus(self, data, original_data):
         if 'role' in data and 'role_name' in data:
-            role = Role.query.filter_by(id=data['role']).one()
+            try:
+                role = Role.query.filter_by(id=data['role']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'source': '/data/role'}, "Role not found")
             if role.name != data['role_name']:
                 raise UnprocessableEntity({'pointer': '/data/attributes/role'},
                                           "Role id do not match role name")
         if 'id' in original_data['data']:
-            role_invite = RoleInvite.query.filter_by(id=original_data['data']['id']).one()
+            try:
+                role_invite = RoleInvite.query.filter_by(id=original_data['data']['id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'source': '/data/id'}, "Role invite not found")
             if 'role' not in data:
                 data['role'] = role_invite.role.id
             if 'role_name' in data:
-                role = Role.query.filter_by(id=data['role']).one()
+                try:
+                    role = Role.query.filter_by(id=data['role']).one()
+                except NoResultFound:
+                    raise ObjectNotFound({'source': '/data/role'}, "Role not found")
                 if role.name != data['role_name']:
                     raise UnprocessableEntity({'pointer': '/data/attributes/role'},
                                               "Role id do not match role name")
