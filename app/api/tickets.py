@@ -50,7 +50,7 @@ class TicketList(ResourceList):
             query_ = Ticket.query.filter(Ticket.access_codes.any(id=access_code.id))
 
         if view_kwargs.get('order_identifier'):
-            order = safe_query(self, Order, 'identifer', view_kwargs['order_identifier'], 'order_identifer')
+            order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
             ticket_ids = []
             for ticket in order.tickets:
                 ticket_ids.append(ticket.id)

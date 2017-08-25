@@ -50,6 +50,7 @@ from app.factories.email_notification import EmailNotificationFactory
 from app.factories.activities import ActivityFactory
 from app.factories.stripe_authorization import StripeAuthorizationFactory
 from app.factories.mail import MailFactory
+from app.factories.order import OrderFactory
 
 
 stash = {}
@@ -3315,4 +3316,46 @@ def create_event_copy(transaction):
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Events > Get Event for a Order > Event Details for a Order")
+def get_event_from_order(transaction):
+    """
+    GET /v1/orders/{identifier}/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        order = OrderFactory()
+        order.identifier = "7201904e"
+        db.session.add(order)
+        db.session.commit()
+
+
+@hooks.before("Tickets > List Tickets for an Order > List Tickets")
+def get_tickets_from_order(transaction):
+    """
+    GET /v1/orders/{identifier}/tickets
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        order = OrderFactory()
+        order.identifier = "7201904e"
+        db.session.add(order)
+        db.session.commit()
+
+
+@hooks.before("Attendees > List Attendees under an order > List All Attendees under an order")
+def get_attendees_from_order(transaction):
+    """
+    GET /v1/orders/{identifier}/attendees
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        order = OrderFactory()
+        order.identifier = "7201904e"
+        db.session.add(order)
         db.session.commit()
