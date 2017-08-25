@@ -44,7 +44,7 @@ from app.api.attendees import AttendeeList, AttendeeDetail, AttendeeRelationship
 from app.api.access_codes import AccessCodeList, AccessCodeListPost, AccessCodeDetail, AccessCodeRelationshipRequired, \
     AccessCodeRelationshipOptional
 from app.api.custom_forms import CustomFormList, CustomFormListPost, CustomFormDetail, CustomFormRelationshipRequired
-from app.api.faqs import FaqListPost, FaqList, FaqDetail, FaqRelationshipRequired
+from app.api.faqs import FaqListPost, FaqList, FaqDetail, FaqRelationshipRequired, FaqRelationshipOptional
 from app.api.modules import ModuleDetail
 from app.api.custom_placeholders import CustomPlaceholderList, CustomPlaceholderDetail, CustomPlaceholderRelationship
 from app.api.activities import ActivityList, ActivityDetail
@@ -213,6 +213,8 @@ api.route(EventRelationship, 'event_custom_forms', '/events/<int:id>/relationshi
           '/events/<identifier>/relationships/custom-forms')
 api.route(EventRelationship, 'event_faqs', '/events/<int:id>/relationships/faqs',
           '/events/<identifier>/relationships/faqs')
+api.route(EventRelationship, 'event_faq_types', '/events/<int:id>/relationships/faq-types',
+          '/events/<identifier>/relationships/faq-types')
 api.route(EventRelationship, 'event_orders', '/events/<int:id>/relationships/orders',
           '/events/<identifier>/relationships/orders')
 # Events -> roles:
@@ -304,7 +306,7 @@ api.route(FaqTypeListPost, 'faq_type_list_post', '/faq-types')
 api.route(FaqTypeList, 'faq_type_list', '/events/<int:event_id>/faq-types',
           '/events/<event_identifier>/faq-types')
 api.route(FaqTypeDetail, 'faq_type_detail', '/faq-types/<int:id>',
-          '/faqs/<int:session_id>/faq-type')
+          '/faqs/<int:faq_id>/faq-type')
 api.route(FaqTypeRelationshipOptional, 'faq_type_faqs',
           '/faq-types/<int:id>/relationships/faqs')
 api.route(FaqTypeRelationshipRequired, 'faq_type_event',
@@ -442,7 +444,7 @@ api.route(FaqList, 'faq_list', '/events/<int:event_id>/faqs', '/events/<event_id
           '/faq-types/<int:faq_type_id>/faqs')
 api.route(FaqDetail, 'faq_detail', '/faqs/<int:id>')
 api.route(FaqRelationshipRequired, 'faq_event', '/faqs/<int:id>/relationships/event')
-api.route(FaqRelationshipRequired, 'faq_faq_type', '/faqs/<int:id>/relationships/faq-type')
+api.route(FaqRelationshipOptional, 'faq_faq_type', '/faqs/<int:id>/relationships/faq-type')
 
 # Stripe Authorization API
 api.route(StripeAuthorizationListPost, 'stripe_authorization_list_post', '/stripe-authorization')

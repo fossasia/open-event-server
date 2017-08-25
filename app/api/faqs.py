@@ -29,7 +29,7 @@ class FaqListPost(ResourceList):
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ObjectNotFound({'parameter': 'event_id'},
-                                 "Event: {} not found".format(data['event_id']))
+                                 "Event: {} not found".format(data['event']))
 
     schema = FaqSchema
     methods = ['POST', ]
@@ -84,6 +84,17 @@ class FaqRelationshipRequired(ResourceRelationship):
     decorators = (api.has_permission('is_coorganizer', fetch='event_id',
                                      fetch_as="event_id", model=Faq, methods="PATCH"),)
     methods = ['GET', 'PATCH']
+    schema = FaqSchema
+    data_layer = {'session': db.session,
+                  'model': Faq}
+
+
+class FaqRelationshipOptional(ResourceRelationship):
+    """
+    FAQ Relationship (Required)
+    """
+    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
+                                     fetch_as="event_id", model=Faq, methods="PATCH"),)
     schema = FaqSchema
     data_layer = {'session': db.session,
                   'model': Faq}

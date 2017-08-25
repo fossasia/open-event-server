@@ -16,7 +16,7 @@ class FaqType(db.Model):
         self.event_id = event_id
 
     def __repr__(self):
-        return '<FAQ %r>' % self.name
+        return '<FAQType %r>' % self.name
 
     def __str__(self):
         return unicode(self).encode('utf-8')
