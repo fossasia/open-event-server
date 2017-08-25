@@ -1,4 +1,3 @@
-from marshmallow import validate as validate
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema, Relationship
 
@@ -9,6 +8,7 @@ class FaqSchema(Schema):
     """
     Api schema for page Model
     """
+
     class Meta:
         """
         Meta class for page Api Schema
@@ -28,3 +28,10 @@ class FaqSchema(Schema):
                          related_view_kwargs={'faq_id': '<id>'},
                          schema='EventSchemaPublic',
                          type_='event')
+    faq_type = Relationship(attribute='faq_type',
+                            self_view='v1.faq_faq_type',
+                            self_view_kwargs={'id': '<id>'},
+                            related_view='v1.faq_type_detail',
+                            related_view_kwargs={'faq_id': '<id>'},
+                            schema='FaqSchemaPublic',
+                            type_='faq-type')

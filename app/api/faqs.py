@@ -10,7 +10,7 @@ from app.api.helpers.utilities import require_relationship
 from app.api.schema.faqs import FaqSchema
 from app.models import db
 from app.models.faq import Faq
-from app.models.event import Event
+from app.models.faq_type import FaqType
 
 
 class FaqListPost(ResourceList):
@@ -50,6 +50,9 @@ class FaqList(ResourceList):
         """
         query_ = self.session.query(Faq)
         query_ = event_query(self, query_, view_kwargs)
+        if view_kwargs.get('faq_type_id') is not None:
+            faq_type = safe_query(self, FaqType, 'id', view_kwargs['faq_type_id'], 'faq_type_id')
+            query_ = query_.join(FaqType).filter(FaqType.id == faq_type.id)
         return query_
 
     view_kwargs = True
@@ -67,23 +70,6 @@ class FaqDetail(ResourceDetail):
     """
     FAQ Resource
     """
-
-    def before_get_object(self, view_kwargs):
-        """
-        before get method
-        :param view_kwargs:
-        :return:
-        """
-        event = None
-        if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
-
-        if event:
-            faq = safe_query(self, Faq, 'event_id', event.id, 'event_id')
-            view_kwargs['id'] = faq.id
-
     decorators = (api.has_permission('is_coorganizer', fetch='event_id',
                   fetch_as="event_id", model=Faq, methods="PATCH,DELETE"), )
     schema = FaqSchema
