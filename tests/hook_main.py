@@ -51,6 +51,7 @@ from app.factories.activities import ActivityFactory
 from app.factories.stripe_authorization import StripeAuthorizationFactory
 from app.factories.mail import MailFactory
 from app.factories.order import OrderFactory
+from app.factories.faq_type import FaqTypeFactory
 
 
 stash = {}
@@ -2600,6 +2601,85 @@ def faq_delete(transaction):
 def faq_get_list(transaction):
     """
     GET /events/1/faqs
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        faq = FaqFactory()
+        db.session.add(faq)
+        db.session.commit()
+
+
+# ------------------------- FAQ Types -------------------------
+@hooks.before("FAQ Types > FAQ Type Collection > Create FAQ Type")
+def faq_type_post(transaction):
+    """
+    POST /faq-types
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("FAQ Types > FAQ Type Detail > FAQ Type Detail")
+def faq_type_get_detail(transaction):
+    """
+    GET /faq-types/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        faq_type = FaqTypeFactory()
+        db.session.add(faq_type)
+        db.session.commit()
+
+
+@hooks.before("FAQ Types > FAQ Type Detail > Update FAQ Type")
+def faq_type_patch(transaction):
+    """
+    PATCH /faq-types/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        faq_type = FaqTypeFactory()
+        db.session.add(faq_type)
+        db.session.commit()
+
+
+@hooks.before("FAQ Types > FAQ Type Detail > Delete FAQ Type")
+def faq_type_delete(transaction):
+    """
+    DELETE /faq-types/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        faq_type = FaqTypeFactory()
+        db.session.add(faq_type)
+        db.session.commit()
+
+
+@hooks.before("FAQ Types > Event FAQ Type Collection > List All FAQ Types for an Event")
+def event_faq_type_get_list(transaction):
+    """
+    GET /events/1/faq-types
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        faq_type = FaqTypeFactory()
+        db.session.add(faq_type)
+        db.session.commit()
+
+
+@hooks.before("FAQ Types > FAQ FAQ Type Collection > List All FAQ Types for a FAQ")
+def faq_faq_type_get_list(transaction):
+    """
+    GET /faq/1/faq-types
     :param transaction:
     :return:
     """

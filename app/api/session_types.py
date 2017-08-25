@@ -85,7 +85,8 @@ class SessionTypeRelationshipRequired(ResourceRelationship):
     """
     SessionType Relationship
     """
-    decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
+    methods = ['GET', 'PATCH']
+    decorators = (api.has_permission('is_coorganizer', methods="PATCH", fetch="event_id", fetch_as="event_id",
                                      model=SessionType),)
     schema = SessionTypeSchema
     data_layer = {'session': db.session,

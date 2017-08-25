@@ -116,7 +116,6 @@ class SessionDetail(ResourceDetail):
                 send_notif_session_accept_reject(organizer, session.title,
                                                  session.state, link)
 
-
     decorators = (api.has_permission('is_speaker_for_session', methods="PATCH,DELETE"),)
     schema = SessionSchema
     data_layer = {'session': db.session,

@@ -14,7 +14,7 @@ from app.models.faq_type import FaqType
 
 class FaqTypeListPost(ResourceList):
     """
-    List and create sessions
+    List and create faq-types
     """
     def before_post(self, args, kwargs, data):
         require_relationship(['event'], data)
@@ -30,7 +30,7 @@ class FaqTypeListPost(ResourceList):
 
 class FaqTypeList(ResourceList):
     """
-    List sessions
+    List faq-types
     """
     def query(self, view_kwargs):
         """
@@ -54,7 +54,7 @@ class FaqTypeList(ResourceList):
 
 class FaqTypeDetail(ResourceDetail):
     """
-    Detail about a single session type by id
+    Detail about a single faq type by id
     """
     def before_get_object(self, view_kwargs):
         """
@@ -65,7 +65,7 @@ class FaqTypeDetail(ResourceDetail):
         """
         if view_kwargs.get('faq_id'):
             faq = safe_query(self, Faq, 'id', view_kwargs['faq_id'], 'faq_id')
-            if faq.session_type_id:
+            if faq.faq_type_id:
                 view_kwargs['id'] = faq.faq_type_id
             else:
                 view_kwargs['id'] = None
@@ -84,6 +84,7 @@ class FaqTypeRelationshipRequired(ResourceRelationship):
     """
     FaqType Relationship
     """
+    methods = ['GET', 'PATCH']
     decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="event_id", fetch_as="event_id",
                                      model=FaqType),)
     schema = FaqTypeSchema

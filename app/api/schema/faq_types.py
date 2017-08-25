@@ -21,10 +21,10 @@ class FaqTypeSchema(Schema):
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
     event = Relationship(attribute='event',
-                         self_view='v1.session_type_event',
+                         self_view='v1.faq_type_event',
                          self_view_kwargs={'id': '<id>'},
                          related_view='v1.event_detail',
-                         related_view_kwargs={'session_type_id': '<id>'},
+                         related_view_kwargs={'faq_type_id': '<id>'},
                          schema='EventSchemaPublic',
                          type_='event')
     faqs = Relationship(attribute='faqs',

@@ -18305,6 +18305,12 @@ Create a new Question-Answer pair (FAQ) with event_id.
         {
             "data": {
                 "relationships": {
+                    "faq-type": {
+                        "links": {
+                            "self": "/v1/faqs/1/relationships/faq-type",
+                            "related": "/v1/faqs/1/faq-type"
+                        }
+                    },
                     "event": {
                         "links": {
                             "self": "/v1/faqs/1/relationships/event",
@@ -18355,6 +18361,12 @@ Get a single FAQ.
                         "links": {
                             "self": "/v1/faqs/1/relationships/event",
                             "related": "/v1/faqs/1/event"
+                        }
+                    },
+                    "faq-type": {
+                        "links": {
+                            "self": "/v1/faqs/1/relationships/faq-type",
+                            "related": "/v1/faqs/1/faq-type"
                         }
                     }
                 },
@@ -18407,6 +18419,12 @@ Update a single FAQ with `id`.
        {
             "data": {
                 "relationships": {
+                    "faq-type": {
+                        "links": {
+                            "self": "/v1/faqs/1/relationships/faq-type",
+                            "related": "/v1/faqs/1/faq-type"
+                        }
+                    },
                     "event": {
                         "links": {
                             "self": "/v1/faqs/1/relationships/event",
@@ -18485,6 +18503,12 @@ Get a list of FAQs for an event.
             "data": [
                 {
                     "relationships": {
+                        "faq-type": {
+                            "links": {
+                                "self": "/v1/faqs/1/relationships/faq-type",
+                                "related": "/v1/faqs/1/faq-type"
+                            }
+                        },
                         "event": {
                             "links": {
                                 "self": "/v1/faqs/1/relationships/event",
@@ -18512,7 +18536,9 @@ Get a list of FAQs for an event.
         }
 
 
+
 # Group FAQ Types
+
 FAQ Types related to the events.
 
 | Parameter | Description | Type | Required |
@@ -18562,8 +18588,8 @@ FAQ Types related to the events.
                 "relationships": {
                     "event": {
                         "links": {
-                            "self": "/v1/session-types/1/relationships/event",
-                            "related": "/v1/session-types/1/event"
+                            "self": "/v1/faq-types/1/relationships/event",
+                            "related": "/v1/faq-types/1/event"
                         }
                     },
                     "faqs": {
@@ -18595,8 +18621,8 @@ FAQ Types related to the events.
 + Parameters
     + faq_type_id: 1 (integer) - ID of the FAQ in the form of an integer
 
-### FAQ Detail [GET]
-Get a single FAQ.
+### FAQ Type Detail [GET]
+Get a single FAQ Type
 
 + Request
 
@@ -18613,8 +18639,8 @@ Get a single FAQ.
                 "relationships": {
                     "event": {
                         "links": {
-                            "self": "/v1/session-types/1/relationships/event",
-                            "related": "/v1/session-types/1/event"
+                            "self": "/v1/faq-types/1/relationships/event",
+                            "related": "/v1/faq-types/1/event"
                         }
                     },
                     "faqs": {
@@ -18642,8 +18668,8 @@ Get a single FAQ.
         }
 
 
-### Update FAQ [PATCH]
-Update a single FAQ with `id`.
+### Update FAQ Type [PATCH]
+Update a single FAQ Type with `id`.
 
 + `id` (integer) - ID of the record to update **(required)**
 
@@ -18661,7 +18687,7 @@ Update a single FAQ with `id`.
                   "name": "xyz"
                 },
                 "type": "faq-type",
-                "id": 1
+                "id": "1"
               }
             }
 
@@ -18673,8 +18699,8 @@ Update a single FAQ with `id`.
                 "relationships": {
                     "event": {
                         "links": {
-                            "self": "/v1/session-types/1/relationships/event",
-                            "related": "/v1/session-types/1/event"
+                            "self": "/v1/faq-types/1/relationships/event",
+                            "related": "/v1/faq-types/1/event"
                         }
                     },
                     "faqs": {
@@ -18702,8 +18728,8 @@ Update a single FAQ with `id`.
         }
 
 
-### Delete FAQ [DELETE]
-Delete a single FAQ.
+### Delete FAQ Type [DELETE]
+Delete a single FAQ Type.
 
 + Request
 
@@ -18725,7 +18751,7 @@ Delete a single FAQ.
         }
 
 
-## Event FAQ Collection [/v1/events/{event_identifier}/faq-typess{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Event FAQ Type Collection [/v1/events/{event_identifier}/faq-types{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -18757,8 +18783,8 @@ Get a list of FAQ Types for an event.
                     "relationships": {
                         "event": {
                             "links": {
-                                "self": "/v1/session-types/1/relationships/event",
-                                "related": "/v1/session-types/1/event"
+                                "self": "/v1/faq-types/1/relationships/event",
+                                "related": "/v1/faq-types/1/event"
                             }
                         },
                         "faqs": {
@@ -18782,9 +18808,68 @@ Get a list of FAQ Types for an event.
                 "version": "1.0"
             },
             "links": {
-                "self": "/v1/events/17/faq-types"
+                "self": "/v1/events/1/faq-types"
             }
         }
+
+
+## FAQ FAQ Type Collection [/v1/faqs/{faq_identifier}/faq-type{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + faq_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/iltering.html for more.
+
+### List All FAQ Types for a FAQ [GET]
+Get a list of FAQ Types for a FAQ.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/faq-types/1/relationships/event",
+                            "related": "/v1/faq-types/1/event"
+                        }
+                    },
+                    "faqs": {
+                        "links": {
+                            "self": "/v1/faq-types/1/relationships/faqs",
+                            "related": "/v1/faq-types/1/faqs"
+                        }
+                    }
+                },
+                "attributes": {
+                    "name": "abc"
+                },
+                "type": "faq-type",
+                "id": "1",
+                "links": {
+                    "self": "/v1/faq-types/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/faq-types/1"
+            }
+        }
+
+
 
 
 # Group User Permissions

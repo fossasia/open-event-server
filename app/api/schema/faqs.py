@@ -33,5 +33,5 @@ class FaqSchema(Schema):
                             self_view_kwargs={'id': '<id>'},
                             related_view='v1.faq_type_detail',
                             related_view_kwargs={'faq_id': '<id>'},
-                            schema='FaqSchemaPublic',
+                            schema='FaqTypeSchemaPublic',
                             type_='faq-type')
