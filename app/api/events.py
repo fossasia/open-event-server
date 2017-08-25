@@ -283,6 +283,13 @@ def get_id(view_kwargs):
         else:
             view_kwargs['id'] = None
 
+    if view_kwargs.get('order_identifier') is not None:
+        order = safe_query(db, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
+        if order.event_id is not None:
+            view_kwargs['id'] = order.event_id
+        else:
+            view_kwargs['id'] = None
+
     return view_kwargs
 
 
@@ -293,16 +300,6 @@ class EventDetail(ResourceDetail):
             self.schema = EventSchema
         else:
             self.schema = EventSchemaPublic
-
-    def before_get_object(self, view_kwargs):
-        get_id(view_kwargs)
-
-        if view_kwargs.get('order_identifier') is not None:
-            order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
-            if order.event_id is not None:
-                view_kwargs['id'] = order.event_id
-            else:
-                view_kwargs['id'] = None
 
     def before_update_object(self, event, data, view_kwargs):
         if data.get('original_image_url') and data['original_image_url'] != event.original_image_url:
@@ -318,7 +315,6 @@ class EventDetail(ResourceDetail):
     data_layer = {'session': db.session,
                   'model': Event,
                   'methods': {
-                      'before_get_object': before_get_object,
                       'before_update_object': before_update_object
                   }}
 
