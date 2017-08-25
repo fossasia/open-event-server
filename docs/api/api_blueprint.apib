@@ -2706,6 +2706,12 @@ Get a list of events.
                                 "related": "/v1/events/1/faqs"
                             }
                         },
+                        "faq-types": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/faq-types",
+                                "related": "/v1/events/1/faq-types"
+                            }
+                        },
                         "attendees": {
                             "links": {
                                 "self": "/v1/events/1/relationships/attendees",
@@ -2980,6 +2986,12 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                             "related": "/v1/events/1/faqs"
                         }
                     },
+                    "faq-types": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/faq-types",
+                            "related": "/v1/events/1/faq-types"
+                        }
+                    },
                     "attendees": {
                         "links": {
                             "self": "/v1/events/1/relationships/attendees",
@@ -3211,6 +3223,12 @@ Get a single event.
                         "links": {
                             "self": "/v1/events/1/relationships/faqs",
                             "related": "/v1/events/1/faqs"
+                        }
+                    },
+                    "faq-types": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/faq-types",
+                            "related": "/v1/events/1/faq-types"
                         }
                     },
                     "attendees": {
@@ -3491,6 +3509,12 @@ All other fields are optional. Add attributes you want to modify.
                             "related": "/v1/events/1/faqs"
                         }
                     },
+                    "faq-types": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/faq-types",
+                            "related": "/v1/events/1/faq-types"
+                        }
+                    },
                     "attendees": {
                         "links": {
                             "self": "/v1/events/1/relationships/attendees",
@@ -3719,6 +3743,12 @@ Get a list of events.
                                 "related": "/v1/events/1/faqs"
                             }
                         },
+                        "faq-types": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/faq-types",
+                                "related": "/v1/events/1/faq-types"
+                            }
+                        },
                         "attendees": {
                             "links": {
                                 "self": "/v1/events/1/relationships/attendees",
@@ -3942,6 +3972,12 @@ Get a list of events.
                             "links": {
                                 "self": "/v1/events/1/relationships/faqs",
                                 "related": "/v1/events/1/faqs"
+                            }
+                        },
+                        "faq-types": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/faq-types",
+                                "related": "/v1/events/1/faq-types"
                             }
                         },
                         "attendees": {
@@ -18474,6 +18510,282 @@ Get a list of FAQs for an event.
                 "self": "/v1/events/1/faqs"
             }
         }
+
+
+# Group FAQ Types
+FAQ Types related to the events.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name to be given to the FAQ type | string | **yes** |
+
+
+## FAQ Type Collection [/v1/faq-types{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/iltering.html for more.
+
+### Create FAQ Type [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "name": "abc"
+                },
+                "type": "faq-type",
+                "relationships": {
+                  "event": {
+                    "data": {
+                      "id": "1",
+                      "type": "event"
+                    }
+                  }
+                }
+              }
+            }
+
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/session-types/1/relationships/event",
+                            "related": "/v1/session-types/1/event"
+                        }
+                    },
+                    "faqs": {
+                        "links": {
+                            "self": "/v1/faq-types/1/relationships/faqs",
+                            "related": "/v1/faq-types/1/faqs"
+                        }
+                    }
+                },
+                "attributes": {
+                    "name": "abc"
+                },
+                "type": "faq-type",
+                "id": "1",
+                "links": {
+                    "self": "/v1/faq-types/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/faq-types/1"
+            }
+        }
+
+
+## FAQ Type Detail [/v1/faq-types/{faq_type_id}]
++ Parameters
+    + faq_type_id: 1 (integer) - ID of the FAQ in the form of an integer
+
+### FAQ Detail [GET]
+Get a single FAQ.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/session-types/1/relationships/event",
+                            "related": "/v1/session-types/1/event"
+                        }
+                    },
+                    "faqs": {
+                        "links": {
+                            "self": "/v1/faq-types/1/relationships/faqs",
+                            "related": "/v1/faq-types/1/faqs"
+                        }
+                    }
+                },
+                "attributes": {
+                    "name": "abc"
+                },
+                "type": "faq-type",
+                "id": "1",
+                "links": {
+                    "self": "/v1/faq-types/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/faq-types/1"
+            }
+        }
+
+
+### Update FAQ [PATCH]
+Update a single FAQ with `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "name": "xyz"
+                },
+                "type": "faq-type",
+                "id": 1
+              }
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+       {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/session-types/1/relationships/event",
+                            "related": "/v1/session-types/1/event"
+                        }
+                    },
+                    "faqs": {
+                        "links": {
+                            "self": "/v1/faq-types/1/relationships/faqs",
+                            "related": "/v1/faq-types/1/faqs"
+                        }
+                    }
+                },
+                "attributes": {
+                    "name": "xyz"
+                },
+                "type": "faq-type",
+                "id": "1",
+                "links": {
+                    "self": "/v1/faq-types/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/faq-types/1"
+            }
+        }
+
+
+### Delete FAQ [DELETE]
+Delete a single FAQ.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
+
+## Event FAQ Collection [/v1/events/{event_identifier}/faq-typess{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/iltering.html for more.
+
+### List All FAQ Types for an Event [GET]
+Get a list of FAQ Types for an event.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "event": {
+                            "links": {
+                                "self": "/v1/session-types/1/relationships/event",
+                                "related": "/v1/session-types/1/event"
+                            }
+                        },
+                        "faqs": {
+                            "links": {
+                                "self": "/v1/faq-types/1/relationships/faqs",
+                                "related": "/v1/faq-types/1/faqs"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "name": "abc"
+                    },
+                    "type": "faq-type",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/faq-types/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/events/17/faq-types"
+            }
+        }
+
 
 # Group User Permissions
 
