@@ -105,6 +105,14 @@ class EventSchemaPublic(Schema):
                            schema='TicketSchemaPublic',
                            many=True,
                            type_='ticket')
+    faqs = Relationship(attribute='faqs',
+                        self_view='v1.event_faqs',
+                        self_view_kwargs={'id': '<id>'},
+                        related_view='v1.faq_list',
+                        related_view_kwargs={'event_id': '<id>'},
+                        schema='FaqSchema',
+                        many=True,
+                        type_='faq')
     ticket_tags = Relationship(attribute='ticket_tags',
                                self_view='v1.event_ticket_tag',
                                self_view_kwargs={'id': '<id>'},

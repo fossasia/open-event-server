@@ -58,6 +58,7 @@ class Event(db.Model):
     roles = db.relationship("UsersEventsRoles", backref="event")
     role_invites = db.relationship('RoleInvite', back_populates='event')
     custom_form = db.relationship('CustomForms', backref="event")
+    faqs = db.relationship('Faq', backref="event")
     attendees = db.relationship('TicketHolder', backref="event")
     privacy = db.Column(db.String, default="public")
     state = db.Column(db.String, default="Draft")
