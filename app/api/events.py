@@ -136,6 +136,13 @@ def get_id(view_kwargs):
         else:
             view_kwargs['id'] = None
 
+    if view_kwargs.get('faq_type_id') is not None:
+        faq_type = safe_query(db, SessionType, 'id', view_kwargs['faq_type_id'], 'faq_type_id')
+        if faq_type.event_id is not None:
+            view_kwargs['id'] = faq_type.event_id
+        else:
+            view_kwargs['id'] = None
+
     if view_kwargs.get('event_invoice_id') is not None:
         event_invoice = safe_query(db, EventInvoice, 'id', view_kwargs['event_invoice_id'], 'event_invoice_id')
         if event_invoice.event_id is not None:

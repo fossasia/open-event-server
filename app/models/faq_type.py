@@ -8,6 +8,8 @@ class FaqType(db.Model):
     name = db.Column(db.String, nullable=False)
     event_id = db.Column(db.Integer,
                          db.ForeignKey('events.id', ondelete='CASCADE'))
+    event = db.relationship("Event", backref="faq_types", foreign_keys=[event_id])
+    faqs = db.relationship('Faq', backref="faq_type")
 
     def __init__(self, name=None, event_id=None):
         self.name = name
