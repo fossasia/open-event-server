@@ -42,6 +42,8 @@ from app.models.event import Event
 from app.models.role_invite import RoleInvite
 from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations, check_migrations
 from app.views.sentry import sentry
+from app.views.elasticsearch import es
+from app.views.redis_store import redis_store
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -101,7 +103,7 @@ def create_app():
     _jwt = JWT(app, jwt_authenticate, jwt_identity)
 
     # setup celery
-    app.config['CELERY_BROKER_URL'] = environ.get('REDIS_URL', 'redis://localhost:6379/0')
+    app.config['CELERY_BROKER_URL'] = app.config['REDIS_URL']
     app.config['CELERY_RESULT_BACKEND'] = app.config['CELERY_BROKER_URL']
 
     CORS(app, resources={r"/*": {"origins": "*"}})
@@ -139,6 +141,12 @@ def create_app():
     # sentry
     if 'SENTRY_DSN' in app.config:
         sentry.init_app(app, dsn=app.config['SENTRY_DSN'])
+
+    # elasticsearch
+    es.init_app(app)
+
+    # redis
+    redis_store.init_app(app)
 
     return app, _manager, db, _jwt
 
@@ -199,6 +207,7 @@ def update_sent_state(sender=None, body=None, **kwargs):
 # it is important to register them after celery is defined to resolve circular imports
 
 import api.helpers.tasks
+
 # import helpers.tasks
 
 

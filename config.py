@@ -55,6 +55,8 @@ class Config(object):
     SERVE_STATIC = env.bool('SERVE_STATIC', default=False)
     DATABASE_QUERY_TIMEOUT = 0.1
     SENTRY_DSN = env('SENTRY_DSN', default=None)
+    ENABLE_ELASTICSEARCH = False
+    REDIS_URL = env('REDIS_URL', default='redis://localhost:6379/0')
 
     # API configs
     SOFT_DELETE = True

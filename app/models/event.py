@@ -3,12 +3,15 @@ import os
 import pytz
 import flask_login as login
 from datetime import datetime
+from sqlalchemy import event
+from flask import current_app
 
 from app.api.helpers.db import get_count
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.email_notification import EmailNotification
 from app.models.user import ATTENDEE, ORGANIZER
 from app.models import db
+from app.views.redis_store import redis_store
 
 
 def get_new_event_identifier(length=8):
@@ -287,3 +290,28 @@ class Event(db.Model):
     def get_staff_roles(self):
         """returns only roles which are staff i.e. not attendee"""
         return [role for role in self.roles if role.role.name != ATTENDEE]
+
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+
+@event.listens_for(Event, 'after_update')
+@event.listens_for(Event, 'after_insert')
+def receive_init(mapper, connection, target):
+    """
+    listen for the 'init' event
+    """
+    if current_app.config['ENABLE_ELASTICSEARCH']:
+        if target.status == 'published' and target.deleted_at is None:
+            redis_store.sadd('event_index', target.id)
+        elif target.deleted_at:
+            redis_store.sadd('event_delete', target.id)
+
+
+@event.listens_for(Event, 'after_delete')
+def receive_after_delete(mapper, connection, target):
+    """
+    listen for the 'after_delete' event
+    """
+    if current_app.config['ENABLE_ELASTICSEARCH']:
+        redis_store.sadd('event_delete', target.id)
