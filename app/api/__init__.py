@@ -45,6 +45,7 @@ from app.api.access_codes import AccessCodeList, AccessCodeListPost, AccessCodeD
     AccessCodeRelationshipOptional
 from app.api.custom_forms import CustomFormList, CustomFormListPost, CustomFormDetail, CustomFormRelationshipRequired
 from app.api.faqs import FaqListPost, FaqList, FaqDetail, FaqRelationshipRequired, FaqRelationshipOptional
+from app.api.feedbacks import FeedbackListPost, FeedbackList, FeedbackDetail, FeedbackRelationshipRequired
 from app.api.modules import ModuleDetail
 from app.api.custom_placeholders import CustomPlaceholderList, CustomPlaceholderDetail, CustomPlaceholderRelationship
 from app.api.activities import ActivityList, ActivityDetail
@@ -66,8 +67,9 @@ api.route(UserDetail, 'user_detail', '/users/<int:id>', '/notifications/<int:not
           '/event-invoices/<int:event_invoice_id>/user', '/speakers/<int:speaker_id>/user',
           '/access-codes/<int:access_code_id>/marketer', '/email-notifications/<int:email_notification_id>/user',
           '/discount-codes/<int:discount_code_id>/marketer', '/sessions/<int:session_id>/creator',
-          '/attendees/<int:attendee_id>/user')
+          '/attendees/<int:attendee_id>/user', '/feedbacks/<int:feedback_id>/user')
 api.route(UserRelationship, 'user_notification', '/users/<int:id>/relationships/notifications')
+api.route(UserRelationship, 'user_feedback', '/users/<int:id>/relationships/feedbacks')
 api.route(UserRelationship, 'user_event_invoices', '/users/<int:id>/relationships/event-invoices')
 api.route(UserRelationship, 'user_speaker', '/users/<int:id>/relationships/speakers')
 api.route(UserRelationship, 'user_session', '/users/<int:id>/relationships/sessions')
@@ -168,7 +170,8 @@ api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>
           '/role-invites/<int:role_invite_id>/event', '/speakers/<int:speaker_id>/event',
           '/access-codes/<int:access_code_id>/event', '/email-notifications/<int:email_notification_id>/event',
           '/attendees/<int:attendee_id>/event', '/custom-forms/<int:custom_form_id>/event',
-          '/orders/<order_identifier>/event', '/faqs/<int:faq_id>/event', '/faq-types/<int:faq_type_id>/event')
+          '/orders/<order_identifier>/event', '/faqs/<int:faq_id>/event', '/faq-types/<int:faq_type_id>/event',
+          '/feedbacks/<int:feedback_id>/event')
 api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/tickets',
           '/events/<identifier>/relationships/tickets')
 api.route(EventRelationship, 'event_ticket_tag', '/events/<int:id>/relationships/ticket-tags',
@@ -213,8 +216,13 @@ api.route(EventRelationship, 'event_custom_forms', '/events/<int:id>/relationshi
           '/events/<identifier>/relationships/custom-forms')
 api.route(EventRelationship, 'event_faqs', '/events/<int:id>/relationships/faqs',
           '/events/<identifier>/relationships/faqs')
+<<<<<<< 4a9f9608bb46d88807855e50d1c98a7ae48199d5
 api.route(EventRelationship, 'event_faq_types', '/events/<int:id>/relationships/faq-types',
           '/events/<identifier>/relationships/faq-types')
+=======
+api.route(EventRelationship, 'event_feedbacks', '/events/<int:id>/relationships/feedbacks',
+          '/events/<identifier>/relationships/feedbacks')
+>>>>>>> Create Feedback schema and API resources
 api.route(EventRelationship, 'event_orders', '/events/<int:id>/relationships/orders',
           '/events/<identifier>/relationships/orders')
 # Events -> roles:
@@ -445,6 +453,15 @@ api.route(FaqList, 'faq_list', '/events/<int:event_id>/faqs', '/events/<event_id
 api.route(FaqDetail, 'faq_detail', '/faqs/<int:id>')
 api.route(FaqRelationshipRequired, 'faq_event', '/faqs/<int:id>/relationships/event')
 api.route(FaqRelationshipOptional, 'faq_faq_type', '/faqs/<int:id>/relationships/faq-type')
+
+# Feedback
+api.route(FeedbackListPost, 'feedback_list_post', '/feedbacks')
+api.route(FeedbackList, 'feedback_list', '/events/<int:event_id>/feedbacks', '/events/<event_identifier>/feedbacks',
+          '/users/<int:user_id>/feedbacks')
+api.route(FeedbackDetail, 'feedback_detail', '/feedbacks/<int:id>')
+api.route(FeedbackRelationshipRequired, 'feedback_event', '/feedbacks/<int:id>/relationships/event')
+api.route(FeedbackRelationshipRequired, 'feedback_user',
+          '/feedbacks/<int:id>/relationships/user')
 
 # Stripe Authorization API
 api.route(StripeAuthorizationListPost, 'stripe_authorization_list_post', '/stripe-authorization')

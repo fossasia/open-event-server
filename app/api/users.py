@@ -16,6 +16,7 @@ from app.models.email_notification import EmailNotification
 from app.models.event_invoice import EventInvoice
 from app.models.mail import USER_REGISTER_WITH_PASSWORD
 from app.models.notification import Notification
+from app.models.feedback import Feedback
 from app.models.speaker import Speaker
 from app.models.session import Session
 from app.api.helpers.exceptions import ConflictException
@@ -73,6 +74,14 @@ class UserDetail(ResourceDetail):
             notification = safe_query(self, Notification, 'id', view_kwargs['notification_id'], 'notification_id')
             if notification.user_id is not None:
                 view_kwargs['id'] = notification.user_id
+            else:
+                view_kwargs['id'] = None
+
+        if view_kwargs.get('feedback_id') is not None:
+            print view_kwargs['feedback_id']
+            feedback = safe_query(self, Feedback, 'id', view_kwargs['feedback_id'], 'feedback_id')
+            if feedback.user_id is not None:
+                view_kwargs['id'] = feedback.user_id
             else:
                 view_kwargs['id'] = None
 
@@ -150,9 +159,9 @@ class UserDetail(ResourceDetail):
             send_email_change_user_email(user.email, view_kwargs.get('email_changed'))
 
     decorators = (api.has_permission('is_user_itself', fetch="user_id,id", fetch_as="id",
-                  model=[Notification, UsersEventsRoles, Session, EventInvoice, AccessCode,
+                  model=[Notification, Feedback, UsersEventsRoles, Session, EventInvoice, AccessCode,
                          DiscountCode, EmailNotification, Speaker, User],
-                  fetch_key_url="notification_id, users_events_role_id, session_id, \
+                  fetch_key_url="notification_id, feedback_id, users_events_role_id, session_id, \
                   event_invoice_id, access_code_id, discount_code_id, email_notification_id, speaker_id, id",
                                      leave_if=lambda a: a.get('attendee_id')), )
     schema = UserSchema

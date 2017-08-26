@@ -17,6 +17,7 @@ from app.models import db
 from app.models.access_code import AccessCode
 from app.models.custom_form import CustomForms
 from app.models.faq import Faq
+from app.models.feedback import Feedback
 from app.models.discount_code import DiscountCode
 from app.models.event import Event
 from app.models.event_invoice import EventInvoice
@@ -295,6 +296,13 @@ def get_id(view_kwargs):
         order = safe_query(db, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
         if order.event_id is not None:
             view_kwargs['id'] = order.event_id
+        else:
+            view_kwargs['id'] = None
+
+    if view_kwargs.get('feedback_id') is not None:
+        feedback = safe_query(db, Feedback, 'id', view_kwargs['feedback_id'], 'feedback_id')
+        if feedback.event_id is not None:
+            view_kwargs['id'] = feedback.event_id
         else:
             view_kwargs['id'] = None
 

@@ -120,6 +120,14 @@ class EventSchemaPublic(Schema):
                              schema='FaqTypeSchema',
                              many=True,
                              type_='faq_type')
+    feedbacks = Relationship(attribute='feedbacks',
+                             self_view='v1.event_feedbacks',
+                             self_view_kwargs={'id': '<id>'},
+                             related_view='v1.feedback_list',
+                             related_view_kwargs={'event_id': '<id>'},
+                             schema='FeedbackSchema',
+                             many=True,
+                             type_='feedback')
     ticket_tags = Relationship(attribute='ticket_tags',
                                self_view='v1.event_ticket_tag',
                                self_view_kwargs={'id': '<id>'},
