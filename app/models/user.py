@@ -70,6 +70,7 @@ class User(db.Model):
     deleted_at = db.Column(db.DateTime(timezone=True))
     speaker = db.relationship('Speaker', backref="user")
     session = db.relationship('Session', backref="user")
+    feedback = db.relationship('Feedback', backref="user")
     access_codes = db.relationship('AccessCode', backref="user")
     discount_codes = db.relationship('DiscountCode', backref="user")
 
