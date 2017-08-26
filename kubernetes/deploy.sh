@@ -9,6 +9,7 @@ if [ "$1" = "delete" ]; then
     fi
     kubectl delete -f ${DIR}/yamls/postgres/00-namespace.yml
     kubectl delete -f ${DIR}/yamls/redis/00-namespace.yml
+    kubectl delete -f ${DIR}/yamls/elasticsearch/00-namespace.yml
     kubectl delete -f ${DIR}/yamls/web/00-namespace.yml
     echo "Done. The project was removed from the cluster."
 elif [ "$1" = "create" ]; then
@@ -21,7 +22,9 @@ elif [ "$1" = "create" ]; then
     fi
     # Start Redis deployment & service
     kubectl create -R -f ${DIR}/yamls/redis
-    # Start postgres persistent volume, deployment & service
+    # Start Elasticsearch deployment & service
+    kubectl create -R -f ${DIR}/yamls/elasticsearch
+    # Start postgres deployment & service
     kubectl create -R -f ${DIR}/yamls/postgres
     echo "Waiting for postgres to startup. Will start in ~30s."
     sleep 30
