@@ -9,7 +9,6 @@ from celery import Celery
 from celery.signals import after_task_publish
 import logging
 import os.path
-from os import environ
 from envparse import env
 import sys
 from flask import Flask, json, make_response
@@ -42,8 +41,9 @@ from app.models.event import Event
 from app.models.role_invite import RoleInvite
 from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations, check_migrations
 from app.views.sentry import sentry
-from app.views.elastic_search import es, refresh_elasticsearch
+from app.views.elastic_search import es, rebuild_events_elasticsearch
 from app.views.redis_store import redis_store
+from app.views.celery_ import celery
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -162,7 +162,6 @@ def track_user():
 
 
 def make_celery(app):
-    celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])
     celery.conf.update(app.config)
     task_base = celery.Task
 
@@ -192,7 +191,7 @@ with current_app.app_context():
 health.add_check(health_check_migrations)
 
 with current_app.app_context():
-    refresh_elasticsearch.delay()
+    rebuild_events_elasticsearch()
 
 
 # http://stackoverflow.com/questions/9824172/find-out-whether-celery-task-exists

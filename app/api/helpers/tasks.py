@@ -1,7 +1,7 @@
 import requests
 from marrow.mailer import Mailer, Message
 
-from app import celery
+from app.views.celery_ import celery
 from app.api.helpers.utilities import strip_tags
 
 """
@@ -10,8 +10,6 @@ This is done to resolve circular imports
 """
 import logging
 import traceback
-
-from flask import url_for
 
 from app.api.helpers.request_context_task import RequestContextTask
 from app.api.helpers.mail import send_export_mail, send_import_mail
@@ -23,7 +21,6 @@ from app.models.user import User
 from app.models import db
 from app.api.exports import event_export_task_base
 from app.api.imports import import_event_task_base
-from app.views.elastic_search import es
 
 
 @celery.task(name='send.email.post')
