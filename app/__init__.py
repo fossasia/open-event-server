@@ -42,7 +42,7 @@ from app.models.event import Event
 from app.models.role_invite import RoleInvite
 from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations, check_migrations
 from app.views.sentry import sentry
-from app.views.elasticsearch import es
+from app.views.elastic_search import es, refresh_elasticsearch
 from app.views.redis_store import redis_store
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -190,6 +190,9 @@ health.add_check(health_check_db)
 with current_app.app_context():
     current_app.config['MIGRATION_STATUS'] = check_migrations()
 health.add_check(health_check_migrations)
+
+with current_app.app_context():
+    refresh_elasticsearch.delay()
 
 
 # http://stackoverflow.com/questions/9824172/find-out-whether-celery-task-exists
