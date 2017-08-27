@@ -23,7 +23,7 @@ from app.models.user import User
 from app.models import db
 from app.api.exports import event_export_task_base
 from app.api.imports import import_event_task_base
-from app.settings import get_settings
+from app.views.elastic_search import es
 
 
 @celery.task(name='send.email.post')
