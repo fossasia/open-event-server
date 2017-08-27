@@ -44,6 +44,7 @@ from app.api.attendees import AttendeeList, AttendeeDetail, AttendeeRelationship
 from app.api.access_codes import AccessCodeList, AccessCodeListPost, AccessCodeDetail, AccessCodeRelationshipRequired, \
     AccessCodeRelationshipOptional
 from app.api.custom_forms import CustomFormList, CustomFormListPost, CustomFormDetail, CustomFormRelationshipRequired
+from app.api.faqs import FaqListPost, FaqList, FaqDetail, FaqRelationshipRequired
 from app.api.modules import ModuleDetail
 from app.api.custom_placeholders import CustomPlaceholderList, CustomPlaceholderDetail, CustomPlaceholderRelationship
 from app.api.activities import ActivityList, ActivityDetail
@@ -166,7 +167,7 @@ api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>
           '/role-invites/<int:role_invite_id>/event', '/speakers/<int:speaker_id>/event',
           '/access-codes/<int:access_code_id>/event', '/email-notifications/<int:email_notification_id>/event',
           '/attendees/<int:attendee_id>/event', '/custom-forms/<int:custom_form_id>/event',
-          '/orders/<order_identifier>/event')
+          '/orders/<order_identifier>/event', '/faqs/<int:faq_id>/event')
 api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/tickets',
           '/events/<identifier>/relationships/tickets')
 api.route(EventRelationship, 'event_ticket_tag', '/events/<int:id>/relationships/ticket-tags',
@@ -209,6 +210,8 @@ api.route(EventRelationship, 'event_attendees', '/events/<int:id>/relationships/
           '/events/<identifier>/relationships/attendees')
 api.route(EventRelationship, 'event_custom_forms', '/events/<int:id>/relationships/custom-forms',
           '/events/<identifier>/relationships/custom-forms')
+api.route(EventRelationship, 'event_faqs', '/events/<int:id>/relationships/faqs',
+          '/events/<identifier>/relationships/faqs')
 api.route(EventRelationship, 'event_orders', '/events/<int:id>/relationships/orders',
           '/events/<identifier>/relationships/orders')
 # Events -> roles:
@@ -420,6 +423,12 @@ api.route(CustomFormList, 'custom_form_list', '/events/<int:event_id>/custom-for
 api.route(CustomFormDetail, 'custom_form_detail', '/custom-forms/<int:id>')
 api.route(CustomFormRelationshipRequired, 'custom_form_event',
           '/custom-forms/<int:id>/relationships/event')
+
+# FAQ
+api.route(FaqListPost, 'faq_list_post', '/faqs')
+api.route(FaqList, 'faq_list', '/events/<int:event_id>/faqs', '/events/<event_identifier>/faqs')
+api.route(FaqDetail, 'faq_detail', '/faqs/<int:id>')
+api.route(FaqRelationshipRequired, 'faq_event', '/faqs/<int:id>/relationships/event')
 
 # Stripe Authorization API
 api.route(StripeAuthorizationListPost, 'stripe_authorization_list_post', '/stripe-authorization')

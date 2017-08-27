@@ -26,6 +26,7 @@ from app.factories.event_type import EventTypeFactory
 from app.factories.discount_code import DiscountCodeFactory
 from app.factories.access_code import AccessCodeFactory
 from app.factories.custom_form import CustomFormFactory
+from app.factories.faq import FaqFactory
 from app.factories.event_topic import EventTopicFactory
 from app.factories.event_invoice import EventInvoiceFactory
 from app.factories.event_sub_topic import EventSubTopicFactory
@@ -49,6 +50,7 @@ from app.factories.email_notification import EmailNotificationFactory
 from app.factories.activities import ActivityFactory
 from app.factories.stripe_authorization import StripeAuthorizationFactory
 from app.factories.mail import MailFactory
+from app.factories.order import OrderFactory
 
 
 stash = {}
@@ -659,6 +661,19 @@ def event_custom_form(transaction):
     with stash['app'].app_context():
         custom_form = CustomFormFactory()
         db.session.add(custom_form)
+        db.session.commit()
+
+
+@hooks.before("Events > Get Event for a FAQ > Event Details for a FAQ")
+def event_faq(transaction):
+    """
+    GET /faqs/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        faq = FaqFactory()
+        db.session.add(faq)
         db.session.commit()
 
 
@@ -2601,6 +2616,73 @@ def custom_form_get_list(transaction):
         db.session.commit()
 
 
+# ------------------------- FAQ -------------------------
+@hooks.before("FAQ > FAQ Collection > Create FAQ")
+def faq_post(transaction):
+    """
+    POST /faqs
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("FAQ > FAQ Detail > FAQ Detail")
+def faq_get_detail(transaction):
+    """
+    GET /faqs/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        faq = FaqFactory()
+        db.session.add(faq)
+        db.session.commit()
+
+
+@hooks.before("FAQ > FAQ Detail > Update FAQ")
+def faq_patch(transaction):
+    """
+    PATCH /faqs/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        faq = FaqFactory()
+        db.session.add(faq)
+        db.session.commit()
+
+
+@hooks.before("FAQ > FAQ Detail > Delete FAQ")
+def faq_delete(transaction):
+    """
+    DELETE /faqs/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        faq = FaqFactory()
+        db.session.add(faq)
+        db.session.commit()
+
+
+@hooks.before(
+    "FAQ > Event FAQ Collection > List All FAQs for an Event")
+def faq_get_list(transaction):
+    """
+    GET /events/1/faqs
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        faq = FaqFactory()
+        db.session.add(faq)
+        db.session.commit()
+
+
 # ------------------------- Role Invites -------------------------
 @hooks.before("Role Invites > Role Invites Collection List > List All Role Invites")
 def role_invite_get_list(transaction):
@@ -3308,4 +3390,46 @@ def create_event_copy(transaction):
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Events > Get Event for a Order > Event Details for a Order")
+def get_event_from_order(transaction):
+    """
+    GET /v1/orders/{identifier}/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        order = OrderFactory()
+        order.identifier = "7201904e"
+        db.session.add(order)
+        db.session.commit()
+
+
+@hooks.before("Tickets > List Tickets for an Order > List Tickets")
+def get_tickets_from_order(transaction):
+    """
+    GET /v1/orders/{identifier}/tickets
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        order = OrderFactory()
+        order.identifier = "7201904e"
+        db.session.add(order)
+        db.session.commit()
+
+
+@hooks.before("Attendees > List Attendees under an order > List All Attendees under an order")
+def get_attendees_from_order(transaction):
+    """
+    GET /v1/orders/{identifier}/attendees
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        order = OrderFactory()
+        order.identifier = "7201904e"
+        db.session.add(order)
         db.session.commit()
