@@ -44,7 +44,7 @@ from app.api.attendees import AttendeeList, AttendeeDetail, AttendeeRelationship
 from app.api.access_codes import AccessCodeList, AccessCodeListPost, AccessCodeDetail, AccessCodeRelationshipRequired, \
     AccessCodeRelationshipOptional
 from app.api.custom_forms import CustomFormList, CustomFormListPost, CustomFormDetail, CustomFormRelationshipRequired
-from app.api.faqs import FaqListPost, FaqList, FaqDetail, FaqRelationshipRequired
+from app.api.faqs import FaqListPost, FaqList, FaqDetail, FaqRelationshipRequired, FaqRelationshipOptional
 from app.api.modules import ModuleDetail
 from app.api.custom_placeholders import CustomPlaceholderList, CustomPlaceholderDetail, CustomPlaceholderRelationship
 from app.api.activities import ActivityList, ActivityDetail
@@ -57,7 +57,8 @@ from app.api.admin_statistics_api.users import AdminStatisticsUserDetail
 from app.api.admin_statistics_api.mails import AdminStatisticsMailDetail
 from app.api.order_statistics.events import OrderStatisticsEventDetail
 from app.api.order_statistics.tickets import OrderStatisticsTicketDetail
-
+from app.api.faq_types import FaqTypeList, FaqTypeListPost, FaqTypeDetail, FaqTypeRelationshipOptional, \
+    FaqTypeRelationshipRequired
 
 # users
 api.route(UserList, 'user_list', '/users')
@@ -167,7 +168,7 @@ api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>
           '/role-invites/<int:role_invite_id>/event', '/speakers/<int:speaker_id>/event',
           '/access-codes/<int:access_code_id>/event', '/email-notifications/<int:email_notification_id>/event',
           '/attendees/<int:attendee_id>/event', '/custom-forms/<int:custom_form_id>/event',
-          '/orders/<order_identifier>/event', '/faqs/<int:faq_id>/event')
+          '/orders/<order_identifier>/event', '/faqs/<int:faq_id>/event', '/faq-types/<int:faq_type_id>/event')
 api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/tickets',
           '/events/<identifier>/relationships/tickets')
 api.route(EventRelationship, 'event_ticket_tag', '/events/<int:id>/relationships/ticket-tags',
@@ -212,6 +213,8 @@ api.route(EventRelationship, 'event_custom_forms', '/events/<int:id>/relationshi
           '/events/<identifier>/relationships/custom-forms')
 api.route(EventRelationship, 'event_faqs', '/events/<int:id>/relationships/faqs',
           '/events/<identifier>/relationships/faqs')
+api.route(EventRelationship, 'event_faq_types', '/events/<int:id>/relationships/faq-types',
+          '/events/<identifier>/relationships/faq-types')
 api.route(EventRelationship, 'event_orders', '/events/<int:id>/relationships/orders',
           '/events/<identifier>/relationships/orders')
 # Events -> roles:
@@ -297,6 +300,17 @@ api.route(SessionTypeRelationshipOptional, 'session_type_sessions',
           '/session-types/<int:id>/relationships/sessions')
 api.route(SessionTypeRelationshipRequired, 'session_type_event',
           '/session-types/<int:id>/relationships/event')
+
+# faq_types
+api.route(FaqTypeListPost, 'faq_type_list_post', '/faq-types')
+api.route(FaqTypeList, 'faq_type_list', '/events/<int:event_id>/faq-types',
+          '/events/<event_identifier>/faq-types')
+api.route(FaqTypeDetail, 'faq_type_detail', '/faq-types/<int:id>',
+          '/faqs/<int:faq_id>/faq-type')
+api.route(FaqTypeRelationshipOptional, 'faq_type_faqs',
+          '/faq-types/<int:id>/relationships/faqs')
+api.route(FaqTypeRelationshipRequired, 'faq_type_event',
+          '/faq-types/<int:id>/relationships/event')
 
 # speakers
 api.route(SpeakerListPost, 'speaker_list_post', '/speakers')
@@ -426,9 +440,11 @@ api.route(CustomFormRelationshipRequired, 'custom_form_event',
 
 # FAQ
 api.route(FaqListPost, 'faq_list_post', '/faqs')
-api.route(FaqList, 'faq_list', '/events/<int:event_id>/faqs', '/events/<event_identifier>/faqs')
+api.route(FaqList, 'faq_list', '/events/<int:event_id>/faqs', '/events/<event_identifier>/faqs',
+          '/faq-types/<int:faq_type_id>/faqs')
 api.route(FaqDetail, 'faq_detail', '/faqs/<int:id>')
 api.route(FaqRelationshipRequired, 'faq_event', '/faqs/<int:id>/relationships/event')
+api.route(FaqRelationshipOptional, 'faq_faq_type', '/faqs/<int:id>/relationships/faq-type')
 
 # Stripe Authorization API
 api.route(StripeAuthorizationListPost, 'stripe_authorization_list_post', '/stripe-authorization')

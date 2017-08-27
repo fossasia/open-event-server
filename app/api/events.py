@@ -41,6 +41,7 @@ from app.models.social_link import SocialLink
 from app.models.tax import Tax
 from app.models.event_copyright import EventCopyright
 from app.models.order import Order
+from app.models.faq_type import FaqType
 
 
 class EventList(ResourceList):
@@ -133,6 +134,13 @@ def get_id(view_kwargs):
         session_type = safe_query(db, SessionType, 'id', view_kwargs['session_type_id'], 'session_type_id')
         if session_type.event_id is not None:
             view_kwargs['id'] = session_type.event_id
+        else:
+            view_kwargs['id'] = None
+
+    if view_kwargs.get('faq_type_id') is not None:
+        faq_type = safe_query(db, FaqType, 'id', view_kwargs['faq_type_id'], 'faq_type_id')
+        if faq_type.event_id is not None:
+            view_kwargs['id'] = faq_type.event_id
         else:
             view_kwargs['id'] = None
 
