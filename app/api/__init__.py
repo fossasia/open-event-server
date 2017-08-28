@@ -216,13 +216,10 @@ api.route(EventRelationship, 'event_custom_forms', '/events/<int:id>/relationshi
           '/events/<identifier>/relationships/custom-forms')
 api.route(EventRelationship, 'event_faqs', '/events/<int:id>/relationships/faqs',
           '/events/<identifier>/relationships/faqs')
-<<<<<<< 4a9f9608bb46d88807855e50d1c98a7ae48199d5
 api.route(EventRelationship, 'event_faq_types', '/events/<int:id>/relationships/faq-types',
           '/events/<identifier>/relationships/faq-types')
-=======
 api.route(EventRelationship, 'event_feedbacks', '/events/<int:id>/relationships/feedbacks',
           '/events/<identifier>/relationships/feedbacks')
->>>>>>> Create Feedback schema and API resources
 api.route(EventRelationship, 'event_orders', '/events/<int:id>/relationships/orders',
           '/events/<identifier>/relationships/orders')
 # Events -> roles:
