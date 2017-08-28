@@ -3,7 +3,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
@@ -87,6 +87,14 @@ class AttendeeDetail(ResourceDetail):
     def before_update_object(self, obj, data, kwargs):
         if not has_access('is_registrar', event_id=obj.event_id):
             raise ForbiddenException({'source': 'User'}, 'You are not authorized to access this.')
+
+        if 'is_checked_in' in data:
+            if data['is_checked_in'] and 'checkin_times' not in data:
+                raise UnprocessableEntity({'pointer': '/data/attributes/checkin_times'},
+                                          "Check in time missing while trying to check in attendee")
+
+            if obj.checkin_times and data['checkin_times'] not in obj.checkin_times.split(","):
+                data['checkin_times'] = '{},{}'.format(obj.checkin_times, data['checkin_times'])
 
     decorators = (jwt_required,)
     schema = AttendeeSchema
