@@ -20022,6 +20022,11 @@ To update or get any attribute of this data layer, you will need admin access. H
 | `android-app-url`  | Android app url | string | **yes** |
 | `web-app-url`  | Web App url | string | **yes** |
 
+**Frontend Url**
+| Parameter | Description | Type | Admin Only |
+|:----------|-------------|------|------------|
+| `frontend-url`  | Url of Open Event Frontend | string (url with scheme) | - |
+
 ## Settings Details [/v1/settings{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -20092,7 +20097,8 @@ To update or get any attribute of this data layer, you will need admin access. H
               "youtube-url": "http://example.com",
               "android-app-url": "http://example.com",
               "web-app-url": "http://example.com",
-              "static-domain": "http://example.com"
+              "static-domain": "http://example.com",
+              "frontend-url": "http://example.com"
             },
             "type": "setting",
             "id": "1",
@@ -20169,7 +20175,8 @@ To update or get any attribute of this data layer, you will need admin access. H
                   "youtube-url": "http://example.com",
                   "android-app-url": "http://example.com",
                   "web-app-url": "http://example.com",
-                  "static-domain": "http://example.com"
+                  "static-domain": "http://example.com",
+                  "frontend-url": "http://example.com"
                 },
                 "type": "setting",
                 "id": "1"
@@ -20230,7 +20237,8 @@ To update or get any attribute of this data layer, you will need admin access. H
               "youtube-url": "http://example.com",
               "android-app-url": "http://example.com",
               "web-app-url": "http://example.com",
-              "static-domain": "http://example.com"
+              "static-domain": "http://example.com",
+              "frontend-url": "http://example.com"
             },
             "type": "setting",
             "id": "1",
