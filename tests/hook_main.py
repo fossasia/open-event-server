@@ -52,6 +52,7 @@ from app.factories.stripe_authorization import StripeAuthorizationFactory
 from app.factories.mail import MailFactory
 from app.factories.order import OrderFactory
 from app.factories.faq_type import FaqTypeFactory
+from app.factories.feedback import FeedbackFactory
 
 
 stash = {}
@@ -675,6 +676,73 @@ def event_faq(transaction):
     with stash['app'].app_context():
         faq = FaqFactory()
         db.session.add(faq)
+        db.session.commit()
+
+
+# ------------------------- Feedback -------------------------
+@hooks.before("Feedback > Feedback Collection > Create Feedback")
+def feedback_post(transaction):
+    """
+    POST /feedbacks
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Feedback > Feedback Detail > Feedback Detail")
+def feedback_get_detail(transaction):
+    """
+    GET /feedbacks/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        feedback = FeedbackFactory()
+        db.session.add(feedback)
+        db.session.commit()
+
+
+@hooks.before("Feedback > Feedback Detail > Update Feedback")
+def feedback_patch(transaction):
+    """
+    PATCH /feedbacks/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        feedback = FeedbackFactory()
+        db.session.add(feedback)
+        db.session.commit()
+
+
+@hooks.before("Feedback > Feedback Detail > Delete Feedback")
+def feedback_delete(transaction):
+    """
+    DELETE /feedbacks/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        feedback = FeedbackFactory()
+        db.session.add(feedback)
+        db.session.commit()
+
+
+@hooks.before(
+    "Feedback > Event Feedback Collection > List All Feedbacks for an Event")
+def feedback_get_list(transaction):
+    """
+    GET /events/1/Feedbacks
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        feedback = FeedbackFactory()
+        db.session.add(feedback)
         db.session.commit()
 
 
