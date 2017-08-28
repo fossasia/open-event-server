@@ -103,3 +103,5 @@ class SettingFactory(factory.alchemy.SQLAlchemyModelFactory):
     #
     android_app_url = common.url_
     web_app_url = common.url_
+
+    frontend_url = common.url_
