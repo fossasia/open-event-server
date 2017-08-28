@@ -14269,6 +14269,7 @@ Related to ticket holders(attendees) of an event (free, paid, donation) to the e
 | `state` | State of the Attendee | string | - |
 | `country` | Country of the Attendee | string | - |
 | `is-checked-in` | If the attendee is checked in | boolean | - |
+| `checkin-times` | Comma separated checkin times | string | - |
 | `pdf-url` | pdf url of the Attendee | url | - |
 
 ## Attendees Collection [/v1/attendees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
@@ -14547,6 +14548,7 @@ Update a single attendee by `id`.
                     "state": "example",
                     "country": "IN",
                     "is-checked-in": "true",
+                    "checkin-times": "2017-12-13T22:59:59.123456+00:00",
                     "pdf-url": "http://example.com"
                 },
                 "type": "attendee",

@@ -45,6 +45,7 @@ class AttendeeSchemaPublic(Schema):
 
     ticket_id = fields.Str(allow_none=True)
     is_checked_in = fields.Boolean()
+    checkin_times = fields.Str(allow_none=True)
     pdf_url = fields.Url(required=True)
     event = Relationship(attribute='event',
                          self_view='v1.attendee_event',
