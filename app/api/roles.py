@@ -25,6 +25,11 @@ class RoleDetail(ResourceDetail):
     Role detail by id
     """
     def before_get_object(self, view_kwargs):
+        """
+        before get method to get the resource id for fetching details
+        :param view_kwargs:
+        :return:
+        """
         if view_kwargs.get('role_invite_id') is not None:
                 role_invite = safe_query(self, RoleInvite, 'id', view_kwargs['role_invite_id'], 'role_invite_id')
                 if role_invite.role_id is not None:
@@ -53,6 +58,12 @@ class RoleDetail(ResourceDetail):
                 raise UnprocessableEntity({'data': 'name'}, "The given name cannot be updated")
 
     def before_delete_object(self, obj, kwargs):
+        """
+        method to check proper resource name before deleting
+        :param obj:
+        :param kwargs:
+        :return:
+        """
         if obj.name in ['organizer', 'coorganizer', 'registrar', 'moderator', 'attendee', 'track_organizer']:
             raise UnprocessableEntity({'data': 'name'}, "The resource with given name cannot be deleted")
 

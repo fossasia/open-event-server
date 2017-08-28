@@ -15,14 +15,27 @@ from app.models.stripe_authorization import StripeAuthorization
 
 class StripeAuthorizationListPost(ResourceList):
     """
-        List and Create Stripe Authorization
+    List and Create Stripe Authorization
     """
     def before_post(self, args, kwargs, data):
+        """
+        before post method to check for required relationship and proper permission
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
         require_relationship(['event'], data)
         if not has_access('is_organizer', event_id=data['event']):
             raise ForbiddenException({'source': ''}, "Minimum Organizer access required")
 
     def before_create_object(self, data, view_kwargs):
+        """
+        method to check if stripe authorization object alredy exists for an event
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         try:
             self.session.query(StripeAuthorization).filter_by(event_id=data['event']).one()
         except NoResultFound:

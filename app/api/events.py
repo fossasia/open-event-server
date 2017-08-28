@@ -47,12 +47,23 @@ from app.models.faq_type import FaqType
 
 class EventList(ResourceList):
     def before_get(self, args, kwargs):
+        """
+        method for assigning schema based on admin access
+        :param args:
+        :param kwargs:
+        :return:
+        """
         if 'Authorization' in request.headers and has_access('is_admin'):
             self.schema = EventSchema
         else:
             self.schema = EventSchemaPublic
 
     def query(self, view_kwargs):
+        """
+        query method for EventList class
+        :param view_kwargs:
+        :return:
+        """
         query_ = self.session.query(Event).filter_by(state='published')
         if 'Authorization' in request.headers:
             _jwt_required(current_app.config['JWT_DEFAULT_REALM'])
@@ -85,6 +96,13 @@ class EventList(ResourceList):
         return query_
 
     def after_create_object(self, event, data, view_kwargs):
+        """
+        after create method to save roles for users
+        :param event:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         role = Role.query.filter_by(name=ORGANIZER).first()
         user = User.query.filter_by(id=view_kwargs['user_id']).first()
         uer = UsersEventsRoles(user, event, role)
@@ -106,6 +124,11 @@ class EventList(ResourceList):
 
 
 def get_id(view_kwargs):
+    """
+    method to get the resource id for fetching details
+    :param view_kwargs:
+    :return:
+    """
     if view_kwargs.get('identifier'):
         event = safe_query(db, Event, 'identifier', view_kwargs['identifier'], 'identifier')
         view_kwargs['id'] = event.id
@@ -310,14 +333,47 @@ def get_id(view_kwargs):
 
 
 class EventDetail(ResourceDetail):
+    """
+    EventDetail class for EventSchema
+    """
     def before_get(self, args, kwargs):
+        """
+        method for assigning schema based on access
+        :param args:
+        :param kwargs:
+        :return:
+        """
         kwargs = get_id(kwargs)
         if 'Authorization' in request.headers and has_access('is_coorganizer', event_id=kwargs['id']):
             self.schema = EventSchema
         else:
             self.schema = EventSchemaPublic
 
+
+    def before_get_object(self, view_kwargs):
+        """
+        before get method to get the resource id for fetching details
+        :param view_kwargs:
+        :return:
+        """
+        get_id(view_kwargs)
+
+        if view_kwargs.get('order_identifier') is not None:
+            order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
+            if order.event_id is not None:
+                view_kwargs['id'] = order.event_id
+            else:
+                view_kwargs['id'] = None
+
+
     def before_update_object(self, event, data, view_kwargs):
+        """
+        method to save image urls before updating event object
+        :param event:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         if data.get('original_image_url') and data['original_image_url'] != event.original_image_url:
             uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
             data['original_image_url'] = uploaded_images['original_image_url']
@@ -336,7 +392,9 @@ class EventDetail(ResourceDetail):
 
 
 class EventRelationship(ResourceRelationship):
-
+    """
+    Event Relationship
+    """
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('identifier'):
             event = safe_query(db, Event, 'identifier', view_kwargs['identifier'], 'identifier')
@@ -352,7 +410,13 @@ class EventRelationship(ResourceRelationship):
 
 
 class EventCopySchema(Schema):
+    """
+    API Schema for EventCopy
+    """
     class Meta:
+        """
+        Meta class for EventCopySchema
+        """
         type_ = 'event-copy'
         inflect = dasherize
         self_view = 'v1.event_copy'
@@ -363,7 +427,9 @@ class EventCopySchema(Schema):
 
 
 class EventCopyResource(ResourceList):
-
+    """
+    ResourceList class for EventCopy
+    """
     schema = EventCopySchema
     methods = ['POST', ]
     data_layer = {'class': EventCopyLayer,

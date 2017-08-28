@@ -28,12 +28,28 @@ from app.models.ticket_holder import TicketHolder
 
 
 class OrdersListPost(ResourceList):
+    """
+    OrderListPost class for OrderSchema
+    """
     def before_post(self, args, kwargs, data=None):
+        """
+        before post method to check for required relationship and proper permission
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
         require_relationship(['event', 'ticket_holders'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
             data['status'] = 'pending'
 
     def before_create_object(self, data, view_kwargs):
+        """
+        before create object method for OrderListPost Class
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         if data.get('cancel_note'):
             del data['cancel_note']
 
@@ -55,6 +71,13 @@ class OrdersListPost(ResourceList):
                 raise UnprocessableEntity({'source': 'discount_code_id'}, "Invalid Discount Code")
 
     def after_create_object(self, order, data, view_kwargs):
+        """
+        after create object method for OrderListPost Class
+        :param order:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         order_tickets = {}
         for holder in order.ticket_holders:
             if holder.id != current_user.id:
@@ -94,7 +117,16 @@ class OrdersListPost(ResourceList):
 
 
 class OrdersList(ResourceList):
+    """
+    OrderList class for OrderSchema
+    """
     def before_get(self, args, kwargs):
+        """
+        before get method to get the resource id for fetching details
+        :param args:
+        :param kwargs:
+        :return:
+        """
         if kwargs.get('event_id') is None:
             if 'GET' in request.method and has_access('is_admin'):
                 pass
@@ -120,7 +152,15 @@ class OrdersList(ResourceList):
 
 
 class OrderDetail(ResourceDetail):
+    """
+    OrderDetail class for OrderSchema
+    """
     def before_get_object(self, view_kwargs):
+        """
+        before get method to get the resource id for fetching details
+        :param view_kwargs:
+        :return:
+        """
         if view_kwargs.get('attendee_id'):
             attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
             view_kwargs['order_identifier'] = attendee.order.identifier
@@ -132,6 +172,12 @@ class OrderDetail(ResourceDetail):
 
 
     def before_update_object(self, order, data, view_kwargs):
+        """
+        :param order:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         if not has_access('is_admin'):
             for element in data:
                 if element != 'status':
@@ -142,11 +188,23 @@ class OrderDetail(ResourceDetail):
                                      "To update status minimum Co-organizer access required")
 
     def after_update_object(self, order, data, view_kwargs):
+        """
+        :param order:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         if order.status == 'cancelled':
             send_order_cancel_email(order)
             send_notif_ticket_cancel(order)
 
     def before_delete_object(self, order, view_kwargs):
+        """
+        method to check for proper permissions for deleting
+        :param order:
+        :param view_kwargs:
+        :return:
+        """
         if not has_access('is_coorganizer', event_id=order.event.id):
             raise ForbiddenException({'source': ''}, 'Access Forbidden')
 
@@ -166,6 +224,9 @@ class OrderDetail(ResourceDetail):
 
 
 class OrderRelationship(ResourceRelationship):
+    """
+    Order relationship
+    """
     decorators = (jwt_required,)
     schema = OrderSchema
     data_layer = {'session': db.session,
@@ -173,7 +234,13 @@ class OrderRelationship(ResourceRelationship):
 
 
 class ChargeSchema(Schema):
+    """
+    ChargeSchema
+    """
     class Meta:
+        """
+        Meta class for ChargeSchema
+        """
         type_ = 'charge'
         inflect = dasherize
         self_view = 'v1.charge_list'
@@ -184,6 +251,9 @@ class ChargeSchema(Schema):
 
 
 class ChargeList(ResourceList):
+    """
+    ChargeList ResourceList for ChargesLayer class
+    """
     methods = ['POST', ]
     schema = ChargeSchema
 

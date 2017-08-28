@@ -18,7 +18,7 @@ class ImageSizeList(ResourceList):
 
 class ImageSizeDetail(ResourceDetail):
     """
-    image_size detail by id
+    Image_size detail by id
     """
     decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
     schema = ImageSizeSchema
