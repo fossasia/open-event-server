@@ -17,6 +17,13 @@ class TrackListPost(ResourceList):
     List and create Tracks
     """
     def before_post(self, args, kwargs, data):
+        """
+        before post method to check for required relationship and proper permission
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
         require_relationship(['event'], data)
         if not has_access('is_track_organizer', event_id=data['event']):
             raise ForbiddenException({'source': ''}, 'Track-organizer access is required.')
@@ -31,6 +38,11 @@ class TrackList(ResourceList):
     List and create Tracks
     """
     def query(self, view_kwargs):
+        """
+        query method for resource list
+        :param view_kwargs:
+        :return:
+        """
         query_ = self.session.query(Track)
         query_ = event_query(self, query_, view_kwargs)
         return query_
@@ -50,6 +62,11 @@ class TrackDetail(ResourceDetail):
     Track detail by id
     """
     def before_get_object(self, view_kwargs):
+        """
+        before get method to get the resource id for fetching details
+        :param view_kwargs:
+        :return:
+        """
         if view_kwargs.get('session_id'):
             session = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
             if session.event_id:

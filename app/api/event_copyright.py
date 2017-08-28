@@ -14,12 +14,29 @@ from app.models.event_copyright import EventCopyright
 
 
 class EventCopyrightListPost(ResourceList):
+    """
+    Event Copyright List Post class for creating an event copyright
+    Only POST method allowed
+    """
     def before_post(self, args, kwargs, data):
+        """
+        before post method to check for required relationship and proper permission
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
 
     def before_create_object(self, data, view_kwargs):
+        """
+        before create method to check if event copyright for the event already exists or not
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         try:
             self.session.query(EventCopyright).filter_by(event_id=data['event']).one()
         except NoResultFound:
@@ -39,7 +56,15 @@ class EventCopyrightListPost(ResourceList):
 
 
 class EventCopyrightDetail(ResourceDetail):
+    """
+    Event Copyright Detail Class
+    """
     def before_get_object(self, view_kwargs):
+        """
+        before get method to get the copyright id to fetch details
+        :param view_kwargs:
+        :return:
+        """
         event = None
         if view_kwargs.get('event_id'):
             event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
@@ -61,7 +86,9 @@ class EventCopyrightDetail(ResourceDetail):
 
 
 class EventCopyrightRelationshipRequired(ResourceRelationship):
-
+    """
+    Event Copyright Relationship
+    """
     decorators = (api.has_permission('is_coorganizer', fetch="event_id", fetch_as="event_id",
                                      model=EventCopyright, methods="PATCH"),)
     methods = ['GET', 'PATCH']

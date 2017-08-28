@@ -18,6 +18,13 @@ class EventSubTopicListPost(ResourceList):
     Create event sub topics
     """
     def before_post(self, args, kwargs, data):
+        """
+        before post method to check for required relationship and proper permission
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
         require_relationship(['event_topic'], data)
         if not has_access('is_admin'):
             raise ForbiddenException({'source': ''}, 'Admin access is required.')
@@ -63,6 +70,11 @@ class EventSubTopicDetail(ResourceDetail):
     """
 
     def before_get_object(self, view_kwargs):
+        """
+        before get method to get the resource id to fetch details
+        :param view_kwargs:
+        :return:
+        """
         if view_kwargs.get('event_identifier'):
             event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
             view_kwargs['event_id'] = event.id

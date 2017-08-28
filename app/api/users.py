@@ -33,10 +33,26 @@ class UserList(ResourceList):
     List and create Users
     """
     def before_create_object(self, data, view_kwargs):
+        """
+        method to check if there is an existing user with same email which is recieved in data to create a new user
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         if db.session.query(User.id).filter_by(email=data['email']).scalar() is not None:
             raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")
 
     def after_create_object(self, user, data, view_kwargs):
+        """
+        method to send-
+        email notification
+        mail link for register verification
+        add image urls
+        :param user:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         s = get_serializer()
         hash = base64.b64encode(s.dumps([user.email, str_generator()]))
         link = make_frontend_url('/email/verify'.format(id=user.id), {'token': hash})
@@ -155,6 +171,13 @@ class UserDetail(ResourceDetail):
             view_kwargs['email_changed'] = user.email
 
     def after_update_object(self, user, data, view_kwargs):
+        """
+        method to mail user about email change
+        :param user:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         if view_kwargs.get('email_changed'):
             send_email_change_user_email(user.email, view_kwargs.get('email_changed'))
 
@@ -175,7 +198,9 @@ class UserDetail(ResourceDetail):
 
 
 class UserRelationship(ResourceRelationship):
-
+    """
+    User Relationship
+    """
     decorators = (is_user_itself, )
     schema = UserSchema
     data_layer = {'session': db.session,

@@ -25,11 +25,25 @@ class RoleInviteListPost(ResourceList):
     """
 
     def before_post(self, args, kwargs, data):
+        """
+        before get method to get the resource id for fetching details
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
         require_relationship(['event', 'role'], data)
         if not has_access('is_organizer', event_id=data['event']):
             raise ForbiddenException({'source': ''}, 'Organizer access is required.')
 
     def after_create_object(self, role_invite, data, view_kwargs):
+        """
+        after create object method for role invite links
+        :param role_invite:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         user = User.query.filter_by(email=role_invite.email).first()
         if 'status' in data and data['status'] == 'accepted':
             role = Role.query.filter_by(name=role_invite.role_name).first()
