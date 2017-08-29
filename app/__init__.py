@@ -5,7 +5,6 @@ from flask.exthook import ExtDeprecationWarning
 warnings.simplefilter('ignore', ExtDeprecationWarning)
 # Keep it before flask extensions are imported
 
-from celery import Celery
 from celery.signals import after_task_publish
 import logging
 import os.path
@@ -41,7 +40,8 @@ from app.models.event import Event
 from app.models.role_invite import RoleInvite
 from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations, check_migrations
 from app.views.sentry import sentry
-from app.views.elastic_search import es, rebuild_events_elasticsearch
+from app.views.elastic_search import es
+from app.views.elastic_cron_helpers import sync_events_elasticsearch, cron_rebuild_events_elasticsearch
 from app.views.redis_store import redis_store
 from app.views.celery_ import celery
 
@@ -143,11 +143,17 @@ def create_app():
         sentry.init_app(app, dsn=app.config['SENTRY_DSN'])
 
     # elasticsearch
-    es.init_app(app)
+    if app.config['ENABLE_ELASTICSEARCH']:
+        es.init_app(app)
 
     # redis
     redis_store.init_app(app)
 
+    with app.app_context():
+        try:
+            cron_rebuild_events_elasticsearch.delay()
+        except Exception:
+            pass
     return app, _manager, db, _jwt
 
 
@@ -190,9 +196,6 @@ with current_app.app_context():
     current_app.config['MIGRATION_STATUS'] = check_migrations()
 health.add_check(health_check_migrations)
 
-with current_app.app_context():
-    rebuild_events_elasticsearch()
-
 
 # http://stackoverflow.com/questions/9824172/find-out-whether-celery-task-exists
 @after_task_publish.connect
@@ -216,6 +219,10 @@ import api.helpers.tasks
 scheduler = BackgroundScheduler(timezone=utc)
 # scheduler.add_job(send_mail_to_expired_orders, 'interval', hours=5)
 # scheduler.add_job(empty_trash, 'cron', hour=5, minute=30)
+if app.config['ENABLE_ELASTICSEARCH']:
+    scheduler.add_job(sync_events_elasticsearch, 'interval', minutes=60)
+    scheduler.add_job(cron_rebuild_events_elasticsearch, 'cron', day=7)
+
 scheduler.add_job(send_after_event_mail, 'cron', hour=5, minute=30)
 scheduler.add_job(send_event_fee_notification, 'cron', day=1)
 scheduler.add_job(send_event_fee_notification_followup, 'cron', day=15)

@@ -302,7 +302,7 @@ def receive_init(mapper, connection, target):
     listen for the 'init' event
     """
     if current_app.config['ENABLE_ELASTICSEARCH']:
-        if target.status == 'published' and target.deleted_at is None:
+        if target.state == 'published' and target.deleted_at is None:
             redis_store.sadd('event_index', target.id)
         elif target.deleted_at:
             redis_store.sadd('event_delete', target.id)
