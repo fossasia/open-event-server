@@ -19,6 +19,13 @@ class TicketListPost(ResourceList):
     Create and List Tickets
     """
     def before_post(self, args, kwargs, data):
+        """
+        before post method to check for required relationship and proper permission
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ObjectNotFound({'parameter': 'event_id'},
@@ -35,10 +42,21 @@ class TicketList(ResourceList):
     List Tickets based on different params
     """
     def before_get(self, args, view_kwargs):
+        """
+        before get method to get the resource id for assigning schema
+        :param args:
+        :param view_kwargs:
+        :return:
+        """
         if view_kwargs.get('ticket_tag_id') or view_kwargs.get('access_code_id') or view_kwargs.get('order_identifier'):
             self.schema = TicketSchemaPublic
 
     def query(self, view_kwargs):
+        """
+        query method for resource list
+        :param view_kwargs:
+        :return:
+        """
         query_ = self.session.query(Ticket).filter_by(is_hidden=False)
         if view_kwargs.get('ticket_tag_id'):
             ticket_tag = safe_query(self, TicketTag, 'id', view_kwargs['ticket_tag_id'], 'ticket_tag_id')
@@ -76,10 +94,21 @@ class TicketDetail(ResourceDetail):
     Ticket Resource
     """
     def before_get(self, args, view_kwargs):
+        """
+        before get method to get the resource id for assigning schema
+        :param args:
+        :param view_kwargs:
+        :return:
+        """
         if view_kwargs.get('attendee_id'):
             self.schema = TicketSchemaPublic
 
     def before_get_object(self, view_kwargs):
+        """
+        before get object method to get the resource id for fetching details
+        :param view_kwargs:
+        :return:
+        """
         if view_kwargs.get('attendee_id') is not None:
             attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
             if attendee.ticket_id is not None:

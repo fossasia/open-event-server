@@ -17,6 +17,13 @@ class SpeakersCallList(ResourceList):
     create Speakers Call
     """
     def before_post(self, args, kwargs, data):
+        """
+        before post method to check for required relationship and proper permission
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
@@ -32,6 +39,13 @@ class SpeakersCallDetail(ResourceDetail):
      speakers call detail by id
     """
     def before_patch(self, args, kwargs, data):
+        """
+        before patch method to check for existing speakers-call
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
         if kwargs.get('event_id'):
             try:
                 speakers_call = SpeakersCall.query.filter_by(event_id=kwargs['event_id']).one()
@@ -40,7 +54,11 @@ class SpeakersCallDetail(ResourceDetail):
             kwargs['id'] = speakers_call.id
 
     def before_get_object(self, view_kwargs):
-        # Permission Manager is not used for GET requests so need to fetch here the event ID
+        """
+        before get method to get the resource id for fetching details
+        :param view_kwargs:
+        :return:
+        """
         if view_kwargs.get('event_identifier'):
             try:
                 event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()

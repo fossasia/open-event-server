@@ -140,7 +140,7 @@ class DiscountCodeDetail(ResourceDetail):
 
     def before_get_object(self, view_kwargs):
         """
-        query method for Discount Code detail
+        before get method for Discount Code detail
         :param view_kwargs:
         :return:
         """

@@ -19,7 +19,7 @@ class MailList(ResourceList):
 
 class MailDetail(ResourceDetail):
     """
-    mail detail by id
+    Mail detail by id
     """
     methods = ['GET']
     schema = MailSchema

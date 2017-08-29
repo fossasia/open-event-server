@@ -22,6 +22,13 @@ class AttendeeListPost(ResourceList):
     """
 
     def before_post(self, args, kwargs, data):
+        """
+        Before post method to check for required relationship and proper permissions
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
         require_relationship(['ticket', 'event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ForbiddenException({'source': 'event_id'}, "Access Forbidden")
@@ -37,6 +44,11 @@ class AttendeeList(ResourceList):
     List Attendees
     """
     def query(self, view_kwargs):
+        """
+        query method for Attendees List
+        :param view_kwargs:
+        :return:
+        """
         query_ = self.session.query(TicketHolder)
 
         if view_kwargs.get('order_identifier'):
@@ -76,15 +88,33 @@ class AttendeeDetail(ResourceDetail):
     Attendee detail by id
     """
     def before_get_object(self, view_kwargs):
+        """
+        before get object method for attendee detail
+        :param view_kwargs:
+        :return:
+        """
         attendee = safe_query(self, TicketHolder, 'id', view_kwargs['id'], 'attendee_id')
         if not has_access('is_registrar_or_user_itself', user_id=current_identity.id, event_id=attendee.event_id):
             raise ForbiddenException({'source': 'User'}, 'You are not authorized to access this.')
 
     def before_delete_object(self, obj, kwargs):
+        """
+        before delete object method for attendee detail
+        :param obj:
+        :param kwargs:
+        :return:
+        """
         if not has_access('is_registrar', event_id=obj.event_id):
             raise ForbiddenException({'source': 'User'}, 'You are not authorized to access this.')
 
     def before_update_object(self, obj, data, kwargs):
+        """
+        before update object method for attendee detail
+        :param obj:
+        :param data:
+        :param kwargs:
+        :return:
+        """
         if not has_access('is_registrar', event_id=obj.event_id):
             raise ForbiddenException({'source': 'User'}, 'You are not authorized to access this.')
 

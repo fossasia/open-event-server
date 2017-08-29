@@ -13,6 +13,13 @@ class SocialLinkListPost(ResourceList):
     List and Create Social Links for an event
     """
     def before_post(self, args, kwargs, data):
+        """
+        before post method to check for required relationship and proper permission
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
         require_relationship(['event'], data)
 
     methods = ['POST']

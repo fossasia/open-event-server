@@ -24,6 +24,11 @@ class EventTypeDetail(ResourceDetail):
     Event type detail by id
     """
     def before_get_object(self, view_kwargs):
+        """
+        before get method to get the resource id for fetching details
+        :param view_kwargs:
+        :return:
+        """
         if view_kwargs.get('event_identifier'):
             event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
             view_kwargs['event_id'] = event.id
