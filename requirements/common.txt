@@ -50,3 +50,6 @@ google-compute-engine
 factory_boy
 raven[flask]
 healthcheck
+elasticsearch
+flask-redis
+Flask-Elasticsearch
