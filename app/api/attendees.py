@@ -30,9 +30,8 @@ class AttendeeListPost(ResourceList):
         :return:
         """
         require_relationship(['ticket', 'event'], data)
-        if not has_access('is_coorganizer', event_id=data['event']):
-            raise ForbiddenException({'source': 'event_id'}, "Access Forbidden")
 
+    decorators = (jwt_required,)
     methods = ['POST']
     schema = AttendeeSchema
     data_layer = {'session': db.session,
