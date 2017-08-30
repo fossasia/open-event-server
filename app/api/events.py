@@ -12,6 +12,7 @@ from app.api.data_layers.EventCopyLayer import EventCopyLayer
 from app.api.helpers.utilities import dasherize
 from app.api.schema.events import EventSchemaPublic, EventSchema
 from app.api.helpers.permission_manager import has_access
+from app.api.helpers.exceptions import ForbiddenException
 # models
 from app.models import db
 from app.models.access_code import AccessCode
@@ -53,7 +54,7 @@ class EventList(ResourceList):
         :param kwargs:
         :return:
         """
-        if 'Authorization' in request.headers and has_access('is_admin'):
+        if 'Authorization' in request.headers and (has_access('is_admin') or kwargs.get('user_id')):
             self.schema = EventSchema
         else:
             self.schema = EventSchemaPublic
@@ -73,6 +74,8 @@ class EventList(ResourceList):
             query_ = query_.union(query2)
 
         if view_kwargs.get('user_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', id=view_kwargs['user_id']):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
             user = safe_query(db, User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
                 filter(Role.name != ATTENDEE)
@@ -90,6 +93,9 @@ class EventList(ResourceList):
                 getattr(Event, 'event_sub_topic_id') == view_kwargs['event_sub_topic_id'])
 
         if view_kwargs.get('discount_code_id') and 'GET' in request.method:
+            event_id = get_id(view_kwargs)['id']
+            if not has_access('is_coorganizer', event_id=event_id):
+                raise ForbiddenException({'source': ''}, 'Coorganizer access is required')
             query_ = self.session.query(Event).filter(
                 getattr(Event, 'discount_code_id') == view_kwargs['discount_code_id'])
 
@@ -114,7 +120,7 @@ class EventList(ResourceList):
 
     # This permission decorator ensures, you are logged in to create an event
     # and have filter ?withRole to get events associated with logged in user
-    decorators = (api.has_permission('create_event'),)
+    decorators = (api.has_permission('create_event', ),)
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
