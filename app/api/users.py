@@ -16,6 +16,7 @@ from app.models.email_notification import EmailNotification
 from app.models.event_invoice import EventInvoice
 from app.models.mail import USER_REGISTER_WITH_PASSWORD
 from app.models.notification import Notification
+from app.models.feedback import Feedback
 from app.models.speaker import Speaker
 from app.models.session import Session
 from app.api.helpers.exceptions import ConflictException
@@ -32,10 +33,26 @@ class UserList(ResourceList):
     List and create Users
     """
     def before_create_object(self, data, view_kwargs):
+        """
+        method to check if there is an existing user with same email which is recieved in data to create a new user
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         if db.session.query(User.id).filter_by(email=data['email']).scalar() is not None:
             raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")
 
     def after_create_object(self, user, data, view_kwargs):
+        """
+        method to send-
+        email notification
+        mail link for register verification
+        add image urls
+        :param user:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         s = get_serializer()
         hash = base64.b64encode(s.dumps([user.email, str_generator()]))
         link = make_frontend_url('/email/verify'.format(id=user.id), {'token': hash})
@@ -73,6 +90,14 @@ class UserDetail(ResourceDetail):
             notification = safe_query(self, Notification, 'id', view_kwargs['notification_id'], 'notification_id')
             if notification.user_id is not None:
                 view_kwargs['id'] = notification.user_id
+            else:
+                view_kwargs['id'] = None
+
+        if view_kwargs.get('feedback_id') is not None:
+            print view_kwargs['feedback_id']
+            feedback = safe_query(self, Feedback, 'id', view_kwargs['feedback_id'], 'feedback_id')
+            if feedback.user_id is not None:
+                view_kwargs['id'] = feedback.user_id
             else:
                 view_kwargs['id'] = None
 
@@ -146,13 +171,20 @@ class UserDetail(ResourceDetail):
             view_kwargs['email_changed'] = user.email
 
     def after_update_object(self, user, data, view_kwargs):
+        """
+        method to mail user about email change
+        :param user:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         if view_kwargs.get('email_changed'):
             send_email_change_user_email(user.email, view_kwargs.get('email_changed'))
 
     decorators = (api.has_permission('is_user_itself', fetch="user_id,id", fetch_as="id",
-                  model=[Notification, UsersEventsRoles, Session, EventInvoice, AccessCode,
+                  model=[Notification, Feedback, UsersEventsRoles, Session, EventInvoice, AccessCode,
                          DiscountCode, EmailNotification, Speaker, User],
-                  fetch_key_url="notification_id, users_events_role_id, session_id, \
+                  fetch_key_url="notification_id, feedback_id, users_events_role_id, session_id, \
                   event_invoice_id, access_code_id, discount_code_id, email_notification_id, speaker_id, id",
                                      leave_if=lambda a: a.get('attendee_id')), )
     schema = UserSchema
@@ -166,7 +198,9 @@ class UserDetail(ResourceDetail):
 
 
 class UserRelationship(ResourceRelationship):
-
+    """
+    User Relationship
+    """
     decorators = (is_user_itself, )
     schema = UserSchema
     data_layer = {'session': db.session,

@@ -2706,6 +2706,12 @@ Get a list of events.
                                 "related": "/v1/events/1/faqs"
                             }
                         },
+                        "faq-types": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/faq-types",
+                                "related": "/v1/events/1/faq-types"
+                            }
+                        },
                         "attendees": {
                             "links": {
                                 "self": "/v1/events/1/relationships/attendees",
@@ -2980,6 +2986,12 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                             "related": "/v1/events/1/faqs"
                         }
                     },
+                    "faq-types": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/faq-types",
+                            "related": "/v1/events/1/faq-types"
+                        }
+                    },
                     "attendees": {
                         "links": {
                             "self": "/v1/events/1/relationships/attendees",
@@ -3211,6 +3223,12 @@ Get a single event.
                         "links": {
                             "self": "/v1/events/1/relationships/faqs",
                             "related": "/v1/events/1/faqs"
+                        }
+                    },
+                    "faq-types": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/faq-types",
+                            "related": "/v1/events/1/faq-types"
                         }
                     },
                     "attendees": {
@@ -3491,6 +3509,12 @@ All other fields are optional. Add attributes you want to modify.
                             "related": "/v1/events/1/faqs"
                         }
                     },
+                    "faq-types": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/faq-types",
+                            "related": "/v1/events/1/faq-types"
+                        }
+                    },
                     "attendees": {
                         "links": {
                             "self": "/v1/events/1/relationships/attendees",
@@ -3719,6 +3743,12 @@ Get a list of events.
                                 "related": "/v1/events/1/faqs"
                             }
                         },
+                        "faq-types": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/faq-types",
+                                "related": "/v1/events/1/faq-types"
+                            }
+                        },
                         "attendees": {
                             "links": {
                                 "self": "/v1/events/1/relationships/attendees",
@@ -3942,6 +3972,12 @@ Get a list of events.
                             "links": {
                                 "self": "/v1/events/1/relationships/faqs",
                                 "related": "/v1/events/1/faqs"
+                            }
+                        },
+                        "faq-types": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/faq-types",
+                                "related": "/v1/events/1/faq-types"
                             }
                         },
                         "attendees": {
@@ -14233,6 +14269,7 @@ Related to ticket holders(attendees) of an event (free, paid, donation) to the e
 | `state` | State of the Attendee | string | - |
 | `country` | Country of the Attendee | string | - |
 | `is-checked-in` | If the attendee is checked in | boolean | - |
+| `checkin-times` | Comma separated checkin times | string | - |
 | `pdf-url` | pdf url of the Attendee | url | - |
 
 ## Attendees Collection [/v1/attendees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
@@ -14511,6 +14548,7 @@ Update a single attendee by `id`.
                     "state": "example",
                     "country": "IN",
                     "is-checked-in": "true",
+                    "checkin-times": "2017-12-13T22:59:59.123456+00:00",
                     "pdf-url": "http://example.com"
                 },
                 "type": "attendee",
@@ -15726,48 +15764,91 @@ Get a list of Discount Codes.
 + Response 200 (application/vnd.api+json)
 
         {
-          "meta": {
-              "count": 1
-          },
-          "data": [
-              {
-                  "relationships": {
-                      "event": {
-                          "links": {
-                              "self": "/v1/discount-codes/1/relationships/events",
-                              "related": "/v1/discount-codes/1/events"
-                          }
-                      }
-                  },
-                  "attributes": {
-                      "tickets": "event",
-                      "code": "DC101",
-                      "valid-from": "2017-06-18T18:30:00+00:00",
-                      "min-quantity": 0,
-                      "created-at": "2017-06-20T09:59:23.740772+00:00",
-                      "tickets-number": 404,
-                      "value": 100,
-                      "max-quantity": 100,
-                      "is-active": false,
-                      "used-for": "event",
-                      "valid-till": "2017-06-24T18:30:00+00:00",
-                      "type": "amount",
-                      "discount-url": "https://my-discount-url.com"
-                  },
-                  "type": "discount-code",
-                  "id": 1,
-                  "links": {
-                      "self": "/v1/discount-codes/1"
-                  }
-              }
-          ],
-          "jsonapi": {
-              "version": "1.0"
-          },
-          "links": {
-              "self": "/v1/events/1/discount-codes"
-          }
-         }
+            "meta": {
+                "count": 2
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "events": {
+                            "links": {
+                                "self": "/v1/discount-codes/1/relationships/events",
+                                "related": "/v1/discount-codes/1/events"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/discount-codes/1/relationships/event",
+                                "related": "/v1/discount-codes/1/event"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "tickets": "event",
+                        "code": "DC101",
+                        "valid-from": "2017-06-18T18:30:00+00:00",
+                        "min-quantity": 0,
+                        "created-at": "2017-08-05T23:38:04.449623+00:00",
+                        "tickets-number": 404,
+                        "value": 100,
+                        "max-quantity": 100,
+                        "is-active": false,
+                        "used-for": "event",
+                        "valid-till": "2017-06-24T18:30:00+00:00",
+                        "type": "amount",
+                        "discount-url": "https://my-discount-url.com"
+                    },
+                    "type": "discount-code",
+                    "id": 1,
+                    "links": {
+                        "self": "/v1/discount-codes/1"
+                    }
+                },
+                {
+                    "relationships": {
+                        "events": {
+                            "links": {
+                                "self": "/v1/discount-codes/2/relationships/events",
+                                "related": "/v1/discount-codes/2/events"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/discount-codes/2/relationships/event",
+                                "related": "/v1/discount-codes/2/event"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "tickets": "event",
+                        "code": "DC101",
+                        "valid-from": "2017-06-18T18:30:00+00:00",
+                        "min-quantity": 0,
+                        "created-at": "2017-08-23T14:07:33.175725+00:00",
+                        "tickets-number": 404,
+                        "value": 100,
+                        "max-quantity": 100,
+                        "is-active": false,
+                        "used-for": "ticket",
+                        "valid-till": "2017-06-24T18:30:00+00:00",
+                        "type": "amount",
+                        "discount-url": "https://my-discount-url.com"
+                    },
+                    "type": "discount-code",
+                    "id": 2,
+                    "links": {
+                        "self": "/v1/discount-codes/2"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/discount-codes"
+            }
+        }
+
 
 ### Create Event Discount Code [POST]
 Create a new Discount Code for event. (Only Admin)
@@ -16150,6 +16231,187 @@ Delete a single discount code (Check permission to delete).
             "version": "1.0"
           }
         }
+
+
+## List Discount Codes under a User [/v1/users/{user_id}/discount-codes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + user_id: 1 (string) - user id in the form of an integer.
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `code`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List All Discount Codes under a User [GET]
+Get a list of Discount Codes.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "event": {
+                            "links": {
+                                "self": "/v1/discount-codes/1/relationships/event",
+                                "related": "/v1/discount-codes/1/event"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "tickets": "event",
+                        "code": "DC101",
+                        "valid-from": "2017-06-18T18:30:00+00:00",
+                        "min-quantity": 0,
+                        "created-at": "2017-08-05T23:38:04.449623+00:00",
+                        "tickets-number": 404,
+                        "value": 100,
+                        "max-quantity": 100,
+                        "is-active": false,
+                        "used-for": "event",
+                        "valid-till": "2017-06-24T18:30:00+00:00",
+                        "type": "amount",
+                        "discount-url": "https://my-discount-url.com"
+                    },
+                    "type": "discount-code",
+                    "id": 1,
+                    "links": {
+                        "self": "/v1/discount-codes/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/users/1/discount-codes"
+            }
+        }
+
+
+## Get Discount Code Detail of an Event [/v1/events/{event_identifier}/discount-code]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+
+### Get Discount Code Detail of an Event [GET]
+Get a single discount code.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/discount-codes/1/relationships/event",
+                            "related": "/v1/discount-codes/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "tickets": "event",
+                    "code": "DC101",
+                    "valid-from": "2017-06-18T18:30:00+00:00",
+                    "min-quantity": 0,
+                    "created-at": "2017-08-05T23:38:04.449623+00:00",
+                    "tickets-number": 404,
+                    "value": 100,
+                    "max-quantity": 100,
+                    "is-active": false,
+                    "used-for": "event",
+                    "valid-till": "2017-06-24T18:30:00+00:00",
+                    "type": "amount",
+                    "discount-url": "https://my-discount-url.com"
+                },
+                "type": "discount-code",
+                "id": 1,
+                "links": {
+                    "self": "/v1/discount-codes/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/discount-codes/1"
+            }
+        }
+
+
+## Get Discount Code Detail of an Event Invoice [/v1/event-invoices/{event_invoice_id}/discount-code]
++ Parameters
+    + event_invoice_id: 1 (integer) - ID of the event invoice in the form of an integer
+
+### Get Discount Code Detail of an Event Invoice [GET]
+Get a single discount code. (Requires admin access)
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/discount-codes/1/relationships/event",
+                            "related": "/v1/discount-codes/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "tickets": "event",
+                    "code": "DC101",
+                    "valid-from": "2017-06-18T18:30:00+00:00",
+                    "min-quantity": 0,
+                    "created-at": "2017-08-05T23:38:04.449623+00:00",
+                    "tickets-number": 404,
+                    "value": 100,
+                    "max-quantity": 100,
+                    "is-active": false,
+                    "used-for": "event",
+                    "valid-till": "2017-06-24T18:30:00+00:00",
+                    "type": "amount",
+                    "discount-url": "https://my-discount-url.com"
+                },
+                "type": "discount-code",
+                "id": 1,
+                "links": {
+                    "self": "/v1/discount-codes/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/discount-codes/1"
+            }
+        }
+
 
 # Group Access Codes
 Access Codes related to the events.
@@ -18269,6 +18531,12 @@ Create a new Question-Answer pair (FAQ) with event_id.
         {
             "data": {
                 "relationships": {
+                    "faq-type": {
+                        "links": {
+                            "self": "/v1/faqs/1/relationships/faq-type",
+                            "related": "/v1/faqs/1/faq-type"
+                        }
+                    },
                     "event": {
                         "links": {
                             "self": "/v1/faqs/1/relationships/event",
@@ -18319,6 +18587,12 @@ Get a single FAQ.
                         "links": {
                             "self": "/v1/faqs/1/relationships/event",
                             "related": "/v1/faqs/1/event"
+                        }
+                    },
+                    "faq-type": {
+                        "links": {
+                            "self": "/v1/faqs/1/relationships/faq-type",
+                            "related": "/v1/faqs/1/faq-type"
                         }
                     }
                 },
@@ -18371,6 +18645,12 @@ Update a single FAQ with `id`.
        {
             "data": {
                 "relationships": {
+                    "faq-type": {
+                        "links": {
+                            "self": "/v1/faqs/1/relationships/faq-type",
+                            "related": "/v1/faqs/1/faq-type"
+                        }
+                    },
                     "event": {
                         "links": {
                             "self": "/v1/faqs/1/relationships/event",
@@ -18449,6 +18729,12 @@ Get a list of FAQs for an event.
             "data": [
                 {
                     "relationships": {
+                        "faq-type": {
+                            "links": {
+                                "self": "/v1/faqs/1/relationships/faq-type",
+                                "related": "/v1/faqs/1/faq-type"
+                            }
+                        },
                         "event": {
                             "links": {
                                 "self": "/v1/faqs/1/relationships/event",
@@ -18474,6 +18760,915 @@ Get a list of FAQs for an event.
                 "self": "/v1/events/1/faqs"
             }
         }
+
+
+# Group Feedback
+feedbacks related to the events.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `rating`  | Rating for the overall event | string | **yes** |
+| `comment` | Comments and suggestions about the event | string | - |
+
+
+
+## Feedback Collection [/v1/feedbacks{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `rating`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/iltering.html for more.
+
+### Create Feedback [POST]
+Create a new feedback with event_id.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "type": "feedback",
+                    "relationships": {
+                        "event": {
+                            "data": {
+                                "type": "event",
+                                "id": "1"
+                            }
+                        },
+                        "user": {
+                            "data": {
+                                "type": "user",
+                                "id": "1"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "rating": "4",
+                        "comment": "Awesome event."
+                    }
+                }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/feedbacks/1/relationships/event",
+                            "related": "/v1/feedbacks/1/event"
+                        }
+                    },
+                    "user": {
+                        "links": {
+                            "self": "/v1/feedbacks/1/relationships/user",
+                            "related": "/v1/feedbacks/1/user"
+                        }
+                    }
+                },
+                "attributes": {
+                "rating": "4",
+                    "comment": "Awesome event"
+                },
+                "type": "feedback",
+                "id": 1,
+                "links": {
+                    "self": "/v1/feedbacks/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/feedbacks/1"
+            }
+        }
+
+## Feedback Detail [/v1/feedbacks/{feedback_id}]
++ Parameters
+    + feedback_id: 1 (integer) - ID of the feedback in the form of an integer
+
+### Feedback Detail [GET]
+Get a single feedback.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/feedbacks/1/relationships/event",
+                            "related": "/v1/feedbacks/1/event"
+                        }
+                    },
+                    "user": {
+                        "links": {
+                            "self": "/v1/feedbacks/1/relationships/user",
+                            "related": "/v1/feedbacks/1/user"
+                        }
+                    }
+                },
+                "attributes": {
+                    "rating": "4",
+                    "comment": "Awesome event"
+                },
+                "type": "feedback",
+                "id": 1,
+                "links": {
+                    "self": "/v1/feedbacks/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/feedbacks/1"
+            }
+        }
+
+
+### Update Feedback [PATCH]
+Update a single feedback with `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "type": "feedback",
+                    "attributes": {
+                        "rating": "5",
+                        "comment": "Awesome event"
+                    },
+                    "id": "1"
+                }
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+       {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/feedbacks/1/relationships/event",
+                            "related": "/v1/feedbacks/1/event"
+                        }
+                    },
+                    "user": {
+                        "links": {
+                            "self": "/v1/feedbacks/1/relationships/user",
+                            "related": "/v1/feedbacks/1/user"
+                        }
+                    }
+                },
+                "attributes": {
+                    "rating": "5",
+                    "comment": "Awesome event"
+                },
+                "type": "feedback",
+                "id": 1,
+                "links": {
+                    "self": "/v1/feedbacks/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/feedbacks/1"
+            }
+        }
+
+### Delete Feedback [DELETE]
+Delete a single feedback.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "message": "Object successfully deleted"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+
+## Event Feedback Collection [/v1/events/{event_identifier}/feedbacks{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `rating`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/iltering.html for more.
+
+### List All Feedbacks for an Event [GET]
+Get a list of feedbacks for an event.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "event": {
+                            "links": {
+                                "self": "/v1/feedbacks/1/relationships/event",
+                                "related": "/v1/feedbacks/1/event"
+                            }
+                        },
+                        "user": {
+                            "links": {
+                                "self": "/v1/feedbacks/1/relationships/user",
+                                "related": "/v1/feedbacks/1/user"
+                                 }
+                        }
+                    },
+                    "attributes": {
+                        "rating": "4",
+                        "comment": "Awesome event"
+                    },
+                    "type": "feedback",
+                    "id": 1,
+                    "links": {
+                        "self": "/v1/feedbacks/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/events/1/feedbacks"
+            }
+        }
+
+# Group FAQ Types
+
+FAQ Types related to the events.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name to be given to the FAQ type | string | **yes** |
+
+
+## FAQ Type Collection [/v1/faq-types{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/iltering.html for more.
+
+### Create FAQ Type [POST]
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "attributes": {
+                        "name": "abc"
+                    },
+                    "type": "faq-type",
+                    "relationships": {
+                        "event": {
+                            "data": {
+                                "id": "1",
+                                "type": "event"
+                            }
+                        }
+                    }
+                }
+            }
+
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/faq-types/1/relationships/event",
+                            "related": "/v1/faq-types/1/event"
+                        }
+                    },
+                    "faqs": {
+                        "links": {
+                            "self": "/v1/faq-types/1/relationships/faqs",
+                            "related": "/v1/faq-types/1/faqs"
+                        }
+                    }
+                },
+                "attributes": {
+                    "name": "abc"
+                },
+                "type": "faq-type",
+                "id": "1",
+                "links": {
+                    "self": "/v1/faq-types/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/faq-types/1"
+            }
+        }
+
+
+## FAQ Type Detail [/v1/faq-types/{faq_type_id}]
++ Parameters
+    + faq_type_id: 1 (integer) - ID of the FAQ in the form of an integer
+
+### FAQ Type Detail [GET]
+Get a single FAQ Type
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/faq-types/1/relationships/event",
+                            "related": "/v1/faq-types/1/event"
+                        }
+                    },
+                    "faqs": {
+                        "links": {
+                            "self": "/v1/faq-types/1/relationships/faqs",
+                            "related": "/v1/faq-types/1/faqs"
+                        }
+                    }
+                },
+                "attributes": {
+                    "name": "abc"
+                },
+                "type": "faq-type",
+                "id": "1",
+                "links": {
+                    "self": "/v1/faq-types/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/faq-types/1"
+            }
+        }
+
+
+### Update FAQ Type [PATCH]
+Update a single FAQ Type with `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "attributes": {
+                        "name": "xyz"
+                    },
+                    "type": "faq-type",
+                    "id": "1"
+                }
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+       {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/faq-types/1/relationships/event",
+                            "related": "/v1/faq-types/1/event"
+                        }
+                    },
+                    "faqs": {
+                        "links": {
+                            "self": "/v1/faq-types/1/relationships/faqs",
+                            "related": "/v1/faq-types/1/faqs"
+                        }
+                    }
+                },
+                "attributes": {
+                    "name": "xyz"
+                },
+                "type": "faq-type",
+                "id": "1",
+                "links": {
+                    "self": "/v1/faq-types/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/faq-types/1"
+            }
+        }
+
+
+### Delete FAQ Type [DELETE]
+Delete a single FAQ Type.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
+
+## Event FAQ Type Collection [/v1/events/{event_identifier}/faq-types{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/iltering.html for more.
+
+### List All FAQ Types for an Event [GET]
+Get a list of FAQ Types for an event.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "event": {
+                            "links": {
+                                "self": "/v1/faq-types/1/relationships/event",
+                                "related": "/v1/faq-types/1/event"
+                            }
+                        },
+                        "faqs": {
+                            "links": {
+                                "self": "/v1/faq-types/1/relationships/faqs",
+                                "related": "/v1/faq-types/1/faqs"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "name": "abc"
+                    },
+                    "type": "faq-type",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/faq-types/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/events/1/faq-types"
+            }
+        }
+
+
+## FAQ FAQ Type Collection [/v1/faqs/{faq_identifier}/faq-type{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + faq_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/iltering.html for more.
+
+### List All FAQ Types for a FAQ [GET]
+Get a list of FAQ Types for a FAQ.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/faq-types/1/relationships/event",
+                            "related": "/v1/faq-types/1/event"
+                        }
+                    },
+                    "faqs": {
+                        "links": {
+                            "self": "/v1/faq-types/1/relationships/faqs",
+                            "related": "/v1/faq-types/1/faqs"
+                        }
+                    }
+                },
+                "attributes": {
+                    "name": "abc"
+                },
+                "type": "faq-type",
+                "id": "1",
+                "links": {
+                    "self": "/v1/faq-types/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/faq-types/1"
+            }
+        }
+
+
+# Group Feedback
+feedbacks related to the events.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `rating`  | Rating for the overall event | string | **yes** |
+| `comment` | Comments and suggestions about the event | string | - |
+
+
+
+## Feedback Collection [/v1/feedbacks{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `rating`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/iltering.html for more.
+
+### Create Feedback [POST]
+Create a new feedback with event_id.
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "type": "feedback",
+                "relationships": {
+                      "event": {
+                        "data": {
+                          "type": "event",
+                          "id": "1"
+                        }
+                      },
+                      "user": {
+                        "data": {
+                          "type": "user",
+                          "id": "1"
+                        }
+                      }
+                    },
+                "attributes": {
+                      "rating": "4",
+                      "comment": "Awesome event."
+                    }
+                }
+            }
+
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/feedbacks/1/relationships/event",
+                            "related": "/v1/feedbacks/1/event"
+                        }
+                    },
+                    "user": {
+                        "links": {
+                            "self": "/v1/feedbacks/1/relationships/user",
+                            "related": "/v1/feedbacks/1/user"
+                        }
+                    }
+                },
+                "attributes": {
+                    "rating": "4",
+                    "comment": "Awesome event"
+                },
+                "type": "feedback",
+                "id": 1,
+                "links": {
+                    "self": "/v1/feedbacks/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/feedbacks/1"
+            }
+        }
+
+
+## Feedback Detail [/v1/feedbacks/{feedback_id}]
++ Parameters
+    + feedback_id: 1 (integer) - ID of the feedback in the form of an integer
+
+### Feedback Detail [GET]
+Get a single feedback.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/feedbacks/1/relationships/event",
+                            "related": "/v1/feedbacks/1/event"
+                        }
+                    },
+                    "user": {
+                        "links": {
+                            "self": "/v1/feedbacks/1/relationships/user",
+                            "related": "/v1/feedbacks/1/user"
+                        }
+                    }
+                },
+                "attributes": {
+                    "rating": "4",
+                    "comment": "Awesome event"
+                },
+                "type": "feedback",
+                "id": 1,
+                "links": {
+                    "self": "/v1/feedbacks/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/feedbacks/1"
+            }
+        }
+
+
+### Update Feedback [PATCH]
+Update a single feedback with `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "type": "feedback",
+                "attributes": {
+                    "rating": "5",
+                    "comment": "Awesome event"
+                },
+                "id": "1"
+              }
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+       {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/feedbacks/1/relationships/event",
+                            "related": "/v1/feedbacks/1/event"
+                        }
+                    },
+                    "user": {
+                        "links": {
+                            "self": "/v1/feedbacks/1/relationships/user",
+                            "related": "/v1/feedbacks/1/user"
+                        }
+                    }
+                },
+                "attributes": {
+                    "rating": "5",
+                    "comment": "Awesome event"
+                },
+                "type": "feedback",
+                "id": 1,
+                "links": {
+                    "self": "/v1/feedbacks/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/feedbacks/1"
+            }
+        }
+
+### Delete Feedback [DELETE]
+Delete a single feedback.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
+
+## Event Feedback Collection [/v1/events/{event_identifier}/feedbacks{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `rating`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/iltering.html for more.
+
+### List All Feedbacks for an Event [GET]
+Get a list of feedbacks for an event.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "event": {
+                            "links": {
+                                "self": "/v1/feedbacks/1/relationships/event",
+                                "related": "/v1/feedbacks/1/event"
+                            }
+                        },
+                        "user": {
+                            "links": {
+                                "self": "/v1/feedbacks/1/relationships/user",
+                                "related": "/v1/feedbacks/1/user"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "rating": "4",
+                        "comment": "Awesome event"
+                    },
+                    "type": "feedback",
+                    "id": 1,
+                    "links": {
+                        "self": "/v1/feedbacks/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/events/1/feedbacks"
+            }
+        }
+
 
 # Group User Permissions
 
@@ -18829,6 +20024,11 @@ To update or get any attribute of this data layer, you will need admin access. H
 | `android-app-url`  | Android app url | string | **yes** |
 | `web-app-url`  | Web App url | string | **yes** |
 
+**Frontend Url**
+| Parameter | Description | Type | Admin Only |
+|:----------|-------------|------|------------|
+| `frontend-url`  | Url of Open Event Frontend | string (url with scheme) | - |
+
 ## Settings Details [/v1/settings{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -18899,7 +20099,8 @@ To update or get any attribute of this data layer, you will need admin access. H
               "youtube-url": "http://example.com",
               "android-app-url": "http://example.com",
               "web-app-url": "http://example.com",
-              "static-domain": "http://example.com"
+              "static-domain": "http://example.com",
+              "frontend-url": "http://example.com"
             },
             "type": "setting",
             "id": "1",
@@ -18976,7 +20177,8 @@ To update or get any attribute of this data layer, you will need admin access. H
                   "youtube-url": "http://example.com",
                   "android-app-url": "http://example.com",
                   "web-app-url": "http://example.com",
-                  "static-domain": "http://example.com"
+                  "static-domain": "http://example.com",
+                  "frontend-url": "http://example.com"
                 },
                 "type": "setting",
                 "id": "1"
@@ -19037,7 +20239,8 @@ To update or get any attribute of this data layer, you will need admin access. H
               "youtube-url": "http://example.com",
               "android-app-url": "http://example.com",
               "web-app-url": "http://example.com",
-              "static-domain": "http://example.com"
+              "static-domain": "http://example.com",
+              "frontend-url": "http://example.com"
             },
             "type": "setting",
             "id": "1",
@@ -19992,7 +21195,7 @@ Get the task status and the final result of the task as response
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
-    + sort (optional, string, `type`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + sort (optional, string) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/iltering.html for more.
 
 ### List All Orders [GET]
@@ -20405,8 +21608,93 @@ Creates the copy. Requires Co-Organizer access
 
 + Response 200 (application/json)
 
-    {
-      "copied": true,
-      "id": 25,
-      "identifier": "52d69149"
-    }
+        {
+          "copied": true,
+          "id": 25,
+          "identifier": "52d69149"
+        }
+
+
+# Group Change Password
+
+This Groups APIs are used for change password request of the user.
+
+## Change Password [/v1/auth/change-password]
+
+### Change password using old password [POST]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "old-password": "fossasia",
+                    "new-password": "eventyay"
+                }
+            }
+
++ Response 200 (application/json)
+
+       {
+          "email": "example@example.com",
+          "id": "1",
+          "name": "example",
+          "password-changed": true
+       }
+
+## Reset Forgotten Password [/v1/auth/reset-password]
+Change password through token received via email.
+
+### Get Reset Password Token [POST]
+Sends the token to reset the account associated with the provided email id via email.
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            {
+                "data": {
+                    "email": "open_event_test_user@fossasia.org"
+                }
+            }
+
++ Response 200 (application/json)
+
+        {
+          "message": "Email Sent"
+        }
+
+
+### Reset Password from Token [PATCH]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            {
+                "data": {
+                    "token": "token",
+                    "password": "new password"
+                }
+            }
+
++ Response 200 (application/json)
+
+        {
+              "id": "1",
+              "email": "example@example.com",
+              "name": "John Doe"
+        }

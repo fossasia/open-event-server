@@ -12,11 +12,13 @@ from app.api.data_layers.EventCopyLayer import EventCopyLayer
 from app.api.helpers.utilities import dasherize
 from app.api.schema.events import EventSchemaPublic, EventSchema
 from app.api.helpers.permission_manager import has_access
+from app.api.helpers.exceptions import ForbiddenException
 # models
 from app.models import db
 from app.models.access_code import AccessCode
 from app.models.custom_form import CustomForms
 from app.models.faq import Faq
+from app.models.feedback import Feedback
 from app.models.discount_code import DiscountCode
 from app.models.event import Event
 from app.models.event_invoice import EventInvoice
@@ -41,16 +43,28 @@ from app.models.social_link import SocialLink
 from app.models.tax import Tax
 from app.models.event_copyright import EventCopyright
 from app.models.order import Order
+from app.models.faq_type import FaqType
 
 
 class EventList(ResourceList):
     def before_get(self, args, kwargs):
-        if 'Authorization' in request.headers and has_access('is_admin'):
+        """
+        method for assigning schema based on admin access
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        if 'Authorization' in request.headers and (has_access('is_admin') or kwargs.get('user_id')):
             self.schema = EventSchema
         else:
             self.schema = EventSchemaPublic
 
     def query(self, view_kwargs):
+        """
+        query method for EventList class
+        :param view_kwargs:
+        :return:
+        """
         query_ = self.session.query(Event).filter_by(state='published')
         if 'Authorization' in request.headers:
             _jwt_required(current_app.config['JWT_DEFAULT_REALM'])
@@ -60,6 +74,8 @@ class EventList(ResourceList):
             query_ = query_.union(query2)
 
         if view_kwargs.get('user_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', id=view_kwargs['user_id']):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
             user = safe_query(db, User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
                 filter(Role.name != ATTENDEE)
@@ -77,12 +93,22 @@ class EventList(ResourceList):
                 getattr(Event, 'event_sub_topic_id') == view_kwargs['event_sub_topic_id'])
 
         if view_kwargs.get('discount_code_id') and 'GET' in request.method:
+            event_id = get_id(view_kwargs)['id']
+            if not has_access('is_coorganizer', event_id=event_id):
+                raise ForbiddenException({'source': ''}, 'Coorganizer access is required')
             query_ = self.session.query(Event).filter(
                 getattr(Event, 'discount_code_id') == view_kwargs['discount_code_id'])
 
         return query_
 
     def after_create_object(self, event, data, view_kwargs):
+        """
+        after create method to save roles for users
+        :param event:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         role = Role.query.filter_by(name=ORGANIZER).first()
         user = User.query.filter_by(id=view_kwargs['user_id']).first()
         uer = UsersEventsRoles(user, event, role)
@@ -94,7 +120,7 @@ class EventList(ResourceList):
 
     # This permission decorator ensures, you are logged in to create an event
     # and have filter ?withRole to get events associated with logged in user
-    decorators = (api.has_permission('create_event'),)
+    decorators = (api.has_permission('create_event', ),)
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
@@ -104,6 +130,11 @@ class EventList(ResourceList):
 
 
 def get_id(view_kwargs):
+    """
+    method to get the resource id for fetching details
+    :param view_kwargs:
+    :return:
+    """
     if view_kwargs.get('identifier'):
         event = safe_query(db, Event, 'identifier', view_kwargs['identifier'], 'identifier')
         view_kwargs['id'] = event.id
@@ -133,6 +164,13 @@ def get_id(view_kwargs):
         session_type = safe_query(db, SessionType, 'id', view_kwargs['session_type_id'], 'session_type_id')
         if session_type.event_id is not None:
             view_kwargs['id'] = session_type.event_id
+        else:
+            view_kwargs['id'] = None
+
+    if view_kwargs.get('faq_type_id') is not None:
+        faq_type = safe_query(db, FaqType, 'id', view_kwargs['faq_type_id'], 'faq_type_id')
+        if faq_type.event_id is not None:
+            view_kwargs['id'] = faq_type.event_id
         else:
             view_kwargs['id'] = None
 
@@ -290,18 +328,58 @@ def get_id(view_kwargs):
         else:
             view_kwargs['id'] = None
 
+    if view_kwargs.get('feedback_id') is not None:
+        feedback = safe_query(db, Feedback, 'id', view_kwargs['feedback_id'], 'feedback_id')
+        if feedback.event_id is not None:
+            view_kwargs['id'] = feedback.event_id
+        else:
+            view_kwargs['id'] = None
+
     return view_kwargs
 
 
 class EventDetail(ResourceDetail):
+    """
+    EventDetail class for EventSchema
+    """
     def before_get(self, args, kwargs):
+        """
+        method for assigning schema based on access
+        :param args:
+        :param kwargs:
+        :return:
+        """
         kwargs = get_id(kwargs)
         if 'Authorization' in request.headers and has_access('is_coorganizer', event_id=kwargs['id']):
             self.schema = EventSchema
         else:
             self.schema = EventSchemaPublic
 
+
+    def before_get_object(self, view_kwargs):
+        """
+        before get method to get the resource id for fetching details
+        :param view_kwargs:
+        :return:
+        """
+        get_id(view_kwargs)
+
+        if view_kwargs.get('order_identifier') is not None:
+            order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
+            if order.event_id is not None:
+                view_kwargs['id'] = order.event_id
+            else:
+                view_kwargs['id'] = None
+
+
     def before_update_object(self, event, data, view_kwargs):
+        """
+        method to save image urls before updating event object
+        :param event:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         if data.get('original_image_url') and data['original_image_url'] != event.original_image_url:
             uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
             data['original_image_url'] = uploaded_images['original_image_url']
@@ -320,7 +398,9 @@ class EventDetail(ResourceDetail):
 
 
 class EventRelationship(ResourceRelationship):
-
+    """
+    Event Relationship
+    """
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('identifier'):
             event = safe_query(db, Event, 'identifier', view_kwargs['identifier'], 'identifier')
@@ -336,7 +416,13 @@ class EventRelationship(ResourceRelationship):
 
 
 class EventCopySchema(Schema):
+    """
+    API Schema for EventCopy
+    """
     class Meta:
+        """
+        Meta class for EventCopySchema
+        """
         type_ = 'event-copy'
         inflect = dasherize
         self_view = 'v1.event_copy'
@@ -347,7 +433,9 @@ class EventCopySchema(Schema):
 
 
 class EventCopyResource(ResourceList):
-
+    """
+    ResourceList class for EventCopy
+    """
     schema = EventCopySchema
     methods = ['POST', ]
     data_layer = {'class': EventCopyLayer,

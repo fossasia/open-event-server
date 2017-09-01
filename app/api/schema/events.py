@@ -10,7 +10,6 @@ from app.api.helpers.utilities import dasherize
 
 
 class EventSchemaPublic(Schema):
-
     class Meta:
         type_ = 'event'
         self_view = 'v1.event_detail'
@@ -113,6 +112,22 @@ class EventSchemaPublic(Schema):
                         schema='FaqSchema',
                         many=True,
                         type_='faq')
+    faq_types = Relationship(attribute='faq_types',
+                             self_view='v1.event_faq_types',
+                             self_view_kwargs={'id': '<id>'},
+                             related_view='v1.faq_type_list',
+                             related_view_kwargs={'event_id': '<id>'},
+                             schema='FaqTypeSchema',
+                             many=True,
+                             type_='faq_type')
+    feedbacks = Relationship(attribute='feedbacks',
+                             self_view='v1.event_feedbacks',
+                             self_view_kwargs={'id': '<id>'},
+                             related_view='v1.feedback_list',
+                             related_view_kwargs={'event_id': '<id>'},
+                             schema='FeedbackSchema',
+                             many=True,
+                             type_='feedback')
     ticket_tags = Relationship(attribute='ticket_tags',
                                self_view='v1.event_ticket_tag',
                                self_view_kwargs={'id': '<id>'},

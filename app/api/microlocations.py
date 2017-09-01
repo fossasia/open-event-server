@@ -17,6 +17,13 @@ class MicrolocationListPost(ResourceList):
     List and create microlocations
     """
     def before_post(self, args, kwargs, data):
+        """
+        before post method to check for required relationship and proper permission
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
@@ -32,6 +39,11 @@ class MicrolocationList(ResourceList):
     List Microlocations
     """
     def query(self, view_kwargs):
+        """
+        query method for resource list
+        :param view_kwargs:
+        :return:
+        """
         query_ = self.session.query(Microlocation)
         query_ = event_query(self, query_, view_kwargs)
         if view_kwargs.get('session_id'):
@@ -55,7 +67,11 @@ class MicrolocationDetail(ResourceDetail):
     """
 
     def before_get_object(self, view_kwargs):
-
+        """
+        before get method to get the resource id for fetching details
+        :param view_kwargs:
+        :return:
+        """
         if view_kwargs.get('session_id') is not None:
             sessions = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
             if sessions.event_id is not None:

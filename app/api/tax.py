@@ -14,12 +14,28 @@ from app.models.tax import Tax
 
 
 class TaxListPost(ResourceList):
+    """
+    TaxListPost class for TaxSchema
+    """
     def before_post(self, args, kwargs, data):
+        """
+        before post method to check for required relationship and proper permission
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
 
     def before_get(self, args, kwargs):
+        """
+        method to assign proper schema based on admin access
+        :param args:
+        :param kwargs:
+        :return:
+        """
         if 'Authorization' in request.headers and has_access('is_admin'):
             self.schema = TaxSchema
         else:
@@ -31,7 +47,16 @@ class TaxListPost(ResourceList):
 
 
 class TaxList(ResourceList):
+    """
+    TaxList class for TaxSchema
+    """
     def before_get(self, args, view_kwargs):
+        """
+        before get method to get the resource id for assigning schema
+        :param args:
+        :param view_kwargs:
+        :return:
+        """
         if view_kwargs.get('event_identifier'):
             try:
                 event = Tax.query.filter_by(identifier=view_kwargs['id']).one()
@@ -47,6 +72,11 @@ class TaxList(ResourceList):
             self.schema = TaxSchemaPublic
 
     def query(self, view_kwargs):
+        """
+        query method for resource list
+        :param view_kwargs:
+        :return:
+        """
         query_ = self.session.query(Tax)
         query_ = event_query(self, query_, view_kwargs)
         return query_
@@ -67,6 +97,12 @@ class TaxDetail(ResourceDetail):
     """
 
     def before_get(self, args, kwargs):
+        """
+        before get method to get the resource id for fetching details
+        :param args:
+        :param kwargs:
+        :return:
+        """
         tax = Tax.query.filter_by(id=kwargs['id']).one()
         if 'Authorization' in request.headers and has_access('is_coorganizer', event_id=tax.event_id):
             self.schema = TaxSchema

@@ -48,3 +48,4 @@ class EventFactoryBasic(factory.alchemy.SQLAlchemyModelFactory):
     event_type_id = None
     event_topic_id = None
     event_sub_topic_id = None
+    discount_code_id = None

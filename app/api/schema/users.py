@@ -64,6 +64,15 @@ class UserSchema(UserSchemaPublic):
         schema='NotificationSchema',
         many=True,
         type_='notification')
+    feedbacks = Relationship(
+        attribute='feedbacks',
+        self_view='v1.user_feedback',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.feedback_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='FeedbackSchema',
+        many=True,
+        type_='feedback')
     event_invoice = Relationship(
         attribute='event_invoice',
         self_view='v1.user_event_invoice',

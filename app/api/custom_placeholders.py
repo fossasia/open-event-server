@@ -40,6 +40,13 @@ class CustomPlaceholderList(ResourceList):
             data['event_sub_topic_id'] = event_sub_topic.id
 
     def after_create_object(self, custom_placeholder, data, view_kwargs):
+        """
+        after create method for custom placeholder to save image sizes
+        :param custom_placeholder:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         if data.get('original_image_url'):
             uploaded_images = create_save_image_sizes(data['original_image_url'], 'custom-placeholders',
                                                       custom_placeholder.id)
@@ -62,6 +69,11 @@ class CustomPlaceholderDetail(ResourceDetail):
     custom placeholder detail by id
     """
     def before_get_object(self, view_kwargs):
+        """
+        before get object method to get custom placeholder id for detail
+        :param view_kwargs:
+        :return:
+        """
         event_sub_topic = None
         if view_kwargs.get('event_sub_topic_id'):
             event_sub_topic = safe_query(self, EventSubTopic, 'id', view_kwargs['event_sub_topic_id'],
@@ -73,6 +85,13 @@ class CustomPlaceholderDetail(ResourceDetail):
             view_kwargs['id'] = custom_placeholder.id
 
     def before_update_object(self, custom_placeholder, data, view_kwargs):
+        """
+        method to update image sizes before updating the custom placeholder
+        :param custom_placeholder:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         if data.get('original_image_url') and data['original_image_url'] != custom_placeholder.original_image_url:
             uploaded_images = create_save_image_sizes(data['original_image_url'], 'custom-placeholders',
                                                       custom_placeholder.id)

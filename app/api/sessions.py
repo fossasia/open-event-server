@@ -24,10 +24,25 @@ class SessionListPost(ResourceList):
     List Sessions
     """
     def before_post(self, args, kwargs, data):
+        """
+        before post method to check for required relationship and proper permission
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
         require_relationship(['event'], data)
         data['creator_id'] = current_identity.id
 
     def after_create_object(self, session, data, view_kwargs):
+        """
+        method to send email for creation of new session
+        mails session link to the concerned user
+        :param session:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
         if session.event.get_organizer():
             event_name = session.event.name
             organizer = session.event.get_organizer()
@@ -52,6 +67,11 @@ class SessionList(ResourceList):
     """
 
     def query(self, view_kwargs):
+        """
+        query method for SessionList class
+        :param view_kwargs:
+        :return:
+        """
         query_ = self.session.query(Session)
         if view_kwargs.get('track_id') is not None:
             track = safe_query(self, Track, 'id', view_kwargs['track_id'], 'track_id')
@@ -88,6 +108,11 @@ class SessionDetail(ResourceDetail):
     Session detail by id
     """
     def before_get_object(self, view_kwargs):
+        """
+        before get method to get the resource id for fetching details
+        :param view_kwargs:
+        :return:
+        """
         if view_kwargs.get('event_identifier'):
             event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'identifier')
             view_kwargs['event_id'] = event.id
@@ -115,7 +140,6 @@ class SessionDetail(ResourceDetail):
                                                  link)
                 send_notif_session_accept_reject(organizer, session.title,
                                                  session.state, link)
-
 
     decorators = (api.has_permission('is_speaker_for_session', methods="PATCH,DELETE"),)
     schema = SessionSchema

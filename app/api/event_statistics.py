@@ -12,6 +12,11 @@ class EventStatisticsGeneralDetail(ResourceDetail):
     Event statistics detail by id
     """
     def before_get_object(self, view_kwargs):
+        """
+        before get method to get the resource id to fetch details
+        :param view_kwargs:
+        :return:
+        """
         if view_kwargs.get('identifier'):
             event = safe_query(self, Event, 'identifier', view_kwargs['identifier'], 'identifier')
             view_kwargs['id'] = event.id

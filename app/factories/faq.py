@@ -1,6 +1,7 @@
 import factory
 from app.models.faq import db, Faq
 from app.factories.event import EventFactoryBasic
+from app.factories.faq_type import FaqTypeFactory
 
 
 class FaqFactory(factory.alchemy.SQLAlchemyModelFactory):
@@ -10,6 +11,8 @@ class FaqFactory(factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session = db.session
 
     event = factory.RelatedFactory(EventFactoryBasic)
+    faq_type = factory.RelatedFactory(FaqTypeFactory)
     question = "Sample Question"
     answer = "Sample Answer"
     event_id = 1
+    faq_type_id = 1

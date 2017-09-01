@@ -3,7 +3,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
@@ -22,10 +22,16 @@ class AttendeeListPost(ResourceList):
     """
 
     def before_post(self, args, kwargs, data):
+        """
+        Before post method to check for required relationship and proper permissions
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
         require_relationship(['ticket', 'event'], data)
-        if not has_access('is_coorganizer', event_id=data['event']):
-            raise ForbiddenException({'source': 'event_id'}, "Access Forbidden")
 
+    decorators = (jwt_required,)
     methods = ['POST']
     schema = AttendeeSchema
     data_layer = {'session': db.session,
@@ -37,6 +43,11 @@ class AttendeeList(ResourceList):
     List Attendees
     """
     def query(self, view_kwargs):
+        """
+        query method for Attendees List
+        :param view_kwargs:
+        :return:
+        """
         query_ = self.session.query(TicketHolder)
 
         if view_kwargs.get('order_identifier'):
@@ -76,17 +87,43 @@ class AttendeeDetail(ResourceDetail):
     Attendee detail by id
     """
     def before_get_object(self, view_kwargs):
+        """
+        before get object method for attendee detail
+        :param view_kwargs:
+        :return:
+        """
         attendee = safe_query(self, TicketHolder, 'id', view_kwargs['id'], 'attendee_id')
         if not has_access('is_registrar_or_user_itself', user_id=current_identity.id, event_id=attendee.event_id):
             raise ForbiddenException({'source': 'User'}, 'You are not authorized to access this.')
 
     def before_delete_object(self, obj, kwargs):
+        """
+        before delete object method for attendee detail
+        :param obj:
+        :param kwargs:
+        :return:
+        """
         if not has_access('is_registrar', event_id=obj.event_id):
             raise ForbiddenException({'source': 'User'}, 'You are not authorized to access this.')
 
     def before_update_object(self, obj, data, kwargs):
+        """
+        before update object method for attendee detail
+        :param obj:
+        :param data:
+        :param kwargs:
+        :return:
+        """
         if not has_access('is_registrar', event_id=obj.event_id):
             raise ForbiddenException({'source': 'User'}, 'You are not authorized to access this.')
+
+        if 'is_checked_in' in data:
+            if data['is_checked_in'] and 'checkin_times' not in data:
+                raise UnprocessableEntity({'pointer': '/data/attributes/checkin_times'},
+                                          "Check in time missing while trying to check in attendee")
+
+            if obj.checkin_times and data['checkin_times'] not in obj.checkin_times.split(","):
+                data['checkin_times'] = '{},{}'.format(obj.checkin_times, data['checkin_times'])
 
     decorators = (jwt_required,)
     schema = AttendeeSchema
