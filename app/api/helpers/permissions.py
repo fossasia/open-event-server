@@ -1,11 +1,11 @@
 from functools import wraps
 from flask import current_app as app
 from flask_jwt import _jwt_required, current_identity
-from app.api.helpers.errors import ForbiddenError, NotFoundError
+
+from app.api.helpers.db import save_to_db
+from app.api.helpers.errors import ForbiddenError
 from flask import request
-from sqlalchemy.orm.exc import NoResultFound
-from app.models import db
-from app.models.email_notification import EmailNotification
+from datetime import datetime
 
 
 def second_order_decorator(inner_dec):
@@ -40,6 +40,8 @@ def jwt_required(fn, realm=None):
     @wraps(fn)
     def decorator(*args, **kwargs):
         _jwt_required(realm or app.config['JWT_DEFAULT_REALM'])
+        current_identity.last_accessed_at = datetime.utcnow()
+        save_to_db(current_identity)
         return fn(*args, **kwargs)
 
     return decorator
