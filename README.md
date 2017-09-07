@@ -173,7 +173,7 @@ When checking in code for models, please update migrations as well.
 
 ### Testing
 
-Clone the repo and set up the server according to the steps listed. Make sure you have installed are the dependencies required for testing by running
+Clone the repo and set up the server according to the steps listed. Make sure you have installed all the dependencies required for testing by running
 
 ```
 pip install -r requirements/tests.txt

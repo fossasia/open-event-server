@@ -40,7 +40,7 @@ cd open-event-orga-server
 ```
 
 
-* **Step 1** - Install python requirements. You need to be present into the root directoryt  of the project.
+* **Step 1** - Install python requirements. You need to be present in the root directory of the project.
 
 ```sh
 sudo -H pip install -r requirements.txt
@@ -70,7 +70,7 @@ CREATE DATABASE oevent WITH OWNER john;
 * Once database is created, exit the psql shell with `\q` followed by ENTER.
 
 
-* **Step 3** - Install bower and frontend requirements. For this you need to be present in the root directory of the project. The root directory contains the file ```bower.json```. When you write ```bower install```, it finds bower.json and installs the libraries on the system.
+* **Step 3** - Install bower and frontend requirements. For this you need to be present in the root directory of the project. The root directory contains the file ```bower.json```. When you write ```bower install```, it finds bower.json and installs the libraries on the system. Please note that this `bower.json` file isn't present in `nextgen` branch. So remember to check the branch from which you created a new one.
 
 ```sh
 npm install bower -g
@@ -97,7 +97,7 @@ export DATABASE_URL=postgresql:///oevent
 export SERVER_NAME=localhost:5000
 ```
 
-The URL is short, thank to the resemble of Postgres user and OS user.
+The URL is short, thanks to the resemble of Postgres user and OS user.
 
 
 * **Step 5** - Start the postgres service.
