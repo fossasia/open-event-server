@@ -38,7 +38,7 @@ cd open-event-orga-server
 ```
 
 
-* **Step 1** - Install python requirements. You need to be present into the root directoryt  of the project.
+* **Step 1** - Install python requirements. You need to be present in the root directory of the project.
 
 ```sh
 sudo -H pip install -r requirements.txt
@@ -68,7 +68,7 @@ CREATE DATABASE oevent WITH OWNER john;
 * Once database is created, exit the psql shell with `\q` followed by ENTER.
 
 
-* **Step 3** - Install bower and frontend requirements. For this you need to be present in the root directory of the project. The root directory contains the file ```bower.json```. When you write ```bower install```, it finds bower.json and installs the libraries on the system.
+* **Step 3** - Install bower and frontend requirements. For this you need to be present in the root directory of the project. The root directory contains the file ```bower.json```. When you write ```bower install```, it finds bower.json and installs the libraries on the system. Bower has been removed as a dependency in the nextgen version of the project. Please skip this step if working on nextgen branch.
 
 ```sh
 npm install bower -g
@@ -94,7 +94,7 @@ bower install
 cp .env.example .env
 ```
 
-The URL is short, thank to the resemble of Postgres user and OS user.
+The URL is short, thanks to the resemble of Postgres user and OS user.
 
 
 * **Step 5** - Start the postgres service.
@@ -122,17 +122,17 @@ python manage.py db stamp head
 ```sh
 # Install and run redis
 # For Ubuntu, Debian and alike
-sudo apt-get install redis-server
+`sudo apt-get install redis-server`
 # For Fedora, RedHat, CentOS
-sudo dnf install redis-server
+`sudo dnf install redis-server`
 
 # Run Celery
 # socketio has problems with celery "blocking" tasks
 # also socketio is not used in a celery task so no problem to turn it off
-INTEGRATE_SOCKETIO=false celery worker -A app.celery
+`INTEGRATE_SOCKETIO=false celery worker -A app.celery`
 
 # run app
-python manage.py runserver
+`python manage.py runserver`
 ```
 
 * **Step 8** - Rejoice. Go to `localhost:5000` in your web browser to see the application live.
