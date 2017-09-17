@@ -142,18 +142,18 @@ def create_app():
     if 'SENTRY_DSN' in app.config:
         sentry.init_app(app, dsn=app.config['SENTRY_DSN'])
 
-    # elasticsearch
-    if app.config['ENABLE_ELASTICSEARCH']:
-        es.init_app(app)
-
     # redis
     redis_store.init_app(app)
 
-    with app.app_context():
-        try:
-            cron_rebuild_events_elasticsearch.delay()
-        except Exception:
-            pass
+    # elasticsearch
+    if app.config['ENABLE_ELASTICSEARCH']:
+        es.init_app(app)
+        with app.app_context():
+            try:
+                cron_rebuild_events_elasticsearch.delay()
+            except Exception:
+                pass
+
     return app, _manager, db, _jwt
 
 
