@@ -43,7 +43,7 @@ def verify_email():
 
 @auth_routes.route('/reset-password', methods=['POST'])
 def reset_password_post():
-    email = request.json['data']['email']
+    email = json.loads(request.json)['data']['email']
 
     try:
         user = User.query.filter_by(email=email).one()
