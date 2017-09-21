@@ -179,7 +179,7 @@ class UserDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('email_changed'):
-            send_email_change_user_email(user.email, view_kwargs.get('email_changed'))
+            send_email_change_user_email(user, view_kwargs.get('email_changed'))
 
     decorators = (api.has_permission('is_user_itself', fetch="user_id,id", fetch_as="id",
                   model=[Notification, Feedback, UsersEventsRoles, Session, EventInvoice, AccessCode,
