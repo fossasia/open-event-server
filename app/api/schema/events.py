@@ -20,7 +20,7 @@ class EventSchemaPublic(Schema):
     @validates_schema(pass_original=True)
     def validate_date(self, data, original_data):
         if 'id' in original_data['data']:
-            event = Event.query.filter_by(id=original_data['data']['id']).one()
+            event = Event.query.filter_by(id=original_data['data']['id']).first()
 
             if 'starts_at' not in data:
                 data['starts_at'] = event.starts_at
