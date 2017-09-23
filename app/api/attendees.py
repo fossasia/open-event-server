@@ -121,9 +121,12 @@ class AttendeeDetail(ResourceDetail):
             if data['is_checked_in'] and 'checkin_times' not in data:
                 raise UnprocessableEntity({'pointer': '/data/attributes/checkin_times'},
                                           "Check in time missing while trying to check in attendee")
-
-            if obj.checkin_times and data['checkin_times'] not in obj.checkin_times.split(","):
-                data['checkin_times'] = '{},{}'.format(obj.checkin_times, data['checkin_times'])
+            try:
+                if obj.checkin_times and data['checkin_times'] not in obj.checkin_times.split(","):
+                    data['checkin_times'] = '{},{}'.format(obj.checkin_times, data['checkin_times'])
+            except KeyError:
+                raise UnprocessableEntity({'pointer': '/data/attributes/checkin_times'}, 
+                                          "Check in time missing while updating attendee details")
 
     decorators = (jwt_required,)
     schema = AttendeeSchema
