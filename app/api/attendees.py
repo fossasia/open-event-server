@@ -125,7 +125,7 @@ class AttendeeDetail(ResourceDetail):
                 if obj.checkin_times and data['checkin_times'] not in obj.checkin_times.split(","):
                     data['checkin_times'] = '{},{}'.format(obj.checkin_times, data['checkin_times'])
             except KeyError:
-                raise UnprocessableEntity({'pointer': '/data/attributes/checkin_times'}, 
+                raise UnprocessableEntity({'pointer': '/data/attributes/checkin_times'},
                                           "Check in time missing while updating attendee details")
 
     decorators = (jwt_required,)
