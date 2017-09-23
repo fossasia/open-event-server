@@ -117,13 +117,13 @@ class AttendeeDetail(ResourceDetail):
         if not has_access('is_registrar', event_id=obj.event_id):
             raise ForbiddenException({'source': 'User'}, 'You are not authorized to access this.')
 
-        if 'is_checked_in' in data:
-            if data['is_checked_in'] and 'checkin_times' not in data:
+        if 'is_checked_in' in data and data['is_checked_in']:
+            if 'checkin_times' not in data:
                 raise UnprocessableEntity({'pointer': '/data/attributes/checkin_times'},
                                           "Check in time missing while trying to check in attendee")
-
-            if obj.checkin_times and data['checkin_times'] not in obj.checkin_times.split(","):
-                data['checkin_times'] = '{},{}'.format(obj.checkin_times, data['checkin_times'])
+            else:
+                if obj.checkin_times and data['checkin_times'] not in obj.checkin_times.split(","):
+                    data['checkin_times'] = '{},{}'.format(obj.checkin_times, data['checkin_times'])
 
     decorators = (jwt_required,)
     schema = AttendeeSchema
