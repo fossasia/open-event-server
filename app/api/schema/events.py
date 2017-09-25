@@ -1,8 +1,10 @@
 import pytz
+from pytz import timezone
 from marshmallow import validates_schema, validate
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema, Relationship
-from pytz import timezone
+from sqlalchemy.orm.exc import NoResultFound
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.models.event import Event
 from app.api.helpers.exceptions import UnprocessableEntity
@@ -20,7 +22,10 @@ class EventSchemaPublic(Schema):
     @validates_schema(pass_original=True)
     def validate_date(self, data, original_data):
         if 'id' in original_data['data']:
-            event = Event.query.filter_by(id=original_data['data']['id']).first()
+            try:
+                event = Event.query.filter_by(id=original_data['data']['id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'source': 'data/id'}, "Event id not found")
 
             if 'starts_at' not in data:
                 data['starts_at'] = event.starts_at
@@ -39,7 +44,10 @@ class EventSchemaPublic(Schema):
     @validates_schema(pass_original=True)
     def validate_timezone(self, data, original_data):
         if 'id' in original_data['data']:
-            event = Event.query.filter_by(id=original_data['data']['id']).one()
+            try:
+                event = Event.query.filter_by(id=original_data['data']['id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'source': 'data/id'}, "Event id not found")
 
             if 'timezone' not in data:
                 data['timezone'] = event.timezone
