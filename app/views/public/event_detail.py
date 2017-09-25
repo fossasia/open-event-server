@@ -203,6 +203,7 @@ def display_event_schedule_xcal(identifier):
 
 @event_detail.route('/<identifier>/cfs/')
 def display_event_cfs(identifier, via_hash=False):
+    show_speaker_modal = request.args.get('show_speaker_modal', '')
     event = get_published_event_or_abort(identifier)
     placeholder_images = DataGetter.get_event_default_images()
     if login.current_user.is_authenticated:
@@ -270,7 +271,8 @@ def display_event_cfs(identifier, via_hash=False):
                            via_hash=via_hash,
                            custom_placeholder=custom_placeholder,
                            user_speaker=user_speaker,
-                           existing_sessions=existing_sessions)
+                           existing_sessions=existing_sessions,
+                           show_speaker_modal=show_speaker_modal)
 
 
 @event_detail.route('/cfs/<hash>/', methods=('GET', 'POST'))
@@ -503,7 +505,7 @@ def process_event_cfs_speaker(identifier, via_hash=False):
         DataManager.add_speaker_to_event(request, event.id)
         if login.current_user.is_authenticated:
             flash("You have been registered as Speaker", "success")
-            return redirect(url_for('event_detail.display_event_cfs', identifier=identifier))
+            return redirect(url_for('event_detail.display_event_cfs', identifier=identifier, show_speaker_modal=True))
         else:
             flash(Markup(
                 "You have been registered as Speaker. Please login/register with <strong><u>" + email + "</u></strong> to manage it."),

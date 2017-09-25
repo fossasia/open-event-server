@@ -177,5 +177,8 @@
                 }
             }
         });
+        {% if show_speaker_modal == "True" %}
+            $('#speaker-session-modal').modal('show');
+        {% endif %}
 </script>
 {% endblock %}
