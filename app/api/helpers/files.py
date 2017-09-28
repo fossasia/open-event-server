@@ -74,7 +74,10 @@ def create_save_resized_image(image_file, basewidth=None, maintain_aspect=None, 
     """
     filename = '{filename}.{ext}'.format(filename=get_file_name(), ext=ext)
     image_file = cStringIO.StringIO(urllib.urlopen(image_file).read())
-    im = Image.open(image_file.getvalue())
+    try:
+        im = Image.open(image_file.getvalue())
+    except IOError:
+        raise IOError("Corrupt/Invalid Image")
 
     # Convert to jpeg for lower file size.
     if im.format is not 'JPEG':
