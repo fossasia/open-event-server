@@ -70,7 +70,7 @@
                         class="form-control col-md-7 col-xs-12">
                     <option value="" {% if not session %}selected{% endif %}>Select {{ pretty_name }}</option>
                     {% for data in data_set %}
-                        {% if speaker and speaker[identifier + '_id'] == data %}
+                        {% if speaker and speaker[identifier] == data %}
                             <option value="{{ data }}" selected>{{ data }}</option>
                         {% else %}
                             <option value="{{ data }}">{{ data }}</option>
