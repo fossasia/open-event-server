@@ -123,9 +123,10 @@ def process_speaker_view(speaker_id):
 
     if request.method == 'POST':
         speaker = DataGetter.get_speaker(speaker_id)
+        event = DataGetter.get_event(speaker.event_id)
         DataManager.edit_speaker(request, speaker)
         flash("The speaker has been updated successfully", "success")
-        return redirect(url_for('.display_my_sessions_view', event_id=speaker.event_id))
+        return redirect(url_for('event_detail.display_event_cfs', identifier=event.identifier, show_speaker_modal=True))
 
 
 @my_sessions.route('/<int:event_id>/speakers/<int:speaker_id>/avatar', methods=('DELETE',))
