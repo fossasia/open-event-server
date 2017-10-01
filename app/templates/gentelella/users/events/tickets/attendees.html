@@ -110,7 +110,8 @@
                         target="_blank"><i class="fa fa-file-pdf-o fa-fw"></i> {{ _("PDF") }}</a>
                     </li>
                     <li role="separator" class="divider"></li>
-                    <li><a href="" id="csv-export"><i class="fa fa-file-excel-o fa-fw"></i> {{ _("CSV") }}</a>
+                    <li><a href="{{ url_for('event_ticket_sales.download_as_csv', event_id=event.id) }}",
+                        target="_blank"><i class="fa fa-file-excel-o fa-fw"></i> {{ _("CSV") }}</a>
                     </li>
                 </ul>
             </div>

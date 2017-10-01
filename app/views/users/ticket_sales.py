@@ -4,7 +4,7 @@ from flask import make_response
 import pycountry
 import re
 from datetime import datetime
-from flask import Blueprint
+from flask import Blueprint, make_response
 from flask import abort, jsonify
 from flask import redirect, flash
 from flask import request, render_template
@@ -287,14 +287,21 @@ def download_as_pdf(event_id):
     return response
 
 
-@event_ticket_sales.route('/attendees/csv')
+@event_ticket_sales.route('/attendees/csv/')
 @can_access
 def download_as_csv(event_id):
     from app.helpers.tasks import export_attendee_csv_task
-    task = export_attendee_csv_task.delay(event_id)
-    return jsonify({
-            'task_url': url_for('api.extras_celery_task', task_id=task.id)
-        })
+    task = export_attendee_csv_task(str(event_id))
+    csv_path = task[7:]
+    csv = ""
+    with open(csv_path, 'r') as csvReader:
+        for row in csvReader.readlines():
+            csv += row
+    response = make_response(csv)
+    response.headers['Content-Disposition'] = 'attachment;\
+                                               filename=event-{}-attendee.csv'.format(event_id)
+    response.mimetype = 'text/csv'
+    return response
 
 
 @event_ticket_sales.route('/orders/pdf')
