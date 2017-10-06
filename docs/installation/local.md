@@ -122,17 +122,17 @@ python manage.py db stamp head
 ```sh
 # Install and run redis
 # For Ubuntu, Debian and alike
-`sudo apt-get install redis-server`
+sudo apt-get install redis-server
 # For Fedora, RedHat, CentOS
-`sudo dnf install redis-server`
+sudo dnf install redis-server
 
 # Run Celery
 # socketio has problems with celery "blocking" tasks
 # also socketio is not used in a celery task so no problem to turn it off
-`INTEGRATE_SOCKETIO=false celery worker -A app.celery`
+INTEGRATE_SOCKETIO=false celery worker -A app.celery
 
 # run app
-`python manage.py runserver`
+python manage.py runserver
 ```
 
 * **Step 8** - Rejoice. Go to `localhost:5000` in your web browser to see the application live.
