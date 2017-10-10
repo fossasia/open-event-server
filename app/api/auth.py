@@ -43,7 +43,10 @@ def verify_email():
 
 @auth_routes.route('/reset-password', methods=['POST'])
 def reset_password_post():
-    email = request.json['data']['email']
+    try:
+        email = request.json['data']['email']
+    except TypeError:
+        return make_response(jsonify(error="Bad Request Error"), 400)
 
     try:
         user = User.query.filter_by(email=email).one()
