@@ -1,0 +1,10 @@
+{
+  "name": "Open-Event-Orga-Server",
+  "description": "The Open Event API Server enables organizers to manage events from concerts to conferences and meet-ups.",
+  "logo": "https://scalingo.com/logo.svg",
+  "repository": "https://github.com/fossasia/open-event-orga-server",
+  "website": "https://open-event-dev.herokuapp.com/",
+  "env": {
+  },
+  "addons": ["scalingo-redis"]
+}

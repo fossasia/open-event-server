@@ -1,0 +1,8 @@
+applications:
+- name: open-event-orga-server
+memory: 256M
+command: python postgres-app.py
+buildpack: https://github.com/cloudfoundry/python-buildpack.git
+instances: 2
+services:
+- todo-postgres-db
