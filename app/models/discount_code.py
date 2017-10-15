@@ -40,6 +40,7 @@ class DiscountCode(db.Model):
                  valid_from=None,
                  valid_till=None,
                  is_active=True,
+                 created_at=None,
                  used_for=None,
                  event_id=None,
                  tickets=None,
