@@ -25,11 +25,11 @@ mkdir -p lib
 gcloud auth activate-service-account --key-file eventyay-8245fde7ab8a.json
 export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/eventyay-8245fde7ab8a.json
 gcloud config set project eventyay
-gcloud container clusters get-credentials eventyay-cluster
+gcloud container clusters get-credentials vintage-cluster
 cd kubernetes/images/web
 docker build --build-arg COMMIT_HASH=$TRAVIS_COMMIT --build-arg BRANCH=$DEPLOY_BRANCH --build-arg REPOSITORY=$REPOSITORY --no-cache -t eventyay/api-server:$TRAVIS_COMMIT .
 docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 docker tag eventyay/api-server:$TRAVIS_COMMIT eventyay/api-server:latest
 docker push eventyay/api-server
 kubectl set image deployment/web web=eventyay/api-server:$TRAVIS_COMMIT
-kubectl set image deployment/celery celery=eventyay/api-server:$TRAVIS_COMMIT
+kubectl set image deployment/web celery=eventyay/api-server:$TRAVIS_COMMIT
