@@ -9,7 +9,7 @@ Flask-JWT>=0.3.2,<0.4
 requests-oauthlib>=0.7.0,<1
 icalendar>=3.11,<4
 requests[security]>=2.12.4,<3
-psycopg2==2.7.3.1   
+psycopg2>=2.7,<2.8
 SQLAlchemy-Utils>=0.32.12,<0.33
 itsdangerous>=0.24,<0.30
 humanize>=0.5.1,<0.6
