@@ -1,5 +1,5 @@
 FROM python:2-slim
-MAINTAINER Avi Aryan <avi.aryan123@gmail.com>
+LABEL maintainer="Niranjan Rajendran <me@niranjan.io>"
 
 ENV INSTALL_PATH /open_event
 RUN mkdir -p $INSTALL_PATH
