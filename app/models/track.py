@@ -39,8 +39,13 @@ class Track(db.Model):
 
     @property
     def font_color(self):
-        h = self.color.lstrip('#')
-        a = 1 - (0.299 * int(h[0:2], 16) + 0.587 * int(h[2:4], 16) + 0.114 * int(h[4:6], 16))/255
+        if self.color.startswith('#'):
+            h = self.color.lstrip('#')
+            a = 1 - (0.299 * int(h[0:2], 16) + 0.587 * int(h[2:4], 16) + 0.114 * int(h[4:6], 16))/255
+        elif self.color.startswith('rgba'):
+            h = self.color.lstrip('rgba').replace('(', '', 1).replace(')', '', 1)
+            h = h.split(',')
+            a = 1 - (0.299 * int(int(h[0]), 16) + 0.587 * int(int(h[1]), 16) + 0.114 * int(int(h[2]), 16)) / 255
         return '#000000' if (a < 0.5) else '#ffffff'
 
     @property
