@@ -9479,15 +9479,15 @@ Data related to an invoice for the event.
 | `paid-via` | Payment procedure | string | - |
 
 ## Event Invoices [/v1/event-invoices{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
-
++ Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    
 
 ### Get Event Invoices [GET]
 Get a list of event invoices.
-
 + Request
 
     + Headers
@@ -19996,7 +19996,6 @@ This group of APIs help you to start a task for exporting a particular event and
 ## Start Event Export [/v1/events/{event_identifier}/export/json]
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
-
 Start a celery task to export the event with the event_id as a collection of json files and archive it to get it ready for downloading. Returns the task url
 to get the status of the export task.
 
@@ -20056,9 +20055,8 @@ from the different json files present inside the zip file and save it inside a d
 This API helps you to get the status of a celery task and the response
 
 ## Task Details [/v1/tasks/{task_id}]
-+Parameters
++ Parameters
     + task_id: 1 (string) - id of the task. (b7ca7088-876e-4c29-a0ee-b8029a64849a is an example of identifier)
-
 Get the task status and the final result of the task as response
 
 
@@ -20906,7 +20904,6 @@ To create copy of an event
 ## Create Event Copy [/v1/events/{identifier}/copy]
 + Parameters
     + identifier: 1 - Identifier of the event or ID of the event to copy
-
 Creates the copy. Requires Co-Organizer access
 
 ### Create Copy [POST]
