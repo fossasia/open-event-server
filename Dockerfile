@@ -18,7 +18,7 @@ COPY requirements.txt requirements.txt
 COPY requirements requirements
 
 # install requirements
-RUN pip install --no-cache-dir -r requirements.txt && bower install --allow-root && bower cache clean --allow-root
+RUN pip install --no-cache-dir -r requirements.txt 
 
 # copy remaining files
 COPY . .
