@@ -11,19 +11,19 @@
 
 > **The Open Event API Server enables organizers to manage events from concerts to conferences and meet-ups.**
 
-It offers features for events with several tracks and venues. Event managers can create invitation forms for speakers and build schedules in a drag and drop interface. The event information is stored in a database. The system provides API endpoints to fetch the data, and to modify and update it. Organizers can import and export event data in a standard compressed file format that includes the event data in JSON and binary media files like images and audio.
+It offers features for events with several tracks and venues. Event managers can create invitation forms for speakers and build schedules in a *drag and drop* interface. The event information is stored in a **database**. The system provides **API endpoints** to **fetch** the data, and to **modify** and **update** it. Organizers can import and export event data in a standard compressed file format that includes the event data in **JSON and binary** media files like **images and audio**.
 
-The Open Event API Server exposes a well documented [JSON:API Spec](http://jsonapi.org/) Compliant REST API that can be used by external services (like the Open Event App generators and the frontend) to access & manipulate the data.
+The **Open Event API Server** exposes a well documented [JSON:API Spec](http://jsonapi.org/) Compliant `REST API` that can be used by external services *(like the Open Event App generators and the frontend)* to access & manipulate the data.
 
 **API Documentation:**
-- Every installation of the project includes API docs, (e.g. here on the test install [https://open-event-api.herokuapp.com](https://open-event-api.herokuapp.com)).
--  A hosted version of the API docs is available in the `gh-pages` branch of the repository at [http://dev.eventyay.com/api/v1](http://dev.eventyay.com/api/v1)
+- Every installation of the project includes **API docs**, (e.g. here on the test install [https://open-event-api.herokuapp.com](https://open-event-api.herokuapp.com)).
+-  A hosted version of the **API docs** is available in the `gh-pages` branch of the repository at [http://dev.eventyay.com/api/v1](http://dev.eventyay.com/api/v1)
 
 ## Communication
 
-* Please join our mailing list to discuss questions regarding the project: https://groups.google.com/forum/#!forum/open-event
+* Please join our **mailing list** to discuss questions regarding the project: https://groups.google.com/forum/#!forum/open-event
 
-* Our chat channel is on Gitter here: [gitter.im/fossasia/open-event-orga-server](https://gitter.im/fossasia/open-event-orga-server)
+* Our chat channel is on **Gitter** here: [gitter.im/fossasia/open-event-orga-server](https://gitter.im/fossasia/open-event-orga-server)
 
 ## Demo version
 
@@ -238,7 +238,7 @@ This is an Open Source project and we would be happy to see contributors who rep
 
 ## Branch Policy
 
-We have the following branches
+We have the following branches :
  * **development**
 	 All development goes on in this branch. If you're making a contribution, please make a pull request to _development_.
 	 PRs to must pass a build check and a unit-test check on Travis (https://open-event-dev.herokuapp.com - Is running off the development branch. It is hosted on Heroku.)
