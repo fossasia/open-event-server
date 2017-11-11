@@ -27,13 +27,13 @@ The **Open Event API Server** exposes a well documented [JSON:API Spec](http://j
 * Our chat channel is on **[Gitter](https://gitter.im/fossasia/open-event-orga-server)**
 > [gitter.im/fossasia/open-event-orga-server](https://gitter.im/fossasia/open-event-orga-server)
 
-## Demo version
+## Demo Version
 
 A demo version is automatically deployed from our repositories:
-* Deployment from the `nextgen` branch - [open-event-api.herokuapp.com](http://open-event-dev.herokuapp.com/)
-* Deployment from the `master` branch - [open-event.herokuapp.com](http://open-event.herokuapp.com/)
-* Deployment from the `development` branch - [open-event-dev.herokuapp.com](http://open-event-dev.herokuapp.com/)
-* Developer documentation `gh-pages` - [dev.eventyay.com](http://dev.eventyay.com/)
+* Deployment from the `nextgen` branch - **[open-event-api.herokuapp.com](http://open-event-dev.herokuapp.com/)**
+* Deployment from the `master` branch - **[open-event.herokuapp.com](http://open-event.herokuapp.com/)**
+* Deployment from the `development` branch - **[open-event-dev.herokuapp.com](http://open-event-dev.herokuapp.com/)**
+* Developer documentation `gh-pages` - **[dev.eventyay.com](http://dev.eventyay.com/)**
 
 ## Installation
 
