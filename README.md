@@ -273,4 +273,6 @@ The tentative release policy for now is, (since there is a lot of activity and a
 
 ## License
 
-This project is currently licensed under the GNU General Public License v3. A copy of LICENSE.md should be present along with the source code. To obtain the software under a different license, please contact [FOSSASIA](http://blog.fossasia.org/contact/).
+This project is currently licensed under the **[GNU General Public License v3](LICENSE.md)**.
+
+> To obtain the software under a different license, please contact [FOSSASIA](http://blog.fossasia.org/contact/).
