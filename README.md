@@ -21,9 +21,11 @@ The **Open Event API Server** exposes a well documented [JSON:API Spec](http://j
 
 ## Communication
 
-* Please join our **mailing list** to discuss questions regarding the project: https://groups.google.com/forum/#!forum/open-event
+* Please join our **[mailing list](https://groups.google.com/forum/#!forum/open-event)** to discuss questions regarding the project.
+> https://groups.google.com/forum/#!forum/open-event
 
-* Our chat channel is on **Gitter** here: [gitter.im/fossasia/open-event-orga-server](https://gitter.im/fossasia/open-event-orga-server)
+* Our chat channel is on **[Gitter](https://gitter.im/fossasia/open-event-orga-server)**
+> [gitter.im/fossasia/open-event-orga-server](https://gitter.im/fossasia/open-event-orga-server)
 
 ## Demo version
 
