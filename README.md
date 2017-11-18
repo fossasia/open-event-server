@@ -1,6 +1,6 @@
-![Open Event API Server](https://storage.googleapis.com/eventyay.com/assets/branding/server_branding.png)
+# Open Event Orga Server
 
-The Open Event API Server enables organizers to manage events from concerts to conferences and meet-ups. It offers features for events with several tracks and venues. Event managers can create invitation forms for speakers and build schedules in a drag and drop interface. The event information is stored in a database. The system provides API endpoints to fetch the data, and to modify and update it. Organizers can import and export event data in a standard compressed file format that includes the event data in JSON and binary media files like images and audio.
+![Open Event API Server](https://storage.googleapis.com/eventyay.com/assets/branding/server_branding.png)
 
 [![GitHub release](https://img.shields.io/badge/release-1.0.0--alpha.10-blue.svg?style=flat-square)](https://github.com/fossasia/open-event-orga-server/releases/latest)
 [![Travis branch](https://img.shields.io/travis/fossasia/open-event-orga-server/master.svg?style=flat-square)](https://travis-ci.org/fossasia/open-event-orga-server)
@@ -9,25 +9,31 @@ The Open Event API Server enables organizers to manage events from concerts to c
 [![Codecov branch](https://img.shields.io/codecov/c/github/fossasia/open-event-orga-server/master.svg?style=flat-square&label=Codecov+Coverage)](https://codecov.io/gh/fossasia/open-event-orga-server)
 [![Gitter](https://img.shields.io/badge/chat-on%20gitter-ff006f.svg?style=flat-square)](https://gitter.im/fossasia/open-event-orga-server)
 
-The Open Event API Server exposes a well documented [JSON:API Spec](http://jsonapi.org/) Compliant REST API that can be used by external services (like the Open Event App generators and the frontend) to access & manipulate the data.
+> **The Open Event API Server enables organizers to manage events from concerts to conferences and meet-ups.**
+
+It offers features for events with several tracks and venues. Event managers can create invitation forms for speakers and build schedules in a *drag and drop* interface. The event information is stored in a **database**. The system provides **API endpoints** to **fetch** the data, and to **modify** and **update** it. Organizers can import and export event data in a standard compressed file format that includes the event data in **JSON and binary** media files like **images and audio**.
+
+The **Open Event API Server** exposes a well documented [JSON:API Spec](http://jsonapi.org/) Compliant `REST API` that can be used by external services *(like the Open Event App generators and the frontend)* to access & manipulate the data.
 
 **API Documentation:**
-- Every installation of the project includes API docs, (e.g. here on the test install [https://open-event-api.herokuapp.com](https://open-event-api.herokuapp.com)).
--  A hosted version of the API docs is available in the `gh-pages` branch of the repository at [http://dev.eventyay.com/api/v1](http://dev.eventyay.com/api/v1)
+- Every installation of the project includes **API docs**, (e.g. here on the test install [https://open-event-api.herokuapp.com](https://open-event-api.herokuapp.com)).
+-  A hosted version of the **API docs** is available in the `gh-pages` branch of the repository at [http://dev.eventyay.com/api/v1](http://dev.eventyay.com/api/v1)
 
 ## Communication
 
-Please join our mailing list to discuss questions regarding the project: https://groups.google.com/forum/#!forum/open-event
+* Please join our **[mailing list](https://groups.google.com/forum/#!forum/open-event)** to discuss questions regarding the project.
+> https://groups.google.com/forum/#!forum/open-event
 
-Our chat channel is on Gitter here: [gitter.im/fossasia/open-event-orga-server](https://gitter.im/fossasia/open-event-orga-server)
+* Our chat channel is on **[Gitter](https://gitter.im/fossasia/open-event-orga-server)**
+> [gitter.im/fossasia/open-event-orga-server](https://gitter.im/fossasia/open-event-orga-server)
 
-## Demo version
+## Demo Version
 
 A demo version is automatically deployed from our repositories:
-* Deployment from the `nextgen` branch - [open-event-api.herokuapp.com](http://open-event-dev.herokuapp.com/)
-* Deployment from the `master` branch - [open-event.herokuapp.com](http://open-event.herokuapp.com/)
-* Deployment from the `development` branch - [open-event-dev.herokuapp.com](http://open-event-dev.herokuapp.com/)
-* Developer documentation `gh-pages` - [dev.eventyay.com](http://dev.eventyay.com/)
+* Deployment from the `nextgen` branch - **[open-event-api.herokuapp.com](http://open-event-dev.herokuapp.com/)**
+* Deployment from the `master` branch - **[open-event.herokuapp.com](http://open-event.herokuapp.com/)**
+* Deployment from the `development` branch - **[open-event-dev.herokuapp.com](http://open-event-dev.herokuapp.com/)**
+* Developer documentation `gh-pages` - **[dev.eventyay.com](http://dev.eventyay.com/)**
 
 ## Installation
 
@@ -234,7 +240,7 @@ This is an Open Source project and we would be happy to see contributors who rep
 
 ## Branch Policy
 
-We have the following branches
+We have the following branches :
  * **development**
 	 All development goes on in this branch. If you're making a contribution, please make a pull request to _development_.
 	 PRs to must pass a build check and a unit-test check on Travis (https://open-event-dev.herokuapp.com - Is running off the development branch. It is hosted on Heroku.)
@@ -269,4 +275,6 @@ The tentative release policy for now is, (since there is a lot of activity and a
 
 ## License
 
-This project is currently licensed under the GNU General Public License v3. A copy of LICENSE.md should be present along with the source code. To obtain the software under a different license, please contact [FOSSASIA](http://blog.fossasia.org/contact/).
+This project is currently licensed under the **[GNU General Public License v3](LICENSE.md)**.
+
+> To obtain the software under a different license, please contact [FOSSASIA](http://blog.fossasia.org/contact/).
