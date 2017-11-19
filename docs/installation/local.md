@@ -68,27 +68,7 @@ CREATE DATABASE oevent WITH OWNER john;
 * Once database is created, exit the psql shell with `\q` followed by ENTER.
 
 
-* **Step 3** - Install bower and frontend requirements. For this you need to be present in the root directory of the project. The root directory contains the file ```bower.json```. When you write ```bower install```, it finds bower.json and installs the libraries on the system. Bower has been removed as a dependency in the nextgen version of the project. Please skip this step if working on nextgen branch.
-
-```sh
-npm install bower -g
-bower install
-```
-
-if error
-```sh
-sudo npm install bower -g
-sudo ln -s /usr/bin/nodejs /usr/bin/node
-sudo bower install
-```
-
-for mac user:
-```sh
-sudo npm install bower -g
-bower install
-```
-
-* **Step 4** - Create application environment variables.
+* **Step 3** - Create application environment variables.
 
 ```sh
 cp .env.example .env
@@ -97,7 +77,7 @@ cp .env.example .env
 The URL is short, thanks to the resemble of Postgres user and OS user.
 
 
-* **Step 5** - Start the postgres service.
+* **Step 4** - Start the postgres service.
 
 ```sh
 sudo service postgresql restart
@@ -108,7 +88,7 @@ for mac users:
 brew services restart postgresql
 ```
 
-* **Step 6** - Create the tables. For that we will use `create_db.py`.
+* **Step 5** - Create the tables. For that we will use `create_db.py`.
 
 ```sh
 python create_db.py
@@ -117,7 +97,7 @@ python manage.py db stamp head
 ```
 
 
-* **Step 7** - Start the application along with the needed services.
+* **Step 6** - Start the application along with the needed services.
 
 ```sh
 # Install and run redis
@@ -135,7 +115,7 @@ INTEGRATE_SOCKETIO=false celery worker -A app.celery
 python manage.py runserver
 ```
 
-* **Step 8** - Rejoice. Go to `localhost:5000` in your web browser to see the application live.
+* **Step 7** - Rejoice. Go to `localhost:5000` in your web browser to see the application live.
 
 
 ## Flask-SocketIO development
@@ -207,23 +187,3 @@ gunicorn app:app --worker-class eventlet -w 1 --bind 0.0.0.0:5001 --reload
 ```
 
 ---
-
-**Note:**
-
-If you are working from within a proxied network of an organization/institute, Bower might not be able to install the libraries. For that, we need to configure .bowerrc to work via proxy.
-* Open .bowerrc in any text editor like vim. Run:
-```vim .bowerrc```
-* The contents of .bowerrc will be something like this:
-```
-{
-	"directory": "app/static/admin/lib"
-}
-```
-* Modify the file to add "proxy" and "https-proxy" properties like this:
-```
-{
-	"directory": "app/static/admin/lib",
-	"proxy": "http://172.31.1.23:8080",
-	"https-proxy": "http://172.31.1.23:8080"
-}
-```
