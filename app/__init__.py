@@ -12,7 +12,6 @@ from app.helpers.scheduled_jobs import send_mail_to_expired_orders, empty_trash,
 
 from celery import Celery
 from celery.signals import after_task_publish
-from flask.ext.htmlmin import HTMLMIN
 import logging
 import os.path
 from os import environ
@@ -122,7 +121,6 @@ def create_app():
     app.config['CELERY_BROKER_URL'] = environ.get('REDIS_URL', 'redis://localhost:6379/0')
     app.config['CELERY_RESULT_BACKEND'] = app.config['CELERY_BROKER_URL']
 
-    HTMLMIN(app)
     CORS(app, resources={r"/api/*": {"origins": "*"}})
     AuthManager.init_login(app)
 
