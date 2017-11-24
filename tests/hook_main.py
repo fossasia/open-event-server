@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 import os.path as path
 import dredd_hooks as hooks

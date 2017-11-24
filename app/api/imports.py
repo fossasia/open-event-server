@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from flask import jsonify, url_for, current_app, Blueprint, abort
 from flask_jwt import jwt_required, current_identity
 
@@ -16,7 +17,7 @@ def import_event(source_type):
     else:
         file_path = None
         abort(404)
-    from helpers.tasks import import_event_task
+    from .helpers.tasks import import_event_task
     task = import_event_task.delay(email=current_identity.email, file=file_path,
                                    source_type=source_type, creator_id=current_identity.id)
     # create import job

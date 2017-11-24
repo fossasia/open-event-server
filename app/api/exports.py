@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import os
 
 from flask import send_file, make_response, jsonify, url_for, \
@@ -22,7 +23,7 @@ EXPORT_SETTING = {
 @export_routes.route('/events/<string:event_identifier>/export/json', methods=['POST'])
 @jwt_required()
 def export_event(event_identifier):
-    from helpers.tasks import export_event_task
+    from .helpers.tasks import export_event_task
 
     settings = EXPORT_SETTING
     settings['image'] = request.json.get('image', False)

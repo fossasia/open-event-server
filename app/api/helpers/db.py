@@ -1,3 +1,4 @@
+from __future__ import print_function
 # ONLY INCLUDE THOSE DB HELPERS WHICH ARE NOT SPECIFIC TO ANY MODEL
 
 import logging
