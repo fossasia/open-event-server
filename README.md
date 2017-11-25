@@ -1,19 +1,19 @@
-# Open Event Orga Server
+# Open Event Server
 
-![Open Event API Server](https://storage.googleapis.com/eventyay.com/assets/branding/server_branding.png)
+![Open Event Server](https://storage.googleapis.com/eventyay.com/assets/branding/server_branding.png)
 
-[![GitHub release](https://img.shields.io/badge/release-1.0.0--alpha.10-blue.svg?style=flat-square)](https://github.com/fossasia/open-event-orga-server/releases/latest)
-[![Travis branch](https://img.shields.io/travis/fossasia/open-event-orga-server/master.svg?style=flat-square)](https://travis-ci.org/fossasia/open-event-orga-server)
-[![Gemnasium](https://img.shields.io/gemnasium/fossasia/open-event-orga-server.svg?style=flat-square)](https://gemnasium.com/github.com/fossasia/open-event-orga-server)
+[![GitHub release](https://img.shields.io/badge/release-1.0.0--alpha.10-blue.svg?style=flat-square)](https://github.com/fossasia/open-event-server/releases/latest)
+[![Travis branch](https://img.shields.io/travis/fossasia/open-event-server/master.svg?style=flat-square)](https://travis-ci.org/fossasia/open-event-server)
+[![Gemnasium](https://img.shields.io/gemnasium/fossasia/open-event-server.svg?style=flat-square)](https://gemnasium.com/github.com/fossasia/open-event-server)
 [![Codacy branch grade](https://img.shields.io/codacy/grade/1ac554483fac462797ffa5a8b9adf2fa/master.svg?style=flat-square)](https://www.codacy.com/app/fossasia/open-event-orga-server)
 [![Codecov branch](https://img.shields.io/codecov/c/github/fossasia/open-event-orga-server/master.svg?style=flat-square&label=Codecov+Coverage)](https://codecov.io/gh/fossasia/open-event-orga-server)
 [![Gitter](https://img.shields.io/badge/chat-on%20gitter-ff006f.svg?style=flat-square)](https://gitter.im/fossasia/open-event-orga-server)
 
-> **The Open Event API Server enables organizers to manage events from concerts to conferences and meet-ups.**
+> **The Open Event Server enables organizers to manage events from concerts to conferences and meet-ups.**
 
 It offers features for events with several tracks and venues. Event managers can create invitation forms for speakers and build schedules in a *drag and drop* interface. The event information is stored in a **database**. The system provides **API endpoints** to **fetch** the data, and to **modify** and **update** it. Organizers can import and export event data in a standard compressed file format that includes the event data in **JSON and binary** media files like **images and audio**.
 
-The **Open Event API Server** exposes a well documented [JSON:API Spec](http://jsonapi.org/) Compliant `REST API` that can be used by external services *(like the Open Event App generators and the frontend)* to access & manipulate the data.
+The **Open Event Server** exposes a well documented [JSON:API Spec](http://jsonapi.org/) Compliant `REST API` that can be used by external services *(like the Open Event App generators and the frontend)* to access & manipulate the data.
 
 **API Documentation:**
 - Every installation of the project includes **API docs**, (e.g. here on the test install [https://open-event-api.herokuapp.com](https://open-event-api.herokuapp.com)).
@@ -30,14 +30,13 @@ The **Open Event API Server** exposes a well documented [JSON:API Spec](http://j
 ## Demo Version
 
 A demo version is automatically deployed from our repositories:
-* Deployment from the `nextgen` branch - **[open-event-api.herokuapp.com](http://open-event-api.herokuapp.com/)**
 * Deployment from the `master` branch - **[open-event.herokuapp.com](http://open-event.herokuapp.com/)**
-* Deployment from the `development` branch - **[open-event-dev.herokuapp.com](http://open-event-dev.herokuapp.com/)**
+* Deployment from the `development` branch - **[open-event-api.herokuapp.com](http://open-event-dev.herokuapp.com/)**
 * Developer documentation `gh-pages` - **[dev.eventyay.com](http://dev.eventyay.com/)**
 
 ## Installation
 
-The Open Event API Server can be easily deployed on a variety of platforms. Detailed platform specific installation instructions have been provided below.
+The Open Event Server can be easily deployed on a variety of platforms. Detailed platform specific installation instructions have been provided below.
 
 1. [Generic Installation Instructions](/docs/installation/basic.md)
 1. [Local Installation](/docs/installation/local.md)
@@ -53,7 +52,7 @@ The Open Event API Server can be easily deployed on a variety of platforms. Deta
 
 One-click Heroku deployment is also available:
 
-[![Deploy to Docker Cloud](https://files.cloud.docker.com/images/deploy-to-dockercloud.svg)](https://cloud.docker.com/stack/deploy/?repo=https://github.com/fossasia/open-event-orga-server)  [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Deploy to Docker Cloud](https://files.cloud.docker.com/images/deploy-to-dockercloud.svg)](https://cloud.docker.com/stack/deploy/?repo=https://github.com/fossasia/open-event-server)  [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 
 ## Technology Stack
@@ -125,7 +124,7 @@ For ticket sales the service integrates payment gateways:
 
 **Import:**
 
-Open Event API server supports multiple formats as a valid source for import.
+Open Event server supports multiple formats as a valid source for import.
 
 - A **zip archive** with JSON (matching the API structure) and binary media files. Read more about this [here](/docs/general/import-export.md).
 - The **Pentabarf XML** format is also supported as a valid import source. ([Sample file](https://archive.fosdem.org/2016/schedule/xml)).
@@ -236,20 +235,17 @@ Once you have activated your account just proceed to the [translation section](h
 
 ## Contributions, Bug Reports, Feature Requests
 
-This is an Open Source project and we would be happy to see contributors who report bugs and file feature requests submitting pull requests as well. Please report issues here https://github.com/fossasia/open-event-orga-server/issues
+This is an Open Source project and we would be happy to see contributors who report bugs and file feature requests submitting pull requests as well. Please report issues here https://github.com/fossasia/open-event-server/issues
 
 ## Branch Policy
 
 We have the following branches :
  * **development**
 	 All development goes on in this branch. If you're making a contribution, please make a pull request to _development_.
-	 PRs to must pass a build check and a unit-test check on Travis (https://open-event-dev.herokuapp.com - Is running off the development branch. It is hosted on Heroku.)
+	 PRs to must pass a build check and a unit-test check on Travis (https://open-event-api.herokuapp.com - Is running off the development branch. It is hosted on Heroku.)
+	 (https://api.eventyay.com - Is running off the `development` branch. Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
  * **master**
    This contains shipped code. After significant features/bug-fixes are accumulated on development, we make a version update, and make a release. (https://eventyay.com - Is running off the master branch. (whichever is the latest release.) Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
- * **nextgen**
-	 All development for the `nextgen` version of the Open Event Orga Server (aka Open Event API Server) goes on in this branch. If you're making a contribution, please make a pull request to _nextgen_.
-	 PRs to must pass a build check and a unit-test check on Travis (https://open-event-api.herokuapp.com - Is running off the `nextgen` branch. It is hosted on Heroku.)
-     (https://api.eventyay.com - Is running off the `nextgen` branch. Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
  * **gh-pages**
    This contains the documentation website on http://dev.eventyay.com. The site is build automatically on each commit in the development branch through a script and using travis. It includes the md files of the Readme and /docs folder. It also includes javadocs.
 
@@ -266,7 +262,7 @@ The tentative release policy for now is, (since there is a lot of activity and a
 * When you're submitting a PR for a UI-related issue, it would be really awesome if you add a screenshot of your change or a link to a deployment where it can be tested out along with your PR. It makes it very easy for the reviewers and you'll also get reviews quicker.
 
 **Feature Requests and Bug Reports**
-* When you file a feature request or when you are submitting a bug report to the [issue tracker](https://github.com/fossasia/open-event-orga-server/issues), make sure you add steps to reproduce it. Especially if that bug is some weird/rare one.
+* When you file a feature request or when you are submitting a bug report to the [issue tracker](https://github.com/fossasia/open-event-server/issues), make sure you add steps to reproduce it. Especially if that bug is some weird/rare one.
 
 **Join the development**
 * Before you join development, please set up the system on your local machine and go through the application completely. Press on any link/button you can find and see where it leads to. Explore. (Don't worry ... Nothing will happen to the app or to you due to the exploring :wink: Only thing that will happen is, you'll be more familiar with what is where and might even get some cool ideas on how to improve various aspects of the app.)
