@@ -113,7 +113,7 @@ def create_app():
         # Profiling
         app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
 
-    # nextgen api
+    # development api
     with app.app_context():
         from app.api.bootstrap import api_v1
         from app.api.uploads import upload_routes

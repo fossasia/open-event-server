@@ -7,7 +7,7 @@ git config --global user.name "Travis CI"
 git config --global user.email "noreply+travis@fossasia.org"
 
 # export DEPLOY_BRANCH=${DEPLOY_BRANCH:-master}
-export DEPLOY_BRANCH='nextgen' # TODO change before merging to dev
+export DEPLOY_BRANCH='development' # TODO change before merging to dev
 
 if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/open-event-server" -o  "$TRAVIS_BRANCH" != "$DEPLOY_BRANCH" ]; then
     echo "We update docs only from master. So, let's skip this shall we ? :)"

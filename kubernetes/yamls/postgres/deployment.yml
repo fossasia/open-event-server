@@ -27,5 +27,5 @@ spec:
       volumes:
         - name: pg-data
           gcePersistentDisk:
-            pdName: nextgen-data-disk
+            pdName: development-data-disk
             fsType: ext4

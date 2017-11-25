@@ -1,6 +1,6 @@
 # API
 
-All the APIs of nextgen branch are right now hosted in `/v1/`.
+All the APIs of development branch are right now hosted in `/v1/`.
 
 ## API Authentication
 
