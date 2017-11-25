@@ -9,7 +9,7 @@ git config --global user.email "noreply+travis@fossasia.org"
 # export DEPLOY_BRANCH=${DEPLOY_BRANCH:-master}
 export DEPLOY_BRANCH='nextgen' # TODO change before merging to dev
 
-if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/open-event-orga-server" -o  "$TRAVIS_BRANCH" != "$DEPLOY_BRANCH" ]; then
+if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/open-event-server" -o  "$TRAVIS_BRANCH" != "$DEPLOY_BRANCH" ]; then
     echo "We update docs only from master. So, let's skip this shall we ? :)"
     exit 0
 fi
@@ -23,7 +23,7 @@ eval `ssh-agent -s`
 ssh-add deploy_key
 
 # clone and do
-git clone -b gh-pages "git@github.com:fossasia/open-event-orga-server.git" gh-pages
+git clone -b gh-pages "git@github.com:fossasia/open-event-server.git" gh-pages
 rm -rf gh-pages/api/v1/*
 aglio --theme-full-width --theme-variables slate -i docs/api/api_blueprint.apib -o gh-pages/api/v1/index.html
 cp -R docs/general/* gh-pages/_docs/
