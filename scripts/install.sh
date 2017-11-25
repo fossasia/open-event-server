@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Install essential packages from Apt
+# Install essential packages from APT software packages
 apt-get update -y
 # Python dev packages
 apt-get install -y build-essential python python-dev python-setuptools python-pip
@@ -18,9 +18,9 @@ APP_DB_NAME=test
 # Edit the following to change the version of PostgreSQL that is installed
 PG_VERSION=9.4
 
-###########################################################
-# Changes below this line are probably not necessary
-###########################################################
+#################################################################
+# Changes below this line are probably not necessarily required #
+#################################################################
 print_db_usage () {
   echo "Your PostgreSQL database has been setup and can be accessed on your local machine on the forwarded port (default: 5432)"
   echo "  Host: localhost"
