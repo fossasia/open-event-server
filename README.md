@@ -1,4 +1,4 @@
-# Open Event Orga Server
+# Open Event Server
 
 ![Open Event API Server](https://storage.googleapis.com/eventyay.com/assets/branding/server_branding.png)
 
@@ -247,7 +247,7 @@ We have the following branches :
  * **master**
    This contains shipped code. After significant features/bug-fixes are accumulated on development, we make a version update, and make a release. (https://eventyay.com - Is running off the master branch. (whichever is the latest release.) Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
  * **nextgen**
-	 All development for the `nextgen` version of the Open Event Orga Server (aka Open Event API Server) goes on in this branch. If you're making a contribution, please make a pull request to _nextgen_.
+	 All development for the `nextgen` version of the Open Event Server (aka Open Event API Server) goes on in this branch. If you're making a contribution, please make a pull request to _nextgen_.
 	 PRs to must pass a build check and a unit-test check on Travis (https://open-event-api.herokuapp.com - Is running off the `nextgen` branch. It is hosted on Heroku.)
      (https://api.eventyay.com - Is running off the `nextgen` branch. Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
  * **gh-pages**
