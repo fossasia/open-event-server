@@ -87,7 +87,7 @@ def index():
     Index route
     :return:
     """
-    r = requests.get('https://raw.githubusercontent.com/fossasia/open-event-server/gh-pages/api/v1/index.html')
+    r = requests.get('https://raw.githubusercontent.com/fossasia/open-event-orga-server/gh-pages/api/v1/index.html')
     response = make_response(r.content)
     response.headers["Content-Type"] = "text/html"
     return response

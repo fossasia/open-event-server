@@ -2,7 +2,7 @@
 
 export NEXTGEN_DEPLOY_BRANCH=${NEXTGEN_DEPLOY_BRANCH:-nextgen}
 
-if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/open-event-server" -o  "$TRAVIS_BRANCH" != "$NEXTGEN_DEPLOY_BRANCH" ]; then
+if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/open-event-orga-server" -o  "$TRAVIS_BRANCH" != "$NEXTGEN_DEPLOY_BRANCH" ]; then
     echo "Skip nextgen deployment for a very good reason."
     exit 0
 fi

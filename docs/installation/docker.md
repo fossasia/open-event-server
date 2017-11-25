@@ -10,7 +10,7 @@
 * Clone the project and cd into it.
 
 ```bash
-git clone https://github.com/fossasia/open-event-server.git && cd open-event-server
+git clone https://github.com/fossasia/open-event-orga-server.git && cd open-event-orga-server
 ```
 
 * Then set the required `SERVER_NAME` environment variable. `SERVER_NAME` should the same as the domain on which the server is running and it should not include 'http', 'https',
@@ -20,7 +20,7 @@ git clone https://github.com/fossasia/open-event-server.git && cd open-event-ser
 export SERVER_NAME=localhost;
 ```
 
-* In the same terminal window, run `docker-compose build` to build open-event-server's docker image. This process can take some time.
+* In the same terminal window, run `docker-compose build` to build open-event-orga-server's docker image. This process can take some time.
 
 * After build is done, run `docker-compose up` to start the server.
 

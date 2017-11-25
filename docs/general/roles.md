@@ -220,7 +220,7 @@ user.is_speaker_at_session(session_id)
 <Role u'moderator'> <Service u'track'>  Read
 ```
 
-The permissions printed above adhere to https://github.com/fossasia/open-event-server/issues/623
+The permissions printed above adhere to https://github.com/fossasia/open-event-orga-server/issues/623
 
 `User` class has the following methods to check its role:
 

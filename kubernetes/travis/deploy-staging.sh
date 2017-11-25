@@ -2,7 +2,7 @@
 
 export STAGING_DEPLOY_BRANCH=${STAGING_DEPLOY_BRANCH:-staging}
 
-if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/open-event-server" -o  "$TRAVIS_BRANCH" != "$STAGING_DEPLOY_BRANCH" ]; then
+if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/open-event-orga-server" -o  "$TRAVIS_BRANCH" != "$STAGING_DEPLOY_BRANCH" ]; then
     echo "Skip staging deployment for a very good reason."
     exit 0
 fi

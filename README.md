@@ -2,7 +2,7 @@
 
 ![Open Event API Server](https://storage.googleapis.com/eventyay.com/assets/branding/server_branding.png)
 
-[![GitHub release](https://img.shields.io/badge/release-1.0.0--alpha.10-blue.svg?style=flat-square)](https://github.com/fossasia/open-event-server/releases/latest)
+[![GitHub release](https://img.shields.io/badge/release-1.0.0--alpha.10-blue.svg?style=flat-square)](https://github.com/fossasia/open-event-orga-server/releases/latest)
 [![Travis branch](https://img.shields.io/travis/fossasia/open-event-orga-server/master.svg?style=flat-square)](https://travis-ci.org/fossasia/open-event-orga-server)
 [![Gemnasium](https://img.shields.io/gemnasium/fossasia/open-event-orga-server.svg?style=flat-square)](https://gemnasium.com/github.com/fossasia/open-event-orga-server)
 [![Codacy branch grade](https://img.shields.io/codacy/grade/1ac554483fac462797ffa5a8b9adf2fa/master.svg?style=flat-square)](https://www.codacy.com/app/fossasia/open-event-orga-server)
@@ -53,7 +53,7 @@ The Open Event API Server can be easily deployed on a variety of platforms. Deta
 
 One-click Heroku deployment is also available:
 
-[![Deploy to Docker Cloud](https://files.cloud.docker.com/images/deploy-to-dockercloud.svg)](https://cloud.docker.com/stack/deploy/?repo=https://github.com/fossasia/open-event-server)  [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Deploy to Docker Cloud](https://files.cloud.docker.com/images/deploy-to-dockercloud.svg)](https://cloud.docker.com/stack/deploy/?repo=https://github.com/fossasia/open-event-orga-server)  [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 
 ## Technology Stack
@@ -236,7 +236,7 @@ Once you have activated your account just proceed to the [translation section](h
 
 ## Contributions, Bug Reports, Feature Requests
 
-This is an Open Source project and we would be happy to see contributors who report bugs and file feature requests submitting pull requests as well. Please report issues here https://github.com/fossasia/open-event-server/issues
+This is an Open Source project and we would be happy to see contributors who report bugs and file feature requests submitting pull requests as well. Please report issues here https://github.com/fossasia/open-event-orga-server/issues
 
 ## Branch Policy
 
@@ -266,7 +266,7 @@ The tentative release policy for now is, (since there is a lot of activity and a
 * When you're submitting a PR for a UI-related issue, it would be really awesome if you add a screenshot of your change or a link to a deployment where it can be tested out along with your PR. It makes it very easy for the reviewers and you'll also get reviews quicker.
 
 **Feature Requests and Bug Reports**
-* When you file a feature request or when you are submitting a bug report to the [issue tracker](https://github.com/fossasia/open-event-server/issues), make sure you add steps to reproduce it. Especially if that bug is some weird/rare one.
+* When you file a feature request or when you are submitting a bug report to the [issue tracker](https://github.com/fossasia/open-event-orga-server/issues), make sure you add steps to reproduce it. Especially if that bug is some weird/rare one.
 
 **Join the development**
 * Before you join development, please set up the system on your local machine and go through the application completely. Press on any link/button you can find and see where it leads to. Explore. (Don't worry ... Nothing will happen to the app or to you due to the exploring :wink: Only thing that will happen is, you'll be more familiar with what is where and might even get some cool ideas on how to improve various aspects of the app.)

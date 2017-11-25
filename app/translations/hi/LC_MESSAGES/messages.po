@@ -1,7 +1,7 @@
-# Hindi translations for fossasia/open-event-server.
+# Hindi translations for fossasia/open-event-orga-server.
 # Copyright (C) 2016 fossasia
 # This file is distributed under the same license as the
-# fossasia/open-event-server project.
+# fossasia/open-event-orga-server project.
 # FOSSASIA <open-event@googlegroups.com>, 2016.
 #
 msgid ""

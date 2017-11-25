@@ -57,7 +57,7 @@ tutorial so please see it.
 * We will start by cloning the GitHub Open Event Orga Server repo and cd'ing into it's directory. Then we will set the `SERVER_NAME` and then build and run the image.
 
 ```bash
-git clone https://github.com/fossasia/open-event-server.git && cd open-event-server
+git clone https://github.com/fossasia/open-event-orga-server.git && cd open-event-orga-server
 export SERVER_NAME=104.236.228.132
 docker-compose build
 docker-compose up
