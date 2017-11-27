@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-export DEVELOPMENT_DEPLOY_BRANCH=${DEVELOPMENT_DEPLOY_BRANCH:-development}
+export NEXTGEN_DEPLOY_BRANCH=${NEXTGEN_DEPLOY_BRANCH:-nextgen}
 
-if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/open-event-server" -o  "$TRAVIS_BRANCH" != "$DEVELOPMENT_DEPLOY_BRANCH" ]; then
-    echo "Skip development deployment for a very good reason."
+if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_REPO_SLUG" != "fossasia/open-event-server" -o  "$TRAVIS_BRANCH" != "$NEXTGEN_DEPLOY_BRANCH" ]; then
+    echo "Skip nextgen deployment for a very good reason."
     exit 0
 fi
 
@@ -25,11 +25,11 @@ mkdir -p lib
 gcloud auth activate-service-account --key-file eventyay-8245fde7ab8a.json
 export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/eventyay-8245fde7ab8a.json
 gcloud config set project eventyay
-gcloud container clusters get-credentials development-cluster
+gcloud container clusters get-credentials nextgen-cluster
 cd kubernetes/images/web
-docker build --build-arg COMMIT_HASH=$TRAVIS_COMMIT --build-arg BRANCH=$DEVELOPMENT_DEPLOY_BRANCH --build-arg REPOSITORY=$REPOSITORY --no-cache -t eventyay/development-api-server:$TRAVIS_COMMIT .
+docker build --build-arg COMMIT_HASH=$TRAVIS_COMMIT --build-arg BRANCH=$NEXTGEN_DEPLOY_BRANCH --build-arg REPOSITORY=$REPOSITORY --no-cache -t eventyay/nextgen-api-server:$TRAVIS_COMMIT .
 docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-docker tag eventyay/development-api-server:$TRAVIS_COMMIT eventyay/development-api-server:latest
-docker push eventyay/development-api-server
-kubectl set image deployment/api-server --namespace=web api-server=eventyay/development-api-server:$TRAVIS_COMMIT
-kubectl set image deployment/api-server --namespace=web celery=eventyay/development-api-server:$TRAVIS_COMMIT
+docker tag eventyay/nextgen-api-server:$TRAVIS_COMMIT eventyay/nextgen-api-server:latest
+docker push eventyay/nextgen-api-server
+kubectl set image deployment/api-server --namespace=web api-server=eventyay/nextgen-api-server:$TRAVIS_COMMIT
+kubectl set image deployment/api-server --namespace=web celery=eventyay/nextgen-api-server:$TRAVIS_COMMIT
