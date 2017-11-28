@@ -83,7 +83,7 @@ export SERVER_NAME="ec2-52-41-207-116.us-west-2.compute.amazonaws.com"
 * Then we will build the server. This process can take some time.
 
 ```sh
-git clone https://github.com/fossasia/open-event-orga-server.git && cd open-event-orga-server
+git clone https://github.com/fossasia/open-event-server.git && cd open-event-server
 docker-compose build
 ```
 
