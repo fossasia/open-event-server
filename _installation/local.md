@@ -33,8 +33,8 @@ Make sure you have the dependencies mentioned above installed before proceeding 
 
 * **Step 0** - Clone the Open Event Orga Server repository (from the development branch) and ```cd ``` into the directory.
 ```sh
-git clone -b development https://github.com/fossasia/open-event-orga-server.git
-cd open-event-orga-server
+git clone -b development https://github.com/fossasia/open-event-server.git
+cd open-event-server
 ```
 
 
