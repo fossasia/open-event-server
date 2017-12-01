@@ -95,7 +95,7 @@ python create_db.py
 # enter email and password
 python manage.py db stamp head
 ```
-
+**Note:** In case you are using Anaconda distribution for python, you may get an import error regarding `celery.signals` module. Please use the default python version while executing these steps in that case.
 
 * **Step 6** - Start the application along with the needed services.
 
