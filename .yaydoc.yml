@@ -1,0 +1,20 @@
+metadata:
+  author: FOSSASIA
+  projectname: "Open Event Server"
+  version: development
+build:
+  theme:
+    name: sphinx_fossasia_theme
+  subproject:
+    - url: https://github.com/fossasia/open-event-frontend
+    - url: https://github.com/fossasia/open-event-webapp
+    - url: https://github.com/fossasia/open-event-android
+    - url: https://github.com/fossasia/open-event-ios
+    - url: https://github.com/fossasia/dev.openvent.io
+    - url: https://github.com/fossasia/open-event-orga-app
+      source: .
+    - url: https://github.com/fossasia/open-event-theme
+publish:
+  ghpages:
+    url: dev.eventyay.com
+
