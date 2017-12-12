@@ -7,7 +7,7 @@
 [![Gemnasium](https://img.shields.io/gemnasium/fossasia/open-event-server.svg?style=flat-square)](https://gemnasium.com/github.com/fossasia/open-event-server)
 [![Codacy branch grade](https://img.shields.io/codacy/grade/1ac554483fac462797ffa5a8b9adf2fa/master.svg?style=flat-square)](https://www.codacy.com/app/fossasia/open-event-orga-server)
 [![Codecov branch](https://img.shields.io/codecov/c/github/fossasia/open-event-orga-server/master.svg?style=flat-square&label=Codecov+Coverage)](https://codecov.io/gh/fossasia/open-event-orga-server)
-[![Gitter](https://img.shields.io/badge/chat-on%20gitter-ff006f.svg?style=flat-square)](https://gitter.im/fossasia/open-event-orga-server)
+[![Gitter](https://img.shields.io/badge/chat-on%20gitter-ff006f.svg?style=flat-square)](https://gitter.im/fossasia/open-event-server)
 
 > **The Open Event Server enables organizers to manage events from concerts to conferences and meet-ups.**
 
@@ -24,8 +24,8 @@ The **Open Event Server** exposes a well documented [JSON:API Spec](http://jsona
 * Please join our **[mailing list](https://groups.google.com/forum/#!forum/open-event)** to discuss questions regarding the project.
 > https://groups.google.com/forum/#!forum/open-event
 
-* Our chat channel is on **[Gitter](https://gitter.im/fossasia/open-event-orga-server)**
-> [gitter.im/fossasia/open-event-orga-server](https://gitter.im/fossasia/open-event-orga-server)
+* Our chat channel is on **[Gitter](https://gitter.im/fossasia/open-event-server)**
+> [gitter.im/fossasia/open-event-server](https://gitter.im/fossasia/open-event-server)
 
 ## Demo Version
 
