@@ -2,7 +2,7 @@
 **I'm submitting a ...**  (check one with "x")
 - [ ] bug report
 - [ ] feature request
-- [ ] support request => Please do not submit support requests here, instead ask your query in out Gitter channel at https://gitter.im/fossasia/open-event-orga-server
+- [ ] support request => Please do not submit support requests here, instead ask your query in out Gitter channel at https://gitter.im/fossasia/open-event-server
 
 **Current behavior:**
 <!-- Describe how the bug manifests. -->
