@@ -72,6 +72,7 @@ class SessionSchema(Schema):
     deleted_at = fields.DateTime(dump_only=True)
     submitted_at = fields.DateTime(allow_none=True)
     is_mail_sent = fields.Boolean()
+    last_modified_at = fields.DateTime(dump_only=True)
     microlocation = Relationship(attribute='microlocation',
                                  self_view='v1.session_microlocation',
                                  self_view_kwargs={'id': '<id>'},

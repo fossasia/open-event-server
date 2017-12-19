@@ -1,7 +1,8 @@
 import datetime
-
+import pytz
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models import db
+from sqlalchemy import event
 
 speakers_sessions = db.Table('speakers_sessions',
                              db.Column('speaker_id', db.Integer, db.ForeignKey('speaker.id', ondelete='CASCADE')),
@@ -45,6 +46,7 @@ class Session(db.Model):
     submitted_at = db.Column(db.DateTime(timezone=True))
     submission_modifier = db.Column(db.String)
     is_mail_sent = db.Column(db.Boolean, default=False)
+    last_modified_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow)
 
     def __init__(self,
                  title=None,
@@ -71,7 +73,8 @@ class Session(db.Model):
                  submission_modifier=None,
                  is_mail_sent=False,
                  deleted_at=None,
-                 submitted_at=None):
+                 submitted_at=None,
+                 last_modified_at=None):
 
         if speakers is None:
             speakers = []
@@ -101,6 +104,7 @@ class Session(db.Model):
         self.is_mail_sent = is_mail_sent
         self.submitted_at = submitted_at
         self.submission_modifier = submission_modifier
+        self.last_modified_at = datetime.datetime.now(pytz.utc)
 
     @staticmethod
     def get_service_name():
@@ -124,3 +128,8 @@ class Session(db.Model):
 
     def __unicode__(self):
         return self.title
+
+
+@event.listens_for(Session, 'before_update')
+def receive_after_update(mapper, connection, target):
+    target.last_modified_at = datetime.datetime.now(pytz.utc)
