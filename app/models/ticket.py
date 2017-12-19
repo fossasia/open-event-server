@@ -121,7 +121,7 @@ class Ticket(db.Model):
 
     @property
     def serialize(self):
-        """Return object data in easily serializeable format"""
+        """Return object data in easily serializable format"""
         data = {
             'id': self.id,
             'name': self.name,
@@ -153,7 +153,8 @@ class Ticket(db.Model):
 
 
 class TicketTag(db.Model):
-    """Tags to group tickets
+    """
+    Tags to group tickets
     """
     __tablename__ = 'ticket_tag'
 
