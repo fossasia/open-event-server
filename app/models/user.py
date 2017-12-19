@@ -117,7 +117,8 @@ class User(db.Model):
 
     # User Permissions
     def can_publish_event(self):
-        """Checks if User can publish an event
+        """
+        Checks if User can publish an event
         """
         perm = UserPermission.query.filter_by(name='publish_event').first()
         if not perm:
@@ -126,7 +127,8 @@ class User(db.Model):
         return perm.unverified_user
 
     def can_create_event(self):
-        """Checks if User can create an event
+        """
+        Checks if User can create an event
         """
         perm = UserPermission.query.filter_by(name='create_event').first()
         if not perm:
@@ -138,7 +140,8 @@ class User(db.Model):
         return True
 
     def has_role(self, event_id):
-        """Checks if user has any of the Roles at an Event.
+        """
+        Checks if user has any of the Roles at an Event.
         Exclude Attendee Role.
         """
         attendee_role = Role.query.filter_by(name=ATTENDEE).first()
@@ -150,7 +153,8 @@ class User(db.Model):
             return True
 
     def _is_role(self, role_name, event_id):
-        """Checks if a user has a particular Role at an Event.
+        """
+        Checks if a user has a particular Role at an Event.
         """
         role = Role.query.filter_by(name=role_name).first()
         uer = UER.query.filter_by(user=self,
@@ -276,14 +280,16 @@ class User(db.Model):
         return self.is_super_admin or self.is_admin
 
     def is_sys_role(self, role_id):
-        """Check if a user has a Custom System Role assigned.
+        """
+        Check if a user has a Custom System Role assigned.
         `role_id` is id of a `CustomSysRole` instance.
         """
         role = UserSystemRole.query.filter_by(user=self, role_id=role_id).first()
         return bool(role)
 
     def first_access_panel(self):
-        """Check if the user is assigned a Custom Role or not
+        """
+        Check if the user is assigned a Custom Role or not
         This checks if there is an entry containing the current user in the `user_system_roles` table
         returns panel name if exists otherwise false
         """
@@ -296,7 +302,8 @@ class User(db.Model):
         return perm.panel_name
 
     def can_access_panel(self, panel_name):
-        """Check if user can access an Admin Panel
+        """
+        Check if user can access an Admin Panel
         """
         if self.is_staff:
             return True
@@ -312,7 +319,8 @@ class User(db.Model):
         return get_count(Notification.query.filter_by(user=self, is_read=False))
 
     def get_unread_notifs(self):
-        """Get unread notifications with titles, humanized receiving time
+        """
+        Get unread notifications with titles, humanized receiving time
         and Mark-as-read links.
         """
         notifs = []

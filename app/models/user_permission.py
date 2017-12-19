@@ -2,7 +2,8 @@ from app.models import db
 
 
 class UserPermission(db.Model):
-    """User Permissions
+    """
+    User Permissions
     """
     __tablename__ = 'user_permissions'
 

@@ -44,7 +44,7 @@ class Version(db.Model):
 
     @property
     def serialize(self):
-        """Return object data in easily serializeable format"""
+        """Return object data in easily serializable format"""
         return {
             'version': [
                 {'id': self.id,

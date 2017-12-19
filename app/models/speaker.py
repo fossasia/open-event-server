@@ -105,7 +105,7 @@ class Speaker(db.Model):
 
     @property
     def serialize(self):
-        """Return object data in easily serializeable format"""
+        """Return object data in easily serializable format"""
 
         session_data = [{'title': session.title, 'id': session.id}
                         for session in self.sessions]

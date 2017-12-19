@@ -39,5 +39,5 @@ class EventType(db.Model):
 
     @property
     def serialize(self):
-        """Return object data in easily serializeable format"""
+        """Return object data in easily serializable format"""
         return {'id': self.id, 'name': self.name, 'slug': self.slug}
