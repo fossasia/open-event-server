@@ -52,7 +52,7 @@ def reset_password_post():
         user = User.query.filter_by(email=email).one()
     except NoResultFound:
         return abort(
-            make_response(jsonify(error="User not found"), 404)
+            make_response(jsonify(error="User not found"), 422)
         )
     else:
         link = make_frontend_url('/reset-password', {'token': user.reset_password})
