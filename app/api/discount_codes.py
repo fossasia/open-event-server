@@ -163,7 +163,7 @@ class DiscountCodeDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
         if view_kwargs.get('id'):
-            discount = self.session.query(DiscountCode).filter_by(id=view_kwargs.get('id')).one()
+            discount = self.session.query(DiscountCode).filter_by(id=view_kwargs.get('id')).first()
             if not discount:
                 raise ObjectNotFound({'parameter': '{id}'}, "DiscountCode:  not found")
 

@@ -37,7 +37,7 @@ class StripeAuthorizationListPost(ResourceList):
         :return:
         """
         try:
-            self.session.query(StripeAuthorization).filter_by(event_id=data['event']).one()
+            self.session.query(StripeAuthorization).filter_by(event_id=data['event']).first()
         except NoResultFound:
             pass
         else:
@@ -67,7 +67,7 @@ class StripeAuthorizationDetail(ResourceDetail):
 
         if view_kwargs.get('event_id'):
             stripe_authorization = self.session.query(StripeAuthorization).\
-                filter_by(event_id=view_kwargs['event_id']).one()
+                filter_by(event_id=view_kwargs['event_id']).first()
             view_kwargs['id'] = stripe_authorization.id
 
     decorators = (api.has_permission('is_coorganizer', fetch="event_id",

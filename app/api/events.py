@@ -278,7 +278,7 @@ def get_id(view_kwargs):
     if view_kwargs.get('email_notification_id'):
         try:
             email_notification = db.session.query(EmailNotification).filter_by(
-                id=view_kwargs['email_notification_id']).one()
+                id=view_kwargs['email_notification_id']).first()
         except NoResultFound:
             raise ObjectNotFound({'parameter': 'email_notification_id'},
                                  "Email Notification: {} not found".format(view_kwargs['email_notification_id']))

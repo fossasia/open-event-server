@@ -30,7 +30,7 @@ def verify_email():
         )
 
     try:
-        user = User.query.filter_by(email=data[0]).one()
+        user = User.query.filter_by(email=data[0]).first()
     except Exception:
         return abort(
             make_response(jsonify(error="Invalid Token"), 400)
@@ -49,7 +49,7 @@ def reset_password_post():
         return make_response(jsonify(error="Bad Request Error"), 400)
 
     try:
-        user = User.query.filter_by(email=email).one()
+        user = User.query.filter_by(email=email).first()
     except NoResultFound:
         return abort(
             make_response(jsonify(error="User not found"), 422)
@@ -67,7 +67,7 @@ def reset_password_patch():
     password = request.json['data']['password']
 
     try:
-        user = User.query.filter_by(reset_password=token).one()
+        user = User.query.filter_by(reset_password=token).first()
     except NoResultFound:
         return abort(
             make_response(jsonify(error="User not found"), 404)
@@ -90,7 +90,7 @@ def change_password():
     new_password = request.json['data']['new-password']
 
     try:
-        user = User.query.filter_by(id=current_user.id).one()
+        user = User.query.filter_by(id=current_user.id).first()
     except NoResultFound:
         return abort(
             make_response(jsonify(error="User not found"), 404)
