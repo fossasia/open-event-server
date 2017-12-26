@@ -11869,6 +11869,80 @@ Delete a single speaker by id.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 
+### List Speakers [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "user": {
+                            "links": {
+                                "self": "/v1/speakers/1/relationships/user",
+                                "related": "/v1/speakers/1/user"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/speakers/1/relationships/event",
+                                "related": "/v1/speakers/1/event"
+                            }
+                        },
+                        "sessions": {
+                            "links": {
+                                "self": "/v1/speakers/1/relationships/sessions",
+                                "related": "/v1/speakers/1/sessions"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "website": "https://firstSpeaker.com",
+                        "city": "Delhi",
+                        "short-biography": "",
+                        "name": "firstSpeaker",
+                        "speaking-experience": "",
+                        "country": "India",
+                        "twitter": null,
+                        "is-featured": false,
+                        "linkedin": null,
+                        "email": "firstSpeaker@gmail.com",
+                        "long-biography": "",
+                        "mobile": null,
+                        "github": null,
+                        "facebook": null,
+                        "gender": "Male",
+                        "position": null,
+                        "organisation": null,
+                        "sponsorship-required": "",
+                        "heard-from": null
+                    },
+                    "type": "speaker",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/speakers/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/sessions/1/speakers"
+            }
+        }
 
 ## List Speaker Profiles for a User [/v1/users/{user_id}/speakers{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -11878,6 +11952,80 @@ Delete a single speaker by id.
     + sort (optional, string, `speaking-experience`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
+### List Speakers [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "user": {
+                            "links": {
+                                "self": "/v1/speakers/1/relationships/user",
+                                "related": "/v1/speakers/1/user"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/speakers/1/relationships/event",
+                                "related": "/v1/speakers/1/event"
+                            }
+                        },
+                        "sessions": {
+                            "links": {
+                                "self": "/v1/speakers/1/relationships/sessions",
+                                "related": "/v1/speakers/1/sessions"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "website": "https://firstSpeaker.com",
+                        "city": "Delhi",
+                        "short-biography": "",
+                        "name": "firstSpeaker",
+                        "speaking-experience": "",
+                        "country": "India",
+                        "twitter": null,
+                        "is-featured": false,
+                        "linkedin": null,
+                        "email": "firstSpeaker@gmail.com",
+                        "long-biography": "",
+                        "mobile": null,
+                        "github": null,
+                        "facebook": null,
+                        "gender": "Male",
+                        "position": null,
+                        "organisation": null,
+                        "sponsorship-required": "",
+                        "heard-from": null
+                    },
+                    "type": "speaker",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/speakers/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/users/1/speakers"
+            }
+        }
 
 
 # Group Social Links
