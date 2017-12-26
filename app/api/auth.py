@@ -13,6 +13,7 @@ from app.api.helpers.utilities import get_serializer
 from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE
 from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
+from app.api.helpers.errors import UnprocessableEntityError, NotFoundError, BadRequestError
 
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
 
@@ -25,16 +26,12 @@ def verify_email():
     try:
         data = s.loads(token)
     except Exception:
-        return abort(
-            make_response(jsonify(error="Invalid Token"), 400)
-        )
+        return BadRequestError({'source': ''}, 'Invalid Token').respond()
 
     try:
         user = User.query.filter_by(email=data[0]).first()
     except Exception:
-        return abort(
-            make_response(jsonify(error="Invalid Token"), 400)
-        )
+        return BadRequestError({'source': ''}, 'Invalid Token').respond()
     else:
         user.is_verified = True
         save_to_db(user)
@@ -46,14 +43,12 @@ def reset_password_post():
     try:
         email = request.json['data']['email']
     except TypeError:
-        return make_response(jsonify(error="Bad Request Error"), 400)
+        return BadRequestError({'source': ''}, 'Bad Request Error').respond()
 
     try:
         user = User.query.filter_by(email=email).first()
     except NoResultFound:
-        return abort(
-            make_response(jsonify(error="User not found"), 422)
-        )
+        return UnprocessableEntityError({'source': ''}, 'User not found').respond()
     else:
         link = make_frontend_url('/reset-password', {'token': user.reset_password})
         send_email_with_action(user, PASSWORD_RESET, app_name=get_settings()['app_name'], link=link)
@@ -69,9 +64,7 @@ def reset_password_patch():
     try:
         user = User.query.filter_by(reset_password=token).first()
     except NoResultFound:
-        return abort(
-            make_response(jsonify(error="User not found"), 404)
-        )
+        return NotFoundError({'source': ''}, 'User Not Found').respond()
     else:
         user.password = password
         save_to_db(user)
@@ -92,9 +85,7 @@ def change_password():
     try:
         user = User.query.filter_by(id=current_user.id).first()
     except NoResultFound:
-        return abort(
-            make_response(jsonify(error="User not found"), 404)
-        )
+        return NotFoundError({'source': ''}, 'User Not Found').respond()
     else:
         if user.is_correct_password(old_password):
 
@@ -105,9 +96,7 @@ def change_password():
             send_notification_with_action(user, PASSWORD_CHANGE_NOTIF,
                                    app_name=get_settings()['app_name'])
         else:
-            return abort(
-                make_response(jsonify(error="Wrong Password"), 400)
-            )
+            return BadRequestError({'source': ''}, 'Wrong Password').respond()
 
     return jsonify({
         "id": user.id,
