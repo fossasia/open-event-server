@@ -67,7 +67,6 @@ class CustomForms(db.Model):
         self.is_included = is_included,
         self.is_fixed = is_fixed
 
-
     def __repr__(self):
         return '<CustomForm %r>' % self.id
 

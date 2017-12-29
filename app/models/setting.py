@@ -117,7 +117,6 @@ class Setting(db.Model):
 
     frontend_url = db.Column(db.String, default="http://eventyay.com")
 
-
     def __init__(self,
                  app_environment=Environment.PRODUCTION,
                  aws_key=None,
