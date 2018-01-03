@@ -1,5 +1,5 @@
 import base64
-from flask import request, jsonify, abort, make_response, Blueprint
+from flask import request, jsonify, make_response, Blueprint
 from flask_jwt import current_identity as current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 

@@ -300,11 +300,12 @@ def send_email_to_attendees(order, purchaser_id):
                     event_name=order.event.name,
                     invoice_id=order.invoice_number
                 ),
-                html= MAILS[TICKET_PURCHASED]['message'].format(
+                html=MAILS[TICKET_PURCHASED]['message'].format(
                     pdf_url=holder.pdf_url,
                     event_name=order.event.name
                 )
             )
+
 
 def send_order_cancel_email(order):
     send_email(

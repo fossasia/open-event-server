@@ -8,6 +8,7 @@ def generate_hash():
     hash_ = random.getrandbits(128)
     return str(hash_)
 
+
 class RoleInvite(db.Model):
     __tablename__ = 'role_invites'
 
