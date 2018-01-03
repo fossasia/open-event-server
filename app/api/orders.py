@@ -170,7 +170,6 @@ class OrderDetail(ResourceDetail):
         if not has_access('is_coorganizer_or_user_itself', event_id=order.event_id, user_id=order.user_id):
             return ForbiddenException({'source': ''}, 'Access Forbidden')
 
-
     def before_update_object(self, order, data, view_kwargs):
         """
         :param order:

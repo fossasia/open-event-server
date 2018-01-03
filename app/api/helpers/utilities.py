@@ -12,6 +12,7 @@ from app.api.helpers.exceptions import UnprocessableEntity
 
 from flask import current_app
 
+
 def dasherize(text):
     return text.replace('_', '-')
 
@@ -107,6 +108,7 @@ def update_state(task_handle, state, result=None):
         task_handle.update_state(
             state=state, meta=result
         )
+
 
 # store task results in case of testing
 # state and info

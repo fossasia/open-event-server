@@ -258,7 +258,6 @@ def user_event(view, view_args, view_kwargs, *args, **kwargs):
     return view(*view_args, **view_kwargs)
 
 
-
 def accessible_role_based_events(view, view_args, view_kwargs, *args, **kwargs):
     if 'POST' in request.method or 'withRole' in request.args:
         _jwt_required(app.config['JWT_DEFAULT_REALM'])
@@ -376,7 +375,7 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         if is_multiple(kwargs['fetch']):
             kwargs['fetch'] = [f.strip() for f in kwargs['fetch'].split(",")]
             for f in kwargs['fetch']:
-               if f in view_kwargs:
+                if f in view_kwargs:
                     fetched = view_kwargs.get(f)
                     break
         elif kwargs['fetch'] in view_kwargs:
