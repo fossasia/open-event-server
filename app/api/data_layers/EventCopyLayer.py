@@ -124,5 +124,4 @@ class EventCopyLayer(BaseDataLayer):
             db.session.add(form)
             db.session.commit()
 
-
         return event

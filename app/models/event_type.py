@@ -4,12 +4,13 @@ from app.api.helpers.db import get_count
 
 
 def get_new_slug(name):
-    slug = name.lower().replace("& ", "").replace(",", "").replace("/","-").replace(" ","-")
+    slug = name.lower().replace("& ", "").replace(",", "").replace("/", "-").replace(" ", "-")
     count = get_count(EventType.query.filter_by(slug=slug))
     if count == 0:
         return slug
     else:
         return '{}-{}'.format(slug, uuid.uuid4().hex)
+
 
 class EventType(db.Model):
     """Event type object table"""

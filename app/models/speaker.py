@@ -136,4 +136,3 @@ class Speaker(db.Model):
             'sponsorship_required': self.sponsorship_required,
             'sessions': session_data
         }
-
