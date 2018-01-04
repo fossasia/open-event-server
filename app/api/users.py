@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import base64
 
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
@@ -94,7 +96,7 @@ class UserDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
         if view_kwargs.get('feedback_id') is not None:
-            print view_kwargs['feedback_id']
+            print(view_kwargs['feedback_id'])
             feedback = safe_query(self, Feedback, 'id', view_kwargs['feedback_id'], 'feedback_id')
             if feedback.user_id is not None:
                 view_kwargs['id'] = feedback.user_id
