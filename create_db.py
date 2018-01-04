@@ -8,6 +8,11 @@ from app.models import db
 from populate_db import populate
 from tests.unittests.auth_helper import create_super_admin
 
+try:
+    raw_input          # Python 2
+except NameError:
+    raw_input = input  # Python 3
+
 
 def _validate_email(email):
     if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
