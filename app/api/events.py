@@ -355,7 +355,6 @@ class EventDetail(ResourceDetail):
         else:
             self.schema = EventSchemaPublic
 
-
     def before_get_object(self, view_kwargs):
         """
         before get method to get the resource id for fetching details
@@ -370,7 +369,6 @@ class EventDetail(ResourceDetail):
                 view_kwargs['id'] = order.event_id
             else:
                 view_kwargs['id'] = None
-
 
     def before_update_object(self, event, data, view_kwargs):
         """

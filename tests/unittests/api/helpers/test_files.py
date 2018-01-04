@@ -58,7 +58,7 @@ class TestFilesHelperValidation(OpenEventTestCase):
 
         with app.test_request_context():
             client = app.test_client()
-            resp = client.post('/test_upload', data = {'file': (StringIO('1,2,3,4'), 'test_file.csv')})
+            resp = client.post('/test_upload', data={'file': (StringIO('1,2,3,4'), 'test_file.csv')})
             data = json.loads(resp.data)
             file_path = data['path']
             filename = data['name']
@@ -86,12 +86,12 @@ class TestFilesHelperValidation(OpenEventTestCase):
             for file in file_uploaded:
                 files_uploaded.append({'path': file.file_path,
                                       'name': file.filename})
-            return jsonify({"files":files_uploaded})
+            return jsonify({"files": files_uploaded})
 
         with app.test_request_context():
             client = app.test_client()
             resp = client.post('/test_upload_multi',
-                               data = {'files[]': [(StringIO('1,2,3,4'), 'test_file.csv'),
+                               data={'files[]': [(StringIO('1,2,3,4'), 'test_file.csv'),
                                                    (StringIO('10,20,30,40'), 'test_file2.csv')]})
             datas = json.loads(resp.data)['files']
             for data in datas:
@@ -142,7 +142,6 @@ class TestFilesHelperValidation(OpenEventTestCase):
             self.assertEqual(resized_width_large, width_large)
             self.assertEqual(resized_width_thumbnail, width_thumbnail)
             self.assertEqual(resized_width_icon, width_icon)
-
 
 
 if __name__ == '__main__':

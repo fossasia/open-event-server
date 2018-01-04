@@ -46,7 +46,7 @@ UPLOAD_PATHS = {
         'original': 'users/{identifier}/original',
         'large': 'users/{identifier}/large',
         'icon': 'users/{identifier}/icon'
-},
+    },
     'temp': {
         'event': 'events/temp/{uuid}',
         'image': 'temp/images/{uuid}'

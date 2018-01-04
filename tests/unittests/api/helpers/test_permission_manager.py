@@ -86,12 +86,13 @@ class TestPermissionManager(OpenEventTestCase):
     def test_permission_manager_attributes(self):
         with app.test_request_context():
             kwargs = {'leave_if': lambda a: True}
-            perm = permission_manager(lambda *a, **b : True, [], {}, 'is_admin', **kwargs)
+            perm = permission_manager(lambda *a, **b: True, [], {}, 'is_admin', **kwargs)
             self.assertTrue(perm)
 
             kwargs = {'check': lambda a: False}
-            perm = permission_manager(lambda *a, **b : False, [], {}, 'is_admin', **kwargs)
+            perm = permission_manager(lambda *a, **b: False, [], {}, 'is_admin', **kwargs)
             self.assertIsInstance(perm, Response)
+
 
 if __name__ == '__main__':
     unittest.main()
