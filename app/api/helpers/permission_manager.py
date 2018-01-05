@@ -258,7 +258,6 @@ def user_event(view, view_args, view_kwargs, *args, **kwargs):
     return view(*view_args, **view_kwargs)
 
 
-
 def accessible_role_based_events(view, view_args, view_kwargs, *args, **kwargs):
     if 'POST' in request.method or 'withRole' in request.args:
         _jwt_required(app.config['JWT_DEFAULT_REALM'])
@@ -359,7 +358,7 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
     if 'event_identifier' in view_kwargs:
         try:
             event = Event.query.filter_by(identifier=view_kwargs['event_identifier']).one()
-        except NoResultFound, e:
+        except NoResultFound:
             return NotFoundError({'parameter': 'event_identifier'}, 'Event not found').respond()
         view_kwargs['event_id'] = event.id
 
@@ -367,7 +366,7 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
     if 'identifier' in view_kwargs:
         try:
             event = Event.query.filter_by(identifier=view_kwargs['identifier']).one()
-        except NoResultFound, e:
+        except NoResultFound:
             return NotFoundError({'parameter': 'identifier'}, 'Event not found').respond()
         view_kwargs['id'] = event.id
 
@@ -376,7 +375,7 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         if is_multiple(kwargs['fetch']):
             kwargs['fetch'] = [f.strip() for f in kwargs['fetch'].split(",")]
             for f in kwargs['fetch']:
-               if f in view_kwargs:
+                if f in view_kwargs:
                     fetched = view_kwargs.get(f)
                     break
         elif kwargs['fetch'] in view_kwargs:
@@ -409,7 +408,7 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
                     continue
                 try:
                     data = mod.query.filter(getattr(mod, fetch_key_model) == view_kwargs[f_url]).one()
-                except NoResultFound, e:
+                except NoResultFound:
                     pass
                 else:
                     found = True
