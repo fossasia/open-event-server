@@ -76,6 +76,21 @@ class DiscountCodeSchemaEvent(DiscountCodeSchemaPublic):
                 raise UnprocessableEntity({'pointer': '/data/attributes/tickets-number'},
                                           "tickets-number should be greater than max-quantity")
 
+    @validates_schema(pass_original=True)
+    def validate_date(self, data, original_data):
+        if 'id' in original_data['data']:
+            discount_code = DiscountCode.query.filter_by(id=original_data['data']['id']).one()
+
+            if 'valid_from' not in data:
+                data['valid_from'] = discount_code.valid_from
+
+            if 'valid_till' not in data:
+                data['valid_till'] = discount_code.valid_till
+
+        if data['valid_from'] >= data['valid_till']:
+            raise UnprocessableEntity({'pointer': '/data/attributes/valid-till'},
+                                      "valid_till should be after valid_from")
+
     events = Relationship(attribute='events',
                           self_view='v1.discount_code_events',
                           self_view_kwargs={'id': '<id>'},
@@ -119,6 +134,21 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
             if data['tickets_number'] < data['max_quantity']:
                 raise UnprocessableEntity({'pointer': '/data/attributes/tickets-number'},
                                           "tickets-number should be greater than max-quantity")
+
+    @validates_schema(pass_original=True)
+    def validate_date(self, data, original_data):
+        if 'id' in original_data['data']:
+            discount_code = DiscountCode.query.filter_by(id=original_data['data']['id']).one()
+
+            if 'valid_from' not in data:
+                data['valid_from'] = discount_code.valid_from
+
+            if 'valid_till' not in data:
+                data['valid_till'] = discount_code.valid_till
+
+        if data['valid_from'] >= data['valid_till']:
+            raise UnprocessableEntity({'pointer': '/data/attributes/valid-till'},
+                                      "valid_till should be after valid_from")
 
     marketer = Relationship(attribute='user',
                             self_view='v1.discount_code_user',
