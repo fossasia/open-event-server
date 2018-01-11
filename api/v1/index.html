@@ -9286,6 +9286,12 @@
 <td>boolean (default: <code>false</code>)</td>
 <td>-</td>
 </tr>
+<tr>
+<td style="text-align:left"><code>last-modified-at</code></td>
+<td>Date the session was modified</td>
+<td>ISO 8601 (tz-aware)</td>
+<td>-</td>
+</tr>
 </tbody>
 </table>
 <div id="sessions-sessions-collection" class="resource"><h3 class="resource-heading">Sessions Collection <a href="#sessions-sessions-collection" class="permalink">&nbsp;&para;</a></h3><div id="sessions-sessions-collection-post" class="action post"><h4 class="action-heading"><div class="name">Create Sessions</div><a href="#sessions-sessions-collection-post" class="method post">POST</a><code class="uri">/v1/sessions{?sort,filter}</code></h4><p>Create a new session using an event_id <strong>(Minimum Co-Organizer Access)</strong></p>
@@ -9317,7 +9323,8 @@
       "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-05-01T01:24:47.500127+00:00"</span></span>,
       "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">submitted-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-05-01T01:24:47.500127+00:00"</span></span>,
-      "<span class="hljs-attribute">is-mail-sent</span>": <span class="hljs-value"><span class="hljs-literal">false</span>
+      "<span class="hljs-attribute">is-mail-sent</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">last-modified-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-05-01T01:24:47.500127+00:00"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"session"</span>
   </span>}
@@ -9373,7 +9380,8 @@
       "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-05-01T01:24:47.500127+00:00"</span></span>,
       "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">submitted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">is-mail-sent</span>": <span class="hljs-value"><span class="hljs-literal">false</span>
+      "<span class="hljs-attribute">is-mail-sent</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">last-modified-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-05-01T01:24:47.500127+00:00"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"session"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"21"</span></span>,
@@ -9441,7 +9449,8 @@
       "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-05-01T01:24:47.500127+00:00"</span></span>,
       "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">submitted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">is-mail-sent</span>": <span class="hljs-value"><span class="hljs-literal">false</span>
+      "<span class="hljs-attribute">is-mail-sent</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">last-modified-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-05-01T01:24:47.500127+00:00"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"session"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -9540,7 +9549,8 @@
       "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-05-01T01:24:47.500127+00:00"</span></span>,
       "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">submitted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">is-mail-sent</span>": <span class="hljs-value"><span class="hljs-literal">false</span>
+      "<span class="hljs-attribute">is-mail-sent</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">last-modified-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-05-02T01:24:47.500127+00:00"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"session"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -9620,7 +9630,8 @@
         "<span class="hljs-attribute">level</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
         "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
         "<span class="hljs-attribute">starts-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T10:00:00.500127+00:00"</span></span>,
-        "<span class="hljs-attribute">is-mail-sent</span>": <span class="hljs-value"><span class="hljs-literal">false</span>
+        "<span class="hljs-attribute">is-mail-sent</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+        "<span class="hljs-attribute">last-modified-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-07-25T02:22:35.010307+00:00"</span>
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"session"</span></span>,
       "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -9692,7 +9703,8 @@
         "<span class="hljs-attribute">level</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
         "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
         "<span class="hljs-attribute">starts-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T10:00:00.500127+00:00"</span></span>,
-        "<span class="hljs-attribute">is-mail-sent</span>": <span class="hljs-value"><span class="hljs-literal">false</span>
+        "<span class="hljs-attribute">is-mail-sent</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+        "<span class="hljs-attribute">last-modified-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-07-25T02:22:35.010307+00:00"</span>
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"session"</span></span>,
       "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -9764,7 +9776,8 @@
         "<span class="hljs-attribute">level</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
         "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
         "<span class="hljs-attribute">starts-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T10:00:00.500127+00:00"</span></span>,
-        "<span class="hljs-attribute">is-mail-sent</span>": <span class="hljs-value"><span class="hljs-literal">false</span>
+        "<span class="hljs-attribute">is-mail-sent</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+        "<span class="hljs-attribute">last-modified-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-07-25T02:22:35.010307+00:00"</span>
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"session"</span></span>,
       "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -9836,7 +9849,8 @@
         "<span class="hljs-attribute">level</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
         "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
         "<span class="hljs-attribute">starts-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T10:00:00.500127+00:00"</span></span>,
-        "<span class="hljs-attribute">is-mail-sent</span>": <span class="hljs-value"><span class="hljs-literal">false</span>
+        "<span class="hljs-attribute">is-mail-sent</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+        "<span class="hljs-attribute">last-modified-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-07-25T02:22:35.010307+00:00"</span>
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"session"</span></span>,
       "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -9908,7 +9922,8 @@
         "<span class="hljs-attribute">level</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
         "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
         "<span class="hljs-attribute">starts-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T10:00:00.500127+00:00"</span></span>,
-        "<span class="hljs-attribute">is-mail-sent</span>": <span class="hljs-value"><span class="hljs-literal">false</span>
+        "<span class="hljs-attribute">is-mail-sent</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+        "<span class="hljs-attribute">last-modified-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-07-25T02:22:35.010307+00:00"</span>
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"session"</span></span>,
       "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
