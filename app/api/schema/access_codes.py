@@ -36,19 +36,31 @@ class AccessCodeSchema(Schema):
             raise UnprocessableEntity({'pointer': '/data/attributes/valid-till'},
                                       "valid_till should be after valid_from")
 
-    @validates_schema
-    def validate_order_quantity(self, data):
-        if 'max_order' in data and 'min_order' in data:
-            if data['max_order'] < data['min_order']:
-                raise UnprocessableEntity({'pointer': '/data/attributes/max-order'},
-                                          "max-order should be greater than min-order")
+    @validates_schema(pass_original=True)
+    def validate_order_quantity(self, data, original_data):
+        if 'id' in original_data['data']:
+            access_code = AccessCode.query.filter_by(id=original_data['data']['id']).one()
 
-        if 'quantity' in data and 'min_order' in data:
-            if data['quantity'] < data['min_order']:
-                raise UnprocessableEntity({'pointer': '/data/attributes/quantity'},
-                                          "quantity should be greater than min-order")
+            if 'min_quantity' not in data:
+                data['min_quantity'] = access_code.min_quantity
 
-    id = fields.Integer(dump_only=True)
+            if 'max_quantity' not in data:
+                data['max_quantity'] = access_code.max_quantity
+
+            if 'tickets_number' not in data:
+                data['tickets_number'] = access_code.tickets_number
+
+        if 'min_quantity' in data and 'max_quantity' in data:
+            if data['min_quantity'] >= data['max_quantity']:
+                raise UnprocessableEntity({'pointer': '/data/attributes/min-quantity'},
+                                          "min-quantity should be less than max-quantity")
+
+        if 'tickets_number' in data and 'max_quantity' in data:
+            if data['tickets_number'] < data['max_quantity']:
+                raise UnprocessableEntity({'pointer': '/data/attributes/tickets-number'},
+                                          "tickets-number should be greater than max-quantity")
+
+    id = fields.Integer(dump_ony=True)
     code = fields.Str(allow_none=True)
     access_url = fields.Url(allow_none=True)
     is_active = fields.Boolean(default=False)

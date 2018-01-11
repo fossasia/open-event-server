@@ -1,6 +1,6 @@
 import flask_login as login
 import requests
-from flask import url_for, redirect, render_template, Blueprint, request, make_response
+from flask import url_for, redirect, Blueprint, request, make_response
 from flask_scrypt import generate_password_hash
 from wtforms import form, fields, validators
 from flask_admin import Admin, AdminIndexView, expose, helpers as admin_helpers
