@@ -67,7 +67,6 @@ class CustomForms(db.Model):
         self.is_included = is_included,
         self.is_fixed = is_fixed
 
-
     def __repr__(self):
         return '<CustomForm %r>' % self.id
 
@@ -79,7 +78,7 @@ class CustomForms(db.Model):
 
     @property
     def serialize(self):
-        """Return object data in easily serializeable format"""
+        """Return object data in easily serializable format"""
 
         return {
             'id': self.id,

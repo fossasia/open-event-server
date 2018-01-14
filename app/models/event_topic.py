@@ -4,12 +4,13 @@ from app.api.helpers.db import get_count
 
 
 def get_new_slug(name):
-    slug = name.lower().replace("& ", "").replace(",", "").replace("/","-").replace(" ","-")
+    slug = name.lower().replace("& ", "").replace(",", "").replace("/", "-").replace(" ", "-")
     count = get_count(EventTopic.query.filter_by(slug=slug))
     if count == 0:
         return slug
     else:
         return '{}-{}'.format(slug, uuid.uuid4().hex)
+
 
 class EventTopic(db.Model):
     """Event topic object table"""
@@ -40,5 +41,5 @@ class EventTopic(db.Model):
 
     @property
     def serialize(self):
-        """Return object data in easily serializeable format"""
+        """Return object data in easily serializable format"""
         return {'id': self.id, 'name': self.name, 'slug': self.slug}

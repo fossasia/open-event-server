@@ -2190,6 +2190,7 @@ def role_role_invite(transaction):
         db.session.add(role_invite)
         db.session.commit()
 
+
 # ------------------------- Activities -------------------------
 @hooks.before("Activity > Activity Collection > List all Activities")
 def activity_get_list(transaction):
@@ -2995,6 +2996,7 @@ def event_event_type_get_detail(transaction):
         event = EventFactoryBasic(event_type_id=1)
         db.session.add(event)
         db.session.commit()
+
 
 # ------------------------- Event Topics -------------------------
 @hooks.before("Event Topics > Event Topics Collection > List All Event Topics")

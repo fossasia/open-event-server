@@ -10304,6 +10304,8 @@ Data related to all the sessions in the event.
 | `deleted-at` | Date the session was deleted | ISO 8601 (tz-aware) | - |
 | `submitted-at` | Date the session was submitted | ISO 8601 (tz-aware) | - |
 | `is-mail-sent` | Yes/No for Session accept/reject email | boolean (default: `false`) | - |
+| `last-modified-at` | Date the session was modified | ISO 8601 (tz-aware) | - |
+
 
 ## Sessions Collection [/v1/sessions{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -10351,7 +10353,8 @@ Create a new session using an event_id **(Minimum Co-Organizer Access)**
                   "created-at": "2017-05-01T01:24:47.500127+00:00",
                   "deleted-at": null,
                   "submitted-at": "2017-05-01T01:24:47.500127+00:00",
-                  "is-mail-sent": false
+                  "is-mail-sent": false,
+                  "last-modified-at": "2017-05-01T01:24:47.500127+00:00"
                 },
                 "type": "session"
               }
@@ -10412,7 +10415,8 @@ Create a new session using an event_id **(Minimum Co-Organizer Access)**
               "created-at": "2017-05-01T01:24:47.500127+00:00",
               "deleted-at": null,
               "submitted-at": null,
-              "is-mail-sent": false
+              "is-mail-sent": false,
+              "last-modified-at": "2017-05-01T01:24:47.500127+00:00"
             },
             "type": "session",
             "id": "21",
@@ -10498,7 +10502,8 @@ Get a single session. **(Public)**
               "created-at": "2017-05-01T01:24:47.500127+00:00",
               "deleted-at": null,
               "submitted-at": null,
-              "is-mail-sent": false
+              "is-mail-sent": false,
+              "last-modified-at": "2017-05-01T01:24:47.500127+00:00"
             },
             "type": "session",
             "id": "1",
@@ -10600,7 +10605,8 @@ Update a single session by `id`. **(Minimum Co-Organizer Access)**
               "created-at": "2017-05-01T01:24:47.500127+00:00",
               "deleted-at": null,
               "submitted-at": null,
-              "is-mail-sent": false
+              "is-mail-sent": false,
+              "last-modified-at": "2017-05-02T01:24:47.500127+00:00"
             },
             "type": "session",
             "id": "1",
@@ -10715,7 +10721,8 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "level": 1,
                         "deleted-at": null,
                         "starts-at": "2017-06-01T10:00:00.500127+00:00",
-                        "is-mail-sent": false
+                        "is-mail-sent": false,
+                        "last-modified-at": "2017-07-25T02:22:35.010307+00:00"
                     },
                     "type": "session",
                     "id": "1",
@@ -10810,7 +10817,8 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "level": 1,
                         "deleted-at": null,
                         "starts-at": "2017-06-01T10:00:00.500127+00:00",
-                        "is-mail-sent": false
+                        "is-mail-sent": false,
+                        "last-modified-at": "2017-07-25T02:22:35.010307+00:00"
                     },
                     "type": "session",
                     "id": "1",
@@ -10905,7 +10913,8 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "level": 1,
                         "deleted-at": null,
                         "starts-at": "2017-06-01T10:00:00.500127+00:00",
-                        "is-mail-sent": false
+                        "is-mail-sent": false,
+                        "last-modified-at": "2017-07-25T02:22:35.010307+00:00"
                     },
                     "type": "session",
                     "id": "1",
@@ -11000,7 +11009,8 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "level": 1,
                         "deleted-at": null,
                         "starts-at": "2017-06-01T10:00:00.500127+00:00",
-                        "is-mail-sent": false
+                        "is-mail-sent": false,
+                        "last-modified-at": "2017-07-25T02:22:35.010307+00:00"
                     },
                     "type": "session",
                     "id": "1",
@@ -11095,7 +11105,8 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "level": 1,
                         "deleted-at": null,
                         "starts-at": "2017-06-01T10:00:00.500127+00:00",
-                        "is-mail-sent": false
+                        "is-mail-sent": false,
+                        "last-modified-at": "2017-07-25T02:22:35.010307+00:00"
                     },
                     "type": "session",
                     "id": "1",
@@ -11869,6 +11880,80 @@ Delete a single speaker by id.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 
+### List Speakers [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "user": {
+                            "links": {
+                                "self": "/v1/speakers/1/relationships/user",
+                                "related": "/v1/speakers/1/user"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/speakers/1/relationships/event",
+                                "related": "/v1/speakers/1/event"
+                            }
+                        },
+                        "sessions": {
+                            "links": {
+                                "self": "/v1/speakers/1/relationships/sessions",
+                                "related": "/v1/speakers/1/sessions"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "website": "https://firstSpeaker.com",
+                        "city": "Delhi",
+                        "short-biography": "",
+                        "name": "firstSpeaker",
+                        "speaking-experience": "",
+                        "country": "India",
+                        "twitter": null,
+                        "is-featured": false,
+                        "linkedin": null,
+                        "email": "firstSpeaker@gmail.com",
+                        "long-biography": "",
+                        "mobile": null,
+                        "github": null,
+                        "facebook": null,
+                        "gender": "Male",
+                        "position": null,
+                        "organisation": null,
+                        "sponsorship-required": "",
+                        "heard-from": null
+                    },
+                    "type": "speaker",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/speakers/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/sessions/1/speakers"
+            }
+        }
 
 ## List Speaker Profiles for a User [/v1/users/{user_id}/speakers{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -11878,6 +11963,80 @@ Delete a single speaker by id.
     + sort (optional, string, `speaking-experience`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
+### List Speakers [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "user": {
+                            "links": {
+                                "self": "/v1/speakers/1/relationships/user",
+                                "related": "/v1/speakers/1/user"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/speakers/1/relationships/event",
+                                "related": "/v1/speakers/1/event"
+                            }
+                        },
+                        "sessions": {
+                            "links": {
+                                "self": "/v1/speakers/1/relationships/sessions",
+                                "related": "/v1/speakers/1/sessions"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "website": "https://firstSpeaker.com",
+                        "city": "Delhi",
+                        "short-biography": "",
+                        "name": "firstSpeaker",
+                        "speaking-experience": "",
+                        "country": "India",
+                        "twitter": null,
+                        "is-featured": false,
+                        "linkedin": null,
+                        "email": "firstSpeaker@gmail.com",
+                        "long-biography": "",
+                        "mobile": null,
+                        "github": null,
+                        "facebook": null,
+                        "gender": "Male",
+                        "position": null,
+                        "organisation": null,
+                        "sponsorship-required": "",
+                        "heard-from": null
+                    },
+                    "type": "speaker",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/speakers/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/users/1/speakers"
+            }
+        }
 
 
 # Group Social Links

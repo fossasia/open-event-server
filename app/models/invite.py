@@ -29,6 +29,6 @@ class Invite(db.Model):
 
     @property
     def serialize(self):
-        """Return object data in easily serializeable format"""
+        """Return object data in easily serializable format"""
 
         return {'id': self.id, 'user_id': self.user_id, 'session_id': self.session_id}
