@@ -53,5 +53,6 @@ class TestDBHelperValidation(OpenEventTestCase):
             save_to_db(attendee)
             self.assertEqual(get_count(TicketHolder.query), 1)
 
+
 if __name__ == '__main__':
     unittest.main()

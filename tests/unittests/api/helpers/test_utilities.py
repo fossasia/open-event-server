@@ -23,5 +23,6 @@ class TestUtilitiesHelperValidation(OpenEventTestCase):
             data = ['event']
             require_relationship(['sponsor', 'event'], data)
 
+
 if __name__ == '__main__':
     unittest.main()

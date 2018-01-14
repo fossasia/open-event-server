@@ -27,6 +27,7 @@ from app.models.custom_system_role import CustomSysRole
 from app.models.user_permission import UserPermission
 SALES = 'sales'
 
+
 def create_roles():
     get_or_create(Role, name=ORGANIZER, title_name='Organizer')
     get_or_create(Role, name=COORGANIZER, title_name='Co-organizer')
