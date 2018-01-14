@@ -65,7 +65,7 @@ Please get familiar with the components of the project in order to be able to co
 * App server - [uWSGI](https://github.com/unbit/uwsgi)
 * Web Server - [NGINX](https://www.nginx.com)
 
-> Open-event-server works with Python 2 at the moment. Modernizing code to support Python 3 is something we are gonna do soon.
+Note that open-event-server **works with Python 2.7** at the moment.
 
 ### External Service Dependencies
 
