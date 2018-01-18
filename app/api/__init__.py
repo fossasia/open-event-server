@@ -3,6 +3,8 @@ from app.api.stripe_authorization import StripeAuthorizationDetail, StripeAuthor
     StripeAuthorizationListPost
 from app.api.ticket_fees import TicketFeeList, TicketFeeDetail
 from app.api.users import UserList, UserDetail, UserRelationship
+from app.api.user_emails import UserEmailListAdmin, UserEmailListPost, UserEmailList, UserEmailDetail, \
+    UserEmailRelationship
 from app.api.notifications import NotificationList, NotificationListAdmin, NotificationDetail, NotificationRelationship
 from app.api.email_notifications import EmailNotificationList, EmailNotificationListAdmin, EmailNotificationDetail,\
     EmailNotificationRelationshipOptional, EmailNotificationRelationshipRequired
@@ -80,7 +82,8 @@ api.route(UserDetail, 'user_detail', '/users/<int:id>', '/notifications/<int:not
           '/event-invoices/<int:event_invoice_id>/user', '/speakers/<int:speaker_id>/user',
           '/access-codes/<int:access_code_id>/marketer', '/email-notifications/<int:email_notification_id>/user',
           '/discount-codes/<int:discount_code_id>/marketer', '/sessions/<int:session_id>/creator',
-          '/attendees/<int:attendee_id>/user', '/feedbacks/<int:feedback_id>/user')
+          '/attendees/<int:attendee_id>/user', '/feedbacks/<int:feedback_id>/user',
+          '/alternate-emails/<int:user_email_id>/user')
 api.route(UserRelationship, 'user_notification', '/users/<int:id>/relationships/notifications')
 api.route(UserRelationship, 'user_feedback', '/users/<int:id>/relationships/feedbacks')
 api.route(UserRelationship, 'user_event_invoices', '/users/<int:id>/relationships/event-invoices')
@@ -97,7 +100,14 @@ api.route(UserRelationship, 'user_moderator_event', '/users/<int:id>/relationshi
 api.route(UserRelationship, 'user_attendees', '/users/<int:id>/relationships/attendees')
 api.route(UserRelationship, 'user_events', '/users/<int:id>/relationships/events')
 api.route(UserRelationship, 'user_orders', '/users/<int:id>/relationships/orders')
+api.route(UserRelationship, 'user_emails', '/users/<int:id>/relationships/alternate-emails')
 
+# users_emails
+api.route(UserEmailListAdmin, 'user_email_list_admin', '/admin/user-emails')
+api.route(UserEmailListPost, 'user_email_post', '/user-emails')
+api.route(UserEmailList, 'user_emails_list', '/users/<int:user_id>/alternate-emails')
+api.route(UserEmailDetail, 'user_emails_detail', '/user-emails/<int:id>', )
+api.route(UserEmailRelationship, 'user_emails_user', '/user-emails/<int:id>/relationships/user')
 
 # notifications
 api.route(NotificationListAdmin, 'notification_list_admin', '/notifications')
