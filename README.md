@@ -31,7 +31,7 @@ The **Open Event Server** exposes a well documented [JSON:API Spec](http://jsona
 
 A demo version is automatically deployed from our repositories:
 * Deployment from the `master` branch - **[open-event-api.herokuapp.com](https://open-event-api.herokuapp.com/)**
-* Deployment from the `development` branch - [open-event-api-dev.herokuapp.com](https://open-event-api-dev.herokuapp.com/)**
+* Deployment from the `development` branch - **[open-event-api-dev.herokuapp.com](https://open-event-api-dev.herokuapp.com/)**
 
 ## Installation
 
