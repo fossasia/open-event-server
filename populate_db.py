@@ -23,6 +23,8 @@ from app.models.user import ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR, 
 from app.models.panel_permission import PanelPermission
 from app.models.custom_system_role import CustomSysRole
 
+from app.models.setting import Setting
+
 # User Permissions
 from app.models.user_permission import UserPermission
 SALES = 'sales'
@@ -49,6 +51,10 @@ def create_services():
     get_or_create(Service, name=speaker)
     get_or_create(Service, name=sponsor)
     get_or_create(Service, name=microlocation)
+
+
+def create_settings():
+    get_or_create(Setting, app_name='Open Event')
 
 
 def create_permissions():
@@ -168,6 +174,8 @@ def populate():
     create_panel_permissions()
     print('Creating user permissions...')
     create_user_permissions()
+    print('Creating settings...')
+    create_settings()
     print('Creating admin message settings...')
     create_admin_message_settings()
 
