@@ -1,3 +1,4 @@
+from __future__ import print_function
 # WARNING: This file contains cron jobs for elasticsearch, please use pure python for any kind of operation here,
 # Objects requiring flask app context may not work properly
 

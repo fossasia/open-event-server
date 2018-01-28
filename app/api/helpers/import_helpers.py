@@ -1,3 +1,4 @@
+from __future__ import print_function
 import json
 import os
 import shutil
@@ -229,7 +230,7 @@ def _upload_media(task_handle, event_id, base_path):
                     file = UploadedMemory(r.content, filename)
                 else:
                     file = None
-            except:
+            except Exception:
                 file = None
         # don't update current file setting
         if file is None:

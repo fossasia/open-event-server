@@ -1,3 +1,5 @@
+from __future__ import print_function
+from __future__ import absolute_import
 import base64
 from datetime import datetime
 
@@ -53,7 +55,7 @@ def send_email(to, action, subject, html):
                     'port': get_settings()['smtp_port'],
                 }
 
-                from tasks import send_mail_via_smtp_task
+                from .tasks import send_mail_via_smtp_task
                 send_mail_via_smtp_task.delay(config, payload)
             else:
                 payload['fromname'] = email_from_name
@@ -64,7 +66,7 @@ def send_email(to, action, subject, html):
                 headers = {
                     "Authorization": ("Bearer " + key)
                 }
-                from tasks import send_email_task
+                from .tasks import send_email_task
                 send_email_task.delay(payload, headers)
 
         # record_mail(to, action, subject, html)

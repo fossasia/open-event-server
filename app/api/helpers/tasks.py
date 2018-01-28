@@ -1,3 +1,5 @@
+from __future__ import print_function
+from __future__ import absolute_import
 import requests
 from marrow.mailer import Mailer, Message
 
@@ -15,7 +17,7 @@ from app.api.helpers.request_context_task import RequestContextTask
 from app.api.helpers.mail import send_export_mail, send_import_mail
 from app.api.helpers.notification import send_notif_after_import, send_notif_after_export
 from app.api.helpers.db import safe_query
-from import_helpers import update_import_job
+from .import_helpers import update_import_job
 from app.models.event import Event
 from app.models.user import User
 from app.models import db
