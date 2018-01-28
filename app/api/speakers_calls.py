@@ -48,7 +48,7 @@ class SpeakersCallDetail(ResourceDetail):
         """
         if kwargs.get('event_id'):
             try:
-                speakers_call = SpeakersCall.query.filter_by(event_id=kwargs['event_id']).one()
+                speakers_call = SpeakersCall.query.filter_by(event_id=kwargs['event_id']).first()
             except NoResultFound:
                 raise ObjectNotFound({'source': ''}, "Object: not found")
             kwargs['id'] = speakers_call.id
@@ -61,7 +61,7 @@ class SpeakersCallDetail(ResourceDetail):
         """
         if view_kwargs.get('event_identifier'):
             try:
-                event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).one()
+                event = self.session.query(Event).filter_by(identifier=view_kwargs['event_identifier']).first()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': 'event_identifier'},
                                      "Event: {} not found".format(view_kwargs['event_identifier']))
@@ -70,7 +70,7 @@ class SpeakersCallDetail(ResourceDetail):
 
         if view_kwargs.get('event_id'):
             try:
-                speakers_call = self.session.query(SpeakersCall).filter_by(event_id=view_kwargs['event_id']).one()
+                speakers_call = self.session.query(SpeakersCall).filter_by(event_id=view_kwargs['event_id']).first()
             except NoResultFound:
                 raise ObjectNotFound({'parameter': 'event_identifier'}, "Object: not found")
             view_kwargs['id'] = speakers_call.id

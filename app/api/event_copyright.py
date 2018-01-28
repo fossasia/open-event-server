@@ -38,7 +38,7 @@ class EventCopyrightListPost(ResourceList):
         :return:
         """
         try:
-            self.session.query(EventCopyright).filter_by(event_id=data['event']).one()
+            self.session.query(EventCopyright).filter_by(event_id=data['event']).first()
         except NoResultFound:
             pass
         else:

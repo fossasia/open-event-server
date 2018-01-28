@@ -29,7 +29,7 @@ def verify_email():
         return BadRequestError({'source': ''}, 'Invalid Token').respond()
 
     try:
-        user = User.query.filter_by(email=data[0]).one()
+        user = User.query.filter_by(email=data[0]).first()
     except Exception:
         return BadRequestError({'source': ''}, 'Invalid Token').respond()
     else:
@@ -46,7 +46,7 @@ def reset_password_post():
         return BadRequestError({'source': ''}, 'Bad Request Error').respond()
 
     try:
-        user = User.query.filter_by(email=email).one()
+        user = User.query.filter_by(email=email).first()
     except NoResultFound:
         return UnprocessableEntityError({'source': ''}, 'User not found').respond()
     else:
@@ -62,7 +62,7 @@ def reset_password_patch():
     password = request.json['data']['password']
 
     try:
-        user = User.query.filter_by(reset_password=token).one()
+        user = User.query.filter_by(reset_password=token).first()
     except NoResultFound:
         return NotFoundError({'source': ''}, 'User Not Found').respond()
     else:
@@ -83,7 +83,7 @@ def change_password():
     new_password = request.json['data']['new-password']
 
     try:
-        user = User.query.filter_by(id=current_user.id).one()
+        user = User.query.filter_by(id=current_user.id).first()
     except NoResultFound:
         return NotFoundError({'source': ''}, 'User Not Found').respond()
     else:
