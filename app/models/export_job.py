@@ -29,7 +29,10 @@ class ExportJob(db.Model):
         return '<ExportJob %d for event %d>' % (self.id, self.event.id)
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
+        try:
+            return unicode(self).encode('utf-8')
+        except NameError:
+            return str(self)
+            
     def __unicode__(self):
         return self.__repr__()

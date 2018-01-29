@@ -627,7 +627,7 @@ def event_speaker(transaction):
         db.session.commit()
 
 
-@hooks.before("Events > Get Event for an Emaildfgfdgdfg Notification > Event Details for an Email Notification")
+@hooks.before("Events > Get Event for an Email Notification > Event Details for an Email Notification")
 def event_email_notification(transaction):
     """
     GET /email-notifications/1/event

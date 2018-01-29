@@ -46,7 +46,11 @@ class RoleInvite(db.Model):
                                           self.role_id,)
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        try:
+            return unicode(self).encode('utf-8')
+        except NameError:
+            return str(self)
+            
 
     def __unicode__(self):
         return 'Invite for %r:%r:%r' % (self.email,

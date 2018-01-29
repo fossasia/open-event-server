@@ -31,7 +31,11 @@ class MessageSettings(db.Model):
         return '<Message Setting %r >' % self.action
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        try:
+            return unicode(self).encode('utf-8')
+        except NameError:
+            return str(self)
+            
 
     def __unicode__(self):
         return 'Message Setting %r' % self.action
