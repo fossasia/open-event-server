@@ -1,0 +1,42 @@
+{
+  "name": "Open-Event-Server",
+  "description": "The Open Event Server enables organizers to manage events from concerts to conferences and meet-ups.",
+  "logo": "https://scalingo.com/logo.svg",
+  "repository": "https://github.com/fossasia/open-event-server",
+  "website": "https://open-event-dev.herokuapp.com/",
+  "env": {
+    "DATABASE_URL": {
+      "description": "PostgreSQL DataBase URL",
+      "required": true,
+      "value": "postgresql://john:start@127.0.0.1:5432/oevent"
+    },
+    "INTEGRATE_SOCKETIO": {
+      "description": "ENV VAR for INTEGRATE_SOCKETIO",
+      "required": true,
+      "value": "false"
+    },
+    "SERVER_NAME": {
+      "description": "ENV VAR for SERVER_NAME",
+      "value": "localhost:5000"
+    },
+    "TEST_DATABASE_URL": {
+      "description": "ENV VAR for TEST_DATABASE_URL",
+      "required": true,
+      "value": "postgresql://open_event_user:test@127.0.0.1:5432/opev_test"
+    },
+    "APP_CONFIG": {
+      "description": "ENV VAR for APP_CONFIG",
+      "required": true,
+      "value": "config.DevelopmentConfig"
+    },
+    "BUILDPACK_URL": {
+      "description": "Internal scalingo configuration",
+      "required": true,
+      "value": "https://github.com/Scalingo/python-buildpack.git"
+    }
+  },
+  "addons": [
+    "scalingo-postgresql",
+    "scalingo-redis"
+  ]
+}
