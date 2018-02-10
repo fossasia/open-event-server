@@ -55,7 +55,10 @@ class ImageSizes(db.Model):
         self.logo_height = logo_height
 
     def __str__(self):
-        return 'Page:' + unicode(self.id).encode('utf-8')
+        try:
+            return 'Page:' + unicode(self.id).encode('utf-8')
+        except:
+            return 'Page:' +str(self.id)
 
     def __unicode__(self):
         return unicode(self.id)

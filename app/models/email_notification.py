@@ -33,7 +33,9 @@ class EmailNotification(db.Model):
         self.after_ticket_purchase = after_ticket_purchase
 
     def __str__(self):
-        return 'User:' + unicode(self.user_id).encode('utf-8') + ' Event: ' + unicode(self.event_id).encode('utf-8')
-
+        try:
+            return 'User:' + unicode(self.user_id).encode('utf-8') + ' Event: ' + unicode(self.event_id).encode('utf-8')
+        except:
+            return 'User:' + str(self.user_id) + ' Event:' + str(self.event_id)
     def __unicode__(self):
         return unicode(self.id)

@@ -122,7 +122,7 @@ class Session(db.Model):
             return unicode(self).encode('utf-8')
         except NameError:
             return str(self)
-            
+
     def __setattr__(self, name, value):
         if name == 'short_abstract' or name == 'long_abstract' or name == 'comments':
             super(Session, self).__setattr__(name, clean_html(clean_up_string(value)))

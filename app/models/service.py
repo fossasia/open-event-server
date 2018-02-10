@@ -18,7 +18,6 @@ class Service(db.Model):
             return unicode(self).encode('utf-8')
         except NameError:
             return str(self)
-            
 
     def __unicode__(self):
         return self.name
