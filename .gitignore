@@ -5,6 +5,7 @@
 *.env
 env
 env*
+!migrations/env.py
 dist
 build
 *.egg

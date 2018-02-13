@@ -31,6 +31,6 @@ script:
 after_success:
   - 'bash <(curl -s https://codecov.io/bash)'
   - bash scripts/push_api_docs.sh
-  - bash kubernetes/travis/deploy.sh
-  - bash kubernetes/travis/deploy-staging.sh
-  - bash kubernetes/travis/deploy-nextgen.sh
+  #- bash kubernetes/travis/deploy.sh
+  #- bash kubernetes/travis/deploy-staging.sh
+  #- bash kubernetes/travis/deploy-nextgen.sh
