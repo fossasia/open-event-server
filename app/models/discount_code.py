@@ -72,7 +72,8 @@ class DiscountCode(db.Model):
         try:
             return unicode(self).encode('utf-8')
         except NameError:
-            return str(self)         
+            return str(self)
+
     def __unicode__(self):
         return self.code
 

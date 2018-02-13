@@ -35,7 +35,8 @@ class EmailNotification(db.Model):
     def __str__(self):
         try:
             return 'User:' + unicode(self.user_id).encode('utf-8') + ' Event: ' + unicode(self.event_id).encode('utf-8')
-        except:
+        except NameError:
             return 'User:' + str(self.user_id) + ' Event:' + str(self.event_id)
+
     def __unicode__(self):
         return unicode(self.id)

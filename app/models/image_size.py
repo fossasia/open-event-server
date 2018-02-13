@@ -57,8 +57,8 @@ class ImageSizes(db.Model):
     def __str__(self):
         try:
             return 'Page:' + unicode(self.id).encode('utf-8')
-        except:
-            return 'Page:' +str(self.id)
+        except NameError:
+            return 'Page:' + str(self.id)
 
     def __unicode__(self):
         return unicode(self.id)

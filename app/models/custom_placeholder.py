@@ -43,8 +43,9 @@ class CustomPlaceholder(db.Model):
     def __str__(self):
         try:
             return 'Name:' + unicode(self.name).encode('utf-8')
-        except:
+        except NameError:
             return 'Name:' + str(self.name)
+
     def __unicode__(self):
         return unicode(self.id)
 

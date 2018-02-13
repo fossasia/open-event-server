@@ -28,7 +28,7 @@ class Page(db.Model):
     def __str__(self):
         try:
             return unicode(self).encode('utf-8')
-        except:
+        except NameError:
             return str(self)
 
     def __unicode__(self):
