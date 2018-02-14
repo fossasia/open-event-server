@@ -71,12 +71,6 @@ fi
 apt-get update
 # apt-get -y upgrade
 
-# Git required by bower
-sudo apt-get install --force-yes -y git
-sudo apt-get install -y npm
-sudo npm install -g bower
-sudo ln -s /usr/bin/nodejs /usr/bin/node
-bower install --allow-root
 apt-get -y install "postgresql-$PG_VERSION" "postgresql-contrib-$PG_VERSION"
 
 PG_CONF="/etc/postgresql/$PG_VERSION/main/postgresql.conf"
