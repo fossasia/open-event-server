@@ -61,25 +61,17 @@ create database test with owner=open_event_user;
 * Once database is created, exit the psql shell with `\q` followed by ENTER.
 
 
-* **Step 3** - Install bower and frontend requirements.
-
-```sh
-npm install bower -g
-bower install
-```
-
-
-* **Step 4** - Create application environment variables.
+* **Step 3** - Create application environment variables.
 
 ```sh
 export DATABASE_URL=postgresql://open_event_user:start@127.0.0.1:5432/test
 ```
 
 
-* **Step 5** - Start the postgres service on the application manually.
+* **Step 4** - Start the postgres service on the application manually.
 
 
-* **Step 6** - Create the tables. For that we will use `create_db.py`.
+* **Step 5** - Create the tables. For that we will use `create_db.py`.
 
 ```sh
 python create_db.py
@@ -88,7 +80,7 @@ python manage.py db stamp head
 ```
 
 
-* **Step 7** - Start the application along with the needed services.
+* **Step 6** - Start the application along with the needed services.
 The `&` at the end of the commands below make them run in background so that they don't hold the terminal.
 
 ```sh

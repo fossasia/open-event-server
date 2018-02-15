@@ -57,22 +57,14 @@ create database test with owner=open_event_user;
 * Once database is created, exit the psql shell with `\q` followed by ENTER.
 
 
-* **Step 3** - Install bower and frontend requirements.
-
-```sh
-npm install bower -g
-bower install
-```
-
-
-* **Step 4** - Start the postgres service.
+* **Step 3** - Start the postgres service.
 
 ```sh
 sudo service postgresql restart
 ```
 
 
-* **Step 5** - Create the tables. For that we will use `create_db.py`.
+* **Step 4** - Create the tables. For that we will use `create_db.py`.
 
 ```sh
 python create_db.py
@@ -81,7 +73,7 @@ python manage.py db stamp head
 ```
 
 
-* **Step 6** - Start the application along with the needed services.
+* **Step 5** - Start the application along with the needed services.
 The `&` at the end of the commands below make them run in background so that they don't hold the terminal.
 
 ```sh
@@ -106,26 +98,4 @@ unset INTEGRATE_SOCKETIO
 python manage.py runserver
 ```
 
-* **Step 7** - Rejoice. Go to `localhost:5000` in your web browser to see the application live.
-
----
-
-**Note:**
-
-If you are working from within a proxied network of an organization/institute, Bower might not be able to install the libraries. For that, we need to configure .bowerrc to work via proxy.
-* Open .bowerrc in any text editor like vim. Run:
-```vim .bowerrc```
-* The contents of .bowerrc will be something like this:
-```
-{
-	"directory": "app/static/admin/lib"
-}
-```
-* Modify the file to add "proxy" and "https-proxy" properties like this:
-```
-{
-	"directory": "app/static/admin/lib",
-	"proxy": "http://172.31.1.23:8080",
-	"https-proxy": "http://172.31.1.23:8080"
-}
-```
+* **Step 6** - Rejoice. Go to `localhost:5000` in your web browser to see the application live.
