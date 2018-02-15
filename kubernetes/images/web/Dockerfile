@@ -16,7 +16,6 @@ RUN apt-get clean -y && apt-get update -y
 RUN apt-get install -y wget git ca-certificates curl && update-ca-certificates
 # install deps
 RUN apt-get install -y --no-install-recommends build-essential python-dev libpq-dev libevent-dev libmagic-dev
-# nodejs bower
 
 ENV INSTALL_PATH /opev
 
