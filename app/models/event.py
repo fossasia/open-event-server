@@ -15,12 +15,12 @@ from app.views.redis_store import redis_store
 
 
 def get_new_event_identifier(length=8):
-    identifier = binascii.b2a_hex(os.urandom(length / 2))
+    identifier = binascii.b2a_hex(os.urandom(int(length / 2)))
     count = get_count(Event.query.filter_by(identifier=identifier))
     if count == 0:
         return identifier
     else:
-        return get_new_event_identifier()
+        return get_new_event_identifier(length)
 
 
 class Event(db.Model):
