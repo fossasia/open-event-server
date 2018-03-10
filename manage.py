@@ -1,5 +1,5 @@
 from __future__ import print_function
-
+from flask_script import Server
 import os
 
 from app.api.helpers.db import save_to_db
@@ -94,4 +94,8 @@ def prepare_kubernetes_db():
 
 
 if __name__ == "__main__":
+    host_port = app.config['SERVER_NAME'].split(":")
+    host = host_port[0]
+    port = int(host_port[1] if len(host_port) > 1 else app.config['FALLBACK_PORT'])
+    manager.add_command("runserver", Server(host=host, port=port))
     manager.run()
