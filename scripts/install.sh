@@ -1,13 +1,42 @@
 #!/usr/bin/env bash
-# Install essential packages from Apt
-apt-get update -y
-# Python dev packages
-apt-get install -y build-essential python python-dev python-setuptools python-pip
-apt-get install -y libxml2-dev libxslt1-dev
-apt-get install -y nginx uwsgi uwsgi-plugin-python
-apt-get install -y postgresql postgresql-contrib libpq-dev
-apt-get install -y libffi-dev
-apt-get install -y libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk
+
+# Operating system
+if type lsb_release >/dev/null 2>&1; then
+    OS=$(lsb_release -si)
+elif [ -f /etc/os-release ]; then
+    . /etc/os-release
+    OS=$NAME
+elif type uname >/dev/null 2>&1; then
+    OS=$(uname -s)
+else
+    OS=$OSTYPE
+fi
+
+# Check if the system is Ubuntu/Debian
+if [[ "$OS" == "Ubuntu" ]] || [[ "$OS" == "Debian" ]]; then
+    # Install essential packages from Apt
+    apt-get update -y
+    # Python dev packages
+    apt-get install -y build-essential python python-dev python-setuptools python-pip
+    apt-get install -y libxml2-dev libxslt1-dev
+    apt-get install -y nginx uwsgi uwsgi-plugin-python
+    apt-get install -y postgresql postgresql-contrib libpq-dev
+    apt-get install -y libffi-dev
+    apt-get install -y libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk
+
+# Check if system is CentOS/Fedora/RHEL
+elif [[ "$OS" == "CentOS" ]] || [[ "$OS" == "Fedora" ]]; then
+    # Update Yum repository
+    yum update -y
+    # Python dev packages
+    yum install -y build-essential python python-devel python-setuptools python-pip
+    yum install -y libffi libffi-devel
+    yum install -y postgresql postgresql-server postgresql-contrib
+    postgresql-setup initdb
+else
+    echo "No development package installation script available for $OS"
+    exit 1
+fi
 # Edit the following to change the name of the database user that will be created:
 APP_DB_USER=open_event_user
 APP_DB_PASS=start
