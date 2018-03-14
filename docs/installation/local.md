@@ -36,7 +36,11 @@ Make sure you have the dependencies mentioned above installed before proceeding 
 git clone -b development https://github.com/fossasia/open-event-server.git
 cd open-event-server
 ```
-
+**Note :** If you want to contribute, first fork the original repository and clone the forked repository into your local machine followed by ```cd``` into the directory
+```sh
+git clone https://github.com/USERNAME/open-event-server.git
+cd open-event-server
+``` 
 
 * **Step 1** - Install python requirements. You need to be present in the root directory of the project.
 
@@ -95,7 +99,9 @@ python create_db.py
 # enter email and password
 python manage.py db stamp head
 ```
-**Note:** In case you are using Anaconda distribution for python, you may get an import error regarding `celery.signals` module. Please use the default python version while executing these steps in that case.
+**Note 1:** In case you made your own username and password in Step 2 are now getting `FATAL:  password authentication failed for user "john"` , probable cause is non updation of `.env` file. To resolve it, open the `.env` file and update `DATABASE_URL=postgresql://USERNAME:PASSWORD@127.0.0.1:5432/oevent` and you are good to go.
+
+**Note 2:** In case you are using Anaconda distribution for python, you may get an import error regarding `celery.signals` module. Please use the default python version while executing these steps in that case.
 
 * **Step 6** - Start the application along with the needed services.
 
