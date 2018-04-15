@@ -35,7 +35,10 @@ class Microlocation(db.Model):
         return '<Microlocation %r>' % self.name
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        try:
+            return unicode(self).encode('utf-8')
+        except NameError:
+            return str(self)
 
     def __unicode__(self):
         return self.name

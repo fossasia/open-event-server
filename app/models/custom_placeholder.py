@@ -41,7 +41,10 @@ class CustomPlaceholder(db.Model):
         self.event_sub_topic_id = event_sub_topic_id
 
     def __str__(self):
-        return 'Name:' + unicode(self.name).encode('utf-8')
+        try:
+            return 'Name:' + unicode(self.name).encode('utf-8')
+        except NameError:
+            return 'Name:' + str(self.name)
 
     def __unicode__(self):
         return unicode(self.id)

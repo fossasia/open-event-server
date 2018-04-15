@@ -352,7 +352,10 @@ class User(db.Model):
         return '<User %r>' % self.email
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        try:
+            return unicode(self).encode('utf-8')
+        except NameError:
+            return str(self)
 
     def __unicode__(self):
         return self.email
