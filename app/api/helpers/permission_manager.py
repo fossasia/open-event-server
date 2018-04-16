@@ -106,7 +106,7 @@ def is_user_itself(view, view_args, view_kwargs, *args, **kwargs):
     Otherwise the user can only access his/her resource.
     """
     user = current_identity
-    if not user.is_admin and not user.is_super_admin and user.id != kwargs['id']:
+    if not user.is_admin and not user.is_super_admin and user.id != kwargs['user_id']:
         return ForbiddenError({'source': ''}, 'Access Forbidden').respond()
     return view(*view_args, **view_kwargs)
 
