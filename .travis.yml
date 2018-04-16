@@ -34,3 +34,4 @@ after_success:
   #- bash kubernetes/travis/deploy.sh
   #- bash kubernetes/travis/deploy-staging.sh
   #- bash kubernetes/travis/deploy-nextgen.sh
+cache: pip
