@@ -1,6 +1,12 @@
+from __future__ import unicode_literals
+
+from future.utils import python_2_unicode_compatible
+
 from app.models import db
+from utils.compat import u
 
 
+@python_2_unicode_compatible
 class Role(db.Model):
     """Event Role
     """
@@ -18,7 +24,4 @@ class Role(db.Model):
         return '<Role %r>' % self.name
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return self.name
+        return u(self.name)

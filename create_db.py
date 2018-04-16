@@ -1,9 +1,13 @@
+from __future__ import print_function
+
+import getpass
 import re
 import sys
-import getpass
+
+from builtins import input
+from flask_migrate import stamp
 
 from app import current_app
-from flask_migrate import stamp
 from app.models import db
 from populate_db import populate
 from tests.unittests.auth_helper import create_super_admin
@@ -23,7 +27,7 @@ def _validate_password(password):
 
 def create_default_user():
     print("Your login is 'super_admin'.")
-    email = raw_input("Enter email for super_admin    : ")
+    email = input("Enter email for super_admin    : ")
     _validate_email(email)
     password = getpass.getpass("Enter password for super_admin : ")
     _validate_password(password)

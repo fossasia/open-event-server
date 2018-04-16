@@ -1,8 +1,14 @@
+from __future__ import unicode_literals
+
 import datetime
+
 import pytz
-from app.models.helpers.versioning import clean_up_string, clean_html
-from app.models import db
+from future.utils import python_2_unicode_compatible
 from sqlalchemy import event
+
+from app.models import db
+from app.models.helpers.versioning import clean_up_string, clean_html
+from utils.compat import u
 
 speakers_sessions = db.Table('speakers_sessions',
                              db.Column('speaker_id', db.Integer, db.ForeignKey('speaker.id', ondelete='CASCADE')),
@@ -10,6 +16,7 @@ speakers_sessions = db.Table('speakers_sessions',
                              db.PrimaryKeyConstraint('speaker_id', 'session_id'))
 
 
+@python_2_unicode_compatible
 class Session(db.Model):
     """Session model class"""
     __tablename__ = 'sessions'
@@ -118,16 +125,13 @@ class Session(db.Model):
         return '<Session %r>' % self.title
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return u(self.title)
 
     def __setattr__(self, name, value):
         if name == 'short_abstract' or name == 'long_abstract' or name == 'comments':
             super(Session, self).__setattr__(name, clean_html(clean_up_string(value)))
         else:
             super(Session, self).__setattr__(name, value)
-
-    def __unicode__(self):
-        return self.title
 
 
 @event.listens_for(Session, 'before_update')

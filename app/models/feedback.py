@@ -1,6 +1,12 @@
+from __future__ import unicode_literals
+
+from future.utils import python_2_unicode_compatible
+
 from app.models import db
+from utils.compat import u
 
 
+@python_2_unicode_compatible
 class Feedback(db.Model):
     """Feedback model class"""
     __tablename__ = 'feedback'
@@ -22,10 +28,7 @@ class Feedback(db.Model):
         return '<Feedback %r>' % self.rating
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return self.rating
+        return u(self.rating)
 
     @property
     def serialize(self):

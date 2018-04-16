@@ -1,6 +1,12 @@
+from __future__ import unicode_literals
+
+from future.utils import python_2_unicode_compatible
+
 from app.models import db
+from utils.compat import u
 
 
+@python_2_unicode_compatible
 class Module(db.Model):
     """File model class"""
     __tablename__ = 'modules'
@@ -20,3 +26,6 @@ class Module(db.Model):
 
     def __repr__(self):
         return '<Module %r>' % self.id
+
+    def __str__(self):
+        return u('<Module %r' % self.id)

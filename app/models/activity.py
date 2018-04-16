@@ -1,6 +1,12 @@
+from __future__ import unicode_literals
+
 from datetime import datetime
+
 import pytz
+from future.utils import python_2_unicode_compatible
+
 from app.models import db
+from utils.compat import u
 
 ACTIVITIES = {
     'create_user': 'User {user} created',
@@ -40,6 +46,7 @@ ACTIVITIES = {
 }
 
 
+@python_2_unicode_compatible
 class Activity(db.Model):
     __tablename__ = 'activities'
     id = db.Column(db.Integer, primary_key=True)
@@ -58,7 +65,4 @@ class Activity(db.Model):
         return '<Activity by %s>' % self.actor
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return 'Activity by %r' % self.actor
+        return u('Activity by %r' % self.actor)

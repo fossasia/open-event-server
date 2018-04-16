@@ -1,5 +1,10 @@
-from app.models.order import OrderTicket, Order
+from __future__ import unicode_literals
+
+from future.utils import python_2_unicode_compatible
+
 from app.models import db
+from app.models.order import OrderTicket, Order
+from utils.compat import u
 
 access_codes_tickets = db.Table('access_codes_tickets',
                                 db.Column('access_code_id', db.Integer, db.ForeignKey(
@@ -13,6 +18,7 @@ ticket_tags_table = db.Table('association', db.Model.metadata,
                              )
 
 
+@python_2_unicode_compatible
 class Ticket(db.Model):
     __tablename__ = 'tickets'
     __table_args__ = (db.UniqueConstraint('name', 'event_id', name='name_event_uc'),)
@@ -114,10 +120,7 @@ class Ticket(db.Model):
         return '<Ticket %r>' % self.name
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return self.name
+        return u(self.name)
 
     @property
     def serialize(self):
@@ -152,6 +155,7 @@ class Ticket(db.Model):
         return data
 
 
+@python_2_unicode_compatible
 class TicketTag(db.Model):
     """
     Tags to group tickets
@@ -172,7 +176,4 @@ class TicketTag(db.Model):
         return '<TicketTag %r>' % self.name
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return self.name
+        return u(self.name)

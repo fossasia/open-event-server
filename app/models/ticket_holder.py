@@ -1,11 +1,16 @@
+from __future__ import unicode_literals
+
 import base64
 from StringIO import StringIO
 
 import qrcode
+from future.utils import python_2_unicode_compatible
 
 from app.models import db
+from utils.compat import u
 
 
+@python_2_unicode_compatible
 class TicketHolder(db.Model):
     __tablename__ = "ticket_holders"
 
@@ -108,10 +113,7 @@ class TicketHolder(db.Model):
         return '<TicketHolder %r>' % self.id
 
     def __str__(self):
-        return '<TicketHolder %r>' % self.id
-
-    def __unicode__(self):
-        return '<TicketHolder %r>' % self.id
+        return u('<TicketHolder %r>' % self.id)
 
     @property
     def name(self):

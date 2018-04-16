@@ -1,4 +1,9 @@
+from __future__ import unicode_literals
+
+from future.utils import python_2_unicode_compatible
+
 from app.models import db
+from utils.compat import u
 
 
 class Environment:
@@ -12,6 +17,7 @@ class Environment:
     TESTING = 'testing'
 
 
+@python_2_unicode_compatible
 class Setting(db.Model):
     __tablename__ = 'settings'
     id = db.Column(db.Integer, primary_key=True)
@@ -214,7 +220,4 @@ class Setting(db.Model):
         return 'Settings'
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return 'Settings'
+        return u('Settings')

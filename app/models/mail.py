@@ -1,6 +1,12 @@
+from __future__ import unicode_literals
+
 from datetime import datetime
+
 import pytz
+from future.utils import python_2_unicode_compatible
+
 from app.models import db
+from utils.compat import u
 
 USER_REGISTER = 'User Registration'
 USER_CONFIRM = 'User Confirmation'
@@ -29,6 +35,7 @@ EVENT_IMPORTED = 'Event Imported'
 EVENT_IMPORT_FAIL = 'Event Import Failed'
 
 
+@python_2_unicode_compatible
 class Mail(db.Model):
     __tablename__ = 'mails'
     id = db.Column(db.Integer, primary_key=True)
@@ -52,7 +59,4 @@ class Mail(db.Model):
         return '<Mail %r to %r>' % (self.id, self.recipient)
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return 'Mail %r by %r' % (self.id, self.recipient,)
+        return u('Mail %r by %r' % (self.id, self.recipient,))

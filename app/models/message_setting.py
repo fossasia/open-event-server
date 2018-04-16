@@ -1,4 +1,9 @@
+from __future__ import unicode_literals
+
+from future.utils import python_2_unicode_compatible
+
 from app.models import db
+from utils.compat import u
 
 USER_REGISTER = 'User Registration'
 USER_CONFIRM = 'User Confirmation'
@@ -13,6 +18,7 @@ EVENT_PUBLISH = 'Event Published'
 AFTER_EVENT = 'After Event'
 
 
+@python_2_unicode_compatible
 class MessageSettings(db.Model):
     __tablename__ = 'message_settings'
     id = db.Column(db.Integer, primary_key=True)
@@ -31,10 +37,7 @@ class MessageSettings(db.Model):
         return '<Message Setting %r >' % self.action
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return 'Message Setting %r' % self.action
+        return u('Message Setting %r' % self.action)
 
     @property
     def serialize(self):

@@ -1,6 +1,12 @@
+from __future__ import unicode_literals
+
+from future.utils import python_2_unicode_compatible
+
 from app.models import db
+from utils.compat import u
 
 
+@python_2_unicode_compatible
 class UsersEventsRoles(db.Model):
     __tablename__ = 'users_events_roles'
 
@@ -34,9 +40,6 @@ class UsersEventsRoles(db.Model):
                                    self.role,)
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return '%r: %r in %r' % (self.user,
-                                 self.role,
-                                 self.event_id,)
+        return u('%r: %r in %r' % (self.user,
+                                   self.role,
+                                   self.event_id,))

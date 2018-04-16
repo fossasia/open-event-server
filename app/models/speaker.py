@@ -1,7 +1,11 @@
+from __future__ import unicode_literals
+from future.utils import python_2_unicode_compatible
+from utils.compat import u
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models import db
 
 
+@python_2_unicode_compatible
 class Speaker(db.Model):
     """Speaker model class"""
     __tablename__ = 'speaker'
@@ -92,10 +96,7 @@ class Speaker(db.Model):
         return '<Speaker %r>' % self.name
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return self.name
+        return u(self.name)
 
     def __setattr__(self, name, value):
         if name == 'short_biography' or name == 'long_biography' or name == 'speaking_experience' or name == 'sponsorship_required':

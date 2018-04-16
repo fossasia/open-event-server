@@ -1,6 +1,12 @@
+from __future__ import unicode_literals
+
+from future.utils import python_2_unicode_compatible
+
 from app.models import db
+from utils.compat import u
 
 
+@python_2_unicode_compatible
 class ImageSizes(db.Model):
     """image size model class"""
     __tablename__ = 'image_sizes'
@@ -55,10 +61,7 @@ class ImageSizes(db.Model):
         self.logo_height = logo_height
 
     def __str__(self):
-        return 'Page:' + unicode(self.id).encode('utf-8')
-
-    def __unicode__(self):
-        return unicode(self.id)
+        return u('Page:' + self.id)
 
     @property
     def serialize(self):

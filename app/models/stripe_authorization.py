@@ -1,8 +1,13 @@
+from __future__ import unicode_literals
+
+from future.utils import python_2_unicode_compatible
 from sqlalchemy.orm import backref
 
 from app.models import db
+from utils.compat import u
 
 
+@python_2_unicode_compatible
 class StripeAuthorization(db.Model):
     """
     Stripe authorization information for an event.
@@ -37,10 +42,7 @@ class StripeAuthorization(db.Model):
         return '<StripeAuthorization %r>' % self.stripe_user_id
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return self.stripe_user_id
+        return u(self.stripe_user_id)
 
     @property
     def serialize(self):
