@@ -49,8 +49,7 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     ERROR_404_HELP = False
     CSRF_ENABLED = True
-    SERVER_NAME = env('SERVER_NAME', default='127.0.0.1:5000')
-    FALLBACK_PORT = 80
+    SERVER_NAME = env('SERVER_NAME', default=None)
     CORS_HEADERS = 'Content-Type'
     SQLALCHEMY_DATABASE_URI = env('DATABASE_URL', default=None)
     SERVE_STATIC = env.bool('SERVE_STATIC', default=False)
