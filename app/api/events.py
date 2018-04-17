@@ -74,7 +74,7 @@ class EventList(ResourceList):
             query_ = query_.union(query2)
 
         if view_kwargs.get('user_id') and 'GET' in request.method:
-            if not has_access('is_user_itself', id=view_kwargs['user_id']):
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_id'])):
                 raise ForbiddenException({'source': ''}, 'Access Forbidden')
             user = safe_query(db, User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
