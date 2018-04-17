@@ -53,7 +53,7 @@ class AccessCodeList(ResourceList):
         query_ = event_query(self, query_, view_kwargs, permission='is_coorganizer')
         if view_kwargs.get('user_id'):
             user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
-            if not has_access('is_user_itself', id=user.id):
+            if not has_access('is_user_itself', user_id=user.id):
                 raise ForbiddenException({'source': ''}, 'Access Forbidden')
             query_ = query_.join(User).filter(User.id == user.id)
         if view_kwargs.get('ticket_id'):
