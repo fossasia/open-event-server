@@ -11,6 +11,7 @@ addons:
       - libffi-dev
 python:
   - '2.7'
+cache: pip
 before-install:
   - npm -g install npm@latest
 install:
