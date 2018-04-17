@@ -1,9 +1,11 @@
+from __future__ import print_function
+
 import json
 import os
 import shutil
 import traceback
-import zipfile
 import uuid
+import zipfile
 
 import requests
 from flask import current_app as app
@@ -12,21 +14,21 @@ from flask_jwt import current_identity
 from werkzeug import secure_filename
 
 from app.api.helpers.db import save_to_db
-from app.api.helpers.utilities import update_state, write_file, is_downloadable
+from app.api.helpers.errors import ServerError, NotFoundError
 from app.api.helpers.storage import UploadedFile, upload, UploadedMemory, \
     UPLOAD_PATHS
-from app.api.helpers.errors import ErrorResponse, ServerError, NotFoundError
+from app.api.helpers.utilities import update_state, write_file, is_downloadable
 from app.models import db
-from app.models.import_job import ImportJob
+from app.models.custom_form import CustomForms
 from app.models.event import Event
-from app.models.social_link import SocialLink
-from app.models.session import Session
-from app.models.speaker import Speaker
+from app.models.import_job import ImportJob
 from app.models.microlocation import Microlocation
+from app.models.session import Session
+from app.models.session_type import SessionType
+from app.models.social_link import SocialLink
+from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
 from app.models.track import Track
-from app.models.session_type import SessionType
-from app.models.custom_form import CustomForms
 
 IMPORT_SERIES = [
     ('social_links', SocialLink),
