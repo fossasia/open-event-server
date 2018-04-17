@@ -2,6 +2,7 @@
 # MODULES RELATED TO THE EVENT-SYSTEM i.e FUNCTIONS SPECIFIC TO DB MODELS E.G A FUNCTION JUST FOR ROLE_INVITES
 import random
 import string
+import sys
 
 import bleach
 from itsdangerous import Serializer
@@ -25,12 +26,12 @@ def require_relationship(resource_list, data):
 
 
 def string_empty(value):
-    if type(value) is not value and type(value) is not unicode:
+    is_not_str_type = type(value) is not str
+    if sys.version_info[0] < 3:
+        is_not_str_type = is_not_str_type and type(value) is not unicode
+    if type(value) is not value and is_not_str_type:
         return False
-    if value and value.strip() and value != u'' and value != u' ':
-        return False
-    else:
-        return True
+    return not (value and value.strip() and value != u'' and value != u' ')
 
 
 def strip_tags(html):

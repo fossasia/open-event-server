@@ -1,5 +1,10 @@
-from app.models import db
+from __future__ import unicode_literals
+
+from future.utils import python_2_unicode_compatible
 from sqlalchemy.orm import backref
+
+from app.models import db
+from utils.compat import u
 
 
 # ensures that if the image resizing fails somehow, respective image fields do not
@@ -7,6 +12,7 @@ def image_default(context):
     return context.current_parameters.get('original_image_url')
 
 
+@python_2_unicode_compatible
 class CustomPlaceholder(db.Model):
     """email notifications model class"""
     __tablename__ = 'custom_placeholders'
@@ -41,10 +47,7 @@ class CustomPlaceholder(db.Model):
         self.event_sub_topic_id = event_sub_topic_id
 
     def __str__(self):
-        return 'Name:' + unicode(self.name).encode('utf-8')
-
-    def __unicode__(self):
-        return unicode(self.id)
+        return u('Name:' + self.name)
 
     @property
     def serialize(self):

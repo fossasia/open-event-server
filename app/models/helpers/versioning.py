@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import itertools
 import re
 import unicodedata
@@ -5,6 +7,7 @@ import unicodedata
 import bleach
 import diff_match_patch
 from bleach.callbacks import target_blank, nofollow
+from utils.compat import u
 
 
 def remove_line_breaks(target_string):
@@ -68,8 +71,8 @@ def side_by_side_diff(old_text, new_text):
     if not new_text:
         new_text = ''
 
-    old_text = strip_tags(strip_line_breaks(unicode(old_text).encode('utf-8', errors='ignore')))
-    new_text = strip_tags(strip_line_breaks(unicode(new_text).encode('utf-8', errors='ignore')))
+    old_text = strip_tags(strip_line_breaks(u(old_text).encode('utf-8', errors='ignore')))
+    new_text = strip_tags(strip_line_breaks(u(new_text).encode('utf-8', errors='ignore')))
 
     old_text = unicodedata.normalize("NFKD", old_text)
     new_text = unicodedata.normalize("NFKD", new_text)

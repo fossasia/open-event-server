@@ -1,6 +1,12 @@
+from __future__ import unicode_literals
+
 import uuid
-from app.models import db
+
+from future.utils import python_2_unicode_compatible
+
 from app.api.helpers.db import get_count
+from app.models import db
+from utils.compat import u
 
 
 def get_new_slug(name):
@@ -12,6 +18,7 @@ def get_new_slug(name):
         return '{}-{}'.format(slug, uuid.uuid4().hex)
 
 
+@python_2_unicode_compatible
 class EventType(db.Model):
     """Event type object table"""
 
@@ -33,10 +40,7 @@ class EventType(db.Model):
         return '<EventType %r>' % self.name
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return self.name
+        return u(self.name)
 
     @property
     def serialize(self):

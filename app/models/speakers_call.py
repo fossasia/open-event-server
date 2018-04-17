@@ -1,8 +1,13 @@
+from __future__ import unicode_literals
+
+from future.utils import python_2_unicode_compatible
 from sqlalchemy.orm import backref
 
 from app.models import db
+from utils.compat import u
 
 
+@python_2_unicode_compatible
 class SpeakersCall(db.Model):
     """call for paper model class"""
     __tablename__ = 'speakers_calls'
@@ -28,10 +33,7 @@ class SpeakersCall(db.Model):
         return '<speakers_call %r>' % self.announcement
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return self.announcement
+        return u(self.announcement)
 
     @property
     def serialize(self):

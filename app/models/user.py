@@ -1,25 +1,31 @@
-from datetime import datetime
-import pytz
+from __future__ import unicode_literals
+
 import random
+from datetime import datetime
+
 import humanize
+import pytz
 from flask import url_for
-from sqlalchemy import event, desc
-from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from flask.ext.scrypt import generate_password_hash, generate_random_salt
+from future.utils import python_2_unicode_compatible
+from sqlalchemy import event, desc
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+
 from app.api.helpers.db import get_count
-from app.models.session import Session
-from app.models.speaker import Speaker
 from app.models import db
+from app.models.custom_system_role import UserSystemRole
+from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.notification import Notification
+from app.models.panel_permission import PanelPermission
 from app.models.permission import Permission
 from app.models.role import Role
 from app.models.service import Service
-from app.models.custom_system_role import UserSystemRole
+from app.models.session import Session
+from app.models.speaker import Speaker
 from app.models.user_permission import UserPermission
 from app.models.users_events_role import UsersEventsRoles as UER
-from app.models.panel_permission import PanelPermission
-from app.models.helpers.versioning import clean_up_string, clean_html
+from utils.compat import u
 
 # System-wide
 ADMIN = 'admin'
@@ -39,6 +45,7 @@ ATTENDEE = 'attendee'
 REGISTRAR = 'registrar'
 
 
+@python_2_unicode_compatible
 class User(db.Model):
     """User model class"""
     __tablename__ = 'users'
@@ -352,10 +359,7 @@ class User(db.Model):
         return '<User %r>' % self.email
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return self.email
+        return u(self.email)
 
     def __setattr__(self, name, value):
         if name == 'details':

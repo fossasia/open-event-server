@@ -1,9 +1,14 @@
+from __future__ import unicode_literals
+
 import time
 import uuid
 from datetime import datetime
 
+from future.utils import python_2_unicode_compatible
+
 from app.api.helpers.db import get_count
 from app.models import db
+from utils.compat import u
 
 
 def get_new_identifier():
@@ -15,6 +20,7 @@ def get_new_identifier():
         return get_new_identifier()
 
 
+@python_2_unicode_compatible
 class EventInvoice(db.Model):
     """
     Stripe authorization information for an event.
@@ -105,7 +111,4 @@ class EventInvoice(db.Model):
         return '<EventInvoice %r>' % self.invoice_pdf_url
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return self.invoice_pdf_url
+        return u(self.invoice_pdf_url)

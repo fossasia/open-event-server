@@ -1,7 +1,13 @@
-from datetime import datetime, timedelta
-import pytz
-from app.models import db
+from __future__ import unicode_literals
+
 import random
+from datetime import datetime, timedelta
+
+import pytz
+from future.utils import python_2_unicode_compatible
+
+from app.models import db
+from utils.compat import u
 
 
 def generate_hash():
@@ -9,6 +15,7 @@ def generate_hash():
     return str(hash_)
 
 
+@python_2_unicode_compatible
 class RoleInvite(db.Model):
     __tablename__ = 'role_invites'
 
@@ -46,9 +53,6 @@ class RoleInvite(db.Model):
                                           self.role_id,)
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return 'Invite for %r:%r:%r' % (self.email,
-                                        self.event_id,
-                                        self.role_id)
+        return u('Invite for %r:%r:%r' % (self.email,
+                                          self.event_id,
+                                          self.role_id))
