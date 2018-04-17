@@ -11,6 +11,7 @@ addons:
       - libffi-dev
 python:
   - '2.7'
+cache: pip
 before-install:
   - npm -g install npm@latest
 install:
@@ -34,4 +35,3 @@ after_success:
   #- bash kubernetes/travis/deploy.sh
   #- bash kubernetes/travis/deploy-staging.sh
   #- bash kubernetes/travis/deploy-nextgen.sh
-cache: pip
