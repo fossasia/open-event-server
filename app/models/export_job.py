@@ -1,16 +1,11 @@
-from __future__ import unicode_literals
-
 from datetime import datetime
 
 import pytz
-from future.utils import python_2_unicode_compatible
 from sqlalchemy.orm import backref
 
 from app.models import db
-from utils.compat import u
 
 
-@python_2_unicode_compatible
 class ExportJob(db.Model):
     """Export Jobs model class"""
     __tablename__ = 'export_jobs'
@@ -35,4 +30,4 @@ class ExportJob(db.Model):
         return '<ExportJob %d for event %d>' % (self.id, self.event.id)
 
     def __str__(self):
-        return u(self.__repr__())
+        return self.__repr__()

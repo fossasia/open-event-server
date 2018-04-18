@@ -2,48 +2,48 @@ from flask import request, current_app
 from flask_jwt import current_identity, _jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
-from marshmallow_jsonapi.flask import Schema
 from marshmallow_jsonapi import fields
+from marshmallow_jsonapi.flask import Schema
 from sqlalchemy import or_
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
+from app.api.helpers.db import save_to_db, safe_query
+from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.files import create_save_image_sizes
+from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
 from app.api.schema.events import EventSchemaPublic, EventSchema
-from app.api.helpers.permission_manager import has_access
-from app.api.helpers.exceptions import ForbiddenException
 # models
 from app.models import db
 from app.models.access_code import AccessCode
 from app.models.custom_form import CustomForms
-from app.models.faq import Faq
-from app.models.feedback import Feedback
 from app.models.discount_code import DiscountCode
+from app.models.email_notification import EmailNotification
 from app.models.event import Event
+from app.models.event_copyright import EventCopyright
 from app.models.event_invoice import EventInvoice
+from app.models.faq import Faq
+from app.models.faq_type import FaqType
+from app.models.feedback import Feedback
+from app.models.microlocation import Microlocation
+from app.models.order import Order
+from app.models.role import Role
 from app.models.role_invite import RoleInvite
 from app.models.session import Session
 from app.models.session_type import SessionType
+from app.models.social_link import SocialLink
 from app.models.speaker import Speaker
 from app.models.speakers_call import SpeakersCall
 from app.models.sponsor import Sponsor
+from app.models.tax import Tax
 from app.models.ticket import Ticket
 from app.models.ticket import TicketTag
+from app.models.ticket_holder import TicketHolder
 from app.models.track import Track
 from app.models.user import User, ATTENDEE, ORGANIZER, COORGANIZER
 from app.models.users_events_role import UsersEventsRoles
-from app.models.role import Role
-from app.models.ticket_holder import TicketHolder
-from app.api.helpers.db import save_to_db, safe_query
-from app.api.helpers.files import create_save_image_sizes
-from app.models.microlocation import Microlocation
-from app.models.email_notification import EmailNotification
-from app.models.social_link import SocialLink
-from app.models.tax import Tax
-from app.models.event_copyright import EventCopyright
-from app.models.order import Order
-from app.models.faq_type import FaqType
 
 
 class EventList(ResourceList):

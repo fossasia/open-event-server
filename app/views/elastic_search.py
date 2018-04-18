@@ -1,3 +1,3 @@
-from flask.ext.elasticsearch import FlaskElasticsearch
+from flask_elasticsearch import FlaskElasticsearch
 
 es = FlaskElasticsearch()

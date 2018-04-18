@@ -1,4 +1,3 @@
-from __future__ import print_function
 import os
 
 from app.api.helpers.db import save_to_db

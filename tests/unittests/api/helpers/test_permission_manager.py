@@ -28,7 +28,7 @@ class TestPermissionManager(OpenEventTestCase):
             db.session.commit()
 
             # Authenticate User
-            self.auth = {'Authorization': "JWT " + _default_jwt_encode_handler(user)}
+            self.auth = {'Authorization': "JWT " + str(_default_jwt_encode_handler(user), 'utf-8')}
 
     def test_has_access(self):
         with app.test_request_context(headers=self.auth):

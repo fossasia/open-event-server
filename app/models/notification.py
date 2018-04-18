@@ -1,12 +1,8 @@
-from __future__ import unicode_literals
-
 from datetime import datetime
 
 import pytz
-from future.utils import python_2_unicode_compatible
 
 from app.models import db
-from utils.compat import u
 
 USER_CHANGE_EMAIL = "User email"
 PASSWORD_CHANGE = 'Change Password'
@@ -32,7 +28,6 @@ MONTHLY_PAYMENT_NOTIF = 'Monthly Payment Notification'
 MONTHLY_PAYMENT_FOLLOWUP_NOTIF = 'Monthly Payment Follow Up Notification'
 
 
-@python_2_unicode_compatible
 class Notification(db.Model):
     """
     Model for storing user notifications.
@@ -62,4 +57,4 @@ class Notification(db.Model):
         return '<Notif %s:%s>' % (self.user, self.title)
 
     def __str__(self):
-        return u('%r: %r' % (self.user, self.title))
+        return self.__repr__()

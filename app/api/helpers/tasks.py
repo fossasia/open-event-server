@@ -1,6 +1,3 @@
-from __future__ import absolute_import
-from __future__ import print_function
-
 import requests
 from marrow.mailer import Mailer, Message
 

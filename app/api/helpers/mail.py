@@ -1,6 +1,3 @@
-from __future__ import absolute_import
-from __future__ import print_function
-
 import base64
 from datetime import datetime
 
@@ -274,7 +271,7 @@ def send_import_mail(email, event_name=None, error_text=None, event_url=None):
 
 def send_email_change_user_email(user, email):
     s = get_serializer()
-    hash = base64.b64encode(s.dumps([email, str_generator()]))
+    hash = str(base64.b64encode(s.dumps([email, str_generator()])), 'utf-8')
     link = make_frontend_url('/email/verify'.format(id=user.id), {'token': hash})
     send_email_with_action(user.email, USER_CONFIRM, email=user.email, link=link)
     send_email_with_action(email, USER_CHANGE_EMAIL, email=email, new_email=user.email)

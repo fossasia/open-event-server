@@ -1,6 +1,7 @@
 import factory
-from app.models.role import db, Role
+
 import app.factories.common as common
+from app.models.role import db, Role
 
 
 class RoleFactory(factory.alchemy.SQLAlchemyModelFactory):

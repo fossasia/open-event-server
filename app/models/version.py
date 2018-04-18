@@ -1,13 +1,8 @@
-from __future__ import unicode_literals
-
-from future.utils import python_2_unicode_compatible
 from sqlalchemy.orm import backref
 
 from app.models import db
-from utils.compat import u
 
 
-@python_2_unicode_compatible
 class Version(db.Model):
     """Version model class"""
     __tablename__ = 'versions'
@@ -42,7 +37,7 @@ class Version(db.Model):
         return '<Version %r>' % self.id
 
     def __str__(self):
-        return u('Version %r' % self.id)
+        return self.__repr__()
 
     @property
     def serialize(self):

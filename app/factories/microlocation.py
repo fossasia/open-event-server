@@ -1,7 +1,8 @@
 import factory
-from app.models.microlocation import db, Microlocation
-from app.factories.event import EventFactoryBasic
+
 import app.factories.common as common
+from app.factories.event import EventFactoryBasic
+from app.models.microlocation import db, Microlocation
 
 
 class MicrolocationFactory(factory.alchemy.SQLAlchemyModelFactory):

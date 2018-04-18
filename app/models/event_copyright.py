@@ -1,13 +1,8 @@
-from __future__ import unicode_literals
-
-from future.utils import python_2_unicode_compatible
 from sqlalchemy.orm import backref
 
 from app.models import db
-from utils.compat import u
 
 
-@python_2_unicode_compatible
 class EventCopyright(db.Model):
     """
     Copyright Information about an event.
@@ -45,7 +40,7 @@ class EventCopyright(db.Model):
         return '<Copyright %r>' % self.holder
 
     def __str__(self):
-        return u(self.holder)
+        return self.__repr__()
 
     @property
     def serialize(self):

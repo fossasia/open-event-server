@@ -1,13 +1,7 @@
-from __future__ import unicode_literals
-
-from future.utils import python_2_unicode_compatible
-
 from app.models import db
 from app.models.helpers.versioning import clean_up_string, clean_html
-from utils.compat import u
 
 
-@python_2_unicode_compatible
 class Sponsor(db.Model):
     """Sponsor model class"""
     __tablename__ = 'sponsors'
@@ -39,7 +33,7 @@ class Sponsor(db.Model):
         return '<Sponsor %r>' % self.name
 
     def __str__(self):
-        return u(self.name)
+        return self.__repr__()
 
     def __setattr__(self, name, value):
         if name == 'description':

@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import binascii
 import os
 from datetime import datetime
@@ -7,7 +5,6 @@ from datetime import datetime
 import flask_login as login
 import pytz
 from flask import current_app
-from future.utils import python_2_unicode_compatible
 from sqlalchemy import event
 
 from app.api.helpers.db import get_count
@@ -16,11 +13,10 @@ from app.models.email_notification import EmailNotification
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.user import ATTENDEE, ORGANIZER
 from app.views.redis_store import redis_store
-from utils.compat import u
 
 
 def get_new_event_identifier(length=8):
-    identifier = binascii.b2a_hex(os.urandom(int(length / 2)))
+    identifier = str(binascii.b2a_hex(os.urandom(int(length / 2))), 'utf-8')
     count = get_count(Event.query.filter_by(identifier=identifier))
     if count == 0:
         return identifier
@@ -28,7 +24,6 @@ def get_new_event_identifier(length=8):
         return get_new_event_identifier(length)
 
 
-@python_2_unicode_compatible
 class Event(db.Model):
     """Event object table"""
     __tablename__ = 'events'
@@ -259,7 +254,7 @@ class Event(db.Model):
         return '<Event %r>' % self.name
 
     def __str__(self):
-        return u(self.name)
+        return self.__repr__()
 
     def __setattr__(self, name, value):
         if name == 'organizer_description' or name == 'description' or name == 'code_of_conduct':

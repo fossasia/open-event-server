@@ -1,16 +1,11 @@
-from __future__ import unicode_literals
-
 import base64
-from StringIO import StringIO
+from io import StringIO
 
 import qrcode
-from future.utils import python_2_unicode_compatible
 
 from app.models import db
-from utils.compat import u
 
 
-@python_2_unicode_compatible
 class TicketHolder(db.Model):
     __tablename__ = "ticket_holders"
 
@@ -113,7 +108,7 @@ class TicketHolder(db.Model):
         return '<TicketHolder %r>' % self.id
 
     def __str__(self):
-        return u('<TicketHolder %r>' % self.id)
+        return self.__repr__()
 
     @property
     def name(self):
@@ -138,7 +133,7 @@ class TicketHolder(db.Model):
 
         buffer = StringIO()
         img.save(buffer, format="JPEG")
-        img_str = base64.b64encode(buffer.getvalue())
+        img_str = str(base64.b64encode(buffer.getvalue()), 'utf-8')
         return img_str
 
     @property

@@ -1,7 +1,8 @@
 import factory
-from app.models.faq import db, Faq
+
 from app.factories.event import EventFactoryBasic
 from app.factories.faq_type import FaqTypeFactory
+from app.models.faq import db, Faq
 
 
 class FaqFactory(factory.alchemy.SQLAlchemyModelFactory):

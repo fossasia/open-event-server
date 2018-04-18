@@ -1,10 +1,6 @@
-from __future__ import unicode_literals
-from future.utils import python_2_unicode_compatible
-from utils.compat import u
 from app.models import db
 
 
-@python_2_unicode_compatible
 class SocialLink(db.Model):
     __tablename__ = "social_links"
     id = db.Column(db.Integer, primary_key=True)
@@ -22,7 +18,7 @@ class SocialLink(db.Model):
         return '<SocialLink %r>' % self.name
 
     def __str__(self):
-        return u(self.name)
+        return self.__repr__()
 
     @property
     def serialize(self):

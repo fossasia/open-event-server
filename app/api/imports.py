@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from flask import jsonify, url_for, current_app, Blueprint, abort
 from flask_jwt import jwt_required, current_identity
 

@@ -1,7 +1,9 @@
+import base64
+import io
 import os
-import cStringIO
-import urllib
-import urlparse
+import urllib.error
+import urllib.parse
+import urllib.request
 import uuid
 
 import PIL
@@ -12,8 +14,8 @@ from sqlalchemy.orm.exc import NoResultFound
 from xhtml2pdf import pisa
 
 from app import get_settings
-from app.models.image_size import ImageSizes
 from app.api.helpers.storage import UploadedFile, upload, generate_hash, UPLOAD_PATHS
+from app.models.image_size import ImageSizes
 
 
 def get_file_name():
@@ -27,7 +29,7 @@ def uploaded_image(extension='.png', file_content=None):
         os.makedirs(filedir)
     file_path = filedir + filename
     file = open(file_path, "wb")
-    file.write(file_content.split(",")[1].decode('base64'))
+    file.write(base64.b64decode(file_content.split(",")[1]))
     file.close()
     return UploadedFile(file_path, filename)
 
@@ -73,7 +75,8 @@ def create_save_resized_image(image_file, basewidth=None, maintain_aspect=None, 
     :return:
     """
     filename = '{filename}.{ext}'.format(filename=get_file_name(), ext=ext)
-    image_file = cStringIO.StringIO(urllib.urlopen(image_file).read())
+    data = urllib.request.urlopen(image_file).read()
+    image_file = io.BytesIO(data)
     try:
         im = Image.open(image_file)
     except IOError:
@@ -104,7 +107,8 @@ def create_save_resized_image(image_file, basewidth=None, maintain_aspect=None, 
     upfile = UploadedFile(file_path=temp_file_path, filename=filename)
 
     if remove_after_upload:
-        os.remove(image_file)
+        # os.remove(image_file) No point in removing in memory file
+        pass
 
     uploaded_url = upload(upfile, upload_path)
     os.remove(temp_file_path)
@@ -173,13 +177,13 @@ def make_frontend_url(path, parameters=None):
     Create URL for frontend
     """
     settings = get_settings()
-    frontend_url = urlparse.urlparse(settings['frontend_url'] if settings['frontend_url'] else '')
-    return urlparse.urlunparse((
+    frontend_url = urllib.parse.urlparse(settings['frontend_url'] if settings['frontend_url'] else '')
+    return urllib.parse.urlunparse((
         frontend_url.scheme,
         frontend_url.netloc,
-        path,
+        str(path),
         '',
-        urllib.urlencode(parameters) if parameters else '',
+        str(urllib.parse.urlencode(parameters) if parameters else ''),
         ''
     ))
 
@@ -199,7 +203,7 @@ def create_save_pdf(pdf_data):
     dest = filedir + filename
 
     file = open(dest, "wb")
-    pisa.CreatePDF(cStringIO.StringIO(pdf_data.encode('utf-8')), file)
+    pisa.CreatePDF(io.StringIO(pdf_data.encode('utf-8')), file)
     file.close()
 
     uploaded_file = UploadedFile(dest, filename)

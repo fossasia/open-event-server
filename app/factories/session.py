@@ -1,10 +1,11 @@
 import factory
-from app.models.session import db, Session
+
 import app.factories.common as common
 from app.factories.event import EventFactoryBasic
+from app.factories.microlocation import MicrolocationFactory
 from app.factories.session_type import SessionTypeFactory
 from app.factories.track import TrackFactory
-from app.factories.microlocation import MicrolocationFactory
+from app.models.session import db, Session
 
 
 class SessionFactory(factory.alchemy.SQLAlchemyModelFactory):

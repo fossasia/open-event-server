@@ -1,7 +1,8 @@
 import factory
-from app.models.feedback import db, Feedback
+
 from app.factories.event import EventFactoryBasic
 from app.factories.user import UserFactory
+from app.models.feedback import db, Feedback
 
 
 class FeedbackFactory(factory.alchemy.SQLAlchemyModelFactory):

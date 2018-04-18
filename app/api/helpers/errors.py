@@ -1,4 +1,5 @@
 import json
+
 from flask import make_response
 from flask_rest_jsonapi.errors import jsonapi_errors
 

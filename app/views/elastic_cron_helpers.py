@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import psycopg2
 from elasticsearch import helpers, Elasticsearch
 
@@ -55,7 +53,7 @@ class EventIterator:
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         if self.current >= self.high:
             raise StopIteration
         else:

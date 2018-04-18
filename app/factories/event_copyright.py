@@ -1,7 +1,8 @@
 import factory
-from app.models.event_copyright import db, EventCopyright
+
 import app.factories.common as common
 from app.factories.event import EventFactoryBasic
+from app.models.event_copyright import db, EventCopyright
 
 
 class EventCopyrightFactory(factory.alchemy.SQLAlchemyModelFactory):
