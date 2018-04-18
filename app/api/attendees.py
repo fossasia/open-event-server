@@ -32,6 +32,8 @@ class AttendeeListPost(ResourceList):
         require_relationship(['ticket', 'event'], data)
 
         ticket = db.session.query(Ticket).filter_by(id=int(data['ticket'])).first()
+        if ticket is None:
+            raise UnprocessableEntity({'pointer': '/data/relationships/ticket'}, "Invalid Ticket")
         if ticket.event_id != int(data['event']):
             raise UnprocessableEntity({'pointer': '/data/relationships/ticket'}, "Ticket belongs to a different Event")
 
