@@ -9484,7 +9484,7 @@ Data related to an invoice for the event.
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
-    
+
 
 ### Get Event Invoices [GET]
 Get a list of event invoices.
@@ -14111,7 +14111,7 @@ Related to ticket holders(attendees) of an event (free, paid, donation) to the e
 | `checkin-times` | Comma separated checkin times | string | - |
 | `pdf-url` | pdf url of the Attendee | url | - |
 
-## Attendees Collection [/v1/attendees/{event_identifier}{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Attendees Collection [/v1/attendees/{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -14121,7 +14121,7 @@ Related to ticket holders(attendees) of an event (free, paid, donation) to the e
 
 
 ### Create Attendee [POST]
-Create a new attendee using an event_id.
+Create a new attendee.
 
 + Request (application/vnd.api+json)
 
