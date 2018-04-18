@@ -1,7 +1,8 @@
 import factory
-from app.models.discount_code import db, DiscountCode
-from app.factories.user import UserFactory
+
 import app.factories.common as common
+from app.factories.user import UserFactory
+from app.models.discount_code import db, DiscountCode
 
 
 class DiscountCodeFactory(factory.alchemy.SQLAlchemyModelFactory):

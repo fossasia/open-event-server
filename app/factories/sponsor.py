@@ -1,7 +1,8 @@
 import factory
-from app.models.sponsor import db, Sponsor
-from app.factories.event import EventFactoryBasic
+
 import app.factories.common as common
+from app.factories.event import EventFactoryBasic
+from app.models.sponsor import db, Sponsor
 
 
 class SponsorFactory(factory.alchemy.SQLAlchemyModelFactory):

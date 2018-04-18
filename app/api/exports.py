@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 import os
 
 from flask import send_file, make_response, jsonify, url_for, \

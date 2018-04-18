@@ -1,8 +1,8 @@
 import factory
 
+from app.factories.event import EventFactoryBasic
 from app.models.order import Order
 from app.models.ticket import db
-from app.factories.event import EventFactoryBasic
 
 
 class OrderFactory(factory.alchemy.SQLAlchemyModelFactory):

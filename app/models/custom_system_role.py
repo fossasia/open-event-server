@@ -1,13 +1,7 @@
-from __future__ import unicode_literals
-
-from future.utils import python_2_unicode_compatible
-
 from app.models import db
 from app.models.panel_permission import PanelPermission
-from utils.compat import u
 
 
-@python_2_unicode_compatible
 class CustomSysRole(db.Model):
     """Custom System Role
     """
@@ -31,10 +25,9 @@ class CustomSysRole(db.Model):
         return '<CustomSysRole %r>' % self.name
 
     def __str__(self):
-        return u(self.name)
+        return self.__repr__()
 
 
-@python_2_unicode_compatible
 class UserSystemRole(db.Model):
     """User Custom System Role
     """
@@ -52,4 +45,4 @@ class UserSystemRole(db.Model):
         self.role = role
 
     def __str__(self):
-        return u('%r as %r' % (self.user, self.role))
+        return '%r as %r' % (self.user, self.role)

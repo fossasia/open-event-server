@@ -1,7 +1,8 @@
 import factory
-from app.models.email_notification import db, EmailNotification
-from app.factories.user import UserFactory
+
 from app.factories.event import EventFactoryBasic
+from app.factories.user import UserFactory
+from app.models.email_notification import db, EmailNotification
 
 
 class EmailNotificationFactory(factory.alchemy.SQLAlchemyModelFactory):

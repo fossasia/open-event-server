@@ -1,8 +1,8 @@
 import factory
 
+import app.factories.common as common
 from app.factories.event import EventFactoryBasic
 from app.models import db
-import app.factories.common as common
 from app.models.stripe_authorization import StripeAuthorization
 
 

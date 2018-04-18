@@ -1,20 +1,20 @@
 from datetime import datetime
+
 from flask import request, render_template
 from flask_jwt import current_identity as current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 
-from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
 from app.api.helpers.files import create_save_pdf
+from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees
+from app.api.helpers.mail import send_order_cancel_email
 from app.api.helpers.notification import send_notif_to_attendees, send_notif_ticket_purchase_organizer, \
     send_notif_ticket_cancel
-from app.api.helpers.files import make_frontend_url
-from app.api.helpers.mail import send_order_cancel_email
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query

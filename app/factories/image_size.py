@@ -1,6 +1,7 @@
 import factory
-from app.models.image_size import db, ImageSizes
+
 import app.factories.common as common
+from app.models.image_size import db, ImageSizes
 
 
 class ImageSizeFactory(factory.alchemy.SQLAlchemyModelFactory):

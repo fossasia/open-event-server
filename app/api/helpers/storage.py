@@ -7,10 +7,10 @@ import magic
 from boto.gs.connection import GSConnection
 from boto.s3.connection import S3Connection, OrdinaryCallingFormat
 from boto.s3.key import Key
-from flask_scrypt import generate_password_hash
-from werkzeug.utils import secure_filename
 from flask import current_app as app, request
-from urlparse import urlparse
+from flask_scrypt import generate_password_hash
+from urllib.parse import urlparse
+from werkzeug.utils import secure_filename
 
 from app.settings import get_settings
 
@@ -249,4 +249,4 @@ def generate_hash(key):
     Generate hash for key
     """
     phash = generate_password_hash(key, get_settings()['secret'])
-    return b64encode(phash)[:10]  # limit len to 10, is sufficient
+    return str(b64encode(phash), 'utf-8')[:10]  # limit len to 10, is sufficient

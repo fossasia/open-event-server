@@ -1,7 +1,8 @@
 import factory
-from app.models.ticket_holder import db, TicketHolder
+
 import app.factories.common as common
 from app.factories.event import EventFactoryBasic
+from app.models.ticket_holder import db, TicketHolder
 
 
 class AttendeeFactory(factory.alchemy.SQLAlchemyModelFactory):

@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 from app import current_app
 from app.models import db
 from app.api.helpers.db import get_or_create  # , save_to_db

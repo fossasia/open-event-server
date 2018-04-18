@@ -3,27 +3,26 @@ import os
 import shutil
 from collections import OrderedDict
 from datetime import datetime
-import pytz
 
+import pytz
 import requests
 from flask import current_app as app
 from flask import request, url_for
 from flask_jwt import current_identity
 
 from app.api.helpers.db import save_to_db
+from app.api.helpers.storage import upload, UPLOAD_PATHS, UploadedFile
+from app.api.helpers.utilities import is_downloadable, get_filename_from_cd
 from app.models import db
+from app.models.custom_form import CustomForms
 from app.models.event import Event
-from app.models.session import Session
-from app.models.speaker import Speaker
+from app.models.export_job import ExportJob
 from app.models.microlocation import Microlocation
+from app.models.session import Session
+from app.models.session_type import SessionType
+from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
 from app.models.track import Track
-from app.models.session_type import SessionType
-from app.models.custom_form import CustomForms
-from app.models.export_job import ExportJob
-from app.api.helpers.utilities import is_downloadable, get_filename_from_cd
-from app.api.helpers.storage import upload, UPLOAD_PATHS, UploadedFile
-from app.settings import get_settings
 
 # order of keys in export json
 FIELD_ORDER = {
@@ -93,10 +92,10 @@ def sorted_dict(data):
     if type(data) == OrderedDict:
         data = dict(data)
     if type(data) == dict:
-        data = OrderedDict(sorted(data.items(), key=lambda t: t[0]))
+        data = OrderedDict(sorted(list(data.items()), key=lambda t: t[0]))
     elif type(data) == list:
         for count in range(len(data)):
-            data[count] = OrderedDict(sorted(data[count].items(), key=lambda t: t[0]))
+            data[count] = OrderedDict(sorted(list(data[count].items()), key=lambda t: t[0]))
     return data
 
 
@@ -119,7 +118,7 @@ def _order_json(data, srv):
 
     # remaining fields, sort and add
     # https://docs.python.org/2/library/collections.html#collections.OrderedDict
-    data = OrderedDict(sorted(data.items(), key=lambda t: t[0]))
+    data = OrderedDict(sorted(list(data.items()), key=lambda t: t[0]))
     for key in data:
         if key in DATE_FIELDS and data[key] and type(data[key]) != str:
             new_data[key] = sorted_dict(data[key].isoformat())

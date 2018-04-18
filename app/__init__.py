@@ -1,10 +1,3 @@
-# Ignore ExtDeprecationWarnings for Flask 0.11 - see http://stackoverflow.com/a/38080580
-import warnings
-from flask.exthook import ExtDeprecationWarning
-
-warnings.simplefilter('ignore', ExtDeprecationWarning)
-# Keep it before flask extensions are imported
-
 from celery.signals import after_task_publish
 import logging
 import os.path
@@ -211,7 +204,7 @@ def update_sent_state(sender=None, body=None, **kwargs):
 # register celery tasks. removing them will cause the tasks to not function. so don't remove them
 # it is important to register them after celery is defined to resolve circular imports
 
-import api.helpers.tasks
+from .api.helpers import tasks
 
 # import helpers.tasks
 

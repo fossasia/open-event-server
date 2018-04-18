@@ -1,12 +1,6 @@
-from __future__ import unicode_literals
-
-from future.utils import python_2_unicode_compatible
-
 from app.models import db
-from utils.compat import u
 
 
-@python_2_unicode_compatible
 class Faq(db.Model):
     """Page model class"""
     __tablename__ = 'faq'
@@ -27,7 +21,7 @@ class Faq(db.Model):
         return '<FAQ %r>' % self.question
 
     def __str__(self):
-        return u(self.question)
+        return self.__repr__()
 
     @property
     def serialize(self):

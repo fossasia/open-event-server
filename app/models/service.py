@@ -1,12 +1,6 @@
-from __future__ import unicode_literals
-
-from future.utils import python_2_unicode_compatible
-
 from app.models import db
-from utils.compat import u
 
 
-@python_2_unicode_compatible
 class Service(db.Model):
     __tablename__ = 'services'
 
@@ -20,4 +14,4 @@ class Service(db.Model):
         return '<Service %r>' % self.name
 
     def __str__(self):
-        return u(self.name)
+        return self.__repr__()

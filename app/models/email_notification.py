@@ -1,12 +1,6 @@
-from __future__ import unicode_literals
-
-from future.utils import python_2_unicode_compatible
-
 from app.models import db
-from utils.compat import u
 
 
-@python_2_unicode_compatible
 class EmailNotification(db.Model):
     """email notifications model class"""
     __tablename__ = 'email_notifications'
@@ -39,4 +33,4 @@ class EmailNotification(db.Model):
         self.after_ticket_purchase = after_ticket_purchase
 
     def __str__(self):
-        return u('User:' + self.user_id + ' Event: ' + self.event_id)
+        return 'User:' + self.user_id + ' Event: ' + self.event_id

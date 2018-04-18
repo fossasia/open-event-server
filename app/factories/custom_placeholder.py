@@ -1,6 +1,7 @@
 import factory
-from app.models.custom_placeholder import db, CustomPlaceholder
+
 import app.factories.common as common
+from app.models.custom_placeholder import db, CustomPlaceholder
 
 
 class CustomPlaceholderFactory(factory.alchemy.SQLAlchemyModelFactory):

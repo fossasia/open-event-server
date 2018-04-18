@@ -1,14 +1,9 @@
-from __future__ import unicode_literals
-
 import datetime
 import time
 import uuid
 
-from future.utils import python_2_unicode_compatible
-
 from app.api.helpers.db import get_count
 from app.models import db
-from utils.compat import u
 
 
 def get_new_order_identifier():
@@ -27,7 +22,6 @@ class OrderTicket(db.Model):
     quantity = db.Column(db.Integer)
 
 
-@python_2_unicode_compatible
 class Order(db.Model):
     __tablename__ = "orders"
 
@@ -103,7 +97,7 @@ class Order(db.Model):
         return '<Order %r>' % self.id
 
     def __str__(self):
-        return u(self.identifier)
+        return str(self.identifier)
 
     def get_invoice_number(self):
         return 'O' + str(int(time.mktime(self.created_at.timetuple()))) + '-' + str(self.id)

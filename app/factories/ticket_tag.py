@@ -1,8 +1,9 @@
 import factory
-from app.models.ticket import db, TicketTag
-from app.factories.ticket import TicketFactory
-from app.factories.event import EventFactoryBasic
+
 import app.factories.common as common
+from app.factories.event import EventFactoryBasic
+from app.factories.ticket import TicketFactory
+from app.models.ticket import db, TicketTag
 
 
 class TicketTagFactory(factory.alchemy.SQLAlchemyModelFactory):
