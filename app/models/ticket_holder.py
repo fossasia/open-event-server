@@ -38,7 +38,7 @@ class TicketHolder(db.Model):
     github = db.Column(db.String)
     gender = db.Column(db.String)
     birth_date = db.Column(db.DateTime(timezone=True))
-    pdf_url = db.Column(db.String, nullable=False)
+    pdf_url = db.Column(db.String)
     ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE'))
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id', ondelete='CASCADE'))
     order = db.relationship('Order', backref='ticket_holders')
