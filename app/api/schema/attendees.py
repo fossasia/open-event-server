@@ -20,7 +20,7 @@ class AttendeeSchemaPublic(Schema):
 
     id = fields.Str(dump_only=True)
     firstname = fields.Str(required=True)
-    lastname = fields.Str(allow_none=True)
+    lastname = fields.Str(required=True)
     email = fields.Str(allow_none=True)
     address = fields.Str(allow_none=True)
     city = fields.Str(allow_none=True)
