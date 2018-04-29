@@ -17,6 +17,8 @@ def get_settings():
         set_settings(secret='super secret key', app_name='Open Event')
     else:
         current_app.config['custom_settings'] = make_dict(s)
+        if not current_app.config['custom_settings'].get('secret'):
+            set_settings(secret='super secret key', app_name='Open Event')
     return current_app.config['custom_settings']
 
 
