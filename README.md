@@ -48,7 +48,6 @@ The Open Event Server can be easily deployed on a variety of platforms. Detailed
 1. [Deployment with Docker](/docs/installation/docker.md)
 1. [Deployment on Heroku](/docs/installation/heroku.md)
 
-> The docs are outdated and will be updated for the nextgen version soon
 
 One-click Heroku deployment is also available:
 
