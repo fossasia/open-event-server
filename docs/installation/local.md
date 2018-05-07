@@ -8,24 +8,6 @@
 sudo apt-get update
 sudo apt-get install postgresql postgresql-contrib
 ```
-* NodeJS
-if nvm(Node Version Manager)  is not installed:
-using cURL:
-```sh
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash
-```
-or Wget:
-```sh
-wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash
-```
-run nvm after exporting NVM_DIR:
-```sh
-. "$NVM_DIR/nvm.sh"
-```
-Node installation, v6.9.1 is LTS, though you can install other versions as well:
-```sh
-nvm install 6.9.1
-```
 
 ## Steps
 
