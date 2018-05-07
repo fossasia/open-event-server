@@ -10,6 +10,7 @@ if [ ! -d redis-3.2.1/src ]; then
     rm redis-3.2.1.tar.gz
     cd redis-3.2.1
     make
+    cd ..
 fi
 
 redis-3.2.1/src/redis-server &
