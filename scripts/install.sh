@@ -2,7 +2,8 @@
 # Install essential packages from Apt
 apt-get update -y
 # Python dev packages
-apt-get install -y build-essential python python-dev python-setuptools python-pip
+apt-get install -y build-essential python python-dev python-pip
+apt-get install -y git
 apt-get install -y libxml2-dev libxslt1-dev
 apt-get install -y nginx uwsgi uwsgi-plugin-python
 apt-get install -y postgresql postgresql-contrib libpq-dev
@@ -114,8 +115,8 @@ export DATABASE_URL=postgresql://$APP_DB_USER:$APP_DB_PASS@localhost:5432/$APP_D
 cd /vagrant
 #Flask
 echo "Installing requirements"
+pip install future
 pip install -r requirements/dev.txt
 
-python create_db.py
 
 echo "export DATABASE_URL=$DATABASE_URL" >> /home/vagrant/.bashrc
