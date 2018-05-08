@@ -12855,6 +12855,65 @@ Related to any tax related information that might be related with the tickets fo
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 
+
+### List all Taxes [GET]
+Get a list of Taxes
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+	"meta": {
+	  "count": 1
+	},
+	"data": [
+	  {
+            "relationships": {
+	      "event": {
+		"links": {
+		  "self": "/v1/taxes/1/relationships/event",
+		  "related": "/v1/tax/1/event"
+		         }
+		        }
+	         },
+	    "attributes": {
+              "city": "example",
+	      "name": "Service Tax",
+	      "zip": 123456,
+	      "should-send-invoice": false,
+	      "country": "IN",
+	      "address": "example",
+	      "state": "example",
+	      "invoice-footer": "example",
+	      "rate": 1.23456789,
+	      "is-tax-included-in-price": false,
+	      "registered-company": "fossasia",
+              "tax-id": "1"
+	     },
+	     "type": "tax",
+	       "id": "1",
+	        "links": {
+		  "self": "/v1/taxes/1"
+		  }
+	     }
+	],
+	"jsonapi": {
+	  "version": "1.0"
+	},
+	"links": {
+	  "self": "/v1/taxes"
+	}
+      }
+
+
 ### Create Tax [POST]
 Create a new tax using an event_id.
 
