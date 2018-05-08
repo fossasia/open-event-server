@@ -12873,47 +12873,47 @@ Get a list of Taxes
 + Response 200 (application/vnd.api+json)
 
         {
-	"meta": {
-	  "count": 1
-	},
-	"data": [
-	  {
-            "relationships": {
-	      "event": {
-		"links": {
-		  "self": "/v1/taxes/1/relationships/event",
-		  "related": "/v1/tax/1/event"
-		         }
-		        }
-	         },
-	    "attributes": {
-              "city": "example",
-	      "name": "Service Tax",
-	      "zip": 123456,
-	      "should-send-invoice": false,
-	      "country": "IN",
-	      "address": "example",
-	      "state": "example",
-	      "invoice-footer": "example",
-	      "rate": 1.23456789,
-	      "is-tax-included-in-price": false,
-	      "registered-company": "fossasia",
-              "tax-id": "1"
-	     },
-	     "type": "tax",
-	       "id": "1",
-	        "links": {
-		  "self": "/v1/taxes/1"
-		  }
-	     }
-	],
-	"jsonapi": {
-	  "version": "1.0"
-	},
-	"links": {
-	  "self": "/v1/taxes"
-	}
-      }
+          "meta": {
+            "count": 1
+          },
+          "data": [
+            {
+              "relationships": {
+                "event": {
+                  "links": {
+                    "self": "/v1/taxes/1/relationships/event",
+                    "related": "/v1/tax/1/event"
+                  }
+                }
+              },
+              "attributes": {
+                "city": "example",
+                "name": "Service Tax",
+                "zip": 123456,
+                "should-send-invoice": false,
+                "country": "IN",
+                "address": "example",
+                "state": "example",
+                "invoice-footer": "example",
+                "rate": 1.23456789,
+                "is-tax-included-in-price": false,
+                "registered-company": "fossasia",
+                "tax-id": "1"
+              },
+              "type": "tax",
+              "id": "1",
+              "links": {
+                "self": "/v1/taxes/1"
+              }
+            }
+          ],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/taxes"
+          }
+        }
 
 
 ### Create Tax [POST]
