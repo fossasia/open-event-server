@@ -162,7 +162,9 @@ def upload_local(uploaded_file, key, **kwargs):
         return get_settings()['static_domain'] + \
             file_relative_path.replace('/static', '')
     url = urlparse(request.url)
-    return '%s://%s:%s%s' % (url.scheme, url.hostname, url.port, file_relative_path)
+    return '{scheme}://{hostname}:{port}{file_relative_path}'.format(
+        scheme=url.scheme, hostname=url.hostname, port=url.port,
+        file_relative_path=file_relative_path)
 
 
 def upload_to_aws(bucket_name, aws_region, aws_key, aws_secret, file, key, acl='public-read'):
