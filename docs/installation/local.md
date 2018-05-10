@@ -4,6 +4,13 @@
 
 * Python 2
 * Postgres
+
+### For mac users
+```sh
+brew install postgresql
+````
+
+### For debian-based linux users
 ```sh
 sudo apt-get update
 sudo apt-get install postgresql postgresql-contrib
@@ -22,7 +29,7 @@ cd open-event-server
 ```sh
 git clone https://github.com/USERNAME/open-event-server.git
 cd open-event-server
-``` 
+```
 
 * **Step 1** - Install python requirements. You need to be present in the root directory of the project.
 
@@ -31,15 +38,24 @@ sudo -H pip install -r requirements.txt
 ```
 hint: You may need to upgrade your pip version and install following packages if you encounter errors while installing the requirements.
 ```sh
+# For linux users
 sudo apt-get install python-dev
 sudo apt-get install libpq-dev
 sudo apt-get install libffi6 libffi-dev
+
+# For macOS users
+brew install python@2
+brew install libmagic
 ```
 
 * **Step 2** - Create the database. For that we first open the psql shell. Go the directory where your postgres file is stored.
 
 ```sh
+# For linux users
 sudo -u postgres psql
+
+# For macOS users
+psql -d postgres
 ```
 
 * When inside psql, create a user for open-event and then using the user create the database.
@@ -93,6 +109,9 @@ python manage.py db stamp head
 sudo apt-get install redis-server
 # For Fedora, RedHat, CentOS
 sudo dnf install redis-server
+
+# For macOS
+brew install redis
 
 # Run Celery
 # socketio has problems with celery "blocking" tasks
