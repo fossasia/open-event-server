@@ -11,7 +11,7 @@ class TicketHolder(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String, nullable=False)
-    lastname = db.Column(db.String)
+    lastname = db.Column(db.String, nullable=False)
     email = db.Column(db.String)
     address = db.Column(db.String)
     city = db.Column(db.String)
