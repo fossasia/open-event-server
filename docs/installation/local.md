@@ -39,17 +39,15 @@ cd open-event-server
 sudo -H pip3 install -r requirements.txt
 ```
 hint: You may need to upgrade your pip version and install following packages if you encounter errors while installing the requirements.
-```sh
 
 # Installation in Virtual Environment
 
 ```sh
-
 virtualenv -p python3 venv
 source venv/bin/activate
 pip3 install -r requirements.txt
 ```
-hint: You may need to upgrade your pip version and install following packages if you encounter errors while installing the requirements.
+
 ```sh
 
 # For linux users
