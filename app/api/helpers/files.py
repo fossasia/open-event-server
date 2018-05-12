@@ -114,7 +114,7 @@ def create_save_resized_image(image_file, basewidth=None, maintain_aspect=None, 
     uploaded_url = upload(upfile, upload_path)
     os.remove(temp_file_path)
 
-    uploaded_url = re.sub(r'\:\d+/', '/', uploaded_url)
+    uploaded_url = re.sub(r'\:(\d+)|None/', '/', uploaded_url)
 
     return uploaded_url
 
