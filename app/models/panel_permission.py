@@ -1,12 +1,6 @@
-from __future__ import unicode_literals
-
-from future.utils import python_2_unicode_compatible
-
 from app.models import db
-from utils.compat import u
 
 
-@python_2_unicode_compatible
 class PanelPermission(db.Model):
     """Super-Admin Panel Permissions
     """
@@ -30,4 +24,4 @@ class PanelPermission(db.Model):
         return '<PanelPerm %r for %r>' % (self.role, self.panel_name)
 
     def __str__(self):
-        return u('PanelPerm %r for %r' % (self.role, self.panel_name))
+        return self.__repr__()

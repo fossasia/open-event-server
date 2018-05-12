@@ -1,7 +1,8 @@
 import factory
-from app.models.custom_form import db, CustomForms
+
 import app.factories.common as common
 from app.factories.event import EventFactoryBasic
+from app.models.custom_form import db, CustomForms
 
 
 class CustomFormFactory(factory.alchemy.SQLAlchemyModelFactory):

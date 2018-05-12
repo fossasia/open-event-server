@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import base64
 
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
@@ -56,7 +54,7 @@ class UserList(ResourceList):
         :return:
         """
         s = get_serializer()
-        hash = base64.b64encode(s.dumps([user.email, str_generator()]))
+        hash = str(base64.b64encode(str(s.dumps([user.email, str_generator()])).encode()), 'utf-8')
         link = make_frontend_url('/email/verify'.format(id=user.id), {'token': hash})
         send_email_with_action(user, USER_REGISTER_WITH_PASSWORD, app_name=get_settings()['app_name'],
                                email=user.email)
@@ -185,7 +183,7 @@ class UserDetail(ResourceDetail):
         if view_kwargs.get('email_changed'):
             send_email_change_user_email(user, view_kwargs.get('email_changed'))
 
-    decorators = (api.has_permission('is_user_itself', fetch="user_id,id", fetch_as="id",
+    decorators = (api.has_permission('is_user_itself', fetch="user_id,id", fetch_as="user_id",
                   model=[Notification, Feedback, UsersEventsRoles, Session, EventInvoice, AccessCode,
                          DiscountCode, EmailNotification, Speaker, User],
                   fetch_key_url="notification_id, feedback_id, users_events_role_id, session_id, \

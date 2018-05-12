@@ -1,6 +1,7 @@
 import factory
-from app.models.event_type import db, EventType
+
 import app.factories.common as common
+from app.models.event_type import db, EventType
 
 
 class EventTypeFactory(factory.alchemy.SQLAlchemyModelFactory):

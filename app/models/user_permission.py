@@ -1,12 +1,6 @@
-from __future__ import unicode_literals
-
-from future.utils import python_2_unicode_compatible
-
 from app.models import db
-from utils.compat import u
 
 
-@python_2_unicode_compatible
 class UserPermission(db.Model):
     """
     User Permissions
@@ -31,4 +25,4 @@ class UserPermission(db.Model):
         return '<UserPerm %r>' % self.name
 
     def __str__(self):
-        return u('UserPerm %r' % self.name)
+        return self.__repr__()

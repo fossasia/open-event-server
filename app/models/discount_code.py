@@ -1,17 +1,11 @@
-from __future__ import unicode_literals
-
 from datetime import datetime
 
-from future.utils import python_2_unicode_compatible
-
 from app.models import db
-from utils.compat import u
 
 TICKET = 'ticket'
 EVENT = 'event'
 
 
-@python_2_unicode_compatible
 class DiscountCode(db.Model):
     __tablename__ = "discount_codes"
 
@@ -75,7 +69,7 @@ class DiscountCode(db.Model):
         return '<DiscountCode %r>' % self.id
 
     def __str__(self):
-        return u(self.code)
+        return self.__repr__()
 
     @property
     def serialize(self):

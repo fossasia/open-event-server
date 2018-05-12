@@ -35,6 +35,8 @@ def string_empty(value):
 
 
 def strip_tags(html):
+    if html is None:
+        return None
     return bleach.clean(html, tags=[], attributes={}, styles=[], strip=True)
 
 

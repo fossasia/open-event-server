@@ -1,24 +1,21 @@
-import urlparse
-from urllib import urlencode
-
 import requests
 import sqlalchemy
+import stripe
+import urllib.parse
 from flask import current_app
 from forex_python.converter import CurrencyRates
-import stripe
+from urllib.parse import urlencode
 
 from app.api.helpers.cache import cache
 from app.api.helpers.db import safe_query, save_to_db
-
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.utilities import represents_int
-from app.models.stripe_authorization import StripeAuthorization
-from app.models.ticket_fee import TicketFees
-from app.models.order import Order
-from app.settings import get_settings
 from app.models import db
 from app.models.event import Event
-
+from app.models.order import Order
+from app.models.stripe_authorization import StripeAuthorization
+from app.models.ticket_fee import TicketFees
+from app.settings import get_settings
 
 DEFAULT_FEE = 0.0
 
@@ -187,9 +184,9 @@ class PayPalPaymentsManager(object):
                 count += 1
 
         response = requests.post(credentials['SERVER'], data=data)
-        if 'TOKEN' not in dict(urlparse.parse_qsl(response.text)):
+        if 'TOKEN' not in dict(urllib.parse.parse_qsl(response.text)):
             raise Exception('PayPal Token could not be retrieved')
-        token = dict(urlparse.parse_qsl(response.text))['TOKEN']
+        token = dict(urllib.parse.parse_qsl(response.text))['TOKEN']
         order.paypal_token = token
         save_to_db(order)
         return credentials['CHECKOUT_URL'] + "?" + urlencode({
@@ -220,7 +217,7 @@ class PayPalPaymentsManager(object):
             return data
 
         response = requests.post(credentials['SERVER'], data=data)
-        return dict(urlparse.parse_qsl(response.text))
+        return dict(urllib.parse.parse_qsl(response.text))
 
     @staticmethod
     def capture_payment(order, payer_id, currency=None, credentials=None):
@@ -251,4 +248,4 @@ class PayPalPaymentsManager(object):
         }
 
         response = requests.post(credentials['SERVER'], data=data)
-        return dict(urlparse.parse_qsl(response.text))
+        return dict(urllib.parse.parse_qsl(response.text))

@@ -1,6 +1,7 @@
 import factory
-from app.models.user import db, User
+
 import app.factories.common as common
+from app.models.user import db, User
 
 
 class UserFactory(factory.alchemy.SQLAlchemyModelFactory):

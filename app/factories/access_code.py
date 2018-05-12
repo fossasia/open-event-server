@@ -1,9 +1,10 @@
 import factory
-from app.models.access_code import db, AccessCode
-from app.factories.ticket import TicketFactory
-from app.factories.event import EventFactoryBasic
-from app.factories.user import UserFactory
+
 import app.factories.common as common
+from app.factories.event import EventFactoryBasic
+from app.factories.ticket import TicketFactory
+from app.factories.user import UserFactory
+from app.models.access_code import db, AccessCode
 
 
 class AccessCodeFactory(factory.alchemy.SQLAlchemyModelFactory):

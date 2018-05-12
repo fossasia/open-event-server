@@ -1,15 +1,16 @@
-import unittest
-import os
 import json
-from PIL import Image
+import os
+import unittest
+from io import BytesIO
 
+from PIL import Image
 from flask import Request, request, jsonify
-from StringIO import StringIO
+
 from app import current_app as app
-from tests.unittests.utils import OpenEventTestCase
-from app.api.helpers.files import uploaded_image, uploaded_file
 from app.api.helpers.files import create_save_resized_image, create_save_image_sizes
+from app.api.helpers.files import uploaded_image, uploaded_file
 from tests.unittests.setup_database import Setup
+from tests.unittests.utils import OpenEventTestCase
 
 
 class TestFilesHelperValidation(OpenEventTestCase):
@@ -37,7 +38,7 @@ class TestFilesHelperValidation(OpenEventTestCase):
 
     def test_upload_single_file(self):
 
-        class FileObj(StringIO):
+        class FileObj(BytesIO):
 
             def close(self):
                 pass
@@ -58,7 +59,7 @@ class TestFilesHelperValidation(OpenEventTestCase):
 
         with app.test_request_context():
             client = app.test_client()
-            resp = client.post('/test_upload', data={'file': (StringIO('1,2,3,4'), 'test_file.csv')})
+            resp = client.post('/test_upload', data={'file': (BytesIO(b'1,2,3,4'), 'test_file.csv')})
             data = json.loads(resp.data)
             file_path = data['path']
             filename = data['name']
@@ -67,7 +68,7 @@ class TestFilesHelperValidation(OpenEventTestCase):
             self.assertTrue(os.path.exists(file_path))
 
     def test_upload_multiple_file(self):
-        class FileObj(StringIO):
+        class FileObj(BytesIO):
 
             def close(self):
                 pass
@@ -91,8 +92,8 @@ class TestFilesHelperValidation(OpenEventTestCase):
         with app.test_request_context():
             client = app.test_client()
             resp = client.post('/test_upload_multi',
-                               data={'files[]': [(StringIO('1,2,3,4'), 'test_file.csv'),
-                                                   (StringIO('10,20,30,40'), 'test_file2.csv')]})
+                               data={'files[]': [(BytesIO(b'1,2,3,4'), 'test_file.csv'),
+                                                 (BytesIO(b'10,20,30,40'), 'test_file2.csv')]})
             datas = json.loads(resp.data)['files']
             for data in datas:
                 file_path = data['path']

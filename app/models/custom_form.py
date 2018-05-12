@@ -1,12 +1,7 @@
-from __future__ import unicode_literals
-
 import json
-
-from future.utils import python_2_unicode_compatible
 from sqlalchemy.schema import UniqueConstraint
 
 from app.models import db
-from utils.compat import u
 
 SESSION_FORM = {
     "title": {"include": 1, "require": 1},
@@ -43,7 +38,6 @@ session_form_str = json.dumps(SESSION_FORM, separators=(',', ':'))
 speaker_form_str = json.dumps(SPEAKER_FORM, separators=(',', ':'))
 
 
-@python_2_unicode_compatible
 class CustomForms(db.Model):
     """custom form model class"""
     __tablename__ = 'custom_forms'
@@ -77,7 +71,7 @@ class CustomForms(db.Model):
         return '<CustomForm %r>' % self.id
 
     def __str__(self):
-        return u('CustomForm %r' % self.id)
+        return self.__repr__()
 
     @property
     def serialize(self):

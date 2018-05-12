@@ -1,12 +1,6 @@
-from __future__ import unicode_literals
-
-from future.utils import python_2_unicode_compatible
-
 from app.models import db
-from utils.compat import u
 
 
-@python_2_unicode_compatible
 class TicketFees(db.Model):
     __tablename__ = 'ticket_fees'
 
@@ -24,4 +18,4 @@ class TicketFees(db.Model):
         return '<Ticket Fee %r>' % self.service_fee
 
     def __str__(self):
-        return u('Ticket Fee %r' % self.service_fee)
+        return self.__repr__()

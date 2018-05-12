@@ -1,10 +1,7 @@
-from __future__ import print_function
-
 import getpass
 import re
 import sys
 
-from builtins import input
 from flask_migrate import stamp
 
 from app import current_app

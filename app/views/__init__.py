@@ -1,10 +1,11 @@
 import flask_login as login
 import requests
 from flask import url_for, redirect, Blueprint, request, make_response
-from flask_scrypt import generate_password_hash
-from wtforms import form, fields, validators
 from flask_admin import Admin, AdminIndexView, expose, helpers as admin_helpers
 from flask_admin.contrib.sqla import ModelView
+from flask_scrypt import generate_password_hash
+from wtforms import form, fields, validators
+
 from app.models import db
 from app.models.user import User
 
@@ -111,13 +112,13 @@ class BlueprintsManager:
         # Get all the models in the db, all models should have a explicit __tablename__
         classes, models, table_names = [], [], []
         # noinspection PyProtectedMember
-        for class_ in db.Model._decl_class_registry.values():
+        for class_ in list(db.Model._decl_class_registry.values()):
             try:
                 table_names.append(class_.__tablename__)
                 classes.append(class_)
             except:
                 pass
-        for table in db.metadata.tables.items():
+        for table in list(db.metadata.tables.items()):
             if table[0] in table_names:
                 models.append(classes[table_names.index(table[0])])
 

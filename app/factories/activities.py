@@ -1,6 +1,7 @@
 import factory
-from app.models.activity import db, Activity
+
 import app.factories.common as common
+from app.models.activity import db, Activity
 
 
 class ActivityFactory(factory.alchemy.SQLAlchemyModelFactory):
