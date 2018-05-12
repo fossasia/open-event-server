@@ -11,7 +11,7 @@ from sqlalchemy.schema import (
 
 
 def db_drop_everything(db):
-    # From http://www.sqlalchemy.org/trac/wiki/UsageRecipes/DropEverything
+    # From https://www.sqlalchemy.org/trac/wiki/UsageRecipes/DropEverything
 
     conn = db.engine.connect()
 
