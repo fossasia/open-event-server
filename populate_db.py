@@ -178,6 +178,8 @@ def populate():
     create_settings()
     print('Creating admin message settings...')
     create_admin_message_settings()
+    
+    db.session.commit()
 
 
 def populate_without_print():
