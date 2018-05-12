@@ -19,6 +19,7 @@ app.db
 .bundle/
 .vscode/
 venv/
+.venv
 
 # Static files at 'app/static/vendor'
 app/static/vendor
