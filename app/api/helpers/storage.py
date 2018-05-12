@@ -165,7 +165,6 @@ def upload_local(uploaded_file, key, **kwargs):
     return '{scheme}://{hostname}:{port}{file_relative_path}'.format(
         scheme=url.scheme, hostname=url.hostname, port=url.port,
         file_relative_path=file_relative_path).replace(':None', '')
-    
 
 
 def upload_to_aws(bucket_name, aws_region, aws_key, aws_secret, file, key, acl='public-read'):
