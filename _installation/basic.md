@@ -2,29 +2,11 @@
 
 ## Dependencies required to run Orga Server
 
-* Python 2
+* Python 3
 * Postgres
 ```sh
 sudo apt-get update
 sudo apt-get install postgresql postgresql-contrib
-```
-* NodeJS
-if nvm(Node Version Manager)  is not installed:
-using cURL:
-```sh
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash
-```
-or Wget:
-```sh
-wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash
-```
-run nvm after exporting NVM_DIR:
-```sh
-. "$NVM_DIR/nvm.sh"
-```
-Node installation, v6.9.1 is LTS, though you can install other versions as well:
-```sh
-nvm install 6.9.1
 ```
 
 ## Steps
@@ -37,7 +19,7 @@ Run the commands mentioned below with the terminal active in the project's root 
 * **Step 1** - Install python requirements.
 
 ```sh
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 
@@ -74,9 +56,9 @@ sudo service postgresql restart
 * **Step 5** - Create the tables. For that we will use `create_db.py`.
 
 ```sh
-python create_db.py
+python3 create_db.py
 # enter email and password
-python manage.py db stamp head
+python3 manage.py db stamp head
 ```
 
 
@@ -102,7 +84,7 @@ celery worker -A app.celery &
 unset INTEGRATE_SOCKETIO
 
 # run app
-python manage.py runserver
+python3 manage.py runserver
 ```
 
 * **Step 7** - Rejoice. Go to `localhost:5000` in your web browser to see the application live.
