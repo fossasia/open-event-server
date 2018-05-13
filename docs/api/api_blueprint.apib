@@ -20795,6 +20795,56 @@ Get the task status and the final result of the task as response
         }
 
 
+## Event Types Statistics Details [/v1/admin/statistics/event-types]
+
+**Event Types:**
+
+| Parameter | Description | Type |
+|:----------|-------------|------|
+| `name`  | Name of event type | string |
+| `id`  | Id of the event type | Integer |
+| `count`  | No. of events of event type | Integer |
+
+### Show Event Types Statistics [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {}
+
+
+## Event Topics Statistics Details [/v1/admin/statistics/event-topics]
+
+**Event Topics:**
+
+| Parameter | Description | Type |
+|:----------|-------------|------|
+| `name`  | Name of event topic | string |
+| `id`  | Id of the event topic | Integer |
+| `count`  | No. of events of event topic | Integer |
+
+### Show Event Topics Statistics [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {}
+
+
 ## User Statistics Details [/v1/admin/statistics/users]
 
 **Users:**
