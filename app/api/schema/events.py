@@ -9,8 +9,10 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from app.models.event import Event
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import dasherize
+from utils.common import use_defaults
 
 
+@use_defaults()
 class EventSchemaPublic(Schema):
     class Meta:
         type_ = 'event'

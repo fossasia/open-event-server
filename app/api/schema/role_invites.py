@@ -8,8 +8,10 @@ from app.models.role_invite import RoleInvite
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import dasherize
 from app.models.role import Role
+from utils.common import use_defaults
 
 
+@use_defaults()
 class RoleInviteSchema(Schema):
     """
     Api Schema for role invite model

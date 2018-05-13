@@ -7,8 +7,10 @@ from app import db
 from app.api.helpers.payment import PayPalPaymentsManager
 from app.api.helpers.utilities import dasherize
 from app.models.order import Order
+from utils.common import use_defaults
 
 
+@use_defaults()
 class OrderSchema(Schema):
     class Meta:
         type_ = 'order'
