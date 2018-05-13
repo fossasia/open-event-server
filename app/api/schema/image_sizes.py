@@ -2,8 +2,10 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 
 from app.api.helpers.utilities import dasherize
+from utils.common import use_defaults
 
 
+@use_defaults()
 class ImageSizeSchema(Schema):
     """
     Api schema for image_size Model

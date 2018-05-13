@@ -2,8 +2,10 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema, Relationship
 
 from app.api.helpers.utilities import dasherize
+from utils.common import use_defaults
 
 
+@use_defaults()
 class EmailNotificationSchema(Schema):
     """
     API Schema for email notification Model
