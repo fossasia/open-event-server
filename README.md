@@ -164,13 +164,13 @@ When writing changes to models. Use migrations.
 
 ```
  # To generate a migration after doing a model update
- python manage.py db migrate
+ python3 manage.py db migrate
 
  # To sync Database
- python manage.py db upgrade
+ python3 manage.py db upgrade
 
  # To rollback
- python manage.py db downgrade
+ python3 manage.py db downgrade
 ```
 
 When checking in code for models, please update migrations as well.
@@ -180,7 +180,7 @@ When checking in code for models, please update migrations as well.
 Clone the repo and set up the server according to the steps listed. Make sure you have installed all the dependencies required for testing by running
 
 ```
-pip install -r requirements/tests.txt
+pip3 install -r requirements/tests.txt
 ```
 
 #### Running unit tests
@@ -195,7 +195,7 @@ export APP_CONFIG=config.TestingConfig
 
 * Then go to the project directory and run the following command:
 ```
-python -m unittest discover tests/unittests/
+python3 -m unittest discover tests/unittests/
 ```
 * It will run each test one by one.
 

@@ -2,7 +2,7 @@
 
 ## Dependencies required to run Orga Server
 
-* Python 2
+* Python 3
 * Postgres
 
 ### For mac users
@@ -20,7 +20,7 @@ sudo apt-get install postgresql postgresql-contrib
 
 Make sure you have the dependencies mentioned above installed before proceeding further.
 
-* **Step 0** - Clone the Open Event Orga Server repository (from the development branch) and ```cd ``` into the directory.
+* **Step 0** - Clone the Open Event Server repository (from the development branch) and ```cd ``` into the directory.
 ```sh
 git clone -b development https://github.com/fossasia/open-event-server.git
 cd open-event-server
@@ -31,20 +31,32 @@ git clone https://github.com/USERNAME/open-event-server.git
 cd open-event-server
 ```
 
-* **Step 1** - Install python requirements. You need to be present in the root directory of the project.
+* **Step 1** - Install python3 requirements. You need to be present in the root directory of the project.
+
+# System Wide Installation
 
 ```sh
-sudo -H pip install -r requirements.txt
+sudo -H pip3 install -r requirements.txt
 ```
 hint: You may need to upgrade your pip version and install following packages if you encounter errors while installing the requirements.
+
+# Installation in Virtual Environment
+
 ```sh
+virtualenv -p python3 venv
+source venv/bin/activate
+pip3 install -r requirements.txt
+```
+
+```sh
+
 # For linux users
-sudo apt-get install python-dev
+sudo apt-get install python3-dev
 sudo apt-get install libpq-dev
 sudo apt-get install libffi6 libffi-dev
 
 # For macOS users
-brew install python@2
+brew install python@3
 brew install libmagic
 ```
 
@@ -93,9 +105,9 @@ brew services restart postgresql
 * **Step 5** - Create the tables. For that we will use `create_db.py`.
 
 ```sh
-python create_db.py
+python3 create_db.py
 # enter email and password
-python manage.py db stamp head
+python3 manage.py db stamp head
 ```
 **Note 1:** In case you made your own username and password in Step 2 are now getting `FATAL:  password authentication failed for user "john"` , probable cause is non updation of `.env` file. To resolve it, open the `.env` file and update `DATABASE_URL=postgresql://USERNAME:PASSWORD@127.0.0.1:5432/oevent` and you are good to go.
 
@@ -119,7 +131,7 @@ brew install redis
 INTEGRATE_SOCKETIO=false celery worker -A app.celery
 
 # run app
-python manage.py runserver
+python3 manage.py runserver
 ```
 
 * **Step 7** - Rejoice. Go to `localhost:5000` in your web browser to see the application live.
