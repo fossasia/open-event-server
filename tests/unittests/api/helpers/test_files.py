@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import unittest
 from io import BytesIO
 
@@ -111,6 +112,7 @@ class TestFilesHelperValidation(OpenEventTestCase):
             upload_path = 'test'
             resized_image_url = create_save_resized_image(image_url_test, width, aspect_ratio, height, upload_path, ext='png')
             resized_image_file = app.config.get('BASE_DIR') + resized_image_url.split('/localhost')[1]
+            resized_image_file = re.sub(r'\:(\d+)|None/', '/', resized_image_file)
             resized_width, resized_height = self.getsizes(resized_image_file)
             self.assertTrue(os.path.exists(resized_image_file))
             self.assertEqual(resized_width, width)
@@ -124,6 +126,9 @@ class TestFilesHelperValidation(OpenEventTestCase):
             width_thumbnail = 500
             width_icon = 75
             image_sizes = create_save_image_sizes(image_url_test, image_sizes_type)
+
+            for image in image_sizes:  # So that file names below don't contain port spec.
+                image_sizes[image] = re.sub(r'\:(\d+)|None/', '/', image_sizes[image])
 
             resized_image_url = image_sizes['original_image_url']
             resized_image_url_large = image_sizes['large_image_url']
