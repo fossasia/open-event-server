@@ -4,6 +4,7 @@
 
 * Python 3
 * Postgres
+* OpenSSL
 
 ### For mac users
 ```sh
