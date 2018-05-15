@@ -119,7 +119,7 @@ def is_coorganizer_or_user_itself(view, view_args, view_kwargs, *args, **kwargs)
     """
     user = current_identity
 
-    if user.is_admin or user.is_super_admin or user.id == kwargs['user_id']:
+    if user.is_admin or user.is_super_admin or ('user_id' in kwargs and user.id == kwargs['user_id']):
         return view(*view_args, **view_kwargs)
 
     if user.is_staff:
