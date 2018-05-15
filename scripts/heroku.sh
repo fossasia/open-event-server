@@ -1,5 +1,5 @@
 #!/bin/bash
-python manage.py db upgrade
+python3 manage.py db upgrade
 export INTEGRATE_SOCKETIO=false
 # socketio has problems with celery "blocking" tasks
 # also socketio is not used in a celery task so no problem to turn it off
