@@ -167,7 +167,7 @@ def upload_local(uploaded_file, key, **kwargs):
 
     # No need to specify scheme-corresponding port
     port = url.port
-    if port and url.scheme == SCHEMES[url.port]:
+    if port and url.scheme == SCHEMES.get(url.port, None):
         port = None
 
     return '{scheme}://{hostname}:{port}{file_relative_path}'.format(
