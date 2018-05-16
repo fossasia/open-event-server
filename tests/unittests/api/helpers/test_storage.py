@@ -1,6 +1,8 @@
 """Test file for storage functions."""
 import os
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
+
+from flask import request
 
 from app import current_app as app
 from app.api.helpers.storage import generate_hash, UploadedFile, upload_local
@@ -21,7 +23,7 @@ class TestStorageHelperValidation(OpenEventTestCase):
         test_path = os.path.join(app.config['BASE_DIR'],
                                  'static/media/temp',
                                  test_name
-                                )
+                                 )
         with open(test_path, 'wb') as img_file:
             img_file.write(b'test content')
 
@@ -30,14 +32,16 @@ class TestStorageHelperValidation(OpenEventTestCase):
 
         with app.test_request_context():
             test_hash = generate_hash(test_key)
+            test_url = request.url
             upload_url = upload_local(upfile, key=test_key)
 
-        expected_url = urljoin('http://localhost:5000',
-                               os.path.join('static/media/',
-                                            test_key,
-                                            test_hash,
-                                            test_name)
-                              )
+        expected_url = urljoin(
+            '{url.scheme}://{url.netloc}'.format(url=urlparse(test_url)),
+            os.path.join('static/media/',
+            test_key,
+            test_hash,
+            test_name)
+            )
 
         self.assertEqual(upload_url, expected_url)
 
@@ -47,5 +51,5 @@ class TestStorageHelperValidation(OpenEventTestCase):
                                test_key,
                                test_hash,
                                test_name
-                              )
-                 )  # Removes the temporary 'uploaded' test file.
+                               )
+                )  # Removes the temporary 'uploaded' test file.
