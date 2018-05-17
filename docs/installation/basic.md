@@ -16,7 +16,7 @@ Make sure you have the dependencies mentioned above installed before proceeding 
 Run the commands mentioned below with the terminal active in the project's root directory.
 
 
-* **Step 1** - Install python requirements.
+* **Step 1** - Install Python 3 requirements.
 
 ```sh
 pip3 install -r requirements.txt
