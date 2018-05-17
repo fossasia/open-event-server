@@ -163,16 +163,8 @@ def upload_local(uploaded_file, key, **kwargs):
     if get_settings()['static_domain']:
         return get_settings()['static_domain'] + \
             file_relative_path.replace('/static', '')
-    url = urlparse(request.url)
 
-    # No need to specify scheme-corresponding port
-    port = url.port
-    if port and url.scheme == SCHEMES.get(url.port, None):
-        port = None
-
-    return '{scheme}://{hostname}:{port}{file_relative_path}'.format(
-        scheme=url.scheme, hostname=url.hostname, port=port,
-        file_relative_path=file_relative_path).replace(':None', '')
+    return create_url(request.url, file_relative_path)
 
 
 def upload_to_aws(bucket_name, aws_region, aws_key, aws_secret, file, key, acl='public-read'):
@@ -260,3 +252,17 @@ def generate_hash(key):
     """
     phash = generate_password_hash(key, get_settings()['secret'])
     return str(b64encode(phash), 'utf-8')[:10]  # limit len to 10, is sufficient
+
+
+def create_url(request_url, file_relative_path):
+    """Generates the URL of an uploaded file."""
+    url = urlparse(request_url)
+
+    # No need to specify scheme-corresponding port
+    port = url.port
+    if port and url.scheme == SCHEMES.get(url.port, None):
+        port = None
+
+    return '{scheme}://{hostname}:{port}{file_relative_path}'.format(
+        scheme=url.scheme, hostname=url.hostname, port=port,
+        file_relative_path=file_relative_path).replace(':None', '')
