@@ -17,7 +17,7 @@ class TestStorageHelperValidation(TestCase):
         self.assertEqual(
             create_url(request_url, file_relative_path), expected_file_url
             )
-    
+
     def test_http_url(self):
         """Method to test a url with port 80."""
         request_url = 'http://localhost:80'
