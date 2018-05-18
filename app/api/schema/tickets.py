@@ -5,8 +5,10 @@ from marshmallow_jsonapi.flask import Schema, Relationship
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import dasherize
 from app.models.ticket import Ticket
+from utils.common import use_defaults
 
 
+@use_defaults()
 class TicketSchemaPublic(Schema):
     class Meta:
         type_ = 'ticket'
