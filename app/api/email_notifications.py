@@ -32,14 +32,14 @@ class EmailNotificationList(ResourceList):
         :return:
         """
         query_ = self.session.query(EmailNotification)
-        if view_kwargs.get('id'):
-            user = safe_query(self, User, 'id', view_kwargs['id'], 'id')
+        if view_kwargs.get('user_id'):
+            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(User).filter(User.id == user.id)
         return query_
 
     view_kwargs = True
     methods = ['GET', ]
-    decorators = (api.has_permission('is_user_itself', fetch="id", fetch_as="id"),)
+    decorators = (api.has_permission('is_user_itself', fetch="user_id", model=EmailNotification),)
     schema = EmailNotificationSchema
     data_layer = {'session': db.session,
                   'model': EmailNotification,
@@ -52,8 +52,7 @@ class EmailNotificationDetail(ResourceDetail):
     """
     Email notification detail by ID
     """
-    decorators = (api.has_permission('is_user_itself', fetch="user_id", fetch_as="id",
-                  model=EmailNotification),)
+    decorators = (api.has_permission('is_user_itself', fetch="user_id", model=EmailNotification),)
     schema = EmailNotificationSchema
     data_layer = {'session': db.session,
                   'model': EmailNotification}
@@ -74,8 +73,7 @@ class EmailNotificationRelationshipOptional(ResourceRelationship):
     """
     Email notification Relationship (Optional)
     """
-    decorators = (api.has_permission('is_user_itself', fetch="user_id", fetch_as="id",
-                                     model=EmailNotification),)
+    decorators = (api.has_permission('is_user_itself', fetch="user_id", model=EmailNotification),)
     schema = EmailNotificationSchema
     data_layer = {'session': db.session,
                   'model': EmailNotification}
