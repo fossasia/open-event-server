@@ -111,7 +111,7 @@ lines 1-19/19 (END)
 
 * For the Next Step we'll setup Docker Compose.
 ```sh
-sudo apt-get -y install python-pip
+sudo apt-get -y install python3-pip
 sudo pip install docker-compose
 ```
 
@@ -146,9 +146,9 @@ sudo docker-compose run web /bin/bash
 
 * Once you are running bash in your container as root,
 ```sh
-python create_db.py
+python3 create_db.py
 # The Email & Password entered here would be your Admin Email
-python manage.py db stamp head
+python3 manage.py db stamp head
 ```
 
 * Now that db is setup, you can kill both the running containers by ^C, and then run
@@ -164,17 +164,17 @@ sudo docker-compose up -d
 ```
 Exception:
 Traceback (most recent call last):
-  File "/usr/lib/python2.7/dist-packages/pip/basecommand.py", line 209, in main
+  File "/usr/lib/python3.5/dist-packages/pip/basecommand.py", line 209, in main
     status = self.run(options, args)
-  File "/usr/lib/python2.7/dist-packages/pip/commands/install.py", line 317, in run
+  File "/usr/lib/python3.5/dist-packages/pip/commands/install.py", line 317, in run
     requirement_set.prepare_files(finder)
-  File "/usr/lib/python2.7/dist-packages/pip/req/req_set.py", line 360, in prepare_files
+  File "/usr/lib/python3.5/dist-packages/pip/req/req_set.py", line 360, in prepare_files
     ignore_dependencies=self.ignore_dependencies))
-  File "/usr/lib/python2.7/dist-packages/pip/req/req_set.py", line 448, in _prepare_file
+  File "/usr/lib/python3.5/dist-packages/pip/req/req_set.py", line 448, in _prepare_file
     req_to_install, finder)
-  File "/usr/lib/python2.7/dist-packages/pip/req/req_set.py", line 387, in _check_skip_installed
+  File "/usr/lib/python3.5/dist-packages/pip/req/req_set.py", line 387, in _check_skip_installed
     req_to_install.check_if_exists()
-  File "/usr/lib/python2.7/dist-packages/pip/req/req_install.py", line 1011, in check_if_exists
+  File "/usr/lib/python3.5/dist-packages/pip/req/req_install.py", line 1011, in check_if_exists
     self.req.project_name
 AttributeError: 'Requirement' object has no attribute 'project_name'
 ```

@@ -56,7 +56,7 @@ sudo apt-get install -y docker-engine
 * Then install Docker Compose.
 
 ```sh
-sudo apt-get -y install python-pip
+sudo apt-get -y install python3-pip
 sudo pip install docker-compose
 ```
 
@@ -123,9 +123,9 @@ docker-compose run web /bin/bash
 * When bash opens, run the following commands and exit.
 
 ```bash
-python create_db.py
+python3 create_db.py
 # ^^ write super_admin email and password when asked
-python manage.py db stamp head
+python3 manage.py db stamp head
 ```
 
 * That's it. Visit the public DNS to see your site live. In my case it was http://ec2-52-41-207-116.us-west-2.compute.amazonaws.com/
