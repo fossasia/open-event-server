@@ -119,7 +119,7 @@ def is_coorganizer_or_user_itself(view, view_args, view_kwargs, *args, **kwargs)
     """
     user = current_identity
 
-    if user.is_admin or user.is_super_admin or user.id == kwargs['user_id']:
+    if user.is_admin or user.is_super_admin or ('user_id' in kwargs and user.id == kwargs['user_id']):
         return view(*view_args, **view_kwargs)
 
     if user.is_staff:
@@ -348,12 +348,6 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         if not check(view_kwargs):
             return ForbiddenError({'source': ''}, 'Access forbidden').respond()
 
-    # leave_if checks if we have to bypass this request on the basis of lambda function
-    if 'leave_if' in kwargs:
-        check = kwargs['leave_if']
-        if check(view_kwargs):
-            return view(*view_args, **view_kwargs)
-
     # If event_identifier in route instead of event_id
     if 'event_identifier' in view_kwargs:
         try:
@@ -383,7 +377,6 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         if not fetched:
             model = kwargs['model']
             fetch = kwargs['fetch']
-            fetch_as = kwargs['fetch_as']
             fetch_key_url = 'id'
             fetch_key_model = 'id'
             if 'fetch_key_url' in kwargs:
@@ -427,7 +420,10 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
                 fetched = getattr(data, fetch) if hasattr(data, fetch) else None
 
         if fetched:
-            kwargs[kwargs['fetch_as']] = fetched
+            if 'fetch_as' in kwargs:
+                kwargs[kwargs['fetch_as']] = fetched
+            elif 'fetch' in kwargs:
+                kwargs[kwargs['fetch']] = fetched
         else:
             return NotFoundError({'source': ''}, 'Object not found.').respond()
 

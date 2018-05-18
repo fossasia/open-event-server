@@ -6,7 +6,7 @@ services:
 addons:
   apt:
     packages:
-      - python-dev
+      - python3-dev
       - libssl-dev
       - libffi-dev
 python:
@@ -16,7 +16,7 @@ before-install:
   - npm -g install npm@latest
 install:
   - npm install -g dredd@4.0.0
-  - pip install -r requirements/tests.txt
+  - pip3 install -r requirements/tests.txt
 env:
   - >-
     APP_CONFIG="config.TestingConfig" PATH=$PATH:${HOME}/google-cloud-sdk/bin

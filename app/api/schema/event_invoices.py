@@ -4,8 +4,10 @@ from marshmallow_jsonapi.flask import Schema, Relationship
 
 from app.api.helpers.static import PAYMENT_COUNTRIES
 from app.api.helpers.utilities import dasherize
+from utils.common import use_defaults
 
 
+@use_defaults()
 class EventInvoiceSchema(Schema):
     """
     Event Invoice API Schema based on event invoice model

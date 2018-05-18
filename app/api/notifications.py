@@ -48,7 +48,7 @@ class NotificationList(ResourceList):
             data['user_id'] = user.id
 
     view_kwargs = True
-    decorators = (api.has_permission('is_user_itself', fetch="user_id", fetch_as="id", model=Notification),)
+    decorators = (api.has_permission('is_user_itself', fetch="user_id", model=Notification),)
     methods = ['GET']
     schema = NotificationSchema
     data_layer = {'session': db.session,
@@ -63,7 +63,7 @@ class NotificationDetail(ResourceDetail):
     """
     Notification detail by ID
     """
-    decorators = (api.has_permission('is_user_itself', fetch="user_id", fetch_as="id", model=Notification),)
+    decorators = (api.has_permission('is_user_itself', fetch="user_id", model=Notification),)
     schema = NotificationSchema
     data_layer = {'session': db.session,
                   'model': Notification}
@@ -73,7 +73,7 @@ class NotificationRelationship(ResourceRelationship):
     """
     Notification Relationship
     """
-    decorators = (api.has_permission('is_user_itself', fetch="user_id", fetch_as="id", model=Notification),)
+    decorators = (api.has_permission('is_user_itself', fetch="user_id", model=Notification),)
     schema = NotificationSchema
     methods = ['GET', 'PATCH']
     data_layer = {'session': db.session,
