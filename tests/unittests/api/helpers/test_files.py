@@ -2,6 +2,7 @@ import json
 import os
 import unittest
 from io import BytesIO
+from urllib.parse import urlparse
 
 from PIL import Image
 from flask import Request, request, jsonify
@@ -110,7 +111,8 @@ class TestFilesHelperValidation(OpenEventTestCase):
             aspect_ratio = False
             upload_path = 'test'
             resized_image_url = create_save_resized_image(image_url_test, width, aspect_ratio, height, upload_path, ext='png')
-            resized_image_file = app.config.get('BASE_DIR') + resized_image_url.split('/localhost')[1]
+            resized_image_path = urlparse(resized_image_url).path
+            resized_image_file = app.config.get('BASE_DIR') + resized_image_path
             resized_width, resized_height = self.getsizes(resized_image_file)
             self.assertTrue(os.path.exists(resized_image_file))
             self.assertEqual(resized_width, width)
@@ -124,16 +126,20 @@ class TestFilesHelperValidation(OpenEventTestCase):
             width_thumbnail = 500
             width_icon = 75
             image_sizes = create_save_image_sizes(image_url_test, image_sizes_type)
+            image_sizes = {
+                url_name: urlparse(image_sizes[url_name]).path
+                for url_name in image_sizes
+            }  # Now file names don't contain port (this gives relative urls).
 
             resized_image_url = image_sizes['original_image_url']
             resized_image_url_large = image_sizes['large_image_url']
             resized_image_url_thumbnail = image_sizes['thumbnail_image_url']
             resized_image_url_icon = image_sizes['icon_image_url']
 
-            resized_image_file = app.config.get('BASE_DIR') + resized_image_url.split('/localhost')[1]
-            resized_image_file_large = app.config.get('BASE_DIR') + resized_image_url_large.split('/localhost')[1]
-            resized_image_file_thumbnail = app.config.get('BASE_DIR') + resized_image_url_thumbnail.split('/localhost')[1]
-            resized_image_file_icon = app.config.get('BASE_DIR') + resized_image_url_icon.split('/localhost')[1]
+            resized_image_file = app.config.get('BASE_DIR') + resized_image_url
+            resized_image_file_large = app.config.get('BASE_DIR') + resized_image_url_large
+            resized_image_file_thumbnail = app.config.get('BASE_DIR') + resized_image_url_thumbnail
+            resized_image_file_icon = app.config.get('BASE_DIR') + resized_image_url_icon
 
             resized_width_large, _ = self.getsizes(resized_image_file_large)
             resized_width_thumbnail, _ = self.getsizes(resized_image_file_thumbnail)
