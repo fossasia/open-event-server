@@ -48,6 +48,6 @@ def get_identity():
     if missing_padding != 0:
         token_second_segment += '=' * (4 - missing_padding)
 
-    payload = json.loads(base64.b64decode(token_second_segment))
+    payload = json.loads(str(base64.b64decode(token_second_segment), 'utf-8'))
     user = jwt_identity(payload)
     return user
