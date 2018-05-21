@@ -38,9 +38,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("email", nargs='?', help="The email for super_admin.", default='')
     parser.add_argument("password", nargs='?', help="The password for super_admin.", default='')
-    parser.parse_args()
-    email = parser.email if hasattr(parser, "email") else ''
-    password = parser.password if hasattr(parser, "password") else ''
+    parse = parser.parse_args()
+    email = parse.email if hasattr(parse, "email") else ''
+    password = parse.password if hasattr(parse, "password") else ''
     with current_app.app_context():
         db.create_all()
         stamp()
