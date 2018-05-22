@@ -39,10 +39,8 @@ if __name__ == "__main__":
     parser.add_argument("email", nargs='?', help="The email for super_admin.", default='')
     parser.add_argument("password", nargs='?', help="The password for super_admin.", default='')
     parse = parser.parse_args()
-    email = parse.email if hasattr(parse, "email") else ''
-    password = parse.password if hasattr(parse, "password") else ''
     with current_app.app_context():
         db.create_all()
         stamp()
-        create_default_user(email, password)
+        create_default_user(getattr(parse, "email"), getattr(parse, "password"))
         populate()
