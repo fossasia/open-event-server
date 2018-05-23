@@ -6,7 +6,7 @@ from utils.common import use_defaults
 
 
 @use_defaults()
-class ModuleSchemaAdmin(Schema):
+class ModuleSchema(Schema):
     """
     Admin Api schema for modules Model
     """

@@ -1,4 +1,4 @@
-FROM python:2-slim
+FROM python:3.6-slim
 LABEL maintainer="Niranjan Rajendran <me@niranjan.io>"
 
 ENV INSTALL_PATH /open_event
