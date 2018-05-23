@@ -46,7 +46,7 @@ from app.api.access_codes import AccessCodeList, AccessCodeListPost, AccessCodeD
 from app.api.custom_forms import CustomFormList, CustomFormListPost, CustomFormDetail, CustomFormRelationshipRequired
 from app.api.faqs import FaqListPost, FaqList, FaqDetail, FaqRelationshipRequired, FaqRelationshipOptional
 from app.api.feedbacks import FeedbackListPost, FeedbackList, FeedbackDetail, FeedbackRelationshipRequired
-from app.api.modules import ModuleDetail, ModuleList
+from app.api.modules import ModuleDetail
 from app.api.custom_placeholders import CustomPlaceholderList, CustomPlaceholderDetail, CustomPlaceholderRelationship
 from app.api.activities import ActivityList, ActivityDetail
 from app.api.orders import OrdersList, OrderDetail, OrderRelationship, ChargeList, OrdersListPost
@@ -108,8 +108,7 @@ api.route(ImageSizeDetail, 'image_size_detail', '/image-sizes/<int:id>')
 api.route(SettingDetail, 'setting_detail', '/settings/<id>', '/settings')
 
 # modules
-api.route(ModuleDetail, 'module_detail', '/modules/<id>')
-api.route(ModuleList, 'module_list', '/modules')
+api.route(ModuleDetail, 'module_detail', '/modules/<id>', '/modules')
 
 # pages
 api.route(PageList, 'page_list', '/pages')
