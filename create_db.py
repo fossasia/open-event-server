@@ -42,5 +42,5 @@ if __name__ == "__main__":
     with current_app.app_context():
         db.create_all()
         stamp()
-        create_default_user(getattr(parse, "email"), getattr(parse, "password"))
+        create_default_user(getattr(parse, "email", ""), getattr(parse, "password", ""))
         populate()
