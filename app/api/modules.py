@@ -1,6 +1,6 @@
 from flask_rest_jsonapi import ResourceDetail
 from flask import request
-from flask_jwt import current_identity as current_user, _jwt_required
+from flask_jwt import _jwt_required
 from flask import current_app as app
 
 from app.api.bootstrap import api
@@ -20,13 +20,6 @@ class ModuleDetail(ResourceDetail):
 
         if 'Authorization' in request.headers:
             _jwt_required(app.config['JWT_DEFAULT_REALM'])
-
-            if current_user.is_admin or current_user.is_super_admin:
-                self.schema = ModuleSchemaAdmin
-            else:
-                raise ForbiddenException(
-                    {'pointer': '/data/attributes'}, "Access Forbidden"
-                )
         else:
             raise ForbiddenException(
                 {'pointer': '/data/attributes'}, "Authorization Required"
