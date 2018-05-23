@@ -108,6 +108,11 @@ class TicketSchema(TicketSchemaPublic):
                 raise UnprocessableEntity({'pointer': '/data/attributes/quantity'},
                                           "quantity should be greater than min-order")
 
+        if 'quantity' in data and 'max_order' in data:
+            if data['quantity'] < data['max_order']:
+                raise UnprocessableEntity({'pointer': '/data/attributes/quantity'},
+                                          "quantity should be lesser than max-order")
+
     access_codes = Relationship(attribute='access_codes',
                                 self_view='v1.ticket_access_code',
                                 self_view_kwargs={'id': '<id>'},
