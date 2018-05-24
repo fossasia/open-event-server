@@ -5,8 +5,10 @@ from marshmallow_jsonapi.flask import Schema, Relationship
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import dasherize
 from app.models.access_code import AccessCode
+from utils.common import use_defaults
 
 
+@use_defaults()
 class AccessCodeSchema(Schema):
     """
     Api schema for Access Code Model
@@ -61,7 +63,7 @@ class AccessCodeSchema(Schema):
                                           "tickets-number should be greater than max-quantity")
 
     id = fields.Integer(dump_ony=True)
-    code = fields.Str(allow_none=True)
+    code = fields.Str(required=True)
     access_url = fields.Url(allow_none=True)
     is_active = fields.Boolean(default=False)
 
@@ -72,7 +74,6 @@ class AccessCodeSchema(Schema):
     max_quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     valid_from = fields.DateTime(required=True)
     valid_till = fields.DateTime(required=True)
-    used_for = fields.Str(allow_none=True)
     event = Relationship(attribute='event',
                          self_view='v1.access_code_event',
                          self_view_kwargs={'id': '<id>'},
