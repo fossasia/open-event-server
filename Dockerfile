@@ -11,15 +11,15 @@ RUN apt-get update && apt-get install -y wget git ca-certificates curl && update
 
 
 # install deps
-RUN apt-get install -y --no-install-recommends build-essential python-dev libpq-dev libevent-dev libmagic-dev && apt-get clean -y
+RUN apt-get install -y --no-install-recommends build-essential python3-dev libpq-dev libevent-dev libmagic-dev && apt-get clean -y
 
 # copy just requirements
 COPY requirements.txt requirements.txt
 COPY requirements requirements
 
 # install requirements
-RUN pip install --no-cache-dir -r requirements.txt 
-RUN pip install eventlet
+RUN pip3 install --no-cache-dir -r requirements.txt 
+RUN pip3 install eventlet
 
 # copy remaining files
 COPY . .
