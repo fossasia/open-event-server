@@ -1,12 +1,13 @@
 from datetime import datetime
 
 from app.models import db
+from app.models.base import SoftDeletionModel
 
 TICKET = 'ticket'
 EVENT = 'event'
 
 
-class AccessCode(db.Model):
+class AccessCode(SoftDeletionModel):
     __tablename__ = "access_codes"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -24,8 +25,6 @@ class AccessCode(db.Model):
     marketer_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     marketer = db.relationship('User', backref='access_codes_')
 
-    used_for = db.Column(db.String)
-
     def __init__(self,
                  code=None,
                  access_url=None,
@@ -37,7 +36,8 @@ class AccessCode(db.Model):
                  is_active=True,
                  used_for=None,
                  event_id=None,
-                 user_id=None):
+                 user_id=None,
+                 deleted_at=None):
         self.code = code
         self.access_url = access_url
         self.tickets_number = tickets_number
@@ -50,6 +50,7 @@ class AccessCode(db.Model):
         self.created_at = datetime.utcnow()
         self.used_for = used_for
         self.marketer_id = user_id
+        self.deleted_at = deleted_at
 
     @staticmethod
     def get_service_name():

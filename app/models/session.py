@@ -4,6 +4,7 @@ import pytz
 from sqlalchemy import event
 
 from app.models import db
+from app.models.base import SoftDeletionModel
 from app.models.helpers.versioning import clean_up_string, clean_html
 
 speakers_sessions = db.Table('speakers_sessions',
@@ -12,7 +13,7 @@ speakers_sessions = db.Table('speakers_sessions',
                              db.PrimaryKeyConstraint('speaker_id', 'session_id'))
 
 
-class Session(db.Model):
+class Session(SoftDeletionModel):
     """Session model class"""
     __tablename__ = 'sessions'
     __versioned__ = {
@@ -44,11 +45,11 @@ class Session(db.Model):
     creator_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     state = db.Column(db.String, default="pending")
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow)
-    deleted_at = db.Column(db.DateTime(timezone=True))
     submitted_at = db.Column(db.DateTime(timezone=True))
     submission_modifier = db.Column(db.String)
     is_mail_sent = db.Column(db.Boolean, default=False)
     last_modified_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow)
+    send_email = db.Column(db.Boolean, nullable=True)
 
     def __init__(self,
                  title=None,
@@ -76,7 +77,8 @@ class Session(db.Model):
                  is_mail_sent=False,
                  deleted_at=None,
                  submitted_at=None,
-                 last_modified_at=None):
+                 last_modified_at=None,
+                 send_email=None):
 
         if speakers is None:
             speakers = []
@@ -107,6 +109,7 @@ class Session(db.Model):
         self.submitted_at = submitted_at
         self.submission_modifier = submission_modifier
         self.last_modified_at = datetime.datetime.now(pytz.utc)
+        self.send_email = send_email
 
     @staticmethod
     def get_service_name():

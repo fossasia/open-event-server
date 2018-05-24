@@ -14,6 +14,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from xhtml2pdf import pisa
 
 from app import get_settings
+from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.storage import UploadedFile, upload, generate_hash, UPLOAD_PATHS
 from app.models.image_size import ImageSizes
 
@@ -74,6 +75,8 @@ def create_save_resized_image(image_file, basewidth=None, maintain_aspect=None, 
     :param image_file:
     :return:
     """
+    if not image_file:
+        return None
     filename = '{filename}.{ext}'.format(filename=get_file_name(), ext=ext)
     data = urllib.request.urlopen(image_file).read()
     image_file = io.BytesIO(data)
@@ -203,7 +206,7 @@ def create_save_pdf(pdf_data):
     dest = filedir + filename
 
     file = open(dest, "wb")
-    pisa.CreatePDF(io.StringIO(pdf_data.encode('utf-8')), file)
+    pisa.CreatePDF(io.BytesIO(pdf_data.encode('utf-8')), file)
     file.close()
 
     uploaded_file = UploadedFile(dest, filename)

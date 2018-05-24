@@ -1,5 +1,5 @@
 {
-    "name": "Open Event Org server",
+    "name": "Open Event Server",
     "description": "A fully functional conference event management system using flask",
     "repository": "https://github.com/fossasia/open-event-server/",
     "logo": "http://labs.fossasia.org/images/fossasia.png",

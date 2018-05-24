@@ -1,7 +1,12 @@
 import uuid
+from flask import current_app as app, request
+import urllib.parse
 
 from app.api.helpers.db import get_count
 from app.models import db
+from app.models.base import SoftDeletionModel
+
+SCHEMES = {80: 'http', 443: 'https'}
 
 
 def get_new_slug(name):
@@ -13,23 +18,36 @@ def get_new_slug(name):
         return '{}-{}'.format(slug, uuid.uuid4().hex)
 
 
-class EventTopic(db.Model):
+class EventTopic(SoftDeletionModel):
     """Event topic object table"""
 
     __tablename__ = 'event_topics'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String, nullable=False)
+    name = db.Column(db.String, nullable=True)
+    system_image_url = db.Column(db.String)
     slug = db.Column(db.String, unique=True, nullable=False)
     events = db.relationship('Event', backref='event_topics')
     event_sub_topics = db.relationship('EventSubTopic', backref='event-topic')
 
     def __init__(self,
                  name=None,
-                 slug=None):
+                 system_image_url=None,
+                 slug=None,
+                 deleted_at=None):
 
         self.name = name
+        self.system_image_url = self.set_default_sys_image() \
+            if system_image_url is None else system_image_url
         self.slug = get_new_slug(name=self.name)
+        self.deleted_at = deleted_at
+
+    @classmethod
+    def set_default_sys_image(cls):
+        with app.test_request_context():
+            url = urllib.parse.urlparse(request.url)
+            image_url = url.scheme + '://' + url.netloc + '/static/header.png'
+            return image_url
 
     def __repr__(self):
         return '<EventTopic %r>' % self.name

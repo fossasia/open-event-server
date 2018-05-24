@@ -65,8 +65,90 @@ def export_download(event_id, path):
     return response
 
 
+@export_routes.route('/events/<string:event_identifier>/export/xcal', methods=['GET'])
+@jwt_required()
+def export_event_xcal(event_identifier):
+
+    if not event_identifier.isdigit():
+        event = db.session.query(Event).filter_by(identifier=event_identifier).first()
+        event_id = str(event.id)
+    else:
+        event_id = event_identifier
+
+    from .helpers.tasks import export_xcal_task
+
+    # queue task
+    task = export_xcal_task.delay(event_id)
+    # create Job
+    create_export_job(task.id, event_id)
+
+    return jsonify(
+        task_url=url_for('tasks.celery_task', task_id=task.id)
+    )
+
+
 def event_export_task_base(event_id, settings):
     path = export_event_json(event_id, settings)
     if path.startswith('/'):
         path = path[1:]
     return path
+
+
+@export_routes.route('/events/<string:event_identifier>/export/ical', methods=['GET'])
+@jwt_required()
+def export_event_ical(event_identifier):
+    if not event_identifier.isdigit():
+        event = db.session.query(Event).filter_by(identifier=event_identifier).first()
+        event_id = str(event.id)
+    else:
+        event_id = event_identifier
+
+    from .helpers.tasks import export_ical_task
+
+    task = export_ical_task.delay(event_id)
+
+    create_export_job(task.id, event_id)
+
+    return jsonify(
+        task_url=url_for('tasks.celery_task', task_id=task.id)
+    )
+
+
+@export_routes.route('/events/<string:event_identifier>/export/pentabarf', methods=['GET'])
+@jwt_required()
+def export_event_pentabarf(event_identifier):
+    if not event_identifier.isdigit():
+        event = db.session.query(Event).filter_by(identifier=event_identifier).first()
+        event_id = str(event.id)
+    else:
+        event_id = event_identifier
+
+    from .helpers.tasks import export_pentabarf_task
+
+    task = export_pentabarf_task.delay(event_id)
+
+    create_export_job(task.id, event_id)
+
+    return jsonify(
+        task_url=url_for('tasks.celery_task', task_id=task.id)
+    )
+
+
+@export_routes.route('/events/<string:event_identifier>/export/orders/csv', methods=['GET'])
+@jwt_required()
+def export_orders_csv(event_identifier):
+    if not event_identifier.isdigit():
+        event = db.session.query(Event).filter_by(identifier=event_identifier).first()
+        event_id = str(event.id)
+    else:
+        event_id = event_identifier
+
+    from .helpers.tasks import export_order_csv_task
+
+    task = export_order_csv_task.delay(event_id)
+
+    create_export_job(task.id, event_id)
+
+    return jsonify(
+        task_url=url_for('tasks.celery_task', task_id=task.id)
+    )

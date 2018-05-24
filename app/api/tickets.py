@@ -1,5 +1,7 @@
+from flask import request, current_app
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
+from flask_jwt import current_identity as current_user, _jwt_required
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
@@ -11,8 +13,9 @@ from app.models import db
 from app.models.access_code import AccessCode
 from app.models.order import Order
 from app.models.ticket import Ticket, TicketTag, ticket_tags_table
+from app.models.event import Event
 from app.models.ticket_holder import TicketHolder
-from app.api.helpers.exceptions import ConflictException
+from app.api.helpers.exceptions import ConflictException, MethodNotAllowed
 from app.api.helpers.db import get_count
 
 
@@ -33,8 +36,12 @@ class TicketListPost(ResourceList):
             raise ObjectNotFound({'parameter': 'event_id'},
                                  "Event: {} not found".format(data['event_id']))
 
-        if get_count(db.session.query(Ticket.id).filter_by(name=data['name'], event_id=int(data['event']))) > 0:
+        if get_count(db.session.query(Ticket.id).filter_by(name=data['name'], event_id=int(data['event']),
+                                                           deleted_at=None)) > 0:
             raise ConflictException({'pointer': '/data/attributes/name'}, "Ticket already exists")
+
+        if get_count(db.session.query(Event).filter_by(id=int(data['event']), is_ticketing_enabled=False)) > 0:
+            raise MethodNotAllowed({'parameter': 'event_id'}, "Ticketing is disabled for this Event")
 
     schema = TicketSchema
     methods = ['POST', ]
@@ -62,7 +69,18 @@ class TicketList(ResourceList):
         :param view_kwargs:
         :return:
         """
-        query_ = self.session.query(Ticket).filter_by(is_hidden=False)
+
+        if 'Authorization' in request.headers:
+            _jwt_required(current_app.config['JWT_DEFAULT_REALM'])
+            if current_user.is_super_admin or current_user.is_admin:
+                query_ = self.session.query(Ticket)
+            elif view_kwargs.get('event_id') and has_access('is_organizer', event_id=view_kwargs['event_id']):
+                query_ = self.session.query(Ticket)
+            else:
+                query_ = self.session.query(Ticket).filter_by(is_hidden=False)
+        else:
+            query_ = self.session.query(Ticket).filter_by(is_hidden=False)
+
         if view_kwargs.get('ticket_tag_id'):
             ticket_tag = safe_query(self, TicketTag, 'id', view_kwargs['ticket_tag_id'], 'ticket_tag_id')
             query_ = query_.join(ticket_tags_table).filter_by(ticket_tag_id=ticket_tag.id)

@@ -2,6 +2,7 @@ import requests
 import sqlalchemy
 import stripe
 import urllib.parse
+import json
 from flask import current_app
 from forex_python.converter import CurrencyRates
 from urllib.parse import urlencode
@@ -11,14 +12,10 @@ from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.utilities import represents_int
 from app.models import db
-from app.models.event import Event
 from app.models.order import Order
 from app.models.stripe_authorization import StripeAuthorization
 from app.models.ticket_fee import TicketFees
 from app.settings import get_settings
-
-DEFAULT_FEE = 0.0
-
 
 @cache.memoize(5)
 def forex(from_currency, to_currency, amount):
@@ -29,19 +26,15 @@ def forex(from_currency, to_currency, amount):
         return amount
 
 
-@cache.memoize(5)
-def get_fee(currency):
-    fee = TicketFees.query.filter_by(currency=currency).order_by(sqlalchemy.desc(TicketFees.id)).first()
-    if fee:
-        return fee.service_fee
-    else:
-        return DEFAULT_FEE
-
-
 class StripePaymentsManager(object):
-
     @staticmethod
     def get_credentials(event=None):
+        """
+        If the event parameter is None, It returns the secret and publishable key of the Admin's Stripe account.
+        Else, it returns the corresponding values for the event organizer's account.
+        :param event:
+        :return: Stripe secret and publishable keys.
+        """
         if not event:
             settings = get_settings()
             if settings['stripe_secret_key'] and settings["stripe_publishable_key"] and settings[
@@ -65,6 +58,27 @@ class StripePaymentsManager(object):
                 }
             else:
                 return None
+
+    @staticmethod
+    def get_event_organizer_credentials_from_stripe(stripe_auth_code):
+        """
+        Uses the stripe_auth_code to get the other credentials for the event organizer's stripe account
+        :param stripe_auth_code: stripe authorization code
+        :return: response from stripe
+        """
+        credentials = StripePaymentsManager.get_credentials()
+
+        if not credentials:
+            raise Exception('Stripe credentials of the Event organizer not found')
+
+        data = {
+            'client_secret': credentials['SECRET_KEY'],
+            'code': stripe_auth_code,
+            'grant_type': 'authorization_code'
+        }
+
+        response = requests.post('https://connect.stripe.com/oauth/token', data=data)
+        return json.loads(response.text)
 
     @staticmethod
     def capture_payment(order_invoice, currency=None, credentials=None):

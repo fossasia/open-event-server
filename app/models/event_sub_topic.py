@@ -2,6 +2,7 @@ import uuid
 
 from app.api.helpers.db import get_count
 from app.models import db
+from app.models.base import SoftDeletionModel
 
 
 def get_new_slug(name):
@@ -13,7 +14,7 @@ def get_new_slug(name):
         return '{}-{}'.format(slug, uuid.uuid4().hex)
 
 
-class EventSubTopic(db.Model):
+class EventSubTopic(SoftDeletionModel):
     """Event sub topic object table"""
 
     __tablename__ = 'event_sub_topics'
@@ -28,11 +29,13 @@ class EventSubTopic(db.Model):
     def __init__(self,
                  name=None,
                  slug=None,
-                 event_topic_id=None):
+                 event_topic_id=None,
+                 deleted_at=None):
 
         self.name = name
         self.slug = get_new_slug(name=self.name)
         self.event_topic_id = event_topic_id
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<EventSubTopic %r>' % self.name

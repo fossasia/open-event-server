@@ -201,7 +201,7 @@ Create a new user using an email, password and an optional name.
               {
                 "attributes":
                 {
-                  "email": "example@example.com",
+                  "email": "email@example.com",
                   "password": "password",
                   "avatar_url": "http://example.com/example.png",
                   "first-name": "John",
@@ -2622,6 +2622,7 @@ These endpoints help you to create the basic event structure. To add other parts
 | `identifier`  | - | string | - |
 | `external-event-url`  | - | string | - |
 | `has-organizer-info`  | - | boolean(default: `false`) | - |
+| `average-rating`  | Average rating of event | float | - |
 
 ## Events Collection [/v1/events{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -2832,6 +2833,7 @@ Get a list of events.
                         "privacy": "public",
                         "code-of-conduct": "example",
                         "state": "draft",
+                        "average-rating": null,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "example",
@@ -2902,6 +2904,7 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "is-sessions-speakers-enabled": "true",
                     "privacy": "public",
                     "state": "draft",
+                    "average-rating": null,
                     "ticket-url": "http://example.com",
                     "code-of-conduct": "example",
                     "is-ticketing-enabled": "true",
@@ -3085,6 +3088,12 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -3112,6 +3121,7 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "privacy": "public",
                     "code-of-conduct": "example",
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "example",
@@ -3324,6 +3334,12 @@ Get a single event.
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -3351,6 +3367,7 @@ Get a single event.
                     "privacy": "public",
                     "code-of-conduct": "example",
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "example",
@@ -3425,6 +3442,7 @@ All other fields are optional. Add attributes you want to modify.
                     "is-sessions-speakers-enabled": "false",
                     "privacy": "private",
                     "state": "published",
+                    "average-rating": null,
                     "ticket-url": "http://example1.com",
                     "code-of-conduct": "example1",
                     "is-ticketing-enabled": "false",
@@ -3608,6 +3626,12 @@ All other fields are optional. Add attributes you want to modify.
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -3635,6 +3659,7 @@ All other fields are optional. Add attributes you want to modify.
                     "privacy": "private",
                     "code-of-conduct": "example1",
                     "state": "published",
+                    "average-rating": null,
                     "latitude": 12.23456789,
                     "starts-at": "2016-12-14T18:29:59.123456+00:00",
                     "searchable-location-name": "example1",
@@ -3860,6 +3885,12 @@ Get a list of events.
                                 "self": "/v1/events/1/relationships/discount-codes",
                                 "related": "/v1/events/1/discount-codes"
                             }
+                        },
+                        "stripe-authorization": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/stripe-authorization",
+                                "related": "/v1/events/1/stripe-authorization"
+                            }
                         }
                     },
                     "attributes": {
@@ -3886,6 +3917,7 @@ Get a list of events.
                         "privacy": "public",
                         "has-organizer-info": false,
                         "state": "draft",
+                        "average-rating": null,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "Draft",
@@ -4117,6 +4149,7 @@ Get a list of events.
                         "privacy": "public",
                         "has-organizer-info": false,
                         "state": "draft",
+                        "average-rating": null,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "Draft",
@@ -4341,6 +4374,7 @@ Get a list of events.
                         "privacy": "public",
                         "has-organizer-info": false,
                         "state": "draft",
+                        "average-rating": null,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "Draft",
@@ -4540,6 +4574,12 @@ Get a list of events.
                                 "self": "/v1/events/1/relationships/discount-codes",
                                 "related": "/v1/events/1/discount-codes"
                             }
+                        },
+                        "stripe-authorization": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/stripe-authorization",
+                                "related": "/v1/events/1/stripe-authorization"
+                            }
                         }
                     },
                     "attributes": {
@@ -4566,6 +4606,7 @@ Get a list of events.
                         "privacy": "public",
                         "has-organizer-info": false,
                         "state": "draft",
+                        "average-rating": null,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "Draft",
@@ -4791,6 +4832,7 @@ Get a list of events.
                         "privacy": "public",
                         "has-organizer-info": false,
                         "state": "draft",
+                        "average-rating": null,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "Draft",
@@ -4981,6 +5023,12 @@ Get a list of events.
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -5007,6 +5055,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -5197,6 +5246,12 @@ Get a list of events.
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -5223,6 +5278,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -5413,6 +5469,12 @@ Get a list of events.
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -5439,6 +5501,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -5629,6 +5692,12 @@ Get a list of events.
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -5655,6 +5724,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -5845,6 +5915,12 @@ Get a list of events.
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -5871,6 +5947,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -6061,6 +6138,12 @@ Get a list of events.
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -6087,6 +6170,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -6277,6 +6361,12 @@ Get a list of events.
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -6303,6 +6393,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -6493,6 +6584,12 @@ Get a list of events.
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -6519,6 +6616,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -6709,6 +6807,12 @@ Get a list of events.
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -6735,6 +6839,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -6925,6 +7030,12 @@ Get a list of events.
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -6951,6 +7062,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -7141,6 +7253,12 @@ Get a list of events.
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -7167,6 +7285,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -7357,6 +7476,12 @@ Get a list of events.
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -7383,6 +7508,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -7573,6 +7699,12 @@ Get a list of events.
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -7599,6 +7731,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -7789,6 +7922,12 @@ Get a list of events.
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -7815,6 +7954,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -8005,6 +8145,12 @@ Get a list of events.
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -8031,6 +8177,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -8221,6 +8368,12 @@ Get a list of events.
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -8247,6 +8400,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -8437,6 +8591,12 @@ Get a list of events.
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -8463,6 +8623,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -8653,6 +8814,12 @@ Get a list of events.
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -8679,6 +8846,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -8869,6 +9037,12 @@ Get a list of events.
                             "self": "/v1/events/1/relationships/discount-codes",
                             "related": "/v1/events/1/discount-codes"
                         }
+                    },
+                    "stripe-authorization": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/stripe-authorization",
+                            "related": "/v1/events/1/stripe-authorization"
+                        }
                     }
                 },
                 "attributes": {
@@ -8895,6 +9069,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -9112,6 +9287,262 @@ Get a list of events.
                   "self": "/v1/events/1/relationships/event-invoices",
                   "related": "/v1/events/1/event-invoices"
                 }
+              },
+              "stripe-authorization": {
+                "links": {
+                  "self": "/v1/events/1/relationships/stripe-authorization",
+                  "related": "/v1/events/1/stripe-authorization"
+                }
+              }
+            },
+            "attributes": {
+              "payment-country": null,
+              "paypal-email": null,
+              "code-of-conduct": "",
+              "schedule-published-on": null,
+              "payment-currency": null,
+              "organizer-description": "",
+              "is-map-shown": false,
+              "original-image-url": "https://cdn.pixabay.com/photo/2013/11/23/16/25/birds-216412_1280.jpg",
+              "onsite-details": null,
+              "organizer-name": null,
+              "longitude": null,
+              "large-image-url": null,
+              "timezone": "Asia/Kolkata",
+              "can-pay-onsite": false,
+              "deleted-at": null,
+              "ticket-url": null,
+              "can-pay-by-paypal": false,
+              "location-name": null,
+              "is-sponsors-enabled": false,
+              "is-sessions-speakers-enabled": false,
+              "privacy": "public",
+              "has-organizer-info": false,
+              "state": "draft",
+              "average-rating": null,
+              "latitude": null,
+              "starts-at": "2002-05-30T04:00:10+00:00",
+              "searchable-location-name": null,
+              "is-ticketing-enabled": true,
+              "can-pay-by-cheque": false,
+              "description": "",
+              "pentabarf-url": null,
+              "xcal-url": null,
+              "logo-url": null,
+              "can-pay-by-bank": false,
+              "is-tax-enabled": false,
+              "icon-image-url": null,
+              "ical-url": null,
+              "name": "New Event",
+              "bank-details": null,
+              "thumbnail-image-url": null,
+              "created-at": "2017-08-13T21:41:20.468748+00:00",
+              "can-pay-by-stripe": false,
+              "cheque-details": null,
+              "external-event-url": null,
+              "identifier": "4f27fefe",
+              "ends-at": "2022-05-30T04:00:10+00:00"
+            },
+            "type": "event",
+            "id": "1",
+            "links": {
+              "self": "/v1/events/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/events/1"
+          }
+        }
+
+## Get Event for a Stripe Authorization [/v1/stripe-authorizations/{stripe_authorization_id}/event]
++ Parameters
+    + stripe_authorization_id : 1 (integer) - ID of the stripe authorization in the form of an integer
+
+### Event Details for a Stripe Authorization [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "organizers": {
+                "links": {
+                  "self": "/v1/events/1/relationships/organizers",
+                  "related": "/v1/users"
+                }
+              },
+              "ticket-tags": {
+                "links": {
+                  "self": "/v1/events/1/relationships/ticket-tags",
+                  "related": "/v1/events/1/ticket-tags"
+                }
+              },
+              "speakers-call": {
+                "links": {
+                  "self": "/v1/events/1/relationships/speakers-call",
+                  "related": "/v1/events/1/speakers-call"
+                }
+              },
+              "tax": {
+                "links": {
+                  "self": "/v1/events/1/relationships/tax",
+                  "related": "/v1/events/1/tax"
+                }
+              },
+              "coorganizers": {
+                "links": {
+                  "self": "/v1/events/1/relationships/coorganizers",
+                  "related": "/v1/users"
+                }
+              },
+              "session-types": {
+                "links": {
+                  "self": "/v1/events/1/relationships/session-types",
+                  "related": "/v1/events/1/session-types"
+                }
+              },
+              "microlocations": {
+                "links": {
+                  "self": "/v1/events/1/relationships/microlocations",
+                  "related": "/v1/events/1/microlocations"
+                }
+              },
+              "orders": {
+                "links": {
+                  "self": "/v1/events/1/relationships/orders",
+                  "related": "/v1/events/1/orders"
+                }
+              },
+              "speakers": {
+                "links": {
+                  "self": "/v1/events/1/relationships/speakers",
+                  "related": "/v1/events/1/speakers"
+                }
+              },
+              "event-copyright": {
+                "links": {
+                  "self": "/v1/events/1/relationships/event-copyright",
+                  "related": "/v1/events/1/event-copyright"
+                }
+              },
+              "attendees": {
+                "links": {
+                  "self": "/v1/events/1/relationships/attendees",
+                  "related": "/v1/events/1/attendees"
+                }
+              },
+              "custom-forms": {
+                "links": {
+                  "self": "/v1/events/1/relationships/custom-forms",
+                  "related": "/v1/events/1/custom-forms"
+                }
+              },
+              "track-organizers": {
+                "links": {
+                  "self": "/v1/events/1/relationships/track-organizers",
+                  "related": "/v1/users"
+                }
+              },
+              "event-type": {
+                "links": {
+                  "self": "/v1/events/1/relationships/event-type",
+                  "related": "/v1/events/1/event-type"
+                }
+              },
+              "discount-codes": {
+                "links": {
+                  "self": "/v1/events/1/relationships/discount-codes",
+                  "related": "/v1/events/1/discount-codes"
+                }
+              },
+              "event-sub-topic": {
+                "links": {
+                  "self": "/v1/events/1/relationships/event-sub-topic",
+                  "related": "/v1/events/1/event-sub-topic"
+                }
+              },
+              "sessions": {
+                "links": {
+                  "self": "/v1/events/1/relationships/sessions",
+                  "related": "/v1/events/1/sessions"
+                }
+              },
+              "event-topic": {
+                "links": {
+                  "self": "/v1/events/1/relationships/event-topic",
+                  "related": "/v1/events/1/event-topic"
+                }
+              },
+              "registrars": {
+                "links": {
+                  "self": "/v1/events/1/relationships/registrars",
+                  "related": "/v1/users"
+                }
+              },
+              "sponsors": {
+                "links": {
+                  "self": "/v1/events/1/relationships/sponsors",
+                  "related": "/v1/events/1/sponsors"
+                }
+              },
+              "tracks": {
+                "links": {
+                  "self": "/v1/events/1/relationships/tracks",
+                  "related": "/v1/events/1/tracks"
+                }
+              },
+              "access-codes": {
+                "links": {
+                  "self": "/v1/events/1/relationships/access-codes",
+                  "related": "/v1/events/1/access-codes"
+                }
+              },
+              "role-invites": {
+                "links": {
+                  "self": "/v1/events/1/relationships/role-invites",
+                  "related": "/v1/events/1/role-invites"
+                }
+              },
+              "tickets": {
+                "links": {
+                  "self": "/v1/events/1/relationships/tickets",
+                  "related": "/v1/events/1/tickets"
+                }
+              },
+              "social-links": {
+                "links": {
+                  "self": "/v1/events/1/relationships/social-links",
+                  "related": "/v1/events/1/social-links"
+                }
+              },
+              "moderators": {
+                "links": {
+                  "self": "/v1/events/1/relationships/moderators",
+                  "related": "/v1/users"
+                }
+              },
+              "event-invoices": {
+                "links": {
+                  "self": "/v1/events/1/relationships/event-invoices",
+                  "related": "/v1/events/1/event-invoices"
+                }
+              },
+              "stripe-authorization": {
+                "links": {
+                  "self": "/v1/events/1/relationships/stripe-authorization",
+                  "related": "/v1/events/1/stripe-authorization"
+                }
               }
             },
             "attributes": {
@@ -9138,6 +9569,7 @@ Get a list of events.
               "privacy": "public",
               "has-organizer-info": false,
               "state": "Draft",
+              "average-rating": null,
               "latitude": null,
               "starts-at": "2002-05-30T04:00:10+00:00",
               "searchable-location-name": null,
@@ -9155,7 +9587,7 @@ Get a list of events.
               "bank-details": null,
               "thumbnail-image-url": null,
               "created-at": "2017-08-13T21:41:20.468748+00:00",
-              "can-pay-by-stripe": false,
+              "can-pay-by-stripe": true,
               "cheque-details": null,
               "external-event-url": null,
               "identifier": "4f27fefe",
@@ -9247,6 +9679,7 @@ Create a new Event Copyright.
               "licence": "Licence text",
               "licence-url": "http://licence-url.com",
               "year": 2007,
+              "deleted-at": null,
               "logo-url": "http://logo-url.com"
             },
             "type": "event-copyright",
@@ -9295,6 +9728,7 @@ Create a new Event Copyright.
               "licence": "Licence text",
               "licence-url": "http://licence-url.com",
               "year": 2007,
+              "deleted-at": null,
               "logo-url": "http://logo-url.com"
             },
             "type": "event-copyright",
@@ -9358,6 +9792,7 @@ Update a single event copyright by `id`.
               "licence": "Licence text",
               "licence-url": "http://licence-url.com",
               "year": 2007,
+              "deleted-at": null,
               "logo-url": "http://logo-url.com"
             },
             "type": "event-copyright",
@@ -9433,6 +9868,7 @@ Delete a single event copyright.
                     "holder-url": "http://holder-url.com",
                     "licence": "Licence text",
                     "year": 2007,
+                    "deleted-at": null,
                     "licence-url": "http://licence-url.com",
                     "holder": "Name of Holder"
                 },
@@ -9996,6 +10432,7 @@ Create a new microlocation using an event_id.
               "latitude": "45.00",
               "longitude": "45.00",
               "floor": "2",
+              "deleted-at": null,
               "room": "room1"
             },
             "type": "microlocation",
@@ -10052,6 +10489,7 @@ Get a single microlocation.
               "latitude": "45.00",
               "longitude": "45.00",
               "floor": "2",
+              "deleted-at": null,
               "room": "room1"
             },
             "type": "microlocation",
@@ -10119,6 +10557,7 @@ Update a single microlocation by `id`.
               "latitude": "46.00",
               "longitude": "46.00",
               "floor": "21",
+              "deleted-at": null,
               "room": "room11"
             },
             "type": "microlocation",
@@ -10205,6 +10644,7 @@ Get a single microlocation.
                         "room": "room1",
                         "name": "microlocation-name",
                         "longitude": 45,
+                        "deleted-at": null,
                         "floor": 2
                     },
                     "type": "microlocation",
@@ -10262,6 +10702,7 @@ Get a single microlocation.
                     "room": "room1",
                     "name": "microlocation-name",
                     "longitude": 45,
+                    "deleted-at": null,
                     "floor": 2
                 },
                 "type": "microlocation",
@@ -10303,6 +10744,7 @@ Data related to all the sessions in the event.
 | `submitted-at` | Date the session was submitted | ISO 8601 (tz-aware) | - |
 | `is-mail-sent` | Yes/No for Session accept/reject email | boolean (default: `false`) | - |
 | `last-modified-at` | Date the session was modified | ISO 8601 (tz-aware) | - |
+| `send-email` | Yes/No for sending Session accept/reject email | boolean | - |
 
 
 ## Sessions Collection [/v1/sessions{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
@@ -10313,7 +10755,7 @@ Data related to all the sessions in the event.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### Create Sessions [POST]
-Create a new session using an event_id **(Minimum Co-Organizer Access)**
+Create a new session using an event_id and track_id **(Minimum Co-Organizer Access)**
 
 + Request (application/vnd.api+json)
 
@@ -10330,6 +10772,12 @@ Create a new session using an event_id **(Minimum Co-Organizer Access)**
                     "data":{
                       "type":"event",
                       "id":"1"
+                    }
+                  },
+                  "track": {
+                    "data":{
+                        "type": "track",
+                        "id": "1"
                     }
                   }
                 },
@@ -11188,7 +11636,8 @@ Create a new session type using an event_id.
             },
             "attributes": {
               "name": "Workshop",
-              "length": "00:30"
+              "length": "00:30",
+              "deleted-at": null
             },
             "type": "session-type",
             "id": "1",
@@ -11240,6 +11689,7 @@ Get a single session type.
             },
             "attributes": {
               "name": "Workshop",
+              "deleted-at": null,
               "length": "00:30"
             },
             "type": "session-type",
@@ -11301,6 +11751,7 @@ Update a single session type by `id`.
             },
             "attributes": {
               "name": "Workshop 2",
+              "deleted-at": null,
               "length": "01:30"
             },
             "type": "session-type",
@@ -11385,6 +11836,7 @@ Delete a single session type.
                     },
                     "attributes": {
                         "length": "00:30",
+                        "deleted-at": null,
                         "name": "Workshop"
                     },
                     "type": "session-type",
@@ -11440,6 +11892,7 @@ Get a single session type.
                 },
                 "attributes": {
                     "length": "00:30",
+                    "deleted-at": null,
                     "name": "Workshop"
                 },
                 "type": "session-type",
@@ -11584,6 +12037,7 @@ Create a Speaker profile
                     "gender": "Male",
                     "position": null,
                     "organisation": null,
+                    "deleted-at": null,
                     "sponsorship-required": "",
                     "heard-from": null
                 },
@@ -11658,6 +12112,7 @@ Get a single Speaker profile
                     "facebook": null,
                     "gender": "Male",
                     "position": null,
+                    "deleted-at": null,
                     "organisation": null,
                     "sponsorship-required": "",
                     "heard-from": null
@@ -11743,6 +12198,7 @@ Update a single speaker by `id`.
                     "github": null,
                     "facebook": null,
                     "gender": "Male",
+                    "deleted-at": null,
                     "position": null,
                     "organisation": null,
                     "sponsorship-required": "",
@@ -11849,6 +12305,7 @@ Delete a single speaker by id.
                         "facebook": null,
                         "gender": "Male",
                         "position": null,
+                        "deleted-at": null,
                         "organisation": null,
                         "sponsorship-required": "",
                         "heard-from": null
@@ -11934,6 +12391,7 @@ Delete a single speaker by id.
                         "facebook": null,
                         "gender": "Male",
                         "position": null,
+                        "deleted-at": null,
                         "organisation": null,
                         "sponsorship-required": "",
                         "heard-from": null
@@ -12017,6 +12475,7 @@ Delete a single speaker by id.
                         "facebook": null,
                         "gender": "Male",
                         "position": null,
+                        "deleted-at": null,
                         "organisation": null,
                         "sponsorship-required": "",
                         "heard-from": null
@@ -12096,6 +12555,7 @@ Create a new social link using event_id.
             },
             "attributes": {
               "link": "http://facebook.com/facebook",
+              "deleted-at": null,
               "name": "Facebook Url"
             },
             "type": "social-link",
@@ -12150,6 +12610,7 @@ Get a list of Social Links.
               },
               "attributes": {
                 "link": "http://facebook.com/facebook",
+                "deleted-at": null,
                 "name": "Facebook Url"
               },
               "type": "social-link",
@@ -12195,6 +12656,7 @@ Get a list of Social Links.
             },
             "attributes": {
               "link": "http://facebook.com/facebook",
+              "deleted-at": null,
               "name": "Facebook Url"
             },
             "type": "social-link",
@@ -12250,6 +12712,7 @@ Update a single social link by `id`.
             },
             "attributes": {
               "link": "http://facebook.com/facebook",
+              "deleted-at": null,
               "name": "Facebook Page Url"
             },
             "type": "social-link",
@@ -12356,6 +12819,7 @@ Create a new speakers call using an event_id.
               "announcement": "Speaker Call Announcement",
               "starts-at": "2017-06-01T01:24:47.500127+00:00",
               "ends-at": "2017-06-20T01:24:47.500127+00:00",
+              "deleted-at": null,
               "hash": "hash",
               "privacy": "public"
             },
@@ -12406,6 +12870,7 @@ Get a single speakers call.
               "starts-at": "2017-06-01T01:24:47.500127+00:00",
               "ends-at": "2017-06-20T01:24:47.500127+00:00",
               "hash": "hash",
+              "deleted-at": null,
               "privacy": "public"
             },
             "type": "speakers-call",
@@ -12467,6 +12932,7 @@ Update a single speakers call by `id`.
                         "ends-at": "2017-06-20T01:24:47.500127+00:00",
                         "hash": "hash",
                         "starts-at": "2017-06-01T01:24:47.500127+00:00",
+                        "deleted-at": null,
                         "privacy": "public"
                     },
                     "type": "speakers-call",
@@ -12538,6 +13004,7 @@ Delete a single speakers call.
                     "ends-at": "2017-06-20T01:24:47.500127+00:00",
                     "hash": "hash",
                     "starts-at": "2017-06-01T01:24:47.500127+00:00",
+                    "deleted-at": null,
                     "privacy": "public"
                 },
                 "type": "speakers-call",
@@ -12619,6 +13086,7 @@ Create a new sponsor using an event_id.
               "level": "1",
               "url": "http://example.com",
               "logo-url": "http://example.com/example.png",
+              "deleted-at": null,
               "type": "Gold",
               "name": "Fossasia"
             },
@@ -12676,6 +13144,7 @@ Get a list of Sponsors.
                 "level": "1",
                 "url": "http://example.com",
                 "type": "Gold",
+                "deleted-at": null,
                 "logo-url": "http://example.com/example.png",
                 "name": "Fossasia"
               },
@@ -12727,6 +13196,7 @@ Get a single sponsor.
               "level": "1",
               "url": "http://example.com",
               "logo-url": "http://example.com/example.png",
+              "deleted-at": null,
               "type": "Gold",
               "name": "Fossasia"
             },
@@ -12790,6 +13260,7 @@ Update a single sponsor by `id`.
               "level": "2",
               "url": "http://example.com",
               "logo-url": "http://example.com/example1.png",
+              "deleted-at": null,
               "type": "Silver",
               "name": "New Open Event Sponsor"
             },
@@ -12836,7 +13307,7 @@ Related to any tax related information that might be related with the tickets fo
 |:----------|-------------|------|----------|--------|
 | `country`  | Country of Tax | string | - | - |
 | `name` | Name of the Tax | string | **yes** | **yes** |
-| `rate` | Tax charges rate | string | **yes** | **yes** |
+| `rate` | Tax charges rate | float(0-100) | **yes** | **yes** |
 | `tax-id` | A string based ID | string | **yes** | - |
 | `registered-company` | Registered Company Name | string | - | - |
 | `address` | Address of the comapany | string | - | - |
@@ -12844,8 +13315,9 @@ Related to any tax related information that might be related with the tickets fo
 | `state` | State of the company | string | - | - |
 | `zip` | Zip Code of the company | integer | - | - |
 | `invoice-footer` | A text to add on the footer | string | - |
-| `is-invoice-sent` | Yes/No for Session accept/reject email | boolean (default: `false`) | - | - |
-| `is-tax-included` | Yes/No for Session accept/reject email | boolean (default: `false`) | - | **yes** |
+| `is-invoice-sent` | Yes/No whether invoice already sent or not | boolean (default: `false`) | - | - |
+| `is-tax-included-in-price` | Yes/No for whether tax included | boolean (default: `false`) | - | **yes** |
+| `should-send-invoice` | Yes/No for whether to send invoice or not | boolean (default: `false`) | - | - |
 
 ## Tax Collection [/v1/taxes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -12859,7 +13331,7 @@ Related to any tax related information that might be related with the tickets fo
 ### List all Taxes [GET]
 Get a list of Taxes
 
-+ Request (application/vnd.api+json)
++ Request
 
     + Headers
 
@@ -12895,8 +13367,10 @@ Get a list of Taxes
                 "invoice-footer": "example",
                 "rate": 1.23456789,
                 "is-tax-included-in-price": false,
+                "deleted-at": null,
                 "registered-company": "fossasia",
-                "tax-id": "1"
+                "tax-id": "1",
+                "is-invoice-sent": false
               },
               "type": "tax",
               "id": "1",
@@ -12947,7 +13421,8 @@ Create a new tax using an event_id.
                     "registered-company": "fossasia",
                     "address": "example",
                     "rate": "1.23456789",
-                    "should-send-invoice": false
+                    "should-send-invoice": false,
+                    "is-invoice-sent": false
                   },
                 "type": "tax"
               }
@@ -12977,7 +13452,9 @@ Create a new tax using an event_id.
                "registered-company": "fossasia",
                "address": "example",
                "rate": "1.23456789",
-               "should-send-invoice": false
+               "deleted-at": null,
+               "should-send-invoice": false,
+               "is-invoice-sent": false
             },
             "type": "tax",
             "id": "1",
@@ -13033,7 +13510,9 @@ Get a single tax.
               "registered-company": "fossasia",
               "address": "example",
               "rate": "1.23456789",
-              "should-send-invoice": false
+              "deleted-at": null,
+              "should-send-invoice": false,
+              "is-invoice-sent": false
             },
             "type": "tax",
             "id": "1",
@@ -13077,7 +13556,8 @@ Update a single tax by `id`.
                   "registered-company": "open event",
                   "address": "example1",
                   "rate": "2.3456789",
-                  "should-send-invoice": false
+                  "should-send-invoice": false,
+                  "is-invoice-sent": false
                 },
                 "type": "tax",
                 "id": "1"
@@ -13105,10 +13585,12 @@ Update a single tax by `id`.
               "state": "example1",
               "tax-id": "123456799",
               "name": "GST",
+              "deleted-at": null,
               "registered-company": "open event",
               "address": "example1",
               "rate": "2.3456789",
-              "should-send-invoice": false
+              "should-send-invoice": false,
+              "is-invoice-sent": false
             },
             "type": "tax",
             "id": "1",
@@ -13147,7 +13629,7 @@ Delete a single tax.
         }
 
 
-## Get Taxes under an Event [/v1/events/{event_identifier}/tax{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Get Tax details under an Event [/v1/events/{event_identifier}/tax{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -13155,8 +13637,8 @@ Delete a single tax.
     + sort (optional, string, `rate`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### Get Taxes under an Event [GET]
-Get list of taxes for an event.
+### Get Tax details under an Event [GET]
+Get tax details for an event.
 
 + Request
 
@@ -13169,45 +13651,42 @@ Get list of taxes for an event.
 + Response 200 (application/vnd.api+json)
 
         {
-            "meta": {
-                "count": 1
-            },
-            "data": [
-                {
-                    "relationships": {
-                        "event": {
-                            "links": {
-                                "self": "/v1/taxes/1/relationships/event",
-                                "related": "/v1/tax/1/event"
-                            }
+            "data": {
+                "type": "tax",
+                "attributes": {
+                    "rate": 1.23456789,
+                    "tax-id": "123456789",
+                    "is-invoice-sent": false,
+                    "zip": 123456,
+                    "city": "example",
+                    "name": "Service Tax",
+                    "should-send-invoice": false,
+                    "invoice-footer": "example",
+                    "address": "example",
+                    "registered-company": "fossasia",
+                    "is-tax-included-in-price": false,
+                    "deleted-at": null,
+                    "country": "IN",
+                    "state": "example"
+                },
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/taxes/1/relationships/event",
+                            "related": "/v1/tax/1/event"
                         }
-                    },
-                    "attributes": {
-                        "city": null,
-                        "name": "asd",
-                        "zip": null,
-                        "should-send-invoice": null,
-                        "country": null,
-                        "address": null,
-                        "state": null,
-                        "invoice-footer": null,
-                        "rate": 2,
-                        "is-tax-included-in-price": null,
-                        "registered-company": null,
-                        "tax-id": "32"
-                    },
-                    "type": "tax",
-                    "id": "1",
-                    "links": {
-                        "self": "/v1/taxes/1"
                     }
+                },
+                "id": "1",
+                "links": {
+                    "self": "/v1/taxes/1"
                 }
-            ],
-            "jsonapi": {
-                "version": "1.0"
             },
             "links": {
-                "self": "/v1/events/1/tax"
+                "self": "/v1/taxes/1"
+            },
+            "jsonapi": {
+                "version": "1.0"
             }
         }
 
@@ -13228,6 +13707,8 @@ Related to tickets (free, paid, donation) to the event.
 | `sales-starts-at` | Start date of ticket sale | ISO 8601 (tz-aware) | **yes** |
 | `sales-ends-at` | End date of ticket sale | ISO 8601 (tz-aware) | **yes** |
 | `is-description-visible` | Yes/No to enter description | boolean (default: `false`) | - |
+| `is-checkin-restricted` | Yes/No to checkin restriction | boolean (deault: `true`) | - |
+| `auto-checkin-enabled` | Yes/No to enable auto checkin | boolean (default: `false`) | - |
 | `is-hidden` | Yes/No to hide ticket | boolean (default: `false`) | - |
 | `is-fee-absorbed` | Yes/No for ticket absorption | boolean (default: `false`) | - |
 
@@ -13266,6 +13747,8 @@ Create a new ticket using an event_id.
                         "price": "100.00",
                         "quantity": "100",
                         "is-description-visible": "false",
+                        "is-checkin-restricted": "true",
+                        "auto-checkin-enabled": "false",
                         "position": "1",
                         "is-fee-absorbed": "false",
                         "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -13310,10 +13793,13 @@ Create a new ticket using an event_id.
                     "name": "ticket-name",
                     "max-order": 100,
                     "is-description-visible": false,
+                    "is-checkin-restricted": "true",
+                    "auto-checkin-enabled": "false",
                     "is-fee-absorbed": false,
                     "position": 1,
                     "quantity": 100,
                     "is-hidden": false,
+                    "deleted-at": null,
                     "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
                     "min-order": 1,
                     "sales-starts-at": "2017-06-01T01:24:47.500127+00:00"
@@ -13379,10 +13865,13 @@ Get a single ticket.
                     "name": "ticket-name",
                     "max-order": 100,
                     "is-description-visible": false,
+                    "is-checkin-restricted": "true",
+                    "auto-checkin-enabled": "false",
                     "is-fee-absorbed": false,
                     "position": 1,
                     "quantity": 100,
                     "is-hidden": false,
+                    "deleted-at": null,
                     "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
                     "min-order": 1,
                     "sales-starts-at": "2017-06-01T01:24:47.500127+00:00"
@@ -13424,6 +13913,8 @@ Update a single ticket by `id`.
                   "price": "100.00",
                   "quantity": "100",
                   "is-description-visible": "false",
+                  "is-checkin-restricted": "true",
+                  "auto-checkin-enabled": "false",
                   "position": "1",
                   "is-fee-absorbed": "false",
                   "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -13468,10 +13959,13 @@ Update a single ticket by `id`.
                     "name": "ticket-name",
                     "max-order": 100,
                     "is-description-visible": false,
+                    "is-checkin-restricted": "true",
+                    "auto-checkin-enabled": "false",
                     "is-fee-absorbed": false,
                     "position": 1,
                     "quantity": 100,
                     "is-hidden": false,
+                    "deleted-at": null,
                     "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
                     "min-order": 5,
                     "sales-starts-at": "2017-06-01T01:24:47.500127+00:00"
@@ -13568,10 +14062,13 @@ Delete a single ticket.
                         "name": "ticket-name",
                         "max-order": 100,
                         "is-description-visible": false,
+                        "is-checkin-restricted": "true",
+                        "auto-checkin-enabled": "false",
                         "is-fee-absorbed": false,
                         "position": 1,
                         "quantity": 100,
                         "is-hidden": false,
+                        "deleted-at": null,
                         "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
                         "min-order": 1,
                         "sales-starts-at": "2017-06-01T01:24:47.500127+00:00"
@@ -13647,10 +14144,13 @@ Delete a single ticket.
                         "name": "ticket-name",
                         "max-order": 100,
                         "is-description-visible": false,
+                        "is-checkin-restricted": "true",
+                        "auto-checkin-enabled": "false",
                         "is-fee-absorbed": false,
                         "position": 1,
                         "quantity": 100,
                         "is-hidden": false,
+                        "deleted-at": null,
                         "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
                         "min-order": 1,
                         "sales-starts-at": "2017-06-01T01:24:47.500127+00:00"
@@ -13726,10 +14226,13 @@ Delete a single ticket.
                         "name": "ticket-name",
                         "max-order": 100,
                         "is-description-visible": false,
+                        "is-checkin-restricted": "true",
+                        "auto-checkin-enabled": "false",
                         "is-fee-absorbed": false,
                         "position": 1,
                         "quantity": 100,
                         "is-hidden": false,
+                        "deleted-at": null,
                         "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
                         "min-order": 1,
                         "sales-starts-at": "2017-06-01T01:24:47.500127+00:00"
@@ -13792,10 +14295,13 @@ Delete a single ticket.
                 "name": "ticket-name0",
                 "max-order": 100,
                 "is-description-visible": true,
+                "is-checkin-restricted": "true",
+                "auto-checkin-enabled": "false",
                 "is-fee-absorbed": true,
                 "position": 1,
                 "quantity": 100,
                 "is-hidden": false,
+                "deleted-at": null,
                 "sales-ends-at": "2018-06-30T00:24:47.500127+00:00",
                 "min-order": 1,
                 "sales-starts-at": "2017-06-01T01:24:47.500127+00:00"
@@ -14166,11 +14672,11 @@ Related to ticket holders(attendees) of an event (free, paid, donation) to the e
 | `country` | Country of the Attendee | string | - |
 | `is-checked-in` | If the attendee is checked in | boolean | - |
 | `checkin-times` | Comma separated checkin times | string | - |
+| `attendee-notes` | Comma separated attendee notes | string | - |
 | `pdf-url` | pdf url of the Attendee | url | - |
 
-## Attendees Collection [/v1/attendees/{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Attendees Collection [/v1/attendees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
-    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
     + sort (optional, string, `city`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
@@ -14199,6 +14705,7 @@ Create a new attendee.
                     "state": "example",
                     "country": "IN",
                     "is-checked-in": "false",
+                    "attendee-notes": "example",
                     "pdf-url": "http://example.com"
                 },
                 "type": "attendee",
@@ -14249,10 +14756,12 @@ Create a new attendee.
               "firstname": "Open Event User",
               "lastname": null,
               "is-checked-in": false,
+              "attendee-notes": "example",
               "state": null,
               "address": null,
               "pdf-url": "http://example.com",
               "country": null,
+              "deleted-at": null,
               "email": null
             },
             "type": "attendee",
@@ -14342,6 +14851,8 @@ Get a list of attendees of an order.
                 "gender": null,
                 "ticket-id": "1",
                 "country": null,
+                "deleted-at": null,
+                "attendee-notes": null,
                 "pdf-url": "http://ipiyush.com",
                 "work-address": null,
                 "work-phone": null
@@ -14395,15 +14906,35 @@ Get a single attendee.
                     }
                 },
                 "attributes": {
-                    "city": "example",
-                    "firstname": "John",
-                    "lastname": "Doe",
+                    "checkin-times": null,
+                    "attendee-notes": null,
+                    "github": null,
+                    "email": "johndoe@example.com",
+                    "home-address": null,
+                    "billing-address": null,
                     "is-checked-in": false,
+                    "gender": null,
+                    "pdf-url": null,
+                    "lastname": "Doe",
+                    "shipping-address": null,
+                    "job-title": null,
+                    "website": null,
+                    "facebook": null,
+                    "twitter": null,
+                    "tax-business-info": null,
                     "state": "example",
-                    "address": "address",
-                    "pdf-url": "http://example.com",
+                    "work-phone": null,
+                    "city": "example",
+                    "birth-date": null,
                     "country": "IN",
-                    "email": "johndoe@example.com"
+                    "address": "address",
+                    "blog": null,
+                    "deleted-at": null,
+                    "work-address": null,
+                    "phone": null,
+                    "ticket-id": "1",
+                    "firstname": "John",
+                    "company": null
                 },
                 "type": "attendee",
                 "id": "1",
@@ -14445,6 +14976,7 @@ Update a single attendee by `id`.
                     "country": "IN",
                     "is-checked-in": "true",
                     "checkin-times": "2017-12-13T22:59:59.123456+00:00",
+                    "attendee-notes": "example",
                     "pdf-url": "http://example.com"
                 },
                 "type": "attendee",
@@ -14469,10 +15001,12 @@ Update a single attendee by `id`.
                     "firstname": "John",
                     "lastname": "Doe",
                     "is-checked-in": true,
+                    "attendee-notes": "example",
                     "state": "example",
                     "address": "address",
                     "pdf-url": "http://example.com",
                     "country": "IN",
+                    "deleted-at": null,
                     "email": "johndoe@example.com"
                 },
                 "type": "attendee",
@@ -14793,6 +15327,7 @@ Create a new track using an event_id.
                   "name" : "Main Track",
                   "description": "description",
                   "color": "#a04b4b",
+                  "deleted-at": null,
                   "font-color":"#ffffff"
                 },
                 "type": "track",
@@ -14847,6 +15382,7 @@ Get a single track.
                   "name" : "Main Track",
                   "description": "description",
                   "color": "#a04b4b",
+                  "deleted-at": null,
                   "font-color":"#ffffff"
                 },
                 "type": "track",
@@ -14912,6 +15448,7 @@ Update a single track by `id`.
                     "color": "#a04b4b",
                     "description": "description",
                     "name": "Main Track",
+                    "deleted-at": null,
                     "font-color": "#ffffff"
                 },
                 "type": "track",
@@ -14997,6 +15534,7 @@ Get a single track.
                         "color": "#a04b4b",
                         "description": "description",
                         "name": "Main Track",
+                        "deleted-at": null,
                         "font-color": "#ffffff"
                     },
                     "type": "track",
@@ -15053,6 +15591,7 @@ Get a single track.
                     "color": "#a04b4b",
                     "description": "description",
                     "name": "Main Track",
+                    "deleted-at": null,
                     "font-color": "#ffffff"
                 },
                 "type": "track",
@@ -15121,6 +15660,7 @@ Get a list of Notifications.
                         "received-at": "2017-06-23T04:40:37.239724+00:00",
                         "is-read": false,
                         "title": "example",
+                        "deleted-at": null,
                         "action": "example"
                     },
                     "type": "notification",
@@ -15178,6 +15718,7 @@ Get a list of Notifications.
                         "received-at": "2017-06-23T04:40:37.239724+00:00",
                         "is-read": false,
                         "title": "example",
+                        "deleted-at": null,
                         "action": "example"
                     },
                     "type": "notification",
@@ -15227,6 +15768,7 @@ Get a single notification.
                     "message": "example",
                     "received-at": "2017-06-23T04:40:37.239724+00:00",
                     "is-read": false,
+                    "deleted-at": null,
                     "title": "example"
                 },
                 "type": "notification",
@@ -15286,6 +15828,7 @@ Update a single notification with `id`.
                     "message": "example1",
                     "received-at": "2017-06-23T04:40:37.239724+00:00",
                     "is-read": true,
+                    "deleted-at": null,
                     "title": "example1"
                 },
                 "type": "notification",
@@ -15383,6 +15926,7 @@ Get a list of Notifications.
                         "new-paper": false,
                         "session-accept-reject": false,
                         "session-schedule": true,
+                        "deleted-at": null,
                         "after-ticket-purchase": true,
                         "event-id": 1
                     },
@@ -15448,6 +15992,7 @@ Get a list of Notifications.
                         "new-paper": false,
                         "session-accept-reject": false,
                         "session-schedule": true,
+                        "deleted-at": null,
                         "after-ticket-purchase": true,
                         "event-id": 1
                     },
@@ -15505,6 +16050,7 @@ Get a single email notification.
                     "new-paper": false,
                     "session-accept-reject": false,
                     "session-schedule": true,
+                    "deleted-at": null,
                     "after-ticket-purchase": true,
                     "event-id": 1
                 },
@@ -15582,6 +16128,7 @@ Update a single email notification with `id`.
                     "new-paper": false,
                     "session-accept-reject": false,
                     "session-schedule": true,
+                    "deleted-at": null,
                     "after-ticket-purchase": true,
                     "event-id": 1
                 },
@@ -15692,6 +16239,7 @@ Get a list of Discount Codes.
                         "max-quantity": 100,
                         "is-active": false,
                         "used-for": "event",
+                        "deleted-at": null,
                         "valid-till": "2017-06-24T18:30:00+00:00",
                         "type": "amount",
                         "discount-url": "https://my-discount-url.com"
@@ -15728,6 +16276,7 @@ Get a list of Discount Codes.
                         "max-quantity": 100,
                         "is-active": false,
                         "used-for": "ticket",
+                        "deleted-at": null,
                         "valid-till": "2017-06-24T18:30:00+00:00",
                         "type": "amount",
                         "discount-url": "https://my-discount-url.com"
@@ -15810,6 +16359,7 @@ Create a new Discount Code for event. (Only Admin)
                     "max-quantity": 100,
                     "is-active": false,
                     "used-for": "event",
+                    "deleted-at": null,
                     "valid-till": "2017-06-24T18:30:00+00:00",
                     "type": "amount",
                     "discount-url": "https://my-discount-url.com"
@@ -15875,6 +16425,7 @@ Get a list of Discount Codes.
                       "max-quantity": 100,
                       "is-active": false,
                       "used-for": "ticket",
+                      "deleted-at": null,
                       "valid-till": "2017-06-24T18:30:00+00:00",
                       "type": "amount",
                       "discount-url": "https://my-discount-url.com"
@@ -15933,6 +16484,7 @@ Get a single discount code.
                     "max-quantity": 100,
                     "is-active": false,
                     "used-for": "event",
+                    "deleted-at": null,
                     "valid-till": "2017-06-24T18:30:00+00:00",
                     "type": "amount",
                     "discount-url": "https://my-discount-url.com"
@@ -16008,6 +16560,7 @@ Update a single discount code with `id` (Check permission to edit).
               "value": 50,
               "max-quantity": 100,
               "is-active": false,
+              "deleted-at": null,
               "used-for": "event",
               "valid-till": "2017-06-24T18:30:00+00:00",
               "type": "percent",
@@ -16096,6 +16649,7 @@ Get a list of Discount Codes.
                         "max-quantity": 100,
                         "is-active": false,
                         "used-for": "event",
+                        "deleted-at": null,
                         "valid-till": "2017-06-24T18:30:00+00:00",
                         "type": "amount",
                         "discount-url": "https://my-discount-url.com"
@@ -16154,6 +16708,7 @@ Get a single discount code.
                     "max-quantity": 100,
                     "is-active": false,
                     "used-for": "event",
+                    "deleted-at": null,
                     "valid-till": "2017-06-24T18:30:00+00:00",
                     "type": "amount",
                     "discount-url": "https://my-discount-url.com"
@@ -16211,6 +16766,7 @@ Get a single discount code. (Requires admin access)
                     "max-quantity": 100,
                     "is-active": false,
                     "used-for": "event",
+                    "deleted-at": null,
                     "valid-till": "2017-06-24T18:30:00+00:00",
                     "type": "amount",
                     "discount-url": "https://my-discount-url.com"
@@ -16235,9 +16791,8 @@ Access Codes related to the events.
 
 | Parameter | Description | Type | Required |
 |:----------|-------------|------|----------|
-| `code`  | Access Code | string | - |
+| `code`  | Access Code | string | yes |
 | `access-url` | URL of the access code | string | - |
-| `type` | Amount or Percentage | string | - |
 | `is-active` | If the access code is active | boolean | - |
 | `tickets-number` | Tickets Number for Access Code | integer (>=0) | - |
 | `min-quantity` | Minimum number of tickets for Access Code | integer (>=0) | - |
@@ -16245,8 +16800,6 @@ Access Codes related to the events.
 | `valid-from` | Access Code valid from | ISO 8601 (tz-aware) | - |
 | `valid-till` | Access Code valid till | ISO 8601 (tz-aware) | - |
 | `created-at` | Access Code created at | ISO 8601 (tz-aware) | - |
-| `tickets` | Event or Ticket | String | - |
-| `used-for` | Access Code used for | String | - |
 
 
 
@@ -16293,8 +16846,7 @@ Create a new Access Code with `event_id` and `user_id`.
                       "min-quantity": "0",
                       "max-quantity": "100",
                       "valid-from": "2017-06-18T18:30:00+00:00",
-                      "valid-till": "2017-06-24T18:30:00+00:00",
-                      "used-for": "Event"
+                      "valid-till": "2017-06-24T18:30:00+00:00"
                   }
                 }
             }
@@ -16330,8 +16882,8 @@ Create a new Access Code with `event_id` and `user_id`.
                     "min-quantity": 0,
                     "tickets-number": 404,
                     "max-quantity": 100,
+                    "deleted-at": null,
                     "is-active": false,
-                    "used-for": "Event",
                     "valid-till": "2017-06-24T18:30:00+00:00"
                 },
                 "type": "access-code",
@@ -16396,7 +16948,7 @@ Get a single access code.
                     "tickets-number": 404,
                     "max-quantity": 100,
                     "is-active": false,
-                    "used-for": "Event",
+                    "deleted-at": null,
                     "valid-till": "2017-06-24T18:30:00+00:00"
                 },
                 "type": "access-code",
@@ -16437,8 +16989,7 @@ Update a single access code with `id`.
                       "min-quantity": "0",
                       "max-quantity": "100",
                       "valid-from": "2017-06-18T18:30:00+00:00",
-                      "valid-till": "2017-06-24T18:30:00+00:00",
-                      "used-for": "Event"
+                      "valid-till": "2017-06-24T18:30:00+00:00"
                   },
               "type": "access-code",
               "id": "1"
@@ -16478,7 +17029,7 @@ Update a single access code with `id`.
                     "tickets-number": 404,
                     "max-quantity": 100,
                     "is-active": true,
-                    "used-for": "Event",
+                    "deleted-at": null,
                     "valid-till": "2017-06-24T18:30:00+00:00"
                 },
                 "type": "access-code",
@@ -16574,7 +17125,7 @@ Get a list of Access Codes.
                         "tickets-number": 404,
                         "max-quantity": 100,
                         "is-active": true,
-                        "used-for": "Event",
+                        "deleted-at": null,
                         "valid-till": "2017-06-24T18:30:00+00:00"
                     },
                     "type": "access-code",
@@ -16650,7 +17201,7 @@ Get a list of Access Codes.
                         "tickets-number": 404,
                         "max-quantity": 100,
                         "is-active": true,
-                        "used-for": "Event",
+                        "deleted-at": null,
                         "valid-till": "2017-06-24T18:30:00+00:00"
                     },
                     "type": "access-code",
@@ -16725,7 +17276,7 @@ Get a list of Access Codes.
                         "tickets-number": 404,
                         "max-quantity": 100,
                         "is-active": true,
-                        "used-for": "Event",
+                        "deleted-at": null,
                         "valid-till": "2017-06-24T18:30:00+00:00"
                     },
                     "type": "access-code",
@@ -17072,140 +17623,10 @@ To create or modify data of this data layer, you will need admin access. You can
 | `logo-height` | Height of the logo | integer | - |
 | `type` | Type of the image | string | - |
 
-## Image Size Collection [/v1/image-sizes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
-+ Parameters
-    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
-    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
-    + sort (optional, string, `type`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+## Event Image Size Details [/v1/event-image-sizes]
 
-### List Image Sizes [GET]
-Get a list of Image Sizes.
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-            "meta": {
-                "count": 1
-            },
-            "data": [
-                {
-                    "attributes": {
-                        "full-aspect": false,
-                        "thumbnail-height": 200,
-                        "thumbnail-aspect": true,
-                        "icon-height": 30,
-                        "icon-aspect": true,
-                        "type": "logo",
-                        "icon-width": 75,
-                        "icon-quality": 80,
-                        "logo-width": 32,
-                        "full-width": 1300,
-                        "thumbnail-width": 500,
-                        "thumbnail-quality": 80,
-                        "full-height": 500,
-                        "logo-height": 32,
-                        "full-quality": 80
-                    },
-                    "type": "image-size",
-                    "id": "1",
-                    "links": {
-                        "self": "/v1/image-sizes/1"
-                    }
-                }
-            ],
-            "jsonapi": {
-                "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/image-sizes"
-            }
-        }
-
-
-### Create Image Size [POST]
-Create a new general image size by admins.
-
-+ Request (application/vnd.api+json)
-
-    + Headers
-
-            Authorization: JWT <Auth Key>
-
-    + Body
-
-            {
-              "data": {
-                "attributes": {
-                  "full-width": 1300,
-                  "full-height": 500,
-                  "full-aspect": true,
-                  "full-quality": 80,
-                  "icon-width": 75,
-                  "icon-height": 30,
-                  "icon-aspect": true,
-                  "icon-quality": 80,
-                  "thumbnail-width": 500,
-                  "thumbnail-height": 200,
-                  "thumbnail-aspect": true,
-                  "thumbnail-quality": 80,
-                  "logo-width": 32,
-                  "logo-height": 32,
-                  "type": "logo"
-                },
-                "type": "image-size"
-              }
-            }
-
-+ Response 201 (application/vnd.api+json)
-
-        {
-            "data": {
-                "attributes": {
-                    "full-aspect": true,
-                    "thumbnail-height": 200,
-                    "thumbnail-aspect": true,
-                    "icon-height": 30,
-                    "icon-aspect": true,
-                    "type": "logo",
-                    "icon-width": 75,
-                    "icon-quality": 80,
-                    "logo-width": 32,
-                    "full-width": 1300,
-                    "thumbnail-width": 500,
-                    "thumbnail-quality": 80,
-                    "full-height": 500,
-                    "logo-height": 32,
-                    "full-quality": 80
-                },
-                "type": "image-size",
-                "id": "1",
-                "links": {
-                    "self": "/v1/image-sizes/1"
-                }
-            },
-            "jsonapi": {
-                "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/image-sizes/1"
-            }
-        }
-
-## Image Size Details [/v1/image-sizes/{image_size_id}]
-+ Parameters
-    + image_size_id: 1 (integer) - ID of the image size in the form of an integer
-
-### Get Image Size Details [GET]
-Get a single image size.
+### Get Event Image Size Details [GET]
+Get a single Event image size.
 
 + Request
 
@@ -17234,27 +17655,25 @@ Get a single image size.
               "thumbnail-quality": 80,
               "logo-width": null,
               "logo-height": null,
-              "type": null
+              "type": "event-image"
             },
-            "type": "image-size",
+            "type": "event-image-size",
             "id": "1",
             "links": {
-              "self": "/v1/image-sizes/1"
+              "self": "/v1/event-image-sizes/1"
             }
           },
           "jsonapi": {
             "version": "1.0"
           },
           "links": {
-            "self": "/v1/image-sizes/1"
+            "self": "/v1/event-image-sizes/1"
           }
         }
 
 
-### Update Image Size [PATCH]
-Update a single image size by `id`.
-
-+ `id` (integer) - ID of the record to update **(required)**
+### Update Event Image Size [PATCH]
+Update a single Event image size
 
 + Request (application/vnd.api+json)
 
@@ -17281,10 +17700,10 @@ Update a single image size by `id`.
                   "thumbnail-quality": 80,
                   "logo-width": 32,
                   "logo-height": 32,
-                  "type": "logo"
+                  "type": "event-image"
                 },
                 "id": "1",
-                "type": "image-size"
+                "type": "event-image-size"
               }
             }
 
@@ -17298,7 +17717,7 @@ Update a single image size by `id`.
                         "thumbnail-aspect": true,
                         "icon-height": 30,
                         "icon-aspect": true,
-                        "type": "logo",
+                        "type": "event-image",
                         "icon-width": 75,
                         "icon-quality": 80,
                         "logo-width": 32,
@@ -17309,22 +17728,24 @@ Update a single image size by `id`.
                         "logo-height": 32,
                         "full-quality": 80
                     },
-                    "type": "image-size",
+                    "type": "event-image-size",
                     "id": "1",
                     "links": {
-                        "self": "/v1/image-sizes/1"
+                        "self": "/v1/event-image-sizes/1"
                     }
                 },
                 "jsonapi": {
                     "version": "1.0"
                 },
                 "links": {
-                    "self": "/v1/image-sizes/1"
+                    "self": "/v1/event-image-sizes/1"
                 }
             }
 
-### Delete Image Size [DELETE]
-Delete a single image size.
+## Speaker Image Size Details [/v1/speaker-image-sizes]
+
+### Get Speaker Image Size Details [GET]
+Get a single Speaker image size.
 
 + Request
 
@@ -17337,11 +17758,82 @@ Delete a single image size.
 + Response 200 (application/vnd.api+json)
 
         {
-          "meta": {
-            "message": "Object successfully deleted"
+          "data": {
+            "attributes": {
+              "icon-size-quality": 80,
+              "small-size-width-height": 50,
+              "thumbnail-size-quality": null,
+              "icon-size-width-height": 35,
+              "type": "speaker-image",
+              "thumbnail-size-width-height": 500,
+              "small-size-quality": 80
+            },
+            "type": "speaker-image-size",
+            "id": "2",
+            "links": {
+              "self": "/v1/speaker-image-sizes/2"
+            }
           },
           "jsonapi": {
             "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/speaker-image-sizes/2"
+          }
+        }
+
+
+### Update Speaker Image Size [PATCH]
+Update a single Speaker image size
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "icon-size-quality": 80,
+                  "small-size-width-height": 50,
+                  "thumbnail-size-quality": null,
+                  "icon-size-width-height": 35,
+                  "type": "speaker-image",
+                  "thumbnail-size-width-height": 500,
+                  "small-size-quality": 80
+                },
+                "id": "2",
+                "type": "speaker-image-size"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "icon-size-quality": 80,
+              "small-size-width-height": 50,
+              "thumbnail-size-quality": null,
+              "icon-size-width-height": 35,
+              "type": "speaker-image",
+              "thumbnail-size-width-height": 500,
+              "small-size-quality": 80
+            },
+            "type": "speaker-image-size",
+            "id": "2",
+            "links": {
+              "self": "/v1/speaker-image-sizes/2"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/speaker-image-sizes/2"
           }
         }
 
@@ -17588,6 +18080,336 @@ Get a single role.
                 "self": "/v1/roles/1"
             }
         }
+
+
+# Group Services
+
+**ADMIN**
+
+To get or modify data of this data layer, you will need admin access. You can get the data without admin access as well.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the service | string | **yes** |
+
+## Services Collection [/v1/services{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List Services [GET]
+Get a list of Services.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "attributes": {
+                        "name": "track"
+                    },
+                    "type": "service",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/services/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/services"
+            }
+        }
+
+
+## Services Details [/v1/services/{service_id}]
++ Parameters
+    + service_id: 1 (integer) - ID of the service in the form of an integer
+
+### Get Service Details [GET]
+Get a single role.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "name": "track"
+            },
+            "type": "service",
+            "id": "1",
+            "links": {
+              "self": "/v1/services/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/services/1"
+          }
+        }
+
+
+### Update Service [PATCH]
+Update a single service by `id` (only admin).
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "name": "track"
+                },
+                "id": "1",
+                "type": "service"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+            {
+                "data": {
+                    "attributes": {
+                        "name": "track"
+                    },
+                    "type": "service",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/services/1"
+                    }
+                },
+                "jsonapi": {
+                    "version": "1.0"
+                },
+                "links": {
+                    "self": "/v1/services/1"
+                }
+            }
+
+
+# Group Event Role Permission
+
+**ADMIN**
+
+To get or modify data of this data layer, you will need admin access. You can get the data without admin access as well.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `can-create`  | Permission of role to create a service | boolean | **yes** |
+| `can-read`  | Permission of role to read a service | boolean | **yes** |
+| `can-update`  | Permission of role to update a service | boolean | **yes** |
+| `can-delete`  | Permission of role to delete a service | boolean | **yes** |
+
+## Event Role Permission Collection [/v1/event-role-permissions{?page%5bsize%5d,page%5bnumber%5d,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response..
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List Event Role Permissions [GET]
+Get a list of Event Role Permissions.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "attributes": {
+                        "can-delete": true,
+                        "can-read": true,
+                        "can-create": true,
+                        "can-update": true
+                    },
+                    "relationships": {
+                        "role": {
+                            "links": {
+                                "related": "/v1/roles/1",
+                                "self": "/v1/event-role-permissions/1/relationships/role"
+                            }
+                        },
+                        "service": {
+                            "links": {
+                                "related": "/v1/services/1",
+                                "self": "/v1/event-role-permissions/1/relationships/service"
+                            }
+                        }
+                    },
+                    "type": "event-role-permissions",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/event-role-permissions/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/event-role-permissions"
+            }
+        }
+
+
+## Event Role Permission Details [/v1/event-role-permissions/{event_role_permissions_id}]
++ Parameters
+    + event_role_permissions_id: 1 (integer) - ID of the events role permission in the form of an integer
+
+### Get Event Role Permission Details [GET]
+Get a single event role permission.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "can-delete": true,
+              "can-create": true,
+              "can-update": true,
+              "can-read": true
+            },
+            "relationships": {
+                "role": {
+                    "links": {
+                        "related": "/v1/roles/1",
+                        "self": "/v1/event-role-permissions/1/relationships/role"
+                    }
+                },
+                "service": {
+                    "links": {
+                        "related": "/v1/services/1",
+                        "self": "/v1/event-role-permissions/1/relationships/service"
+                    }
+                }
+            },
+            "type": "event-role-permissions",
+            "id": "1",
+            "links": {
+              "self": "/v1/event-role-permissions/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/event-role-permissions/1"
+          }
+        }
+
+
+### Update Event Role Permission [PATCH]
+Update a single event role permission by `id` (only admin).
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "can-delete": false,
+                  "can-create": true,
+                  "can-update": false,
+                  "can-read": false
+                },
+                "id": "1",
+                "type": "event-role-permissions"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+            {
+                "data": {
+                    "attributes": {
+                        "can-delete": false,
+                        "can-create": true,
+                        "can-update": false,
+                        "can-read": false
+                    },
+                    "relationships": {
+                        "role": {
+                            "links": {
+                                "related": "/v1/roles/1",
+                                "self": "/v1/event-role-permissions/1/relationships/role"
+                            }
+                        },
+                        "service": {
+                            "links": {
+                                "related": "/v1/services/1",
+                                "self": "/v1/event-role-permissions/1/relationships/service"
+                            }
+                        }
+                    },
+                    "type": "event-role-permissions",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/event-role-permissions/1"
+                    }
+                },
+                "jsonapi": {
+                    "version": "1.0"
+                },
+                "links": {
+                    "self": "/v1/event-role-permissions/1"
+                }
+            }
 
 
 # Group Activity
@@ -18082,6 +18904,7 @@ Create a new Custom Form with event_id.
                     "field-identifier": "abc123",
                     "is-included": false,
                     "is-fixed": false,
+                    "deleted-at": null,
                     "type": "text"
                 },
                 "type": "custom-form",
@@ -18132,6 +18955,7 @@ Get a single custom form.
                     "field-identifier": "abc123",
                     "is-fixed": false,
                     "is-included": false,
+                    "deleted-at": null,
                     "type": "text"
                 },
                 "type": "custom-form",
@@ -18195,6 +19019,7 @@ Update a single custom form with `id`.
                     "form": "form",
                     "field-identifier": "abc123",
                     "is-fixed": false,
+                    "deleted-at": null,
                     "is-included": false,
                     "type": "text"
                 },
@@ -18278,6 +19103,7 @@ Get a list of Custom Forms for an event.
                         "field-identifier": "abc123",
                         "is-included": false,
                         "is-fixed": false,
+                        "deleted-at": null,
                         "type": "text"
                     },
                     "type": "custom-form",
@@ -18363,6 +19189,7 @@ Create a new Question-Answer pair (FAQ) with event_id.
                 },
                 "attributes": {
                     "question": "Sample Question",
+                    "deleted-at": null,
                     "answer": "Sample Answer"
                 },
                 "type": "faq",
@@ -18415,7 +19242,8 @@ Get a single FAQ.
                 },
                 "attributes": {
                     "question": "Sample Question",
-                    "answer": "Sample Answer"
+                    "answer": "Sample Answer",
+                    "deleted-at": null
                 },
                 "type": "faq",
                 "id": 1,
@@ -18477,6 +19305,7 @@ Update a single FAQ with `id`.
                 },
                 "attributes": {
                     "question": "Sample Question",
+                    "deleted-at": null,
                     "answer": "Sample Answer Changed"
                 },
                 "type": "faq",
@@ -18561,6 +19390,7 @@ Get a list of FAQs for an event.
                     },
                     "attributes": {
                         "question": "Sample Question",
+                        "deleted-at": null,
                         "answer": "Sample Answer"
                     },
                     "type": "faq",
@@ -18916,7 +19746,7 @@ feedbacks related to the events.
 
 | Parameter | Description | Type | Required |
 |:----------|-------------|------|----------|
-| `rating`  | Rating for the overall event | string | **yes** |
+| `rating`  | Rating for the overall event | float | **yes** |
 | `comment` | Comments and suggestions about the event | string | - |
 
 
@@ -18984,6 +19814,7 @@ Create a new feedback with event_id.
                 },
                 "attributes": {
                     "rating": "4",
+                    "deleted-at": null,
                     "comment": "Awesome event"
                 },
                 "type": "feedback",
@@ -19098,6 +19929,7 @@ Update a single feedback with `id`.
                 },
                 "attributes": {
                     "rating": "5",
+                    "deleted-at": null,
                     "comment": "Awesome event"
                 },
                 "type": "feedback",
@@ -19182,6 +20014,7 @@ Get a list of feedbacks for an event.
                     },
                     "attributes": {
                         "rating": "4",
+                        "deleted-at": null,
                         "comment": "Awesome event"
                     },
                     "type": "feedback",
@@ -19255,6 +20088,7 @@ To create or modify any data of this data layer, you will need admin access. How
                         "description": "Create event",
                         "unverified-user": true,
                         "name": "create_event",
+                        "deleted-at": null,
                         "anonymous-user": false
                     },
                     "type": "user-permission",
@@ -19303,6 +20137,7 @@ To create or modify any data of this data layer, you will need admin access. How
                 "name": "example",
                 "description": "example",
                 "unverified-user": "false",
+                "deleted-at": null,
                 "anonymous-user": "false"
               },
             "type": "user-permission",
@@ -19343,6 +20178,7 @@ Get a single resource.
                 "name": "example",
                 "description": "example",
                 "unverified-user": "false",
+                "deleted-at": null,
                 "anonymous-user": "false"
               },
             "type": "user-permission",
@@ -19394,6 +20230,7 @@ Update a single resource by `id`.
                 "name": "example",
                 "description": "example",
                 "unverified-user": "false",
+                "deleted-at": null,
                 "anonymous-user": "false"
               },
             "type": "user-permission",
@@ -19943,7 +20780,7 @@ This endpoint supports uploading of any kind of file or multiple files. If a sin
         }
 
 
-# Group StripeAuthorization
+# Group Stripe Authorization
 
 **Event ADMIN**
 
@@ -19951,21 +20788,15 @@ To update or get any attribute of this data layer, you will need event admin acc
 
 | Parameter | Type | Required |
 |:----------|------|----------|
-| `stripe_secret_key`  | string | **yes** |
-| `stripe_refresh_token`  | string | **yes** |
-| `stripe_publishable_key`  | string | **yes** |
-| `stripe_user_id`  | string | **yes** |
-| `stripe_email`  | string | **yes** |
+| `stripe_auth_code`  | string | **yes** |
+| `stripe_publishable_key`  | string | **no** |
 
-## StripeAuthorization Collection[/v1/stripe-authorization{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
-+ Parameters
-    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
-    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
-    + sort (optional, string, `app-name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+
+## Stripe Authorization Collection [/v1/stripe-authorizations]
+Requires Co-Organizer Access
 
 ### Create Stripe Authorization [POST]
-Requires Co-Organizer Access
 
 + Request (application/vnd.api+json)
 
@@ -19978,11 +20809,7 @@ Requires Co-Organizer Access
             {
               "data": {
                 "attributes": {
-                  "stripe-secret-key": "example",
-                  "stripe-refresh-token": "example",
-                  "stripe-publishable-key": "example",
-                  "stripe-user-id": "example",
-                  "stripe-email": "example@example.com"
+                  "stripe-auth-code": "example"
                 },
                 "type": "stripe-authorization",
                 "relationships": {
@@ -20003,34 +20830,31 @@ Requires Co-Organizer Access
             "relationships": {
               "event": {
                 "links": {
-                  "self": "/v1/stripe-authorization/1/relationships/event",
+                  "self": "/v1/stripe-authorizations/1/relationships/event",
                   "related": "/v1/events/1"
                 }
               }
             },
             "attributes": {
-              "stripe-email": "example@example.com",
-              "stripe-secret-key": "example",
-              "stripe-user-id": "example",
               "stripe-publishable-key": "example",
-              "stripe-refresh-token": "example"
+              "deleted-at": null
             },
             "type": "stripe-authorization",
             "id": "1",
             "links": {
-              "self": "/v1/stripe-authorization/1"
+              "self": "/v1/stripe-authorizations/1"
             }
           },
           "jsonapi": {
             "version": "1.0"
           },
           "links": {
-            "self": "/v1/stripe-authorization/1"
+            "self": "/v1/stripe-authorizations/1"
           }
         }
 
 
-## Stripe Authorization Details [/v1/stripe-authorization/{id}]
+## Stripe Authorization Details [/v1/stripe-authorizations/{id}]
 Requires Event Co-Organizer Access
 + Parameters
     + id: 1 (integer) - ID of the stripe-authorization
@@ -20052,29 +20876,26 @@ Requires Event Co-Organizer Access
             "relationships": {
               "event": {
                 "links": {
-                  "self": "/v1/stripe-authorization/1/relationships/event",
+                  "self": "/v1/stripe-authorizations/1/relationships/event",
                   "related": "/v1/events/1"
                 }
               }
             },
             "attributes": {
-              "stripe-email": "example@example.com",
-              "stripe-secret-key": "example",
-              "stripe-user-id": "example",
               "stripe-publishable-key": "example",
-              "stripe-refresh-token": "example"
+              "deleted-at": null
             },
             "type": "stripe-authorization",
             "id": "1",
             "links": {
-              "self": "/v1/stripe-authorization/1"
+              "self": "/v1/stripe-authorizations/1"
             }
           },
           "jsonapi": {
             "version": "1.0"
           },
           "links": {
-            "self": "/v1/stripe-authorization/1"
+            "self": "/v1/stripe-authorizations/1"
           }
         }
 
@@ -20092,11 +20913,7 @@ Requires Event Co-Organizer Access
             {
               "data": {
                 "attributes": {
-                  "stripe-secret-key": "example",
-                  "stripe-refresh-token": "example",
-                  "stripe-publishable-key": "example",
-                  "stripe-user-id": "example",
-                  "stripe-email": "example@example.com"
+                  "stripe-auth-code": "example"
                 },
                 "type": "stripe-authorization",
                 "id": "1"
@@ -20110,29 +20927,26 @@ Requires Event Co-Organizer Access
             "relationships": {
               "event": {
                 "links": {
-                  "self": "/v1/stripe-authorization/1/relationships/event",
+                  "self": "/v1/stripe-authorizations/1/relationships/event",
                   "related": "/v1/events/1"
                 }
               }
             },
             "attributes": {
-              "stripe-email": "example@example.com",
-              "stripe-secret-key": "example",
-              "stripe-user-id": "example",
               "stripe-publishable-key": "example",
-              "stripe-refresh-token": "example"
+              "deleted-at": null
             },
             "type": "stripe-authorization",
             "id": "1",
             "links": {
-              "self": "/v1/stripe-authorization/1"
+              "self": "/v1/stripe-authorizations/1"
             }
           },
           "jsonapi": {
             "version": "1.0"
           },
           "links": {
-            "self": "/v1/stripe-authorization/1"
+            "self": "/v1/stripe-authorizations/1"
           }
         }
 
@@ -20159,7 +20973,7 @@ Requires Event Co-Organizer Access
 
 
 ## Stripe Authorization for an Event [/v1/events/{event_identifier}/stripe-authorization]
-Requires event admin access in Orga Server
+Requires event admin access
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
 
@@ -20180,51 +20994,49 @@ Requires event admin access in Orga Server
                 "relationships": {
                     "event": {
                         "links": {
-                            "self": "/v1/stripe-authorization/1/relationships/event",
+                            "self": "/v1/stripe-authorizations/1/relationships/event",
                             "related": "/v1/events/1"
                         }
                     }
                 },
                 "attributes": {
-                    "stripe-email": "example@example.com",
-                    "stripe-secret-key": "example",
-                    "stripe-user-id": "example",
                     "stripe-publishable-key": "example",
-                    "stripe-refresh-token": "example"
+                    "deleted-at": null
                 },
                 "type": "stripe-authorization",
                 "id": "1",
                 "links": {
-                    "self": "/v1/stripe-authorization/1"
+                    "self": "/v1/stripe-authorizations/1"
                 }
             },
             "jsonapi": {
                 "version": "1.0"
             },
             "links": {
-                "self": "/v1/stripe-authorization/1"
+                "self": "/v1/stripe-authorizations/1"
             }
         }
 
 
 # Group Event Export
 
-This group of APIs help you to start a task for exporting a particular event and downloading the zip containing json files for all the event related data.
+This group of APIs help you to start a task for exporting a particular event in the zip format, ical and xcal. It also lets you start a task to export orders of an event as csv
 
-## Start Event Export [/v1/events/{event_identifier}/export/json]
+## Start Event Export as Zip [/v1/events/{event_identifier}/export/json]
+This endpoint lets the user start a task of exporting the event in the zip format.
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
 Start a celery task to export the event with the event_id as a collection of json files and archive it to get it ready for downloading. Returns the task url
 to get the status of the export task.
 
 
-### Start a Task to Export an Event [POST]
+### Start a Task to Export an Event as Zip [POST]
 
 + Request
 
     + Headers
 
-            Content-Type: application/json
+            Content-Type: application/vnd.api+json
             Authorization: JWT <Auth Key>
 
     + Body
@@ -20242,6 +21054,88 @@ to get the status of the export task.
             "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
         }
 
+## Start Event Export as iCal file [/v1/events/{event_identifier}/export/ical]
+This endpoint lets the user start a task to export the event as an iCal file.
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+Start a celery task to export the event with the event_id as an iCal event file.
+
+### Start a Task to Export an Event as iCal event [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
+
+## Start Event Export as xCalendar [/v1/events/{event_identifier}/export/xcal]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+Start a celery task to export the event with the event_id as an xcal file to get it ready for downloading. Returns the task url
+to get the status of the export task.
+
+
+### Start a Task to Export an Event as xCalendar [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
+
+## Start Event Export as Pentabarf XML [/v1/events/{event_identifier}/export/pentabarf]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+Start a celery task to export the event with the event_id as a pentabarf XML file to get it ready for downloading. Returns the task url
+to get the status of the export task.
+
+
+### Start a Task to Export an Event as Pentabarf XML [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
+
+## Start Orders Export as CSV [/v1/events/{event_identifier}/export/orders/csv]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+Start a celery task to export the list of order of the event with that event_id as a CSV file to get it ready for downloading. Returns the task url
+to get the status of the export task.
+
+
+### Start a Task to Export Orders of an Event as CSV [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
 
 # Group Event Import
 
@@ -20407,6 +21301,56 @@ Get the task status and the final result of the task as response
                 "self": "/v1/admin/statistics/events"
             }
         }
+
+
+## Event Types Statistics Details [/v1/admin/statistics/event-types]
+
+**Event Types:**
+
+| Parameter | Description | Type |
+|:----------|-------------|------|
+| `name`  | Name of event type | string |
+| `id`  | Id of the event type | Integer |
+| `count`  | No. of events of event type | Integer |
+
+### Show Event Types Statistics [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {}
+
+
+## Event Topics Statistics Details [/v1/admin/statistics/event-topics]
+
+**Event Topics:**
+
+| Parameter | Description | Type |
+|:----------|-------------|------|
+| `name`  | Name of event topic | string |
+| `id`  | Id of the event topic | Integer |
+| `count`  | No. of events of event topic | Integer |
+
+### Show Event Topics Statistics [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {}
 
 
 ## User Statistics Details [/v1/admin/statistics/users]
@@ -20718,8 +21662,9 @@ Get the task status and the final result of the task as response
 | `country` | Country of the purchaser | boolean | **yes** |
 | `zipcode` | Zipcode of the address | string | - |
 | `payment-mode` | Mode of payment (free,stripe,paypal) | string | **yes** |
-| `status` | Status of the order | string (default=pending) | - |
+| `status` | Status of the order(pending, completed, placed, cancelled, expired) | string (default=pending) | - |
 | `discount_code_id` | ID of the discount code | string | - |
+| `order-notes` | Notes associated with Order | string | - |
 
 ## Orders Collection [/v1/orders{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -20771,7 +21716,8 @@ Create a new Order
                   "payment-mode": "paypal",
                   "country": "India",
                   "status": "pending",
-                  "amount": "10"
+                  "amount": "10",
+                  "order-notes": "example"
                 },
                 "type": "order",
                 "relationships": {
@@ -20821,7 +21767,8 @@ Create a new Order
                 "address": null,
                 "pdf-url": "http://example.com",
                 "country": null,
-                "email": null
+                "email": null,
+                "order-notes": "example"
               },
               "type": "attendee",
               "id": "1",
@@ -20890,7 +21837,8 @@ Create a new Order
               "exp-month": null,
               "amount": 10.0,
               "country": "India",
-              "completed-at": null
+              "completed-at": null,
+              "order-notes": "example"
             },
             "type": "order",
             "id": "11",
@@ -20978,7 +21926,8 @@ Get a single Order detail.
               "exp-month": null,
               "amount": 10.0,
               "country": "India",
-              "completed-at": null
+              "completed-at": null,
+              "order-notes": "example"
             },
             "type": "order",
             "id": "1",
@@ -21011,7 +21960,8 @@ Update a single custom form with `id`.
             {
               "data": {
                 "attributes": {
-                  "status": "confirmed"
+                  "status": "confirmed",
+                  "order-notes": "example"
                 },
                 "type": "order",
                 "id": "ab25a170-f36d-4dd6-b99c-9c202e693afc"
@@ -21076,7 +22026,8 @@ Update a single custom form with `id`.
               "exp-month": null,
               "amount": 10.0,
               "country": "India",
-              "completed-at": null
+              "completed-at": null,
+              "order-notes": "sample,example"
             },
             "type": "order",
             "id": "1",
@@ -21114,6 +22065,74 @@ Delete a single Order.
           }
         }
 
+# Group Admin Sales
+
+## Fees Sales Details [/v1/admin/sales/fees]
+
+**Fees:**
+
+| Parameter | Description | Type |
+|:----------|-------------|------|
+| `name` | Name of event | String |
+| `fee-percentage` | Fee percentage | Float |
+| `payment-currency` | Currency of event | String |
+| `revenue` | Total revenue | Integer |
+| `ticket-count` | Number of tickets sold | Float |
+
+### Show Sales Fees [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": [
+                {
+                    "type": "admin-sales-fees",
+                    "attributes": {
+                        "name": "event 1",
+                        "fee-percentage": 20.0,
+                        "revenue": 10,
+                        "ticket-count": 42.0,
+                        "payment-currency": "USD"
+                    },
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/admin/sales/fees"
+                    }
+                },
+                {
+                    "type": "admin-sales-fees",
+                    "attributes": {
+                        "name": "event 2",
+                        "fee-percentage": 20.0,
+                        "revenue": 0,
+                        "ticket-count": 3.0,
+                        "payment-currency": "USD"
+                    },
+                    "id": "2",
+                    "links": {
+                        "self": "/v1/admin/sales/fees"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/admin/sales/fees"
+            },
+            "meta": {
+                "count": 5
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
 
 # Group Event Copy
 

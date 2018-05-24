@@ -204,9 +204,9 @@ def export_event_json(event_id, settings):
             for count in range(len(data)):
                 data[count] = _order_json(data[count], e)
                 _download_media(data[count], e[0], dir_path, settings)
-        data_str = json.dumps(data, indent=4, ensure_ascii=False).encode('utf-8')
+        data_str = json.dumps(data, indent=4, ensure_ascii=False, default=handle_unserializable_data).encode('utf-8')
         fp = open(dir_path + '/' + e[0], 'w')
-        fp.write(data_str)
+        fp.write(str(data_str, 'utf-8'))
         fp.close()
     # add meta
     data_str = json.dumps(
@@ -214,7 +214,7 @@ def export_event_json(event_id, settings):
         indent=4, ensure_ascii=False
     ).encode('utf-8')
     fp = open(dir_path + '/meta', 'w')
-    fp.write(data_str)
+    fp.write(str(data_str, 'utf-8'))
     fp.close()
     # make zip
     shutil.make_archive(dir_path, 'zip', dir_path)
@@ -257,3 +257,13 @@ def make_filename(name):
     for _ in FILENAME_EXCLUDE:
         name = name.replace(_, ' ')
     return ''.join(s.title() for s in name.split() if s)
+
+
+def handle_unserializable_data(obj):
+    """
+    Handles objects which cannot be serialized by json.dumps()
+    :param obj: Object to be serialized
+    :return: JSON representation of the object
+    """
+    if isinstance(obj, datetime):
+        return obj.__str__()

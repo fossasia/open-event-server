@@ -5,10 +5,11 @@ from flask_jwt import current_identity as current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
+from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.data_layers.ChargesLayer import ChargesLayer
-from app.api.helpers.db import save_to_db, safe_query
-from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
+from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
+from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees
@@ -40,6 +41,7 @@ class OrdersListPost(ResourceList):
         :return:
         """
         require_relationship(['event', 'ticket_holders'], data)
+        # Ensuring that default status is always pending, unless the user is event co-organizer
         if not has_access('is_coorganizer', event_id=data['event']):
             data['status'] = 'pending'
 
@@ -50,12 +52,25 @@ class OrdersListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
+        for ticket_holder in data['ticket_holders']:
+            # Ensuring that the attendee exists and doesn't have an associated order.
+            try:
+                ticket_holder_object = self.session.query(TicketHolder).filter_by(id=int(ticket_holder),
+                                                                                  deleted_at=None).one()
+                if ticket_holder_object.order_id:
+                    raise ConflictException({'pointer': '/data/relationships/attendees'},
+                                            "Order already exists for attendee with id {}".format(str(ticket_holder)))
+            except NoResultFound:
+                raise ConflictException({'pointer': '/data/relationships/attendees'},
+                                        "Attendee with id {} does not exists".format(str(ticket_holder)))
+
         if data.get('cancel_note'):
             del data['cancel_note']
 
         # Apply discount only if the user is not event admin
         if data.get('discount') and not has_access('is_coorganizer', event_id=data['event']):
-            discount_code = safe_query(self, DiscountCode, 'id', data['discount'], 'discount_code_id')
+            discount_code = safe_query_without_soft_deleted_entries(self, DiscountCode, 'id', data['discount'],
+                                                                    'discount_code_id')
             if not discount_code.is_active:
                 raise UnprocessableEntity({'source': 'discount_code_id'}, "Inactive Discount Code")
             else:
@@ -86,7 +101,7 @@ class OrdersListPost(ResourceList):
                 pdf = create_save_pdf(render_template('/pdf/ticket_purchaser.html', order=order))
             holder.pdf_url = pdf
             save_to_db(holder)
-            if order_tickets.get(holder.ticket_id) is None:
+            if not order_tickets.get(holder.ticket_id):
                 order_tickets[holder.ticket_id] = 1
             else:
                 order_tickets[holder.ticket_id] += 1
@@ -94,15 +109,19 @@ class OrdersListPost(ResourceList):
             od = OrderTicket(order_id=order.id, ticket_id=ticket, quantity=order_tickets[ticket])
             save_to_db(od)
         order.quantity = order.get_tickets_count()
+        order.user = current_user
         save_to_db(order)
         if not has_access('is_coorganizer', event_id=data['event']):
             TicketingManager.calculate_update_amount(order)
-        send_email_to_attendees(order, current_user.id)
-        send_notif_to_attendees(order, current_user.id)
 
-        order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
-        for organizer in order.event.organizers:
-            send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name)
+        # send e-mail and notifications if the order status is completed
+        if order.status == 'completed':
+            send_email_to_attendees(order, current_user.id)
+            send_notif_to_attendees(order, current_user.id)
+
+            order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
+            for organizer in order.event.organizers:
+                send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name)
 
         data['user_id'] = current_user.id
 
@@ -127,11 +146,8 @@ class OrdersList(ResourceList):
         :param kwargs:
         :return:
         """
-        if kwargs.get('event_id') is None:
-            if 'GET' in request.method and has_access('is_admin'):
-                pass
-            else:
-                raise ForbiddenException({'source': ''}, "Admin Access Required")
+        if 'GET' in request.method and kwargs.get('event_id') is None:
+            pass
         elif not has_access('is_coorganizer', event_id=kwargs['event_id']):
             raise ForbiddenException({'source': ''}, "Co-Organizer Access Required")
 
@@ -177,6 +193,7 @@ class OrderDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        # Admin can update all the fields while Co-organizer can update only the status
         if not has_access('is_admin'):
             for element in data:
                 if element != 'status':
@@ -185,6 +202,10 @@ class OrderDetail(ResourceDetail):
         if not has_access('is_coorganizer', event_id=order.event.id):
             raise ForbiddenException({'pointer': 'data/status'},
                                      "To update status minimum Co-organizer access required")
+
+        if 'order_notes' in data:
+            if order.order_notes and data['order_notes'] not in order.order_notes.split(","):
+                data['order_notes'] = '{},{}'.format(order.order_notes, data['order_notes'])
 
     def after_update_object(self, order, data, view_kwargs):
         """

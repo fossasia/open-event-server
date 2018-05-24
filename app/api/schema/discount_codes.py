@@ -1,13 +1,14 @@
 from marshmallow import validates_schema, validate
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
 from app.models.discount_code import DiscountCode
 
 
-class DiscountCodeSchemaPublic(Schema):
+class DiscountCodeSchemaPublic(SoftDeletionSchema):
     """
     API Schema for discount_code Model
     For endpoints which allow somebody other than co-organizer/admin to access the resource.
@@ -41,6 +42,17 @@ class DiscountCodeSchemaPublic(Schema):
                          schema='EventSchemaPublic',
                          type_='event')
 
+    @classmethod
+    def quantity_validation_helper(obj, data):
+        min_quantity = data.get('min_quantity', None)
+        max_quantity = data.get('max_quantity', None)
+        if min_quantity is not None and max_quantity is not None:
+            if min_quantity >= max_quantity:
+                raise UnprocessableEntity(
+                    {'pointer': '/data/attributes/min-quantity'},
+                    "min-quantity should be less than max-quantity"
+                )
+
 
 class DiscountCodeSchemaEvent(DiscountCodeSchemaPublic):
     """
@@ -66,10 +78,7 @@ class DiscountCodeSchemaEvent(DiscountCodeSchemaPublic):
             if 'tickets_number' not in data:
                 data['tickets_number'] = discount_code.tickets_number
 
-        if 'min_quantity' in data and 'max_quantity' in data:
-            if data['min_quantity'] >= data['max_quantity']:
-                raise UnprocessableEntity({'pointer': '/data/attributes/min-quantity'},
-                                          "min-quantity should be less than max-quantity")
+        DiscountCodeSchemaEvent.quantity_validation_helper(data)
 
         if 'tickets_number' in data and 'max_quantity' in data:
             if data['tickets_number'] < data['max_quantity']:
@@ -125,10 +134,7 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
             if 'tickets_number' not in data:
                 data['tickets_number'] = discount_code.tickets_number
 
-        if 'min_quantity' in data and 'max_quantity' in data:
-            if data['min_quantity'] >= data['max_quantity']:
-                raise UnprocessableEntity({'pointer': '/data/attributes/min-quantity'},
-                                          "min-quantity should be less than max-quantity")
+        DiscountCodeSchemaTicket.quantity_validation_helper(data)
 
         if 'tickets_number' in data and 'max_quantity' in data:
             if data['tickets_number'] < data['max_quantity']:

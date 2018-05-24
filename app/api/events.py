@@ -6,15 +6,19 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy import or_
 from sqlalchemy.orm.exc import NoResultFound
+import pytz
+from datetime import datetime
+import urllib.error
 
 from app.api.bootstrap import api
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
 from app.api.helpers.db import save_to_db, safe_query
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.exceptions import ForbiddenException, ConflictException, UnprocessableEntity
 from app.api.helpers.files import create_save_image_sizes
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
 from app.api.schema.events import EventSchemaPublic, EventSchema
+from app.api.helpers.export_helpers import create_export_job
 # models
 from app.models import db
 from app.models.access_code import AccessCode
@@ -44,6 +48,7 @@ from app.models.ticket_holder import TicketHolder
 from app.models.track import Track
 from app.models.user import User, ATTENDEE, ORGANIZER, COORGANIZER
 from app.models.users_events_role import UsersEventsRoles
+from app.models.stripe_authorization import StripeAuthorization
 
 
 class EventList(ResourceList):
@@ -101,9 +106,26 @@ class EventList(ResourceList):
 
         return query_
 
+    def before_post(self, args, kwargs, data=None):
+        """
+        before post method to verify if the event location is provided before publishing the event
+        and checks that the user is verified
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
+        is_verified = User.query.filter_by(id=kwargs['user_id']).first().is_verified
+        if (data.get('state', None) == 'published' and not is_verified):
+            raise ForbiddenException({'source': ''},
+                                      "Only verified accounts can publish events")
+        if data.get('state', None) == 'published' and not data.get('location_name', None):
+            raise ConflictException({'pointer': '/data/attributes/location-name'},
+                                    "Location is required to publish the event")
+
     def after_create_object(self, event, data, view_kwargs):
         """
-        after create method to save roles for users
+        after create method to save roles for users and add the user as an accepted role(organizer)
         :param event:
         :param data:
         :param view_kwargs:
@@ -113,8 +135,25 @@ class EventList(ResourceList):
         user = User.query.filter_by(id=view_kwargs['user_id']).first()
         uer = UsersEventsRoles(user, event, role)
         save_to_db(uer, 'Event Saved')
+        role_invite = RoleInvite(user.email, role.title_name, event.id, role.id, datetime.now(pytz.utc),
+                                 status='accepted')
+        save_to_db(role_invite, 'Organiser Role Invite Added')
+
+        email_notification = EmailNotification(next_event=True, new_paper=True, session_accept_reject=True,
+                                               session_schedule=True, after_ticket_purchase=True)
+        email_notification.user = user
+        email_notification.event = event
+        save_to_db(email_notification, 'Email Notification of event added to user')
+        if event.state == 'published' and event.schedule_published_on:
+            start_export_tasks(event)
+
         if data.get('original_image_url'):
-            uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
+            try:
+                uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
+            except (urllib.error.HTTPError, urllib.error.URLError):
+                raise UnprocessableEntity(
+                    {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
+                )
             self.session.query(Event).filter_by(id=event.id).update(uploaded_images)
             self.session.commit()
 
@@ -206,6 +245,14 @@ def get_id(view_kwargs):
         tax = safe_query(db, Tax, 'id', view_kwargs['tax_id'], 'tax_id')
         if tax.event_id is not None:
             view_kwargs['id'] = tax.event_id
+        else:
+            view_kwargs['id'] = None
+
+    if view_kwargs.get('stripe_authorization_id') is not None:
+        stripe_authorization = safe_query(db, StripeAuthorization, 'id', view_kwargs['stripe_authorization_id'],
+                                          'stripe_authorization_id')
+        if stripe_authorization.event_id is not None:
+            view_kwargs['id'] = stripe_authorization.event_id
         else:
             view_kwargs['id'] = None
 
@@ -342,6 +389,7 @@ class EventDetail(ResourceDetail):
     """
     EventDetail class for EventSchema
     """
+
     def before_get(self, args, kwargs):
         """
         method for assigning schema based on access
@@ -370,6 +418,18 @@ class EventDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
+    def before_patch(self, args, kwargs, data=None):
+        """
+        before patch method to verify if the event location is provided before publishing the event
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
+        if data.get('state', None) == 'published' and not data.get('location_name', None):
+            raise ConflictException({'pointer': '/data/attributes/location-name'},
+                                    "Location is required to publish the event")
+
     def before_update_object(self, event, data, view_kwargs):
         """
         method to save image urls before updating event object
@@ -379,19 +439,31 @@ class EventDetail(ResourceDetail):
         :return:
         """
         if data.get('original_image_url') and data['original_image_url'] != event.original_image_url:
-            uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
+            try:
+                uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
+            except (urllib.error.HTTPError, urllib.error.URLError):
+                raise UnprocessableEntity(
+                    {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
+                )
             data['original_image_url'] = uploaded_images['original_image_url']
             data['large_image_url'] = uploaded_images['large_image_url']
             data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
             data['icon_image_url'] = uploaded_images['icon_image_url']
 
+    def after_update_object(self, event, data, view_kwargs):
+        if event.state == 'published' and event.schedule_published_on:
+            start_export_tasks(event)
+        else:
+            clear_export_urls(event)
+
     decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="id", fetch_as="event_id",
-                                     model=Event), )
+                                     model=Event),)
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
                   'methods': {
-                      'before_update_object': before_update_object
+                      'before_update_object': before_update_object,
+                      'after_update_object': after_update_object
                   }}
 
 
@@ -399,6 +471,7 @@ class EventRelationship(ResourceRelationship):
     """
     Event Relationship
     """
+
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('identifier'):
             event = safe_query(db, Event, 'identifier', view_kwargs['identifier'], 'identifier')
@@ -417,6 +490,7 @@ class EventCopySchema(Schema):
     """
     API Schema for EventCopy
     """
+
     class Meta:
         """
         Meta class for EventCopySchema
@@ -438,3 +512,28 @@ class EventCopyResource(ResourceList):
     methods = ['POST', ]
     data_layer = {'class': EventCopyLayer,
                   'session': db.Session}
+
+
+def start_export_tasks(event):
+    event_id = str(event.id)
+    # XCAL
+    from .helpers.tasks import export_xcal_task
+    task_xcal = export_xcal_task.delay(event_id, temp=False)
+    create_export_job(task_xcal.id, event_id)
+
+    # ICAL
+    from .helpers.tasks import export_ical_task
+    task_ical = export_ical_task.delay(event_id, temp=False)
+    create_export_job(task_ical.id, event_id)
+
+    # PENTABARF XML
+    from .helpers.tasks import export_pentabarf_task
+    task_pentabarf = export_pentabarf_task.delay(event_id, temp=False)
+    create_export_job(task_pentabarf.id, event_id)
+
+
+def clear_export_urls(event):
+    event.ical_url = None
+    event.xcal_url = None
+    event.pentabarf_url = None
+    save_to_db(event)

@@ -1,13 +1,16 @@
 from marshmallow import validates_schema
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
 from app.models.access_code import AccessCode
+from utils.common import use_defaults
 
 
-class AccessCodeSchema(Schema):
+@use_defaults()
+class AccessCodeSchema(SoftDeletionSchema):
     """
     Api schema for Access Code Model
     """
@@ -32,7 +35,7 @@ class AccessCodeSchema(Schema):
             if 'valid_till' not in data:
                 data['valid_till'] = access_code.valid_till
 
-        if data['valid_from'] >= data['valid_till']:
+        if data['valid_from'] > data['valid_till']:
             raise UnprocessableEntity({'pointer': '/data/attributes/valid-till'},
                                       "valid_till should be after valid_from")
 
@@ -50,10 +53,14 @@ class AccessCodeSchema(Schema):
             if 'tickets_number' not in data:
                 data['tickets_number'] = access_code.tickets_number
 
-        if 'min_quantity' in data and 'max_quantity' in data:
-            if data['min_quantity'] >= data['max_quantity']:
-                raise UnprocessableEntity({'pointer': '/data/attributes/min-quantity'},
-                                          "min-quantity should be less than max-quantity")
+        min_quantity = data.get('min_quantity', None)
+        max_quantity = data.get('max_quantity', None)
+        if min_quantity is not None and max_quantity is not None:
+            if min_quantity > max_quantity:
+                raise UnprocessableEntity(
+                    {'pointer': '/data/attributes/min-quantity'},
+                    "min-quantity should be less than max-quantity"
+                )
 
         if 'tickets_number' in data and 'max_quantity' in data:
             if data['tickets_number'] < data['max_quantity']:
@@ -61,7 +68,7 @@ class AccessCodeSchema(Schema):
                                           "tickets-number should be greater than max-quantity")
 
     id = fields.Integer(dump_ony=True)
-    code = fields.Str(allow_none=True)
+    code = fields.Str(required=True)
     access_url = fields.Url(allow_none=True)
     is_active = fields.Boolean(default=False)
 
@@ -72,7 +79,6 @@ class AccessCodeSchema(Schema):
     max_quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     valid_from = fields.DateTime(required=True)
     valid_till = fields.DateTime(required=True)
-    used_for = fields.Str(allow_none=True)
     event = Relationship(attribute='event',
                          self_view='v1.access_code_event',
                          self_view_kwargs={'id': '<id>'},

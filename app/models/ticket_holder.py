@@ -1,12 +1,13 @@
 import base64
-from io import StringIO
+from io import BytesIO
 
 import qrcode
 
 from app.models import db
+from app.models.base import SoftDeletionModel
 
 
-class TicketHolder(db.Model):
+class TicketHolder(SoftDeletionModel):
     __tablename__ = "ticket_holders"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -40,6 +41,7 @@ class TicketHolder(db.Model):
     ticket = db.relationship('Ticket', backref='ticket_holders')
     is_checked_in = db.Column(db.Boolean, default=False)
     checkin_times = db.Column(db.String)
+    attendee_notes = db.Column(db.String)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     user = db.relationship('User', foreign_keys=[email], primaryjoin='User.email == TicketHolder.email', viewonly=True,
                            backref='attendees')
@@ -71,9 +73,11 @@ class TicketHolder(db.Model):
                  ticket_id=None,
                  is_checked_in=False,
                  checkin_times=None,
+                 attendee_notes=None,
                  order_id=None,
                  pdf_url=None,
-                 event_id=None):
+                 event_id=None,
+                 deleted_at=None):
         self.firstname = firstname
         self.lastname = lastname
         self.email = email
@@ -101,8 +105,10 @@ class TicketHolder(db.Model):
         self.order_id = order_id
         self.is_checked_in = is_checked_in
         self.checkin_times = checkin_times
+        self.attendee_notes = attendee_notes
         self.pdf_url = pdf_url
         self.event_id = event_id
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<TicketHolder %r>' % self.id
@@ -131,7 +137,7 @@ class TicketHolder(db.Model):
         qr.make(fit=True)
         img = qr.make_image()
 
-        buffer = StringIO()
+        buffer = BytesIO()
         img.save(buffer, format="JPEG")
         img_str = str(base64.b64encode(buffer.getvalue()), 'utf-8')
         return img_str

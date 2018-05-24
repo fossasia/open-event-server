@@ -1,4 +1,5 @@
 from app.models import db
+from app.models.base import SoftDeletionModel
 from app.models.order import OrderTicket, Order
 
 access_codes_tickets = db.Table('access_codes_tickets',
@@ -13,7 +14,7 @@ ticket_tags_table = db.Table('association', db.Model.metadata,
                              )
 
 
-class Ticket(db.Model):
+class Ticket(SoftDeletionModel):
     __tablename__ = 'tickets'
     __table_args__ = (db.UniqueConstraint('name', 'event_id', name='name_event_uc'),)
 
@@ -32,7 +33,8 @@ class Ticket(db.Model):
 
     min_order = db.Column(db.Integer)
     max_order = db.Column(db.Integer)
-
+    is_checkin_restricted = db.Column(db.Boolean)
+    auto_checkin_enabled = db.Column(db.Boolean)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref='tickets_')
 
@@ -50,6 +52,8 @@ class Ticket(db.Model):
                  is_hidden=False,
                  description=None,
                  is_description_visible=True,
+                 is_checkin_restricted=True,
+                 auto_checkin_enabled=False,
                  quantity=100,
                  position=1,
                  price=0,
@@ -70,6 +74,8 @@ class Ticket(db.Model):
         self.event_id = event_id
         self.description = description
         self.is_description_visible = is_description_visible
+        self.is_checkin_restricted = is_checkin_restricted
+        self.auto_checkin_enabled = auto_checkin_enabled
         self.price = price
         self.sales_starts_at = sales_starts_at
         self.sales_ends_at = sales_ends_at
@@ -149,7 +155,7 @@ class Ticket(db.Model):
         return data
 
 
-class TicketTag(db.Model):
+class TicketTag(SoftDeletionModel):
     """
     Tags to group tickets
     """
@@ -161,9 +167,10 @@ class TicketTag(db.Model):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref='ticket_tags')
 
-    def __init__(self, name=None, event_id=None):
+    def __init__(self, name=None, event_id=None, deleted_at=None):
         self.name = name
         self.event_id = event_id
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<TicketTag %r>' % self.name
