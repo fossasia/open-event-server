@@ -38,9 +38,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("email", nargs='?', help="The email for super_admin.", default='')
     parser.add_argument("password", nargs='?', help="The password for super_admin.", default='')
-    parse = parser.parse_args()
+    parsed = parser.parse_args()
     with current_app.app_context():
         db.create_all()
         stamp()
-        create_default_user(parse.email, parse.password)
+        create_default_user(parsed.email, parsed.password)
         populate()
