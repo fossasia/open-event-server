@@ -3333,7 +3333,7 @@ def user_permission_delete(transaction):
 
 
 # ------------------------- Stripe Authorizations -------------------------
-@hooks.before("StripeAuthorization > StripeAuthorization Collection > Create Stripe Authorization")
+@hooks.before("Stripe Authorization > Stripe Authorization Collection > Create Stripe Authorization")
 def stripe_authorization_post(transaction):
     """
     POST /stripe-authorization
@@ -3346,7 +3346,7 @@ def stripe_authorization_post(transaction):
         db.session.commit()
 
 
-@hooks.before("StripeAuthorization > Stripe Authorization Details > Get Stripe Authorization")
+@hooks.before("Stripe Authorization > Stripe Authorization Details > Get Stripe Authorization")
 def stripe_authorization_get_detail(transaction):
     """
     GET /stripe-authorization/1
@@ -3359,7 +3359,7 @@ def stripe_authorization_get_detail(transaction):
         db.session.commit()
 
 
-@hooks.before("StripeAuthorization > Stripe Authorization Details > Update Stripe Authorization")
+@hooks.before("Stripe Authorization > Stripe Authorization Details > Update Stripe Authorization")
 def stripe_authorization_patch(transaction):
     """
     PATCH /stripe-authorization/1
@@ -3372,7 +3372,7 @@ def stripe_authorization_patch(transaction):
         db.session.commit()
 
 
-@hooks.before("StripeAuthorization > Stripe Authorization Details > Delete Stripe Authorization")
+@hooks.before("Stripe Authorization > Stripe Authorization Details > Delete Stripe Authorization")
 def stripe_authorization_delete(transaction):
     """
     DELETE /stripe-authorization/1
@@ -3385,7 +3385,7 @@ def stripe_authorization_delete(transaction):
         db.session.commit()
 
 
-@hooks.before("StripeAuthorization > Stripe Authorization for an Event > Get Stripe Authorization Details of an Event")
+@hooks.before("Stripe Authorization > Stripe Authorization for an Event > Get Stripe Authorization Details of an Event")
 def event_stripe_authorization_get_detail(transaction):
     """
     GET /events/1/stripe-authorization
