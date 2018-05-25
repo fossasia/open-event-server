@@ -16235,9 +16235,8 @@ Access Codes related to the events.
 
 | Parameter | Description | Type | Required |
 |:----------|-------------|------|----------|
-| `code`  | Access Code | string | - |
+| `code`  | Access Code | string | yes |
 | `access-url` | URL of the access code | string | - |
-| `type` | Amount or Percentage | string | - |
 | `is-active` | If the access code is active | boolean | - |
 | `tickets-number` | Tickets Number for Access Code | integer (>=0) | - |
 | `min-quantity` | Minimum number of tickets for Access Code | integer (>=0) | - |
@@ -16245,8 +16244,6 @@ Access Codes related to the events.
 | `valid-from` | Access Code valid from | ISO 8601 (tz-aware) | - |
 | `valid-till` | Access Code valid till | ISO 8601 (tz-aware) | - |
 | `created-at` | Access Code created at | ISO 8601 (tz-aware) | - |
-| `tickets` | Event or Ticket | String | - |
-| `used-for` | Access Code used for | String | - |
 
 
 
@@ -16293,8 +16290,7 @@ Create a new Access Code with `event_id` and `user_id`.
                       "min-quantity": "0",
                       "max-quantity": "100",
                       "valid-from": "2017-06-18T18:30:00+00:00",
-                      "valid-till": "2017-06-24T18:30:00+00:00",
-                      "used-for": "Event"
+                      "valid-till": "2017-06-24T18:30:00+00:00"
                   }
                 }
             }
@@ -16331,7 +16327,6 @@ Create a new Access Code with `event_id` and `user_id`.
                     "tickets-number": 404,
                     "max-quantity": 100,
                     "is-active": false,
-                    "used-for": "Event",
                     "valid-till": "2017-06-24T18:30:00+00:00"
                 },
                 "type": "access-code",
@@ -16396,7 +16391,6 @@ Get a single access code.
                     "tickets-number": 404,
                     "max-quantity": 100,
                     "is-active": false,
-                    "used-for": "Event",
                     "valid-till": "2017-06-24T18:30:00+00:00"
                 },
                 "type": "access-code",
@@ -16437,8 +16431,7 @@ Update a single access code with `id`.
                       "min-quantity": "0",
                       "max-quantity": "100",
                       "valid-from": "2017-06-18T18:30:00+00:00",
-                      "valid-till": "2017-06-24T18:30:00+00:00",
-                      "used-for": "Event"
+                      "valid-till": "2017-06-24T18:30:00+00:00"
                   },
               "type": "access-code",
               "id": "1"
@@ -16478,7 +16471,6 @@ Update a single access code with `id`.
                     "tickets-number": 404,
                     "max-quantity": 100,
                     "is-active": true,
-                    "used-for": "Event",
                     "valid-till": "2017-06-24T18:30:00+00:00"
                 },
                 "type": "access-code",
@@ -16574,7 +16566,6 @@ Get a list of Access Codes.
                         "tickets-number": 404,
                         "max-quantity": 100,
                         "is-active": true,
-                        "used-for": "Event",
                         "valid-till": "2017-06-24T18:30:00+00:00"
                     },
                     "type": "access-code",
@@ -16650,7 +16641,6 @@ Get a list of Access Codes.
                         "tickets-number": 404,
                         "max-quantity": 100,
                         "is-active": true,
-                        "used-for": "Event",
                         "valid-till": "2017-06-24T18:30:00+00:00"
                     },
                     "type": "access-code",
@@ -16725,7 +16715,6 @@ Get a list of Access Codes.
                         "tickets-number": 404,
                         "max-quantity": 100,
                         "is-active": true,
-                        "used-for": "Event",
                         "valid-till": "2017-06-24T18:30:00+00:00"
                     },
                     "type": "access-code",
