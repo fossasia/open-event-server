@@ -97,7 +97,7 @@ def get_filename_from_cd(cd):
 def write_file(file, data):
     """simple write to file"""
     fp = open(file, 'w')
-    fp.write(data)
+    fp.write(str(data, 'utf-8'))
     fp.close()
 
 

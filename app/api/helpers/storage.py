@@ -109,7 +109,7 @@ class UploadedMemory(object):
 
     def save(self, path):
         f = open(path, 'w')
-        f.write(self.data)
+        f.write(str(self.data, 'utf-8'))
         f.close()
 
 
