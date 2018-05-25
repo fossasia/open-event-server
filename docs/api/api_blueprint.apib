@@ -19932,7 +19932,7 @@ This endpoint supports uploading of any kind of file or multiple files. If a sin
         }
 
 
-# Group StripeAuthorization
+# Group Stripe Authorization
 
 **Event ADMIN**
 
@@ -19946,15 +19946,11 @@ To update or get any attribute of this data layer, you will need event admin acc
 | `stripe_user_id`  | string | **yes** |
 | `stripe_email`  | string | **yes** |
 
-## StripeAuthorization Collection[/v1/stripe-authorization{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
-+ Parameters
-    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
-    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
-    + sort (optional, string, `app-name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+## Stripe Authorization Collection [/v1/stripe-authorization]
+Requires Co-Organizer Access
 
 ### Create Stripe Authorization [POST]
-Requires Co-Organizer Access
 
 + Request (application/vnd.api+json)
 
