@@ -206,7 +206,7 @@ def export_event_json(event_id, settings):
                 _download_media(data[count], e[0], dir_path, settings)
         data_str = json.dumps(data, indent=4, ensure_ascii=False).encode('utf-8')
         fp = open(dir_path + '/' + e[0], 'w')
-        fp.write(data_str)
+        fp.write(str(data_str, 'utf-8'))
         fp.close()
     # add meta
     data_str = json.dumps(
@@ -214,7 +214,7 @@ def export_event_json(event_id, settings):
         indent=4, ensure_ascii=False
     ).encode('utf-8')
     fp = open(dir_path + '/meta', 'w')
-    fp.write(data_str)
+    fp.write(str(data_str, 'utf-8'))
     fp.close()
     # make zip
     shutil.make_archive(dir_path, 'zip', dir_path)
