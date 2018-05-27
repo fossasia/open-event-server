@@ -13242,7 +13242,7 @@ Related to any tax related information that might be related with the tickets fo
 |:----------|-------------|------|----------|--------|
 | `country`  | Country of Tax | string | - | - |
 | `name` | Name of the Tax | string | **yes** | **yes** |
-| `rate` | Tax charges rate | string | **yes** | **yes** |
+| `rate` | Tax charges rate | float(0-100) | **yes** | **yes** |
 | `tax-id` | A string based ID | string | **yes** | - |
 | `registered-company` | Registered Company Name | string | - | - |
 | `address` | Address of the comapany | string | - | - |
@@ -13250,8 +13250,9 @@ Related to any tax related information that might be related with the tickets fo
 | `state` | State of the company | string | - | - |
 | `zip` | Zip Code of the company | integer | - | - |
 | `invoice-footer` | A text to add on the footer | string | - |
-| `is-invoice-sent` | Yes/No for Session accept/reject email | boolean (default: `false`) | - | - |
-| `is-tax-included` | Yes/No for Session accept/reject email | boolean (default: `false`) | - | **yes** |
+| `is-invoice-sent` | Yes/No whether invoice already sent or not | boolean (default: `false`) | - | - |
+| `is-tax-included-in-price` | Yes/No for whether tax included | boolean (default: `false`) | - | **yes** |
+| `should-send-invoice` | Yes/No for whether to send invoice or not | boolean (default: `false`) | - | - |
 
 ## Tax Collection [/v1/taxes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -13265,7 +13266,7 @@ Related to any tax related information that might be related with the tickets fo
 ### List all Taxes [GET]
 Get a list of Taxes
 
-+ Request (application/vnd.api+json)
++ Request
 
     + Headers
 
@@ -13302,7 +13303,8 @@ Get a list of Taxes
                 "rate": 1.23456789,
                 "is-tax-included-in-price": false,
                 "registered-company": "fossasia",
-                "tax-id": "1"
+                "tax-id": "1",
+                "is-invoice-sent": false
               },
               "type": "tax",
               "id": "1",
@@ -13353,7 +13355,8 @@ Create a new tax using an event_id.
                     "registered-company": "fossasia",
                     "address": "example",
                     "rate": "1.23456789",
-                    "should-send-invoice": false
+                    "should-send-invoice": false,
+                    "is-invoice-sent": false
                   },
                 "type": "tax"
               }
@@ -13383,7 +13386,8 @@ Create a new tax using an event_id.
                "registered-company": "fossasia",
                "address": "example",
                "rate": "1.23456789",
-               "should-send-invoice": false
+               "should-send-invoice": false,
+               "is-invoice-sent": false
             },
             "type": "tax",
             "id": "1",
@@ -13439,7 +13443,8 @@ Get a single tax.
               "registered-company": "fossasia",
               "address": "example",
               "rate": "1.23456789",
-              "should-send-invoice": false
+              "should-send-invoice": false,
+              "is-invoice-sent": false
             },
             "type": "tax",
             "id": "1",
@@ -13483,7 +13488,8 @@ Update a single tax by `id`.
                   "registered-company": "open event",
                   "address": "example1",
                   "rate": "2.3456789",
-                  "should-send-invoice": false
+                  "should-send-invoice": false,
+                  "is-invoice-sent": false
                 },
                 "type": "tax",
                 "id": "1"
@@ -13514,7 +13520,8 @@ Update a single tax by `id`.
               "registered-company": "open event",
               "address": "example1",
               "rate": "2.3456789",
-              "should-send-invoice": false
+              "should-send-invoice": false,
+              "is-invoice-sent": false
             },
             "type": "tax",
             "id": "1",
@@ -13553,7 +13560,7 @@ Delete a single tax.
         }
 
 
-## Get Taxes under an Event [/v1/events/{event_identifier}/tax{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Get Tax details under an Event [/v1/events/{event_identifier}/tax{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -13561,8 +13568,8 @@ Delete a single tax.
     + sort (optional, string, `rate`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### Get Taxes under an Event [GET]
-Get list of taxes for an event.
+### Get Tax details under an Event [GET]
+Get tax details for an event.
 
 + Request
 
@@ -13575,45 +13582,41 @@ Get list of taxes for an event.
 + Response 200 (application/vnd.api+json)
 
         {
-            "meta": {
-                "count": 1
-            },
-            "data": [
-                {
-                    "relationships": {
-                        "event": {
-                            "links": {
-                                "self": "/v1/taxes/1/relationships/event",
-                                "related": "/v1/tax/1/event"
-                            }
+            "data": {
+                "type": "tax",
+                "attributes": {
+                    "rate": 1.23456789,
+                    "tax-id": "123456789",
+                    "is-invoice-sent": false,
+                    "zip": 123456,
+                    "city": "example",
+                    "name": "Service Tax",
+                    "should-send-invoice": false,
+                    "invoice-footer": "example",
+                    "address": "example",
+                    "registered-company": "fossasia",
+                    "is-tax-included-in-price": false,
+                    "country": "IN",
+                    "state": "example"
+                },
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/taxes/1/relationships/event",
+                            "related": "/v1/tax/1/event"
                         }
-                    },
-                    "attributes": {
-                        "city": null,
-                        "name": "asd",
-                        "zip": null,
-                        "should-send-invoice": null,
-                        "country": null,
-                        "address": null,
-                        "state": null,
-                        "invoice-footer": null,
-                        "rate": 2,
-                        "is-tax-included-in-price": null,
-                        "registered-company": null,
-                        "tax-id": "32"
-                    },
-                    "type": "tax",
-                    "id": "1",
-                    "links": {
-                        "self": "/v1/taxes/1"
                     }
+                },
+                "id": "1",
+                "links": {
+                    "self": "/v1/taxes/1"
                 }
-            ],
-            "jsonapi": {
-                "version": "1.0"
             },
             "links": {
-                "self": "/v1/events/1/tax"
+                "self": "/v1/taxes/1"
+            },
+            "jsonapi": {
+                "version": "1.0"
             }
         }
 
@@ -14572,6 +14575,7 @@ Related to ticket holders(attendees) of an event (free, paid, donation) to the e
 | `country` | Country of the Attendee | string | - |
 | `is-checked-in` | If the attendee is checked in | boolean | - |
 | `checkin-times` | Comma separated checkin times | string | - |
+| `attendee-notes` | Comma separated attendee notes | string | - |
 | `pdf-url` | pdf url of the Attendee | url | - |
 
 ## Attendees Collection [/v1/attendees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
@@ -14604,6 +14608,7 @@ Create a new attendee.
                     "state": "example",
                     "country": "IN",
                     "is-checked-in": "false",
+                    "attendee-notes": "example",
                     "pdf-url": "http://example.com"
                 },
                 "type": "attendee",
@@ -14654,6 +14659,7 @@ Create a new attendee.
               "firstname": "Open Event User",
               "lastname": null,
               "is-checked-in": false,
+              "attendee-notes": "example",
               "state": null,
               "address": null,
               "pdf-url": "http://example.com",
@@ -14747,6 +14753,7 @@ Get a list of attendees of an order.
                 "gender": null,
                 "ticket-id": "1",
                 "country": null,
+                "attendee-notes": null,
                 "pdf-url": "http://ipiyush.com",
                 "work-address": null,
                 "work-phone": null
@@ -14801,6 +14808,7 @@ Get a single attendee.
                 },
                 "attributes": {
                     "checkin-times": null,
+                    "attendee-notes": null,
                     "github": null,
                     "email": "johndoe@example.com",
                     "home-address": null,
@@ -14868,6 +14876,7 @@ Update a single attendee by `id`.
                     "country": "IN",
                     "is-checked-in": "true",
                     "checkin-times": "2017-12-13T22:59:59.123456+00:00",
+                    "attendee-notes": "example",
                     "pdf-url": "http://example.com"
                 },
                 "type": "attendee",
@@ -14892,6 +14901,7 @@ Update a single attendee by `id`.
                     "firstname": "John",
                     "lastname": "Doe",
                     "is-checked-in": true,
+                    "attendee-notes": "example",
                     "state": "example",
                     "address": "address",
                     "pdf-url": "http://example.com",
@@ -17941,6 +17951,336 @@ Get a single role.
                 "self": "/v1/roles/1"
             }
         }
+
+
+# Group Services
+
+**ADMIN**
+
+To get or modify data of this data layer, you will need admin access. You can get the data without admin access as well.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the service | string | **yes** |
+
+## Services Collection [/v1/services{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List Services [GET]
+Get a list of Services.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "attributes": {
+                        "name": "track"
+                    },
+                    "type": "service",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/services/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/services"
+            }
+        }
+
+
+## Services Details [/v1/services/{service_id}]
++ Parameters
+    + service_id: 1 (integer) - ID of the service in the form of an integer
+
+### Get Service Details [GET]
+Get a single role.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "name": "track"
+            },
+            "type": "service",
+            "id": "1",
+            "links": {
+              "self": "/v1/services/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/services/1"
+          }
+        }
+
+
+### Update Service [PATCH]
+Update a single service by `id` (only admin).
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "name": "track"
+                },
+                "id": "1",
+                "type": "service"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+            {
+                "data": {
+                    "attributes": {
+                        "name": "track"
+                    },
+                    "type": "service",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/services/1"
+                    }
+                },
+                "jsonapi": {
+                    "version": "1.0"
+                },
+                "links": {
+                    "self": "/v1/services/1"
+                }
+            }
+
+
+# Group Event Role Permission
+
+**ADMIN**
+
+To get or modify data of this data layer, you will need admin access. You can get the data without admin access as well.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `can-create`  | Permission of role to create a service | boolean | **yes** |
+| `can-read`  | Permission of role to read a service | boolean | **yes** |
+| `can-update`  | Permission of role to update a service | boolean | **yes** |
+| `can-delete`  | Permission of role to delete a service | boolean | **yes** |
+
+## Event Role Permission Collection [/v1/event-role-permissions{?page%5bsize%5d,page%5bnumber%5d,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response..
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List Event Role Permissions [GET]
+Get a list of Event Role Permissions.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "attributes": {
+                        "can-delete": true,
+                        "can-read": true,
+                        "can-create": true,
+                        "can-update": true
+                    },
+                    "relationships": {
+                        "role": {
+                            "links": {
+                                "related": "/v1/roles/1",
+                                "self": "/v1/event-role-permissions/1/relationships/role"
+                            }
+                        },
+                        "service": {
+                            "links": {
+                                "related": "/v1/services/1",
+                                "self": "/v1/event-role-permissions/1/relationships/service"
+                            }
+                        }
+                    },
+                    "type": "event-role-permissions",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/event-role-permissions/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/event-role-permissions"
+            }
+        }
+
+
+## Event Role Permission Details [/v1/event-role-permissions/{event_role_permissions_id}]
++ Parameters
+    + event_role_permissions_id: 1 (integer) - ID of the events role permission in the form of an integer
+
+### Get Event Role Permission Details [GET]
+Get a single event role permission.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "can-delete": true,
+              "can-create": true,
+              "can-update": true,
+              "can-read": true
+            },
+            "relationships": {
+                "role": {
+                    "links": {
+                        "related": "/v1/roles/1",
+                        "self": "/v1/event-role-permissions/1/relationships/role"
+                    }
+                },
+                "service": {
+                    "links": {
+                        "related": "/v1/services/1",
+                        "self": "/v1/event-role-permissions/1/relationships/service"
+                    }
+                }
+            },
+            "type": "event-role-permissions",
+            "id": "1",
+            "links": {
+              "self": "/v1/event-role-permissions/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/event-role-permissions/1"
+          }
+        }
+
+
+### Update Event Role Permission [PATCH]
+Update a single event role permission by `id` (only admin).
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "can-delete": false,
+                  "can-create": true,
+                  "can-update": false,
+                  "can-read": false
+                },
+                "id": "1",
+                "type": "event-role-permissions"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+            {
+                "data": {
+                    "attributes": {
+                        "can-delete": false,
+                        "can-create": true,
+                        "can-update": false,
+                        "can-read": false
+                    },
+                    "relationships": {
+                        "role": {
+                            "links": {
+                                "related": "/v1/roles/1",
+                                "self": "/v1/event-role-permissions/1/relationships/role"
+                            }
+                        },
+                        "service": {
+                            "links": {
+                                "related": "/v1/services/1",
+                                "self": "/v1/event-role-permissions/1/relationships/service"
+                            }
+                        }
+                    },
+                    "type": "event-role-permissions",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/event-role-permissions/1"
+                    }
+                },
+                "jsonapi": {
+                    "version": "1.0"
+                },
+                "links": {
+                    "self": "/v1/event-role-permissions/1"
+                }
+            }
 
 
 # Group Activity
