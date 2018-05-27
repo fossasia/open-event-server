@@ -127,11 +127,8 @@ class OrdersList(ResourceList):
         :param kwargs:
         :return:
         """
-        if kwargs.get('event_id') is None:
-            if 'GET' in request.method and has_access('is_admin'):
-                pass
-            else:
-                raise ForbiddenException({'source': ''}, "Admin Access Required")
+        if 'GET' in request.method and kwargs.get('event_id') is None:
+            pass
         elif not has_access('is_coorganizer', event_id=kwargs['event_id']):
             raise ForbiddenException({'source': ''}, "Co-Organizer Access Required")
 
