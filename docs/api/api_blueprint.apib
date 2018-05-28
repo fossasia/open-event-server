@@ -9325,6 +9325,255 @@ Get a list of events.
           }
         }
 
+## Get Event for a Stripe Authorization [/v1//stripe-authorization/{stripe_authorization_identifier}/event]
++ Parameters
+    + stripe_authorization_identifier: 7201904e (string) - Identifier of the Stripe Authorization
+
+### Event Details for a Stripe Authorization [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "organizers": {
+                "links": {
+                  "self": "/v1/events/1/relationships/organizers",
+                  "related": "/v1/users"
+                }
+              },
+              "ticket-tags": {
+                "links": {
+                  "self": "/v1/events/1/relationships/ticket-tags",
+                  "related": "/v1/events/1/ticket-tags"
+                }
+              },
+              "speakers-call": {
+                "links": {
+                  "self": "/v1/events/1/relationships/speakers-call",
+                  "related": "/v1/events/1/speakers-call"
+                }
+              },
+              "tax": {
+                "links": {
+                  "self": "/v1/events/1/relationships/tax",
+                  "related": "/v1/events/1/tax"
+                }
+              },
+              "coorganizers": {
+                "links": {
+                  "self": "/v1/events/1/relationships/coorganizers",
+                  "related": "/v1/users"
+                }
+              },
+              "session-types": {
+                "links": {
+                  "self": "/v1/events/1/relationships/session-types",
+                  "related": "/v1/events/1/session-types"
+                }
+              },
+              "microlocations": {
+                "links": {
+                  "self": "/v1/events/1/relationships/microlocations",
+                  "related": "/v1/events/1/microlocations"
+                }
+              },
+              "orders": {
+                "links": {
+                  "self": "/v1/events/1/relationships/orders",
+                  "related": "/v1/events/1/orders"
+                }
+              },
+              "speakers": {
+                "links": {
+                  "self": "/v1/events/1/relationships/speakers",
+                  "related": "/v1/events/1/speakers"
+                }
+              },
+              "event-copyright": {
+                "links": {
+                  "self": "/v1/events/1/relationships/event-copyright",
+                  "related": "/v1/events/1/event-copyright"
+                }
+              },
+              "attendees": {
+                "links": {
+                  "self": "/v1/events/1/relationships/attendees",
+                  "related": "/v1/events/1/attendees"
+                }
+              },
+              "custom-forms": {
+                "links": {
+                  "self": "/v1/events/1/relationships/custom-forms",
+                  "related": "/v1/events/1/custom-forms"
+                }
+              },
+              "track-organizers": {
+                "links": {
+                  "self": "/v1/events/1/relationships/track-organizers",
+                  "related": "/v1/users"
+                }
+              },
+              "event-type": {
+                "links": {
+                  "self": "/v1/events/1/relationships/event-type",
+                  "related": "/v1/events/1/event-type"
+                }
+              },
+              "discount-codes": {
+                "links": {
+                  "self": "/v1/events/1/relationships/discount-codes",
+                  "related": "/v1/events/1/discount-codes"
+                }
+              },
+              "event-sub-topic": {
+                "links": {
+                  "self": "/v1/events/1/relationships/event-sub-topic",
+                  "related": "/v1/events/1/event-sub-topic"
+                }
+              },
+              "sessions": {
+                "links": {
+                  "self": "/v1/events/1/relationships/sessions",
+                  "related": "/v1/events/1/sessions"
+                }
+              },
+              "event-topic": {
+                "links": {
+                  "self": "/v1/events/1/relationships/event-topic",
+                  "related": "/v1/events/1/event-topic"
+                }
+              },
+              "registrars": {
+                "links": {
+                  "self": "/v1/events/1/relationships/registrars",
+                  "related": "/v1/users"
+                }
+              },
+              "sponsors": {
+                "links": {
+                  "self": "/v1/events/1/relationships/sponsors",
+                  "related": "/v1/events/1/sponsors"
+                }
+              },
+              "tracks": {
+                "links": {
+                  "self": "/v1/events/1/relationships/tracks",
+                  "related": "/v1/events/1/tracks"
+                }
+              },
+              "access-codes": {
+                "links": {
+                  "self": "/v1/events/1/relationships/access-codes",
+                  "related": "/v1/events/1/access-codes"
+                }
+              },
+              "role-invites": {
+                "links": {
+                  "self": "/v1/events/1/relationships/role-invites",
+                  "related": "/v1/events/1/role-invites"
+                }
+              },
+              "tickets": {
+                "links": {
+                  "self": "/v1/events/1/relationships/tickets",
+                  "related": "/v1/events/1/tickets"
+                }
+              },
+              "social-links": {
+                "links": {
+                  "self": "/v1/events/1/relationships/social-links",
+                  "related": "/v1/events/1/social-links"
+                }
+              },
+              "moderators": {
+                "links": {
+                  "self": "/v1/events/1/relationships/moderators",
+                  "related": "/v1/users"
+                }
+              },
+              "event-invoices": {
+                "links": {
+                  "self": "/v1/events/1/relationships/event-invoices",
+                  "related": "/v1/events/1/event-invoices"
+                }
+              },
+              "stripe-authorization": {
+                "links": {
+                  "self": "/v1/stripe-authorization/1/relationships/event",
+                  "related": "/v1/events/1/stripe-authorization"
+                }
+              }
+            },
+            "attributes": {
+              "payment-country": null,
+              "paypal-email": null,
+              "code-of-conduct": "",
+              "schedule-published-on": null,
+              "payment-currency": null,
+              "organizer-description": "",
+              "is-map-shown": false,
+              "original-image-url": "https://cdn.pixabay.com/photo/2013/11/23/16/25/birds-216412_1280.jpg",
+              "onsite-details": null,
+              "organizer-name": null,
+              "longitude": null,
+              "large-image-url": null,
+              "timezone": "Asia/Kolkata",
+              "can-pay-onsite": false,
+              "deleted-at": null,
+              "ticket-url": null,
+              "can-pay-by-paypal": false,
+              "location-name": null,
+              "is-sponsors-enabled": false,
+              "is-sessions-speakers-enabled": false,
+              "privacy": "public",
+              "has-organizer-info": false,
+              "state": "Draft",
+              "latitude": null,
+              "starts-at": "2002-05-30T04:00:10+00:00",
+              "searchable-location-name": null,
+              "is-ticketing-enabled": true,
+              "can-pay-by-cheque": false,
+              "description": "",
+              "pentabarf-url": null,
+              "xcal-url": null,
+              "logo-url": null,
+              "can-pay-by-bank": false,
+              "is-tax-enabled": false,
+              "icon-image-url": null,
+              "ical-url": null,
+              "name": "New Event",
+              "bank-details": null,
+              "thumbnail-image-url": null,
+              "created-at": "2017-08-13T21:41:20.468748+00:00",
+              "can-pay-by-stripe": true,
+              "cheque-details": null,
+              "external-event-url": null,
+              "identifier": "4f27fefe",
+              "ends-at": "2022-05-30T04:00:10+00:00"
+            },
+            "type": "event",
+            "id": "1",
+            "links": {
+              "self": "/v1/events/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/events/1"
+          }
+        }
+
 # Group Copyright
 Data related to event copyright information.
 
