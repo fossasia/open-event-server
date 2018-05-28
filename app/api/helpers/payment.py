@@ -39,9 +39,14 @@ def get_fee(currency):
 
 
 class StripePaymentsManager(object):
-
     @staticmethod
     def get_credentials(event=None):
+        """
+        If the event parameter is None, It returns the secret and publishable key of the Admin's Stripe account.
+        Else, it returns the corresponding values for the event organizer's account.
+        :param event:
+        :return: Stripe secret and publishable keys.
+        """
         if not event:
             settings = get_settings()
             if settings['stripe_secret_key'] and settings["stripe_publishable_key"] and settings[
@@ -65,6 +70,27 @@ class StripePaymentsManager(object):
                 }
             else:
                 return None
+
+    @staticmethod
+    def get_event_organizer_credentials_from_stripe(stripe_auth_code):
+        """
+        Uses the stripe_auth_code to get the other credentials for the event organizer's stripe account
+        :param stripe_auth_code: stripe authorization code
+        :return: response from stripe
+        """
+        credentials = StripePaymentsManager.get_credentials()
+
+        if not credentials:
+            raise Exception('Stripe is incorrectly configured')
+
+        data = {
+            'client_secret': credentials['SECRET_KEY'],
+            'code': stripe_auth_code,
+            'grant_type': 'authorization_code'
+        }
+
+        response = requests.post('https://connect.stripe.com/oauth/token', data=data)
+        return dict(urllib.parse.parse_qsl(response.text))
 
     @staticmethod
     def capture_payment(order_invoice, currency=None, credentials=None):
