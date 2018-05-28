@@ -46,6 +46,7 @@ from app.models.ticket_holder import TicketHolder
 from app.models.track import Track
 from app.models.user import User, ATTENDEE, ORGANIZER, COORGANIZER
 from app.models.users_events_role import UsersEventsRoles
+from app.models.stripe_authorization import StripeAuthorization
 
 
 class EventList(ResourceList):
@@ -211,6 +212,14 @@ def get_id(view_kwargs):
         tax = safe_query(db, Tax, 'id', view_kwargs['tax_id'], 'tax_id')
         if tax.event_id is not None:
             view_kwargs['id'] = tax.event_id
+        else:
+            view_kwargs['id'] = None
+
+    if view_kwargs.get('stripe_authorization_id') is not None:
+        stripe_authorization = safe_query(db, StripeAuthorization, 'id', view_kwargs['stripe_authorization_id'],
+                                          'stripe_authorization_id')
+        if stripe_authorization.event_id is not None:
+            view_kwargs['id'] = stripe_authorization.event_id
         else:
             view_kwargs['id'] = None
 
