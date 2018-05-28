@@ -24,6 +24,7 @@ from app.models.panel_permission import PanelPermission
 from app.models.custom_system_role import CustomSysRole
 
 from app.models.setting import Setting
+from app.models.module import Module
 
 # User Permissions
 from app.models.user_permission import UserPermission
@@ -55,6 +56,10 @@ def create_services():
 
 def create_settings():
     get_or_create(Setting, app_name='Open Event')
+
+
+def create_modules():
+    get_or_create(Module, donation_include=False)
 
 
 def create_permissions():
@@ -176,6 +181,8 @@ def populate():
     create_user_permissions()
     print('Creating settings...')
     create_settings()
+    print('Creating modules...')
+    create_modules()
     print('Creating admin message settings...')
     create_admin_message_settings()
 
