@@ -20357,11 +20357,9 @@ To update or get any attribute of this data layer, you will need event admin acc
 
 | Parameter | Type | Required |
 |:----------|------|----------|
-| `stripe_secret_key`  | string | **yes** |
-| `stripe_refresh_token`  | string | **yes** |
-| `stripe_publishable_key`  | string | **yes** |
-| `stripe_user_id`  | string | **yes** |
-| `stripe_email`  | string | **yes** |
+| `stripe_auth_code`  | string | **yes** |
+| `stripe_publishable_key`  | string | **no** |
+
 
 
 ## Stripe Authorization Collection [/v1/stripe-authorization]
@@ -20380,11 +20378,7 @@ Requires Co-Organizer Access
             {
               "data": {
                 "attributes": {
-                  "stripe-secret-key": "example",
-                  "stripe-refresh-token": "example",
-                  "stripe-publishable-key": "example",
-                  "stripe-user-id": "example",
-                  "stripe-email": "example@example.com"
+                  "stripe-auth-code": "example"
                 },
                 "type": "stripe-authorization",
                 "relationships": {
@@ -20411,11 +20405,7 @@ Requires Co-Organizer Access
               }
             },
             "attributes": {
-              "stripe-email": "example@example.com",
-              "stripe-secret-key": "example",
-              "stripe-user-id": "example",
-              "stripe-publishable-key": "example",
-              "stripe-refresh-token": "example"
+              "stripe-publishable-key": "example"
             },
             "type": "stripe-authorization",
             "id": "1",
@@ -20460,11 +20450,7 @@ Requires Event Co-Organizer Access
               }
             },
             "attributes": {
-              "stripe-email": "example@example.com",
-              "stripe-secret-key": "example",
-              "stripe-user-id": "example",
-              "stripe-publishable-key": "example",
-              "stripe-refresh-token": "example"
+              "stripe-publishable-key": "example"
             },
             "type": "stripe-authorization",
             "id": "1",
@@ -20494,11 +20480,7 @@ Requires Event Co-Organizer Access
             {
               "data": {
                 "attributes": {
-                  "stripe-secret-key": "example",
-                  "stripe-refresh-token": "example",
-                  "stripe-publishable-key": "example",
-                  "stripe-user-id": "example",
-                  "stripe-email": "example@example.com"
+                  "stripe-auth-code": "example"
                 },
                 "type": "stripe-authorization",
                 "id": "1"
@@ -20518,11 +20500,7 @@ Requires Event Co-Organizer Access
               }
             },
             "attributes": {
-              "stripe-email": "example@example.com",
-              "stripe-secret-key": "example",
-              "stripe-user-id": "example",
-              "stripe-publishable-key": "example",
-              "stripe-refresh-token": "example"
+              "stripe-publishable-key": "example"
             },
             "type": "stripe-authorization",
             "id": "1",
@@ -20561,7 +20539,7 @@ Requires Event Co-Organizer Access
 
 
 ## Stripe Authorization for an Event [/v1/events/{event_identifier}/stripe-authorization]
-Requires event admin access in Orga Server
+Requires event admin access
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
 
@@ -20588,11 +20566,7 @@ Requires event admin access in Orga Server
                     }
                 },
                 "attributes": {
-                    "stripe-email": "example@example.com",
-                    "stripe-secret-key": "example",
-                    "stripe-user-id": "example",
-                    "stripe-publishable-key": "example",
-                    "stripe-refresh-token": "example"
+                    "stripe-publishable-key": "example"
                 },
                 "type": "stripe-authorization",
                 "id": "1",
