@@ -2,6 +2,7 @@ import requests
 import sqlalchemy
 import stripe
 import urllib.parse
+import json
 from flask import current_app
 from forex_python.converter import CurrencyRates
 from urllib.parse import urlencode
@@ -90,7 +91,7 @@ class StripePaymentsManager(object):
         }
 
         response = requests.post('https://connect.stripe.com/oauth/token', data=data)
-        return dict(urllib.parse.parse_qsl(response.text))
+        return json.loads(response.text)
 
     @staticmethod
     def capture_payment(order_invoice, currency=None, credentials=None):
