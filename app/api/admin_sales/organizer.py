@@ -6,26 +6,29 @@ from app.api.bootstrap import api
 from app.models import db
 from app.models.event import Event
 from app.models.order import Order
+from app.models.role import Role
+from app.models.user import User
+from app.models.users_events_role import UsersEventsRoles
 
 from app.api.admin_sales.utils import summary
 
 
-class AdminSalesByEventsSchema(Schema):
+class AdminSalesByOrganizersSchema(Schema):
     """
-    Sales summarized by event
+    Sales summarized by organizer
 
     Provides
-        event(name),
-        date,
+        organizer (first name and last name),
         count of tickets and total sales for orders grouped by status
     """
 
     class Meta:
-        type_ = 'admin-sales-by-events'
-        self_view = 'v1.admin_sales_by_events'
+        type_ = 'admin-sales-by-organizers'
+        self_view = 'v1.admin_sales_by_organizers'
 
     id = fields.String()
-    name = fields.String()
+    first_name = fields.String()
+    last_name = fields.String()
     starts_at = fields.DateTime()
     ends_at = fields.DateTime()
     sales = fields.Method('calc_sales')
@@ -40,18 +43,22 @@ class AdminSalesByEventsSchema(Schema):
         return {s: summary(obj.orders, s) for s in status_codes}
 
 
-class AdminSalesByEventsList(ResourceList):
+class AdminSalesByOrganizersList(ResourceList):
     """
-    Resource for sales by events. Joins events with orders and subsequently
-    accumulates by status
+    Resource for sales by organizers. Joins organizers with events and orders
+    and subsequently accumulates sales by status
     """
 
     def query(self, _):
-        return self.session.query(Event).join(Order)
+        query_ = self.session.query(User)
+        query_ = query_.join(UsersEventsRoles).filter(Role.name == 'organizer')
+        query_ = query_.join(Event).outerjoin(Order)
+
+        return query_
 
     methods = ['GET']
     decorators = (api.has_permission('is_admin'), )
-    schema = AdminSalesByEventsSchema
+    schema = AdminSalesByOrganizersSchema
     data_layer = {
         'model': Event,
         'session': db.session,
