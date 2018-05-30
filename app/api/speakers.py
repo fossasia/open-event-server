@@ -3,7 +3,8 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query, get_count
+from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
@@ -35,6 +36,9 @@ class SpeakerListPost(ResourceList):
                 if event.state == "draft":
                     raise ObjectNotFound({'parameter': 'event_id'},
                                          "Event: {} not found".format(data['event_id']))
+
+        if get_count(db.session.query(Event).filter_by(id=int(data['event']), is_sessions_speakers_enabled=False)) > 0:
+            raise ForbiddenException({'pointer': ''}, "Speakers are disabled for this Event")
 
         if 'sessions' in data:
             session_ids = data['sessions']
