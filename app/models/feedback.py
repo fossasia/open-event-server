@@ -5,7 +5,7 @@ class Feedback(db.Model):
     """Feedback model class"""
     __tablename__ = 'feedback'
     id = db.Column(db.Integer, primary_key=True)
-    rating = db.Column(db.String, nullable=False)
+    rating = db.Column(db.Float, nullable=False)
     comment = db.Column(db.String, nullable=True)
     user_id = db.Column(db.Integer,
                         db.ForeignKey('users.id', ondelete='CASCADE'))
@@ -13,7 +13,9 @@ class Feedback(db.Model):
                          db.ForeignKey('events.id', ondelete='CASCADE'))
 
     def __init__(self, rating=None, comment=None, event_id=None, user_id=None):
-        self.rating = rating
+        rating = float(rating)
+        self.rating = round(rating*2, 0) / 2  # Rounds to nearest 0.5
+
         self.comment = comment
         self.event_id = event_id
         self.user_id = user_id
