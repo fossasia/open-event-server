@@ -11,8 +11,9 @@ from app.models import db
 from app.models.access_code import AccessCode
 from app.models.order import Order
 from app.models.ticket import Ticket, TicketTag, ticket_tags_table
+from app.models.event import Event
 from app.models.ticket_holder import TicketHolder
-from app.api.helpers.exceptions import ConflictException
+from app.api.helpers.exceptions import ConflictException, MethodNotAllowed
 from app.api.helpers.db import get_count
 
 
@@ -35,6 +36,9 @@ class TicketListPost(ResourceList):
 
         if get_count(db.session.query(Ticket.id).filter_by(name=data['name'], event_id=int(data['event']))) > 0:
             raise ConflictException({'pointer': '/data/attributes/name'}, "Ticket already exists")
+
+        if get_count(db.session.query(Event).filter_by(id=int(data['event']), is_ticketing_enabled=False)) > 0:
+            raise MethodNotAllowed({'parameter': 'event_id'}, "Ticketing is disabled for this Event")
 
     schema = TicketSchema
     methods = ['POST', ]
