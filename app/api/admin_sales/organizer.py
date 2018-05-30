@@ -60,7 +60,7 @@ class AdminSalesByOrganizersList(ResourceList):
     decorators = (api.has_permission('is_admin'), )
     schema = AdminSalesByOrganizersSchema
     data_layer = {
-        'model': Event,
+        'model': User,
         'session': db.session,
         'methods': {
             'query': query
