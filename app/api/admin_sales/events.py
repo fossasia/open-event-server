@@ -1,14 +1,18 @@
-from app.api.bootstrap import api
-from app.models import db
-from app.models.order import Order
-from app.models.event import Event
-
-from flask_rest_jsonapi import ResourceList
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
+from flask_rest_jsonapi import ResourceList
+
+from app.api.bootstrap import api
+from app.models import db
+from app.models.event import Event
+from app.models.order import Order
 
 
 def summary(orders, status):
+    """
+    Groups orders by status and returns the total sales and ticket count as a
+    dictionary
+    """
     return {
         'sales_total': sum([o.amount for o in orders if o.status == status]),
         'ticket_count': len([o for o in orders if o.status == status])
@@ -35,13 +39,23 @@ class AdminSalesByEventsSchema(Schema):
     ends_at = fields.DateTime()
     pending = fields.Method('sales')
 
-    def sales(self, obj):
+    @staticmethod
+    def sales(obj):
+        """
+        Returns sales (dictionary with total sales and ticket count) for
+        placed, completed and pending orders
+        """
         status_codes = ['placed', 'completed', 'pending']
         return {s: summary(obj.orders, s) for s in status_codes}
 
 
 class AdminSalesByEventsList(ResourceList):
-    def query(self, view_kwargs):
+    """
+    Resource for sales by events. Joins events with orders and subsequently
+    accumulates by status
+    """
+
+    def query(self, _):
         return self.session.query(Event).join(Order)
 
     methods = ['GET']
