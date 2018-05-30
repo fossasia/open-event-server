@@ -60,7 +60,7 @@ from app.api.order_statistics.events import OrderStatisticsEventDetail
 from app.api.order_statistics.tickets import OrderStatisticsTicketDetail
 from app.api.faq_types import FaqTypeList, FaqTypeListPost, FaqTypeDetail, FaqTypeRelationshipOptional, \
     FaqTypeRelationshipRequired
-from app.api.admin_sales.events import AdminSalesByEvents
+from app.api.admin_sales.events import AdminSalesByEventsList
 
 # users
 api.route(UserList, 'user_list', '/users')
@@ -502,4 +502,4 @@ api.route(AdminStatisticsUserDetail, 'admin_statistics_user_detail', '/admin/sta
 api.route(AdminStatisticsMailDetail, 'admin_statistics_mail_detail', '/admin/statistics/mails')
 
 # Admin Sales
-api.route(AdminSalesByEvents, 'admin_sales_by_events', '/admin/sales/by-events')
+api.route(AdminSalesByEventsList, 'admin_sales_by_events', '/admin/sales/by-events')

@@ -1,51 +1,56 @@
 from app.api.bootstrap import api
-from app.api.data_layers.NoModelLayer import NoModelLayer
-from app.api.helpers.utilities import dasherize
 from app.models import db
-from app.models.order import Order, OrderTicket
+from app.models.order import Order
 from app.models.event import Event
 
-from flask_rest_jsonapi import ResourceDetail, ResourceList
+from flask_rest_jsonapi import ResourceList
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Schema
 
 
-class AdminStatisticsEventSchema(Schema):
+def summary(orders, status):
+    return {
+        'sales_total': sum([o.amount for o in orders if o.status == status]),
+        'ticket_count': len([o for o in orders if o.status == status])
+    }
+
+
+class AdminSalesByEventsSchema(Schema):
     """
-    Tickets summarized by event
+    Sales summarized by event
 
     Provides
         event(name),
         date,
-        count of tickets and total sales for completed orders,
-        count of tickets and total sales for placed orders,
-        count of tickets and total sales for pending orders
+        count of tickets and total sales for orders grouped by status
     """
 
     class Meta:
-        type_ = 'admin-sales-by-event'
+        type_ = 'admin-sales-by-events'
+        self_view = 'v1.admin_sales_by_events'
 
-    id = fields.String(dump_only=True)
+    id = fields.String()
+    name = fields.String()
+    starts_at = fields.DateTime()
+    ends_at = fields.DateTime()
+    pending = fields.Method('sales')
 
-    created_at = fields.DateTime()
-    completed_at = fields.DateTime()
-
-    completed = fields.Method("completed_tickets_and_sales")
-    placed = fields.Method("placed_tickets_and_sales")
-    pending = fields.Method("pending_tickets_and_sales")
-
-    def completed_tickets_and_sales(self, obj):
-        return # TODO self.session.query(Event) #.filter_by(event_id=obj.id)
-
-    def placed_tickets_and_sales(self, obj):
-        return self.session.query(OrderTicket)
-
-    def pending_tickets_and_sales(self, obj):
-        return 42
+    def sales(self, obj):
+        status_codes = ['placed', 'completed', 'pending']
+        return {s: summary(obj.orders, s) for s in status_codes}
 
 
-class AdminSalesByEvents(ResourceList):
-    schema = AdminStatisticsEventSchema
+class AdminSalesByEventsList(ResourceList):
+    def query(self, view_kwargs):
+        return self.session.query(Event).join(Order)
+
     methods = ['GET']
     decorators = (api.has_permission('is_admin'), )
-    data_layer = {'model': Event, 'session': db.session}
+    schema = AdminSalesByEventsSchema
+    data_layer = {
+        'model': Event,
+        'session': db.session,
+        'methods': {
+            'query': query
+        }
+    }
