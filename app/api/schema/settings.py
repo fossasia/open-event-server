@@ -6,8 +6,72 @@ from app.settings import Environment
 from utils.common import use_defaults
 
 
+class SettingSchemaPublic(Schema):
+    """
+    Public Api schema for settings Model
+    """
+    class Meta:
+        """
+        Meta class for setting Api Schema
+        """
+        type_ = 'setting'
+        self_view = 'v1.setting_detail'
+        self_view_kwargs = {'id': '<id>'}
+        inflect = dasherize
+
+    id = fields.Str(dump_only=True)
+
+    # Name of the application. (Eg. Event Yay!, Open Event)
+    app_name = fields.Str(allow_none=True)
+
+    # Tagline for the application. (Eg. Event Management and Ticketing, Home)
+    tagline = fields.Str(allow_none=True)
+
+    # Google Analytics
+    analytics_key = fields.Str(allow_none=True)
+
+    #
+    # Social links
+    #
+    google_url = fields.Str(allow_none=True)
+    github_url = fields.Str(allow_none=True)
+    twitter_url = fields.Str(allow_none=True)
+    support_url = fields.Str(allow_none=True)
+    facebook_url = fields.Str(allow_none=True)
+    youtube_url = fields.Str(allow_none=True)
+
+    # Url of Frontend
+    frontend_url = fields.Url(allow_none=True)
+
+
+class SettingSchemaNonAdmin(SettingSchemaPublic):
+    """
+    Non Admin Api schema for settings Model
+    """
+    class Meta:
+        """
+        Meta class for setting Api Schema
+        """
+        type_ = 'setting'
+        self_view = 'v1.setting_detail'
+        self_view_kwargs = {'id': '<id>'}
+        inflect = dasherize
+
+    id = fields.Str(dump_only=True)
+
+    # Stripe Keys
+    stripe_client_id = fields.Str(allow_none=True)
+    stripe_publishable_key = fields.Str(allow_none=True)
+
+    #
+    # Generators
+    #
+    android_app_url = fields.Str(allow_none=True)
+    web_app_url = fields.Str(allow_none=True)
+
+
 @use_defaults()
-class SettingSchemaAdmin(Schema):
+class SettingSchemaAdmin(SettingSchemaNonAdmin):
     """
     Admin Api schema for settings Model
     """
@@ -26,10 +90,7 @@ class SettingSchemaAdmin(Schema):
     #
 
     app_environment = fields.Str(default=Environment.PRODUCTION)
-    # Name of the application. (Eg. Event Yay!, Open Event)
-    app_name = fields.Str(allow_none=True)
-    # Tagline for the application. (Eg. Event Management and Ticketing, Home)
-    tagline = fields.Str(allow_none=True)
+
     # App secret
     secret = fields.Str(allow_none=True)
     # Static domain
@@ -72,10 +133,9 @@ class SettingSchemaAdmin(Schema):
     # Payment Gateway
     #
 
-    # Stripe Keys
-    stripe_client_id = fields.Str(allow_none=True)
+    # Stripe secret key
     stripe_secret_key = fields.Str(allow_none=True)
-    stripe_publishable_key = fields.Str(allow_none=True)
+
     # PayPal Credentials
     paypal_mode = fields.Str(allow_none=True)
     paypal_sandbox_username = fields.Str(allow_none=True)
@@ -101,68 +161,3 @@ class SettingSchemaAdmin(Schema):
     smtp_password = fields.Str(allow_none=True)
     smtp_port = fields.Integer(allow_none=True)
     smtp_encryption = fields.Str(allow_none=True)  # Can be tls, ssl, none
-    # Google Analytics
-    analytics_key = fields.Str(allow_none=True)
-
-    #
-    # Social links
-    #
-    google_url = fields.Str(allow_none=True)
-    github_url = fields.Str(allow_none=True)
-    twitter_url = fields.Str(allow_none=True)
-    support_url = fields.Str(allow_none=True)
-    facebook_url = fields.Str(allow_none=True)
-    youtube_url = fields.Str(allow_none=True)
-
-    #
-    # Generators
-    #
-    android_app_url = fields.Str(allow_none=True)
-    web_app_url = fields.Str(allow_none=True)
-
-    # Url of Frontend
-    frontend_url = fields.Url(allow_none=True)
-
-
-class SettingSchemaNonAdmin(Schema):
-    """
-    Non Admin Api schema for settings Model
-    """
-    class Meta:
-        """
-        Meta class for setting Api Schema
-        """
-        type_ = 'setting'
-        self_view = 'v1.setting_detail'
-        self_view_kwargs = {'id': '<id>'}
-        inflect = dasherize
-
-    id = fields.Str(dump_only=True)
-
-    # Name of the application. (Eg. Event Yay!, Open Event)
-    app_name = fields.Str(allow_none=True)
-    # Tagline for the application. (Eg. Event Management and Ticketing, Home)
-    tagline = fields.Str(allow_none=True)
-    # Google Analytics
-    analytics_key = fields.Str(allow_none=True)
-
-    stripe_publishable_key = fields.Str(allow_none=True)
-
-    #
-    # Social links
-    #
-    google_url = fields.Str(allow_none=True)
-    github_url = fields.Str(allow_none=True)
-    twitter_url = fields.Str(allow_none=True)
-    support_url = fields.Str(allow_none=True)
-    facebook_url = fields.Str(allow_none=True)
-    youtube_url = fields.Str(allow_none=True)
-
-    #
-    # Generators
-    #
-    android_app_url = fields.Str(allow_none=True)
-    web_app_url = fields.Str(allow_none=True)
-
-    # Url of Frontend
-    frontend_url = fields.Url(allow_none=True)
