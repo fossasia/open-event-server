@@ -67,7 +67,7 @@ def create_permissions():
     coorgr = Role.query.get(2)
     track_orgr = Role.query.get(3)
     mod = Role.query.get(4)
-    attend  = Role.query.get(5)
+    attend = Role.query.get(5)
     regist = Role.query.get(6)
 
     track = Service.query.get(1)
