@@ -67,6 +67,8 @@ def create_permissions():
     coorgr = Role.query.get(2)
     track_orgr = Role.query.get(3)
     mod = Role.query.get(4)
+    attend  = Role.query.get(5)
+    regist = Role.query.get(6)
 
     track = Service.query.get(1)
     session = Service.query.get(2)
@@ -110,6 +112,48 @@ def create_permissions():
     # For MODERATOR
     perm, _ = get_or_create(Permission, role=mod, service=track)
     perm.can_create, perm.can_update, perm.can_delete = False, False, False
+    db.session.add(perm)
+
+    # For ATTENDEE
+    perm, _ = get_or_create(Permission, role=attend, service=track)
+    perm.can_create, perm.can_delete = False, False
+    db.session.add(perm)
+
+    perm, _ = get_or_create(Permission, role=attend, service=session)
+    perm.can_create, perm.can_delete = False, False
+    db.session.add(perm)
+
+    perm, _ = get_or_create(Permission, role=attend, service=speaker)
+    perm.can_create, perm.can_delete = False, False
+    db.session.add(perm)
+
+    perm, _ = get_or_create(Permission, role=attend, service=sponsor)
+    perm.can_create, perm.can_delete = False, False
+    db.session.add(perm)
+
+    perm, _ = get_or_create(Permission, role=attend, service=microlocation)
+    perm.can_create, perm.can_delete = False, False
+    db.session.add(perm)
+
+    # For REGISTRAR
+    perm, _ = get_or_create(Permission, role=regist, service=track)
+    perm.can_create, perm.can_delete = False, False
+    db.session.add(perm)
+
+    perm, _ = get_or_create(Permission, role=regist, service=session)
+    perm.can_create, perm.can_delete = False, False
+    db.session.add(perm)
+
+    perm, _ = get_or_create(Permission, role=regist, service=speaker)
+    perm.can_create, perm.can_delete = False, False
+    db.session.add(perm)
+
+    perm, _ = get_or_create(Permission, role=regist, service=sponsor)
+    perm.can_create, perm.can_delete = False, False
+    db.session.add(perm)
+
+    perm, _ = get_or_create(Permission, role=regist, service=microlocation)
+    perm.can_create, perm.can_delete = False, False
     db.session.add(perm)
 
 
