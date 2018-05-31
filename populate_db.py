@@ -241,6 +241,8 @@ def populate_without_print():
     create_custom_sys_roles()
     create_panel_permissions()
     create_user_permissions()
+    create_settings()
+    create_modules()
     create_admin_message_settings()
 
     db.session.commit()
