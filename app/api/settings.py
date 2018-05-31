@@ -4,7 +4,7 @@ from flask_jwt import current_identity as current_user, _jwt_required
 from flask_rest_jsonapi import ResourceDetail
 
 from app.api.bootstrap import api
-from app.api.schema.settings import SettingSchemaAdmin, SettingSchemaNonAdmin
+from app.api.schema.settings import SettingSchemaAdmin, SettingSchemaNonAdmin, SettingSchemaPublic
 from app.models import db
 from app.models.setting import Setting
 
@@ -36,7 +36,7 @@ class SettingDetail(ResourceDetail):
             else:
                 self.schema = SettingSchemaNonAdmin
         else:
-            self.schema = SettingSchemaNonAdmin
+            self.schema = SettingSchemaPublic
 
     decorators = (api.has_permission('is_admin', methods="PATCH", id="1"),)
     methods = ['GET', 'PATCH']

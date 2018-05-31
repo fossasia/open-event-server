@@ -1,3 +1,6 @@
+"""Schema class for Feedbacks"""
+
+from marshmallow.validate import Range
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema, Relationship
 
@@ -18,7 +21,7 @@ class FeedbackSchema(Schema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    rating = fields.Str(required=True)
+    rating = fields.Float(required=True, validate=Range(min=0, max=5))
     comment = fields.Str(required=False)
     event = Relationship(attribute='event',
                          self_view='v1.feedback_event',
