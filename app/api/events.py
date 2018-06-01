@@ -6,6 +6,8 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy import or_
 from sqlalchemy.orm.exc import NoResultFound
+import pytz
+from datetime import datetime
 
 from app.api.bootstrap import api
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
@@ -103,7 +105,7 @@ class EventList(ResourceList):
 
     def after_create_object(self, event, data, view_kwargs):
         """
-        after create method to save roles for users
+        after create method to save roles for users and add the user as an accepted role(organizer)
         :param event:
         :param data:
         :param view_kwargs:
@@ -113,6 +115,9 @@ class EventList(ResourceList):
         user = User.query.filter_by(id=view_kwargs['user_id']).first()
         uer = UsersEventsRoles(user, event, role)
         save_to_db(uer, 'Event Saved')
+        role_invite = RoleInvite(user.email, role.title_name, event.id, role.id, datetime.now(pytz.utc),
+                                 status='accepted')
+        save_to_db(role_invite, 'Organiser Role Invite Added')
         if data.get('original_image_url'):
             uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
             self.session.query(Event).filter_by(id=event.id).update(uploaded_images)
@@ -342,6 +347,7 @@ class EventDetail(ResourceDetail):
     """
     EventDetail class for EventSchema
     """
+
     def before_get(self, args, kwargs):
         """
         method for assigning schema based on access
@@ -386,7 +392,7 @@ class EventDetail(ResourceDetail):
             data['icon_image_url'] = uploaded_images['icon_image_url']
 
     decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="id", fetch_as="event_id",
-                                     model=Event), )
+                                     model=Event),)
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
@@ -399,6 +405,7 @@ class EventRelationship(ResourceRelationship):
     """
     Event Relationship
     """
+
     def before_get_object(self, view_kwargs):
         if view_kwargs.get('identifier'):
             event = safe_query(db, Event, 'identifier', view_kwargs['identifier'], 'identifier')
@@ -417,6 +424,7 @@ class EventCopySchema(Schema):
     """
     API Schema for EventCopy
     """
+
     class Meta:
         """
         Meta class for EventCopySchema
