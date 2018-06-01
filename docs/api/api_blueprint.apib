@@ -201,7 +201,7 @@ Create a new user using an email, password and an optional name.
               {
                 "attributes":
                 {
-                  "email": "example@example.com",
+                  "email": "email@example.com",
                   "password": "password",
                   "avatar_url": "http://example.com/example.png",
                   "first-name": "John",
@@ -14395,15 +14395,33 @@ Get a single attendee.
                     }
                 },
                 "attributes": {
-                    "city": "example",
-                    "firstname": "John",
-                    "lastname": "Doe",
+                    "checkin-times": null,
+                    "github": null,
+                    "email": "johndoe@example.com",
+                    "home-address": null,
+                    "billing-address": null,
                     "is-checked-in": false,
+                    "gender": null,
+                    "pdf-url": null,
+                    "lastname": "Doe",
+                    "shipping-address": null,
+                    "job-title": null,
+                    "website": null,
+                    "facebook": null,
+                    "twitter": null,
+                    "tax-business-info": null,
                     "state": "example",
-                    "address": "address",
-                    "pdf-url": "http://example.com",
+                    "work-phone": null,
+                    "city": "example",
+                    "birth-date": null,
                     "country": "IN",
-                    "email": "johndoe@example.com"
+                    "address": "address",
+                    "blog": null,
+                    "work-address": null,
+                    "phone": null,
+                    "ticket-id": "1",
+                    "firstname": "John",
+                    "company": null
                 },
                 "type": "attendee",
                 "id": "1",
@@ -16235,9 +16253,8 @@ Access Codes related to the events.
 
 | Parameter | Description | Type | Required |
 |:----------|-------------|------|----------|
-| `code`  | Access Code | string | - |
+| `code`  | Access Code | string | yes |
 | `access-url` | URL of the access code | string | - |
-| `type` | Amount or Percentage | string | - |
 | `is-active` | If the access code is active | boolean | - |
 | `tickets-number` | Tickets Number for Access Code | integer (>=0) | - |
 | `min-quantity` | Minimum number of tickets for Access Code | integer (>=0) | - |
@@ -16245,8 +16262,6 @@ Access Codes related to the events.
 | `valid-from` | Access Code valid from | ISO 8601 (tz-aware) | - |
 | `valid-till` | Access Code valid till | ISO 8601 (tz-aware) | - |
 | `created-at` | Access Code created at | ISO 8601 (tz-aware) | - |
-| `tickets` | Event or Ticket | String | - |
-| `used-for` | Access Code used for | String | - |
 
 
 
@@ -16293,8 +16308,7 @@ Create a new Access Code with `event_id` and `user_id`.
                       "min-quantity": "0",
                       "max-quantity": "100",
                       "valid-from": "2017-06-18T18:30:00+00:00",
-                      "valid-till": "2017-06-24T18:30:00+00:00",
-                      "used-for": "Event"
+                      "valid-till": "2017-06-24T18:30:00+00:00"
                   }
                 }
             }
@@ -16331,7 +16345,6 @@ Create a new Access Code with `event_id` and `user_id`.
                     "tickets-number": 404,
                     "max-quantity": 100,
                     "is-active": false,
-                    "used-for": "Event",
                     "valid-till": "2017-06-24T18:30:00+00:00"
                 },
                 "type": "access-code",
@@ -16396,7 +16409,6 @@ Get a single access code.
                     "tickets-number": 404,
                     "max-quantity": 100,
                     "is-active": false,
-                    "used-for": "Event",
                     "valid-till": "2017-06-24T18:30:00+00:00"
                 },
                 "type": "access-code",
@@ -16437,8 +16449,7 @@ Update a single access code with `id`.
                       "min-quantity": "0",
                       "max-quantity": "100",
                       "valid-from": "2017-06-18T18:30:00+00:00",
-                      "valid-till": "2017-06-24T18:30:00+00:00",
-                      "used-for": "Event"
+                      "valid-till": "2017-06-24T18:30:00+00:00"
                   },
               "type": "access-code",
               "id": "1"
@@ -16478,7 +16489,6 @@ Update a single access code with `id`.
                     "tickets-number": 404,
                     "max-quantity": 100,
                     "is-active": true,
-                    "used-for": "Event",
                     "valid-till": "2017-06-24T18:30:00+00:00"
                 },
                 "type": "access-code",
@@ -16574,7 +16584,6 @@ Get a list of Access Codes.
                         "tickets-number": 404,
                         "max-quantity": 100,
                         "is-active": true,
-                        "used-for": "Event",
                         "valid-till": "2017-06-24T18:30:00+00:00"
                     },
                     "type": "access-code",
@@ -16650,7 +16659,6 @@ Get a list of Access Codes.
                         "tickets-number": 404,
                         "max-quantity": 100,
                         "is-active": true,
-                        "used-for": "Event",
                         "valid-till": "2017-06-24T18:30:00+00:00"
                     },
                     "type": "access-code",
@@ -16725,7 +16733,6 @@ Get a list of Access Codes.
                         "tickets-number": 404,
                         "max-quantity": 100,
                         "is-active": true,
-                        "used-for": "Event",
                         "valid-till": "2017-06-24T18:30:00+00:00"
                     },
                     "type": "access-code",
@@ -18916,7 +18923,7 @@ feedbacks related to the events.
 
 | Parameter | Description | Type | Required |
 |:----------|-------------|------|----------|
-| `rating`  | Rating for the overall event | string | **yes** |
+| `rating`  | Rating for the overall event | float | **yes** |
 | `comment` | Comments and suggestions about the event | string | - |
 
 
@@ -19943,7 +19950,7 @@ This endpoint supports uploading of any kind of file or multiple files. If a sin
         }
 
 
-# Group StripeAuthorization
+# Group Stripe Authorization
 
 **Event ADMIN**
 
@@ -19957,15 +19964,11 @@ To update or get any attribute of this data layer, you will need event admin acc
 | `stripe_user_id`  | string | **yes** |
 | `stripe_email`  | string | **yes** |
 
-## StripeAuthorization Collection[/v1/stripe-authorization{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
-+ Parameters
-    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
-    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
-    + sort (optional, string, `app-name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+## Stripe Authorization Collection [/v1/stripe-authorization]
+Requires Co-Organizer Access
 
 ### Create Stripe Authorization [POST]
-Requires Co-Organizer Access
 
 + Request (application/vnd.api+json)
 

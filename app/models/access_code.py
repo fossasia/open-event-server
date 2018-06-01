@@ -24,8 +24,6 @@ class AccessCode(db.Model):
     marketer_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     marketer = db.relationship('User', backref='access_codes_')
 
-    used_for = db.Column(db.String)
-
     def __init__(self,
                  code=None,
                  access_url=None,
