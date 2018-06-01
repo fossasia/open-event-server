@@ -114,47 +114,14 @@ def create_permissions():
     perm.can_create, perm.can_update, perm.can_delete = False, False, False
     db.session.add(perm)
 
-    # For ATTENDEE
-    perm, _ = get_or_create(Permission, role=attend, service=track)
-    perm.can_create, perm.can_delete = False, False
-    db.session.add(perm)
-
-    perm, _ = get_or_create(Permission, role=attend, service=session)
-    perm.can_create, perm.can_delete = False, False
-    db.session.add(perm)
-
-    perm, _ = get_or_create(Permission, role=attend, service=speaker)
-    perm.can_create, perm.can_delete = False, False
-    db.session.add(perm)
-
-    perm, _ = get_or_create(Permission, role=attend, service=sponsor)
-    perm.can_create, perm.can_delete = False, False
-    db.session.add(perm)
-
-    perm, _ = get_or_create(Permission, role=attend, service=microlocation)
-    perm.can_create, perm.can_delete = False, False
-    db.session.add(perm)
-
-    # For REGISTRAR
-    perm, _ = get_or_create(Permission, role=regist, service=track)
-    perm.can_create, perm.can_delete = False, False
-    db.session.add(perm)
-
-    perm, _ = get_or_create(Permission, role=regist, service=session)
-    perm.can_create, perm.can_delete = False, False
-    db.session.add(perm)
-
-    perm, _ = get_or_create(Permission, role=regist, service=speaker)
-    perm.can_create, perm.can_delete = False, False
-    db.session.add(perm)
-
-    perm, _ = get_or_create(Permission, role=regist, service=sponsor)
-    perm.can_create, perm.can_delete = False, False
-    db.session.add(perm)
-
-    perm, _ = get_or_create(Permission, role=regist, service=microlocation)
-    perm.can_create, perm.can_delete = False, False
-    db.session.add(perm)
+    # For ATTENDEE and REGISTRAR
+    services = [track, session, speaker, sponsor, microlocation]
+    roles = [attend, regist]
+    for role in Role.query.filter(Role.name.in_(roles)):
+        for service in services:
+            perm, _ = get_or_create(Permission, role=role, service=service)
+            perm.can_create, perm.can_update, perm.can_delete = False, False, False
+            db.session.add(perm)
 
 
 def create_custom_sys_roles():
