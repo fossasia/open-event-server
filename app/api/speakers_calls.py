@@ -3,7 +3,7 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.exceptions import ForbiddenException, ConflictException
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.speakers_calls import SpeakersCallSchema
@@ -28,10 +28,28 @@ class SpeakersCallList(ResourceList):
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ForbiddenException({'source': ''}, 'Co-organizer access is required.')
 
+    def before_create_object(self, data, view_kwargs):
+        """
+        method to check if speaker calls object already exists for an event
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
+        try:
+            self.session.query(SpeakersCall).filter_by(event_id=data['event']).one()
+        except NoResultFound:
+            pass
+        else:
+            raise ConflictException({'pointer': '/data/relationships/event'},
+                                    "Speakers Call already exists for this event")
+
     schema = SpeakersCallSchema
     methods = ['POST', ]
     data_layer = {'session': db.session,
-                  'model': SpeakersCall}
+                  'model': SpeakersCall,
+                  'methods': {
+                      'before_create_object': before_create_object
+                  }}
 
 
 class SpeakersCallDetail(ResourceDetail):
