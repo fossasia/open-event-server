@@ -42,7 +42,13 @@ class ImageSizes(db.Model):
                  thumbnail_aspect=False,
                  thumbnail_quality=None,
                  logo_width=None,
-                 logo_height=None):
+                 logo_height=None,
+                 small_size_width_height=None,
+                 small_size_quality=None,
+                 thumbnail_size_width_height=None,
+                 thumbnail_size_quality=None,
+                 icon_size_width_height=None,
+                 icon_size_quality=None):
         self.type = type
         self.full_width = full_width
         self.full_height = full_height
