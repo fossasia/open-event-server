@@ -82,7 +82,7 @@ class StripePaymentsManager(object):
         credentials = StripePaymentsManager.get_credentials()
 
         if not credentials:
-            raise Exception('Stripe is incorrectly configured')
+            raise Exception('Stripe credentials of the Event organizer not found')
 
         data = {
             'client_secret': credentials['SECRET_KEY'],
