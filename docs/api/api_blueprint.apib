@@ -17078,137 +17078,7 @@ To create or modify data of this data layer, you will need admin access. You can
 | `logo-height` | Height of the logo | integer | - |
 | `type` | Type of the image | string | - |
 
-## Image Size Collection [/v1/image-sizes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
-+ Parameters
-    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
-    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
-    + sort (optional, string, `type`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
-
-### List Image Sizes [GET]
-Get a list of Image Sizes.
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-            "meta": {
-                "count": 1
-            },
-            "data": [
-                {
-                    "attributes": {
-                        "full-aspect": false,
-                        "thumbnail-height": 200,
-                        "thumbnail-aspect": true,
-                        "icon-height": 30,
-                        "icon-aspect": true,
-                        "type": "logo",
-                        "icon-width": 75,
-                        "icon-quality": 80,
-                        "logo-width": 32,
-                        "full-width": 1300,
-                        "thumbnail-width": 500,
-                        "thumbnail-quality": 80,
-                        "full-height": 500,
-                        "logo-height": 32,
-                        "full-quality": 80
-                    },
-                    "type": "image-size",
-                    "id": "1",
-                    "links": {
-                        "self": "/v1/image-sizes/1"
-                    }
-                }
-            ],
-            "jsonapi": {
-                "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/image-sizes"
-            }
-        }
-
-
-### Create Image Size [POST]
-Create a new general image size by admins.
-
-+ Request (application/vnd.api+json)
-
-    + Headers
-
-            Authorization: JWT <Auth Key>
-
-    + Body
-
-            {
-              "data": {
-                "attributes": {
-                  "full-width": 1300,
-                  "full-height": 500,
-                  "full-aspect": true,
-                  "full-quality": 80,
-                  "icon-width": 75,
-                  "icon-height": 30,
-                  "icon-aspect": true,
-                  "icon-quality": 80,
-                  "thumbnail-width": 500,
-                  "thumbnail-height": 200,
-                  "thumbnail-aspect": true,
-                  "thumbnail-quality": 80,
-                  "logo-width": 32,
-                  "logo-height": 32,
-                  "type": "logo"
-                },
-                "type": "image-size"
-              }
-            }
-
-+ Response 201 (application/vnd.api+json)
-
-        {
-            "data": {
-                "attributes": {
-                    "full-aspect": true,
-                    "thumbnail-height": 200,
-                    "thumbnail-aspect": true,
-                    "icon-height": 30,
-                    "icon-aspect": true,
-                    "type": "logo",
-                    "icon-width": 75,
-                    "icon-quality": 80,
-                    "logo-width": 32,
-                    "full-width": 1300,
-                    "thumbnail-width": 500,
-                    "thumbnail-quality": 80,
-                    "full-height": 500,
-                    "logo-height": 32,
-                    "full-quality": 80
-                },
-                "type": "image-size",
-                "id": "1",
-                "links": {
-                    "self": "/v1/image-sizes/1"
-                }
-            },
-            "jsonapi": {
-                "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/image-sizes/1"
-            }
-        }
-
-## Image Size Details [/v1/image-sizes/{image_size_id}]
-+ Parameters
-    + image_size_id: 1 (integer) - ID of the image size in the form of an integer
+## Image Size Details [/v1/event-image-sizes]
 
 ### Get Image Size Details [GET]
 Get a single image size.
@@ -17245,22 +17115,20 @@ Get a single image size.
             "type": "image-size",
             "id": "1",
             "links": {
-              "self": "/v1/image-sizes/1"
+              "self": "/v1/event-image-sizes?id=1"
             }
           },
           "jsonapi": {
             "version": "1.0"
           },
           "links": {
-            "self": "/v1/image-sizes/1"
+            "self": "/v1/event-image-sizes?id=1"
           }
         }
 
 
 ### Update Image Size [PATCH]
-Update a single image size by `id`.
-
-+ `id` (integer) - ID of the record to update **(required)**
+Update a single image size
 
 + Request (application/vnd.api+json)
 
@@ -17290,7 +17158,7 @@ Update a single image size by `id`.
                   "type": "logo"
                 },
                 "id": "1",
-                "type": "image-size"
+                "type": "event-image-size"
               }
             }
 
@@ -17315,41 +17183,19 @@ Update a single image size by `id`.
                         "logo-height": 32,
                         "full-quality": 80
                     },
-                    "type": "image-size",
+                    "type": "event-image-size",
                     "id": "1",
                     "links": {
-                        "self": "/v1/image-sizes/1"
+                        "self": "/v1/event-image-sizes?id=1"
                     }
                 },
                 "jsonapi": {
                     "version": "1.0"
                 },
                 "links": {
-                    "self": "/v1/image-sizes/1"
+                    "self": "/v1/event-image-sizes?id=1"
                 }
             }
-
-### Delete Image Size [DELETE]
-Delete a single image size.
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-          "meta": {
-            "message": "Object successfully deleted"
-          },
-          "jsonapi": {
-            "version": "1.0"
-          }
-        }
 
 # Group Roles
 
