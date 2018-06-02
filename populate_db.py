@@ -117,7 +117,7 @@ def create_permissions():
     # For ATTENDEE and REGISTRAR
     services = [track, session, speaker, sponsor, microlocation]
     roles = [attend, regist]
-    for role in Role.query.filter(Role.name.in_(roles)):
+    for role in roles:
         for service in services:
             perm, _ = get_or_create(Permission, role=role, service=service)
             perm.can_create, perm.can_update, perm.can_delete = False, False, False
