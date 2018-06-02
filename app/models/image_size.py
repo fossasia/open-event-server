@@ -4,8 +4,7 @@ from app.models import db
 class ImageSizes(db.Model):
     """image size model class"""
     __tablename__ = 'image_sizes'
-    id = db.Column(db.Integer,
-                   primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String)
     full_width = db.Column(db.Integer)
     full_height = db.Column(db.Integer)
@@ -21,6 +20,12 @@ class ImageSizes(db.Model):
     thumbnail_quality = db.Column(db.Integer)
     logo_width = db.Column(db.Integer)
     logo_height = db.Column(db.Integer)
+    small_size_width_height = db.Column(db.Integer)
+    small_size_quality = db.Column(db.Integer)
+    thumbnail_size_width_height = db.Column(db.Integer)
+    thumbnail_size_quality = db.Column(db.Integer)
+    icon_size_width_height = db.Column(db.Integer)
+    icon_size_quality = db.Column(db.Integer)
 
     def __init__(self,
                  type=None,
@@ -53,9 +58,15 @@ class ImageSizes(db.Model):
         self.thumbnail_quality = thumbnail_quality
         self.logo_width = logo_width
         self.logo_height = logo_height
+        self.small_size_width_height = small_size_width_height
+        self.small_size_quality = small_size_quality
+        self.thumbnail_size_width_height = thumbnail_size_width_height
+        self.thumbnail_size_quality = thumbnail_size_quality
+        self.icon_size_width_height = icon_size_width_height
+        self.icon_size_quality = icon_size_quality
 
     def __str__(self):
-        return 'Page: ' + self.id
+        return 'Image Size: ' + self.id
 
     @property
     def serialize(self):
@@ -76,5 +87,11 @@ class ImageSizes(db.Model):
             'thumbnail_aspect': self.thumbnail_aspect,
             'thumbnail_quality': self.thumbnail_quality,
             'logo_height': self.logo_height,
-            'logo_width': self.logo_width
+            'logo_width': self.logo_width,
+            'small_size_width_height': self.small_size_width_height,
+            'small_size_quality': self.small_size_quality,
+            'thumbnail_size_width_height': self.thumbnail_size_width_height,
+            'thumbnail_size_quality': self.thumbnail_size_quality,
+            'icon_size_width_height': self.icon_size_width_height,
+            'icon_size_quality': self.icon_size_quality
         }
