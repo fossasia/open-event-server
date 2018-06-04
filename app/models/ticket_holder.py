@@ -8,6 +8,9 @@ from app.models import db
 
 class TicketHolder(db.Model):
     __tablename__ = "ticket_holders"
+    __table_args__ = (
+        db.UniqueConstraint('ticket_id', name='ticket_event'),
+        )
 
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String, nullable=False)
