@@ -74,6 +74,9 @@ def create_save_resized_image(image_file, basewidth=None, maintain_aspect=None, 
     :param image_file:
     :return:
     """
+    if not image_file:
+        return None
+
     filename = '{filename}.{ext}'.format(filename=get_file_name(), ext=ext)
     data = urllib.request.urlopen(image_file).read()
     image_file = io.BytesIO(data)
