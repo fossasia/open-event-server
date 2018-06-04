@@ -1,5 +1,7 @@
+from flask import request, current_app
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
+from flask_jwt import current_identity as current_user, _jwt_required
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
@@ -66,7 +68,18 @@ class TicketList(ResourceList):
         :param view_kwargs:
         :return:
         """
-        query_ = self.session.query(Ticket).filter_by(is_hidden=False)
+
+        if 'Authorization' in request.headers:
+            _jwt_required(current_app.config['JWT_DEFAULT_REALM'])
+            if current_user.is_super_admin or current_user.is_admin:
+                query_ = self.session.query(Ticket)
+            elif view_kwargs.get('event_id') and has_access('is_organizer', event_id=view_kwargs['event_id']):
+                query_ = self.session.query(Ticket)
+            else:
+                query_ = self.session.query(Ticket).filter_by(is_hidden=False)
+        else:
+            query_ = self.session.query(Ticket).filter_by(is_hidden=False)
+
         if view_kwargs.get('ticket_tag_id'):
             ticket_tag = safe_query(self, TicketTag, 'id', view_kwargs['ticket_tag_id'], 'ticket_tag_id')
             query_ = query_.join(ticket_tags_table).filter_by(ticket_tag_id=ticket_tag.id)

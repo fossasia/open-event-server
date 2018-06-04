@@ -52,10 +52,14 @@ class AccessCodeSchema(Schema):
             if 'tickets_number' not in data:
                 data['tickets_number'] = access_code.tickets_number
 
-        if 'min_quantity' in data and 'max_quantity' in data:
-            if data['min_quantity'] >= data['max_quantity']:
-                raise UnprocessableEntity({'pointer': '/data/attributes/min-quantity'},
-                                          "min-quantity should be less than max-quantity")
+        min_quantity = data.get('min_quantity', None)
+        max_quantity = data.get('max_quantity', None)
+        if min_quantity is not None and max_quantity is not None:
+            if min_quantity >= max_quantity:
+                raise UnprocessableEntity(
+                    {'pointer': '/data/attributes/min-quantity'},
+                    "min-quantity should be less than max-quantity"
+                )
 
         if 'tickets_number' in data and 'max_quantity' in data:
             if data['tickets_number'] < data['max_quantity']:
