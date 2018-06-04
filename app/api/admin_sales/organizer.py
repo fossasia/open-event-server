@@ -39,8 +39,7 @@ class AdminSalesByOrganizersSchema(Schema):
         Returns sales (dictionary with total sales and ticket count) for
         placed, completed and pending orders
         """
-        status_codes = ['placed', 'completed', 'pending']
-        return {s: summary(obj.orders, s) for s in status_codes}
+        return summary(obj.orders)
 
 
 class AdminSalesByOrganizersList(ResourceList):

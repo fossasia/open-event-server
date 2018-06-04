@@ -4,7 +4,7 @@ admin section
 """
 
 
-def summary(orders, status):
+def status_summary(orders, status):
     """
     Groups orders by status and returns the total sales and ticket count as a
     dictionary
@@ -13,3 +13,9 @@ def summary(orders, status):
         'sales_total': sum([o.amount for o in orders if o.status == status]),
         'ticket_count': len([o for o in orders if o.status == status])
     }
+
+
+def summary(orders):
+    "Returns sales as dictionary for all status codes"
+    status_codes = ['placed', 'completed', 'pending']
+    return {s: status_summary(orders, s) for s in status_codes}

@@ -1,33 +1,33 @@
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from flask_rest_jsonapi import ResourceList
+from sqlalchemy import func
 
 from app.api.bootstrap import api
 from app.models import db
-from app.models.event import Event
-from app.models.order import Order
+from app.models.order import Order, OrderTicket
+from app.models.user import User
 
 from app.api.admin_sales.utils import summary
 
 
-class AdminSalesByEventsSchema(Schema):
+
+class AdminSalesByMarketerSchema(Schema):
     """
-    Sales summarized by event
+    Sales summarized by marketer
 
     Provides
-        event(name),
-        date,
+        marketer name,
         count of tickets and total sales for orders grouped by status
     """
 
     class Meta:
-        type_ = 'admin-sales-by-events'
-        self_view = 'v1.admin_sales_by_events'
+        type_ = 'admin-sales-by-marketer'
+        self_view = 'v1.admin_sales_by_marketer'
 
     id = fields.String()
-    name = fields.String()
-    starts_at = fields.DateTime()
-    ends_at = fields.DateTime()
+    fullname = fields.String()
+    email = fields.String()
     sales = fields.Method('calc_sales')
 
     @staticmethod
@@ -39,20 +39,20 @@ class AdminSalesByEventsSchema(Schema):
         return summary(obj.orders)
 
 
-class AdminSalesByEventsList(ResourceList):
+class AdminSalesByMarketerList(ResourceList):
     """
-    Resource for sales by events. Joins events with orders and subsequently
-    accumulates by status
+    Resource for sales by marketer. Joins event marketer and orders and
+    subsequently accumulates sales by status
     """
 
     def query(self, _):
-        return self.session.query(Event).join(Order)
+        return self.session.query(User).join(Order, Order.marketer_id == User.id)
 
     methods = ['GET']
     decorators = (api.has_permission('is_admin'), )
-    schema = AdminSalesByEventsSchema
+    schema = AdminSalesByMarketerSchema
     data_layer = {
-        'model': Event,
+        'model': User,
         'session': db.session,
         'methods': {
             'query': query

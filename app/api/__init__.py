@@ -63,6 +63,7 @@ from app.api.faq_types import FaqTypeList, FaqTypeListPost, FaqTypeDetail, FaqTy
 from app.api.admin_sales.events import AdminSalesByEventsList
 from app.api.admin_sales.organizer import AdminSalesByOrganizersList
 from app.api.admin_sales.locations import AdminSalesByLocationList
+from app.api.admin_sales.marketer import AdminSalesByMarketerList
 
 # users
 api.route(UserList, 'user_list', '/users')
@@ -507,3 +508,4 @@ api.route(AdminStatisticsMailDetail, 'admin_statistics_mail_detail', '/admin/sta
 api.route(AdminSalesByEventsList, 'admin_sales_by_events', '/admin/sales/by-events')
 api.route(AdminSalesByOrganizersList, 'admin_sales_by_organizers', '/admin/sales/by-organizers')
 api.route(AdminSalesByLocationList, 'admin_sales_by_location', '/admin/sales/by-location')
+api.route(AdminSalesByMarketerList, 'admin_sales_by_marketer', '/admin/sales/by-marketer')
