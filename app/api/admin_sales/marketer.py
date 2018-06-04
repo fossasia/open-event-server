@@ -46,7 +46,7 @@ class AdminSalesByMarketerList(ResourceList):
     """
 
     def query(self, _):
-        return self.session.query(User).join(Order, Order.marketer_id == User.id)
+        return self.session.query(User).join(Order, Order.marketer_id == User.id).outerjoin(OrderTicket)
 
     methods = ['GET']
     decorators = (api.has_permission('is_admin'), )

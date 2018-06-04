@@ -5,7 +5,7 @@ from flask_rest_jsonapi import ResourceList
 from app.api.bootstrap import api
 from app.models import db
 from app.models.event import Event
-from app.models.order import Order
+from app.models.order import Order, OrderTicket
 from app.models.role import Role
 from app.models.user import User
 from app.models.users_events_role import UsersEventsRoles
@@ -51,7 +51,7 @@ class AdminSalesByOrganizersList(ResourceList):
     def query(self, _):
         query_ = self.session.query(User)
         query_ = query_.join(UsersEventsRoles).filter(Role.name == 'organizer')
-        query_ = query_.join(Event).outerjoin(Order)
+        query_ = query_.join(Event).outerjoin(Order).outerjoin(OrderTicket)
 
         return query_
 

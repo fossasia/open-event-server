@@ -5,7 +5,7 @@ from flask_rest_jsonapi import ResourceList
 from app.api.bootstrap import api
 from app.models import db
 from app.models.event import Event
-from app.models.order import Order
+from app.models.order import Order, OrderTicket
 
 from app.api.admin_sales.utils import summary
 
@@ -46,7 +46,7 @@ class AdminSalesByEventsList(ResourceList):
     """
 
     def query(self, _):
-        return self.session.query(Event).join(Order)
+        return self.session.query(Event).outerjoin(Order).outerjoin(OrderTicket)
 
     methods = ['GET']
     decorators = (api.has_permission('is_admin'), )
