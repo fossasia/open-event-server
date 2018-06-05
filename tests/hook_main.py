@@ -3402,7 +3402,7 @@ def event_stripe_authorization_get_detail(transaction):
 
 # ------------------------- Export -------------------------
 @hooks.before(
-    "Event Export > Start Event Export > Start a Task to Export an Event")
+    "Event Export > Start Event Export as Zip > Start a Task to Export an Event as Zip")
 def event_export_post(transaction):
     """
     :param transaction:
