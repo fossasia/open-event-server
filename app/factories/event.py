@@ -42,7 +42,7 @@ class EventFactoryBasic(factory.alchemy.SQLAlchemyModelFactory):
     cheque_details = common.string_
     bank_details = common.string_
     onsite_details = common.string_
-    is_sponsors_enabled = False
+    is_sponsors_enabled = True
     pentabarf_url = common.url_
     ical_url = common.url_
     xcal_url = common.url_
