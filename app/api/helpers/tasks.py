@@ -3,6 +3,8 @@ from marrow.mailer import Mailer, Message
 
 from app.api.helpers.utilities import strip_tags
 from app.views.celery_ import celery
+from flask import current_app
+import os
 
 """
 Define all API v2 celery tasks here
@@ -16,11 +18,14 @@ from app.api.helpers.mail import send_export_mail, send_import_mail
 from app.api.helpers.notification import send_notif_after_import, send_notif_after_export
 from app.api.helpers.db import safe_query
 from .import_helpers import update_import_job
-from app.models.event import Event
 from app.models.user import User
 from app.models import db
 from app.api.exports import event_export_task_base
 from app.api.imports import import_event_task_base
+from app.models.event import Event
+from app.api.helpers.ICalExporter import ICalExporter
+from app.api.helpers.storage import UploadedFile, upload, UPLOAD_PATHS
+from app.api.helpers.db import save_to_db
 
 
 @celery.task(name='send.email.post')
@@ -100,5 +105,30 @@ def import_event_task(self, email, file, source_type, creator_id):
         update_import_job(task_id, str(e), e.status if hasattr(e, 'status') else 'FAILURE')
         send_import_mail(email=email, error_text=str(e))
         send_notif_after_import(user=user, error_text=str(e))
+
+    return result
+
+
+@celery.task(base=RequestContextTask, name='export.ical', bind=True)
+def export_ical_task(self, event_id):
+    event = db.session.query(Event).filter_by(id=event_id).first()
+    try:
+        filedir = current_app.config.get('BASE_DIR') + '/static/uploads/temp/'
+        if not os.path.isdir(filedir):
+            os.makedirs(filedir)
+        filename = "ical.ics"
+        file_path = current_app.config['BASE_DIR'] + '/static/media/temp/' + filename
+        with open(file_path, "w") as temp_file:
+            temp_file.write(str(ICalExporter.export(event_id), 'utf-8'))
+        ical_file = UploadedFile(file_path=file_path, filename=filename)
+        event.ical_url = upload(ical_file, UPLOAD_PATHS['exports']['ical'].format(event_id=event_id))
+        save_to_db(event)
+        result = {
+            'download_url': event.ical_url
+        }
+
+    except Exception as e:
+        print(traceback.format_exc())
+        result = {'__error': True, 'result': str(e)}
 
     return result
