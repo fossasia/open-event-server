@@ -87,6 +87,8 @@ def create_permissions():
     coorgr = Role.query.get(2)
     track_orgr = Role.query.get(3)
     mod = Role.query.get(4)
+    attend = Role.query.get(5)
+    regist = Role.query.get(6)
 
     track = Service.query.get(1)
     session = Service.query.get(2)
@@ -96,32 +98,17 @@ def create_permissions():
 
     # For ORGANIZER
     # All four permissions set to True
-    get_or_create(Permission, role=orgr, service=track)
-    get_or_create(Permission, role=orgr, service=session)
-    get_or_create(Permission, role=orgr, service=speaker)
-    get_or_create(Permission, role=orgr, service=sponsor)
-    get_or_create(Permission, role=orgr, service=microlocation)
+    services = [track, session, speaker, sponsor, microlocation]
+    roles = [attend, regist]
+    for service in services:
+        perm, _ = get_or_create(Permission, role=orgr, service=service)
+        db.session.add(perm)
 
     # For COORGANIZER
-    perm, _ = get_or_create(Permission, role=coorgr, service=track)
-    perm.can_create, perm.can_delete = False, False
-    db.session.add(perm)
-
-    perm, _ = get_or_create(Permission, role=coorgr, service=session)
-    perm.can_create, perm.can_delete = False, False
-    db.session.add(perm)
-
-    perm, _ = get_or_create(Permission, role=coorgr, service=speaker)
-    perm.can_create, perm.can_delete = False, False
-    db.session.add(perm)
-
-    perm, _ = get_or_create(Permission, role=coorgr, service=sponsor)
-    perm.can_create, perm.can_delete = False, False
-    db.session.add(perm)
-
-    perm, _ = get_or_create(Permission, role=coorgr, service=microlocation)
-    perm.can_create, perm.can_delete = False, False
-    db.session.add(perm)
+    for service in services:
+        perm, _ = get_or_create(Permission, role=coorgr, service=service)
+        perm.can_create, perm.can_delete = False, False
+        db.session.add(perm)
 
     # For TRACK_ORGANIZER
     perm, _ = get_or_create(Permission, role=track_orgr, service=track)
@@ -131,6 +118,15 @@ def create_permissions():
     perm, _ = get_or_create(Permission, role=mod, service=track)
     perm.can_create, perm.can_update, perm.can_delete = False, False, False
     db.session.add(perm)
+
+    # For ATTENDEE and REGISTRAR
+    services = [track, session, speaker, sponsor, microlocation]
+    roles = [attend, regist]
+    for role in roles:
+        for service in services:
+            perm, _ = get_or_create(Permission, role=role, service=service)
+            perm.can_create, perm.can_update, perm.can_delete = False, False, False
+            db.session.add(perm)
 
 
 def create_custom_sys_roles():
