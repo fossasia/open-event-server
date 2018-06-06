@@ -217,7 +217,7 @@ def populate():
     print('Creating Event Topics...')
     create_event_topics()
     print('Creating Event Types...')
-    create_event_types()  
+    create_event_types()
     print('Creating admin message settings...')
     create_admin_message_settings()
 
