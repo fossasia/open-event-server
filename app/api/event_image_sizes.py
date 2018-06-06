@@ -10,6 +10,7 @@ class EventImageSizeDetail(ResourceDetail):
     """
     Event Image_size detail by id
     """
+    @classmethod
     def before_get(self, args, kwargs):
         kwargs['id'] = 1
     decorators = (api.has_permission('is_admin', methods='PATCH', id="1"),)
