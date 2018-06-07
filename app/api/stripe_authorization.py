@@ -2,8 +2,9 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import ForbiddenException, ConflictException
+from app.api.helpers.db import safe_query, get_count
+from app.api.helpers.exceptions import ForbiddenException, ConflictException, UnprocessableEntity
+from app.api.helpers.payment import StripePaymentsManager
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.utilities import require_relationship
@@ -28,10 +29,14 @@ class StripeAuthorizationListPost(ResourceList):
         require_relationship(['event'], data)
         if not has_access('is_organizer', event_id=data['event']):
             raise ForbiddenException({'source': ''}, "Minimum Organizer access required")
+        if get_count(db.session.query(Event).filter_by(id=int(data['event']), can_pay_by_stripe=False)) > 0:
+            raise ForbiddenException({'pointer': ''}, "Stripe payment is disabled for this Event")
 
     def before_create_object(self, data, view_kwargs):
         """
-        method to check if stripe authorization object alredy exists for an event
+        method to check if stripe authorization object already exists for an event.
+        Raises ConflictException if it already exists.
+        If it doesn't, then uses the StripePaymentManager to get the other credentials from Stripe.
         :param data:
         :param view_kwargs:
         :return:
@@ -39,7 +44,17 @@ class StripeAuthorizationListPost(ResourceList):
         try:
             self.session.query(StripeAuthorization).filter_by(event_id=data['event']).one()
         except NoResultFound:
-            pass
+            try:
+                credentials = StripePaymentsManager\
+                    .get_event_organizer_credentials_from_stripe(data['stripe_auth_code'])
+                if 'error' in credentials:
+                    raise UnprocessableEntity({'pointer': '/data/stripe_auth_code'}, credentials['error_description'])
+                data['stripe_secret_key'] = credentials['access_token']
+                data['stripe_refresh_token'] = credentials['refresh_token']
+                data['stripe_publishable_key'] = credentials['stripe_publishable_key']
+                data['stripe_user_id'] = credentials['stripe_user_id']
+            except Exception:
+                raise ForbiddenException({'pointer': ''}, "Stripe payment isn't configured properly for this Event")
         else:
             raise ConflictException({'pointer': '/data/relationships/event'},
                                     "Stripe Authorization already exists for this event")
@@ -48,7 +63,10 @@ class StripeAuthorizationListPost(ResourceList):
     decorators = (jwt_required, )
     methods = ['POST']
     data_layer = {'session': db.session,
-                  'model': StripeAuthorization}
+                  'model': StripeAuthorization,
+                  'methods': {
+                      'before_create_object': before_create_object
+                  }}
 
 
 class StripeAuthorizationDetail(ResourceDetail):
