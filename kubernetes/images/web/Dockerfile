@@ -1,4 +1,4 @@
-FROM python:2-slim
+FROM python:3.6-slim
 MAINTAINER Niranjan Rajendran <niranjan94@yahoo.com>
 
 
@@ -15,7 +15,7 @@ RUN apt-get clean -y && apt-get update -y
 # update some packages
 RUN apt-get install -y wget git ca-certificates curl && update-ca-certificates
 # install deps
-RUN apt-get install -y --no-install-recommends build-essential python-dev libpq-dev libevent-dev libmagic-dev
+RUN apt-get install -y --no-install-recommends build-essential python3.6-dev libpq-dev libevent-dev libmagic-dev
 
 ENV INSTALL_PATH /opev
 
