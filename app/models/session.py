@@ -49,6 +49,7 @@ class Session(db.Model):
     submission_modifier = db.Column(db.String)
     is_mail_sent = db.Column(db.Boolean, default=False)
     last_modified_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow)
+    send_email = db.Column(db.Boolean, nullable=True)
 
     def __init__(self,
                  title=None,
@@ -76,7 +77,8 @@ class Session(db.Model):
                  is_mail_sent=False,
                  deleted_at=None,
                  submitted_at=None,
-                 last_modified_at=None):
+                 last_modified_at=None,
+                 send_email=None):
 
         if speakers is None:
             speakers = []
@@ -107,6 +109,7 @@ class Session(db.Model):
         self.submitted_at = submitted_at
         self.submission_modifier = submission_modifier
         self.last_modified_at = datetime.datetime.now(pytz.utc)
+        self.send_email = send_email
 
     @staticmethod
     def get_service_name():
