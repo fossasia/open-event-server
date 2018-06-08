@@ -18,8 +18,7 @@ from app.factories.notification import NotificationFactory
 from app.factories.event import EventFactoryBasic
 from app.factories.social_link import SocialLinkFactory
 from app.factories.microlocation import MicrolocationFactory
-from app.factories.image_size import EventImageSizeFactory,
-    SpeakerImageSizeFactory
+from app.factories.image_size import EventImageSizeFactory, SpeakerImageSizeFactory
 from app.factories.page import PageFactory
 from app.factories.event_copyright import EventCopyrightFactory
 from app.factories.setting import SettingFactory

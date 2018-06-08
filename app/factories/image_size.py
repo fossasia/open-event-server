@@ -32,9 +32,9 @@ class SpeakerImageSizeFactory(factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session = db.session
 
     type = common.string_
-    icon-size-quality = 80
-    small-size-width-height = 50
-    thumbnail-size-quality = None
-    icon-size-width-height = 35
-    thumbnail-size-width-height = 500
-    small-size-quality = 80
+    icon_size_quality = 80
+    small_size_width_height = 50
+    thumbnail_size_quality = None
+    icon_size_width_height = 35
+    thumbnail_size_width_height = 500
+    small_size_quality = 80
