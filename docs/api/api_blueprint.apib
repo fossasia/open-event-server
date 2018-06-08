@@ -17079,10 +17079,10 @@ To create or modify data of this data layer, you will need admin access. You can
 | `logo-height` | Height of the logo | integer | - |
 | `type` | Type of the image | string | - |
 
-## Image Size Details [/v1/event-image-sizes]
+## Event Image Size Details [/v1/event-image-sizes]
 
-### Get Image Size Details [GET]
-Get a single image size.
+### Get Event Image Size Details [GET]
+Get a single Event image size.
 
 + Request
 
@@ -17128,8 +17128,8 @@ Get a single image size.
         }
 
 
-### Update Image Size [PATCH]
-Update a single image size
+### Update Event Image Size [PATCH]
+Update a single Event image size
 
 + Request (application/vnd.api+json)
 
@@ -17197,6 +17197,101 @@ Update a single image size
                     "self": "/v1/event-image-sizes?id=1"
                 }
             }
+
+## Speaker Image Size Details [/v1/speaker-image-sizes]
+
+### Get Speaker Image Size Details [GET]
+Get a single Speaker image size.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "icon-size-quality": 80,
+              "small-size-width-height": 50,
+              "thumbnail-size-quality": null,
+              "icon-size-width-height": 35,
+              "type": "speaker-image",
+              "thumbnail-size-width-height": 500,
+              "small-size-quality": 80
+            },
+            "type": "image-size",
+            "id": "2",
+            "links": {
+              "self": "/v1/speaker-image-sizes?id=2"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/speaker-image-sizes?id=2"
+          }
+        }
+
+
+### Update Speaker Image Size [PATCH]
+Update a single Speaker image size
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "icon-size-quality": 80,
+                  "small-size-width-height": 50,
+                  "thumbnail-size-quality": null,
+                  "icon-size-width-height": 35,
+                  "type": "speaker-image",
+                  "thumbnail-size-width-height": 500,
+                  "small-size-quality": 80
+                },
+                "id": "2",
+                "type": "speaker-image-size"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "icon-size-quality": 80,
+              "small-size-width-height": 50,
+              "thumbnail-size-quality": null,
+              "icon-size-width-height": 35,
+              "type": "speaker-image",
+              "thumbnail-size-width-height": 500,
+              "small-size-quality": 80
+            },
+            "type": "image-size",
+            "id": "2",
+            "links": {
+              "self": "/v1/speaker-image-sizes?id=2"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/speaker-image-sizes?id=2"
+          }
+        }
 
 # Group Roles
 

@@ -47,7 +47,7 @@ class SpeakerImageSizeSchema(Schema):
         Meta class for image_size Api Schema
         """
         type_ = 'speaker-image-size'
-        self_view = 'v1.speaker-image_size_detail'
+        self_view = 'v1.speaker_image_size_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
