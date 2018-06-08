@@ -20639,6 +20639,29 @@ Start a celery task to export the event with the event_id as an iCal event file.
             "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
         }
 
+## Start Event Export as xCalendar [/v1/events/{event_identifier}/export/xcal]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+Start a celery task to export the event with the event_id as an xcal file to get it ready for downloading. Returns the task url
+to get the status of the export task.
+
+
+### Start a Task to Export an Event as xCalendar [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
+
+
+
 # Group Event Import
 
 This group of APIs help you to start a task for importing zip containing JSON files into the server.
