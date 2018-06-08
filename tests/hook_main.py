@@ -2101,7 +2101,7 @@ def speaker_image_size_get_detail(transaction):
     """
     with stash['app'].app_context():
         speaker_image_size = SpeakerImageSizeFactory()
-        db.session.add(image_size)
+        db.session.add(speaker_image_size)
         db.session.commit()
 
 
