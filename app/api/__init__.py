@@ -174,7 +174,7 @@ api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>
           '/access-codes/<int:access_code_id>/event', '/email-notifications/<int:email_notification_id>/event',
           '/attendees/<int:attendee_id>/event', '/custom-forms/<int:custom_form_id>/event',
           '/orders/<order_identifier>/event', '/faqs/<int:faq_id>/event', '/faq-types/<int:faq_type_id>/event',
-          '/feedbacks/<int:feedback_id>/event')
+          '/feedbacks/<int:feedback_id>/event', '/stripe-authorization/<int:stripe_authorization_id>/event')
 api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/tickets',
           '/events/<identifier>/relationships/tickets')
 api.route(EventRelationship, 'event_ticket_tag', '/events/<int:id>/relationships/ticket-tags',
@@ -225,6 +225,8 @@ api.route(EventRelationship, 'event_feedbacks', '/events/<int:id>/relationships/
           '/events/<identifier>/relationships/feedbacks')
 api.route(EventRelationship, 'event_orders', '/events/<int:id>/relationships/orders',
           '/events/<identifier>/relationships/orders')
+api.route(EventRelationship, 'event_stripe_authorization', '/events/<int:id>/relationships/stripe-authorization',
+          '/events/<identifier>/relationships/stripe-authorization')
 # Events -> roles:
 api.route(EventRelationship, 'event_organizers', '/events/<int:id>/relationships/organizers',
           '/events/<identifier>/relationships/organizers')
@@ -469,7 +471,6 @@ api.route(StripeAuthorizationDetail, 'stripe_authorization_detail',  '/stripe-au
           '/events/<int:event_id>/stripe-authorization', '/events/<event_identifier>/stripe-authorization')
 api.route(StripeAuthorizationRelationship, 'stripe_authorization_event',
           '/stripe-authorization/<int:id>/relationships/event')
-
 
 # Orders API
 api.route(OrdersListPost, 'order_list_post', '/orders')
