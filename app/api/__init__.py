@@ -102,10 +102,12 @@ api.route(EmailNotificationRelationshipOptional, 'email_notification_event',
           '/email-notifications/<int:id>/relationships/event')
 
 # event_image_sizes
-api.route(EventImageSizeDetail, 'event_image_size_detail', '/event-image-sizes')
+api.route(EventImageSizeDetail, 'event_image_size_detail', '/event-image-sizes/<id>',
+          '/event-image-sizes')
 
 # speaker_image_sizes
-api.route(SpeakerImageSizeDetail, 'speaker_image_size_detail', '/speaker-image-sizes')
+api.route(SpeakerImageSizeDetail, 'speaker_image_size_detail', '/speaker-image-sizes/<id>',
+          '/speaker-image-sizes')
 
 # settings
 api.route(SettingDetail, 'setting_detail', '/settings/<id>', '/settings')
