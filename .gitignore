@@ -20,7 +20,6 @@ app.db
 .vscode/
 venv/
 .venv
-migrations/versions/b243cdc08370_.py
 
 # Static files at 'app/static/vendor'
 app/static/vendor
