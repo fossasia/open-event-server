@@ -84,8 +84,8 @@ class StripeAuthorizationDetail(ResourceDetail):
             view_kwargs['event_id'] = event.id
 
         if view_kwargs.get('event_id'):
-            stripe_authorization = self.session.query(StripeAuthorization).\
-                filter_by(event_id=view_kwargs['event_id']).one()
+            stripe_authorization = \
+                safe_query(self, StripeAuthorization, 'event_id', view_kwargs['event_id'], 'event_id')
             view_kwargs['id'] = stripe_authorization.id
 
     decorators = (api.has_permission('is_coorganizer', fetch="event_id",
