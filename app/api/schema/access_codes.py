@@ -34,7 +34,7 @@ class AccessCodeSchema(Schema):
             if 'valid_till' not in data:
                 data['valid_till'] = access_code.valid_till
 
-        if data['valid_from'] >= data['valid_till']:
+        if data['valid_from'] > data['valid_till']:
             raise UnprocessableEntity({'pointer': '/data/attributes/valid-till'},
                                       "valid_till should be after valid_from")
 
@@ -55,7 +55,7 @@ class AccessCodeSchema(Schema):
         min_quantity = data.get('min_quantity', None)
         max_quantity = data.get('max_quantity', None)
         if min_quantity is not None and max_quantity is not None:
-            if min_quantity >= max_quantity:
+            if min_quantity > max_quantity:
                 raise UnprocessableEntity(
                     {'pointer': '/data/attributes/min-quantity'},
                     "min-quantity should be less than max-quantity"
