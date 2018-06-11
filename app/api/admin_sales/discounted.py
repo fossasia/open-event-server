@@ -10,9 +10,6 @@ from app.models.discount_code import DiscountCode
 from app.models.event import Event
 from app.models.order import Order, OrderTicket
 from app.models.user import User
-from app.models.ticket import Ticket
-
-from app.api.admin_sales.utils import summary
 
 
 def sales_per_marketer_and_discount_by_status(status):
