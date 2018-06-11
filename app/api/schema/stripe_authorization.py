@@ -19,15 +19,13 @@ class StripeAuthorizationSchema(Schema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    stripe_secret_key = fields.Str(required=True)
-    stripe_refresh_token = fields.Str(required=True)
-    stripe_publishable_key = fields.Str(required=True)
-    stripe_user_id = fields.Str(required=True)
-    stripe_email = fields.Str(required=True)
+    stripe_publishable_key = fields.Str(dump_only=True)
+    stripe_auth_code = fields.Str(load_only=True, required=True)
 
-    event = Relationship(self_view='v1.stripe_authorization_event',
+    event = Relationship(attribute='event',
+                         self_view='v1.stripe_authorization_event',
                          self_view_kwargs={'id': '<id>'},
                          related_view='v1.event_detail',
-                         related_view_kwargs={'id': '<id>'},
+                         related_view_kwargs={'stripe_authorization_id': '<id>'},
                          schema="EventSchema",
                          type_='event')

@@ -679,6 +679,19 @@ def event_faq(transaction):
         db.session.commit()
 
 
+@hooks.before("Events > Get Event for a Stripe Authorization > Event Details for a Stripe Authorization")
+def event_stripe_authorization(transaction):
+    """
+    GET /stripe-authorization/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        stripe_authorization = StripeAuthorizationFactory()
+        db.session.add(stripe_authorization)
+        db.session.commit()
+
+
 # ------------------------- Feedback -------------------------
 @hooks.before("Feedback > Feedback Collection > Create Feedback")
 def feedback_post(transaction):
@@ -3342,10 +3355,7 @@ def stripe_authorization_post(transaction):
     :param transaction:
     :return:
     """
-    with stash['app'].app_context():
-        event = EventFactoryBasic()
-        db.session.add(event)
-        db.session.commit()
+    transaction['skip'] = True
 
 
 @hooks.before("Stripe Authorization > Stripe Authorization Details > Get Stripe Authorization")
