@@ -26,6 +26,12 @@ from app.models.custom_system_role import CustomSysRole
 from app.models.setting import Setting
 from app.models.module import Module
 
+# EventTopic
+from app.models.event_topic import EventTopic
+
+# EventType
+from app.models.event_type import EventType
+
 # User Permissions
 from app.models.user_permission import UserPermission
 SALES = 'sales'
@@ -60,6 +66,35 @@ def create_settings():
 
 def create_modules():
     get_or_create(Module, donation_include=False)
+
+
+def create_event_topics():
+    event_topic = ['Health & Wellness', 'Home & Lifestyle',
+                   'Charity & Causes', 'Other', 'Religion & Spirituality',
+                   'Community & Culture', 'Government & Politics',
+                   'Government & Politics', 'Auto, Boat & Air',
+                   'Travel & Outdoor', 'Hobbies & Special Interest',
+                   'Sports & Fitness', 'Business & Professional',
+                   'Music', 'Seasonal & Holiday',
+                   'Film, Media & Entertainment', 'Family & Education',
+                   'Science & Technology', 'Performing & Visual Arts',
+                   'Food & Drink', 'Family & Education']
+    for topic in event_topic:
+        get_or_create(EventTopic, name=topic)
+
+
+def create_event_types():
+    event_type = ['Camp, Treat & Retreat', 'Dinner or Gala',
+                  'Other', 'Concert or Performance', 'Conference',
+                  'Seminar or Talk', 'Convention',
+                  'Festival or Fair', 'Tour',
+                  'Screening', 'Game or Competition',
+                  'Party or Social Gathering', 'Race or Endurance Event',
+                  'Meeting or Networking Event', 'Attraction',
+                  'Class, Training, or Workshop', 'Appearance or Signing',
+                  'Tournament', 'Rally']
+    for type_ in event_type:
+        get_or_create(EventType, name=type_)
 
 
 def create_permissions():
@@ -179,6 +214,10 @@ def populate():
     create_settings()
     print('Creating modules...')
     create_modules()
+    print('Creating Event Topics...')
+    create_event_topics()
+    print('Creating Event Types...')
+    create_event_types()
     print('Creating admin message settings...')
     create_admin_message_settings()
 
@@ -195,6 +234,8 @@ def populate_without_print():
     create_user_permissions()
     create_settings()
     create_modules()
+    create_event_topics()
+    create_event_types()
     create_admin_message_settings()
 
     db.session.commit()

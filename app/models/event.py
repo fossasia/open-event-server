@@ -196,7 +196,8 @@ class Event(db.Model):
                  discount_code_id=None,
                  onsite_details=None,
                  is_tax_enabled=None,
-                 is_sponsors_enabled=None):
+                 is_sponsors_enabled=None,
+                 stripe_authorization=None):
 
         self.name = name
         self.logo_url = logo_url
@@ -249,6 +250,7 @@ class Event(db.Model):
         self.created_at = datetime.now(pytz.utc)
         self.is_tax_enabled = is_tax_enabled
         self.is_sponsors_enabled = is_sponsors_enabled
+        self.stripe_authorization = stripe_authorization
 
     def __repr__(self):
         return '<Event %r>' % self.name
