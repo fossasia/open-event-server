@@ -5,8 +5,6 @@ from flask_rest_jsonapi import ResourceList
 from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
 from app.models import db
-from app.models.order import Order, OrderTicket
-from app.models.user import User
 from app.models.event import Event
 
 
