@@ -25,10 +25,15 @@ class AdminSalesInvoicesSchema(Schema):
     created_at = fields.DateTime()
     completed_at = fields.DateTime()
     event_name = fields.Method('format_event_name')
+    sent_to = fields.Method('format_sent_to')
 
     @staticmethod
     def format_event_name(self):
-        '{}'.format(self.event.name)
+        return '{}'.format(self.event.name)
+
+    @staticmethod
+    def format_sent_to(self):
+        return '{} <{}>'.format(self.user.fullname, self.user.email)
 
 
 class AdminSalesInvoicesList(ResourceList):
