@@ -6,55 +6,36 @@ from app.api.bootstrap import api
 from app.models import db
 from app.models.order import Order, OrderTicket
 from app.models.user import User
+from app.models.event import Event
 
-from app.api.admin_sales.utils import summary
 
-
-# TODO
 class AdminSalesFeesSchema(Schema):
     """
-    Sales summarized by marketer
-
-    Provides
-        marketer name,
-        count of tickets and total sales for orders grouped by status
+    Sales fees and revenue for all events
     """
 
     class Meta:
-        type_ = 'admin-sales-discounted'
-        self_view = 'v1.admin_sales_discounted'
+        type_ = 'admin-sales-fees'
+        self_view = 'v1.admin_sales_fees'
 
     id = fields.String()
-    fullname = fields.String()
-    email = fields.String()
-    sales = fields.Method('calc_sales')
+    name = fields.String()
+    fee = fields.Float()
+    revenue = fields.Method('calc_revenue')
 
     @staticmethod
-    def calc_sales(obj):
-        """
-        Returns sales (dictionary with total sales and ticket count) for
-        placed, completed and pending orders
-        """
-        return summary(obj.orders)
+    def calc_revenue(obj):
+        "Returns total revenues of all completed orders for the given event"
+        return sum(
+            [o.get_revenue() for o in obj.orders if o.status == 'completed'])
 
 
 class AdminSalesFeesList(ResourceList):
     """
-    Resource for sales by marketer. Joins event marketer and orders and
-    subsequently accumulates sales by status
+    Resource for sales fees and revenue
     """
-
-    def query(self, _):
-        return self.session.query(User).join(
-            Order, Order.marketer_id == User.id).outerjoin(OrderTicket)
 
     methods = ['GET']
     decorators = (api.has_permission('is_admin'), )
     schema = AdminSalesFeesSchema
-    data_layer = {
-        'model': User,
-        'session': db.session,
-        'methods': {
-            'query': query
-        }
-    }
+    data_layer = {'model': Event, 'session': db.session}

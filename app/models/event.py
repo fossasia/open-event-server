@@ -9,6 +9,7 @@ from sqlalchemy import event
 
 from app.api.helpers.db import get_count
 from app.models import db
+from app.models.ticket_fee import get_fee
 from app.models.email_notification import EmailNotification
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.user import ATTENDEE, ORGANIZER
@@ -27,9 +28,7 @@ def get_new_event_identifier(length=8):
 class Event(db.Model):
     """Event object table"""
     __tablename__ = 'events'
-    __versioned__ = {
-        'exclude': ['schedule_published_on', 'created_at']
-    }
+    __versioned__ = {'exclude': ['schedule_published_on', 'created_at']}
     id = db.Column(db.Integer, primary_key=True)
     identifier = db.Column(db.String)
     name = db.Column(db.String, nullable=False)
@@ -67,10 +66,12 @@ class Event(db.Model):
     attendees = db.relationship('TicketHolder', backref="event")
     privacy = db.Column(db.String, default="public")
     state = db.Column(db.String, default="Draft")
-    event_type_id = db.Column(db.Integer, db.ForeignKey('event_types.id', ondelete='CASCADE'))
-    event_topic_id = db.Column(db.Integer, db.ForeignKey('event_topics.id', ondelete='CASCADE'))
-    event_sub_topic_id = db.Column(db.Integer, db.ForeignKey(
-        'event_sub_topics.id', ondelete='CASCADE'))
+    event_type_id = db.Column(
+        db.Integer, db.ForeignKey('event_types.id', ondelete='CASCADE'))
+    event_topic_id = db.Column(
+        db.Integer, db.ForeignKey('event_topics.id', ondelete='CASCADE'))
+    event_sub_topic_id = db.Column(
+        db.Integer, db.ForeignKey('event_sub_topics.id', ondelete='CASCADE'))
     ticket_url = db.Column(db.String)
     db.UniqueConstraint('track.name')
     code_of_conduct = db.Column(db.String)
@@ -94,57 +95,66 @@ class Event(db.Model):
     ical_url = db.Column(db.String)
     xcal_url = db.Column(db.String)
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
-    discount_code_id = db.Column(db.Integer, db.ForeignKey(
-        'discount_codes.id', ondelete='CASCADE'))
-    discount_code = db.relationship('DiscountCode', backref='events', foreign_keys=[discount_code_id])
-    event_type = db.relationship('EventType', backref='event', foreign_keys=[event_type_id])
-    event_topic = db.relationship('EventTopic', backref='event', foreign_keys=[event_topic_id])
+    discount_code_id = db.Column(
+        db.Integer, db.ForeignKey('discount_codes.id', ondelete='CASCADE'))
+    discount_code = db.relationship(
+        'DiscountCode', backref='events', foreign_keys=[discount_code_id])
+    event_type = db.relationship(
+        'EventType', backref='event', foreign_keys=[event_type_id])
+    event_topic = db.relationship(
+        'EventTopic', backref='event', foreign_keys=[event_topic_id])
     event_sub_topic = db.relationship(
         'EventSubTopic', backref='event', foreign_keys=[event_sub_topic_id])
-    organizers = db.relationship('User',
-                                 viewonly=True,
-                                 secondary='join(UsersEventsRoles, Role,'
-                                           ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "organizer"))',
-                                 primaryjoin='UsersEventsRoles.event_id == Event.id',
-                                 secondaryjoin='User.id == UsersEventsRoles.user_id',
-                                 backref='organizer_events')
-    coorganizers = db.relationship('User',
-                                   viewonly=True,
-                                   secondary='join(UsersEventsRoles, Role,'
-                                             ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "coorganizer"))',
-                                   primaryjoin='UsersEventsRoles.event_id == Event.id',
-                                   secondaryjoin='User.id == UsersEventsRoles.user_id',
-                                   backref='coorganizer_events')
-    track_organizers = db.relationship('User',
-                                       viewonly=True,
-                                       secondary='join(UsersEventsRoles, Role,'
-                                                 ' and_(Role.id == UsersEventsRoles.role_id,'
-                                                 ' Role.name == "track_organizer"))',
-                                       primaryjoin='UsersEventsRoles.event_id == Event.id',
-                                       secondaryjoin='User.id == UsersEventsRoles.user_id',
-                                       backref='track_organizer_events')
-    registrars = db.relationship('User',
-                                 viewonly=True,
-                                 secondary='join(UsersEventsRoles, Role,'
-                                           ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "registrar"))',
-                                 primaryjoin='UsersEventsRoles.event_id == Event.id',
-                                 secondaryjoin='User.id == UsersEventsRoles.user_id',
-                                 backref='registrar_events')
-    moderators = db.relationship('User',
-                                 viewonly=True,
-                                 secondary='join(UsersEventsRoles, Role,'
-                                           ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "moderator"))',
-                                 primaryjoin='UsersEventsRoles.event_id == Event.id',
-                                 secondaryjoin='User.id == UsersEventsRoles.user_id',
-                                 backref='moderator_events')
+    organizers = db.relationship(
+        'User',
+        viewonly=True,
+        secondary='join(UsersEventsRoles, Role,'
+        ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "organizer"))',
+        primaryjoin='UsersEventsRoles.event_id == Event.id',
+        secondaryjoin='User.id == UsersEventsRoles.user_id',
+        backref='organizer_events')
+    coorganizers = db.relationship(
+        'User',
+        viewonly=True,
+        secondary='join(UsersEventsRoles, Role,'
+        ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "coorganizer"))',
+        primaryjoin='UsersEventsRoles.event_id == Event.id',
+        secondaryjoin='User.id == UsersEventsRoles.user_id',
+        backref='coorganizer_events')
+    track_organizers = db.relationship(
+        'User',
+        viewonly=True,
+        secondary='join(UsersEventsRoles, Role,'
+        ' and_(Role.id == UsersEventsRoles.role_id,'
+        ' Role.name == "track_organizer"))',
+        primaryjoin='UsersEventsRoles.event_id == Event.id',
+        secondaryjoin='User.id == UsersEventsRoles.user_id',
+        backref='track_organizer_events')
+    registrars = db.relationship(
+        'User',
+        viewonly=True,
+        secondary='join(UsersEventsRoles, Role,'
+        ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "registrar"))',
+        primaryjoin='UsersEventsRoles.event_id == Event.id',
+        secondaryjoin='User.id == UsersEventsRoles.user_id',
+        backref='registrar_events')
+    moderators = db.relationship(
+        'User',
+        viewonly=True,
+        secondary='join(UsersEventsRoles, Role,'
+        ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "moderator"))',
+        primaryjoin='UsersEventsRoles.event_id == Event.id',
+        secondaryjoin='User.id == UsersEventsRoles.user_id',
+        backref='moderator_events')
     # staff
-    users = db.relationship('User',
-                            viewonly=True,
-                            secondary='join(UsersEventsRoles, Role,'
-                                      ' and_(Role.id == UsersEventsRoles.role_id, Role.name != "attendee"))',
-                            primaryjoin='UsersEventsRoles.event_id == Event.id',
-                            secondaryjoin='User.id == UsersEventsRoles.user_id',
-                            backref='events')
+    users = db.relationship(
+        'User',
+        viewonly=True,
+        secondary='join(UsersEventsRoles, Role,'
+        ' and_(Role.id == UsersEventsRoles.role_id, Role.name != "attendee"))',
+        primaryjoin='UsersEventsRoles.event_id == Event.id',
+        secondaryjoin='User.id == UsersEventsRoles.user_id',
+        backref='events')
 
     def __init__(self,
                  name=None,
@@ -260,9 +270,19 @@ class Event(db.Model):
 
     def __setattr__(self, name, value):
         if name == 'organizer_description' or name == 'description' or name == 'code_of_conduct':
-            super(Event, self).__setattr__(name, clean_html(clean_up_string(value)))
+            super(Event, self).__setattr__(name,
+                                           clean_html(clean_up_string(value)))
         else:
             super(Event, self).__setattr__(name, value)
+
+    @property
+    def fee(self):
+        """
+        Returns the fee as a float from 0 to 1 for this event
+
+        Is retrieved from the db using the `payment_currency`
+        """
+        return get_fee(self.payment_currency)
 
     def notification_settings(self, user_id):
         try:
@@ -282,7 +302,8 @@ class Event(db.Model):
     def has_staff_access(self, user_id):
         """does user have role other than attendee"""
         for _ in self.roles:
-            if _.user_id == (login.current_user.id if not user_id else int(user_id)):
+            if _.user_id == (login.current_user.id
+                             if not user_id else int(user_id)):
                 if _.role.name != ATTENDEE:
                     return True
         return False
