@@ -71,7 +71,7 @@ def export_event_xcal(event_identifier):
 
     if not event_identifier.isdigit():
         event = db.session.query(Event).filter_by(identifier=event_identifier).first()
-        event_id = event.id
+        event_id = str(event.id)
     else:
         event_id = event_identifier
 
@@ -99,7 +99,7 @@ def event_export_task_base(event_id, settings):
 def export_event_ical(event_identifier):
     if not event_identifier.isdigit():
         event = db.session.query(Event).filter_by(identifier=event_identifier).first()
-        event_id = event.id
+        event_id = str(event.id)
     else:
         event_id = event_identifier
 
