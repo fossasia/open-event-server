@@ -60,7 +60,7 @@ from app.api.order_statistics.events import OrderStatisticsEventDetail
 from app.api.order_statistics.tickets import OrderStatisticsTicketDetail
 from app.api.faq_types import FaqTypeList, FaqTypeListPost, FaqTypeDetail, FaqTypeRelationshipOptional, \
     FaqTypeRelationshipRequired
-from app.api.admin_sales.fees import AdminSalesFeesList
+from app.api.admin_sales.invoices import AdminSalesInvoicesList
 
 # users
 api.route(UserList, 'user_list', '/users')
