@@ -58,6 +58,8 @@ class TicketSchemaPublic(SoftDeletionSchema):
     is_hidden = fields.Boolean(default=False)
     min_order = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     max_order = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
+    is_checkin_restricted = fields.Boolean(default=True)
+    auto_checkin_enabled = fields.Boolean(default=False)
     event = Relationship(attribute='event',
                          self_view='v1.ticket_event',
                          self_view_kwargs={'id': '<id>'},

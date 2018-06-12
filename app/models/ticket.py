@@ -33,7 +33,8 @@ class Ticket(SoftDeletionModel):
 
     min_order = db.Column(db.Integer)
     max_order = db.Column(db.Integer)
-
+    is_checkin_restricted = db.Column(db.Boolean)
+    auto_checkin_enabled = db.Column(db.Boolean)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref='tickets_')
 
@@ -51,6 +52,8 @@ class Ticket(SoftDeletionModel):
                  is_hidden=False,
                  description=None,
                  is_description_visible=True,
+                 is_checkin_restricted=True,
+                 auto_checkin_enabled=False,
                  quantity=100,
                  position=1,
                  price=0,
@@ -71,6 +74,8 @@ class Ticket(SoftDeletionModel):
         self.event_id = event_id
         self.description = description
         self.is_description_visible = is_description_visible
+        self.is_checkin_restricted = is_checkin_restricted
+        self.auto_checkin_enabled = auto_checkin_enabled
         self.price = price
         self.sales_starts_at = sales_starts_at
         self.sales_ends_at = sales_ends_at
