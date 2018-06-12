@@ -1,7 +1,8 @@
 from app.models import db
+from app.models.base import BaseModel
 
 
-class Track(db.Model):
+class Track(BaseModel):
     """Track model class"""
     __tablename__ = 'tracks'
     id = db.Column(db.Integer, primary_key=True)
@@ -12,12 +13,13 @@ class Track(db.Model):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
 
     def __init__(self, name=None, description=None, event_id=None,
-                 session=None, color=None):
+                 session=None, color=None, deleted_at=None):
         self.name = name
         self.description = description
         self.event_id = event_id
         self.session_id = session
         self.color = color
+        self.deleted_at = deleted_at
 
     @staticmethod
     def get_service_name():

@@ -22,6 +22,7 @@ from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.user_permission import UserPermission
 from app.models.users_events_role import UsersEventsRoles as UER
+from app.models.base import BaseModel
 
 # System-wide
 ADMIN = 'admin'
@@ -41,7 +42,7 @@ ATTENDEE = 'attendee'
 REGISTRAR = 'registrar'
 
 
-class User(db.Model):
+class User(BaseModel):
     """User model class"""
     __tablename__ = 'users'
 
@@ -69,7 +70,6 @@ class User(db.Model):
     is_verified = db.Column(db.Boolean, default=False)
     last_accessed_at = db.Column(db.DateTime(timezone=True))
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(pytz.utc))
-    deleted_at = db.Column(db.DateTime(timezone=True))
     speaker = db.relationship('Speaker', backref="user")
     session = db.relationship('Session', backref="user")
     feedback = db.relationship('Feedback', backref="user")

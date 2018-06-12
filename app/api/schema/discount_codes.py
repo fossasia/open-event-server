@@ -1,13 +1,14 @@
 from marshmallow import validates_schema, validate
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import dasherize
 from app.models.discount_code import DiscountCode
+from app.api.schema.base import BaseSchema
 
 
-class DiscountCodeSchemaPublic(Schema):
+class DiscountCodeSchemaPublic(BaseSchema):
     """
     API Schema for discount_code Model
     For endpoints which allow somebody other than co-organizer/admin to access the resource.

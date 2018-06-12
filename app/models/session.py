@@ -5,6 +5,7 @@ from sqlalchemy import event
 
 from app.models import db
 from app.models.helpers.versioning import clean_up_string, clean_html
+from app.models.base import BaseModel
 
 speakers_sessions = db.Table('speakers_sessions',
                              db.Column('speaker_id', db.Integer, db.ForeignKey('speaker.id', ondelete='CASCADE')),
@@ -12,7 +13,7 @@ speakers_sessions = db.Table('speakers_sessions',
                              db.PrimaryKeyConstraint('speaker_id', 'session_id'))
 
 
-class Session(db.Model):
+class Session(BaseModel):
     """Session model class"""
     __tablename__ = 'sessions'
     __versioned__ = {
@@ -44,7 +45,6 @@ class Session(db.Model):
     creator_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     state = db.Column(db.String, default="pending")
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow)
-    deleted_at = db.Column(db.DateTime(timezone=True))
     submitted_at = db.Column(db.DateTime(timezone=True))
     submission_modifier = db.Column(db.String)
     is_mail_sent = db.Column(db.Boolean, default=False)
@@ -78,7 +78,7 @@ class Session(db.Model):
                  deleted_at=None,
                  submitted_at=None,
                  last_modified_at=None,
-                 send_email=None):
+                 send_email=None,):
 
         if speakers is None:
             speakers = []

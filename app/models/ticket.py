@@ -1,5 +1,6 @@
 from app.models import db
 from app.models.order import OrderTicket, Order
+from app.models.base import BaseModel
 
 access_codes_tickets = db.Table('access_codes_tickets',
                                 db.Column('access_code_id', db.Integer, db.ForeignKey(
@@ -13,7 +14,7 @@ ticket_tags_table = db.Table('association', db.Model.metadata,
                              )
 
 
-class Ticket(db.Model):
+class Ticket(BaseModel):
     __tablename__ = 'tickets'
     __table_args__ = (db.UniqueConstraint('name', 'event_id', name='name_event_uc'),)
 
@@ -57,7 +58,8 @@ class Ticket(db.Model):
                  max_order=10,
                  is_fee_absorbed=False,
                  tags=None,
-                 access_codes=None):
+                 access_codes=None,
+                 deleted_at=None):
 
         if tags is None:
             tags = []
@@ -79,6 +81,7 @@ class Ticket(db.Model):
         self.tags = tags
         self.is_fee_absorbed = is_fee_absorbed
         self.access_codes = access_codes
+        self.deleted_at = deleted_at
 
     def has_order_tickets(self):
         """Returns True if ticket has already placed orders.
@@ -149,7 +152,7 @@ class Ticket(db.Model):
         return data
 
 
-class TicketTag(db.Model):
+class TicketTag(BaseModel):
     """
     Tags to group tickets
     """
@@ -161,9 +164,10 @@ class TicketTag(db.Model):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref='ticket_tags')
 
-    def __init__(self, name=None, event_id=None):
+    def __init__(self, name=None, event_id=None, deleted_at=None):
         self.name = name
         self.event_id = event_id
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<TicketTag %r>' % self.name

@@ -4,9 +4,10 @@ from io import StringIO
 import qrcode
 
 from app.models import db
+from app.models.base import BaseModel
 
 
-class TicketHolder(db.Model):
+class TicketHolder(BaseModel):
     __tablename__ = "ticket_holders"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -73,7 +74,8 @@ class TicketHolder(db.Model):
                  checkin_times=None,
                  order_id=None,
                  pdf_url=None,
-                 event_id=None):
+                 event_id=None,
+                 deleted_at=None):
         self.firstname = firstname
         self.lastname = lastname
         self.email = email
@@ -103,6 +105,7 @@ class TicketHolder(db.Model):
         self.checkin_times = checkin_times
         self.pdf_url = pdf_url
         self.event_id = event_id
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<TicketHolder %r>' % self.id

@@ -1,7 +1,8 @@
 from app.models import db
+from app.models.base import BaseModel
 
 
-class FaqType(db.Model):
+class FaqType(BaseModel):
     """Page model class"""
     __tablename__ = 'faq_types'
     id = db.Column(db.Integer, primary_key=True)
@@ -11,9 +12,10 @@ class FaqType(db.Model):
     event = db.relationship("Event", backref="faq_types", foreign_keys=[event_id])
     faqs = db.relationship('Faq', backref="faq_type")
 
-    def __init__(self, name=None, event_id=None):
+    def __init__(self, name=None, event_id=None, deleted_at=None):
         self.name = name
         self.event_id = event_id
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<FAQType %r>' % self.name
@@ -26,5 +28,5 @@ class FaqType(db.Model):
         """Return object data in easily serializable format"""
         return {
             'id': self.id,
-            'name': self.name,
+            'name': self.name
         }

@@ -2,6 +2,7 @@ import uuid
 
 from app.api.helpers.db import get_count
 from app.models import db
+from app.models.base import BaseModel
 
 
 def get_new_slug(name):
@@ -13,7 +14,7 @@ def get_new_slug(name):
         return '{}-{}'.format(slug, uuid.uuid4().hex)
 
 
-class EventType(db.Model):
+class EventType(BaseModel):
     """Event type object table"""
 
     __tablename__ = 'event_types'
@@ -25,10 +26,12 @@ class EventType(db.Model):
 
     def __init__(self,
                  name=None,
-                 slug=None):
+                 slug=None,
+                 deleted_at=None):
 
         self.name = name
         self.slug = get_new_slug(name=self.name)
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<EventType %r>' % self.name

@@ -1,10 +1,11 @@
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import BaseSchema
 
 
-class EventTypeSchema(Schema):
+class EventTypeSchema(BaseSchema):
     """
     Api Schema for event type model
     """

@@ -1,17 +1,18 @@
 from flask import request
 from marshmallow import post_dump, validates_schema, validate
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app import db
 from app.api.helpers.payment import PayPalPaymentsManager
 from app.api.helpers.utilities import dasherize
 from app.models.order import Order
+from app.api.schema.base import BaseSchema
 from utils.common import use_defaults
 
 
 @use_defaults()
-class OrderSchema(Schema):
+class OrderSchema(BaseSchema):
     class Meta:
         type_ = 'order'
         self_view = 'v1.order_detail'

@@ -1,9 +1,10 @@
 from sqlalchemy.orm import backref
 
 from app.models import db
+from app.models.base import BaseModel
 
 
-class StripeAuthorization(db.Model):
+class StripeAuthorization(BaseModel):
     """
     Stripe authorization information for an event.
     """
@@ -25,13 +26,15 @@ class StripeAuthorization(db.Model):
                  stripe_publishable_key=None,
                  stripe_user_id=None,
                  stripe_auth_code=None,
-                 event_id=None):
+                 event_id=None,
+                 deleted_at=None):
         self.stripe_secret_key = stripe_secret_key
         self.stripe_refresh_token = stripe_refresh_token
         self.stripe_publishable_key = stripe_publishable_key
         self.stripe_user_id = stripe_user_id
         self.stripe_auth_code = stripe_auth_code
         self.event_id = event_id
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<StripeAuthorization %r>' % self.stripe_user_id

@@ -1,7 +1,8 @@
 from app.models import db
+from app.models.base import BaseModel
 
 
-class Invite(db.Model):
+class Invite(BaseModel):
     """invite model class"""
     __tablename__ = 'invites'
     id = db.Column(db.Integer, primary_key=True)
@@ -13,10 +14,11 @@ class Invite(db.Model):
     session = db.relationship("Session", backref="invite")
     hash = db.Column(db.String, nullable=False)
 
-    def __init__(self, event_id=None, user_id=None, session_id=None):
+    def __init__(self, event_id=None, user_id=None, session_id=None, deleted_at=None):
         self.user_id = user_id
         self.event_id = event_id
         self.session_id = session_id
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<Invite %r>' % self.user_id

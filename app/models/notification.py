@@ -3,6 +3,7 @@ from datetime import datetime
 import pytz
 
 from app.models import db
+from app.models.base import BaseModel
 
 USER_CHANGE_EMAIL = "User email"
 PASSWORD_CHANGE = 'Change Password'
@@ -28,7 +29,7 @@ MONTHLY_PAYMENT_NOTIF = 'Monthly Payment Notification'
 MONTHLY_PAYMENT_FOLLOWUP_NOTIF = 'Monthly Payment Follow Up Notification'
 
 
-class Notification(db.Model):
+class Notification(BaseModel):
     """
     Model for storing user notifications.
     """
@@ -45,13 +46,14 @@ class Notification(db.Model):
     received_at = db.Column(db.DateTime(timezone=True))
     is_read = db.Column(db.Boolean)
 
-    def __init__(self, user_id=None, title=None, message=None, action=None, is_read=False):
+    def __init__(self, user_id=None, title=None, message=None, action=None, is_read=False, deleted_at=None):
         self.user_id = user_id
         self.title = title
         self.message = message
         self.action = action
         self.received_at = datetime.now(pytz.utc)
         self.is_read = is_read
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<Notif %s:%s>' % (self.user, self.title)

@@ -1,12 +1,13 @@
 from datetime import datetime
 
 from app.models import db
+from app.models.base import BaseModel
 
 TICKET = 'ticket'
 EVENT = 'event'
 
 
-class DiscountCode(db.Model):
+class DiscountCode(BaseModel):
     __tablename__ = "discount_codes"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -40,11 +41,11 @@ class DiscountCode(db.Model):
                  valid_from=None,
                  valid_till=None,
                  is_active=True,
-                 created_at=None,
                  used_for=None,
                  event_id=None,
                  tickets=None,
-                 user_id=None):
+                 user_id=None,
+                 deleted_at=None):
         self.code = code
         self.discount_url = discount_url
         self.type = type
@@ -60,6 +61,8 @@ class DiscountCode(db.Model):
         self.used_for = used_for
         self.tickets = tickets
         self.marketer_id = user_id
+        self.deleted_at = deleted_at
+        self.created_at = datetime.utcnow()
 
     @staticmethod
     def get_service_name():
