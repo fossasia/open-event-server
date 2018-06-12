@@ -3,6 +3,7 @@ from marshmallow_jsonapi.flask import Schema
 from flask_rest_jsonapi import ResourceList
 
 from app.api.bootstrap import api
+from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.order import Order, OrderTicket
 from app.models.user import User
@@ -17,11 +18,23 @@ class AdminSalesFeesSchema(Schema):
     class Meta:
         type_ = 'admin-sales-fees'
         self_view = 'v1.admin_sales_fees'
+        inflect = dasherize
 
     id = fields.String()
     name = fields.String()
-    fee = fields.Float()
+    payment_currency = fields.String()
+    fee = fields.Method('format_fee')
     revenue = fields.Method('calc_revenue')
+    ticket_count = fields.Method('calc_ticket_count')
+
+    @staticmethod
+    def format_fee(obj):
+        return '{:.2f}%'.format(100 * obj.fee)
+
+    @staticmethod
+    def calc_ticket_count(obj):
+        "Count all tickets in all orders of this event"
+        return sum([o.amount for o in obj.orders])
 
     @staticmethod
     def calc_revenue(obj):
