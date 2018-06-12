@@ -10713,7 +10713,7 @@ Data related to all the sessions in the event.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### Create Sessions [POST]
-Create a new session using an event_id **(Minimum Co-Organizer Access)**
+Create a new session using an event_id and track_id **(Minimum Co-Organizer Access)**
 
 + Request (application/vnd.api+json)
 
@@ -10730,6 +10730,12 @@ Create a new session using an event_id **(Minimum Co-Organizer Access)**
                     "data":{
                       "type":"event",
                       "id":"1"
+                    }
+                  },
+                  "track": {
+                    "data":{
+                        "type": "track",
+                        "id": "1"
                     }
                   }
                 },

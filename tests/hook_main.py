@@ -996,6 +996,10 @@ def session_post(transaction):
         db.session.add(event)
         db.session.commit()
 
+        track = TrackFactory()
+        db.session.add(track)
+        db.session.commit()
+
 
 @hooks.before("Sessions > Sessions Details > Session Details")
 def session_get_detail(transaction):
