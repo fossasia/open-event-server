@@ -26,7 +26,8 @@ from app.api.speakers_calls import SpeakersCallList, SpeakersCallDetail, Speaker
 from app.api.event_invoices import EventInvoiceList, EventInvoiceDetail, \
     EventInvoiceRelationshipRequired, EventInvoiceRelationshipOptional
 from app.api.role_invites import RoleInviteListPost, RoleInviteList, RoleInviteDetail, RoleInviteRelationship
-from app.api.image_sizes import ImageSizeList, ImageSizeDetail
+from app.api.event_image_sizes import EventImageSizeDetail
+from app.api.speaker_image_sizes import SpeakerImageSizeDetail
 from app.api.roles import RoleList, RoleDetail
 from app.api.session_types import SessionTypeList, SessionTypeListPost, SessionTypeDetail,\
     SessionTypeRelationshipRequired, SessionTypeRelationshipOptional
@@ -105,9 +106,13 @@ api.route(EmailNotificationRelationshipRequired, 'email_notification_user',
 api.route(EmailNotificationRelationshipOptional, 'email_notification_event',
           '/email-notifications/<int:id>/relationships/event')
 
-# image_sizes
-api.route(ImageSizeList, 'image_size_list', '/image-sizes')
-api.route(ImageSizeDetail, 'image_size_detail', '/image-sizes/<int:id>')
+# event_image_sizes
+api.route(EventImageSizeDetail, 'event_image_size_detail', '/event-image-sizes/<id>',
+          '/event-image-sizes')
+
+# speaker_image_sizes
+api.route(SpeakerImageSizeDetail, 'speaker_image_size_detail', '/speaker-image-sizes/<id>',
+          '/speaker-image-sizes')
 
 # settings
 api.route(SettingDetail, 'setting_detail', '/settings/<id>', '/settings')
