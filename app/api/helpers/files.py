@@ -16,6 +16,7 @@ from xhtml2pdf import pisa
 from app import get_settings
 from app.api.helpers.storage import UploadedFile, upload, generate_hash, UPLOAD_PATHS
 from app.models.image_size import ImageSizes
+from app.api.helpers.exceptions import UnprocessableEntity
 
 
 def get_file_name():
@@ -78,13 +79,17 @@ def create_save_resized_image(image_file, basewidth=None, maintain_aspect=None, 
         return None
 
     filename = '{filename}.{ext}'.format(filename=get_file_name(), ext=ext)
-    data = urllib.request.urlopen(image_file).read()
+    try:
+        data = urllib.request.urlopen(image_file).read()
+    except urllib.error.HTTPError:
+        raise UnprocessableEntity(
+            {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
+        )
     image_file = io.BytesIO(data)
     try:
         im = Image.open(image_file)
     except IOError:
         raise IOError("Corrupt/Invalid Image")
-
     # Convert to jpeg for lower file size.
     if im.format is not 'JPEG':
         img = im.convert('RGB')
