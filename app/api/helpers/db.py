@@ -53,7 +53,7 @@ def safe_query(self, model, column_name, value, parameter_name):
 
 def get_or_create(model, **kwargs):
     """
-    This function gets the model given as parameter, if not found it will create one.
+    This function queries a record in the model, if not found it will create one.
     :param model: db Model to be queried
     :param **kwargs: Arguments to the filter_by method of sqlalchemy.orm.query.Query.filter_by to be filtered by
     """
@@ -71,7 +71,7 @@ def get_or_create(model, **kwargs):
 
 def get_count(query):
     """
-    Counts how many items there are in a database object
+   Counts how many records are there in a database table/model
     :param query: <sqlalchemy.orm.query.Query> a SQLAlchemy query object
     :return: Number
     """
