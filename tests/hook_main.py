@@ -18,7 +18,7 @@ from app.factories.notification import NotificationFactory
 from app.factories.event import EventFactoryBasic
 from app.factories.social_link import SocialLinkFactory
 from app.factories.microlocation import MicrolocationFactory
-from app.factories.image_size import ImageSizeFactory
+from app.factories.image_size import EventImageSizeFactory, SpeakerImageSizeFactory
 from app.factories.page import PageFactory
 from app.factories.event_copyright import EventCopyrightFactory
 from app.factories.setting import SettingFactory
@@ -679,6 +679,19 @@ def event_faq(transaction):
         db.session.commit()
 
 
+@hooks.before("Events > Get Event for a Stripe Authorization > Event Details for a Stripe Authorization")
+def event_stripe_authorization(transaction):
+    """
+    GET /stripe-authorization/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        stripe_authorization = StripeAuthorizationFactory()
+        db.session.add(stripe_authorization)
+        db.session.commit()
+
+
 # ------------------------- Feedback -------------------------
 @hooks.before("Feedback > Feedback Collection > Create Feedback")
 def feedback_post(transaction):
@@ -981,6 +994,10 @@ def session_post(transaction):
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
+        db.session.commit()
+
+        track = TrackFactory()
+        db.session.add(track)
         db.session.commit()
 
 
@@ -2053,65 +2070,55 @@ def email_notification_delete(transaction):
 
 
 # ------------------------- Image Size -------------------------
-@hooks.before("Image Size > Image Size Collection > List Image Sizes")
-def image_size_get_list(transaction):
+@hooks.before("Image Size > Event Image Size Details > Get Event Image Size Details")
+def event_image_size_get_detail(transaction):
     """
-    GET /image-sizes
+    GET /event-image-sizes
     :param transaction:
     :return:
     """
     with stash['app'].app_context():
-        image_size = ImageSizeFactory()
-        db.session.add(image_size)
+        event_image_size = EventImageSizeFactory()
+        db.session.add(event_image_size)
         db.session.commit()
 
 
-@hooks.before("Image Size > Image Size Collection > Create Image Size")
-def image_size_post(transaction):
+@hooks.before("Image Size > Image Size Details > Update Event Image Size")
+def event_image_size_patch(transaction):
     """
-    POST /image-sizes
-    :param transaction:
-    :return:
-    """
-    pass
-
-
-@hooks.before("Image Size > Image Size Details > Get Image Size Details")
-def image_size_get_detail(transaction):
-    """
-    GET /image-sizes/1
+    PATCH /event-image-sizes
     :param transaction:
     :return:
     """
     with stash['app'].app_context():
-        image_size = ImageSizeFactory()
-        db.session.add(image_size)
+        event_image_size = EventImageSizeFactory()
+        db.session.add(event_image_size)
         db.session.commit()
 
 
-@hooks.before("Image Size > Image Size Details > Update Image Size")
-def image_size_patch(transaction):
+@hooks.before("Image Size > Speaker Image Size Details > Get Speaker Image Size Details")
+def speaker_image_size_get_detail(transaction):
     """
-    PATCH /image-sizes/1
+    GET /speaker-image-sizes
     :param transaction:
     :return:
     """
     with stash['app'].app_context():
-        image_size = ImageSizeFactory()
-        db.session.add(image_size)
+        speaker_image_size = SpeakerImageSizeFactory()
+        db.session.add(speaker_image_size)
         db.session.commit()
 
 
-@hooks.before("Image Size > Image Size Details > Delete Image Size")
-def image_size_delete(transaction):
+@hooks.before("Image Size > Speaker Size Details > Update Speaker Image Size")
+def speaker_size_patch(transaction):
     """
-    DELETE /image-sizes/1
+    PATCH /speaker-image-sizes
     :param transaction:
     :return:
     """
     with stash['app'].app_context():
-        image_size = ImageSizeFactory()
-        db.session.add(image_size)
+        speaker_image_size = SpeakerImageSizeFactory()
+        db.session.add(speaker_image_size)
         db.session.commit()
 
 
@@ -3342,10 +3349,7 @@ def stripe_authorization_post(transaction):
     :param transaction:
     :return:
     """
-    with stash['app'].app_context():
-        event = EventFactoryBasic()
-        db.session.add(event)
-        db.session.commit()
+    transaction['skip'] = True
 
 
 @hooks.before("Stripe Authorization > Stripe Authorization Details > Get Stripe Authorization")

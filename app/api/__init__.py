@@ -26,7 +26,8 @@ from app.api.speakers_calls import SpeakersCallList, SpeakersCallDetail, Speaker
 from app.api.event_invoices import EventInvoiceList, EventInvoiceDetail, \
     EventInvoiceRelationshipRequired, EventInvoiceRelationshipOptional
 from app.api.role_invites import RoleInviteListPost, RoleInviteList, RoleInviteDetail, RoleInviteRelationship
-from app.api.image_sizes import ImageSizeList, ImageSizeDetail
+from app.api.event_image_sizes import EventImageSizeDetail
+from app.api.speaker_image_sizes import SpeakerImageSizeDetail
 from app.api.roles import RoleList, RoleDetail
 from app.api.session_types import SessionTypeList, SessionTypeListPost, SessionTypeDetail,\
     SessionTypeRelationshipRequired, SessionTypeRelationshipOptional
@@ -100,9 +101,13 @@ api.route(EmailNotificationRelationshipRequired, 'email_notification_user',
 api.route(EmailNotificationRelationshipOptional, 'email_notification_event',
           '/email-notifications/<int:id>/relationships/event')
 
-# image_sizes
-api.route(ImageSizeList, 'image_size_list', '/image-sizes')
-api.route(ImageSizeDetail, 'image_size_detail', '/image-sizes/<int:id>')
+# event_image_sizes
+api.route(EventImageSizeDetail, 'event_image_size_detail', '/event-image-sizes/<id>',
+          '/event-image-sizes')
+
+# speaker_image_sizes
+api.route(SpeakerImageSizeDetail, 'speaker_image_size_detail', '/speaker-image-sizes/<id>',
+          '/speaker-image-sizes')
 
 # settings
 api.route(SettingDetail, 'setting_detail', '/settings/<id>', '/settings')
@@ -171,7 +176,7 @@ api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>
           '/access-codes/<int:access_code_id>/event', '/email-notifications/<int:email_notification_id>/event',
           '/attendees/<int:attendee_id>/event', '/custom-forms/<int:custom_form_id>/event',
           '/orders/<order_identifier>/event', '/faqs/<int:faq_id>/event', '/faq-types/<int:faq_type_id>/event',
-          '/feedbacks/<int:feedback_id>/event')
+          '/feedbacks/<int:feedback_id>/event', '/stripe-authorizations/<int:stripe_authorization_id>/event')
 api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/tickets',
           '/events/<identifier>/relationships/tickets')
 api.route(EventRelationship, 'event_ticket_tag', '/events/<int:id>/relationships/ticket-tags',
@@ -222,6 +227,8 @@ api.route(EventRelationship, 'event_feedbacks', '/events/<int:id>/relationships/
           '/events/<identifier>/relationships/feedbacks')
 api.route(EventRelationship, 'event_orders', '/events/<int:id>/relationships/orders',
           '/events/<identifier>/relationships/orders')
+api.route(EventRelationship, 'event_stripe_authorization', '/events/<int:id>/relationships/stripe-authorization',
+          '/events/<identifier>/relationships/stripe-authorization')
 # Events -> roles:
 api.route(EventRelationship, 'event_organizers', '/events/<int:id>/relationships/organizers',
           '/events/<identifier>/relationships/organizers')
@@ -461,12 +468,11 @@ api.route(FeedbackRelationshipRequired, 'feedback_user',
           '/feedbacks/<int:id>/relationships/user')
 
 # Stripe Authorization API
-api.route(StripeAuthorizationListPost, 'stripe_authorization_list_post', '/stripe-authorization')
-api.route(StripeAuthorizationDetail, 'stripe_authorization_detail',  '/stripe-authorization/<int:id>',
+api.route(StripeAuthorizationListPost, 'stripe_authorization_list_post', '/stripe-authorizations')
+api.route(StripeAuthorizationDetail, 'stripe_authorization_detail',  '/stripe-authorizations/<int:id>',
           '/events/<int:event_id>/stripe-authorization', '/events/<event_identifier>/stripe-authorization')
 api.route(StripeAuthorizationRelationship, 'stripe_authorization_event',
-          '/stripe-authorization/<int:id>/relationships/event')
-
+          '/stripe-authorizations/<int:id>/relationships/event')
 
 # Orders API
 api.route(OrdersListPost, 'order_list_post', '/orders')

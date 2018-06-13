@@ -65,6 +65,28 @@ def export_download(event_id, path):
     return response
 
 
+@export_routes.route('/events/<string:event_identifier>/export/xcal', methods=['GET'])
+@jwt_required()
+def export_event_xcal(event_identifier):
+
+    if not event_identifier.isdigit():
+        event = db.session.query(Event).filter_by(identifier=event_identifier).first()
+        event_id = str(event.id)
+    else:
+        event_id = event_identifier
+
+    from .helpers.tasks import export_xcal_task
+
+    # queue task
+    task = export_xcal_task.delay(event_id)
+    # create Job
+    create_export_job(task.id, event_id)
+
+    return jsonify(
+        task_url=url_for('tasks.celery_task', task_id=task.id)
+    )
+
+
 def event_export_task_base(event_id, settings):
     path = export_event_json(event_id, settings)
     if path.startswith('/'):
@@ -77,7 +99,7 @@ def event_export_task_base(event_id, settings):
 def export_event_ical(event_identifier):
     if not event_identifier.isdigit():
         event = db.session.query(Event).filter_by(identifier=event_identifier).first()
-        event_id = event.id
+        event_id = str(event.id)
     else:
         event_id = event_identifier
 
