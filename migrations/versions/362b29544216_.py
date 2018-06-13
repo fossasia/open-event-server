@@ -1,7 +1,7 @@
 """empty message
 
 Revision ID: 362b29544216
-Revises: 49f3a33f5437
+Revises: 9d21de792967
 Create Date: 2018-06-12 08:55:12.423860
 
 """
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = '362b29544216'
-down_revision = '49f3a33f5437'
+down_revision = '9d21de792967'
 
 
 def upgrade():
