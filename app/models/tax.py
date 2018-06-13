@@ -1,9 +1,10 @@
 from sqlalchemy.orm import backref
 
 from app.models import db
+from app.models.base import BaseModel
 
 
-class Tax(db.Model):
+class Tax(BaseModel):
     """
     Copyright Information about an event.
     """
@@ -39,7 +40,8 @@ class Tax(db.Model):
                  zip=None,
                  invoice_footer=None,
                  is_tax_included_in_price=None,
-                 event_id=None):
+                 event_id=None,
+                 deleted_at=None):
         self.country = country
         self.name = name
         self.rate = rate
@@ -53,6 +55,7 @@ class Tax(db.Model):
         self.invoice_footer = invoice_footer
         self.is_tax_included_in_price = is_tax_included_in_price
         self.event_id = event_id
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<Tax %r>' % self.name

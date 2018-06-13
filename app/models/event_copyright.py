@@ -1,9 +1,10 @@
 from sqlalchemy.orm import backref
 
 from app.models import db
+from app.models.base import BaseModel
 
 
-class EventCopyright(db.Model):
+class EventCopyright(BaseModel):
     """
     Copyright Information about an event.
     """
@@ -27,7 +28,8 @@ class EventCopyright(db.Model):
                  licence_url=None,
                  year=None,
                  logo=None,
-                 event_id=None):
+                 event_id=None,
+                 deleted_at=None):
         self.holder = holder
         self.holder_url = holder_url
         self.licence = licence
@@ -35,6 +37,7 @@ class EventCopyright(db.Model):
         self.year = year
         self.logo = logo
         self.event_id = event_id
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<Copyright %r>' % self.holder

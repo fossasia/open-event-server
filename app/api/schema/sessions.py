@@ -1,16 +1,17 @@
 from marshmallow import validates_schema, validate
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.exceptions import UnprocessableEntity, ForbiddenException
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
 from app.models.session import Session
+from app.api.schema.base import BaseSchema
 from utils.common import use_defaults
 
 
 @use_defaults()
-class SessionSchema(Schema):
+class SessionSchema(BaseSchema):
     """
     Api schema for Session Model
     """
@@ -71,7 +72,6 @@ class SessionSchema(Schema):
     state = fields.Str(validate=validate.OneOf(choices=["pending", "accepted", "confirmed", "rejected", "draft"]),
                        allow_none=True, default='draft')
     created_at = fields.DateTime(dump_only=True)
-    deleted_at = fields.DateTime(dump_only=True)
     submitted_at = fields.DateTime(allow_none=True)
     is_mail_sent = fields.Boolean()
     last_modified_at = fields.DateTime(dump_only=True)

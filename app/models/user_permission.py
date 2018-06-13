@@ -1,7 +1,8 @@
 from app.models import db
+from app.models.base import BaseModel
 
 
-class UserPermission(db.Model):
+class UserPermission(BaseModel):
     """
     User Permissions
     """
@@ -15,11 +16,12 @@ class UserPermission(db.Model):
     anonymous_user = db.Column(db.Boolean)
 
     def __init__(self, name, description, unverified_user=False,
-                 anonymous_user=False):
+                 anonymous_user=False, deleted_at=None):
         self.name = name
         self.description = description
         self.unverified_user = unverified_user
         self.anonymous_user = anonymous_user
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<UserPerm %r>' % self.name

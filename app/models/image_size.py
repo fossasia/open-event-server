@@ -1,7 +1,8 @@
 from app.models import db
+from app.models.base import BaseModel
 
 
-class ImageSizes(db.Model):
+class ImageSizes(BaseModel):
     """image size model class"""
     __tablename__ = 'image_sizes'
     id = db.Column(db.Integer,
@@ -37,7 +38,8 @@ class ImageSizes(db.Model):
                  thumbnail_aspect=False,
                  thumbnail_quality=None,
                  logo_width=None,
-                 logo_height=None):
+                 logo_height=None,
+                 deleted_at=None):
         self.type = type
         self.full_width = full_width
         self.full_height = full_height
@@ -53,6 +55,7 @@ class ImageSizes(db.Model):
         self.thumbnail_quality = thumbnail_quality
         self.logo_width = logo_width
         self.logo_height = logo_height
+        self.deleted_at = deleted_at
 
     def __str__(self):
         return 'Page: ' + self.id

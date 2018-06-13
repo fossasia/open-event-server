@@ -1,10 +1,10 @@
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import BaseSchema
 
 
-class UserPermissionSchema(Schema):
+class UserPermissionSchema(BaseSchema):
     """
     Api schema for user permission Model
     """

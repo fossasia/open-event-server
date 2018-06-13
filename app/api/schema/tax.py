@@ -1,12 +1,13 @@
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import BaseSchema
 from utils.common import use_defaults
 
 
 @use_defaults()
-class TaxSchemaPublic(Schema):
+class TaxSchemaPublic(BaseSchema):
     class Meta:
         type_ = 'tax'
         self_view = 'v1.tax_detail'
@@ -26,7 +27,7 @@ class TaxSchemaPublic(Schema):
                          type_='event')
 
 
-class TaxSchema(Schema):
+class TaxSchema(BaseSchema):
     class Meta:
         type_ = 'tax'
         self_view = 'v1.tax_detail'

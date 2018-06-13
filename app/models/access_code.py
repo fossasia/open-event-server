@@ -1,12 +1,13 @@
 from datetime import datetime
 
 from app.models import db
+from app.models.base import BaseModel
 
 TICKET = 'ticket'
 EVENT = 'event'
 
 
-class AccessCode(db.Model):
+class AccessCode(BaseModel):
     __tablename__ = "access_codes"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -35,7 +36,8 @@ class AccessCode(db.Model):
                  is_active=True,
                  used_for=None,
                  event_id=None,
-                 user_id=None):
+                 user_id=None,
+                 deleted_at=None):
         self.code = code
         self.access_url = access_url
         self.tickets_number = tickets_number
@@ -48,6 +50,7 @@ class AccessCode(db.Model):
         self.created_at = datetime.utcnow()
         self.used_for = used_for
         self.marketer_id = user_id
+        self.deleted_at = deleted_at
 
     @staticmethod
     def get_service_name():

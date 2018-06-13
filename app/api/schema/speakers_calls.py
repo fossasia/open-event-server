@@ -1,13 +1,14 @@
 from marshmallow import validates_schema, validate
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import dasherize
 from app.models.speakers_call import SpeakersCall
+from app.api.schema.base import BaseSchema
 
 
-class SpeakersCallSchema(Schema):
+class SpeakersCallSchema(BaseSchema):
     """
     Api Schema for Speakers Call model
     """

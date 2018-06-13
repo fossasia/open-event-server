@@ -4,6 +4,7 @@ from datetime import datetime
 
 from app.api.helpers.db import get_count
 from app.models import db
+from app.models.base import BaseModel
 
 
 def get_new_identifier():
@@ -15,7 +16,7 @@ def get_new_identifier():
         return get_new_identifier()
 
 
-class EventInvoice(db.Model):
+class EventInvoice(BaseModel):
     """
     Stripe authorization information for an event.
     """
@@ -73,7 +74,8 @@ class EventInvoice(db.Model):
                  exp_year=None,
                  last4=None,
                  stripe_token=None,
-                 paypal_token=None
+                 paypal_token=None,
+                 deleted_at=None
                  ):
         self.identifier = get_new_identifier()
         self.amount = amount
@@ -97,6 +99,7 @@ class EventInvoice(db.Model):
         self.last4 = last4
         self.stripe_token = stripe_token
         self.paypal_token = paypal_token
+        self.deleted_at = deleted_at
 
     def get_invoice_number(self):
         return 'I' + str(int(time.mktime(self.created_at.timetuple()))) + '-' + str(self.id)

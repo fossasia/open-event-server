@@ -1,15 +1,16 @@
 from marshmallow import validates_schema
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import dasherize
 from app.models.ticket import Ticket
+from app.api.schema.base import BaseSchema
 from utils.common import use_defaults
 
 
 @use_defaults()
-class TicketSchemaPublic(Schema):
+class TicketSchemaPublic(BaseSchema):
     class Meta:
         type_ = 'ticket'
         self_view = 'v1.ticket_detail'

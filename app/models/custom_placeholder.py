@@ -1,6 +1,7 @@
 from sqlalchemy.orm import backref
 
 from app.models import db
+from app.models.base import BaseModel
 
 
 # ensures that if the image resizing fails somehow, respective image fields do not
@@ -8,7 +9,7 @@ def image_default(context):
     return context.current_parameters.get('original_image_url')
 
 
-class CustomPlaceholder(db.Model):
+class CustomPlaceholder(BaseModel):
     """email notifications model class"""
     __tablename__ = 'custom_placeholders'
     id = db.Column(db.Integer,
@@ -31,7 +32,8 @@ class CustomPlaceholder(db.Model):
                  icon_image_url=None,
                  copyright=None,
                  origin=None,
-                 event_sub_topic_id=None):
+                 event_sub_topic_id=None,
+                 deleted_at=None):
         self.name = name
         self.original_image_url = original_image_url
         self.thumbnail_image_url = thumbnail_image_url
@@ -40,6 +42,7 @@ class CustomPlaceholder(db.Model):
         self.copyright = copyright
         self.origin = origin
         self.event_sub_topic_id = event_sub_topic_id
+        self.deleted_at = deleted_at
 
     def __str__(self):
         return 'Name: ' + self.name

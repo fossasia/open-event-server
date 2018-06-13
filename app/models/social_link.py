@@ -1,7 +1,8 @@
 from app.models import db
+from app.models.base import BaseModel
 
 
-class SocialLink(db.Model):
+class SocialLink(BaseModel):
     __tablename__ = "social_links"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
@@ -9,10 +10,11 @@ class SocialLink(db.Model):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship("Event", backref="social_link")
 
-    def __init__(self, name=None, link=None, event_id=None):
+    def __init__(self, name=None, link=None, event_id=None, deleted_at=None):
         self.name = name
         self.link = link
         self.event_id = event_id
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<SocialLink %r>' % self.name

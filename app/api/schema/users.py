@@ -1,10 +1,11 @@
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import BaseSchema
 
 
-class UserSchemaPublic(Schema):
+class UserSchemaPublic(BaseSchema):
     """
     Api schema for User Model which can be accessed by any resource to which user is related.
     Co-organizers of events to which the user will be related will have access to this info.
@@ -52,7 +53,6 @@ class UserSchema(UserSchemaPublic):
     is_verified = fields.Boolean(dump_only=True)
     last_accessed_at = fields.DateTime(dump_only=True)
     created_at = fields.DateTime(dump_only=True)
-    deleted_at = fields.DateTime(dump_only=True)
     details = fields.Str(allow_none=True)
     contact = fields.Str(allow_none=True)
     notifications = Relationship(

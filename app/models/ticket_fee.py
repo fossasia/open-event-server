@@ -1,7 +1,8 @@
 from app.models import db
+from app.models.base import BaseModel
 
 
-class TicketFees(db.Model):
+class TicketFees(BaseModel):
     __tablename__ = 'ticket_fees'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -9,10 +10,11 @@ class TicketFees(db.Model):
     service_fee = db.Column(db.Float)
     maximum_fee = db.Column(db.Float)
 
-    def __init__(self, currency=None, service_fee=None, maximum_fee=None):
+    def __init__(self, currency=None, service_fee=None, maximum_fee=None, deleted_at=None):
         self.currency = currency
         self.service_fee = service_fee
         self.maximum_fee = maximum_fee
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<Ticket Fee %r>' % self.service_fee

@@ -1,12 +1,12 @@
 from marshmallow import validate
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema
 
 from app.api.helpers.static import PAYMENT_CURRENCY_CHOICES
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import BaseSchema
 
 
-class TicketFeesSchema(Schema):
+class TicketFeesSchema(BaseSchema):
     """
     Api schema for ticket_fee Model
     """

@@ -1,7 +1,8 @@
 from app.models import db
+from app.models.base import BaseModel
 
 
-class Page(db.Model):
+class Page(BaseModel):
     """Page model class"""
     __tablename__ = 'pages'
     id = db.Column(db.Integer, primary_key=True)
@@ -13,7 +14,8 @@ class Page(db.Model):
     language = db.Column(db.String)
     index = db.Column(db.Integer, default=0)
 
-    def __init__(self, name=None, title=None, description=None, url=None, place=None, index=None, language=None):
+    def __init__(self, name=None, title=None, description=None, url=None, place=None, index=None, language=None,
+                 deleted_at=None):
         self.name = name
         self.description = description
         self.title = title
@@ -21,6 +23,7 @@ class Page(db.Model):
         self.place = place
         self.language = language
         self.index = index
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<Page %r>' % self.name
