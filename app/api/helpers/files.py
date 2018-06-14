@@ -14,9 +14,9 @@ from sqlalchemy.orm.exc import NoResultFound
 from xhtml2pdf import pisa
 
 from app import get_settings
+from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.storage import UploadedFile, upload, generate_hash, UPLOAD_PATHS
 from app.models.image_size import ImageSizes
-from app.api.helpers.exceptions import UnprocessableEntity
 
 
 def get_file_name():
@@ -211,7 +211,7 @@ def create_save_pdf(pdf_data):
     dest = filedir + filename
 
     file = open(dest, "wb")
-    pisa.CreatePDF(io.StringIO(pdf_data.encode('utf-8')), file)
+    pisa.CreatePDF(io.BytesIO(pdf_data.encode('utf-8')), file)
     file.close()
 
     uploaded_file = UploadedFile(dest, filename)
