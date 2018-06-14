@@ -278,7 +278,7 @@ class Event(db.Model):
     @property
     def fee(self):
         """
-        Returns the fee as a float from 0 to 1 for this event
+        Returns the fee as a percentage from 0 to 100 for this event
 
         Is retrieved from the db using the `payment_currency`
         """

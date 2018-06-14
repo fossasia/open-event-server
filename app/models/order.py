@@ -134,7 +134,7 @@ class Order(db.Model):
         return self.paid_via == 'free'
 
     def get_revenue(self):
-        return self.amount - (self.amount * self.event.fee)
+        return self.amount - (self.amount * (self.event.fee / 100.0))
 
     @property
     def serialize(self):

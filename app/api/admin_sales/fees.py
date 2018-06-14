@@ -27,7 +27,7 @@ class AdminSalesFeesSchema(Schema):
 
     @staticmethod
     def format_fee(obj):
-        return '{:.2f}%'.format(100 * obj.fee)
+        return '{:.2f}%'.format(obj.fee)
 
     @staticmethod
     def calc_ticket_count(obj):

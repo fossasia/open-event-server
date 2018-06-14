@@ -26,7 +26,7 @@ class TicketFees(db.Model):
 
 
 def get_fee(currency):
-    "Returns the fee for a given currency string as a float from 0 to 1"
+    "Returns the fee for a given currency string"
     fee = db.session.query(TicketFees) \
                     .filter(TicketFees.currency == currency) \
                     .order_by(desc(TicketFees.id)).first()
