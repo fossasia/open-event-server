@@ -61,11 +61,13 @@ from app.api.order_statistics.events import OrderStatisticsEventDetail
 from app.api.order_statistics.tickets import OrderStatisticsTicketDetail
 from app.api.faq_types import FaqTypeList, FaqTypeListPost, FaqTypeDetail, FaqTypeRelationshipOptional, \
     FaqTypeRelationshipRequired
+
 from app.api.admin_sales.events import AdminSalesByEventsList
 from app.api.admin_sales.organizer import AdminSalesByOrganizersList
 from app.api.admin_sales.locations import AdminSalesByLocationList
 from app.api.admin_sales.marketer import AdminSalesByMarketerList
 from app.api.admin_sales.discounted import AdminSalesDiscountedList
+from app.api.admin_sales.invoices import AdminSalesInvoicesList
 
 # users
 api.route(UserList, 'user_list', '/users')
@@ -517,3 +519,4 @@ api.route(AdminSalesByOrganizersList, 'admin_sales_by_organizers', '/admin/sales
 api.route(AdminSalesByLocationList, 'admin_sales_by_location', '/admin/sales/by-location')
 api.route(AdminSalesByMarketerList, 'admin_sales_by_marketer', '/admin/sales/by-marketer')
 api.route(AdminSalesDiscountedList, 'admin_sales_discounted', '/admin/sales/discounted')
+api.route(AdminSalesInvoicesList, 'admin_sales_invoices', '/admin/sales/invoices')
