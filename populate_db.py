@@ -24,6 +24,7 @@ from app.models.panel_permission import PanelPermission
 from app.models.custom_system_role import CustomSysRole
 
 from app.models.setting import Setting
+from app.models.image_size import ImageSizes
 from app.models.module import Module
 
 # EventTopic
@@ -62,6 +63,25 @@ def create_services():
 
 def create_settings():
     get_or_create(Setting, app_name='Open Event')
+
+
+def create_event_image_sizes():
+    get_or_create(
+        ImageSizes, type='event-image', full_width=1300,
+        full_height=500, full_aspect=True, full_quality=80,
+        icon_width=75, icon_height=30, icon_aspect=True,
+        icon_quality=80, thumbnail_width=500, thumbnail_height=200,
+        thumbnail_aspect=True, thumbnail_quality=80, logo_width=500,
+        logo_height=200
+    )
+
+
+def create_speaker_image_sizes():
+    get_or_create(
+        ImageSizes, type='speaker-image', icon_size_width_height=35, icon_size_quality=80,
+        small_size_width_height=50, small_size_quality=80,
+        thumbnail_size_width_height=500, thumbnail_quality=80
+    )
 
 
 def create_modules():
@@ -214,6 +234,10 @@ def populate():
     create_settings()
     print('Creating modules...')
     create_modules()
+    print('Creating event image size...')
+    create_event_image_sizes()
+    print('Creating speaker image size...')
+    create_speaker_image_sizes()
     print('Creating Event Topics...')
     create_event_topics()
     print('Creating Event Types...')
@@ -234,6 +258,8 @@ def populate_without_print():
     create_user_permissions()
     create_settings()
     create_modules()
+    create_event_image_sizes()
+    create_speaker_image_sizes()
     create_event_topics()
     create_event_types()
     create_admin_message_settings()

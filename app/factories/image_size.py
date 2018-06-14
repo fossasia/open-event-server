@@ -4,7 +4,7 @@ import app.factories.common as common
 from app.models.image_size import db, ImageSizes
 
 
-class ImageSizeFactory(factory.alchemy.SQLAlchemyModelFactory):
+class EventImageSizeFactory(factory.alchemy.SQLAlchemyModelFactory):
     class Meta:
         model = ImageSizes
         sqlalchemy_session = db.session
@@ -24,3 +24,17 @@ class ImageSizeFactory(factory.alchemy.SQLAlchemyModelFactory):
     thumbnail_quality = 10
     logo_width = 10
     logo_height = 10
+
+
+class SpeakerImageSizeFactory(factory.alchemy.SQLAlchemyModelFactory):
+    class Meta:
+        model = ImageSizes
+        sqlalchemy_session = db.session
+
+    type = common.string_
+    icon_size_quality = 80
+    small_size_width_height = 50
+    thumbnail_size_quality = None
+    icon_size_width_height = 35
+    thumbnail_size_width_height = 500
+    small_size_quality = 80
