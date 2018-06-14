@@ -21550,6 +21550,74 @@ Delete a single Order.
           }
         }
 
+# Group Admin Sales
+
+## Fees Sales Details [/v1/admin/sales/fees]
+
+**Fees:**
+
+| Parameter | Description | Type |
+|:----------|-------------|------|
+| `name` | Name of event | String |
+| `fee` | Fee percentage formatted | String |
+| `revenue` | Total revenue | Integer |
+| `ticket-count` | Number of tickets sold | Float |
+| `payment-currency` | Currency of event | String |
+
+### Show Sales Fees [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": [
+                {
+                    "type": "admin-sales-fees",
+                    "attributes": {
+                        "name": "event 1",
+                        "fee": "20.00%",
+                        "revenue": 10,
+                        "ticket-count": 42.0,
+                        "payment-currency": "USD"
+                    },
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/admin/sales/fees"
+                    }
+                },
+                {
+                    "type": "admin-sales-fees",
+                    "attributes": {
+                        "name": "event 2",
+                        "fee": "20.00%",
+                        "revenue": 0,
+                        "ticket-count": 3.0,
+                        "payment-currency": "USD"
+                    },
+                    "id": "2",
+                    "links": {
+                        "self": "/v1/admin/sales/fees"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/admin/sales/fees"
+            },
+            "meta": {
+                "count": 5
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
 
 # Group Event Copy
 
