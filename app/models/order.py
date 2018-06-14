@@ -17,14 +17,8 @@ def get_new_order_identifier():
 
 class OrderTicket(db.Model):
     __tablename__ = 'orders_tickets'
-    order_id = db.Column(
-        db.Integer,
-        db.ForeignKey('orders.id', ondelete='CASCADE'),
-        primary_key=True)
-    ticket_id = db.Column(
-        db.Integer,
-        db.ForeignKey('tickets.id', ondelete='CASCADE'),
-        primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.id', ondelete='CASCADE'), primary_key=True)
+    ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE'), primary_key=True)
     quantity = db.Column(db.Integer)
 
 
@@ -39,17 +33,12 @@ class Order(db.Model):
     state = db.Column(db.String)
     country = db.Column(db.String)
     zipcode = db.Column(db.String)
-    user_id = db.Column(db.Integer,
-                        db.ForeignKey('users.id', ondelete='SET NULL'))
-    event_id = db.Column(db.Integer,
-                         db.ForeignKey('events.id', ondelete='SET NULL'))
-    marketer_id = db.Column(db.Integer,
-                            db.ForeignKey('users.id', ondelete='SET NULL'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='SET NULL'))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='SET NULL'))
+    marketer_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='SET NULL'))
     created_at = db.Column(db.DateTime(timezone=True))
-    completed_at = db.Column(
-        db.DateTime(timezone=True), nullable=True, default=None)
-    trashed_at = db.Column(
-        db.DateTime(timezone=True), nullable=True, default=None)
+    completed_at = db.Column(db.DateTime(timezone=True), nullable=True, default=None)
+    trashed_at = db.Column(db.DateTime(timezone=True), nullable=True, default=None)
     transaction_id = db.Column(db.String)
     paid_via = db.Column(db.String)
     payment_mode = db.Column(db.String)
@@ -63,18 +52,13 @@ class Order(db.Model):
     cancel_note = db.Column(db.String, nullable=True)
 
     discount_code_id = db.Column(
-        db.Integer,
-        db.ForeignKey('discount_codes.id', ondelete='SET NULL'),
-        nullable=True,
-        default=None)
+        db.Integer, db.ForeignKey('discount_codes.id', ondelete='SET NULL'), nullable=True, default=None)
     discount_code = db.relationship('DiscountCode', backref='orders')
 
     event = db.relationship('Event', backref='orders')
     user = db.relationship('User', backref='orders', foreign_keys=[user_id])
-    marketer = db.relationship(
-        'User', backref='marketed_orders', foreign_keys=[marketer_id])
-    tickets = db.relationship(
-        "Ticket", secondary='orders_tickets', backref='order')
+    marketer = db.relationship('User', backref='marketed_orders', foreign_keys=[marketer_id])
+    tickets = db.relationship("Ticket", secondary='orders_tickets', backref='order')
     order_tickets = db.relationship("OrderTicket", backref='order')
 
     def __init__(self,
@@ -116,8 +100,7 @@ class Order(db.Model):
         return str(self.identifier)
 
     def get_invoice_number(self):
-        return 'O' + str(int(time.mktime(
-            self.created_at.timetuple()))) + '-' + str(self.id)
+        return 'O' + str(int(time.mktime(self.created_at.timetuple()))) + '-' + str(self.id)
 
     @property
     def invoice_number(self):
