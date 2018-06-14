@@ -114,6 +114,7 @@ def create_app():
         from app.api.imports import import_routes
         from app.api.celery_tasks import celery_routes
         from app.api.auth import auth_routes
+        from app.api.admin_statistics_api.events import event_statistics
         from app.api.event_copy import event_copy
 
         app.register_blueprint(api_v1)
@@ -123,6 +124,7 @@ def create_app():
         app.register_blueprint(import_routes)
         app.register_blueprint(celery_routes)
         app.register_blueprint(auth_routes)
+        app.register_blueprint(event_statistics)
 
     sa.orm.configure_mappers()
 
