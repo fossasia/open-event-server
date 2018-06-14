@@ -1,5 +1,5 @@
 import base64
-from io import StringIO
+from io import BytesIO
 
 import qrcode
 
@@ -134,7 +134,7 @@ class TicketHolder(db.Model):
         qr.make(fit=True)
         img = qr.make_image()
 
-        buffer = StringIO()
+        buffer = BytesIO()
         img.save(buffer, format="JPEG")
         img_str = str(base64.b64encode(buffer.getvalue()), 'utf-8')
         return img_str
