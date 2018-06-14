@@ -71,7 +71,7 @@ def get_or_create(model, **kwargs):
 
 def get_count(query):
     """
-   Counts how many records are there in a database table/model
+    Counts how many records are there in a database table/model
     :param query: <sqlalchemy.orm.query.Query> a SQLAlchemy query object
     :return: Number
     """
