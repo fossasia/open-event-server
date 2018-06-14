@@ -1,5 +1,4 @@
 import icalendar
-import pytz
 from flask import url_for
 from icalendar import Calendar, vCalAddress, vText
 from sqlalchemy import asc
@@ -24,9 +23,6 @@ class ICalExporter:
         cal.add('x-wr-calname', event.name)
         cal.add('x-wr-caldesc', "Schedule for sessions at " + event.name)
 
-        tz = event.timezone or 'UTC'
-        tz = pytz.timezone(tz)
-
         sessions = Session.query \
             .filter_by(event_id=event_id) \
             .filter_by(state='accepted') \
@@ -43,8 +39,8 @@ class ICalExporter:
             event_component.add('uid', str(session.id) + "-" + event.identifier)
             event_component.add('geo', (event.latitude, event.longitude))
             event_component.add('location', session.microlocation.name or '' + " " + event.location_name)
-            event_component.add('dtstart', tz.localize(session.starts_at))
-            event_component.add('dtend', tz.localize(session.ends_at))
+            event_component.add('dtstart', session.starts_at)
+            event_component.add('dtend', session.ends_at)
             event_component.add('email', event.email)
             event_component.add('description', session.short_abstract)
             event_component.add('url', url_for('event_detail.display_event_detail_home',
