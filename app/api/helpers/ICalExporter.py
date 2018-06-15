@@ -1,5 +1,4 @@
 import icalendar
-from flask import url_for
 from icalendar import Calendar, vCalAddress, vText
 from sqlalchemy import asc
 

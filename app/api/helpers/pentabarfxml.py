@@ -1,4 +1,3 @@
-from flask import url_for
 from pentabarf.Conference import Conference
 from pentabarf.Day import Day
 from pentabarf.Event import Event
