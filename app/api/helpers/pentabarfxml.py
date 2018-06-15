@@ -1,6 +1,7 @@
 from pentabarf.Conference import Conference
 from pentabarf.Day import Day
 from pentabarf.Event import Event
+from flask import url_for
 from pentabarf.Person import Person
 from pentabarf.Room import Room
 from sqlalchemy import DATE
@@ -44,8 +45,8 @@ class PentabarfExporter:
                                      .filter(Session.deleted_at.is_(None))
                                      .order_by(asc(Session.microlocation_id)).distinct())
 
-            for microlocation_id in microlocation_ids:
-                microlocation_id = microlocation_id[0]
+            for microlocation_tuple in microlocation_ids:
+                microlocation_id = microlocation_tuple[0]
                 if microlocation_id:
                     microlocation = Microlocation.query.get(microlocation_id)
                     sessions = Session.query.filter_by(microlocation_id=microlocation_id) \
@@ -66,6 +67,10 @@ class PentabarfExporter:
                                               title=session.title,
                                               type='Talk',
                                               description=session.long_abstract,
+                                              conf_url=url_for('v1.event_list',
+                                                               identifier=event.identifier),
+                                              full_conf_url=url_for('v1.event_list',
+                                                                    identifier=event.identifier, _external=True),
                                               released="True" if event.schedule_published_on else "False")
 
                         for speaker in session.speakers:
