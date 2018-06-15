@@ -1,6 +1,5 @@
 from xml.etree.ElementTree import Element, SubElement, tostring
 
-from flask import url_for
 from sqlalchemy import asc
 
 from app.models.session import Session
@@ -71,12 +70,8 @@ class XCalExporter:
                 categories_node = SubElement(v_event_node, 'categories')
                 categories_node.text = session.session_type.name if session.session_type else ''
 
-                url_node = SubElement(v_event_node, 'url')
-                url_node.text = url_for('event_detail.display_event_detail_home',
-                                        identifier=event.identifier, _external=True)
-
                 location_node = SubElement(v_event_node, 'location')
-                location_node.text = session.microlocation.name
+                location_node.text = session.microlocation.name if session.microlocation else 'Not decided yet'
 
                 for speaker in session.speakers:
                     attendee_node = SubElement(v_event_node, 'attendee')
