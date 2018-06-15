@@ -21,7 +21,6 @@ class DiscountCode(SoftDeletionModel):
     max_quantity = db.Column(db.Integer, default=100)
     valid_from = db.Column(db.DateTime(timezone=True), nullable=True)
     valid_till = db.Column(db.DateTime(timezone=True), nullable=True)
-    tickets = db.Column(db.String)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref='discount_codes', foreign_keys=[event_id])
     created_at = db.Column(db.DateTime(timezone=True))
@@ -44,7 +43,7 @@ class DiscountCode(SoftDeletionModel):
                  created_at=None,
                  used_for=None,
                  event_id=None,
-                 tickets=None,
+                 user_id=None,
                  marketer_id=None,
                  deleted_at=None):
         self.code = code
@@ -60,7 +59,7 @@ class DiscountCode(SoftDeletionModel):
         self.is_active = is_active
         self.created_at = datetime.utcnow()
         self.used_for = used_for
-        self.tickets = tickets
+        self.marketer_id = user_id
         self.marketer_id = marketer_id
         self.deleted_at = deleted_at
 

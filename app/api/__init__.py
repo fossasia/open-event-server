@@ -173,9 +173,11 @@ api.route(RoleInviteRelationship, 'role_invite_role', '/role-invites/<int:id>/re
 api.route(TicketListPost, 'ticket_list_post', '/tickets')
 api.route(TicketList, 'ticket_list', '/events/<int:event_id>/tickets',
           '/events/<event_identifier>/tickets', '/ticket-tags/<int:ticket_tag_id>/tickets',
-          '/access-codes/<int:access_code_id>/tickets', '/orders/<order_identifier>/tickets')
+          '/access-codes/<int:access_code_id>/tickets', '/orders/<order_identifier>/tickets',
+          '/discount-codes/<int:discount_code_id>/tickets')
 api.route(TicketDetail, 'ticket_detail', '/tickets/<int:id>', '/attendees/<int:attendee_id>/ticket')
 api.route(TicketRelationshipRequired, 'ticket_event', '/tickets/<int:id>/relationships/event')
+api.route(TicketRelationshipRequired, 'ticket_discount_codes', '/tickets/<int:id>/relationships/discount-codes')
 api.route(TicketRelationshipOptional, 'ticket_ticket_tag', '/tickets/<int:id>/relationships/ticket-tags')
 api.route(TicketRelationshipOptional, 'ticket_access_code', '/tickets/<int:id>/relationships/access-codes')
 api.route(TicketRelationshipOptional, 'ticket_attendees', '/tickets/<int:id>/relationships/attendees')
@@ -398,15 +400,19 @@ api.route(EventInvoiceRelationshipOptional, 'event_invoice_discount_code',
 # discount codes
 api.route(DiscountCodeListPost, 'discount_code_list_post', '/discount-codes')
 api.route(DiscountCodeList, 'discount_code_list', '/events/<int:event_id>/discount-codes',
-          '/events/<event_identifier>/discount-codes', '/users/<int:user_id>/discount-codes')
-api.route(DiscountCodeDetail, 'discount_code_detail', '/discount-codes/<int:id>', '/discount-codes/<code>',
-          '/events/<int:event_id>/discount-code', '/event-invoices/<int:event_invoice_id>/discount-code')
+          '/events/<event_identifier>/discount-codes', '/users/<int:user_id>/discount-codes',
+          '/tickets/<int:ticket_id>/discount-codes')
+api.route(DiscountCodeDetail, 'discount_code_detail', '/discount-codes/<int:id>',
+          '/events/<int:event_id>/discount-code', '/event-invoices/<int:event_invoice_id>/discount-code',
+          '/discount-codes/<code>')
 api.route(DiscountCodeRelationshipRequired, 'discount_code_event',
           '/discount-codes/<int:id>/relationships/event')
 api.route(DiscountCodeRelationshipOptional, 'discount_code_events',
           '/discount-codes/<int:id>/relationships/events')
 api.route(DiscountCodeRelationshipOptional, 'discount_code_user',
           '/discount-codes/<int:id>/relationships/marketer')
+api.route(DiscountCodeRelationshipRequired, 'discount_code_tickets',
+          '/discount-codes/<int:id>/relationships/tickets')
 
 # attendees
 api.route(AttendeeListPost, 'attendee_list_post', '/attendees')

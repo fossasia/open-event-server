@@ -24,7 +24,7 @@ from app.factories.page import PageFactory
 from app.factories.event_copyright import EventCopyrightFactory
 from app.factories.setting import SettingFactory
 from app.factories.event_type import EventTypeFactory
-from app.factories.discount_code import DiscountCodeFactory
+from app.factories.discount_code import DiscountCodeFactory, DiscountCodeTicketFactory
 from app.factories.access_code import AccessCodeFactory
 from app.factories.custom_form import CustomFormFactory
 from app.factories.faq import FaqFactory
@@ -1663,6 +1663,19 @@ def access_code_ticket(transaction):
         db.session.commit()
 
 
+@hooks.before("Tickets > List Tickets for a Discount Code > List Tickets")
+def discount_code_ticket(transaction):
+    """
+    GET /discount-codes/1/tickets
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        discount_code = DiscountCodeTicketFactory(event_id=1)
+        db.session.add(discount_code)
+        db.session.commit()
+
+
 # ------------------------- Ticket Fees -------------------------
 @hooks.before("Ticket Fees > Ticket Fees Collection > List Ticket Fees")
 def ticket_fees_get_list(transaction):
@@ -2549,17 +2562,18 @@ def event_discount_code_post(transaction):
 #        db.session.commit()
 
 
-@hooks.before("Discount Codes > Event Discount Code Collection > Create Ticket Discount Code")
+@hooks.before("Discount Codes > Ticket Discount Code Collection > Create Ticket Discount Code")
 def ticket_discount_code_post(transaction):
     """
-    POST /events/1/discount-codes
+    POST /discount-codes
     :param transaction:
     :return:
     """
-    with stash['app'].app_context():
-        event = EventFactoryBasic()
-        db.session.add(event)
-        db.session.commit()
+    transaction['skip'] = True
+    # with stash['app'].app_context():
+    #     event = EventFactoryBasic()
+    #     db.session.add(event)
+    #     db.session.commit()
 
 
 @hooks.before("Discount Codes > Ticket Discount Code Collection > List All Ticket Discount Codes")
@@ -2574,7 +2588,7 @@ def ticket_discount_code_get_list(transaction):
         db.session.add(event)
         db.session.commit()
 
-        discount_code = DiscountCodeFactory(event_id=1)
+        discount_code = DiscountCodeTicketFactory(event_id=1)
         db.session.add(discount_code)
         db.session.commit()
 
@@ -2591,7 +2605,7 @@ def discount_code_get_detail(transaction):
         db.session.add(event)
         db.session.commit()
 
-        discount_code = DiscountCodeFactory(event_id=1)
+        discount_code = DiscountCodeTicketFactory(event_id=1)
         db.session.add(discount_code)
         db.session.commit()
 
@@ -2608,7 +2622,7 @@ def discount_code_patch(transaction):
         db.session.add(event)
         db.session.commit()
 
-        discount_code = DiscountCodeFactory(event_id=1)
+        discount_code = DiscountCodeTicketFactory(event_id=1)
         db.session.add(discount_code)
         db.session.commit()
 
@@ -2661,6 +2675,19 @@ def user_discount_code_get_list(transaction):
         db.session.commit()
 
         discount_code = DiscountCodeFactory(event_id=1)
+        db.session.add(discount_code)
+        db.session.commit()
+
+
+@hooks.before("Discount Codes > List Discount Codes under a Ticket > List All Discount Codes under a Ticket")
+def get_discount_codes_under_ticket(transaction):
+    """
+    GET /tickets/1/discount-codes
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        discount_code = DiscountCodeTicketFactory(event_id=1)
         db.session.add(discount_code)
         db.session.commit()
 
