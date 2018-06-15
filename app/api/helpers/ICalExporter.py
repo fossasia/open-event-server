@@ -38,13 +38,10 @@ class ICalExporter:
             event_component.add('summary', session.title)
             event_component.add('uid', str(session.id) + "-" + event.identifier)
             event_component.add('geo', (event.latitude, event.longitude))
-            event_component.add('location', session.microlocation.name or '' + " " + event.location_name)
+            event_component.add('location', session.microlocation and session.microlocation.name or '' + " " + event.location_name)
             event_component.add('dtstart', session.starts_at)
             event_component.add('dtend', session.ends_at)
-            event_component.add('email', event.email)
             event_component.add('description', session.short_abstract)
-            event_component.add('url', url_for('event_detail.display_event_detail_home',
-                                               identifier=event.identifier, _external=True))
 
             for speaker in session.speakers:
                 # Ref: http://icalendar.readthedocs.io/en/latest/usage.html#file-structure

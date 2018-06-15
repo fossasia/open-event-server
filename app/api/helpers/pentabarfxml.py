@@ -67,10 +67,6 @@ class PentabarfExporter:
                                               title=session.title,
                                               type='Talk',
                                               description=session.long_abstract,
-                                              conf_url=url_for('event_detail.display_event_detail_home',
-                                                               identifier=event.identifier),
-                                              full_conf_url=url_for('event_detail.display_event_detail_home',
-                                                                    identifier=event.identifier, _external=True),
                                               released="True" if event.schedule_published_on else "False")
 
                         for speaker in session.speakers:
