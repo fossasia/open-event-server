@@ -52,6 +52,11 @@ def safe_query(self, model, column_name, value, parameter_name):
 
 
 def get_or_create(model, **kwargs):
+    """
+    This function queries a record in the model, if not found it will create one.
+    :param model: db Model to be queried
+    :param **kwargs: Arguments to the filter_by method of sqlalchemy.orm.query.Query.filter_by to be filtered by
+    """
     was_created = False
     instance = db.session.query(model).filter_by(**kwargs).first()
     if instance:
@@ -64,7 +69,12 @@ def get_or_create(model, **kwargs):
         return instance, was_created
 
 
-def get_count(q):
-    count_q = q.statement.with_only_columns([func.count()]).order_by(None)
-    count = q.session.execute(count_q).scalar()
+def get_count(query):
+    """
+    Counts how many records are there in a database table/model
+    :param query: <sqlalchemy.orm.query.Query> a SQLAlchemy query object
+    :return: Number
+    """
+    count_q = query.statement.with_only_columns([func.count()]).order_by(None)
+    count = query.session.execute(count_q).scalar()
     return count
