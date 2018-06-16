@@ -129,7 +129,8 @@ brew install redis
 # Run Celery
 # socketio has problems with celery "blocking" tasks
 # also socketio is not used in a celery task so no problem to turn it off
-INTEGRATE_SOCKETIO=false celery worker -A app.celery
+INTEGRATE_SOCKETIO=false
+celery worker -A app.celery
 
 # run app
 python3 manage.py runserver
