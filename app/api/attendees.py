@@ -150,6 +150,10 @@ class AttendeeDetail(ResourceDetail):
                 if obj.checkin_times and data['checkin_times'] not in obj.checkin_times.split(","):
                     data['checkin_times'] = '{},{}'.format(obj.checkin_times, data['checkin_times'])
 
+        if 'attendee_notes' in data:
+            if obj.attendee_notes and data['attendee_notes'] not in obj.attendee_notes.split(","):
+                data['attendee_notes'] = '{},{}'.format(obj.attendee_notes, data['attendee_notes'])
+
     decorators = (jwt_required,)
     schema = AttendeeSchema
     data_layer = {'session': db.session,
