@@ -236,7 +236,7 @@ Once you have activated your account just proceed to the [translation section](h
 
 ## Contributions, Bug Reports, Feature Requests
 
-This is an Open Source project and we would be happy to see contributors who report bugs and file feature requests submitting pull requests as well. Please report issues here https://github.com/fossasia/open-event-server/issues
+This is an Open Source project and we would be happy to see contributors who report bugs and file feature requests submitting pull requests as well. Please report issues here https://github.com/fossasia/open-event-server/issues. It is also recommended to go through the [developer handbook](https://github.com/fossasia/open-event/tree/master/docs/dev-handbook) in order to get a basic understanding of the ecosystem.
 
 ## Branch Policy
 
