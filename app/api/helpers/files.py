@@ -79,12 +79,7 @@ def create_save_resized_image(image_file, basewidth=None, maintain_aspect=None, 
         return None
 
     filename = '{filename}.{ext}'.format(filename=get_file_name(), ext=ext)
-    try:
-        data = urllib.request.urlopen(image_file).read()
-    except urllib.error.HTTPError:
-        raise UnprocessableEntity(
-            {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
-        )
+    data = urllib.request.urlopen(image_file).read()
     image_file = io.BytesIO(data)
     try:
         im = Image.open(image_file)
