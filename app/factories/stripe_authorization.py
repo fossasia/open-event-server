@@ -16,5 +16,5 @@ class StripeAuthorizationFactory(factory.alchemy.SQLAlchemyModelFactory):
     stripe_refresh_token = common.string_
     stripe_publishable_key = common.string_
     stripe_user_id = common.string_
-    stripe_email = common.email_
+    stripe_auth_code = common.secret_
     event_id = 1

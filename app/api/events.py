@@ -12,7 +12,7 @@ from datetime import datetime
 from app.api.bootstrap import api
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
 from app.api.helpers.db import save_to_db, safe_query
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.exceptions import ForbiddenException, ConflictException
 from app.api.helpers.files import create_save_image_sizes
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
@@ -46,6 +46,7 @@ from app.models.ticket_holder import TicketHolder
 from app.models.track import Track
 from app.models.user import User, ATTENDEE, ORGANIZER, COORGANIZER
 from app.models.users_events_role import UsersEventsRoles
+from app.models.stripe_authorization import StripeAuthorization
 
 
 class EventList(ResourceList):
@@ -102,6 +103,18 @@ class EventList(ResourceList):
                 getattr(Event, 'discount_code_id') == view_kwargs['discount_code_id'])
 
         return query_
+
+    def before_post(self, args, kwargs, data=None):
+        """
+        before post method to verify if the event location is provided before publishing the event
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
+        if data.get('state', None) == 'published' and not data.get('location_name', None):
+            raise ConflictException({'pointer': '/data/attributes/location-name'},
+                                    "Location is required to publish the event")
 
     def after_create_object(self, event, data, view_kwargs):
         """
@@ -211,6 +224,14 @@ def get_id(view_kwargs):
         tax = safe_query(db, Tax, 'id', view_kwargs['tax_id'], 'tax_id')
         if tax.event_id is not None:
             view_kwargs['id'] = tax.event_id
+        else:
+            view_kwargs['id'] = None
+
+    if view_kwargs.get('stripe_authorization_id') is not None:
+        stripe_authorization = safe_query(db, StripeAuthorization, 'id', view_kwargs['stripe_authorization_id'],
+                                          'stripe_authorization_id')
+        if stripe_authorization.event_id is not None:
+            view_kwargs['id'] = stripe_authorization.event_id
         else:
             view_kwargs['id'] = None
 
@@ -375,6 +396,18 @@ class EventDetail(ResourceDetail):
                 view_kwargs['id'] = order.event_id
             else:
                 view_kwargs['id'] = None
+
+    def before_patch(self, args, kwargs, data=None):
+        """
+        before patch method to verify if the event location is provided before publishing the event
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
+        if data.get('state', None) == 'published' and not data.get('location_name', None):
+            raise ConflictException({'pointer': '/data/attributes/location-name'},
+                                    "Location is required to publish the event")
 
     def before_update_object(self, event, data, view_kwargs):
         """

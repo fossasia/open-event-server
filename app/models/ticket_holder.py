@@ -1,5 +1,5 @@
 import base64
-from io import StringIO
+from io import BytesIO
 
 import qrcode
 
@@ -8,6 +8,9 @@ from app.models import db
 
 class TicketHolder(db.Model):
     __tablename__ = "ticket_holders"
+    __table_args__ = (
+        db.UniqueConstraint('ticket_id', name='ticket_event'),
+        )
 
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String, nullable=False)
@@ -131,7 +134,7 @@ class TicketHolder(db.Model):
         qr.make(fit=True)
         img = qr.make_image()
 
-        buffer = StringIO()
+        buffer = BytesIO()
         img.save(buffer, format="JPEG")
         img_str = str(base64.b64encode(buffer.getvalue()), 'utf-8')
         return img_str

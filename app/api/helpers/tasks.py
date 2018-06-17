@@ -24,6 +24,8 @@ from app.api.exports import event_export_task_base
 from app.api.imports import import_event_task_base
 from app.models.event import Event
 from app.api.helpers.ICalExporter import ICalExporter
+from app.api.helpers.xcal import XCalExporter
+from app.api.helpers.pentabarfxml import PentabarfExporter
 from app.api.helpers.storage import UploadedFile, upload, UPLOAD_PATHS
 from app.api.helpers.db import save_to_db
 
@@ -111,13 +113,14 @@ def import_event_task(self, email, file, source_type, creator_id):
 
 @celery.task(base=RequestContextTask, name='export.ical', bind=True)
 def export_ical_task(self, event_id):
-    event = db.session.query(Event).filter_by(id=event_id).first()
+    event = safe_query(db, Event, 'id', event_id, 'event_id')
+
     try:
-        filedir = current_app.config.get('BASE_DIR') + '/static/uploads/temp/'
+        filedir = current_app.config.get('BASE_DIR') + '/static/uploads/temp/' + event_id + '/'
         if not os.path.isdir(filedir):
             os.makedirs(filedir)
         filename = "ical.ics"
-        file_path = current_app.config['BASE_DIR'] + '/static/media/temp/' + filename
+        file_path = filedir + filename
         with open(file_path, "w") as temp_file:
             temp_file.write(str(ICalExporter.export(event_id), 'utf-8'))
         ical_file = UploadedFile(file_path=file_path, filename=filename)
@@ -127,6 +130,56 @@ def export_ical_task(self, event_id):
             'download_url': event.ical_url
         }
 
+    except Exception as e:
+        print(traceback.format_exc())
+        result = {'__error': True, 'result': str(e)}
+
+    return result
+
+
+@celery.task(base=RequestContextTask, name='export.xcal', bind=True)
+def export_xcal_task(self, event_id):
+    event = safe_query(db, Event, 'id', event_id, 'event_id')
+
+    try:
+        filedir = current_app.config.get('BASE_DIR') + '/static/uploads/temp/' + event_id + '/'
+        if not os.path.isdir(filedir):
+            os.makedirs(filedir)
+        filename = "xcal.xcs"
+        file_path = filedir + filename
+        with open(file_path, "w") as temp_file:
+            temp_file.write(str(XCalExporter.export(event_id), 'utf-8'))
+        xcal_file = UploadedFile(file_path=file_path, filename=filename)
+        event.xcal_url = upload(xcal_file, UPLOAD_PATHS['exports']['xcal'].format(event_id=event_id))
+        save_to_db(event)
+        result = {
+            'download_url': event.xcal_url
+        }
+    except Exception as e:
+        print(traceback.format_exc())
+        result = {'__error': True, 'result': str(e)}
+
+    return result
+
+
+@celery.task(base=RequestContextTask, name='export.pentabarf', bind=True)
+def export_pentabarf_task(self, event_id):
+    event = safe_query(db, Event, 'id', event_id, 'event_id')
+
+    try:
+        filedir = current_app.config.get('BASE_DIR') + '/static/uploads/temp/' + event_id + '/'
+        if not os.path.isdir(filedir):
+            os.makedirs(filedir)
+        filename = "pentabarf.xml"
+        file_path = filedir + filename
+        with open(file_path, "w") as temp_file:
+            temp_file.write(str(PentabarfExporter.export(event_id), 'utf-8'))
+        pentabarf_file = UploadedFile(file_path=file_path, filename=filename)
+        event.pentabarf_url = upload(pentabarf_file, UPLOAD_PATHS['exports']['pentabarf'].format(event_id=event_id))
+        save_to_db(event)
+        result = {
+            'download_url': event.pentabarf_url
+        }
     except Exception as e:
         print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
