@@ -14572,6 +14572,7 @@ Related to ticket holders(attendees) of an event (free, paid, donation) to the e
 | `country` | Country of the Attendee | string | - |
 | `is-checked-in` | If the attendee is checked in | boolean | - |
 | `checkin-times` | Comma separated checkin times | string | - |
+| `attendee-notes` | Comma separated attendee notes | string | - |
 | `pdf-url` | pdf url of the Attendee | url | - |
 
 ## Attendees Collection [/v1/attendees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
@@ -14604,6 +14605,7 @@ Create a new attendee.
                     "state": "example",
                     "country": "IN",
                     "is-checked-in": "false",
+                    "attendee-notes": "example",
                     "pdf-url": "http://example.com"
                 },
                 "type": "attendee",
@@ -14654,6 +14656,7 @@ Create a new attendee.
               "firstname": "Open Event User",
               "lastname": null,
               "is-checked-in": false,
+              "attendee-notes": "example",
               "state": null,
               "address": null,
               "pdf-url": "http://example.com",
@@ -14747,6 +14750,7 @@ Get a list of attendees of an order.
                 "gender": null,
                 "ticket-id": "1",
                 "country": null,
+                "attendee-notes": null,
                 "pdf-url": "http://ipiyush.com",
                 "work-address": null,
                 "work-phone": null
@@ -14801,6 +14805,7 @@ Get a single attendee.
                 },
                 "attributes": {
                     "checkin-times": null,
+                    "attendee-notes": null,
                     "github": null,
                     "email": "johndoe@example.com",
                     "home-address": null,
@@ -14868,6 +14873,7 @@ Update a single attendee by `id`.
                     "country": "IN",
                     "is-checked-in": "true",
                     "checkin-times": "2017-12-13T22:59:59.123456+00:00",
+                    "attendee-notes": "example",
                     "pdf-url": "http://example.com"
                 },
                 "type": "attendee",
@@ -14892,6 +14898,7 @@ Update a single attendee by `id`.
                     "firstname": "John",
                     "lastname": "Doe",
                     "is-checked-in": true,
+                    "attendee-notes": "example",
                     "state": "example",
                     "address": "address",
                     "pdf-url": "http://example.com",

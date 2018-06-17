@@ -43,6 +43,7 @@ class TicketHolder(db.Model):
     ticket = db.relationship('Ticket', backref='ticket_holders')
     is_checked_in = db.Column(db.Boolean, default=False)
     checkin_times = db.Column(db.String)
+    attendee_notes = db.Column(db.String)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     user = db.relationship('User', foreign_keys=[email], primaryjoin='User.email == TicketHolder.email', viewonly=True,
                            backref='attendees')
@@ -74,6 +75,7 @@ class TicketHolder(db.Model):
                  ticket_id=None,
                  is_checked_in=False,
                  checkin_times=None,
+                 attendee_notes=None,
                  order_id=None,
                  pdf_url=None,
                  event_id=None):
@@ -104,6 +106,7 @@ class TicketHolder(db.Model):
         self.order_id = order_id
         self.is_checked_in = is_checked_in
         self.checkin_times = checkin_times
+        self.attendee_notes = attendee_notes
         self.pdf_url = pdf_url
         self.event_id = event_id
 
