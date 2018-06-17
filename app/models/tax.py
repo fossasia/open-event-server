@@ -5,7 +5,7 @@ from app.models import db
 
 class Tax(db.Model):
     """
-    Copyright Information about an event.
+    Tax Information about an event.
     """
     __tablename__ = 'tax'
 
@@ -22,6 +22,7 @@ class Tax(db.Model):
     zip = db.Column(db.Integer)
     invoice_footer = db.Column(db.String)
     is_tax_included_in_price = db.Column(db.Boolean, default=False)
+    is_invoice_sent = db.Column(db.Boolean, default=False)
 
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref=backref('tax', uselist=False))
@@ -39,6 +40,7 @@ class Tax(db.Model):
                  zip=None,
                  invoice_footer=None,
                  is_tax_included_in_price=None,
+                 is_invoice_sent=None,
                  event_id=None):
         self.country = country
         self.name = name
@@ -52,6 +54,7 @@ class Tax(db.Model):
         self.zip = zip
         self.invoice_footer = invoice_footer
         self.is_tax_included_in_price = is_tax_included_in_price
+        self.is_invoice_sent = is_invoice_sent
         self.event_id = event_id
 
     def __repr__(self):
@@ -76,5 +79,6 @@ class Tax(db.Model):
             'state': self.state,
             'zip': self.zip,
             'invoice_footer': self.invoice_footer,
-            'is_tax_included_in_price': self.is_tax_included_in_price
+            'is_tax_included_in_price': self.is_tax_included_in_price,
+            'is_invoice_sent': self.is_invoice_sent
         }
