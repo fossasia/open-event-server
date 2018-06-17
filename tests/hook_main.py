@@ -1545,7 +1545,7 @@ def tax_delete(transaction):
         db.session.commit()
 
 
-@hooks.before("Tax > Get Taxes under an Event > Get Taxes under an Event")
+@hooks.before("Tax > Get Tax details under an Event > Get Tax details under an Event")
 def event_tax_get_list(transaction):
     """
     GET /taxes/1

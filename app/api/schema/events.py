@@ -200,7 +200,8 @@ class EventSchemaPublic(Schema):
                                    related_view_kwargs={'event_id': '<id>'},
                                    schema='EventCopyrightSchema',
                                    type_='event-copyright')
-    tax = Relationship(self_view='v1.event_tax',
+    tax = Relationship(attribute='tax',
+                       self_view='v1.event_tax',
                        self_view_kwargs={'id': '<id>'},
                        related_view='v1.tax_detail',
                        related_view_kwargs={'event_id': '<id>'},
