@@ -9,7 +9,7 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=openevent
     volumes:
-      - /data/postgres:/var/lib/postgresql/data
+      - pg:/var/lib/postgresql/data
       - ./postgres-initdb.d:/docker-entrypoint-initdb.d
     ports:
       - 127.0.0.1:5432:5432
@@ -18,7 +18,7 @@ services:
     image: redis:3-alpine
     command: redis-server
     volumes:
-      - ./data/redis:/var/lib/redis/data
+      - rd:/var/lib/redis/data
     ports:
       - 127.0.0.1:6379:6379
 
@@ -27,7 +27,7 @@ services:
     environment:
         - discovery.type=single-node
     volumes:
-        - ./data/elasticsearch:/usr/share/elasticsearch/data
+        - es:/usr/share/elasticsearch/data
     ports:
         - 127.0.0.1:9200:9200
         - 127.0.0.1:9300:9300
@@ -46,3 +46,11 @@ services:
       - ./data/web:/open_event/static
     ports:
       - '80:5000'
+
+volumes:
+    pg:
+        driver: local
+    rd:
+        driver: local
+    es:
+        driver: local
