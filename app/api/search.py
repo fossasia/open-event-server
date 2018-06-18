@@ -27,7 +27,7 @@ class SearchEvent(Resource):
     and descriptions
     """
 
-    def get(self, query):
+    def get(self):
         args = request.args
         search = Search(using=es, index=SearchableEvent.meta.index)
 
@@ -36,11 +36,21 @@ class SearchEvent(Resource):
             search = search.highlight('name')
 
         if args.get('description'):
-            search = search.query('fuzzy', description=args['description'])
+            search = search.query('match', description=args['description'])
             search = search.highlight('description')
 
         if args.get('location_name'):
             search = search.query('fuzzy', location_name=args['location_name'])
             search = search.highlight('location_name')
+
+        if args.get('organizer_name'):
+            search = search.query(
+                'fuzzy', organizer_name=args['organizer_name'])
+            search = search.highlight('organizer_name')
+
+        if args.get('organizer_description'):
+            search = search.query(
+                'fuzzy', organizer_description=args['organizer_description'])
+            search = search.highlight('organizer_description')
 
         return [to_dict(r) for r in search.execute()]

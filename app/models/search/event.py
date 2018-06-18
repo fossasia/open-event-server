@@ -20,13 +20,5 @@ class SearchableEvent(DocType):
         self.id = db_event.id
         self.description = db_event.description
         self.location_name = db_event.location_name
-        self.organization_name = db_event.organizer_name
-        self.organization_description = db_event.organizer_description
-
-    def serialize(self):
-        return {
-            'name': self.name,
-            'description': self.description,
-            'location_name': self.location_name,
-            'organizer_name': self.organization_name,
-        }
+        self.organizer_name = db_event.organizer_name
+        self.organizer_description = db_event.organizer_description

@@ -511,4 +511,4 @@ api.route(AdminStatisticsMailDetail, 'admin_statistics_mail_detail', '/admin/sta
 api.route(AdminSalesInvoicesList, 'admin_sales_invoices', '/admin/sales/invoices')
 
 # Search
-api.route(SearchEvent, 'search_event', '/search/event/<query>')
+api.route(SearchEvent, 'search_event', '/search/event')
