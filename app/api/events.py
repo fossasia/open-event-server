@@ -18,6 +18,7 @@ from app.api.helpers.files import create_save_image_sizes
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
 from app.api.schema.events import EventSchemaPublic, EventSchema
+from app.api.helpers.export_helpers import create_export_job
 # models
 from app.models import db
 from app.models.access_code import AccessCode
@@ -132,6 +133,9 @@ class EventList(ResourceList):
         role_invite = RoleInvite(user.email, role.title_name, event.id, role.id, datetime.now(pytz.utc),
                                  status='accepted')
         save_to_db(role_invite, 'Organiser Role Invite Added')
+        if event.state == 'published' and event.schedule_published_on:
+            start_export_tasks(event)
+
         if data.get('original_image_url'):
             try:
                 uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
@@ -435,13 +439,20 @@ class EventDetail(ResourceDetail):
             data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
             data['icon_image_url'] = uploaded_images['icon_image_url']
 
+    def after_update_object(self, event, data, view_kwargs):
+        if event.state == 'published' and event.schedule_published_on:
+            start_export_tasks(event)
+        else:
+            clear_export_urls(event)
+
     decorators = (api.has_permission('is_coorganizer', methods="PATCH,DELETE", fetch="id", fetch_as="event_id",
                                      model=Event),)
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
                   'methods': {
-                      'before_update_object': before_update_object
+                      'before_update_object': before_update_object,
+                      'after_update_object': after_update_object
                   }}
 
 
@@ -490,3 +501,28 @@ class EventCopyResource(ResourceList):
     methods = ['POST', ]
     data_layer = {'class': EventCopyLayer,
                   'session': db.Session}
+
+
+def start_export_tasks(event):
+    event_id = str(event.id)
+    # XCAL
+    from .helpers.tasks import export_xcal_task
+    task_xcal = export_xcal_task.delay(event_id, temp=False)
+    create_export_job(task_xcal.id, event_id)
+
+    # ICAL
+    from .helpers.tasks import export_ical_task
+    task_ical = export_ical_task.delay(event_id, temp=False)
+    create_export_job(task_ical.id, event_id)
+
+    # PENTABARF XML
+    from .helpers.tasks import export_pentabarf_task
+    task_pentabarf = export_pentabarf_task.delay(event_id, temp=False)
+    create_export_job(task_pentabarf.id, event_id)
+
+
+def clear_export_urls(event):
+    event.ical_url = None
+    event.xcal_url = None
+    event.pentabarf_url = None
+    save_to_db(event)
