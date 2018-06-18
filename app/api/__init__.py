@@ -62,6 +62,7 @@ from app.api.order_statistics.tickets import OrderStatisticsTicketDetail
 from app.api.faq_types import FaqTypeList, FaqTypeListPost, FaqTypeDetail, FaqTypeRelationshipOptional, \
     FaqTypeRelationshipRequired
 from app.api.admin_sales.invoices import AdminSalesInvoicesList
+from app.api.search import SearchEvent
 
 # users
 api.route(UserList, 'user_list', '/users')
@@ -508,3 +509,6 @@ api.route(AdminStatisticsMailDetail, 'admin_statistics_mail_detail', '/admin/sta
 
 # Admin Sales
 api.route(AdminSalesInvoicesList, 'admin_sales_invoices', '/admin/sales/invoices')
+
+# Search
+api.route(SearchEvent, 'search_event', '/search/event/<query>')

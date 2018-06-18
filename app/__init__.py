@@ -15,6 +15,7 @@ from flask_rest_jsonapi.errors import jsonapi_errors
 from flask_rest_jsonapi.exceptions import JsonApiException
 from healthcheck import HealthCheck, EnvironmentDump
 from apscheduler.schedulers.background import BackgroundScheduler
+from elasticsearch_dsl.connections import connections
 from pytz import utc
 
 import sqlalchemy as sa
@@ -147,6 +148,7 @@ def create_app():
     # elasticsearch
     if app.config['ENABLE_ELASTICSEARCH']:
         es.init_app(app)
+        connections.add_connection('default', es.elasticsearch)
         with app.app_context():
             try:
                 cron_rebuild_events_elasticsearch.delay()
