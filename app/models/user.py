@@ -11,6 +11,7 @@ from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from app.api.helpers.db import get_count
 from app.models import db
+from app.models.base import SoftDeletionModel
 from app.models.custom_system_role import UserSystemRole
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.notification import Notification
@@ -41,7 +42,7 @@ ATTENDEE = 'attendee'
 REGISTRAR = 'registrar'
 
 
-class User(db.Model):
+class User(SoftDeletionModel):
     """User model class"""
     __tablename__ = 'users'
 
@@ -69,7 +70,6 @@ class User(db.Model):
     is_verified = db.Column(db.Boolean, default=False)
     last_accessed_at = db.Column(db.DateTime(timezone=True))
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(pytz.utc))
-    deleted_at = db.Column(db.DateTime(timezone=True))
     speaker = db.relationship('Speaker', backref="user")
     session = db.relationship('Session', backref="user")
     feedback = db.relationship('Feedback', backref="user")
