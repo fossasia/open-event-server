@@ -1,15 +1,26 @@
 import psycopg2
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from elasticsearch import helpers, Elasticsearch
+from elasticsearch_dsl.connections import connections
 
 from app.views.celery_ import celery
 from app.views.redis_store import redis_store
+from app.models.event import Event
+from app.models.search.event import SearchableEvent
 from config import Config
 
 # WARNING: This file contains cron jobs for elasticsearch, please use pure python for any kind of operation here,
 # Objects requiring flask app context may not work properly
 
 es_store = Elasticsearch([Config.ELASTICSEARCH_HOST])
-conn = psycopg2.connect(Config.SQLALCHEMY_DATABASE_URI)
+connections.create_connection(es_store)
+
+db = create_engine(Config.SQLALCHEMY_DATABASE_URI)
+# conn = psycopg2.connect(Config.SQLALCHEMY_DATABASE_URI)
+Session = sessionmaker()
+Session.configure(bind=db)
+session = Session()
 
 
 @celery.task(name='rebuild.events.elasticsearch')
@@ -19,83 +30,37 @@ def cron_rebuild_events_elasticsearch():
     Also clears event_index and event_delete redis sets
     :return:
     """
-    conn = psycopg2.connect(Config.SQLALCHEMY_DATABASE_URI)
-    cur = conn.cursor()
-    cur.execute(
-        "SELECT id, name, description, searchable_location_name, organizer_name, organizer_description FROM events WHERE state = 'published' and deleted_at is NULL ;")
-    events = cur.fetchall()
-    event_data = ({'_type': 'event',
-                   '_index': 'events',
-                   '_id': event_[0],
-                   'name': event_[1],
-                   'description': event_[2] or None,
-                   'searchable_location_name': event_[3] or None,
-                   'organizer_name': event_[4] or None,
-                   'organizer_description': event_[5] or None}
-                  for event_ in events)
     redis_store.delete('event_index')
     redis_store.delete('event_delete')
-    es_store.indices.delete('events')
-    es_store.indices.create('events')
-    abc = helpers.bulk(es_store, event_data)
-    print(abc)
 
+    es_store.indices.delete(SearchableEvent.meta.index)
+    SearchableEvent.init()
 
-class EventIterator:
-    """
-    Iterator that returns tuple with event info by popping the event id from the given redis set_name
-    """
-    def __init__(self, high, set_name):
-        self.current = 1
-        self.high = high
-        self.set_name = set_name
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self.current >= self.high:
-            raise StopIteration
-        else:
-            self.current += 1
-            event_id = redis_store.spop(self.set_name)
-            cur = conn.cursor()
-            cur.execute(
-                "SELECT id, name, description, searchable_location_name, organizer_name, organizer_description FROM events WHERE id = %s;",
-                (event_id,))
-            event_ = cur.fetchone()
-            return event_
+    for event in session.query(Event):
+        print('adding to elasticsearch:', event.name)
+        searchable = SearchableEvent()
+        searchable.from_event(event)
+        searchable.save()
 
 
 def sync_events_elasticsearch():
     # Sync update and inserts
-    index_count = redis_store.scard('event_index')
-    index_event_data = ({'_type': 'event',
-                         '_index': 'events',
-                         '_id': event_[0],
-                         'name': event_[1],
-                         'description': event_[2] or None,
-                         'searchable_location_name': event_[3] or None,
-                         'organizer_name': event_[4] or None,
-                         'organizer_description': event_[5] or None}
-                        for event_ in EventIterator(index_count, 'event_index'))
-    try:
-        helpers.bulk(es_store, index_event_data)
-    except Exception as e:
-        print(e)
+    updated, todo = 1, redis_store.scard('event_index')
+
+    while updated < todo:
+        updated += 1
+        event_id = redis_store.spop('event_index')
+        event = session.query(Event).filter(id=event_id).one()
+        searchable = SearchableEvent()
+        searchable.from_event(event)
+        searchable.save()
 
     # sync both soft and hard deletes
-    del_count = redis_store.scard('event_delete')
-    del_event_data = ({'_type': 'event',
-                       '_index': 'events',
-                       '_id': event_[0],
-                       'name': event_[1],
-                       'description': event_[2] or None,
-                       'searchable_location_name': event_[3] or None,
-                       'organizer_name': event_[4] or None,
-                       'organizer_description': event_[5] or None}
-                      for event_ in EventIterator(del_count, 'event_delete'))
-    try:
-        helpers.bulk(es_store, del_event_data)
-    except Exception as e:
-        print(e)
+    deleted, todo = 1, redis_store.scard('event_delete')
+
+    while deleted < todo:
+        deleted += 1
+        event_id = redis_store.scard('event_delete')
+        searchable = SearchableEvent()
+        searchable.meta.id = event_id
+        searchable.delete()
