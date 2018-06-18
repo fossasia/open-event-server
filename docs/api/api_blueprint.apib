@@ -21559,10 +21559,10 @@ Delete a single Order.
 | Parameter | Description | Type |
 |:----------|-------------|------|
 | `name` | Name of event | String |
-| `fee` | Fee percentage formatted | String |
+| `fee-percentage` | Fee percentage | Float |
+| `payment-currency` | Currency of event | String |
 | `revenue` | Total revenue | Integer |
 | `ticket-count` | Number of tickets sold | Float |
-| `payment-currency` | Currency of event | String |
 
 ### Show Sales Fees [GET]
 
@@ -21583,7 +21583,7 @@ Delete a single Order.
                     "type": "admin-sales-fees",
                     "attributes": {
                         "name": "event 1",
-                        "fee": "20.00%",
+                        "fee-percentage": 20.0,
                         "revenue": 10,
                         "ticket-count": 42.0,
                         "payment-currency": "USD"
@@ -21597,7 +21597,7 @@ Delete a single Order.
                     "type": "admin-sales-fees",
                     "attributes": {
                         "name": "event 2",
-                        "fee": "20.00%",
+                        "fee": 20.0,
                         "revenue": 0,
                         "ticket-count": 3.0,
                         "payment-currency": "USD"
