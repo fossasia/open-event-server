@@ -21,13 +21,9 @@ class AdminSalesFeesSchema(Schema):
     id = fields.String()
     name = fields.String()
     payment_currency = fields.String()
-    fee = fields.Method('format_fee')
+    fee_percentage = fields.Float(attribute='fee')
     revenue = fields.Method('calc_revenue')
     ticket_count = fields.Method('calc_ticket_count')
-
-    @staticmethod
-    def format_fee(obj):
-        return '{:.2f}%'.format(obj.fee)
 
     @staticmethod
     def calc_ticket_count(obj):
