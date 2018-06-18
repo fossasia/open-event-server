@@ -2,9 +2,10 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema, Relationship
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
 
 
-class UserSchemaPublic(Schema):
+class UserSchemaPublic(SoftDeletionSchema):
     """
     Api schema for User Model which can be accessed by any resource to which user is related.
     Co-organizers of events to which the user will be related will have access to this info.

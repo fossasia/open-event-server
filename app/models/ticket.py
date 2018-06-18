@@ -1,4 +1,5 @@
 from app.models import db
+from app.models.base import SoftDeletionModel
 from app.models.order import OrderTicket, Order
 
 access_codes_tickets = db.Table('access_codes_tickets',
@@ -13,7 +14,7 @@ ticket_tags_table = db.Table('association', db.Model.metadata,
                              )
 
 
-class Ticket(db.Model):
+class Ticket(SoftDeletionModel):
     __tablename__ = 'tickets'
     __table_args__ = (db.UniqueConstraint('name', 'event_id', name='name_event_uc'),)
 
@@ -149,7 +150,7 @@ class Ticket(db.Model):
         return data
 
 
-class TicketTag(db.Model):
+class TicketTag(SoftDeletionModel):
     """
     Tags to group tickets
     """
@@ -161,9 +162,10 @@ class TicketTag(db.Model):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref='ticket_tags')
 
-    def __init__(self, name=None, event_id=None):
+    def __init__(self, name=None, event_id=None, deleted_at=None):
         self.name = name
         self.event_id = event_id
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<TicketTag %r>' % self.name

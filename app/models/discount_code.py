@@ -1,12 +1,13 @@
 from datetime import datetime
 
 from app.models import db
+from app.models.base import SoftDeletionModel
 
 TICKET = 'ticket'
 EVENT = 'event'
 
 
-class DiscountCode(db.Model):
+class DiscountCode(SoftDeletionModel):
     __tablename__ = "discount_codes"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -44,7 +45,8 @@ class DiscountCode(db.Model):
                  used_for=None,
                  event_id=None,
                  tickets=None,
-                 user_id=None):
+                 user_id=None,
+                 deleted_at=None):
         self.code = code
         self.discount_url = discount_url
         self.type = type
@@ -60,6 +62,7 @@ class DiscountCode(db.Model):
         self.used_for = used_for
         self.tickets = tickets
         self.marketer_id = user_id
+        self.deleted_at = deleted_at
 
     @staticmethod
     def get_service_name():
