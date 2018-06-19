@@ -1,6 +1,3 @@
-from elasticsearch import Elasticsearch
-from elasticsearch_dsl.connections import connections
-
 from app.models.event import Event
 from app.models.search.event import SearchableEvent
 from app.views.elastic_search import connect_from_config
@@ -58,6 +55,4 @@ def sync_events_elasticsearch():
         event_id = redis_store.spop('event_delete')
         searchable = SearchableEvent()
         searchable.meta.id = event_id
-
-        if event_id:  # For safety
-            searchable.delete()
+        searchable.delete()
