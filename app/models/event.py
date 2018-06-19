@@ -9,6 +9,7 @@ from sqlalchemy import event
 
 from app.api.helpers.db import get_count
 from app.models import db
+from app.models.ticket_fee import get_fee
 from app.models.email_notification import EmailNotification
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.user import ATTENDEE, ORGANIZER
@@ -265,6 +266,15 @@ class Event(db.Model):
             super(Event, self).__setattr__(name, clean_html(clean_up_string(value)))
         else:
             super(Event, self).__setattr__(name, value)
+
+    @property
+    def fee(self):
+        """
+        Returns the fee as a percentage from 0 to 100 for this event
+
+        Is retrieved from the db using the `payment_currency`
+        """
+        return get_fee(self.payment_currency)
 
     def notification_settings(self, user_id):
         try:
