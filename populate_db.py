@@ -146,13 +146,17 @@ def create_permissions():
         db.session.add(perm)
 
     # For TRACK_ORGANIZER
-    perm, _ = get_or_create(Permission, role=track_orgr, service=track)
-    db.session.add(perm)
+    for service in services:
+        perm, _ = get_or_create(Permission, role=track_orgr, service=service)
+        if not service == track:
+            perm.can_create, perm.can_update, perm.can_delete = False, False, False
+        db.session.add(perm)
 
     # For MODERATOR
-    perm, _ = get_or_create(Permission, role=mod, service=track)
-    perm.can_create, perm.can_update, perm.can_delete = False, False, False
-    db.session.add(perm)
+    for service in services:
+        perm, _ = get_or_create(Permission, role=mod, service=service)
+        perm.can_create, perm.can_update, perm.can_delete = False, False, False
+        db.session.add(perm)
 
     # For ATTENDEE and REGISTRAR
     services = [track, session, speaker, sponsor, microlocation]

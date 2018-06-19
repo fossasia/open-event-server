@@ -198,7 +198,8 @@ class Event(db.Model):
                  onsite_details=None,
                  is_tax_enabled=None,
                  is_sponsors_enabled=None,
-                 stripe_authorization=None):
+                 stripe_authorization=None,
+                 tax=None):
 
         self.name = name
         self.logo_url = logo_url
@@ -252,6 +253,7 @@ class Event(db.Model):
         self.is_tax_enabled = is_tax_enabled
         self.is_sponsors_enabled = is_sponsors_enabled
         self.stripe_authorization = stripe_authorization
+        self.tax = tax
 
     def __repr__(self):
         return '<Event %r>' % self.name

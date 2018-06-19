@@ -1,10 +1,11 @@
+import os
+
 import requests
+from flask import current_app
 from marrow.mailer import Mailer, Message
 
+from app import make_celery
 from app.api.helpers.utilities import strip_tags
-from app.views.celery_ import celery
-from flask import current_app
-import os
 
 """
 Define all API v2 celery tasks here
@@ -28,6 +29,8 @@ from app.api.helpers.xcal import XCalExporter
 from app.api.helpers.pentabarfxml import PentabarfExporter
 from app.api.helpers.storage import UploadedFile, upload, UPLOAD_PATHS
 from app.api.helpers.db import save_to_db
+
+celery = make_celery()
 
 
 @celery.task(name='send.email.post')

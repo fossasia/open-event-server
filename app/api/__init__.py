@@ -34,7 +34,7 @@ from app.api.session_types import SessionTypeList, SessionTypeListPost, SessionT
 from app.api.event_copyright import EventCopyrightListPost, EventCopyrightDetail, EventCopyrightRelationshipRequired
 from app.api.pages import PageList, PageDetail
 from app.api.user_permission import UserPermissionList, UserPermissionDetail
-from app.api.tax import TaxList, TaxListPost, TaxDetail, TaxRelationship
+from app.api.tax import TaxList, TaxDetail, TaxRelationship
 from app.api.settings import SettingDetail
 from app.api.discount_codes import DiscountCodeList, DiscountCodeDetail, DiscountCodeRelationshipOptional, \
     DiscountCodeRelationshipRequired, DiscountCodeListPost
@@ -353,9 +353,8 @@ api.route(CustomPlaceholderRelationship, 'custom_placeholder_event_sub_topic',
           '/custom-placeholders/<int:id>/relationships/event-sub-topic')
 
 # tax
-api.route(TaxListPost, 'tax_list_post', '/taxes')
-api.route(TaxList, 'tax_list', '/taxes', '/events/<int:event_id>/tax', '/events/<identifier>/tax')
-api.route(TaxDetail, 'tax_detail', '/taxes/<int:id>', '/events/<int:event_id>/tax')
+api.route(TaxList, 'tax_list', '/taxes')
+api.route(TaxDetail, 'tax_detail', '/taxes/<int:id>', '/events/<int:event_id>/tax', '/events/<event_identifier>/tax')
 api.route(TaxRelationship, 'tax_event', '/taxes/<int:id>/relationships/event')
 
 # event invoices
