@@ -270,7 +270,7 @@ class Event(db.Model):
 
     @property
     def sales(self):
-        return sum([o.amount for o in self.orders])
+        return sum([o.amount for o in self.orders if o.status == 'completed'])
 
     @property
     def revenue(self):
