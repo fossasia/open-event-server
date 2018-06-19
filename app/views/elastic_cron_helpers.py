@@ -26,7 +26,9 @@ def cron_rebuild_events_elasticsearch():
     redis_store.delete('event_index')
     redis_store.delete('event_delete')
 
-    es_store.indices.delete(SearchableEvent.meta.index)
+    if es_store.indices.exists(SearchableEvent.meta.index):
+        es_store.indices.delete(SearchableEvent.meta.index)
+
     SearchableEvent.init()  # Create ES index
 
     for event in session.query(Event):

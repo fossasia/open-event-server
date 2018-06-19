@@ -10,6 +10,6 @@ client = FlaskElasticsearch()
 def connect_from_config():
     "Create connection for `elasticsearch_dsl`"
     es_store = Elasticsearch([Config.ELASTICSEARCH_HOST])
-    connections.create_connection(es_store)
+    connections.create_connection(hosts=[Config.ELASTICSEARCH_HOST])
 
     return es_store
