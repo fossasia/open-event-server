@@ -60,7 +60,9 @@ def sync_events_elasticsearch():
 
     while deleted < todo:
         deleted += 1
-        event_id = redis_store.scard('event_delete')
+        event_id = redis_store.spop('event_delete')
         searchable = SearchableEvent()
         searchable.meta.id = event_id
-        searchable.delete()
+
+        if event_id:  # For safety
+            searchable.delete()
