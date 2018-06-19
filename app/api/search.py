@@ -27,9 +27,8 @@ class EventSearch(Resource):
     and descriptions
     """
 
-    def get(self):
-        args = request.args
-        search = Search(using=client, index=SearchableEvent.meta.index)
+    def search(self, args, es_client=client):
+        search = Search(using=es_client, index=SearchableEvent.meta.index)
 
         if args.get('name'):
             search = search.query('fuzzy', name=args['name'])
@@ -54,3 +53,8 @@ class EventSearch(Resource):
             search = search.highlight('organizer_description')
 
         return [to_dict(r) for r in search.execute()]
+
+    def get(self):
+        args = request.args
+
+        return self.search(args)

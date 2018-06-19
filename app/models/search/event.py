@@ -18,6 +18,7 @@ class SearchableEvent(DocType):
         self.meta.id = db_event.id
 
         self.id = db_event.id
+        self.name = db_event.name
         self.description = db_event.description
         self.location_name = db_event.location_name
         self.organizer_name = db_event.organizer_name
