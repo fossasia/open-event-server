@@ -1,11 +1,10 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl.connections import connections
-from config import Config
 
 from app.models.event import Event
 from app.models.search.event import SearchableEvent
+from app.views.elastic_search import connect_from_config
+from app.views.postgres import get_session_from_config
 from app.views.celery_ import celery
 from app.views.redis_store import redis_store
 
@@ -14,14 +13,10 @@ from app.views.redis_store import redis_store
 # may not work properly
 
 # Elasticsearch connection
-es_store = Elasticsearch([Config.ELASTICSEARCH_HOST])
-connections.create_connection(es_store)
+es_store = connect_from_config()
 
 # Postgres connection
-db = create_engine(Config.SQLALCHEMY_DATABASE_URI)
-Session = sessionmaker()
-Session.configure(bind=db)
-session = Session()
+session = get_session_from_config()
 
 
 @celery.task(name='rebuild.events.elasticsearch')

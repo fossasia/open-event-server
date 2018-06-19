@@ -34,7 +34,7 @@ from app.models.event import Event
 from app.models.role_invite import RoleInvite
 from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations, check_migrations
 from app.views.sentry import sentry
-from app.views.elastic_search import es
+from app.views.elastic_search import client
 from app.views.elastic_cron_helpers import sync_events_elasticsearch, cron_rebuild_events_elasticsearch
 from app.views.redis_store import redis_store
 from app.views.celery_ import celery
@@ -147,8 +147,8 @@ def create_app():
 
     # elasticsearch
     if app.config['ENABLE_ELASTICSEARCH']:
-        es.init_app(app)
-        connections.add_connection('default', es.elasticsearch)
+        client.init_app(app)
+        connections.add_connection('default', client.elasticsearch)
         with app.app_context():
             try:
                 cron_rebuild_events_elasticsearch.delay()

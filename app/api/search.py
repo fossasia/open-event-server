@@ -9,7 +9,7 @@ from flask_rest_jsonapi.resource import Resource
 from elasticsearch_dsl import Search
 
 from app.models.search.event import SearchableEvent
-from app.views.elastic_search import es
+from app.views.elastic_search import client
 
 
 def to_dict(response):
@@ -29,7 +29,7 @@ class SearchEvent(Resource):
 
     def get(self):
         args = request.args
-        search = Search(using=es, index=SearchableEvent.meta.index)
+        search = Search(using=client, index=SearchableEvent.meta.index)
 
         if args.get('name'):
             search = search.query('fuzzy', name=args['name'])
