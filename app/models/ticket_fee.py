@@ -12,6 +12,7 @@ class TicketFees(db.Model):
     currency = db.Column(db.String)
     service_fee = db.Column(db.Float)
     maximum_fee = db.Column(db.Float)
+    events = db.relationship('Event', back_populates='ticket_fees')
 
     def __init__(self, currency=None, service_fee=None, maximum_fee=None):
         self.currency = currency
@@ -19,7 +20,7 @@ class TicketFees(db.Model):
         self.maximum_fee = maximum_fee
 
     def __repr__(self):
-        return '<Ticket Fee {}>'.format(self.service_fee)
+        return '<Ticket Fee {} {}%>'.format(self.currency, self.service_fee)
 
     def __str__(self):
         return self.__repr__()

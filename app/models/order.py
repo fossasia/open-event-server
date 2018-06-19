@@ -116,7 +116,8 @@ class Order(db.Model):
     def is_free(self):
         return self.paid_via == 'free'
 
-    def get_revenue(self):
+    @property
+    def revenue(self):
         return self.amount - (self.amount * (self.event.fee / 100.0))
 
     @property
