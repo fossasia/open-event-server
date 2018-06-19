@@ -20,7 +20,7 @@ def to_dict(response):
     return r
 
 
-class SearchEvent(Resource):
+class EventSearch(Resource):
     """Resource for event searches
 
     Queries elasticsearch for events using fuzzy matches for names, locations
