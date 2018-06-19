@@ -9,7 +9,6 @@ from sqlalchemy import event
 
 from app.api.helpers.db import get_count
 from app.models import db
-from app.models.ticket_fee import get_fee
 from app.models.email_notification import EmailNotification
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.user import ATTENDEE, ORGANIZER
