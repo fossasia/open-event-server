@@ -1,10 +1,11 @@
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
 
 
-class NotificationSchema(Schema):
+class NotificationSchema(SoftDeletionSchema):
     """
     API Schema for Notification Model
     """
