@@ -154,14 +154,18 @@ class User(SoftDeletionModel):
         else:
             return True
 
-    def _is_role(self, role_name, event_id):
+    def _is_role(self, role_name, event_id=None):
         """
         Checks if a user has a particular Role at an Event.
         """
         role = Role.query.filter_by(name=role_name).first()
-        uer = UER.query.filter_by(user=self,
-                                  event_id=event_id,
-                                  role=role).first()
+        if event_id:
+            uer = UER.query.filter_by(user=self,
+                                      event_id=event_id,
+                                      role=role).first()
+        else:
+            uer = UER.query.filter_by(user=self,
+                                      role=role).first()
         if not uer:
             return False
         else:
@@ -185,6 +189,31 @@ class User(SoftDeletionModel):
 
     def is_attendee(self, event_id):
         return self._is_role(ATTENDEE, event_id)
+
+    @hybrid_property
+    def is_user_organizer(self):
+        # type: (object) -> object
+        return self._is_role(ORGANIZER)
+
+    @hybrid_property
+    def is_user_coorganizer(self):
+        return self._is_role(COORGANIZER)
+
+    @hybrid_property
+    def is_user_track_organizer(self):
+        return self._is_role(TRACK_ORGANIZER)
+
+    @hybrid_property
+    def is_user_moderator(self):
+        return self._is_role(MODERATOR)
+
+    @hybrid_property
+    def is_user_registrar(self):
+        return self._is_role(REGISTRAR)
+
+    @hybrid_property
+    def is_user_attendee(self):
+        return self._is_role(ATTENDEE)
 
     def _has_perm(self, operation, service_class, event_id):
         # Operation names and their corresponding permission in `Permissions`
