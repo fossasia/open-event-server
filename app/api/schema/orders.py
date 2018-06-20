@@ -6,12 +6,13 @@ from marshmallow_jsonapi.flask import Schema, Relationship
 from app import db
 from app.api.helpers.payment import PayPalPaymentsManager
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
 from app.models.order import Order
 from utils.common import use_defaults
 
 
 @use_defaults()
-class OrderSchema(Schema):
+class OrderSchema(SoftDeletionSchema):
     class Meta:
         type_ = 'order'
         self_view = 'v1.order_detail'

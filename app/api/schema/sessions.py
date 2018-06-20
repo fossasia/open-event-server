@@ -1,16 +1,17 @@
 from marshmallow import validates_schema, validate
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.exceptions import UnprocessableEntity, ForbiddenException
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
 from app.models.session import Session
 from utils.common import use_defaults
 
 
 @use_defaults()
-class SessionSchema(Schema):
+class SessionSchema(SoftDeletionSchema):
     """
     Api schema for Session Model
     """

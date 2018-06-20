@@ -1,10 +1,11 @@
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
 
 
-class EventTopicSchema(Schema):
+class EventTopicSchema(SoftDeletionSchema):
     """
     Api Schema for event topic model
     """
