@@ -45,7 +45,8 @@ class OrderSchema(Schema):
     zipcode = fields.Str()
     completed_at = fields.DateTime(dump_only=True)
     transaction_id = fields.Str(dump_only=True)
-    payment_mode = fields.Str(default="free", required=True)
+    payment_mode = fields.Str(default="free", required=True,
+                              validate=validate.OneOf(choices=["free", "stripe", "paypal"]))
     paid_via = fields.Str(dump_only=True)
     brand = fields.Str(dump_only=True)
     exp_month = fields.Str(dump_only=True)
