@@ -1,6 +1,7 @@
 import os
-
 import requests
+import uuid
+import csv
 from flask import current_app
 from marrow.mailer import Mailer, Message
 
@@ -24,6 +25,7 @@ from app.models import db
 from app.api.exports import event_export_task_base
 from app.api.imports import import_event_task_base
 from app.models.event import Event
+from app.models.order import Order
 from app.api.helpers.ICalExporter import ICalExporter
 from app.api.helpers.xcal import XCalExporter
 from app.api.helpers.pentabarfxml import PentabarfExporter
@@ -212,6 +214,35 @@ def export_pentabarf_task(self, event_id, temp=True):
             event.pentabarf_url = pentabarf_url
             save_to_db(event)
 
+    except Exception as e:
+        print(traceback.format_exc())
+        result = {'__error': True, 'result': str(e)}
+
+    return result
+
+
+@celery.task(base=RequestContextTask, name='export.order.csv', bind=True)
+def export_order_csv_task(self, event_id):
+    orders = db.session.query(Order).filter_by(event_id=event_id)
+
+    try:
+        filedir = current_app.config.get('BASE_DIR') + '/static/uploads/temp/'
+        if not os.path.isdir(filedir):
+            os.makedirs(filedir)
+        filename = "order-{}.csv".format(uuid.uuid1().hex)
+        file_path = filedir + filename
+
+        with open(file_path, "w") as temp_file:
+            writer = csv.writer(temp_file)
+            from app.api.helpers.csv_jobs_util import export_orders_csv
+            content = export_orders_csv(orders)
+            for row in content:
+                writer.writerow(row)
+        order_csv_file = UploadedFile(file_path=file_path, filename=filename)
+        order_csv_url = upload(order_csv_file, UPLOAD_PATHS['exports']['csv'].format(event_id=event_id))
+        result = {
+            'download_url': order_csv_url
+        }
     except Exception as e:
         print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
