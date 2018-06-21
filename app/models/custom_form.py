@@ -2,6 +2,7 @@ import json
 from sqlalchemy.schema import UniqueConstraint
 
 from app.models import db
+from app.models.base import SoftDeletionModel
 
 SESSION_FORM = {
     "title": {"include": 1, "require": 1},
@@ -38,7 +39,7 @@ session_form_str = json.dumps(SESSION_FORM, separators=(',', ':'))
 speaker_form_str = json.dumps(SPEAKER_FORM, separators=(',', ':'))
 
 
-class CustomForms(db.Model):
+class CustomForms(SoftDeletionModel):
     """custom form model class"""
     __tablename__ = 'custom_forms'
     __table_args__ = (UniqueConstraint('event_id', 'field_identifier', 'form', name='custom_form_identifier'), )
@@ -58,7 +59,8 @@ class CustomForms(db.Model):
                  type=None,
                  is_required=None,
                  is_included=None,
-                 is_fixed=None):
+                 is_fixed=None,
+                 deleted_at=None):
         self.event_id = event_id
         self.field_identifier = field_identifier,
         self.form = form,
@@ -66,6 +68,7 @@ class CustomForms(db.Model):
         self.is_required = is_required,
         self.is_included = is_included,
         self.is_fixed = is_fixed
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<CustomForm %r>' % self.id
