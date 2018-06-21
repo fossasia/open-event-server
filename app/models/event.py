@@ -9,6 +9,7 @@ from sqlalchemy import event
 
 from app.api.helpers.db import get_count
 from app.models import db
+from app.models.base import SoftDeletionModel
 from app.models.email_notification import EmailNotification
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.user import ATTENDEE, ORGANIZER
@@ -24,7 +25,7 @@ def get_new_event_identifier(length=8):
         return get_new_event_identifier(length)
 
 
-class Event(db.Model):
+class Event(SoftDeletionModel):
     """Event object table"""
     __tablename__ = 'events'
     __versioned__ = {
@@ -76,7 +77,6 @@ class Event(db.Model):
     code_of_conduct = db.Column(db.String)
     schedule_published_on = db.Column(db.DateTime(timezone=True))
     is_ticketing_enabled = db.Column(db.Boolean, default=True)
-    deleted_at = db.Column(db.DateTime(timezone=True))
     payment_country = db.Column(db.String)
     payment_currency = db.Column(db.String)
     paypal_email = db.Column(db.String)
@@ -197,7 +197,8 @@ class Event(db.Model):
                  onsite_details=None,
                  is_tax_enabled=None,
                  is_sponsors_enabled=None,
-                 stripe_authorization=None):
+                 stripe_authorization=None,
+                 tax=None):
 
         self.name = name
         self.logo_url = logo_url
@@ -251,6 +252,7 @@ class Event(db.Model):
         self.is_tax_enabled = is_tax_enabled
         self.is_sponsors_enabled = is_sponsors_enabled
         self.stripe_authorization = stripe_authorization
+        self.tax = tax
 
     def __repr__(self):
         return '<Event %r>' % self.name
