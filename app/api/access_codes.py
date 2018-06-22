@@ -29,8 +29,7 @@ class AccessCodeListPost(ResourceList):
         """
         require_relationship(['event', 'user'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
-            raise ObjectNotFound({'parameter': 'event_id'},
-                                 "Event: {} not found".format(data['event']))
+            raise ForbiddenException({'source': ''}, "Minimum Organizer access required")
 
     schema = AccessCodeSchema
     methods = ['POST', ]
