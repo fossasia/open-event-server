@@ -5,10 +5,11 @@ from flask_jwt import current_identity as current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
+from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query
-from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
+from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees
@@ -50,6 +51,17 @@ class OrdersListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
+        for ticket_holder in data['ticket_holders']:
+            # Ensuring that the attendee exists and doesn't have an associated order.
+            try:
+                ticket_holder_object = self.session.query(TicketHolder).filter_by(id=int(ticket_holder)).one()
+                if ticket_holder_object.order_id:
+                    raise ConflictException({'pointer': '/data/relationships/attendees'},
+                                            "Order already exists for attendee with id {}".format(str(ticket_holder)))
+            except NoResultFound:
+                raise ConflictException({'pointer': '/data/relationships/attendees'},
+                                        "Attendee with id {} does not exists".format(str(ticket_holder)))
+
         if data.get('cancel_note'):
             del data['cancel_note']
 

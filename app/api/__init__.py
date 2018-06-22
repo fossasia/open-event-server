@@ -26,14 +26,15 @@ from app.api.speakers_calls import SpeakersCallList, SpeakersCallDetail, Speaker
 from app.api.event_invoices import EventInvoiceList, EventInvoiceDetail, \
     EventInvoiceRelationshipRequired, EventInvoiceRelationshipOptional
 from app.api.role_invites import RoleInviteListPost, RoleInviteList, RoleInviteDetail, RoleInviteRelationship
-from app.api.image_sizes import ImageSizeList, ImageSizeDetail
+from app.api.event_image_sizes import EventImageSizeDetail
+from app.api.speaker_image_sizes import SpeakerImageSizeDetail
 from app.api.roles import RoleList, RoleDetail
 from app.api.session_types import SessionTypeList, SessionTypeListPost, SessionTypeDetail,\
     SessionTypeRelationshipRequired, SessionTypeRelationshipOptional
 from app.api.event_copyright import EventCopyrightListPost, EventCopyrightDetail, EventCopyrightRelationshipRequired
 from app.api.pages import PageList, PageDetail
 from app.api.user_permission import UserPermissionList, UserPermissionDetail
-from app.api.tax import TaxList, TaxListPost, TaxDetail, TaxRelationship
+from app.api.tax import TaxList, TaxDetail, TaxRelationship
 from app.api.settings import SettingDetail
 from app.api.discount_codes import DiscountCodeList, DiscountCodeDetail, DiscountCodeRelationshipOptional, \
     DiscountCodeRelationshipRequired, DiscountCodeListPost
@@ -65,6 +66,7 @@ from app.api.admin_sales.organizer import AdminSalesByOrganizersList
 from app.api.admin_sales.locations import AdminSalesByLocationList
 from app.api.admin_sales.marketer import AdminSalesByMarketerList
 from app.api.admin_sales.discounted import AdminSalesDiscountedList
+from app.api.admin_sales.invoices import AdminSalesInvoicesList
 
 # users
 api.route(UserList, 'user_list', '/users')
@@ -105,9 +107,13 @@ api.route(EmailNotificationRelationshipRequired, 'email_notification_user',
 api.route(EmailNotificationRelationshipOptional, 'email_notification_event',
           '/email-notifications/<int:id>/relationships/event')
 
-# image_sizes
-api.route(ImageSizeList, 'image_size_list', '/image-sizes')
-api.route(ImageSizeDetail, 'image_size_detail', '/image-sizes/<int:id>')
+# event_image_sizes
+api.route(EventImageSizeDetail, 'event_image_size_detail', '/event-image-sizes/<id>',
+          '/event-image-sizes')
+
+# speaker_image_sizes
+api.route(SpeakerImageSizeDetail, 'speaker_image_size_detail', '/speaker-image-sizes/<id>',
+          '/speaker-image-sizes')
 
 # settings
 api.route(SettingDetail, 'setting_detail', '/settings/<id>', '/settings')
@@ -351,9 +357,8 @@ api.route(CustomPlaceholderRelationship, 'custom_placeholder_event_sub_topic',
           '/custom-placeholders/<int:id>/relationships/event-sub-topic')
 
 # tax
-api.route(TaxListPost, 'tax_list_post', '/taxes')
-api.route(TaxList, 'tax_list', '/taxes', '/events/<int:event_id>/tax', '/events/<identifier>/tax')
-api.route(TaxDetail, 'tax_detail', '/taxes/<int:id>', '/events/<int:event_id>/tax')
+api.route(TaxList, 'tax_list', '/taxes')
+api.route(TaxDetail, 'tax_detail', '/taxes/<int:id>', '/events/<int:event_id>/tax', '/events/<event_identifier>/tax')
 api.route(TaxRelationship, 'tax_event', '/taxes/<int:id>/relationships/event')
 
 # event invoices
@@ -507,8 +512,12 @@ api.route(AdminStatisticsUserDetail, 'admin_statistics_user_detail', '/admin/sta
 api.route(AdminStatisticsMailDetail, 'admin_statistics_mail_detail', '/admin/statistics/mails')
 
 # Admin Sales
+<<<<<<< HEAD
 api.route(AdminSalesByEventsList, 'admin_sales_by_events', '/admin/sales/by-events')
 api.route(AdminSalesByOrganizersList, 'admin_sales_by_organizers', '/admin/sales/by-organizers')
 api.route(AdminSalesByLocationList, 'admin_sales_by_location', '/admin/sales/by-location')
 api.route(AdminSalesByMarketerList, 'admin_sales_by_marketer', '/admin/sales/by-marketer')
 api.route(AdminSalesDiscountedList, 'admin_sales_discounted', '/admin/sales/discounted')
+=======
+api.route(AdminSalesInvoicesList, 'admin_sales_invoices', '/admin/sales/invoices')
+>>>>>>> development

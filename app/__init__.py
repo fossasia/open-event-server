@@ -66,9 +66,13 @@ class ReverseProxied(object):
 
 app.wsgi_app = ReverseProxied(app.wsgi_app)
 
+app_created = False
+
 
 def create_app():
-    BlueprintsManager.register(app)
+    global app_created
+    if not app_created:
+        BlueprintsManager.register(app)
     Migrate(app, db)
 
     app.config.from_object(env('APP_CONFIG', default='config.ProductionConfig'))
@@ -114,6 +118,7 @@ def create_app():
         from app.api.imports import import_routes
         from app.api.celery_tasks import celery_routes
         from app.api.auth import auth_routes
+        from app.api.admin_statistics_api.events import event_statistics
         from app.api.event_copy import event_copy
 
         app.register_blueprint(api_v1)
@@ -123,6 +128,7 @@ def create_app():
         app.register_blueprint(import_routes)
         app.register_blueprint(celery_routes)
         app.register_blueprint(auth_routes)
+        app.register_blueprint(event_statistics)
 
     sa.orm.configure_mappers()
 
@@ -132,7 +138,7 @@ def create_app():
                          view_func=app.send_static_file)
 
     # sentry
-    if 'SENTRY_DSN' in app.config:
+    if not app_created and 'SENTRY_DSN' in app.config:
         sentry.init_app(app, dsn=app.config['SENTRY_DSN'])
 
     # redis
@@ -147,6 +153,7 @@ def create_app():
             except Exception:
                 pass
 
+    app_created = True
     return app, _manager, db, _jwt
 
 
@@ -160,7 +167,8 @@ def track_user():
         current_user.update_lat()
 
 
-def make_celery(app):
+def make_celery(app=None):
+    app = app or create_app()[0]
     celery.conf.update(app.config)
     task_base = celery.Task
 
@@ -177,8 +185,6 @@ def make_celery(app):
     celery.Task = ContextTask
     return celery
 
-
-celery = make_celery(current_app)
 
 # Health-check
 health = HealthCheck(current_app, "/health-check")

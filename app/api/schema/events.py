@@ -1,19 +1,20 @@
 import pytz
-from pytz import timezone
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validates_schema, validate
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
+from pytz import timezone
 from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 
-from app.models.event import Event
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
+from app.models.event import Event
 from utils.common import use_defaults
 
 
 @use_defaults()
-class EventSchemaPublic(Schema):
+class EventSchemaPublic(SoftDeletionSchema):
     class Meta:
         type_ = 'event'
         self_view = 'v1.event_detail'
@@ -88,7 +89,6 @@ class EventSchemaPublic(Schema):
     code_of_conduct = fields.Str(allow_none=True)
     schedule_published_on = fields.DateTime(allow_none=True)
     is_ticketing_enabled = fields.Bool(default=True)
-    deleted_at = fields.DateTime(allow_none=True)
     payment_country = fields.Str(allow_none=True)
     payment_currency = fields.Str(allow_none=True)
     paypal_email = fields.Str(allow_none=True)
@@ -200,7 +200,8 @@ class EventSchemaPublic(Schema):
                                    related_view_kwargs={'event_id': '<id>'},
                                    schema='EventCopyrightSchema',
                                    type_='event-copyright')
-    tax = Relationship(self_view='v1.event_tax',
+    tax = Relationship(attribute='tax',
+                       self_view='v1.event_tax',
                        self_view_kwargs={'id': '<id>'},
                        related_view='v1.tax_detail',
                        related_view_kwargs={'event_id': '<id>'},

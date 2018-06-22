@@ -8,11 +8,12 @@ from sqlalchemy import or_
 from sqlalchemy.orm.exc import NoResultFound
 import pytz
 from datetime import datetime
+import urllib.error
 
 from app.api.bootstrap import api
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
 from app.api.helpers.db import save_to_db, safe_query
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.exceptions import ForbiddenException, ConflictException, UnprocessableEntity
 from app.api.helpers.files import create_save_image_sizes
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
@@ -104,6 +105,18 @@ class EventList(ResourceList):
 
         return query_
 
+    def before_post(self, args, kwargs, data=None):
+        """
+        before post method to verify if the event location is provided before publishing the event
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
+        if data.get('state', None) == 'published' and not data.get('location_name', None):
+            raise ConflictException({'pointer': '/data/attributes/location-name'},
+                                    "Location is required to publish the event")
+
     def after_create_object(self, event, data, view_kwargs):
         """
         after create method to save roles for users and add the user as an accepted role(organizer)
@@ -120,7 +133,12 @@ class EventList(ResourceList):
                                  status='accepted')
         save_to_db(role_invite, 'Organiser Role Invite Added')
         if data.get('original_image_url'):
-            uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
+            try:
+                uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
+            except (urllib.error.HTTPError, urllib.error.URLError):
+                raise UnprocessableEntity(
+                    {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
+                )
             self.session.query(Event).filter_by(id=event.id).update(uploaded_images)
             self.session.commit()
 
@@ -385,6 +403,18 @@ class EventDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
+    def before_patch(self, args, kwargs, data=None):
+        """
+        before patch method to verify if the event location is provided before publishing the event
+        :param args:
+        :param kwargs:
+        :param data:
+        :return:
+        """
+        if data.get('state', None) == 'published' and not data.get('location_name', None):
+            raise ConflictException({'pointer': '/data/attributes/location-name'},
+                                    "Location is required to publish the event")
+
     def before_update_object(self, event, data, view_kwargs):
         """
         method to save image urls before updating event object
@@ -394,7 +424,12 @@ class EventDetail(ResourceDetail):
         :return:
         """
         if data.get('original_image_url') and data['original_image_url'] != event.original_image_url:
-            uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
+            try:
+                uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
+            except (urllib.error.HTTPError, urllib.error.URLError):
+                raise UnprocessableEntity(
+                    {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
+                )
             data['original_image_url'] = uploaded_images['original_image_url']
             data['large_image_url'] = uploaded_images['large_image_url']
             data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']

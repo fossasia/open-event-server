@@ -18,7 +18,7 @@ from app.factories.notification import NotificationFactory
 from app.factories.event import EventFactoryBasic
 from app.factories.social_link import SocialLinkFactory
 from app.factories.microlocation import MicrolocationFactory
-from app.factories.image_size import ImageSizeFactory
+from app.factories.image_size import EventImageSizeFactory, SpeakerImageSizeFactory
 from app.factories.page import PageFactory
 from app.factories.event_copyright import EventCopyrightFactory
 from app.factories.setting import SettingFactory
@@ -996,6 +996,10 @@ def session_post(transaction):
         db.session.add(event)
         db.session.commit()
 
+        track = TrackFactory()
+        db.session.add(track)
+        db.session.commit()
+
 
 @hooks.before("Sessions > Sessions Details > Session Details")
 def session_get_detail(transaction):
@@ -1541,7 +1545,7 @@ def tax_delete(transaction):
         db.session.commit()
 
 
-@hooks.before("Tax > Get Taxes under an Event > Get Taxes under an Event")
+@hooks.before("Tax > Get Tax details under an Event > Get Tax details under an Event")
 def event_tax_get_list(transaction):
     """
     GET /taxes/1
@@ -2066,65 +2070,55 @@ def email_notification_delete(transaction):
 
 
 # ------------------------- Image Size -------------------------
-@hooks.before("Image Size > Image Size Collection > List Image Sizes")
-def image_size_get_list(transaction):
+@hooks.before("Image Size > Event Image Size Details > Get Event Image Size Details")
+def event_image_size_get_detail(transaction):
     """
-    GET /image-sizes
+    GET /event-image-sizes
     :param transaction:
     :return:
     """
     with stash['app'].app_context():
-        image_size = ImageSizeFactory()
-        db.session.add(image_size)
+        event_image_size = EventImageSizeFactory()
+        db.session.add(event_image_size)
         db.session.commit()
 
 
-@hooks.before("Image Size > Image Size Collection > Create Image Size")
-def image_size_post(transaction):
+@hooks.before("Image Size > Image Size Details > Update Event Image Size")
+def event_image_size_patch(transaction):
     """
-    POST /image-sizes
-    :param transaction:
-    :return:
-    """
-    pass
-
-
-@hooks.before("Image Size > Image Size Details > Get Image Size Details")
-def image_size_get_detail(transaction):
-    """
-    GET /image-sizes/1
+    PATCH /event-image-sizes
     :param transaction:
     :return:
     """
     with stash['app'].app_context():
-        image_size = ImageSizeFactory()
-        db.session.add(image_size)
+        event_image_size = EventImageSizeFactory()
+        db.session.add(event_image_size)
         db.session.commit()
 
 
-@hooks.before("Image Size > Image Size Details > Update Image Size")
-def image_size_patch(transaction):
+@hooks.before("Image Size > Speaker Image Size Details > Get Speaker Image Size Details")
+def speaker_image_size_get_detail(transaction):
     """
-    PATCH /image-sizes/1
+    GET /speaker-image-sizes
     :param transaction:
     :return:
     """
     with stash['app'].app_context():
-        image_size = ImageSizeFactory()
-        db.session.add(image_size)
+        speaker_image_size = SpeakerImageSizeFactory()
+        db.session.add(speaker_image_size)
         db.session.commit()
 
 
-@hooks.before("Image Size > Image Size Details > Delete Image Size")
-def image_size_delete(transaction):
+@hooks.before("Image Size > Speaker Size Details > Update Speaker Image Size")
+def speaker_size_patch(transaction):
     """
-    DELETE /image-sizes/1
+    PATCH /speaker-image-sizes
     :param transaction:
     :return:
     """
     with stash['app'].app_context():
-        image_size = ImageSizeFactory()
-        db.session.add(image_size)
+        speaker_image_size = SpeakerImageSizeFactory()
+        db.session.add(speaker_image_size)
         db.session.commit()
 
 
@@ -3423,6 +3417,44 @@ def event_export_post(transaction):
         db.session.add(event)
         db.session.commit()
 
+
+@hooks.before(
+    "Event Export > Start Event Export as iCal file > Start a Task to Export an Event as iCal event")
+def event_export_ical_post(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Export > Start Event Export as xCalendar > Start a Task to Export an Event as xCalendar")
+def event_export_xcal_post(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Export > Start Event Export as Pentabarf XML > Start a Task to Export an Event as Pentabarf XML")
+def event_export_pentabarf_post(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 # ------------------------- Import -------------------------
 @hooks.before(

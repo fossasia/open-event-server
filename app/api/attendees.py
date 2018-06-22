@@ -3,7 +3,11 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
+from app.api.helpers.exceptions import (
+    ConflictException,
+    ForbiddenException,
+    UnprocessableEntity,
+)
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
@@ -31,11 +35,26 @@ class AttendeeListPost(ResourceList):
         """
         require_relationship(['ticket', 'event'], data)
 
-        ticket = db.session.query(Ticket).filter_by(id=int(data['ticket'])).first()
+        ticket = db.session.query(Ticket).filter_by(
+            id=int(data['ticket'])
+            ).first()
         if ticket is None:
-            raise UnprocessableEntity({'pointer': '/data/relationships/ticket'}, "Invalid Ticket")
+            raise UnprocessableEntity(
+                {'pointer': '/data/relationships/ticket'}, "Invalid Ticket"
+                )
         if ticket.event_id != int(data['event']):
-            raise UnprocessableEntity({'pointer': '/data/relationships/ticket'}, "Ticket belongs to a different Event")
+            raise UnprocessableEntity(
+                {'pointer': '/data/relationships/ticket'},
+                "Ticket belongs to a different Event"
+            )
+
+        if db.session.query(TicketHolder.id).filter_by(
+                ticket_id=int(data['ticket']), event_id=int(data['event'])
+                ).scalar() is not None:
+            raise ConflictException(
+                {'pointer': '/data/attributes/ticket_id'},
+                "Attendee with this ticket already exists for the same event"
+            )
 
     decorators = (jwt_required,)
     methods = ['POST']
@@ -130,6 +149,10 @@ class AttendeeDetail(ResourceDetail):
             else:
                 if obj.checkin_times and data['checkin_times'] not in obj.checkin_times.split(","):
                     data['checkin_times'] = '{},{}'.format(obj.checkin_times, data['checkin_times'])
+
+        if 'attendee_notes' in data:
+            if obj.attendee_notes and data['attendee_notes'] not in obj.attendee_notes.split(","):
+                data['attendee_notes'] = '{},{}'.format(obj.attendee_notes, data['attendee_notes'])
 
     decorators = (jwt_required,)
     schema = AttendeeSchema

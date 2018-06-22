@@ -1,6 +1,5 @@
 from xml.etree.ElementTree import Element, SubElement, tostring
 
-import pytz
 from flask import url_for
 from sqlalchemy import asc
 
@@ -17,9 +16,6 @@ class XCalExporter:
         """Takes an event id and returns the event in xCal format"""
 
         event = Event.query.get(event_id)
-
-        tz = event.timezone or 'UTC'
-        tz = pytz.timezone(tz)
 
         i_calendar_node = Element('iCalendar')
         i_calendar_node.set('xmlns:xCal', 'urn:ietf:params:xml:ns:xcal')
@@ -52,10 +48,10 @@ class XCalExporter:
                 uid_node.text = str(session.id) + "-" + event.identifier
 
                 dtstart_node = SubElement(v_event_node, 'dtstart')
-                dtstart_node.text = tz.localize(session.starts_at).isoformat()
+                dtstart_node.text = session.starts_at.isoformat()
 
                 dtend_node = SubElement(v_event_node, 'dtend')
-                dtend_node.text = tz.localize(session.ends_at).isoformat()
+                dtend_node.text = session.ends_at.isoformat()
 
                 duration_node = SubElement(v_event_node, 'duration')
                 duration_node.text = str(session.ends_at - session.starts_at) + "00:00"

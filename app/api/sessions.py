@@ -32,7 +32,7 @@ class SessionListPost(ResourceList):
         :param data:
         :return:
         """
-        require_relationship(['event'], data)
+        require_relationship(['event', 'track'], data)
         data['creator_id'] = current_identity.id
         if get_count(db.session.query(Event).filter_by(id=int(data['event']), is_sessions_speakers_enabled=False)) > 0:
             raise ForbiddenException({'pointer': ''}, "Sessions are disabled for this Event")

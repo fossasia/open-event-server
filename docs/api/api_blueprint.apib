@@ -10713,7 +10713,7 @@ Data related to all the sessions in the event.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### Create Sessions [POST]
-Create a new session using an event_id **(Minimum Co-Organizer Access)**
+Create a new session using an event_id and track_id **(Minimum Co-Organizer Access)**
 
 + Request (application/vnd.api+json)
 
@@ -10730,6 +10730,12 @@ Create a new session using an event_id **(Minimum Co-Organizer Access)**
                     "data":{
                       "type":"event",
                       "id":"1"
+                    }
+                  },
+                  "track": {
+                    "data":{
+                        "type": "track",
+                        "id": "1"
                     }
                   }
                 },
@@ -13236,7 +13242,7 @@ Related to any tax related information that might be related with the tickets fo
 |:----------|-------------|------|----------|--------|
 | `country`  | Country of Tax | string | - | - |
 | `name` | Name of the Tax | string | **yes** | **yes** |
-| `rate` | Tax charges rate | string | **yes** | **yes** |
+| `rate` | Tax charges rate | float(0-100) | **yes** | **yes** |
 | `tax-id` | A string based ID | string | **yes** | - |
 | `registered-company` | Registered Company Name | string | - | - |
 | `address` | Address of the comapany | string | - | - |
@@ -13244,8 +13250,9 @@ Related to any tax related information that might be related with the tickets fo
 | `state` | State of the company | string | - | - |
 | `zip` | Zip Code of the company | integer | - | - |
 | `invoice-footer` | A text to add on the footer | string | - |
-| `is-invoice-sent` | Yes/No for Session accept/reject email | boolean (default: `false`) | - | - |
-| `is-tax-included` | Yes/No for Session accept/reject email | boolean (default: `false`) | - | **yes** |
+| `is-invoice-sent` | Yes/No whether invoice already sent or not | boolean (default: `false`) | - | - |
+| `is-tax-included-in-price` | Yes/No for whether tax included | boolean (default: `false`) | - | **yes** |
+| `should-send-invoice` | Yes/No for whether to send invoice or not | boolean (default: `false`) | - | - |
 
 ## Tax Collection [/v1/taxes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -13259,7 +13266,7 @@ Related to any tax related information that might be related with the tickets fo
 ### List all Taxes [GET]
 Get a list of Taxes
 
-+ Request (application/vnd.api+json)
++ Request
 
     + Headers
 
@@ -13296,7 +13303,8 @@ Get a list of Taxes
                 "rate": 1.23456789,
                 "is-tax-included-in-price": false,
                 "registered-company": "fossasia",
-                "tax-id": "1"
+                "tax-id": "1",
+                "is-invoice-sent": false
               },
               "type": "tax",
               "id": "1",
@@ -13347,7 +13355,8 @@ Create a new tax using an event_id.
                     "registered-company": "fossasia",
                     "address": "example",
                     "rate": "1.23456789",
-                    "should-send-invoice": false
+                    "should-send-invoice": false,
+                    "is-invoice-sent": false
                   },
                 "type": "tax"
               }
@@ -13377,7 +13386,8 @@ Create a new tax using an event_id.
                "registered-company": "fossasia",
                "address": "example",
                "rate": "1.23456789",
-               "should-send-invoice": false
+               "should-send-invoice": false,
+               "is-invoice-sent": false
             },
             "type": "tax",
             "id": "1",
@@ -13433,7 +13443,8 @@ Get a single tax.
               "registered-company": "fossasia",
               "address": "example",
               "rate": "1.23456789",
-              "should-send-invoice": false
+              "should-send-invoice": false,
+              "is-invoice-sent": false
             },
             "type": "tax",
             "id": "1",
@@ -13477,7 +13488,8 @@ Update a single tax by `id`.
                   "registered-company": "open event",
                   "address": "example1",
                   "rate": "2.3456789",
-                  "should-send-invoice": false
+                  "should-send-invoice": false,
+                  "is-invoice-sent": false
                 },
                 "type": "tax",
                 "id": "1"
@@ -13508,7 +13520,8 @@ Update a single tax by `id`.
               "registered-company": "open event",
               "address": "example1",
               "rate": "2.3456789",
-              "should-send-invoice": false
+              "should-send-invoice": false,
+              "is-invoice-sent": false
             },
             "type": "tax",
             "id": "1",
@@ -13547,7 +13560,7 @@ Delete a single tax.
         }
 
 
-## Get Taxes under an Event [/v1/events/{event_identifier}/tax{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Get Tax details under an Event [/v1/events/{event_identifier}/tax{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -13555,8 +13568,8 @@ Delete a single tax.
     + sort (optional, string, `rate`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### Get Taxes under an Event [GET]
-Get list of taxes for an event.
+### Get Tax details under an Event [GET]
+Get tax details for an event.
 
 + Request
 
@@ -13569,45 +13582,41 @@ Get list of taxes for an event.
 + Response 200 (application/vnd.api+json)
 
         {
-            "meta": {
-                "count": 1
-            },
-            "data": [
-                {
-                    "relationships": {
-                        "event": {
-                            "links": {
-                                "self": "/v1/taxes/1/relationships/event",
-                                "related": "/v1/tax/1/event"
-                            }
+            "data": {
+                "type": "tax",
+                "attributes": {
+                    "rate": 1.23456789,
+                    "tax-id": "123456789",
+                    "is-invoice-sent": false,
+                    "zip": 123456,
+                    "city": "example",
+                    "name": "Service Tax",
+                    "should-send-invoice": false,
+                    "invoice-footer": "example",
+                    "address": "example",
+                    "registered-company": "fossasia",
+                    "is-tax-included-in-price": false,
+                    "country": "IN",
+                    "state": "example"
+                },
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/taxes/1/relationships/event",
+                            "related": "/v1/tax/1/event"
                         }
-                    },
-                    "attributes": {
-                        "city": null,
-                        "name": "asd",
-                        "zip": null,
-                        "should-send-invoice": null,
-                        "country": null,
-                        "address": null,
-                        "state": null,
-                        "invoice-footer": null,
-                        "rate": 2,
-                        "is-tax-included-in-price": null,
-                        "registered-company": null,
-                        "tax-id": "32"
-                    },
-                    "type": "tax",
-                    "id": "1",
-                    "links": {
-                        "self": "/v1/taxes/1"
                     }
+                },
+                "id": "1",
+                "links": {
+                    "self": "/v1/taxes/1"
                 }
-            ],
-            "jsonapi": {
-                "version": "1.0"
             },
             "links": {
-                "self": "/v1/events/1/tax"
+                "self": "/v1/taxes/1"
+            },
+            "jsonapi": {
+                "version": "1.0"
             }
         }
 
@@ -14566,9 +14575,10 @@ Related to ticket holders(attendees) of an event (free, paid, donation) to the e
 | `country` | Country of the Attendee | string | - |
 | `is-checked-in` | If the attendee is checked in | boolean | - |
 | `checkin-times` | Comma separated checkin times | string | - |
+| `attendee-notes` | Comma separated attendee notes | string | - |
 | `pdf-url` | pdf url of the Attendee | url | - |
 
-## Attendees Collection [/v1/attendees/{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## Attendees Collection [/v1/attendees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
     + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response.
@@ -14598,6 +14608,7 @@ Create a new attendee.
                     "state": "example",
                     "country": "IN",
                     "is-checked-in": "false",
+                    "attendee-notes": "example",
                     "pdf-url": "http://example.com"
                 },
                 "type": "attendee",
@@ -14648,6 +14659,7 @@ Create a new attendee.
               "firstname": "Open Event User",
               "lastname": null,
               "is-checked-in": false,
+              "attendee-notes": "example",
               "state": null,
               "address": null,
               "pdf-url": "http://example.com",
@@ -14741,6 +14753,7 @@ Get a list of attendees of an order.
                 "gender": null,
                 "ticket-id": "1",
                 "country": null,
+                "attendee-notes": null,
                 "pdf-url": "http://ipiyush.com",
                 "work-address": null,
                 "work-phone": null
@@ -14795,6 +14808,7 @@ Get a single attendee.
                 },
                 "attributes": {
                     "checkin-times": null,
+                    "attendee-notes": null,
                     "github": null,
                     "email": "johndoe@example.com",
                     "home-address": null,
@@ -14862,6 +14876,7 @@ Update a single attendee by `id`.
                     "country": "IN",
                     "is-checked-in": "true",
                     "checkin-times": "2017-12-13T22:59:59.123456+00:00",
+                    "attendee-notes": "example",
                     "pdf-url": "http://example.com"
                 },
                 "type": "attendee",
@@ -14886,6 +14901,7 @@ Update a single attendee by `id`.
                     "firstname": "John",
                     "lastname": "Doe",
                     "is-checked-in": true,
+                    "attendee-notes": "example",
                     "state": "example",
                     "address": "address",
                     "pdf-url": "http://example.com",
@@ -17478,140 +17494,10 @@ To create or modify data of this data layer, you will need admin access. You can
 | `logo-height` | Height of the logo | integer | - |
 | `type` | Type of the image | string | - |
 
-## Image Size Collection [/v1/image-sizes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
-+ Parameters
-    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
-    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
-    + sort (optional, string, `type`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
-    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+## Event Image Size Details [/v1/event-image-sizes]
 
-### List Image Sizes [GET]
-Get a list of Image Sizes.
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-        {
-            "meta": {
-                "count": 1
-            },
-            "data": [
-                {
-                    "attributes": {
-                        "full-aspect": false,
-                        "thumbnail-height": 200,
-                        "thumbnail-aspect": true,
-                        "icon-height": 30,
-                        "icon-aspect": true,
-                        "type": "logo",
-                        "icon-width": 75,
-                        "icon-quality": 80,
-                        "logo-width": 32,
-                        "full-width": 1300,
-                        "thumbnail-width": 500,
-                        "thumbnail-quality": 80,
-                        "full-height": 500,
-                        "logo-height": 32,
-                        "full-quality": 80
-                    },
-                    "type": "image-size",
-                    "id": "1",
-                    "links": {
-                        "self": "/v1/image-sizes/1"
-                    }
-                }
-            ],
-            "jsonapi": {
-                "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/image-sizes"
-            }
-        }
-
-
-### Create Image Size [POST]
-Create a new general image size by admins.
-
-+ Request (application/vnd.api+json)
-
-    + Headers
-
-            Authorization: JWT <Auth Key>
-
-    + Body
-
-            {
-              "data": {
-                "attributes": {
-                  "full-width": 1300,
-                  "full-height": 500,
-                  "full-aspect": true,
-                  "full-quality": 80,
-                  "icon-width": 75,
-                  "icon-height": 30,
-                  "icon-aspect": true,
-                  "icon-quality": 80,
-                  "thumbnail-width": 500,
-                  "thumbnail-height": 200,
-                  "thumbnail-aspect": true,
-                  "thumbnail-quality": 80,
-                  "logo-width": 32,
-                  "logo-height": 32,
-                  "type": "logo"
-                },
-                "type": "image-size"
-              }
-            }
-
-+ Response 201 (application/vnd.api+json)
-
-        {
-            "data": {
-                "attributes": {
-                    "full-aspect": true,
-                    "thumbnail-height": 200,
-                    "thumbnail-aspect": true,
-                    "icon-height": 30,
-                    "icon-aspect": true,
-                    "type": "logo",
-                    "icon-width": 75,
-                    "icon-quality": 80,
-                    "logo-width": 32,
-                    "full-width": 1300,
-                    "thumbnail-width": 500,
-                    "thumbnail-quality": 80,
-                    "full-height": 500,
-                    "logo-height": 32,
-                    "full-quality": 80
-                },
-                "type": "image-size",
-                "id": "1",
-                "links": {
-                    "self": "/v1/image-sizes/1"
-                }
-            },
-            "jsonapi": {
-                "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/image-sizes/1"
-            }
-        }
-
-## Image Size Details [/v1/image-sizes/{image_size_id}]
-+ Parameters
-    + image_size_id: 1 (integer) - ID of the image size in the form of an integer
-
-### Get Image Size Details [GET]
-Get a single image size.
+### Get Event Image Size Details [GET]
+Get a single Event image size.
 
 + Request
 
@@ -17640,27 +17526,25 @@ Get a single image size.
               "thumbnail-quality": 80,
               "logo-width": null,
               "logo-height": null,
-              "type": null
+              "type": "event-image"
             },
-            "type": "image-size",
+            "type": "event-image-size",
             "id": "1",
             "links": {
-              "self": "/v1/image-sizes/1"
+              "self": "/v1/event-image-sizes/1"
             }
           },
           "jsonapi": {
             "version": "1.0"
           },
           "links": {
-            "self": "/v1/image-sizes/1"
+            "self": "/v1/event-image-sizes/1"
           }
         }
 
 
-### Update Image Size [PATCH]
-Update a single image size by `id`.
-
-+ `id` (integer) - ID of the record to update **(required)**
+### Update Event Image Size [PATCH]
+Update a single Event image size
 
 + Request (application/vnd.api+json)
 
@@ -17687,10 +17571,10 @@ Update a single image size by `id`.
                   "thumbnail-quality": 80,
                   "logo-width": 32,
                   "logo-height": 32,
-                  "type": "logo"
+                  "type": "event-image"
                 },
                 "id": "1",
-                "type": "image-size"
+                "type": "event-image-size"
               }
             }
 
@@ -17704,7 +17588,7 @@ Update a single image size by `id`.
                         "thumbnail-aspect": true,
                         "icon-height": 30,
                         "icon-aspect": true,
-                        "type": "logo",
+                        "type": "event-image",
                         "icon-width": 75,
                         "icon-quality": 80,
                         "logo-width": 32,
@@ -17715,22 +17599,24 @@ Update a single image size by `id`.
                         "logo-height": 32,
                         "full-quality": 80
                     },
-                    "type": "image-size",
+                    "type": "event-image-size",
                     "id": "1",
                     "links": {
-                        "self": "/v1/image-sizes/1"
+                        "self": "/v1/event-image-sizes/1"
                     }
                 },
                 "jsonapi": {
                     "version": "1.0"
                 },
                 "links": {
-                    "self": "/v1/image-sizes/1"
+                    "self": "/v1/event-image-sizes/1"
                 }
             }
 
-### Delete Image Size [DELETE]
-Delete a single image size.
+## Speaker Image Size Details [/v1/speaker-image-sizes]
+
+### Get Speaker Image Size Details [GET]
+Get a single Speaker image size.
 
 + Request
 
@@ -17743,11 +17629,82 @@ Delete a single image size.
 + Response 200 (application/vnd.api+json)
 
         {
-          "meta": {
-            "message": "Object successfully deleted"
+          "data": {
+            "attributes": {
+              "icon-size-quality": 80,
+              "small-size-width-height": 50,
+              "thumbnail-size-quality": null,
+              "icon-size-width-height": 35,
+              "type": "speaker-image",
+              "thumbnail-size-width-height": 500,
+              "small-size-quality": 80
+            },
+            "type": "speaker-image-size",
+            "id": "2",
+            "links": {
+              "self": "/v1/speaker-image-sizes/2"
+            }
           },
           "jsonapi": {
             "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/speaker-image-sizes/2"
+          }
+        }
+
+
+### Update Speaker Image Size [PATCH]
+Update a single Speaker image size
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "icon-size-quality": 80,
+                  "small-size-width-height": 50,
+                  "thumbnail-size-quality": null,
+                  "icon-size-width-height": 35,
+                  "type": "speaker-image",
+                  "thumbnail-size-width-height": 500,
+                  "small-size-quality": 80
+                },
+                "id": "2",
+                "type": "speaker-image-size"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "icon-size-quality": 80,
+              "small-size-width-height": 50,
+              "thumbnail-size-quality": null,
+              "icon-size-width-height": 35,
+              "type": "speaker-image",
+              "thumbnail-size-width-height": 500,
+              "small-size-quality": 80
+            },
+            "type": "speaker-image-size",
+            "id": "2",
+            "links": {
+              "self": "/v1/speaker-image-sizes/2"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/speaker-image-sizes/2"
           }
         }
 
@@ -20619,7 +20576,7 @@ to get the status of the export task.
             "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
         }
 
-## Start a Task to Export Event as iCal file [/v1/events/{event_identifier}/export/ical]
+## Start Event Export as iCal file [/v1/events/{event_identifier}/export/ical]
 This endpoint lets the user start a task to export the event as an iCal file.
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
@@ -20660,6 +20617,26 @@ to get the status of the export task.
             "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
         }
 
+## Start Event Export as Pentabarf XML [/v1/events/{event_identifier}/export/pentabarf]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+Start a celery task to export the event with the event_id as a pentabarf XML file to get it ready for downloading. Returns the task url
+to get the status of the export task.
+
+
+### Start a Task to Export an Event as Pentabarf XML [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
 
 
 # Group Event Import
@@ -20826,6 +20803,56 @@ Get the task status and the final result of the task as response
                 "self": "/v1/admin/statistics/events"
             }
         }
+
+
+## Event Types Statistics Details [/v1/admin/statistics/event-types]
+
+**Event Types:**
+
+| Parameter | Description | Type |
+|:----------|-------------|------|
+| `name`  | Name of event type | string |
+| `id`  | Id of the event type | Integer |
+| `count`  | No. of events of event type | Integer |
+
+### Show Event Types Statistics [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {}
+
+
+## Event Topics Statistics Details [/v1/admin/statistics/event-topics]
+
+**Event Topics:**
+
+| Parameter | Description | Type |
+|:----------|-------------|------|
+| `name`  | Name of event topic | string |
+| `id`  | Id of the event topic | Integer |
+| `count`  | No. of events of event topic | Integer |
+
+### Show Event Topics Statistics [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {}
 
 
 ## User Statistics Details [/v1/admin/statistics/users]
