@@ -115,11 +115,15 @@ def import_event_task(self, email, file, source_type, creator_id):
 
 
 @celery.task(base=RequestContextTask, name='export.ical', bind=True)
-def export_ical_task(self, event_id):
+def export_ical_task(self, event_id, temp=True):
     event = safe_query(db, Event, 'id', event_id, 'event_id')
 
     try:
-        filedir = current_app.config.get('BASE_DIR') + '/static/uploads/temp/' + event_id + '/'
+        if temp:
+            filedir = current_app.config.get('BASE_DIR') + '/static/uploads/temp/' + event_id + '/'
+        else:
+            filedir = current_app.config.get('BASE_DIR') + '/static/uploads/' + event_id + '/'
+
         if not os.path.isdir(filedir):
             os.makedirs(filedir)
         filename = "ical.ics"
@@ -127,11 +131,16 @@ def export_ical_task(self, event_id):
         with open(file_path, "w") as temp_file:
             temp_file.write(str(ICalExporter.export(event_id), 'utf-8'))
         ical_file = UploadedFile(file_path=file_path, filename=filename)
-        event.ical_url = upload(ical_file, UPLOAD_PATHS['exports']['ical'].format(event_id=event_id))
-        save_to_db(event)
+        if temp:
+            ical_url = upload(ical_file, UPLOAD_PATHS['exports-temp']['ical'].format(event_id=event_id))
+        else:
+            ical_url = upload(ical_file, UPLOAD_PATHS['exports']['ical'].format(event_id=event_id))
         result = {
-            'download_url': event.ical_url
+            'download_url': ical_url
         }
+        if not temp:
+            event.ical_url = ical_url
+            save_to_db(event)
 
     except Exception as e:
         print(traceback.format_exc())
@@ -141,11 +150,15 @@ def export_ical_task(self, event_id):
 
 
 @celery.task(base=RequestContextTask, name='export.xcal', bind=True)
-def export_xcal_task(self, event_id):
+def export_xcal_task(self, event_id, temp=True):
     event = safe_query(db, Event, 'id', event_id, 'event_id')
 
     try:
-        filedir = current_app.config.get('BASE_DIR') + '/static/uploads/temp/' + event_id + '/'
+        if temp:
+            filedir = current_app.config.get('BASE_DIR') + '/static/uploads/temp/' + event_id + '/'
+        else:
+            filedir = current_app.config.get('BASE_DIR') + '/static/uploads/' + event_id + '/'
+
         if not os.path.isdir(filedir):
             os.makedirs(filedir)
         filename = "xcal.xcs"
@@ -153,11 +166,17 @@ def export_xcal_task(self, event_id):
         with open(file_path, "w") as temp_file:
             temp_file.write(str(XCalExporter.export(event_id), 'utf-8'))
         xcal_file = UploadedFile(file_path=file_path, filename=filename)
-        event.xcal_url = upload(xcal_file, UPLOAD_PATHS['exports']['xcal'].format(event_id=event_id))
-        save_to_db(event)
+        if temp:
+            xcal_url = upload(xcal_file, UPLOAD_PATHS['exports-temp']['xcal'].format(event_id=event_id))
+        else:
+            xcal_url = upload(xcal_file, UPLOAD_PATHS['exports']['xcal'].format(event_id=event_id))
         result = {
-            'download_url': event.xcal_url
+            'download_url': xcal_url
         }
+        if not temp:
+            event.xcal_url = xcal_url
+            save_to_db(event)
+
     except Exception as e:
         print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
@@ -166,11 +185,15 @@ def export_xcal_task(self, event_id):
 
 
 @celery.task(base=RequestContextTask, name='export.pentabarf', bind=True)
-def export_pentabarf_task(self, event_id):
+def export_pentabarf_task(self, event_id, temp=True):
     event = safe_query(db, Event, 'id', event_id, 'event_id')
 
     try:
-        filedir = current_app.config.get('BASE_DIR') + '/static/uploads/temp/' + event_id + '/'
+        if temp:
+            filedir = current_app.config.get('BASE_DIR') + '/static/uploads/temp/' + event_id + '/'
+        else:
+            filedir = current_app.config.get('BASE_DIR') + '/static/uploads/' + event_id + '/'
+
         if not os.path.isdir(filedir):
             os.makedirs(filedir)
         filename = "pentabarf.xml"
@@ -178,11 +201,17 @@ def export_pentabarf_task(self, event_id):
         with open(file_path, "w") as temp_file:
             temp_file.write(str(PentabarfExporter.export(event_id), 'utf-8'))
         pentabarf_file = UploadedFile(file_path=file_path, filename=filename)
-        event.pentabarf_url = upload(pentabarf_file, UPLOAD_PATHS['exports']['pentabarf'].format(event_id=event_id))
-        save_to_db(event)
+        if temp:
+            pentabarf_url = upload(pentabarf_file, UPLOAD_PATHS['exports-temp']['pentabarf'].format(event_id=event_id))
+        else:
+            pentabarf_url = upload(pentabarf_file, UPLOAD_PATHS['exports']['pentabarf'].format(event_id=event_id))
         result = {
-            'download_url': event.pentabarf_url
+            'download_url': pentabarf_url
         }
+        if not temp:
+            event.pentabarf_url = pentabarf_url
+            save_to_db(event)
+
     except Exception as e:
         print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
