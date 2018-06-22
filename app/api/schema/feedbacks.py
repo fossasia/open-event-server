@@ -2,12 +2,13 @@
 
 from marshmallow.validate import Range
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
 
 
-class FeedbackSchema(Schema):
+class FeedbackSchema(SoftDeletionSchema):
     """
     Api schema for Feedback Model
     """
