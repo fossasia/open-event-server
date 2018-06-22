@@ -1,7 +1,8 @@
 from app.models import db
+from app.models.base import SoftDeletionModel
 
 
-class UsersEventsRoles(db.Model):
+class UsersEventsRoles(SoftDeletionModel):
     __tablename__ = 'users_events_roles'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -14,7 +15,7 @@ class UsersEventsRoles(db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id', ondelete='CASCADE'))
     role = db.relationship("Role")
 
-    def __init__(self, user=None, event=None, role=None, user_id=None, role_id=None, event_id=None):
+    def __init__(self, user=None, event=None, role=None, user_id=None, role_id=None, event_id=None, deleted_at=None):
         if user:
             self.user = user
         if event:
@@ -27,6 +28,7 @@ class UsersEventsRoles(db.Model):
             self.role_id = role_id
         if event_id:
             self.event_id = event_id
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<UER %r:%r:%r>' % (self.user,

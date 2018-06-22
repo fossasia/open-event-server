@@ -1,8 +1,9 @@
+from app.models.base import SoftDeletionModel
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models import db
 
 
-class Speaker(db.Model):
+class Speaker(SoftDeletionModel):
     """Speaker model class"""
     __tablename__ = 'speaker'
     id = db.Column(db.Integer, primary_key=True)
@@ -57,7 +58,8 @@ class Speaker(db.Model):
                  heard_from=None,
                  sponsorship_required=None,
                  event_id=None,
-                 user_id=None):
+                 user_id=None,
+                 deleted_at=None):
         self.name = name
         self.photo_url = photo_url
         self.thumbnail_image_url = thumbnail_image_url
@@ -83,6 +85,7 @@ class Speaker(db.Model):
         self.sponsorship_required = sponsorship_required
         self.event_id = event_id
         self.user_id = user_id
+        self.deleted_at = deleted_at
 
     @staticmethod
     def get_service_name():
