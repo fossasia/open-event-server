@@ -1,9 +1,11 @@
 import datetime
-import time
 import uuid
+
+import time
 
 from app.api.helpers.db import get_count
 from app.models import db
+from app.models.base import SoftDeletionModel
 
 
 def get_new_order_identifier():
@@ -15,14 +17,14 @@ def get_new_order_identifier():
         return get_new_order_identifier()
 
 
-class OrderTicket(db.Model):
+class OrderTicket(SoftDeletionModel):
     __tablename__ = 'orders_tickets'
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id', ondelete='CASCADE'), primary_key=True)
     ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE'), primary_key=True)
     quantity = db.Column(db.Integer)
 
 
-class Order(db.Model):
+class Order(SoftDeletionModel):
     __tablename__ = "orders"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -75,7 +77,8 @@ class Order(db.Model):
                  discount_code_id=None,
                  event_id=None,
                  status='pending',
-                 payment_mode=None):
+                 payment_mode=None,
+                 deleted_at=None):
         self.identifier = get_new_order_identifier()
         self.quantity = quantity
         self.amount = amount
@@ -92,6 +95,7 @@ class Order(db.Model):
         self.discount_code_id = discount_code_id
         self.status = status
         self.payment_mode = payment_mode
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<Order %r>' % self.id
