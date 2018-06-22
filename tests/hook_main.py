@@ -3509,7 +3509,7 @@ def event_export_post(transaction):
 
 @hooks.before(
     "Event Export > Start Event Export as iCal file > Start a Task to Export an Event as iCal event")
-def event_export_ical_post(transaction):
+def event_export_ical_get(transaction):
     """
     :param transaction:
     :return:
@@ -3522,7 +3522,7 @@ def event_export_ical_post(transaction):
 
 @hooks.before(
     "Event Export > Start Event Export as xCalendar > Start a Task to Export an Event as xCalendar")
-def event_export_xcal_post(transaction):
+def event_export_xcal_get(transaction):
     """
     :param transaction:
     :return:
@@ -3535,7 +3535,20 @@ def event_export_xcal_post(transaction):
 
 @hooks.before(
     "Event Export > Start Event Export as Pentabarf XML > Start a Task to Export an Event as Pentabarf XML")
-def event_export_pentabarf_post(transaction):
+def event_export_pentabarf_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Export > Start Orders Export as CSV > Start a Task to Export Orders of an Event as CSV")
+def event_orders_export_csv_get(transaction):
     """
     :param transaction:
     :return:

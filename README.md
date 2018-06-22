@@ -175,6 +175,15 @@ When writing changes to models. Use migrations.
 
 When checking in code for models, please update migrations as well.
 
+### API documentation
+
+The api is documented using [api blueprint](https://apiblueprint.org/). Local changes to [the description](https://github.com/fossasia/open-event-server/blob/development/docs/api/api_blueprint.apib) can be viewed using e.g. the [apiary gem](https://help.apiary.io/tools/apiary-cli/):
+
+```bash
+gem install apiaryio # dependency
+apiary preview --path docs/api/api_blueprint.apib # opens browser with generated file
+```
+
 ### Testing
 
 Clone the repo and set up the server according to the steps listed. Make sure you have installed all the dependencies required for testing by running

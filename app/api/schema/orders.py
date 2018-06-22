@@ -6,12 +6,13 @@ from marshmallow_jsonapi.flask import Schema, Relationship
 from app import db
 from app.api.helpers.payment import PayPalPaymentsManager
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
 from app.models.order import Order
 from utils.common import use_defaults
 
 
 @use_defaults()
-class OrderSchema(Schema):
+class OrderSchema(SoftDeletionSchema):
     class Meta:
         type_ = 'order'
         self_view = 'v1.order_detail'
@@ -45,7 +46,8 @@ class OrderSchema(Schema):
     zipcode = fields.Str()
     completed_at = fields.DateTime(dump_only=True)
     transaction_id = fields.Str(dump_only=True)
-    payment_mode = fields.Str(default="free", required=True)
+    payment_mode = fields.Str(default="free", required=True,
+                              validate=validate.OneOf(choices=["free", "stripe", "paypal"]))
     paid_via = fields.Str(dump_only=True)
     brand = fields.Str(dump_only=True)
     exp_month = fields.Str(dump_only=True)

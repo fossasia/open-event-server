@@ -5,10 +5,11 @@ from flask_jwt import current_identity as current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
+from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query
-from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
+from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees
@@ -40,6 +41,7 @@ class OrdersListPost(ResourceList):
         :return:
         """
         require_relationship(['event', 'ticket_holders'], data)
+        # Ensuring that default status is always pending, unless the user is event co-organizer
         if not has_access('is_coorganizer', event_id=data['event']):
             data['status'] = 'pending'
 
@@ -50,6 +52,17 @@ class OrdersListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
+        for ticket_holder in data['ticket_holders']:
+            # Ensuring that the attendee exists and doesn't have an associated order.
+            try:
+                ticket_holder_object = self.session.query(TicketHolder).filter_by(id=int(ticket_holder)).one()
+                if ticket_holder_object.order_id:
+                    raise ConflictException({'pointer': '/data/relationships/attendees'},
+                                            "Order already exists for attendee with id {}".format(str(ticket_holder)))
+            except NoResultFound:
+                raise ConflictException({'pointer': '/data/relationships/attendees'},
+                                        "Attendee with id {} does not exists".format(str(ticket_holder)))
+
         if data.get('cancel_note'):
             del data['cancel_note']
 
@@ -86,7 +99,7 @@ class OrdersListPost(ResourceList):
                 pdf = create_save_pdf(render_template('/pdf/ticket_purchaser.html', order=order))
             holder.pdf_url = pdf
             save_to_db(holder)
-            if order_tickets.get(holder.ticket_id) is None:
+            if not order_tickets.get(holder.ticket_id):
                 order_tickets[holder.ticket_id] = 1
             else:
                 order_tickets[holder.ticket_id] += 1

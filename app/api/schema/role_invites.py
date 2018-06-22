@@ -1,18 +1,19 @@
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validates_schema, validate
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 
-from app.models.role_invite import RoleInvite
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
 from app.models.role import Role
+from app.models.role_invite import RoleInvite
 from utils.common import use_defaults
 
 
 @use_defaults()
-class RoleInviteSchema(Schema):
+class RoleInviteSchema(SoftDeletionSchema):
     """
     Api Schema for role invite model
     """

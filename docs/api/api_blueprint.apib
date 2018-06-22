@@ -20872,7 +20872,7 @@ Requires event admin access
 
 # Group Event Export
 
-This group of APIs help you to start a task for exporting a particular event in the zip format, ical and xcal.
+This group of APIs help you to start a task for exporting a particular event in the zip format, ical and xcal. It also lets you start a task to export orders of an event as csv
 
 ## Start Event Export as Zip [/v1/events/{event_identifier}/export/json]
 This endpoint lets the user start a task of exporting the event in the zip format.
@@ -20968,6 +20968,26 @@ to get the status of the export task.
             "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
         }
 
+## Start Orders Export as CSV [/v1/events/{event_identifier}/export/orders/csv]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+Start a celery task to export the list of order of the event with that event_id as a CSV file to get it ready for downloading. Returns the task url
+to get the status of the export task.
+
+
+### Start a Task to Export Orders of an Event as CSV [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
 
 # Group Event Import
 
