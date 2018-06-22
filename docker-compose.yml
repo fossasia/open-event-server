@@ -1,30 +1,36 @@
 version: '2'
 
 services:
-  data:
-    image: postgres:9.5
-    environment:
-      POSTGRES_PASSWORD: 'test'
-    volumes:
-      - /var/lib/postgresql
-    command: echo true
 
   postgres:
-    image: postgres:9.5
+    image: postgres:10-alpine
     environment:
-      POSTGRES_PASSWORD: 'test'
-    volumes_from:
-      - data
+      - POSTGRES_USER=openevent
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=openevent
+    volumes:
+      - pg:/var/lib/postgresql/data
+      - ./postgres-initdb.d:/docker-entrypoint-initdb.d
     ports:
-      - '5432:5432'
+      - 127.0.0.1:5432:5432
 
   redis:
-    image: 'redis:3-alpine'
+    image: redis:3-alpine
     command: redis-server
     volumes:
-      - 'redis:/var/lib/redis/data'
+      - rd:/var/lib/redis/data
     ports:
-      - '6379:6379'
+      - 127.0.0.1:6379:6379
+
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.0
+    environment:
+        - discovery.type=single-node
+    volumes:
+        - es:/usr/share/elasticsearch/data
+    ports:
+        - 127.0.0.1:9200:9200
+        - 127.0.0.1:9300:9300
 
   web:
     build: .
@@ -37,10 +43,14 @@ services:
       - postgres:postgres
       - redis:redis
     volumes:
-      - 'storage:/open_event/static'
+      - ./data/web:/open_event/static
     ports:
       - '80:5000'
 
 volumes:
-  redis:
-  storage:
+    pg:
+        driver: local
+    rd:
+        driver: local
+    es:
+        driver: local
