@@ -5,9 +5,9 @@ services:
   postgres:
     image: postgres:10-alpine
     environment:
-      - POSTGRES_USER=openevent
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=openevent
+      - POSTGRES_USER=john
+      - POSTGRES_PASSWORD=start
+      - POSTGRES_DB=oevent_2
     volumes:
       - pg:/var/lib/postgresql/data
       - ./postgres-initdb.d:/docker-entrypoint-initdb.d
