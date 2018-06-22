@@ -110,7 +110,8 @@ class Order(SoftDeletionModel):
     def invoice_number(self):
         return self.get_invoice_number()
 
-    def get_tickets_count(self):
+    @property
+    def tickets_count(self):
         return sum([t.quantity for t in self.order_tickets])
 
     @property

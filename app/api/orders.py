@@ -105,7 +105,7 @@ class OrdersListPost(ResourceList):
         for ticket in order_tickets:
             od = OrderTicket(order_id=order.id, ticket_id=ticket, quantity=order_tickets[ticket])
             save_to_db(od)
-        order.quantity = order.get_tickets_count()
+        order.quantity = order.tickets_count()
         save_to_db(order)
         if not has_access('is_coorganizer', event_id=data['event']):
             TicketingManager.calculate_update_amount(order)
