@@ -512,12 +512,10 @@ api.route(AdminStatisticsUserDetail, 'admin_statistics_user_detail', '/admin/sta
 api.route(AdminStatisticsMailDetail, 'admin_statistics_mail_detail', '/admin/statistics/mails')
 
 # Admin Sales
-<<<<<<< HEAD
 api.route(AdminSalesByEventsList, 'admin_sales_by_events', '/admin/sales/by-events')
 api.route(AdminSalesByOrganizersList, 'admin_sales_by_organizers', '/admin/sales/by-organizers')
 api.route(AdminSalesByLocationList, 'admin_sales_by_location', '/admin/sales/by-location')
 api.route(AdminSalesByMarketerList, 'admin_sales_by_marketer', '/admin/sales/by-marketer')
 api.route(AdminSalesDiscountedList, 'admin_sales_discounted', '/admin/sales/discounted')
-=======
 api.route(AdminSalesInvoicesList, 'admin_sales_invoices', '/admin/sales/invoices')
->>>>>>> development
+api.route(AdminSalesInvoicesList, 'admin_sales_invoices', '/admin/sales/invoices')
