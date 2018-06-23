@@ -1,9 +1,10 @@
 from sqlalchemy.orm import backref
 
 from app.models import db
+from app.models.base import SoftDeletionModel
 
 
-class EventCopyright(db.Model):
+class EventCopyright(SoftDeletionModel):
     """
     Copyright Information about an event.
     """

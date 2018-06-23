@@ -1,9 +1,10 @@
 from sqlalchemy.orm import backref
 
 from app.models import db
+from app.models.base import SoftDeletionModel
 
 
-class Tax(db.Model):
+class Tax(SoftDeletionModel):
     """
     Tax Information about an event.
     """

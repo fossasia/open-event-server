@@ -8,7 +8,7 @@ from marshmallow_jsonapi.flask import Schema
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.data_layers.ChargesLayer import ChargesLayer
-from app.api.helpers.db import save_to_db, safe_query
+from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.files import make_frontend_url
@@ -55,7 +55,8 @@ class OrdersListPost(ResourceList):
         for ticket_holder in data['ticket_holders']:
             # Ensuring that the attendee exists and doesn't have an associated order.
             try:
-                ticket_holder_object = self.session.query(TicketHolder).filter_by(id=int(ticket_holder)).one()
+                ticket_holder_object = self.session.query(TicketHolder).filter_by(id=int(ticket_holder),
+                                                                                  deleted_at=None).one()
                 if ticket_holder_object.order_id:
                     raise ConflictException({'pointer': '/data/relationships/attendees'},
                                             "Order already exists for attendee with id {}".format(str(ticket_holder)))
@@ -68,7 +69,8 @@ class OrdersListPost(ResourceList):
 
         # Apply discount only if the user is not event admin
         if data.get('discount') and not has_access('is_coorganizer', event_id=data['event']):
-            discount_code = safe_query(self, DiscountCode, 'id', data['discount'], 'discount_code_id')
+            discount_code = safe_query_without_soft_deleted_entries(self, DiscountCode, 'id', data['discount'],
+                                                                    'discount_code_id')
             if not discount_code.is_active:
                 raise UnprocessableEntity({'source': 'discount_code_id'}, "Inactive Discount Code")
             else:
