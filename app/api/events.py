@@ -107,16 +107,18 @@ class EventList(ResourceList):
         return query_
 
     def before_post(self, args, kwargs, data=None):
-        """he 
+        """
         before post method to verify if the event location is provided before publishing the event
+        AND checks that the user is verified
         :param args:
         :param kwargs:
         :param data:
         :return:
         """
-        if data.get('state', None) == 'published' and not User.query.filter_by(id=kwargs['user_id']).first().is_verified:
+        if (data.get('state', None) == 'published' and not
+                User.query.filter_by(id=kwargs['user_id']).first().is_verified):
             raise ForbiddenException({'source': ''},
-                                    "Only verified accounts can publish events")
+                                      "Only verified accounts can publish events")
         if data.get('state', None) == 'published' and not data.get('location_name', None):
             raise ConflictException({'pointer': '/data/attributes/location-name'},
                                     "Location is required to publish the event")
