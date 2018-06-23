@@ -1,6 +1,7 @@
 import base64
 
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from flask_jwt import current_identity as current_user
 
 from app import get_settings
 from app.api.bootstrap import api
@@ -8,7 +9,7 @@ from app.api.helpers.files import create_save_image_sizes, make_frontend_url
 from app.api.helpers.mail import send_email_confirmation, send_email_change_user_email, send_email_with_action
 from app.api.helpers.permissions import is_user_itself
 from app.api.helpers.utilities import get_serializer, str_generator
-from app.api.schema.users import UserSchema
+from app.api.schema.users import UserSchema, UserSchemaPublic
 from app.models import db
 from app.models.access_code import AccessCode
 from app.models.discount_code import DiscountCode
@@ -80,6 +81,13 @@ class UserDetail(ResourceDetail):
     """
     User detail by id
     """
+    def before_get(self, args, kwargs):
+
+        if current_user.is_admin or current_user.is_super_admin or current_user:
+            self.schema = UserSchema
+        else:
+            self.schema = UserSchemaPublic
+
     def before_get_object(self, view_kwargs):
         """
         before get method for user object
