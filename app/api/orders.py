@@ -41,6 +41,7 @@ class OrdersListPost(ResourceList):
         :return:
         """
         require_relationship(['event', 'ticket_holders'], data)
+        # Ensuring that default status is always pending, unless the user is event co-organizer
         if not has_access('is_coorganizer', event_id=data['event']):
             data['status'] = 'pending'
 
@@ -98,7 +99,7 @@ class OrdersListPost(ResourceList):
                 pdf = create_save_pdf(render_template('/pdf/ticket_purchaser.html', order=order))
             holder.pdf_url = pdf
             save_to_db(holder)
-            if order_tickets.get(holder.ticket_id) is None:
+            if not order_tickets.get(holder.ticket_id):
                 order_tickets[holder.ticket_id] = 1
             else:
                 order_tickets[holder.ticket_id] += 1
