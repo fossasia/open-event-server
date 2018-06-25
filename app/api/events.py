@@ -104,8 +104,8 @@ class EventList(ResourceList):
             query_ = self.session.query(Event).filter(
                 getattr(Event, 'discount_code_id') == view_kwargs['discount_code_id'])
 
-        if view_kwargs.get('filter') and 'GET' in request.method:
-            filter_term = view_kwargs['filter']
+        if request.args.get('search') and 'GET' in request.method:
+            filter_term = request.args.get('search')
             filter_term = pg_conform_search(filter_term)
             query_ = query_.filter(Event.__ts_vector__.match(filter_term, postgres_regconfig='english'))
 

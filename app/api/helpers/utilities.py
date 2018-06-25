@@ -128,5 +128,5 @@ def pg_conform_search(search):
     See the documentation for more information:
     https://www.postgresql.org/docs/9.5/static/textsearch-intro.html#TEXTSEARCH-MATCHING
     """
-    search = search.replace(' ', '|')
+    search = search.replace(' ', '&')
     return search
