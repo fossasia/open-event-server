@@ -182,6 +182,7 @@ To have a running database, you can use the dump from the repository:
 ```bash
 gunzip dumps/2018-06-22.dump.gz
 pg_restore --clean --no-acl --no-owner -h localhost -d oevent_2 -U john dumps/2018-06-22.dump
+python3 manage.py db upgrade
 ```
 
 ### API documentation
