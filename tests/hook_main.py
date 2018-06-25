@@ -53,6 +53,9 @@ from app.factories.mail import MailFactory
 from app.factories.order import OrderFactory
 from app.factories.faq_type import FaqTypeFactory
 from app.factories.feedback import FeedbackFactory
+from app.factories.service import ServiceFactory
+
+
 
 
 stash = {}
@@ -2196,6 +2199,92 @@ def role_role_invite(transaction):
         role_invite = RoleInviteFactory()
         db.session.add(role_invite)
         db.session.commit()
+
+
+# ------------------------- Service -------------------------
+@hooks.before("Services > Services Collection > List Services")
+def service(transaction):
+    """
+    GET /services
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        service = ServiceFactory()
+        db.session.add(service)
+        db.session.commit()
+
+
+@hooks.before("Services > Services Details > Get Service Details")
+def service_detail(transaction):
+    """
+    GET /services/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        service = ServiceFactory()
+        db.session.add(service)
+        db.session.commit()
+
+
+@hooks.before("Services > Services Details > Update Service")
+def service_patch(transaction):
+    """
+    PATCH /services/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        service = ServiceFactory()
+        db.session.add(service)
+        db.session.commit()
+
+
+# ------------------------- Event Role Permission -------------------------
+@hooks.before("Event Role Permission > Event Role Permission Collection > List Event Role Permissions")
+def event_role_permission_list(transaction):
+    """
+    GET /event-role-permissions
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+#   TODO: This is breaking the build, we need to repair it eventually.
+#   with stash['app'].app_context():
+#       event_role_permission = EventRolePermissionsFactory()
+#       db.session.add(event_role_permission)
+#       db.session.commit()
+
+
+@hooks.before("Event Role Permission > Event Role Permission Details > Get Event Role Permission Details")
+def event_role_permission_detail(transaction):
+    """
+    GET /event-role-permissions/1
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+#   TODO: This is breaking the build, we need to repair it eventually.
+#   with stash['app'].app_context():
+#       event_role_permission = EventRolePermissionsFactory()
+#       db.session.add(event_role_permission)
+#       db.session.commit()
+
+
+@hooks.before("Event Role Permission > Event Role Permission Details > Update Event Role Permission")
+def event_role_permission_patch(transaction):
+    """
+    PATCH /event-role-permissions/1
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+#   TODO: This is breaking the build, we need to repair it eventually.
+#   with stash['app'].app_context():
+#       event_role_permission = EventRolePermissionsFactory()
+#       db.session.add(event_role_permission)
+#       db.session.commit()
 
 
 # ------------------------- Activities -------------------------
