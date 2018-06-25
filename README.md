@@ -175,6 +175,15 @@ When writing changes to models. Use migrations.
 
 When checking in code for models, please update migrations as well.
 
+### Populating the db
+
+To have a running database, you can use the dump from the repository:
+
+```bash
+gunzip dumps/2018-06-22.dump.gz
+pg_restore --clean --no-acl --no-owner -h localhost -d oevent_2 -U john dumps/2018-06-22.dump
+```
+
 ### API documentation
 
 The api is documented using [api blueprint](https://apiblueprint.org/). Local changes to [the description](https://github.com/fossasia/open-event-server/blob/development/docs/api/api_blueprint.apib) can be viewed using e.g. the [apiary gem](https://help.apiary.io/tools/apiary-cli/):
