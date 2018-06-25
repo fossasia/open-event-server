@@ -2630,6 +2630,7 @@ These endpoints help you to create the basic event structure. To add other parts
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `identifier`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. If you want to filter by firstname and lastname, example url will /endpoint?filter=[{"firstname":"firstname","lastname":"lastname"}]Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+    + search (optional, string, `keyword`) - Filter by keyword. Uses Postgres query syntax and undestands &, |, etc
 
 ### List All Events [GET]
 Get a list of events.
