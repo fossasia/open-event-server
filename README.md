@@ -185,6 +185,8 @@ pg_restore --clean --no-acl --no-owner -h localhost -d oevent_2 -U john dumps/20
 python3 manage.py db upgrade
 ```
 
+You can login as `open_event_test_user@fossasia.org` with password `fossasia`
+
 ### API documentation
 
 The api is documented using [api blueprint](https://apiblueprint.org/). Local changes to [the description](https://github.com/fossasia/open-event-server/blob/development/docs/api/api_blueprint.apib) can be viewed using e.g. the [apiary gem](https://help.apiary.io/tools/apiary-cli/):
