@@ -120,3 +120,13 @@ TASK_RESULTS = {}
 
 class EmptyObject(object):
     pass
+
+
+def pg_conform_search(search):
+    """
+    Makes `search` a valid term for Postgres full-text search
+    See the documentation for more information:
+    https://www.postgresql.org/docs/9.5/static/textsearch-intro.html#TEXTSEARCH-MATCHING
+    """
+    search = search.replace(' ', '&')
+    return search
