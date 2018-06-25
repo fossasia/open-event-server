@@ -5,7 +5,7 @@ from datetime import datetime
 import flask_login as login
 import pytz
 from flask import current_app
-from sqlalchemy import event
+from sqlalchemy import event, Index
 from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_count
@@ -147,6 +147,17 @@ class Event(SoftDeletionModel):
                             primaryjoin='UsersEventsRoles.event_id == Event.id',
                             secondaryjoin='User.id == UsersEventsRoles.user_id',
                             backref='events')
+
+    # Full-text search index
+    __ts_vector__ = func.to_tsvector(
+        'english',
+        func.coalesce(name, '') + ' ' +
+        func.coalesce(description, '') + ' ' +
+        func.coalesce(location_name, '') + ' ' +
+        func.coalesce(organizer_name, '') + ' ' +
+        func.coalesce(organizer_description, ''))
+
+    __table_args__ = (Index('idx_events_fts', __ts_vector__, postgresql_using='gin'),)
 
     def __init__(self,
                  name=None,

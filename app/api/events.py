@@ -16,7 +16,7 @@ from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.exceptions import ForbiddenException, ConflictException, UnprocessableEntity
 from app.api.helpers.files import create_save_image_sizes
 from app.api.helpers.permission_manager import has_access
-from app.api.helpers.utilities import dasherize
+from app.api.helpers.utilities import dasherize, pg_conform_search
 from app.api.schema.events import EventSchemaPublic, EventSchema
 from app.api.helpers.export_helpers import create_export_job
 # models
@@ -103,6 +103,11 @@ class EventList(ResourceList):
                 raise ForbiddenException({'source': ''}, 'Coorganizer access is required')
             query_ = self.session.query(Event).filter(
                 getattr(Event, 'discount_code_id') == view_kwargs['discount_code_id'])
+
+        if view_kwargs.get('filter') and 'GET' in request.method:
+            filter_term = view_kwargs['filter']
+            filter_term = pg_conform_search(filter_term)
+            query_ = query_.filter(Event.__ts_vector__.match(filter_term, postgres_regconfig='english'))
 
         return query_
 
