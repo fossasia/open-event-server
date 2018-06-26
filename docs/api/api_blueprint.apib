@@ -2622,6 +2622,7 @@ These endpoints help you to create the basic event structure. To add other parts
 | `identifier`  | - | string | - |
 | `external-event-url`  | - | string | - |
 | `has-organizer-info`  | - | boolean(default: `false`) | - |
+| `average-rating`  | Average rating of event | float | - |
 
 ## Events Collection [/v1/events{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -2832,6 +2833,7 @@ Get a list of events.
                         "privacy": "public",
                         "code-of-conduct": "example",
                         "state": "draft",
+                        "average-rating": null,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "example",
@@ -2902,6 +2904,7 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "is-sessions-speakers-enabled": "true",
                     "privacy": "public",
                     "state": "draft",
+                    "average-rating": null,
                     "ticket-url": "http://example.com",
                     "code-of-conduct": "example",
                     "is-ticketing-enabled": "true",
@@ -3118,6 +3121,7 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "privacy": "public",
                     "code-of-conduct": "example",
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "example",
@@ -3363,6 +3367,7 @@ Get a single event.
                     "privacy": "public",
                     "code-of-conduct": "example",
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "example",
@@ -3437,6 +3442,7 @@ All other fields are optional. Add attributes you want to modify.
                     "is-sessions-speakers-enabled": "false",
                     "privacy": "private",
                     "state": "published",
+                    "average-rating": null,
                     "ticket-url": "http://example1.com",
                     "code-of-conduct": "example1",
                     "is-ticketing-enabled": "false",
@@ -3653,6 +3659,7 @@ All other fields are optional. Add attributes you want to modify.
                     "privacy": "private",
                     "code-of-conduct": "example1",
                     "state": "published",
+                    "average-rating": null,
                     "latitude": 12.23456789,
                     "starts-at": "2016-12-14T18:29:59.123456+00:00",
                     "searchable-location-name": "example1",
@@ -3910,6 +3917,7 @@ Get a list of events.
                         "privacy": "public",
                         "has-organizer-info": false,
                         "state": "draft",
+                        "average-rating": null,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "Draft",
@@ -4141,6 +4149,7 @@ Get a list of events.
                         "privacy": "public",
                         "has-organizer-info": false,
                         "state": "draft",
+                        "average-rating": null,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "Draft",
@@ -4365,6 +4374,7 @@ Get a list of events.
                         "privacy": "public",
                         "has-organizer-info": false,
                         "state": "draft",
+                        "average-rating": null,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "Draft",
@@ -4596,6 +4606,7 @@ Get a list of events.
                         "privacy": "public",
                         "has-organizer-info": false,
                         "state": "draft",
+                        "average-rating": null,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "Draft",
@@ -4821,6 +4832,7 @@ Get a list of events.
                         "privacy": "public",
                         "has-organizer-info": false,
                         "state": "draft",
+                        "average-rating": null,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "Draft",
@@ -5043,6 +5055,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -5265,6 +5278,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -5487,6 +5501,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -5709,6 +5724,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -5931,6 +5947,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -6153,6 +6170,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -6375,6 +6393,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -6597,6 +6616,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -6819,6 +6839,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -7041,6 +7062,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -7263,6 +7285,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -7485,6 +7508,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -7707,6 +7731,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -7929,6 +7954,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -8151,6 +8177,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -8373,6 +8400,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -8595,6 +8623,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -8817,6 +8846,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -9039,6 +9069,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -9287,7 +9318,8 @@ Get a list of events.
               "is-sessions-speakers-enabled": false,
               "privacy": "public",
               "has-organizer-info": false,
-              "state": "Draft",
+              "state": "draft",
+              "average-rating": null,
               "latitude": null,
               "starts-at": "2002-05-30T04:00:10+00:00",
               "searchable-location-name": null,
@@ -9537,6 +9569,7 @@ Get a list of events.
               "privacy": "public",
               "has-organizer-info": false,
               "state": "Draft",
+              "average-rating": null,
               "latitude": null,
               "starts-at": "2002-05-30T04:00:10+00:00",
               "searchable-location-name": null,
@@ -17953,6 +17986,336 @@ Get a single role.
         }
 
 
+# Group Services
+
+**ADMIN**
+
+To get or modify data of this data layer, you will need admin access. You can get the data without admin access as well.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the service | string | **yes** |
+
+## Services Collection [/v1/services{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List Services [GET]
+Get a list of Services.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "attributes": {
+                        "name": "track"
+                    },
+                    "type": "service",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/services/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/services"
+            }
+        }
+
+
+## Services Details [/v1/services/{service_id}]
++ Parameters
+    + service_id: 1 (integer) - ID of the service in the form of an integer
+
+### Get Service Details [GET]
+Get a single role.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "name": "track"
+            },
+            "type": "service",
+            "id": "1",
+            "links": {
+              "self": "/v1/services/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/services/1"
+          }
+        }
+
+
+### Update Service [PATCH]
+Update a single service by `id` (only admin).
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "name": "track"
+                },
+                "id": "1",
+                "type": "service"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+            {
+                "data": {
+                    "attributes": {
+                        "name": "track"
+                    },
+                    "type": "service",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/services/1"
+                    }
+                },
+                "jsonapi": {
+                    "version": "1.0"
+                },
+                "links": {
+                    "self": "/v1/services/1"
+                }
+            }
+
+
+# Group Event Role Permission
+
+**ADMIN**
+
+To get or modify data of this data layer, you will need admin access. You can get the data without admin access as well.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `can-create`  | Permission of role to create a service | boolean | **yes** |
+| `can-read`  | Permission of role to read a service | boolean | **yes** |
+| `can-update`  | Permission of role to update a service | boolean | **yes** |
+| `can-delete`  | Permission of role to delete a service | boolean | **yes** |
+
+## Event Role Permission Collection [/v1/event-role-permissions{?page%5bsize%5d,page%5bnumber%5d,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response..
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List Event Role Permissions [GET]
+Get a list of Event Role Permissions.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "attributes": {
+                        "can-delete": true,
+                        "can-read": true,
+                        "can-create": true,
+                        "can-update": true
+                    },
+                    "relationships": {
+                        "role": {
+                            "links": {
+                                "related": "/v1/roles/1",
+                                "self": "/v1/event-role-permissions/1/relationships/role"
+                            }
+                        },
+                        "service": {
+                            "links": {
+                                "related": "/v1/services/1",
+                                "self": "/v1/event-role-permissions/1/relationships/service"
+                            }
+                        }
+                    },
+                    "type": "event-role-permissions",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/event-role-permissions/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/event-role-permissions"
+            }
+        }
+
+
+## Event Role Permission Details [/v1/event-role-permissions/{event_role_permissions_id}]
++ Parameters
+    + event_role_permissions_id: 1 (integer) - ID of the events role permission in the form of an integer
+
+### Get Event Role Permission Details [GET]
+Get a single event role permission.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "can-delete": true,
+              "can-create": true,
+              "can-update": true,
+              "can-read": true
+            },
+            "relationships": {
+                "role": {
+                    "links": {
+                        "related": "/v1/roles/1",
+                        "self": "/v1/event-role-permissions/1/relationships/role"
+                    }
+                },
+                "service": {
+                    "links": {
+                        "related": "/v1/services/1",
+                        "self": "/v1/event-role-permissions/1/relationships/service"
+                    }
+                }
+            },
+            "type": "event-role-permissions",
+            "id": "1",
+            "links": {
+              "self": "/v1/event-role-permissions/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/event-role-permissions/1"
+          }
+        }
+
+
+### Update Event Role Permission [PATCH]
+Update a single event role permission by `id` (only admin).
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "can-delete": false,
+                  "can-create": true,
+                  "can-update": false,
+                  "can-read": false
+                },
+                "id": "1",
+                "type": "event-role-permissions"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+            {
+                "data": {
+                    "attributes": {
+                        "can-delete": false,
+                        "can-create": true,
+                        "can-update": false,
+                        "can-read": false
+                    },
+                    "relationships": {
+                        "role": {
+                            "links": {
+                                "related": "/v1/roles/1",
+                                "self": "/v1/event-role-permissions/1/relationships/role"
+                            }
+                        },
+                        "service": {
+                            "links": {
+                                "related": "/v1/services/1",
+                                "self": "/v1/event-role-permissions/1/relationships/service"
+                            }
+                        }
+                    },
+                    "type": "event-role-permissions",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/event-role-permissions/1"
+                    }
+                },
+                "jsonapi": {
+                    "version": "1.0"
+                },
+                "links": {
+                    "self": "/v1/event-role-permissions/1"
+                }
+            }
+
+
 # Group Activity
 
 *ADMIN**
@@ -20542,7 +20905,7 @@ Requires event admin access
 
 # Group Event Export
 
-This group of APIs help you to start a task for exporting a particular event in the zip format, ical and xcal.
+This group of APIs help you to start a task for exporting a particular event in the zip format, ical and xcal. It also lets you start a task to export orders of an event as csv
 
 ## Start Event Export as Zip [/v1/events/{event_identifier}/export/json]
 This endpoint lets the user start a task of exporting the event in the zip format.
@@ -20638,6 +21001,26 @@ to get the status of the export task.
             "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
         }
 
+## Start Orders Export as CSV [/v1/events/{event_identifier}/export/orders/csv]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+Start a celery task to export the list of order of the event with that event_id as a CSV file to get it ready for downloading. Returns the task url
+to get the status of the export task.
+
+
+### Start a Task to Export Orders of an Event as CSV [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
 
 # Group Event Import
 

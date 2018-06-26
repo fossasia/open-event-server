@@ -1,5 +1,7 @@
-CREATE USER v1 WITH PASSWORD 'v1-password';
-CREATE DATABASE oevent_1 WITH OWNER v1;
+-- Open Event database
+CREATE USER john WITH PASSWORD 'start';
+CREATE DATABASE oevent_2 WITH OWNER john;
 
-CREATE USER v2 WITH PASSWORD 'v2-password';
-CREATE DATABASE oevent_2 WITH OWNER v2;
+-- Test database
+CREATE USER open_event_user WITH PASSWORD 'test';
+CREATE DATABASE opev_test WITH OWNER open_event_user;

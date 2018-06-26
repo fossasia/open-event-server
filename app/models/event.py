@@ -6,11 +6,13 @@ import flask_login as login
 import pytz
 from flask import current_app
 from sqlalchemy import event
+from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_count
 from app.models import db
 from app.models.base import SoftDeletionModel
 from app.models.email_notification import EmailNotification
+from app.models.feedback import Feedback
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.user import ATTENDEE, ORGANIZER
 from app.views.redis_store import redis_store
@@ -273,6 +275,16 @@ class Event(SoftDeletionModel):
                 filter_by(event_id=self.id).first()
         except:
             return None
+
+    def get_average_rating(self):
+        avg = db.session.query(func.avg(Feedback.rating)).filter_by(event_id=self.id).scalar()
+        if avg is not None:
+            avg = round(avg, 2)
+        return avg
+
+    @property
+    def average_rating(self):
+        return self.get_average_rating()
 
     def get_organizer(self):
         """returns organizer of an event"""

@@ -34,7 +34,7 @@ class TicketingManager(object):
     def calculate_update_amount(order):
         discount = None
         if order.discount_code_id:
-            discount = order.discount
+            discount = order.discount_code
         # Access code part will be done ticket_holders API
         amount = 0
         total_discount = 0
