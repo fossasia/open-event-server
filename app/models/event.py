@@ -15,7 +15,7 @@ from app.models.email_notification import EmailNotification
 from app.models.feedback import Feedback
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.user import ATTENDEE, ORGANIZER
-from app.views.redis_store import redis_store
+from app.models.search import sync
 
 
 def get_new_event_identifier(length=8):
@@ -317,9 +317,9 @@ def receive_init(mapper, connection, target):
     """
     if current_app.config['ENABLE_ELASTICSEARCH']:
         if target.state == 'published' and target.deleted_at is None:
-            redis_store.sadd('event_index', target.id)
+            sync.mark_event(sync.REDIS_EVENT_INDEX, target.id)
         elif target.deleted_at:
-            redis_store.sadd('event_delete', target.id)
+            sync.mark_event(sync.REDIS_EVENT_DELETE, target.id)
 
 
 @event.listens_for(Event, 'after_delete')
@@ -328,4 +328,4 @@ def receive_after_delete(mapper, connection, target):
     listen for the 'after_delete' event
     """
     if current_app.config['ENABLE_ELASTICSEARCH']:
-        redis_store.sadd('event_delete', target.id)
+        sync.mark_event(sync.REDIS_EVENT_DELETE, target.id)
