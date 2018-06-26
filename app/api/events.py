@@ -15,6 +15,7 @@ from app.api.data_layers.EventCopyLayer import EventCopyLayer
 from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.exceptions import ForbiddenException, ConflictException, UnprocessableEntity
 from app.api.helpers.files import create_save_image_sizes
+from app.api.helpers.filters import json_to_rest_filter_list
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
 from app.api.schema.events import EventSchemaPublic, EventSchema
@@ -49,6 +50,7 @@ from app.models.track import Track
 from app.models.user import User, ATTENDEE, ORGANIZER, COORGANIZER
 from app.models.users_events_role import UsersEventsRoles
 from app.models.stripe_authorization import StripeAuthorization
+from app.models.search.event import find_ids
 
 
 class EventList(ResourceList):
@@ -104,8 +106,19 @@ class EventList(ResourceList):
             query_ = self.session.query(Event).filter(
                 getattr(Event, 'discount_code_id') == view_kwargs['discount_code_id'])
 
-        # if current_app.config['ENABLE_ELASTICSEARCH'] and request.args['filter']:
-        #     print(request.args['filter'])
+        # Full-text search
+        if ('ENABLE_ELASTICSEARCH' in current_app.config
+                and 'GET' in request.method and 'search_filter' in request.args):
+            # TODO 'search-filter' is used as 'filter' would be evaluated
+            # automatically by the libraries used. Solutions would be using the
+            # request body, 'search-filter' or a new endpoint (/event/search)
+            json_filter = request.args['search_filter']
+            filter_terms = [
+                f.val for f in json_to_rest_filter_list(json_filter)
+                if f.name == 'event' and f.op == 'search'
+            ]
+            matching_ids = find_ids(filter_terms)
+            query_ = query_.filter(Event.id.in_(matching_ids))
 
         return query_
 
