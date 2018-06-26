@@ -65,7 +65,6 @@ from app.api.order_statistics.tickets import OrderStatisticsTicketDetail
 from app.api.faq_types import FaqTypeList, FaqTypeListPost, FaqTypeDetail, FaqTypeRelationshipOptional, \
     FaqTypeRelationshipRequired
 from app.api.admin_sales.invoices import AdminSalesInvoicesList
-from app.api.search import EventSearch
 
 # users
 api.route(UserList, 'user_list', '/users')
@@ -180,7 +179,6 @@ api.route(EventList, 'event_list', '/events', '/event-types/<int:event_type_id>/
           '/event-topics/<int:event_topic_id>/events',
           '/event-sub-topics/<int:event_sub_topic_id>/events', '/discount-codes/<int:discount_code_id>/events',
           '/users/<int:user_id>/events')
-api.route(EventSearch, 'search_event', '/events/search')
 api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>',
           '/tickets/<int:ticket_id>/event', '/microlocations/<int:microlocation_id>/event',
           '/social-links/<int:social_link_id>/event',
