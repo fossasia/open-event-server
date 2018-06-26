@@ -45,21 +45,21 @@ def rebuild_indices(client=client):
         index_class.init()
 
 
-def delete_event_from_index(id):
+def delete_event_from_index(event_id):
     "Deletes an event from the Elasticsearch index"
     searchable = SearchableEvent()
-    searchable.id = id
+    searchable.id = event_id
     searchable.delete()
 
 
-def mark_event(purpose, id):
+def mark_event(purpose, event_id):
     """Marks an event id in redis for later syncing.
 
     Purpose can be taken from this namespace (Look for global REDIS_X
     variables)
 
     """
-    redis_store.sadd(purpose, id)
+    redis_store.sadd(purpose, event_id)
 
 
 def _events_marked(purpose):
@@ -74,10 +74,10 @@ def sync():
     "Syncs all events that have been marked"
     logger.info('Syncing marked events')
 
-    for id in list(_events_marked(REDIS_EVENT_INDEX)):
-        logger.info('Syncing event %i', id)
-        sync_event_from_database(id)
+    for event_id in list(_events_marked(REDIS_EVENT_INDEX)):
+        logger.info('Syncing event %i', event_id)
+        sync_event_from_database(event_id)
 
-    for id in list(_events_marked(REDIS_EVENT_DELETE)):
-        logger.info('Deleting event %i', id)
-        delete_event_from_index(id)
+    for event_id in list(_events_marked(REDIS_EVENT_DELETE)):
+        logger.info('Deleting event %i', event_id)
+        delete_event_from_index(event_id)
