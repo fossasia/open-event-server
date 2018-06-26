@@ -36,7 +36,7 @@ class AttendeeListPost(ResourceList):
         require_relationship(['ticket', 'event'], data)
 
         ticket = db.session.query(Ticket).filter_by(
-            id=int(data['ticket'])
+            id=int(data['ticket']), deleted_at=None
             ).first()
         if ticket is None:
             raise UnprocessableEntity(
@@ -49,7 +49,7 @@ class AttendeeListPost(ResourceList):
             )
 
         if db.session.query(TicketHolder.id).filter_by(
-                ticket_id=int(data['ticket']), event_id=int(data['event'])
+                ticket_id=int(data['ticket']), event_id=int(data['event']), deleted_at=None
                 ).scalar() is not None:
             raise ConflictException(
                 {'pointer': '/data/attributes/ticket_id'},
@@ -77,7 +77,7 @@ class AttendeeList(ResourceList):
 
         if view_kwargs.get('order_identifier'):
             order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
-            if not has_access('is_registrar', event_id=order.event_id) or not has_access('is_user_itself',
+            if not has_access('is_registrar', event_id=order.event_id) and not has_access('is_user_itself',
                                                                                          user_id=order.user_id):
                 raise ForbiddenException({'source': ''}, 'Access Forbidden')
             query_ = query_.join(Order).filter(Order.id == order.id)

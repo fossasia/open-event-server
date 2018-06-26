@@ -37,7 +37,7 @@ class DiscountCodeListPost(ResourceList):
         if data['used_for'] == 'event' and 'events' in data:
             for event in data['events']:
                 try:
-                    event_now = db.session.query(Event).filter_by(id=event).one()
+                    event_now = db.session.query(Event).filter_by(id=event, deleted_at=None).one()
                 except NoResultFound:
                     raise UnprocessableEntity({'event_id': event},
                                               "Event does not exist")

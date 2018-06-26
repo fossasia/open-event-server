@@ -35,12 +35,12 @@ class UserList(ResourceList):
     """
     def before_create_object(self, data, view_kwargs):
         """
-        method to check if there is an existing user with same email which is recieved in data to create a new user
+        method to check if there is an existing user with same email which is received in data to create a new user
         :param data:
         :param view_kwargs:
         :return:
         """
-        if db.session.query(User.id).filter_by(email=data['email']).scalar() is not None:
+        if db.session.query(User.id).filter_by(email=data['email'], deleted_at=None).scalar() is not None:
             raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")
 
     def after_create_object(self, user, data, view_kwargs):

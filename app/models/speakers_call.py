@@ -1,9 +1,10 @@
 from sqlalchemy.orm import backref
 
 from app.models import db
+from app.models.base import SoftDeletionModel
 
 
-class SpeakersCall(db.Model):
+class SpeakersCall(SoftDeletionModel):
     """call for paper model class"""
     __tablename__ = 'speakers_calls'
     id = db.Column(db.Integer, primary_key=True)
