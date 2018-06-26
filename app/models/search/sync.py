@@ -1,0 +1,90 @@
+"""
+Sync full-text search indices with the database
+
+- Mark events for later syncing
+- Sync events
+- Rebuild the indices
+"""
+
+import logging
+
+from app.models import db
+from app.models.event import Event
+from app.models.search.event import SearchableEvent
+from app.views.elastic_search import client
+from app.views.redis_store import redis_store
+
+logger = logging.getLogger(__name__)
+
+INDEX_CLASSES = [SearchableEvent]
+
+REDIS_EVENT_INDEX = 'event_index'
+REDIS_EVENT_DELETE = 'event_delete'
+
+
+def sync_event_from_database(id, session=db.session):
+    """Fetches the event with id `id` from the database and creates or updates the
+    document in the Elasticsearch index
+
+    """
+    searchable = SearchableEvent()
+    db_event = session.query(Event).filter(Event.id == id).one()
+
+    if db_event:
+        searchable.from_event(db_event)
+        searchable.save()
+
+
+def rebuild_indices(client=client, session=db.session):
+    "Rebuilds all search indices, deletes all data"
+    redis_store.delete(REDIS_EVENT_INDEX)
+    redis_store.delete(REDIS_EVENT_DELETE)
+
+    for index_class in INDEX_CLASSES:
+        if client.indices.exists(index_class.meta.index):
+            logger.info('Deleting index %s', index_class.meta.index)
+            client.indices.delete(index_class.meta.index)
+
+        index_class.init()
+
+    for event in session.query(Event):
+        logger.info('Indexing event %i %s', event.id, event.name)
+        sync_event_from_database(event.id, session=session)
+
+
+def delete_event_from_index(id):
+    "Deletes an event from the Elasticsearch index"
+    searchable = SearchableEvent()
+    searchable.id = id
+    searchable.delete()
+
+
+def mark_event(purpose, id):
+    """Marks an event id in redis for later syncing.
+
+    Purpose can be taken from this namespace (Look for global REDIS_X
+    variables)
+
+    """
+    redis_store.sadd(purpose, id)
+
+
+def _events_marked(purpose):
+    "Retrieve all event ids from redis marked as `purpose`"
+    marked_event_id = redis_store.spop(purpose)
+    while marked_event_id:
+        yield marked_event_id
+        marked_event_id = redis_store.spop(purpose)
+
+
+def sync():
+    "Syncs all events that have been marked"
+    logger.info('Syncing marked events')
+
+    for id in list(_events_marked(REDIS_EVENT_INDEX)):
+        logger.info('Syncing event %i', id)
+        sync_event_from_database(id)
+
+    for id in list(_events_marked(REDIS_EVENT_DELETE)):
+        logger.info('Deleting event %i', id)
+        delete_event_from_index(id)
