@@ -8,8 +8,6 @@ Sync full-text search indices with the database
 
 import logging
 
-from app.models import db
-from app.models.event import Event
 from app.models.search.event import SearchableEvent
 from app.views.elastic_search import client
 from app.views.redis_store import redis_store
@@ -22,20 +20,19 @@ REDIS_EVENT_INDEX = 'event_index'
 REDIS_EVENT_DELETE = 'event_delete'
 
 
-def sync_event_from_database(id, session=db.session):
+def sync_event_from_database(db_event):
     """Fetches the event with id `id` from the database and creates or updates the
     document in the Elasticsearch index
 
     """
+    logger.info('Indexing event %i %s', db_event.id, db_event.name)
+
     searchable = SearchableEvent()
-    db_event = session.query(Event).filter(Event.id == id).one()
-
-    if db_event:
-        searchable.from_event(db_event)
-        searchable.save()
+    searchable.from_event(db_event)
+    searchable.save()
 
 
-def rebuild_indices(client=client, session=db.session):
+def rebuild_indices(client=client):
     "Rebuilds all search indices, deletes all data"
     redis_store.delete(REDIS_EVENT_INDEX)
     redis_store.delete(REDIS_EVENT_DELETE)
@@ -46,10 +43,6 @@ def rebuild_indices(client=client, session=db.session):
             client.indices.delete(index_class.meta.index)
 
         index_class.init()
-
-    for event in session.query(Event):
-        logger.info('Indexing event %i %s', event.id, event.name)
-        sync_event_from_database(event.id, session=session)
 
 
 def delete_event_from_index(id):

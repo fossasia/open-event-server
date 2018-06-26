@@ -104,6 +104,9 @@ class EventList(ResourceList):
             query_ = self.session.query(Event).filter(
                 getattr(Event, 'discount_code_id') == view_kwargs['discount_code_id'])
 
+        # if current_app.config['ENABLE_ELASTICSEARCH'] and request.args['filter']:
+        #     print(request.args['filter'])
+
         return query_
 
     def before_post(self, args, kwargs, data=None):
