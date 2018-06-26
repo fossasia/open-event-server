@@ -21,7 +21,7 @@ session = get_session_from_config()
 @celery.task(name='rebuild.events.elasticsearch')
 def cron_rebuild_events_elasticsearch():
     "Re-inserts all eligible events into elasticsearch, deletes existing events"
-    elastic.rebuild_indices(client=es_store, session=session)
+    elastic.rebuild_indices(client=es_store)
 
     for event in session.query(Event):
         elastic.sync_event_from_database(event)
