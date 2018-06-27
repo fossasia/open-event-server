@@ -2,7 +2,7 @@ from flask_jwt import current_identity
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query, get_count
 from app.api.helpers.exceptions import (
     ConflictException,
     ForbiddenException,
@@ -47,13 +47,12 @@ class AttendeeListPost(ResourceList):
                 {'pointer': '/data/relationships/ticket'},
                 "Ticket belongs to a different Event"
             )
-
-        if db.session.query(TicketHolder.id).filter_by(
-                ticket_id=int(data['ticket']), event_id=int(data['event']), deleted_at=None
-                ).scalar() is not None:
+        # Check if the ticket is already sold out or not.
+        if get_count(db.session.query(TicketHolder.id).
+                     filter_by(ticket_id=int(data['ticket']), deleted_at=None)) >= ticket.quantity:
             raise ConflictException(
                 {'pointer': '/data/attributes/ticket_id'},
-                "Attendee with this ticket already exists for the same event"
+                "Ticket already sold out"
             )
 
     decorators = (jwt_required,)
