@@ -17,13 +17,14 @@ class SpeakersCall(SoftDeletionModel):
     event = db.relationship("Event", backref=backref("speakers_call", uselist=False))
 
     def __init__(self, announcement=None, starts_at=None, ends_at=None, hash=None, privacy='public',
-                 event_id=None):
+                 event_id=None, deleted_at=None):
         self.announcement = announcement
         self.starts_at = starts_at
         self.ends_at = ends_at
         self.hash = hash
         self.privacy = privacy
         self.event_id = event_id
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<speakers_call %r>' % self.announcement

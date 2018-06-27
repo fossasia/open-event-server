@@ -42,7 +42,8 @@ class Tax(SoftDeletionModel):
                  invoice_footer=None,
                  is_tax_included_in_price=None,
                  is_invoice_sent=None,
-                 event_id=None):
+                 event_id=None,
+                 deleted_at=None):
         self.country = country
         self.name = name
         self.rate = rate
@@ -57,6 +58,7 @@ class Tax(SoftDeletionModel):
         self.is_tax_included_in_price = is_tax_included_in_price
         self.is_invoice_sent = is_invoice_sent
         self.event_id = event_id
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<Tax %r>' % self.name
