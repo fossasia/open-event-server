@@ -2,13 +2,14 @@ from datetime import datetime
 
 from marshmallow import validates_schema
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
 
 
-class SessionTypeSchema(Schema):
+class SessionTypeSchema(SoftDeletionSchema):
     """
     Api Schema for session type model
     """

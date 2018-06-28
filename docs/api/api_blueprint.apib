@@ -2622,6 +2622,7 @@ These endpoints help you to create the basic event structure. To add other parts
 | `identifier`  | - | string | - |
 | `external-event-url`  | - | string | - |
 | `has-organizer-info`  | - | boolean(default: `false`) | - |
+| `average-rating`  | Average rating of event | float | - |
 
 ## Events Collection [/v1/events{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -2832,6 +2833,7 @@ Get a list of events.
                         "privacy": "public",
                         "code-of-conduct": "example",
                         "state": "draft",
+                        "average-rating": null,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "example",
@@ -2902,6 +2904,7 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "is-sessions-speakers-enabled": "true",
                     "privacy": "public",
                     "state": "draft",
+                    "average-rating": null,
                     "ticket-url": "http://example.com",
                     "code-of-conduct": "example",
                     "is-ticketing-enabled": "true",
@@ -3118,6 +3121,7 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "privacy": "public",
                     "code-of-conduct": "example",
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "example",
@@ -3363,6 +3367,7 @@ Get a single event.
                     "privacy": "public",
                     "code-of-conduct": "example",
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "example",
@@ -3437,6 +3442,7 @@ All other fields are optional. Add attributes you want to modify.
                     "is-sessions-speakers-enabled": "false",
                     "privacy": "private",
                     "state": "published",
+                    "average-rating": null,
                     "ticket-url": "http://example1.com",
                     "code-of-conduct": "example1",
                     "is-ticketing-enabled": "false",
@@ -3653,6 +3659,7 @@ All other fields are optional. Add attributes you want to modify.
                     "privacy": "private",
                     "code-of-conduct": "example1",
                     "state": "published",
+                    "average-rating": null,
                     "latitude": 12.23456789,
                     "starts-at": "2016-12-14T18:29:59.123456+00:00",
                     "searchable-location-name": "example1",
@@ -3910,6 +3917,7 @@ Get a list of events.
                         "privacy": "public",
                         "has-organizer-info": false,
                         "state": "draft",
+                        "average-rating": null,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "Draft",
@@ -4141,6 +4149,7 @@ Get a list of events.
                         "privacy": "public",
                         "has-organizer-info": false,
                         "state": "draft",
+                        "average-rating": null,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "Draft",
@@ -4365,6 +4374,7 @@ Get a list of events.
                         "privacy": "public",
                         "has-organizer-info": false,
                         "state": "draft",
+                        "average-rating": null,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "Draft",
@@ -4596,6 +4606,7 @@ Get a list of events.
                         "privacy": "public",
                         "has-organizer-info": false,
                         "state": "draft",
+                        "average-rating": null,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "Draft",
@@ -4821,6 +4832,7 @@ Get a list of events.
                         "privacy": "public",
                         "has-organizer-info": false,
                         "state": "draft",
+                        "average-rating": null,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
                         "searchable-location-name": "Draft",
@@ -5043,6 +5055,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -5265,6 +5278,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -5487,6 +5501,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -5709,6 +5724,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -5931,6 +5947,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -6153,6 +6170,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -6375,6 +6393,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -6597,6 +6616,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -6819,6 +6839,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -7041,6 +7062,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -7263,6 +7285,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -7485,6 +7508,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -7707,6 +7731,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -7929,6 +7954,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -8151,6 +8177,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -8373,6 +8400,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -8595,6 +8623,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -8817,6 +8846,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -9039,6 +9069,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -9287,7 +9318,8 @@ Get a list of events.
               "is-sessions-speakers-enabled": false,
               "privacy": "public",
               "has-organizer-info": false,
-              "state": "Draft",
+              "state": "draft",
+              "average-rating": null,
               "latitude": null,
               "starts-at": "2002-05-30T04:00:10+00:00",
               "searchable-location-name": null,
@@ -9537,6 +9569,7 @@ Get a list of events.
               "privacy": "public",
               "has-organizer-info": false,
               "state": "Draft",
+              "average-rating": null,
               "latitude": null,
               "starts-at": "2002-05-30T04:00:10+00:00",
               "searchable-location-name": null,
@@ -9646,6 +9679,7 @@ Create a new Event Copyright.
               "licence": "Licence text",
               "licence-url": "http://licence-url.com",
               "year": 2007,
+              "deleted-at": null,
               "logo-url": "http://logo-url.com"
             },
             "type": "event-copyright",
@@ -9694,6 +9728,7 @@ Create a new Event Copyright.
               "licence": "Licence text",
               "licence-url": "http://licence-url.com",
               "year": 2007,
+              "deleted-at": null,
               "logo-url": "http://logo-url.com"
             },
             "type": "event-copyright",
@@ -9757,6 +9792,7 @@ Update a single event copyright by `id`.
               "licence": "Licence text",
               "licence-url": "http://licence-url.com",
               "year": 2007,
+              "deleted-at": null,
               "logo-url": "http://logo-url.com"
             },
             "type": "event-copyright",
@@ -9832,6 +9868,7 @@ Delete a single event copyright.
                     "holder-url": "http://holder-url.com",
                     "licence": "Licence text",
                     "year": 2007,
+                    "deleted-at": null,
                     "licence-url": "http://licence-url.com",
                     "holder": "Name of Holder"
                 },
@@ -10395,6 +10432,7 @@ Create a new microlocation using an event_id.
               "latitude": "45.00",
               "longitude": "45.00",
               "floor": "2",
+              "deleted-at": null,
               "room": "room1"
             },
             "type": "microlocation",
@@ -10451,6 +10489,7 @@ Get a single microlocation.
               "latitude": "45.00",
               "longitude": "45.00",
               "floor": "2",
+              "deleted-at": null,
               "room": "room1"
             },
             "type": "microlocation",
@@ -10518,6 +10557,7 @@ Update a single microlocation by `id`.
               "latitude": "46.00",
               "longitude": "46.00",
               "floor": "21",
+              "deleted-at": null,
               "room": "room11"
             },
             "type": "microlocation",
@@ -10604,6 +10644,7 @@ Get a single microlocation.
                         "room": "room1",
                         "name": "microlocation-name",
                         "longitude": 45,
+                        "deleted-at": null,
                         "floor": 2
                     },
                     "type": "microlocation",
@@ -10661,6 +10702,7 @@ Get a single microlocation.
                     "room": "room1",
                     "name": "microlocation-name",
                     "longitude": 45,
+                    "deleted-at": null,
                     "floor": 2
                 },
                 "type": "microlocation",
@@ -11594,7 +11636,8 @@ Create a new session type using an event_id.
             },
             "attributes": {
               "name": "Workshop",
-              "length": "00:30"
+              "length": "00:30",
+              "deleted-at": null
             },
             "type": "session-type",
             "id": "1",
@@ -11646,6 +11689,7 @@ Get a single session type.
             },
             "attributes": {
               "name": "Workshop",
+              "deleted-at": null,
               "length": "00:30"
             },
             "type": "session-type",
@@ -11707,6 +11751,7 @@ Update a single session type by `id`.
             },
             "attributes": {
               "name": "Workshop 2",
+              "deleted-at": null,
               "length": "01:30"
             },
             "type": "session-type",
@@ -11791,6 +11836,7 @@ Delete a single session type.
                     },
                     "attributes": {
                         "length": "00:30",
+                        "deleted-at": null,
                         "name": "Workshop"
                     },
                     "type": "session-type",
@@ -11846,6 +11892,7 @@ Get a single session type.
                 },
                 "attributes": {
                     "length": "00:30",
+                    "deleted-at": null,
                     "name": "Workshop"
                 },
                 "type": "session-type",
@@ -11990,6 +12037,7 @@ Create a Speaker profile
                     "gender": "Male",
                     "position": null,
                     "organisation": null,
+                    "deleted-at": null,
                     "sponsorship-required": "",
                     "heard-from": null
                 },
@@ -12064,6 +12112,7 @@ Get a single Speaker profile
                     "facebook": null,
                     "gender": "Male",
                     "position": null,
+                    "deleted-at": null,
                     "organisation": null,
                     "sponsorship-required": "",
                     "heard-from": null
@@ -12149,6 +12198,7 @@ Update a single speaker by `id`.
                     "github": null,
                     "facebook": null,
                     "gender": "Male",
+                    "deleted-at": null,
                     "position": null,
                     "organisation": null,
                     "sponsorship-required": "",
@@ -12255,6 +12305,7 @@ Delete a single speaker by id.
                         "facebook": null,
                         "gender": "Male",
                         "position": null,
+                        "deleted-at": null,
                         "organisation": null,
                         "sponsorship-required": "",
                         "heard-from": null
@@ -12340,6 +12391,7 @@ Delete a single speaker by id.
                         "facebook": null,
                         "gender": "Male",
                         "position": null,
+                        "deleted-at": null,
                         "organisation": null,
                         "sponsorship-required": "",
                         "heard-from": null
@@ -12423,6 +12475,7 @@ Delete a single speaker by id.
                         "facebook": null,
                         "gender": "Male",
                         "position": null,
+                        "deleted-at": null,
                         "organisation": null,
                         "sponsorship-required": "",
                         "heard-from": null
@@ -12502,6 +12555,7 @@ Create a new social link using event_id.
             },
             "attributes": {
               "link": "http://facebook.com/facebook",
+              "deleted-at": null,
               "name": "Facebook Url"
             },
             "type": "social-link",
@@ -12556,6 +12610,7 @@ Get a list of Social Links.
               },
               "attributes": {
                 "link": "http://facebook.com/facebook",
+                "deleted-at": null,
                 "name": "Facebook Url"
               },
               "type": "social-link",
@@ -12601,6 +12656,7 @@ Get a list of Social Links.
             },
             "attributes": {
               "link": "http://facebook.com/facebook",
+              "deleted-at": null,
               "name": "Facebook Url"
             },
             "type": "social-link",
@@ -12656,6 +12712,7 @@ Update a single social link by `id`.
             },
             "attributes": {
               "link": "http://facebook.com/facebook",
+              "deleted-at": null,
               "name": "Facebook Page Url"
             },
             "type": "social-link",
@@ -12762,6 +12819,7 @@ Create a new speakers call using an event_id.
               "announcement": "Speaker Call Announcement",
               "starts-at": "2017-06-01T01:24:47.500127+00:00",
               "ends-at": "2017-06-20T01:24:47.500127+00:00",
+              "deleted-at": null,
               "hash": "hash",
               "privacy": "public"
             },
@@ -12812,6 +12870,7 @@ Get a single speakers call.
               "starts-at": "2017-06-01T01:24:47.500127+00:00",
               "ends-at": "2017-06-20T01:24:47.500127+00:00",
               "hash": "hash",
+              "deleted-at": null,
               "privacy": "public"
             },
             "type": "speakers-call",
@@ -12873,6 +12932,7 @@ Update a single speakers call by `id`.
                         "ends-at": "2017-06-20T01:24:47.500127+00:00",
                         "hash": "hash",
                         "starts-at": "2017-06-01T01:24:47.500127+00:00",
+                        "deleted-at": null,
                         "privacy": "public"
                     },
                     "type": "speakers-call",
@@ -12944,6 +13004,7 @@ Delete a single speakers call.
                     "ends-at": "2017-06-20T01:24:47.500127+00:00",
                     "hash": "hash",
                     "starts-at": "2017-06-01T01:24:47.500127+00:00",
+                    "deleted-at": null,
                     "privacy": "public"
                 },
                 "type": "speakers-call",
@@ -13025,6 +13086,7 @@ Create a new sponsor using an event_id.
               "level": "1",
               "url": "http://example.com",
               "logo-url": "http://example.com/example.png",
+              "deleted-at": null,
               "type": "Gold",
               "name": "Fossasia"
             },
@@ -13082,6 +13144,7 @@ Get a list of Sponsors.
                 "level": "1",
                 "url": "http://example.com",
                 "type": "Gold",
+                "deleted-at": null,
                 "logo-url": "http://example.com/example.png",
                 "name": "Fossasia"
               },
@@ -13133,6 +13196,7 @@ Get a single sponsor.
               "level": "1",
               "url": "http://example.com",
               "logo-url": "http://example.com/example.png",
+              "deleted-at": null,
               "type": "Gold",
               "name": "Fossasia"
             },
@@ -13196,6 +13260,7 @@ Update a single sponsor by `id`.
               "level": "2",
               "url": "http://example.com",
               "logo-url": "http://example.com/example1.png",
+              "deleted-at": null,
               "type": "Silver",
               "name": "New Open Event Sponsor"
             },
@@ -13302,6 +13367,7 @@ Get a list of Taxes
                 "invoice-footer": "example",
                 "rate": 1.23456789,
                 "is-tax-included-in-price": false,
+                "deleted-at": null,
                 "registered-company": "fossasia",
                 "tax-id": "1",
                 "is-invoice-sent": false
@@ -13386,6 +13452,7 @@ Create a new tax using an event_id.
                "registered-company": "fossasia",
                "address": "example",
                "rate": "1.23456789",
+               "deleted-at": null,
                "should-send-invoice": false,
                "is-invoice-sent": false
             },
@@ -13443,6 +13510,7 @@ Get a single tax.
               "registered-company": "fossasia",
               "address": "example",
               "rate": "1.23456789",
+              "deleted-at": null,
               "should-send-invoice": false,
               "is-invoice-sent": false
             },
@@ -13517,6 +13585,7 @@ Update a single tax by `id`.
               "state": "example1",
               "tax-id": "123456799",
               "name": "GST",
+              "deleted-at": null,
               "registered-company": "open event",
               "address": "example1",
               "rate": "2.3456789",
@@ -13596,6 +13665,7 @@ Get tax details for an event.
                     "address": "example",
                     "registered-company": "fossasia",
                     "is-tax-included-in-price": false,
+                    "deleted-at": null,
                     "country": "IN",
                     "state": "example"
                 },
@@ -13723,6 +13793,7 @@ Create a new ticket using an event_id.
                     "position": 1,
                     "quantity": 100,
                     "is-hidden": false,
+                    "deleted-at": null,
                     "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
                     "min-order": 1,
                     "sales-starts-at": "2017-06-01T01:24:47.500127+00:00"
@@ -13792,6 +13863,7 @@ Get a single ticket.
                     "position": 1,
                     "quantity": 100,
                     "is-hidden": false,
+                    "deleted-at": null,
                     "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
                     "min-order": 1,
                     "sales-starts-at": "2017-06-01T01:24:47.500127+00:00"
@@ -13881,6 +13953,7 @@ Update a single ticket by `id`.
                     "position": 1,
                     "quantity": 100,
                     "is-hidden": false,
+                    "deleted-at": null,
                     "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
                     "min-order": 5,
                     "sales-starts-at": "2017-06-01T01:24:47.500127+00:00"
@@ -13981,6 +14054,7 @@ Delete a single ticket.
                         "position": 1,
                         "quantity": 100,
                         "is-hidden": false,
+                        "deleted-at": null,
                         "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
                         "min-order": 1,
                         "sales-starts-at": "2017-06-01T01:24:47.500127+00:00"
@@ -14060,6 +14134,7 @@ Delete a single ticket.
                         "position": 1,
                         "quantity": 100,
                         "is-hidden": false,
+                        "deleted-at": null,
                         "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
                         "min-order": 1,
                         "sales-starts-at": "2017-06-01T01:24:47.500127+00:00"
@@ -14139,6 +14214,7 @@ Delete a single ticket.
                         "position": 1,
                         "quantity": 100,
                         "is-hidden": false,
+                        "deleted-at": null,
                         "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
                         "min-order": 1,
                         "sales-starts-at": "2017-06-01T01:24:47.500127+00:00"
@@ -14205,6 +14281,7 @@ Delete a single ticket.
                 "position": 1,
                 "quantity": 100,
                 "is-hidden": false,
+                "deleted-at": null,
                 "sales-ends-at": "2018-06-30T00:24:47.500127+00:00",
                 "min-order": 1,
                 "sales-starts-at": "2017-06-01T01:24:47.500127+00:00"
@@ -14664,6 +14741,7 @@ Create a new attendee.
               "address": null,
               "pdf-url": "http://example.com",
               "country": null,
+              "deleted-at": null,
               "email": null
             },
             "type": "attendee",
@@ -14753,6 +14831,7 @@ Get a list of attendees of an order.
                 "gender": null,
                 "ticket-id": "1",
                 "country": null,
+                "deleted-at": null,
                 "attendee-notes": null,
                 "pdf-url": "http://ipiyush.com",
                 "work-address": null,
@@ -14830,6 +14909,7 @@ Get a single attendee.
                     "country": "IN",
                     "address": "address",
                     "blog": null,
+                    "deleted-at": null,
                     "work-address": null,
                     "phone": null,
                     "ticket-id": "1",
@@ -14906,6 +14986,7 @@ Update a single attendee by `id`.
                     "address": "address",
                     "pdf-url": "http://example.com",
                     "country": "IN",
+                    "deleted-at": null,
                     "email": "johndoe@example.com"
                 },
                 "type": "attendee",
@@ -15226,6 +15307,7 @@ Create a new track using an event_id.
                   "name" : "Main Track",
                   "description": "description",
                   "color": "#a04b4b",
+                  "deleted-at": null,
                   "font-color":"#ffffff"
                 },
                 "type": "track",
@@ -15280,6 +15362,7 @@ Get a single track.
                   "name" : "Main Track",
                   "description": "description",
                   "color": "#a04b4b",
+                  "deleted-at": null,
                   "font-color":"#ffffff"
                 },
                 "type": "track",
@@ -15345,6 +15428,7 @@ Update a single track by `id`.
                     "color": "#a04b4b",
                     "description": "description",
                     "name": "Main Track",
+                    "deleted-at": null,
                     "font-color": "#ffffff"
                 },
                 "type": "track",
@@ -15430,6 +15514,7 @@ Get a single track.
                         "color": "#a04b4b",
                         "description": "description",
                         "name": "Main Track",
+                        "deleted-at": null,
                         "font-color": "#ffffff"
                     },
                     "type": "track",
@@ -15486,6 +15571,7 @@ Get a single track.
                     "color": "#a04b4b",
                     "description": "description",
                     "name": "Main Track",
+                    "deleted-at": null,
                     "font-color": "#ffffff"
                 },
                 "type": "track",
@@ -15554,6 +15640,7 @@ Get a list of Notifications.
                         "received-at": "2017-06-23T04:40:37.239724+00:00",
                         "is-read": false,
                         "title": "example",
+                        "deleted-at": null,
                         "action": "example"
                     },
                     "type": "notification",
@@ -15611,6 +15698,7 @@ Get a list of Notifications.
                         "received-at": "2017-06-23T04:40:37.239724+00:00",
                         "is-read": false,
                         "title": "example",
+                        "deleted-at": null,
                         "action": "example"
                     },
                     "type": "notification",
@@ -15660,6 +15748,7 @@ Get a single notification.
                     "message": "example",
                     "received-at": "2017-06-23T04:40:37.239724+00:00",
                     "is-read": false,
+                    "deleted-at": null,
                     "title": "example"
                 },
                 "type": "notification",
@@ -15719,6 +15808,7 @@ Update a single notification with `id`.
                     "message": "example1",
                     "received-at": "2017-06-23T04:40:37.239724+00:00",
                     "is-read": true,
+                    "deleted-at": null,
                     "title": "example1"
                 },
                 "type": "notification",
@@ -15816,6 +15906,7 @@ Get a list of Notifications.
                         "new-paper": false,
                         "session-accept-reject": false,
                         "session-schedule": true,
+                        "deleted-at": null,
                         "after-ticket-purchase": true,
                         "event-id": 1
                     },
@@ -15881,6 +15972,7 @@ Get a list of Notifications.
                         "new-paper": false,
                         "session-accept-reject": false,
                         "session-schedule": true,
+                        "deleted-at": null,
                         "after-ticket-purchase": true,
                         "event-id": 1
                     },
@@ -15938,6 +16030,7 @@ Get a single email notification.
                     "new-paper": false,
                     "session-accept-reject": false,
                     "session-schedule": true,
+                    "deleted-at": null,
                     "after-ticket-purchase": true,
                     "event-id": 1
                 },
@@ -16015,6 +16108,7 @@ Update a single email notification with `id`.
                     "new-paper": false,
                     "session-accept-reject": false,
                     "session-schedule": true,
+                    "deleted-at": null,
                     "after-ticket-purchase": true,
                     "event-id": 1
                 },
@@ -16125,6 +16219,7 @@ Get a list of Discount Codes.
                         "max-quantity": 100,
                         "is-active": false,
                         "used-for": "event",
+                        "deleted-at": null,
                         "valid-till": "2017-06-24T18:30:00+00:00",
                         "type": "amount",
                         "discount-url": "https://my-discount-url.com"
@@ -16161,6 +16256,7 @@ Get a list of Discount Codes.
                         "max-quantity": 100,
                         "is-active": false,
                         "used-for": "ticket",
+                        "deleted-at": null,
                         "valid-till": "2017-06-24T18:30:00+00:00",
                         "type": "amount",
                         "discount-url": "https://my-discount-url.com"
@@ -16243,6 +16339,7 @@ Create a new Discount Code for event. (Only Admin)
                     "max-quantity": 100,
                     "is-active": false,
                     "used-for": "event",
+                    "deleted-at": null,
                     "valid-till": "2017-06-24T18:30:00+00:00",
                     "type": "amount",
                     "discount-url": "https://my-discount-url.com"
@@ -16308,6 +16405,7 @@ Get a list of Discount Codes.
                       "max-quantity": 100,
                       "is-active": false,
                       "used-for": "ticket",
+                      "deleted-at": null,
                       "valid-till": "2017-06-24T18:30:00+00:00",
                       "type": "amount",
                       "discount-url": "https://my-discount-url.com"
@@ -16366,6 +16464,7 @@ Get a single discount code.
                     "max-quantity": 100,
                     "is-active": false,
                     "used-for": "event",
+                    "deleted-at": null,
                     "valid-till": "2017-06-24T18:30:00+00:00",
                     "type": "amount",
                     "discount-url": "https://my-discount-url.com"
@@ -16441,6 +16540,7 @@ Update a single discount code with `id` (Check permission to edit).
               "value": 50,
               "max-quantity": 100,
               "is-active": false,
+              "deleted-at": null,
               "used-for": "event",
               "valid-till": "2017-06-24T18:30:00+00:00",
               "type": "percent",
@@ -16529,6 +16629,7 @@ Get a list of Discount Codes.
                         "max-quantity": 100,
                         "is-active": false,
                         "used-for": "event",
+                        "deleted-at": null,
                         "valid-till": "2017-06-24T18:30:00+00:00",
                         "type": "amount",
                         "discount-url": "https://my-discount-url.com"
@@ -16587,6 +16688,7 @@ Get a single discount code.
                     "max-quantity": 100,
                     "is-active": false,
                     "used-for": "event",
+                    "deleted-at": null,
                     "valid-till": "2017-06-24T18:30:00+00:00",
                     "type": "amount",
                     "discount-url": "https://my-discount-url.com"
@@ -16644,6 +16746,7 @@ Get a single discount code. (Requires admin access)
                     "max-quantity": 100,
                     "is-active": false,
                     "used-for": "event",
+                    "deleted-at": null,
                     "valid-till": "2017-06-24T18:30:00+00:00",
                     "type": "amount",
                     "discount-url": "https://my-discount-url.com"
@@ -16759,6 +16862,7 @@ Create a new Access Code with `event_id` and `user_id`.
                     "min-quantity": 0,
                     "tickets-number": 404,
                     "max-quantity": 100,
+                    "deleted-at": null,
                     "is-active": false,
                     "valid-till": "2017-06-24T18:30:00+00:00"
                 },
@@ -16824,6 +16928,7 @@ Get a single access code.
                     "tickets-number": 404,
                     "max-quantity": 100,
                     "is-active": false,
+                    "deleted-at": null,
                     "valid-till": "2017-06-24T18:30:00+00:00"
                 },
                 "type": "access-code",
@@ -16904,6 +17009,7 @@ Update a single access code with `id`.
                     "tickets-number": 404,
                     "max-quantity": 100,
                     "is-active": true,
+                    "deleted-at": null,
                     "valid-till": "2017-06-24T18:30:00+00:00"
                 },
                 "type": "access-code",
@@ -16999,6 +17105,7 @@ Get a list of Access Codes.
                         "tickets-number": 404,
                         "max-quantity": 100,
                         "is-active": true,
+                        "deleted-at": null,
                         "valid-till": "2017-06-24T18:30:00+00:00"
                     },
                     "type": "access-code",
@@ -17074,6 +17181,7 @@ Get a list of Access Codes.
                         "tickets-number": 404,
                         "max-quantity": 100,
                         "is-active": true,
+                        "deleted-at": null,
                         "valid-till": "2017-06-24T18:30:00+00:00"
                     },
                     "type": "access-code",
@@ -17148,6 +17256,7 @@ Get a list of Access Codes.
                         "tickets-number": 404,
                         "max-quantity": 100,
                         "is-active": true,
+                        "deleted-at": null,
                         "valid-till": "2017-06-24T18:30:00+00:00"
                     },
                     "type": "access-code",
@@ -17953,6 +18062,336 @@ Get a single role.
         }
 
 
+# Group Services
+
+**ADMIN**
+
+To get or modify data of this data layer, you will need admin access. You can get the data without admin access as well.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the service | string | **yes** |
+
+## Services Collection [/v1/services{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List Services [GET]
+Get a list of Services.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "attributes": {
+                        "name": "track"
+                    },
+                    "type": "service",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/services/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/services"
+            }
+        }
+
+
+## Services Details [/v1/services/{service_id}]
++ Parameters
+    + service_id: 1 (integer) - ID of the service in the form of an integer
+
+### Get Service Details [GET]
+Get a single role.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "name": "track"
+            },
+            "type": "service",
+            "id": "1",
+            "links": {
+              "self": "/v1/services/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/services/1"
+          }
+        }
+
+
+### Update Service [PATCH]
+Update a single service by `id` (only admin).
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "name": "track"
+                },
+                "id": "1",
+                "type": "service"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+            {
+                "data": {
+                    "attributes": {
+                        "name": "track"
+                    },
+                    "type": "service",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/services/1"
+                    }
+                },
+                "jsonapi": {
+                    "version": "1.0"
+                },
+                "links": {
+                    "self": "/v1/services/1"
+                }
+            }
+
+
+# Group Event Role Permission
+
+**ADMIN**
+
+To get or modify data of this data layer, you will need admin access. You can get the data without admin access as well.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `can-create`  | Permission of role to create a service | boolean | **yes** |
+| `can-read`  | Permission of role to read a service | boolean | **yes** |
+| `can-update`  | Permission of role to update a service | boolean | **yes** |
+| `can-delete`  | Permission of role to delete a service | boolean | **yes** |
+
+## Event Role Permission Collection [/v1/event-role-permissions{?page%5bsize%5d,page%5bnumber%5d,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response..
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List Event Role Permissions [GET]
+Get a list of Event Role Permissions.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "attributes": {
+                        "can-delete": true,
+                        "can-read": true,
+                        "can-create": true,
+                        "can-update": true
+                    },
+                    "relationships": {
+                        "role": {
+                            "links": {
+                                "related": "/v1/roles/1",
+                                "self": "/v1/event-role-permissions/1/relationships/role"
+                            }
+                        },
+                        "service": {
+                            "links": {
+                                "related": "/v1/services/1",
+                                "self": "/v1/event-role-permissions/1/relationships/service"
+                            }
+                        }
+                    },
+                    "type": "event-role-permissions",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/event-role-permissions/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/event-role-permissions"
+            }
+        }
+
+
+## Event Role Permission Details [/v1/event-role-permissions/{event_role_permissions_id}]
++ Parameters
+    + event_role_permissions_id: 1 (integer) - ID of the events role permission in the form of an integer
+
+### Get Event Role Permission Details [GET]
+Get a single event role permission.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+              "can-delete": true,
+              "can-create": true,
+              "can-update": true,
+              "can-read": true
+            },
+            "relationships": {
+                "role": {
+                    "links": {
+                        "related": "/v1/roles/1",
+                        "self": "/v1/event-role-permissions/1/relationships/role"
+                    }
+                },
+                "service": {
+                    "links": {
+                        "related": "/v1/services/1",
+                        "self": "/v1/event-role-permissions/1/relationships/service"
+                    }
+                }
+            },
+            "type": "event-role-permissions",
+            "id": "1",
+            "links": {
+              "self": "/v1/event-role-permissions/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/event-role-permissions/1"
+          }
+        }
+
+
+### Update Event Role Permission [PATCH]
+Update a single event role permission by `id` (only admin).
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "can-delete": false,
+                  "can-create": true,
+                  "can-update": false,
+                  "can-read": false
+                },
+                "id": "1",
+                "type": "event-role-permissions"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+            {
+                "data": {
+                    "attributes": {
+                        "can-delete": false,
+                        "can-create": true,
+                        "can-update": false,
+                        "can-read": false
+                    },
+                    "relationships": {
+                        "role": {
+                            "links": {
+                                "related": "/v1/roles/1",
+                                "self": "/v1/event-role-permissions/1/relationships/role"
+                            }
+                        },
+                        "service": {
+                            "links": {
+                                "related": "/v1/services/1",
+                                "self": "/v1/event-role-permissions/1/relationships/service"
+                            }
+                        }
+                    },
+                    "type": "event-role-permissions",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/event-role-permissions/1"
+                    }
+                },
+                "jsonapi": {
+                    "version": "1.0"
+                },
+                "links": {
+                    "self": "/v1/event-role-permissions/1"
+                }
+            }
+
+
 # Group Activity
 
 *ADMIN**
@@ -18445,6 +18884,7 @@ Create a new Custom Form with event_id.
                     "field-identifier": "abc123",
                     "is-included": false,
                     "is-fixed": false,
+                    "deleted-at": null,
                     "type": "text"
                 },
                 "type": "custom-form",
@@ -18495,6 +18935,7 @@ Get a single custom form.
                     "field-identifier": "abc123",
                     "is-fixed": false,
                     "is-included": false,
+                    "deleted-at": null,
                     "type": "text"
                 },
                 "type": "custom-form",
@@ -18558,6 +18999,7 @@ Update a single custom form with `id`.
                     "form": "form",
                     "field-identifier": "abc123",
                     "is-fixed": false,
+                    "deleted-at": null,
                     "is-included": false,
                     "type": "text"
                 },
@@ -18641,6 +19083,7 @@ Get a list of Custom Forms for an event.
                         "field-identifier": "abc123",
                         "is-included": false,
                         "is-fixed": false,
+                        "deleted-at": null,
                         "type": "text"
                     },
                     "type": "custom-form",
@@ -18726,6 +19169,7 @@ Create a new Question-Answer pair (FAQ) with event_id.
                 },
                 "attributes": {
                     "question": "Sample Question",
+                    "deleted-at": null,
                     "answer": "Sample Answer"
                 },
                 "type": "faq",
@@ -18778,7 +19222,8 @@ Get a single FAQ.
                 },
                 "attributes": {
                     "question": "Sample Question",
-                    "answer": "Sample Answer"
+                    "answer": "Sample Answer",
+                    "deleted-at": null
                 },
                 "type": "faq",
                 "id": 1,
@@ -18840,6 +19285,7 @@ Update a single FAQ with `id`.
                 },
                 "attributes": {
                     "question": "Sample Question",
+                    "deleted-at": null,
                     "answer": "Sample Answer Changed"
                 },
                 "type": "faq",
@@ -18924,6 +19370,7 @@ Get a list of FAQs for an event.
                     },
                     "attributes": {
                         "question": "Sample Question",
+                        "deleted-at": null,
                         "answer": "Sample Answer"
                     },
                     "type": "faq",
@@ -19347,6 +19794,7 @@ Create a new feedback with event_id.
                 },
                 "attributes": {
                     "rating": "4",
+                    "deleted-at": null,
                     "comment": "Awesome event"
                 },
                 "type": "feedback",
@@ -19461,6 +19909,7 @@ Update a single feedback with `id`.
                 },
                 "attributes": {
                     "rating": "5",
+                    "deleted-at": null,
                     "comment": "Awesome event"
                 },
                 "type": "feedback",
@@ -19545,6 +19994,7 @@ Get a list of feedbacks for an event.
                     },
                     "attributes": {
                         "rating": "4",
+                        "deleted-at": null,
                         "comment": "Awesome event"
                     },
                     "type": "feedback",
@@ -19618,6 +20068,7 @@ To create or modify any data of this data layer, you will need admin access. How
                         "description": "Create event",
                         "unverified-user": true,
                         "name": "create_event",
+                        "deleted-at": null,
                         "anonymous-user": false
                     },
                     "type": "user-permission",
@@ -19666,6 +20117,7 @@ To create or modify any data of this data layer, you will need admin access. How
                 "name": "example",
                 "description": "example",
                 "unverified-user": "false",
+                "deleted-at": null,
                 "anonymous-user": "false"
               },
             "type": "user-permission",
@@ -19706,6 +20158,7 @@ Get a single resource.
                 "name": "example",
                 "description": "example",
                 "unverified-user": "false",
+                "deleted-at": null,
                 "anonymous-user": "false"
               },
             "type": "user-permission",
@@ -19757,6 +20210,7 @@ Update a single resource by `id`.
                 "name": "example",
                 "description": "example",
                 "unverified-user": "false",
+                "deleted-at": null,
                 "anonymous-user": "false"
               },
             "type": "user-permission",
@@ -20362,7 +20816,8 @@ Requires Co-Organizer Access
               }
             },
             "attributes": {
-              "stripe-publishable-key": "example"
+              "stripe-publishable-key": "example",
+              "deleted-at": null
             },
             "type": "stripe-authorization",
             "id": "1",
@@ -20407,7 +20862,8 @@ Requires Event Co-Organizer Access
               }
             },
             "attributes": {
-              "stripe-publishable-key": "example"
+              "stripe-publishable-key": "example",
+              "deleted-at": null
             },
             "type": "stripe-authorization",
             "id": "1",
@@ -20457,7 +20913,8 @@ Requires Event Co-Organizer Access
               }
             },
             "attributes": {
-              "stripe-publishable-key": "example"
+              "stripe-publishable-key": "example",
+              "deleted-at": null
             },
             "type": "stripe-authorization",
             "id": "1",
@@ -20523,7 +20980,8 @@ Requires event admin access
                     }
                 },
                 "attributes": {
-                    "stripe-publishable-key": "example"
+                    "stripe-publishable-key": "example",
+                    "deleted-at": null
                 },
                 "type": "stripe-authorization",
                 "id": "1",
@@ -20542,7 +21000,7 @@ Requires event admin access
 
 # Group Event Export
 
-This group of APIs help you to start a task for exporting a particular event in the zip format, ical and xcal.
+This group of APIs help you to start a task for exporting a particular event in the zip format, ical and xcal. It also lets you start a task to export orders of an event as csv
 
 ## Start Event Export as Zip [/v1/events/{event_identifier}/export/json]
 This endpoint lets the user start a task of exporting the event in the zip format.
@@ -20638,6 +21096,26 @@ to get the status of the export task.
             "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
         }
 
+## Start Orders Export as CSV [/v1/events/{event_identifier}/export/orders/csv]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+Start a celery task to export the list of order of the event with that event_id as a CSV file to get it ready for downloading. Returns the task url
+to get the status of the export task.
+
+
+### Start a Task to Export Orders of an Event as CSV [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
 
 # Group Event Import
 

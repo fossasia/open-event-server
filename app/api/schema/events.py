@@ -106,6 +106,8 @@ class EventSchemaPublic(SoftDeletionSchema):
     pentabarf_url = fields.Url(dump_only=True)
     ical_url = fields.Url(dump_only=True)
     xcal_url = fields.Url(dump_only=True)
+    average_rating = fields.Float(dump_only=True)
+
     tickets = Relationship(attribute='tickets',
                            self_view='v1.event_ticket',
                            self_view_kwargs={'id': '<id>'},

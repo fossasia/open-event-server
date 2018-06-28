@@ -8,7 +8,7 @@ from marshmallow_jsonapi.flask import Schema
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.data_layers.ChargesLayer import ChargesLayer
-from app.api.helpers.db import save_to_db, safe_query
+from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.files import make_frontend_url
@@ -41,6 +41,7 @@ class OrdersListPost(ResourceList):
         :return:
         """
         require_relationship(['event', 'ticket_holders'], data)
+        # Ensuring that default status is always pending, unless the user is event co-organizer
         if not has_access('is_coorganizer', event_id=data['event']):
             data['status'] = 'pending'
 
@@ -54,7 +55,8 @@ class OrdersListPost(ResourceList):
         for ticket_holder in data['ticket_holders']:
             # Ensuring that the attendee exists and doesn't have an associated order.
             try:
-                ticket_holder_object = self.session.query(TicketHolder).filter_by(id=int(ticket_holder)).one()
+                ticket_holder_object = self.session.query(TicketHolder).filter_by(id=int(ticket_holder),
+                                                                                  deleted_at=None).one()
                 if ticket_holder_object.order_id:
                     raise ConflictException({'pointer': '/data/relationships/attendees'},
                                             "Order already exists for attendee with id {}".format(str(ticket_holder)))
@@ -67,7 +69,8 @@ class OrdersListPost(ResourceList):
 
         # Apply discount only if the user is not event admin
         if data.get('discount') and not has_access('is_coorganizer', event_id=data['event']):
-            discount_code = safe_query(self, DiscountCode, 'id', data['discount'], 'discount_code_id')
+            discount_code = safe_query_without_soft_deleted_entries(self, DiscountCode, 'id', data['discount'],
+                                                                    'discount_code_id')
             if not discount_code.is_active:
                 raise UnprocessableEntity({'source': 'discount_code_id'}, "Inactive Discount Code")
             else:
@@ -98,7 +101,7 @@ class OrdersListPost(ResourceList):
                 pdf = create_save_pdf(render_template('/pdf/ticket_purchaser.html', order=order))
             holder.pdf_url = pdf
             save_to_db(holder)
-            if order_tickets.get(holder.ticket_id) is None:
+            if not order_tickets.get(holder.ticket_id):
                 order_tickets[holder.ticket_id] = 1
             else:
                 order_tickets[holder.ticket_id] += 1
@@ -106,6 +109,7 @@ class OrdersListPost(ResourceList):
             od = OrderTicket(order_id=order.id, ticket_id=ticket, quantity=order_tickets[ticket])
             save_to_db(od)
         order.quantity = order.get_tickets_count()
+        order.user = current_user
         save_to_db(order)
         if not has_access('is_coorganizer', event_id=data['event']):
             TicketingManager.calculate_update_amount(order)

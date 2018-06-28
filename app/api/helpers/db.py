@@ -32,6 +32,29 @@ def save_to_db(item, msg="Saved to db", print_error=True):
         return False
 
 
+def safe_query_without_soft_deleted_entries(self, model, column_name, value, parameter_name):
+    """
+    Wrapper query to properly raise exception after filtering the soft deleted entries
+    :param self:
+    :param model: db Model to be queried
+    :param column_name: name of the column to be queried for the given value
+    :param value: value to be queried against the given column name, e.g view_kwargs['event_id']
+    :param parameter_name: Name of parameter to be printed in json-api error message eg 'event_id'
+    :return:
+    """
+    try:
+        if hasattr(model, 'deleted_at'):
+            record = self.session.query(model).filter(getattr(model, column_name) == value)\
+                .filter_by(deleted_at=None).one()
+        else:
+            record = self.session.query(model).filter(getattr(model, column_name) == value).one()
+    except NoResultFound:
+        raise ObjectNotFound({'parameter': '{}'.format(parameter_name)},
+                             "{}: {} not found".format(model.__name__, value))
+    else:
+        return record
+
+
 def safe_query(self, model, column_name, value, parameter_name):
     """
     Wrapper query to properly raise exception
