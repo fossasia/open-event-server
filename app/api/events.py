@@ -115,7 +115,7 @@ class EventList(ResourceList):
         :param data:
         :return:
         """
-        isVerified=User.query.filter_by(id=kwargs['user_id']).first().is_verified
+        isVerified = User.query.filter_by(id=kwargs['user_id']).first().is_verified
         if (data.get('state', None) == 'published' and not isVerified):
             raise ForbiddenException({'source': ''},
                                       "Only verified accounts can publish events")
