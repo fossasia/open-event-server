@@ -190,6 +190,7 @@ class OrderDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        # Admin can update all the fields while Co-organizer can update only the status
         if not has_access('is_admin'):
             for element in data:
                 if element != 'status':
