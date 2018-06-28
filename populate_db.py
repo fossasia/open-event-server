@@ -194,7 +194,7 @@ def create_user_permissions():
     # Create Event
     user_perm, _ = get_or_create(UserPermission, name='create_event',
                                  description='Create event')
-    user_perm.verified_user, user_perm.unverified_user = True, True
+    user_perm.verified_user, user_perm.unverified_user = True, False
     db.session.add(user_perm)
 
 
