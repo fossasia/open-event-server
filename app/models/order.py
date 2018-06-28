@@ -117,6 +117,14 @@ class Order(SoftDeletionModel):
         return count
 
     @property
+    def is_free(self):
+        return self.paid_via == 'free'
+
+    @property
+    def revenue(self):
+        return self.amount - (self.amount * (self.event.fee / 100.0))
+
+    @property
     def serialize(self):
         """Return object data in easily serializable format"""
         return {

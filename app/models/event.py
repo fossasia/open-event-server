@@ -80,7 +80,6 @@ class Event(SoftDeletionModel):
     schedule_published_on = db.Column(db.DateTime(timezone=True))
     is_ticketing_enabled = db.Column(db.Boolean, default=True)
     payment_country = db.Column(db.String)
-    payment_currency = db.Column(db.String)
     paypal_email = db.Column(db.String)
     is_tax_enabled = db.Column(db.Boolean, default=False)
     can_pay_by_paypal = db.Column(db.Boolean, default=False)
@@ -96,6 +95,8 @@ class Event(SoftDeletionModel):
     ical_url = db.Column(db.String)
     xcal_url = db.Column(db.String)
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
+    payment_currency = db.Column(db.String, db.ForeignKey('ticket_fees.currency'))
+    ticket_fees = db.relationship('TicketFees', back_populates='events')
     discount_code_id = db.Column(db.Integer, db.ForeignKey(
         'discount_codes.id', ondelete='CASCADE'))
     discount_code = db.relationship('DiscountCode', backref='events', foreign_keys=[discount_code_id])
@@ -267,6 +268,19 @@ class Event(SoftDeletionModel):
             super(Event, self).__setattr__(name, clean_html(clean_up_string(value)))
         else:
             super(Event, self).__setattr__(name, value)
+
+    @property
+    def sales(self):
+        return sum([o.amount for o in self.orders if o.status == 'completed'])
+
+    @property
+    def revenue(self):
+        if self.ticket_fees:
+            reduction = self.sales * self.ticket_fees.service_fee / 100.0
+            reduction = min(reduction, self.ticket_fees.maximum_fee)
+            return self.sales - reduction
+
+        return self.sales
 
     def notification_settings(self, user_id):
         try:
