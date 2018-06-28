@@ -10,6 +10,7 @@ from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_count
 from app.models import db
+from app.models.ticket_fee import get_fee
 from app.models.base import SoftDeletionModel
 from app.models.email_notification import EmailNotification
 from app.models.feedback import Feedback
@@ -267,6 +268,15 @@ class Event(SoftDeletionModel):
             super(Event, self).__setattr__(name, clean_html(clean_up_string(value)))
         else:
             super(Event, self).__setattr__(name, value)
+
+    @property
+    def fee(self):
+        """
+        Returns the fee as a percentage from 0 to 100 for this event
+
+        Is retrieved from the db using the `payment_currency`
+        """
+        return get_fee(self.payment_currency)
 
     def notification_settings(self, user_id):
         try:
