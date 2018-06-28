@@ -2,7 +2,7 @@ import os
 import requests
 import uuid
 import csv
-from flask import current_app
+from flask import current_app, render_template
 from marrow.mailer import Mailer, Message
 
 from app import make_celery
@@ -26,11 +26,13 @@ from app.api.exports import event_export_task_base
 from app.api.imports import import_event_task_base
 from app.models.event import Event
 from app.models.order import Order
+from app.models.discount_code import DiscountCode
 from app.api.helpers.ICalExporter import ICalExporter
 from app.api.helpers.xcal import XCalExporter
 from app.api.helpers.pentabarfxml import PentabarfExporter
 from app.api.helpers.storage import UploadedFile, upload, UPLOAD_PATHS
 from app.api.helpers.db import save_to_db
+from app.api.helpers.files import create_save_pdf
 
 celery = make_celery()
 
@@ -105,7 +107,7 @@ def import_event_task(self, email, file, source_type, creator_id):
         logging.info('Importing done..Sending email')
         send_import_mail(email=email, event_name=result['event_name'], event_url=result['url'])
         send_notif_after_import(user=user, event_name=result[
-                                'event_name'], event_url=result['url'])
+            'event_name'], event_url=result['url'])
     except Exception as e:
         print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
@@ -242,6 +244,25 @@ def export_order_csv_task(self, event_id):
         order_csv_url = upload(order_csv_file, UPLOAD_PATHS['exports']['csv'].format(event_id=event_id))
         result = {
             'download_url': order_csv_url
+        }
+    except Exception as e:
+        print(traceback.format_exc())
+        result = {'__error': True, 'result': str(e)}
+
+    return result
+
+
+@celery.task(base=RequestContextTask, name='export.order.pdf', bind=True)
+def export_order_pdf_task(self, event_id):
+    orders = db.session.query(Order).filter_by(event_id=event_id)
+    event = db.session.query(Event).filter_by(id=int(event_id)).first()
+    discount_code = db.session.query(DiscountCode).filter_by(event_id=event_id)
+    try:
+        order_pdf_url = create_save_pdf(
+            render_template('pdf/orders.html', event=event, event_id=event_id, orders=orders,
+                            discount_code=discount_code))
+        result = {
+            'download_url': order_pdf_url
         }
     except Exception as e:
         print(traceback.format_exc())

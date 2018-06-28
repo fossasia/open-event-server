@@ -32,6 +32,7 @@ class OrdersListPost(ResourceList):
     """
     OrderListPost class for OrderSchema
     """
+
     def before_post(self, args, kwargs, data=None):
         """
         before post method to check for required relationship and proper permission
@@ -96,9 +97,11 @@ class OrdersListPost(ResourceList):
         order_tickets = {}
         for holder in order.ticket_holders:
             if holder.id != current_user.id:
-                pdf = create_save_pdf(render_template('/pdf/ticket_attendee.html', order=order, holder=holder))
+                pdf = create_save_pdf(render_template('pdf/ticket_attendee.html', order=order, holder=holder),
+                                      dir_path='/static/uploads/pdf/tickets/')
             else:
-                pdf = create_save_pdf(render_template('/pdf/ticket_purchaser.html', order=order))
+                pdf = create_save_pdf(render_template('pdf/ticket_purchaser.html', order=order),
+                                      dir_path='/static/uploads/pdf/tickets/')
             holder.pdf_url = pdf
             save_to_db(holder)
             if not order_tickets.get(holder.ticket_id):
@@ -139,6 +142,7 @@ class OrdersList(ResourceList):
     """
     OrderList class for OrderSchema
     """
+
     def before_get(self, args, kwargs):
         """
         before get method to get the resource id for fetching details
@@ -171,6 +175,7 @@ class OrderDetail(ResourceDetail):
     """
     OrderDetail class for OrderSchema
     """
+
     def before_get_object(self, view_kwargs):
         """
         before get method to get the resource id for fetching details
@@ -253,6 +258,7 @@ class ChargeSchema(Schema):
     """
     ChargeSchema
     """
+
     class Meta:
         """
         Meta class for ChargeSchema
