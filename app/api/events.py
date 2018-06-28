@@ -12,6 +12,7 @@ import urllib.error
 
 from app.api.bootstrap import api
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
+from app.api.data_layers.SearchFilterLayer import SearchFilterLayer
 from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.exceptions import ForbiddenException, ConflictException, UnprocessableEntity
 from app.api.helpers.files import create_save_image_sizes
@@ -108,11 +109,8 @@ class EventList(ResourceList):
 
         # Full-text search
         if ('ENABLE_ELASTICSEARCH' in current_app.config
-                and 'GET' in request.method and 'search_filter' in request.args):
-            # TODO 'search-filter' is used as 'filter' would be evaluated
-            # automatically by the libraries used. Solutions would be using the
-            # request body, 'search-filter' or a new endpoint (/event/search)
-            json_filter = request.args['search_filter']
+                and 'GET' in request.method and 'filter' in request.args):
+            json_filter = request.args['filter']
             filter_terms = [
                 f.val for f in json_to_rest_filter_list(json_filter)
                 if f.name == 'event' and f.op == 'search'
@@ -168,6 +166,7 @@ class EventList(ResourceList):
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
+                  'class': SearchFilterLayer,
                   'methods': {'after_create_object': after_create_object,
                               'query': query
                               }}

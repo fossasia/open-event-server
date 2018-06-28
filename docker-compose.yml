@@ -49,8 +49,5 @@ services:
 
 volumes:
     pg:
-        driver: local
     rd:
-        driver: local
     es:
-        driver: local
