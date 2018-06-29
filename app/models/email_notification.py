@@ -5,8 +5,7 @@ from app.models.base import SoftDeletionModel
 class EmailNotification(SoftDeletionModel):
     """email notifications model class"""
     __tablename__ = 'email_notifications'
-    id = db.Column(db.Integer,
-                   primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     next_event = db.Column(db.Boolean, default=False)
     new_paper = db.Column(db.Boolean, default=False)
     session_accept_reject = db.Column(db.Boolean, default=False)
