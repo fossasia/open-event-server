@@ -58,11 +58,12 @@ def send_email(to, action, subject, html):
             else:
                 payload['fromname'] = email_from_name
                 key = get_settings()['sendgrid_key']
-                if not key and not current_app.config['TESTING']:
+                if not key:
                     print('Sendgrid key not defined')
                     return
                 headers = {
-                    "Authorization": ("Bearer " + key)
+                    "Authorization": ("Bearer " + key),
+                    "Content-Type": "application/json"
                 }
                 from .tasks import send_email_task
                 send_email_task.delay(payload, headers)
