@@ -40,7 +40,7 @@ class EventTypeDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
-    decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
+    decorators = (api.has_permission('is_admin', methods="PATCH"),)
     schema = EventTypeSchema
     data_layer = {'session': db.session,
                   'model': EventType,
