@@ -138,6 +138,12 @@ class EventList(ResourceList):
         role_invite = RoleInvite(user.email, role.title_name, event.id, role.id, datetime.now(pytz.utc),
                                  status='accepted')
         save_to_db(role_invite, 'Organiser Role Invite Added')
+
+        email_notification = EmailNotification(next_event=True, new_paper=True, session_accept_reject=True,
+                                               session_schedule=True, after_ticket_purchase=True)
+        email_notification.user = user
+        email_notification.event = event
+        save_to_db(email_notification, 'Email Notification of event added to user')
         if event.state == 'published' and event.schedule_published_on:
             start_export_tasks(event)
 
