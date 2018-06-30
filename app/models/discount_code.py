@@ -45,7 +45,7 @@ class DiscountCode(SoftDeletionModel):
                  used_for=None,
                  event_id=None,
                  tickets=None,
-                 user_id=None,
+                 marketer_id=None,
                  deleted_at=None):
         self.code = code
         self.discount_url = discount_url
@@ -61,7 +61,7 @@ class DiscountCode(SoftDeletionModel):
         self.created_at = datetime.utcnow()
         self.used_for = used_for
         self.tickets = tickets
-        self.marketer_id = user_id
+        self.marketer_id = marketer_id
         self.deleted_at = deleted_at
 
     @staticmethod

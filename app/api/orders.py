@@ -113,12 +113,15 @@ class OrdersListPost(ResourceList):
         save_to_db(order)
         if not has_access('is_coorganizer', event_id=data['event']):
             TicketingManager.calculate_update_amount(order)
-        send_email_to_attendees(order, current_user.id)
-        send_notif_to_attendees(order, current_user.id)
 
-        order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
-        for organizer in order.event.organizers:
-            send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name)
+        # send e-mail and notifications if the order status is completed
+        if order.status == 'completed':
+            send_email_to_attendees(order, current_user.id)
+            send_notif_to_attendees(order, current_user.id)
+
+            order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
+            for organizer in order.event.organizers:
+                send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name)
 
         data['user_id'] = current_user.id
 
@@ -190,6 +193,7 @@ class OrderDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        # Admin can update all the fields while Co-organizer can update only the status
         if not has_access('is_admin'):
             for element in data:
                 if element != 'status':

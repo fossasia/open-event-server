@@ -10,7 +10,7 @@ class DiscountCodeFactory(factory.alchemy.SQLAlchemyModelFactory):
         model = DiscountCode
         sqlalchemy_session = db.session
 
-    user = factory.RelatedFactory(UserFactory)
+    marketer = factory.RelatedFactory(UserFactory)
     code = common.string_
     discount_url = common.url_
     value = common.float_
@@ -23,5 +23,5 @@ class DiscountCodeFactory(factory.alchemy.SQLAlchemyModelFactory):
     valid_till = common.dateEnd_
     used_for = "event"
     tickets = "event"
-    user_id = 1
+    marketer_id = 1
     event_id = None
