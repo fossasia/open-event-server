@@ -19040,6 +19040,12 @@ Get the task status and the final result of the task as response</p>
 <td>string</td>
 <td>-</td>
 </tr>
+<tr>
+<td style="text-align:left"><code>order-notes</code></td>
+<td>Notes associated with Order</td>
+<td>string</td>
+<td>-</td>
+</tr>
 </tbody>
 </table>
 <div id="orders-orders-collection" class="resource"><h3 class="resource-heading">Orders Collection <a href="#orders-orders-collection" class="permalink">&nbsp;&para;</a></h3><div id="orders-orders-collection-get" class="action get"><h4 class="action-heading"><div class="name">List All Orders</div><a href="#orders-orders-collection-get" class="method get">GET</a><code class="uri">/v1/orders{?sort,filter}</code></h4><p>Get a list of all orders</p>
@@ -19063,7 +19069,8 @@ Get the task status and the final result of the task as response</p>
       "<span class="hljs-attribute">payment-mode</span>": <span class="hljs-value"><span class="hljs-string">"paypal"</span></span>,
       "<span class="hljs-attribute">country</span>": <span class="hljs-value"><span class="hljs-string">"India"</span></span>,
       "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-string">"pending"</span></span>,
-      "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">order-notes</span>": <span class="hljs-value"><span class="hljs-string">"example"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"order"</span></span>,
     "<span class="hljs-attribute">relationships</span>": <span class="hljs-value">{
@@ -19110,7 +19117,8 @@ Get the task status and the final result of the task as response</p>
         "<span class="hljs-attribute">address</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
         "<span class="hljs-attribute">pdf-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
         "<span class="hljs-attribute">country</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-        "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
+        "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+        "<span class="hljs-attribute">order-notes</span>": <span class="hljs-value"><span class="hljs-string">"example"</span>
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"attendee"</span></span>,
       "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -19179,7 +19187,8 @@ Get the task status and the final result of the task as response</p>
       "<span class="hljs-attribute">exp-month</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">10</span></span>,
       "<span class="hljs-attribute">country</span>": <span class="hljs-value"><span class="hljs-string">"India"</span></span>,
-      "<span class="hljs-attribute">completed-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
+      "<span class="hljs-attribute">completed-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">order-notes</span>": <span class="hljs-value"><span class="hljs-string">"example"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"order"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"11"</span></span>,
@@ -19250,7 +19259,8 @@ Get the task status and the final result of the task as response</p>
       "<span class="hljs-attribute">exp-month</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">10</span></span>,
       "<span class="hljs-attribute">country</span>": <span class="hljs-value"><span class="hljs-string">"India"</span></span>,
-      "<span class="hljs-attribute">completed-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
+      "<span class="hljs-attribute">completed-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">order-notes</span>": <span class="hljs-value"><span class="hljs-string">"example"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"order"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -19272,7 +19282,8 @@ Get the task status and the final result of the task as response</p>
 </dd></dl></div><div class="title"><strong>Request</strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.api+json</span><br><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">JWT &lt;Auth Key&gt;</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">data</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
-      "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-string">"confirmed"</span>
+      "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-string">"confirmed"</span></span>,
+      "<span class="hljs-attribute">order-notes</span>": <span class="hljs-value"><span class="hljs-string">"example"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"order"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"ab25a170-f36d-4dd6-b99c-9c202e693afc"</span>
@@ -19332,7 +19343,8 @@ Get the task status and the final result of the task as response</p>
       "<span class="hljs-attribute">exp-month</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">amount</span>": <span class="hljs-value"><span class="hljs-number">10</span></span>,
       "<span class="hljs-attribute">country</span>": <span class="hljs-value"><span class="hljs-string">"India"</span></span>,
-      "<span class="hljs-attribute">completed-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
+      "<span class="hljs-attribute">completed-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">order-notes</span>": <span class="hljs-value"><span class="hljs-string">"sample,example"</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"order"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -19467,7 +19479,7 @@ Creates the copy. Requires Co-Organizer access</p>
   "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
   "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"example@example.com"</span></span>,
   "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"John Doe"</span>
-</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 29 Jun 2018</p><script>/* eslint-env browser */
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 01 Jul 2018</p><script>/* eslint-env browser */
 /* eslint quotes: [2, "single"] */
 'use strict';
 
