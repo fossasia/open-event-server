@@ -42,7 +42,7 @@ class EventTopic(SoftDeletionModel):
 
     @classmethod
     def set_default_sys_image(cls):
-        with app.request_context():
+        with app.test_request_context():
             url = urllib.parse.urlparse(request.url)
             image_url = url.scheme + '://' + url.netloc + '/static/header.png'
             return image_url
