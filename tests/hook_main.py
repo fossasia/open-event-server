@@ -3558,6 +3558,19 @@ def event_orders_export_csv_get(transaction):
         db.session.add(event)
         db.session.commit()
 
+
+@hooks.before(
+    "Event Export > Start Orders Export as PDF > Start a Task to Export Orders of an Event as PDF")
+def event_orders_export_pdf_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
 # ------------------------- Import -------------------------
 @hooks.before(
     "Event Import > Start Event Import > Start a Task to Import an Event")
