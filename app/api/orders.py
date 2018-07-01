@@ -208,6 +208,10 @@ class OrderDetail(ResourceDetail):
             raise ForbiddenException({'pointer': 'data/status'},
                                      "To update status minimum Co-organizer access required")
 
+        if 'order_notes' in data:
+            if order.order_notes and data['order_notes'] not in order.order_notes.split(","):
+                data['order_notes'] = '{},{}'.format(order.order_notes, data['order_notes'])
+
     def after_update_object(self, order, data, view_kwargs):
         """
         :param order:
