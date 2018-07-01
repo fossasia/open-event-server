@@ -14,7 +14,7 @@ revision = '20b836df74cc'
 down_revision = '6440077182f0'
 
 def set_default_sys_image():
-    with app.test_request_context():
+    with app.request_context():
         url = urllib.parse.urlparse(request.url)
         image_url = url.scheme + '://' + url.netloc + '/static/header.png'
         return image_url
