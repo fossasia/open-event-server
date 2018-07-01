@@ -13707,6 +13707,8 @@ Related to tickets (free, paid, donation) to the event.
 | `sales-starts-at` | Start date of ticket sale | ISO 8601 (tz-aware) | **yes** |
 | `sales-ends-at` | End date of ticket sale | ISO 8601 (tz-aware) | **yes** |
 | `is-description-visible` | Yes/No to enter description | boolean (default: `false`) | - |
+| `is-checkin-restricted` | Yes/No to checkin restriction | boolean (deault: `true`) | - |
+| `auto-checkin-enabled` | Yes/No to enable auto checkin | boolean (default: `false`) | - |
 | `is-hidden` | Yes/No to hide ticket | boolean (default: `false`) | - |
 | `is-fee-absorbed` | Yes/No for ticket absorption | boolean (default: `false`) | - |
 
@@ -13745,6 +13747,8 @@ Create a new ticket using an event_id.
                         "price": "100.00",
                         "quantity": "100",
                         "is-description-visible": "false",
+                        "is-checkin-restricted": "true",
+                        "auto-checkin-enabled": "false",
                         "position": "1",
                         "is-fee-absorbed": "false",
                         "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -13789,6 +13793,8 @@ Create a new ticket using an event_id.
                     "name": "ticket-name",
                     "max-order": 100,
                     "is-description-visible": false,
+                    "is-checkin-restricted": "true",
+                    "auto-checkin-enabled": "false",
                     "is-fee-absorbed": false,
                     "position": 1,
                     "quantity": 100,
@@ -13859,6 +13865,8 @@ Get a single ticket.
                     "name": "ticket-name",
                     "max-order": 100,
                     "is-description-visible": false,
+                    "is-checkin-restricted": "true",
+                    "auto-checkin-enabled": "false",
                     "is-fee-absorbed": false,
                     "position": 1,
                     "quantity": 100,
@@ -13905,6 +13913,8 @@ Update a single ticket by `id`.
                   "price": "100.00",
                   "quantity": "100",
                   "is-description-visible": "false",
+                  "is-checkin-restricted": "true",
+                  "auto-checkin-enabled": "false",
                   "position": "1",
                   "is-fee-absorbed": "false",
                   "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -13949,6 +13959,8 @@ Update a single ticket by `id`.
                     "name": "ticket-name",
                     "max-order": 100,
                     "is-description-visible": false,
+                    "is-checkin-restricted": "true",
+                    "auto-checkin-enabled": "false",
                     "is-fee-absorbed": false,
                     "position": 1,
                     "quantity": 100,
@@ -14050,6 +14062,8 @@ Delete a single ticket.
                         "name": "ticket-name",
                         "max-order": 100,
                         "is-description-visible": false,
+                        "is-checkin-restricted": "true",
+                        "auto-checkin-enabled": "false",
                         "is-fee-absorbed": false,
                         "position": 1,
                         "quantity": 100,
@@ -14130,6 +14144,8 @@ Delete a single ticket.
                         "name": "ticket-name",
                         "max-order": 100,
                         "is-description-visible": false,
+                        "is-checkin-restricted": "true",
+                        "auto-checkin-enabled": "false",
                         "is-fee-absorbed": false,
                         "position": 1,
                         "quantity": 100,
@@ -14210,6 +14226,8 @@ Delete a single ticket.
                         "name": "ticket-name",
                         "max-order": 100,
                         "is-description-visible": false,
+                        "is-checkin-restricted": "true",
+                        "auto-checkin-enabled": "false",
                         "is-fee-absorbed": false,
                         "position": 1,
                         "quantity": 100,
@@ -14277,6 +14295,8 @@ Delete a single ticket.
                 "name": "ticket-name0",
                 "max-order": 100,
                 "is-description-visible": true,
+                "is-checkin-restricted": "true",
+                "auto-checkin-enabled": "false",
                 "is-fee-absorbed": true,
                 "position": 1,
                 "quantity": 100,
