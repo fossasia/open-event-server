@@ -6,8 +6,6 @@ from app.api.helpers.db import get_count
 from app.models import db
 from app.models.base import SoftDeletionModel
 
-SCHEMES = {80: 'http', 443: 'https'}
-
 
 def get_new_slug(name):
     slug = name.lower().replace("& ", "").replace(",", "").replace("/", "-").replace(" ", "-")
