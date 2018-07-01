@@ -21644,6 +21644,7 @@ Get the task status and the final result of the task as response
 | `payment-mode` | Mode of payment (free,stripe,paypal) | string | **yes** |
 | `status` | Status of the order(pending, completed, placed, cancelled, expired) | string (default=pending) | - |
 | `discount_code_id` | ID of the discount code | string | - |
+| `order-notes` | Notes associated with Order | string | - |
 
 ## Orders Collection [/v1/orders{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -21695,7 +21696,8 @@ Create a new Order
                   "payment-mode": "paypal",
                   "country": "India",
                   "status": "pending",
-                  "amount": "10"
+                  "amount": "10",
+                  "order-notes": "example"
                 },
                 "type": "order",
                 "relationships": {
@@ -21745,7 +21747,8 @@ Create a new Order
                 "address": null,
                 "pdf-url": "http://example.com",
                 "country": null,
-                "email": null
+                "email": null,
+                "order-notes": "example"
               },
               "type": "attendee",
               "id": "1",
@@ -21814,7 +21817,8 @@ Create a new Order
               "exp-month": null,
               "amount": 10.0,
               "country": "India",
-              "completed-at": null
+              "completed-at": null,
+              "order-notes": "example"
             },
             "type": "order",
             "id": "11",
@@ -21902,7 +21906,8 @@ Get a single Order detail.
               "exp-month": null,
               "amount": 10.0,
               "country": "India",
-              "completed-at": null
+              "completed-at": null,
+              "order-notes": "example"
             },
             "type": "order",
             "id": "1",
@@ -21935,7 +21940,8 @@ Update a single custom form with `id`.
             {
               "data": {
                 "attributes": {
-                  "status": "confirmed"
+                  "status": "confirmed",
+                  "order-notes": "example"
                 },
                 "type": "order",
                 "id": "ab25a170-f36d-4dd6-b99c-9c202e693afc"
@@ -22000,7 +22006,8 @@ Update a single custom form with `id`.
               "exp-month": null,
               "amount": 10.0,
               "country": "India",
-              "completed-at": null
+              "completed-at": null,
+              "order-notes": "sample,example"
             },
             "type": "order",
             "id": "1",
