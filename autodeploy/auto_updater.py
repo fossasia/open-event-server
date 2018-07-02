@@ -25,7 +25,7 @@ class AutoUpdater():
         try:
             self.docker.start()
         except DockerComposeError:
-            logger.warn('Start threw an error')
+            logger.warning('Start threw an error')
 
     def update(self):
         if self.git.changed_files() > 0:
