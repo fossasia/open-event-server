@@ -1,6 +1,6 @@
 import logging
-from docker_format import format_ps
-from subprocess import Popen, PIPE
+
+from command import execute
 
 logger = logging.getLogger(__name__)
 
@@ -16,17 +16,13 @@ class DockerComposeError(Exception):
 
 
 def _docker_compose(cwd, *cmd):
-    command = ['/usr/bin/docker-compose'] + list(cmd)
-    process = Popen(command, stdout=PIPE, stderr=PIPE, cwd=cwd)
-    out, err = process.communicate()
+    retcode, out, err = execute(cwd, '/usr/bin/docker-compose', *cmd)
+    if retcode == 0:
+        return out
 
-    if process.returncode == 0:
-        return str(out, 'utf-8')
-
-    logger.error('docker-compose command failed: %s', cwd)
-    raise DockerComposeError(
-        'Docker-Compose command exited with a non-zero exit code',
-        str(err, 'utf-8'))
+    logger.error('docker-compose failed: %s', cwd)
+    raise DockerComposeError('docker-compose exited with a non-zero exit code',
+                             err)
 
 
 class DockerCompose():
@@ -46,4 +42,16 @@ class DockerCompose():
         logger.info('stopping...')
         res = _docker_compose(self.cwd, 'stop')
         logger.info('stopped')
+        return res
+
+    def restart(self):
+        logger.info('restarting...')
+        res = _docker_compose(self.cwd, 'restart')
+        logger.info('restarted')
+        return res
+
+    def build(self):
+        logger.info('building...')
+        res = _docker_compose(self.cwd, 'build')
+        logger.info('(re-)built')
         return res
