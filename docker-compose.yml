@@ -4,10 +4,6 @@ services:
 
   postgres:
     image: postgres:10-alpine
-    environment:
-      - POSTGRES_USER=john
-      - POSTGRES_PASSWORD=start
-      - POSTGRES_DB=oevent_2
     volumes:
       - pg:/var/lib/postgresql/data
       - ./postgres-initdb.d:/docker-entrypoint-initdb.d
@@ -39,7 +35,6 @@ services:
       ELASTICSEARCH_HOST: elastic:9200
       REDIS_URL: redis://redis:6379/0
       C_FORCE_ROOT: "true"
-      SERVER_NAME: "demo"
     links:
       - postgres:postgres
       - redis:redis
@@ -47,7 +42,7 @@ services:
     volumes:
       - ./data/web:/open_event/static
     ports:
-      - '5000:5000'
+      - 127.0.0.1:5000:5000
 
 volumes:
     pg:
