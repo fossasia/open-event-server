@@ -1,9 +1,11 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
+from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
+from app.api.helpers.exceptions import ForbiddenException, ConflictException
+from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
@@ -31,11 +33,33 @@ class AccessCodeListPost(ResourceList):
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ForbiddenException({'source': ''}, "Minimum Organizer access required")
 
+    def before_create_object(self, data, view_kwargs):
+        """
+        before create object method for AccessCodeListPost Class
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
+        if data.get('tickets', None):
+            for ticket in data['tickets']:
+                # Ensuring that the ticket exists and is hidden.
+                try:
+                    ticket_object = self.session.query(Ticket).filter_by(id=int(ticket),
+                                                                         deleted_at=None).one()
+                    if not ticket_object.is_hidden:
+                        raise ConflictException({'pointer': '/data/relationships/tickets'},
+                                                "Ticket with id {} is public.".format(ticket) +
+                                                " Access code cannot be applied to public tickets")
+                except NoResultFound:
+                    raise ConflictException({'pointer': '/data/relationships/tickets'},
+                                            "Ticket with id {} does not exists".format(str(ticket)))
+
     schema = AccessCodeSchema
     methods = ['POST', ]
     data_layer = {'session': db.session,
-                  'model': AccessCode
-                  }
+                  'model': AccessCode,
+                  'methods': {'before_create_object': before_create_object
+                              }}
 
 
 class AccessCodeList(ResourceList):
