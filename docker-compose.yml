@@ -35,11 +35,15 @@ services:
   web:
     build: .
     environment:
+      DATABASE_URL: postgresql://john:start@postgres:5432/oevent_2
+      ELASTICSEARCH_HOST: elastic:9200
+      REDIS_URL: redis://redis:6379/0
       C_FORCE_ROOT: "true"
       SERVER_NAME: "demo"
     links:
       - postgres:postgres
       - redis:redis
+      - elastic:elastic
     volumes:
       - ./data/web:/open_event/static
     ports:
