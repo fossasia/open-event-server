@@ -18,8 +18,8 @@ COPY requirements.txt requirements.txt
 COPY requirements requirements
 
 # install requirements
-RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install eventlet
+RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 install eventlet
 
 # copy remaining files
 COPY . .

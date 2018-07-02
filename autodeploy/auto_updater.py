@@ -4,7 +4,7 @@ from os.path import exists, isfile, join
 from os import makedirs
 
 from command import execute
-from docker import DockerCompose
+from docker import DockerCompose, DockerComposeError
 from git import Git
 
 logger = logging.getLogger(__name__)
@@ -22,7 +22,10 @@ class AutoUpdater():
         self.docker = DockerCompose(cwd)
 
     def start(self):
-        self.docker.start()
+        try:
+            self.docker.start()
+        except DockerComposeError:
+            logger.warn('Start threw an error')
 
     def update(self):
         if self.git.changed_files() > 0:
