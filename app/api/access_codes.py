@@ -1,8 +1,9 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
@@ -75,11 +76,37 @@ class AccessCodeList(ResourceList):
 
 class AccessCodeDetail(ResourceDetail):
     """
-    AccessCode detail by id
+    AccessCode detail by id or code
     """
+    def before_get(self, args, kwargs):
+        """
+        before get method of access code details.
+        Check for permissions on the basis of kwargs.
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        # Any registered user can fetch access code details using the code.
+        if kwargs.get('code'):
+            access = db.session.query(AccessCode).filter_by(code=kwargs.get('code')).first()
+            if access:
+                kwargs['id'] = access.id
+            else:
+                raise ObjectNotFound({'parameter': '{code}'}, "Access Code:  not found")
+            return
 
-    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
-                  fetch_as="event_id", model=AccessCode, methods="GET, PATCH"),
+        # Co-organizer or the admin can fetch access code details using the id.
+        if kwargs.get('id'):
+            access = db.session.query(AccessCode).filter_by(id=kwargs.get('id')).one()
+            if not access:
+                raise ObjectNotFound({'parameter': '{id}'}, "Access Code:  not found")
+
+            if not has_access('is_coorganizer', event_id=access.event_id):
+                raise UnprocessableEntity({'source': ''},
+                                          "Please verify your permission")
+
+    decorators = (jwt_required, api.has_permission('is_coorganizer', fetch='event_id',
+                  fetch_as="event_id", model=AccessCode, methods="PATCH"),
                   api.has_permission('is_coorganizer_but_not_admin', fetch='event_id',
                   fetch_as="event_id", model=AccessCode, methods="DELETE"),)
     schema = AccessCodeSchema
