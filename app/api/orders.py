@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import request, render_template
+from flask import render_template
 from flask_jwt import current_identity as current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
@@ -35,7 +35,7 @@ class OrdersListPost(ResourceList):
 
     def before_post(self, args, kwargs, data=None):
         """
-        before post method to check for required relationship and proper permission
+        before post method to check for required relationships and permissions
         :param args:
         :param kwargs:
         :param data:
@@ -150,9 +150,7 @@ class OrdersList(ResourceList):
         :param kwargs:
         :return:
         """
-        if 'GET' in request.method and kwargs.get('event_id') is None:
-            pass
-        elif not has_access('is_coorganizer', event_id=kwargs['event_id']):
+        if kwargs.get('event_id') and not has_access('is_coorganizer', event_id=kwargs['event_id']):
             raise ForbiddenException({'source': ''}, "Co-Organizer Access Required")
 
     def query(self, view_kwargs):
@@ -189,7 +187,7 @@ class OrderDetail(ResourceDetail):
         order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
 
         if not has_access('is_coorganizer_or_user_itself', event_id=order.event_id, user_id=order.user_id):
-            return ForbiddenException({'source': ''}, 'Access Forbidden')
+            return ForbiddenException({'source': ''}, 'You can only access your orders or your event\'s orders')
 
     def before_update_object(self, order, data, view_kwargs):
         """
@@ -274,6 +272,7 @@ class ChargeSchema(Schema):
 
     id = fields.Str(dump_only=True)
     stripe = fields.Str(allow_none=True)
+    paypal = fields.Str(allow_none=True)
 
 
 class ChargeList(ResourceList):
@@ -287,3 +286,5 @@ class ChargeList(ResourceList):
         'class': ChargesLayer,
         'session': db.session
     }
+
+    decorators = (jwt_required,)
