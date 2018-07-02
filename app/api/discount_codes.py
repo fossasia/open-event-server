@@ -112,7 +112,7 @@ class DiscountCodeList(ResourceList):
 
 class DiscountCodeDetail(ResourceDetail):
     """
-    Discount Code detail by id
+    Discount Code detail by id or code.
     """
 
     def before_get(self, args, kwargs):
@@ -126,6 +126,15 @@ class DiscountCodeDetail(ResourceDetail):
                 kwargs['id'] = event.discount_code_id
             else:
                 kwargs['id'] = None
+
+        # Any registered user can fetch discount code details using the code.
+        if kwargs.get('code'):
+            discount = db.session.query(DiscountCode).filter_by(code=kwargs.get('code')).first()
+            if discount:
+                kwargs['id'] = discount.id
+            else:
+                raise ObjectNotFound({'parameter': '{code}'}, "DiscountCode:  not found")
+            return
 
         if kwargs.get('id'):
             discount = db.session.query(DiscountCode).filter_by(id=kwargs.get('id')).one()
