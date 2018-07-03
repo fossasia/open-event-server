@@ -42,8 +42,7 @@ class AutoUpdater():
     def update(self):
         if self.git.changed_files() > 0:
             self.git.pull()
-            self.docker.build()
-            self.docker.restart()
+            self.docker.update()
             logger.info('update finished')
         logger.info('no update needed')
 

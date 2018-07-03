@@ -44,16 +44,10 @@ class DockerCompose():
         logger.info('stopped')
         return res
 
-    def restart(self):
-        logger.info('restarting...')
-        res = _docker_compose(self.cwd, 'restart')
-        logger.info('restarted')
-        return res
-
-    def build(self):
-        logger.info('building...')
-        res = _docker_compose(self.cwd, 'build')
-        logger.info('(re-)built')
+    def update(self):
+        logger.info('updating containers...')
+        res = _docker_compose(self.cwd, 'up', '-d', '--build')
+        logger.info('updated')
         return res
 
     def exec(self, container, command):
