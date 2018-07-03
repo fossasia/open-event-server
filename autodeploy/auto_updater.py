@@ -31,6 +31,7 @@ class AutoUpdater():
             logger.info('initialized with %s', res)
         except DockerComposeError as e:
             logger.warning('%s: %s', e.message, e.errors)
+        self.upgrade()
 
     def start(self):
         try:
@@ -38,16 +39,18 @@ class AutoUpdater():
         except DockerComposeError as e:
             logger.warning('Start threw an error: %s', e.errors)
 
+    def upgrade(self):
+        try:
+            res = self.docker.exec('web', 'bash scripts/upgrade.sh')
+            logger.info('upgraded with %s', res)
+        except DockerComposeError as e:
+            logger.warning('%s: %s', e.message, e.errors)
+
     def update(self):
         if self.git.changed_files() > 0:
             self.git.pull()
             self.docker.build()
             self.docker.restart()
-            try:
-                res = self.docker.exec('web', 'bash scripts/upgrade.sh')
-                logger.info('upgraded with %s', res)
-            except DockerComposeError as e:
-                logger.warning('%s: %s', e.message, e.errors)
             logger.info('update finished')
 
         return 'no update needed'
