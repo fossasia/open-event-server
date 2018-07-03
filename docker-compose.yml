@@ -35,6 +35,8 @@ services:
       ELASTICSEARCH_HOST: elastic:9200
       REDIS_URL: redis://redis:6379/0
       C_FORCE_ROOT: "true"
+      ADMIN_EMAIL: "a@b.cd"
+      ADMIN_PASSWORD: "password"
     links:
       - postgres:postgres
       - redis:redis
