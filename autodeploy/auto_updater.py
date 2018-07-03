@@ -24,8 +24,7 @@ class AutoUpdater():
             self.first_startup()
 
     def first_startup(self):
-        self.docker.build()
-        self.docker.start()
+        self.docker.update()
         try:
             res = self.docker.exec('web', 'bash scripts/init.sh')
             logger.info('initialized with %s', res)
