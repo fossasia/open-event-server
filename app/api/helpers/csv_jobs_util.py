@@ -17,3 +17,26 @@ def export_orders_csv(orders):
             rows.append(column)
 
     return rows
+
+
+def export_attendees_csv(attendees):
+    headers = ['Order#', 'Order Date', 'Status', 'First Name', 'Last Name', 'Email',
+               'Country', 'Payment Type', 'Ticket Name', 'Ticket Price', 'Ticket Type']
+
+    rows = [headers]
+    for attendee in attendees:
+        column = [str(attendee.order.get_invoice_number()) if attendee.order else '-',
+                  str(attendee.order.created_at) if attendee.order and attendee.order.created_at else '-',
+                  str(attendee.order.status) if attendee.order and attendee.order.status else '-',
+                  str(attendee.firstname) if attendee.firstname else '',
+                  str(attendee.lastname) if attendee.lastname else '',
+                  str(attendee.email) if attendee.email else '',
+                  str(attendee.country) if attendee.country else '',
+                  str(attendee.order.payment_mode) if attendee.order and attendee.order.payment_mode else '',
+                  str(attendee.ticket.name) if attendee.ticket and attendee.ticket.name else '',
+                  str(attendee.ticket.price) if attendee.ticket and attendee.ticket.price else '0',
+                  str(attendee.ticket.type) if attendee.ticket and attendee.ticket.type else '']
+
+        rows.append(column)
+
+    return rows
