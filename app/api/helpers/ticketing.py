@@ -72,8 +72,17 @@ class TicketingManager(object):
 
     @staticmethod
     def charge_stripe_order_payment(order, token_id):
+        """
+        Charge the user through Stripe
+        :param order: Order for which to charge for
+        :param token_id: Stripe token
+        :return:
+        """
+        # save the stripe token with the order
         order.stripe_token = token_id
         save_to_db(order)
+
+        # charge the user
         charge = StripePaymentsManager.capture_payment(order)
 
         if charge:
@@ -99,8 +108,21 @@ class TicketingManager(object):
             return False, 'Error'
 
     @staticmethod
-    def charge_paypal_order_payment(order):
+    def charge_paypal_order_payment(order, token_id):
+        """
+        Charge the user through paypal.
+        :param order: Order for which to charge for
+        :param token_id: Paypal token
+        :return:
+        """
+        # save the paypal token with the order
+        order.paypal_token = token_id
+        save_to_db(order)
+
+        # get relevant details from Paypal using the token
         payment_details = PayPalPaymentsManager.get_approved_payment_details(order)
+
+        # charge the user
         if 'PAYERID' in payment_details:
             capture_result = PayPalPaymentsManager.capture_payment(order, payment_details['PAYERID'])
             if capture_result['ACK'] == 'Success':

@@ -55,17 +55,16 @@ class AccessCodeSchema(SoftDeletionSchema):
 
         min_quantity = data.get('min_quantity', None)
         max_quantity = data.get('max_quantity', None)
-        if min_quantity is not None and max_quantity is not None:
-            if min_quantity > max_quantity:
-                raise UnprocessableEntity(
+        tickets_number = data.get('tickets_number', None)
+        if min_quantity and max_quantity and (min_quantity > max_quantity):
+            raise UnprocessableEntity(
                     {'pointer': '/data/attributes/min-quantity'},
                     "min-quantity should be less than max-quantity"
-                )
+            )
 
-        if 'tickets_number' in data and 'max_quantity' in data:
-            if data['tickets_number'] < data['max_quantity']:
-                raise UnprocessableEntity({'pointer': '/data/attributes/tickets-number'},
-                                          "tickets-number should be greater than max-quantity")
+        if tickets_number and max_quantity and (tickets_number < max_quantity):
+            raise UnprocessableEntity({'pointer': '/data/attributes/tickets-number'},
+                                      "tickets-number should be greater than max-quantity")
 
     id = fields.Integer(dump_ony=True)
     code = fields.Str(required=True)

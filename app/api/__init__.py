@@ -386,7 +386,7 @@ api.route(EventInvoiceRelationshipOptional, 'event_invoice_discount_code',
 api.route(DiscountCodeListPost, 'discount_code_list_post', '/discount-codes')
 api.route(DiscountCodeList, 'discount_code_list', '/events/<int:event_id>/discount-codes',
           '/events/<event_identifier>/discount-codes', '/users/<int:user_id>/discount-codes')
-api.route(DiscountCodeDetail, 'discount_code_detail', '/discount-codes/<int:id>',
+api.route(DiscountCodeDetail, 'discount_code_detail', '/discount-codes/<int:id>', '/discount-codes/<code>',
           '/events/<int:event_id>/discount-code', '/event-invoices/<int:event_invoice_id>/discount-code')
 api.route(DiscountCodeRelationshipRequired, 'discount_code_event',
           '/discount-codes/<int:id>/relationships/event')
@@ -445,7 +445,7 @@ api.route(AccessCodeListPost, 'access_code_list_post', '/access-codes')
 api.route(AccessCodeList, 'access_code_list', '/events/<int:event_id>/access-codes',
           '/events/<event_identifier>/access-codes', '/users/<int:user_id>/access-codes',
           '/tickets/<int:ticket_id>/access-codes')
-api.route(AccessCodeDetail, 'access_code_detail', '/access-codes/<int:id>')
+api.route(AccessCodeDetail, 'access_code_detail', '/access-codes/<int:id>', '/access-codes/<code>')
 api.route(AccessCodeRelationshipRequired, 'access_code_event',
           '/access-codes/<int:id>/relationships/event')
 api.route(AccessCodeRelationshipOptional, 'access_code_user',

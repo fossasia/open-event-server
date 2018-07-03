@@ -1,7 +1,7 @@
 from flask import request
 from marshmallow import post_dump, validates_schema, validate
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app import db
 from app.api.helpers.payment import PayPalPaymentsManager
@@ -42,11 +42,11 @@ class OrderSchema(SoftDeletionSchema):
     address = fields.Str()
     city = fields.Str()
     state = fields.Str(db.String)
-    country = fields.Str(required=True)
+    country = fields.Str()
     zipcode = fields.Str()
     completed_at = fields.DateTime(dump_only=True)
     transaction_id = fields.Str(dump_only=True)
-    payment_mode = fields.Str(default="free", required=True,
+    payment_mode = fields.Str(default="free",
                               validate=validate.OneOf(choices=["free", "stripe", "paypal"]))
     paid_via = fields.Str(dump_only=True)
     brand = fields.Str(dump_only=True)
@@ -57,6 +57,7 @@ class OrderSchema(SoftDeletionSchema):
     discount_code_id = fields.Str()
     payment_url = fields.Str(dump_only=True)
     cancel_note = fields.Str()
+    order_notes = fields.Str(allow_none=True)
 
     attendees = Relationship(attribute='ticket_holders',
                              self_view='v1.order_attendee',
