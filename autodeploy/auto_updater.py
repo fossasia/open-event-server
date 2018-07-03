@@ -1,9 +1,7 @@
 import logging
-
-from os.path import exists, isfile, join
 from os import makedirs
+from os.path import exists
 
-from command import execute
 from docker import DockerCompose, DockerComposeError
 from git import Git
 
@@ -41,7 +39,7 @@ class AutoUpdater():
         self.docker.update()
         if self.init_script:
             try:
-                res = self.docker.exec(self.container, upgrade_script)
+                res = self.docker.exec(self.container, self.upgrade_script)
                 logger.info('<%s> initialized with %s', self.name, res)
             except DockerComposeError as e:
                 logger.warning('%s: %s', e.message, e.errors)
