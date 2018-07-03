@@ -1,10 +1,12 @@
 import logging
+import threading
 from os.path import join
 
 import yaml
-import time, threading
 
 from auto_updater import AutoUpdater
+
+POLL_SECONDS = 60
 
 logger = logging.getLogger(__name__)
 log_format = '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
@@ -44,7 +46,8 @@ def update_all_projects():
         p.update()
         p.upgrade()
 
-    threading.Timer(60, update_all_projects).start()
+    logger.info('sleeping %d seconds', POLL_SECONDS)
+    threading.Timer(POLL_SECONDS, update_all_projects).start()
 
 
 if __name__ == '__main__':

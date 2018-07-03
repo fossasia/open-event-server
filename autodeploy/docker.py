@@ -51,7 +51,5 @@ class DockerCompose():
         return res
 
     def exec(self, container, command):
-        logger.info('executing %s on %s', command, container)
         res = _docker_compose(self.cwd, 'exec', container, command)
-        logger.info('executed command')
         return res

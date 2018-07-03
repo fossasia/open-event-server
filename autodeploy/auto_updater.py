@@ -16,6 +16,7 @@ class AutoUpdater():
         self.repo = repo
         self.cwd = cwd
         self.git = Git(repo, cwd, branch)
+        self.git.clone_if_necessary()
         self.docker = DockerCompose(cwd)
 
         self.container = None
@@ -25,7 +26,6 @@ class AutoUpdater():
         if not exists(cwd):
             logger.info('<%s> creating missing directory %s', self.name, cwd)
             makedirs(cwd)
-            self.git.clone_if_necessary()
             self.first_startup()
 
     def add_scripts(self, container='web', init_cmd='', upgrade_cmd=''):

@@ -19,7 +19,6 @@ def _git(cwd, *cmd):
     if retcode == 0:
         return out
 
-    logger.error('git failed: %s', cwd)
     raise GitError('git exited with a non-zero exit code', err)
 
 
@@ -33,23 +32,20 @@ class Git():
         try:
             self.status()
         except GitError:
-            logger.info('Cloning repo...')
-            res = _git('.', 'clone', '-b', self.branch, self.repo, self.cwd)
-            logger.info('Cloned')
-            return res
+            logger.info('cloning %s', self.repo)
+            return _git('.', 'clone', '-b', self.branch, self.repo, self.cwd)
 
     def status(self):
         return _git(self.cwd, 'status', '-sb')
 
     def fetch(self):
-        logger.info('Fetching from %s', self.branch)
         return _git(self.cwd, 'fetch', 'origin', self.branch)
 
     def pull(self):
-        logger.info('Pulling in %s', self.cwd)
         return _git(self.cwd, 'pull', '--rebase')
 
     def changed_files(self):
+        self.fetch()
         res = _git(self.cwd, 'diff', '--stat', 'origin/{}'.format(self.branch))
         lines = res.splitlines()
         if lines:
