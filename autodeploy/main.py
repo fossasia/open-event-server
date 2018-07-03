@@ -2,16 +2,15 @@ import logging
 from os.path import join
 
 import yaml
-from celery import Celery
+import time, threading
 
 from auto_updater import AutoUpdater
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
+log_format = '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+logging.basicConfig(level=logging.INFO, format=log_format)
 
-app = Celery()
 cwd = '../../tmp'
-projects = []
 
 with open("config.yml", 'r') as ymlfile:
     config = yaml.load(ymlfile)
@@ -19,35 +18,37 @@ with open("config.yml", 'r') as ymlfile:
 
 def get_auto_updater(name, cfg):
     logger.info('project <%s> from <%s> added', name, cfg['url'])
-    a = AutoUpdater(cfg['url'], join(cwd, name), branch=cfg['branch'])
-    if 'init' in cfg:
-        a.add_init_script(cfg['init'])
-    if 'upgrade' in cfg:
-        a.add_upgrade_script(cfg['upgrade'])
+    a = AutoUpdater(
+        name, cfg['url'], cwd=join(cwd, name), branch=cfg['branch'])
+
+    if 'init' in cfg or 'upgrade' in cfg:
+        a.add_scripts(
+            container=cfg['container'],
+            init_cmd=cfg['init'],
+            upgrade_cmd=cfg['upgrade'])
 
     return a
 
 
-def init_all_projects():
-    projects = [get_auto_updater(n, config[n]) for n in config]
+projects = [get_auto_updater(n, config[n]) for n in config]
 
+
+def start_all_projects():
     for p in projects:
         p.start()
 
 
-@app.task
 def update_all_projects():
     for p in projects:
+        logger.info('updating %s', p.repo)
         p.update()
         p.upgrade()
 
-
-@app.on_after_configure.connect
-def setup_periodic_tasks(sender, **kwargs):
-    sender.add_periodic_task(
-        60.0, update_all_projects(), name='update projects')
+    threading.Timer(60, update_all_projects).start()
 
 
 if __name__ == '__main__':
-    init_all_projects()
-    app.worker_main()
+    logger.info('starting projects')
+    start_all_projects()
+    logger.info('starting update threads for projects')
+    update_all_projects()

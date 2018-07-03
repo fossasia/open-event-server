@@ -1,6 +1,7 @@
 server:
     url: github.com/maxlorenz/open-event-server
     branch: deployment
+    container: web
     upgrade: bash scripts/upgrade.sh
     init: bash scripts/init.sh
 frontend:
