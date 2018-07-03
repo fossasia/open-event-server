@@ -39,21 +39,20 @@ class AutoUpdater():
         except DockerComposeError as e:
             logger.warning('Start threw an error: %s', e.errors)
 
-    def upgrade(self):
-        try:
-            res = self.docker.exec('web', 'bash scripts/upgrade.sh')
-            logger.info('upgraded with %s', res)
-        except DockerComposeError as e:
-            logger.warning('%s: %s', e.message, e.errors)
-
     def update(self):
         if self.git.changed_files() > 0:
             self.git.pull()
             self.docker.build()
             self.docker.restart()
             logger.info('update finished')
+        logger.info('no update needed')
 
-        return 'no update needed'
+    def upgrade(self):
+        try:
+            res = self.docker.exec('web', 'bash scripts/upgrade.sh')
+            logger.info('upgraded with %s', res)
+        except DockerComposeError as e:
+            logger.warning('%s: %s', e.message, e.errors)
 
 
 if __name__ == '__main__':
@@ -62,3 +61,5 @@ if __name__ == '__main__':
         'https://github.com/maxlorenz/open-event-server',
         '../../tmp/',
         branch='deployment')
+    a.update()
+    a.upgrade()
