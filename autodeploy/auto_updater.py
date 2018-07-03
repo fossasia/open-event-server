@@ -26,7 +26,11 @@ class AutoUpdater():
             logger.info('<%s> creating missing directory %s', self.name, cwd)
             makedirs(cwd)
             self.git.clone_if_necessary()
-            self.first_startup()
+            try:
+                self.first_startup()
+            except DockerComposeError as e:
+                logger.error('<%s> could not start docker-compose: %s',
+                             self.name, e.errors)
 
     def add_scripts(self, container='web', init_cmd='', upgrade_cmd=''):
         self.container = container
@@ -52,9 +56,12 @@ class AutoUpdater():
 
     def update(self):
         if self.git.changed_files() > 0:
+            running_commit_date = self.git.last_commit_date()
             self.git.pull()
+            latest_commit_date = self.git.last_commit_date()
             self.docker.update()
-            logger.info('<%s> update finished', self.name)
+            logger.info('<%s> update finished, %s to %s', self.name,
+                        running_commit_date, latest_commit_date)
         else:
             logger.info('<%s> no update needed', self.name)
 

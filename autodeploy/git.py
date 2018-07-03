@@ -44,6 +44,9 @@ class Git():
     def pull(self):
         return _git(self.cwd, 'pull', '--rebase')
 
+    def last_commit_date(self):
+        return _git(self.cwd, 'git', 'log', '-1', '--format=%cd')
+
     def changed_files(self):
         self.fetch()
         res = _git(self.cwd, 'diff', '--stat', 'origin/{}'.format(self.branch))
