@@ -17,6 +17,13 @@ def get_new_order_identifier():
         return get_new_order_identifier()
 
 
+def get_updatable_fields():
+    """
+    :return: The list of fields which can be modified by the order user using the pre payment form.
+    """
+    return ['country', 'address', 'city', 'state', 'zipcode', 'status', 'paid_via', 'order_notes']
+
+
 class OrderTicket(SoftDeletionModel):
     __tablename__ = 'orders_tickets'
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id', ondelete='CASCADE'), primary_key=True)
