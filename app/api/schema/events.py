@@ -254,6 +254,20 @@ class EventSchemaPublic(SoftDeletionSchema):
                                 schema='CustomFormSchema',
                                 many=True,
                                 type_='custom-form')
+    organizers = Relationship(attribute='organizers',
+                              self_view='v1.event_organizers',
+                              self_view_kwargs={'id': '<id>'},
+                              related_view='v1.user_list',
+                              schema='UserSchemaPublic',
+                              type_='user',
+                              many=True)
+    coorganizers = Relationship(attribute='coorganizers',
+                                self_view='v1.event_coorganizers',
+                                self_view_kwargs={'id': '<id>'},
+                                related_view='v1.user_list',
+                                schema='UserSchemaPublic',
+                                type_='user',
+                                many=True)
 
 
 class EventSchema(EventSchemaPublic):
@@ -279,20 +293,6 @@ class EventSchema(EventSchemaPublic):
                                   related_view_kwargs={'event_id': '<id>'},
                                   schema='DiscountCodeSchema',
                                   type_='discount-code')
-    organizers = Relationship(attribute='organizers',
-                              self_view='v1.event_organizers',
-                              self_view_kwargs={'id': '<id>'},
-                              related_view='v1.user_list',
-                              schema='UserSchemaPublic',
-                              type_='user',
-                              many=True)
-    coorganizers = Relationship(attribute='coorganizers',
-                                self_view='v1.event_coorganizers',
-                                self_view_kwargs={'id': '<id>'},
-                                related_view='v1.user_list',
-                                schema='UserSchemaPublic',
-                                type_='user',
-                                many=True)
     track_organizers = Relationship(attribute='track_organizers',
                                     self_view='v1.event_track_organizers',
                                     self_view_kwargs={'id': '<id>'},
