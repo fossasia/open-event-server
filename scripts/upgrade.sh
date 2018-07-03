@@ -1,1 +1,1 @@
-python3 manage.py db upgrade
+docker-compose exec web 'python3 manage.py db upgrade'

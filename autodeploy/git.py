@@ -35,7 +35,7 @@ class Git():
             self.status()
         except GitError:
             logger.info('Cloning repo...')
-            res = _git('.', 'clone', self.repo, self.cwd)
+            res = _git('.', 'clone', '-b', self.branch, self.repo, self.cwd)
             logger.info('Cloned')
             return res
 
@@ -52,12 +52,9 @@ class Git():
 
     def changed_files(self):
         res = _git(self.cwd, 'diff', '--stat', 'origin/{}'.format(self.branch))
-        last_line = res.splitlines()[-1]
-        files_changed = int(last_line.split()[0])
-        return files_changed
+        lines = res.splitlines()
+        if lines:
+            last_line = lines[-1]
+            return int(last_line.split()[0])
 
-
-if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
-    git = Git('..', branch='development')
-    print('files changed: {}'.format(git.changed_files()))
+        return 0

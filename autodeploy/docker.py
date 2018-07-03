@@ -34,7 +34,7 @@ class DockerCompose():
 
     def start(self):
         logger.info('starting up...')
-        res = _docker_compose(self.cwd, 'start')
+        res = _docker_compose(self.cwd, 'up', '-d')
         logger.info('started')
         return res
 
@@ -54,4 +54,10 @@ class DockerCompose():
         logger.info('building...')
         res = _docker_compose(self.cwd, 'build')
         logger.info('(re-)built')
+        return res
+
+    def exec(self, container, command):
+        logger.info('executing %s on %s', command, container)
+        res = _docker_compose(self.cwd, 'exec', container, command)
+        logger.info('executed command')
         return res

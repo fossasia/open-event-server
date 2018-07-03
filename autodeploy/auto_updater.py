@@ -24,32 +24,30 @@ class AutoUpdater():
     def start(self):
         try:
             self.docker.start()
-        except DockerComposeError:
-            logger.warning('Start threw an error')
+        except DockerComposeError as e:
+            logger.warning('Start threw an error: %s', e.errors)
 
     def update(self):
-        if self.git.changed_files() > 0:
+        if True:  #self.git.changed_files() > 0:
             self.git.pull()
             self.docker.build()
             self.docker.restart()
-
-            upgrade_script = join(self.cwd, 'scripts', 'upgrade.sh')
-            if isfile(upgrade_script):
-                logger.info('Executing upgrade script...')
-                retcode, out, err = execute(self.cwd, '/bin/bash', '-c',
-                                            upgrade_script)
-                logger.info('Upgrade exited with %d', retcode)
-            else:
-                logger.info('No upgrade script found')
-
-            return 'update finished'
+            self.docker.exec('web', 'bash scripts/upgrade.sh')
+            logger.info('update finished')
 
         return 'no update needed'
 
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
-    a = AutoUpdater('https://github.com/maxlorenz/open-event-server',
-                    '../../tmp/', branch='deployment')
-    a.start()
+    a = AutoUpdater(
+        'https://github.com/maxlorenz/open-event-server',
+        '../../tmp/',
+        branch='deployment')
+    # logger.info('starting up')
+    # print(a.docker.ps())
+    # a.start()
+    print(a.docker.ps())
+
+    logger.info('updating')
     a.update()
