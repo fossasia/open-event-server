@@ -33,6 +33,9 @@ from app.models.event_topic import EventTopic
 # EventType
 from app.models.event_type import EventType
 
+# EventLocation
+from app.models.event_location import EventLocation
+
 # User Permissions
 from app.models.user_permission import UserPermission
 SALES = 'sales'
@@ -115,6 +118,12 @@ def create_event_types():
                   'Tournament', 'Rally']
     for type_ in event_type:
         get_or_create(EventType, name=type_)
+
+
+def create_event_locations():
+    event_location = ['India', 'Singapore', 'Berlin', 'New York', 'Hong Kong']
+    for loc_ in event_location:
+        get_or_create(EventLocation, name=loc_)
 
 
 def create_permissions():
@@ -246,6 +255,8 @@ def populate():
     create_event_topics()
     print('Creating Event Types...')
     create_event_types()
+    print('Creating Event Locations...')
+    create_event_locations()
     print('Creating admin message settings...')
     create_admin_message_settings()
 
@@ -266,6 +277,7 @@ def populate_without_print():
     create_speaker_image_sizes()
     create_event_topics()
     create_event_types()
+    create_event_locations()
     create_admin_message_settings()
 
     db.session.commit()
