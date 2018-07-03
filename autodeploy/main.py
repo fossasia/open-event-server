@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 log_format = '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
 logging.basicConfig(level=logging.INFO, format=log_format)
 
-cwd = '../../tmp'
+cwd = 'autodeploy'
 
 with open("config.yml", 'r') as ymlfile:
     config = yaml.load(ymlfile)

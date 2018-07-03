@@ -1,9 +1,9 @@
 server:
-    url: https://github.com/maxlorenz/open-event-server
-    branch: deployment
+    url: https://github.com/fossasia/open-event-server
+    branch: development
     container: web
     upgrade: bash scripts/upgrade.sh
     init: bash scripts/init.sh
 frontend:
     url: https://github.com/fossasia/open-event-frontend
-    branch: master
+    branch: development
