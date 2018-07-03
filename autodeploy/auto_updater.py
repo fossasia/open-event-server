@@ -18,20 +18,19 @@ class AutoUpdater():
         self.docker = DockerCompose(cwd)
 
         if not exists(cwd):
-            logger.info('Creating missing directory %s', cwd)
+            logger.info('creating missing directory %s', cwd)
             makedirs(cwd)
             self.git.clone_if_necessary()
-            self.docker.build()
-            self.docker.start()
-            self.docker.exec('web', 'bash scripts/init.sh')
+            self.first_startup()
 
-    def init(self):
+    def first_startup(self):
+        self.docker.build()
+        self.docker.start()
         try:
             res = self.docker.exec('web', 'bash scripts/init.sh')
             logger.info('initialized with %s', res)
         except DockerComposeError as e:
             logger.warning('%s: %s', e.message, e.errors)
-
 
     def start(self):
         try:
