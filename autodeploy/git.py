@@ -28,7 +28,6 @@ class Git():
         self.repo = repo
         self.cwd = cwd
         self.branch = branch
-        self.clone_if_necessary()
 
     def clone_if_necessary(self):
         try:

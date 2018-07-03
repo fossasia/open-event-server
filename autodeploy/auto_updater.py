@@ -12,14 +12,26 @@ logger = logging.getLogger(__name__)
 
 class AutoUpdater():
     def __init__(self, repo, cwd, branch='master'):
-        if not exists(cwd):
-            logger.info('Creating missing directory %s', cwd)
-            makedirs(cwd)
-
         self.repo = repo
         self.cwd = cwd
         self.git = Git(repo, cwd, branch)
         self.docker = DockerCompose(cwd)
+
+        if not exists(cwd):
+            logger.info('Creating missing directory %s', cwd)
+            makedirs(cwd)
+            self.git.clone_if_necessary()
+            self.docker.build()
+            self.docker.start()
+            self.docker.exec('web', 'bash scripts/init.sh')
+
+    def init(self):
+        try:
+            res = self.docker.exec('web', 'bash scripts/init.sh')
+            logger.info('initialized with %s', res)
+        except DockerComposeError as e:
+            logger.warning('%s: %s', e.message, e.errors)
+
 
     def start(self):
         try:
@@ -28,11 +40,15 @@ class AutoUpdater():
             logger.warning('Start threw an error: %s', e.errors)
 
     def update(self):
-        if True:  #self.git.changed_files() > 0:
+        if self.git.changed_files() > 0:
             self.git.pull()
             self.docker.build()
             self.docker.restart()
-            self.docker.exec('web', 'bash scripts/upgrade.sh')
+            try:
+                res = self.docker.exec('web', 'bash scripts/upgrade.sh')
+                logger.info('upgraded with %s', res)
+            except DockerComposeError as e:
+                logger.warning('%s: %s', e.message, e.errors)
             logger.info('update finished')
 
         return 'no update needed'
@@ -44,10 +60,3 @@ if __name__ == '__main__':
         'https://github.com/maxlorenz/open-event-server',
         '../../tmp/',
         branch='deployment')
-    # logger.info('starting up')
-    # print(a.docker.ps())
-    # a.start()
-    print(a.docker.ps())
-
-    logger.info('updating')
-    a.update()
