@@ -260,6 +260,8 @@ class OrderDetail(ResourceDetail):
         """
         if not has_access('is_coorganizer', event_id=order.event.id):
             raise ForbiddenException({'source': ''}, 'Access Forbidden')
+        elif order.amount and order.amount > 0 and (order.status == 'completed' or order.status == 'placed'):
+            raise ConflictException({'source': ''}, 'You cannot delete a placed/completed paid order.')
 
     decorators = (jwt_required,)
 
