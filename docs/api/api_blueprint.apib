@@ -1214,6 +1214,116 @@ Get the details of the user.
             }
         }
 
+## Check if the email is available [/v1/users/checkEmail]
+Check if the email passed is available or not. True is returned if the email is available, false otherwise.
+
+
+### Check if email is available [POST]
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
+        {
+            "email": "test@example.com"
+        }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "result": "True"
+        }
+
+
+# Group Event Locations
+
+Event Locations for Events. 
+
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the event type | string | - |
+| `slug` | Slug of the event type | string | - |
+
+
+## Event Locations Collection [/v1/event-locations{?page%5bsize%5d,page%5bnumber%5d,sort}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+
+### List All Event Locations [GET]
+Get a list of Event Types.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": [
+            {
+              "type": "event-location",
+              "attributes": {
+                "slug": "india",
+                "name": "India"
+              },
+              "id": "1"
+            },
+            {
+              "type": "event-location",
+              "attributes": {
+                "slug": "singapore",
+                "name": "Singapore"
+              },
+              "id": "2"
+            },
+            {
+              "type": "event-location",
+              "attributes": {
+                "slug": "berlin",
+                "name": "Berlin"
+              },
+              "id": "3"
+            },
+            {
+              "type": "event-location",
+              "attributes": {
+                "slug": "new-york",
+                "name": "New York"
+              },
+              "id": "4"
+            },
+            {
+              "type": "event-location",
+              "attributes": {
+                "slug": "hong-kong",
+                "name": "Hong Kong"
+              },
+              "id": "5"
+            }
+          ],
+          "links": {
+            "self": "/v1/event-locations"
+          },
+          "meta": {
+            "count": 5
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
 
 # Group Event Types
 
@@ -21279,6 +21389,48 @@ to get the status of the export task.
             "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
         }
 
+## Start Attendees Export as CSV [/v1/events/{event_identifier}/export/attendees/csv]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+Start a celery task to export the list of attendees of the event with that event_id as a CSV file to get it ready for downloading. Returns the task url
+to get the status of the export task.
+
+
+### Start a Task to Export Attendees of an Event as CSV [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
+
+## Start Attendees Export as PDF [/v1/events/{event_identifier}/export/attendees/pdf]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+Start a celery task to export the list of attendees of the event with that event_id as a PDF file to get it ready for downloading. Returns the task url
+to get the status of the export task.
+
+
+### Start a Task to Export Attendees of an Event as PDF [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
+
 # Group Event Import
 
 This group of APIs help you to start a task for importing zip containing JSON files into the server.
@@ -22206,6 +22358,41 @@ Delete a single Order.
             "version": "1.0"
           }
         }
+
+## Orders under a User [/v1/users/{user_id}/orders{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + user_id: 1 (integer) - ID of the user in the form of an integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. If you want to filter by firstname and lastname, example url will /endpoint?filter=[{"firstname":"firstname","lastname":"lastname"}]Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List all Orders under a User [GET]
+Get a list of all orders
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 0
+          },
+          "data": [],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/orders"
+          }
+        }
+
 
 # Group Admin Sales
 

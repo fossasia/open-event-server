@@ -27,6 +27,7 @@ from app.api.imports import import_event_task_base
 from app.models.event import Event
 from app.models.order import Order
 from app.models.discount_code import DiscountCode
+from app.models.ticket_holder import TicketHolder
 from app.api.helpers.ICalExporter import ICalExporter
 from app.api.helpers.xcal import XCalExporter
 from app.api.helpers.pentabarfxml import PentabarfExporter
@@ -124,14 +125,14 @@ def export_ical_task(self, event_id, temp=True):
 
     try:
         if temp:
-            filedir = current_app.config.get('BASE_DIR') + '/static/uploads/temp/' + event_id + '/'
+            filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/' + event_id + '/')
         else:
-            filedir = current_app.config.get('BASE_DIR') + '/static/uploads/' + event_id + '/'
+            filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/' + event_id + '/')
 
         if not os.path.isdir(filedir):
             os.makedirs(filedir)
         filename = "ical.ics"
-        file_path = filedir + filename
+        file_path = os.path.join(filedir, filename)
         with open(file_path, "w") as temp_file:
             temp_file.write(str(ICalExporter.export(event_id), 'utf-8'))
         ical_file = UploadedFile(file_path=file_path, filename=filename)
@@ -159,14 +160,14 @@ def export_xcal_task(self, event_id, temp=True):
 
     try:
         if temp:
-            filedir = current_app.config.get('BASE_DIR') + '/static/uploads/temp/' + event_id + '/'
+            filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/' + event_id + '/')
         else:
-            filedir = current_app.config.get('BASE_DIR') + '/static/uploads/' + event_id + '/'
+            filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/' + event_id + '/')
 
         if not os.path.isdir(filedir):
             os.makedirs(filedir)
         filename = "xcal.xcs"
-        file_path = filedir + filename
+        file_path = os.path.join(filedir, filename)
         with open(file_path, "w") as temp_file:
             temp_file.write(str(XCalExporter.export(event_id), 'utf-8'))
         xcal_file = UploadedFile(file_path=file_path, filename=filename)
@@ -194,14 +195,14 @@ def export_pentabarf_task(self, event_id, temp=True):
 
     try:
         if temp:
-            filedir = current_app.config.get('BASE_DIR') + '/static/uploads/temp/' + event_id + '/'
+            filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/' + event_id + '/')
         else:
-            filedir = current_app.config.get('BASE_DIR') + '/static/uploads/' + event_id + '/'
+            filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/' + event_id + '/')
 
         if not os.path.isdir(filedir):
             os.makedirs(filedir)
         filename = "pentabarf.xml"
-        file_path = filedir + filename
+        file_path = os.path.join(filedir, filename)
         with open(file_path, "w") as temp_file:
             temp_file.write(str(PentabarfExporter.export(event_id), 'utf-8'))
         pentabarf_file = UploadedFile(file_path=file_path, filename=filename)
@@ -228,11 +229,11 @@ def export_order_csv_task(self, event_id):
     orders = db.session.query(Order).filter_by(event_id=event_id)
 
     try:
-        filedir = current_app.config.get('BASE_DIR') + '/static/uploads/temp/'
+        filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
         if not os.path.isdir(filedir):
             os.makedirs(filedir)
         filename = "order-{}.csv".format(uuid.uuid1().hex)
-        file_path = filedir + filename
+        file_path = os.path.join(filedir, filename)
 
         with open(file_path, "w") as temp_file:
             writer = csv.writer(temp_file)
@@ -241,7 +242,8 @@ def export_order_csv_task(self, event_id):
             for row in content:
                 writer.writerow(row)
         order_csv_file = UploadedFile(file_path=file_path, filename=filename)
-        order_csv_url = upload(order_csv_file, UPLOAD_PATHS['exports']['csv'].format(event_id=event_id))
+        order_csv_url = upload(order_csv_file,
+                               UPLOAD_PATHS['exports-temp']['csv'].format(event_id=event_id, identifier=''))
         result = {
             'download_url': order_csv_url
         }
@@ -260,9 +262,56 @@ def export_order_pdf_task(self, event_id):
     try:
         order_pdf_url = create_save_pdf(
             render_template('pdf/orders.html', event=event, event_id=event_id, orders=orders,
-                            discount_code=discount_code))
+                            discount_code=discount_code),
+            UPLOAD_PATHS['exports-temp']['pdf'].format(event_id=event_id, identifier=''))
         result = {
             'download_url': order_pdf_url
+        }
+    except Exception as e:
+        print(traceback.format_exc())
+        result = {'__error': True, 'result': str(e)}
+
+    return result
+
+
+@celery.task(base=RequestContextTask, name='export.attendees.csv', bind=True)
+def export_attendees_csv_task(self, event_id):
+    attendees = db.session.query(TicketHolder).filter_by(event_id=event_id)
+    try:
+        filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
+        if not os.path.isdir(filedir):
+            os.makedirs(filedir)
+        filename = "attendees-{}.csv".format(uuid.uuid1().hex)
+        file_path = os.path.join(filedir, filename)
+
+        with open(file_path, "w") as temp_file:
+            writer = csv.writer(temp_file)
+            from app.api.helpers.csv_jobs_util import export_attendees_csv
+            content = export_attendees_csv(attendees)
+            for row in content:
+                writer.writerow(row)
+        attendees_csv_file = UploadedFile(file_path=file_path, filename=filename)
+        attendees_csv_url = upload(attendees_csv_file,
+                                   UPLOAD_PATHS['exports-temp']['csv'].format(event_id=event_id, identifier=''))
+        result = {
+            'download_url': attendees_csv_url
+        }
+    except Exception as e:
+        print(traceback.format_exc())
+        result = {'__error': True, 'result': str(e)}
+
+    return result
+
+
+@celery.task(base=RequestContextTask, name='export.attendees.pdf', bind=True)
+def export_attendees_pdf_task(self, event_id):
+    attendees = db.session.query(TicketHolder).filter_by(event_id=event_id)
+    try:
+        attendees_pdf_url = create_save_pdf(
+            render_template('pdf/attendees_pdf.html', holders=attendees),
+            UPLOAD_PATHS['exports-temp']['pdf'].format(event_id=event_id, identifier=''))
+        result = {
+            'download_url': attendees_pdf_url
         }
     except Exception as e:
         print(traceback.format_exc())

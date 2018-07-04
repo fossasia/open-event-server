@@ -3,7 +3,7 @@ from flask import current_app
 from app.api.helpers.db import save_to_db
 from app.models.notification import Notification, NEW_SESSION, SESSION_ACCEPT_REJECT, \
     EVENT_IMPORTED, EVENT_IMPORT_FAIL, EVENT_EXPORTED, EVENT_EXPORT_FAIL, MONTHLY_PAYMENT_NOTIF, \
-    MONTHLY_PAYMENT_FOLLOWUP_NOTIF, EVENT_ROLE_INVITE, AFTER_EVENT, TICKET_PURCHASED_ORGANIZER, \
+    MONTHLY_PAYMENT_FOLLOWUP_NOTIF, EVENT_ROLE, AFTER_EVENT, TICKET_PURCHASED_ORGANIZER, \
     TICKET_PURCHASED_ATTENDEE, TICKET_PURCHASED, TICKET_CANCELLED, TICKET_CANCELLED_ORGANIZER
 from app.models.message_setting import MessageSettings
 from app.api.helpers.log import record_activity
@@ -125,10 +125,10 @@ def send_followup_notif_monthly_fee_payment(user, event_name, previous_month, am
 
 
 def send_notif_event_role(user, role_name, event_name, link):
-    message_settings = MessageSettings.query.filter_by(action=EVENT_ROLE_INVITE).first()
+    message_settings = MessageSettings.query.filter_by(action=EVENT_ROLE).first()
     if not message_settings or message_settings.notification_status == 1:
-        notif = NOTIFS[EVENT_ROLE_INVITE]
-        action = EVENT_ROLE_INVITE
+        notif = NOTIFS[EVENT_ROLE]
+        action = EVENT_ROLE
         title = notif['title'].format(
             role_name=role_name,
             event_name=event_name
