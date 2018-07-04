@@ -137,9 +137,12 @@ class DiscountCodeDetail(ResourceDetail):
             return
 
         if kwargs.get('id'):
-            discount = db.session.query(DiscountCode).filter_by(id=kwargs.get('id')).one()
-            if not discount:
-                raise ObjectNotFound({'parameter': '{id}'}, "DiscountCode:  not found")
+            try:
+                discount = db.session.query(
+                    DiscountCode).filter_by(id=kwargs.get('id')).one()
+            except NoResultFound:
+                raise ObjectNotFound(
+                    {'parameter': '{id}'}, "DiscountCode:  not found")
 
             if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=discount.event_id):
                 self.schema = DiscountCodeSchemaTicket
@@ -180,9 +183,12 @@ class DiscountCodeDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
         if view_kwargs.get('id'):
-            discount = self.session.query(DiscountCode).filter_by(id=view_kwargs.get('id')).one()
-            if not discount:
-                raise ObjectNotFound({'parameter': '{id}'}, "DiscountCode:  not found")
+            try:
+                discount = self.session.query(
+                    DiscountCode).filter_by(id=view_kwargs.get('id')).one()
+            except NoResultFound:
+                raise ObjectNotFound(
+                    {'parameter': '{id}'}, "DiscountCode: not found")
 
             if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=discount.event_id):
                 self.schema = DiscountCodeSchemaTicket
@@ -257,9 +263,12 @@ class DiscountCodeRelationshipRequired(ResourceRelationship):
         :param kwargs:
         :return:
         """
-        discount = db.session.query(DiscountCode).filter_by(id=kwargs.get('id')).one()
-        if not discount:
-            raise ObjectNotFound({'parameter': '{id}'}, "DiscountCode:  not found")
+        try:
+            discount = db.session.query(
+                DiscountCode).filter_by(id=kwargs.get('id')).one()
+        except NoResultFound:
+            raise ObjectNotFound(
+                {'parameter': '{id}'}, "DiscountCode: not found")
         if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=discount.event_id):
             self.schema = DiscountCodeSchemaTicket
 
@@ -288,9 +297,12 @@ class DiscountCodeRelationshipOptional(ResourceRelationship):
         :param kwargs:
         :return:
         """
-        discount = db.session.query(DiscountCode).filter_by(id=kwargs.get('id')).one()
-        if not discount:
-            raise ObjectNotFound({'parameter': '{id}'}, "DiscountCode:  not found")
+        try:
+            discount = db.session.query(
+                DiscountCode).filter_by(id=kwargs.get('id')).one()
+        except NoResultFound:
+            raise ObjectNotFound(
+                {'parameter': '{id}'}, "DiscountCode: not found")
 
         if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=discount.event_id):
             self.schema = DiscountCodeSchemaTicket
