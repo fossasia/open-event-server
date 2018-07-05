@@ -225,6 +225,10 @@ class OrderDetail(ResourceDetail):
                             # Since we don't have a refund system.
                             raise ForbiddenException({'pointer': 'data/status'},
                                                      "You cannot update the status of a completed paid order")
+                        elif element == 'status' and order.status == 'cancelled':
+                            # Since the tickets have been unlocked and we can't revert it.
+                            raise ForbiddenException({'pointer': 'data/status'},
+                                                     "You cannot update the status of a cancelled order")
 
         elif current_user.id == order.user_id:
             if order.status != 'pending':
