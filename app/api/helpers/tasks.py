@@ -242,7 +242,8 @@ def export_order_csv_task(self, event_id):
             for row in content:
                 writer.writerow(row)
         order_csv_file = UploadedFile(file_path=file_path, filename=filename)
-        order_csv_url = upload(order_csv_file, UPLOAD_PATHS['exports']['csv'].format(event_id=event_id))
+        order_csv_url = upload(order_csv_file,
+                               UPLOAD_PATHS['exports-temp']['csv'].format(event_id=event_id, identifier=''))
         result = {
             'download_url': order_csv_url
         }
@@ -261,7 +262,8 @@ def export_order_pdf_task(self, event_id):
     try:
         order_pdf_url = create_save_pdf(
             render_template('pdf/orders.html', event=event, event_id=event_id, orders=orders,
-                            discount_code=discount_code))
+                            discount_code=discount_code),
+            UPLOAD_PATHS['exports-temp']['pdf'].format(event_id=event_id, identifier=''))
         result = {
             'download_url': order_pdf_url
         }
@@ -289,9 +291,27 @@ def export_attendees_csv_task(self, event_id):
             for row in content:
                 writer.writerow(row)
         attendees_csv_file = UploadedFile(file_path=file_path, filename=filename)
-        attendees_csv_url = upload(attendees_csv_file, UPLOAD_PATHS['exports']['csv'].format(event_id=event_id))
+        attendees_csv_url = upload(attendees_csv_file,
+                                   UPLOAD_PATHS['exports-temp']['csv'].format(event_id=event_id, identifier=''))
         result = {
             'download_url': attendees_csv_url
+        }
+    except Exception as e:
+        print(traceback.format_exc())
+        result = {'__error': True, 'result': str(e)}
+
+    return result
+
+
+@celery.task(base=RequestContextTask, name='export.attendees.pdf', bind=True)
+def export_attendees_pdf_task(self, event_id):
+    attendees = db.session.query(TicketHolder).filter_by(event_id=event_id)
+    try:
+        attendees_pdf_url = create_save_pdf(
+            render_template('pdf/attendees_pdf.html', holders=attendees),
+            UPLOAD_PATHS['exports-temp']['pdf'].format(event_id=event_id, identifier=''))
+        result = {
+            'download_url': attendees_pdf_url
         }
     except Exception as e:
         print(traceback.format_exc())
