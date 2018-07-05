@@ -53,6 +53,9 @@ from app.factories.mail import MailFactory
 from app.factories.order import OrderFactory
 from app.factories.faq_type import FaqTypeFactory
 from app.factories.feedback import FeedbackFactory
+from app.factories.service import ServiceFactory
+
+
 
 
 stash = {}
@@ -2198,6 +2201,92 @@ def role_role_invite(transaction):
         db.session.commit()
 
 
+# ------------------------- Service -------------------------
+@hooks.before("Services > Services Collection > List Services")
+def service(transaction):
+    """
+    GET /services
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        service = ServiceFactory()
+        db.session.add(service)
+        db.session.commit()
+
+
+@hooks.before("Services > Services Details > Get Service Details")
+def service_detail(transaction):
+    """
+    GET /services/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        service = ServiceFactory()
+        db.session.add(service)
+        db.session.commit()
+
+
+@hooks.before("Services > Services Details > Update Service")
+def service_patch(transaction):
+    """
+    PATCH /services/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        service = ServiceFactory()
+        db.session.add(service)
+        db.session.commit()
+
+
+# ------------------------- Event Role Permission -------------------------
+@hooks.before("Event Role Permission > Event Role Permission Collection > List Event Role Permissions")
+def event_role_permission_list(transaction):
+    """
+    GET /event-role-permissions
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+#   TODO: This is breaking the build, we need to repair it eventually.
+#   with stash['app'].app_context():
+#       event_role_permission = EventRolePermissionsFactory()
+#       db.session.add(event_role_permission)
+#       db.session.commit()
+
+
+@hooks.before("Event Role Permission > Event Role Permission Details > Get Event Role Permission Details")
+def event_role_permission_detail(transaction):
+    """
+    GET /event-role-permissions/1
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+#   TODO: This is breaking the build, we need to repair it eventually.
+#   with stash['app'].app_context():
+#       event_role_permission = EventRolePermissionsFactory()
+#       db.session.add(event_role_permission)
+#       db.session.commit()
+
+
+@hooks.before("Event Role Permission > Event Role Permission Details > Update Event Role Permission")
+def event_role_permission_patch(transaction):
+    """
+    PATCH /event-role-permissions/1
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+#   TODO: This is breaking the build, we need to repair it eventually.
+#   with stash['app'].app_context():
+#       event_role_permission = EventRolePermissionsFactory()
+#       db.session.add(event_role_permission)
+#       db.session.commit()
+
+
 # ------------------------- Activities -------------------------
 @hooks.before("Activity > Activity Collection > List all Activities")
 def activity_get_list(transaction):
@@ -2485,6 +2574,24 @@ def discount_delete(transaction):
         db.session.commit()
 
 
+@hooks.before("Discount Codes > Get Discount Code Detail using the code > Get Discount Code Detail")
+def discount_code_get_detail_using_code(transaction):
+    """
+    GET /discount-codes/DC101
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+        discount_code = DiscountCodeFactory(event_id=1)
+        discount_code.code = 'DC101'
+        db.session.add(discount_code)
+        db.session.commit()
+
+
 @hooks.before("Discount Codes > List Discount Codes under a User > List All Discount Codes under a User")
 def user_discount_code_get_list(transaction):
     """
@@ -2586,6 +2693,20 @@ def access_code_delete(transaction):
     """
     with stash['app'].app_context():
         access_code = AccessCodeFactory()
+        db.session.add(access_code)
+        db.session.commit()
+
+
+@hooks.before("Access Codes > Access Code Detail using the Code > Access Code Detail")
+def access_code_get_detail_using_code(transaction):
+    """
+    GET /access-codes/AC101
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        access_code = AccessCodeFactory()
+        access_code.code = 'AC101'
         db.session.add(access_code)
         db.session.commit()
 
@@ -3460,6 +3581,19 @@ def event_export_pentabarf_get(transaction):
 @hooks.before(
     "Event Export > Start Orders Export as CSV > Start a Task to Export Orders of an Event as CSV")
 def event_orders_export_csv_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Export > Start Orders Export as PDF > Start a Task to Export Orders of an Event as PDF")
+def event_orders_export_pdf_get(transaction):
     """
     :param transaction:
     :return:

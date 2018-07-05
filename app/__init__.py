@@ -37,6 +37,8 @@ from app.views.elastic_search import es
 from app.views.elastic_cron_helpers import sync_events_elasticsearch, cron_rebuild_events_elasticsearch
 from app.views.redis_store import redis_store
 from app.views.celery_ import celery
+from app.templates.flask_ext.jinja.filters import init_filters
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -158,6 +160,7 @@ def create_app():
 
 
 current_app, manager, database, jwt = create_app()
+init_filters(app)
 
 
 # http://stackoverflow.com/questions/26724623/

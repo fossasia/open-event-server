@@ -17,7 +17,7 @@ from app.models.user import User
 
 class DiscountCodeListPost(ResourceList):
     """
-    Create Discount Codes
+    Create Event and Ticket Discount code and Get Event Discount Codes
     """
 
     def before_post(self, args, kwargs, data):
@@ -37,7 +37,7 @@ class DiscountCodeListPost(ResourceList):
         if data['used_for'] == 'event' and 'events' in data:
             for event in data['events']:
                 try:
-                    event_now = db.session.query(Event).filter_by(id=event).one()
+                    event_now = db.session.query(Event).filter_by(id=event, deleted_at=None).one()
                 except NoResultFound:
                     raise UnprocessableEntity({'event_id': event},
                                               "Event does not exist")
@@ -68,7 +68,7 @@ class DiscountCodeListPost(ResourceList):
 
 class DiscountCodeList(ResourceList):
     """
-    List and Create Discount Code
+    Get the list of Ticket Discount Code
     """
 
     def query(self, view_kwargs):
@@ -78,17 +78,25 @@ class DiscountCodeList(ResourceList):
         :return:
         """
         query_ = self.session.query(DiscountCode)
+        # user can only access his/her discount codes.
         if view_kwargs.get('user_id'):
-            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
-            query_ = query_.join(User).filter(User.id == user.id)
+            if has_access('is_user_itself', user_id=view_kwargs['user_id']):
+                user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+                query_ = query_.join(User).filter(User.id == user.id)
+            else:
+                raise ForbiddenException({'source': ''}, 'You are not authorized')
 
         if view_kwargs.get('event_identifier'):
             event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
             view_kwargs['event_id'] = event.id
 
-        if view_kwargs.get('event_id') and has_access('is_coorganizer', event_id=view_kwargs['event_id']):
-            self.schema = DiscountCodeSchemaTicket
-            query_ = query_.filter_by(event_id=view_kwargs['event_id'])
+        # event co-organizer access required for discount codes under an event.
+        if view_kwargs.get('event_id'):
+            if has_access('is_coorganizer', event_id=view_kwargs['event_id']):
+                self.schema = DiscountCodeSchemaTicket
+                query_ = query_.filter_by(event_id=view_kwargs['event_id'])
+            else:
+                raise ForbiddenException({'source': ''}, 'Event organizer access required')
 
         return query_
 
@@ -104,7 +112,7 @@ class DiscountCodeList(ResourceList):
 
 class DiscountCodeDetail(ResourceDetail):
     """
-    Discount Code detail by id
+    Discount Code detail by id or code.
     """
 
     def before_get(self, args, kwargs):
@@ -118,6 +126,15 @@ class DiscountCodeDetail(ResourceDetail):
                 kwargs['id'] = event.discount_code_id
             else:
                 kwargs['id'] = None
+
+        # Any registered user can fetch discount code details using the code.
+        if kwargs.get('code'):
+            discount = db.session.query(DiscountCode).filter_by(code=kwargs.get('code')).first()
+            if discount:
+                kwargs['id'] = discount.id
+            else:
+                raise ObjectNotFound({'parameter': '{code}'}, "DiscountCode:  not found")
+            return
 
         if kwargs.get('id'):
             discount = db.session.query(DiscountCode).filter_by(id=kwargs.get('id')).one()

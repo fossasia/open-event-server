@@ -1,9 +1,10 @@
 from sqlalchemy.orm import backref
 
 from app.models import db
+from app.models.base import SoftDeletionModel
 
 
-class Tax(db.Model):
+class Tax(SoftDeletionModel):
     """
     Tax Information about an event.
     """
@@ -41,7 +42,8 @@ class Tax(db.Model):
                  invoice_footer=None,
                  is_tax_included_in_price=None,
                  is_invoice_sent=None,
-                 event_id=None):
+                 event_id=None,
+                 deleted_at=None):
         self.country = country
         self.name = name
         self.rate = rate
@@ -56,6 +58,7 @@ class Tax(db.Model):
         self.is_tax_included_in_price = is_tax_included_in_price
         self.is_invoice_sent = is_invoice_sent
         self.event_id = event_id
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<Tax %r>' % self.name

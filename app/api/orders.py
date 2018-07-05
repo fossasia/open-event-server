@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import request, render_template
+from flask import render_template
 from flask_jwt import current_identity as current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
@@ -8,7 +8,7 @@ from marshmallow_jsonapi.flask import Schema
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.data_layers.ChargesLayer import ChargesLayer
-from app.api.helpers.db import save_to_db, safe_query
+from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
 from app.api.helpers.files import create_save_pdf
 from app.api.helpers.files import make_frontend_url
@@ -32,9 +32,10 @@ class OrdersListPost(ResourceList):
     """
     OrderListPost class for OrderSchema
     """
+
     def before_post(self, args, kwargs, data=None):
         """
-        before post method to check for required relationship and proper permission
+        before post method to check for required relationships and permissions
         :param args:
         :param kwargs:
         :param data:
@@ -55,7 +56,8 @@ class OrdersListPost(ResourceList):
         for ticket_holder in data['ticket_holders']:
             # Ensuring that the attendee exists and doesn't have an associated order.
             try:
-                ticket_holder_object = self.session.query(TicketHolder).filter_by(id=int(ticket_holder)).one()
+                ticket_holder_object = self.session.query(TicketHolder).filter_by(id=int(ticket_holder),
+                                                                                  deleted_at=None).one()
                 if ticket_holder_object.order_id:
                     raise ConflictException({'pointer': '/data/relationships/attendees'},
                                             "Order already exists for attendee with id {}".format(str(ticket_holder)))
@@ -68,7 +70,8 @@ class OrdersListPost(ResourceList):
 
         # Apply discount only if the user is not event admin
         if data.get('discount') and not has_access('is_coorganizer', event_id=data['event']):
-            discount_code = safe_query(self, DiscountCode, 'id', data['discount'], 'discount_code_id')
+            discount_code = safe_query_without_soft_deleted_entries(self, DiscountCode, 'id', data['discount'],
+                                                                    'discount_code_id')
             if not discount_code.is_active:
                 raise UnprocessableEntity({'source': 'discount_code_id'}, "Inactive Discount Code")
             else:
@@ -86,7 +89,7 @@ class OrdersListPost(ResourceList):
     def after_create_object(self, order, data, view_kwargs):
         """
         after create object method for OrderListPost Class
-        :param order:
+        :param order: Object created from mashmallow_jsonapi
         :param data:
         :param view_kwargs:
         :return:
@@ -94,9 +97,11 @@ class OrdersListPost(ResourceList):
         order_tickets = {}
         for holder in order.ticket_holders:
             if holder.id != current_user.id:
-                pdf = create_save_pdf(render_template('/pdf/ticket_attendee.html', order=order, holder=holder))
+                pdf = create_save_pdf(render_template('pdf/ticket_attendee.html', order=order, holder=holder),
+                                      dir_path='/static/uploads/pdf/tickets/')
             else:
-                pdf = create_save_pdf(render_template('/pdf/ticket_purchaser.html', order=order))
+                pdf = create_save_pdf(render_template('pdf/ticket_purchaser.html', order=order),
+                                      dir_path='/static/uploads/pdf/tickets/')
             holder.pdf_url = pdf
             save_to_db(holder)
             if not order_tickets.get(holder.ticket_id):
@@ -107,15 +112,19 @@ class OrdersListPost(ResourceList):
             od = OrderTicket(order_id=order.id, ticket_id=ticket, quantity=order_tickets[ticket])
             save_to_db(od)
         order.quantity = order.tickets_count()
+        order.user = current_user
         save_to_db(order)
         if not has_access('is_coorganizer', event_id=data['event']):
             TicketingManager.calculate_update_amount(order)
-        send_email_to_attendees(order, current_user.id)
-        send_notif_to_attendees(order, current_user.id)
 
-        order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
-        for organizer in order.event.organizers:
-            send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name)
+        # send e-mail and notifications if the order status is completed
+        if order.status == 'completed':
+            send_email_to_attendees(order, current_user.id)
+            send_notif_to_attendees(order, current_user.id)
+
+            order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
+            for organizer in order.event.organizers:
+                send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name)
 
         data['user_id'] = current_user.id
 
@@ -133,6 +142,7 @@ class OrdersList(ResourceList):
     """
     OrderList class for OrderSchema
     """
+
     def before_get(self, args, kwargs):
         """
         before get method to get the resource id for fetching details
@@ -140,9 +150,7 @@ class OrdersList(ResourceList):
         :param kwargs:
         :return:
         """
-        if 'GET' in request.method and kwargs.get('event_id') is None:
-            pass
-        elif not has_access('is_coorganizer', event_id=kwargs['event_id']):
+        if kwargs.get('event_id') and not has_access('is_coorganizer', event_id=kwargs['event_id']):
             raise ForbiddenException({'source': ''}, "Co-Organizer Access Required")
 
     def query(self, view_kwargs):
@@ -165,6 +173,7 @@ class OrderDetail(ResourceDetail):
     """
     OrderDetail class for OrderSchema
     """
+
     def before_get_object(self, view_kwargs):
         """
         before get method to get the resource id for fetching details
@@ -178,23 +187,58 @@ class OrderDetail(ResourceDetail):
         order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
 
         if not has_access('is_coorganizer_or_user_itself', event_id=order.event_id, user_id=order.user_id):
-            return ForbiddenException({'source': ''}, 'Access Forbidden')
+            return ForbiddenException({'source': ''}, 'You can only access your orders or your event\'s orders')
 
     def before_update_object(self, order, data, view_kwargs):
         """
+        before update object method of order details
+        1. admin can update all the fields.
+        2. event organizer
+            a. own orders: he/she can update selected fields.
+            b. other's orders: can only update the status that too when the order mode is free. No refund system.
+        3. order user can update selected fields of his/her order when the status is pending.
+        The selected fields mentioned above can be taken from get_updatable_fields method from order model.
         :param order:
         :param data:
         :param view_kwargs:
         :return:
         """
-        if not has_access('is_admin'):
-            for element in data:
-                if element != 'status':
-                    setattr(data, element, getattr(order, element))
+        if (not has_access('is_coorganizer', event_id=order.event_id)) and (not current_user.id == order.user_id):
+            raise ForbiddenException({'pointer': ''}, "Access Forbidden")
 
-        if not has_access('is_coorganizer', event_id=order.event.id):
-            raise ForbiddenException({'pointer': 'data/status'},
-                                     "To update status minimum Co-organizer access required")
+        if has_access('is_coorganizer_but_not_admin', event_id=order.event_id):
+            if current_user.id == order.user_id:
+                # Order created from the tickets tab.
+                for element in data:
+                    if data[element] != getattr(order, element, None) and element not in Order.get_updatable_fields():
+                        raise ForbiddenException({'pointer': 'data/{}'.format(element)},
+                                                 "You cannot update {} of an order".format(element))
+
+            else:
+                # Order created from the public pages.
+                for element in data:
+                    if data[element] != getattr(order, element, None):
+                        if element != 'status':
+                            raise ForbiddenException({'pointer': 'data/{}'.format(element)},
+                                                     "You cannot update {} of an order".format(element))
+                        elif element == 'status' and order.amount and order.status == 'completed':
+                            # Since we don't have a refund system.
+                            raise ForbiddenException({'pointer': 'data/status'},
+                                                     "You cannot update the status of a completed paid order")
+
+        elif current_user.id == order.user_id:
+            if order.status != 'pending':
+                raise ForbiddenException({'pointer': ''},
+                                         "You cannot update a non-pending order")
+            else:
+                for element in data:
+                    if data[element] != getattr(order, element, None) and element not in Order.get_updatable_fields():
+                        raise ForbiddenException({'pointer': 'data/{}'.format(element)},
+                                                 "You cannot update {} of an order".format(element))
+
+        if 'order_notes' in data:
+            if order.order_notes and data['order_notes'] not in order.order_notes.split(","):
+                data['order_notes'] = '{},{}'.format(order.order_notes, data['order_notes'])
 
     def after_update_object(self, order, data, view_kwargs):
         """
@@ -216,6 +260,8 @@ class OrderDetail(ResourceDetail):
         """
         if not has_access('is_coorganizer', event_id=order.event.id):
             raise ForbiddenException({'source': ''}, 'Access Forbidden')
+        elif order.amount and order.amount > 0 and (order.status == 'completed' or order.status == 'placed'):
+            raise ConflictException({'source': ''}, 'You cannot delete a placed/completed paid order.')
 
     decorators = (jwt_required,)
 
@@ -246,6 +292,7 @@ class ChargeSchema(Schema):
     """
     ChargeSchema
     """
+
     class Meta:
         """
         Meta class for ChargeSchema
@@ -257,6 +304,7 @@ class ChargeSchema(Schema):
 
     id = fields.Str(dump_only=True)
     stripe = fields.Str(allow_none=True)
+    paypal = fields.Str(allow_none=True)
 
 
 class ChargeList(ResourceList):
@@ -270,3 +318,5 @@ class ChargeList(ResourceList):
         'class': ChargesLayer,
         'session': db.session
     }
+
+    decorators = (jwt_required,)

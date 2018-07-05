@@ -36,7 +36,8 @@ class TicketListPost(ResourceList):
             raise ObjectNotFound({'parameter': 'event_id'},
                                  "Event: {} not found".format(data['event_id']))
 
-        if get_count(db.session.query(Ticket.id).filter_by(name=data['name'], event_id=int(data['event']))) > 0:
+        if get_count(db.session.query(Ticket.id).filter_by(name=data['name'], event_id=int(data['event']),
+                                                           deleted_at=None)) > 0:
             raise ConflictException({'pointer': '/data/attributes/name'}, "Ticket already exists")
 
         if get_count(db.session.query(Event).filter_by(id=int(data['event']), is_ticketing_enabled=False)) > 0:

@@ -17,6 +17,13 @@ def get_new_order_identifier():
         return get_new_order_identifier()
 
 
+def get_updatable_fields():
+    """
+    :return: The list of fields which can be modified by the order user using the pre payment form.
+    """
+    return ['country', 'address', 'city', 'state', 'zipcode', 'status', 'paid_via', 'order_notes']
+
+
 class OrderTicket(SoftDeletionModel):
     __tablename__ = 'orders_tickets'
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id', ondelete='CASCADE'), primary_key=True)
@@ -52,6 +59,7 @@ class Order(SoftDeletionModel):
     paypal_token = db.Column(db.String)
     status = db.Column(db.String)
     cancel_note = db.Column(db.String, nullable=True)
+    order_notes = db.Column(db.String)
 
     discount_code_id = db.Column(
         db.Integer, db.ForeignKey('discount_codes.id', ondelete='SET NULL'), nullable=True, default=None)
@@ -78,7 +86,8 @@ class Order(SoftDeletionModel):
                  event_id=None,
                  status='pending',
                  payment_mode=None,
-                 deleted_at=None):
+                 deleted_at=None,
+                 order_notes=None):
         self.identifier = get_new_order_identifier()
         self.quantity = quantity
         self.amount = amount
@@ -96,6 +105,7 @@ class Order(SoftDeletionModel):
         self.status = status
         self.payment_mode = payment_mode
         self.deleted_at = deleted_at
+        self.order_notes = order_notes
 
     def __repr__(self):
         return '<Order %r>' % self.id
@@ -113,6 +123,13 @@ class Order(SoftDeletionModel):
     @property
     def tickets_count(self):
         return sum([t.quantity for t in self.order_tickets])
+
+    @property
+    def is_free(self):
+        return self.paid_via == 'free'
+
+    def get_revenue(self):
+        return self.amount - (self.amount * (self.event.fee / 100.0))
 
     @property
     def serialize(self):

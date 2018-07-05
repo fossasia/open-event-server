@@ -40,7 +40,7 @@ class TaxList(ResourceList):
         :param view_kwargs:
         :return:
         """
-        if self.session.query(Tax).filter_by(event_id=data['event']).first():
+        if self.session.query(Tax).filter_by(event_id=data['event'], deleted_at=None).first():
             raise ConflictException({'pointer': '/data/relationships/event'}, "Tax already exists for this event")
 
     def before_get(self, args, kwargs):

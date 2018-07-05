@@ -21,7 +21,7 @@ class EmailNotificationSchema(SoftDeletionSchema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Integer(dump_only=True)
     next_event = fields.Boolean(default=False, allow_none=True)
     new_paper = fields.Boolean(default=False, allow_none=True)
     session_accept_reject = fields.Boolean(default=False, allow_none=True)
