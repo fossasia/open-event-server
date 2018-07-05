@@ -3099,19 +3099,6 @@ def event_type_patch(transaction):
         db.session.commit()
 
 
-@hooks.before("Event Types > Event Type Details > Delete Event Type")
-def event_type_delete(transaction):
-    """
-    DELETE /event-types/1
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        event_type = EventTypeFactory()
-        db.session.add(event_type)
-        db.session.commit()
-
-
 @hooks.before("Event Types > Event Type of an Event > Event Type Details of an Event")
 def event_event_type_get_detail(transaction):
     """
