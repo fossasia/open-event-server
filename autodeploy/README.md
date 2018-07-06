@@ -3,6 +3,10 @@
 This directory contains a Python auto deployment script that polls the github
 projects of Open Event and updates docker-compose containers
 
+# WARNING
+
+Edit `.env` before deployment - the admin credentials are stored there
+
 ## Config format
 
 Edit `config.yml` for adding new projects
