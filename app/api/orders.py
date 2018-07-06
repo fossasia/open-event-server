@@ -7,6 +7,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy.orm.exc import NoResultFound
 
+from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
@@ -98,9 +99,11 @@ class OrdersListPost(ResourceList):
         for holder in order.ticket_holders:
             if holder.id != current_user.id:
                 pdf = create_save_pdf(render_template('pdf/ticket_attendee.html', order=order, holder=holder),
+                                      UPLOAD_PATHS['pdf']['ticket_attendee'],
                                       dir_path='/static/uploads/pdf/tickets/')
             else:
                 pdf = create_save_pdf(render_template('pdf/ticket_purchaser.html', order=order),
+                                      UPLOAD_PATHS['pdf']['ticket_attendee'],
                                       dir_path='/static/uploads/pdf/tickets/')
             holder.pdf_url = pdf
             save_to_db(holder)

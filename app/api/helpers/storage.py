@@ -58,13 +58,16 @@ UPLOAD_PATHS = {
         'pentabarf': 'exports/{event_id}/pentabarf',
         'ical': 'exports/{event_id}/ical',
         'xcal': 'exports/{event_id}/xcal',
-        'csv': 'exports/{event_id}/csv'
+        'csv': 'exports/{event_id}/csv/{identifier}',
+        'pdf': 'exports/{event_id}/pdf/{identifier}'
     },
     'exports-temp': {
         'zip': 'exports/{event_id}/temp/zip',
         'pentabarf': 'exports/{event_id}/temp/pentabarf',
         'ical': 'exports/{event_id}/temp/ical',
-        'xcal': 'exports/{event_id}/temp/xcal'
+        'xcal': 'exports/{event_id}/temp/xcal',
+        'csv': 'exports/{event_id}/csv/{identifier}',
+        'pdf': 'exports/{event_id}/pdf/{identifier}'
     },
     'custom-placeholders': {
         'original': 'custom-placeholders/{identifier}/original',
@@ -169,7 +172,7 @@ def upload_local(uploaded_file, key, **kwargs):
     file_relative_path = '/' + file_relative_path
     if get_settings()['static_domain']:
         return get_settings()['static_domain'] + \
-            file_relative_path.replace('/static', '')
+               file_relative_path.replace('/static', '')
 
     return create_url(request.url, file_relative_path)
 
