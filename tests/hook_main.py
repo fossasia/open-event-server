@@ -1473,8 +1473,6 @@ def sponsor_patch(transaction):
     :param transaction:
     :return:
     """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
 
     with stash['app'].app_context():
         sponsor = SponsorFactory()
@@ -1804,7 +1802,13 @@ def attendee_post(transaction):
     :return:
     """
     # Skip until docs for direct endpoints added
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        ticket = TicketFactory()
+        db.session.add(ticket)
+
+        attendee = AttendeeFactory(ticket_id=1)
+        db.session.add(attendee)
+        db.session.commit()
 
 
 @hooks.before("Attendees > Attendee Details > Attendee Details")
