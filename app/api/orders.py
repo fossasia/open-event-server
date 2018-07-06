@@ -7,6 +7,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy.orm.exc import NoResultFound
 
+from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
@@ -98,9 +99,11 @@ class OrdersListPost(ResourceList):
         for holder in order.ticket_holders:
             if holder.id != current_user.id:
                 pdf = create_save_pdf(render_template('pdf/ticket_attendee.html', order=order, holder=holder),
+                                      UPLOAD_PATHS['pdf']['ticket_attendee'],
                                       dir_path='/static/uploads/pdf/tickets/')
             else:
                 pdf = create_save_pdf(render_template('pdf/ticket_purchaser.html', order=order),
+                                      UPLOAD_PATHS['pdf']['ticket_attendee'],
                                       dir_path='/static/uploads/pdf/tickets/')
             holder.pdf_url = pdf
             save_to_db(holder)
@@ -225,6 +228,10 @@ class OrderDetail(ResourceDetail):
                             # Since we don't have a refund system.
                             raise ForbiddenException({'pointer': 'data/status'},
                                                      "You cannot update the status of a completed paid order")
+                        elif element == 'status' and order.status == 'cancelled':
+                            # Since the tickets have been unlocked and we can't revert it.
+                            raise ForbiddenException({'pointer': 'data/status'},
+                                                     "You cannot update the status of a cancelled order")
 
         elif current_user.id == order.user_id:
             if order.status != 'pending':
@@ -260,6 +267,8 @@ class OrderDetail(ResourceDetail):
         """
         if not has_access('is_coorganizer', event_id=order.event.id):
             raise ForbiddenException({'source': ''}, 'Access Forbidden')
+        elif order.amount and order.amount > 0 and (order.status == 'completed' or order.status == 'placed'):
+            raise ConflictException({'source': ''}, 'You cannot delete a placed/completed paid order.')
 
     decorators = (jwt_required,)
 
