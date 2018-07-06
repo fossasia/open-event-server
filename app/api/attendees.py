@@ -55,7 +55,6 @@ class AttendeeListPost(ResourceList):
                 "Ticket already sold out"
             )
 
-    decorators = (jwt_required,)
     methods = ['POST']
     schema = AttendeeSchema
     data_layer = {'session': db.session,
@@ -153,7 +152,6 @@ class AttendeeDetail(ResourceDetail):
             if obj.attendee_notes and data['attendee_notes'] not in obj.attendee_notes.split(","):
                 data['attendee_notes'] = '{},{}'.format(obj.attendee_notes, data['attendee_notes'])
 
-    decorators = (jwt_required,)
     schema = AttendeeSchema
     data_layer = {'session': db.session,
                   'model': TicketHolder,
@@ -168,7 +166,6 @@ class AttendeeRelationshipRequired(ResourceRelationship):
     """
     Attendee Relationship (Required)
     """
-    decorators = (jwt_required,)
     methods = ['GET', 'PATCH']
     schema = AttendeeSchema
     data_layer = {'session': db.session,
