@@ -20,6 +20,7 @@ from app.api.helpers.notification import send_notif_to_attendees, send_notif_tic
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
+from app.api.helpers.order import delete_related_attendees_for_order
 from app.api.helpers.ticketing import TicketingManager
 from app.api.helpers.utilities import dasherize, require_relationship
 from app.api.schema.orders import OrderSchema
@@ -257,6 +258,9 @@ class OrderDetail(ResourceDetail):
         if order.status == 'cancelled':
             send_order_cancel_email(order)
             send_notif_ticket_cancel(order)
+
+            # delete the attendees so that the tickets are unlocked.
+            delete_related_attendees_for_order(self, order)
 
     def before_delete_object(self, order, view_kwargs):
         """
