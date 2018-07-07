@@ -69,6 +69,10 @@ class OrdersListPost(ResourceList):
         if data.get('cancel_note'):
             del data['cancel_note']
 
+        if data.get('payment_mode') != 'free' and not data.get('amount'):
+            raise ConflictException({'pointer': '/data/attributes/amount'},
+                                    "Amount cannot be null for a paid order")
+
         # Apply discount only if the user is not event admin
         if data.get('discount') and not has_access('is_coorganizer', event_id=data['event']):
             discount_code = safe_query_without_soft_deleted_entries(self, DiscountCode, 'id', data['discount'],
