@@ -37,6 +37,7 @@ from app.api.pages import PageList, PageDetail
 from app.api.user_permission import UserPermissionList, UserPermissionDetail
 from app.api.events_role_permission import EventsRolePermissionList, EventsRolePermissionDetail, \
     EventsRolePermissionRelationship
+from app.api.message_settings import MessageSettingsList, MessageSettingsDetail
 from app.api.tax import TaxList, TaxDetail, TaxRelationship
 from app.api.settings import SettingDetail
 from app.api.discount_codes import DiscountCodeList, DiscountCodeDetail, DiscountCodeRelationshipOptional, \
@@ -110,6 +111,10 @@ api.route(EmailNotificationRelationshipRequired, 'email_notification_user',
           '/email-notifications/<int:id>/relationships/user')
 api.route(EmailNotificationRelationshipOptional, 'email_notification_event',
           '/email-notifications/<int:id>/relationships/event')
+
+# message_settings
+api.route(MessageSettingsList, 'message_settings_list', '/message-settings')
+api.route(MessageSettingsDetail, 'message_setting_detail', '/message-settings/<int:id>')
 
 # event_image_sizes
 api.route(EventImageSizeDetail, 'event_image_size_detail', '/event-image-sizes/<id>',
