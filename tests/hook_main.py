@@ -1473,8 +1473,6 @@ def sponsor_patch(transaction):
     :param transaction:
     :return:
     """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
 
     with stash['app'].app_context():
         sponsor = SponsorFactory()
@@ -1804,7 +1802,13 @@ def attendee_post(transaction):
     :return:
     """
     # Skip until docs for direct endpoints added
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        ticket = TicketFactory()
+        db.session.add(ticket)
+
+        attendee = AttendeeFactory(ticket_id=1)
+        db.session.add(attendee)
+        db.session.commit()
 
 
 @hooks.before("Attendees > Attendee Details > Attendee Details")
@@ -3594,6 +3598,32 @@ def event_orders_export_csv_get(transaction):
 @hooks.before(
     "Event Export > Start Orders Export as PDF > Start a Task to Export Orders of an Event as PDF")
 def event_orders_export_pdf_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Export > Start Attendees Export as CSV > Start a Task to Export Attendees of an Event as CSV")
+def event_attendees_export_csv_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Export > Start Attendees Export as PDF > Start a Task to Export Attendees of an Event as PDF")
+def event_attendees_export_pdf_get(transaction):
     """
     :param transaction:
     :return:

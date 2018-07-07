@@ -14,7 +14,6 @@ from sqlalchemy.orm.exc import NoResultFound
 from xhtml2pdf import pisa
 
 from app import get_settings
-from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.storage import UploadedFile, upload, generate_hash, UPLOAD_PATHS
 from app.models.image_size import ImageSizes
 
@@ -191,7 +190,7 @@ def make_frontend_url(path, parameters=None):
     ))
 
 
-def create_save_pdf(pdf_data, dir_path='/static/uploads/pdf/temp/'):
+def create_save_pdf(pdf_data, key, dir_path='/static/uploads/pdf/temp/'):
     """
     Create and Saves PDFs from html
     :param pdf_data:
@@ -210,7 +209,7 @@ def create_save_pdf(pdf_data, dir_path='/static/uploads/pdf/temp/'):
     file.close()
 
     uploaded_file = UploadedFile(dest, filename)
-    upload_path = UPLOAD_PATHS['pdf']['ticket_attendee'].format(identifier=get_file_name())
+    upload_path = key.format(identifier=get_file_name())
     new_file = upload(uploaded_file, upload_path)
     # Removing old file created
     os.remove(dest)
