@@ -21,3 +21,4 @@ class AttendeeFactory(factory.alchemy.SQLAlchemyModelFactory):
     is_checked_in = True
     pdf_url = common.url_
     event_id = 1
+    ticket_id = None

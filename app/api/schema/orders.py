@@ -1,7 +1,7 @@
 from flask import request
 from marshmallow import post_dump, validates_schema, validate
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app import db
 from app.api.helpers.payment import PayPalPaymentsManager
@@ -39,14 +39,14 @@ class OrderSchema(SoftDeletionSchema):
     id = fields.Str(dump_only=True)
     identifier = fields.Str(dump_only=True)
     amount = fields.Float(validate=lambda n: n > 0)
-    address = fields.Str()
-    city = fields.Str()
-    state = fields.Str(db.String)
-    country = fields.Str(required=True)
-    zipcode = fields.Str()
+    address = fields.Str(allow_none=True)
+    city = fields.Str(allow_none=True)
+    state = fields.Str(db.String, allow_none=True)
+    country = fields.Str(allow_none=True)
+    zipcode = fields.Str(allow_none=True)
     completed_at = fields.DateTime(dump_only=True)
     transaction_id = fields.Str(dump_only=True)
-    payment_mode = fields.Str(default="free", required=True,
+    payment_mode = fields.Str(default="free",
                               validate=validate.OneOf(choices=["free", "stripe", "paypal"]))
     paid_via = fields.Str(dump_only=True)
     brand = fields.Str(dump_only=True)
@@ -54,9 +54,10 @@ class OrderSchema(SoftDeletionSchema):
     exp_year = fields.Str(dump_only=True)
     last4 = fields.Str(dump_only=True)
     status = fields.Str(validate=validate.OneOf(choices=["pending", "cancelled", "completed", "placed", "expired"]))
-    discount_code_id = fields.Str()
+    discount_code_id = fields.Str(allow_none=True)
     payment_url = fields.Str(dump_only=True)
-    cancel_note = fields.Str()
+    cancel_note = fields.Str(allow_none=True)
+    order_notes = fields.Str(allow_none=True)
 
     attendees = Relationship(attribute='ticket_holders',
                              self_view='v1.order_attendee',

@@ -13707,6 +13707,8 @@ Related to tickets (free, paid, donation) to the event.
 | `sales-starts-at` | Start date of ticket sale | ISO 8601 (tz-aware) | **yes** |
 | `sales-ends-at` | End date of ticket sale | ISO 8601 (tz-aware) | **yes** |
 | `is-description-visible` | Yes/No to enter description | boolean (default: `false`) | - |
+| `is-checkin-restricted` | Yes/No to checkin restriction | boolean (deault: `true`) | - |
+| `auto-checkin-enabled` | Yes/No to enable auto checkin | boolean (default: `false`) | - |
 | `is-hidden` | Yes/No to hide ticket | boolean (default: `false`) | - |
 | `is-fee-absorbed` | Yes/No for ticket absorption | boolean (default: `false`) | - |
 
@@ -13745,6 +13747,8 @@ Create a new ticket using an event_id.
                         "price": "100.00",
                         "quantity": "100",
                         "is-description-visible": "false",
+                        "is-checkin-restricted": "true",
+                        "auto-checkin-enabled": "false",
                         "position": "1",
                         "is-fee-absorbed": "false",
                         "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -13789,6 +13793,8 @@ Create a new ticket using an event_id.
                     "name": "ticket-name",
                     "max-order": 100,
                     "is-description-visible": false,
+                    "is-checkin-restricted": "true",
+                    "auto-checkin-enabled": "false",
                     "is-fee-absorbed": false,
                     "position": 1,
                     "quantity": 100,
@@ -13859,6 +13865,8 @@ Get a single ticket.
                     "name": "ticket-name",
                     "max-order": 100,
                     "is-description-visible": false,
+                    "is-checkin-restricted": "true",
+                    "auto-checkin-enabled": "false",
                     "is-fee-absorbed": false,
                     "position": 1,
                     "quantity": 100,
@@ -13905,6 +13913,8 @@ Update a single ticket by `id`.
                   "price": "100.00",
                   "quantity": "100",
                   "is-description-visible": "false",
+                  "is-checkin-restricted": "true",
+                  "auto-checkin-enabled": "false",
                   "position": "1",
                   "is-fee-absorbed": "false",
                   "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
@@ -13949,6 +13959,8 @@ Update a single ticket by `id`.
                     "name": "ticket-name",
                     "max-order": 100,
                     "is-description-visible": false,
+                    "is-checkin-restricted": "true",
+                    "auto-checkin-enabled": "false",
                     "is-fee-absorbed": false,
                     "position": 1,
                     "quantity": 100,
@@ -14050,6 +14062,8 @@ Delete a single ticket.
                         "name": "ticket-name",
                         "max-order": 100,
                         "is-description-visible": false,
+                        "is-checkin-restricted": "true",
+                        "auto-checkin-enabled": "false",
                         "is-fee-absorbed": false,
                         "position": 1,
                         "quantity": 100,
@@ -14130,6 +14144,8 @@ Delete a single ticket.
                         "name": "ticket-name",
                         "max-order": 100,
                         "is-description-visible": false,
+                        "is-checkin-restricted": "true",
+                        "auto-checkin-enabled": "false",
                         "is-fee-absorbed": false,
                         "position": 1,
                         "quantity": 100,
@@ -14210,6 +14226,8 @@ Delete a single ticket.
                         "name": "ticket-name",
                         "max-order": 100,
                         "is-description-visible": false,
+                        "is-checkin-restricted": "true",
+                        "auto-checkin-enabled": "false",
                         "is-fee-absorbed": false,
                         "position": 1,
                         "quantity": 100,
@@ -14277,6 +14295,8 @@ Delete a single ticket.
                 "name": "ticket-name0",
                 "max-order": 100,
                 "is-description-visible": true,
+                "is-checkin-restricted": "true",
+                "auto-checkin-enabled": "false",
                 "is-fee-absorbed": true,
                 "position": 1,
                 "quantity": 100,
@@ -16582,6 +16602,63 @@ Delete a single discount code (Check permission to delete).
           }
         }
 
+## Get Discount Code Detail using the code [/v1/discount-codes/{code}]
++ Parameters
+    + code: DC101 (string) - code associated with a discount code. (DC101 is an example of code)
+
+### Get Discount Code Detail [GET]
+Get a single discount code using a code.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/discount-codes/1/relationships/event",
+                            "related": "/v1/discount-codes/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "tickets": "event",
+                    "code": "DC101",
+                    "valid-from": "2017-06-18T18:30:00+00:00",
+                    "min-quantity": 0,
+                    "created-at": "2017-08-05T23:38:04.449623+00:00",
+                    "tickets-number": 404,
+                    "value": 100,
+                    "max-quantity": 100,
+                    "is-active": false,
+                    "used-for": "event",
+                    "deleted-at": null,
+                    "valid-till": "2017-06-24T18:30:00+00:00",
+                    "type": "amount",
+                    "discount-url": "https://my-discount-url.com"
+                },
+                "type": "discount-code",
+                "id": 1,
+                "links": {
+                    "self": "/v1/discount-codes/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/discount-codes/1"
+            }
+        }
+
 
 ## List Discount Codes under a User [/v1/users/{user_id}/discount-codes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -17046,6 +17123,70 @@ Delete a single Access code.
           "jsonapi": {
             "version": "1.0"
           }
+        }
+
+## Access Code Detail using the Code [/v1/access-codes/{code}]
++ Parameters
+    + code: AC101 (string) - code of the access-code.
+
+### Access Code Detail [GET]
+Get a single access code using the code.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "tickets": {
+                        "links": {
+                            "self": "/v1/access-codes/1/relationships/tickets",
+                            "related": "/v1/access-codes/1/tickets"
+                        }
+                    },
+                    "marketer": {
+                        "links": {
+                            "self": "/v1/access-codes/1/relationships/marketer",
+                            "related": "/v1/access-codes/1/marketer"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/access-codes/1/relationships/event",
+                            "related": "/v1/access-codes/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "code": "AC101",
+                    "valid-from": "2017-06-18T18:30:00+00:00",
+                    "access-url": "https://my-access-code-url.com",
+                    "min-quantity": 0,
+                    "tickets-number": 404,
+                    "max-quantity": 100,
+                    "is-active": false,
+                    "deleted-at": null,
+                    "valid-till": "2017-06-24T18:30:00+00:00"
+                },
+                "type": "access-code",
+                "id": 1,
+                "links": {
+                    "self": "/v1/access-codes/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/access-codes/1"
+            }
         }
 
 
@@ -21099,11 +21240,74 @@ to get the status of the export task.
 ## Start Orders Export as CSV [/v1/events/{event_identifier}/export/orders/csv]
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
-Start a celery task to export the list of order of the event with that event_id as a CSV file to get it ready for downloading. Returns the task url
+Start a celery task to export the list of orders of the event with that event_id as a CSV file to get it ready for downloading. Returns the task url
 to get the status of the export task.
 
 
 ### Start a Task to Export Orders of an Event as CSV [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
+
+## Start Orders Export as PDF [/v1/events/{event_identifier}/export/orders/pdf]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+Start a celery task to export the list of orders of the event with that event_id as a PDF file to get it ready for downloading. Returns the task url
+to get the status of the export task.
+
+
+### Start a Task to Export Orders of an Event as PDF [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
+
+## Start Attendees Export as CSV [/v1/events/{event_identifier}/export/attendees/csv]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+Start a celery task to export the list of attendees of the event with that event_id as a CSV file to get it ready for downloading. Returns the task url
+to get the status of the export task.
+
+
+### Start a Task to Export Attendees of an Event as CSV [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
+
+## Start Attendees Export as PDF [/v1/events/{event_identifier}/export/attendees/pdf]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+Start a celery task to export the list of attendees of the event with that event_id as a PDF file to get it ready for downloading. Returns the task url
+to get the status of the export task.
+
+
+### Start a Task to Export Attendees of an Event as PDF [GET]
 
 + Request
 
@@ -21637,13 +21841,14 @@ Get the task status and the final result of the task as response
 |:----------|-------------|------|----------|
 | `amount`  | Total Amount of Order | Float | - |
 | `address` | Address Of Purchaser | string | - |
-| `city` | City of Purchaser | string | **yes** |
+| `city` | City of Purchaser | string | - |
 | `state` | If the custom form is included | boolean | - |
-| `country` | Country of the purchaser | boolean | **yes** |
+| `country` | Country of the purchaser | boolean | - |
 | `zipcode` | Zipcode of the address | string | - |
-| `payment-mode` | Mode of payment (free,stripe,paypal) | string | **yes** |
+| `payment-mode` | Mode of payment (free,stripe,paypal) | string | - |
 | `status` | Status of the order(pending, completed, placed, cancelled, expired) | string (default=pending) | - |
 | `discount_code_id` | ID of the discount code | string | - |
+| `order-notes` | Notes associated with Order | string | - |
 
 ## Orders Collection [/v1/orders{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -21695,7 +21900,8 @@ Create a new Order
                   "payment-mode": "paypal",
                   "country": "India",
                   "status": "pending",
-                  "amount": "10"
+                  "amount": "10",
+                  "order-notes": "example"
                 },
                 "type": "order",
                 "relationships": {
@@ -21745,7 +21951,8 @@ Create a new Order
                 "address": null,
                 "pdf-url": "http://example.com",
                 "country": null,
-                "email": null
+                "email": null,
+                "order-notes": "example"
               },
               "type": "attendee",
               "id": "1",
@@ -21814,7 +22021,8 @@ Create a new Order
               "exp-month": null,
               "amount": 10.0,
               "country": "India",
-              "completed-at": null
+              "completed-at": null,
+              "order-notes": "example"
             },
             "type": "order",
             "id": "11",
@@ -21902,7 +22110,8 @@ Get a single Order detail.
               "exp-month": null,
               "amount": 10.0,
               "country": "India",
-              "completed-at": null
+              "completed-at": null,
+              "order-notes": "example"
             },
             "type": "order",
             "id": "1",
@@ -21935,7 +22144,8 @@ Update a single custom form with `id`.
             {
               "data": {
                 "attributes": {
-                  "status": "confirmed"
+                  "status": "confirmed",
+                  "order-notes": "example"
                 },
                 "type": "order",
                 "id": "ab25a170-f36d-4dd6-b99c-9c202e693afc"
@@ -22000,7 +22210,8 @@ Update a single custom form with `id`.
               "exp-month": null,
               "amount": 10.0,
               "country": "India",
-              "completed-at": null
+              "completed-at": null,
+              "order-notes": "sample,example"
             },
             "type": "order",
             "id": "1",

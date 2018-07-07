@@ -62,7 +62,8 @@ class EventList(ResourceList):
         :param kwargs:
         :return:
         """
-        if 'Authorization' in request.headers and (has_access('is_admin') or kwargs.get('user_id')):
+        if 'Authorization' in request.headers and (has_access('is_admin') or has_access('is_user_itself',
+                                                                                        user_id=kwargs.get('user_id'))):
             self.schema = EventSchema
         else:
             self.schema = EventSchemaPublic
@@ -83,7 +84,9 @@ class EventList(ResourceList):
 
         if view_kwargs.get('user_id') and 'GET' in request.method:
             if not has_access('is_user_itself', user_id=int(view_kwargs['user_id'])):
-                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+                # other registered users can see the published events of the user.
+                query_ = query_.filter_by(state='published')
+
             user = safe_query(db, User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
                 filter(Role.name != ATTENDEE)
@@ -130,9 +133,9 @@ class EventList(ResourceList):
         :return:
         """
         is_verified = User.query.filter_by(id=kwargs['user_id']).first().is_verified
-        if (data.get('state', None) == 'published' and not is_verified):
+        if data.get('state', None) == 'published' and not is_verified:
             raise ForbiddenException({'source': ''},
-                                      "Only verified accounts can publish events")
+                                     "Only verified accounts can publish events")
         if data.get('state', None) == 'published' and not data.get('location_name', None):
             raise ConflictException({'pointer': '/data/attributes/location-name'},
                                     "Location is required to publish the event")

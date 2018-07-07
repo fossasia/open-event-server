@@ -1473,8 +1473,6 @@ def sponsor_patch(transaction):
     :param transaction:
     :return:
     """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
 
     with stash['app'].app_context():
         sponsor = SponsorFactory()
@@ -1804,7 +1802,13 @@ def attendee_post(transaction):
     :return:
     """
     # Skip until docs for direct endpoints added
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        ticket = TicketFactory()
+        db.session.add(ticket)
+
+        attendee = AttendeeFactory(ticket_id=1)
+        db.session.add(attendee)
+        db.session.commit()
 
 
 @hooks.before("Attendees > Attendee Details > Attendee Details")
@@ -2574,6 +2578,24 @@ def discount_delete(transaction):
         db.session.commit()
 
 
+@hooks.before("Discount Codes > Get Discount Code Detail using the code > Get Discount Code Detail")
+def discount_code_get_detail_using_code(transaction):
+    """
+    GET /discount-codes/DC101
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+        discount_code = DiscountCodeFactory(event_id=1)
+        discount_code.code = 'DC101'
+        db.session.add(discount_code)
+        db.session.commit()
+
+
 @hooks.before("Discount Codes > List Discount Codes under a User > List All Discount Codes under a User")
 def user_discount_code_get_list(transaction):
     """
@@ -2675,6 +2697,20 @@ def access_code_delete(transaction):
     """
     with stash['app'].app_context():
         access_code = AccessCodeFactory()
+        db.session.add(access_code)
+        db.session.commit()
+
+
+@hooks.before("Access Codes > Access Code Detail using the Code > Access Code Detail")
+def access_code_get_detail_using_code(transaction):
+    """
+    GET /access-codes/AC101
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        access_code = AccessCodeFactory()
+        access_code.code = 'AC101'
         db.session.add(access_code)
         db.session.commit()
 
@@ -3549,6 +3585,45 @@ def event_export_pentabarf_get(transaction):
 @hooks.before(
     "Event Export > Start Orders Export as CSV > Start a Task to Export Orders of an Event as CSV")
 def event_orders_export_csv_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Export > Start Orders Export as PDF > Start a Task to Export Orders of an Event as PDF")
+def event_orders_export_pdf_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Export > Start Attendees Export as CSV > Start a Task to Export Attendees of an Event as CSV")
+def event_attendees_export_csv_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Export > Start Attendees Export as PDF > Start a Task to Export Attendees of an Event as PDF")
+def event_attendees_export_pdf_get(transaction):
     """
     :param transaction:
     :return:
