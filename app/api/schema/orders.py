@@ -21,13 +21,15 @@ class OrderSchema(SoftDeletionSchema):
 
     @post_dump
     def generate_payment_url(self, data):
+        """
+        generate payment url for an order
+        :param data:
+        :return:
+        """
         if 'POST' in request.method or ('GET' in request.method and 'regenerate' in request.args) and 'completed' != \
            data["status"]:
             if data['payment_mode'] == 'stripe':
                 data['payment_url'] = 'stripe://payment'
-            elif data['payment_mode'] == 'paypal':
-                order = Order.query.filter_by(id=data['id']).first()
-                data['payment_url'] = PayPalPaymentsManager.get_checkout_url(order)
         return data
 
     @validates_schema

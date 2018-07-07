@@ -141,14 +141,13 @@ class TicketingManager(object):
                 order.completed_at = datetime.utcnow()
                 save_to_db(order)
 
-                invoice_id = order.get_invoice_number()
-                order_url = make_frontend_url(path="/{identifier}/view/".format(identifier=order.identifier))
+                # send email and notifications
+                send_email_to_attendees(order, current_user.id)
+                send_notif_to_attendees(order, current_user.id)
 
-                # trigger_after_purchase_notifications(order.user.email, order.event_id, order.event, invoice_id,
-                # order_url)
-                # send_email_for_after_purchase(order.user.email, invoice_id, order_url, order.event.name,
-                # order.event.organizer_name)
-                # send_notif_for_after_purchase(order.user, invoice_id, order_url)
+                order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
+                for organizer in order.event.organizers:
+                    send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name)
 
                 return True, order
             else:
