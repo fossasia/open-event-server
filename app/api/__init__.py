@@ -535,4 +535,3 @@ api.route(AdminSalesByMarketerList, 'admin_sales_by_marketer', '/admin/sales/by-
 api.route(AdminSalesDiscountedList, 'admin_sales_discounted', '/admin/sales/discounted')
 api.route(AdminSalesInvoicesList, 'admin_sales_invoices', '/admin/sales/invoices')
 api.route(AdminSalesFeesList, 'admin_sales_fees', '/admin/sales/fees')
-api.route(AdminSalesInvoicesList, 'admin_sales_invoices', '/admin/sales/invoices')
