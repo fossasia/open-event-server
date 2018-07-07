@@ -53,7 +53,7 @@ class OrderSchema(SoftDeletionSchema):
     exp_month = fields.Str(dump_only=True)
     exp_year = fields.Str(dump_only=True)
     last4 = fields.Str(dump_only=True)
-    status = fields.Str(validate=validate.OneOf(choices=["pending", "cancelled", "confirmed", "deleted"]))
+    status = fields.Str(validate=validate.OneOf(choices=["pending", "cancelled", "completed", "placed", "expired"]))
     discount_code_id = fields.Str()
     payment_url = fields.Str(dump_only=True)
     cancel_note = fields.Str()
@@ -67,7 +67,8 @@ class OrderSchema(SoftDeletionSchema):
                              many=True,
                              type_='attendee')
 
-    tickets = Relationship(self_view='v1.order_ticket',
+    tickets = Relationship(attribute='tickets',
+                           self_view='v1.order_ticket',
                            self_view_kwargs={'order_identifier': '<identifier>'},
                            related_view='v1.ticket_list',
                            related_view_kwargs={'order_identifier': '<identifier>'},
@@ -75,28 +76,32 @@ class OrderSchema(SoftDeletionSchema):
                            many=True,
                            type_="ticket")
 
-    user = Relationship(self_view='v1.order_user',
+    user = Relationship(attribute='user',
+                        self_view='v1.order_user',
                         self_view_kwargs={'order_identifier': '<identifier>'},
                         related_view='v1.user_detail',
                         related_view_kwargs={'id': '<user_id>'},
                         schema='UserSchemaPublic',
                         type_="user")
 
-    event = Relationship(self_view='v1.order_event',
+    event = Relationship(attribute='event',
+                         self_view='v1.order_event',
                          self_view_kwargs={'order_identifier': '<identifier>'},
                          related_view='v1.event_detail',
                          related_view_kwargs={'id': '<event_id>'},
                          schema='EventSchemaPublic',
                          type_="event")
 
-    marketer = Relationship(self_view='v1.order_marketer',
+    marketer = Relationship(attribute='marketer',
+                            self_view='v1.order_marketer',
                             self_view_kwargs={'order_identifier': '<identifier>'},
                             related_view='v1.user_detail',
                             related_view_kwargs={'id': '<marketer_id>'},
                             schema='UserSchemaPublic',
                             type_="user")
 
-    discount_code = Relationship(self_view='v1.order_discount',
+    discount_code = Relationship(attribute='discount_code',
+                                 self_view='v1.order_discount',
                                  self_view_kwargs={'order_identifier': '<identifier>'},
                                  related_view='v1.discount_code_detail',
                                  related_view_kwargs={'id': '<discount_code_id>'},

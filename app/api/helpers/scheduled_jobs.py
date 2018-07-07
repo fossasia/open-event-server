@@ -2,6 +2,7 @@ from app.models.event import Event
 from app.models.order import Order
 from app.models.event_invoice import EventInvoice
 from app.models.ticket import Ticket
+from app.models.ticket_fee import get_fee
 from app.api.helpers.query import get_upcoming_events, get_user_event_roles_by_role_name
 from app.api.helpers.mail import send_email_after_event, send_email_for_monthly_fee_payment, \
     send_followup_email_for_monthly_fee_payment
@@ -9,7 +10,6 @@ from app.api.helpers.notification import send_notif_monthly_fee_payment, send_fo
     send_notif_after_event
 from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.utilities import monthdelta
-from app.api.helpers.payment import get_fee
 from app.settings import get_settings
 from app.models import db
 

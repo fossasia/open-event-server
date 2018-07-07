@@ -12,14 +12,10 @@ from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.utilities import represents_int
 from app.models import db
-from app.models.event import Event
 from app.models.order import Order
 from app.models.stripe_authorization import StripeAuthorization
 from app.models.ticket_fee import TicketFees
 from app.settings import get_settings
-
-DEFAULT_FEE = 0.0
-
 
 @cache.memoize(5)
 def forex(from_currency, to_currency, amount):
@@ -28,15 +24,6 @@ def forex(from_currency, to_currency, amount):
         return currency_rates.convert(from_currency, to_currency, amount)
     except:
         return amount
-
-
-@cache.memoize(5)
-def get_fee(currency):
-    fee = TicketFees.query.filter_by(currency=currency).order_by(sqlalchemy.desc(TicketFees.id)).first()
-    if fee:
-        return fee.service_fee
-    else:
-        return DEFAULT_FEE
 
 
 class StripePaymentsManager(object):
