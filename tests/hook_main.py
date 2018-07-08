@@ -3751,6 +3751,16 @@ def delete_order(transaction):
     transaction['skip'] = True
 
 
+@hooks.before("Orders > Orders under a User > List all Orders under a User")
+def orders_get_collection_under_user(transaction):
+    """
+    GET /users/1/orders
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
 @hooks.before("Event Copy > Create Event Copy > Create Copy")
 def create_event_copy(transaction):
     """
