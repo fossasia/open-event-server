@@ -25,13 +25,17 @@ TICKET_PURCHASED = 'Ticket(s) Purchased'
 TICKET_PURCHASED_ATTENDEE = 'Ticket(s) purchased to Attendee    '
 TICKET_PURCHASED_ORGANIZER = 'Ticket(s) Purchased to Organizer'
 TICKET_CANCELLED = 'Ticket(s) cancelled'
+TICKET_RESEND_ORGANIZER = 'Ticket Resend'
 EVENT_EXPORTED = 'Event Exported'
 EVENT_EXPORT_FAIL = 'Event Export Failed'
+EVENT_IMPORT_FAIL = 'Event Import Failed'
 MAIL_TO_EXPIRED_ORDERS = 'Mail Expired Orders'
 MONTHLY_PAYMENT_EMAIL = 'Monthly Payment Email'
+MONTHLY_PAYMENT_NOTIF = 'Monthly Payment Notification'
 MONTHLY_PAYMENT_FOLLOWUP_EMAIL = 'Monthly Payment Follow Up Email'
+MONTHLY_PAYMENT_FOLLOWUP_NOTIF = 'Monthly Payment Follow Up Notification'
 EVENT_IMPORTED = 'Event Imported'
-EVENT_IMPORT_FAIL = 'Event Import Failed'
+TICKET_CANCELLED_ORGANIZER = 'Ticket(s) cancelled organizer'
 
 
 class MessageSettings(db.Model):
@@ -60,58 +64,20 @@ class MessageSettings(db.Model):
     @classmethod
     def _email_message(self, action):
         message = {}
-        if action == EVENT_PUBLISH:
-            message = MAILS[EVENT_PUBLISH]
-        elif action == INVITE_PAPERS:
-            message = MAILS[INVITE_PAPERS]
-        elif action == SESSION_ACCEPT_REJECT:
-            message = MAILS[SESSION_ACCEPT_REJECT]
-        elif action == SESSION_SCHEDULE:
-            message = MAILS[SESSION_SCHEDULE]
-        elif action == NEXT_EVENT:
-            message = MAILS[NEXT_EVENT]
-        elif action == AFTER_EVENT:
-            message = MAILS[AFTER_EVENT]
-        elif action == NEW_SESSION:
-            message = MAILS[NEW_SESSION]
-        elif action == USER_REGISTER:
-            message = MAILS[USER_REGISTER]
-        elif action == USER_REGISTER_WITH_PASSWORD:
-            message = MAILS.USER_REGISTER_WITH_PASSWORD
-        elif action == USER_CONFIRM:
-            message = MAILS[USER_CONFIRM]
-        elif action == USER_CHANGE_EMAIL:
-            message = MAILS.USER_CHANGE_EMAIL
-        elif action == PASSWORD_RESET:
-            message = MAILS[PASSWORD_RESET]
-        elif action == PASSWORD_CHANGE:
-            message = MAILS.PASSWORD_CHANGE
-        elif action == EVENT_ROLE:
-            message = MAILS[EVENT_ROLE]
-        elif action == TICKET_PURCHASED:
-            message = MAILS.TICKET_PURCHASED
-        elif action == TICKET_PURCHASED_ATTENDEE:
-            message = MAILS.TICKET_PURCHASED_ATTENDEE
-        elif action == TICKET_PURCHASED_ORGANIZER:
-            message = MAILS.TICKET_PURCHASED_ORGANIZER
-        elif action == TICKET_CANCELLED:
-            message = MAILS.TICKET_CANCELLED
-        elif action == EVENT_EXPORTED:
-            message = MAILS.EVENT_EXPORTED
-        elif action == EVENT_EXPORT_FAIL:
-            message = MAILS.EVENT_EXPORT_FAIL
-        elif action == MAIL_TO_EXPIRED_ORDERS:
-            message = MAILS.MAIL_TO_EXPIRED_ORDERS
-        elif action == MONTHLY_PAYMENT_EMAIL:
-            message = MAILS.MONTHLY_PAYMENT_EMAIL
-        elif action == MONTHLY_PAYMENT_FOLLOWUP_EMAIL:
-            message = MAILS.MONTHLY_PAYMENT_FOLLOWUP_EMAIL
-        elif action == EVENT_IMPORTED:
-            message = MAILS.EVENT_IMPORTED
-        elif action == EVENT_IMPORT_FAIL:
-            message = MAILS.EVENT_IMPORT_FAIL
+        if action in [INVITE_PAPERS, NEW_SESSION, USER_CONFIRM,
+                      USER_REGISTER, PASSWORD_RESET, EVENT_ROLE,
+                      SESSION_ACCEPT_REJECT, SESSION_SCHEDULE, NEXT_EVENT,
+                      EVENT_PUBLISH, AFTER_EVENT, USER_CHANGE_EMAIL,
+                      USER_REGISTER_WITH_PASSWORD, TICKET_PURCHASED,
+                      EVENT_EXPORTED, EVENT_EXPORT_FAIL,
+                      MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_EMAIL,
+                      MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_IMPORTED,
+                      EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER,
+                      TICKET_CANCELLED, TICKET_PURCHASED_ATTENDEE, 
+                      PASSWORD_CHANGE]:
+            message = MAILS[action]
         else:
-            message = "No Email was sent"
+            message = MAILS.__dict__[action]
         return message
 
     @hybrid_property
@@ -122,54 +88,18 @@ class MessageSettings(db.Model):
     @classmethod
     def _notification_message(self, action):
         message = {}
-        if action == EVENT_PUBLISH:
-            message = NOTIFS[EVENT_PUBLISH]
-        elif action == INVITE_PAPERS:
-            message = NOTIFS[INVITE_PAPERS]
-        elif action == SESSION_ACCEPT_REJECT:
-            message = NOTIFS[SESSION_ACCEPT_REJECT]
-        elif action == SESSION_SCHEDULE:
-            message = NOTIFS[SESSION_SCHEDULE]
-        elif action == NEXT_EVENT:
-            message = NOTIFS[NEXT_EVENT]
-        elif action == AFTER_EVENT:
-            message = NOTIFS[AFTER_EVENT]
-        elif action == NEW_SESSION:
-            message = NOTIFS[NEW_SESSION]
-        elif action == USER_REGISTER_WITH_PASSWORD:
-            message = NOTIFS.USER_REGISTER_WITH_PASSWOR
-        elif action == USER_CHANGE_EMAIL:
-            message = NOTIFS.USER_CHANGE_EMAIL
-        elif action == PASSWORD_RESET:
-            message = NOTIFS[PASSWORD_RESET]
-        elif action == PASSWORD_CHANGE:
-            message = NOTIFS.PASSWORD_CHANGE
-        elif action == EVENT_ROLE:
-            message = NOTIFS[EVENT_ROLE]
-        elif action == TICKET_PURCHASED:
-            message = NOTIFS.TICKET_PURCHASED
-        elif action == TICKET_PURCHASED_ATTENDEE:
-            message = NOTIFS.TICKET_PURCHASED_ATTENDEE
-        elif action == TICKET_PURCHASED_ORGANIZER:
-            message = NOTIFS.TICKET_PURCHASED_ORGANIZER
-        elif action == TICKET_CANCELLED:
-            message = NOTIFS.TICKET_CANCELLED
-        elif action == EVENT_EXPORTED:
-            message = NOTIFS.EVENT_EXPORTED
-        elif action == EVENT_EXPORT_FAIL:
-            message = NOTIFS.EVENT_EXPORT_FAIL
-        elif action == MAIL_TO_EXPIRED_ORDERS:
-            message = NOTIFS.MAIL_TO_EXPIRED_ORDERS
-        elif action == MONTHLY_PAYMENT_EMAIL:
-            message = NOTIFS.MONTHLY_PAYMENT_EMAIL
-        elif action == MONTHLY_PAYMENT_FOLLOWUP_EMAIL:
-            message = NOTIFS.MONTHLY_PAYMENT_FOLLOWUP_EMAIL
-        elif action == EVENT_IMPORTED:
-            message = NOTIFS.EVENT_IMPORTED
-        elif action == EVENT_IMPORT_FAIL:
-            message = NOTIFS.EVENT_IMPORT_FAIL
+        if action in [EVENT_ROLE, NEW_SESSION, SESSION_SCHEDULE,
+                      NEXT_EVENT, SESSION_ACCEPT_REJECT, INVITE_PAPERS,
+                      AFTER_EVENT, EVENT_PUBLISH, USER_CHANGE_EMAIL, 
+                      PASSWORD_CHANGE, TICKET_PURCHASED,
+                      TICKET_RESEND_ORGANIZER, EVENT_EXPORT_FAIL,
+                      EVENT_EXPORTED, EVENT_IMPORT_FAIL, EVENT_IMPORTED,
+                      MONTHLY_PAYMENT_NOTIF, MONTHLY_PAYMENT_FOLLOWUP_NOTIF,
+                      TICKET_PURCHASED_ORGANIZER, TICKET_PURCHASED_ATTENDEE,
+                      TICKET_CANCELLED, TICKET_CANCELLED_ORGANIZER]:
+            message = MAILS[action]
         else:
-            message = "No Notification was sent"
+            message = MAILS.__dict__[action]
         return message
 
     @hybrid_property
