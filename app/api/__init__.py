@@ -37,6 +37,7 @@ from app.api.pages import PageList, PageDetail
 from app.api.user_permission import UserPermissionList, UserPermissionDetail
 from app.api.events_role_permission import EventsRolePermissionList, EventsRolePermissionDetail, \
     EventsRolePermissionRelationship
+from app.api.message_settings import MessageSettingsList, MessageSettingsDetail
 from app.api.tax import TaxList, TaxDetail, TaxRelationship
 from app.api.settings import SettingDetail
 from app.api.discount_codes import DiscountCodeList, DiscountCodeDetail, DiscountCodeRelationshipOptional, \
@@ -64,6 +65,11 @@ from app.api.order_statistics.events import OrderStatisticsEventDetail
 from app.api.order_statistics.tickets import OrderStatisticsTicketDetail
 from app.api.faq_types import FaqTypeList, FaqTypeListPost, FaqTypeDetail, FaqTypeRelationshipOptional, \
     FaqTypeRelationshipRequired
+from app.api.admin_sales.events import AdminSalesByEventsList
+from app.api.admin_sales.organizer import AdminSalesByOrganizersList
+from app.api.admin_sales.locations import AdminSalesByLocationList
+from app.api.admin_sales.marketer import AdminSalesByMarketerList
+from app.api.admin_sales.discounted import AdminSalesDiscountedList
 from app.api.admin_sales.fees import AdminSalesFeesList
 from app.api.admin_sales.invoices import AdminSalesInvoicesList
 
@@ -105,6 +111,10 @@ api.route(EmailNotificationRelationshipRequired, 'email_notification_user',
           '/email-notifications/<int:id>/relationships/user')
 api.route(EmailNotificationRelationshipOptional, 'email_notification_event',
           '/email-notifications/<int:id>/relationships/event')
+
+# message_settings
+api.route(MessageSettingsList, 'message_settings_list', '/message-settings')
+api.route(MessageSettingsDetail, 'message_setting_detail', '/message-settings/<int:id>')
 
 # event_image_sizes
 api.route(EventImageSizeDetail, 'event_image_size_detail', '/event-image-sizes/<id>',
@@ -522,5 +532,11 @@ api.route(AdminStatisticsUserDetail, 'admin_statistics_user_detail', '/admin/sta
 api.route(AdminStatisticsMailDetail, 'admin_statistics_mail_detail', '/admin/statistics/mails')
 
 # Admin Sales
-api.route(AdminSalesFeesList, 'admin_sales_fees', '/admin/sales/fees')
+
+api.route(AdminSalesByEventsList, 'admin_sales_by_events', '/admin/sales/by-events')
+api.route(AdminSalesByOrganizersList, 'admin_sales_by_organizers', '/admin/sales/by-organizers')
+api.route(AdminSalesByLocationList, 'admin_sales_by_location', '/admin/sales/by-location')
+api.route(AdminSalesByMarketerList, 'admin_sales_by_marketer', '/admin/sales/by-marketer')
+api.route(AdminSalesDiscountedList, 'admin_sales_discounted', '/admin/sales/discounted')
 api.route(AdminSalesInvoicesList, 'admin_sales_invoices', '/admin/sales/invoices')
+api.route(AdminSalesFeesList, 'admin_sales_fees', '/admin/sales/fees')
