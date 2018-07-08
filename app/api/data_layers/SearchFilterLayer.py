@@ -12,9 +12,9 @@ class SearchFilterLayer(SqlalchemyDataLayer):
         :param DeclarativeMeta model: an sqlalchemy model
         :return Query: the sorted query
         """
-        without_fulltext = [f for f in filter_info if f.get('op') and f['op'] != 'search']
+        without_fulltext = [f for f in filter_info if f['op'] != 'search']
 
-        if without_fulltext:
-            print(without_fulltext)
-            filters = create_filters(model, without_fulltext, self.resource)
-            query = query.filter(*filters)
+        if not without_fulltext:
+            return query
+
+        return super().filter_query(query, without_fulltext, model)
