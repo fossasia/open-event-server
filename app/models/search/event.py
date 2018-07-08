@@ -16,7 +16,7 @@ class SearchableEvent(DocType):
     location_name = Text()
     organizer_name = Text()
     organizer_description = Text()
-    meta = self.Meta()
+    meta = Meta()
 
     def from_event(self, db_event):
         "Convert an existing (sqlalchemy-)event into an Elasticsearch event"
