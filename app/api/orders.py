@@ -7,6 +7,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy.orm.exc import NoResultFound
 
+from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
@@ -19,6 +20,7 @@ from app.api.helpers.notification import send_notif_to_attendees, send_notif_tic
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
+from app.api.helpers.order import delete_related_attendees_for_order
 from app.api.helpers.ticketing import TicketingManager
 from app.api.helpers.utilities import dasherize, require_relationship
 from app.api.schema.orders import OrderSchema
@@ -68,6 +70,10 @@ class OrdersListPost(ResourceList):
         if data.get('cancel_note'):
             del data['cancel_note']
 
+        if data.get('payment_mode') != 'free' and not data.get('amount'):
+            raise ConflictException({'pointer': '/data/attributes/amount'},
+                                    "Amount cannot be null for a paid order")
+
         # Apply discount only if the user is not event admin
         if data.get('discount') and not has_access('is_coorganizer', event_id=data['event']):
             discount_code = safe_query_without_soft_deleted_entries(self, DiscountCode, 'id', data['discount'],
@@ -89,7 +95,7 @@ class OrdersListPost(ResourceList):
     def after_create_object(self, order, data, view_kwargs):
         """
         after create object method for OrderListPost Class
-        :param order:
+        :param order: Object created from mashmallow_jsonapi
         :param data:
         :param view_kwargs:
         :return:
@@ -98,9 +104,11 @@ class OrdersListPost(ResourceList):
         for holder in order.ticket_holders:
             if holder.id != current_user.id:
                 pdf = create_save_pdf(render_template('pdf/ticket_attendee.html', order=order, holder=holder),
+                                      UPLOAD_PATHS['pdf']['ticket_attendee'],
                                       dir_path='/static/uploads/pdf/tickets/')
             else:
                 pdf = create_save_pdf(render_template('pdf/ticket_purchaser.html', order=order),
+                                      UPLOAD_PATHS['pdf']['ticket_attendee'],
                                       dir_path='/static/uploads/pdf/tickets/')
             holder.pdf_url = pdf
             save_to_db(holder)
@@ -111,7 +119,7 @@ class OrdersListPost(ResourceList):
         for ticket in order_tickets:
             od = OrderTicket(order_id=order.id, ticket_id=ticket, quantity=order_tickets[ticket])
             save_to_db(od)
-        order.quantity = order.get_tickets_count()
+        order.quantity = order.tickets_count
         order.user = current_user
         save_to_db(order)
         if not has_access('is_coorganizer', event_id=data['event']):
@@ -225,6 +233,10 @@ class OrderDetail(ResourceDetail):
                             # Since we don't have a refund system.
                             raise ForbiddenException({'pointer': 'data/status'},
                                                      "You cannot update the status of a completed paid order")
+                        elif element == 'status' and order.status == 'cancelled':
+                            # Since the tickets have been unlocked and we can't revert it.
+                            raise ForbiddenException({'pointer': 'data/status'},
+                                                     "You cannot update the status of a cancelled order")
 
         elif current_user.id == order.user_id:
             if order.status != 'pending':
@@ -251,6 +263,9 @@ class OrderDetail(ResourceDetail):
             send_order_cancel_email(order)
             send_notif_ticket_cancel(order)
 
+            # delete the attendees so that the tickets are unlocked.
+            delete_related_attendees_for_order(self, order)
+
     def before_delete_object(self, order, view_kwargs):
         """
         method to check for proper permissions for deleting
@@ -260,6 +275,8 @@ class OrderDetail(ResourceDetail):
         """
         if not has_access('is_coorganizer', event_id=order.event.id):
             raise ForbiddenException({'source': ''}, 'Access Forbidden')
+        elif order.amount and order.amount > 0 and (order.status == 'completed' or order.status == 'placed'):
+            raise ConflictException({'source': ''}, 'You cannot delete a placed/completed paid order.')
 
     decorators = (jwt_required,)
 

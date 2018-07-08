@@ -21,13 +21,15 @@ class OrderSchema(SoftDeletionSchema):
 
     @post_dump
     def generate_payment_url(self, data):
+        """
+        generate payment url for an order
+        :param data:
+        :return:
+        """
         if 'POST' in request.method or ('GET' in request.method and 'regenerate' in request.args) and 'completed' != \
            data["status"]:
             if data['payment_mode'] == 'stripe':
                 data['payment_url'] = 'stripe://payment'
-            elif data['payment_mode'] == 'paypal':
-                order = Order.query.filter_by(id=data['id']).first()
-                data['payment_url'] = PayPalPaymentsManager.get_checkout_url(order)
         return data
 
     @validates_schema
@@ -38,12 +40,12 @@ class OrderSchema(SoftDeletionSchema):
 
     id = fields.Str(dump_only=True)
     identifier = fields.Str(dump_only=True)
-    amount = fields.Float(validate=lambda n: n > 0)
-    address = fields.Str()
-    city = fields.Str()
-    state = fields.Str(db.String)
-    country = fields.Str()
-    zipcode = fields.Str()
+    amount = fields.Float(validate=lambda n: n > 0, allow_none=True)
+    address = fields.Str(allow_none=True)
+    city = fields.Str(allow_none=True)
+    state = fields.Str(db.String, allow_none=True)
+    country = fields.Str(allow_none=True)
+    zipcode = fields.Str(allow_none=True)
     completed_at = fields.DateTime(dump_only=True)
     transaction_id = fields.Str(dump_only=True)
     payment_mode = fields.Str(default="free",
@@ -54,9 +56,9 @@ class OrderSchema(SoftDeletionSchema):
     exp_year = fields.Str(dump_only=True)
     last4 = fields.Str(dump_only=True)
     status = fields.Str(validate=validate.OneOf(choices=["pending", "cancelled", "completed", "placed", "expired"]))
-    discount_code_id = fields.Str()
+    discount_code_id = fields.Str(allow_none=True)
     payment_url = fields.Str(dump_only=True)
-    cancel_note = fields.Str()
+    cancel_note = fields.Str(allow_none=True)
     order_notes = fields.Str(allow_none=True)
 
     attendees = Relationship(attribute='ticket_holders',

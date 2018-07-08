@@ -2,7 +2,7 @@
 User Notification Structures
 """
 from app.models.notification import (
-    EVENT_ROLE_INVITE,
+    EVENT_ROLE,
     NEW_SESSION,
     SESSION_SCHEDULE,
     NEXT_EVENT,
@@ -154,7 +154,7 @@ NOTIFS = {
                    <a href='{link}' class='btn btn-info btn-sm'>View Event</a>""",
         'recipient': 'User',
     },
-    EVENT_ROLE_INVITE: {
+    EVENT_ROLE: {
         'title': u'Invitation to be {role_name} at {event_name}',
         'message': u"""You've been invited to be a <strong>{role_name}</strong>
             at <strong>{event_name}</strong>.<br><br>
