@@ -18,7 +18,6 @@ from app.models.ticket_holder import TicketHolder
 from app.api.helpers.exceptions import ConflictException, MethodNotAllowed
 from app.api.helpers.db import get_count
 
-
 class TicketListPost(ResourceList):
     """
     Create and List Tickets
@@ -34,7 +33,7 @@ class TicketListPost(ResourceList):
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ObjectNotFound({'parameter': 'event_id'},
-                                 "Event: {} not found".format(data['event_id']))
+                                 "Event: {} not found".format(data['event']))
 
         if get_count(db.session.query(Ticket.id).filter_by(name=data['name'], event_id=int(data['event']),
                                                            deleted_at=None)) > 0:
