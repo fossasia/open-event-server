@@ -1,5 +1,6 @@
-import sys
 import os.path as path
+import sys
+
 import dredd_hooks as hooks
 import requests
 
@@ -274,6 +275,16 @@ def user_speaker(transaction):
         speaker = SpeakerFactory()
         db.session.add(speaker)
         db.session.commit()
+
+
+@hooks.before("Users > Check if the email is available > Check if email is available")
+def user_check_email(transaction):
+    """
+    POST /users/checkEmail
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
 
 
 # ------------------------- Events -------------------------
@@ -3745,6 +3756,16 @@ def update_order(transaction):
 def delete_order(transaction):
     """
     GET /orders
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Orders > Orders under a User > List all Orders under a User")
+def orders_get_collection_under_user(transaction):
+    """
+    GET /users/1/orders
     :param transaction:
     :return:
     """

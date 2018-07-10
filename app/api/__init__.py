@@ -502,7 +502,7 @@ api.route(StripeAuthorizationRelationship, 'stripe_authorization_event',
 # Orders API
 api.route(OrdersListPost, 'order_list_post', '/orders')
 api.route(OrdersList, 'orders_list', '/orders', '/events/<int:event_id>/orders',
-          '/events/<event_identifier>/orders')
+          '/events/<event_identifier>/orders', '/users/<int:user_id>/orders')
 api.route(OrderDetail, 'order_detail', '/orders/<order_identifier>',
           '/attendees/<int:attendee_id>/order')
 

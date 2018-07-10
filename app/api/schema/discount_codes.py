@@ -47,10 +47,10 @@ class DiscountCodeSchemaPublic(SoftDeletionSchema):
         min_quantity = data.get('min_quantity', None)
         max_quantity = data.get('max_quantity', None)
         if min_quantity is not None and max_quantity is not None:
-            if min_quantity >= max_quantity:
+            if min_quantity > max_quantity:
                 raise UnprocessableEntity(
                     {'pointer': '/data/attributes/min-quantity'},
-                    "min-quantity should be less than max-quantity"
+                    "min-quantity cannot be more than max-quantity"
                 )
 
 

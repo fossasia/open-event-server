@@ -7,7 +7,6 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
@@ -17,10 +16,11 @@ from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.mail import send_order_cancel_email
 from app.api.helpers.notification import send_notif_to_attendees, send_notif_ticket_purchase_organizer, \
     send_notif_ticket_cancel
+from app.api.helpers.order import delete_related_attendees_for_order
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
-from app.api.helpers.order import delete_related_attendees_for_order
+from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.helpers.ticketing import TicketingManager
 from app.api.helpers.utilities import dasherize, require_relationship
 from app.api.schema.orders import OrderSchema
@@ -28,6 +28,7 @@ from app.models import db
 from app.models.discount_code import DiscountCode, TICKET
 from app.models.order import Order, OrderTicket
 from app.models.ticket_holder import TicketHolder
+from app.models.user import User
 
 
 class OrdersListPost(ResourceList):
@@ -163,7 +164,15 @@ class OrdersList(ResourceList):
 
     def query(self, view_kwargs):
         query_ = self.session.query(Order)
-        query_ = event_query(self, query_, view_kwargs)
+        if view_kwargs.get('user_id'):
+            # orders under a user
+            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            if not has_access('is_user_itself', user_id=user.id):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            query_ = query_.join(User, User.id == Order.user_id).filter(User.id == user.id)
+        else:
+            # orders under an event
+            query_ = event_query(self, query_, view_kwargs)
 
         return query_
 
