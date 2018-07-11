@@ -55,6 +55,7 @@ from app.factories.order import OrderFactory
 from app.factories.faq_type import FaqTypeFactory
 from app.factories.feedback import FeedbackFactory
 from app.factories.service import ServiceFactory
+from app.factories.message_setting import MessageSettingsFactory
 
 
 
@@ -2300,6 +2301,46 @@ def event_role_permission_patch(transaction):
 #       event_role_permission = EventRolePermissionsFactory()
 #       db.session.add(event_role_permission)
 #       db.session.commit()
+
+
+# ------------------------- Message Setting -------------------------
+@hooks.before("Message Settings > Message Setting Collection > List Message Settings")
+def message_setting_list(transaction):
+    """
+    GET /message-settings
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        message_setting = MessageSettingsFactory()
+        db.session.add(message_setting)
+        db.session.commit()
+
+
+@hooks.before("Message Settings > Message Setting Details > Get Message Setting Details")
+def message_setting_detail(transaction):
+    """
+    GET /message-settings/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        message_setting = MessageSettingsFactory()
+        db.session.add(message_setting)
+        db.session.commit()
+
+
+@hooks.before("Message Settings > Message Setting Details > Update Message Setting")
+def message_setting_patch(transaction):
+    """
+    PATCH /message-settings/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        message_setting = MessageSettingsFactory()
+        db.session.add(message_setting)
+        db.session.commit()
 
 
 # ------------------------- Activities -------------------------
