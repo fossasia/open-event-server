@@ -3105,6 +3105,16 @@ def file_upload_post(transaction):
     transaction['skip'] = True
 
 
+# ------------------------- Event Locationss -------------------------
+@hooks.before("Event Locations > Event Locations Collection > List All Event Locations")
+def event_location_get_list(transaction):
+    """
+    GET /events-location
+    :param transaction:
+    :return:
+    """
+
+
 # ------------------------- Event Types -------------------------
 @hooks.before("Event Types > Event Types Collection > List All Event Types")
 def event_type_get_list(transaction):

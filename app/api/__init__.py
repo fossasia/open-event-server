@@ -10,6 +10,7 @@ from app.api.tickets import TicketList, TicketListPost, TicketDetail, TicketRela
     TicketRelationshipOptional
 from app.api.events import EventList, EventDetail, EventRelationship, EventCopyResource
 from app.api.event_types import EventTypeList, EventTypeDetail, EventTypeRelationship
+from app.api.event_locations import EventLocationList
 from app.api.event_topics import EventTopicList, EventTopicDetail, EventTopicRelationship
 from app.api.event_sub_topics import EventSubTopicList, EventSubTopicListPost, EventSubTopicDetail,\
     EventSubTopicRelationshipRequired, EventSubTopicRelationshipOptional
@@ -417,6 +418,9 @@ api.route(AttendeeRelationshipOptional, 'attendee_ticket', '/attendees/<int:id>/
 api.route(AttendeeRelationshipRequired, 'attendee_event', '/attendees/<int:id>/relationships/event')
 api.route(AttendeeRelationshipRequired, 'attendee_order', '/attendees/<int:id>/relationships/order')
 api.route(AttendeeRelationshipOptional, 'attendee_user', '/attendees/<int:id>/relationships/user')
+
+# event locations
+api.route(EventLocationList, 'event_location_list', '/event-locations')
 
 # event types
 api.route(EventTypeList, 'event_type_list', '/event-types')
