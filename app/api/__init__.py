@@ -509,7 +509,7 @@ api.route(StripeAuthorizationRelationship, 'stripe_authorization_event',
 api.route(OrdersListPost, 'order_list_post', '/orders')
 api.route(OrdersList, 'orders_list', '/orders', '/events/<int:event_id>/orders',
           '/events/<event_identifier>/orders', '/users/<int:user_id>/orders')
-api.route(OrderDetail, 'order_detail', '/orders/<order_identifier>',
+api.route(OrderDetail, 'order_detail', '/orders/<int:id>', '/orders/<order_identifier>',
           '/attendees/<int:attendee_id>/order')
 
 # Charges API
