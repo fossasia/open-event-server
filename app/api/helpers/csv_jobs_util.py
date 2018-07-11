@@ -1,3 +1,6 @@
+from app.models.helpers.versioning import strip_tags
+
+
 def export_orders_csv(orders):
     headers = ['Order#', 'Order Date', 'Status', 'Payment Type', 'Total Amount', 'Quantity',
                'Discount Code', 'First Name', 'Last Name', 'Email']
@@ -38,5 +41,29 @@ def export_attendees_csv(attendees):
                   str(attendee.ticket.type) if attendee.ticket and attendee.ticket.type else '']
 
         rows.append(column)
+
+    return rows
+
+
+def export_sessions_csv(sessions):
+    headers = ['Session Title', 'Session Speakers',
+               'Session Track', 'Session Abstract', 'Created At', 'Email Sent']
+    rows = [headers]
+    for session in sessions:
+        if not session.deleted_at:
+            column = [session.title + ' (' + session.state + ')' if session.title else '']
+            if session.speakers:
+                in_session = ''
+                for speaker in session.speakers:
+                    if speaker.name:
+                        in_session += (speaker.name + '; ')
+                column.append(in_session[:-2])
+            else:
+                column.append('')
+            column.append(session.track.name if session.track and session.track.name else '')
+            column.append(strip_tags(session.short_abstract) if session.short_abstract else '')
+            column.append(session.created_at if session.created_at else '')
+            column.append('Yes' if session.is_mail_sent else 'No')
+            rows.append(column)
 
     return rows
