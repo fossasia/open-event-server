@@ -325,7 +325,7 @@ class ChargeSchema(Schema):
         type_ = 'charge'
         inflect = dasherize
         self_view = 'v1.charge_list'
-        self_view_kwargs = {'id': '<id>'}
+        self_view_kwargs = {'order_identifier': '<id>'}
 
     id = fields.Str(dump_only=True)
     stripe = fields.Str(allow_none=True)
@@ -341,7 +341,8 @@ class ChargeList(ResourceList):
 
     data_layer = {
         'class': ChargesLayer,
-        'session': db.session
+        'session': db.session,
+        'model': Order
     }
 
     decorators = (jwt_required,)
