@@ -7,6 +7,7 @@ from marrow.mailer import Mailer, Message
 
 from app import make_celery
 from app.api.helpers.utilities import strip_tags
+from app.models.session import Session
 
 """
 Define all API v2 celery tasks here
@@ -312,6 +313,35 @@ def export_attendees_pdf_task(self, event_id):
             UPLOAD_PATHS['exports-temp']['pdf'].format(event_id=event_id, identifier=''))
         result = {
             'download_url': attendees_pdf_url
+        }
+    except Exception as e:
+        print(traceback.format_exc())
+        result = {'__error': True, 'result': str(e)}
+
+    return result
+
+
+@celery.task(base=RequestContextTask, name='export.sessions.csv', bind=True)
+def export_sessions_csv_task(self, event_id):
+    sessions = db.session.query(Session).filter_by(event_id=event_id)
+    try:
+        filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
+        if not os.path.isdir(filedir):
+            os.makedirs(filedir)
+        filename = "sessions-{}.csv".format(uuid.uuid1().hex)
+        file_path = os.path.join(filedir, filename)
+
+        with open(file_path, "w") as temp_file:
+            writer = csv.writer(temp_file)
+            from app.api.helpers.csv_jobs_util import export_sessions_csv
+            content = export_sessions_csv(sessions)
+            for row in content:
+                writer.writerow(row)
+        sessions_csv_file = UploadedFile(file_path=file_path, filename=filename)
+        sessions_csv_url = upload(sessions_csv_file,
+                                  UPLOAD_PATHS['exports-temp']['csv'].format(event_id=event_id, identifier=''))
+        result = {
+            'download_url': sessions_csv_url
         }
     except Exception as e:
         print(traceback.format_exc())
