@@ -1,7 +1,9 @@
+import csv
+import json
 import os
 import requests
 import uuid
-import csv
+
 from flask import current_app, render_template
 from marrow.mailer import Mailer, Message
 
@@ -41,10 +43,16 @@ celery = make_celery()
 
 @celery.task(name='send.email.post')
 def send_email_task(payload, headers):
+    data = {"personalizations": [{"to": []}]}
+    data["personalizations"][0]["to"].append({"email": payload["to"]})
+    data["from"] = {"email": payload["from"]}
+    data["subject"] = payload["subject"]
+    data["content"] = [{"type": "text/html", "value": payload["html"]}]
     requests.post(
-        "https://api.sendgrid.com/api/mail.send.json",
-        data=payload,
-        headers=headers
+        "https://api.sendgrid.com/v3/mail/send",
+        data=json.dumps(data),
+        headers=headers,
+        verify=False  # doesn't work with verification in celery context
     )
 
 
