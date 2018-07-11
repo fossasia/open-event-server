@@ -200,8 +200,11 @@ class OrderDetail(ResourceDetail):
         if view_kwargs.get('attendee_id'):
             attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
             view_kwargs['order_identifier'] = attendee.order.identifier
-
-        order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
+        if view_kwargs.get('order_identifier'):
+            order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
+            view_kwargs['id'] = order.id
+        elif view_kwargs.get('id'):
+            order = safe_query(self, Order, 'id', view_kwargs['id'], 'id')
 
         if not has_access('is_coorganizer_or_user_itself', event_id=order.event_id, user_id=order.user_id):
             return ForbiddenException({'source': ''}, 'You can only access your orders or your event\'s orders')
@@ -292,8 +295,6 @@ class OrderDetail(ResourceDetail):
     schema = OrderSchema
     data_layer = {'session': db.session,
                   'model': Order,
-                  'url_field': 'order_identifier',
-                  'id_field': 'identifier',
                   'methods': {
                       'before_update_object': before_update_object,
                       'before_delete_object': before_delete_object,
