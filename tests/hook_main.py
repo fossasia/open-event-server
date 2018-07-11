@@ -1,5 +1,6 @@
-import sys
 import os.path as path
+import sys
+
 import dredd_hooks as hooks
 import requests
 
@@ -54,6 +55,7 @@ from app.factories.order import OrderFactory
 from app.factories.faq_type import FaqTypeFactory
 from app.factories.feedback import FeedbackFactory
 from app.factories.service import ServiceFactory
+from app.factories.message_setting import MessageSettingsFactory
 
 
 
@@ -274,6 +276,16 @@ def user_speaker(transaction):
         speaker = SpeakerFactory()
         db.session.add(speaker)
         db.session.commit()
+
+
+@hooks.before("Users > Check if the email is available > Check if email is available")
+def user_check_email(transaction):
+    """
+    POST /users/checkEmail
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
 
 
 # ------------------------- Events -------------------------
@@ -1473,8 +1485,6 @@ def sponsor_patch(transaction):
     :param transaction:
     :return:
     """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
 
     with stash['app'].app_context():
         sponsor = SponsorFactory()
@@ -1804,7 +1814,13 @@ def attendee_post(transaction):
     :return:
     """
     # Skip until docs for direct endpoints added
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        ticket = TicketFactory()
+        db.session.add(ticket)
+
+        attendee = AttendeeFactory(ticket_id=1)
+        db.session.add(attendee)
+        db.session.commit()
 
 
 @hooks.before("Attendees > Attendee Details > Attendee Details")
@@ -2285,6 +2301,46 @@ def event_role_permission_patch(transaction):
 #       event_role_permission = EventRolePermissionsFactory()
 #       db.session.add(event_role_permission)
 #       db.session.commit()
+
+
+# ------------------------- Message Setting -------------------------
+@hooks.before("Message Settings > Message Setting Collection > List Message Settings")
+def message_setting_list(transaction):
+    """
+    GET /message-settings
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        message_setting = MessageSettingsFactory()
+        db.session.add(message_setting)
+        db.session.commit()
+
+
+@hooks.before("Message Settings > Message Setting Details > Get Message Setting Details")
+def message_setting_detail(transaction):
+    """
+    GET /message-settings/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        message_setting = MessageSettingsFactory()
+        db.session.add(message_setting)
+        db.session.commit()
+
+
+@hooks.before("Message Settings > Message Setting Details > Update Message Setting")
+def message_setting_patch(transaction):
+    """
+    PATCH /message-settings/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        message_setting = MessageSettingsFactory()
+        db.session.add(message_setting)
+        db.session.commit()
 
 
 # ------------------------- Activities -------------------------
@@ -3049,6 +3105,16 @@ def file_upload_post(transaction):
     transaction['skip'] = True
 
 
+# ------------------------- Event Locationss -------------------------
+@hooks.before("Event Locations > Event Locations Collection > List All Event Locations")
+def event_location_get_list(transaction):
+    """
+    GET /events-location
+    :param transaction:
+    :return:
+    """
+
+
 # ------------------------- Event Types -------------------------
 @hooks.before("Event Types > Event Types Collection > List All Event Types")
 def event_type_get_list(transaction):
@@ -3603,6 +3669,45 @@ def event_orders_export_pdf_get(transaction):
         db.session.add(event)
         db.session.commit()
 
+
+@hooks.before(
+    "Event Export > Start Attendees Export as CSV > Start a Task to Export Attendees of an Event as CSV")
+def event_attendees_export_csv_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Export > Start Attendees Export as PDF > Start a Task to Export Attendees of an Event as PDF")
+def event_attendees_export_pdf_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Export > Start Sessions Export as CSV > Start a Task to Export Sessions of an Event as CSV")
+def event_sessions_export_csv_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
 # ------------------------- Import -------------------------
 @hooks.before(
     "Event Import > Start Event Import > Start a Task to Import an Event")
@@ -3715,6 +3820,16 @@ def update_order(transaction):
 def delete_order(transaction):
     """
     GET /orders
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Orders > Orders under a User > List all Orders under a User")
+def orders_get_collection_under_user(transaction):
+    """
+    GET /users/1/orders
     :param transaction:
     :return:
     """

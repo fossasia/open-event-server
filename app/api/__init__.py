@@ -10,6 +10,7 @@ from app.api.tickets import TicketList, TicketListPost, TicketDetail, TicketRela
     TicketRelationshipOptional
 from app.api.events import EventList, EventDetail, EventRelationship, EventCopyResource
 from app.api.event_types import EventTypeList, EventTypeDetail, EventTypeRelationship
+from app.api.event_locations import EventLocationList
 from app.api.event_topics import EventTopicList, EventTopicDetail, EventTopicRelationship
 from app.api.event_sub_topics import EventSubTopicList, EventSubTopicListPost, EventSubTopicDetail,\
     EventSubTopicRelationshipRequired, EventSubTopicRelationshipOptional
@@ -37,6 +38,7 @@ from app.api.pages import PageList, PageDetail
 from app.api.user_permission import UserPermissionList, UserPermissionDetail
 from app.api.events_role_permission import EventsRolePermissionList, EventsRolePermissionDetail, \
     EventsRolePermissionRelationship
+from app.api.message_settings import MessageSettingsList, MessageSettingsDetail
 from app.api.tax import TaxList, TaxDetail, TaxRelationship
 from app.api.settings import SettingDetail
 from app.api.discount_codes import DiscountCodeList, DiscountCodeDetail, DiscountCodeRelationshipOptional, \
@@ -64,6 +66,11 @@ from app.api.order_statistics.events import OrderStatisticsEventDetail
 from app.api.order_statistics.tickets import OrderStatisticsTicketDetail
 from app.api.faq_types import FaqTypeList, FaqTypeListPost, FaqTypeDetail, FaqTypeRelationshipOptional, \
     FaqTypeRelationshipRequired
+from app.api.admin_sales.events import AdminSalesByEventsList
+from app.api.admin_sales.organizer import AdminSalesByOrganizersList
+from app.api.admin_sales.locations import AdminSalesByLocationList
+from app.api.admin_sales.marketer import AdminSalesByMarketerList
+from app.api.admin_sales.discounted import AdminSalesDiscountedList
 from app.api.admin_sales.fees import AdminSalesFeesList
 from app.api.admin_sales.invoices import AdminSalesInvoicesList
 
@@ -89,6 +96,8 @@ api.route(UserRelationship, 'user_registrar_event', '/users/<int:id>/relationshi
 api.route(UserRelationship, 'user_moderator_event', '/users/<int:id>/relationships/moderator-events')
 api.route(UserRelationship, 'user_attendees', '/users/<int:id>/relationships/attendees')
 api.route(UserRelationship, 'user_events', '/users/<int:id>/relationships/events')
+api.route(UserRelationship, 'user_orders', '/users/<int:id>/relationships/orders')
+
 
 # notifications
 api.route(NotificationListAdmin, 'notification_list_admin', '/notifications')
@@ -105,6 +114,10 @@ api.route(EmailNotificationRelationshipRequired, 'email_notification_user',
           '/email-notifications/<int:id>/relationships/user')
 api.route(EmailNotificationRelationshipOptional, 'email_notification_event',
           '/email-notifications/<int:id>/relationships/event')
+
+# message_settings
+api.route(MessageSettingsList, 'message_settings_list', '/message-settings')
+api.route(MessageSettingsDetail, 'message_setting_detail', '/message-settings/<int:id>')
 
 # event_image_sizes
 api.route(EventImageSizeDetail, 'event_image_size_detail', '/event-image-sizes/<id>',
@@ -406,6 +419,9 @@ api.route(AttendeeRelationshipRequired, 'attendee_event', '/attendees/<int:id>/r
 api.route(AttendeeRelationshipRequired, 'attendee_order', '/attendees/<int:id>/relationships/order')
 api.route(AttendeeRelationshipOptional, 'attendee_user', '/attendees/<int:id>/relationships/user')
 
+# event locations
+api.route(EventLocationList, 'event_location_list', '/event-locations')
+
 # event types
 api.route(EventTypeList, 'event_type_list', '/event-types')
 api.route(EventTypeDetail, 'event_type_detail', '/event-types/<int:id>', '/events/<int:event_id>/event-type',
@@ -492,8 +508,8 @@ api.route(StripeAuthorizationRelationship, 'stripe_authorization_event',
 # Orders API
 api.route(OrdersListPost, 'order_list_post', '/orders')
 api.route(OrdersList, 'orders_list', '/orders', '/events/<int:event_id>/orders',
-          '/events/<event_identifier>/orders')
-api.route(OrderDetail, 'order_detail', '/orders/<order_identifier>',
+          '/events/<event_identifier>/orders', '/users/<int:user_id>/orders')
+api.route(OrderDetail, 'order_detail', '/orders/<int:id>', '/orders/<order_identifier>',
           '/attendees/<int:attendee_id>/order')
 
 # Charges API
@@ -522,5 +538,11 @@ api.route(AdminStatisticsUserDetail, 'admin_statistics_user_detail', '/admin/sta
 api.route(AdminStatisticsMailDetail, 'admin_statistics_mail_detail', '/admin/statistics/mails')
 
 # Admin Sales
-api.route(AdminSalesFeesList, 'admin_sales_fees', '/admin/sales/fees')
+
+api.route(AdminSalesByEventsList, 'admin_sales_by_events', '/admin/sales/by-events')
+api.route(AdminSalesByOrganizersList, 'admin_sales_by_organizers', '/admin/sales/by-organizers')
+api.route(AdminSalesByLocationList, 'admin_sales_by_location', '/admin/sales/by-location')
+api.route(AdminSalesByMarketerList, 'admin_sales_by_marketer', '/admin/sales/by-marketer')
+api.route(AdminSalesDiscountedList, 'admin_sales_discounted', '/admin/sales/discounted')
 api.route(AdminSalesInvoicesList, 'admin_sales_invoices', '/admin/sales/invoices')
+api.route(AdminSalesFeesList, 'admin_sales_fees', '/admin/sales/fees')

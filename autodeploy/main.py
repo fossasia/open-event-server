@@ -32,7 +32,6 @@ def get_auto_updater(cwd, name, cfg):
     return a
 
 
-
 def start_all_projects(projects):
     for p in projects:
         p.start()

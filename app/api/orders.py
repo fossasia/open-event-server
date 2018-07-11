@@ -16,16 +16,19 @@ from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.mail import send_order_cancel_email
 from app.api.helpers.notification import send_notif_to_attendees, send_notif_ticket_purchase_organizer, \
     send_notif_ticket_cancel
+from app.api.helpers.order import delete_related_attendees_for_order
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
+from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.helpers.ticketing import TicketingManager
 from app.api.helpers.utilities import dasherize, require_relationship
 from app.api.schema.orders import OrderSchema
 from app.models import db
 from app.models.discount_code import DiscountCode, TICKET
-from app.models.order import Order, OrderTicket
+from app.models.order import Order, OrderTicket, get_updatable_fields
 from app.models.ticket_holder import TicketHolder
+from app.models.user import User
 
 
 class OrdersListPost(ResourceList):
@@ -68,6 +71,10 @@ class OrdersListPost(ResourceList):
         if data.get('cancel_note'):
             del data['cancel_note']
 
+        if data.get('payment_mode') != 'free' and not data.get('amount'):
+            raise ConflictException({'pointer': '/data/attributes/amount'},
+                                    "Amount cannot be null for a paid order")
+
         # Apply discount only if the user is not event admin
         if data.get('discount') and not has_access('is_coorganizer', event_id=data['event']):
             discount_code = safe_query_without_soft_deleted_entries(self, DiscountCode, 'id', data['discount'],
@@ -89,7 +96,7 @@ class OrdersListPost(ResourceList):
     def after_create_object(self, order, data, view_kwargs):
         """
         after create object method for OrderListPost Class
-        :param order:
+        :param order: Object created from mashmallow_jsonapi
         :param data:
         :param view_kwargs:
         :return:
@@ -98,9 +105,11 @@ class OrdersListPost(ResourceList):
         for holder in order.ticket_holders:
             if holder.id != current_user.id:
                 pdf = create_save_pdf(render_template('pdf/ticket_attendee.html', order=order, holder=holder),
+                                      UPLOAD_PATHS['pdf']['ticket_attendee'],
                                       dir_path='/static/uploads/pdf/tickets/')
             else:
                 pdf = create_save_pdf(render_template('pdf/ticket_purchaser.html', order=order),
+                                      UPLOAD_PATHS['pdf']['ticket_attendee'],
                                       dir_path='/static/uploads/pdf/tickets/')
             holder.pdf_url = pdf
             save_to_db(holder)
@@ -111,7 +120,7 @@ class OrdersListPost(ResourceList):
         for ticket in order_tickets:
             od = OrderTicket(order_id=order.id, ticket_id=ticket, quantity=order_tickets[ticket])
             save_to_db(od)
-        order.quantity = order.get_tickets_count()
+        order.quantity = order.tickets_count
         order.user = current_user
         save_to_db(order)
         if not has_access('is_coorganizer', event_id=data['event']):
@@ -155,7 +164,15 @@ class OrdersList(ResourceList):
 
     def query(self, view_kwargs):
         query_ = self.session.query(Order)
-        query_ = event_query(self, query_, view_kwargs)
+        if view_kwargs.get('user_id'):
+            # orders under a user
+            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            if not has_access('is_user_itself', user_id=user.id):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            query_ = query_.join(User, User.id == Order.user_id).filter(User.id == user.id)
+        else:
+            # orders under an event
+            query_ = event_query(self, query_, view_kwargs)
 
         return query_
 
@@ -183,8 +200,11 @@ class OrderDetail(ResourceDetail):
         if view_kwargs.get('attendee_id'):
             attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
             view_kwargs['order_identifier'] = attendee.order.identifier
-
-        order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
+        if view_kwargs.get('order_identifier'):
+            order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
+            view_kwargs['id'] = order.id
+        elif view_kwargs.get('id'):
+            order = safe_query(self, Order, 'id', view_kwargs['id'], 'id')
 
         if not has_access('is_coorganizer_or_user_itself', event_id=order.event_id, user_id=order.user_id):
             return ForbiddenException({'source': ''}, 'You can only access your orders or your event\'s orders')
@@ -210,7 +230,7 @@ class OrderDetail(ResourceDetail):
             if current_user.id == order.user_id:
                 # Order created from the tickets tab.
                 for element in data:
-                    if data[element] != getattr(order, element, None) and element not in Order.get_updatable_fields():
+                    if data[element] != getattr(order, element, None) and element not in get_updatable_fields():
                         raise ForbiddenException({'pointer': 'data/{}'.format(element)},
                                                  "You cannot update {} of an order".format(element))
 
@@ -225,6 +245,10 @@ class OrderDetail(ResourceDetail):
                             # Since we don't have a refund system.
                             raise ForbiddenException({'pointer': 'data/status'},
                                                      "You cannot update the status of a completed paid order")
+                        elif element == 'status' and order.status == 'cancelled':
+                            # Since the tickets have been unlocked and we can't revert it.
+                            raise ForbiddenException({'pointer': 'data/status'},
+                                                     "You cannot update the status of a cancelled order")
 
         elif current_user.id == order.user_id:
             if order.status != 'pending':
@@ -232,7 +256,7 @@ class OrderDetail(ResourceDetail):
                                          "You cannot update a non-pending order")
             else:
                 for element in data:
-                    if data[element] != getattr(order, element, None) and element not in Order.get_updatable_fields():
+                    if data[element] != getattr(order, element, None) and element not in get_updatable_fields():
                         raise ForbiddenException({'pointer': 'data/{}'.format(element)},
                                                  "You cannot update {} of an order".format(element))
 
@@ -251,6 +275,9 @@ class OrderDetail(ResourceDetail):
             send_order_cancel_email(order)
             send_notif_ticket_cancel(order)
 
+            # delete the attendees so that the tickets are unlocked.
+            delete_related_attendees_for_order(self, order)
+
     def before_delete_object(self, order, view_kwargs):
         """
         method to check for proper permissions for deleting
@@ -260,14 +287,14 @@ class OrderDetail(ResourceDetail):
         """
         if not has_access('is_coorganizer', event_id=order.event.id):
             raise ForbiddenException({'source': ''}, 'Access Forbidden')
+        elif order.amount and order.amount > 0 and (order.status == 'completed' or order.status == 'placed'):
+            raise ConflictException({'source': ''}, 'You cannot delete a placed/completed paid order.')
 
     decorators = (jwt_required,)
 
     schema = OrderSchema
     data_layer = {'session': db.session,
                   'model': Order,
-                  'url_field': 'order_identifier',
-                  'id_field': 'identifier',
                   'methods': {
                       'before_update_object': before_update_object,
                       'before_delete_object': before_delete_object,

@@ -1,4 +1,5 @@
 from forex_python.converter import CurrencyCodes
+import arrow
 
 
 def init_filters(app):
@@ -14,3 +15,9 @@ def init_filters(app):
     @app.template_filter('datetime')
     def simple_datetime_display(date):
         return date.strftime('%B %d, %Y %I:%M %p')
+
+    @app.template_filter('humanize')
+    def humanize_filter(time):
+        if not time:
+            return "N/A"
+        return arrow.get(time).humanize()

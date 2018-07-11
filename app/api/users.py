@@ -1,12 +1,17 @@
 import base64
 
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from flask import Blueprint, request, jsonify, abort, make_response
 from flask_jwt import current_identity as current_user
+from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app import get_settings
 from app.api.bootstrap import api
+from app.api.helpers.db import safe_query, get_count
+from app.api.helpers.exceptions import ConflictException
+from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.files import create_save_image_sizes, make_frontend_url
 from app.api.helpers.mail import send_email_confirmation, send_email_change_user_email, send_email_with_action
+from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import is_user_itself
 from app.api.helpers.utilities import get_serializer, str_generator
 from app.api.schema.users import UserSchema, UserSchemaPublic
@@ -15,18 +20,16 @@ from app.models.access_code import AccessCode
 from app.models.discount_code import DiscountCode
 from app.models.email_notification import EmailNotification
 from app.models.event_invoice import EventInvoice
+from app.models.feedback import Feedback
 from app.models.mail import USER_REGISTER_WITH_PASSWORD
 from app.models.notification import Notification
-from app.models.feedback import Feedback
-from app.models.speaker import Speaker
 from app.models.session import Session
-from app.api.helpers.exceptions import ConflictException
-from app.api.helpers.db import safe_query
+from app.models.speaker import Speaker
+from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 from app.models.users_events_role import UsersEventsRoles
-from app.models.ticket_holder import TicketHolder
-from app.api.helpers.exceptions import ForbiddenException
-from app.api.helpers.permission_manager import has_access
+
+user_misc_routes = Blueprint('user_misc', __name__, url_prefix='/v1')
 
 
 class UserList(ResourceList):
@@ -215,3 +218,21 @@ class UserRelationship(ResourceRelationship):
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User}
+
+
+@user_misc_routes.route('/users/checkEmail', methods=['POST'])
+def is_email_available():
+    email = request.json.get('email', None)
+    if email:
+        if get_count(db.session.query(User).filter_by(email=email)):
+            return jsonify(
+                result="False"
+            )
+        else:
+            return jsonify(
+                result="True"
+            )
+    else:
+        abort(
+            make_response(jsonify(error="Email field missing"), 422)
+        )

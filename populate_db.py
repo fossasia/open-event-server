@@ -222,9 +222,13 @@ def create_admin_message_settings():
                      "New Session Proposal"]
     for mail in MAILS:
         if mail in default_mails:
-            get_or_create(MessageSettings, action=mail, mail_status=1, notification_status=1, user_control_status=1)
+            get_or_create(MessageSettings, action=mail, mail_status=True,
+                          notification_status=True, user_control_status=True)
         else:
-            get_or_create(MessageSettings, action=mail, mail_status=0, notification_status=0, user_control_status=0)
+            get_or_create(
+                MessageSettings, action=mail, mail_status=False,
+                notification_status=False, user_control_status=False
+            )
 
 
 def populate():
