@@ -230,14 +230,15 @@ class OrderDetail(ResourceDetail):
             if current_user.id == order.user_id:
                 # Order created from the tickets tab.
                 for element in data:
-                    if data[element] != getattr(order, element, None) and element not in get_updatable_fields():
+                    if data[element] and data[element]\
+                            != getattr(order, element, None) and element not in get_updatable_fields():
                         raise ForbiddenException({'pointer': 'data/{}'.format(element)},
                                                  "You cannot update {} of an order".format(element))
 
             else:
                 # Order created from the public pages.
                 for element in data:
-                    if data[element] != getattr(order, element, None):
+                    if data[element] and data[element] != getattr(order, element, None):
                         if element != 'status':
                             raise ForbiddenException({'pointer': 'data/{}'.format(element)},
                                                      "You cannot update {} of an order".format(element))
@@ -256,7 +257,8 @@ class OrderDetail(ResourceDetail):
                                          "You cannot update a non-pending order")
             else:
                 for element in data:
-                    if data[element] != getattr(order, element, None) and element not in get_updatable_fields():
+                    if data[element] and data[element]\
+                            != getattr(order, element, None) and element not in get_updatable_fields():
                         raise ForbiddenException({'pointer': 'data/{}'.format(element)},
                                                  "You cannot update {} of an order".format(element))
 
