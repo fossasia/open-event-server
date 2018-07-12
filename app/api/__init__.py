@@ -513,7 +513,7 @@ api.route(OrderDetail, 'order_detail', '/orders/<int:id>', '/orders/<order_ident
           '/attendees/<int:attendee_id>/order')
 
 # Charges API
-api.route(ChargeList, 'charge_list', '/orders/<identifier>/charge', '/orders/<order_identifier>/charge')
+api.route(ChargeList, 'charge_list', '/orders/<order_identifier>/charge')
 api.route(OrderRelationship, 'order_attendee', '/orders/<order_identifier>/relationships/attendee')
 api.route(OrderRelationship, 'order_ticket', '/orders/<order_identifier>/relationships/ticket')
 api.route(OrderRelationship, 'order_user', '/orders/<order_identifier>/relationships/user')

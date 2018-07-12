@@ -22621,6 +22621,52 @@ Delete a single Order.
           }
         }
 
+## Charge [/v1/orders/{order_identifier}/charge]
++ Parameters
+    + order_identifier: 1 (Integer) - Identifier of the order in the form of an integer.
+
+### Charge for an Order [POST]
+Receive payments for an order
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "stripe": "stripe_token",
+                  "paypal": null
+                },
+                "type": "charge"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "type": "charge",
+                "id": "1",
+                "links": {
+                    "self": "/v1/orders/1/charge"
+                }
+            },
+            "links": {
+                "self": "/v1/orders/1/charge"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+
 ## Orders under a User [/v1/users/{user_id}/orders{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + user_id: 1 (integer) - ID of the user in the form of an integer
