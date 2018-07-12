@@ -1302,7 +1302,7 @@ Check if the email passed is available or not. True is returned if the email is 
 
 # Group Event Locations
 
-Event Locations for Events. 
+Event Locations for Events.
 
 
 | Parameter | Description | Type | Required |
@@ -21659,6 +21659,27 @@ to get the status of the export task.
 
 
 ### Start a Task to Export Sessions of an Event as CSV [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
+
+## Start Speakers Export as CSV [/v1/events/{event_identifier}/export/speakers/csv]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+Start a celery task to export the list of speakers of the event with that event_id as a CSV file to get it ready for downloading. Returns the task url
+to get the status of the export task.
+
+
+### Start a Task to Export Speakers of an Event as CSV [GET]
 
 + Request
 

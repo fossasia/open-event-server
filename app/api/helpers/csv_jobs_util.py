@@ -67,3 +67,26 @@ def export_sessions_csv(sessions):
             rows.append(column)
 
     return rows
+
+
+def export_speakers_csv(speakers):
+    headers = ['Speaker Name', 'Speaker Email', 'Speaker Session(s)',
+               'Speaker Mobile', 'Speaker Bio', 'Speaker Organisation', 'Speaker Position']
+    rows = [headers]
+    for speaker in speakers:
+        column = [speaker.name if speaker.name else '', speaker.email if speaker.email else '']
+        if speaker.sessions:
+            session_details = ''
+            for session in speaker.sessions:
+                if not session.deleted_at:
+                    session_details += session.title + ' (' + session.state + '); '
+            column.append(session_details[:-2])
+        else:
+            column.append('')
+        column.append(speaker.mobile if speaker.mobile else '')
+        column.append(speaker.short_biography if speaker.short_biography else '')
+        column.append(speaker.organisation if speaker.organisation else '')
+        column.append(speaker.position if speaker.position else '')
+        rows.append(column)
+
+    return rows
