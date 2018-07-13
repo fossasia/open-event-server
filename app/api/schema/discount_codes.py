@@ -1,6 +1,8 @@
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validates_schema, validate
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
+from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import dasherize
@@ -33,7 +35,7 @@ class DiscountCodeSchemaPublic(SoftDeletionSchema):
     valid_till = fields.DateTime(allow_none=True)
     used_for = fields.Str(validate=validate.OneOf(choices=["event", "ticket"]), allow_none=False)
     created_at = fields.DateTime(allow_none=True)
-    tickets = fields.Str(allow_none=True)
+
     event = Relationship(attribute='event',
                          self_view='v1.discount_code_event',
                          self_view_kwargs={'id': '<id>'},
@@ -68,7 +70,10 @@ class DiscountCodeSchemaEvent(DiscountCodeSchemaPublic):
     @validates_schema(pass_original=True)
     def validate_quantity(self, data, original_data):
         if 'id' in original_data['data']:
-            discount_code = DiscountCode.query.filter_by(id=original_data['data']['id']).one()
+            try:
+                discount_code = DiscountCode.query.filter_by(id=original_data['data']['id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': '{code}'}, "DiscountCode: not found")
             if 'min_quantity' not in data:
                 data['min_quantity'] = discount_code.min_quantity
 
@@ -88,7 +93,10 @@ class DiscountCodeSchemaEvent(DiscountCodeSchemaPublic):
     @validates_schema(pass_original=True)
     def validate_date(self, data, original_data):
         if 'id' in original_data['data']:
-            discount_code = DiscountCode.query.filter_by(id=original_data['data']['id']).one()
+            try:
+                discount_code = DiscountCode.query.filter_by(id=original_data['data']['id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': '{code}'}, "DiscountCode: not found")
 
             if 'valid_from' not in data:
                 data['valid_from'] = discount_code.valid_from
@@ -124,7 +132,11 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
     @validates_schema(pass_original=True)
     def validate_quantity(self, data, original_data):
         if 'id' in original_data['data']:
-            discount_code = DiscountCode.query.filter_by(id=original_data['data']['id']).one()
+            try:
+                discount_code = DiscountCode.query.filter_by(id=original_data['data']['id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': '{code}'}, "DiscountCode: not found")
+
             if 'min_quantity' not in data:
                 data['min_quantity'] = discount_code.min_quantity
 
@@ -144,7 +156,10 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
     @validates_schema(pass_original=True)
     def validate_date(self, data, original_data):
         if 'id' in original_data['data']:
-            discount_code = DiscountCode.query.filter_by(id=original_data['data']['id']).one()
+            try:
+                discount_code = DiscountCode.query.filter_by(id=original_data['data']['id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': '{code}'}, "DiscountCode: not found")
 
             if 'valid_from' not in data:
                 data['valid_from'] = discount_code.valid_from
@@ -163,3 +178,12 @@ class DiscountCodeSchemaTicket(DiscountCodeSchemaPublic):
                             related_view_kwargs={'discount_code_id': '<id>'},
                             schema='UserSchemaPublic',
                             type_='user')
+
+    tickets = Relationship(attribute='tickets',
+                           self_view='v1.discount_code_tickets',
+                           self_view_kwargs={'id': '<id>'},
+                           related_view='v1.ticket_list',
+                           related_view_kwargs={'discount_code_id': '<id>'},
+                           schema='TicketSchemaPublic',
+                           many=True,
+                           type_='ticket')

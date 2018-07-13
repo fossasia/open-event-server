@@ -13955,6 +13955,12 @@ Create a new ticket using an event_id.
                             "self": "/v1/tickets/1/relationships/event",
                             "related": "/v1/tickets/1/event"
                         }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/tickets/1/relationships/discount-codes",
+                            "related": "/v1/tickets/1/discount-codes"
+                        }
                     }
                 },
                 "attributes": {
@@ -14020,6 +14026,12 @@ Get a single ticket.
                         "links": {
                             "self": "/v1/tickets/1/relationships/access-codes",
                             "related": "/v1/tickets/1/access-codes"
+                        }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/tickets/1/relationships/discount-codes",
+                            "related": "/v1/tickets/1/discount-codes"
                         }
                     },
                     "event": {
@@ -14114,6 +14126,12 @@ Update a single ticket by `id`.
                         "links": {
                             "self": "/v1/tickets/1/relationships/access-codes",
                             "related": "/v1/tickets/1/access-codes"
+                        }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/tickets/1/relationships/discount-codes",
+                            "related": "/v1/tickets/1/discount-codes"
                         }
                     },
                     "event": {
@@ -14219,6 +14237,12 @@ Delete a single ticket.
                                 "related": "/v1/tickets/1/access-codes"
                             }
                         },
+                        "discount-codes": {
+                            "links": {
+                                "self": "/v1/tickets/1/relationships/discount-codes",
+                                "related": "/v1/tickets/1/discount-codes"
+                            }
+                        },
                         "event": {
                             "links": {
                                 "self": "/v1/tickets/1/relationships/event",
@@ -14299,6 +14323,12 @@ Delete a single ticket.
                             "links": {
                                 "self": "/v1/tickets/1/relationships/access-codes",
                                 "related": "/v1/tickets/1/access-codes"
+                            }
+                        },
+                        "discount-codes": {
+                            "links": {
+                                "self": "/v1/tickets/1/relationships/discount-codes",
+                                "related": "/v1/tickets/1/discount-codes"
                             }
                         },
                         "event": {
@@ -14383,6 +14413,12 @@ Delete a single ticket.
                                 "related": "/v1/tickets/1/access-codes"
                             }
                         },
+                        "discount-codes": {
+                            "links": {
+                                "self": "/v1/tickets/1/relationships/discount-codes",
+                                "related": "/v1/tickets/1/discount-codes"
+                            }
+                        },
                         "event": {
                             "links": {
                                 "self": "/v1/tickets/1/relationships/event",
@@ -14423,6 +14459,96 @@ Delete a single ticket.
             }
         }
 
+## List Tickets for a Discount Code [/v1/discount-codes/{discount_code_id}/tickets{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + discount_code_id: 1 (integer) - ID of the discount code in the form of an integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `sales-starts-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+
+### List Tickets [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": [
+                {
+                    "type": "ticket",
+                    "attributes": {
+                        "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
+                        "type": "VIP-ticket",
+                        "price": 100,
+                        "quantity": 100,
+                        "is-description-visible": false,
+                        "deleted-at": null,
+                        "name": "some-ticket-name",
+                        "max-order": 100,
+                        "min-order": 1,
+                        "description": "some description",
+                        "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
+                        "is-hidden": false,
+                        "is-fee-absorbed": false,
+                        "position": 1
+                    },
+                    "relationships": {
+                        "attendees": {
+                            "links": {
+                                "self": "/v1/tickets/1/relationships/attendees",
+                                "related": "/v1/attendees?ticket_id=1"
+                            }
+                        },
+                        "access-codes": {
+                            "links": {
+                                "self": "/v1/tickets/1/relationships/access-codes",
+                                "related": "/v1/tickets/1/access-codes"
+                            }
+                        },
+                        "discount-codes": {
+                            "links": {
+                                "self": "/v1/tickets/1/relationships/discount-codes",
+                                "related": "/v1/tickets/1/discount-codes"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/tickets/1/relationships/event",
+                                "related": "/v1/tickets/1/event"
+                            }
+                        },
+                        "ticket-tags": {
+                            "links": {
+                                "self": "/v1/tickets/1/relationships/ticket-tags",
+                                "related": "/v1/tickets/1/ticket-tags"
+                            }
+                        }
+                    },
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/tickets/1"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/discount-codes/1/tickets"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
 ## List Tickets for an Order [/v1/orders/{order_identifier}/tickets]
 + Parameters
     + order_identifier: 7201904e (string) - Indetifier of the order
@@ -14457,6 +14583,12 @@ Delete a single ticket.
                     "self": "/v1/tickets/1/relationships/event",
                     "related": "/v1/tickets/1/event"
                   }
+                },
+                "discount-codes": {
+                    "links": {
+                        "self": "/v1/tickets/1/relationships/discount-codes",
+                        "related": "/v1/tickets/1/discount-codes"
+                    }
                 }
               },
               "attributes": {
@@ -16355,7 +16487,6 @@ Discount Codes related to the events.
 | `valid-from` | Discount Code valid from | ISO 8601 (tz-aware) | - |
 | `valid-till` | Discount Code valid till | ISO 8601 (tz-aware) | - |
 | `created-at` | Discount Code created at | ISO 8601 (tz-aware) | - |
-| `tickets` | Event or Ticket | String | - |
 | `used-for` | Discount Code used for: tickets or events | String | **yes** |
 
 
@@ -16400,7 +16531,6 @@ Get a list of Discount Codes.
                         }
                     },
                     "attributes": {
-                        "tickets": "event",
                         "code": "DC101",
                         "valid-from": "2017-06-18T18:30:00+00:00",
                         "min-quantity": 0,
@@ -16423,21 +16553,20 @@ Get a list of Discount Codes.
                 },
                 {
                     "relationships": {
-                        "events": {
-                            "links": {
-                                "self": "/v1/discount-codes/2/relationships/events",
-                                "related": "/v1/discount-codes/2/events"
-                            }
-                        },
                         "event": {
                             "links": {
                                 "self": "/v1/discount-codes/2/relationships/event",
                                 "related": "/v1/discount-codes/2/event"
                             }
+                        },
+                        "tickets": {
+                            "links": {
+                                "self": "/v1/discount-codes/1/relationships/tickets",
+                                "related": "/v1/discount-codes/1/tickets"
+                            }
                         }
                     },
                     "attributes": {
-                        "tickets": "event",
                         "code": "DC101",
                         "valid-from": "2017-06-18T18:30:00+00:00",
                         "min-quantity": 0,
@@ -16492,8 +16621,7 @@ Create a new Discount Code for event. (Only Admin)
                   "max-quantity": "100",
                   "valid-from": "2017-06-18T18:30:00+00:00",
                   "valid-till": "2017-06-24T18:30:00+00:00",
-                  "used-for": "event",
-                  "tickets": "event"
+                  "used-for": "event"
                 },
                 "type": "discount-code",
                 "relationships": {
@@ -16517,10 +16645,15 @@ Create a new Discount Code for event. (Only Admin)
                             "self": "/v1/discount-codes/4/relationships/events",
                             "related": "/v1/discount-codes/4/events"
                         }
+                    },
+                    "tickets": {
+                        "links": {
+                            "self": "/v1/discount-codes/1/relationships/tickets",
+                            "related": "/v1/discount-codes/1/tickets"
+                        }
                     }
                 },
                 "attributes": {
-                    "tickets": "event",
                     "code": "DC101",
                     "valid-from": "2017-06-18T18:30:00+00:00",
                     "min-quantity": 0,
@@ -16549,7 +16682,6 @@ Create a new Discount Code for event. (Only Admin)
             }
         }
 
-
 ## Ticket Discount Code Collection [/v1/events/{event_identifier}/discount-codes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
@@ -16557,6 +16689,103 @@ Create a new Discount Code for event. (Only Admin)
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `code`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### Create Ticket Discount Code [POST]
+Create a new Discount Code for event. (Only by Co-organizers)
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "code": "DC101",
+                  "discount-url": "https://my-discount-url.com",
+                  "value": "100",
+                  "type": "amount",
+                  "is-active": "false",
+                  "tickets-number": "404",
+                  "min-quantity": "0",
+                  "max-quantity": "100",
+                  "valid-from": "2017-06-18T18:30:00+00:00",
+                  "valid-till": "2017-06-24T18:30:00+00:00",
+                  "used-for": "ticket"
+                },
+                "type": "discount-code",
+                "relationships": {
+                  "event": {
+                    "data": {
+                      "id": "1",
+                      "type": "event"
+                    }
+                  },
+                  "tickets": {
+                    "data": [{
+                      "id": "1",
+                      "type": "ticket"
+                    }]
+                  }
+                }
+              }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "type": "discount-code",
+                "id": 1,
+                "attributes": {
+                    "discount-url": "https://my-discount-url.com",
+                    "deleted-at": null,
+                    "used-for": "ticket",
+                    "min-quantity": 0,
+                    "value": 100,
+                    "max-quantity": 100,
+                    "valid-till": "2017-06-24T18:30:00+00:00",
+                    "is-active": false,
+                    "type": "amount",
+                    "code": "DC101",
+                    "valid-from": "2017-06-18T18:30:00+00:00",
+                    "tickets-number": 404,
+                    "created-at": "2018-06-26T16:03:33.494021+00:00"
+                },
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/discount-codes/1/relationships/event",
+                            "related": "/v1/discount-codes/1/event"
+                        }
+                    },
+                    "tickets": {
+                        "links": {
+                            "self": "/v1/discount-codes/1/relationships/tickets",
+                            "related": "/v1/discount-codes/1/tickets"
+                        }
+                    },
+                    "marketer": {
+                        "links": {
+                            "self": "/v1/discount-codes/1/relationships/marketer",
+                            "related": "/v1/discount-codes/1/marketer"
+                        }
+                    }
+                },
+                "links": {
+                    "self": "/v1/discount-codes/1"
+                }
+            },
+            "links": {
+                "self": "/v1/discount-codes/1"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
 
 ### List All Ticket Discount Codes [GET]
 Get a list of Discount Codes.
@@ -16583,10 +16812,15 @@ Get a list of Discount Codes.
                               "self": "/v1/discount-codes/1/relationships/event",
                               "related": "/v1/discount-codes/1/event"
                           }
+                      },
+                      "tickets": {
+                            "links": {
+                                "self": "/v1/discount-codes/1/relationships/tickets",
+                                "related": "/v1/discount-codes/1/tickets"
+                            }
                       }
                   },
                   "attributes": {
-                      "tickets": "event",
                       "code": "DC101",
                       "valid-from": "2017-06-18T18:30:00+00:00",
                       "min-quantity": 0,
@@ -16642,10 +16876,15 @@ Get a single discount code.
                             "self": "/v1/discount-codes/1/relationships/events",
                             "related": "/v1/discount-codes/1/events"
                         }
+                    },
+                    "tickets": {
+                        "links": {
+                            "self": "/v1/discount-codes/1/relationships/tickets",
+                            "related": "/v1/discount-codes/1/tickets"
+                        }
                     }
                 },
                 "attributes": {
-                    "tickets": "event",
                     "code": "DC101",
                     "valid-from": "2017-06-18T18:30:00+00:00",
                     "min-quantity": 0,
@@ -16654,7 +16893,7 @@ Get a single discount code.
                     "value": 100,
                     "max-quantity": 100,
                     "is-active": false,
-                    "used-for": "event",
+                    "used-for": "ticket",
                     "deleted-at": null,
                     "valid-till": "2017-06-24T18:30:00+00:00",
                     "type": "amount",
@@ -16701,8 +16940,7 @@ Update a single discount code with `id` (Check permission to edit).
                   "max-quantity": "100",
                   "valid-from": "2017-06-18T18:30:00+00:00",
                   "valid-till": "2017-06-24T18:30:00+00:00",
-                  "used-for": "event",
-                  "tickets": "event"
+                  "used-for": "ticket"
                 },
                 "type": "discount-code",
                 "id": "1"
@@ -16719,10 +16957,21 @@ Update a single discount code with `id` (Check permission to edit).
                   "self": "/v1/discount-codes/1/relationships/events",
                   "related": "/v1/discount-codes/1/events"
                 }
+              },
+              "marketer": {
+                "links": {
+                    "self": "/v1/discount-codes/1/relationships/marketer",
+                    "related": "/v1/discount-codes/1/marketer"
+                }
+              },
+              "tickets": {
+                "links": {
+                    "self": "/v1/discount-codes/1/relationships/tickets",
+                    "related": "/v1/discount-codes/1/tickets"
+                }
               }
             },
             "attributes": {
-              "tickets": "event",
               "code": "DC101",
               "valid-from": "2017-06-18T18:30:00+00:00",
               "min-quantity": 0,
@@ -16732,7 +16981,7 @@ Update a single discount code with `id` (Check permission to edit).
               "max-quantity": 100,
               "is-active": false,
               "deleted-at": null,
-              "used-for": "event",
+              "used-for": "ticket",
               "valid-till": "2017-06-24T18:30:00+00:00",
               "type": "percent",
               "discount-url": "https://my-discount-url.com"
@@ -16801,7 +17050,6 @@ Get a single discount code using a code.
                     }
                 },
                 "attributes": {
-                    "tickets": "event",
                     "code": "DC101",
                     "valid-from": "2017-06-18T18:30:00+00:00",
                     "min-quantity": 0,
@@ -16864,10 +17112,15 @@ Get a list of Discount Codes.
                                 "self": "/v1/discount-codes/1/relationships/event",
                                 "related": "/v1/discount-codes/1/event"
                             }
+                        },
+                        "tickets": {
+                            "links": {
+                                "self": "/v1/discount-codes/1/relationships/tickets",
+                                "related": "/v1/discount-codes/1/tickets"
+                            }
                         }
                     },
                     "attributes": {
-                        "tickets": "event",
                         "code": "DC101",
                         "valid-from": "2017-06-18T18:30:00+00:00",
                         "min-quantity": 0,
@@ -16897,6 +17150,82 @@ Get a list of Discount Codes.
             }
         }
 
+## List Discount Codes under a Ticket [/v1/tickets/{ticket_id}/discount-codes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + ticket_id: 1 (string) - user id in the form of an integer.
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `code`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List All Discount Codes under a Ticket [GET]
+Get a list of Discount Codes applied on a given ticket.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": [
+                {
+                    "type": "discount-code",
+                    "relationships": {
+                        "tickets": {
+                            "links": {
+                                "self": "/v1/discount-codes/1/relationships/tickets",
+                                "related": "/v1/discount-codes/1/tickets"
+                            }
+                        },
+                        "marketer": {
+                            "links": {
+                                "self": "/v1/discount-codes/1/relationships/marketer",
+                                "related": "/v1/discount-codes/1/marketer"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/discount-codes/1/relationships/event",
+                                "related": "/v1/discount-codes/1/event"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "value": 100,
+                        "created-at": "2018-06-26T16:03:33.494021+00:00",
+                        "tickets-number": 404,
+                        "code": "DC101",
+                        "used-for": "ticket",
+                        "is-active": false,
+                        "max-quantity": 100,
+                        "discount-url": "https://my-discount-url.com",
+                        "type": "amount",
+                        "min-quantity": 0,
+                        "valid-from": "2017-06-18T18:30:00+00:00",
+                        "valid-till": "2017-06-24T18:30:00+00:00",
+                        "deleted-at": null
+                    },
+                    "id": 1,
+                    "links": {
+                        "self": "/v1/discount-codes/1"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/tickets/1/discount-codes"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
 
 ## Get Discount Code Detail of an Event [/v1/events/{event_identifier}/discount-code]
 + Parameters
@@ -16923,10 +17252,15 @@ Get a single discount code.
                             "self": "/v1/discount-codes/1/relationships/event",
                             "related": "/v1/discount-codes/1/event"
                         }
+                    },
+                    "events": {
+                        "links": {
+                            "self": "/v1/discount-codes/1/relationships/events",
+                            "related": "/v1/discount-codes/1/events"
+                        }
                     }
                 },
                 "attributes": {
-                    "tickets": "event",
                     "code": "DC101",
                     "valid-from": "2017-06-18T18:30:00+00:00",
                     "min-quantity": 0,
@@ -16981,10 +17315,15 @@ Get a single discount code. (Requires admin access)
                             "self": "/v1/discount-codes/1/relationships/event",
                             "related": "/v1/discount-codes/1/event"
                         }
+                    },
+                    "events": {
+                        "links": {
+                            "self": "/v1/discount-codes/1/relationships/events",
+                            "related": "/v1/discount-codes/1/events"
+                        }
                     }
                 },
                 "attributes": {
-                    "tickets": "event",
                     "code": "DC101",
                     "valid-from": "2017-06-18T18:30:00+00:00",
                     "min-quantity": 0,
