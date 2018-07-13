@@ -16,7 +16,7 @@ from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.mail import send_order_cancel_email
 from app.api.helpers.notification import send_notif_to_attendees, send_notif_ticket_purchase_organizer, \
     send_notif_ticket_cancel
-from app.api.helpers.order import delete_related_attendees_for_order
+from app.api.helpers.order import delete_related_attendees_for_order, set_expiry_for_order
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
@@ -174,6 +174,11 @@ class OrdersList(ResourceList):
             # orders under an event
             query_ = event_query(self, query_, view_kwargs)
 
+        # expire the pending orders if the time limit is over.
+        orders = query_.all()
+        for order in orders:
+            set_expiry_for_order(order)
+
         return query_
 
     decorators = (jwt_required,)
@@ -208,6 +213,9 @@ class OrderDetail(ResourceDetail):
 
         if not has_access('is_coorganizer_or_user_itself', event_id=order.event_id, user_id=order.user_id):
             return ForbiddenException({'source': ''}, 'You can only access your orders or your event\'s orders')
+
+        # expire the pending order if time limit is over.
+        set_expiry_for_order(order)
 
     def before_update_object(self, order, data, view_kwargs):
         """

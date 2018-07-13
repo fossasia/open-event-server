@@ -100,7 +100,7 @@ class Order(SoftDeletionModel):
         self.event_id = event_id
         self.transaction_id = transaction_id
         self.paid_via = paid_via
-        self.created_at = datetime.datetime.utcnow()
+        self.created_at = datetime.datetime.now(datetime.timezone.utc)
         self.discount_code_id = discount_code_id
         self.status = status
         self.payment_mode = payment_mode
