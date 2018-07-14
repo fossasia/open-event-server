@@ -1,9 +1,11 @@
 import datetime
-import time
 import uuid
+
+import time
 
 from app.api.helpers.db import get_count
 from app.models import db
+from app.models.base import SoftDeletionModel
 
 
 def get_new_order_identifier():
@@ -15,14 +17,21 @@ def get_new_order_identifier():
         return get_new_order_identifier()
 
 
-class OrderTicket(db.Model):
+def get_updatable_fields():
+    """
+    :return: The list of fields which can be modified by the order user using the pre payment form.
+    """
+    return ['country', 'address', 'city', 'state', 'zipcode', 'status', 'paid_via', 'order_notes', 'deleted_at', 'user']
+
+
+class OrderTicket(SoftDeletionModel):
     __tablename__ = 'orders_tickets'
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id', ondelete='CASCADE'), primary_key=True)
     ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE'), primary_key=True)
     quantity = db.Column(db.Integer)
 
 
-class Order(db.Model):
+class Order(SoftDeletionModel):
     __tablename__ = "orders"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -50,6 +59,7 @@ class Order(db.Model):
     paypal_token = db.Column(db.String)
     status = db.Column(db.String)
     cancel_note = db.Column(db.String, nullable=True)
+    order_notes = db.Column(db.String)
 
     discount_code_id = db.Column(
         db.Integer, db.ForeignKey('discount_codes.id', ondelete='SET NULL'), nullable=True, default=None)
@@ -75,7 +85,9 @@ class Order(db.Model):
                  discount_code_id=None,
                  event_id=None,
                  status='pending',
-                 payment_mode=None):
+                 payment_mode=None,
+                 deleted_at=None,
+                 order_notes=None):
         self.identifier = get_new_order_identifier()
         self.quantity = quantity
         self.amount = amount
@@ -88,10 +100,12 @@ class Order(db.Model):
         self.event_id = event_id
         self.transaction_id = transaction_id
         self.paid_via = paid_via
-        self.created_at = datetime.datetime.utcnow()
+        self.created_at = datetime.datetime.now(datetime.timezone.utc)
         self.discount_code_id = discount_code_id
         self.status = status
         self.payment_mode = payment_mode
+        self.deleted_at = deleted_at
+        self.order_notes = order_notes
 
     def __repr__(self):
         return '<Order %r>' % self.id
@@ -106,11 +120,16 @@ class Order(db.Model):
     def invoice_number(self):
         return self.get_invoice_number()
 
-    def get_tickets_count(self):
-        count = 0
-        for order_ticket in self.order_tickets:
-            count += order_ticket.quantity
-        return count
+    @property
+    def tickets_count(self):
+        return sum([t.quantity for t in self.order_tickets])
+
+    @property
+    def is_free(self):
+        return self.paid_via == 'free'
+
+    def get_revenue(self):
+        return self.amount - (self.amount * (self.event.fee / 100.0))
 
     @property
     def serialize(self):

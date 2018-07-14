@@ -1,10 +1,10 @@
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
 
 
-class UserPermissionSchema(Schema):
+class UserPermissionSchema(SoftDeletionSchema):
     """
     Api schema for user permission Model
     """

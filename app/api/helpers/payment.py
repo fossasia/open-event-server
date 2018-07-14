@@ -1,24 +1,17 @@
-import requests
-import sqlalchemy
-import stripe
-import urllib.parse
 import json
+
+import requests
+import stripe
 from flask import current_app
 from forex_python.converter import CurrencyRates
-from urllib.parse import urlencode
 
 from app.api.helpers.cache import cache
-from app.api.helpers.db import safe_query, save_to_db
-from app.api.helpers.files import make_frontend_url
+from app.api.helpers.db import safe_query
 from app.api.helpers.utilities import represents_int
 from app.models import db
 from app.models.event import Event
-from app.models.order import Order
 from app.models.stripe_authorization import StripeAuthorization
-from app.models.ticket_fee import TicketFees
 from app.settings import get_settings
-
-DEFAULT_FEE = 0.0
 
 
 @cache.memoize(5)
@@ -28,15 +21,6 @@ def forex(from_currency, to_currency, amount):
         return currency_rates.convert(from_currency, to_currency, amount)
     except:
         return amount
-
-
-@cache.memoize(5)
-def get_fee(currency):
-    fee = TicketFees.query.filter_by(currency=currency).order_by(sqlalchemy.desc(TicketFees.id)).first()
-    if fee:
-        return fee.service_fee
-    else:
-        return DEFAULT_FEE
 
 
 class StripePaymentsManager(object):
@@ -136,6 +120,13 @@ class PayPalPaymentsManager(object):
 
     @staticmethod
     def get_credentials(event=None, override_mode=False, is_testing=False):
+        """
+        Get Paypal credentials from settings module.
+        :param event: Associated event.
+        :param override_mode:
+        :param is_testing:
+        :return:
+        """
         if event and represents_int(event):
             event = safe_query(db, Event, 'id', event, 'event_id')
         settings = get_settings()
@@ -173,62 +164,19 @@ class PayPalPaymentsManager(object):
             return None
 
     @staticmethod
-    def get_checkout_url(order, currency=None, credentials=None):
-        if not credentials:
-            credentials = PayPalPaymentsManager.get_credentials(order.event)
-
-        if not credentials:
-            raise Exception('PayPal credentials have not be set correctly')
-
-        if current_app.config['TESTING']:
-            return credentials['CHECKOUT_URL']
-
-        currency = order.event.payment_currency if not currency and order.event.payment_currency != "" else "USD"
-        data = {
-            'USER': credentials['USER'],
-            'PWD': credentials['PWD'],
-            'SIGNATURE': credentials['SIGNATURE'],
-            'SUBJECT': credentials['EMAIL'],
-
-            'METHOD': 'SetExpressCheckout',
-            'VERSION': PayPalPaymentsManager.api_version,
-            'PAYMENTREQUEST_0_PAYMENTACTION': 'SALE',
-            'PAYMENTREQUEST_0_AMT': order.amount,
-            'PAYMENTREQUEST_0_CURRENCYCODE': currency,
-            'RETURNURL': make_frontend_url(path='/orders/{identifier}/payment/success'.
-                                           format(identifier=order.identifier)),
-            'CANCELURL': make_frontend_url(path='/orders/{identifier}/payment/cancelled'.
-                                           format(identifier=order.identifier))
-        }
-
-        count = 1
-
-        if type(order) is Order:
-            for ticket_order in order.order_tickets:
-                data['L_PAYMENTREQUEST_' + str(count) + '_NAMEm'] = ticket_order.ticket.name
-                data['L_PAYMENTREQUEST_' + str(count) + '_QTYm'] = ticket_order.quantity
-                data['L_PAYMENTREQUEST_' + str(count) + '_AMTm'] = ticket_order.ticket.price
-                count += 1
-
-        response = requests.post(credentials['SERVER'], data=data)
-        if 'TOKEN' not in dict(urllib.parse.parse_qsl(response.text)):
-            raise Exception('PayPal Token could not be retrieved')
-        token = dict(urllib.parse.parse_qsl(response.text))['TOKEN']
-        order.paypal_token = token
-        save_to_db(order)
-        return credentials['CHECKOUT_URL'] + "?" + urlencode({
-            'cmd': '_express-checkout',
-            'token': token
-        })
-
-    @staticmethod
     def get_approved_payment_details(order, credentials=None):
+        """
+        Use the paypal token to get the approved payment details from Paypal
+        :param order: Order to charge for
+        :param credentials: the paypal credentials
+        :return: payer_id and other details returned by Paypal.
+        """
 
         if not credentials:
             credentials = PayPalPaymentsManager.get_credentials(order.event)
 
         if not credentials:
-            raise Exception('PayPal credentials have not be set correctly')
+            raise Exception('PayPal credentials have not been set correctly')
 
         data = {
             'USER': credentials['USER'],
@@ -244,10 +192,18 @@ class PayPalPaymentsManager(object):
             return data
 
         response = requests.post(credentials['SERVER'], data=data)
-        return dict(urllib.parse.parse_qsl(response.text))
+        return json.loads(response.text)
 
     @staticmethod
     def capture_payment(order, payer_id, currency=None, credentials=None):
+        """
+        capture order payment using payer_id and token.
+        :param order: Order to charge for.
+        :param payer_id: The payer_id obtained from Paypal using the get_approved_payment_details method.
+        :param currency: currency
+        :param credentials: the paypal credentials.
+        :return:
+        """
         if not credentials:
             credentials = PayPalPaymentsManager.get_credentials(order.event)
 
@@ -275,4 +231,4 @@ class PayPalPaymentsManager(object):
         }
 
         response = requests.post(credentials['SERVER'], data=data)
-        return dict(urllib.parse.parse_qsl(response.text))
+        return json.loads(response.text)

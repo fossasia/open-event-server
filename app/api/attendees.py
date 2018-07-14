@@ -2,7 +2,7 @@ from flask_jwt import current_identity
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query, get_count
 from app.api.helpers.exceptions import (
     ConflictException,
     ForbiddenException,
@@ -36,7 +36,7 @@ class AttendeeListPost(ResourceList):
         require_relationship(['ticket', 'event'], data)
 
         ticket = db.session.query(Ticket).filter_by(
-            id=int(data['ticket'])
+            id=int(data['ticket']), deleted_at=None
             ).first()
         if ticket is None:
             raise UnprocessableEntity(
@@ -47,13 +47,12 @@ class AttendeeListPost(ResourceList):
                 {'pointer': '/data/relationships/ticket'},
                 "Ticket belongs to a different Event"
             )
-
-        if db.session.query(TicketHolder.id).filter_by(
-                ticket_id=int(data['ticket']), event_id=int(data['event'])
-                ).scalar() is not None:
+        # Check if the ticket is already sold out or not.
+        if get_count(db.session.query(TicketHolder.id).
+                     filter_by(ticket_id=int(data['ticket']), deleted_at=None)) >= ticket.quantity:
             raise ConflictException(
                 {'pointer': '/data/attributes/ticket_id'},
-                "Attendee with this ticket already exists for the same event"
+                "Ticket already sold out"
             )
 
     decorators = (jwt_required,)
@@ -77,8 +76,8 @@ class AttendeeList(ResourceList):
 
         if view_kwargs.get('order_identifier'):
             order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
-            if not has_access('is_registrar', event_id=order.event_id) or not has_access('is_user_itself',
-                                                                                         id=order.user_id):
+            if not has_access('is_registrar', event_id=order.event_id) and not has_access('is_user_itself',
+                                                                                         user_id=order.user_id):
                 raise ForbiddenException({'source': ''}, 'Access Forbidden')
             query_ = query_.join(Order).filter(Order.id == order.id)
 
@@ -149,6 +148,10 @@ class AttendeeDetail(ResourceDetail):
             else:
                 if obj.checkin_times and data['checkin_times'] not in obj.checkin_times.split(","):
                     data['checkin_times'] = '{},{}'.format(obj.checkin_times, data['checkin_times'])
+
+        if 'attendee_notes' in data:
+            if obj.attendee_notes and data['attendee_notes'] not in obj.attendee_notes.split(","):
+                data['attendee_notes'] = '{},{}'.format(obj.attendee_notes, data['attendee_notes'])
 
     decorators = (jwt_required,)
     schema = AttendeeSchema

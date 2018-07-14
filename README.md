@@ -175,6 +175,15 @@ When writing changes to models. Use migrations.
 
 When checking in code for models, please update migrations as well.
 
+### API documentation
+
+The api is documented using [api blueprint](https://apiblueprint.org/). Local changes to [the description](https://github.com/fossasia/open-event-server/blob/development/docs/api/api_blueprint.apib) can be viewed using e.g. the [apiary gem](https://help.apiary.io/tools/apiary-cli/):
+
+```bash
+gem install apiaryio # dependency
+apiary preview --path docs/api/api_blueprint.apib # opens browser with generated file
+```
+
 ### Testing
 
 Clone the repo and set up the server according to the steps listed. Make sure you have installed all the dependencies required for testing by running
@@ -236,7 +245,7 @@ Once you have activated your account just proceed to the [translation section](h
 
 ## Contributions, Bug Reports, Feature Requests
 
-This is an Open Source project and we would be happy to see contributors who report bugs and file feature requests submitting pull requests as well. Please report issues here https://github.com/fossasia/open-event-server/issues
+This is an Open Source project and we would be happy to see contributors who report bugs and file feature requests submitting pull requests as well. Please report issues here https://github.com/fossasia/open-event-server/issues. It is also recommended to go through the [developer handbook](https://github.com/fossasia/open-event/tree/master/docs/dev-handbook) in order to get a basic understanding of the ecosystem.
 
 ## Branch Policy
 
