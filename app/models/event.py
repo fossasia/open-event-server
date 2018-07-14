@@ -285,10 +285,8 @@ class Event(SoftDeletionModel):
     def fee(self):
         """
         Returns the fee as a percentage from 0 to 100 for this event
-
-        Is retrieved from the db using the `payment_currency`
         """
-        return get_fee(self.payment_currency)
+        return get_fee(self.payment_country, self.payment_currency)
 
     def notification_settings(self, user_id):
         try:

@@ -1,13 +1,14 @@
 from marshmallow import validates_schema
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
+from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
+from app.models.discount_code import DiscountCode
 from app.models.ticket import Ticket
 from utils.common import use_defaults
-
 
 @use_defaults()
 class TicketSchemaPublic(SoftDeletionSchema):
@@ -44,6 +45,17 @@ class TicketSchemaPublic(SoftDeletionSchema):
                 raise UnprocessableEntity({'pointer': '/data/attributes/quantity'},
                                           "quantity should be greater than min-order")
 
+    @validates_schema(pass_original=True)
+    def validate_discount_code(self, data, original_data):
+        if 'relationships' in original_data and 'discount-codes' in original_data['data']['relationships']:
+            discount_codes = original_data['data']['relationships']['discount-codes']
+            for code in discount_codes['data']:
+                try:
+                    DiscountCode.query.filter_by(id=code['id']).one()
+                except NoResultFound:
+                    raise UnprocessableEntity(
+                        {'pointer': '/data/relationships/discount-codes'}, "Discount code does not exist")
+
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
     description = fields.Str(allow_none=True)
@@ -67,6 +79,7 @@ class TicketSchemaPublic(SoftDeletionSchema):
                          related_view_kwargs={'ticket_id': '<id>'},
                          schema='EventSchemaPublic',
                          type_='event')
+
     ticket_tags = Relationship(attribute='tags',
                                self_view='v1.ticket_ticket_tag',
                                self_view_kwargs={'id': '<id>'},
@@ -75,6 +88,16 @@ class TicketSchemaPublic(SoftDeletionSchema):
                                schema='TicketTagSchema',
                                many=True,
                                type_='ticket-tag')
+
+    discount_codes = Relationship(
+        attribute='discount_codes',
+        self_view='v1.ticket_discount_codes',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.discount_code_list',
+        related_view_kwargs={'ticket_id': '<id>'},
+        schema='DiscountCodeSchemaTicket',
+        many=True,
+        type_='discount-code')
 
 
 class TicketSchema(TicketSchemaPublic):

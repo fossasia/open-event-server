@@ -16,7 +16,13 @@ class ChargesLayer(BaseDataLayer):
         :param view_kwargs:
         :return:
         """
-        order = Order.query.filter_by(id=view_kwargs['id']).first()
+
+        if view_kwargs.get('order_identifier').isdigit():
+            # when id is passed
+            order = Order.query.filter_by(id=view_kwargs['order_identifier']).first()
+        else:
+            # when identifier is passed
+            order = Order.query.filter_by(identifier=view_kwargs['order_identifier']).first()
         if not order:
             raise ObjectNotFound({'parameter': 'id'},
                                  "Order with id: {} not found".format(view_kwargs['id']))
