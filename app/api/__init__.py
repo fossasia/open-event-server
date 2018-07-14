@@ -10,6 +10,7 @@ from app.api.tickets import TicketList, TicketListPost, TicketDetail, TicketRela
     TicketRelationshipOptional
 from app.api.events import EventList, EventDetail, EventRelationship, EventCopyResource
 from app.api.event_types import EventTypeList, EventTypeDetail, EventTypeRelationship
+from app.api.event_locations import EventLocationList
 from app.api.event_topics import EventTopicList, EventTopicDetail, EventTopicRelationship
 from app.api.event_sub_topics import EventSubTopicList, EventSubTopicListPost, EventSubTopicDetail,\
     EventSubTopicRelationshipRequired, EventSubTopicRelationshipOptional
@@ -95,6 +96,8 @@ api.route(UserRelationship, 'user_registrar_event', '/users/<int:id>/relationshi
 api.route(UserRelationship, 'user_moderator_event', '/users/<int:id>/relationships/moderator-events')
 api.route(UserRelationship, 'user_attendees', '/users/<int:id>/relationships/attendees')
 api.route(UserRelationship, 'user_events', '/users/<int:id>/relationships/events')
+api.route(UserRelationship, 'user_orders', '/users/<int:id>/relationships/orders')
+
 
 # notifications
 api.route(NotificationListAdmin, 'notification_list_admin', '/notifications')
@@ -170,9 +173,11 @@ api.route(RoleInviteRelationship, 'role_invite_role', '/role-invites/<int:id>/re
 api.route(TicketListPost, 'ticket_list_post', '/tickets')
 api.route(TicketList, 'ticket_list', '/events/<int:event_id>/tickets',
           '/events/<event_identifier>/tickets', '/ticket-tags/<int:ticket_tag_id>/tickets',
-          '/access-codes/<int:access_code_id>/tickets', '/orders/<order_identifier>/tickets')
+          '/access-codes/<int:access_code_id>/tickets', '/orders/<order_identifier>/tickets',
+          '/discount-codes/<int:discount_code_id>/tickets')
 api.route(TicketDetail, 'ticket_detail', '/tickets/<int:id>', '/attendees/<int:attendee_id>/ticket')
 api.route(TicketRelationshipRequired, 'ticket_event', '/tickets/<int:id>/relationships/event')
+api.route(TicketRelationshipRequired, 'ticket_discount_codes', '/tickets/<int:id>/relationships/discount-codes')
 api.route(TicketRelationshipOptional, 'ticket_ticket_tag', '/tickets/<int:id>/relationships/ticket-tags')
 api.route(TicketRelationshipOptional, 'ticket_access_code', '/tickets/<int:id>/relationships/access-codes')
 api.route(TicketRelationshipOptional, 'ticket_attendees', '/tickets/<int:id>/relationships/attendees')
@@ -395,15 +400,19 @@ api.route(EventInvoiceRelationshipOptional, 'event_invoice_discount_code',
 # discount codes
 api.route(DiscountCodeListPost, 'discount_code_list_post', '/discount-codes')
 api.route(DiscountCodeList, 'discount_code_list', '/events/<int:event_id>/discount-codes',
-          '/events/<event_identifier>/discount-codes', '/users/<int:user_id>/discount-codes')
-api.route(DiscountCodeDetail, 'discount_code_detail', '/discount-codes/<int:id>', '/discount-codes/<code>',
-          '/events/<int:event_id>/discount-code', '/event-invoices/<int:event_invoice_id>/discount-code')
+          '/events/<event_identifier>/discount-codes', '/users/<int:user_id>/discount-codes',
+          '/tickets/<int:ticket_id>/discount-codes')
+api.route(DiscountCodeDetail, 'discount_code_detail', '/discount-codes/<int:id>',
+          '/events/<int:event_id>/discount-code', '/event-invoices/<int:event_invoice_id>/discount-code',
+          '/discount-codes/<code>')
 api.route(DiscountCodeRelationshipRequired, 'discount_code_event',
           '/discount-codes/<int:id>/relationships/event')
 api.route(DiscountCodeRelationshipOptional, 'discount_code_events',
           '/discount-codes/<int:id>/relationships/events')
 api.route(DiscountCodeRelationshipOptional, 'discount_code_user',
           '/discount-codes/<int:id>/relationships/marketer')
+api.route(DiscountCodeRelationshipRequired, 'discount_code_tickets',
+          '/discount-codes/<int:id>/relationships/tickets')
 
 # attendees
 api.route(AttendeeListPost, 'attendee_list_post', '/attendees')
@@ -415,6 +424,9 @@ api.route(AttendeeRelationshipOptional, 'attendee_ticket', '/attendees/<int:id>/
 api.route(AttendeeRelationshipRequired, 'attendee_event', '/attendees/<int:id>/relationships/event')
 api.route(AttendeeRelationshipRequired, 'attendee_order', '/attendees/<int:id>/relationships/order')
 api.route(AttendeeRelationshipOptional, 'attendee_user', '/attendees/<int:id>/relationships/user')
+
+# event locations
+api.route(EventLocationList, 'event_location_list', '/event-locations')
 
 # event types
 api.route(EventTypeList, 'event_type_list', '/event-types')
@@ -502,12 +514,12 @@ api.route(StripeAuthorizationRelationship, 'stripe_authorization_event',
 # Orders API
 api.route(OrdersListPost, 'order_list_post', '/orders')
 api.route(OrdersList, 'orders_list', '/orders', '/events/<int:event_id>/orders',
-          '/events/<event_identifier>/orders')
-api.route(OrderDetail, 'order_detail', '/orders/<order_identifier>',
+          '/events/<event_identifier>/orders', '/users/<int:user_id>/orders')
+api.route(OrderDetail, 'order_detail', '/orders/<int:id>', '/orders/<order_identifier>',
           '/attendees/<int:attendee_id>/order')
 
 # Charges API
-api.route(ChargeList, 'charge_list', '/orders/<identifier>/charge', '/orders/<order_identifier>/charge')
+api.route(ChargeList, 'charge_list', '/orders/<order_identifier>/charge')
 api.route(OrderRelationship, 'order_attendee', '/orders/<order_identifier>/relationships/attendee')
 api.route(OrderRelationship, 'order_ticket', '/orders/<order_identifier>/relationships/ticket')
 api.route(OrderRelationship, 'order_user', '/orders/<order_identifier>/relationships/user')

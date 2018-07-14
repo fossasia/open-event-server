@@ -21,7 +21,7 @@ def get_updatable_fields():
     """
     :return: The list of fields which can be modified by the order user using the pre payment form.
     """
-    return ['country', 'address', 'city', 'state', 'zipcode', 'status', 'paid_via', 'order_notes']
+    return ['country', 'address', 'city', 'state', 'zipcode', 'status', 'paid_via', 'order_notes', 'deleted_at', 'user']
 
 
 class OrderTicket(SoftDeletionModel):
@@ -100,7 +100,7 @@ class Order(SoftDeletionModel):
         self.event_id = event_id
         self.transaction_id = transaction_id
         self.paid_via = paid_via
-        self.created_at = datetime.datetime.utcnow()
+        self.created_at = datetime.datetime.now(datetime.timezone.utc)
         self.discount_code_id = discount_code_id
         self.status = status
         self.payment_mode = payment_mode

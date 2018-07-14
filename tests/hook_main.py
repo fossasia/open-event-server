@@ -1,5 +1,6 @@
-import sys
 import os.path as path
+import sys
+
 import dredd_hooks as hooks
 import requests
 
@@ -23,7 +24,7 @@ from app.factories.page import PageFactory
 from app.factories.event_copyright import EventCopyrightFactory
 from app.factories.setting import SettingFactory
 from app.factories.event_type import EventTypeFactory
-from app.factories.discount_code import DiscountCodeFactory
+from app.factories.discount_code import DiscountCodeFactory, DiscountCodeTicketFactory
 from app.factories.access_code import AccessCodeFactory
 from app.factories.custom_form import CustomFormFactory
 from app.factories.faq import FaqFactory
@@ -54,6 +55,7 @@ from app.factories.order import OrderFactory
 from app.factories.faq_type import FaqTypeFactory
 from app.factories.feedback import FeedbackFactory
 from app.factories.service import ServiceFactory
+from app.factories.message_setting import MessageSettingsFactory
 
 
 
@@ -274,6 +276,16 @@ def user_speaker(transaction):
         speaker = SpeakerFactory()
         db.session.add(speaker)
         db.session.commit()
+
+
+@hooks.before("Users > Check if the email is available > Check if email is available")
+def user_check_email(transaction):
+    """
+    POST /users/checkEmail
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
 
 
 # ------------------------- Events -------------------------
@@ -1651,6 +1663,19 @@ def access_code_ticket(transaction):
         db.session.commit()
 
 
+@hooks.before("Tickets > List Tickets for a Discount Code > List Tickets")
+def discount_code_ticket(transaction):
+    """
+    GET /discount-codes/1/tickets
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        discount_code = DiscountCodeTicketFactory(event_id=1)
+        db.session.add(discount_code)
+        db.session.commit()
+
+
 # ------------------------- Ticket Fees -------------------------
 @hooks.before("Ticket Fees > Ticket Fees Collection > List Ticket Fees")
 def ticket_fees_get_list(transaction):
@@ -2291,6 +2316,46 @@ def event_role_permission_patch(transaction):
 #       db.session.commit()
 
 
+# ------------------------- Message Setting -------------------------
+@hooks.before("Message Settings > Message Setting Collection > List Message Settings")
+def message_setting_list(transaction):
+    """
+    GET /message-settings
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        message_setting = MessageSettingsFactory()
+        db.session.add(message_setting)
+        db.session.commit()
+
+
+@hooks.before("Message Settings > Message Setting Details > Get Message Setting Details")
+def message_setting_detail(transaction):
+    """
+    GET /message-settings/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        message_setting = MessageSettingsFactory()
+        db.session.add(message_setting)
+        db.session.commit()
+
+
+@hooks.before("Message Settings > Message Setting Details > Update Message Setting")
+def message_setting_patch(transaction):
+    """
+    PATCH /message-settings/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        message_setting = MessageSettingsFactory()
+        db.session.add(message_setting)
+        db.session.commit()
+
+
 # ------------------------- Activities -------------------------
 @hooks.before("Activity > Activity Collection > List all Activities")
 def activity_get_list(transaction):
@@ -2497,17 +2562,18 @@ def event_discount_code_post(transaction):
 #        db.session.commit()
 
 
-@hooks.before("Discount Codes > Event Discount Code Collection > Create Ticket Discount Code")
+@hooks.before("Discount Codes > Ticket Discount Code Collection > Create Ticket Discount Code")
 def ticket_discount_code_post(transaction):
     """
-    POST /events/1/discount-codes
+    POST /discount-codes
     :param transaction:
     :return:
     """
-    with stash['app'].app_context():
-        event = EventFactoryBasic()
-        db.session.add(event)
-        db.session.commit()
+    transaction['skip'] = True
+    # with stash['app'].app_context():
+    #     event = EventFactoryBasic()
+    #     db.session.add(event)
+    #     db.session.commit()
 
 
 @hooks.before("Discount Codes > Ticket Discount Code Collection > List All Ticket Discount Codes")
@@ -2522,7 +2588,7 @@ def ticket_discount_code_get_list(transaction):
         db.session.add(event)
         db.session.commit()
 
-        discount_code = DiscountCodeFactory(event_id=1)
+        discount_code = DiscountCodeTicketFactory(event_id=1)
         db.session.add(discount_code)
         db.session.commit()
 
@@ -2539,7 +2605,7 @@ def discount_code_get_detail(transaction):
         db.session.add(event)
         db.session.commit()
 
-        discount_code = DiscountCodeFactory(event_id=1)
+        discount_code = DiscountCodeTicketFactory(event_id=1)
         db.session.add(discount_code)
         db.session.commit()
 
@@ -2556,7 +2622,7 @@ def discount_code_patch(transaction):
         db.session.add(event)
         db.session.commit()
 
-        discount_code = DiscountCodeFactory(event_id=1)
+        discount_code = DiscountCodeTicketFactory(event_id=1)
         db.session.add(discount_code)
         db.session.commit()
 
@@ -2609,6 +2675,19 @@ def user_discount_code_get_list(transaction):
         db.session.commit()
 
         discount_code = DiscountCodeFactory(event_id=1)
+        db.session.add(discount_code)
+        db.session.commit()
+
+
+@hooks.before("Discount Codes > List Discount Codes under a Ticket > List All Discount Codes under a Ticket")
+def get_discount_codes_under_ticket(transaction):
+    """
+    GET /tickets/1/discount-codes
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        discount_code = DiscountCodeTicketFactory(event_id=1)
         db.session.add(discount_code)
         db.session.commit()
 
@@ -3051,6 +3130,16 @@ def file_upload_post(transaction):
     :return:
     """
     transaction['skip'] = True
+
+
+# ------------------------- Event Locationss -------------------------
+@hooks.before("Event Locations > Event Locations Collection > List All Event Locations")
+def event_location_get_list(transaction):
+    """
+    GET /events-location
+    :param transaction:
+    :return:
+    """
 
 
 # ------------------------- Event Types -------------------------
@@ -3633,6 +3722,32 @@ def event_attendees_export_pdf_get(transaction):
         db.session.add(event)
         db.session.commit()
 
+
+@hooks.before(
+    "Event Export > Start Sessions Export as CSV > Start a Task to Export Sessions of an Event as CSV")
+def event_sessions_export_csv_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Export > Start Speakers Export as CSV > Start a Task to Export Speakers of an Event as CSV")
+def event_speakers_export_csv_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
 # ------------------------- Import -------------------------
 @hooks.before(
     "Event Import > Start Event Import > Start a Task to Import an Event")
@@ -3745,6 +3860,26 @@ def update_order(transaction):
 def delete_order(transaction):
     """
     GET /orders
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Orders > Charge > Charge for an Order")
+def orders_charge(transaction):
+    """
+    GET /orders/1/charge
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Orders > Orders under a User > List all Orders under a User")
+def orders_get_collection_under_user(transaction):
+    """
+    GET /users/1/orders
     :param transaction:
     :return:
     """

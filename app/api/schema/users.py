@@ -183,3 +183,12 @@ class UserSchema(UserSchemaPublic):
         schema='EventSchema',
         many=True,
         type_='event')
+    orders = Relationship(
+        attribute='orders',
+        self_view='v1.user_orders',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.orders_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='OrderSchema',
+        many=True,
+        type_='order')
