@@ -47,6 +47,7 @@ class OrderSchema(SoftDeletionSchema):
     country = fields.Str(allow_none=True)
     zipcode = fields.Str(allow_none=True)
     completed_at = fields.DateTime(dump_only=True)
+    created_at = fields.DateTime(dump_only=True)
     transaction_id = fields.Str(dump_only=True)
     payment_mode = fields.Str(default="free",
                               validate=validate.OneOf(choices=["free", "stripe", "paypal"]))
