@@ -1875,6 +1875,21 @@ def attendee_delete(transaction):
         db.session.commit()
 
 
+@hooks.before("Attendees > Send order receipts > Send email receipts to attendees")
+def attendee_receipts(transaction):
+    """
+    POST /attendees/send-receipt
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        order = OrderFactory()
+        order.identifier = 'xyz789'
+        order.status = 'completed'
+        db.session.add(order)
+        db.session.commit()
+
+
 # ------------------------- Tracks -------------------------
 @hooks.before("Tracks > Tracks Collection > Create Track")
 def track_post(transaction):
