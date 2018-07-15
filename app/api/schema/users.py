@@ -123,6 +123,15 @@ class UserSchema(UserSchemaPublic):
         schema='EmailNotificationSchema',
         many=True,
         type_='email-notification')
+    alternate_emails = Relationship(
+        attribute='alternate_emails',
+        self_view='v1.user_emails',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.user_emails_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='UserEmailSchema',
+        many=True,
+        type_='user-emails')
     sessions = Relationship(
         attribute='session',
         self_view='v1.user_session',
