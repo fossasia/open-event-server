@@ -1,10 +1,11 @@
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
 
 
-class AttendeeSchemaPublic(Schema):
+class AttendeeSchemaPublic(SoftDeletionSchema):
     """
     Api schema for Ticket Holder Model
     """
@@ -46,6 +47,7 @@ class AttendeeSchemaPublic(Schema):
     ticket_id = fields.Str(allow_none=True)
     is_checked_in = fields.Boolean()
     checkin_times = fields.Str(allow_none=True)
+    attendee_notes = fields.Str(allow_none=True)
     pdf_url = fields.Url(dump_only=True)
     event = Relationship(attribute='event',
                          self_view='v1.attendee_event',

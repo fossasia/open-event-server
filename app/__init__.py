@@ -37,6 +37,8 @@ from app.views.elastic_search import es
 from app.views.elastic_cron_helpers import sync_events_elasticsearch, cron_rebuild_events_elasticsearch
 from app.views.redis_store import redis_store
 from app.views.celery_ import celery
+from app.templates.flask_ext.jinja.filters import init_filters
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -66,9 +68,13 @@ class ReverseProxied(object):
 
 app.wsgi_app = ReverseProxied(app.wsgi_app)
 
+app_created = False
+
 
 def create_app():
-    BlueprintsManager.register(app)
+    global app_created
+    if not app_created:
+        BlueprintsManager.register(app)
     Migrate(app, db)
 
     app.config.from_object(env('APP_CONFIG', default='config.ProductionConfig'))
@@ -108,14 +114,16 @@ def create_app():
 
     # development api
     with app.app_context():
+        from app.api.admin_statistics_api.events import event_statistics
+        from app.api.auth import auth_routes
+        from app.api.attendees import attendee_misc_routes
         from app.api.bootstrap import api_v1
-        from app.api.uploads import upload_routes
+        from app.api.celery_tasks import celery_routes
+        from app.api.event_copy import event_copy
         from app.api.exports import export_routes
         from app.api.imports import import_routes
-        from app.api.celery_tasks import celery_routes
-        from app.api.auth import auth_routes
-        from app.api.admin_statistics_api.events import event_statistics
-        from app.api.event_copy import event_copy
+        from app.api.uploads import upload_routes
+        from app.api.users import user_misc_routes
 
         app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)
@@ -125,6 +133,8 @@ def create_app():
         app.register_blueprint(celery_routes)
         app.register_blueprint(auth_routes)
         app.register_blueprint(event_statistics)
+        app.register_blueprint(user_misc_routes)
+        app.register_blueprint(attendee_misc_routes)
 
     sa.orm.configure_mappers()
 
@@ -134,7 +144,7 @@ def create_app():
                          view_func=app.send_static_file)
 
     # sentry
-    if 'SENTRY_DSN' in app.config:
+    if not app_created and 'SENTRY_DSN' in app.config:
         sentry.init_app(app, dsn=app.config['SENTRY_DSN'])
 
     # redis
@@ -149,10 +159,12 @@ def create_app():
             except Exception:
                 pass
 
+    app_created = True
     return app, _manager, db, _jwt
 
 
 current_app, manager, database, jwt = create_app()
+init_filters(app)
 
 
 # http://stackoverflow.com/questions/26724623/
@@ -162,7 +174,8 @@ def track_user():
         current_user.update_lat()
 
 
-def make_celery(app):
+def make_celery(app=None):
+    app = app or create_app()[0]
     celery.conf.update(app.config)
     task_base = celery.Task
 
@@ -179,8 +192,6 @@ def make_celery(app):
     celery.Task = ContextTask
     return celery
 
-
-celery = make_celery(current_app)
 
 # Health-check
 health = HealthCheck(current_app, "/health-check")

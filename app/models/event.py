@@ -6,10 +6,14 @@ import flask_login as login
 import pytz
 from flask import current_app
 from sqlalchemy import event
+from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_count
 from app.models import db
+from app.models.ticket_fee import get_fee
+from app.models.base import SoftDeletionModel
 from app.models.email_notification import EmailNotification
+from app.models.feedback import Feedback
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.user import ATTENDEE, ORGANIZER
 from app.views.redis_store import redis_store
@@ -24,7 +28,7 @@ def get_new_event_identifier(length=8):
         return get_new_event_identifier(length)
 
 
-class Event(db.Model):
+class Event(SoftDeletionModel):
     """Event object table"""
     __tablename__ = 'events'
     __versioned__ = {
@@ -76,7 +80,6 @@ class Event(db.Model):
     code_of_conduct = db.Column(db.String)
     schedule_published_on = db.Column(db.DateTime(timezone=True))
     is_ticketing_enabled = db.Column(db.Boolean, default=True)
-    deleted_at = db.Column(db.DateTime(timezone=True))
     payment_country = db.Column(db.String)
     payment_currency = db.Column(db.String)
     paypal_email = db.Column(db.String)
@@ -197,7 +200,8 @@ class Event(db.Model):
                  onsite_details=None,
                  is_tax_enabled=None,
                  is_sponsors_enabled=None,
-                 stripe_authorization=None):
+                 stripe_authorization=None,
+                 tax=None):
 
         self.name = name
         self.logo_url = logo_url
@@ -251,6 +255,7 @@ class Event(db.Model):
         self.is_tax_enabled = is_tax_enabled
         self.is_sponsors_enabled = is_sponsors_enabled
         self.stripe_authorization = stripe_authorization
+        self.tax = tax
 
     def __repr__(self):
         return '<Event %r>' % self.name
@@ -264,6 +269,13 @@ class Event(db.Model):
         else:
             super(Event, self).__setattr__(name, value)
 
+    @property
+    def fee(self):
+        """
+        Returns the fee as a percentage from 0 to 100 for this event
+        """
+        return get_fee(self.payment_country, self.payment_currency)
+
     def notification_settings(self, user_id):
         try:
             return EmailNotification.query.filter_by(
@@ -271,6 +283,16 @@ class Event(db.Model):
                 filter_by(event_id=self.id).first()
         except:
             return None
+
+    def get_average_rating(self):
+        avg = db.session.query(func.avg(Feedback.rating)).filter_by(event_id=self.id).scalar()
+        if avg is not None:
+            avg = round(avg, 2)
+        return avg
+
+    @property
+    def average_rating(self):
+        return self.get_average_rating()
 
     def get_organizer(self):
         """returns organizer of an event"""

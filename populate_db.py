@@ -33,6 +33,9 @@ from app.models.event_topic import EventTopic
 # EventType
 from app.models.event_type import EventType
 
+# EventLocation
+from app.models.event_location import EventLocation
+
 # User Permissions
 from app.models.user_permission import UserPermission
 SALES = 'sales'
@@ -117,6 +120,12 @@ def create_event_types():
         get_or_create(EventType, name=type_)
 
 
+def create_event_locations():
+    event_location = ['India', 'Singapore', 'Berlin', 'New York', 'Hong Kong']
+    for loc_ in event_location:
+        get_or_create(EventLocation, name=loc_)
+
+
 def create_permissions():
     orgr = Role.query.get(1)
     coorgr = Role.query.get(2)
@@ -146,13 +155,17 @@ def create_permissions():
         db.session.add(perm)
 
     # For TRACK_ORGANIZER
-    perm, _ = get_or_create(Permission, role=track_orgr, service=track)
-    db.session.add(perm)
+    for service in services:
+        perm, _ = get_or_create(Permission, role=track_orgr, service=service)
+        if not service == track:
+            perm.can_create, perm.can_update, perm.can_delete = False, False, False
+        db.session.add(perm)
 
     # For MODERATOR
-    perm, _ = get_or_create(Permission, role=mod, service=track)
-    perm.can_create, perm.can_update, perm.can_delete = False, False, False
-    db.session.add(perm)
+    for service in services:
+        perm, _ = get_or_create(Permission, role=mod, service=service)
+        perm.can_create, perm.can_update, perm.can_delete = False, False, False
+        db.session.add(perm)
 
     # For ATTENDEE and REGISTRAR
     services = [track, session, speaker, sponsor, microlocation]
@@ -190,7 +203,7 @@ def create_user_permissions():
     # Create Event
     user_perm, _ = get_or_create(UserPermission, name='create_event',
                                  description='Create event')
-    user_perm.verified_user, user_perm.unverified_user = True, True
+    user_perm.verified_user, user_perm.unverified_user = True, False
     db.session.add(user_perm)
 
 
@@ -209,9 +222,13 @@ def create_admin_message_settings():
                      "New Session Proposal"]
     for mail in MAILS:
         if mail in default_mails:
-            get_or_create(MessageSettings, action=mail, mail_status=1, notification_status=1, user_control_status=1)
+            get_or_create(MessageSettings, action=mail, mail_status=True,
+                          notification_status=True, user_control_status=True)
         else:
-            get_or_create(MessageSettings, action=mail, mail_status=0, notification_status=0, user_control_status=0)
+            get_or_create(
+                MessageSettings, action=mail, mail_status=False,
+                notification_status=False, user_control_status=False
+            )
 
 
 def populate():
@@ -242,6 +259,8 @@ def populate():
     create_event_topics()
     print('Creating Event Types...')
     create_event_types()
+    print('Creating Event Locations...')
+    create_event_locations()
     print('Creating admin message settings...')
     create_admin_message_settings()
 
@@ -262,6 +281,7 @@ def populate_without_print():
     create_speaker_image_sizes()
     create_event_topics()
     create_event_types()
+    create_event_locations()
     create_admin_message_settings()
 
     db.session.commit()

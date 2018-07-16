@@ -36,7 +36,7 @@ class SpeakersCallList(ResourceList):
         :return:
         """
         try:
-            self.session.query(SpeakersCall).filter_by(event_id=data['event']).one()
+            self.session.query(SpeakersCall).filter_by(event_id=data['event'], deleted_at=None).one()
         except NoResultFound:
             pass
         else:

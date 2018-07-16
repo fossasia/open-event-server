@@ -1,15 +1,16 @@
 from marshmallow import validates_schema
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
 from app.models.access_code import AccessCode
 from utils.common import use_defaults
 
 
 @use_defaults()
-class AccessCodeSchema(Schema):
+class AccessCodeSchema(SoftDeletionSchema):
     """
     Api schema for Access Code Model
     """
@@ -54,17 +55,16 @@ class AccessCodeSchema(Schema):
 
         min_quantity = data.get('min_quantity', None)
         max_quantity = data.get('max_quantity', None)
-        if min_quantity is not None and max_quantity is not None:
-            if min_quantity > max_quantity:
-                raise UnprocessableEntity(
+        tickets_number = data.get('tickets_number', None)
+        if min_quantity and max_quantity and (min_quantity > max_quantity):
+            raise UnprocessableEntity(
                     {'pointer': '/data/attributes/min-quantity'},
                     "min-quantity should be less than max-quantity"
-                )
+            )
 
-        if 'tickets_number' in data and 'max_quantity' in data:
-            if data['tickets_number'] < data['max_quantity']:
-                raise UnprocessableEntity({'pointer': '/data/attributes/tickets-number'},
-                                          "tickets-number should be greater than max-quantity")
+        if tickets_number and max_quantity and (tickets_number < max_quantity):
+            raise UnprocessableEntity({'pointer': '/data/attributes/tickets-number'},
+                                      "tickets-number should be greater than max-quantity")
 
     id = fields.Integer(dump_ony=True)
     code = fields.Str(required=True)

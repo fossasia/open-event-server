@@ -1,46 +1,55 @@
 version: '2'
 
 services:
-  data:
-    image: postgres:9.5
-    environment:
-      POSTGRES_PASSWORD: 'test'
-    volumes:
-      - /var/lib/postgresql
-    command: echo true
 
   postgres:
-    image: postgres:9.5
-    environment:
-      POSTGRES_PASSWORD: 'test'
-    volumes_from:
-      - data
+    image: postgres:10-alpine
+    volumes:
+      - pg:/var/lib/postgresql/data
+      - ./postgres-initdb.d:/docker-entrypoint-initdb.d
     ports:
-      - '5432:5432'
+      - 127.0.0.1:5432:5432
 
   redis:
-    image: 'redis:3-alpine'
+    image: redis:3-alpine
     command: redis-server
     volumes:
-      - 'redis:/var/lib/redis/data'
+      - rd:/var/lib/redis/data
     ports:
-      - '6379:6379'
+      - 127.0.0.1:6379:6379
+
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.0
+    environment:
+        - discovery.type=single-node
+    volumes:
+        - es:/usr/share/elasticsearch/data
+    ports:
+        - 127.0.0.1:9200:9200
+        - 127.0.0.1:9300:9300
 
   web:
     build: .
     environment:
-      DATABASE_URL: postgresql://postgres:test@postgres:5432/opev
+      DATABASE_URL: postgresql://john:start@postgres:5432/oevent_2
+      ELASTICSEARCH_HOST: elastic:9200
       REDIS_URL: redis://redis:6379/0
       C_FORCE_ROOT: "true"
-      SERVER_NAME: $SERVER_NAME
+      ADMIN_EMAIL: "@{ADMIN_EMAIL}"
+      ADMIN_PASSWORD: "@{ADMIN_PASSWORD}"
     links:
       - postgres:postgres
       - redis:redis
+      - elastic:elastic
     volumes:
-      - 'storage:/open_event/static'
+      - ./data/web:/open_event/static
     ports:
-      - '80:5000'
+      - 0.0.0.0:5000:5000
 
 volumes:
-  redis:
-  storage:
+    pg:
+        driver: local
+    rd:
+        driver: local
+    es:
+        driver: local

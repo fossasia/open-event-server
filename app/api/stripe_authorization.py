@@ -42,7 +42,7 @@ class StripeAuthorizationListPost(ResourceList):
         :return:
         """
         try:
-            self.session.query(StripeAuthorization).filter_by(event_id=data['event']).one()
+            self.session.query(StripeAuthorization).filter_by(event_id=data['event'], deleted_at=None).one()
         except NoResultFound:
             try:
                 credentials = StripePaymentsManager\

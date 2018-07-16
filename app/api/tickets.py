@@ -11,13 +11,13 @@ from app.api.helpers.utilities import require_relationship
 from app.api.schema.tickets import TicketSchema, TicketSchemaPublic
 from app.models import db
 from app.models.access_code import AccessCode
+from app.models.discount_code import DiscountCode
 from app.models.order import Order
 from app.models.ticket import Ticket, TicketTag, ticket_tags_table
 from app.models.event import Event
 from app.models.ticket_holder import TicketHolder
 from app.api.helpers.exceptions import ConflictException, MethodNotAllowed
 from app.api.helpers.db import get_count
-
 
 class TicketListPost(ResourceList):
     """
@@ -34,9 +34,10 @@ class TicketListPost(ResourceList):
         require_relationship(['event'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ObjectNotFound({'parameter': 'event_id'},
-                                 "Event: {} not found".format(data['event_id']))
+                                 "Event: {} not found".format(data['event']))
 
-        if get_count(db.session.query(Ticket.id).filter_by(name=data['name'], event_id=int(data['event']))) > 0:
+        if get_count(db.session.query(Ticket.id).filter_by(name=data['name'], event_id=int(data['event']),
+                                                           deleted_at=None)) > 0:
             raise ConflictException({'pointer': '/data/attributes/name'}, "Ticket already exists")
 
         if get_count(db.session.query(Event).filter_by(id=int(data['event']), is_ticketing_enabled=False)) > 0:
@@ -88,6 +89,11 @@ class TicketList(ResourceList):
             access_code = safe_query(self, AccessCode, 'id', view_kwargs['access_code_id'], 'access_code_id')
             # access_code - ticket :: many-to-many relationship
             query_ = Ticket.query.filter(Ticket.access_codes.any(id=access_code.id))
+
+        if view_kwargs.get('discount_code_id'):
+            discount_code = safe_query(self, DiscountCode, 'id', view_kwargs['discount_code_id'], 'discount_code_id')
+            # discount_code - ticket :: many-to-many relationship
+            query_ = Ticket.query.filter(Ticket.discount_codes.any(id=discount_code.id))
 
         if view_kwargs.get('order_identifier'):
             order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
