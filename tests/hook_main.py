@@ -1822,7 +1822,7 @@ def ticket_tag_ticket(transaction):
 @hooks.before("Attendees > Attendees Collection > Create Attendee")
 def attendee_post(transaction):
     """
-    POST /events/1/attendees
+    POST /attendees
     :param transaction:
     :return:
     """
