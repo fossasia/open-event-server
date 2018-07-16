@@ -1,10 +1,12 @@
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
+from utils.common import use_defaults
 
 
+@use_defaults()
 class UserSchemaPublic(SoftDeletionSchema):
     """
     Api schema for User Model which can be accessed by any resource to which user is related.
@@ -57,6 +59,7 @@ class UserSchema(UserSchemaPublic):
     is_user_registrar = fields.Boolean(dump_only=True)
     is_user_attendee = fields.Boolean(dump_only=True)
     is_verified = fields.Boolean(dump_only=True)
+    has_accepted_cookie_policy = fields.Boolean(default=False)
     last_accessed_at = fields.DateTime(dump_only=True)
     created_at = fields.DateTime(dump_only=True)
     deleted_at = fields.DateTime(dump_only=True)
@@ -123,6 +126,15 @@ class UserSchema(UserSchemaPublic):
         schema='EmailNotificationSchema',
         many=True,
         type_='email-notification')
+    alternate_emails = Relationship(
+        attribute='alternate_emails',
+        self_view='v1.user_emails',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.user_emails_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='UserEmailSchema',
+        many=True,
+        type_='user-emails')
     sessions = Relationship(
         attribute='session',
         self_view='v1.user_session',

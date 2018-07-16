@@ -1,5 +1,8 @@
-from flask_jwt import current_identity
+from flask import Blueprint, request, jsonify, abort, make_response
+from flask_jwt import current_identity, jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from flask_rest_jsonapi.exceptions import ObjectNotFound
+from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query, get_count
@@ -8,6 +11,7 @@ from app.api.helpers.exceptions import (
     ForbiddenException,
     UnprocessableEntity,
 )
+from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
@@ -19,6 +23,7 @@ from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 
+attendee_misc_routes = Blueprint('attendee_misc', __name__, url_prefix='/v1')
 
 class AttendeeListPost(ResourceList):
     """
@@ -183,3 +188,30 @@ class AttendeeRelationshipOptional(ResourceRelationship):
     schema = AttendeeSchema
     data_layer = {'session': db.session,
                   'model': TicketHolder}
+
+
+@attendee_misc_routes.route('/attendees/send-receipt', methods=['POST'])
+@jwt_required
+def send_receipt():
+    order_id = request.json.get('order-id')
+    if order_id:
+        try:
+            order = db.session.query(Order).filter_by(id=int(order_id)).one()
+        except NoResultFound:
+            raise ObjectNotFound({'parameter': '{id}'}, "Order not found")
+
+        if order.user_id != current_identity.id:
+            abort(
+                make_response(jsonify(error="You cannot send reciept for an order not created by you"), 403)
+            )
+        elif order.status != 'completed':
+            abort(
+                make_response(jsonify(error="Cannot send receipt for an incomplete order"), 409)
+            )
+        else:
+            send_email_to_attendees(order, current_identity.id)
+            return jsonify(message="receipt sent to attendees")
+    else:
+        abort(
+            make_response(jsonify(error="Order id missing"), 422)
+        )

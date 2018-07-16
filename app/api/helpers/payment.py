@@ -47,7 +47,7 @@ class StripePaymentsManager(object):
             if represents_int(event):
                 authorization = StripeAuthorization.query.filter_by(event_id=event).first()
             else:
-                authorization = event.stripe
+                authorization = event.stripe_authorization
             if authorization:
                 return {
                     'SECRET_KEY': authorization.stripe_secret_key,
