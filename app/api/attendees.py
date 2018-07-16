@@ -193,12 +193,14 @@ class AttendeeRelationshipOptional(ResourceRelationship):
 @attendee_misc_routes.route('/attendees/send-receipt', methods=['POST'])
 @jwt_required
 def send_receipt():
-    order_id = request.json.get('order-id')
-    if order_id:
+    # Function to send receipts to attendees related to the provided order.
+
+    order_identifier = request.json.get('order-identifier')
+    if order_identifier:
         try:
-            order = db.session.query(Order).filter_by(id=int(order_id)).one()
+            order = db.session.query(Order).filter_by(identifier=order_identifier).one()
         except NoResultFound:
-            raise ObjectNotFound({'parameter': '{id}'}, "Order not found")
+            raise ObjectNotFound({'parameter': '{identifier}'}, "Order not found")
 
         if order.user_id != current_identity.id:
             abort(
@@ -213,5 +215,5 @@ def send_receipt():
             return jsonify(message="receipt sent to attendees")
     else:
         abort(
-            make_response(jsonify(error="Order id missing"), 422)
+            make_response(jsonify(error="Order identifier missing"), 422)
         )

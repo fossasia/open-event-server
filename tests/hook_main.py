@@ -1822,7 +1822,7 @@ def ticket_tag_ticket(transaction):
 @hooks.before("Attendees > Attendees Collection > Create Attendee")
 def attendee_post(transaction):
     """
-    POST /events/1/attendees
+    POST /attendees
     :param transaction:
     :return:
     """
@@ -1872,6 +1872,21 @@ def attendee_delete(transaction):
     with stash['app'].app_context():
         attendee = AttendeeFactory()
         db.session.add(attendee)
+        db.session.commit()
+
+
+@hooks.before("Attendees > Send order receipts > Send email receipts to attendees")
+def attendee_receipts(transaction):
+    """
+    POST /attendees/send-receipt
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        order = OrderFactory()
+        order.identifier = 'xyz789'
+        order.status = 'completed'
+        db.session.add(order)
         db.session.commit()
 
 
