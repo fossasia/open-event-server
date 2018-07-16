@@ -14978,6 +14978,32 @@ Related to ticket holders(attendees) of an event (free, paid, donation) to the e
 | `attendee-notes` | Comma separated attendee notes | string | - |
 | `pdf-url` | pdf url of the Attendee | url | - |
 
+## Send order receipts [v1/attendees/send-receipt]
+
+### Send email receipts to attendees [POST]
+Send order receipts to attendees via email (requires organizer access).
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "order-identifier": "xyz789"
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "message": "receipt sent to attendees"
+        }
+
 ## Attendees Collection [/v1/attendees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -23289,7 +23315,7 @@ The sales object contains properties placed, completed and pending properties wh
             "version": "1.0"
         }
     }
-    
+
 ## Sales by Marketer Details [/v1/admin/sales/by-marketer]
 
 
@@ -23341,7 +23367,7 @@ The sales object contains properties placed, completed and pending properties wh
         "jsonapi": {
             "version": "1.0"
         }
-    }    
+    }
 
 ## Sales discounted Details [/v1/admin/sales/discounted]
 
@@ -23458,7 +23484,7 @@ The sales object contains properties placed, completed and pending properties wh
                 "version": "1.0"
             }
         }
-        
+
 # Group Event Copy
 
 To create copy of an event
