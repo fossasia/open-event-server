@@ -2,6 +2,7 @@ import base64
 from flask import request, jsonify, make_response, Blueprint
 from flask_jwt import current_identity as current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
+import requests
 
 from app import get_settings
 from app.api.helpers.db import save_to_db
@@ -16,8 +17,62 @@ from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE, \
 from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
 from app.api.helpers.errors import UnprocessableEntityError, NotFoundError, BadRequestError
+from app.api.helpers.third_party_auth import GoogleOAuth, FbOAuth, TwitterOAuth, InstagramOAuth
 
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
+
+
+@auth_routes.route('/oauth/<provider>', methods=['GET'])
+def redirect_uri(provider):
+    if provider == 'facebook':
+        provider_class = FbOAuth()
+    elif provider == 'google':
+        provider_class = GoogleOAuth()
+    elif provider == 'twitter':
+        provider_class = TwitterOAuth()
+    elif provider == 'instagram':
+        provider_class = InstagramOAuth()
+    else:
+        return make_response(jsonify(
+            message="No support for {}".format(provider)), 404)
+    url = provider_class.get_auth_uri() + '?client_id=' +\
+        provider_class.get_client_id() + '&redirect_uri=' +\
+        provider_class.get_redirect_uri()
+    return make_response(jsonify(url=url), 200)
+
+
+@auth_routes.route('/oauth/token/<provider>', methods=['GET'])
+def get_token(provider):
+    if provider == 'facebook':
+        provider_class = FbOAuth()
+        payload = {
+            'grant_type': 'client_credentials',
+            'client_id': provider_class.get_client_id(),
+            'client_secret': provider_class.get_client_secret()
+        }
+    elif provider == 'google':
+        provider_class = GoogleOAuth()
+        payload = {
+            'client_id': provider_class.get_client_id(),
+            'client_secret': provider_class.get_client_secret()
+        }
+    elif provider == 'twitter':
+        provider_class = TwitterOAuth()
+        payload = {
+            'client_id': provider_class.get_client_id(),
+            'client_secret': provider_class.get_client_secret()
+        }
+    elif provider == 'instagram':
+        provider_class = InstagramOAuth()
+        payload = {
+            'client_id': provider_class.get_client_id(),
+            'client_secret': provider_class.get_client_secret()
+        }
+    else:
+        return make_response(jsonify(
+            message="No support for {}".format(provider)), 200)
+    response = requests.post(provider_class.get_token_uri(), params=payload)
+    return make_response(jsonify(token=response.json()), 200)
 
 
 @auth_routes.route('/verify-email', methods=['POST'])
