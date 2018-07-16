@@ -119,7 +119,7 @@ class TicketingManager(object):
             save_to_db(order)
 
             # delete related attendees to unlock the tickets
-            delete_related_attendees_for_order(db, order)
+            delete_related_attendees_for_order(order)
 
             # return the failure message from stripe.
             return False, charge.failure_message
@@ -164,7 +164,7 @@ class TicketingManager(object):
                 save_to_db(order)
 
                 # delete related attendees to unlock the tickets
-                delete_related_attendees_for_order(db, order)
+                delete_related_attendees_for_order(order)
 
                 # return the error message from Paypal
                 return False, capture_result['L_SHORTMESSAGE0']

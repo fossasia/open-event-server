@@ -286,7 +286,7 @@ class OrderDetail(ResourceDetail):
             send_notif_ticket_cancel(order)
 
             # delete the attendees so that the tickets are unlocked.
-            delete_related_attendees_for_order(self, order)
+            delete_related_attendees_for_order(order)
 
     def before_delete_object(self, order, view_kwargs):
         """
