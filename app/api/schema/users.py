@@ -52,6 +52,10 @@ class UserSchema(UserSchemaPublic):
     password = fields.Str(required=True, load_only=True)
     is_super_admin = fields.Boolean(dump_only=True)
     is_admin = fields.Boolean(dump_only=True)
+
+    is_sales_admin = fields.Boolean(dump_only=True)
+    is_marketer = fields.Boolean(dump_only=True)
+
     is_user_organizer = fields.Boolean(dump_only=True)
     is_user_coorganizer = fields.Boolean(dump_only=True)
     is_user_track_organizer = fields.Boolean(dump_only=True)
