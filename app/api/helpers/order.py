@@ -1,24 +1,24 @@
 import logging
 from datetime import timedelta, datetime, timezone
 
-from app.api.helpers.db import save_to_db
 from app.api.helpers import ticketing
+from app.api.helpers.db import save_to_db
+from app.models import db
 
 
-def delete_related_attendees_for_order(self, order):
+def delete_related_attendees_for_order(order):
     """
     Delete the associated attendees of an order when it is cancelled/deleted/expired
-    :param self:
     :param order: Order whose attendees have to be deleted.
     :return:
     """
     for ticket_holder in order.ticket_holders:
-        self.session.delete(ticket_holder)
+        db.session.delete(ticket_holder)
         try:
-            self.session.commit()
+            db.session.commit()
         except Exception as e:
             logging.error('DB Exception! %s' % e)
-            self.session.rollback()
+            db.session.rollback()
 
 
 def set_expiry_for_order(order, override=False):
@@ -33,5 +33,6 @@ def set_expiry_for_order(order, override=False):
                 order.created_at +
                 timedelta(minutes=ticketing.TicketingManager.get_order_expiry())) < datetime.now(timezone.utc))):
             order.status = 'expired'
+            delete_related_attendees_for_order(order)
             save_to_db(order)
     return order
