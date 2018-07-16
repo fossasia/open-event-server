@@ -1,6 +1,6 @@
 """empty message
 Revision ID: 20b836df74cc
-Revises: 713af9635f46
+Revises: b006b725586f
 Create Date: 2018-05-25 01:46:53.292127
 """
 
@@ -11,7 +11,7 @@ import urllib.parse
 
 # revision identifiers, used by Alembic.
 revision = '20b836df74cc'
-down_revision = '713af9635f46'
+down_revision = 'b006b725586f'
 
 def set_default_sys_image():
     with app.request_context():
