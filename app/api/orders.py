@@ -205,7 +205,7 @@ class OrderDetail(ResourceDetail):
         """
         if view_kwargs.get('attendee_id'):
             attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
-            view_kwargs['order_identifier'] = attendee.order.identifier
+            view_kwargs['id'] = attendee.order.id
         if view_kwargs.get('order_identifier'):
             order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
             view_kwargs['id'] = order.id
@@ -301,8 +301,9 @@ class OrderDetail(ResourceDetail):
         elif order.amount and order.amount > 0 and (order.status == 'completed' or order.status == 'placed'):
             raise ConflictException({'source': ''}, 'You cannot delete a placed/completed paid order.')
 
+    # This is to ensure that the permissions manager runs and hence changes the kwarg from order identifier to id.
     decorators = (jwt_required, api.has_permission(
-        'is_user_itself', methods="PATCH,DELETE", fetch="id", fetch_as="order_id", model=Order),)
+        'auth_required', methods="PATCH,DELETE", fetch="user_id", model=Order),)
 
     schema = OrderSchema
     data_layer = {'session': db.session,
