@@ -41,8 +41,6 @@ from app.api.helpers.files import create_save_pdf
 
 celery = make_celery()
 
-celery = make_celery()
-
 
 @celery.task(name='send.email.post')
 def send_email_task(payload, headers):
