@@ -12,7 +12,7 @@ from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from app.api.helpers.db import get_count
 from app.models import db
 from app.models.base import SoftDeletionModel
-from app.models.custom_system_role import UserSystemRole
+from app.models.custom_system_role import UserSystemRole, CustomSysRole
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.notification import Notification
 from app.models.panel_permission import PanelPermission
@@ -27,6 +27,9 @@ from app.models.users_events_role import UsersEventsRoles as UER
 # System-wide
 ADMIN = 'admin'
 SUPERADMIN = 'super_admin'
+
+MARKETER = 'Marketer'
+SALES_ADMIN = 'Sales Admin'
 
 SYS_ROLES_LIST = [
     ADMIN,
@@ -76,6 +79,21 @@ class User(SoftDeletionModel):
     feedback = db.relationship('Feedback', backref="user")
     access_codes = db.relationship('AccessCode', backref="user")
     discount_codes = db.relationship('DiscountCode', backref="user")
+    marketer_events = db.relationship(
+                          'Event',
+                          viewonly=True,
+                          secondary='join(UserSystemRole, CustomSysRole,'
+                                    ' and_(CustomSysRole.id == UserSystemRole.role_id, CustomSysRole.name == "Marketer"))',
+                          primaryjoin='UserSystemRole.user_id == User.id',
+                          secondaryjoin='Event.id == UserSystemRole.event_id'
+    )
+    sales_admin_events = db.relationship(
+                         'Event',
+                         viewonly=True,
+                         secondary='join(UserSystemRole, CustomSysRole,'
+                                   ' and_(CustomSysRole.id == UserSystemRole.role_id, CustomSysRole.name == "Sales Admin"))',
+                         primaryjoin='UserSystemRole.user_id == User.id',
+                         secondaryjoin='Event.id == UserSystemRole.event_id')
 
     @hybrid_property
     def password(self):
@@ -154,6 +172,27 @@ class User(SoftDeletionModel):
             return False
         else:
             return True
+
+    def _is_system_role(self, role_name):
+        """
+        Checks if a user has a particular Role.
+        """
+        role = CustomSysRole.query.filter_by(name=role_name).first()
+        ucsr = UserSystemRole.query.filter_by(user=self,
+                                              role=role).first()
+        if not ucsr:
+            return False
+        else:
+            return True
+
+    @hybrid_property
+    def is_marketer(self):
+        # type: (object) -> object
+        return self._is_system_role(MARKETER)
+
+    @hybrid_property
+    def is_sales_admin(self):
+        return self._is_system_role(SALES_ADMIN)
 
     def _is_role(self, role_name, event_id=None):
         """

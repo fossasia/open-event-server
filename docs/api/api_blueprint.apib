@@ -137,6 +137,18 @@ Get a list of Users.
                                 "related": "/v1/events"
                             }
                         },
+                        "marketer-events": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/marketer-events",
+                                "related": "/v1/events"
+                            }
+                        },
+                        "sales-admin-events": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/sales-admin-events",
+                                "related": "/v1/events"
+                            }
+                        },
                         "access-codes": {
                             "links": {
                                 "self": "/v1/users/2/relationships/access-codes",
@@ -161,6 +173,8 @@ Get a list of Users.
                         "last-name": "Doe",
                         "instagram-url": "http://instagram.com/instagram",
                         "is-super-admin": false,
+                        "is-sales-admin": false,
+                        "is-marketer": false,
                         "thumbnail-image-url": "http://example.com/example.png",
                         "created-at": "2017-06-21T20:33:33.186358+00:00",
                         "last-accessed-at": null,
@@ -283,6 +297,18 @@ Create a new user using an email, password and an optional name.
                             "related": "/v1/events"
                         }
                     },
+                    "marketer-events": {
+                         "links": {
+                            "self": "/v1/users/2/relationships/marketer-events",
+                            "related": "/v1/events"
+                        }
+                     },
+                     "sales-admin-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/sales-admin-events",
+                            "related": "/v1/events"
+                        }
+                     },
                     "notifications": {
                         "links": {
                             "self": "/v1/users/2/relationships/notifications",
@@ -319,6 +345,8 @@ Create a new user using an email, password and an optional name.
                     "last-name": "Doe",
                     "instagram-url": "http://instagram.com/instagram",
                     "is-super-admin": false,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "thumbnail-image-url": "http://example.com/example.png",
                     "created-at": "2017-06-21T20:33:33.186358+00:00",
                     "last-accessed-at": null,
@@ -405,6 +433,18 @@ Get a single user.
                             "related": "/v1/events"
                         }
                     },
+                    "marketer-events": {
+                         "links": {
+                            "self": "/v1/users/2/relationships/marketer-events",
+                            "related": "/v1/events"
+                        }
+                     },
+                     "sales-admin-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/sales-admin-events",
+                            "related": "/v1/events"
+                        }
+                     },
                     "speakers": {
                         "links": {
                             "self": "/v1/users/2/relationships/speakers",
@@ -453,6 +493,8 @@ Get a single user.
                     "last-name": "Doe",
                     "instagram-url": "http://instagram.com/instagram",
                     "is-super-admin": false,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "thumbnail-image-url": "http://example.com/example.png",
                     "created-at": "2017-06-21T20:33:33.186358+00:00",
                     "last-accessed-at": null,
@@ -574,6 +616,18 @@ Authorized user should be same as user in request body or must be admin.
                             "related": "/v1/events"
                         }
                     },
+                    "marketer-events": {
+                         "links": {
+                            "self": "/v1/users/2/relationships/marketer-events",
+                            "related": "/v1/events"
+                        }
+                     },
+                     "sales-admin-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/sales-admin-events",
+                            "related": "/v1/events"
+                        }
+                     },
                     "notifications": {
                         "links": {
                             "self": "/v1/users/2/relationships/notifications",
@@ -610,6 +664,8 @@ Authorized user should be same as user in request body or must be admin.
                     "last-name": "Doe",
                     "instagram-url": "http://instagram.com/instagram",
                     "is-super-admin": false,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "thumbnail-image-url": "http://example.com/example.png",
                     "created-at": "2017-06-21T20:33:33.186358+00:00",
                     "last-accessed-at": null,
@@ -730,6 +786,8 @@ Get the details of the user.
                     "icon-image-url": null,
                     "instagram-url": null,
                     "is-super-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "original-image-url": null,
                     "created-at": "2017-07-21T15:06:20.741290+00:00",
                     "last-accessed-at": null,
@@ -833,6 +891,8 @@ Get the details of the user.
                     "icon-image-url": null,
                     "instagram-url": null,
                     "is-super-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "original-image-url": null,
                     "created-at": "2017-07-21T15:06:20.741290+00:00",
                     "last-accessed-at": null,
@@ -931,6 +991,8 @@ Get the details of the user.
                 },
                 "attributes": {
                     "is-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "thumbnail-image-url": null,
                     "last-name": null,
                     "icon-image-url": null,
@@ -1039,6 +1101,8 @@ Get the details of the user.
                     "icon-image-url": null,
                     "instagram-url": null,
                     "is-super-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "original-image-url": null,
                     "created-at": "2017-07-21T15:06:20.741290+00:00",
                     "last-accessed-at": null,
@@ -1137,6 +1201,8 @@ Get the details of the user.
                 },
                 "attributes": {
                     "is-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "thumbnail-image-url": null,
                     "last-name": null,
                     "icon-image-url": null,
@@ -1240,6 +1306,8 @@ Get the details of the user.
                 },
                 "attributes": {
                     "is-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "thumbnail-image-url": null,
                     "last-name": null,
                     "icon-image-url": null,
@@ -12706,7 +12774,8 @@ Create a new social link using event_id.
                 },
                 "attributes": {
                   "name": "Facebook Url",
-                  "link": "http://facebook.com/facebook"
+                  "link": "http://facebook.com/facebook",
+                  "identifier": "example"
                 },
                 "type": "social-link"
               }
@@ -12727,7 +12796,8 @@ Create a new social link using event_id.
             "attributes": {
               "link": "http://facebook.com/facebook",
               "deleted-at": null,
-              "name": "Facebook Url"
+              "name": "Facebook Url",
+              "identifier": "example"
             },
             "type": "social-link",
             "id": "1",
@@ -12782,7 +12852,8 @@ Get a list of Social Links.
               "attributes": {
                 "link": "http://facebook.com/facebook",
                 "deleted-at": null,
-                "name": "Facebook Url"
+                "name": "Facebook Url",
+                "identifier": "example"
               },
               "type": "social-link",
               "id": "1",
@@ -12828,7 +12899,8 @@ Get a list of Social Links.
             "attributes": {
               "link": "http://facebook.com/facebook",
               "deleted-at": null,
-              "name": "Facebook Url"
+              "name": "Facebook Url",
+              "identifier": "example"
             },
             "type": "social-link",
             "id": "1",
@@ -12862,7 +12934,8 @@ Update a single social link by `id`.
               "data": {
                 "attributes": {
                   "name": "Facebook Page Url",
-                  "link": "http://facebook.com/facebook"
+                  "link": "http://facebook.com/facebook",
+                  "identifier": "example"
                 },
                 "type": "social-link",
                 "id": "1"
@@ -12884,7 +12957,8 @@ Update a single social link by `id`.
             "attributes": {
               "link": "http://facebook.com/facebook",
               "deleted-at": null,
-              "name": "Facebook Page Url"
+              "name": "Facebook Page Url",
+              "identifier": "example"
             },
             "type": "social-link",
             "id": "1",

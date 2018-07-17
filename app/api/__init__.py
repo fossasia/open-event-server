@@ -101,6 +101,9 @@ api.route(UserRelationship, 'user_attendees', '/users/<int:id>/relationships/att
 api.route(UserRelationship, 'user_events', '/users/<int:id>/relationships/events')
 api.route(UserRelationship, 'user_orders', '/users/<int:id>/relationships/orders')
 api.route(UserRelationship, 'user_emails', '/users/<int:id>/relationships/alternate-emails')
+api.route(UserRelationship, 'user_marketer_events', '/users/<int:id>/relationships/marketer-events')
+api.route(UserRelationship, 'user_sales_admin_events',
+          '/users/<int:id>/relationships/sales-admin-events')
 
 # users_emails
 api.route(UserEmailListAdmin, 'user_email_list_admin', '/admin/user-emails')

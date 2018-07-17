@@ -52,6 +52,10 @@ class UserSchema(UserSchemaPublic):
     password = fields.Str(required=True, load_only=True)
     is_super_admin = fields.Boolean(dump_only=True)
     is_admin = fields.Boolean(dump_only=True)
+
+    is_sales_admin = fields.Boolean(dump_only=True)
+    is_marketer = fields.Boolean(dump_only=True)
+
     is_user_organizer = fields.Boolean(dump_only=True)
     is_user_coorganizer = fields.Boolean(dump_only=True)
     is_user_track_organizer = fields.Boolean(dump_only=True)
@@ -204,3 +208,19 @@ class UserSchema(UserSchemaPublic):
         schema='OrderSchema',
         many=True,
         type_='order')
+    marketer_events = Relationship(
+        attribute='marketer_events',
+        self_view='v1.user_marketer_events',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_list',
+        schema='EventSchema',
+        type_='event',
+        many=True)
+    sales_admin_events = Relationship(
+        attribute='sales_admin_events',
+        self_view='v1.user_sales_admin_events',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_list',
+        schema='EventSchema',
+        type_='event',
+        many=True)
