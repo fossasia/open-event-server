@@ -35,8 +35,14 @@ def redirect_uri(provider):
     else:
         return make_response(jsonify(
             message="No support for {}".format(provider)), 404)
+
+    client_id = provider_class.get_client_id()
+    if not client_id:
+        return make_response(jsonify(
+            message="{} client id is not configured on the server".format(provider)), 404)
+
     url = provider_class.get_auth_uri() + '?client_id=' +\
-        provider_class.get_client_id() + '&redirect_uri=' +\
+        client_id + '&redirect_uri=' +\
         provider_class.get_redirect_uri()
     return make_response(jsonify(url=url), 200)
 
