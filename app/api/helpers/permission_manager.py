@@ -354,8 +354,8 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         try:
             order = Order.query.filter_by(identifier=view_kwargs['order_identifier']).one()
         except NoResultFound:
-            return NotFoundError({'parameter': 'order_identifier'}, 'Event not found').respond()
-        view_kwargs['id'] = order.identifier
+            return NotFoundError({'parameter': 'order_identifier'}, 'Order not found').respond()
+        view_kwargs['id'] = order.id
 
     # If event_identifier in route instead of event_id
     if 'event_identifier' in view_kwargs:
@@ -435,7 +435,6 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
                 kwargs[kwargs['fetch']] = fetched
         else:
             return NotFoundError({'source': ''}, 'Object not found.').respond()
-
     if args[0] in permissions:
         return permissions[args[0]](view, view_args, view_kwargs, *args, **kwargs)
     else:
