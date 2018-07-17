@@ -7,6 +7,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy.orm.exc import NoResultFound
 
+from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
@@ -300,7 +301,8 @@ class OrderDetail(ResourceDetail):
         elif order.amount and order.amount > 0 and (order.status == 'completed' or order.status == 'placed'):
             raise ConflictException({'source': ''}, 'You cannot delete a placed/completed paid order.')
 
-    decorators = (jwt_required,)
+    decorators = (jwt_required, api.has_permission(
+        'is_user_itself', methods="PATCH,DELETE", fetch="id", fetch_as="order_id", model=Order),)
 
     schema = OrderSchema
     data_layer = {'session': db.session,
