@@ -161,3 +161,9 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     smtp_password = fields.Str(allow_none=True)
     smtp_port = fields.Integer(allow_none=True)
     smtp_encryption = fields.Str(allow_none=True)  # Can be tls, ssl, none
+
+    #
+    # Cookie Policy
+    #
+    cookie_policy = fields.Str(allow_none=True)
+    cookie_policy_link = fields.Str(allow_none=True)
