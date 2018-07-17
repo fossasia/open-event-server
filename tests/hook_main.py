@@ -3572,6 +3572,18 @@ def delete_order(transaction):
     :return:
     """
     transaction['skip'] = True
+    
+@hooks.before("Orders > List Orders under an Event > List Orders")
+def event_order(transaction):
+    """
+    GET /events/1/orders
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        order = SessionFactory()
+        db.session.add(order)
+        db.session.commit()
 
 
 @hooks.before("Event Copy > Create Event Copy > Create Copy")
