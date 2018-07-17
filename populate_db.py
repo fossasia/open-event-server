@@ -1,6 +1,7 @@
 from app import current_app
 from app.models import db
 from app.api.helpers.db import get_or_create  # , save_to_db
+from envparse import env
 
 # Admin message settings
 from app.api.helpers.system_mails import MAILS
@@ -66,6 +67,21 @@ def create_services():
 
 def create_settings():
     get_or_create(Setting, app_name='Open Event')
+
+    if current_app.config['DEVELOPMENT']:
+        # get the stripe keys from the env file and save it in the settings.
+        env.read_envfile()
+        stripe_secret_key = env('STRIPE_SECRET_KEY', default=None)
+        stripe_publishable_key = env('STRIPE_PUBLISHABLE_KEY', default=None)
+        stripe_client_id = env('STRIPE_CLIENT_ID', default=None)
+
+        if stripe_client_id and stripe_secret_key and stripe_publishable_key:
+            setting, _ = get_or_create(Setting, app_name='Open Event')
+            setting.stripe_client_id = stripe_client_id
+            setting.stripe_publishable_key = stripe_publishable_key
+            setting.stripe_secret_key = stripe_secret_key
+            db.session.add(setting)
+            db.session.commit()
 
 
 def create_event_image_sizes():
