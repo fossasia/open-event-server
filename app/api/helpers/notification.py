@@ -3,7 +3,7 @@ from flask import current_app
 from app.api.helpers.db import save_to_db
 from app.models.notification import Notification, NEW_SESSION, SESSION_ACCEPT_REJECT, \
     EVENT_IMPORTED, EVENT_IMPORT_FAIL, EVENT_EXPORTED, EVENT_EXPORT_FAIL, MONTHLY_PAYMENT_NOTIF, \
-    MONTHLY_PAYMENT_FOLLOWUP_NOTIF, EVENT_ROLE_INVITE, AFTER_EVENT, TICKET_PURCHASED_ORGANIZER, \
+    MONTHLY_PAYMENT_FOLLOWUP_NOTIF, EVENT_ROLE, AFTER_EVENT, TICKET_PURCHASED_ORGANIZER, \
     TICKET_PURCHASED_ATTENDEE, TICKET_PURCHASED, TICKET_CANCELLED, TICKET_CANCELLED_ORGANIZER
 from app.models.message_setting import MessageSettings
 from app.api.helpers.log import record_activity
@@ -125,10 +125,10 @@ def send_followup_notif_monthly_fee_payment(user, event_name, previous_month, am
 
 
 def send_notif_event_role(user, role_name, event_name, link):
-    message_settings = MessageSettings.query.filter_by(action=EVENT_ROLE_INVITE).first()
+    message_settings = MessageSettings.query.filter_by(action=EVENT_ROLE).first()
     if not message_settings or message_settings.notification_status == 1:
-        notif = NOTIFS[EVENT_ROLE_INVITE]
-        action = EVENT_ROLE_INVITE
+        notif = NOTIFS[EVENT_ROLE]
+        action = EVENT_ROLE
         title = notif['title'].format(
             role_name=role_name,
             event_name=event_name
@@ -174,28 +174,32 @@ def send_notif_ticket_purchase_organizer(user, invoice_id, order_url, event_name
 
 def send_notif_to_attendees(order, purchaser_id):
     for holder in order.ticket_holders:
-        if holder.id != purchaser_id:
-            send_notification(
-                user=holder,
-                action=TICKET_PURCHASED_ATTENDEE,
-                title=NOTIFS[TICKET_PURCHASED_ATTENDEE]['title'].format(
-                    event_name=order.event.name
-                ),
-                message=NOTIFS[TICKET_PURCHASED_ATTENDEE]['message'].format(
-                    pdf_url=holder.pdf_url
+        if holder.user:
+            # send notification if the ticket holder is a registered user.
+            if holder.user.id != purchaser_id:
+                # The ticket holder is not the purchaser
+                send_notification(
+                    user=holder.user,
+                    action=TICKET_PURCHASED_ATTENDEE,
+                    title=NOTIFS[TICKET_PURCHASED_ATTENDEE]['title'].format(
+                        event_name=order.event.name
+                    ),
+                    message=NOTIFS[TICKET_PURCHASED_ATTENDEE]['message'].format(
+                        pdf_url=holder.pdf_url
+                    )
                 )
-            )
-        else:
-            send_notification(
-                user=holder,
-                action=TICKET_PURCHASED,
-                title=NOTIFS[TICKET_PURCHASED]['title'].format(
-                    invoice_id=order.invoice_number
-                ),
-                message=NOTIFS[TICKET_PURCHASED]['message'].format(
-                    pdf_url=holder.pdf_url
+            else:
+                # The Ticket purchaser
+                send_notification(
+                    user=holder.user,
+                    action=TICKET_PURCHASED,
+                    title=NOTIFS[TICKET_PURCHASED]['title'].format(
+                        invoice_id=order.invoice_number
+                    ),
+                    message=NOTIFS[TICKET_PURCHASED]['message'].format(
+                        pdf_url=holder.pdf_url
+                    )
                 )
-            )
 
 
 def send_notif_ticket_cancel(order):

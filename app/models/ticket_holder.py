@@ -4,13 +4,11 @@ from io import BytesIO
 import qrcode
 
 from app.models import db
+from app.models.base import SoftDeletionModel
 
 
-class TicketHolder(db.Model):
+class TicketHolder(SoftDeletionModel):
     __tablename__ = "ticket_holders"
-    __table_args__ = (
-        db.UniqueConstraint('ticket_id', name='ticket_event'),
-        )
 
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String, nullable=False)
@@ -78,7 +76,8 @@ class TicketHolder(db.Model):
                  attendee_notes=None,
                  order_id=None,
                  pdf_url=None,
-                 event_id=None):
+                 event_id=None,
+                 deleted_at=None):
         self.firstname = firstname
         self.lastname = lastname
         self.email = email
@@ -109,6 +108,7 @@ class TicketHolder(db.Model):
         self.attendee_notes = attendee_notes
         self.pdf_url = pdf_url
         self.event_id = event_id
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<TicketHolder %r>' % self.id

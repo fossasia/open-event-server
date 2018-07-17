@@ -1,7 +1,8 @@
 from app.models import db
+from app.models.base import SoftDeletionModel
 
 
-class Microlocation(db.Model):
+class Microlocation(SoftDeletionModel):
     """Microlocation model class"""
     __tablename__ = 'microlocations'
     id = db.Column(db.Integer, primary_key=True)
@@ -19,13 +20,15 @@ class Microlocation(db.Model):
                  longitude=None,
                  floor=None,
                  event_id=None,
-                 room=None):
+                 room=None,
+                 deleted_at=None):
         self.name = name
         self.latitude = latitude
         self.longitude = longitude
         self.floor = floor
         self.event_id = event_id
         self.room = room
+        self.deleted_at = deleted_at
 
     @staticmethod
     def get_service_name():

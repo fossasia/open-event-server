@@ -11,7 +11,8 @@ from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from app.api.helpers.db import get_count
 from app.models import db
-from app.models.custom_system_role import UserSystemRole
+from app.models.base import SoftDeletionModel
+from app.models.custom_system_role import UserSystemRole, CustomSysRole
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.notification import Notification
 from app.models.panel_permission import PanelPermission
@@ -27,6 +28,9 @@ from app.models.users_events_role import UsersEventsRoles as UER
 ADMIN = 'admin'
 SUPERADMIN = 'super_admin'
 
+MARKETER = 'Marketer'
+SALES_ADMIN = 'Sales Admin'
+
 SYS_ROLES_LIST = [
     ADMIN,
     SUPERADMIN,
@@ -41,7 +45,7 @@ ATTENDEE = 'attendee'
 REGISTRAR = 'registrar'
 
 
-class User(db.Model):
+class User(SoftDeletionModel):
     """User model class"""
     __tablename__ = 'users'
 
@@ -67,14 +71,29 @@ class User(db.Model):
     is_super_admin = db.Column(db.Boolean, default=False)
     is_admin = db.Column(db.Boolean, default=False)
     is_verified = db.Column(db.Boolean, default=False)
+    has_accepted_cookie_policy = db.Column(db.Boolean, default=False)
     last_accessed_at = db.Column(db.DateTime(timezone=True))
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(pytz.utc))
-    deleted_at = db.Column(db.DateTime(timezone=True))
     speaker = db.relationship('Speaker', backref="user")
     session = db.relationship('Session', backref="user")
     feedback = db.relationship('Feedback', backref="user")
     access_codes = db.relationship('AccessCode', backref="user")
     discount_codes = db.relationship('DiscountCode', backref="user")
+    marketer_events = db.relationship(
+                          'Event',
+                          viewonly=True,
+                          secondary='join(UserSystemRole, CustomSysRole,'
+                                    ' and_(CustomSysRole.id == UserSystemRole.role_id, CustomSysRole.name == "Marketer"))',
+                          primaryjoin='UserSystemRole.user_id == User.id',
+                          secondaryjoin='Event.id == UserSystemRole.event_id'
+    )
+    sales_admin_events = db.relationship(
+                         'Event',
+                         viewonly=True,
+                         secondary='join(UserSystemRole, CustomSysRole,'
+                                   ' and_(CustomSysRole.id == UserSystemRole.role_id, CustomSysRole.name == "Sales Admin"))',
+                         primaryjoin='UserSystemRole.user_id == User.id',
+                         secondaryjoin='Event.id == UserSystemRole.event_id')
 
     @hybrid_property
     def password(self):
@@ -154,14 +173,39 @@ class User(db.Model):
         else:
             return True
 
-    def _is_role(self, role_name, event_id):
+    def _is_system_role(self, role_name):
+        """
+        Checks if a user has a particular Role.
+        """
+        role = CustomSysRole.query.filter_by(name=role_name).first()
+        ucsr = UserSystemRole.query.filter_by(user=self,
+                                              role=role).first()
+        if not ucsr:
+            return False
+        else:
+            return True
+
+    @hybrid_property
+    def is_marketer(self):
+        # type: (object) -> object
+        return self._is_system_role(MARKETER)
+
+    @hybrid_property
+    def is_sales_admin(self):
+        return self._is_system_role(SALES_ADMIN)
+
+    def _is_role(self, role_name, event_id=None):
         """
         Checks if a user has a particular Role at an Event.
         """
         role = Role.query.filter_by(name=role_name).first()
-        uer = UER.query.filter_by(user=self,
-                                  event_id=event_id,
-                                  role=role).first()
+        if event_id:
+            uer = UER.query.filter_by(user=self,
+                                      event_id=event_id,
+                                      role=role).first()
+        else:
+            uer = UER.query.filter_by(user=self,
+                                      role=role).first()
         if not uer:
             return False
         else:
@@ -185,6 +229,31 @@ class User(db.Model):
 
     def is_attendee(self, event_id):
         return self._is_role(ATTENDEE, event_id)
+
+    @hybrid_property
+    def is_user_organizer(self):
+        # type: (object) -> object
+        return self._is_role(ORGANIZER)
+
+    @hybrid_property
+    def is_user_coorganizer(self):
+        return self._is_role(COORGANIZER)
+
+    @hybrid_property
+    def is_user_track_organizer(self):
+        return self._is_role(TRACK_ORGANIZER)
+
+    @hybrid_property
+    def is_user_moderator(self):
+        return self._is_role(MODERATOR)
+
+    @hybrid_property
+    def is_user_registrar(self):
+        return self._is_role(REGISTRAR)
+
+    @hybrid_property
+    def is_user_attendee(self):
+        return self._is_role(ATTENDEE)
 
     def _has_perm(self, operation, service_class, event_id):
         # Operation names and their corresponding permission in `Permissions`
