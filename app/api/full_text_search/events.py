@@ -38,16 +38,16 @@ class EventSearchResultList(Resource):
             search = search.query('match', description=args['description'])
             search = search.highlight('description')
 
-        if args.get('location_name'):
+        if args.get('location-name'):
             search = search.query('fuzzy', location_name=args['location_name'])
             search = search.highlight('location_name')
 
-        if args.get('organizer_name'):
+        if args.get('organizer-name'):
             search = search.query(
                 'fuzzy', organizer_name=args['organizer_name'])
             search = search.highlight('organizer_name')
 
-        if args.get('organizer_description'):
+        if args.get('organizer-description'):
             search = search.query(
                 'fuzzy', organizer_description=args['organizer_description'])
             search = search.highlight('organizer_description')

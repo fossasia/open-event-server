@@ -23703,3 +23703,46 @@ Sends the token to verify the account associated with the provided email id via 
         {
           "message": "Verification email resent"
         }
+
+
+# Full-text search
+
+The full-text search uses `elasticsearch` and provides highlighting
+
+## Search events [/v1/auth/resend-verification-email]
+Retrieve all events that contain a certain word or phrase
+
++ Parameters
+    + name (optional, string, ``) - Filter by event name
+    + description (optional, string, ``) - Filter by event description
+    + location-name (optional, string, ``) - Filter by location name
+    + organizer-name (optional, string, ``) - Filter by organizer name
+    + organizer-description (optional, string, ``) - Filter by organizer description
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+
++ Response 200 (application/json)
+
+    [
+      {
+        "id": 1,
+        "name": "Test",
+        "description": "",
+        "location_name": "testlocation",
+        "meta": {
+          "index": "event",
+          "id": "1",
+          "score": 0.2876821,
+          "highlight": {
+            "location_name": [
+              "<em>testlocation</em>"
+            ]
+          },
+          "doc_type": "doc"
+        }
+      }
+    ]
