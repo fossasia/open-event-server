@@ -3881,6 +3881,16 @@ def delete_order(transaction):
     transaction['skip'] = True
 
 
+@hooks.before("Orders > Orders under an Event > List all Orders under an Event")
+def event_order_get_list(transaction):
+    """
+    GET /events/1/orders
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
 @hooks.before("Orders > Charge > Charge for an Order")
 def orders_charge(transaction):
     """
