@@ -7,6 +7,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy.orm.exc import NoResultFound
 
+from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
@@ -204,7 +205,7 @@ class OrderDetail(ResourceDetail):
         """
         if view_kwargs.get('attendee_id'):
             attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
-            view_kwargs['order_identifier'] = attendee.order.identifier
+            view_kwargs['id'] = attendee.order.id
         if view_kwargs.get('order_identifier'):
             order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
             view_kwargs['id'] = order.id
@@ -300,7 +301,9 @@ class OrderDetail(ResourceDetail):
         elif order.amount and order.amount > 0 and (order.status == 'completed' or order.status == 'placed'):
             raise ConflictException({'source': ''}, 'You cannot delete a placed/completed paid order.')
 
-    decorators = (jwt_required,)
+    # This is to ensure that the permissions manager runs and hence changes the kwarg from order identifier to id.
+    decorators = (jwt_required, api.has_permission(
+        'auth_required', methods="PATCH,DELETE", fetch="user_id", model=Order),)
 
     schema = OrderSchema
     data_layer = {'session': db.session,
@@ -317,6 +320,22 @@ class OrderRelationship(ResourceRelationship):
     """
     Order relationship
     """
+
+    def before_get(self, args, kwargs):
+        """
+        before get method to get the resource id for fetching details
+        :param view_kwargs:
+        :return:
+        """
+        if kwargs.get('order_identifier'):
+            order = safe_query(db, Order, 'identifier', kwargs['order_identifier'], 'order_identifier')
+            kwargs['id'] = order.id
+        elif kwargs.get('id'):
+            order = safe_query(db, Order, 'id', kwargs['id'], 'id')
+
+        if not has_access('is_coorganizer', event_id=order.event_id, user_id=order.user_id):
+            return ForbiddenException({'source': ''}, 'You can only access your orders or your event\'s orders')
+
     decorators = (jwt_required,)
     schema = OrderSchema
     data_layer = {'session': db.session,
