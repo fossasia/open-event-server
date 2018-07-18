@@ -6,6 +6,7 @@ from app.api.helpers.db import save_to_db, get_count
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.notification import send_notif_to_attendees, send_notif_ticket_purchase_organizer
+from app.api.helpers.order import delete_related_attendees_for_order
 from app.api.helpers.payment import StripePaymentsManager, PayPalPaymentsManager
 from app.models import db
 from app.models.ticket_fee import TicketFees
@@ -113,7 +114,14 @@ class TicketingManager(object):
 
             return True, order
         else:
-            # payment failed hence return the failure message from stripe.
+            # payment failed hence expire the order
+            order.status = 'expired'
+            save_to_db(order)
+
+            # delete related attendees to unlock the tickets
+            delete_related_attendees_for_order(order)
+
+            # return the failure message from stripe.
             return False, charge.failure_message
 
     @staticmethod
@@ -151,6 +159,14 @@ class TicketingManager(object):
 
                 return True, order
             else:
+                # payment failed hence expire the order
+                order.status = 'expired'
+                save_to_db(order)
+
+                # delete related attendees to unlock the tickets
+                delete_related_attendees_for_order(order)
+
+                # return the error message from Paypal
                 return False, capture_result['L_SHORTMESSAGE0']
         else:
             return False, 'Payer ID missing. Payment flow tampered.'

@@ -1,12 +1,16 @@
+import csv
+import json
 import os
 import requests
 import uuid
-import csv
+
 from flask import current_app, render_template
 from marrow.mailer import Mailer, Message
 
 from app import make_celery
 from app.api.helpers.utilities import strip_tags
+from app.models.session import Session
+from app.models.speaker import Speaker
 
 """
 Define all API v2 celery tasks here
@@ -40,10 +44,16 @@ celery = make_celery()
 
 @celery.task(name='send.email.post')
 def send_email_task(payload, headers):
+    data = {"personalizations": [{"to": []}]}
+    data["personalizations"][0]["to"].append({"email": payload["to"]})
+    data["from"] = {"email": payload["from"]}
+    data["subject"] = payload["subject"]
+    data["content"] = [{"type": "text/html", "value": payload["html"]}]
     requests.post(
-        "https://api.sendgrid.com/api/mail.send.json",
-        data=payload,
-        headers=headers
+        "https://api.sendgrid.com/v3/mail/send",
+        data=json.dumps(data),
+        headers=headers,
+        verify=False  # doesn't work with verification in celery context
     )
 
 
@@ -312,6 +322,64 @@ def export_attendees_pdf_task(self, event_id):
             UPLOAD_PATHS['exports-temp']['pdf'].format(event_id=event_id, identifier=''))
         result = {
             'download_url': attendees_pdf_url
+        }
+    except Exception as e:
+        print(traceback.format_exc())
+        result = {'__error': True, 'result': str(e)}
+
+    return result
+
+
+@celery.task(base=RequestContextTask, name='export.sessions.csv', bind=True)
+def export_sessions_csv_task(self, event_id):
+    sessions = db.session.query(Session).filter_by(event_id=event_id)
+    try:
+        filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
+        if not os.path.isdir(filedir):
+            os.makedirs(filedir)
+        filename = "sessions-{}.csv".format(uuid.uuid1().hex)
+        file_path = os.path.join(filedir, filename)
+
+        with open(file_path, "w") as temp_file:
+            writer = csv.writer(temp_file)
+            from app.api.helpers.csv_jobs_util import export_sessions_csv
+            content = export_sessions_csv(sessions)
+            for row in content:
+                writer.writerow(row)
+        sessions_csv_file = UploadedFile(file_path=file_path, filename=filename)
+        sessions_csv_url = upload(sessions_csv_file,
+                                  UPLOAD_PATHS['exports-temp']['csv'].format(event_id=event_id, identifier=''))
+        result = {
+            'download_url': sessions_csv_url
+        }
+    except Exception as e:
+        print(traceback.format_exc())
+        result = {'__error': True, 'result': str(e)}
+
+    return result
+
+
+@celery.task(base=RequestContextTask, name='export.speakers.csv', bind=True)
+def export_speakers_csv_task(self, event_id):
+    speakers = db.session.query(Speaker).filter_by(event_id=event_id)
+    try:
+        filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
+        if not os.path.isdir(filedir):
+            os.makedirs(filedir)
+        filename = "speakers-{}.csv".format(uuid.uuid1().hex)
+        file_path = os.path.join(filedir, filename)
+
+        with open(file_path, "w") as temp_file:
+            writer = csv.writer(temp_file)
+            from app.api.helpers.csv_jobs_util import export_speakers_csv
+            content = export_speakers_csv(speakers)
+            for row in content:
+                writer.writerow(row)
+        speakers_csv_file = UploadedFile(file_path=file_path, filename=filename)
+        speakers_csv_url = upload(speakers_csv_file,
+                                  UPLOAD_PATHS['exports-temp']['csv'].format(event_id=event_id, identifier=''))
+        result = {
+            'download_url': speakers_csv_url
         }
     except Exception as e:
         print(traceback.format_exc())

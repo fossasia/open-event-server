@@ -114,7 +114,7 @@ NOTIFS = {
     },
     TICKET_CANCELLED: {
         'recipient': 'User',
-        'subject': u'Your order for {event_name} has been cancelled ({invoice_id})',
+        'title': u'Your order for {event_name} has been cancelled ({invoice_id})',
         'message': (
             u"Your order for {event_name} has been cancelled by the organizer"
             u"<br/>Please contact the organizer for more info" +
@@ -123,7 +123,7 @@ NOTIFS = {
     },
     TICKET_CANCELLED_ORGANIZER: {
         'recipient': 'User',
-        'subject': u'Order ({invoice_id}) has been cancelled',
+        'title': u'Order ({invoice_id}) has been cancelled',
         'message': (
             u"Order ({invoice_id}) has been cancelled"
             u"<br/>Cancel Note: {cancel_note}."

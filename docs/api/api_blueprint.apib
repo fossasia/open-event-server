@@ -83,6 +83,12 @@ Get a list of Users.
                                 "related": "/v1/users/3/attendees"
                             }
                         },
+                        "orders": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/orders",
+                                "related": "/v1/users/2/orders"
+                            }
+                        },
                         "email-notifications": {
                             "links": {
                                 "self": "/v1/users/2/relationships/email-notifications",
@@ -131,6 +137,18 @@ Get a list of Users.
                                 "related": "/v1/events"
                             }
                         },
+                        "marketer-events": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/marketer-events",
+                                "related": "/v1/events"
+                            }
+                        },
+                        "sales-admin-events": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/sales-admin-events",
+                                "related": "/v1/events"
+                            }
+                        },
                         "access-codes": {
                             "links": {
                                 "self": "/v1/users/2/relationships/access-codes",
@@ -155,6 +173,8 @@ Get a list of Users.
                         "last-name": "Doe",
                         "instagram-url": "http://instagram.com/instagram",
                         "is-super-admin": false,
+                        "is-sales-admin": false,
+                        "is-marketer": false,
                         "thumbnail-image-url": "http://example.com/example.png",
                         "created-at": "2017-06-21T20:33:33.186358+00:00",
                         "last-accessed-at": null,
@@ -235,6 +255,12 @@ Create a new user using an email, password and an optional name.
                             "related": "/v1/users/3/attendees"
                         }
                     },
+                    "orders": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/orders",
+                            "related": "/v1/users/1/orders"
+                        }
+                    },
                     "email-notifications": {
                         "links": {
                             "self": "/v1/users/2/relationships/email-notifications",
@@ -271,6 +297,18 @@ Create a new user using an email, password and an optional name.
                             "related": "/v1/events"
                         }
                     },
+                    "marketer-events": {
+                         "links": {
+                            "self": "/v1/users/2/relationships/marketer-events",
+                            "related": "/v1/events"
+                        }
+                     },
+                     "sales-admin-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/sales-admin-events",
+                            "related": "/v1/events"
+                        }
+                     },
                     "notifications": {
                         "links": {
                             "self": "/v1/users/2/relationships/notifications",
@@ -307,6 +345,8 @@ Create a new user using an email, password and an optional name.
                     "last-name": "Doe",
                     "instagram-url": "http://instagram.com/instagram",
                     "is-super-admin": false,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "thumbnail-image-url": "http://example.com/example.png",
                     "created-at": "2017-06-21T20:33:33.186358+00:00",
                     "last-accessed-at": null,
@@ -363,6 +403,12 @@ Get a single user.
                             "related": "/v1/users/3/attendees"
                         }
                     },
+                    "orders": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/orders",
+                            "related": "/v1/users/1/orders"
+                        }
+                    },
                     "email-notifications": {
                         "links": {
                             "self": "/v1/users/2/relationships/email-notifications",
@@ -387,6 +433,18 @@ Get a single user.
                             "related": "/v1/events"
                         }
                     },
+                    "marketer-events": {
+                         "links": {
+                            "self": "/v1/users/2/relationships/marketer-events",
+                            "related": "/v1/events"
+                        }
+                     },
+                     "sales-admin-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/sales-admin-events",
+                            "related": "/v1/events"
+                        }
+                     },
                     "speakers": {
                         "links": {
                             "self": "/v1/users/2/relationships/speakers",
@@ -435,6 +493,8 @@ Get a single user.
                     "last-name": "Doe",
                     "instagram-url": "http://instagram.com/instagram",
                     "is-super-admin": false,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "thumbnail-image-url": "http://example.com/example.png",
                     "created-at": "2017-06-21T20:33:33.186358+00:00",
                     "last-accessed-at": null,
@@ -514,6 +574,12 @@ Authorized user should be same as user in request body or must be admin.
                             "related": "/v1/users/3/attendees"
                         }
                     },
+                    "orders": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/orders",
+                            "related": "/v1/users/1/orders"
+                        }
+                    },
                     "email-notifications": {
                         "links": {
                             "self": "/v1/users/2/relationships/email-notifications",
@@ -550,6 +616,18 @@ Authorized user should be same as user in request body or must be admin.
                             "related": "/v1/events"
                         }
                     },
+                    "marketer-events": {
+                         "links": {
+                            "self": "/v1/users/2/relationships/marketer-events",
+                            "related": "/v1/events"
+                        }
+                     },
+                     "sales-admin-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/sales-admin-events",
+                            "related": "/v1/events"
+                        }
+                     },
                     "notifications": {
                         "links": {
                             "self": "/v1/users/2/relationships/notifications",
@@ -586,6 +664,8 @@ Authorized user should be same as user in request body or must be admin.
                     "last-name": "Doe",
                     "instagram-url": "http://instagram.com/instagram",
                     "is-super-admin": false,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "thumbnail-image-url": "http://example.com/example.png",
                     "created-at": "2017-06-21T20:33:33.186358+00:00",
                     "last-accessed-at": null,
@@ -668,6 +748,12 @@ Get the details of the user.
                             "related": "/v1/users/1/notifications"
                         }
                     },
+                    "orders": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/orders",
+                            "related": "/v1/users/1/orders"
+                        }
+                    },
                     "discount-codes": {
                         "links": {
                             "self": "/v1/users/1/relationships/discount-codes",
@@ -700,6 +786,8 @@ Get the details of the user.
                     "icon-image-url": null,
                     "instagram-url": null,
                     "is-super-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "original-image-url": null,
                     "created-at": "2017-07-21T15:06:20.741290+00:00",
                     "last-accessed-at": null,
@@ -765,6 +853,12 @@ Get the details of the user.
                             "related": "/v1/users/1/notifications"
                         }
                     },
+                    "orders": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/orders",
+                            "related": "/v1/users/1/orders"
+                        }
+                    },
                     "discount-codes": {
                         "links": {
                             "self": "/v1/users/1/relationships/discount-codes",
@@ -797,6 +891,8 @@ Get the details of the user.
                     "icon-image-url": null,
                     "instagram-url": null,
                     "is-super-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "original-image-url": null,
                     "created-at": "2017-07-21T15:06:20.741290+00:00",
                     "last-accessed-at": null,
@@ -862,6 +958,12 @@ Get the details of the user.
                             "related": "/v1/users/1/notifications"
                         }
                     },
+                    "orders": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/orders",
+                            "related": "/v1/users/1/orders"
+                        }
+                    },
                     "discount-codes": {
                         "links": {
                             "self": "/v1/users/1/relationships/discount-codes",
@@ -889,6 +991,8 @@ Get the details of the user.
                 },
                 "attributes": {
                     "is-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "thumbnail-image-url": null,
                     "last-name": null,
                     "icon-image-url": null,
@@ -959,6 +1063,12 @@ Get the details of the user.
                             "related": "/v1/users/1/notifications"
                         }
                     },
+                    "orders": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/orders",
+                            "related": "/v1/users/1/orders"
+                        }
+                    },
                     "discount-codes": {
                         "links": {
                             "self": "/v1/users/1/relationships/discount-codes",
@@ -991,6 +1101,8 @@ Get the details of the user.
                     "icon-image-url": null,
                     "instagram-url": null,
                     "is-super-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "original-image-url": null,
                     "created-at": "2017-07-21T15:06:20.741290+00:00",
                     "last-accessed-at": null,
@@ -1056,6 +1168,12 @@ Get the details of the user.
                             "related": "/v1/users/1/notifications"
                         }
                     },
+                    "orders": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/orders",
+                            "related": "/v1/users/1/orders"
+                        }
+                    },
                     "discount-codes": {
                         "links": {
                             "self": "/v1/users/1/relationships/discount-codes",
@@ -1083,6 +1201,8 @@ Get the details of the user.
                 },
                 "attributes": {
                     "is-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "thumbnail-image-url": null,
                     "last-name": null,
                     "icon-image-url": null,
@@ -1153,6 +1273,12 @@ Get the details of the user.
                             "related": "/v1/users/1/notifications"
                         }
                     },
+                    "orders": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/orders",
+                            "related": "/v1/users/1/orders"
+                        }
+                    },
                     "discount-codes": {
                         "links": {
                             "self": "/v1/users/1/relationships/discount-codes",
@@ -1180,6 +1306,8 @@ Get the details of the user.
                 },
                 "attributes": {
                     "is-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "thumbnail-image-url": null,
                     "last-name": null,
                     "icon-image-url": null,
@@ -1213,6 +1341,117 @@ Get the details of the user.
                 "self": "/v1/users/1"
             }
         }
+
+## Check if the email is available [/v1/users/checkEmail]
+Check if the email passed is available or not. True is returned if the email is available, false otherwise.
+
+
+### Check if email is available [POST]
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+
+    + Body
+
+            {
+                "email": "test@example.com"
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "result": "True"
+        }
+
+
+# Group Event Locations
+
+Event Locations for Events.
+
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `name`  | Name of the event type | string | - |
+| `slug` | Slug of the event type | string | - |
+
+
+## Event Locations Collection [/v1/event-locations{?page%5bsize%5d,page%5bnumber%5d,sort}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+
+### List All Event Locations [GET]
+Get a list of Event Locations.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": [
+            {
+              "type": "event-location",
+              "attributes": {
+                "slug": "india",
+                "name": "India"
+              },
+              "id": "1"
+            },
+            {
+              "type": "event-location",
+              "attributes": {
+                "slug": "singapore",
+                "name": "Singapore"
+              },
+              "id": "2"
+            },
+            {
+              "type": "event-location",
+              "attributes": {
+                "slug": "berlin",
+                "name": "Berlin"
+              },
+              "id": "3"
+            },
+            {
+              "type": "event-location",
+              "attributes": {
+                "slug": "new-york",
+                "name": "New York"
+              },
+              "id": "4"
+            },
+            {
+              "type": "event-location",
+              "attributes": {
+                "slug": "hong-kong",
+                "name": "Hong Kong"
+              },
+              "id": "5"
+            }
+          ],
+          "links": {
+            "self": "/v1/event-locations"
+          },
+          "meta": {
+            "count": 5
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
 
 
 # Group Event Types
@@ -12535,7 +12774,8 @@ Create a new social link using event_id.
                 },
                 "attributes": {
                   "name": "Facebook Url",
-                  "link": "http://facebook.com/facebook"
+                  "link": "http://facebook.com/facebook",
+                  "identifier": "example"
                 },
                 "type": "social-link"
               }
@@ -12556,7 +12796,8 @@ Create a new social link using event_id.
             "attributes": {
               "link": "http://facebook.com/facebook",
               "deleted-at": null,
-              "name": "Facebook Url"
+              "name": "Facebook Url",
+              "identifier": "example"
             },
             "type": "social-link",
             "id": "1",
@@ -12611,7 +12852,8 @@ Get a list of Social Links.
               "attributes": {
                 "link": "http://facebook.com/facebook",
                 "deleted-at": null,
-                "name": "Facebook Url"
+                "name": "Facebook Url",
+                "identifier": "example"
               },
               "type": "social-link",
               "id": "1",
@@ -12657,7 +12899,8 @@ Get a list of Social Links.
             "attributes": {
               "link": "http://facebook.com/facebook",
               "deleted-at": null,
-              "name": "Facebook Url"
+              "name": "Facebook Url",
+              "identifier": "example"
             },
             "type": "social-link",
             "id": "1",
@@ -12691,7 +12934,8 @@ Update a single social link by `id`.
               "data": {
                 "attributes": {
                   "name": "Facebook Page Url",
-                  "link": "http://facebook.com/facebook"
+                  "link": "http://facebook.com/facebook",
+                  "identifier": "example"
                 },
                 "type": "social-link",
                 "id": "1"
@@ -12713,7 +12957,8 @@ Update a single social link by `id`.
             "attributes": {
               "link": "http://facebook.com/facebook",
               "deleted-at": null,
-              "name": "Facebook Page Url"
+              "name": "Facebook Page Url",
+              "identifier": "example"
             },
             "type": "social-link",
             "id": "1",
@@ -13784,6 +14029,12 @@ Create a new ticket using an event_id.
                             "self": "/v1/tickets/1/relationships/event",
                             "related": "/v1/tickets/1/event"
                         }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/tickets/1/relationships/discount-codes",
+                            "related": "/v1/tickets/1/discount-codes"
+                        }
                     }
                 },
                 "attributes": {
@@ -13849,6 +14100,12 @@ Get a single ticket.
                         "links": {
                             "self": "/v1/tickets/1/relationships/access-codes",
                             "related": "/v1/tickets/1/access-codes"
+                        }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/tickets/1/relationships/discount-codes",
+                            "related": "/v1/tickets/1/discount-codes"
                         }
                     },
                     "event": {
@@ -13943,6 +14200,12 @@ Update a single ticket by `id`.
                         "links": {
                             "self": "/v1/tickets/1/relationships/access-codes",
                             "related": "/v1/tickets/1/access-codes"
+                        }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/tickets/1/relationships/discount-codes",
+                            "related": "/v1/tickets/1/discount-codes"
                         }
                     },
                     "event": {
@@ -14048,6 +14311,12 @@ Delete a single ticket.
                                 "related": "/v1/tickets/1/access-codes"
                             }
                         },
+                        "discount-codes": {
+                            "links": {
+                                "self": "/v1/tickets/1/relationships/discount-codes",
+                                "related": "/v1/tickets/1/discount-codes"
+                            }
+                        },
                         "event": {
                             "links": {
                                 "self": "/v1/tickets/1/relationships/event",
@@ -14128,6 +14397,12 @@ Delete a single ticket.
                             "links": {
                                 "self": "/v1/tickets/1/relationships/access-codes",
                                 "related": "/v1/tickets/1/access-codes"
+                            }
+                        },
+                        "discount-codes": {
+                            "links": {
+                                "self": "/v1/tickets/1/relationships/discount-codes",
+                                "related": "/v1/tickets/1/discount-codes"
                             }
                         },
                         "event": {
@@ -14212,6 +14487,12 @@ Delete a single ticket.
                                 "related": "/v1/tickets/1/access-codes"
                             }
                         },
+                        "discount-codes": {
+                            "links": {
+                                "self": "/v1/tickets/1/relationships/discount-codes",
+                                "related": "/v1/tickets/1/discount-codes"
+                            }
+                        },
                         "event": {
                             "links": {
                                 "self": "/v1/tickets/1/relationships/event",
@@ -14252,6 +14533,96 @@ Delete a single ticket.
             }
         }
 
+## List Tickets for a Discount Code [/v1/discount-codes/{discount_code_id}/tickets{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + discount_code_id: 1 (integer) - ID of the discount code in the form of an integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `sales-starts-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+
+### List Tickets [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": [
+                {
+                    "type": "ticket",
+                    "attributes": {
+                        "sales-ends-at": "2017-06-30T00:24:47.500127+00:00",
+                        "type": "VIP-ticket",
+                        "price": 100,
+                        "quantity": 100,
+                        "is-description-visible": false,
+                        "deleted-at": null,
+                        "name": "some-ticket-name",
+                        "max-order": 100,
+                        "min-order": 1,
+                        "description": "some description",
+                        "sales-starts-at": "2017-06-01T01:24:47.500127+00:00",
+                        "is-hidden": false,
+                        "is-fee-absorbed": false,
+                        "position": 1
+                    },
+                    "relationships": {
+                        "attendees": {
+                            "links": {
+                                "self": "/v1/tickets/1/relationships/attendees",
+                                "related": "/v1/attendees?ticket_id=1"
+                            }
+                        },
+                        "access-codes": {
+                            "links": {
+                                "self": "/v1/tickets/1/relationships/access-codes",
+                                "related": "/v1/tickets/1/access-codes"
+                            }
+                        },
+                        "discount-codes": {
+                            "links": {
+                                "self": "/v1/tickets/1/relationships/discount-codes",
+                                "related": "/v1/tickets/1/discount-codes"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/tickets/1/relationships/event",
+                                "related": "/v1/tickets/1/event"
+                            }
+                        },
+                        "ticket-tags": {
+                            "links": {
+                                "self": "/v1/tickets/1/relationships/ticket-tags",
+                                "related": "/v1/tickets/1/ticket-tags"
+                            }
+                        }
+                    },
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/tickets/1"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/discount-codes/1/tickets"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
 ## List Tickets for an Order [/v1/orders/{order_identifier}/tickets]
 + Parameters
     + order_identifier: 7201904e (string) - Indetifier of the order
@@ -14286,6 +14657,12 @@ Delete a single ticket.
                     "self": "/v1/tickets/1/relationships/event",
                     "related": "/v1/tickets/1/event"
                   }
+                },
+                "discount-codes": {
+                    "links": {
+                        "self": "/v1/tickets/1/relationships/discount-codes",
+                        "related": "/v1/tickets/1/discount-codes"
+                    }
                 }
               },
               "attributes": {
@@ -14674,6 +15051,32 @@ Related to ticket holders(attendees) of an event (free, paid, donation) to the e
 | `checkin-times` | Comma separated checkin times | string | - |
 | `attendee-notes` | Comma separated attendee notes | string | - |
 | `pdf-url` | pdf url of the Attendee | url | - |
+
+## Send order receipts [v1/attendees/send-receipt]
+
+### Send email receipts to attendees [POST]
+Send order receipts to attendees via email (requires organizer access).
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "order-identifier": "xyz789"
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "message": "receipt sent to attendees"
+        }
 
 ## Attendees Collection [/v1/attendees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -16184,7 +16587,6 @@ Discount Codes related to the events.
 | `valid-from` | Discount Code valid from | ISO 8601 (tz-aware) | - |
 | `valid-till` | Discount Code valid till | ISO 8601 (tz-aware) | - |
 | `created-at` | Discount Code created at | ISO 8601 (tz-aware) | - |
-| `tickets` | Event or Ticket | String | - |
 | `used-for` | Discount Code used for: tickets or events | String | **yes** |
 
 
@@ -16229,7 +16631,6 @@ Get a list of Discount Codes.
                         }
                     },
                     "attributes": {
-                        "tickets": "event",
                         "code": "DC101",
                         "valid-from": "2017-06-18T18:30:00+00:00",
                         "min-quantity": 0,
@@ -16252,21 +16653,20 @@ Get a list of Discount Codes.
                 },
                 {
                     "relationships": {
-                        "events": {
-                            "links": {
-                                "self": "/v1/discount-codes/2/relationships/events",
-                                "related": "/v1/discount-codes/2/events"
-                            }
-                        },
                         "event": {
                             "links": {
                                 "self": "/v1/discount-codes/2/relationships/event",
                                 "related": "/v1/discount-codes/2/event"
                             }
+                        },
+                        "tickets": {
+                            "links": {
+                                "self": "/v1/discount-codes/1/relationships/tickets",
+                                "related": "/v1/discount-codes/1/tickets"
+                            }
                         }
                     },
                     "attributes": {
-                        "tickets": "event",
                         "code": "DC101",
                         "valid-from": "2017-06-18T18:30:00+00:00",
                         "min-quantity": 0,
@@ -16321,8 +16721,7 @@ Create a new Discount Code for event. (Only Admin)
                   "max-quantity": "100",
                   "valid-from": "2017-06-18T18:30:00+00:00",
                   "valid-till": "2017-06-24T18:30:00+00:00",
-                  "used-for": "event",
-                  "tickets": "event"
+                  "used-for": "event"
                 },
                 "type": "discount-code",
                 "relationships": {
@@ -16346,10 +16745,15 @@ Create a new Discount Code for event. (Only Admin)
                             "self": "/v1/discount-codes/4/relationships/events",
                             "related": "/v1/discount-codes/4/events"
                         }
+                    },
+                    "tickets": {
+                        "links": {
+                            "self": "/v1/discount-codes/1/relationships/tickets",
+                            "related": "/v1/discount-codes/1/tickets"
+                        }
                     }
                 },
                 "attributes": {
-                    "tickets": "event",
                     "code": "DC101",
                     "valid-from": "2017-06-18T18:30:00+00:00",
                     "min-quantity": 0,
@@ -16378,7 +16782,6 @@ Create a new Discount Code for event. (Only Admin)
             }
         }
 
-
 ## Ticket Discount Code Collection [/v1/events/{event_identifier}/discount-codes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
@@ -16386,6 +16789,103 @@ Create a new Discount Code for event. (Only Admin)
     + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
     + sort (optional, string, `code`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### Create Ticket Discount Code [POST]
+Create a new Discount Code for event. (Only by Co-organizers)
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "code": "DC101",
+                  "discount-url": "https://my-discount-url.com",
+                  "value": "100",
+                  "type": "amount",
+                  "is-active": "false",
+                  "tickets-number": "404",
+                  "min-quantity": "0",
+                  "max-quantity": "100",
+                  "valid-from": "2017-06-18T18:30:00+00:00",
+                  "valid-till": "2017-06-24T18:30:00+00:00",
+                  "used-for": "ticket"
+                },
+                "type": "discount-code",
+                "relationships": {
+                  "event": {
+                    "data": {
+                      "id": "1",
+                      "type": "event"
+                    }
+                  },
+                  "tickets": {
+                    "data": [{
+                      "id": "1",
+                      "type": "ticket"
+                    }]
+                  }
+                }
+              }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "type": "discount-code",
+                "id": 1,
+                "attributes": {
+                    "discount-url": "https://my-discount-url.com",
+                    "deleted-at": null,
+                    "used-for": "ticket",
+                    "min-quantity": 0,
+                    "value": 100,
+                    "max-quantity": 100,
+                    "valid-till": "2017-06-24T18:30:00+00:00",
+                    "is-active": false,
+                    "type": "amount",
+                    "code": "DC101",
+                    "valid-from": "2017-06-18T18:30:00+00:00",
+                    "tickets-number": 404,
+                    "created-at": "2018-06-26T16:03:33.494021+00:00"
+                },
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/discount-codes/1/relationships/event",
+                            "related": "/v1/discount-codes/1/event"
+                        }
+                    },
+                    "tickets": {
+                        "links": {
+                            "self": "/v1/discount-codes/1/relationships/tickets",
+                            "related": "/v1/discount-codes/1/tickets"
+                        }
+                    },
+                    "marketer": {
+                        "links": {
+                            "self": "/v1/discount-codes/1/relationships/marketer",
+                            "related": "/v1/discount-codes/1/marketer"
+                        }
+                    }
+                },
+                "links": {
+                    "self": "/v1/discount-codes/1"
+                }
+            },
+            "links": {
+                "self": "/v1/discount-codes/1"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
 
 ### List All Ticket Discount Codes [GET]
 Get a list of Discount Codes.
@@ -16412,10 +16912,15 @@ Get a list of Discount Codes.
                               "self": "/v1/discount-codes/1/relationships/event",
                               "related": "/v1/discount-codes/1/event"
                           }
+                      },
+                      "tickets": {
+                            "links": {
+                                "self": "/v1/discount-codes/1/relationships/tickets",
+                                "related": "/v1/discount-codes/1/tickets"
+                            }
                       }
                   },
                   "attributes": {
-                      "tickets": "event",
                       "code": "DC101",
                       "valid-from": "2017-06-18T18:30:00+00:00",
                       "min-quantity": 0,
@@ -16471,10 +16976,15 @@ Get a single discount code.
                             "self": "/v1/discount-codes/1/relationships/events",
                             "related": "/v1/discount-codes/1/events"
                         }
+                    },
+                    "tickets": {
+                        "links": {
+                            "self": "/v1/discount-codes/1/relationships/tickets",
+                            "related": "/v1/discount-codes/1/tickets"
+                        }
                     }
                 },
                 "attributes": {
-                    "tickets": "event",
                     "code": "DC101",
                     "valid-from": "2017-06-18T18:30:00+00:00",
                     "min-quantity": 0,
@@ -16483,7 +16993,7 @@ Get a single discount code.
                     "value": 100,
                     "max-quantity": 100,
                     "is-active": false,
-                    "used-for": "event",
+                    "used-for": "ticket",
                     "deleted-at": null,
                     "valid-till": "2017-06-24T18:30:00+00:00",
                     "type": "amount",
@@ -16530,8 +17040,7 @@ Update a single discount code with `id` (Check permission to edit).
                   "max-quantity": "100",
                   "valid-from": "2017-06-18T18:30:00+00:00",
                   "valid-till": "2017-06-24T18:30:00+00:00",
-                  "used-for": "event",
-                  "tickets": "event"
+                  "used-for": "ticket"
                 },
                 "type": "discount-code",
                 "id": "1"
@@ -16548,10 +17057,21 @@ Update a single discount code with `id` (Check permission to edit).
                   "self": "/v1/discount-codes/1/relationships/events",
                   "related": "/v1/discount-codes/1/events"
                 }
+              },
+              "marketer": {
+                "links": {
+                    "self": "/v1/discount-codes/1/relationships/marketer",
+                    "related": "/v1/discount-codes/1/marketer"
+                }
+              },
+              "tickets": {
+                "links": {
+                    "self": "/v1/discount-codes/1/relationships/tickets",
+                    "related": "/v1/discount-codes/1/tickets"
+                }
               }
             },
             "attributes": {
-              "tickets": "event",
               "code": "DC101",
               "valid-from": "2017-06-18T18:30:00+00:00",
               "min-quantity": 0,
@@ -16561,7 +17081,7 @@ Update a single discount code with `id` (Check permission to edit).
               "max-quantity": 100,
               "is-active": false,
               "deleted-at": null,
-              "used-for": "event",
+              "used-for": "ticket",
               "valid-till": "2017-06-24T18:30:00+00:00",
               "type": "percent",
               "discount-url": "https://my-discount-url.com"
@@ -16630,7 +17150,6 @@ Get a single discount code using a code.
                     }
                 },
                 "attributes": {
-                    "tickets": "event",
                     "code": "DC101",
                     "valid-from": "2017-06-18T18:30:00+00:00",
                     "min-quantity": 0,
@@ -16693,10 +17212,15 @@ Get a list of Discount Codes.
                                 "self": "/v1/discount-codes/1/relationships/event",
                                 "related": "/v1/discount-codes/1/event"
                             }
+                        },
+                        "tickets": {
+                            "links": {
+                                "self": "/v1/discount-codes/1/relationships/tickets",
+                                "related": "/v1/discount-codes/1/tickets"
+                            }
                         }
                     },
                     "attributes": {
-                        "tickets": "event",
                         "code": "DC101",
                         "valid-from": "2017-06-18T18:30:00+00:00",
                         "min-quantity": 0,
@@ -16726,6 +17250,82 @@ Get a list of Discount Codes.
             }
         }
 
+## List Discount Codes under a Ticket [/v1/tickets/{ticket_id}/discount-codes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + ticket_id: 1 (string) - user id in the form of an integer.
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `code`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List All Discount Codes under a Ticket [GET]
+Get a list of Discount Codes applied on a given ticket.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": [
+                {
+                    "type": "discount-code",
+                    "relationships": {
+                        "tickets": {
+                            "links": {
+                                "self": "/v1/discount-codes/1/relationships/tickets",
+                                "related": "/v1/discount-codes/1/tickets"
+                            }
+                        },
+                        "marketer": {
+                            "links": {
+                                "self": "/v1/discount-codes/1/relationships/marketer",
+                                "related": "/v1/discount-codes/1/marketer"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/discount-codes/1/relationships/event",
+                                "related": "/v1/discount-codes/1/event"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "value": 100,
+                        "created-at": "2018-06-26T16:03:33.494021+00:00",
+                        "tickets-number": 404,
+                        "code": "DC101",
+                        "used-for": "ticket",
+                        "is-active": false,
+                        "max-quantity": 100,
+                        "discount-url": "https://my-discount-url.com",
+                        "type": "amount",
+                        "min-quantity": 0,
+                        "valid-from": "2017-06-18T18:30:00+00:00",
+                        "valid-till": "2017-06-24T18:30:00+00:00",
+                        "deleted-at": null
+                    },
+                    "id": 1,
+                    "links": {
+                        "self": "/v1/discount-codes/1"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/tickets/1/discount-codes"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
 
 ## Get Discount Code Detail of an Event [/v1/events/{event_identifier}/discount-code]
 + Parameters
@@ -16752,10 +17352,15 @@ Get a single discount code.
                             "self": "/v1/discount-codes/1/relationships/event",
                             "related": "/v1/discount-codes/1/event"
                         }
+                    },
+                    "events": {
+                        "links": {
+                            "self": "/v1/discount-codes/1/relationships/events",
+                            "related": "/v1/discount-codes/1/events"
+                        }
                     }
                 },
                 "attributes": {
-                    "tickets": "event",
                     "code": "DC101",
                     "valid-from": "2017-06-18T18:30:00+00:00",
                     "min-quantity": 0,
@@ -16810,10 +17415,15 @@ Get a single discount code. (Requires admin access)
                             "self": "/v1/discount-codes/1/relationships/event",
                             "related": "/v1/discount-codes/1/event"
                         }
+                    },
+                    "events": {
+                        "links": {
+                            "self": "/v1/discount-codes/1/relationships/events",
+                            "related": "/v1/discount-codes/1/events"
+                        }
                     }
                 },
                 "attributes": {
-                    "tickets": "event",
                     "code": "DC101",
                     "valid-from": "2017-06-18T18:30:00+00:00",
                     "min-quantity": 0,
@@ -18529,6 +19139,165 @@ Update a single event role permission by `id` (only admin).
                 },
                 "links": {
                     "self": "/v1/event-role-permissions/1"
+                }
+            }
+
+
+# Group Message Settings
+
+**ADMIN**
+
+To get or modify data of this data layer, you will need admin access. You can get the data without admin access as well.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `action`  | Action of the message | string | - |
+| `mail-status`  | Status of Mail | boolean | - |
+| `notification-status`  | Status of Notification | boolean | - |
+| `user-control-status`  | Status of User Control | boolean | - |
+| `email-message`  | Message of the Email | string | - |
+| `notification-message`  | Message of the Notification | string | - |
+
+## Message Setting Collection [/v1/message-settings{?page%5bsize%5d,page%5bnumber%5d,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response..
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List Message Settings [GET]
+Get a list of Message Settings.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "attributes": {
+                        "mail-status": true,
+                        "notification-status": true,
+                        "user-control-status": true,
+                        "action": "After Event",
+                        "email-message": "{'sent_at': '1 day after the event', 'recipient': 'Organizer, Speaker', 'message': 'Hi {email},<br/>Thank You for participating in our event. We hope you enjoyed it. Please check the list of more upcoming eventsHere are the upcoming events: {upcoming_events} .Get ready!! ', 'subject': 'Event {event_name} is over'}",
+                        "notification-message": "{'sent_at': '1 day after the event', 'recipient': 'Organizer, Speaker', 'message': 'Hi {email},<br/>Thank You for participating in our event. We hope you enjoyed it. Please check the list of more upcoming eventsHere are the upcoming events: {upcoming_events} .Get ready!! ', 'subject': 'Event {event_name} is over'}"
+                    },
+                    "type": "message-settings",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/message-settings/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/message-settings"
+            }
+        }
+
+
+## Message Setting Details [/v1/message-settings/{message_settings_id}]
++ Parameters
+    + message_settings_id: 1 (integer) - ID of the message setting in the form of an integer
+
+### Get Message Setting Details [GET]
+Get a single message setting.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "data": {
+            "attributes": {
+                "mail-status": true,
+                "notification-status": true,
+                "user-control-status": true,
+                "action": "After Event",
+                "email-message": "{'sent_at': '1 day after the event', 'recipient': 'Organizer, Speaker', 'message': 'Hi {email},<br/>Thank You for participating in our event. We hope you enjoyed it. Please check the list of more upcoming eventsHere are the upcoming events: {upcoming_events} .Get ready!! ', 'subject': 'Event {event_name} is over'}",
+                "notification-message": "{'sent_at': '1 day after the event', 'recipient': 'Organizer, Speaker', 'message': 'Hi {email},<br/>Thank You for participating in our event. We hope you enjoyed it. Please check the list of more upcoming eventsHere are the upcoming events: {upcoming_events} .Get ready!! ', 'subject': 'Event {event_name} is over'}"
+            },
+            "type": "message-setting",
+            "id": "1",
+            "links": {
+              "self": "/v1/message-settings/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/message-settings/1"
+          }
+        }
+
+
+### Update Message Setting [PATCH]
+Update a single message setting by `id` (only admin).
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "mail-status": true,
+                  "notification-status": true,
+                  "user-control-status": true,
+                  "action": "After Event"
+            },
+                "id": "1",
+                "type": "message-setting"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+            {
+                "data": {
+                    "attributes": {
+                        "mail-status": true,
+                        "notification-status": true,
+                        "user-control-status": true,
+                        "action": "After Event",
+                        "email-message": "{'sent_at': '1 day after the event', 'recipient': 'Organizer, Speaker', 'message': 'Hi {email},<br/>Thank You for participating in our event. We hope you enjoyed it. Please check the list of more upcoming eventsHere are the upcoming events: {upcoming_events} .Get ready!! ', 'subject': 'Event {event_name} is over'}",
+                        "notification-message": "{'sent_at': '1 day after the event', 'recipient': 'Organizer, Speaker', 'message': 'Hi {email},<br/>Thank You for participating in our event. We hope you enjoyed it. Please check the list of more upcoming eventsHere are the upcoming events: {upcoming_events} .Get ready!! ', 'subject': 'Event {event_name} is over'}"
+                    },
+                    "type": "message-setting",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/message-settings/1"
+                    }
+                },
+                "jsonapi": {
+                    "version": "1.0"
+                },
+                "links": {
+                    "self": "/v1/message-settings/1"
                 }
             }
 
@@ -21321,6 +22090,48 @@ to get the status of the export task.
             "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
         }
 
+## Start Sessions Export as CSV [/v1/events/{event_identifier}/export/sessions/csv]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+Start a celery task to export the list of sessions of the event with that event_id as a CSV file to get it ready for downloading. Returns the task url
+to get the status of the export task.
+
+
+### Start a Task to Export Sessions of an Event as CSV [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
+
+## Start Speakers Export as CSV [/v1/events/{event_identifier}/export/speakers/csv]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+Start a celery task to export the list of speakers of the event with that event_id as a CSV file to get it ready for downloading. Returns the task url
+to get the status of the export task.
+
+
+### Start a Task to Export Speakers of an Event as CSV [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
+
 # Group Event Import
 
 This group of APIs help you to start a task for importing zip containing JSON files into the server.
@@ -21952,6 +22763,7 @@ Create a new Order
                 "pdf-url": "http://example.com",
                 "country": null,
                 "email": null,
+                "created-at": "2018-07-08T01:05:09.904696+00:00",
                 "order-notes": "example"
               },
               "type": "attendee",
@@ -22022,6 +22834,7 @@ Create a new Order
               "amount": 10.0,
               "country": "India",
               "completed-at": null,
+              "created-at": "2018-07-08T01:05:09.904696+00:00",
               "order-notes": "example"
             },
             "type": "order",
@@ -22111,6 +22924,7 @@ Get a single Order detail.
               "amount": 10.0,
               "country": "India",
               "completed-at": null,
+              "created-at": "2018-07-08T01:05:09.904696+00:00",
               "order-notes": "example"
             },
             "type": "order",
@@ -22211,6 +23025,7 @@ Update a single custom form with `id`.
               "amount": 10.0,
               "country": "India",
               "completed-at": null,
+              "created-at": "2018-07-08T01:05:09.904696+00:00",
               "order-notes": "sample,example"
             },
             "type": "order",
@@ -22249,19 +23064,445 @@ Delete a single Order.
           }
         }
 
+## Charge [/v1/orders/{order_identifier}/charge]
++ Parameters
+    + order_identifier: 1 (Integer) - Identifier of the order in the form of an integer.
+
+### Charge for an Order [POST]
+Receive payments for an order
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "stripe": "stripe_token",
+                  "paypal": null
+                },
+                "type": "charge"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "type": "charge",
+                "id": "1",
+                "links": {
+                    "self": "/v1/orders/1/charge"
+                }
+            },
+            "links": {
+                "self": "/v1/orders/1/charge"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+
+## Orders under a User [/v1/users/{user_id}/orders{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + user_id: 1 (integer) - ID of the user in the form of an integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. If you want to filter by firstname and lastname, example url will /endpoint?filter=[{"firstname":"firstname","lastname":"lastname"}]Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List all Orders under a User [GET]
+Get a list of all orders
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "count": 0
+          },
+          "data": [],
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/orders"
+          }
+        }
+
+
 # Group Admin Sales
 
-## Fees Sales Details [/v1/admin/sales/fees]
-
-**Fees:**
+**Sales:**
 
 | Parameter | Description | Type |
 |:----------|-------------|------|
 | `name` | Name of event | String |
+| `sales` | sales block | Object |
+| `starts_at` | Start time of event | String |
+| `ends_at` | End time of event | String |
 | `fee-percentage` | Fee percentage | Float |
 | `payment-currency` | Currency of event | String |
 | `revenue` | Total revenue | Integer |
 | `ticket-count` | Number of tickets sold | Float |
+| `location_name` | Place of event | String |
+| `first_name` | First name of organizer | String |
+| `last_name` | Last name of organizer | String |
+| `email` | Email of marketer | String |
+| `fullname` | Full name of marketer | String |
+
+## Sales by Events Details [/v1/admin/sales/by-events{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter(optional, string, ``) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+
+The sales object contains properties placed, completed and pending properties which are objects that contain the count on total sales and tickets
+
+### Show Sales by Events [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": [{
+            "type": "admin-sales-by-events",
+            "attributes": {
+                "name": "Event name",
+                "ends_at": "2018-08-08T15:00:02.394000+00:00",
+                "sales": {
+                    "placed": {
+                        "sales_total": 0,
+                        "ticket_count": 0
+                    },
+                    "completed": {
+                        "sales_total": 0,
+                        "ticket_count": 0
+                    },
+                    "pending": {
+                        "sales_total": 0,
+                        "ticket_count": 0
+                    }
+                },
+                "starts_at": "2018-08-07T22:00:00+00:00"
+            },
+            "id": "1",
+            "links": {
+                "self": "/v1/admin/sales/by-events"
+            }
+        }],
+        "links": {
+            "self": "/v1/admin/sales/by-events"
+        },
+        "meta": {
+            "count": 1
+        },
+        "jsonapi": {
+            "version": "1.0"
+        }
+    }
+
+## Sales by Organizers Details [/v1/admin/sales/by-organizers{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `first_name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter(optional, string, ``) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+
+
+### Show Sales by Organizers [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": [{
+                "type": "admin-sales-by-organizers",
+                "attributes": {
+                    "first_name": null,
+                    "last_name": null,
+                    "sales": {
+                        "placed": {
+                            "sales_total": 0,
+                            "ticket_count": 0
+                        },
+                        "completed": {
+                            "sales_total": 0,
+                            "ticket_count": 0
+                        },
+                        "pending": {
+                            "sales_total": 0,
+                            "ticket_count": 0
+                        }
+                    }
+                },
+                "id": "1",
+                "links": {
+                    "self": "/v1/admin/sales/by-organizers"
+                }
+            }],
+            "links": {
+                "self": "/v1/admin/sales/by-organizers"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+
+## Sales by Location Details [/v1/admin/sales/by-location]
+
+
+### Show Sales by Location [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": [{
+                "type": "admin-sales-by-location",
+                "attributes": {
+                    "location_name": "Berlin, Germany",
+                    "sales": {
+                        "placed": {
+                            "sales_total": 0,
+                            "ticket_count": 0
+                        },
+                        "completed": {
+                            "sales_total": 0,
+                            "ticket_count": 0
+                        },
+                        "pending": {
+                            "sales_total": 0,
+                            "ticket_count": 0
+                        }
+                    }
+                },
+                "links": {
+                    "self": "/v1/admin/sales/by-location"
+                }
+            }],
+            "links": {
+                "self": "/v1/admin/sales/by-location"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+## Sales by Marketer Details [/v1/admin/sales/by-marketer]
+
+
+### Show Sales by Marketer [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": [{
+            "type": "admin-sales-by-marketer",
+            "attributes": {
+                "fullname": null,
+                "email": null,
+                "sales": {
+                    "placed": {
+                        "sales_total": 0,
+                        "ticket_count": 0
+                    },
+                    "completed": {
+                        "sales_total": 0,
+                        "ticket_count": 0
+                    },
+                    "pending": {
+                        "sales_total": 0,
+                        "ticket_count": 0
+                    }
+                }
+            },
+            "id": "1",
+            "links": {
+                "self": "/v1/admin/sales/by-marketer"
+            }
+        }],
+        "links": {
+            "self": "/v1/admin/sales/by-marketer"
+        },
+        "meta": {
+            "count": 1
+        },
+        "jsonapi": {
+            "version": "1.0"
+        }
+    }
+
+## Sales by Marketer Details [/v1/admin/sales/by-marketer]
+
+
+### Show Sales by Marketer [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": [{
+            "type": "admin-sales-by-marketer",
+            "attributes": {
+                "fullname": null,
+                "email": null,
+                "sales": {
+                    "placed": {
+                        "sales_total": 0,
+                        "ticket_count": 0
+                    },
+                    "completed": {
+                        "sales_total": 0,
+                        "ticket_count": 0
+                    },
+                    "pending": {
+                        "sales_total": 0,
+                        "ticket_count": 0
+                    }
+                }
+            },
+            "id": "1",
+            "links": {
+                "self": "/v1/admin/sales/by-marketer"
+            }
+        }],
+        "links": {
+            "self": "/v1/admin/sales/by-marketer"
+        },
+        "meta": {
+            "count": 1
+        },
+        "jsonapi": {
+            "version": "1.0"
+        }
+    }
+
+## Sales discounted Details [/v1/admin/sales/discounted]
+
+
+### Show Sales Discounted  [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": [],
+            "links": {
+                "self": "/v1/admin/sales/discounted"
+            },
+            "meta": {
+                "count": 0
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+## Sales invoice detail [/v1/admin/sales/invoices]
+
+
+### Show Sales Invoices  [GET]
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "data": [],
+            "links": {
+                "self": "/v1/admin/sales/invoices"
+            },
+            "meta": {
+                "count": 0
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+## Fees Sales Details [/v1/admin/sales/fees]
+
 
 ### Show Sales Fees [GET]
 
@@ -22431,4 +23672,34 @@ Sends the token to reset the account associated with the provided email id via e
               "id": "1",
               "email": "example@example.com",
               "name": "John Doe"
+        }
+
+# Group Email Verification
+
+This Group's APIs are used for verifying user registrations
+
+## Resend Email Verification [/v1/auth/resend-verification-email]
+Get the email containing verification token again.
+
+### Get User Verification Token Again [POST]
+Sends the token to verify the account associated with the provided email id via email.
+
++ Request
+
+    + Headers
+
+            Content-Type: application/json
+
+    + Body
+
+            {
+                "data": {
+                    "email": "open_event_test_user@fossasia.org"
+                }
+            }
+
++ Response 200 (application/json)
+
+        {
+          "message": "Verification email resent"
         }

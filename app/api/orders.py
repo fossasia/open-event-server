@@ -7,7 +7,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy.orm.exc import NoResultFound
 
-from app.api.helpers.storage import UPLOAD_PATHS
+from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
@@ -17,17 +17,19 @@ from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.mail import send_order_cancel_email
 from app.api.helpers.notification import send_notif_to_attendees, send_notif_ticket_purchase_organizer, \
     send_notif_ticket_cancel
+from app.api.helpers.order import delete_related_attendees_for_order, set_expiry_for_order
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
-from app.api.helpers.order import delete_related_attendees_for_order
+from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.helpers.ticketing import TicketingManager
 from app.api.helpers.utilities import dasherize, require_relationship
 from app.api.schema.orders import OrderSchema
 from app.models import db
 from app.models.discount_code import DiscountCode, TICKET
-from app.models.order import Order, OrderTicket
+from app.models.order import Order, OrderTicket, get_updatable_fields
 from app.models.ticket_holder import TicketHolder
+from app.models.user import User
 
 
 class OrdersListPost(ResourceList):
@@ -163,7 +165,20 @@ class OrdersList(ResourceList):
 
     def query(self, view_kwargs):
         query_ = self.session.query(Order)
-        query_ = event_query(self, query_, view_kwargs)
+        if view_kwargs.get('user_id'):
+            # orders under a user
+            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            if not has_access('is_user_itself', user_id=user.id):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            query_ = query_.join(User, User.id == Order.user_id).filter(User.id == user.id)
+        else:
+            # orders under an event
+            query_ = event_query(self, query_, view_kwargs)
+
+        # expire the pending orders if the time limit is over.
+        orders = query_.all()
+        for order in orders:
+            set_expiry_for_order(order)
 
         return query_
 
@@ -190,12 +205,18 @@ class OrderDetail(ResourceDetail):
         """
         if view_kwargs.get('attendee_id'):
             attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
-            view_kwargs['order_identifier'] = attendee.order.identifier
-
-        order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
+            view_kwargs['id'] = attendee.order.id
+        if view_kwargs.get('order_identifier'):
+            order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
+            view_kwargs['id'] = order.id
+        elif view_kwargs.get('id'):
+            order = safe_query(self, Order, 'id', view_kwargs['id'], 'id')
 
         if not has_access('is_coorganizer_or_user_itself', event_id=order.event_id, user_id=order.user_id):
             return ForbiddenException({'source': ''}, 'You can only access your orders or your event\'s orders')
+
+        # expire the pending order if time limit is over.
+        set_expiry_for_order(order)
 
     def before_update_object(self, order, data, view_kwargs):
         """
@@ -218,14 +239,15 @@ class OrderDetail(ResourceDetail):
             if current_user.id == order.user_id:
                 # Order created from the tickets tab.
                 for element in data:
-                    if data[element] != getattr(order, element, None) and element not in Order.get_updatable_fields():
+                    if data[element] and data[element]\
+                            != getattr(order, element, None) and element not in get_updatable_fields():
                         raise ForbiddenException({'pointer': 'data/{}'.format(element)},
                                                  "You cannot update {} of an order".format(element))
 
             else:
                 # Order created from the public pages.
                 for element in data:
-                    if data[element] != getattr(order, element, None):
+                    if data[element] and data[element] != getattr(order, element, None):
                         if element != 'status':
                             raise ForbiddenException({'pointer': 'data/{}'.format(element)},
                                                      "You cannot update {} of an order".format(element))
@@ -244,7 +266,8 @@ class OrderDetail(ResourceDetail):
                                          "You cannot update a non-pending order")
             else:
                 for element in data:
-                    if data[element] != getattr(order, element, None) and element not in Order.get_updatable_fields():
+                    if data[element] and data[element]\
+                            != getattr(order, element, None) and element not in get_updatable_fields():
                         raise ForbiddenException({'pointer': 'data/{}'.format(element)},
                                                  "You cannot update {} of an order".format(element))
 
@@ -264,7 +287,7 @@ class OrderDetail(ResourceDetail):
             send_notif_ticket_cancel(order)
 
             # delete the attendees so that the tickets are unlocked.
-            delete_related_attendees_for_order(self, order)
+            delete_related_attendees_for_order(order)
 
     def before_delete_object(self, order, view_kwargs):
         """
@@ -278,13 +301,13 @@ class OrderDetail(ResourceDetail):
         elif order.amount and order.amount > 0 and (order.status == 'completed' or order.status == 'placed'):
             raise ConflictException({'source': ''}, 'You cannot delete a placed/completed paid order.')
 
-    decorators = (jwt_required,)
+    # This is to ensure that the permissions manager runs and hence changes the kwarg from order identifier to id.
+    decorators = (jwt_required, api.has_permission(
+        'auth_required', methods="PATCH,DELETE", fetch="user_id", model=Order),)
 
     schema = OrderSchema
     data_layer = {'session': db.session,
                   'model': Order,
-                  'url_field': 'order_identifier',
-                  'id_field': 'identifier',
                   'methods': {
                       'before_update_object': before_update_object,
                       'before_delete_object': before_delete_object,
@@ -297,6 +320,22 @@ class OrderRelationship(ResourceRelationship):
     """
     Order relationship
     """
+
+    def before_get(self, args, kwargs):
+        """
+        before get method to get the resource id for fetching details
+        :param view_kwargs:
+        :return:
+        """
+        if kwargs.get('order_identifier'):
+            order = safe_query(db, Order, 'identifier', kwargs['order_identifier'], 'order_identifier')
+            kwargs['id'] = order.id
+        elif kwargs.get('id'):
+            order = safe_query(db, Order, 'id', kwargs['id'], 'id')
+
+        if not has_access('is_coorganizer', event_id=order.event_id, user_id=order.user_id):
+            return ForbiddenException({'source': ''}, 'You can only access your orders or your event\'s orders')
+
     decorators = (jwt_required,)
     schema = OrderSchema
     data_layer = {'session': db.session,
@@ -315,7 +354,7 @@ class ChargeSchema(Schema):
         type_ = 'charge'
         inflect = dasherize
         self_view = 'v1.charge_list'
-        self_view_kwargs = {'id': '<id>'}
+        self_view_kwargs = {'order_identifier': '<id>'}
 
     id = fields.Str(dump_only=True)
     stripe = fields.Str(allow_none=True)
@@ -331,7 +370,8 @@ class ChargeList(ResourceList):
 
     data_layer = {
         'class': ChargesLayer,
-        'session': db.session
+        'session': db.session,
+        'model': Order
     }
 
     decorators = (jwt_required,)
