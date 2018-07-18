@@ -12,7 +12,6 @@ import urllib.error
 
 from app.api.bootstrap import api
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
-from app.api.data_layers.SearchFilterLayer import SearchFilterLayer
 from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.exceptions import ForbiddenException, ConflictException, UnprocessableEntity
 from app.api.helpers.files import create_save_image_sizes
@@ -110,17 +109,6 @@ class EventList(ResourceList):
             query_ = self.session.query(Event).filter(
                 getattr(Event, 'discount_code_id') == view_kwargs['discount_code_id'])
 
-        # Full-text search
-        if ('ENABLE_ELASTICSEARCH' in current_app.config
-                and 'GET' in request.method and 'filter' in request.args):
-            json_filter = request.args['filter']
-            filter_terms = [
-                f.val for f in json_to_rest_filter_list(json_filter)
-                if f.name == 'event' and f.op == 'search'
-            ]
-            matching_ids = find_ids(filter_terms)
-            query_ = query_.filter(Event.id.in_(matching_ids))
-
         return query_
 
     def before_post(self, args, kwargs, data=None):
@@ -180,7 +168,7 @@ class EventList(ResourceList):
     schema = EventSchema
     data_layer = {'session': db.session,
                   'model': Event,
-                  'class': SearchFilterLayer,
+                  'class': EventCopyLayer,
                   'methods': {'after_create_object': after_create_object,
                               'query': query
                               }}
