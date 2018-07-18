@@ -29,11 +29,10 @@ class SearchableEvent(DocType):
         self.organizer_name = db_event.organizer_name
         self.organizer_description = db_event.organizer_description
 
-
-def find_ids(search_strings, client=client):
+def find_all(search_strings, client=client):
     search = Search().using(client)
 
     for search_string in search_strings:
         search = search.query('multi_match', query=search_string)
 
-    return [event.id for event in search.execute()]
+    return search.execute()
