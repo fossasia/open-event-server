@@ -117,6 +117,17 @@ class Setting(db.Model):
 
     frontend_url = db.Column(db.String, default="http://eventyay.com")
 
+    #
+    # Cookie Policy
+    #
+    cookie_policy = db.Column(db.String,
+                              default="This website, and certain approved third parties, use functional, "
+                                      "analytical and tracking cookies (or similar technologies) to understand your "
+                                      "event preferences and provide you with a customized experience. "
+                                      "By closing this banner or by continuing to use the site, you agree. "
+                                      "For more information please review our cookie policy.")
+    cookie_policy_link = db.Column(db.String, default="http://next.cookie-policy.eventyay.com")
+
     def __init__(self,
                  app_environment=Environment.PRODUCTION,
                  aws_key=None,
@@ -155,8 +166,12 @@ class Setting(db.Model):
                  smtp_port=None,
                  smtp_encryption=None,
                  frontend_url=None,
-                 facebook_url=None, youtube_url=None, android_app_url=None, web_app_url=None):
-
+                 facebook_url=None,
+                 youtube_url=None,
+                 android_app_url=None,
+                 web_app_url=None,
+                 cookie_policy=None,
+                 cookie_policy_link=None):
         self.app_environment = app_environment
         self.aws_key = aws_key
         self.aws_secret = aws_secret
@@ -209,6 +224,8 @@ class Setting(db.Model):
         self.email_from = email_from
         self.email_from_name = email_from_name
         self.frontend_url = frontend_url
+        self.cookie_policy = cookie_policy
+        self.cookie_policy_link = cookie_policy_link
 
     def __repr__(self):
         return 'Settings'
