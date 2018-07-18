@@ -18,7 +18,7 @@ def cron_rebuild_events_elasticsearch():
     session = get_session_from_config()
     elastic.rebuild_indices(client=elastic)
 
-    for event in session.query(Event):
+    for event in session.query(Event).filter_by(state='published'):
         elastic.sync_event_from_database(event)
 
 
