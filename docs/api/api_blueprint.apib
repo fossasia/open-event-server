@@ -22551,7 +22551,8 @@ Get the task status and the final result of the task as response
                         "cancelled": 0,
                         "total": 0,
                         "expired": 0,
-                        "pending": 0
+                        "pending": 0,
+                        "completed": 0
                     },
                     "identifier": "09d9a4f1",
                     "orders": {
@@ -22560,7 +22561,8 @@ Get the task status and the final result of the task as response
                         "cancelled": 0,
                         "total": 0,
                         "expired": 0,
-                        "pending": 0
+                        "pending": 0,
+                        "completed": 0
                     },
                     "sales": {
                         "placed": 0,
@@ -22568,7 +22570,8 @@ Get the task status and the final result of the task as response
                         "cancelled": 0,
                         "total": 0,
                         "expired": 0,
-                        "pending": 0
+                        "pending": 0,
+                        "completed": 0
                     }
                 },
                 "type": "order-statistics-event",
@@ -23703,46 +23706,3 @@ Sends the token to verify the account associated with the provided email id via 
         {
           "message": "Verification email resent"
         }
-
-
-# Full-text search
-
-The full-text search uses `elasticsearch` and provides highlighting
-
-## Search events [/v1/auth/resend-verification-email]
-Retrieve all events that contain a certain word or phrase
-
-+ Parameters
-    + name (optional, string, ``) - Filter by event name
-    + description (optional, string, ``) - Filter by event description
-    + location-name (optional, string, ``) - Filter by location name
-    + organizer-name (optional, string, ``) - Filter by organizer name
-    + organizer-description (optional, string, ``) - Filter by organizer description
-
-+ Request
-
-    + Headers
-
-            Content-Type: application/json
-
-+ Response 200 (application/json)
-
-    [
-      {
-        "id": 1,
-        "name": "Test",
-        "description": "",
-        "location_name": "testlocation",
-        "meta": {
-          "index": "event",
-          "id": "1",
-          "score": 0.2876821,
-          "highlight": {
-            "location_name": [
-              "<em>testlocation</em>"
-            ]
-          },
-          "doc_type": "doc"
-        }
-      }
-    ]
