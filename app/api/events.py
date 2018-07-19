@@ -444,6 +444,9 @@ class EventDetail(ResourceDetail):
             data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
             data['icon_image_url'] = uploaded_images['icon_image_url']
 
+        if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
+            event.deleted_at = data.get('deleted_at')
+
     def after_update_object(self, event, data, view_kwargs):
         if event.state == 'published' and event.schedule_published_on:
             start_export_tasks(event)
