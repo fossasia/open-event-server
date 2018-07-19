@@ -1,4 +1,5 @@
 import json
+
 from flask import make_response
 from flask_rest_jsonapi.errors import jsonapi_errors
 
@@ -61,3 +62,13 @@ class NotFoundError(ErrorResponse):
 class ServerError(ErrorResponse):
     status = 500
     title = 'Internal Server Error'
+
+
+class UnprocessableEntityError(ErrorResponse):
+    status = 422
+    title = 'Unprocessable Entity'
+
+
+class BadRequestError(ErrorResponse):
+    status = 400
+    title = 'Bad Request'

@@ -28,7 +28,7 @@ class TestPermissionManager(OpenEventTestCase):
             db.session.commit()
 
             # Authenticate User
-            self.auth = {'Authorization': "JWT " + _default_jwt_encode_handler(user)}
+            self.auth = {'Authorization': "JWT " + str(_default_jwt_encode_handler(user), 'utf-8')}
 
     def test_has_access(self):
         with app.test_request_context(headers=self.auth):
@@ -86,12 +86,13 @@ class TestPermissionManager(OpenEventTestCase):
     def test_permission_manager_attributes(self):
         with app.test_request_context():
             kwargs = {'leave_if': lambda a: True}
-            perm = permission_manager(lambda *a, **b : True, [], {}, 'is_admin', **kwargs)
+            perm = permission_manager(lambda *a, **b: True, [], {}, 'is_admin', **kwargs)
             self.assertTrue(perm)
 
             kwargs = {'check': lambda a: False}
-            perm = permission_manager(lambda *a, **b : False, [], {}, 'is_admin', **kwargs)
+            perm = permission_manager(lambda *a, **b: False, [], {}, 'is_admin', **kwargs)
             self.assertIsInstance(perm, Response)
+
 
 if __name__ == '__main__':
     unittest.main()

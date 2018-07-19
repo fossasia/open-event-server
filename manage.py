@@ -25,7 +25,7 @@ def list_routes():
         output.append(line)
 
     for line in sorted(output):
-        print line
+        print(line)
 
 
 @manager.command
@@ -55,8 +55,8 @@ def fix_speaker_images(event):
             speaker.icon = save_resized_photo(file_path, event_id, speaker.id, 'icon', image_sizes)
             db.session.add(speaker)
             os.remove(file_path)
-            print "Downloaded " + speaker.photo + " into " + file_relative_path
-        print "Processed - " + str(speaker.id)
+            print("Downloaded " + speaker.photo + " into " + file_relative_path)
+        print("Processed - " + str(speaker.id))
     db.session.commit()
 
 
@@ -67,22 +67,22 @@ def initialize_db(credentials):
         inspector = reflection.Inspector.from_engine(db.engine)
         table_name = 'events'
         table_names = inspector.get_table_names()
-        print "[LOG] Existing tables:"
-        print "[LOG] " + ','.join(table_names)
+        print("[LOG] Existing tables:")
+        print("[LOG] " + ','.join(table_names))
         if table_name not in table_names:
-            print "[LOG] Table not found. Attempting creation"
+            print("[LOG] Table not found. Attempting creation")
             try:
                 db.create_all()
                 stamp()
             except:
                 populate_data = False
-                print "[LOG] Could not create tables. Either database does not exist or tables already created"
+                print("[LOG] Could not create tables. Either database does not exist or tables already created")
             if populate_data:
                 credentials = credentials.split(":")
                 create_super_admin(credentials[0], credentials[1])
                 populate()
         else:
-            print "[LOG] Tables already exist. Skipping data population & creation."
+            print("[LOG] Tables already exist. Skipping data population & creation.")
 
 
 @manager.command

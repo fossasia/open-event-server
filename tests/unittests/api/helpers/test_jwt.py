@@ -1,13 +1,14 @@
 import unittest
+
 from flask_jwt import _default_jwt_encode_handler
 
 from app import current_app as app
-from tests.unittests.utils import OpenEventTestCase
-from app.factories.user import UserFactory
 from app.api.helpers.jwt import jwt_authenticate, get_identity
+from app.factories.event import EventFactoryBasic
+from app.factories.user import UserFactory
 from app.models import db
 from tests.unittests.setup_database import Setup
-from app.factories.event import EventFactoryBasic
+from tests.unittests.utils import OpenEventTestCase
 
 
 class TestJWTHelperValidation(OpenEventTestCase):
@@ -40,7 +41,7 @@ class TestJWTHelperValidation(OpenEventTestCase):
             db.session.commit()
 
             # Authenticate User
-            self.auth = {'Authorization': "JWT " + _default_jwt_encode_handler(user)}
+            self.auth = {'Authorization': "JWT " + str(_default_jwt_encode_handler(user), 'utf-8')}
 
         with app.test_request_context(headers=self.auth):
             self.assertEquals(get_identity().id, user.id)

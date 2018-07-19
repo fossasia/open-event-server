@@ -6,16 +6,17 @@ services:
 addons:
   apt:
     packages:
-      - python-dev
+      - python3-dev
       - libssl-dev
       - libffi-dev
 python:
-  - '2.7'
+  - '3.6'
+cache: pip
 before-install:
   - npm -g install npm@latest
 install:
   - npm install -g dredd@4.0.0
-  - pip install -r requirements/tests.txt
+  - pip3 install -r requirements/tests.txt
 env:
   - >-
     APP_CONFIG="config.TestingConfig" PATH=$PATH:${HOME}/google-cloud-sdk/bin
@@ -31,6 +32,6 @@ script:
 after_success:
   - 'bash <(curl -s https://codecov.io/bash)'
   - bash scripts/push_api_docs.sh
-  - bash kubernetes/travis/deploy.sh
-  - bash kubernetes/travis/deploy-staging.sh
-  - bash kubernetes/travis/deploy-nextgen.sh
+  #- bash kubernetes/travis/deploy.sh
+  #- bash kubernetes/travis/deploy-staging.sh
+  #- bash kubernetes/travis/deploy-nextgen.sh

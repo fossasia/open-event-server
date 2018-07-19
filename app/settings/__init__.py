@@ -17,6 +17,8 @@ def get_settings():
         set_settings(secret='super secret key', app_name='Open Event')
     else:
         current_app.config['custom_settings'] = make_dict(s)
+        if not current_app.config['custom_settings'].get('secret'):
+            set_settings(secret='super secret key', app_name='Open Event')
     return current_app.config['custom_settings']
 
 
@@ -59,7 +61,7 @@ def set_settings(**kwargs):
         if not setting:
             setting = Setting(**kwargs)
         else:
-            for key, value in kwargs.iteritems():
+            for key, value in list(kwargs.items()):
                 setattr(setting, key, value)
         from app.api.helpers.db import save_to_db
         save_to_db(setting, 'Setting saved')
@@ -83,7 +85,7 @@ def set_settings(**kwargs):
 
 def make_dict(s):
     arguments = {}
-    for name, column in s.__mapper__.columns.items():
+    for name, column in list(s.__mapper__.columns.items()):
         if not (column.primary_key or column.unique):
             arguments[name] = getattr(s, name)
     return arguments

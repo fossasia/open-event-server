@@ -2,7 +2,8 @@
 # Install essential packages from Apt
 apt-get update -y
 # Python dev packages
-apt-get install -y build-essential python python-dev python-setuptools python-pip
+apt-get install -y build-essential python3 python3-dev python3-pip
+apt-get install -y git
 apt-get install -y libxml2-dev libxslt1-dev
 apt-get install -y nginx uwsgi uwsgi-plugin-python
 apt-get install -y postgresql postgresql-contrib libpq-dev
@@ -71,12 +72,6 @@ fi
 apt-get update
 # apt-get -y upgrade
 
-# Git required by bower
-sudo apt-get install --force-yes -y git
-sudo apt-get install -y npm
-sudo npm install -g bower
-sudo ln -s /usr/bin/nodejs /usr/bin/node
-bower install --allow-root
 apt-get -y install "postgresql-$PG_VERSION" "postgresql-contrib-$PG_VERSION"
 
 PG_CONF="/etc/postgresql/$PG_VERSION/main/postgresql.conf"
@@ -120,8 +115,8 @@ export DATABASE_URL=postgresql://$APP_DB_USER:$APP_DB_PASS@localhost:5432/$APP_D
 cd /vagrant
 #Flask
 echo "Installing requirements"
-pip install -r requirements/dev.txt
+pip3 install future
+pip3 install -r requirements/dev.txt
 
-python create_db.py
 
 echo "export DATABASE_URL=$DATABASE_URL" >> /home/vagrant/.bashrc

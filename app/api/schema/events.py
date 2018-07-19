@@ -1,17 +1,20 @@
 import pytz
-from pytz import timezone
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validates_schema, validate
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
+from pytz import timezone
 from sqlalchemy.orm.exc import NoResultFound
-from flask_rest_jsonapi.exceptions import ObjectNotFound
 
-from app.models.event import Event
 from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
+from app.models.event import Event
+from utils.common import use_defaults
 
 
-class EventSchemaPublic(Schema):
+@use_defaults()
+class EventSchemaPublic(SoftDeletionSchema):
     class Meta:
         type_ = 'event'
         self_view = 'v1.event_detail'
@@ -86,7 +89,6 @@ class EventSchemaPublic(Schema):
     code_of_conduct = fields.Str(allow_none=True)
     schedule_published_on = fields.DateTime(allow_none=True)
     is_ticketing_enabled = fields.Bool(default=True)
-    deleted_at = fields.DateTime(allow_none=True)
     payment_country = fields.Str(allow_none=True)
     payment_currency = fields.Str(allow_none=True)
     paypal_email = fields.Str(allow_none=True)
@@ -104,6 +106,8 @@ class EventSchemaPublic(Schema):
     pentabarf_url = fields.Url(dump_only=True)
     ical_url = fields.Url(dump_only=True)
     xcal_url = fields.Url(dump_only=True)
+    average_rating = fields.Float(dump_only=True)
+
     tickets = Relationship(attribute='tickets',
                            self_view='v1.event_ticket',
                            self_view_kwargs={'id': '<id>'},
@@ -198,7 +202,8 @@ class EventSchemaPublic(Schema):
                                    related_view_kwargs={'event_id': '<id>'},
                                    schema='EventCopyrightSchema',
                                    type_='event-copyright')
-    tax = Relationship(self_view='v1.event_tax',
+    tax = Relationship(attribute='tax',
+                       self_view='v1.event_tax',
                        self_view_kwargs={'id': '<id>'},
                        related_view='v1.tax_detail',
                        related_view_kwargs={'event_id': '<id>'},
@@ -249,6 +254,20 @@ class EventSchemaPublic(Schema):
                                 schema='CustomFormSchema',
                                 many=True,
                                 type_='custom-form')
+    organizers = Relationship(attribute='organizers',
+                              self_view='v1.event_organizers',
+                              self_view_kwargs={'id': '<id>'},
+                              related_view='v1.user_list',
+                              schema='UserSchemaPublic',
+                              type_='user',
+                              many=True)
+    coorganizers = Relationship(attribute='coorganizers',
+                                self_view='v1.event_coorganizers',
+                                self_view_kwargs={'id': '<id>'},
+                                related_view='v1.user_list',
+                                schema='UserSchemaPublic',
+                                type_='user',
+                                many=True)
 
 
 class EventSchema(EventSchemaPublic):
@@ -274,20 +293,6 @@ class EventSchema(EventSchemaPublic):
                                   related_view_kwargs={'event_id': '<id>'},
                                   schema='DiscountCodeSchema',
                                   type_='discount-code')
-    organizers = Relationship(attribute='organizers',
-                              self_view='v1.event_organizers',
-                              self_view_kwargs={'id': '<id>'},
-                              related_view='v1.user_list',
-                              schema='UserSchemaPublic',
-                              type_='user',
-                              many=True)
-    coorganizers = Relationship(attribute='coorganizers',
-                                self_view='v1.event_coorganizers',
-                                self_view_kwargs={'id': '<id>'},
-                                related_view='v1.user_list',
-                                schema='UserSchemaPublic',
-                                type_='user',
-                                many=True)
     track_organizers = Relationship(attribute='track_organizers',
                                     self_view='v1.event_track_organizers',
                                     self_view_kwargs={'id': '<id>'},
@@ -340,3 +345,10 @@ class EventSchema(EventSchemaPublic):
                              schema='AttendeeSchema',
                              many=True,
                              type_='attendee')
+    stripe_authorization = Relationship(attribute='stripe_authorization',
+                                        self_view='v1.stripe_authorization_event',
+                                        self_view_kwargs={'id': '<id>'},
+                                        related_view='v1.stripe_authorization_detail',
+                                        related_view_kwargs={'event_id': '<id>'},
+                                        schema='StripeAuthorizationSchema',
+                                        type_='stripe-authorization')

@@ -1,7 +1,8 @@
 import factory
-from app.models.track import db, Track
-from app.factories.event import EventFactoryBasic
+
 import app.factories.common as common
+from app.factories.event import EventFactoryBasic
+from app.models.track import db, Track
 
 
 class TrackFactory(factory.alchemy.SQLAlchemyModelFactory):

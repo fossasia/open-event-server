@@ -1,6 +1,7 @@
 import factory
-from app.models.setting import db, Setting
+
 import app.factories.common as common
+from app.models.setting import db, Setting
 
 
 class SettingFactory(factory.alchemy.SQLAlchemyModelFactory):
@@ -105,3 +106,9 @@ class SettingFactory(factory.alchemy.SQLAlchemyModelFactory):
     web_app_url = common.url_
 
     frontend_url = common.url_
+
+    #
+    # Cookie Policy
+    #
+    cookie_policy = common.string_
+    cookie_policy_link = common.url_

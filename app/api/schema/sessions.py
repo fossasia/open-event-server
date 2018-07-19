@@ -1,14 +1,17 @@
 from marshmallow import validates_schema, validate
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.exceptions import UnprocessableEntity, ForbiddenException
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
 from app.models.session import Session
+from utils.common import use_defaults
 
 
-class SessionSchema(Schema):
+@use_defaults()
+class SessionSchema(SoftDeletionSchema):
     """
     Api schema for Session Model
     """
@@ -72,6 +75,8 @@ class SessionSchema(Schema):
     deleted_at = fields.DateTime(dump_only=True)
     submitted_at = fields.DateTime(allow_none=True)
     is_mail_sent = fields.Boolean()
+    last_modified_at = fields.DateTime(dump_only=True)
+    send_email = fields.Boolean(load_only=True, allow_none=True)
     microlocation = Relationship(attribute='microlocation',
                                  self_view='v1.session_microlocation',
                                  self_view_kwargs={'id': '<id>'},

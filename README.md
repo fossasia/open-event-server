@@ -3,11 +3,12 @@
 ![Open Event Server](https://storage.googleapis.com/eventyay.com/assets/branding/server_branding.png)
 
 [![GitHub release](https://img.shields.io/badge/release-1.0.0--alpha.10-blue.svg?style=flat-square)](https://github.com/fossasia/open-event-server/releases/latest)
-[![Travis branch](https://img.shields.io/travis/fossasia/open-event-server/master.svg?style=flat-square)](https://travis-ci.org/fossasia/open-event-server)
-[![Gemnasium](https://img.shields.io/gemnasium/fossasia/open-event-server.svg?style=flat-square)](https://gemnasium.com/github.com/fossasia/open-event-server)
-[![Codacy branch grade](https://img.shields.io/codacy/grade/1ac554483fac462797ffa5a8b9adf2fa/master.svg?style=flat-square)](https://www.codacy.com/app/fossasia/open-event-orga-server)
-[![Codecov branch](https://img.shields.io/codecov/c/github/fossasia/open-event-orga-server/master.svg?style=flat-square&label=Codecov+Coverage)](https://codecov.io/gh/fossasia/open-event-orga-server)
+[![Travis branch](https://api.travis-ci.org/fossasia/open-event-server.svg?branch=master&style=flat-square)](https://travis-ci.org/fossasia/open-event-server)
+[![Gemnasium](https://gemnasium.com/fossasia/open-event-server.svg?style=flat-square)](https://gemnasium.com/github.com/fossasia/open-event-server)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1ac554483fac462797ffa5a8b9adf2fa?style=flat-square)](https://www.codacy.com/app/fossasia/open-event-orga-server)
+[![Codecov branch](https://codecov.io/gh/fossasia/open-event-server/branch/master/graph/badge.svg?style=flat-square)](https://codecov.io/gh/fossasia/open-event-orga-server)
 [![Gitter](https://img.shields.io/badge/chat-on%20gitter-ff006f.svg?style=flat-square)](https://gitter.im/fossasia/open-event-server)
+[![Open Source Helpers](https://www.codetriage.com/fossasia/open-event-orga-server/badges/users.svg)](https://www.codetriage.com/fossasia/open-event-orga-server)
 
 > **The Open Event Server enables organizers to manage events from concerts to conferences and meet-ups.**
 
@@ -30,8 +31,8 @@ The **Open Event Server** exposes a well documented [JSON:API Spec](http://jsona
 ## Demo Version
 
 A demo version is automatically deployed from our repositories:
-* Deployment from the `master` branch - **[api.eventyay.com](https://api.eventyay.com) & [open-event-api.herokuapp.com](https://open-event-api.herokuapp.com/)**
-* Deployment from the `development` branch - **[ api-dev.eventyay.com](https://api-dev.eventyay.com) & [open-event-api-dev.herokuapp.com](https://open-event-api-dev.herokuapp.com/)**
+* Deployment from the `master` branch - **[open-event-api.herokuapp.com](https://open-event-api.herokuapp.com/)**
+* Deployment from the `development` branch - **[open-event-api-dev.herokuapp.com](https://open-event-api-dev.herokuapp.com/)**
 
 ## Installation
 
@@ -47,7 +48,6 @@ The Open Event Server can be easily deployed on a variety of platforms. Detailed
 1. [Deployment with Docker](/docs/installation/docker.md)
 1. [Deployment on Heroku](/docs/installation/heroku.md)
 
-> The docs are outdated and will be updated for the nextgen version soon
 
 One-click Heroku deployment is also available:
 
@@ -64,6 +64,8 @@ Please get familiar with the components of the project in order to be able to co
 * Web framework - [Flask](http://flask.pocoo.org)
 * App server - [uWSGI](https://github.com/unbit/uwsgi)
 * Web Server - [NGINX](https://www.nginx.com)
+
+Note that open-event-server **works with Python 3.6** at the moment.
 
 ### External Service Dependencies
 
@@ -162,23 +164,32 @@ When writing changes to models. Use migrations.
 
 ```
  # To generate a migration after doing a model update
- python manage.py db migrate
+ python3 manage.py db migrate
 
  # To sync Database
- python manage.py db upgrade
+ python3 manage.py db upgrade
 
  # To rollback
- python manage.py db downgrade
+ python3 manage.py db downgrade
 ```
 
 When checking in code for models, please update migrations as well.
+
+### API documentation
+
+The api is documented using [api blueprint](https://apiblueprint.org/). Local changes to [the description](https://github.com/fossasia/open-event-server/blob/development/docs/api/api_blueprint.apib) can be viewed using e.g. the [apiary gem](https://help.apiary.io/tools/apiary-cli/):
+
+```bash
+gem install apiaryio # dependency
+apiary preview --path docs/api/api_blueprint.apib # opens browser with generated file
+```
 
 ### Testing
 
 Clone the repo and set up the server according to the steps listed. Make sure you have installed all the dependencies required for testing by running
 
 ```
-pip install -r requirements/tests.txt
+pip3 install -r requirements/tests.txt
 ```
 
 #### Running unit tests
@@ -193,7 +204,7 @@ export APP_CONFIG=config.TestingConfig
 
 * Then go to the project directory and run the following command:
 ```
-python -m unittest discover tests/unittests/
+python3 -m unittest discover tests/unittests/
 ```
 * It will run each test one by one.
 
@@ -234,7 +245,7 @@ Once you have activated your account just proceed to the [translation section](h
 
 ## Contributions, Bug Reports, Feature Requests
 
-This is an Open Source project and we would be happy to see contributors who report bugs and file feature requests submitting pull requests as well. Please report issues here https://github.com/fossasia/open-event-server/issues
+This is an Open Source project and we would be happy to see contributors who report bugs and file feature requests submitting pull requests as well. Please report issues here https://github.com/fossasia/open-event-server/issues. It is also recommended to go through the [developer handbook](https://github.com/fossasia/open-event/tree/master/docs/dev-handbook) in order to get a basic understanding of the ecosystem.
 
 ## Branch Policy
 

@@ -2,7 +2,8 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 
 from app.api.bootstrap import api
 from app.api.events import Event
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query, get_count
+from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.mail import send_email_new_session, send_email_session_accept_reject
 from app.api.helpers.notification import send_notif_new_session_organizer, send_notif_session_accept_reject
 from app.api.helpers.permissions import current_identity
@@ -31,8 +32,10 @@ class SessionListPost(ResourceList):
         :param data:
         :return:
         """
-        require_relationship(['event'], data)
+        require_relationship(['event', 'track'], data)
         data['creator_id'] = current_identity.id
+        if get_count(db.session.query(Event).filter_by(id=int(data['event']), is_sessions_speakers_enabled=False)) > 0:
+            raise ForbiddenException({'pointer': ''}, "Sessions are disabled for this Event")
 
     def after_create_object(self, session, data, view_kwargs):
         """
@@ -119,7 +122,9 @@ class SessionDetail(ResourceDetail):
 
     def after_update_object(self, session, data, view_kwargs):
         """ Send email if session accepted or rejected """
-        if 'state' in data and (session.state == 'accepted' or session.state == 'rejected'):
+
+        if 'state' in data and data.get('send_email', None) and (session.state == 'accepted' or
+                                                                 session.state == 'rejected'):
             # Email for speaker
             speakers = session.speakers
             for speaker in speakers:

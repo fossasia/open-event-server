@@ -1,11 +1,11 @@
 from app.models import db
+from app.models.base import SoftDeletionModel
 
 
-class EmailNotification(db.Model):
+class EmailNotification(SoftDeletionModel):
     """email notifications model class"""
     __tablename__ = 'email_notifications'
-    id = db.Column(db.Integer,
-                   primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     next_event = db.Column(db.Boolean, default=False)
     new_paper = db.Column(db.Boolean, default=False)
     session_accept_reject = db.Column(db.Boolean, default=False)
@@ -23,7 +23,8 @@ class EmailNotification(db.Model):
                  session_schedule=False,
                  after_ticket_purchase=True,
                  user_id=None,
-                 event_id=None):
+                 event_id=None,
+                 deleted_at=None):
         self.next_event = next_event
         self.new_paper = new_paper
         self.session_accept_reject = session_accept_reject
@@ -31,9 +32,7 @@ class EmailNotification(db.Model):
         self.user_id = user_id
         self.event_id = event_id
         self.after_ticket_purchase = after_ticket_purchase
+        self.deleted_at = deleted_at
 
     def __str__(self):
-        return 'User:' + unicode(self.user_id).encode('utf-8') + ' Event: ' + unicode(self.event_id).encode('utf-8')
-
-    def __unicode__(self):
-        return unicode(self.id)
+        return 'User:' + self.user_id + ' Event: ' + self.event_id

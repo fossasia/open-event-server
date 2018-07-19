@@ -1,9 +1,11 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
-from app.api.helpers.exceptions import ForbiddenException
+from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
+from app.api.helpers.exceptions import ForbiddenException, ConflictException
+from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
@@ -29,14 +31,35 @@ class AccessCodeListPost(ResourceList):
         """
         require_relationship(['event', 'user'], data)
         if not has_access('is_coorganizer', event_id=data['event']):
-            raise ObjectNotFound({'parameter': 'event_id'},
-                                 "Event: {} not found".format(data['event']))
+            raise ForbiddenException({'source': ''}, "Minimum Organizer access required")
+
+    def before_create_object(self, data, view_kwargs):
+        """
+        before create object method for AccessCodeListPost Class
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
+        if data.get('tickets', None):
+            for ticket in data['tickets']:
+                # Ensuring that the ticket exists and is hidden.
+                try:
+                    ticket_object = self.session.query(Ticket).filter_by(id=int(ticket),
+                                                                         deleted_at=None).one()
+                    if not ticket_object.is_hidden:
+                        raise ConflictException({'pointer': '/data/relationships/tickets'},
+                                                "Ticket with id {} is public.".format(ticket) +
+                                                " Access code cannot be applied to public tickets")
+                except NoResultFound:
+                    raise ConflictException({'pointer': '/data/relationships/tickets'},
+                                            "Ticket with id {} does not exists".format(str(ticket)))
 
     schema = AccessCodeSchema
     methods = ['POST', ]
     data_layer = {'session': db.session,
-                  'model': AccessCode
-                  }
+                  'model': AccessCode,
+                  'methods': {'before_create_object': before_create_object
+                              }}
 
 
 class AccessCodeList(ResourceList):
@@ -53,7 +76,7 @@ class AccessCodeList(ResourceList):
         query_ = event_query(self, query_, view_kwargs, permission='is_coorganizer')
         if view_kwargs.get('user_id'):
             user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
-            if not has_access('is_user_itself', id=user.id):
+            if not has_access('is_user_itself', user_id=user.id):
                 raise ForbiddenException({'source': ''}, 'Access Forbidden')
             query_ = query_.join(User).filter(User.id == user.id)
         if view_kwargs.get('ticket_id'):
@@ -77,11 +100,37 @@ class AccessCodeList(ResourceList):
 
 class AccessCodeDetail(ResourceDetail):
     """
-    AccessCode detail by id
+    AccessCode detail by id or code
     """
+    def before_get(self, args, kwargs):
+        """
+        before get method of access code details.
+        Check for permissions on the basis of kwargs.
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        # Any registered user can fetch access code details using the code.
+        if kwargs.get('code'):
+            access = db.session.query(AccessCode).filter_by(code=kwargs.get('code')).first()
+            if access:
+                kwargs['id'] = access.id
+            else:
+                raise ObjectNotFound({'parameter': '{code}'}, "Access Code:  not found")
+            return
 
-    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
-                  fetch_as="event_id", model=AccessCode, methods="GET, PATCH"),
+        # Co-organizer or the admin can fetch access code details using the id.
+        if kwargs.get('id'):
+            access = db.session.query(AccessCode).filter_by(id=kwargs.get('id')).one()
+            if not access:
+                raise ObjectNotFound({'parameter': '{id}'}, "Access Code:  not found")
+
+            if not has_access('is_coorganizer', event_id=access.event_id):
+                raise UnprocessableEntity({'source': ''},
+                                          "Please verify your permission")
+
+    decorators = (jwt_required, api.has_permission('is_coorganizer', fetch='event_id',
+                  fetch_as="event_id", model=AccessCode, methods="PATCH"),
                   api.has_permission('is_coorganizer_but_not_admin', fetch='event_id',
                   fetch_as="event_id", model=AccessCode, methods="DELETE"),)
     schema = AccessCodeSchema

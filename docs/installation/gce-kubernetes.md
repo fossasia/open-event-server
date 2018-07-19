@@ -90,7 +90,7 @@ _You can delete the instance if your not planning to use it for anything else. B
 - Create a cluster via the `gcloud` command line tool:
 
     ```
-    gcloud container clusters create opev-cluster --cluster-version=1.6.4
+    gcloud container clusters create opev-cluster
     ```
 
 - Get the credentials for `kubectl` to use.
@@ -110,22 +110,20 @@ _You can delete the instance if your not planning to use it for anything else. B
 	The response would be similar to
 
 	```
-	address: 123.123.123.123
-	creationTimestamp: '2017-05-16T05:26:24.894-07:00'
-	description: ''
-	id: '1234556789'
-	kind: compute#address
-	name: test
-	selfLink: https://www.googleapis.com/compute/v1/projects/eventyay/global/addresses/test
-	status: RESERVED
+	Created [https://www.googleapis.com/compute/v1/projects/eventyay-212514/regions/us-west1/addresses/testip].
+	```
+- Listing static external IP addresses
+
+    ```bash
+	gcloud compute addresses list --filter=testip
 	```
 
-	Note down the address. (In this case `123.123.123.123`). We'll call this **External IP Address One**.
+	Note down the address. We'll call this **External IP Address One**.
 - Add the **External IP Address One** as an `A` record to your domain's DNS Zone.
 - Add the **External IP Address One** to `kubernetes/yamls/nginx/service.yml` for the parameter `loadBalancerIP`.
 - Add your domain name to `kubernetes/yamls/web/ingress-notls.yml` & `kubernetes/yamls/web/ingress-tls.yml`. (replace `api.eventyay.com`)
 - Add your email ID to `kubernetes/yamls/lego/configmap.yml` for the parameter `lego.email`.
-- In `kubernetes/yamls/postgres/postgres-pod.yml` ensure `pdName` is `pg-data-disk`. Else change it.
+- In `kubernetes/yamls/postgres/deployment.yml` ensure `pdName` is `pg-data-disk`. Else change it.
 
 ## Deploy our pods, services and deployments
 

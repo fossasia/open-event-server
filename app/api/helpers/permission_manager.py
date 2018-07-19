@@ -7,6 +7,7 @@ from app.api.helpers.errors import ForbiddenError, NotFoundError
 from app.api.helpers.permissions import jwt_required
 from app.models.session import Session
 from app.models.event import Event
+from app.models.order import Order
 from app.api.helpers.jwt import get_identity
 
 
@@ -106,7 +107,7 @@ def is_user_itself(view, view_args, view_kwargs, *args, **kwargs):
     Otherwise the user can only access his/her resource.
     """
     user = current_identity
-    if not user.is_admin and not user.is_super_admin and user.id != kwargs['id']:
+    if not user.is_admin and not user.is_super_admin and user.id != kwargs['user_id']:
         return ForbiddenError({'source': ''}, 'Access Forbidden').respond()
     return view(*view_args, **view_kwargs)
 
@@ -119,7 +120,7 @@ def is_coorganizer_or_user_itself(view, view_args, view_kwargs, *args, **kwargs)
     """
     user = current_identity
 
-    if user.is_admin or user.is_super_admin or user.id == kwargs['user_id']:
+    if user.is_admin or user.is_super_admin or ('user_id' in kwargs and user.id == kwargs['user_id']):
         return view(*view_args, **view_kwargs)
 
     if user.is_staff:
@@ -258,7 +259,6 @@ def user_event(view, view_args, view_kwargs, *args, **kwargs):
     return view(*view_args, **view_kwargs)
 
 
-
 def accessible_role_based_events(view, view_args, view_kwargs, *args, **kwargs):
     if 'POST' in request.method or 'withRole' in request.args:
         _jwt_required(app.config['JWT_DEFAULT_REALM'])
@@ -349,17 +349,19 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         if not check(view_kwargs):
             return ForbiddenError({'source': ''}, 'Access forbidden').respond()
 
-    # leave_if checks if we have to bypass this request on the basis of lambda function
-    if 'leave_if' in kwargs:
-        check = kwargs['leave_if']
-        if check(view_kwargs):
-            return view(*view_args, **view_kwargs)
+    # For Orders API
+    if 'order_identifier' in view_kwargs:
+        try:
+            order = Order.query.filter_by(identifier=view_kwargs['order_identifier']).one()
+        except NoResultFound:
+            return NotFoundError({'parameter': 'order_identifier'}, 'Order not found').respond()
+        view_kwargs['id'] = order.id
 
     # If event_identifier in route instead of event_id
     if 'event_identifier' in view_kwargs:
         try:
             event = Event.query.filter_by(identifier=view_kwargs['event_identifier']).one()
-        except NoResultFound, e:
+        except NoResultFound:
             return NotFoundError({'parameter': 'event_identifier'}, 'Event not found').respond()
         view_kwargs['event_id'] = event.id
 
@@ -367,7 +369,7 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
     if 'identifier' in view_kwargs:
         try:
             event = Event.query.filter_by(identifier=view_kwargs['identifier']).one()
-        except NoResultFound, e:
+        except NoResultFound:
             return NotFoundError({'parameter': 'identifier'}, 'Event not found').respond()
         view_kwargs['id'] = event.id
 
@@ -376,7 +378,7 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         if is_multiple(kwargs['fetch']):
             kwargs['fetch'] = [f.strip() for f in kwargs['fetch'].split(",")]
             for f in kwargs['fetch']:
-               if f in view_kwargs:
+                if f in view_kwargs:
                     fetched = view_kwargs.get(f)
                     break
         elif kwargs['fetch'] in view_kwargs:
@@ -384,7 +386,6 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         if not fetched:
             model = kwargs['model']
             fetch = kwargs['fetch']
-            fetch_as = kwargs['fetch_as']
             fetch_key_url = 'id'
             fetch_key_model = 'id'
             if 'fetch_key_url' in kwargs:
@@ -409,7 +410,7 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
                     continue
                 try:
                     data = mod.query.filter(getattr(mod, fetch_key_model) == view_kwargs[f_url]).one()
-                except NoResultFound, e:
+                except NoResultFound:
                     pass
                 else:
                     found = True
@@ -428,10 +429,12 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
                 fetched = getattr(data, fetch) if hasattr(data, fetch) else None
 
         if fetched:
-            kwargs[kwargs['fetch_as']] = fetched
+            if 'fetch_as' in kwargs:
+                kwargs[kwargs['fetch_as']] = fetched
+            elif 'fetch' in kwargs:
+                kwargs[kwargs['fetch']] = fetched
         else:
             return NotFoundError({'source': ''}, 'Object not found.').respond()
-
     if args[0] in permissions:
         return permissions[args[0]](view, view_args, view_kwargs, *args, **kwargs)
     else:

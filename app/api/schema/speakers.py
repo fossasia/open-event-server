@@ -1,10 +1,13 @@
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
+from utils.common import use_defaults
 
 
-class SpeakerSchema(Schema):
+@use_defaults()
+class SpeakerSchema(SoftDeletionSchema):
     """
     Speaker Schema based on Speaker Model
     """

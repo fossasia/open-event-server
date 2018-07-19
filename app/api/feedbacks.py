@@ -27,7 +27,7 @@ class FeedbackListPost(ResourceList):
         :return:
         """
         require_relationship(['event', 'user'], data)
-        if not has_access('is_user_itself', id=data['user']):
+        if not has_access('is_user_itself', user_id=int(data['user'])):
             raise ObjectNotFound({'parameter': 'user_id'},
                                  "User: {} doesn't match auth key".format(data['user']))
 

@@ -1,14 +1,18 @@
-from datetime import datetime, timedelta
-import pytz
-from app.models import db
 import random
+from datetime import datetime, timedelta
+
+import pytz
+
+from app.models import db
+from app.models.base import SoftDeletionModel
 
 
 def generate_hash():
     hash_ = random.getrandbits(128)
     return str(hash_)
 
-class RoleInvite(db.Model):
+
+class RoleInvite(SoftDeletionModel):
     __tablename__ = 'role_invites'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -26,7 +30,8 @@ class RoleInvite(db.Model):
     created_at = db.Column(db.DateTime(timezone=True))
     status = db.Column(db.String, default="pending")
 
-    def __init__(self, email=None, role_name=None, event_id=None, role_id=None, created_at=None, status="pending", hash=None):
+    def __init__(self, email=None, role_name=None, event_id=None, role_id=None, created_at=None,
+                 status="pending", hash=None, deleted_at=None):
         self.email = email
         self.role_name = role_name
         self.event_id = event_id
@@ -34,6 +39,7 @@ class RoleInvite(db.Model):
         self.created_at = created_at
         self.status = status
         self.hash = generate_hash()
+        self.deleted_at = deleted_at
 
     def has_expired(self):
         # Check if invitation link has expired (it expires after 24 hours)
@@ -45,9 +51,4 @@ class RoleInvite(db.Model):
                                           self.role_id,)
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return 'Invite for %r:%r:%r' % (self.email,
-                                        self.event_id,
-                                        self.role_id)
+        return self.__repr__()

@@ -1,9 +1,10 @@
 import factory
-from app.models.speaker import db, Speaker
-from app.factories.event import EventFactoryBasic
-from app.factories.user import UserFactory
-from app.factories.session import SessionFactory
+
 import app.factories.common as common
+from app.factories.event import EventFactoryBasic
+from app.factories.session import SessionFactory
+from app.factories.user import UserFactory
+from app.models.speaker import db, Speaker
 
 
 class SpeakerFactory(factory.alchemy.SQLAlchemyModelFactory):

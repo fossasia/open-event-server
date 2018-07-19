@@ -1,29 +1,35 @@
-from datetime import datetime
-import pytz
 import random
+from datetime import datetime
+
 import humanize
+import pytz
 from flask import url_for
+from flask_scrypt import generate_password_hash, generate_random_salt
 from sqlalchemy import event, desc
-from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
-from flask.ext.scrypt import generate_password_hash, generate_random_salt
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+
 from app.api.helpers.db import get_count
-from app.models.session import Session
-from app.models.speaker import Speaker
 from app.models import db
+from app.models.base import SoftDeletionModel
+from app.models.custom_system_role import UserSystemRole, CustomSysRole
+from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.notification import Notification
+from app.models.panel_permission import PanelPermission
 from app.models.permission import Permission
 from app.models.role import Role
 from app.models.service import Service
-from app.models.custom_system_role import UserSystemRole
+from app.models.session import Session
+from app.models.speaker import Speaker
 from app.models.user_permission import UserPermission
 from app.models.users_events_role import UsersEventsRoles as UER
-from app.models.panel_permission import PanelPermission
-from app.models.helpers.versioning import clean_up_string, clean_html
 
 # System-wide
 ADMIN = 'admin'
 SUPERADMIN = 'super_admin'
+
+MARKETER = 'Marketer'
+SALES_ADMIN = 'Sales Admin'
 
 SYS_ROLES_LIST = [
     ADMIN,
@@ -39,7 +45,7 @@ ATTENDEE = 'attendee'
 REGISTRAR = 'registrar'
 
 
-class User(db.Model):
+class User(SoftDeletionModel):
     """User model class"""
     __tablename__ = 'users'
 
@@ -67,12 +73,26 @@ class User(db.Model):
     is_verified = db.Column(db.Boolean, default=False)
     last_accessed_at = db.Column(db.DateTime(timezone=True))
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(pytz.utc))
-    deleted_at = db.Column(db.DateTime(timezone=True))
     speaker = db.relationship('Speaker', backref="user")
     session = db.relationship('Session', backref="user")
     feedback = db.relationship('Feedback', backref="user")
     access_codes = db.relationship('AccessCode', backref="user")
     discount_codes = db.relationship('DiscountCode', backref="user")
+    marketer_events = db.relationship(
+                          'Event',
+                          viewonly=True,
+                          secondary='join(UserSystemRole, CustomSysRole,'
+                                    ' and_(CustomSysRole.id == UserSystemRole.role_id, CustomSysRole.name == "Marketer"))',
+                          primaryjoin='UserSystemRole.user_id == User.id',
+                          secondaryjoin='Event.id == UserSystemRole.event_id'
+    )
+    sales_admin_events = db.relationship(
+                         'Event',
+                         viewonly=True,
+                         secondary='join(UserSystemRole, CustomSysRole,'
+                                   ' and_(CustomSysRole.id == UserSystemRole.role_id, CustomSysRole.name == "Sales Admin"))',
+                         primaryjoin='UserSystemRole.user_id == User.id',
+                         secondaryjoin='Event.id == UserSystemRole.event_id')
 
     @hybrid_property
     def password(self):
@@ -89,8 +109,8 @@ class User(db.Model):
         :param password:
         :return:
         """
-        salt = generate_random_salt()
-        self._password = generate_password_hash(password, salt)
+        salt = str(generate_random_salt(), 'utf-8')
+        self._password = str(generate_password_hash(password, salt), 'utf-8')
         hash_ = random.getrandbits(128)
         self.reset_password = str(hash_)
         self.salt = salt
@@ -117,7 +137,8 @@ class User(db.Model):
 
     # User Permissions
     def can_publish_event(self):
-        """Checks if User can publish an event
+        """
+        Checks if User can publish an event
         """
         perm = UserPermission.query.filter_by(name='publish_event').first()
         if not perm:
@@ -126,7 +147,8 @@ class User(db.Model):
         return perm.unverified_user
 
     def can_create_event(self):
-        """Checks if User can create an event
+        """
+        Checks if User can create an event
         """
         perm = UserPermission.query.filter_by(name='create_event').first()
         if not perm:
@@ -138,7 +160,8 @@ class User(db.Model):
         return True
 
     def has_role(self, event_id):
-        """Checks if user has any of the Roles at an Event.
+        """
+        Checks if user has any of the Roles at an Event.
         Exclude Attendee Role.
         """
         attendee_role = Role.query.filter_by(name=ATTENDEE).first()
@@ -149,13 +172,39 @@ class User(db.Model):
         else:
             return True
 
-    def _is_role(self, role_name, event_id):
-        """Checks if a user has a particular Role at an Event.
+    def _is_system_role(self, role_name):
+        """
+        Checks if a user has a particular Role.
+        """
+        role = CustomSysRole.query.filter_by(name=role_name).first()
+        ucsr = UserSystemRole.query.filter_by(user=self,
+                                              role=role).first()
+        if not ucsr:
+            return False
+        else:
+            return True
+
+    @hybrid_property
+    def is_marketer(self):
+        # type: (object) -> object
+        return self._is_system_role(MARKETER)
+
+    @hybrid_property
+    def is_sales_admin(self):
+        return self._is_system_role(SALES_ADMIN)
+
+    def _is_role(self, role_name, event_id=None):
+        """
+        Checks if a user has a particular Role at an Event.
         """
         role = Role.query.filter_by(name=role_name).first()
-        uer = UER.query.filter_by(user=self,
-                                  event_id=event_id,
-                                  role=role).first()
+        if event_id:
+            uer = UER.query.filter_by(user=self,
+                                      event_id=event_id,
+                                      role=role).first()
+        else:
+            uer = UER.query.filter_by(user=self,
+                                      role=role).first()
         if not uer:
             return False
         else:
@@ -180,6 +229,31 @@ class User(db.Model):
     def is_attendee(self, event_id):
         return self._is_role(ATTENDEE, event_id)
 
+    @hybrid_property
+    def is_user_organizer(self):
+        # type: (object) -> object
+        return self._is_role(ORGANIZER)
+
+    @hybrid_property
+    def is_user_coorganizer(self):
+        return self._is_role(COORGANIZER)
+
+    @hybrid_property
+    def is_user_track_organizer(self):
+        return self._is_role(TRACK_ORGANIZER)
+
+    @hybrid_property
+    def is_user_moderator(self):
+        return self._is_role(MODERATOR)
+
+    @hybrid_property
+    def is_user_registrar(self):
+        return self._is_role(REGISTRAR)
+
+    @hybrid_property
+    def is_user_attendee(self):
+        return self._is_role(ATTENDEE)
+
     def _has_perm(self, operation, service_class, event_id):
         # Operation names and their corresponding permission in `Permissions`
         operations = {
@@ -188,7 +262,7 @@ class User(db.Model):
             'update': 'can_update',
             'delete': 'can_delete',
         }
-        if operation not in operations.keys():
+        if operation not in list(operations.keys()):
             raise ValueError('No such operation defined')
 
         try:
@@ -266,7 +340,7 @@ class User(db.Model):
 
     def is_correct_password(self, password):
         salt = self.salt
-        password = generate_password_hash(password, salt)
+        password = str(generate_password_hash(password, salt), 'utf-8')
         if password == self._password:
             return True
         return False
@@ -276,14 +350,16 @@ class User(db.Model):
         return self.is_super_admin or self.is_admin
 
     def is_sys_role(self, role_id):
-        """Check if a user has a Custom System Role assigned.
+        """
+        Check if a user has a Custom System Role assigned.
         `role_id` is id of a `CustomSysRole` instance.
         """
         role = UserSystemRole.query.filter_by(user=self, role_id=role_id).first()
         return bool(role)
 
     def first_access_panel(self):
-        """Check if the user is assigned a Custom Role or not
+        """
+        Check if the user is assigned a Custom Role or not
         This checks if there is an entry containing the current user in the `user_system_roles` table
         returns panel name if exists otherwise false
         """
@@ -296,7 +372,8 @@ class User(db.Model):
         return perm.panel_name
 
     def can_access_panel(self, panel_name):
-        """Check if user can access an Admin Panel
+        """
+        Check if user can access an Admin Panel
         """
         if self.is_staff:
             return True
@@ -312,7 +389,8 @@ class User(db.Model):
         return get_count(Notification.query.filter_by(user=self, is_read=False))
 
     def get_unread_notifs(self):
-        """Get unread notifications with titles, humanized receiving time
+        """
+        Get unread notifications with titles, humanized receiving time
         and Mark-as-read links.
         """
         notifs = []
@@ -336,7 +414,7 @@ class User(db.Model):
         firstname = self.first_name if self.first_name else ''
         lastname = self.last_name if self.last_name else ''
         if firstname and lastname:
-            return u'{} {}'.format(firstname, lastname)
+            return '{} {}'.format(firstname, lastname)
         else:
             return ''
 
@@ -344,10 +422,7 @@ class User(db.Model):
         return '<User %r>' % self.email
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return self.email
+        return self.__repr__()
 
     def __setattr__(self, name, value):
         if name == 'details':

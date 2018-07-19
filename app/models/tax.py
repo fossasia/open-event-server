@@ -1,11 +1,12 @@
 from sqlalchemy.orm import backref
 
 from app.models import db
+from app.models.base import SoftDeletionModel
 
 
-class Tax(db.Model):
+class Tax(SoftDeletionModel):
     """
-    Copyright Information about an event.
+    Tax Information about an event.
     """
     __tablename__ = 'tax'
 
@@ -22,6 +23,7 @@ class Tax(db.Model):
     zip = db.Column(db.Integer)
     invoice_footer = db.Column(db.String)
     is_tax_included_in_price = db.Column(db.Boolean, default=False)
+    is_invoice_sent = db.Column(db.Boolean, default=False)
 
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref=backref('tax', uselist=False))
@@ -39,7 +41,9 @@ class Tax(db.Model):
                  zip=None,
                  invoice_footer=None,
                  is_tax_included_in_price=None,
-                 event_id=None):
+                 is_invoice_sent=None,
+                 event_id=None,
+                 deleted_at=None):
         self.country = country
         self.name = name
         self.rate = rate
@@ -52,16 +56,15 @@ class Tax(db.Model):
         self.zip = zip
         self.invoice_footer = invoice_footer
         self.is_tax_included_in_price = is_tax_included_in_price
+        self.is_invoice_sent = is_invoice_sent
         self.event_id = event_id
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<Tax %r>' % self.name
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return self.name
+        return self.__repr__()
 
     @property
     def serialize(self):
@@ -79,5 +82,6 @@ class Tax(db.Model):
             'state': self.state,
             'zip': self.zip,
             'invoice_footer': self.invoice_footer,
-            'is_tax_included_in_price': self.is_tax_included_in_price
+            'is_tax_included_in_price': self.is_tax_included_in_price,
+            'is_invoice_sent': self.is_invoice_sent
         }

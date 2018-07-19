@@ -2,7 +2,7 @@
 
 ## Dependencies required to run Orga Server
 
-* Python 2
+* Python 3
 
 * Installation of 'Homebrew' would catalyze the process of installation
 ```sh
@@ -33,15 +33,15 @@ You may encounter problems installing 'libevent' while executing the requirement
 Installing the below files would prevent the 'egg_info' error.
 
 ```sh
-brew install python libevent
-curl https://bootstrap.pypa.io/ez_setup.py -o - | python
+brew install python3 libevent
+curl https://bootstrap.pypa.io/ez_setup.py -o - | python3
 pip install gevent gunicorn
 ```
 
-* **Step 1** - Install python requirements.
+* **Step 1** - Install Python 3 requirements.
 
 ```sh
-sudo pip install -r requirements.txt
+sudo pip3 install -r requirements.txt
 ```
 
 
@@ -61,34 +61,26 @@ create database test with owner=open_event_user;
 * Once database is created, exit the psql shell with `\q` followed by ENTER.
 
 
-* **Step 3** - Install bower and frontend requirements.
-
-```sh
-npm install bower -g
-bower install
-```
-
-
-* **Step 4** - Create application environment variables.
+* **Step 3** - Create application environment variables.
 
 ```sh
 export DATABASE_URL=postgresql://open_event_user:start@127.0.0.1:5432/test
 ```
 
 
-* **Step 5** - Start the postgres service on the application manually.
+* **Step 4** - Start the postgres service on the application manually.
 
 
-* **Step 6** - Create the tables. For that we will use `create_db.py`.
+* **Step 5** - Create the tables. For that we will use `create_db.py`.
 
 ```sh
-python create_db.py
+python3 create_db.py
 # enter email and password
-python manage.py db stamp head
+python3 manage.py db stamp head
 ```
 
 
-* **Step 7** - Start the application along with the needed services.
+* **Step 6** - Start the application along with the needed services.
 The `&` at the end of the commands below make them run in background so that they don't hold the terminal.
 
 ```sh
@@ -110,7 +102,7 @@ celery worker -A app.celery &
 unset INTEGRATE_SOCKETIO
 
 # run app
-python manage.py runserver
+python3 manage.py runserver
 ```
 
 * **Step 8** - Rejoice. Go to `localhost:5000` in your web browser to see the application live.

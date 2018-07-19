@@ -1,6 +1,7 @@
 import factory
-from app.models.page import db, Page
+
 import app.factories.common as common
+from app.models.page import db, Page
 
 
 class PageFactory(factory.alchemy.SQLAlchemyModelFactory):

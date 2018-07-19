@@ -1,9 +1,9 @@
 from flask import jsonify, url_for, current_app, Blueprint, abort
 from flask_jwt import jwt_required, current_identity
 
+from app.api.helpers.files import make_frontend_url
 from app.api.helpers.import_helpers import get_file_from_request, import_event_json, create_import_job
 from app.api.helpers.utilities import TASK_RESULTS
-from app.api.helpers.files import make_frontend_url
 
 import_routes = Blueprint('imports', __name__, url_prefix='/v1')
 
@@ -16,7 +16,7 @@ def import_event(source_type):
     else:
         file_path = None
         abort(404)
-    from helpers.tasks import import_event_task
+    from .helpers.tasks import import_event_task
     task = import_event_task.delay(email=current_identity.email, file=file_path,
                                    source_type=source_type, creator_id=current_identity.id)
     # create import job

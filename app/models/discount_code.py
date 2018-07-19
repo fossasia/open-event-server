@@ -1,12 +1,13 @@
 from datetime import datetime
 
 from app.models import db
+from app.models.base import SoftDeletionModel
 
 TICKET = 'ticket'
 EVENT = 'event'
 
 
-class DiscountCode(db.Model):
+class DiscountCode(SoftDeletionModel):
     __tablename__ = "discount_codes"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -20,7 +21,6 @@ class DiscountCode(db.Model):
     max_quantity = db.Column(db.Integer, default=100)
     valid_from = db.Column(db.DateTime(timezone=True), nullable=True)
     valid_till = db.Column(db.DateTime(timezone=True), nullable=True)
-    tickets = db.Column(db.String)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref='discount_codes', foreign_keys=[event_id])
     created_at = db.Column(db.DateTime(timezone=True))
@@ -43,8 +43,9 @@ class DiscountCode(db.Model):
                  created_at=None,
                  used_for=None,
                  event_id=None,
-                 tickets=None,
-                 user_id=None):
+                 user_id=None,
+                 marketer_id=None,
+                 deleted_at=None):
         self.code = code
         self.discount_url = discount_url
         self.type = type
@@ -58,8 +59,9 @@ class DiscountCode(db.Model):
         self.is_active = is_active
         self.created_at = datetime.utcnow()
         self.used_for = used_for
-        self.tickets = tickets
         self.marketer_id = user_id
+        self.marketer_id = marketer_id
+        self.deleted_at = deleted_at
 
     @staticmethod
     def get_service_name():
@@ -69,10 +71,7 @@ class DiscountCode(db.Model):
         return '<DiscountCode %r>' % self.id
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return self.code
+        return self.__repr__()
 
     @property
     def serialize(self):

@@ -2,58 +2,73 @@
 
 ## Dependencies required to run Orga Server
 
-* Python 2
+* Python 3
 * Postgres
+* OpenSSL
+
+### For mac users
+```sh
+brew install postgresql
+````
+
+### For debian-based linux users
 ```sh
 sudo apt-get update
 sudo apt-get install postgresql postgresql-contrib
-```
-* NodeJS
-if nvm(Node Version Manager)  is not installed:
-using cURL:
-```sh
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash
-```
-or Wget:
-```sh
-wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash
-```
-run nvm after exporting NVM_DIR:
-```sh
-. "$NVM_DIR/nvm.sh"
-```
-Node installation, v6.9.1 is LTS, though you can install other versions as well:
-```sh
-nvm install 6.9.1
 ```
 
 ## Steps
 
 Make sure you have the dependencies mentioned above installed before proceeding further.
 
-* **Step 0** - Clone the Open Event Orga Server repository (from the development branch) and ```cd ``` into the directory.
+* **Step 0** - Clone the Open Event Server repository (from the development branch) and ```cd ``` into the directory.
 ```sh
 git clone -b development https://github.com/fossasia/open-event-server.git
 cd open-event-server
 ```
+**Note :** If you want to contribute, first fork the original repository and clone the forked repository into your local machine followed by ```cd``` into the directory
+```sh
+git clone https://github.com/USERNAME/open-event-server.git
+cd open-event-server
+```
 
+* **Step 1** - Install python3 requirements. You need to be present in the root directory of the project.
 
-* **Step 1** - Install python requirements. You need to be present in the root directory of the project.
+# System Wide Installation
 
 ```sh
-sudo -H pip install -r requirements.txt
+sudo -H pip3 install -r requirements.txt
 ```
 hint: You may need to upgrade your pip version and install following packages if you encounter errors while installing the requirements.
+
+# Installation in Virtual Environment
+
 ```sh
-sudo apt-get install python-dev
+virtualenv -p python3 venv
+source venv/bin/activate
+pip3 install -r requirements.txt
+```
+
+```sh
+
+# For linux users
+sudo apt-get install python3-dev
 sudo apt-get install libpq-dev
 sudo apt-get install libffi6 libffi-dev
+
+# For macOS users
+brew install python@3
+brew install libmagic
 ```
 
 * **Step 2** - Create the database. For that we first open the psql shell. Go the directory where your postgres file is stored.
 
 ```sh
+# For linux users
 sudo -u postgres psql
+
+# For macOS users
+psql -d postgres
 ```
 
 * When inside psql, create a user for open-event and then using the user create the database.
@@ -91,11 +106,13 @@ brew services restart postgresql
 * **Step 5** - Create the tables. For that we will use `create_db.py`.
 
 ```sh
-python create_db.py
+python3 create_db.py
 # enter email and password
-python manage.py db stamp head
+python3 manage.py db stamp head
 ```
-**Note:** In case you are using Anaconda distribution for python, you may get an import error regarding `celery.signals` module. Please use the default python version while executing these steps in that case.
+**Note 1:** In case you made your own username and password in Step 2 are now getting `FATAL:  password authentication failed for user "john"` , probable cause is non updation of `.env` file. To resolve it, open the `.env` file and update `DATABASE_URL=postgresql://USERNAME:PASSWORD@127.0.0.1:5432/oevent` and you are good to go.
+
+**Note 2:** In case you are using Anaconda distribution for python, you may get an import error regarding `celery.signals` module. Please use the default python version while executing these steps in that case.
 
 * **Step 6** - Start the application along with the needed services.
 
@@ -106,13 +123,16 @@ sudo apt-get install redis-server
 # For Fedora, RedHat, CentOS
 sudo dnf install redis-server
 
+# For macOS
+brew install redis
+
 # Run Celery
 # socketio has problems with celery "blocking" tasks
 # also socketio is not used in a celery task so no problem to turn it off
 INTEGRATE_SOCKETIO=false celery worker -A app.celery
 
 # run app
-python manage.py runserver
+python3 manage.py runserver
 ```
 
 * **Step 7** - Rejoice. Go to `localhost:5000` in your web browser to see the application live.
@@ -128,7 +148,7 @@ export INTEGRATE_SOCKETIO="true"
 
 The development server is the one that Flask ships with. It's based on Werkzeug and does not support WebSockets. If you try to run it, you'll get a RunTime error, something like: `You need to use the eventlet server. `.  To test real-time notifications, you must use the Gunicorn web server with eventlet worker class.
 
-If you've installed development requirements, you should have both `gunicorn` and `eventlet` installed. To run application on port 5000, execute the following instead of `python manage.py runserver`:
+If you've installed development requirements, you should have both `gunicorn` and `eventlet` installed. To run application on port 5000, execute the following instead of `python3 manage.py runserver`:
 
 ```bash
 gunicorn app:app --worker-class eventlet -w 1 --bind 0.0.0.0:5000 --reload
