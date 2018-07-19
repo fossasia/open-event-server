@@ -184,7 +184,7 @@ class UserDetail(ResourceDetail):
             view_kwargs['email_changed'] = user.email
 
         if data.get('is_admin') != user.is_admin:
-            data['is_admin'] = not user.is_admin
+            user.is_admin = not user.is_admin
 
     def after_update_object(self, user, data, view_kwargs):
         """
