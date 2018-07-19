@@ -23,7 +23,7 @@
             margin-top: 25px;
         }
 
-        .order-total {
+        .speaker-total {
             margin-right: 50px;
         }
 
@@ -35,14 +35,14 @@
 <body id="body">
 <h3 style="text-align:center;">{{ event.name }} - {{ ("Speakers List") }}</h3>
     <br>
-    <table class="table with-datatable" id="orders-table" width="100%">
+    <table class="table with-datatable" id="speakers-table" width="100%">
         <thead>
         <tr>
             <th>
-                {{ ("Order") }}
+                {{ ("Speaker") }}
             </th>
             <th>
-                {{ ("Order Details") }}
+                {{ ("Speaker Details") }}
             </th>
             <th>
                 {{ ("User") }}
@@ -53,59 +53,59 @@
         </tr>
         </thead>
         <tbody>
-        {% for order in orders %}
-            {% if order.status != "deleted" %}
+        {% for speaker in speakers %}
+            {% if speaker.status != "deleted" %}
                 <tr class="padded">
                     <td><br>
-                            Order Number    :<br>
-                            Order By        :<br>
-                            Order Status    :<br>
+                            Speaker Number    :<br>
+                            Speaker By        :<br>
+                            Speaker Status    :<br>
                             Quantity        :<br>
                             Total Amount    :<br>
                             Payment Mode    :<br>
                             Discount Code   :<br>
-                        {% if order.status == 'completed' %}
-                            Order Completed :<br>
+                        {% if speaker.status == 'completed' %}
+                            Speaker Completed :<br>
                         {% else %}
-                            Order Placed    :<br>
+                            Speaker Placed    :<br>
                         {% endif %}
                     </td>
                     <td><br>
-                            <strong>{{ order.get_invoice_number() }}</strong><br>
-                            {% if order.user and order.user.first_name and order.user.last_name %}
-                                {{ order.user.fullname }}
-                            {% elif order.user %}
-                                {{ order.user.email }}
+                            <strong>{{ speaker.get_invoice_number() }}</strong><br>
+                            {% if speaker.user and speaker.user.first_name and speaker.user.last_name %}
+                                {{ speaker.user.fullname }}
+                            {% elif speaker.user %}
+                                {{ speaker.user.email }}
                             {% else %}
                                 {{ ('Information unavailable') }}
                             {% endif %}<br>
-                            {% if order.status == 'completed' %}
-                                {{ order.status | capitalize }}
-                            {% elif order.status == 'pending' or order.status == 'initialized' %}
+                            {% if speaker.status == 'completed' %}
+                                {{ speaker.status | capitalize }}
+                            {% elif speaker.status == 'pending' or speaker.status == 'initialized' %}
                                 {{ ("Pending") }}
-                            {% elif order.status == 'placed' %}
-                                {{ order.status | capitalize }}
-                            {% elif order.status == 'cancelled' %}
-                                {{ order.status | capitalize }}
+                            {% elif speaker.status == 'placed' %}
+                                {{ speaker.status | capitalize }}
+                            {% elif speaker.status == 'cancelled' %}
+                                {{ speaker.status | capitalize }}
                             {% else %}
-                                {{ order.status | capitalize }}
+                                {{ speaker.status | capitalize }}
                             {% endif %}<br>
-                            {{ order.get_tickets_count() }}<br>
-                            {{ event.payment_currency | currency_symbol }}{{ order.amount | money }}<br>
-                            {% if order.status == 'completed' %}
-                                {{ order.paid_via | capitalize }}
+                            {{ speaker.get_tickets_count() }}<br>
+                            {{ event.payment_currency | currency_symbol }}{{ speaker.amount | money }}<br>
+                            {% if speaker.status == 'completed' %}
+                                {{ speaker.paid_via | capitalize }}
                             {% else %}
                                 {{ ('Payment pending') }}
                             {% endif %}<br>
-                            {% if order.discount_code %}
-                                {{ order.discount_code.code }}<br>
+                            {% if speaker.discount_code %}
+                                {{ speaker.discount_code.code }}<br>
                             {% else %}
                                 {{ ('NA') }}
                             {% endif %}<br>
-                            {% if order.status == 'completed' %}
-                                <span class="datetime">{{ order.completed_at | datetime }}</span>
+                            {% if speaker.status == 'completed' %}
+                                <span class="datetime">{{ speaker.completed_at | datetime }}</span>
                             {% else %}
-                                <span class="datetime">{{ order.created_at | datetime }}</span>
+                                <span class="datetime">{{ speaker.created_at | datetime }}</span>
                             {% endif %}<br>
                     </td>
                     <td style="text-align:center;"><br>
@@ -117,9 +117,9 @@
                     </td>
                     <td><br>
                             <strong>
-                            {{ order.user.first_name if order.user and order.user.first_name }}<br>
-                            {{ order.user.last_name if order.user and order.user.last_name}}<br>
-                            {{ order.user.email if order.user and order.user.email}}<br>
+                            {{ speaker.user.first_name if speaker.user and speaker.user.first_name }}<br>
+                            {{ speaker.user.last_name if speaker.user and speaker.user.last_name}}<br>
+                            {{ speaker.user.email if speaker.user and speaker.user.email}}<br>
                             </strong>
                     </td>
                 </tr>
