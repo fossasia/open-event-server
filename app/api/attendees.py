@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Blueprint, request, jsonify, abort, make_response
 from flask_jwt import current_identity, jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
@@ -153,6 +155,13 @@ class AttendeeDetail(ResourceDetail):
             else:
                 if obj.checkin_times and data['checkin_times'] not in obj.checkin_times.split(","):
                     data['checkin_times'] = '{},{}'.format(obj.checkin_times, data['checkin_times'])
+
+        if 'is_checked_out' in data and data['is_checked_out']:
+            attendee = safe_query(db, TicketHolder, 'id', kwargs['id'], 'attendee_id')
+            if not attendee.is_checked_out:
+                checkout_times = obj.checkout_times.split(',') if obj.checkout_times else []
+                checkout_times.append(str(datetime.utcnow()))
+                data['checkout_times'] = ','.join(checkout_times)
 
         if 'attendee_notes' in data:
             if obj.attendee_notes and data['attendee_notes'] not in obj.attendee_notes.split(","):
