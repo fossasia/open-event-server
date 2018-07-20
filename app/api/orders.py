@@ -357,8 +357,10 @@ class ChargeSchema(Schema):
         self_view_kwargs = {'order_identifier': '<id>'}
 
     id = fields.Str(dump_only=True)
-    stripe = fields.Str(allow_none=True)
-    paypal = fields.Str(allow_none=True)
+    stripe = fields.Str(load_only=True, allow_none=True)
+    paypal = fields.Str(load_only=True, allow_none=True)
+    status = fields.Boolean(dump_only=True)
+    message = fields.Str(dump_only=True)
 
 
 class ChargeList(ResourceList):
