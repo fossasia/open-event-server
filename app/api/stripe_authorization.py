@@ -44,17 +44,14 @@ class StripeAuthorizationListPost(ResourceList):
         try:
             self.session.query(StripeAuthorization).filter_by(event_id=data['event'], deleted_at=None).one()
         except NoResultFound:
-            try:
-                credentials = StripePaymentsManager\
-                    .get_event_organizer_credentials_from_stripe(data['stripe_auth_code'])
-                if 'error' in credentials:
-                    raise UnprocessableEntity({'pointer': '/data/stripe_auth_code'}, credentials['error_description'])
-                data['stripe_secret_key'] = credentials['access_token']
-                data['stripe_refresh_token'] = credentials['refresh_token']
-                data['stripe_publishable_key'] = credentials['stripe_publishable_key']
-                data['stripe_user_id'] = credentials['stripe_user_id']
-            except Exception:
-                raise ForbiddenException({'pointer': ''}, "Stripe payment isn't configured properly for this Event")
+            credentials = StripePaymentsManager\
+                .get_event_organizer_credentials_from_stripe(data['stripe_auth_code'])
+            if 'error' in credentials:
+                raise UnprocessableEntity({'pointer': '/data/stripe_auth_code'}, credentials['error_description'])
+            data['stripe_secret_key'] = credentials['access_token']
+            data['stripe_refresh_token'] = credentials['refresh_token']
+            data['stripe_publishable_key'] = credentials['stripe_publishable_key']
+            data['stripe_user_id'] = credentials['stripe_user_id']
         else:
             raise ConflictException({'pointer': '/data/relationships/event'},
                                     "Stripe Authorization already exists for this event")

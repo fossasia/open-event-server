@@ -7,6 +7,7 @@ from forex_python.converter import CurrencyRates
 
 from app.api.helpers.cache import cache
 from app.api.helpers.db import safe_query
+from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.utilities import represents_int
 from app.models import db
 from app.models.event import Event
@@ -66,7 +67,7 @@ class StripePaymentsManager(object):
         credentials = StripePaymentsManager.get_credentials()
 
         if not credentials:
-            raise Exception('Stripe credentials of the Event organizer not found')
+            raise ForbiddenException({'pointer': ''}, "Stripe payment isn't configured properly for this Event")
 
         data = {
             'client_secret': credentials['SECRET_KEY'],
