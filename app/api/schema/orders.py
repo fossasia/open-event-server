@@ -4,10 +4,8 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 
 from app import db
-from app.api.helpers.payment import PayPalPaymentsManager
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
-from app.models.order import Order
 from utils.common import use_defaults
 
 
@@ -61,6 +59,7 @@ class OrderSchema(SoftDeletionSchema):
     payment_url = fields.Str(dump_only=True)
     cancel_note = fields.Str(allow_none=True)
     order_notes = fields.Str(allow_none=True)
+    tickets_pdf_url = fields.Url(dump_only=True)
 
     attendees = Relationship(attribute='ticket_holders',
                              self_view='v1.order_attendee',
