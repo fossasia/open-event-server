@@ -30,6 +30,9 @@ class SettingSchemaPublic(Schema):
     # Google Analytics
     analytics_key = fields.Str(allow_none=True)
 
+    # FB
+    fb_client_id = fields.Str(allow_none=True)
+
     #
     # Social links
     #
