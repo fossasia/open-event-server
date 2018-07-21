@@ -253,6 +253,7 @@ def export_speakers_csv(event_identifier):
         task_url=url_for('tasks.celery_task', task_id=task.id)
     )
 
+
 @export_routes.route('/events/<string:event_identifier>/export/speakers/pdf', methods=['GET'])
 @jwt_required()
 def export_speakers_pdf(event_identifier):
