@@ -284,7 +284,7 @@ def export_sessions_pdf(event_identifier):
         event_id = event_identifier
 
     from .helpers.tasks import export_speakers_pdf_task
-
+    
     task = export_speakers_pdf_task.delay(event_id)
     
     from .helpers.tasks import export_sessions_pdf_task
