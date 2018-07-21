@@ -47,7 +47,7 @@ sudo systemctl status docker
 * Next step is to install Docker-Compose. Following the [DigitalOcean guide](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-14-04), run the following commands in the ssh shell to install compose.
 
 ```bash
-sudo apt-get -y install python-pip
+sudo apt-get -y install python3-pip
 sudo pip install docker-compose
 ```
 
@@ -57,7 +57,7 @@ tutorial so please see it.
 * We will start by cloning the GitHub Open Event Orga Server repo and cd'ing into it's directory. Then we will set the `SERVER_NAME` and then build and run the image.
 
 ```bash
-git clone https://github.com/fossasia/open-event-orga-server.git && cd open-event-orga-server
+git clone https://github.com/fossasia/open-event-server.git && cd open-event-server
 export SERVER_NAME=104.236.228.132
 docker-compose build
 docker-compose up
@@ -95,9 +95,9 @@ docker-compose run web /bin/bash
 * When bash opens, run the following commands and exit.
 
 ```bash
-python create_db.py
+python3 create_db.py
 # ^^ write super_admin email and password when asked
-python manage.py db stamp head
+python3 manage.py db stamp head
 ```
 
 * That's it. Visit the `$IP` (example 104.236.228.132) to view the open event server. You can close the 2nd terminal window if you wish.

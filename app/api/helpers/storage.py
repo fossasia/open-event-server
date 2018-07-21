@@ -7,12 +7,14 @@ import magic
 from boto.gs.connection import GSConnection
 from boto.s3.connection import S3Connection, OrdinaryCallingFormat
 from boto.s3.key import Key
-from flask_scrypt import generate_password_hash
-from werkzeug.utils import secure_filename
 from flask import current_app as app, request
-from urlparse import urlparse
+from flask_scrypt import generate_password_hash
+from urllib.parse import urlparse
+from werkzeug.utils import secure_filename
 
 from app.settings import get_settings
+
+SCHEMES = {80: 'http', 443: 'https'}
 
 #################
 # STORAGE SCHEMA
@@ -46,7 +48,7 @@ UPLOAD_PATHS = {
         'original': 'users/{identifier}/original',
         'large': 'users/{identifier}/large',
         'icon': 'users/{identifier}/icon'
-},
+    },
     'temp': {
         'event': 'events/temp/{uuid}',
         'image': 'temp/images/{uuid}'
@@ -55,7 +57,17 @@ UPLOAD_PATHS = {
         'zip': 'exports/{event_id}/zip',
         'pentabarf': 'exports/{event_id}/pentabarf',
         'ical': 'exports/{event_id}/ical',
-        'xcal': 'exports/{event_id}/xcal'
+        'xcal': 'exports/{event_id}/xcal',
+        'csv': 'exports/{event_id}/csv/{identifier}',
+        'pdf': 'exports/{event_id}/pdf/{identifier}'
+    },
+    'exports-temp': {
+        'zip': 'exports/{event_id}/temp/zip',
+        'pentabarf': 'exports/{event_id}/temp/pentabarf',
+        'ical': 'exports/{event_id}/temp/ical',
+        'xcal': 'exports/{event_id}/temp/xcal',
+        'csv': 'exports/{event_id}/csv/{identifier}',
+        'pdf': 'exports/{event_id}/pdf/{identifier}'
     },
     'custom-placeholders': {
         'original': 'custom-placeholders/{identifier}/original',
@@ -107,7 +119,7 @@ class UploadedMemory(object):
 
     def save(self, path):
         f = open(path, 'w')
-        f.write(self.data)
+        f.write(str(self.data, 'utf-8'))
         f.close()
 
 
@@ -160,9 +172,23 @@ def upload_local(uploaded_file, key, **kwargs):
     file_relative_path = '/' + file_relative_path
     if get_settings()['static_domain']:
         return get_settings()['static_domain'] + \
-            file_relative_path.replace('/static', '')
-    url = urlparse(request.url)
-    return url.scheme + '://' + url.hostname + file_relative_path
+               file_relative_path.replace('/static', '')
+
+    return create_url(request.url, file_relative_path)
+
+
+def create_url(request_url, file_relative_path):
+    """Generates the URL of an uploaded file."""
+    url = urlparse(request_url)
+
+    # No need to specify scheme-corresponding port
+    port = url.port
+    if port and url.scheme == SCHEMES.get(url.port, None):
+        port = None
+
+    return '{scheme}://{hostname}:{port}{file_relative_path}'.format(
+        scheme=url.scheme, hostname=url.hostname, port=port,
+        file_relative_path=file_relative_path).replace(':None', '')
 
 
 def upload_to_aws(bucket_name, aws_region, aws_key, aws_secret, file, key, acl='public-read'):
@@ -249,4 +275,4 @@ def generate_hash(key):
     Generate hash for key
     """
     phash = generate_password_hash(key, get_settings()['secret'])
-    return b64encode(phash)[:10]  # limit len to 10, is sufficient
+    return str(b64encode(phash), 'utf-8')[:10]  # limit len to 10, is sufficient

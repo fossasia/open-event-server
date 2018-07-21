@@ -20,3 +20,6 @@ class Module(db.Model):
 
     def __repr__(self):
         return '<Module %r>' % self.id
+
+    def __str__(self):
+        return self.__repr__()

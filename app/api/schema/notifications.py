@@ -1,10 +1,11 @@
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
 
 
-class NotificationSchema(Schema):
+class NotificationSchema(SoftDeletionSchema):
     """
     API Schema for Notification Model
     """
@@ -22,6 +23,7 @@ class NotificationSchema(Schema):
     id = fields.Str(dump_only=True)
     title = fields.Str(allow_none=True, dump_only=True)
     message = fields.Str(allow_none=True, dump_only=True)
+    action = fields.Str(allow_none=True, dump_only=True)
     received_at = fields.DateTime(dump_only=True)
     accept = fields.Str(allow_none=True, dump_only=True)
     is_read = fields.Boolean()

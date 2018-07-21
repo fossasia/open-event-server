@@ -2,6 +2,7 @@
 # MODULES RELATED TO THE EVENT-SYSTEM i.e FUNCTIONS SPECIFIC TO DB MODELS E.G A FUNCTION JUST FOR ROLE_INVITES
 import random
 import string
+import sys
 
 import bleach
 from itsdangerous import Serializer
@@ -11,6 +12,7 @@ import re
 from app.api.helpers.exceptions import UnprocessableEntity
 
 from flask import current_app
+
 
 def dasherize(text):
     return text.replace('_', '-')
@@ -24,15 +26,17 @@ def require_relationship(resource_list, data):
 
 
 def string_empty(value):
-    if type(value) is not value and type(value) is not unicode:
+    is_not_str_type = type(value) is not str
+    if sys.version_info[0] < 3:
+        is_not_str_type = is_not_str_type and type(value) is not unicode
+    if type(value) is not value and is_not_str_type:
         return False
-    if value and value.strip() and value != u'' and value != u' ':
-        return False
-    else:
-        return True
+    return not (value and value.strip() and value != u'' and value != u' ')
 
 
 def strip_tags(html):
+    if html is None:
+        return None
     return bleach.clean(html, tags=[], attributes={}, styles=[], strip=True)
 
 
@@ -93,7 +97,7 @@ def get_filename_from_cd(cd):
 def write_file(file, data):
     """simple write to file"""
     fp = open(file, 'w')
-    fp.write(data)
+    fp.write(str(data, 'utf-8'))
     fp.close()
 
 
@@ -107,6 +111,7 @@ def update_state(task_handle, state, result=None):
         task_handle.update_state(
             state=state, meta=result
         )
+
 
 # store task results in case of testing
 # state and info

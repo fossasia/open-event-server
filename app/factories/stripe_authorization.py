@@ -1,8 +1,8 @@
 import factory
 
+import app.factories.common as common
 from app.factories.event import EventFactoryBasic
 from app.models import db
-import app.factories.common as common
 from app.models.stripe_authorization import StripeAuthorization
 
 
@@ -16,5 +16,5 @@ class StripeAuthorizationFactory(factory.alchemy.SQLAlchemyModelFactory):
     stripe_refresh_token = common.string_
     stripe_publishable_key = common.string_
     stripe_user_id = common.string_
-    stripe_email = common.email_
+    stripe_auth_code = common.secret_
     event_id = 1

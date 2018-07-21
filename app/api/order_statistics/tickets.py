@@ -1,14 +1,14 @@
 from flask_rest_jsonapi import ResourceDetail
-from marshmallow_jsonapi.flask import Schema
 from marshmallow_jsonapi import fields
+from marshmallow_jsonapi.flask import Schema
 from sqlalchemy import func
 
-from app.api.helpers.utilities import dasherize
 from app.api.bootstrap import api
+from app.api.helpers.db import get_count
+from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.order import Order, OrderTicket
 from app.models.ticket import Ticket
-from app.api.helpers.db import get_count
 
 
 class OrderStatisticsTicketSchema(Schema):

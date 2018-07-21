@@ -1,10 +1,10 @@
-import itertools
 import re
 import unicodedata
 
 import bleach
 import diff_match_patch
 from bleach.callbacks import target_blank, nofollow
+from itertools import zip_longest
 
 
 def remove_line_breaks(target_string):
@@ -25,6 +25,8 @@ def clean_up_string(target_string):
 
 
 def clean_html(html):
+    if html is None:
+        return None
     tags = [
         'b',
         'strong',
@@ -50,6 +52,8 @@ def clean_html(html):
 
 
 def strip_tags(html):
+    if html is None:
+        return None
     return bleach.clean(html, tags=[], attributes={}, styles=[], strip=True)
 
 
@@ -68,8 +72,8 @@ def side_by_side_diff(old_text, new_text):
     if not new_text:
         new_text = ''
 
-    old_text = strip_tags(strip_line_breaks(unicode(old_text).encode('utf-8', errors='ignore')))
-    new_text = strip_tags(strip_line_breaks(unicode(new_text).encode('utf-8', errors='ignore')))
+    old_text = strip_tags(strip_line_breaks(str(old_text).encode('utf-8', errors='ignore')))
+    new_text = strip_tags(strip_line_breaks(str(new_text).encode('utf-8', errors='ignore')))
 
     old_text = unicodedata.normalize("NFKD", old_text)
     new_text = unicodedata.normalize("NFKD", new_text)
@@ -80,14 +84,14 @@ def side_by_side_diff(old_text, new_text):
         # Get unchanged parts onto the right line
         if ls[0] == rs[0]:
             yield (False, ls[0], rs[0])
-            for l, r in itertools.izip_longest(ls[1:], rs[1:]):
+            for l, r in zip_longest(ls[1:], rs[1:]):
                 yield (True, l, r)
         elif ls[-1] == rs[-1]:
-            for l, r in itertools.izip_longest(ls[:-1], rs[:-1]):
+            for l, r in zip_longest(ls[:-1], rs[:-1]):
                 yield (l != r, l, r)
             yield (False, ls[-1], rs[-1])
         else:
-            for l, r in itertools.izip_longest(ls, rs):
+            for l, r in zip_longest(ls, rs):
                 yield (True, l, r)
 
     line_split = re.compile(r'(?:\r?\n)')

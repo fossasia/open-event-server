@@ -1,10 +1,13 @@
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
+from utils.common import use_defaults
 
 
-class EmailNotificationSchema(Schema):
+@use_defaults()
+class EmailNotificationSchema(SoftDeletionSchema):
     """
     API Schema for email notification Model
     """
@@ -18,7 +21,7 @@ class EmailNotificationSchema(Schema):
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
-    id = fields.Str(dump_only=True)
+    id = fields.Integer(dump_only=True)
     next_event = fields.Boolean(default=False, allow_none=True)
     new_paper = fields.Boolean(default=False, allow_none=True)
     session_accept_reject = fields.Boolean(default=False, allow_none=True)

@@ -1,7 +1,11 @@
 import datetime
 
-from app.models.helpers.versioning import clean_up_string, clean_html
+import pytz
+from sqlalchemy import event
+
 from app.models import db
+from app.models.base import SoftDeletionModel
+from app.models.helpers.versioning import clean_up_string, clean_html
 
 speakers_sessions = db.Table('speakers_sessions',
                              db.Column('speaker_id', db.Integer, db.ForeignKey('speaker.id', ondelete='CASCADE')),
@@ -9,7 +13,7 @@ speakers_sessions = db.Table('speakers_sessions',
                              db.PrimaryKeyConstraint('speaker_id', 'session_id'))
 
 
-class Session(db.Model):
+class Session(SoftDeletionModel):
     """Session model class"""
     __tablename__ = 'sessions'
     __versioned__ = {
@@ -41,10 +45,11 @@ class Session(db.Model):
     creator_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     state = db.Column(db.String, default="pending")
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow)
-    deleted_at = db.Column(db.DateTime(timezone=True))
     submitted_at = db.Column(db.DateTime(timezone=True))
     submission_modifier = db.Column(db.String)
     is_mail_sent = db.Column(db.Boolean, default=False)
+    last_modified_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow)
+    send_email = db.Column(db.Boolean, nullable=True)
 
     def __init__(self,
                  title=None,
@@ -71,7 +76,9 @@ class Session(db.Model):
                  submission_modifier=None,
                  is_mail_sent=False,
                  deleted_at=None,
-                 submitted_at=None):
+                 submitted_at=None,
+                 last_modified_at=None,
+                 send_email=None):
 
         if speakers is None:
             speakers = []
@@ -101,6 +108,8 @@ class Session(db.Model):
         self.is_mail_sent = is_mail_sent
         self.submitted_at = submitted_at
         self.submission_modifier = submission_modifier
+        self.last_modified_at = datetime.datetime.now(pytz.utc)
+        self.send_email = send_email
 
     @staticmethod
     def get_service_name():
@@ -114,7 +123,7 @@ class Session(db.Model):
         return '<Session %r>' % self.title
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        return self.__repr__()
 
     def __setattr__(self, name, value):
         if name == 'short_abstract' or name == 'long_abstract' or name == 'comments':
@@ -122,5 +131,7 @@ class Session(db.Model):
         else:
             super(Session, self).__setattr__(name, value)
 
-    def __unicode__(self):
-        return self.title
+
+@event.listens_for(Session, 'before_update')
+def receive_after_update(mapper, connection, target):
+    target.last_modified_at = datetime.datetime.now(pytz.utc)

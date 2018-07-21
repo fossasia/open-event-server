@@ -63,20 +63,20 @@
 ![Terminal-search](https://cloud.githubusercontent.com/assets/9834624/11858953/392f8bb0-a434-11e5-9939-e2de9c14ed7f.png)
 
 * In Terminal, type or copy and paste
-```git clone git@github.com:fossasia/open-event-orga-server.git```
+```git clone git@github.com:fossasia/open-event-server.git```
 after entering commands in Terminal press the "Enter" key.
 
 ![Terminal-clone](https://cloud.githubusercontent.com/assets/9834624/11853331/5e75a66c-a40b-11e5-8984-00dd1b57730f.png)
 * Then type or copy and paste
-```cd open-event-orga-server```
+```cd open-event-server```
  (cd means change directory)
 
 ![Terminal-cd1](https://cloud.githubusercontent.com/assets/9834624/11853330/5e72b952-a40b-11e5-8b58-80f7d1a50b2c.png)
 
-* You will then change into the “open-event-orga-server” directory.
+* You will then change into the “open-event-server” directory.
 
 ![Terminal-Vagrant](https://cloud.githubusercontent.com/assets/9834624/11853332/5e789fb6-a40b-11e5-876e-ba37e462643d.png)
-* In Terminal in the “open-event-orga-server” directory, type
+* In Terminal in the “open-event-server” directory, type
 ```vagrant up```
 to bring up the virtual machine. This will start installation of a ubuntu box within which the server will run with all its components. If after typing “vagrant up” you received an error stating “valid providers not found ….”, type
 ```vagrant up --provider=virtualbox```
@@ -129,7 +129,7 @@ This will bring you to the root directory of the Virtual Machine.
 
 
 * To run the app, type
-```python create_db.py```
+```python3 create_db.py```
 this step should exit normally without raising any errors. If Terminal does report an error type
 ```echo $DATABASE_URL```
 to double check your database configuration.
@@ -138,7 +138,7 @@ to double check your database configuration.
 
 
 * Next, type
-```python manage.py runserver -h 0.0.0.0 -p 5000```
+```python3 manage.py runserver -h 0.0.0.0 -p 5000```
 
 ![screen shot 2015-12-13 at 7 22 55 pm](https://cloud.githubusercontent.com/assets/9834624/11853343/5e9cab7c-a40b-11e5-96ad-30df2a3e33a0.png)
 

@@ -1,8 +1,9 @@
-from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models import db
+from app.models.base import SoftDeletionModel
+from app.models.helpers.versioning import clean_up_string, clean_html
 
 
-class Sponsor(db.Model):
+class Sponsor(SoftDeletionModel):
     """Sponsor model class"""
     __tablename__ = 'sponsors'
 
@@ -16,7 +17,7 @@ class Sponsor(db.Model):
     type = db.Column(db.String)
 
     def __init__(self, name=None, url=None, logo_url=None, event_id=None,
-                 description=None, type=None, level=None):
+                 description=None, type=None, level=None, deleted_at=None):
         self.name = name
         self.url = url
         self.logo_url = logo_url
@@ -24,6 +25,7 @@ class Sponsor(db.Model):
         self.level = level
         self.type = type
         self.description = description
+        self.deleted_at = deleted_at
 
     @staticmethod
     def get_service_name():
@@ -33,10 +35,7 @@ class Sponsor(db.Model):
         return '<Sponsor %r>' % self.name
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return self.name
+        return self.__repr__()
 
     def __setattr__(self, name, value):
         if name == 'description':
@@ -46,7 +45,7 @@ class Sponsor(db.Model):
 
     @property
     def serialize(self):
-        """Return object data in easily serializeable format"""
+        """Return object data in easily serializable format"""
         return {
             'id': self.id,
             'name': self.name,

@@ -53,18 +53,19 @@ def send_email(to, action, subject, html):
                     'port': get_settings()['smtp_port'],
                 }
 
-                from tasks import send_mail_via_smtp_task
+                from .tasks import send_mail_via_smtp_task
                 send_mail_via_smtp_task.delay(config, payload)
             else:
                 payload['fromname'] = email_from_name
                 key = get_settings()['sendgrid_key']
-                if not key and not current_app.config['TESTING']:
+                if not key:
                     print('Sendgrid key not defined')
                     return
                 headers = {
-                    "Authorization": ("Bearer " + key)
+                    "Authorization": ("Bearer " + key),
+                    "Content-Type": "application/json"
                 }
-                from tasks import send_email_task
+                from .tasks import send_email_task
                 send_email_task.delay(payload, headers)
 
         # record_mail(to, action, subject, html)
@@ -271,7 +272,7 @@ def send_import_mail(email, event_name=None, error_text=None, event_url=None):
 
 def send_email_change_user_email(user, email):
     s = get_serializer()
-    hash = base64.b64encode(s.dumps([email, str_generator()]))
+    hash = str(base64.b64encode(s.dumps([email, str_generator()])), 'utf-8')
     link = make_frontend_url('/email/verify'.format(id=user.id), {'token': hash})
     send_email_with_action(user.email, USER_CONFIRM, email=user.email, link=link)
     send_email_with_action(email, USER_CHANGE_EMAIL, email=email, new_email=user.email)
@@ -279,7 +280,22 @@ def send_email_change_user_email(user, email):
 
 def send_email_to_attendees(order, purchaser_id):
     for holder in order.ticket_holders:
-        if holder.id != purchaser_id:
+        if holder.user and holder.user.id == purchaser_id:
+            # Ticket holder is the purchaser
+            send_email(
+                to=holder.email,
+                action=TICKET_PURCHASED,
+                subject=MAILS[TICKET_PURCHASED]['subject'].format(
+                    event_name=order.event.name,
+                    invoice_id=order.invoice_number
+                ),
+                html=MAILS[TICKET_PURCHASED]['message'].format(
+                    pdf_url=holder.pdf_url,
+                    event_name=order.event.name
+                )
+            )
+        else:
+            # The Ticket holder is not the purchaser
             send_email(
                 to=holder.email,
                 action=TICKET_PURCHASED_ATTENDEE,
@@ -292,19 +308,7 @@ def send_email_to_attendees(order, purchaser_id):
                     event_name=order.event.name
                 )
             )
-        else:
-            send_email(
-                to=holder.email,
-                action=TICKET_PURCHASED,
-                subject=MAILS[TICKET_PURCHASED]['subject'].format(
-                    event_name=order.event.name,
-                    invoice_id=order.invoice_number
-                ),
-                html= MAILS[TICKET_PURCHASED]['message'].format(
-                    pdf_url=holder.pdf_url,
-                    event_name=order.event.name
-                )
-            )
+
 
 def send_order_cancel_email(order):
     send_email(

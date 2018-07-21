@@ -10,7 +10,7 @@
 * Clone the project and cd into it.
 
 ```bash
-git clone https://github.com/fossasia/open-event-orga-server.git && cd open-event-orga-server
+git clone https://github.com/fossasia/open-event-server.git && cd open-event-server
 ```
 
 * Then set the required `SERVER_NAME` environment variable. `SERVER_NAME` should the same as the domain on which the server is running and it should not include 'http', 'https',
@@ -20,7 +20,7 @@ git clone https://github.com/fossasia/open-event-orga-server.git && cd open-even
 export SERVER_NAME=localhost;
 ```
 
-* In the same terminal window, run `docker-compose build` to build open-event-orga-server's docker image. This process can take some time.
+* In the same terminal window, run `docker-compose build` to build open-event-server's docker image. This process can take some time.
 
 * After build is done, run `docker-compose up` to start the server.
 
@@ -43,9 +43,9 @@ create database opev;
 * Now the database is created, so let's create the tables. Open the application's shell by `docker-compose run web /bin/bash`. Then write the following commands.
 
 ```bash
-python create_db.py
+python3 create_db.py
 # ^^ write super_admin email and password when asked
-python manage.py db stamp head
+python3 manage.py db stamp head
 ```
 
 * Close the application's shell by `exit` command.
@@ -62,7 +62,7 @@ python manage.py db stamp head
 * Then open a new terminal window in same directory and run the following.
 
 ```bash
-docker-compose run web python manage.py db upgrade
+docker-compose run web python3 manage.py db upgrade
 ```
 
 * That should be all. Open `localhost` in web browser to view the updated open-event-server.

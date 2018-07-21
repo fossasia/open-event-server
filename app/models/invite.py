@@ -22,13 +22,10 @@ class Invite(db.Model):
         return '<Invite %r>' % self.user_id
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return 'Invite for %s' % self.session
+        return self.__repr__()
 
     @property
     def serialize(self):
-        """Return object data in easily serializeable format"""
+        """Return object data in easily serializable format"""
 
         return {'id': self.id, 'user_id': self.user_id, 'session_id': self.session_id}

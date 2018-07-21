@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import os
+
 from envparse import env
 
 env.read_envfile()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-VERSION_NAME = '2.0.0-alpha.1'
+VERSION_NAME = '2.1.0-alpha.0'
 
 LANGUAGES = {
     'en': 'English',

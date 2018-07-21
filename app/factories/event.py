@@ -1,6 +1,7 @@
 import factory
-from app.models.event import db, Event
+
 import app.factories.common as common
+from app.models.event import db, Event
 
 
 class EventFactoryBasic(factory.alchemy.SQLAlchemyModelFactory):
@@ -41,7 +42,7 @@ class EventFactoryBasic(factory.alchemy.SQLAlchemyModelFactory):
     cheque_details = common.string_
     bank_details = common.string_
     onsite_details = common.string_
-    is_sponsors_enabled = False
+    is_sponsors_enabled = True
     pentabarf_url = common.url_
     ical_url = common.url_
     xcal_url = common.url_

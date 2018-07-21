@@ -1,9 +1,10 @@
 from sqlalchemy.orm import backref
 
 from app.models import db
+from app.models.base import SoftDeletionModel
 
 
-class SpeakersCall(db.Model):
+class SpeakersCall(SoftDeletionModel):
     """call for paper model class"""
     __tablename__ = 'speakers_calls'
     id = db.Column(db.Integer, primary_key=True)
@@ -16,26 +17,24 @@ class SpeakersCall(db.Model):
     event = db.relationship("Event", backref=backref("speakers_call", uselist=False))
 
     def __init__(self, announcement=None, starts_at=None, ends_at=None, hash=None, privacy='public',
-                 event_id=None):
+                 event_id=None, deleted_at=None):
         self.announcement = announcement
         self.starts_at = starts_at
         self.ends_at = ends_at
         self.hash = hash
         self.privacy = privacy
         self.event_id = event_id
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<speakers_call %r>' % self.announcement
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return self.announcement
+        return self.__repr__()
 
     @property
     def serialize(self):
-        """Return object data in easily serializeable format"""
+        """Return object data in easily serializable format"""
 
         return {
             'id': self.id,

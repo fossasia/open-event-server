@@ -1,4 +1,5 @@
 import factory
+
 from app.models.module import db, Module
 
 

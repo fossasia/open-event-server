@@ -114,11 +114,12 @@ class RoleInviteDetail(ResourceDetail):
         """
         user = User.query.filter_by(email=role_invite.email).first()
         if user:
-            if not has_access('is_user_itself', id=user.id):
+            if not has_access('is_user_itself', user_id=user.id):
                 raise UnprocessableEntity({'source': ''}, "Only users can edit their own status")
         if not user and not has_access('is_organizer', event_id=role_invite.event_id):
             raise UnprocessableEntity({'source': ''}, "User not registered")
-        if not has_access('is_organizer', event_id=role_invite.event_id) and (len(data.keys()) > 1 or 'status' not in data):
+        if not has_access('is_organizer', event_id=role_invite.event_id) and (len(list(data.keys())) > 1 or
+                                                                              'status' not in data):
             raise UnprocessableEntity({'source': ''}, "You can only change your status")
 
     def after_update_object(self, role_invite, data, view_kwargs):

@@ -1,9 +1,11 @@
-from app.models import db
-from celery.task.control import inspect
 from errno import errorcode
+
+from celery.task.control import inspect
 from flask import current_app
-from app.views.sentry import sentry
 from redis.exceptions import ConnectionError
+
+from app.models import db
+from app.views.sentry import sentry
 
 
 def health_check_celery():
@@ -55,13 +57,13 @@ def check_migrations():
     # Get all the models in the db, all models should have a explicit __tablename__
     classes, models, table_names = [], [], []
     # noinspection PyProtectedMember
-    for class_ in db.Model._decl_class_registry.values():
+    for class_ in list(db.Model._decl_class_registry.values()):
         try:
             table_names.append(class_.__tablename__)
             classes.append(class_)
         except:
             pass
-    for table in db.metadata.tables.items():
+    for table in list(db.metadata.tables.items()):
         if table[0] in table_names:
             models.append(classes[table_names.index(table[0])])
 

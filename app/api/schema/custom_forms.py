@@ -1,11 +1,14 @@
 from marshmallow import validate as validate
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
+from utils.common import use_defaults
 
 
-class CustomFormSchema(Schema):
+@use_defaults()
+class CustomFormSchema(SoftDeletionSchema):
     """
     API Schema for Custom Forms database model
     """
@@ -22,7 +25,8 @@ class CustomFormSchema(Schema):
     field_identifier = fields.Str(required=True)
     form = fields.Str(required=True)
     type = fields.Str(default="text", validate=validate.OneOf(
-        choices=["text", "checkbox", "select", "file", "image", "email"]))
+        choices=["text", "checkbox", "select", "file", "image", "email",
+                 "number"]))
     is_required = fields.Boolean(default=False)
     is_included = fields.Boolean(default=False)
     is_fixed = fields.Boolean(default=False)

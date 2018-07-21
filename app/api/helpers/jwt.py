@@ -1,8 +1,10 @@
+import base64
 import json
-from flask.ext.scrypt import check_password_hash
-from app.models.user import User
-from flask_jwt import _default_request_handler
 
+from flask_jwt import _default_request_handler
+from flask_scrypt import check_password_hash
+
+from app.models.user import User
 
 def jwt_authenticate(email, password):
     """
@@ -44,8 +46,8 @@ def get_identity():
 
     # ensures the string is correctly padded to be a multiple of 4
     if missing_padding != 0:
-        token_second_segment += b'=' * (4 - missing_padding)
+        token_second_segment += '=' * (4 - missing_padding)
 
-    payload = json.loads(token_second_segment.decode('base64'))
+    payload = json.loads(str(base64.b64decode(token_second_segment), 'utf-8'))
     user = jwt_identity(payload)
     return user

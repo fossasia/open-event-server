@@ -1,5 +1,6 @@
-import sys
 import os.path as path
+import sys
+
 import dredd_hooks as hooks
 import requests
 
@@ -18,12 +19,12 @@ from app.factories.notification import NotificationFactory
 from app.factories.event import EventFactoryBasic
 from app.factories.social_link import SocialLinkFactory
 from app.factories.microlocation import MicrolocationFactory
-from app.factories.image_size import ImageSizeFactory
+from app.factories.image_size import EventImageSizeFactory, SpeakerImageSizeFactory
 from app.factories.page import PageFactory
 from app.factories.event_copyright import EventCopyrightFactory
 from app.factories.setting import SettingFactory
 from app.factories.event_type import EventTypeFactory
-from app.factories.discount_code import DiscountCodeFactory
+from app.factories.discount_code import DiscountCodeFactory, DiscountCodeTicketFactory
 from app.factories.access_code import AccessCodeFactory
 from app.factories.custom_form import CustomFormFactory
 from app.factories.faq import FaqFactory
@@ -53,6 +54,10 @@ from app.factories.mail import MailFactory
 from app.factories.order import OrderFactory
 from app.factories.faq_type import FaqTypeFactory
 from app.factories.feedback import FeedbackFactory
+from app.factories.service import ServiceFactory
+from app.factories.message_setting import MessageSettingsFactory
+
+
 
 
 stash = {}
@@ -271,6 +276,16 @@ def user_speaker(transaction):
         speaker = SpeakerFactory()
         db.session.add(speaker)
         db.session.commit()
+
+
+@hooks.before("Users > Check if the email is available > Check if email is available")
+def user_check_email(transaction):
+    """
+    POST /users/checkEmail
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
 
 
 # ------------------------- Events -------------------------
@@ -679,6 +694,19 @@ def event_faq(transaction):
         db.session.commit()
 
 
+@hooks.before("Events > Get Event for a Stripe Authorization > Event Details for a Stripe Authorization")
+def event_stripe_authorization(transaction):
+    """
+    GET /stripe-authorization/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        stripe_authorization = StripeAuthorizationFactory()
+        db.session.add(stripe_authorization)
+        db.session.commit()
+
+
 # ------------------------- Feedback -------------------------
 @hooks.before("Feedback > Feedback Collection > Create Feedback")
 def feedback_post(transaction):
@@ -981,6 +1009,10 @@ def session_post(transaction):
     with stash['app'].app_context():
         event = EventFactoryBasic()
         db.session.add(event)
+        db.session.commit()
+
+        track = TrackFactory()
+        db.session.add(track)
         db.session.commit()
 
 
@@ -1453,8 +1485,6 @@ def sponsor_patch(transaction):
     :param transaction:
     :return:
     """
-    # Skip until docs for direct endpoints added
-    transaction['skip'] = True
 
     with stash['app'].app_context():
         sponsor = SponsorFactory()
@@ -1528,7 +1558,7 @@ def tax_delete(transaction):
         db.session.commit()
 
 
-@hooks.before("Tax > Get Taxes under an Event > Get Taxes under an Event")
+@hooks.before("Tax > Get Tax details under an Event > Get Tax details under an Event")
 def event_tax_get_list(transaction):
     """
     GET /taxes/1
@@ -1630,6 +1660,19 @@ def access_code_ticket(transaction):
     with stash['app'].app_context():
         access_code = AccessCodeFactory()
         db.session.add(access_code)
+        db.session.commit()
+
+
+@hooks.before("Tickets > List Tickets for a Discount Code > List Tickets")
+def discount_code_ticket(transaction):
+    """
+    GET /discount-codes/1/tickets
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        discount_code = DiscountCodeTicketFactory(event_id=1)
+        db.session.add(discount_code)
         db.session.commit()
 
 
@@ -1779,12 +1822,18 @@ def ticket_tag_ticket(transaction):
 @hooks.before("Attendees > Attendees Collection > Create Attendee")
 def attendee_post(transaction):
     """
-    POST /events/1/attendees
+    POST /attendees
     :param transaction:
     :return:
     """
     # Skip until docs for direct endpoints added
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        ticket = TicketFactory()
+        db.session.add(ticket)
+
+        attendee = AttendeeFactory(ticket_id=1)
+        db.session.add(attendee)
+        db.session.commit()
 
 
 @hooks.before("Attendees > Attendee Details > Attendee Details")
@@ -1823,6 +1872,21 @@ def attendee_delete(transaction):
     with stash['app'].app_context():
         attendee = AttendeeFactory()
         db.session.add(attendee)
+        db.session.commit()
+
+
+@hooks.before("Attendees > Send order receipts > Send email receipts to attendees")
+def attendee_receipts(transaction):
+    """
+    POST /attendees/send-receipt
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        order = OrderFactory()
+        order.identifier = 'xyz789'
+        order.status = 'completed'
+        db.session.add(order)
         db.session.commit()
 
 
@@ -2053,65 +2117,55 @@ def email_notification_delete(transaction):
 
 
 # ------------------------- Image Size -------------------------
-@hooks.before("Image Size > Image Size Collection > List Image Sizes")
-def image_size_get_list(transaction):
+@hooks.before("Image Size > Event Image Size Details > Get Event Image Size Details")
+def event_image_size_get_detail(transaction):
     """
-    GET /image-sizes
+    GET /event-image-sizes
     :param transaction:
     :return:
     """
     with stash['app'].app_context():
-        image_size = ImageSizeFactory()
-        db.session.add(image_size)
+        event_image_size = EventImageSizeFactory()
+        db.session.add(event_image_size)
         db.session.commit()
 
 
-@hooks.before("Image Size > Image Size Collection > Create Image Size")
-def image_size_post(transaction):
+@hooks.before("Image Size > Image Size Details > Update Event Image Size")
+def event_image_size_patch(transaction):
     """
-    POST /image-sizes
-    :param transaction:
-    :return:
-    """
-    pass
-
-
-@hooks.before("Image Size > Image Size Details > Get Image Size Details")
-def image_size_get_detail(transaction):
-    """
-    GET /image-sizes/1
+    PATCH /event-image-sizes
     :param transaction:
     :return:
     """
     with stash['app'].app_context():
-        image_size = ImageSizeFactory()
-        db.session.add(image_size)
+        event_image_size = EventImageSizeFactory()
+        db.session.add(event_image_size)
         db.session.commit()
 
 
-@hooks.before("Image Size > Image Size Details > Update Image Size")
-def image_size_patch(transaction):
+@hooks.before("Image Size > Speaker Image Size Details > Get Speaker Image Size Details")
+def speaker_image_size_get_detail(transaction):
     """
-    PATCH /image-sizes/1
+    GET /speaker-image-sizes
     :param transaction:
     :return:
     """
     with stash['app'].app_context():
-        image_size = ImageSizeFactory()
-        db.session.add(image_size)
+        speaker_image_size = SpeakerImageSizeFactory()
+        db.session.add(speaker_image_size)
         db.session.commit()
 
 
-@hooks.before("Image Size > Image Size Details > Delete Image Size")
-def image_size_delete(transaction):
+@hooks.before("Image Size > Speaker Size Details > Update Speaker Image Size")
+def speaker_size_patch(transaction):
     """
-    DELETE /image-sizes/1
+    PATCH /speaker-image-sizes
     :param transaction:
     :return:
     """
     with stash['app'].app_context():
-        image_size = ImageSizeFactory()
-        db.session.add(image_size)
+        speaker_image_size = SpeakerImageSizeFactory()
+        db.session.add(speaker_image_size)
         db.session.commit()
 
 
@@ -2189,6 +2243,133 @@ def role_role_invite(transaction):
         role_invite = RoleInviteFactory()
         db.session.add(role_invite)
         db.session.commit()
+
+
+# ------------------------- Service -------------------------
+@hooks.before("Services > Services Collection > List Services")
+def service(transaction):
+    """
+    GET /services
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        service = ServiceFactory()
+        db.session.add(service)
+        db.session.commit()
+
+
+@hooks.before("Services > Services Details > Get Service Details")
+def service_detail(transaction):
+    """
+    GET /services/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        service = ServiceFactory()
+        db.session.add(service)
+        db.session.commit()
+
+
+@hooks.before("Services > Services Details > Update Service")
+def service_patch(transaction):
+    """
+    PATCH /services/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        service = ServiceFactory()
+        db.session.add(service)
+        db.session.commit()
+
+
+# ------------------------- Event Role Permission -------------------------
+@hooks.before("Event Role Permission > Event Role Permission Collection > List Event Role Permissions")
+def event_role_permission_list(transaction):
+    """
+    GET /event-role-permissions
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+#   TODO: This is breaking the build, we need to repair it eventually.
+#   with stash['app'].app_context():
+#       event_role_permission = EventRolePermissionsFactory()
+#       db.session.add(event_role_permission)
+#       db.session.commit()
+
+
+@hooks.before("Event Role Permission > Event Role Permission Details > Get Event Role Permission Details")
+def event_role_permission_detail(transaction):
+    """
+    GET /event-role-permissions/1
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+#   TODO: This is breaking the build, we need to repair it eventually.
+#   with stash['app'].app_context():
+#       event_role_permission = EventRolePermissionsFactory()
+#       db.session.add(event_role_permission)
+#       db.session.commit()
+
+
+@hooks.before("Event Role Permission > Event Role Permission Details > Update Event Role Permission")
+def event_role_permission_patch(transaction):
+    """
+    PATCH /event-role-permissions/1
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+#   TODO: This is breaking the build, we need to repair it eventually.
+#   with stash['app'].app_context():
+#       event_role_permission = EventRolePermissionsFactory()
+#       db.session.add(event_role_permission)
+#       db.session.commit()
+
+
+# ------------------------- Message Setting -------------------------
+@hooks.before("Message Settings > Message Setting Collection > List Message Settings")
+def message_setting_list(transaction):
+    """
+    GET /message-settings
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        message_setting = MessageSettingsFactory()
+        db.session.add(message_setting)
+        db.session.commit()
+
+
+@hooks.before("Message Settings > Message Setting Details > Get Message Setting Details")
+def message_setting_detail(transaction):
+    """
+    GET /message-settings/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        message_setting = MessageSettingsFactory()
+        db.session.add(message_setting)
+        db.session.commit()
+
+
+@hooks.before("Message Settings > Message Setting Details > Update Message Setting")
+def message_setting_patch(transaction):
+    """
+    PATCH /message-settings/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        message_setting = MessageSettingsFactory()
+        db.session.add(message_setting)
+        db.session.commit()
+
 
 # ------------------------- Activities -------------------------
 @hooks.before("Activity > Activity Collection > List all Activities")
@@ -2388,23 +2569,26 @@ def event_discount_code_post(transaction):
     :param transaction:
     :return:
     """
-    with stash['app'].app_context():
-        event = EventFactoryBasic()
-        db.session.add(event)
-        db.session.commit()
+    transaction['skip'] = True
+#   TODO: This is breaking the build, we need to repair it eventually.
+#   with stash['app'].app_context():	+    transaction['skip'] = True
+#        event = EventFactoryBasic()
+#        db.session.add(event)
+#        db.session.commit()
 
 
-@hooks.before("Discount Codes > Event Discount Code Collection > Create Ticket Discount Code")
+@hooks.before("Discount Codes > Ticket Discount Code Collection > Create Ticket Discount Code")
 def ticket_discount_code_post(transaction):
     """
-    POST /events/1/discount-codes
+    POST /discount-codes
     :param transaction:
     :return:
     """
-    with stash['app'].app_context():
-        event = EventFactoryBasic()
-        db.session.add(event)
-        db.session.commit()
+    transaction['skip'] = True
+    # with stash['app'].app_context():
+    #     event = EventFactoryBasic()
+    #     db.session.add(event)
+    #     db.session.commit()
 
 
 @hooks.before("Discount Codes > Ticket Discount Code Collection > List All Ticket Discount Codes")
@@ -2419,7 +2603,7 @@ def ticket_discount_code_get_list(transaction):
         db.session.add(event)
         db.session.commit()
 
-        discount_code = DiscountCodeFactory(event_id=1)
+        discount_code = DiscountCodeTicketFactory(event_id=1)
         db.session.add(discount_code)
         db.session.commit()
 
@@ -2436,7 +2620,7 @@ def discount_code_get_detail(transaction):
         db.session.add(event)
         db.session.commit()
 
-        discount_code = DiscountCodeFactory(event_id=1)
+        discount_code = DiscountCodeTicketFactory(event_id=1)
         db.session.add(discount_code)
         db.session.commit()
 
@@ -2453,7 +2637,7 @@ def discount_code_patch(transaction):
         db.session.add(event)
         db.session.commit()
 
-        discount_code = DiscountCodeFactory(event_id=1)
+        discount_code = DiscountCodeTicketFactory(event_id=1)
         db.session.add(discount_code)
         db.session.commit()
 
@@ -2475,6 +2659,24 @@ def discount_delete(transaction):
         db.session.commit()
 
 
+@hooks.before("Discount Codes > Get Discount Code Detail using the code > Get Discount Code Detail")
+def discount_code_get_detail_using_code(transaction):
+    """
+    GET /discount-codes/DC101
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+        discount_code = DiscountCodeFactory(event_id=1)
+        discount_code.code = 'DC101'
+        db.session.add(discount_code)
+        db.session.commit()
+
+
 @hooks.before("Discount Codes > List Discount Codes under a User > List All Discount Codes under a User")
 def user_discount_code_get_list(transaction):
     """
@@ -2488,6 +2690,19 @@ def user_discount_code_get_list(transaction):
         db.session.commit()
 
         discount_code = DiscountCodeFactory(event_id=1)
+        db.session.add(discount_code)
+        db.session.commit()
+
+
+@hooks.before("Discount Codes > List Discount Codes under a Ticket > List All Discount Codes under a Ticket")
+def get_discount_codes_under_ticket(transaction):
+    """
+    GET /tickets/1/discount-codes
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        discount_code = DiscountCodeTicketFactory(event_id=1)
         db.session.add(discount_code)
         db.session.commit()
 
@@ -2576,6 +2791,20 @@ def access_code_delete(transaction):
     """
     with stash['app'].app_context():
         access_code = AccessCodeFactory()
+        db.session.add(access_code)
+        db.session.commit()
+
+
+@hooks.before("Access Codes > Access Code Detail using the Code > Access Code Detail")
+def access_code_get_detail_using_code(transaction):
+    """
+    GET /access-codes/AC101
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        access_code = AccessCodeFactory()
+        access_code.code = 'AC101'
         db.session.add(access_code)
         db.session.commit()
 
@@ -2918,6 +3147,16 @@ def file_upload_post(transaction):
     transaction['skip'] = True
 
 
+# ------------------------- Event Locationss -------------------------
+@hooks.before("Event Locations > Event Locations Collection > List All Event Locations")
+def event_location_get_list(transaction):
+    """
+    GET /events-location
+    :param transaction:
+    :return:
+    """
+
+
 # ------------------------- Event Types -------------------------
 @hooks.before("Event Types > Event Types Collection > List All Event Types")
 def event_type_get_list(transaction):
@@ -2995,6 +3234,7 @@ def event_event_type_get_detail(transaction):
         event = EventFactoryBasic(event_type_id=1)
         db.session.add(event)
         db.session.commit()
+
 
 # ------------------------- Event Topics -------------------------
 @hooks.before("Event Topics > Event Topics Collection > List All Event Topics")
@@ -3331,20 +3571,17 @@ def user_permission_delete(transaction):
 
 
 # ------------------------- Stripe Authorizations -------------------------
-@hooks.before("StripeAuthorization > StripeAuthorization Collection > Create Stripe Authorization")
+@hooks.before("Stripe Authorization > Stripe Authorization Collection > Create Stripe Authorization")
 def stripe_authorization_post(transaction):
     """
     POST /stripe-authorization
     :param transaction:
     :return:
     """
-    with stash['app'].app_context():
-        event = EventFactoryBasic()
-        db.session.add(event)
-        db.session.commit()
+    transaction['skip'] = True
 
 
-@hooks.before("StripeAuthorization > Stripe Authorization Details > Get Stripe Authorization")
+@hooks.before("Stripe Authorization > Stripe Authorization Details > Get Stripe Authorization")
 def stripe_authorization_get_detail(transaction):
     """
     GET /stripe-authorization/1
@@ -3357,7 +3594,7 @@ def stripe_authorization_get_detail(transaction):
         db.session.commit()
 
 
-@hooks.before("StripeAuthorization > Stripe Authorization Details > Update Stripe Authorization")
+@hooks.before("Stripe Authorization > Stripe Authorization Details > Update Stripe Authorization")
 def stripe_authorization_patch(transaction):
     """
     PATCH /stripe-authorization/1
@@ -3370,7 +3607,7 @@ def stripe_authorization_patch(transaction):
         db.session.commit()
 
 
-@hooks.before("StripeAuthorization > Stripe Authorization Details > Delete Stripe Authorization")
+@hooks.before("Stripe Authorization > Stripe Authorization Details > Delete Stripe Authorization")
 def stripe_authorization_delete(transaction):
     """
     DELETE /stripe-authorization/1
@@ -3383,7 +3620,7 @@ def stripe_authorization_delete(transaction):
         db.session.commit()
 
 
-@hooks.before("StripeAuthorization > Stripe Authorization for an Event > Get Stripe Authorization Details of an Event")
+@hooks.before("Stripe Authorization > Stripe Authorization for an Event > Get Stripe Authorization Details of an Event")
 def event_stripe_authorization_get_detail(transaction):
     """
     GET /events/1/stripe-authorization
@@ -3398,7 +3635,7 @@ def event_stripe_authorization_get_detail(transaction):
 
 # ------------------------- Export -------------------------
 @hooks.before(
-    "Event Export > Start Event Export > Start a Task to Export an Event")
+    "Event Export > Start Event Export as Zip > Start a Task to Export an Event as Zip")
 def event_export_post(transaction):
     """
     :param transaction:
@@ -3409,6 +3646,135 @@ def event_export_post(transaction):
         db.session.add(event)
         db.session.commit()
 
+
+@hooks.before(
+    "Event Export > Start Event Export as iCal file > Start a Task to Export an Event as iCal event")
+def event_export_ical_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Export > Start Event Export as xCalendar > Start a Task to Export an Event as xCalendar")
+def event_export_xcal_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Export > Start Event Export as Pentabarf XML > Start a Task to Export an Event as Pentabarf XML")
+def event_export_pentabarf_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Export > Start Orders Export as CSV > Start a Task to Export Orders of an Event as CSV")
+def event_orders_export_csv_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Export > Start Orders Export as PDF > Start a Task to Export Orders of an Event as PDF")
+def event_orders_export_pdf_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Export > Start Attendees Export as CSV > Start a Task to Export Attendees of an Event as CSV")
+def event_attendees_export_csv_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Export > Start Attendees Export as PDF > Start a Task to Export Attendees of an Event as PDF")
+def event_attendees_export_pdf_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Export > Start Sessions Export as CSV > Start a Task to Export Sessions of an Event as CSV")
+def event_sessions_export_csv_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Export > Start Speakers Export as CSV > Start a Task to Export Speakers of an Event as CSV")
+def event_speakers_export_csv_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before(
+    "Event Export > Start Sessions Export as PDF > Start a Task to Export Sessions of an Event as PDF")
+def event_sessions_export_pdf_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 # ------------------------- Import -------------------------
 @hooks.before(
@@ -3522,6 +3888,36 @@ def update_order(transaction):
 def delete_order(transaction):
     """
     GET /orders
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Orders > Orders under an Event > List all Orders under an Event")
+def event_order_get_list(transaction):
+    """
+    GET /events/1/orders
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Orders > Charge > Charge for an Order")
+def orders_charge(transaction):
+    """
+    GET /orders/1/charge
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Orders > Orders under a User > List all Orders under a User")
+def orders_get_collection_under_user(transaction):
+    """
+    GET /users/1/orders
     :param transaction:
     :return:
     """

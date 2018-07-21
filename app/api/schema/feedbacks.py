@@ -1,10 +1,14 @@
+"""Schema class for Feedbacks"""
+
+from marshmallow.validate import Range
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
 
 
-class FeedbackSchema(Schema):
+class FeedbackSchema(SoftDeletionSchema):
     """
     Api schema for Feedback Model
     """
@@ -18,7 +22,7 @@ class FeedbackSchema(Schema):
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
-    rating = fields.Str(required=True)
+    rating = fields.Float(required=True, validate=Range(min=0, max=5))
     comment = fields.Str(required=False)
     event = Relationship(attribute='event',
                          self_view='v1.feedback_event',

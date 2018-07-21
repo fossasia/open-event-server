@@ -1,29 +1,34 @@
 import binascii
 import os
-import pytz
-import flask_login as login
 from datetime import datetime
-from sqlalchemy import event
+
+import flask_login as login
+import pytz
 from flask import current_app
+from sqlalchemy import event
+from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_count
-from app.models.helpers.versioning import clean_up_string, clean_html
-from app.models.email_notification import EmailNotification
-from app.models.user import ATTENDEE, ORGANIZER
 from app.models import db
-from app.views.redis_store import redis_store
+from app.models.ticket_fee import get_fee
+from app.models.base import SoftDeletionModel
+from app.models.email_notification import EmailNotification
+from app.models.feedback import Feedback
+from app.models.helpers.versioning import clean_up_string, clean_html
+from app.models.user import ATTENDEE, ORGANIZER
+from app.models.search import sync
 
 
 def get_new_event_identifier(length=8):
-    identifier = binascii.b2a_hex(os.urandom(length / 2))
+    identifier = str(binascii.b2a_hex(os.urandom(int(length / 2))), 'utf-8')
     count = get_count(Event.query.filter_by(identifier=identifier))
     if count == 0:
         return identifier
     else:
-        return get_new_event_identifier()
+        return get_new_event_identifier(length)
 
 
-class Event(db.Model):
+class Event(SoftDeletionModel):
     """Event object table"""
     __tablename__ = 'events'
     __versioned__ = {
@@ -75,7 +80,6 @@ class Event(db.Model):
     code_of_conduct = db.Column(db.String)
     schedule_published_on = db.Column(db.DateTime(timezone=True))
     is_ticketing_enabled = db.Column(db.Boolean, default=True)
-    deleted_at = db.Column(db.DateTime(timezone=True))
     payment_country = db.Column(db.String)
     payment_currency = db.Column(db.String)
     paypal_email = db.Column(db.String)
@@ -198,6 +202,8 @@ class Event(db.Model):
                  is_tax_enabled=None,
                  is_sponsors_enabled=None,
                  order_expiry_time=None):
+                 stripe_authorization=None,
+                 tax=None):
 
         self.name = name
         self.logo_url = logo_url
@@ -251,21 +257,27 @@ class Event(db.Model):
         self.is_tax_enabled = is_tax_enabled
         self.is_sponsors_enabled = is_sponsors_enabled
         self.order_expiry_time= order_expiry_time
+        self.stripe_authorization = stripe_authorization
+        self.tax = tax
 
     def __repr__(self):
         return '<Event %r>' % self.name
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return self.name
+        return self.__repr__()
 
     def __setattr__(self, name, value):
         if name == 'organizer_description' or name == 'description' or name == 'code_of_conduct':
             super(Event, self).__setattr__(name, clean_html(clean_up_string(value)))
         else:
             super(Event, self).__setattr__(name, value)
+
+    @property
+    def fee(self):
+        """
+        Returns the fee as a percentage from 0 to 100 for this event
+        """
+        return get_fee(self.payment_country, self.payment_currency)
 
     def notification_settings(self, user_id):
         try:
@@ -274,6 +286,16 @@ class Event(db.Model):
                 filter_by(event_id=self.id).first()
         except:
             return None
+
+    def get_average_rating(self):
+        avg = db.session.query(func.avg(Feedback.rating)).filter_by(event_id=self.id).scalar()
+        if avg is not None:
+            avg = round(avg, 2)
+        return avg
+
+    @property
+    def average_rating(self):
+        return self.get_average_rating()
 
     def get_organizer(self):
         """returns organizer of an event"""
@@ -306,9 +328,9 @@ def receive_init(mapper, connection, target):
     """
     if current_app.config['ENABLE_ELASTICSEARCH']:
         if target.state == 'published' and target.deleted_at is None:
-            redis_store.sadd('event_index', target.id)
+            sync.mark_event(sync.REDIS_EVENT_INDEX, target.id)
         elif target.deleted_at:
-            redis_store.sadd('event_delete', target.id)
+            sync.mark_event(sync.REDIS_EVENT_DELETE, target.id)
 
 
 @event.listens_for(Event, 'after_delete')
@@ -317,4 +339,4 @@ def receive_after_delete(mapper, connection, target):
     listen for the 'after_delete' event
     """
     if current_app.config['ENABLE_ELASTICSEARCH']:
-        redis_store.sadd('event_delete', target.id)
+        sync.mark_event(sync.REDIS_EVENT_DELETE, target.id)

@@ -8,7 +8,7 @@ ARG REPOSITORY
 
 ENV COMMIT_HASH ${COMMIT_HASH:-null}
 ENV BRANCH ${BRANCH:-master}
-ENV REPOSITORY ${REPOSITORY:-https://github.com/fossasia/open-event-orga-server.git}
+ENV REPOSITORY ${REPOSITORY:-https://github.com/fossasia/open-event-server.git}
 
 # apt-get update
 RUN apt-get clean -y && apt-get update -y
@@ -16,7 +16,6 @@ RUN apt-get clean -y && apt-get update -y
 RUN apt-get install -y wget git ca-certificates curl && update-ca-certificates
 # install deps
 RUN apt-get install -y --no-install-recommends build-essential python-dev libpq-dev libevent-dev libmagic-dev
-# nodejs bower
 
 ENV INSTALL_PATH /opev
 

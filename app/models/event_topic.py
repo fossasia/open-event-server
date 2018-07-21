@@ -1,17 +1,20 @@
 import uuid
-from app.models import db
+
 from app.api.helpers.db import get_count
+from app.models import db
+from app.models.base import SoftDeletionModel
 
 
 def get_new_slug(name):
-    slug = name.lower().replace("& ", "").replace(",", "").replace("/","-").replace(" ","-")
+    slug = name.lower().replace("& ", "").replace(",", "").replace("/", "-").replace(" ", "-")
     count = get_count(EventTopic.query.filter_by(slug=slug))
     if count == 0:
         return slug
     else:
         return '{}-{}'.format(slug, uuid.uuid4().hex)
 
-class EventTopic(db.Model):
+
+class EventTopic(SoftDeletionModel):
     """Event topic object table"""
 
     __tablename__ = 'event_topics'
@@ -24,21 +27,20 @@ class EventTopic(db.Model):
 
     def __init__(self,
                  name=None,
-                 slug=None):
+                 slug=None,
+                 deleted_at=None):
 
         self.name = name
         self.slug = get_new_slug(name=self.name)
+        self.deleted_at = deleted_at
 
     def __repr__(self):
         return '<EventTopic %r>' % self.name
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
-
-    def __unicode__(self):
-        return self.name
+        return self.__repr__()
 
     @property
     def serialize(self):
-        """Return object data in easily serializeable format"""
+        """Return object data in easily serializable format"""
         return {'id': self.id, 'name': self.name, 'slug': self.slug}

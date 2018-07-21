@@ -1,8 +1,8 @@
 import factory
 
+from app.factories.event import EventFactoryBasic
 from app.models.order import Order
 from app.models.ticket import db
-from app.factories.event import EventFactoryBasic
 
 
 class OrderFactory(factory.alchemy.SQLAlchemyModelFactory):
@@ -13,3 +13,4 @@ class OrderFactory(factory.alchemy.SQLAlchemyModelFactory):
     event = factory.RelatedFactory(EventFactoryBasic)
     event_id = 1
     payment_mode = 'free'
+    status = 'pending'
