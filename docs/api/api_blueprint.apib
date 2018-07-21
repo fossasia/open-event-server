@@ -22212,6 +22212,27 @@ to get the status of the export task.
             "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
         }
 
+## Start Sessions Export as PDF [/v1/events/{event_identifier}/export/sessions/pdf]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+Start a celery task to export the list of sessions of the event with that event_id as a PDF file to get it ready for downloading. Returns the task url
+to get the status of the export task.
+
+
+### Start a Task to Export Sessions of an Event as PDF [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
+
 # Group Event Import
 
 This group of APIs help you to start a task for importing zip containing JSON files into the server.
@@ -22921,7 +22942,8 @@ Create a new Order
               "country": "India",
               "completed-at": null,
               "created-at": "2018-07-08T01:05:09.904696+00:00",
-              "order-notes": "example"
+              "order-notes": "example",
+              "tickets-pdf-url": "https://example.com/media/attendees/tickets/pdf/order_identifier.pdf"
             },
             "type": "order",
             "id": "11",
@@ -23011,7 +23033,8 @@ Get a single Order detail.
               "country": "India",
               "completed-at": null,
               "created-at": "2018-07-08T01:05:09.904696+00:00",
-              "order-notes": "example"
+              "order-notes": "example",
+              "tickets-pdf-url": "https://example.com/media/attendees/tickets/pdf/order_identifier.pdf"
             },
             "type": "order",
             "id": "1",
@@ -23112,7 +23135,8 @@ Update a single custom form with `id`.
               "country": "India",
               "completed-at": null,
               "created-at": "2018-07-08T01:05:09.904696+00:00",
-              "order-notes": "sample,example"
+              "order-notes": "sample,example",
+              "tickets-pdf-url": "https://example.com/media/attendees/tickets/pdf/order_identifier.pdf"
             },
             "type": "order",
             "id": "1",
@@ -23183,6 +23207,10 @@ Receive payments for an order
             "data": {
                 "type": "charge",
                 "id": "1",
+                "attributes": {
+                    "message": "success/failure message",
+                    "status": true
+                },
                 "links": {
                     "self": "/v1/orders/1/charge"
                 }
@@ -23283,7 +23311,8 @@ Receive payments for an order
                         "country": "India",
                         "identifier": "070abac6-44a7-423d-830f-f5f0ef4e83f2",
                         "zipcode": null,
-                        "discount-code-id": null
+                        "discount-code-id": null,
+                        "tickets-pdf-url": "https://example.com/media/attendees/tickets/pdf/order_identifier.pdf"
                     }
                 }
             ],

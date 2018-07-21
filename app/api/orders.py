@@ -103,15 +103,18 @@ class OrdersListPost(ResourceList):
         :return:
         """
         order_tickets = {}
+        pdf = create_save_pdf(render_template('pdf/ticket_purchaser.html', order=order),
+                              UPLOAD_PATHS['pdf']['ticket_attendee'],
+                              dir_path='/static/uploads/pdf/tickets/')
+        order.tickets_pdf_url = pdf
         for holder in order.ticket_holders:
-            if holder.id != current_user.id:
+            if (not holder.user) or holder.user.id != current_user.id:
+                # holder is not the order buyer
                 pdf = create_save_pdf(render_template('pdf/ticket_attendee.html', order=order, holder=holder),
                                       UPLOAD_PATHS['pdf']['ticket_attendee'],
                                       dir_path='/static/uploads/pdf/tickets/')
             else:
-                pdf = create_save_pdf(render_template('pdf/ticket_purchaser.html', order=order),
-                                      UPLOAD_PATHS['pdf']['ticket_attendee'],
-                                      dir_path='/static/uploads/pdf/tickets/')
+                pdf = order.tickets_pdf_url
             holder.pdf_url = pdf
             save_to_db(holder)
             if not order_tickets.get(holder.ticket_id):
@@ -357,8 +360,10 @@ class ChargeSchema(Schema):
         self_view_kwargs = {'order_identifier': '<id>'}
 
     id = fields.Str(dump_only=True)
-    stripe = fields.Str(allow_none=True)
-    paypal = fields.Str(allow_none=True)
+    stripe = fields.Str(load_only=True, allow_none=True)
+    paypal = fields.Str(load_only=True, allow_none=True)
+    status = fields.Boolean(dump_only=True)
+    message = fields.Str(dump_only=True)
 
 
 class ChargeList(ResourceList):
