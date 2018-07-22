@@ -107,6 +107,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     ical_url = fields.Url(dump_only=True)
     xcal_url = fields.Url(dump_only=True)
     average_rating = fields.Float(dump_only=True)
+    order_expiry_time = fields.Float(default=10,allow_none=True)
 
     tickets = Relationship(attribute='tickets',
                            self_view='v1.event_ticket',
@@ -254,7 +255,6 @@ class EventSchemaPublic(SoftDeletionSchema):
                                 schema='CustomFormSchema',
                                 many=True,
                                 type_='custom-form')
-    order_expiry_time = fields.Float(default=10)
     organizers = Relationship(attribute='organizers',
                               self_view='v1.event_organizers',
                               self_view_kwargs={'id': '<id>'},
