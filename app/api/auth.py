@@ -122,11 +122,38 @@ def login_user(provider, auth_code):
         return make_response(jsonify(user_id=user.id, email=user.email, facebook_id=user.facebook_id), 200)
 
     elif provider == 'google':
-        provider_class = GoogleOAuth()
+        provider_class = GooglrOAuth()
         payload = {
             'client_id': provider_class.get_client_id(),
-            'client_secret': provider_class.get_client_secret()
+            'redirect_uri': request.args.get('redirect_uri'),
+            'client_secret': provider_class.get_client_secret(),
+            'code': auth_code
         }
+        access_token = requests.get('https://accounts.google.com/o/oauth2/token', params=payload).json()
+        payload_details = {
+            'input_token': access_token['access_token'],
+            'access_token': provider_class.get_client_id() + '|' + provider_class.get_client_secret()
+        }
+        details = requests.get('https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=', params=payload_details).json()
+        user_details = requests.get('https://www.googleapis.com/userinfo/v2/' + details['data']['google_plus_url'],
+                                    params={'access_token': access_token['access_token'],
+                                            'fields': 'first_name, last_name, email, google_plus_url'}).json()
+
+        if get_count(db.session.query(User).filter_by(google_plus_url=user_details['google_plus_url'])) > 0:
+            user = db.session.query(User).filter_by(google_plus_url=user_details['google_plus_url']).one()
+            return make_response(
+                jsonify(user_id=user.id, email=user.email, google_plus_url=user.google_plus_url), 200)
+
+        user = User()
+        user.first_name = user_details['first_name']
+        user.last_name = user_details['last_name']
+        user.email = user_details['email']
+        user.google_plus_url = user_details['google_plus_url']
+        user.password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(8))
+
+
+        save_to_db(user)
+        return make_response(jsonify(user_id=user.id, email=user.email, facebook_id=user.facebook_id), 200)
     elif provider == 'twitter':
         provider_class = TwitterOAuth()
         payload = {
