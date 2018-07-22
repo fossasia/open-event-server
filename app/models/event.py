@@ -99,6 +99,7 @@ class Event(SoftDeletionModel):
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
     discount_code_id = db.Column(db.Integer, db.ForeignKey(
         'discount_codes.id', ondelete='CASCADE'))
+    order_expiry_time = db.Column(db.Float, default=10)
     discount_code = db.relationship('DiscountCode', backref='events', foreign_keys=[discount_code_id])
     event_type = db.relationship('EventType', backref='event', foreign_keys=[event_type_id])
     event_topic = db.relationship('EventTopic', backref='event', foreign_keys=[event_topic_id])
@@ -148,7 +149,6 @@ class Event(SoftDeletionModel):
                             primaryjoin='UsersEventsRoles.event_id == Event.id',
                             secondaryjoin='User.id == UsersEventsRoles.user_id',
                             backref='events')
-    order_expiry_time = db.Column(db.Float, default=10)
 
     def __init__(self,
                  name=None,
