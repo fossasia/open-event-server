@@ -144,6 +144,7 @@ class Event(db.Model):
                             primaryjoin='UsersEventsRoles.event_id == Event.id',
                             secondaryjoin='User.id == UsersEventsRoles.user_id',
                             backref='events')
+    order_expiry_time = db.Column(db.Float, default=10)
 
     def __init__(self,
                  name=None,
@@ -195,7 +196,8 @@ class Event(db.Model):
                  discount_code_id=None,
                  onsite_details=None,
                  is_tax_enabled=None,
-                 is_sponsors_enabled=None):
+                 is_sponsors_enabled=None,
+                 order_expiry_time=None):
 
         self.name = name
         self.logo_url = logo_url
@@ -248,6 +250,7 @@ class Event(db.Model):
         self.created_at = datetime.now(pytz.utc)
         self.is_tax_enabled = is_tax_enabled
         self.is_sponsors_enabled = is_sponsors_enabled
+        self.order_expiry_time= order_expiry_time
 
     def __repr__(self):
         return '<Event %r>' % self.name

@@ -249,6 +249,7 @@ class EventSchemaPublic(Schema):
                                 schema='CustomFormSchema',
                                 many=True,
                                 type_='custom-form')
+    order_expiry_time = fields.Float(default=10)
 
 
 class EventSchema(EventSchemaPublic):
