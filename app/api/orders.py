@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from flask import render_template, Blueprint, jsonify
+from flask_cors import cross_origin
 from flask_jwt import current_identity as current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
@@ -386,6 +387,7 @@ class ChargeList(ResourceList):
 
 
 @order_misc_routes.route('/get-client-token', methods=['GET'])
+@cross_origin()
 @jwt_required
 def send_receipt():
     """
