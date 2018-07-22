@@ -122,7 +122,7 @@ def login_user(provider, auth_code):
         return make_response(jsonify(user_id=user.id, email=user.email, facebook_id=user.facebook_id), 200)
 
     elif provider == 'google':
-        provider_class = GooglrOAuth()
+        provider_class = GoogleOAuth()
         payload = {
             'client_id': provider_class.get_client_id(),
             'redirect_uri': request.args.get('redirect_uri'),
