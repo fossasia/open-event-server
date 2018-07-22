@@ -21283,16 +21283,12 @@ To update or get any attribute of this data layer, you will need admin access. H
 | `stripe-secret-key`  | Stripe secret key | string | **yes** |
 | `stripe-publishable-key`  | Stripe publishable key | string | **yes** |
 
-(PayPal Credentials)
+(PayPal Braintree Credentials)
 | Parameter | Description | Type | Admin Only |
 |:----------|-------------|------|------------|
 | `paypal-mode`  | Paypal mode | string | **yes** |
-| `paypal-sandbox-username`  | Paypal sandbox username | string | **yes** |
-| `paypal-sandbox-password`  | Paypal sandbox password | string | **yes** |
-| `paypal-sandbox-signature`  | Paypal sandbox signature | string | **yes** |
-| `paypal-live-username`  | Paypal live username | string | **yes** |
-| `paypal-live-password`  | Paypal live password | string | **yes** |
-| `paypal-live-signature`  | Paypal live signature | string | **yes** |
+| `paypal-braintree-sandbox-access-token`  | Paypal Braintree sandbox access token | string | **yes** |
+| `paypal-braintree-access-token`  | Paypal Braintree access token | string | **yes** |
 
 **EMAIL**
 (Email service)
@@ -21393,13 +21389,9 @@ To update or get any attribute of this data layer, you will need admin access. H
               "stripe-client-id": "example1234",
               "stripe-secret-key": "example1234",
               "stripe-publishable-key": "example1234",
-              "paypal-mode": "example",
-              "paypal-sandbox-username": "example",
-              "paypal-sandbox-password": "example",
-              "paypal-sandbox-signature": "example1234",
-              "paypal-live-username": "example",
-              "paypal-live-password": "example",
-              "paypal-live-signature": "example1234",
+              "paypal-mode": "development",
+              "paypal-braintree-sandbox-access-token": "example1234",
+              "paypal-braintree-access-token": "example1234",
               "email-service": "example",
               "email-from": "example@example.com",
               "email-from-name": "example",
@@ -21473,13 +21465,9 @@ To update or get any attribute of this data layer, you will need admin access. H
                   "stripe-client-id": "example1234",
                   "stripe-secret-key": "example1234",
                   "stripe-publishable-key": "example1234",
-                  "paypal-mode": "example",
-                  "paypal-sandbox-username": "example",
-                  "paypal-sandbox-password": "example",
-                  "paypal-sandbox-signature": "example1234",
-                  "paypal-live-username": "example",
-                  "paypal-live-password": "example",
-                  "paypal-live-signature": "example1234",
+                  "paypal-mode": "development",
+                  "paypal-braintree-sandbox-access-token": "example1234",
+                  "paypal-braintree-access-token": "example1234",
                   "email-service": "example",
                   "email-from": "example@example.com",
                   "email-from-name": "example",
@@ -21537,13 +21525,9 @@ To update or get any attribute of this data layer, you will need admin access. H
               "stripe-client-id": "example1234",
               "stripe-secret-key": "example1234",
               "stripe-publishable-key": "example1234",
-              "paypal-mode": "example",
-              "paypal-sandbox-username": "example",
-              "paypal-sandbox-password": "example",
-              "paypal-sandbox-signature": "example1234",
-              "paypal-live-username": "example",
-              "paypal-live-password": "example",
-              "paypal-live-signature": "example1234",
+              "paypal-mode": "development",
+              "paypal-braintree-sandbox-access-token": "example1234",
+              "paypal-braintree-access-token": "example1234",
               "email-service": "example",
               "email-from": "example@example.com",
               "email-from-name": "example",
@@ -22752,6 +22736,7 @@ Get the task status and the final result of the task as response
 | `status` | Status of the order(pending, completed, placed, cancelled, expired) | string (default=pending) | - |
 | `discount_code_id` | ID of the discount code | string | - |
 | `order-notes` | Notes associated with Order | string | - |
+| `pdf-url` | URL to download the tickets | string | - |
 
 ## Orders Collection [/v1/orders{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -23342,6 +23327,26 @@ Get a list of all orders
             "self": "/v1/orders"
           }
         }
+
+
+## Client token for Paypal Braintree [/v1/get-client-token]
+
+### Get Paypal Braintree client token [GET]
+Get the client token.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+   {
+        "client_token": "example123"
+   }
 
 
 # Group Admin Sales

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import render_template
+from flask import render_template, Blueprint, jsonify
 from flask_jwt import current_identity as current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
@@ -18,6 +18,7 @@ from app.api.helpers.mail import send_order_cancel_email
 from app.api.helpers.notification import send_notif_to_attendees, send_notif_ticket_purchase_organizer, \
     send_notif_ticket_cancel
 from app.api.helpers.order import delete_related_attendees_for_order, set_expiry_for_order
+from app.api.helpers.payment import PayPalPaymentsManager
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
@@ -30,6 +31,8 @@ from app.models.discount_code import DiscountCode, TICKET
 from app.models.order import Order, OrderTicket, get_updatable_fields
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
+
+order_misc_routes = Blueprint('order_misc', __name__, url_prefix='/v1')
 
 
 class OrdersListPost(ResourceList):
@@ -361,7 +364,7 @@ class ChargeSchema(Schema):
 
     id = fields.Str(dump_only=True)
     stripe = fields.Str(load_only=True, allow_none=True)
-    paypal = fields.Str(load_only=True, allow_none=True)
+    paypal_braintree_nonce = fields.Str(load_only=True, allow_none=True)
     status = fields.Boolean(dump_only=True)
     message = fields.Str(dump_only=True)
 
@@ -380,3 +383,12 @@ class ChargeList(ResourceList):
     }
 
     decorators = (jwt_required,)
+
+
+@order_misc_routes.route('/get-client-token', methods=['GET'])
+@jwt_required
+def send_receipt():
+    """
+    :return: The client token required for Braintree client SDK.
+    """
+    return jsonify(client_token=PayPalPaymentsManager.get_client_token())
