@@ -52,6 +52,7 @@ class UserSchema(UserSchemaPublic):
     password = fields.Str(required=True, load_only=True)
     is_super_admin = fields.Boolean(dump_only=True)
     is_admin = fields.Boolean(dump_only=True)
+    facebook_id = fields.Integer(dump_only=True)
 
     is_sales_admin = fields.Boolean(dump_only=True)
     is_marketer = fields.Boolean(dump_only=True)
