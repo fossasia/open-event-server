@@ -27,6 +27,7 @@ from app.models.user import User
 
 attendee_misc_routes = Blueprint('attendee_misc', __name__, url_prefix='/v1')
 
+
 class AttendeeListPost(ResourceList):
     """
        List and create Attendees through direct URL

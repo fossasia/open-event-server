@@ -1,18 +1,15 @@
 import json
 
+import braintree
 import requests
 import stripe
-from flask import current_app
 from forex_python.converter import CurrencyRates
 
 from app.api.helpers.cache import cache
-from app.api.helpers.db import safe_query
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.utilities import represents_int
-from app.models import db
-from app.models.event import Event
 from app.models.stripe_authorization import StripeAuthorization
-from app.settings import get_settings
+from app.settings import get_settings, Environment
 
 
 @cache.memoize(5)
@@ -117,119 +114,56 @@ class StripePaymentsManager(object):
 
 
 class PayPalPaymentsManager(object):
-    api_version = 93
+    """
+    Class to manage payment through Paypal Braintree.
+    """
 
     @staticmethod
-    def get_credentials(event=None, override_mode=False, is_testing=False):
+    def get_credentials():
         """
-        Get Paypal credentials from settings module.
-        :param event: Associated event.
-        :param override_mode:
-        :param is_testing:
-        :return:
+        Initialize and return the Braintree payment gateway.
+        :return: Braintree gateway instance.
         """
-        if event and represents_int(event):
-            event = safe_query(db, Event, 'id', event, 'event_id')
+        # Use Sandbox by default.
         settings = get_settings()
-        if not override_mode:
-            if settings['paypal_mode'] and settings['paypal_mode'] != "":
-                if settings['paypal_mode'] == 'live':
-                    is_testing = False
-                else:
-                    is_testing = True
-            else:
-                return None
+        paypal_braintree_access_token = settings['paypal_braintree_sandbox_access_token']
 
-        if is_testing:
-            credentials = {
-                'USER': settings['paypal_sandbox_username'],
-                'PWD': settings['paypal_sandbox_password'],
-                'SIGNATURE': settings['paypal_sandbox_signature'],
-                'SERVER': 'https://api-3t.sandbox.paypal.com/nvp',
-                'CHECKOUT_URL': 'https://www.sandbox.paypal.com/cgi-bin/webscr',
-                'EMAIL': '' if not event or not event.paypal_email or event.paypal_email == "" else event.paypal_email
-            }
-        else:
-            credentials = {
-                'USER': settings['paypal_live_username'],
-                'PWD': settings['paypal_live_password'],
-                'SIGNATURE': settings['paypal_live_signature'],
-                'SERVER': 'https://api-3t.paypal.com/nvp',
-                'CHECKOUT_URL': 'https://www.paypal.com/cgi-bin/webscr',
-                'EMAIL': '' if not event or not event.paypal_email or event.paypal_email == "" else event.paypal_email
-            }
-        if credentials['USER'] and credentials['PWD'] and credentials['SIGNATURE'] and credentials['USER'] != "" and \
-                credentials['PWD'] != "" and credentials['SIGNATURE'] != "":
-            return credentials
-        else:
-            return None
+        # Switch to production if environment is production.
+        if settings['paypal_mode'] == Environment.PRODUCTION:
+            paypal_braintree_access_token = settings['paypal_braintree_access_token']
+
+        # Initialize braintree instance.
+        braintree_payment_gateway_instance = braintree.BraintreeGateway(access_token=paypal_braintree_access_token)
+
+        return braintree_payment_gateway_instance
 
     @staticmethod
-    def get_approved_payment_details(order, credentials=None):
+    def get_client_token():
         """
-        Use the paypal token to get the approved payment details from Paypal
-        :param order: Order to charge for
-        :param credentials: the paypal credentials
-        :return: payer_id and other details returned by Paypal.
+        Get the client token for Braintree client SDK.
+        :return: token.
         """
-
-        if not credentials:
-            credentials = PayPalPaymentsManager.get_credentials(order.event)
-
-        if not credentials:
-            raise Exception('PayPal credentials have not been set correctly')
-
-        data = {
-            'USER': credentials['USER'],
-            'PWD': credentials['PWD'],
-            'SIGNATURE': credentials['SIGNATURE'],
-            'SUBJECT': credentials['EMAIL'],
-            'METHOD': 'GetExpressCheckoutDetails',
-            'VERSION': PayPalPaymentsManager.api_version,
-            'TOKEN': order.paypal_token
-        }
-
-        if current_app.config['TESTING']:
-            return data
-
-        response = requests.post(credentials['SERVER'], data=data)
-        return json.loads(response.text)
+        braintree_payment_gateway = PayPalPaymentsManager.get_credentials()
+        return braintree_payment_gateway.client_token.generate()
 
     @staticmethod
-    def capture_payment(order, payer_id, currency=None, credentials=None):
+    def create_transaction(order_invoice, paypal_braintree_nonce):
         """
-        capture order payment using payer_id and token.
-        :param order: Order to charge for.
-        :param payer_id: The payer_id obtained from Paypal using the get_approved_payment_details method.
-        :param currency: currency
-        :param credentials: the paypal credentials.
-        :return:
+        Create transaction and charge the user.
+        :param order_invoice: Order to charge for.
+        :param paypal_braintree_nonce: Nonce received from Paypal Braintree.
+        :return: Result of the transaction.
         """
-        if not credentials:
-            credentials = PayPalPaymentsManager.get_credentials(order.event)
+        braintree_payment_gateway = PayPalPaymentsManager.get_credentials()
 
-        if not credentials:
-            raise Exception('PayPal credentials have not be set correctly')
+        # submit_for_settlement ensures that the funds are captured instantly.
+        result = braintree_payment_gateway.transaction.sale({
+            "amount": int(order_invoice.amount * 100),
+            "merchant_account_id": order_invoice.event.payment_currency,
+            "payment_method_nonce": paypal_braintree_nonce,
+            "options": {
+                "submit_for_settlement": True
+            }
+        })
 
-        if not currency:
-            currency = order.event.payment_currency
-
-        if not currency or currency == "":
-            currency = "USD"
-
-        data = {
-            'USER': credentials['USER'],
-            'PWD': credentials['PWD'],
-            'SIGNATURE': credentials['SIGNATURE'],
-            'SUBJECT': credentials['EMAIL'],
-            'METHOD': 'DoExpressCheckoutPayment',
-            'VERSION': PayPalPaymentsManager.api_version,
-            'TOKEN': order.paypal_token,
-            'PAYERID': payer_id,
-            'PAYMENTREQUEST_0_PAYMENTACTION': 'SALE',
-            'PAYMENTREQUEST_0_AMT': order.amount,
-            'PAYMENTREQUEST_0_CURRENCYCODE': currency,
-        }
-
-        response = requests.post(credentials['SERVER'], data=data)
-        return json.loads(response.text)
+        return result
