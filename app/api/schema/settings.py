@@ -145,14 +145,10 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     # Stripe secret key
     stripe_secret_key = fields.Str(allow_none=True)
 
-    # PayPal Credentials
+    # PayPal Braintree Credential
     paypal_mode = fields.Str(allow_none=True)
-    paypal_sandbox_username = fields.Str(allow_none=True)
-    paypal_sandbox_password = fields.Str(allow_none=True)
-    paypal_sandbox_signature = fields.Str(allow_none=True)
-    paypal_live_username = fields.Str(allow_none=True)
-    paypal_live_password = fields.Str(allow_none=True)
-    paypal_live_signature = fields.Str(allow_none=True)
+    paypal_braintree_sandbox_access_token = fields.Str(allow_none=True)
+    paypal_braintree_access_token = fields.Str(allow_none=True)
 
     #
     # EMAIL
