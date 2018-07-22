@@ -149,7 +149,7 @@ def login_user(provider, auth_code):
         user.last_name = user_details['last_name']
         user.email = user_details['email']
         user.google_plus_url = user_details['google_plus_url']
-        user.password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(8)) 
+        user.password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(8))
         save_to_db(user)
         return make_response(jsonify(user_id=user.id, email=user.email, facebook_id=user.facebook_id), 200)
     elif provider == 'twitter':
