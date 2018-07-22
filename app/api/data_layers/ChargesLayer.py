@@ -52,12 +52,12 @@ class ChargesLayer(BaseDataLayer):
 
         # charge through paypal
         elif order.payment_mode == 'paypal':
-            if not data.get('paypal'):
-                raise UnprocessableEntity({'source': ''}, "paypal token is missing")
+            if not data.get('paypal_braintree_nonce'):
+                raise UnprocessableEntity({'source': ''}, "paypal braintree nonce is missing")
             if not order.event.can_pay_by_paypal:
                 raise ConflictException({'': ''}, "This event doesn't accept payments by Paypal")
             try:
-                success, response = TicketingManager.charge_paypal_order_payment(order, data['paypal'])
+                success, response = TicketingManager.charge_paypal_order_payment(order, data['paypal_braintree_nonce'])
                 data['status'] = success
                 data['message'] = response
             except Exception:
