@@ -256,7 +256,7 @@ class Event(SoftDeletionModel):
         self.created_at = datetime.now(pytz.utc)
         self.is_tax_enabled = is_tax_enabled
         self.is_sponsors_enabled = is_sponsors_enabled
-        self.order_expiry_time= order_expiry_time
+        self.order_expiry_time = order_expiry_time
         self.stripe_authorization = stripe_authorization
         self.tax = tax
 
