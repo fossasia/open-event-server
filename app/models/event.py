@@ -201,7 +201,7 @@ class Event(SoftDeletionModel):
                  onsite_details=None,
                  is_tax_enabled=None,
                  is_sponsors_enabled=None,
-                 order_expiry_time=None):
+                 order_expiry_time=None,
                  stripe_authorization=None,
                  tax=None):
 
