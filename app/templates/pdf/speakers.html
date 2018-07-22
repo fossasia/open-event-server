@@ -1,131 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>{{ event.name }} - {{ ("Speakers List") }}</title>
-    <style type="text/css">
-        {% include 'bootstrap/bootstrap_pdf.css' %}
-        table th {
-            text-align: left;
-        }
+	<meta charset="UTF-8">
+	<title>{{ event.name }} - {{ ("Speakers List") }}</title>
+	<style type="text/css">
+		{% include 'bootstrap/bootstrap_pdf.css' %}
+		table th {
+			text-align: left;
+		}
 
-        table td {
-            text-align: left;
-            border-spacing: 1em;
-        }
+		table td {
+			text-align: left;
+			border-spacing: 1em;
+		}
 
-        table {
-            margin-top: 20px;
-            border-collapse: separate;
-        }
+		table {
+			margin-top: 20px;
+			border-collapse: separate;
+		}
 
-        .total-row {
-            margin-top: 25px;
-        }
+		.total-row {
+			margin-top: 25px;
+		}
 
-        .speaker-total {
-            margin-right: 50px;
-        }
+		.speaker-total {
+			margin-right: 50px;
+		}
 
-        tr.padded td{
-        padding-top : 40px;
-        }
-    </style>
+		tr.padded td{
+		padding-top : 40px;
+		}
+	</style>
 </head>
 <body id="body">
 <h3 style="text-align:center;">{{ event.name }} - {{ ("Speakers List") }}</h3>
-    <br>
-    <table class="table with-datatable" id="speakers-table" width="100%">
-        <thead>
-        <tr>
-            <th>
-                {{ ("Speaker") }}
-            </th>
-            <th>
-                {{ ("Speaker Details") }}
-            </th>
-            <th>
-                {{ ("User") }}
-            </th>
-            <th>
-                {{ ("User Details") }}
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for speaker in speakers %}
-            {% if speaker.status != "deleted" %}
-                <tr class="padded">
-                    <td><br>
-                            Speaker Number    :<br>
-                            Speaker By        :<br>
-                            Speaker Status    :<br>
-                            Quantity        :<br>
-                            Total Amount    :<br>
-                            Payment Mode    :<br>
-                            Discount Code   :<br>
-                        {% if speaker.status == 'completed' %}
-                            Speaker Completed :<br>
-                        {% else %}
-                            Speaker Placed    :<br>
-                        {% endif %}
-                    </td>
-                    <td><br>
-                            <strong>{{ speaker.get_invoice_number() }}</strong><br>
-                            {% if speaker.user and speaker.user.first_name and speaker.user.last_name %}
-                                {{ speaker.user.fullname }}
-                            {% elif speaker.user %}
-                                {{ speaker.user.email }}
-                            {% else %}
-                                {{ ('Information unavailable') }}
-                            {% endif %}<br>
-                            {% if speaker.status == 'completed' %}
-                                {{ speaker.status | capitalize }}
-                            {% elif speaker.status == 'pending' or speaker.status == 'initialized' %}
-                                {{ ("Pending") }}
-                            {% elif speaker.status == 'placed' %}
-                                {{ speaker.status | capitalize }}
-                            {% elif speaker.status == 'cancelled' %}
-                                {{ speaker.status | capitalize }}
-                            {% else %}
-                                {{ speaker.status | capitalize }}
-                            {% endif %}<br>
-                            {{ speaker.get_tickets_count() }}<br>
-                            {{ event.payment_currency | currency_symbol }}{{ speaker.amount | money }}<br>
-                            {% if speaker.status == 'completed' %}
-                                {{ speaker.paid_via | capitalize }}
-                            {% else %}
-                                {{ ('Payment pending') }}
-                            {% endif %}<br>
-                            {% if speaker.discount_code %}
-                                {{ speaker.discount_code.code }}<br>
-                            {% else %}
-                                {{ ('NA') }}
-                            {% endif %}<br>
-                            {% if speaker.status == 'completed' %}
-                                <span class="datetime">{{ speaker.completed_at | datetime }}</span>
-                            {% else %}
-                                <span class="datetime">{{ speaker.created_at | datetime }}</span>
-                            {% endif %}<br>
-                    </td>
-                    <td style="text-align:center;"><br>
-                        <strong>
-                        First Name   :<br>
-                        Last Name    :<br>
-                        Email       :<br>
-                        </strong>
-                    </td>
-                    <td><br>
-                            <strong>
-                            {{ speaker.user.first_name if speaker.user and speaker.user.first_name }}<br>
-                            {{ speaker.user.last_name if speaker.user and speaker.user.last_name}}<br>
-                            {{ speaker.user.email if speaker.user and speaker.user.email}}<br>
-                            </strong>
-                    </td>
-                </tr>
-            {% endif %}
-        {% endfor %}
-        </tbody>
-    </table>
+<br>
+<table class="table with-datatable" id="speakers-table" width="100%">
+	<thead>
+	<tr>
+		<th>
+			{{ ("Speaker Name") }}
+		</th>
+		<th>
+			{{ ("Speaker Email") }}
+		</th>
+		<th>
+			{{ ("Speaker Sessions") }}
+		</th>
+		<th>
+			{{ ("Speaker Mobile") }}
+		</th>
+		<th>
+			{{ ("Speaker Bio") }}
+		</th>
+		<th>
+			{{ ("Speaker Organisation") }}
+		</th>
+		<th>
+			{{ ("Speaker Position") }}
+		</th>
+	</tr>
+	</thead>
+	<tbody>
+		{%for speaker in speakers %}
+			<tr class="padded" style="text-align:center; margin-top: 5px">
+				<td>  
+					{% if speaker.name %}
+						{{speaker.name}}
+					{% else %}
+						{{"-"}}
+					{% endif %}
+				</td>
+				<td>
+					{% if speaker.email %}
+						{{speaker.email}}
+					{% else %}
+						{{"-"}}
+					{% endif %}
+				</td>
+				<td>
+					{% if speaker.sessions %}
+						{% for session in speaker.sessions %}
+							{% if not session.deleted_at %}
+								{{ session.state }}<br>
+					{% else %}
+						{{"-"}}
+				</td>
+				<td>
+					{% if speaker.moblie %}
+						{{speaker.moblie}}
+					{% else %}
+						{{"-"}}
+				</td>
+				<td>
+					{% if speaker.short.biography %}
+						{{speaker.short.biography}}
+					{% else %}
+						{{"-"}}
+				</td>
+				<td>
+					{% if speaker.position %}
+						{{speaker.position}}
+					{% else %}
+						{{"-"}}
+				</td>
+			</tr>
+		{% endif %}
+	{% endfor %}
+	</tbody>
+</table>
 </body>
 </html>
