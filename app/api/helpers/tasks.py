@@ -361,7 +361,7 @@ def export_sessions_csv_task(self, event_id):
 
 @celery.task(base=RequestContextTask, name='export.speakers.csv', bind=True)
 def export_speakers_csv_task(self, event_id):
-    speakers = db.session.query(Speaker).filter_by(event_id=event_id)
+    speaker = db.session.query(Speaker).filter_by(event_id=event_id)
     try:
         filedir = os.path.join(current_app.config.get('BASE_DIR'), 'static/uploads/temp/')
         if not os.path.isdir(filedir):
