@@ -71,6 +71,8 @@ class User(SoftDeletionModel):
     icon_image_url = db.Column(db.String)
     is_super_admin = db.Column(db.Boolean, default=False)
     is_admin = db.Column(db.Boolean, default=False)
+    is_sales_admin = db.Column(db.Boolean, default=False)
+    is_marketer = db.Column(db.Boolean, default=False)
     is_verified = db.Column(db.Boolean, default=False)
     last_accessed_at = db.Column(db.DateTime(timezone=True))
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(pytz.utc))
@@ -172,27 +174,6 @@ class User(SoftDeletionModel):
             return False
         else:
             return True
-
-    def _is_system_role(self, role_name):
-        """
-        Checks if a user has a particular Role.
-        """
-        role = CustomSysRole.query.filter_by(name=role_name).first()
-        ucsr = UserSystemRole.query.filter_by(user=self,
-                                              role=role).first()
-        if not ucsr:
-            return False
-        else:
-            return True
-
-    @hybrid_property
-    def is_marketer(self):
-        # type: (object) -> object
-        return self._is_system_role(MARKETER)
-
-    @hybrid_property
-    def is_sales_admin(self):
-        return self._is_system_role(SALES_ADMIN)
 
     def _is_role(self, role_name, event_id=None):
         """
