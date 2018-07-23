@@ -81,7 +81,7 @@ class StripePaymentsManager(object):
             credentials = StripePaymentsManager.get_credentials(order_invoice.event)
 
         if not credentials:
-            raise Exception('Stripe is incorrectly configured')
+            raise Exception('Stripe credentials not found for the event.')
         stripe.api_key = credentials['SECRET_KEY']
 
         if not currency:
