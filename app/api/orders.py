@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import render_template, Blueprint, jsonify
+from flask import Blueprint, jsonify
 from flask_jwt import current_identity as current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
@@ -11,18 +11,17 @@ from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
-from app.api.helpers.files import create_save_pdf
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.mail import send_order_cancel_email
 from app.api.helpers.notification import send_notif_to_attendees, send_notif_ticket_purchase_organizer, \
     send_notif_ticket_cancel
-from app.api.helpers.order import delete_related_attendees_for_order, set_expiry_for_order
+from app.api.helpers.order import delete_related_attendees_for_order, set_expiry_for_order, \
+    create_pdf_tickets_for_holder
 from app.api.helpers.payment import PayPalPaymentsManager
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
-from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.helpers.ticketing import TicketingManager
 from app.api.helpers.utilities import dasherize, require_relationship
 from app.api.schema.orders import OrderSchema
@@ -106,29 +105,23 @@ class OrdersListPost(ResourceList):
         :return:
         """
         order_tickets = {}
-        pdf = create_save_pdf(render_template('pdf/ticket_purchaser.html', order=order),
-                              UPLOAD_PATHS['pdf']['ticket_attendee'],
-                              dir_path='/static/uploads/pdf/tickets/')
-        order.tickets_pdf_url = pdf
         for holder in order.ticket_holders:
-            if (not holder.user) or holder.user.id != current_user.id:
-                # holder is not the order buyer
-                pdf = create_save_pdf(render_template('pdf/ticket_attendee.html', order=order, holder=holder),
-                                      UPLOAD_PATHS['pdf']['ticket_attendee'],
-                                      dir_path='/static/uploads/pdf/tickets/')
-            else:
-                pdf = order.tickets_pdf_url
-            holder.pdf_url = pdf
             save_to_db(holder)
             if not order_tickets.get(holder.ticket_id):
                 order_tickets[holder.ticket_id] = 1
             else:
                 order_tickets[holder.ticket_id] += 1
+
+        order.user = current_user
+
+        # create pdf tickets.
+        create_pdf_tickets_for_holder(order)
+
         for ticket in order_tickets:
             od = OrderTicket(order_id=order.id, ticket_id=ticket, quantity=order_tickets[ticket])
             save_to_db(od)
+
         order.quantity = order.tickets_count
-        order.user = current_user
         save_to_db(order)
         if not has_access('is_coorganizer', event_id=data['event']):
             TicketingManager.calculate_update_amount(order)
@@ -288,6 +281,9 @@ class OrderDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        # create pdf tickets.
+        create_pdf_tickets_for_holder(order)
+
         if order.status == 'cancelled':
             send_order_cancel_email(order)
             send_notif_ticket_cancel(order)

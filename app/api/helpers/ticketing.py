@@ -6,7 +6,7 @@ from app.api.helpers.db import save_to_db, get_count
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.notification import send_notif_to_attendees, send_notif_ticket_purchase_organizer
-from app.api.helpers.order import delete_related_attendees_for_order
+from app.api.helpers.order import delete_related_attendees_for_order, create_pdf_tickets_for_holder
 from app.api.helpers.payment import StripePaymentsManager, PayPalPaymentsManager
 from app.models import db
 from app.models.ticket_fee import TicketFees
@@ -104,7 +104,10 @@ class TicketingManager(object):
             order.completed_at = datetime.utcnow()
             save_to_db(order)
 
-            # send email and notifications
+            # create tickets.
+            create_pdf_tickets_for_holder(order)
+
+            # send email and notifications.
             send_email_to_attendees(order, current_user.id)
             send_notif_to_attendees(order, current_user.id)
 
@@ -149,6 +152,9 @@ class TicketingManager(object):
             order.transaction_id = transaction_result.transaction.id
             order.completed_at = datetime.utcnow()
             save_to_db(order)
+
+            # create tickets
+            create_pdf_tickets_for_holder(order)
 
             # send email and notifications
             send_email_to_attendees(order, order.user_id)
