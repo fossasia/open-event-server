@@ -53,6 +53,7 @@ class User(SoftDeletionModel):
     _email = db.Column(db.String(120), unique=True, nullable=False)
     _password = db.Column(db.String(128), nullable=False)
     facebook_id = db.Column(db.BigInteger, unique=True, nullable=True, name='facebook_id')
+    facebook_login_hash = db.Column(db.String, nullable=True)
     reset_password = db.Column(db.String(128))
     salt = db.Column(db.String(128))
     avatar_url = db.Column(db.String)
