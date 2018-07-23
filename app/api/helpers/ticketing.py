@@ -3,6 +3,7 @@ from datetime import datetime
 from flask_login import current_user
 
 from app.api.helpers.db import save_to_db, get_count
+from app.api.helpers.exceptions import ConflictException
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.notification import send_notif_to_attendees, send_notif_ticket_purchase_organizer
@@ -88,7 +89,17 @@ class TicketingManager(object):
         save_to_db(order)
 
         # charge the user
-        charge = StripePaymentsManager.capture_payment(order)
+        try:
+            charge = StripePaymentsManager.capture_payment(order)
+        except ConflictException as e:
+            # payment failed hence expire the order
+            order.status = 'expired'
+            save_to_db(order)
+
+            # delete related attendees to unlock the tickets
+            delete_related_attendees_for_order(order)
+
+            raise e
 
         # charge.paid is true if the charge succeeded, or was successfully authorized for later capture.
         if charge.paid:
@@ -135,9 +146,6 @@ class TicketingManager(object):
         :param paypal_nonce: Paypal token
         :return:
         """
-        if not paypal_nonce:
-            return False, 'Paypal nonce missing'
-
         # save the paypal nonce with the order
         order.paypal_token = paypal_nonce
         save_to_db(order)

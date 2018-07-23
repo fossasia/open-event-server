@@ -6,7 +6,7 @@ import stripe
 from forex_python.converter import CurrencyRates
 
 from app.api.helpers.cache import cache
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.exceptions import ForbiddenException, ConflictException
 from app.api.helpers.utilities import represents_int
 from app.models.stripe_authorization import StripeAuthorization
 from app.settings import get_settings, Environment
@@ -22,6 +22,10 @@ def forex(from_currency, to_currency, amount):
 
 
 class StripePaymentsManager(object):
+    """
+    Class to manage payments through Stripe.
+    """
+
     @staticmethod
     def get_credentials(event=None):
         """
@@ -64,7 +68,7 @@ class StripePaymentsManager(object):
         credentials = StripePaymentsManager.get_credentials()
 
         if not credentials:
-            raise ForbiddenException({'pointer': ''}, "Stripe payment isn't configured properly for this Event")
+            raise ForbiddenException({'pointer': ''}, "Stripe payment isn't configured properly for the Platform")
 
         data = {
             'client_secret': credentials['SECRET_KEY'],
@@ -77,11 +81,19 @@ class StripePaymentsManager(object):
 
     @staticmethod
     def capture_payment(order_invoice, currency=None, credentials=None):
+        """
+        Capture payments through stripe.
+        :param order_invoice: Order to be charged for
+        :param currency: Currency of the order amount.
+        :param credentials: Stripe credentials.
+        :return: charge/None depending on success/failure.
+        """
         if not credentials:
             credentials = StripePaymentsManager.get_credentials(order_invoice.event)
 
         if not credentials:
-            raise Exception('Stripe credentials not found for the event.')
+            raise ConflictException({'pointer': ''},
+                                    'Stripe credentials not found for the event.')
         stripe.api_key = credentials['SECRET_KEY']
 
         if not currency:
@@ -109,13 +121,13 @@ class StripePaymentsManager(object):
                 description=order_invoice.event.name
             )
             return charge
-        except:
-            return None
+        except Exception as e:
+            raise ConflictException({'pointer': ''}, str(e))
 
 
 class PayPalPaymentsManager(object):
     """
-    Class to manage payment through Paypal Braintree.
+    Class to manage payments through Paypal Braintree.
     """
 
     @staticmethod
@@ -128,7 +140,7 @@ class PayPalPaymentsManager(object):
         settings = get_settings()
         paypal_braintree_access_token = settings['paypal_braintree_sandbox_access_token']
 
-        # Switch to production if environment is production.
+        # Switch to production if paypal_mode is production.
         if settings['paypal_mode'] == Environment.PRODUCTION:
             paypal_braintree_access_token = settings['paypal_braintree_access_token']
 
