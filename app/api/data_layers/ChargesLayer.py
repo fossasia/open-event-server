@@ -46,9 +46,9 @@ class ChargesLayer(BaseDataLayer):
                 success, response = TicketingManager.charge_stripe_order_payment(order, data['stripe'])
                 data['status'] = success
                 data['message'] = response
-            except Exception:
+            except Exception as e:
                 data['status'] = False
-                data['message'] = "Stripe hasn't been configured properly."
+                data['message'] = str(e)
 
         # charge through paypal
         elif order.payment_mode == 'paypal':
@@ -60,8 +60,8 @@ class ChargesLayer(BaseDataLayer):
                 success, response = TicketingManager.charge_paypal_order_payment(order, data['paypal_braintree_nonce'])
                 data['status'] = success
                 data['message'] = response
-            except Exception:
+            except Exception as e:
                 data['status'] = False
-                data['message'] = "Paypal hasn't been configured properly."
+                data['message'] = str(e)
 
         return data
