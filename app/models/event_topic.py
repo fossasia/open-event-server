@@ -35,17 +35,9 @@ class EventTopic(SoftDeletionModel):
                  deleted_at=None):
 
         self.name = name
-        self.system_image_url = self.set_default_sys_image() \
-            if system_image_url is None else system_image_url
+        self.system_image_url = system_image_url
         self.slug = get_new_slug(name=self.name)
         self.deleted_at = deleted_at
-
-    @classmethod
-    def set_default_sys_image(cls):
-        with app.test_request_context():
-            url = urllib.parse.urlparse(request.url)
-            image_url = url.scheme + '://' + url.netloc + '/static/header.png'
-            return image_url
 
     def __repr__(self):
         return '<EventTopic %r>' % self.name
