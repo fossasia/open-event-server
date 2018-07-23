@@ -270,7 +270,7 @@ class OrderDetail(ResourceDetail):
                         raise ForbiddenException({'pointer': 'data/{}'.format(element)},
                                                  "You cannot update {} of an order".format(element))
 
-        if 'order_notes' in data:
+        if has_access('is_organizer', event_id=order.event_id) and 'order_notes' in data:
             if order.order_notes and data['order_notes'] not in order.order_notes.split(","):
                 data['order_notes'] = '{},{}'.format(order.order_notes, data['order_notes'])
 
