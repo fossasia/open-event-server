@@ -30,6 +30,9 @@ class SettingSchemaPublic(Schema):
     # Google Analytics
     analytics_key = fields.Str(allow_none=True)
 
+    # FB
+    fb_client_id = fields.Str(allow_none=True)
+
     #
     # Social links
     #
@@ -42,6 +45,12 @@ class SettingSchemaPublic(Schema):
 
     # Url of Frontend
     frontend_url = fields.Url(allow_none=True)
+
+    #
+    # Cookie Policy
+    #
+    cookie_policy = fields.Str(allow_none=True)
+    cookie_policy_link = fields.Str(allow_none=True)
 
 
 class SettingSchemaNonAdmin(SettingSchemaPublic):
@@ -136,14 +145,10 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     # Stripe secret key
     stripe_secret_key = fields.Str(allow_none=True)
 
-    # PayPal Credentials
+    # PayPal Braintree Credential
     paypal_mode = fields.Str(allow_none=True)
-    paypal_sandbox_username = fields.Str(allow_none=True)
-    paypal_sandbox_password = fields.Str(allow_none=True)
-    paypal_sandbox_signature = fields.Str(allow_none=True)
-    paypal_live_username = fields.Str(allow_none=True)
-    paypal_live_password = fields.Str(allow_none=True)
-    paypal_live_signature = fields.Str(allow_none=True)
+    paypal_braintree_sandbox_access_token = fields.Str(allow_none=True)
+    paypal_braintree_access_token = fields.Str(allow_none=True)
 
     #
     # EMAIL

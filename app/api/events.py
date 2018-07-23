@@ -13,6 +13,7 @@ import urllib.error
 from app.api.bootstrap import api
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
 from app.api.helpers.db import save_to_db, safe_query
+from app.api.helpers.events import create_custom_forms_for_attendees
 from app.api.helpers.exceptions import ForbiddenException, ConflictException, UnprocessableEntity
 from app.api.helpers.files import create_save_image_sizes
 from app.api.helpers.permission_manager import has_access
@@ -59,8 +60,7 @@ class EventList(ResourceList):
         :param kwargs:
         :return:
         """
-        if 'Authorization' in request.headers and (has_access('is_admin') or has_access('is_user_itself',
-                                                                                        user_id=kwargs.get('user_id'))):
+        if 'Authorization' in request.headers and (has_access('is_admin') or kwargs.get('user_id')):
             self.schema = EventSchema
         else:
             self.schema = EventSchemaPublic
@@ -81,9 +81,7 @@ class EventList(ResourceList):
 
         if view_kwargs.get('user_id') and 'GET' in request.method:
             if not has_access('is_user_itself', user_id=int(view_kwargs['user_id'])):
-                # other registered users can see the published events of the user.
-                query_ = query_.filter_by(state='published')
-
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
             user = safe_query(db, User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
                 filter(Role.name != ATTENDEE)
@@ -142,11 +140,9 @@ class EventList(ResourceList):
                                  status='accepted')
         save_to_db(role_invite, 'Organiser Role Invite Added')
 
-        email_notification = EmailNotification(next_event=True, new_paper=True, session_accept_reject=True,
-                                               session_schedule=True, after_ticket_purchase=True)
-        email_notification.user = user
-        email_notification.event = event
-        save_to_db(email_notification, 'Email Notification of event added to user')
+        # create custom forms for compulsory fields of attendee form.
+        create_custom_forms_for_attendees(event)
+
         if event.state == 'published' and event.schedule_published_on:
             start_export_tasks(event)
 
@@ -452,6 +448,9 @@ class EventDetail(ResourceDetail):
             data['large_image_url'] = uploaded_images['large_image_url']
             data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
             data['icon_image_url'] = uploaded_images['icon_image_url']
+
+        if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
+            event.deleted_at = data.get('deleted_at')
 
     def after_update_object(self, event, data, view_kwargs):
         if event.state == 'published' and event.schedule_published_on:

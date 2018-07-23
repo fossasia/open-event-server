@@ -1,21 +1,25 @@
 import base64
+import random
+import string
+
 from flask import request, jsonify, make_response, Blueprint
 from flask_jwt import current_identity as current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 import requests
 
 from app import get_settings
-from app.api.helpers.db import save_to_db
+from app.api.helpers.db import save_to_db, get_count
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_with_action, \
-                                 send_email_confirmation
+    send_email_confirmation
 from app.api.helpers.notification import send_notification_with_action
 
 from app.api.helpers.utilities import get_serializer, str_generator
 from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE, \
-                            USER_REGISTER_WITH_PASSWORD
+    USER_REGISTER_WITH_PASSWORD
 from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
+from app.models import db
 from app.api.helpers.errors import UnprocessableEntityError, NotFoundError, BadRequestError
 from app.api.helpers.third_party_auth import GoogleOAuth, FbOAuth, TwitterOAuth, InstagramOAuth
 
@@ -35,9 +39,15 @@ def redirect_uri(provider):
     else:
         return make_response(jsonify(
             message="No support for {}".format(provider)), 404)
-    url = provider_class.get_auth_uri() + '?client_id=' +\
-        provider_class.get_client_id() + '&redirect_uri=' +\
-        provider_class.get_redirect_uri()
+
+    client_id = provider_class.get_client_id()
+    if not client_id:
+        return make_response(jsonify(
+            message="{} client id is not configured on the server".format(provider)), 404)
+
+    url = provider_class.get_auth_uri() + '?client_id=' + \
+          client_id + '&redirect_uri=' + \
+          provider_class.get_redirect_uri()
     return make_response(jsonify(url=url), 200)
 
 
@@ -50,6 +60,67 @@ def get_token(provider):
             'client_id': provider_class.get_client_id(),
             'client_secret': provider_class.get_client_secret()
         }
+    elif provider == 'google':
+        provider_class = GoogleOAuth()
+        payload = {
+            'client_id': provider_class.get_client_id(),
+            'client_secret': provider_class.get_client_secret()
+        }
+    elif provider == 'twitter':
+        provider_class = TwitterOAuth()
+        payload = {
+            'client_id': provider_class.get_client_id(),
+            'client_secret': provider_class.get_client_secret()
+        }
+    elif provider == 'instagram':
+        provider_class = InstagramOAuth()
+        payload = {
+            'client_id': provider_class.get_client_id(),
+            'client_secret': provider_class.get_client_secret()
+        }
+    else:
+        return make_response(jsonify(
+            message="No support for {}".format(provider)), 200)
+    response = requests.post(provider_class.get_token_uri(), params=payload)
+    return make_response(jsonify(token=response.json()), 200)
+
+
+@auth_routes.route('/oauth/login/<provider>/<auth_code>/', methods=['GET'])
+def login_user(provider, auth_code):
+    if provider == 'facebook':
+        provider_class = FbOAuth()
+        payload = {
+            'client_id': provider_class.get_client_id(),
+            'redirect_uri': request.args.get('redirect_uri'),
+            'client_secret': provider_class.get_client_secret(),
+            'code': auth_code
+        }
+        access_token = requests.get('https://graph.facebook.com/v3.0/oauth/access_token', params=payload).json()
+        payload_details = {
+            'input_token': access_token['access_token'],
+            'access_token': provider_class.get_client_id() + '|' + provider_class.get_client_secret()
+        }
+        details = requests.get('https://graph.facebook.com/debug_token', params=payload_details).json()
+        user_details = requests.get('https://graph.facebook.com/v3.0/' + details['data']['user_id'],
+                                    params={'access_token': access_token['access_token'],
+                                            'fields': 'first_name, last_name, email'}).json()
+
+        if get_count(db.session.query(User).filter_by(facebook_id=user_details['id'])) > 0:
+            user = db.session.query(User).filter_by(facebook_id=user_details['id']).one()
+            return make_response(
+                jsonify(user_id=user.id, email=user.email, facebook_id=user.facebook_id), 200)
+
+        user = User()
+        user.first_name = user_details['first_name']
+        user.last_name = user_details['last_name']
+        user.facebook_id = user_details['id']
+        user.password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(8))
+        if user_details['email']:
+            user.email = user_details['email']
+
+        save_to_db(user)
+        return make_response(jsonify(user_id=user.id, email=user.email, facebook_id=user.facebook_id), 200)
+
     elif provider == 'google':
         provider_class = GoogleOAuth()
         payload = {
@@ -177,7 +248,7 @@ def change_password():
             send_email_with_action(user, PASSWORD_CHANGE,
                                    app_name=get_settings()['app_name'])
             send_notification_with_action(user, PASSWORD_CHANGE_NOTIF,
-                                   app_name=get_settings()['app_name'])
+                                          app_name=get_settings()['app_name'])
         else:
             return BadRequestError({'source': ''}, 'Wrong Password').respond()
 

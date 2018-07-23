@@ -12,7 +12,7 @@ from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from app.api.helpers.db import get_count
 from app.models import db
 from app.models.base import SoftDeletionModel
-from app.models.custom_system_role import UserSystemRole
+from app.models.custom_system_role import UserSystemRole, CustomSysRole
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.notification import Notification
 from app.models.panel_permission import PanelPermission
@@ -27,6 +27,9 @@ from app.models.users_events_role import UsersEventsRoles as UER
 # System-wide
 ADMIN = 'admin'
 SUPERADMIN = 'super_admin'
+
+MARKETER = 'Marketer'
+SALES_ADMIN = 'Sales Admin'
 
 SYS_ROLES_LIST = [
     ADMIN,
@@ -49,6 +52,7 @@ class User(SoftDeletionModel):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     _email = db.Column(db.String(120), unique=True, nullable=False)
     _password = db.Column(db.String(128), nullable=False)
+    facebook_id = db.Column(db.BigInteger, unique=True, nullable=True, name='facebook_id')
     reset_password = db.Column(db.String(128))
     salt = db.Column(db.String(128))
     avatar_url = db.Column(db.String)
@@ -68,7 +72,6 @@ class User(SoftDeletionModel):
     is_super_admin = db.Column(db.Boolean, default=False)
     is_admin = db.Column(db.Boolean, default=False)
     is_verified = db.Column(db.Boolean, default=False)
-    has_accepted_cookie_policy = db.Column(db.Boolean, default=False)
     last_accessed_at = db.Column(db.DateTime(timezone=True))
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(pytz.utc))
     speaker = db.relationship('Speaker', backref="user")
@@ -169,6 +172,27 @@ class User(SoftDeletionModel):
             return False
         else:
             return True
+
+    def _is_system_role(self, role_name):
+        """
+        Checks if a user has a particular Role.
+        """
+        role = CustomSysRole.query.filter_by(name=role_name).first()
+        ucsr = UserSystemRole.query.filter_by(user=self,
+                                              role=role).first()
+        if not ucsr:
+            return False
+        else:
+            return True
+
+    @hybrid_property
+    def is_marketer(self):
+        # type: (object) -> object
+        return self._is_system_role(MARKETER)
+
+    @hybrid_property
+    def is_sales_admin(self):
+        return self._is_system_role(SALES_ADMIN)
 
     def _is_role(self, role_name, event_id=None):
         """
