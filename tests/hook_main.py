@@ -3924,6 +3924,16 @@ def orders_get_collection_under_user(transaction):
     transaction['skip'] = True
 
 
+@hooks.before("Orders > Create Paypal payment > Create Paypal payment for an Order")
+def create_paypal_payment(transaction):
+    """
+    POST /v1/orders/{identifier}/create-paypal-payment
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
 @hooks.before("Event Copy > Create Event Copy > Create Copy")
 def create_event_copy(transaction):
     """

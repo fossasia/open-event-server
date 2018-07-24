@@ -38,7 +38,7 @@ SPEAKER_FORM = {
 ATTENDEE_FORM = {
     "firstname": {"include": 1, "require": 1},
     "lastname": {"include": 1, "require": 1},
-    "email": {"include": 1, "require": 0},
+    "email": {"include": 1, "require": 1},
     "address": {"include": 1, "require": 0},
     "city": {"include": 1, "require": 0},
     "state": {"include": 1, "require": 0},

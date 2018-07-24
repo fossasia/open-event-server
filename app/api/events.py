@@ -13,6 +13,7 @@ import urllib.error
 from app.api.bootstrap import api
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
 from app.api.helpers.db import save_to_db, safe_query
+from app.api.helpers.events import create_custom_forms_for_attendees
 from app.api.helpers.exceptions import ForbiddenException, ConflictException, UnprocessableEntity
 from app.api.helpers.files import create_save_image_sizes
 from app.api.helpers.permission_manager import has_access
@@ -116,9 +117,9 @@ class EventList(ResourceList):
         :return:
         """
         is_verified = User.query.filter_by(id=kwargs['user_id']).first().is_verified
-        if (data.get('state', None) == 'published' and not is_verified):
+        if data.get('state', None) == 'published' and not is_verified:
             raise ForbiddenException({'source': ''},
-                                      "Only verified accounts can publish events")
+                                     "Only verified accounts can publish events")
         if data.get('state', None) == 'published' and not data.get('location_name', None):
             raise ConflictException({'pointer': '/data/attributes/location-name'},
                                     "Location is required to publish the event")
@@ -138,6 +139,10 @@ class EventList(ResourceList):
         role_invite = RoleInvite(user.email, role.title_name, event.id, role.id, datetime.now(pytz.utc),
                                  status='accepted')
         save_to_db(role_invite, 'Organiser Role Invite Added')
+
+        # create custom forms for compulsory fields of attendee form.
+        create_custom_forms_for_attendees(event)
+
         if event.state == 'published' and event.schedule_published_on:
             start_export_tasks(event)
 

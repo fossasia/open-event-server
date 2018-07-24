@@ -21229,6 +21229,8 @@ To update or get any attribute of this data layer, you will need admin access. H
 | `app-name`  | Name of the application (Eg. Event Yay!, Open Event) | string | - |
 | `tagline` | Tagline (Eg. Event Management and Ticketing, Home)  | string | - |
 | `secret` | App Secret  | string | **yes** |
+| `is-paypal-activated` | Whether paypal payment is configured or not | boolean | - |
+| `is-stripe-activated` | Whether stripe payment is configured or not | boolean | - |
 
 **STORAGE**
 | Parameter | Description | Type | Admin Only |
@@ -21287,12 +21289,10 @@ To update or get any attribute of this data layer, you will need admin access. H
 | Parameter | Description | Type | Admin Only |
 |:----------|-------------|------|------------|
 | `paypal-mode`  | Paypal mode | string | **yes** |
-| `paypal-sandbox-username`  | Paypal sandbox username | string | **yes** |
-| `paypal-sandbox-password`  | Paypal sandbox password | string | **yes** |
-| `paypal-sandbox-signature`  | Paypal sandbox signature | string | **yes** |
-| `paypal-live-username`  | Paypal live username | string | **yes** |
-| `paypal-live-password`  | Paypal live password | string | **yes** |
-| `paypal-live-signature`  | Paypal live signature | string | **yes** |
+| `paypal-sandbox-client`  | Paypal sandbox client | string | **yes** |
+| `paypal-sandbox-secret`  | Paypal sandbox secret | string | **yes** |
+| `paypal-client`  | Paypal client | string | **yes** |
+| `paypal-secret`  | Paypal secret | string | **yes** |
 
 **EMAIL**
 (Email service)
@@ -21393,13 +21393,11 @@ To update or get any attribute of this data layer, you will need admin access. H
               "stripe-client-id": "example1234",
               "stripe-secret-key": "example1234",
               "stripe-publishable-key": "example1234",
-              "paypal-mode": "example",
-              "paypal-sandbox-username": "example",
-              "paypal-sandbox-password": "example",
-              "paypal-sandbox-signature": "example1234",
-              "paypal-live-username": "example",
-              "paypal-live-password": "example",
-              "paypal-live-signature": "example1234",
+              "paypal-mode": "development",
+              "paypal-sandbox-secret": "example1234",
+              "paypal-sandbox-client": "example1234",
+              "paypal-secret": "example1234",
+              "paypal-client": "example1234",
               "email-service": "example",
               "email-from": "example@example.com",
               "email-from-name": "example",
@@ -21421,7 +21419,9 @@ To update or get any attribute of this data layer, you will need admin access. H
               "static-domain": "http://example.com",
               "frontend-url": "http://example.com",
               "cookie-policy": "example",
-              "cookie-policy-link": "http://example.com"
+              "cookie-policy-link": "http://example.com",
+              "is-paypal-activated": false,
+              "is-stripe-activated": false
             },
             "type": "setting",
             "id": "1",
@@ -21473,13 +21473,11 @@ To update or get any attribute of this data layer, you will need admin access. H
                   "stripe-client-id": "example1234",
                   "stripe-secret-key": "example1234",
                   "stripe-publishable-key": "example1234",
-                  "paypal-mode": "example",
-                  "paypal-sandbox-username": "example",
-                  "paypal-sandbox-password": "example",
-                  "paypal-sandbox-signature": "example1234",
-                  "paypal-live-username": "example",
-                  "paypal-live-password": "example",
-                  "paypal-live-signature": "example1234",
+                  "paypal-mode": "development",
+                  "paypal-sandbox-secret": "example1234",
+                  "paypal-sandbox-client": "example1234",
+                  "paypal-secret": "example1234",
+                  "paypal-client": "example1234",
                   "email-service": "example",
                   "email-from": "example@example.com",
                   "email-from-name": "example",
@@ -21537,13 +21535,11 @@ To update or get any attribute of this data layer, you will need admin access. H
               "stripe-client-id": "example1234",
               "stripe-secret-key": "example1234",
               "stripe-publishable-key": "example1234",
-              "paypal-mode": "example",
-              "paypal-sandbox-username": "example",
-              "paypal-sandbox-password": "example",
-              "paypal-sandbox-signature": "example1234",
-              "paypal-live-username": "example",
-              "paypal-live-password": "example",
-              "paypal-live-signature": "example1234",
+              "paypal-mode": "development",
+              "paypal-sandbox-secret": "example1234",
+              "paypal-sandbox-client": "example1234",
+              "paypal-secret": "example1234",
+              "paypal-client": "example1234",
               "email-service": "example",
               "email-from": "example@example.com",
               "email-from-name": "example",
@@ -21565,7 +21561,9 @@ To update or get any attribute of this data layer, you will need admin access. H
               "static-domain": "http://example.com",
               "frontend-url": "http://example.com",
               "cookie-policy": "example",
-              "cookie-policy-link": "http://example.com"
+              "cookie-policy-link": "http://example.com",
+              "is-paypal-activated": false,
+              "is-stripe-activated": false
             },
             "type": "setting",
             "id": "1",
@@ -22774,6 +22772,7 @@ Get the task status and the final result of the task as response
 | `status` | Status of the order(pending, completed, placed, cancelled, expired) | string (default=pending) | - |
 | `discount_code_id` | ID of the discount code | string | - |
 | `order-notes` | Notes associated with Order | string | - |
+| `pdf-url` | URL to download the tickets | string | - |
 
 ## Orders Collection [/v1/orders{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -23205,7 +23204,8 @@ Receive payments for an order
               "data": {
                 "attributes": {
                   "stripe": "stripe_token",
-                  "paypal": null
+                  "paypal_payer_id": null,
+                  "paypal_payment_id": null
                 },
                 "type": "charge"
               }
@@ -23364,6 +23364,42 @@ Get a list of all orders
             "self": "/v1/orders"
           }
         }
+
+
+## Create Paypal payment [/orders/{order_identifier}/create-paypal-payment]
++ Parameters
+    + order_identifier: example (string) - Identifier of the order in the form of a String.
+
+### Create Paypal payment for an Order [POST]
+Create paypal payment
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "return_url": "https://localhost:5000/return_url",
+                  "cancel_url": "https://localhost:5000/cancel_url"
+                },
+                "type": "paypal-payment"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+   {
+        "status": "true",
+        "payment_id": "example",
+        "error": null
+   }
 
 
 # Group Admin Sales

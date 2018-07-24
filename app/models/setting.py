@@ -1,4 +1,5 @@
 from app.models import db
+from sqlalchemy.ext.hybrid import hybrid_property
 
 
 class Environment:
@@ -71,14 +72,13 @@ class Setting(db.Model):
     stripe_client_id = db.Column(db.String)
     stripe_secret_key = db.Column(db.String)
     stripe_publishable_key = db.Column(db.String)
-    # PayPal Credentials
+
+    # Paypal credentials
     paypal_mode = db.Column(db.String)
-    paypal_sandbox_username = db.Column(db.String)
-    paypal_sandbox_password = db.Column(db.String)
-    paypal_sandbox_signature = db.Column(db.String)
-    paypal_live_username = db.Column(db.String)
-    paypal_live_password = db.Column(db.String)
-    paypal_live_signature = db.Column(db.String)
+    paypal_client = db.Column(db.String)
+    paypal_secret = db.Column(db.String)
+    paypal_sandbox_client = db.Column(db.String)
+    paypal_sandbox_secret = db.Column(db.String)
 
     #
     # EMAIL
@@ -151,12 +151,10 @@ class Setting(db.Model):
                  twitter_url=None, support_url=None,
                  analytics_key=None,
                  paypal_mode=None,
-                 paypal_sandbox_username=None,
-                 paypal_sandbox_password=None,
-                 paypal_sandbox_signature=None,
-                 paypal_live_username=None,
-                 paypal_live_password=None,
-                 paypal_live_signature=None,
+                 paypal_client=None,
+                 paypal_secret=None,
+                 paypal_sandbox_client=None,
+                 paypal_sandbox_secret=None,
                  email_service=None,
                  email_from=None,
                  email_from_name=None,
@@ -208,13 +206,6 @@ class Setting(db.Model):
         self.stripe_secret_key = stripe_secret_key
         self.web_app_url = web_app_url
         self.android_app_url = android_app_url
-        self.paypal_mode = paypal_mode
-        self.paypal_sandbox_username = paypal_sandbox_username
-        self.paypal_sandbox_password = paypal_sandbox_password
-        self.paypal_sandbox_signature = paypal_sandbox_signature
-        self.paypal_live_username = paypal_live_username
-        self.paypal_live_password = paypal_live_password
-        self.paypal_live_signature = paypal_live_signature
         self.email_service = email_service
         self.smtp_host = smtp_host
         self.smtp_username = smtp_username
@@ -226,6 +217,26 @@ class Setting(db.Model):
         self.frontend_url = frontend_url
         self.cookie_policy = cookie_policy
         self.cookie_policy_link = cookie_policy_link
+
+        # Paypal credentials
+        self.paypal_mode = paypal_mode
+        self.paypal_client = paypal_client
+        self.paypal_secret = paypal_secret
+        self.paypal_sandbox_client = paypal_sandbox_client
+        self.paypal_sandbox_secret = paypal_sandbox_secret
+
+    @hybrid_property
+    def is_paypal_activated(self):
+        if self.paypal_mode == 'sandbox' and self.paypal_sandbox_client and self.paypal_sandbox_secret:
+            return True
+        elif self.paypal_client and self.paypal_secret:
+            return True
+        else:
+            return False
+
+    @hybrid_property
+    def is_stripe_activated(self):
+        return self.stripe_client_id is not None
 
     def __repr__(self):
         return 'Settings'

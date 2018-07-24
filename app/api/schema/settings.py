@@ -52,6 +52,12 @@ class SettingSchemaPublic(Schema):
     cookie_policy = fields.Str(allow_none=True)
     cookie_policy_link = fields.Str(allow_none=True)
 
+    #
+    # Online Payment Flags
+    #
+    is_paypal_activated = fields.Bool(dump_only=True)
+    is_stripe_activated = fields.Bool(dump_only=True)
+
 
 class SettingSchemaNonAdmin(SettingSchemaPublic):
     """
@@ -147,12 +153,10 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
 
     # PayPal Credentials
     paypal_mode = fields.Str(allow_none=True)
-    paypal_sandbox_username = fields.Str(allow_none=True)
-    paypal_sandbox_password = fields.Str(allow_none=True)
-    paypal_sandbox_signature = fields.Str(allow_none=True)
-    paypal_live_username = fields.Str(allow_none=True)
-    paypal_live_password = fields.Str(allow_none=True)
-    paypal_live_signature = fields.Str(allow_none=True)
+    paypal_client = fields.Str(allow_none=True)
+    paypal_secret = fields.Str(allow_none=True)
+    paypal_sandbox_client = fields.Str(allow_none=True)
+    paypal_sandbox_secret = fields.Str(allow_none=True)
 
     #
     # EMAIL
