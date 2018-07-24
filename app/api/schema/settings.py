@@ -52,6 +52,12 @@ class SettingSchemaPublic(Schema):
     cookie_policy = fields.Str(allow_none=True)
     cookie_policy_link = fields.Str(allow_none=True)
 
+    #
+    # Online Payment Flags
+    #
+    is_paypal_activated = fields.Bool(dump_only=True)
+    is_stripe_activated = fields.Bool(dump_only=True)
+
 
 class SettingSchemaNonAdmin(SettingSchemaPublic):
     """
