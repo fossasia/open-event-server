@@ -21229,6 +21229,8 @@ To update or get any attribute of this data layer, you will need admin access. H
 | `app-name`  | Name of the application (Eg. Event Yay!, Open Event) | string | - |
 | `tagline` | Tagline (Eg. Event Management and Ticketing, Home)  | string | - |
 | `secret` | App Secret  | string | **yes** |
+| `is-paypal-activated` | Whether paypal payment is configured or not | boolean | - |
+| `is-stripe-activated` | Whether stripe payment is configured or not | boolean | - |
 
 **STORAGE**
 | Parameter | Description | Type | Admin Only |
@@ -21417,7 +21419,9 @@ To update or get any attribute of this data layer, you will need admin access. H
               "static-domain": "http://example.com",
               "frontend-url": "http://example.com",
               "cookie-policy": "example",
-              "cookie-policy-link": "http://example.com"
+              "cookie-policy-link": "http://example.com",
+              "is-paypal-activated": false,
+              "is-stripe-activated": false
             },
             "type": "setting",
             "id": "1",
@@ -21557,7 +21561,9 @@ To update or get any attribute of this data layer, you will need admin access. H
               "static-domain": "http://example.com",
               "frontend-url": "http://example.com",
               "cookie-policy": "example",
-              "cookie-policy-link": "http://example.com"
+              "cookie-policy-link": "http://example.com",
+              "is-paypal-activated": false,
+              "is-stripe-activated": false
             },
             "type": "setting",
             "id": "1",

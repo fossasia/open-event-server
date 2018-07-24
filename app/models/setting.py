@@ -1,4 +1,5 @@
 from app.models import db
+from sqlalchemy.ext.hybrid import hybrid_property
 
 
 class Environment:
@@ -223,6 +224,19 @@ class Setting(db.Model):
         self.paypal_secret = paypal_secret
         self.paypal_sandbox_client = paypal_sandbox_client
         self.paypal_sandbox_secret = paypal_sandbox_secret
+
+    @hybrid_property
+    def is_paypal_activated(self):
+        if self.paypal_mode == 'sandbox' and self.paypal_sandbox_client and self.paypal_sandbox_secret:
+            return True
+        elif self.paypal_client and self.paypal_secret:
+            return True
+        else:
+            return False
+
+    @hybrid_property
+    def is_stripe_activated(self):
+        return self.stripe_client_id is not None
 
     def __repr__(self):
         return 'Settings'
