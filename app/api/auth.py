@@ -105,21 +105,27 @@ def login_user(provider, auth_code):
                                     params={'access_token': access_token['access_token'],
                                             'fields': 'first_name, last_name, email'}).json()
 
-        if get_count(db.session.query(User).filter_by(facebook_id=user_details['id'])) > 0:
-            user = db.session.query(User).filter_by(facebook_id=user_details['id']).one()
+        if get_count(db.session.query(User).filter_by(email=user_details['email'])) > 0:
+            user = db.session.query(User).filter_by(email=user_details['email']).one()
+            if not user.facebook_id:
+                user.facebook_id = user_details['id']
+                user.facebook_login_hash = random.getrandbits(128)
+                save_to_db(user)
             return make_response(
-                jsonify(user_id=user.id, email=user.email, facebook_id=user.facebook_id), 200)
+                jsonify(user_id=user.id, email=user.email, facebook_login_hash=user.facebook_login_hash), 200)
 
         user = User()
         user.first_name = user_details['first_name']
         user.last_name = user_details['last_name']
         user.facebook_id = user_details['id']
+        user.facebook_login_hash = random.getrandbits(128)
         user.password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(8))
         if user_details['email']:
             user.email = user_details['email']
 
         save_to_db(user)
-        return make_response(jsonify(user_id=user.id, email=user.email, facebook_id=user.facebook_id), 200)
+        return make_response(jsonify(user_id=user.id, email=user.email, facebook_login_hash=user.facebook_login_hash),
+                             200)
 
     elif provider == 'google':
         provider_class = GoogleOAuth()
