@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from flask_jwt import current_identity as current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
@@ -10,6 +10,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
+from app.api.helpers.errors import BadRequestError
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees
@@ -360,7 +361,8 @@ class ChargeSchema(Schema):
 
     id = fields.Str(dump_only=True)
     stripe = fields.Str(load_only=True, allow_none=True)
-    paypal_braintree_nonce = fields.Str(load_only=True, allow_none=True)
+    paypal_payer_id = fields.Str(load_only=True, allow_none=True)
+    paypal_payment_id = fields.Str(load_only=True, allow_none=True)
     status = fields.Boolean(dump_only=True)
     message = fields.Str(dump_only=True)
 
@@ -381,10 +383,23 @@ class ChargeList(ResourceList):
     decorators = (jwt_required,)
 
 
-@order_misc_routes.route('/get-client-token', methods=['GET'])
+@order_misc_routes.route('/orders/<string:order_identifier>/create-paypal-payment', methods=['POST'])
 @jwt_required
-def send_receipt():
+def create_payment_payment(order_identifier):
     """
-    :return: The client token required for Braintree client SDK.
+    Create a paypal payment.
+    :return: The payment id of the created payment.
     """
-    return jsonify(client_token=PayPalPaymentsManager.get_client_token())
+    try:
+        return_url = request.json['data']['attributes']['return-url']
+        cancel_url = request.json['data']['attributes']['cancel-url']
+    except TypeError:
+        return BadRequestError({'source': ''}, 'Bad Request Error').respond()
+
+    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+    status, response = PayPalPaymentsManager.create_payment(order, return_url, cancel_url)
+
+    if status:
+        return jsonify(status=True, payment_id=response)
+    else:
+        return jsonify(status=False, error=response)

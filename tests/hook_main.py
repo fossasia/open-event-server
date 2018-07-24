@@ -3924,10 +3924,10 @@ def orders_get_collection_under_user(transaction):
     transaction['skip'] = True
 
 
-@hooks.before("Orders > Client token for Paypal Braintree > Get Paypal Braintree client token")
-def get_client_token(transaction):
+@hooks.before("Orders > Create Paypal payment > Create Paypal payment for an Order")
+def create_paypal_payment(transaction):
     """
-    GET /get-client-token
+    POST /v1/orders/{identifier}/create-paypal-payment
     :param transaction:
     :return:
     """
