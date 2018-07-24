@@ -35,8 +35,34 @@ SPEAKER_FORM = {
     "linkedin": {"include": 0, "require": 0}
 }
 
+ATTENDEE_FORM = {
+    "firstname": {"include": 1, "require": 1},
+    "lastname": {"include": 1, "require": 1},
+    "email": {"include": 1, "require": 1},
+    "address": {"include": 1, "require": 0},
+    "city": {"include": 1, "require": 0},
+    "state": {"include": 1, "require": 0},
+    "country": {"include": 1, "require": 0},
+    "job_title": {"include": 1, "require": 0},
+    "phone": {"include": 1, "require": 0},
+    "tax_business_info": {"include": 0, "require": 0},
+    "billing_address": {"include": 0, "require": 0},
+    "home_address": {"include": 0, "require": 0},
+    "shipping_address": {"include": 0, "require": 0},
+    "company": {"include": 0, "require": 0},
+    "work_address": {"include": 0, "require": 0},
+    "work_phone": {"include": 0, "require": 0},
+    "website": {"include": 1, "require": 0},
+    "blog": {"include": 0, "require": 0},
+    "twitter": {"include": 1, "require": 0},
+    "facebook": {"include": 0, "require": 0},
+    "github": {"include": 1, "require": 0},
+    "gender": {"include": 0, "require": 0},
+}
+
 session_form_str = json.dumps(SESSION_FORM, separators=(',', ':'))
 speaker_form_str = json.dumps(SPEAKER_FORM, separators=(',', ':'))
+attendee_form_str = json.dumps(ATTENDEE_FORM, separators=(',', ':'))
 
 
 class CustomForms(SoftDeletionModel):

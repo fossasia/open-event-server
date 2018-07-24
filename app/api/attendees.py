@@ -1,5 +1,10 @@
-from flask_jwt import current_identity
+from datetime import datetime
+
+from flask import Blueprint, request, jsonify, abort, make_response
+from flask_jwt import current_identity, jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from flask_rest_jsonapi.exceptions import ObjectNotFound
+from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query, get_count
@@ -8,6 +13,7 @@ from app.api.helpers.exceptions import (
     ForbiddenException,
     UnprocessableEntity,
 )
+from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
@@ -18,6 +24,8 @@ from app.models.order import Order
 from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
+
+attendee_misc_routes = Blueprint('attendee_misc', __name__, url_prefix='/v1')
 
 
 class AttendeeListPost(ResourceList):
@@ -149,6 +157,13 @@ class AttendeeDetail(ResourceDetail):
                 if obj.checkin_times and data['checkin_times'] not in obj.checkin_times.split(","):
                     data['checkin_times'] = '{},{}'.format(obj.checkin_times, data['checkin_times'])
 
+        if 'is_checked_out' in data and data['is_checked_out']:
+            attendee = safe_query(db, TicketHolder, 'id', kwargs['id'], 'attendee_id')
+            if not attendee.is_checked_out:
+                checkout_times = obj.checkout_times.split(',') if obj.checkout_times else []
+                checkout_times.append(str(datetime.utcnow()))
+                data['checkout_times'] = ','.join(checkout_times)
+
         if 'attendee_notes' in data:
             if obj.attendee_notes and data['attendee_notes'] not in obj.attendee_notes.split(","):
                 data['attendee_notes'] = '{},{}'.format(obj.attendee_notes, data['attendee_notes'])
@@ -183,3 +198,32 @@ class AttendeeRelationshipOptional(ResourceRelationship):
     schema = AttendeeSchema
     data_layer = {'session': db.session,
                   'model': TicketHolder}
+
+
+@attendee_misc_routes.route('/attendees/send-receipt', methods=['POST'])
+@jwt_required
+def send_receipt():
+    # Function to send receipts to attendees related to the provided order.
+
+    order_identifier = request.json.get('order-identifier')
+    if order_identifier:
+        try:
+            order = db.session.query(Order).filter_by(identifier=order_identifier).one()
+        except NoResultFound:
+            raise ObjectNotFound({'parameter': '{identifier}'}, "Order not found")
+
+        if order.user_id != current_identity.id:
+            abort(
+                make_response(jsonify(error="You cannot send reciept for an order not created by you"), 403)
+            )
+        elif order.status != 'completed':
+            abort(
+                make_response(jsonify(error="Cannot send receipt for an incomplete order"), 409)
+            )
+        else:
+            send_email_to_attendees(order, current_identity.id)
+            return jsonify(message="receipt sent to attendees")
+    else:
+        abort(
+            make_response(jsonify(error="Order identifier missing"), 422)
+        )

@@ -10,6 +10,7 @@ from app.models.discount_code import DiscountCode
 from app.models.ticket import Ticket
 from utils.common import use_defaults
 
+
 @use_defaults()
 class TicketSchemaPublic(SoftDeletionSchema):
     class Meta:
@@ -38,12 +39,17 @@ class TicketSchemaPublic(SoftDeletionSchema):
         if 'max_order' in data and 'min_order' in data:
             if data['max_order'] < data['min_order']:
                 raise UnprocessableEntity({'pointer': '/data/attributes/max-order'},
-                                          "max-order should be greater than min-order")
+                                          "max-order should be greater than or equal to min-order")
 
         if 'quantity' in data and 'min_order' in data:
             if data['quantity'] < data['min_order']:
                 raise UnprocessableEntity({'pointer': '/data/attributes/quantity'},
-                                          "quantity should be greater than min-order")
+                                          "quantity should be greater than or equal to min-order")
+
+        if 'quantity' in data and 'max_order' in data:
+            if data['quantity'] < data['max_order']:
+                raise UnprocessableEntity({'pointer': '/data/attributes/quantity'},
+                                          "quantity should be greater than or equal to max-order")
 
     @validates_schema(pass_original=True)
     def validate_discount_code(self, data, original_data):
@@ -106,38 +112,6 @@ class TicketSchema(TicketSchemaPublic):
         self_view = 'v1.ticket_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
-
-    @validates_schema(pass_original=True)
-    def validate_date(self, data, original_data):
-        if 'id' in original_data['data']:
-            ticket = Ticket.query.filter_by(id=original_data['data']['id']).one()
-
-            if 'sales_starts_at' not in data:
-                data['sales_starts_at'] = ticket.sales_starts_at
-
-            if 'sales_ends_at' not in data:
-                data['sales_ends_at'] = ticket.sales_ends_at
-
-        if data['sales_starts_at'] >= data['sales_ends_at']:
-            raise UnprocessableEntity({'pointer': '/data/attributes/sales-ends-at'},
-                                      "sales-ends-at should be after sales-starts-at")
-
-    @validates_schema
-    def validate_quantity(self, data):
-        if 'max_order' in data and 'min_order' in data:
-            if data['max_order'] < data['min_order']:
-                raise UnprocessableEntity({'pointer': '/data/attributes/max-order'},
-                                          "max-order should be greater than min-order")
-
-        if 'quantity' in data and 'min_order' in data:
-            if data['quantity'] < data['min_order']:
-                raise UnprocessableEntity({'pointer': '/data/attributes/quantity'},
-                                          "quantity should be greater than min-order")
-
-        if 'quantity' in data and 'max_order' in data:
-            if data['quantity'] < data['max_order']:
-                raise UnprocessableEntity({'pointer': '/data/attributes/quantity'},
-                                          "quantity should be lesser than max-order")
 
     access_codes = Relationship(attribute='access_codes',
                                 self_view='v1.ticket_access_code',

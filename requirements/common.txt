@@ -49,7 +49,8 @@ google-compute-engine
 factory_boy
 raven[flask]
 healthcheck
-elasticsearch
+elasticsearch-dsl
 flask-redis
 SQLAlchemy==1.1.15 # 1.2.0 doesn't work, check if any future versions work
 Flask-Elasticsearch
+paypalrestsdk

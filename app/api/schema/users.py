@@ -1,10 +1,12 @@
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
+from utils.common import use_defaults
 
 
+@use_defaults()
 class UserSchemaPublic(SoftDeletionSchema):
     """
     Api schema for User Model which can be accessed by any resource to which user is related.
@@ -50,6 +52,11 @@ class UserSchema(UserSchemaPublic):
     password = fields.Str(required=True, load_only=True)
     is_super_admin = fields.Boolean(dump_only=True)
     is_admin = fields.Boolean(dump_only=True)
+    facebook_id = fields.Integer(dump_only=True)
+
+    is_sales_admin = fields.Boolean(dump_only=True)
+    is_marketer = fields.Boolean(dump_only=True)
+
     is_user_organizer = fields.Boolean(dump_only=True)
     is_user_coorganizer = fields.Boolean(dump_only=True)
     is_user_track_organizer = fields.Boolean(dump_only=True)
@@ -123,6 +130,15 @@ class UserSchema(UserSchemaPublic):
         schema='EmailNotificationSchema',
         many=True,
         type_='email-notification')
+    alternate_emails = Relationship(
+        attribute='alternate_emails',
+        self_view='v1.user_emails',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.user_emails_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='UserEmailSchema',
+        many=True,
+        type_='user-emails')
     sessions = Relationship(
         attribute='session',
         self_view='v1.user_session',
@@ -192,3 +208,19 @@ class UserSchema(UserSchemaPublic):
         schema='OrderSchema',
         many=True,
         type_='order')
+    marketer_events = Relationship(
+        attribute='marketer_events',
+        self_view='v1.user_marketer_events',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_list',
+        schema='EventSchema',
+        type_='event',
+        many=True)
+    sales_admin_events = Relationship(
+        attribute='sales_admin_events',
+        self_view='v1.user_sales_admin_events',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_list',
+        schema='EventSchema',
+        type_='event',
+        many=True)

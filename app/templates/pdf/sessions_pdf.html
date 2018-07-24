@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ sessions[0].event.name }} - {{ ("Sessions List") }}</title>
+    <style type="text/css">
+        {% include 'bootstrap/bootstrap_pdf.css' %}
+        table th {
+            text-align: left;
+        }
+
+        table td {
+            text-align: center;
+            border-spacing: 1em;
+        }
+
+        table {
+            margin-top: 20px;
+            border-collapse: separate;
+            border-bottom: black 5px;
+        }
+
+        tr.padded td {
+            padding-top: 40px;
+        }
+    </style>
+</head>
+<body>
+<h3 style="text-align:center;">{{ sessions[0].event.name }} - {{ ("Sessions List") }}</h3>
+<br>
+<table class="table with-datatable" id="sessions-table" width="100%">
+    <thead>
+    <tr>
+        <th>
+            {{ ("Title") }}
+        </th>
+        <th>
+            {{ ("State") }}
+        </th>
+        <th>
+            {{ ("Speakers") }}
+        </th>
+        <th>
+            {{ ("Track") }}
+        </th>
+        <th>
+            {{ ("Created At") }}
+        </th>
+        <th>
+            {{ ("Email Sent") }}
+        </th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for session in sessions %}
+        {% if not session.deleted_at %}
+            <tr class="padded" style="text-align:center; margin-top: 5px">
+                <td>
+                    {% if session.title %}
+                        {{ session.title }}
+                    {% else %}
+                        {{ "-" }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if session.state %}
+                        {{ session.state }}
+                    {% else %}
+                        {{ "-" }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if session.speakers %}
+                        {% for speaker in session.speakers %}
+                            {{ speaker.name }}<br>
+                        {% endfor %}
+                    {% else %}
+                        {{ "-" }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if session.track and session.track.name %}
+                        {{ session.track.name }}
+                    {% else %}
+                        {{ "-" }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if session.created_at %}
+                        <span class="datetime">{{ session.created_at | datetime }}</span>
+                    {% else %}
+                        {{ "-" }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if session.is_mail_sent %}
+                        {{ "Yes" }}
+                    {% else %}
+                        {{ "No" }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+    </tbody>
+</body>
+</html>

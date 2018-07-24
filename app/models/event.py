@@ -17,6 +17,8 @@ from app.models.feedback import Feedback
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.user import ATTENDEE, ORGANIZER
 from app.views.redis_store import redis_store
+from app.models.event_topic import EventTopic
+from app.models.search import sync
 
 
 def get_new_event_identifier(length=8):
@@ -214,6 +216,8 @@ class Event(SoftDeletionModel):
         self.description = clean_up_string(description)
         self.external_event_url = external_event_url
         self.original_image_url = original_image_url
+        self.original_image_url = self.set_default_event_image(event_topic_id) if original_image_url is None \
+            else original_image_url
         self.thumbnail_image_url = thumbnail_image_url
         self.large_image_url = large_image_url
         self.icon_image_url = icon_image_url
@@ -268,6 +272,15 @@ class Event(SoftDeletionModel):
             super(Event, self).__setattr__(name, clean_html(clean_up_string(value)))
         else:
             super(Event, self).__setattr__(name, value)
+
+    @classmethod
+    def set_default_event_image(self, event_topic_id):
+        if event_topic_id is None:
+            return None
+        else:
+            event_topic = EventTopic.query.filter_by(
+                id=event_topic_id).first()
+            return event_topic.system_image_url
 
     @property
     def fee(self):
@@ -325,9 +338,9 @@ def receive_init(mapper, connection, target):
     """
     if current_app.config['ENABLE_ELASTICSEARCH']:
         if target.state == 'published' and target.deleted_at is None:
-            redis_store.sadd('event_index', target.id)
+            sync.mark_event(sync.REDIS_EVENT_INDEX, target.id)
         elif target.deleted_at:
-            redis_store.sadd('event_delete', target.id)
+            sync.mark_event(sync.REDIS_EVENT_DELETE, target.id)
 
 
 @event.listens_for(Event, 'after_delete')
@@ -336,4 +349,4 @@ def receive_after_delete(mapper, connection, target):
     listen for the 'after_delete' event
     """
     if current_app.config['ENABLE_ELASTICSEARCH']:
-        redis_store.sadd('event_delete', target.id)
+        sync.mark_event(sync.REDIS_EVENT_DELETE, target.id)

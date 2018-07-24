@@ -1822,7 +1822,7 @@ def ticket_tag_ticket(transaction):
 @hooks.before("Attendees > Attendees Collection > Create Attendee")
 def attendee_post(transaction):
     """
-    POST /events/1/attendees
+    POST /attendees
     :param transaction:
     :return:
     """
@@ -1872,6 +1872,21 @@ def attendee_delete(transaction):
     with stash['app'].app_context():
         attendee = AttendeeFactory()
         db.session.add(attendee)
+        db.session.commit()
+
+
+@hooks.before("Attendees > Send order receipts > Send email receipts to attendees")
+def attendee_receipts(transaction):
+    """
+    POST /attendees/send-receipt
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        order = OrderFactory()
+        order.identifier = 'xyz789'
+        order.status = 'completed'
+        db.session.add(order)
         db.session.commit()
 
 
@@ -3748,6 +3763,19 @@ def event_speakers_export_csv_get(transaction):
         db.session.add(event)
         db.session.commit()
 
+
+@hooks.before(
+    "Event Export > Start Sessions Export as PDF > Start a Task to Export Sessions of an Event as PDF")
+def event_sessions_export_pdf_get(transaction):
+    """
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
 # ------------------------- Import -------------------------
 @hooks.before(
     "Event Import > Start Event Import > Start a Task to Import an Event")
@@ -3866,6 +3894,16 @@ def delete_order(transaction):
     transaction['skip'] = True
 
 
+@hooks.before("Orders > Orders under an Event > List all Orders under an Event")
+def event_order_get_list(transaction):
+    """
+    GET /events/1/orders
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
 @hooks.before("Orders > Charge > Charge for an Order")
 def orders_charge(transaction):
     """
@@ -3880,6 +3918,16 @@ def orders_charge(transaction):
 def orders_get_collection_under_user(transaction):
     """
     GET /users/1/orders
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Orders > Create Paypal payment > Create Paypal payment for an Order")
+def create_paypal_payment(transaction):
+    """
+    POST /v1/orders/{identifier}/create-paypal-payment
     :param transaction:
     :return:
     """
