@@ -72,10 +72,12 @@ class Setting(db.Model):
     stripe_secret_key = db.Column(db.String)
     stripe_publishable_key = db.Column(db.String)
 
-    # Paypal Braintree Credentials
+    # Paypal credentials
     paypal_mode = db.Column(db.String)
-    paypal_braintree_sandbox_access_token = db.Column(db.String)
-    paypal_braintree_access_token = db.Column(db.String)
+    paypal_client = db.Column(db.String)
+    paypal_secret = db.Column(db.String)
+    paypal_sandbox_client = db.Column(db.String)
+    paypal_sandbox_secret = db.Column(db.String)
 
     #
     # EMAIL
@@ -148,8 +150,10 @@ class Setting(db.Model):
                  twitter_url=None, support_url=None,
                  analytics_key=None,
                  paypal_mode=None,
-                 paypal_braintree_sandbox_access_token=None,
-                 paypal_braintree_access_token=None,
+                 paypal_client=None,
+                 paypal_secret=None,
+                 paypal_sandbox_client=None,
+                 paypal_sandbox_secret=None,
                  email_service=None,
                  email_from=None,
                  email_from_name=None,
@@ -213,10 +217,12 @@ class Setting(db.Model):
         self.cookie_policy = cookie_policy
         self.cookie_policy_link = cookie_policy_link
 
-        # Paypal braintree
+        # Paypal credentials
         self.paypal_mode = paypal_mode
-        self.paypal_braintree_sandbox_access_token = paypal_braintree_sandbox_access_token
-        self.paypal_braintree_access_token = paypal_braintree_access_token
+        self.paypal_client = paypal_client
+        self.paypal_secret = paypal_secret
+        self.paypal_sandbox_client = paypal_sandbox_client
+        self.paypal_sandbox_secret = paypal_sandbox_secret
 
     def __repr__(self):
         return 'Settings'

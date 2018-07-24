@@ -1,6 +1,6 @@
 import json
 
-import braintree
+import paypalrestsdk
 import requests
 import stripe
 from forex_python.converter import CurrencyRates
@@ -127,55 +127,83 @@ class StripePaymentsManager(object):
 
 class PayPalPaymentsManager(object):
     """
-    Class to manage payments through Paypal Braintree.
+    Class to manage payment through Paypal REST API.
     """
 
     @staticmethod
-    def get_credentials():
+    def configure_paypal():
         """
-        Initialize and return the Braintree payment gateway.
-        :return: Braintree gateway instance.
+        Configure the paypal sdk
+        :return: Credentials
         """
         # Use Sandbox by default.
         settings = get_settings()
-        paypal_braintree_access_token = settings['paypal_braintree_sandbox_access_token']
+        paypal_mode = 'sandbox'
+        paypal_client = settings['paypal_sandbox_client']
+        paypal_secret = settings['paypal_sandbox_secret']
 
         # Switch to production if paypal_mode is production.
         if settings['paypal_mode'] == Environment.PRODUCTION:
-            paypal_braintree_access_token = settings['paypal_braintree_access_token']
+            paypal_mode = 'live'
+            paypal_client = settings['paypal_client']
+            paypal_secret = settings['paypal_secret']
 
-        # Initialize braintree instance.
-        braintree_payment_gateway_instance = braintree.BraintreeGateway(access_token=paypal_braintree_access_token)
+        if not paypal_client or not paypal_secret:
+            raise ConflictException({'pointer': ''}, "Payments through Paypal hasn't been configured on the platform")
 
-        return braintree_payment_gateway_instance
-
-    @staticmethod
-    def get_client_token():
-        """
-        Get the client token for Braintree client SDK.
-        :return: token.
-        """
-        braintree_payment_gateway = PayPalPaymentsManager.get_credentials()
-        return braintree_payment_gateway.client_token.generate()
+        paypalrestsdk.configure({
+            "mode": paypal_mode,
+            "client_id": paypal_client,
+            "client_secret": paypal_secret})
 
     @staticmethod
-    def create_transaction(order_invoice, paypal_braintree_nonce):
+    def create_payment(order, return_url, cancel_url):
         """
-        Create transaction and charge the user.
-        :param order_invoice: Order to charge for.
-        :param paypal_braintree_nonce: Nonce received from Paypal Braintree.
-        :return: Result of the transaction.
+        Create payment for an order
+        :param order: Order to create payment for.
+        :param return_url: return url for the payment.
+        :param cancel_url: cancel_url for the payment.
+        :return: request_id or the error message along with an indicator.
         """
-        braintree_payment_gateway = PayPalPaymentsManager.get_credentials()
+        if (not order.event.paypal_email) or order.event.paypal_email == '':
+            raise ConflictException({'pointer': ''}, "Payments through Paypal hasn't been configured for the event")
 
-        # submit_for_settlement ensures that the funds are captured instantly.
-        result = braintree_payment_gateway.transaction.sale({
-            "amount": int(order_invoice.amount * 100),
-            "merchant_account_id": order_invoice.event.payment_currency,
-            "payment_method_nonce": paypal_braintree_nonce,
-            "options": {
-                "submit_for_settlement": True
-            }
+        PayPalPaymentsManager.configure_paypal()
+
+        payment = paypalrestsdk.Payment({
+            "intent": "sale",
+            "payer": {"payment_method": "paypal"},
+            "redirect_urls": {
+                "return_url": return_url,
+                "cancel_url": cancel_url},
+            "transactions": [{
+                "amount": {
+                    "total": int(order.amount*100),
+                    "currency": order.event.payment_currency
+                },
+                "payee": {
+                    "email": order.event.paypal_email
+                }
+            }]
         })
 
-        return result
+        if payment.create():
+            return True, payment.request_id
+        else:
+            return False, payment.error
+
+    @staticmethod
+    def execute_payment(paypal_payer_id, paypal_payment_id):
+        """
+        Execute payemnt and charge the user.
+        :param paypal_payment_id: payment_id
+        :param paypal_payer_id: payer_id
+        :return: Result of the transaction.
+        """
+
+        payment = paypalrestsdk.Payment.find(paypal_payment_id)
+
+        if payment.execute({"payer_id": paypal_payer_id}):
+            return True
+        else:
+            return False, payment.error

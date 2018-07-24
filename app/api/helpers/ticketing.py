@@ -139,25 +139,27 @@ class TicketingManager(object):
             return False, charge.failure_message
 
     @staticmethod
-    def charge_paypal_order_payment(order, paypal_nonce):
+    def charge_paypal_order_payment(order, paypal_payer_id, paypal_payment_id):
         """
         Charge the user through paypal.
-        :param order: Order for which to charge for
-        :param paypal_nonce: Paypal token
+        :param order: Order for which to charge for.
+        :param paypal_payment_id: payment_id
+        :param paypal_payer_id: payer_id
         :return:
         """
-        # save the paypal nonce with the order
-        order.paypal_token = paypal_nonce
+
+        # save the paypal payment_id with the order
+        order.paypal_token = paypal_payment_id
         save_to_db(order)
 
         # create the transaction.
-        transaction_result = PayPalPaymentsManager.create_transaction(order, paypal_nonce)
+        status, error = PayPalPaymentsManager.execute_payment(paypal_payer_id, paypal_payment_id)
 
-        if transaction_result.is_success:
+        if status:
             # successful transaction hence update the order details.
             order.paid_via = 'paypal'
             order.status = 'completed'
-            order.transaction_id = transaction_result.transaction.id
+            order.transaction_id = paypal_payment_id
             order.completed_at = datetime.utcnow()
             save_to_db(order)
 
@@ -182,4 +184,4 @@ class TicketingManager(object):
             delete_related_attendees_for_order(order)
 
             # return the error message from Paypal
-            return False, transaction_result.message
+            return False, error
