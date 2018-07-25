@@ -208,7 +208,7 @@ def reset_password_post():
     try:
         user = User.query.filter_by(email=email).one()
     except NoResultFound:
-        return UnprocessableEntityError({'source': ''}, 'User not found').respond()
+        return NotFoundError({'source': ''}, 'User not found').respond()
     else:
         link = make_frontend_url('/reset-password', {'token': user.reset_password})
         send_email_with_action(user, PASSWORD_RESET, app_name=get_settings()['app_name'], link=link)
