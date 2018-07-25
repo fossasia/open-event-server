@@ -101,6 +101,7 @@ class Event(SoftDeletionModel):
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
     discount_code_id = db.Column(db.Integer, db.ForeignKey(
         'discount_codes.id', ondelete='CASCADE'))
+    order_expiry_time = db.Column(db.Float, default=10)
     discount_code = db.relationship('DiscountCode', backref='events', foreign_keys=[discount_code_id])
     event_type = db.relationship('EventType', backref='event', foreign_keys=[event_type_id])
     event_topic = db.relationship('EventTopic', backref='event', foreign_keys=[event_topic_id])
@@ -202,6 +203,7 @@ class Event(SoftDeletionModel):
                  onsite_details=None,
                  is_tax_enabled=None,
                  is_sponsors_enabled=None,
+                 order_expiry_time=None,
                  stripe_authorization=None,
                  tax=None):
 
@@ -258,6 +260,7 @@ class Event(SoftDeletionModel):
         self.created_at = datetime.now(pytz.utc)
         self.is_tax_enabled = is_tax_enabled
         self.is_sponsors_enabled = is_sponsors_enabled
+        self.order_expiry_time = order_expiry_time
         self.stripe_authorization = stripe_authorization
         self.tax = tax
 
