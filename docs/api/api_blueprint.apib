@@ -21229,6 +21229,8 @@ To update or get any attribute of this data layer, you will need admin access. H
 | `app-name`  | Name of the application (Eg. Event Yay!, Open Event) | string | - |
 | `tagline` | Tagline (Eg. Event Management and Ticketing, Home)  | string | - |
 | `secret` | App Secret  | string | **yes** |
+| `is-paypal-activated` | Whether paypal payment is configured or not | boolean | - |
+| `is-stripe-activated` | Whether stripe payment is configured or not | boolean | - |
 
 **STORAGE**
 | Parameter | Description | Type | Admin Only |
@@ -21283,12 +21285,14 @@ To update or get any attribute of this data layer, you will need admin access. H
 | `stripe-secret-key`  | Stripe secret key | string | **yes** |
 | `stripe-publishable-key`  | Stripe publishable key | string | **yes** |
 
-(PayPal Braintree Credentials)
+(PayPal Credentials)
 | Parameter | Description | Type | Admin Only |
 |:----------|-------------|------|------------|
 | `paypal-mode`  | Paypal mode | string | **yes** |
-| `paypal-braintree-sandbox-access-token`  | Paypal Braintree sandbox access token | string | **yes** |
-| `paypal-braintree-access-token`  | Paypal Braintree access token | string | **yes** |
+| `paypal-sandbox-client`  | Paypal sandbox client | string | **yes** |
+| `paypal-sandbox-secret`  | Paypal sandbox secret | string | **yes** |
+| `paypal-client`  | Paypal client | string | **yes** |
+| `paypal-secret`  | Paypal secret | string | **yes** |
 
 **EMAIL**
 (Email service)
@@ -21390,8 +21394,10 @@ To update or get any attribute of this data layer, you will need admin access. H
               "stripe-secret-key": "example1234",
               "stripe-publishable-key": "example1234",
               "paypal-mode": "development",
-              "paypal-braintree-sandbox-access-token": "example1234",
-              "paypal-braintree-access-token": "example1234",
+              "paypal-sandbox-secret": "example1234",
+              "paypal-sandbox-client": "example1234",
+              "paypal-secret": "example1234",
+              "paypal-client": "example1234",
               "email-service": "example",
               "email-from": "example@example.com",
               "email-from-name": "example",
@@ -21413,7 +21419,9 @@ To update or get any attribute of this data layer, you will need admin access. H
               "static-domain": "http://example.com",
               "frontend-url": "http://example.com",
               "cookie-policy": "example",
-              "cookie-policy-link": "http://example.com"
+              "cookie-policy-link": "http://example.com",
+              "is-paypal-activated": false,
+              "is-stripe-activated": false
             },
             "type": "setting",
             "id": "1",
@@ -21466,8 +21474,10 @@ To update or get any attribute of this data layer, you will need admin access. H
                   "stripe-secret-key": "example1234",
                   "stripe-publishable-key": "example1234",
                   "paypal-mode": "development",
-                  "paypal-braintree-sandbox-access-token": "example1234",
-                  "paypal-braintree-access-token": "example1234",
+                  "paypal-sandbox-secret": "example1234",
+                  "paypal-sandbox-client": "example1234",
+                  "paypal-secret": "example1234",
+                  "paypal-client": "example1234",
                   "email-service": "example",
                   "email-from": "example@example.com",
                   "email-from-name": "example",
@@ -21526,8 +21536,10 @@ To update or get any attribute of this data layer, you will need admin access. H
               "stripe-secret-key": "example1234",
               "stripe-publishable-key": "example1234",
               "paypal-mode": "development",
-              "paypal-braintree-sandbox-access-token": "example1234",
-              "paypal-braintree-access-token": "example1234",
+              "paypal-sandbox-secret": "example1234",
+              "paypal-sandbox-client": "example1234",
+              "paypal-secret": "example1234",
+              "paypal-client": "example1234",
               "email-service": "example",
               "email-from": "example@example.com",
               "email-from-name": "example",
@@ -21549,7 +21561,9 @@ To update or get any attribute of this data layer, you will need admin access. H
               "static-domain": "http://example.com",
               "frontend-url": "http://example.com",
               "cookie-policy": "example",
-              "cookie-policy-link": "http://example.com"
+              "cookie-policy-link": "http://example.com",
+              "is-paypal-activated": false,
+              "is-stripe-activated": false
             },
             "type": "setting",
             "id": "1",
@@ -23168,7 +23182,8 @@ Receive payments for an order
               "data": {
                 "attributes": {
                   "stripe": "stripe_token",
-                  "paypal": null
+                  "paypal_payer_id": null,
+                  "paypal_payment_id": null
                 },
                 "type": "charge"
               }
@@ -23329,10 +23344,12 @@ Get a list of all orders
         }
 
 
-## Client token for Paypal Braintree [/v1/get-client-token]
+## Create Paypal payment [/orders/{order_identifier}/create-paypal-payment]
++ Parameters
+    + order_identifier: example (string) - Identifier of the order in the form of a String.
 
-### Get Paypal Braintree client token [GET]
-Get the client token.
+### Create Paypal payment for an Order [POST]
+Create paypal payment
 
 + Request
 
@@ -23342,10 +23359,24 @@ Get the client token.
 
             Authorization: JWT <Auth Key>
 
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "return_url": "https://localhost:5000/return_url",
+                  "cancel_url": "https://localhost:5000/cancel_url"
+                },
+                "type": "paypal-payment"
+              }
+            }
+
 + Response 200 (application/vnd.api+json)
 
    {
-        "client_token": "example123"
+        "status": "true",
+        "payment_id": "example",
+        "error": null
    }
 
 

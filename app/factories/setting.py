@@ -63,9 +63,10 @@ class SettingFactory(factory.alchemy.SQLAlchemyModelFactory):
     stripe_publishable_key = common.string_
     # PayPal Credentials
     paypal_mode = 'development'
-    paypal_braintree_sandbox_access_token = common.string_
-    paypal_braintree_access_token = common.string_
-
+    paypal_client = common.string_
+    paypal_secret = common.string_
+    paypal_sandbox_client = common.string_
+    paypal_sandbox_secret = common.string_
     #
     # EMAIL
     #

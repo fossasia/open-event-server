@@ -42,26 +42,21 @@ class ChargesLayer(BaseDataLayer):
                 raise UnprocessableEntity({'source': ''}, "stripe token is missing")
             if not order.event.can_pay_by_stripe:
                 raise ConflictException({'': ''}, "This event doesn't accept payments by Stripe")
-            try:
-                success, response = TicketingManager.charge_stripe_order_payment(order, data['stripe'])
-                data['status'] = success
-                data['message'] = response
-            except Exception as e:
-                data['status'] = False
-                data['message'] = str(e)
+
+            success, response = TicketingManager.charge_stripe_order_payment(order, data['stripe'])
+            data['status'] = success
+            data['message'] = response
 
         # charge through paypal
         elif order.payment_mode == 'paypal':
-            if not data.get('paypal_braintree_nonce'):
-                raise UnprocessableEntity({'source': ''}, "paypal braintree nonce is missing")
+            if (not data.get('paypal_payer_id')) or (not data.get('paypal_payment_id')):
+                raise UnprocessableEntity({'source': ''}, "paypal_payer_id or paypal_payment_id or both missing")
             if not order.event.can_pay_by_paypal:
                 raise ConflictException({'': ''}, "This event doesn't accept payments by Paypal")
-            try:
-                success, response = TicketingManager.charge_paypal_order_payment(order, data['paypal_braintree_nonce'])
-                data['status'] = success
-                data['message'] = response
-            except Exception as e:
-                data['status'] = False
-                data['message'] = str(e)
+
+            success, response = TicketingManager.charge_paypal_order_payment(order, data['paypal_payer_id'],
+                                                                             data['paypal_payment_id'])
+            data['status'] = success
+            data['message'] = response
 
         return data
