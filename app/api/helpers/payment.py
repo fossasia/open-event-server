@@ -188,7 +188,7 @@ class PayPalPaymentsManager(object):
         })
 
         if payment.create():
-            return True, payment.request_id
+            return True, payment.id
         else:
             return False, payment.error
 
