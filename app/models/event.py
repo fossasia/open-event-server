@@ -99,6 +99,7 @@ class Event(SoftDeletionModel):
     ical_url = db.Column(db.String)
     xcal_url = db.Column(db.String)
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
+    order_expiry_time = db.Column(db.Integer)
     discount_code_id = db.Column(db.Integer, db.ForeignKey(
         'discount_codes.id', ondelete='CASCADE'))
     discount_code = db.relationship('DiscountCode', backref='events', foreign_keys=[discount_code_id])
@@ -203,7 +204,8 @@ class Event(SoftDeletionModel):
                  is_tax_enabled=None,
                  is_sponsors_enabled=None,
                  stripe_authorization=None,
-                 tax=None):
+                 tax=None,
+                 order_expiry_time=None):
 
         self.name = name
         self.logo_url = logo_url
@@ -260,6 +262,7 @@ class Event(SoftDeletionModel):
         self.is_sponsors_enabled = is_sponsors_enabled
         self.stripe_authorization = stripe_authorization
         self.tax = tax
+        self.order_expiry_time = order_expiry_time
 
     def __repr__(self):
         return '<Event %r>' % self.name

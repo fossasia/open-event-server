@@ -197,7 +197,7 @@ def send_notif_to_attendees(order, purchaser_id):
                         invoice_id=order.invoice_number
                     ),
                     message=NOTIFS[TICKET_PURCHASED]['message'].format(
-                        pdf_url=holder.pdf_url
+                        order_url=order.tickets_pdf_url
                     )
                 )
 
