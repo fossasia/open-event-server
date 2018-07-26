@@ -1,7 +1,7 @@
 import unittest
 
 from tests.unittests.utils import OpenEventTestCase
-from app.api.helpers.exceptions import UnprocessableEntity, ConflictException, ForbiddenException
+from app.api.helpers.exceptions import UnprocessableEntity, ConflictException, ForbiddenException, MethodNotAllowed
 from tests.unittests.setup_database import Setup
 
 
@@ -22,6 +22,10 @@ class TestExceptionsHelperValidation(OpenEventTestCase):
         # Forbidden Exception
         with self.assertRaises(ForbiddenException):
             raise ForbiddenException({'source': ''}, "Access Forbidden")
+
+        # Method Not Allowed Exception
+        with self.assertRaises(MethodNotAllowed):
+            raise MethodNotAllowed({'source': ''}, "Method Not Allowed")
 
 
 if __name__ == '__main__':
