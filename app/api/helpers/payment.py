@@ -178,7 +178,7 @@ class PayPalPaymentsManager(object):
                 "cancel_url": cancel_url},
             "transactions": [{
                 "amount": {
-                    "total": int(order.amount*100),
+                    "total": int(order.amount),
                     "currency": order.event.payment_currency
                 },
                 "payee": {
@@ -188,7 +188,7 @@ class PayPalPaymentsManager(object):
         })
 
         if payment.create():
-            return True, payment.request_id
+            return True, payment.id
         else:
             return False, payment.error
 
@@ -204,6 +204,6 @@ class PayPalPaymentsManager(object):
         payment = paypalrestsdk.Payment.find(paypal_payment_id)
 
         if payment.execute({"payer_id": paypal_payer_id}):
-            return True
+            return True, 'Successfully Executed'
         else:
             return False, payment.error
