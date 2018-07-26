@@ -23203,6 +23203,141 @@ Delete a single Order.
           }
         }
 
+## Create Order with on site Attendees [/v1/orders?onsite=true]
+
+### Create Order with on site Attendees [POST]
+Create a new Order with on site attendees
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "payment-mode": "free",
+                  "country": "India",
+                  "status": "pending",
+                  "amount": null,
+                  "order-notes": "example",
+                  "on-site-tickets":  [
+                        {
+                            "data": {
+                                "attributes": {
+                                  "id": "1",
+                                  "quantity": "2"
+                                },
+                                "type": "on-site-ticket"
+                            }
+                        },
+                        {
+                            "data": {
+                                "attributes": {
+                                  "id": "2",
+                                  "quantity": "3"
+                                },
+                                "type": "on-site-ticket"
+                            }
+                        }
+                    ]
+                },
+                "type": "order",
+                "relationships": {
+                  "event": {
+                    "data": {
+                      "id": "1",
+                      "type": "event"
+                    }
+                  }
+                }
+              }
+            }
++ Response 201 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "tickets": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/ticket",
+                  "related": "/v1/orders/11/tickets"
+                }
+              },
+              "attendees": {
+                "data": [
+                  {
+                    "type": "attendee",
+                    "id": "1"
+                  }
+                ],
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/attendee",
+                  "related": "/v1/orders/11/attendees"
+                }
+              },
+              "marketer": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/marketer"
+                }
+              },
+              "user": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/user"
+                }
+              },
+              "discount-code": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/discount-code"
+                }
+              },
+              "event": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/event",
+                  "related": "/v1/events/1"
+                }
+              }
+            },
+            "attributes": {
+              "status": "pending",
+              "city": null,
+              "identifier": "617ed24c-9a07-4084-b076-ed73552db27e",
+              "paid-via": null,
+              "exp-year": null,
+              "transaction-id": null,
+              "discount-code-id": null,
+              "brand": null,
+              "zipcode": null,
+              "payment-mode": "free",
+              "last4": null,
+              "state": null,
+              "payment-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?token=EC-62113287PK247472B&cmd=_express-checkout",
+              "address": null,
+              "exp-month": null,
+              "amount": null,
+              "country": "India",
+              "completed-at": null,
+              "created-at": "2018-07-08T01:05:09.904696+00:00",
+              "order-notes": "example",
+              "tickets-pdf-url": "https://example.com/media/attendees/tickets/pdf/order_identifier.pdf"
+            },
+            "type": "order",
+            "id": "11",
+            "links": {
+              "self": "/v1/orders/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/orders/11"
+          }
+        }
+
 ## Charge [/v1/orders/{order_identifier}/charge]
 + Parameters
     + order_identifier: 1 (Integer) - Identifier of the order in the form of an integer.
