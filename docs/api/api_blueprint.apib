@@ -2872,6 +2872,7 @@ These endpoints help you to create the basic event structure. To add other parts
 | `external-event-url`  | - | string | - |
 | `has-organizer-info`  | - | boolean(default: `false`) | - |
 | `average-rating`  | Average rating of event | float | - |
+| `order-expiry-time`  | Expiry time for orders in minutes | Integer(default: 10) | - |
 
 ## Events Collection [/v1/events{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -3103,7 +3104,8 @@ Get a list of events.
                         "longitude": 1.23456789,
                         "bank-details": "example",
                         "cheque-details": "example",
-                        "identifier": "b8324ae2"
+                        "identifier": "b8324ae2",
+                        "order-expiry-time": "10"
                     },
                     "type": "event",
                     "id": "1",
@@ -3170,7 +3172,8 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "bank-details": "example",
                     "onsite-details": "example",
                     "is-sponsors-enabled": "false",
-                    "has-organizer-info": "false"
+                    "has-organizer-info": "false",
+                    "order-expiry-time": "10"
                 },
                 "type": "event"
               }
@@ -3391,7 +3394,8 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "longitude": 1.23456789,
                     "bank-details": "example",
                     "cheque-details": "example",
-                    "identifier": "b8324ae2"
+                    "identifier": "b8324ae2",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -3637,7 +3641,8 @@ Get a single event.
                     "longitude": 1.23456789,
                     "bank-details": "example",
                     "cheque-details": "example",
-                    "identifier": "b8324ae2"
+                    "identifier": "b8324ae2",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -3708,7 +3713,8 @@ All other fields are optional. Add attributes you want to modify.
                     "bank-details": "example1",
                     "onsite-details": "example1",
                     "is-sponsors-enabled": "false",
-                    "has-organizer-info": "false"
+                    "has-organizer-info": "false",
+                    "order-expiry-time": "10"
                 },
                 "id": "1",
                 "type": "event"
@@ -3929,7 +3935,8 @@ All other fields are optional. Add attributes you want to modify.
                     "longitude": 12.23456789,
                     "bank-details": "example1",
                     "cheque-details": "example1",
-                    "identifier": "b8324ae2"
+                    "identifier": "b8324ae2",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -4188,7 +4195,8 @@ Get a list of events.
                         "cheque-details": "example",
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
-                        "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                        "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                        "order-expiry-time": "10"
                     },
                     "type": "event",
                     "id": "1",
@@ -4420,7 +4428,8 @@ Get a list of events.
                         "cheque-details": "example",
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
-                        "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                        "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                        "order-expiry-time": "10"
                     },
                     "type": "event",
                     "id": "1",
@@ -4645,7 +4654,8 @@ Get a list of events.
                         "cheque-details": "example",
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
-                        "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                        "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                        "order-expiry-time": "10"
                     },
                     "type": "event",
                     "id": "1",
@@ -4877,7 +4887,8 @@ Get a list of events.
                         "cheque-details": "example",
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
-                        "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                        "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                        "order-expiry-time": "10"
                     },
                     "type": "event",
                     "id": "1",
@@ -5103,7 +5114,8 @@ Get a list of events.
                         "cheque-details": "example",
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
-                        "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                        "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                        "order-expiry-time": "10"
                     },
                     "type": "event",
                     "id": "1",
@@ -5326,7 +5338,8 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -5549,7 +5562,8 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -5772,7 +5786,8 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -5995,7 +6010,8 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -6218,7 +6234,8 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -6441,7 +6458,8 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -6664,7 +6682,8 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -6887,7 +6906,8 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -7110,7 +7130,8 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -7333,7 +7354,8 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -7556,7 +7578,8 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -7779,7 +7802,8 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -8002,7 +8026,8 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -8225,7 +8250,8 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -8448,7 +8474,8 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -8671,7 +8698,8 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -8894,7 +8922,8 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -9117,7 +9146,8 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -9340,7 +9370,8 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10"
                 },
                 "type": "event",
                 "id": "1",
@@ -9590,7 +9621,8 @@ Get a list of events.
               "cheque-details": null,
               "external-event-url": null,
               "identifier": "4f27fefe",
-              "ends-at": "2022-05-30T04:00:10+00:00"
+              "ends-at": "2022-05-30T04:00:10+00:00",
+              "order-expiry-time": "10"
             },
             "type": "event",
             "id": "1",
@@ -9840,7 +9872,8 @@ Get a list of events.
               "cheque-details": null,
               "external-event-url": null,
               "identifier": "4f27fefe",
-              "ends-at": "2022-05-30T04:00:10+00:00"
+              "ends-at": "2022-05-30T04:00:10+00:00",
+              "order-expiry-time": "10"
             },
             "type": "event",
             "id": "1",
