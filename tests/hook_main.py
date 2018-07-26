@@ -3864,6 +3864,16 @@ def create_order(transaction):
     transaction['skip'] = True
 
 
+@hooks.before("Orders > Create Order with on site Attendees > Create Order with on site Attendees")
+def create_order_with_on_site_attendee(transaction):
+    """
+    GET /orders?onsite=true
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
 @hooks.before("Orders > Order Detail > Get Order Detail")
 def order_detail(transaction):
     """
