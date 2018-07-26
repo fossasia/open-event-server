@@ -50,3 +50,4 @@ class EventFactoryBasic(factory.alchemy.SQLAlchemyModelFactory):
     event_topic_id = None
     event_sub_topic_id = None
     discount_code_id = None
+    order_expiry_time = 10
