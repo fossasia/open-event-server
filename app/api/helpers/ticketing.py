@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask_login import current_user
+from flask_jwt import current_identity as current_user
 
 from app.api.helpers.db import save_to_db, get_count
 from app.api.helpers.exceptions import ConflictException
