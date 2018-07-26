@@ -12,14 +12,23 @@ class Feedback(SoftDeletionModel):
                         db.ForeignKey('users.id', ondelete='CASCADE'))
     event_id = db.Column(db.Integer,
                          db.ForeignKey('events.id', ondelete='CASCADE'))
+    session_id = db.Column(db.Integer,
+                           db.ForeignKey('sessions.id', ondelete='CASCADE'))
 
-    def __init__(self, rating=None, comment=None, event_id=None, user_id=None, deleted_at=None):
+    def __init__(self,
+                 rating=None,
+                 comment=None,
+                 event_id=None,
+                 user_id=None,
+                 session_id=None,
+                 deleted_at=None):
         rating = float(rating)
-        self.rating = round(rating*2, 0) / 2  # Rounds to nearest 0.5
+        self.rating = round(rating * 2, 0) / 2  # Rounds to nearest 0.5
 
         self.comment = comment
         self.event_id = event_id
         self.user_id = user_id
+        self.session_id = session_id
         self.deleted_at = deleted_at
 
     def __repr__(self):

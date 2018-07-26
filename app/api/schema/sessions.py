@@ -77,6 +77,7 @@ class SessionSchema(SoftDeletionSchema):
     is_mail_sent = fields.Boolean()
     last_modified_at = fields.DateTime(dump_only=True)
     send_email = fields.Boolean(load_only=True, allow_none=True)
+    average_rating = fields.Float(dump_only=True)
     microlocation = Relationship(attribute='microlocation',
                                  self_view='v1.session_microlocation',
                                  self_view_kwargs={'id': '<id>'},
@@ -105,15 +106,22 @@ class SessionSchema(SoftDeletionSchema):
                          related_view_kwargs={'session_id': '<id>'},
                          schema='EventSchemaPublic',
                          type_='event')
-    speakers = Relationship(
-        attribute='speakers',
-        many=True,
-        self_view='v1.session_speaker',
-        self_view_kwargs={'id': '<id>'},
-        related_view='v1.speaker_list',
-        related_view_kwargs={'session_id': '<id>'},
-        schema='SpeakerSchema',
-        type_='speaker')
+    feedbacks = Relationship(attribute='feedbacks',
+                             self_view='v1.session_feedbacks',
+                             self_view_kwargs={'id': '<id>'},
+                             related_view='v1.feedback_list',
+                             related_view_kwargs={'session_id': '<id>'},
+                             schema='FeedbackSchema',
+                             many=True,
+                             type_='feedback')
+    speakers = Relationship(attribute='speakers',
+                            many=True,
+                            self_view='v1.session_speaker',
+                            self_view_kwargs={'id': '<id>'},
+                            related_view='v1.speaker_list',
+                            related_view_kwargs={'session_id': '<id>'},
+                            schema='SpeakerSchema',
+                            type_='speaker')
     creator = Relationship(attribute='user',
                            self_view='v1.session_user',
                            self_view_kwargs={'id': '<id>'},

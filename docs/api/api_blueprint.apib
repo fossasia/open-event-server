@@ -11027,6 +11027,7 @@ Data related to all the sessions in the event.
 | `is-mail-sent` | Yes/No for Session accept/reject email | boolean (default: `false`) | - |
 | `last-modified-at` | Date the session was modified | ISO 8601 (tz-aware) | - |
 | `send-email` | Yes/No for sending Session accept/reject email | boolean | - |
+| `average-rating`  | Average rating of session | float | - |
 
 
 ## Sessions Collection [/v1/sessions{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
@@ -11130,6 +11131,7 @@ Create a new session using an event_id and track_id **(Minimum Co-Organizer Acce
               "subtitle": null,
               "level": 1,
               "short-abstract": null,
+              "average-rating": 4.25,
               "long-abstract": null,
               "comments": null,
               "starts-at": "2017-06-01T10:00:00.500127+00:00",
@@ -11217,6 +11219,7 @@ Get a single session. **(Public)**
               "subtitle": null,
               "level": 1,
               "short-abstract": null,
+              "average-rating": 4.25,
               "long-abstract": null,
               "comments": null,
               "starts-at": "2017-06-01T10:00:00.500127+00:00",
@@ -11320,6 +11323,7 @@ Update a single session by `id`. **(Minimum Co-Organizer Access)**
               "subtitle": null,
               "level": 1,
               "short-abstract": null,
+              "average-rating": 4.25,
               "long-abstract": null,
               "comments": null,
               "starts-at": "2017-06-01T10:00:00.500127+00:00",
@@ -11437,6 +11441,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "ends-at": "2017-06-01T11:00:00.500127+00:00",
                         "language": "English",
                         "short-abstract": "Short Abstract",
+                        "average-rating": 4.25,
                         "slides-url": "http://example.com/example",
                         "title": "Micropython Session",
                         "created-at": "2017-07-25T02:22:35.010307+00:00",
@@ -11533,6 +11538,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "ends-at": "2017-06-01T11:00:00.500127+00:00",
                         "language": "English",
                         "short-abstract": "Short Abstract",
+                        "average-rating": 4.25,
                         "slides-url": "http://example.com/example",
                         "title": "Micropython Session",
                         "created-at": "2017-07-25T02:22:35.010307+00:00",
@@ -11629,6 +11635,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "ends-at": "2017-06-01T11:00:00.500127+00:00",
                         "language": "English",
                         "short-abstract": "Short Abstract",
+                        "average-rating": 4.25,
                         "slides-url": "http://example.com/example",
                         "title": "Micropython Session",
                         "created-at": "2017-07-25T02:22:35.010307+00:00",
@@ -11725,6 +11732,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "ends-at": "2017-06-01T11:00:00.500127+00:00",
                         "language": "English",
                         "short-abstract": "Short Abstract",
+                        "average-rating": 4.25,
                         "slides-url": "http://example.com/example",
                         "title": "Micropython Session",
                         "created-at": "2017-07-25T02:22:35.010307+00:00",
@@ -11821,6 +11829,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "ends-at": "2017-06-01T11:00:00.500127+00:00",
                         "language": "English",
                         "short-abstract": "Short Abstract",
+                        "average-rating": 4.25,
                         "slides-url": "http://example.com/example",
                         "title": "Micropython Session",
                         "created-at": "2017-07-25T02:22:35.010307+00:00",

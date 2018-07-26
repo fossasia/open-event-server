@@ -3,6 +3,7 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
+from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
@@ -26,10 +27,16 @@ class FeedbackListPost(ResourceList):
         :param data:
         :return:
         """
-        require_relationship(['event', 'user'], data)
+        require_relationship(['user'], data)
         if not has_access('is_user_itself', user_id=int(data['user'])):
             raise ObjectNotFound({'parameter': 'user_id'},
                                  "User: {} doesn't match auth key".format(data['user']))
+        if 'event' in data and 'session' in data:
+            raise UnprocessableEntity({'pointer': ''},
+                                      "Only one relationship between event and session is allowed")
+        if 'event' not in data and 'session' not in data:
+            raise UnprocessableEntity({'pointer': ''},
+                                      "A valid relationship with event and session is required")
 
     schema = FeedbackSchema
     methods = ['POST', ]
@@ -42,6 +49,7 @@ class FeedbackList(ResourceList):
     """
     Show List of Feedback
     """
+
     def query(self, view_kwargs):
         """
         query method for different view_kwargs
@@ -53,7 +61,7 @@ class FeedbackList(ResourceList):
         return query_
 
     view_kwargs = True
-    decorators = (jwt_required, )
+    decorators = (jwt_required,)
     methods = ['GET', ]
     schema = FeedbackSchema
     data_layer = {'session': db.session,
@@ -85,15 +93,15 @@ class FeedbackDetail(ResourceDetail):
             view_kwargs['id'] = feedback.id
 
     decorators = (api.has_permission('is_user_itself', fetch='user_id',
-                  fetch_as="user_id", model=Feedback, methods="PATCH,DELETE"), )
+                                     fetch_as="user_id", model=Feedback, methods="PATCH,DELETE"),)
     schema = FeedbackSchema
     data_layer = {'session': db.session,
                   'model': Feedback}
 
 
-class FeedbackRelationshipRequired(ResourceRelationship):
+class FeedbackRelationship(ResourceRelationship):
     """
-    Feedback Relationship (Required)
+    Feedback Relationship
     """
     decorators = (api.has_permission('is_user_itself', fetch='user_id',
                                      fetch_as="user_id", model=Feedback, methods="PATCH"),)

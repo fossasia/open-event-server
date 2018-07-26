@@ -12,6 +12,7 @@ class FeedbackSchema(SoftDeletionSchema):
     """
     Api schema for Feedback Model
     """
+
     class Meta:
         """
         Meta class for Feedback Api Schema
@@ -31,6 +32,13 @@ class FeedbackSchema(SoftDeletionSchema):
                          related_view_kwargs={'feedback_id': '<id>'},
                          schema='EventSchemaPublic',
                          type_='event')
+    session = Relationship(attribute='session',
+                           self_view='v1.feedback_session',
+                           self_view_kwargs={'id': '<id>'},
+                           related_view='v1.session_detail',
+                           related_view_kwargs={'feedback_id': '<id>'},
+                           schema='SessionsSchema',
+                           type_='session')
     user = Relationship(attribute='user',
                         self_view='v1.feedback_user',
                         self_view_kwargs={'id': '<id>'},
