@@ -107,6 +107,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     ical_url = fields.Url(dump_only=True)
     xcal_url = fields.Url(dump_only=True)
     average_rating = fields.Float(dump_only=True)
+    order_expiry_time = fields.Integer(allow_none=True, default=10)
 
     tickets = Relationship(attribute='tickets',
                            self_view='v1.event_ticket',
