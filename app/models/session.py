@@ -1,10 +1,11 @@
 import datetime
 
 import pytz
-from sqlalchemy import event
+from sqlalchemy import event, func
 
 from app.models import db
 from app.models.base import SoftDeletionModel
+from app.models.feedback import Feedback
 from app.models.helpers.versioning import clean_up_string, clean_html
 
 speakers_sessions = db.Table('speakers_sessions',
@@ -36,6 +37,7 @@ class Session(SoftDeletionModel):
                                secondary=speakers_sessions,
                                backref=db.backref('sessions', lazy='dynamic'))
 
+    feedbacks = db.relationship('Feedback', backref="session")
     slides_url = db.Column(db.String)
     video_url = db.Column(db.String)
     audio_url = db.Column(db.String)
@@ -118,6 +120,16 @@ class Session(SoftDeletionModel):
     @property
     def is_accepted(self):
         return self.state == "accepted"
+
+    def get_average_rating(self):
+        avg = db.session.query(func.avg(Feedback.rating)).filter_by(session_id=self.id).scalar()
+        if avg is not None:
+            avg = round(avg, 2)
+        return avg
+
+    @property
+    def average_rating(self):
+        return self.get_average_rating()
 
     def __repr__(self):
         return '<Session %r>' % self.title
