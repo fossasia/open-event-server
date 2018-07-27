@@ -51,3 +51,4 @@ class EventFactoryBasic(factory.alchemy.SQLAlchemyModelFactory):
     event_sub_topic_id = None
     discount_code_id = None
     order_expiry_time = 10
+    refund_policy = 'All sales are final. No refunds shall be issued in any case.'

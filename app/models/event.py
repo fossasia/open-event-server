@@ -16,7 +16,6 @@ from app.models.email_notification import EmailNotification
 from app.models.feedback import Feedback
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.user import ATTENDEE, ORGANIZER
-from app.views.redis_store import redis_store
 from app.models.event_topic import EventTopic
 from app.models.search import sync
 
@@ -99,6 +98,7 @@ class Event(SoftDeletionModel):
     ical_url = db.Column(db.String)
     xcal_url = db.Column(db.String)
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
+    refund_policy = db.Column(db.String, default='All sales are final. No refunds shall be issued in any case.')
     order_expiry_time = db.Column(db.Integer)
     discount_code_id = db.Column(db.Integer, db.ForeignKey(
         'discount_codes.id', ondelete='CASCADE'))
@@ -205,7 +205,8 @@ class Event(SoftDeletionModel):
                  is_sponsors_enabled=None,
                  stripe_authorization=None,
                  tax=None,
-                 order_expiry_time=None):
+                 order_expiry_time=None,
+                 refund_policy='All sales are final. No refunds shall be issued in any case.'):
 
         self.name = name
         self.logo_url = logo_url
@@ -263,6 +264,7 @@ class Event(SoftDeletionModel):
         self.stripe_authorization = stripe_authorization
         self.tax = tax
         self.order_expiry_time = order_expiry_time
+        self.refund_policy = refund_policy
 
     def __repr__(self):
         return '<Event %r>' % self.name
