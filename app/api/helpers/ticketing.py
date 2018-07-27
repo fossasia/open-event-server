@@ -104,8 +104,7 @@ class TicketingManager(object):
         # charge.paid is true if the charge succeeded, or was successfully authorized for later capture.
         if charge.paid:
             # update the order in the db.
-            order.paid_via = 'stripe'
-            order.payment_mode = charge.source.object
+            order.paid_via = charge.source.object
             order.brand = charge.source.brand
             order.exp_month = charge.source.exp_month
             order.exp_year = charge.source.exp_year
