@@ -22,7 +22,7 @@ EVENT_PUBLISH = 'Event Published'
 AFTER_EVENT = 'After Event'
 USER_REGISTER_WITH_PASSWORD = 'User Registration during Payment'
 TICKET_PURCHASED = 'Ticket(s) Purchased'
-TICKET_PURCHASED_ATTENDEE = 'Ticket(s) purchased to Attendee    '
+TICKET_PURCHASED_ATTENDEE = 'Ticket(s) purchased to Attendee'
 TICKET_PURCHASED_ORGANIZER = 'Ticket(s) Purchased to Organizer'
 TICKET_CANCELLED = 'Ticket(s) cancelled'
 TICKET_RESEND_ORGANIZER = 'Ticket Resend'
@@ -62,7 +62,7 @@ class MessageSettings(db.Model):
         return self.__repr__()
 
     @classmethod
-    def _email_message(self, action):
+    def _email_message(self, action, attr=None):
         message = {}
         if action in [INVITE_PAPERS, NEW_SESSION, USER_CONFIRM,
                       USER_REGISTER, PASSWORD_RESET, EVENT_ROLE,
@@ -73,38 +73,55 @@ class MessageSettings(db.Model):
                       MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_EMAIL,
                       MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_IMPORTED,
                       EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER,
-                      TICKET_CANCELLED, TICKET_PURCHASED_ATTENDEE, 
+                      TICKET_CANCELLED, TICKET_PURCHASED_ATTENDEE,
                       PASSWORD_CHANGE]:
             message = MAILS[action]
         else:
             message = MAILS.__dict__[action]
+        message = str(message.get(attr))
         return message
 
     @hybrid_property
     def email_message(self):
-        message = self._email_message(self.action)
+        message = self._email_message(self.action, attr='message')
+        return message
+
+    @hybrid_property
+    def recipient(self):
+        message = self._email_message(self.action, attr='recipient')
+        return message
+
+    @hybrid_property
+    def email_subject(self):
+        message = self._email_message(self.action, attr='subject')
         return message
 
     @classmethod
-    def _notification_message(self, action):
+    def _notification_message(self, action, attr=None):
         message = {}
         if action in [EVENT_ROLE, NEW_SESSION, SESSION_SCHEDULE,
                       NEXT_EVENT, SESSION_ACCEPT_REJECT, INVITE_PAPERS,
-                      AFTER_EVENT, EVENT_PUBLISH, USER_CHANGE_EMAIL, 
+                      AFTER_EVENT, EVENT_PUBLISH, USER_CHANGE_EMAIL,
                       PASSWORD_CHANGE, TICKET_PURCHASED,
                       TICKET_RESEND_ORGANIZER, EVENT_EXPORT_FAIL,
                       EVENT_EXPORTED, EVENT_IMPORT_FAIL, EVENT_IMPORTED,
                       MONTHLY_PAYMENT_NOTIF, MONTHLY_PAYMENT_FOLLOWUP_NOTIF,
                       TICKET_PURCHASED_ORGANIZER, TICKET_PURCHASED_ATTENDEE,
                       TICKET_CANCELLED, TICKET_CANCELLED_ORGANIZER]:
-            message = MAILS[action]
+            message = NOTIFS[action]
         else:
-            message = MAILS.__dict__[action]
+            message = NOTIFS.__dict__[action]
+        message = str(message.get(attr))
         return message
 
     @hybrid_property
     def notification_message(self):
-        message = self._notification_message(self.action)
+        message = self._notification_message(self.action, attr='message')
+        return message
+
+    @hybrid_property
+    def notification_title(self):
+        message = self._notification_message(self.action, attr='title')
         return message
 
     @property
