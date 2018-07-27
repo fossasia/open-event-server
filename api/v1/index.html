@@ -14234,21 +14234,21 @@
 <td>-</td>
 </tr>
 <tr>
-<td style="text-align:left"><code>accept</code></td>
-<td>Accept/Reject notification</td>
-<td>string</td>
-<td>-</td>
-</tr>
-<tr>
 <td style="text-align:left"><code>is-read</code></td>
 <td>Yes/No for read notification</td>
 <td>boolean (default: <code>false</code>)</td>
 <td>-</td>
 </tr>
 <tr>
-<td style="text-align:left"><code>recieved-at</code></td>
+<td style="text-align:left"><code>received-at</code></td>
 <td>Notification recieved time</td>
 <td>ISO 8601 (tz-aware)</td>
+<td>-</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>subject-id</code></td>
+<td>ID of the related subject(For eg: session_id in case of a new session)</td>
+<td>integer</td>
 <td>-</td>
 </tr>
 </tbody>
@@ -14275,7 +14275,8 @@
         "<span class="hljs-attribute">is-read</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
         "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
         "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-        "<span class="hljs-attribute">action</span>": <span class="hljs-value"><span class="hljs-string">"example"</span>
+        "<span class="hljs-attribute">subject-id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
+        "<span class="hljs-attribute">actions</span>": <span class="hljs-value">[]
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"notification"</span></span>,
       "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -14310,8 +14311,8 @@
         "<span class="hljs-attribute">received-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-23T04:40:37.239724+00:00"</span></span>,
         "<span class="hljs-attribute">is-read</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
         "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
-        "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-        "<span class="hljs-attribute">action</span>": <span class="hljs-value"><span class="hljs-string">"example"</span>
+        "<span class="hljs-attribute">subject-id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
+        "<span class="hljs-attribute">actions</span>": <span class="hljs-value">[]
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"notification"</span></span>,
       "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -14343,7 +14344,9 @@
       "<span class="hljs-attribute">received-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-23T04:40:37.239724+00:00"</span></span>,
       "<span class="hljs-attribute">is-read</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"example"</span>
+      "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
+      "<span class="hljs-attribute">subject-id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
+      "<span class="hljs-attribute">actions</span>": <span class="hljs-value">[]
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"notification"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -14367,8 +14370,9 @@
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
       "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"example1"</span></span>,
       "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"example1"</span></span>,
-      "<span class="hljs-attribute">action</span>": <span class="hljs-value"><span class="hljs-string">"example1"</span></span>,
-      "<span class="hljs-attribute">is-read</span>": <span class="hljs-value"><span class="hljs-string">"true"</span>
+      "<span class="hljs-attribute">is-read</span>": <span class="hljs-value"><span class="hljs-string">"true"</span></span>,
+      "<span class="hljs-attribute">subject-id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
+      "<span class="hljs-attribute">actions</span>": <span class="hljs-value">[]
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"notification"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span>
@@ -14388,7 +14392,9 @@
       "<span class="hljs-attribute">received-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-23T04:40:37.239724+00:00"</span></span>,
       "<span class="hljs-attribute">is-read</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
       "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
-      "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"example1"</span>
+      "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"example1"</span></span>,
+      "<span class="hljs-attribute">subject-id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
+      "<span class="hljs-attribute">actions</span>": <span class="hljs-value">[]
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"notification"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
