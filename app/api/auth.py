@@ -17,7 +17,7 @@ from app.api.helpers.notification import send_notification_with_action
 from app.api.helpers.utilities import get_serializer, str_generator
 from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE, \
     USER_REGISTER_WITH_PASSWORD
-from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
+from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF, NotificationTopic
 from app.models.user import User
 from app.models import db
 from app.api.helpers.errors import UnprocessableEntityError, NotFoundError, BadRequestError
@@ -253,7 +253,7 @@ def change_password():
             save_to_db(user)
             send_email_with_action(user, PASSWORD_CHANGE,
                                    app_name=get_settings()['app_name'])
-            send_notification_with_action(user, PASSWORD_CHANGE_NOTIF,
+            send_notification_with_action(user, PASSWORD_CHANGE_NOTIF, NotificationTopic.PASSWORD_CHANGE,
                                           app_name=get_settings()['app_name'])
         else:
             return BadRequestError({'source': ''}, 'Wrong Password').respond()

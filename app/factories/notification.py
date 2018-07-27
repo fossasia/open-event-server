@@ -13,7 +13,8 @@ class NotificationFactory(factory.alchemy.SQLAlchemyModelFactory):
     user = factory.RelatedFactory(UserFactory)
     title = common.string_
     message = common.string_
-    action = common.string_
     is_read = False
     user_id = 2
+    subject_id = 1
+    notification_topic = 0
 
