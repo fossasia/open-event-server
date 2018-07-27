@@ -39,10 +39,10 @@ def send_after_event_mail():
             if current_time > event.ends_at and time_difference_minutes < 1440:
                 for speaker in speakers:
                     send_email_after_event(speaker.user.email, event.name, upcoming_event_links)
-                    send_notif_after_event(speaker.user, event.name)
+                    send_notif_after_event(speaker.user, event.name, event.id)
                 for organizer in organizers:
                     send_email_after_event(organizer.user.email, event.name, upcoming_event_links)
-                    send_notif_after_event(organizer.user.email, event.name)
+                    send_notif_after_event(organizer.user.email, event.name, event.id)
 
 
 def send_event_fee_notification():
@@ -99,7 +99,8 @@ def send_event_fee_notification():
                                                prev_month,
                                                new_invoice.amount,
                                                app_name,
-                                               link)
+                                               link,
+                                               new_invoice.user_id)
 
 
 def send_event_fee_notification_followup():
@@ -125,4 +126,5 @@ def send_event_fee_notification_followup():
                                                         prev_month,
                                                         incomplete_invoice.amount,
                                                         app_name,
-                                                        link)
+                                                        link,
+                                                        incomplete_invoice.event.id)

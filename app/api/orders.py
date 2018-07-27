@@ -142,7 +142,8 @@ class OrdersListPost(ResourceList):
 
             order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
             for organizer in order.event.organizers:
-                send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name)
+                send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
+                                                     order.id)
 
         data['user_id'] = current_user.id
 

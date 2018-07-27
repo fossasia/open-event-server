@@ -16117,9 +16117,9 @@ Notifications related to the various users about invites, ticket purchase, sessi
 |:----------|-------------|------|----------|
 | `title`  | Title of the notification | string | - |
 | `message` | Message/content of the notification | string | - |
-| `accept` | Accept/Reject notification | string | - |
 | `is-read` | Yes/No for read notification | boolean (default: `false`) | - |
-| `recieved-at` | Notification recieved time | ISO 8601 (tz-aware) | - |
+| `received-at` | Notification recieved time | ISO 8601 (tz-aware) | - |
+| `subject-id` | ID of the related subject(For eg: session_id in case of a new session) | integer | - |
 
 ## Notifications Collection [/v1/users/{user_id}/notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -16162,7 +16162,8 @@ Get a list of Notifications.
                         "is-read": false,
                         "title": "example",
                         "deleted-at": null,
-                        "action": "example"
+                        "subject-id": "1",
+                        "actions": []
                     },
                     "type": "notification",
                     "id": "1",
@@ -16219,8 +16220,8 @@ Get a list of Notifications.
                         "received-at": "2017-06-23T04:40:37.239724+00:00",
                         "is-read": false,
                         "title": "example",
-                        "deleted-at": null,
-                        "action": "example"
+                        "subject-id": "1",
+                        "actions": []
                     },
                     "type": "notification",
                     "id": "1",
@@ -16270,7 +16271,9 @@ Get a single notification.
                     "received-at": "2017-06-23T04:40:37.239724+00:00",
                     "is-read": false,
                     "deleted-at": null,
-                    "title": "example"
+                    "title": "example",
+                    "subject-id": "1",
+                    "actions": []
                 },
                 "type": "notification",
                 "id": "1",
@@ -16305,8 +16308,9 @@ Update a single notification with `id`.
                 "attributes": {
                   "title": "example1",
                   "message": "example1",
-                  "action": "example1",
-                  "is-read": "true"
+                  "is-read": "true",
+                  "subject-id": "1",
+                  "actions": []
                 },
                 "type": "notification",
                 "id": "1"
@@ -16330,7 +16334,9 @@ Update a single notification with `id`.
                     "received-at": "2017-06-23T04:40:37.239724+00:00",
                     "is-read": true,
                     "deleted-at": null,
-                    "title": "example1"
+                    "title": "example1",
+                    "subject-id": "1",
+                    "actions": []
                 },
                 "type": "notification",
                 "id": "1",

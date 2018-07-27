@@ -95,7 +95,7 @@ def export_event_task(self, email, event_id, settings):
         }
         logging.info('Exporting done.. sending email')
         send_export_mail(email=email, event_name=event.name, download_url=download_url)
-        send_notif_after_export(user=user, event_name=event.name, download_url=download_url)
+        send_notif_after_export(user=user, event_name=event.name, download_url=download_url, subject_id=event_id)
     except Exception as e:
         print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
@@ -118,7 +118,7 @@ def import_event_task(self, email, file, source_type, creator_id):
         logging.info('Importing done..Sending email')
         send_import_mail(email=email, event_name=result['event_name'], event_url=result['url'])
         send_notif_after_import(user=user, event_name=result[
-            'event_name'], event_url=result['url'])
+            'event_name'], event_url=result['url'], subject_id=result['id'])
     except Exception as e:
         print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
