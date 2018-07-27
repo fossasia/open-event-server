@@ -1,7 +1,8 @@
 import unittest
 
 from tests.unittests.utils import OpenEventTestCase
-from app.api.helpers.errors import ForbiddenError, NotFoundError
+from app.api.helpers.errors import ForbiddenError, NotFoundError, ServerError, \
+    UnprocessableEntityError, BadRequestError
 from tests.unittests.setup_database import Setup
 from app import current_app as app
 
@@ -19,6 +20,19 @@ class TestErrorsHelperValidation(OpenEventTestCase):
             # Not Found Error
             not_found_error = NotFoundError({'source': ''}, 'Object not found.')
             self.assertEqual(not_found_error.status, 404)
+
+            # Server Error
+            server_error = ServerError({'source': ''}, 'Internal Server Error')
+            self.assertEqual(server_error.status, 500)
+
+            # UnprocessableEntity Error
+            unprocessable_entity_error = UnprocessableEntityError({'source': ''},
+                'Entity cannot be processed')
+            self.assertEqual(unprocessable_entity_error.status, 422)
+
+            # Bad Request Error
+            bad_request_error = BadRequestError({'source': ''}, 'Request cannot be served')
+            self.assertEqual(bad_request_error.status, 400)
 
 
 if __name__ == '__main__':
