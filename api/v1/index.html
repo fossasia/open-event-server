@@ -9986,6 +9986,12 @@
 <td>boolean</td>
 <td>-</td>
 </tr>
+<tr>
+<td style="text-align:left"><code>average-rating</code></td>
+<td>Average rating of session</td>
+<td>float</td>
+<td>-</td>
+</tr>
 </tbody>
 </table>
 <div id="sessions-sessions-collection" class="resource"><h3 class="resource-heading">Sessions Collection <a href="#sessions-sessions-collection" class="permalink">&nbsp;&para;</a></h3><div id="sessions-sessions-collection-post" class="action post"><h4 class="action-heading"><div class="name">Create Sessions</div><a href="#sessions-sessions-collection-post" class="method post">POST</a><code class="uri">/v1/sessions{?sort,filter}</code></h4><p>Create a new session using an event_id and track_id <strong>(Minimum Co-Organizer Access)</strong></p>
@@ -10067,6 +10073,7 @@
       "<span class="hljs-attribute">subtitle</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">level</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
       "<span class="hljs-attribute">short-abstract</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">average-rating</span>": <span class="hljs-value"><span class="hljs-number">4.25</span></span>,
       "<span class="hljs-attribute">long-abstract</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">comments</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">starts-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T10:00:00.500127+00:00"</span></span>,
@@ -10136,6 +10143,7 @@
       "<span class="hljs-attribute">subtitle</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">level</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
       "<span class="hljs-attribute">short-abstract</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">average-rating</span>": <span class="hljs-value"><span class="hljs-number">4.25</span></span>,
       "<span class="hljs-attribute">long-abstract</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">comments</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">starts-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T10:00:00.500127+00:00"</span></span>,
@@ -10236,6 +10244,7 @@
       "<span class="hljs-attribute">subtitle</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">level</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>,
       "<span class="hljs-attribute">short-abstract</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">average-rating</span>": <span class="hljs-value"><span class="hljs-number">4.25</span></span>,
       "<span class="hljs-attribute">long-abstract</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">comments</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">starts-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T10:00:00.500127+00:00"</span></span>,
@@ -10318,6 +10327,7 @@
         "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T11:00:00.500127+00:00"</span></span>,
         "<span class="hljs-attribute">language</span>": <span class="hljs-value"><span class="hljs-string">"English"</span></span>,
         "<span class="hljs-attribute">short-abstract</span>": <span class="hljs-value"><span class="hljs-string">"Short Abstract"</span></span>,
+        "<span class="hljs-attribute">average-rating</span>": <span class="hljs-value"><span class="hljs-number">4.25</span></span>,
         "<span class="hljs-attribute">slides-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example"</span></span>,
         "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"Micropython Session"</span></span>,
         "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-07-25T02:22:35.010307+00:00"</span></span>,
@@ -10391,6 +10401,7 @@
         "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T11:00:00.500127+00:00"</span></span>,
         "<span class="hljs-attribute">language</span>": <span class="hljs-value"><span class="hljs-string">"English"</span></span>,
         "<span class="hljs-attribute">short-abstract</span>": <span class="hljs-value"><span class="hljs-string">"Short Abstract"</span></span>,
+        "<span class="hljs-attribute">average-rating</span>": <span class="hljs-value"><span class="hljs-number">4.25</span></span>,
         "<span class="hljs-attribute">slides-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example"</span></span>,
         "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"Micropython Session"</span></span>,
         "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-07-25T02:22:35.010307+00:00"</span></span>,
@@ -10464,6 +10475,7 @@
         "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T11:00:00.500127+00:00"</span></span>,
         "<span class="hljs-attribute">language</span>": <span class="hljs-value"><span class="hljs-string">"English"</span></span>,
         "<span class="hljs-attribute">short-abstract</span>": <span class="hljs-value"><span class="hljs-string">"Short Abstract"</span></span>,
+        "<span class="hljs-attribute">average-rating</span>": <span class="hljs-value"><span class="hljs-number">4.25</span></span>,
         "<span class="hljs-attribute">slides-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example"</span></span>,
         "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"Micropython Session"</span></span>,
         "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-07-25T02:22:35.010307+00:00"</span></span>,
@@ -10537,6 +10549,7 @@
         "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T11:00:00.500127+00:00"</span></span>,
         "<span class="hljs-attribute">language</span>": <span class="hljs-value"><span class="hljs-string">"English"</span></span>,
         "<span class="hljs-attribute">short-abstract</span>": <span class="hljs-value"><span class="hljs-string">"Short Abstract"</span></span>,
+        "<span class="hljs-attribute">average-rating</span>": <span class="hljs-value"><span class="hljs-number">4.25</span></span>,
         "<span class="hljs-attribute">slides-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example"</span></span>,
         "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"Micropython Session"</span></span>,
         "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-07-25T02:22:35.010307+00:00"</span></span>,
@@ -10610,6 +10623,7 @@
         "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-01T11:00:00.500127+00:00"</span></span>,
         "<span class="hljs-attribute">language</span>": <span class="hljs-value"><span class="hljs-string">"English"</span></span>,
         "<span class="hljs-attribute">short-abstract</span>": <span class="hljs-value"><span class="hljs-string">"Short Abstract"</span></span>,
+        "<span class="hljs-attribute">average-rating</span>": <span class="hljs-value"><span class="hljs-number">4.25</span></span>,
         "<span class="hljs-attribute">slides-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example"</span></span>,
         "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"Micropython Session"</span></span>,
         "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-07-25T02:22:35.010307+00:00"</span></span>,
@@ -20944,7 +20958,7 @@ Creates the copy. Requires Co-Organizer access</p>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Verification email resent"</span>
-</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 26 Jul 2018</p><script>/* eslint-env browser */
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 27 Jul 2018</p><script>/* eslint-env browser */
 /* eslint quotes: [2, "single"] */
 'use strict';
 
