@@ -18,7 +18,7 @@ from app.api.helpers.mail import send_order_cancel_email
 from app.api.helpers.notification import send_notif_to_attendees, send_notif_ticket_purchase_organizer, \
     send_notif_ticket_cancel
 from app.api.helpers.order import delete_related_attendees_for_order, set_expiry_for_order, \
-    create_pdf_tickets_for_holder
+    create_pdf_tickets_for_holder, create_onsite_attendees_for_order
 from app.api.helpers.payment import PayPalPaymentsManager
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
@@ -48,7 +48,15 @@ class OrdersListPost(ResourceList):
         :param data:
         :return:
         """
-        require_relationship(['event', 'ticket_holders'], data)
+        require_relationship(['event'], data)
+
+        # Create on site attendees.
+        if request.args.get('onsite', False):
+            create_onsite_attendees_for_order(data)
+        elif data.get('on_site_tickets'):
+            del data['on_site_tickets']
+        require_relationship(['ticket_holders'], data)
+
         # Ensuring that default status is always pending, unless the user is event co-organizer
         if not has_access('is_coorganizer', event_id=data['event']):
             data['status'] = 'pending'
@@ -134,7 +142,8 @@ class OrdersListPost(ResourceList):
 
             order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
             for organizer in order.event.organizers:
-                send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name)
+                send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
+                                                     order.id)
 
         data['user_id'] = current_user.id
 

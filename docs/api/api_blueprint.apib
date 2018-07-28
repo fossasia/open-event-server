@@ -2873,6 +2873,7 @@ These endpoints help you to create the basic event structure. To add other parts
 | `has-organizer-info`  | - | boolean(default: `false`) | - |
 | `average-rating`  | Average rating of event | float | - |
 | `order-expiry-time`  | Expiry time for orders in minutes | Integer(default: 10) | - |
+| `refund-policy` | Refund policy | string | - |
 
 ## Events Collection [/v1/events{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -3105,7 +3106,8 @@ Get a list of events.
                         "bank-details": "example",
                         "cheque-details": "example",
                         "identifier": "b8324ae2",
-                        "order-expiry-time": "10"
+                        "order-expiry-time": "10",
+                        "refund-policy": "All sales are final. No refunds shall be issued in any case."
                     },
                     "type": "event",
                     "id": "1",
@@ -3395,7 +3397,8 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "bank-details": "example",
                     "cheque-details": "example",
                     "identifier": "b8324ae2",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -3642,7 +3645,8 @@ Get a single event.
                     "bank-details": "example",
                     "cheque-details": "example",
                     "identifier": "b8324ae2",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -3714,7 +3718,8 @@ All other fields are optional. Add attributes you want to modify.
                     "onsite-details": "example1",
                     "is-sponsors-enabled": "false",
                     "has-organizer-info": "false",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "id": "1",
                 "type": "event"
@@ -3936,7 +3941,8 @@ All other fields are optional. Add attributes you want to modify.
                     "bank-details": "example1",
                     "cheque-details": "example1",
                     "identifier": "b8324ae2",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -4196,7 +4202,8 @@ Get a list of events.
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
                         "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                        "order-expiry-time": "10"
+                        "order-expiry-time": "10",
+                        "refund-policy": "All sales are final. No refunds shall be issued in any case."
                     },
                     "type": "event",
                     "id": "1",
@@ -4429,7 +4436,8 @@ Get a list of events.
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
                         "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                        "order-expiry-time": "10"
+                        "order-expiry-time": "10",
+                        "refund-policy": "All sales are final. No refunds shall be issued in any case."
                     },
                     "type": "event",
                     "id": "1",
@@ -4655,7 +4663,8 @@ Get a list of events.
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
                         "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                        "order-expiry-time": "10"
+                        "order-expiry-time": "10",
+                        "refund-policy": "All sales are final. No refunds shall be issued in any case."
                     },
                     "type": "event",
                     "id": "1",
@@ -4888,7 +4897,8 @@ Get a list of events.
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
                         "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                        "order-expiry-time": "10"
+                        "order-expiry-time": "10",
+                        "refund-policy": "All sales are final. No refunds shall be issued in any case."
                     },
                     "type": "event",
                     "id": "1",
@@ -5115,7 +5125,8 @@ Get a list of events.
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
                         "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                        "order-expiry-time": "10"
+                        "order-expiry-time": "10",
+                        "refund-policy": "All sales are final. No refunds shall be issued in any case."
                     },
                     "type": "event",
                     "id": "1",
@@ -5339,7 +5350,8 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -5563,7 +5575,8 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -5787,7 +5800,8 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -6011,7 +6025,8 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -6235,7 +6250,8 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -6459,7 +6475,8 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -6683,7 +6700,8 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -6907,7 +6925,8 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -7131,7 +7150,8 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -7355,7 +7375,8 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -7579,7 +7600,8 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -7803,7 +7825,8 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -8027,7 +8050,8 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -8251,7 +8275,8 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -8475,7 +8500,8 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -8699,7 +8725,8 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -8923,7 +8950,8 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -9147,7 +9175,8 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -9371,7 +9400,8 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10"
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "type": "event",
                 "id": "1",
@@ -9622,7 +9652,8 @@ Get a list of events.
               "external-event-url": null,
               "identifier": "4f27fefe",
               "ends-at": "2022-05-30T04:00:10+00:00",
-              "order-expiry-time": "10"
+              "order-expiry-time": "10",
+              "refund-policy": "All sales are final. No refunds shall be issued in any case."
             },
             "type": "event",
             "id": "1",
@@ -9873,7 +9904,8 @@ Get a list of events.
               "external-event-url": null,
               "identifier": "4f27fefe",
               "ends-at": "2022-05-30T04:00:10+00:00",
-              "order-expiry-time": "10"
+              "order-expiry-time": "10",
+              "refund-policy": "All sales are final. No refunds shall be issued in any case."
             },
             "type": "event",
             "id": "1",
@@ -11027,6 +11059,7 @@ Data related to all the sessions in the event.
 | `is-mail-sent` | Yes/No for Session accept/reject email | boolean (default: `false`) | - |
 | `last-modified-at` | Date the session was modified | ISO 8601 (tz-aware) | - |
 | `send-email` | Yes/No for sending Session accept/reject email | boolean | - |
+| `average-rating`  | Average rating of session | float | - |
 
 
 ## Sessions Collection [/v1/sessions{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
@@ -11130,6 +11163,7 @@ Create a new session using an event_id and track_id **(Minimum Co-Organizer Acce
               "subtitle": null,
               "level": 1,
               "short-abstract": null,
+              "average-rating": 4.25,
               "long-abstract": null,
               "comments": null,
               "starts-at": "2017-06-01T10:00:00.500127+00:00",
@@ -11217,6 +11251,7 @@ Get a single session. **(Public)**
               "subtitle": null,
               "level": 1,
               "short-abstract": null,
+              "average-rating": 4.25,
               "long-abstract": null,
               "comments": null,
               "starts-at": "2017-06-01T10:00:00.500127+00:00",
@@ -11320,6 +11355,7 @@ Update a single session by `id`. **(Minimum Co-Organizer Access)**
               "subtitle": null,
               "level": 1,
               "short-abstract": null,
+              "average-rating": 4.25,
               "long-abstract": null,
               "comments": null,
               "starts-at": "2017-06-01T10:00:00.500127+00:00",
@@ -11437,6 +11473,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "ends-at": "2017-06-01T11:00:00.500127+00:00",
                         "language": "English",
                         "short-abstract": "Short Abstract",
+                        "average-rating": 4.25,
                         "slides-url": "http://example.com/example",
                         "title": "Micropython Session",
                         "created-at": "2017-07-25T02:22:35.010307+00:00",
@@ -11533,6 +11570,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "ends-at": "2017-06-01T11:00:00.500127+00:00",
                         "language": "English",
                         "short-abstract": "Short Abstract",
+                        "average-rating": 4.25,
                         "slides-url": "http://example.com/example",
                         "title": "Micropython Session",
                         "created-at": "2017-07-25T02:22:35.010307+00:00",
@@ -11629,6 +11667,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "ends-at": "2017-06-01T11:00:00.500127+00:00",
                         "language": "English",
                         "short-abstract": "Short Abstract",
+                        "average-rating": 4.25,
                         "slides-url": "http://example.com/example",
                         "title": "Micropython Session",
                         "created-at": "2017-07-25T02:22:35.010307+00:00",
@@ -11725,6 +11764,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "ends-at": "2017-06-01T11:00:00.500127+00:00",
                         "language": "English",
                         "short-abstract": "Short Abstract",
+                        "average-rating": 4.25,
                         "slides-url": "http://example.com/example",
                         "title": "Micropython Session",
                         "created-at": "2017-07-25T02:22:35.010307+00:00",
@@ -11821,6 +11861,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "ends-at": "2017-06-01T11:00:00.500127+00:00",
                         "language": "English",
                         "short-abstract": "Short Abstract",
+                        "average-rating": 4.25,
                         "slides-url": "http://example.com/example",
                         "title": "Micropython Session",
                         "created-at": "2017-07-25T02:22:35.010307+00:00",
@@ -16108,9 +16149,9 @@ Notifications related to the various users about invites, ticket purchase, sessi
 |:----------|-------------|------|----------|
 | `title`  | Title of the notification | string | - |
 | `message` | Message/content of the notification | string | - |
-| `accept` | Accept/Reject notification | string | - |
 | `is-read` | Yes/No for read notification | boolean (default: `false`) | - |
-| `recieved-at` | Notification recieved time | ISO 8601 (tz-aware) | - |
+| `received-at` | Notification recieved time | ISO 8601 (tz-aware) | - |
+| `subject-id` | ID of the related subject(For eg: session_id in case of a new session) | integer | - |
 
 ## Notifications Collection [/v1/users/{user_id}/notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -16153,7 +16194,8 @@ Get a list of Notifications.
                         "is-read": false,
                         "title": "example",
                         "deleted-at": null,
-                        "action": "example"
+                        "subject-id": "1",
+                        "actions": []
                     },
                     "type": "notification",
                     "id": "1",
@@ -16210,8 +16252,8 @@ Get a list of Notifications.
                         "received-at": "2017-06-23T04:40:37.239724+00:00",
                         "is-read": false,
                         "title": "example",
-                        "deleted-at": null,
-                        "action": "example"
+                        "subject-id": "1",
+                        "actions": []
                     },
                     "type": "notification",
                     "id": "1",
@@ -16261,7 +16303,9 @@ Get a single notification.
                     "received-at": "2017-06-23T04:40:37.239724+00:00",
                     "is-read": false,
                     "deleted-at": null,
-                    "title": "example"
+                    "title": "example",
+                    "subject-id": "1",
+                    "actions": []
                 },
                 "type": "notification",
                 "id": "1",
@@ -16296,8 +16340,9 @@ Update a single notification with `id`.
                 "attributes": {
                   "title": "example1",
                   "message": "example1",
-                  "action": "example1",
-                  "is-read": "true"
+                  "is-read": "true",
+                  "subject-id": "1",
+                  "actions": []
                 },
                 "type": "notification",
                 "id": "1"
@@ -16321,7 +16366,9 @@ Update a single notification with `id`.
                     "received-at": "2017-06-23T04:40:37.239724+00:00",
                     "is-read": true,
                     "deleted-at": null,
-                    "title": "example1"
+                    "title": "example1",
+                    "subject-id": "1",
+                    "actions": []
                 },
                 "type": "notification",
                 "id": "1",
@@ -23191,6 +23238,141 @@ Delete a single Order.
           },
           "jsonapi": {
             "version": "1.0"
+          }
+        }
+
+## Create Order with on site Attendees [/v1/orders?onsite=true]
+
+### Create Order with on site Attendees [POST]
+Create a new Order with on site attendees
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "payment-mode": "free",
+                  "country": "India",
+                  "status": "pending",
+                  "amount": null,
+                  "order-notes": "example",
+                  "on-site-tickets":  [
+                        {
+                            "data": {
+                                "attributes": {
+                                  "id": "1",
+                                  "quantity": "2"
+                                },
+                                "type": "on-site-ticket"
+                            }
+                        },
+                        {
+                            "data": {
+                                "attributes": {
+                                  "id": "2",
+                                  "quantity": "3"
+                                },
+                                "type": "on-site-ticket"
+                            }
+                        }
+                    ]
+                },
+                "type": "order",
+                "relationships": {
+                  "event": {
+                    "data": {
+                      "id": "1",
+                      "type": "event"
+                    }
+                  }
+                }
+              }
+            }
++ Response 201 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "tickets": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/ticket",
+                  "related": "/v1/orders/11/tickets"
+                }
+              },
+              "attendees": {
+                "data": [
+                  {
+                    "type": "attendee",
+                    "id": "1"
+                  }
+                ],
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/attendee",
+                  "related": "/v1/orders/11/attendees"
+                }
+              },
+              "marketer": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/marketer"
+                }
+              },
+              "user": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/user"
+                }
+              },
+              "discount-code": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/discount-code"
+                }
+              },
+              "event": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/event",
+                  "related": "/v1/events/1"
+                }
+              }
+            },
+            "attributes": {
+              "status": "pending",
+              "city": null,
+              "identifier": "617ed24c-9a07-4084-b076-ed73552db27e",
+              "paid-via": null,
+              "exp-year": null,
+              "transaction-id": null,
+              "discount-code-id": null,
+              "brand": null,
+              "zipcode": null,
+              "payment-mode": "free",
+              "last4": null,
+              "state": null,
+              "payment-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?token=EC-62113287PK247472B&cmd=_express-checkout",
+              "address": null,
+              "exp-month": null,
+              "amount": null,
+              "country": "India",
+              "completed-at": null,
+              "created-at": "2018-07-08T01:05:09.904696+00:00",
+              "order-notes": "example",
+              "tickets-pdf-url": "https://example.com/media/attendees/tickets/pdf/order_identifier.pdf"
+            },
+            "type": "order",
+            "id": "11",
+            "links": {
+              "self": "/v1/orders/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/orders/11"
           }
         }
 
