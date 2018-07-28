@@ -2491,6 +2491,12 @@
 <td>Integer(default: 10)</td>
 <td>-</td>
 </tr>
+<tr>
+<td style="text-align:left"><code>refund-policy</code></td>
+<td>Refund policy</td>
+<td>string</td>
+<td>-</td>
+</tr>
 </tbody>
 </table>
 <div id="events-events-collection" class="resource"><h3 class="resource-heading">Events Collection <a href="#events-events-collection" class="permalink">&nbsp;&para;</a></h3><div id="events-events-collection-get" class="action get"><h4 class="action-heading"><div class="name">List All Events</div><a href="#events-events-collection-get" class="method get">GET</a><code class="uri">/v1/events{?sort,filter}</code></h4><p>Get a list of events.</p>
@@ -2705,7 +2711,8 @@
         "<span class="hljs-attribute">bank-details</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
         "<span class="hljs-attribute">cheque-details</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
         "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"b8324ae2"</span></span>,
-        "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+        "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+        "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
       "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -2977,7 +2984,8 @@
       "<span class="hljs-attribute">bank-details</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">cheque-details</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"b8324ae2"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -3206,7 +3214,8 @@
       "<span class="hljs-attribute">bank-details</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">cheque-details</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"b8324ae2"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -3265,7 +3274,8 @@
       "<span class="hljs-attribute">onsite-details</span>": <span class="hljs-value"><span class="hljs-string">"example1"</span></span>,
       "<span class="hljs-attribute">is-sponsors-enabled</span>": <span class="hljs-value"><span class="hljs-string">"false"</span></span>,
       "<span class="hljs-attribute">has-organizer-info</span>": <span class="hljs-value"><span class="hljs-string">"false"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span>
@@ -3483,7 +3493,8 @@
       "<span class="hljs-attribute">bank-details</span>": <span class="hljs-value"><span class="hljs-string">"example1"</span></span>,
       "<span class="hljs-attribute">cheque-details</span>": <span class="hljs-value"><span class="hljs-string">"example1"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"b8324ae2"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -3707,7 +3718,8 @@
         "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
         "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
         "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-        "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+        "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+        "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
       "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -3917,7 +3929,8 @@
         "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
         "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
         "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-        "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+        "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+        "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
       "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -4121,7 +4134,8 @@
         "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
         "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
         "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-        "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+        "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+        "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
       "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -4331,7 +4345,8 @@
         "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
         "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
         "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-        "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+        "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+        "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
       "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -4535,7 +4550,8 @@
         "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
         "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
         "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-        "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+        "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+        "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
       </span>}</span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
       "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -4740,7 +4756,8 @@
       "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -4944,7 +4961,8 @@
       "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -5148,7 +5166,8 @@
       "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -5352,7 +5371,8 @@
       "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -5556,7 +5576,8 @@
       "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -5760,7 +5781,8 @@
       "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -5964,7 +5986,8 @@
       "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -6168,7 +6191,8 @@
       "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -6372,7 +6396,8 @@
       "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -6576,7 +6601,8 @@
       "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -6780,7 +6806,8 @@
       "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -6984,7 +7011,8 @@
       "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -7188,7 +7216,8 @@
       "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -7392,7 +7421,8 @@
       "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -7596,7 +7626,8 @@
       "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -7800,7 +7831,8 @@
       "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -8004,7 +8036,8 @@
       "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -8208,7 +8241,8 @@
       "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -8412,7 +8446,8 @@
       "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -8646,7 +8681,8 @@
       "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"4f27fefe"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2022-05-30T04:00:10+00:00"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -8880,7 +8916,8 @@
       "<span class="hljs-attribute">external-event-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"4f27fefe"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2022-05-30T04:00:10+00:00"</span></span>,
-      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span>
+      "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span>
     </span>}</span>,
     "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"event"</span></span>,
     "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-string">"1"</span></span>,
@@ -20964,7 +21001,7 @@ Creates the copy. Requires Co-Organizer access</p>
   </span>}
 </span>}</code></pre><div style="height: 1px;"></div></div></div><div class="title"><strong>Response&nbsp;&nbsp;<code>200</code></strong><div class="collapse-button"><span class="close">Hide</span><span class="open">Show</span></div></div><div class="collapse-content"><div class="inner"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span></code></pre><div style="height: 1px;"></div><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Verification email resent"</span>
-</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 27 Jul 2018</p><script>/* eslint-env browser */
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 28 Jul 2018</p><script>/* eslint-env browser */
 /* eslint quotes: [2, "single"] */
 'use strict';
 
