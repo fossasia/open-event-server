@@ -108,6 +108,8 @@ class EventSchemaPublic(SoftDeletionSchema):
     xcal_url = fields.Url(dump_only=True)
     average_rating = fields.Float(dump_only=True)
     order_expiry_time = fields.Integer(allow_none=True, default=10)
+    refund_policy = fields.String(dump_only=True,
+                                  default='All sales are final. No refunds shall be issued in any case.')
 
     tickets = Relationship(attribute='tickets',
                            self_view='v1.event_ticket',
