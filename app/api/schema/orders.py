@@ -56,8 +56,10 @@ class OrderSchema(SoftDeletionSchema):
     completed_at = fields.DateTime(dump_only=True)
     created_at = fields.DateTime(dump_only=True)
     transaction_id = fields.Str(dump_only=True)
-    payment_mode = fields.Str(default="free",
-                              validate=validate.OneOf(choices=["free", "stripe", "paypal"]), allow_none=True)
+    payment_mode = fields.Str(
+                            default="free",
+                            validate=validate.OneOf(choices=["free", "stripe", "paypal", "bank", "cheque", "onsite"]),
+                            allow_none=True)
     paid_via = fields.Str(dump_only=True)
     brand = fields.Str(dump_only=True)
     exp_month = fields.Str(dump_only=True)
