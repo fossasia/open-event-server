@@ -2874,6 +2874,7 @@ These endpoints help you to create the basic event structure. To add other parts
 | `average-rating`  | Average rating of event | float | - |
 | `order-expiry-time`  | Expiry time for orders in minutes | Integer(default: 10) | - |
 | `refund-policy` | Refund policy | string | - |
+| `is-stripe-linked` | Shows if the event has a linked stripe account. | boolean(default: `false`) | - |
 
 ## Events Collection [/v1/events{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -3107,7 +3108,8 @@ Get a list of events.
                         "cheque-details": "example",
                         "identifier": "b8324ae2",
                         "order-expiry-time": "10",
-                        "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                        "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                        "is-stripe-linked": "false"
                     },
                     "type": "event",
                     "id": "1",
@@ -3398,7 +3400,8 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "cheque-details": "example",
                     "identifier": "b8324ae2",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -3646,7 +3649,8 @@ Get a single event.
                     "cheque-details": "example",
                     "identifier": "b8324ae2",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -3942,7 +3946,8 @@ All other fields are optional. Add attributes you want to modify.
                     "cheque-details": "example1",
                     "identifier": "b8324ae2",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -4203,7 +4208,8 @@ Get a list of events.
                         "identifier": "f4fbf878",
                         "ends-at": "2016-12-14T23:59:59.123456+00:00",
                         "order-expiry-time": "10",
-                        "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                        "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                        "is-stripe-linked": "false"
                     },
                     "type": "event",
                     "id": "1",
@@ -4437,7 +4443,8 @@ Get a list of events.
                         "identifier": "f4fbf878",
                         "ends-at": "2016-12-14T23:59:59.123456+00:00",
                         "order-expiry-time": "10",
-                        "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                        "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                        "is-stripe-linked": "false"
                     },
                     "type": "event",
                     "id": "1",
@@ -4664,7 +4671,8 @@ Get a list of events.
                         "identifier": "f4fbf878",
                         "ends-at": "2016-12-14T23:59:59.123456+00:00",
                         "order-expiry-time": "10",
-                        "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                        "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                        "is-stripe-linked": "false"
                     },
                     "type": "event",
                     "id": "1",
@@ -4898,7 +4906,8 @@ Get a list of events.
                         "identifier": "f4fbf878",
                         "ends-at": "2016-12-14T23:59:59.123456+00:00",
                         "order-expiry-time": "10",
-                        "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                        "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                        "is-stripe-linked": "false"
                     },
                     "type": "event",
                     "id": "1",
@@ -5126,7 +5135,8 @@ Get a list of events.
                         "identifier": "f4fbf878",
                         "ends-at": "2016-12-14T23:59:59.123456+00:00",
                         "order-expiry-time": "10",
-                        "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                        "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                        "is-stripe-linked": "false"
                     },
                     "type": "event",
                     "id": "1",
@@ -5351,7 +5361,8 @@ Get a list of events.
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -5576,7 +5587,8 @@ Get a list of events.
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -5801,7 +5813,8 @@ Get a list of events.
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -6026,7 +6039,8 @@ Get a list of events.
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -6251,7 +6265,8 @@ Get a list of events.
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -6476,7 +6491,8 @@ Get a list of events.
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -6701,7 +6717,8 @@ Get a list of events.
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -6926,7 +6943,8 @@ Get a list of events.
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -7151,7 +7169,8 @@ Get a list of events.
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -7376,7 +7395,8 @@ Get a list of events.
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -7601,7 +7621,8 @@ Get a list of events.
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -7826,7 +7847,8 @@ Get a list of events.
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -8051,7 +8073,8 @@ Get a list of events.
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -8276,7 +8299,8 @@ Get a list of events.
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -8501,7 +8525,8 @@ Get a list of events.
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -8726,7 +8751,8 @@ Get a list of events.
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -8951,7 +8977,8 @@ Get a list of events.
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -9176,7 +9203,8 @@ Get a list of events.
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -9401,7 +9429,8 @@ Get a list of events.
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "order-expiry-time": "10",
-                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -9653,7 +9682,8 @@ Get a list of events.
               "identifier": "4f27fefe",
               "ends-at": "2022-05-30T04:00:10+00:00",
               "order-expiry-time": "10",
-              "refund-policy": "All sales are final. No refunds shall be issued in any case."
+              "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+              "is-stripe-linked": "false"
             },
             "type": "event",
             "id": "1",
@@ -9905,7 +9935,8 @@ Get a list of events.
               "identifier": "4f27fefe",
               "ends-at": "2022-05-30T04:00:10+00:00",
               "order-expiry-time": "10",
-              "refund-policy": "All sales are final. No refunds shall be issued in any case."
+              "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+              "is-stripe-linked": "true"
             },
             "type": "event",
             "id": "1",
