@@ -64,7 +64,7 @@ class StripeAuthorizationListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
-        event = db.session.query(Event).filter_by(id=int(data['event']))
+        event = db.session.query(Event).filter_by(id=int(data['event'])).one()
         event.is_stripe_linked = True
         save_to_db(event)
 
