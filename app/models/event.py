@@ -100,6 +100,7 @@ class Event(SoftDeletionModel):
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
     refund_policy = db.Column(db.String, default='All sales are final. No refunds shall be issued in any case.')
     order_expiry_time = db.Column(db.Integer)
+    is_stripe_linked = db.Column(db.Boolean, default=False)
     discount_code_id = db.Column(db.Integer, db.ForeignKey(
         'discount_codes.id', ondelete='CASCADE'))
     discount_code = db.relationship('DiscountCode', backref='events', foreign_keys=[discount_code_id])
@@ -206,7 +207,8 @@ class Event(SoftDeletionModel):
                  stripe_authorization=None,
                  tax=None,
                  order_expiry_time=None,
-                 refund_policy='All sales are final. No refunds shall be issued in any case.'):
+                 refund_policy='All sales are final. No refunds shall be issued in any case.',
+                 is_stripe_linked=False):
 
         self.name = name
         self.logo_url = logo_url
@@ -265,6 +267,7 @@ class Event(SoftDeletionModel):
         self.tax = tax
         self.order_expiry_time = order_expiry_time
         self.refund_policy = refund_policy
+        self.is_stripe_linked = is_stripe_linked
 
     def __repr__(self):
         return '<Event %r>' % self.name
