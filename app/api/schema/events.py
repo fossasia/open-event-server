@@ -107,7 +107,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     ical_url = fields.Url(dump_only=True)
     xcal_url = fields.Url(dump_only=True)
     average_rating = fields.Float(dump_only=True)
-    order_expiry_time = fields.Integer(allow_none=True, default=10)
+    order_expiry_time = fields.Integer(allow_none=True, default=10, validate=lambda n: 1 <= n <= 60)
     refund_policy = fields.String(dump_only=True,
                                   default='All sales are final. No refunds shall be issued in any case.')
     is_stripe_linked = fields.Boolean(dump_only=True, allow_none=True, default=False)
