@@ -51,12 +51,10 @@ class UserSchema(UserSchemaPublic):
     google_plus_url = fields.Url(allow_none=True)
     password = fields.Str(required=True, load_only=True)
     is_super_admin = fields.Boolean(dump_only=True)
-    is_admin = fields.Boolean(dump_only=True)
+    is_admin = fields.Boolean()
     facebook_id = fields.Integer(dump_only=True)
-
-    is_sales_admin = fields.Boolean(dump_only=True)
-    is_marketer = fields.Boolean(dump_only=True)
-
+    is_sales_admin = fields.Boolean()
+    is_marketer = fields.Boolean()
     is_user_organizer = fields.Boolean(dump_only=True)
     is_user_coorganizer = fields.Boolean(dump_only=True)
     is_user_track_organizer = fields.Boolean(dump_only=True)
