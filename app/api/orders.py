@@ -394,7 +394,7 @@ class ChargeList(ResourceList):
 
 @order_misc_routes.route('/orders/<string:order_identifier>/create-paypal-payment', methods=['POST'])
 @jwt_required
-def create_payment_payment(order_identifier):
+def create_paypal_payment(order_identifier):
     """
     Create a paypal payment.
     :return: The payment id of the created payment.

@@ -203,8 +203,10 @@ class AttendeeRelationshipOptional(ResourceRelationship):
 @attendee_misc_routes.route('/attendees/send-receipt', methods=['POST'])
 @jwt_required
 def send_receipt():
-    # Function to send receipts to attendees related to the provided order.
-
+    """
+    Send receipts to attendees related to the provided order.
+    :return:
+    """
     order_identifier = request.json.get('order-identifier')
     if order_identifier:
         try:
@@ -212,9 +214,9 @@ def send_receipt():
         except NoResultFound:
             raise ObjectNotFound({'parameter': '{identifier}'}, "Order not found")
 
-        if order.user_id != current_identity.id:
+        if (order.user_id != current_identity.id) and (not has_access('is_registrar', event_id=order.event_id)):
             abort(
-                make_response(jsonify(error="You cannot send reciept for an order not created by you"), 403)
+                make_response(jsonify(error="You need to be the event organizer or order buyer to send receipts."), 403)
             )
         elif order.status != 'completed':
             abort(
