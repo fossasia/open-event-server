@@ -122,6 +122,15 @@ class SessionSchema(SoftDeletionSchema):
                             related_view_kwargs={'session_id': '<id>'},
                             schema='SpeakerSchema',
                             type_='speaker')
+    session_chat_messages = Relationship(
+        attribute='session_chat_messages',
+        many=True,
+        self_view='v1.session_session_chat_message',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.session_chat_message_list',
+        related_view_kwargs={'session_id': '<id>'},
+        schema='SessionChatMessageSchema',
+        type_='session-chat-message')
     creator = Relationship(attribute='user',
                            self_view='v1.session_user',
                            self_view_kwargs={'id': '<id>'},

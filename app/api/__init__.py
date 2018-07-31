@@ -5,6 +5,8 @@ from app.api.ticket_fees import TicketFeeList, TicketFeeDetail
 from app.api.users import UserList, UserDetail, UserRelationship
 from app.api.user_emails import UserEmailListAdmin, UserEmailListPost, UserEmailList, UserEmailDetail, \
     UserEmailRelationship
+from app.api.event_chat_messages import EventChatMessageListPost, EventChatMessageList, \
+    EventChatMessageDetail, EventChatMessageRelationship
 from app.api.notifications import NotificationList, NotificationListAdmin, NotificationDetail, NotificationRelationship
 from app.api.email_notifications import EmailNotificationList, EmailNotificationListAdmin, EmailNotificationDetail, \
     EmailNotificationRelationshipOptional, EmailNotificationRelationshipRequired
@@ -23,6 +25,8 @@ from app.api.sessions import SessionList, SessionListPost, SessionDetail, Sessio
 from app.api.speakers import SpeakerList, SpeakerListPost, SpeakerDetail, SpeakerRelationshipRequired, \
     SpeakerRelationshipOptional
 from app.api.service import ServiceList, ServiceDetail
+from app.api.session_chat_messages import SessionChatMessageListPost, SessionChatMessageList, \
+    SessionChatMessageDetail, SessionChatMessageRelationship
 from app.api.social_links import SocialLinkList, SocialLinkListPost, SocialLinkDetail, SocialLinkRelationship
 from app.api.sponsors import SponsorList, SponsorListPost, SponsorDetail, SponsorRelationship
 from app.api.tracks import TrackList, TrackListPost, TrackDetail, TrackRelationshipOptional, TrackRelationshipRequired
@@ -85,7 +89,8 @@ api.route(UserDetail, 'user_detail', '/users/<int:id>', '/notifications/<int:not
           '/access-codes/<int:access_code_id>/marketer', '/email-notifications/<int:email_notification_id>/user',
           '/discount-codes/<int:discount_code_id>/marketer', '/sessions/<int:session_id>/creator',
           '/attendees/<int:attendee_id>/user', '/feedbacks/<int:feedback_id>/user',
-          '/alternate-emails/<int:user_email_id>/user')
+          '/alternate-emails/<int:user_email_id>/user', '/event-chat-messages/<int:message_id>/user',
+          '/session-chat-messages/<int:session_message_id>/user')
 api.route(UserRelationship, 'user_notification', '/users/<int:id>/relationships/notifications')
 api.route(UserRelationship, 'user_feedback', '/users/<int:id>/relationships/feedbacks')
 api.route(UserRelationship, 'user_event_invoices', '/users/<int:id>/relationships/event-invoices')
@@ -221,7 +226,8 @@ api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>
           '/access-codes/<int:access_code_id>/event', '/email-notifications/<int:email_notification_id>/event',
           '/attendees/<int:attendee_id>/event', '/custom-forms/<int:custom_form_id>/event',
           '/orders/<order_identifier>/event', '/faqs/<int:faq_id>/event', '/faq-types/<int:faq_type_id>/event',
-          '/feedbacks/<int:feedback_id>/event', '/stripe-authorizations/<int:stripe_authorization_id>/event')
+          '/feedbacks/<int:feedback_id>/event', '/stripe-authorizations/<int:stripe_authorization_id>/event',
+          '/event-chat-messages/<int:message_id>/event')
 api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/tickets',
           '/events/<identifier>/relationships/tickets')
 api.route(EventRelationship, 'event_ticket_tag', '/events/<int:id>/relationships/ticket-tags',
@@ -272,6 +278,8 @@ api.route(EventRelationship, 'event_feedbacks', '/events/<int:id>/relationships/
           '/events/<identifier>/relationships/feedbacks')
 api.route(EventRelationship, 'event_orders', '/events/<int:id>/relationships/orders',
           '/events/<identifier>/relationships/orders')
+api.route(EventRelationship, 'event_event_chat_message', '/events/<int:id>/relationships/event-chat-messages',
+          '/events/<identifier>/relationships/event-chat-messages')
 api.route(EventRelationship, 'event_stripe_authorization', '/events/<int:id>/relationships/stripe-authorization',
           '/events/<identifier>/relationships/stripe-authorization')
 # Events -> roles:
@@ -297,13 +305,26 @@ api.route(MicrolocationRelationshipOptional, 'microlocation_session',
 api.route(MicrolocationRelationshipRequired, 'microlocation_event',
           '/microlocations/<int:id>/relationships/event')
 
+# event chat messages
+api.route(EventChatMessageListPost, 'event_chat_message_list_post', '/event-chat-messages')
+api.route(EventChatMessageList, 'event_chat_message_list', '/event-chat-messages',
+          '/events/<event_identifier>/event-chat-messages',
+          '/events/<int:event_id>/event-chat-messages')
+api.route(EventChatMessageDetail, 'event_chat_message_detail',
+          '/event-chat-messages/<int:id>')
+api.route(EventChatMessageRelationship, 'event_chat_message_user',
+          '/event-chat-messages/<int:id>/relationships/user')
+api.route(EventChatMessageRelationship, 'event_chat_message_event',
+          '/event-chat-messages/<int:id>/relationships/event')
+
 # sessions
 api.route(SessionListPost, 'session_list_post', '/sessions')
 api.route(SessionList, 'session_list', '/events/<int:event_id>/sessions',
           '/events/<event_identifier>/sessions', '/users/<int:user_id>/sessions',
           '/tracks/<int:track_id>/sessions', '/session-types/<int:session_type_id>/sessions',
           '/microlocations/<int:microlocation_id>/sessions', '/speakers/<int:speaker_id>/sessions')
-api.route(SessionDetail, 'session_detail', '/sessions/<int:id>', '/feedbacks/<int:feedback_id>/event')
+api.route(SessionDetail, 'session_detail', '/sessions/<int:id>', '/feedbacks/<int:feedback_id>/event',
+          '/session-chat-messages/<int:session_message_id>/session')
 api.route(SessionRelationshipOptional, 'session_microlocation',
           '/sessions/<int:id>/relationships/microlocation')
 api.route(SessionRelationshipOptional, 'session_track', '/sessions/<int:id>/relationships/track')
@@ -316,6 +337,8 @@ api.route(SessionRelationshipRequired, 'session_user',
 api.route(SessionRelationshipOptional, 'session_speaker',
           '/sessions/<int:id>/relationships/speakers')
 api.route(SessionRelationshipOptional, 'session_feedbacks', '/sessions/<int:id>/relationships/feedbacks')
+api.route(SessionRelationshipOptional, 'session_session_chat_message',
+          '/sessions/<int:id>/relationships/session-chat-messages')
 
 # social_links
 api.route(SocialLinkListPost, 'social_link_list_post', '/social-links')
@@ -324,6 +347,17 @@ api.route(SocialLinkList, 'social_link_list', '/events/<int:event_id>/social-lin
 api.route(SocialLinkDetail, 'social_link_detail', '/social-links/<int:id>')
 api.route(SocialLinkRelationship, 'social_link_event',
           '/social-links/<int:id>/relationships/event')
+
+# session chat messages
+api.route(SessionChatMessageListPost, 'session_chat_message_list_post', '/session-chat-messages')
+api.route(SessionChatMessageList, 'session_chat_message_list', '/session-chat-messages',
+          '/sessions/<int:session_id>/session-chat-messages')
+api.route(SessionChatMessageDetail, 'session_chat_message_detail',
+          '/session-chat-messages/<int:id>')
+api.route(SessionChatMessageRelationship, 'session_chat_message_user',
+          '/session-chat-messages/<int:id>/relationships/user')
+api.route(SessionChatMessageRelationship, 'session_chat_message_session',
+          '/session-chat-messages/<int:id>/relationships/session')
 
 # sponsors
 api.route(SponsorListPost, 'sponsor_list_post', '/sponsors')
