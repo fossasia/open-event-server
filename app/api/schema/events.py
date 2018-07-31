@@ -272,6 +272,14 @@ class EventSchemaPublic(SoftDeletionSchema):
                                 schema='UserSchemaPublic',
                                 type_='user',
                                 many=True)
+    event_chat_messages = Relationship(attribute='event_chat_messages',
+                                       self_view='v1.event_event_chat_message',
+                                       self_view_kwargs={'id': '<id>'},
+                                       related_view='v1.event_chat_message_list',
+                                       related_view_kwargs={'event_id': '<id>'},
+                                       schema='EventChatMessageSchema',
+                                       type_='event-chat-message',
+                                       many=True)
 
 
 class EventSchema(EventSchemaPublic):

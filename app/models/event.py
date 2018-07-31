@@ -108,6 +108,7 @@ class Event(SoftDeletionModel):
     event_topic = db.relationship('EventTopic', backref='event', foreign_keys=[event_topic_id])
     event_sub_topic = db.relationship(
         'EventSubTopic', backref='event', foreign_keys=[event_sub_topic_id])
+    event_chat_messages = db.relationship('EventChatMessage', backref="event")
     organizers = db.relationship('User',
                                  viewonly=True,
                                  secondary='join(UsersEventsRoles, Role,'
