@@ -419,12 +419,18 @@ class EventDetail(ResourceDetail):
 
     def before_patch(self, args, kwargs, data=None):
         """
-        before patch method to verify if the event location is provided before publishing the event
+        before patch method to verify if the event location is provided before publishing the event and checks that
+        the user is verified
         :param args:
         :param kwargs:
         :param data:
         :return:
         """
+        is_verified = current_identity.is_verified
+        if data.get('state', None) == 'published' and not is_verified:
+            raise ForbiddenException({'source': ''},
+                                     "Only verified accounts can publish events")
+
         if data.get('state', None) == 'published' and not data.get('location_name', None):
             raise ConflictException({'pointer': '/data/attributes/location-name'},
                                     "Location is required to publish the event")
@@ -465,7 +471,8 @@ class EventDetail(ResourceDetail):
                   'model': Event,
                   'methods': {
                       'before_update_object': before_update_object,
-                      'after_update_object': after_update_object
+                      'after_update_object': after_update_object,
+                      'before_patch': before_patch
                   }}
 
 
