@@ -19,8 +19,9 @@ class EventChatMessage(SoftDeletionModel):
     message = db.Column(db.String, nullable=False)
     timezone = db.Column(db.String, nullable=False, default="UTC")
     sent_at = db.Column(db.DateTime(timezone=True))
+    label = db.Column(db.String, nullable=False)
 
-    def __init__(self, user=None, event=None, message=None,
+    def __init__(self, user=None, event=None, message=None, label=None,
                  user_id=None, event_id=None, timezone=None):
         self.user = user
         self.message = message
@@ -28,6 +29,7 @@ class EventChatMessage(SoftDeletionModel):
         self.event_id = event_id
         self.timezone = timezone
         self.sent_at = datetime.now(pytz.utc)
+        self.label = label
 
     def __str__(self):
         return '%r as %r' % (self.user, self.message)
