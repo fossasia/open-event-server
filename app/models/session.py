@@ -36,8 +36,8 @@ class Session(SoftDeletionModel):
     speakers = db.relationship('Speaker',
                                secondary=speakers_sessions,
                                backref=db.backref('sessions', lazy='dynamic'))
-
     feedbacks = db.relationship('Feedback', backref="session")
+    session_chat_messages = db.relationship('SessionChatMessage', backref="session")
     slides_url = db.Column(db.String)
     video_url = db.Column(db.String)
     audio_url = db.Column(db.String)
