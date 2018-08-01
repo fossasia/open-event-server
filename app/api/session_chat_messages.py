@@ -34,7 +34,7 @@ class SessionChatMessageListPost(ResourceList):
             raise ForbiddenException({'source': ''}, 'Authorization required')
         require_relationship(['session'], data)
 
-        data['user_id'] = current_user.id
+        data['user'] = current_user.id
         session = db.session.query(Session).filter_by(id=int(data['session'])).first()
         event_id = session.event_id
         attendee = db.session.query(TicketHolder).filter_by(event_id=event_id, email=current_user.email).first()
