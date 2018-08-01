@@ -2,8 +2,8 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from flask import request
 from flask import current_app as app
 
-from flask_jwt import _jwt_required
-from app.api.events import Event
+from flask_jwt import current_identity as current_user, _jwt_required
+from app.models.event import Event
 from app.api.helpers.db import safe_query
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.exceptions import ForbiddenException
@@ -11,6 +11,7 @@ from app.api.helpers.utilities import require_relationship
 from app.api.schema.event_chat_message import EventChatMessageSchema
 from app.models import db
 from app.models.event_chat_message import EventChatMessage
+from app.models.speaker import Speaker
 
 
 class EventChatMessageListPost(ResourceList):
@@ -25,12 +26,34 @@ class EventChatMessageListPost(ResourceList):
         :param data:
         :return:
         """
-        require_relationship(['event', 'user'], data)
+        require_relationship(['event'], data)
 
         if 'Authorization' in request.headers:
             _jwt_required(app.config['JWT_DEFAULT_REALM'])
         else:
             raise ForbiddenException({'source': ''}, 'Only Authorized Users can chat in Event Chat Room')
+
+        data['user_id'] = current_user.id
+        event = db.session.query(Event).filter_by(id=int(data['event'])).first()
+        if event.state == 'draft':
+            raise ForbiddenException({'source': ''}, 'Event Chat Room is open for only published events')
+        speaker = db.session.query(Speaker).filter_by(event_id=event.id, user_id=current_user.id).first()
+        if speaker:
+            data['label'] = 'Speaker'
+        elif current_user.is_organizer(event.id):
+            data['label'] = 'Organizer'
+        elif current_user.is_coorganizer(event.id):
+            data['label'] = 'Co-organizer'
+        elif current_user.is_track_organizer(event.id):
+            data['label'] = 'Track Organizer'
+        elif current_user.is_moderator(event.id):
+            data['label'] = 'Moderator'
+        elif current_user.is_registrar(event.id):
+            data['label'] = 'Registrar'
+        elif current_user.is_attendee(event.id):
+            data['label'] = 'Attendee'
+        else:
+            data['label'] = 'User'
 
     view_kwargs = True
     schema = EventChatMessageSchema

@@ -1,5 +1,6 @@
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
+from marshmallow import validate
 
 from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
@@ -23,6 +24,8 @@ class EventChatMessageSchema(SoftDeletionSchema):
     message = fields.Str(required=True)
     sent_at = fields.DateTime(dump_only=True)
     timezone = fields.Str(required=True)
+    label = fields.Str(validate=validate.OneOf(choices=["Organizer", "Co-organizer", "Track Organizer",
+                       "Moderator",  "Registrar", "Speaker", "Attendee"]), allow_none=True)
     event = Relationship(attribute='event',
                          self_view='v1.event_chat_message_event',
                          self_view_kwargs={'id': '<id>'},
