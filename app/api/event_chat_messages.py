@@ -33,7 +33,7 @@ class EventChatMessageListPost(ResourceList):
         else:
             raise ForbiddenException({'source': ''}, 'Only Authorized Users can chat in Event Chat Room')
 
-        data['user_id'] = current_user.id
+        data['user'] = current_user.id
         event = db.session.query(Event).filter_by(id=int(data['event'])).first()
         if event.state == 'draft':
             raise ForbiddenException({'source': ''}, 'Event Chat Room is open for only published events')

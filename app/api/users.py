@@ -28,6 +28,7 @@ from app.models.speaker import Speaker
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 from app.models.users_events_role import UsersEventsRoles
+from app.models.event_chat_message import EventChatMessage
 
 user_misc_routes = Blueprint('user_misc', __name__, url_prefix='/v1')
 
@@ -101,6 +102,13 @@ class UserDetail(ResourceDetail):
             notification = safe_query(self, Notification, 'id', view_kwargs['notification_id'], 'notification_id')
             if notification.user_id is not None:
                 view_kwargs['id'] = notification.user_id
+            else:
+                view_kwargs['id'] = None
+
+        if view_kwargs.get('message_id') is not None:
+            event_chat_message = safe_query(self, EventChatMessage, 'id', view_kwargs['message_id'], 'message_id')
+            if event_chat_message.user_id is not None:
+                view_kwargs['id'] = event_chat_message.user_id
             else:
                 view_kwargs['id'] = None
 
