@@ -16182,7 +16182,7 @@ Notifications related to the various users about invites, ticket purchase, sessi
 | `message` | Message/content of the notification | string | - |
 | `is-read` | Yes/No for read notification | boolean (default: `false`) | - |
 | `received-at` | Notification recieved time | ISO 8601 (tz-aware) | - |
-| `subject-id` | ID of the related subject(For eg: session_id in case of a new session) | integer | - |
+| `actions` | Notification actions | list | - |
 
 ## Notifications Collection [/v1/users/{user_id}/notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -16225,7 +16225,6 @@ Get a list of Notifications.
                         "is-read": false,
                         "title": "example",
                         "deleted-at": null,
-                        "subject-id": "1",
                         "actions": []
                     },
                     "type": "notification",
@@ -16283,7 +16282,6 @@ Get a list of Notifications.
                         "received-at": "2017-06-23T04:40:37.239724+00:00",
                         "is-read": false,
                         "title": "example",
-                        "subject-id": "1",
                         "actions": []
                     },
                     "type": "notification",
@@ -16335,7 +16333,6 @@ Get a single notification.
                     "is-read": false,
                     "deleted-at": null,
                     "title": "example",
-                    "subject-id": "1",
                     "actions": []
                 },
                 "type": "notification",
@@ -16372,7 +16369,6 @@ Update a single notification with `id`.
                   "title": "example1",
                   "message": "example1",
                   "is-read": "true",
-                  "subject-id": "1",
                   "actions": []
                 },
                 "type": "notification",
@@ -16398,7 +16394,6 @@ Update a single notification with `id`.
                     "is-read": true,
                     "deleted-at": null,
                     "title": "example1",
-                    "subject-id": "1",
                     "actions": []
                 },
                 "type": "notification",

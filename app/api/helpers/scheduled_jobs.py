@@ -1,21 +1,22 @@
-from app.models.event import Event
-from app.models.order import Order
-from app.models.event_invoice import EventInvoice
-from app.models.ticket import Ticket
-from app.models.ticket_fee import get_fee
-from app.api.helpers.query import get_upcoming_events, get_user_event_roles_by_role_name
+import datetime
+
+import pytz
+from dateutil.relativedelta import relativedelta
+
+from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.mail import send_email_after_event, send_email_for_monthly_fee_payment, \
     send_followup_email_for_monthly_fee_payment
 from app.api.helpers.notification import send_notif_monthly_fee_payment, send_followup_notif_monthly_fee_payment, \
     send_notif_after_event
-from app.api.helpers.db import safe_query, save_to_db
+from app.api.helpers.query import get_upcoming_events, get_user_event_roles_by_role_name
 from app.api.helpers.utilities import monthdelta
-from app.settings import get_settings
 from app.models import db
-
-import datetime
-import pytz
-from dateutil.relativedelta import relativedelta
+from app.models.event import Event
+from app.models.event_invoice import EventInvoice
+from app.models.order import Order
+from app.models.ticket import Ticket
+from app.models.ticket_fee import get_fee
+from app.settings import get_settings
 
 
 def send_after_event_mail():
@@ -39,10 +40,10 @@ def send_after_event_mail():
             if current_time > event.ends_at and time_difference_minutes < 1440:
                 for speaker in speakers:
                     send_email_after_event(speaker.user.email, event.name, upcoming_event_links)
-                    send_notif_after_event(speaker.user, event.name, event.id)
+                    send_notif_after_event(speaker.user, event.name)
                 for organizer in organizers:
                     send_email_after_event(organizer.user.email, event.name, upcoming_event_links)
-                    send_notif_after_event(organizer.user.email, event.name, event.id)
+                    send_notif_after_event(organizer.user.email, event.name)
 
 
 def send_event_fee_notification():
@@ -100,7 +101,7 @@ def send_event_fee_notification():
                                                new_invoice.amount,
                                                app_name,
                                                link,
-                                               new_invoice.user_id)
+                                               new_invoice.event_id)
 
 
 def send_event_fee_notification_followup():
