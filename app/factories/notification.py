@@ -15,6 +15,3 @@ class NotificationFactory(factory.alchemy.SQLAlchemyModelFactory):
     message = common.string_
     is_read = False
     user_id = 2
-    subject_id = 1
-    notification_topic = 0
-

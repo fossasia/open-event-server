@@ -20,6 +20,7 @@ class NotificationActionSchema(SoftDeletionSchema):
     id = fields.Str(dump_only=True)
     action_type = fields.Str(allow_none=True, dump_only=True)
     subject = fields.Str(allow_none=True, dump_only=True)
+    subject_id = fields.Str(allow_none=True, dump_only=True)
 
 
 class NotificationSchema(SoftDeletionSchema):
@@ -43,7 +44,6 @@ class NotificationSchema(SoftDeletionSchema):
     received_at = fields.DateTime(dump_only=True)
     accept = fields.Str(allow_none=True, dump_only=True)
     is_read = fields.Boolean()
-    subject_id = fields.Str(allow_none=True, dump_only=True)
     actions = fields.List(cls_or_instance=fields.Nested(NotificationActionSchema), allow_none=True, dump_only=True)
     user = Relationship(attribute='user',
                         self_view='v1.notification_user',
