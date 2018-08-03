@@ -5,6 +5,8 @@ from app.api.ticket_fees import TicketFeeList, TicketFeeDetail
 from app.api.users import UserList, UserDetail, UserRelationship
 from app.api.user_emails import UserEmailListAdmin, UserEmailListPost, UserEmailList, UserEmailDetail, \
     UserEmailRelationship
+from app.api.user_favourite_events import UserFavouriteEventListPost, UserFavouriteEventList, \
+    UserFavouriteEventDetail, UserFavouriteEventRelationship
 from app.api.notifications import NotificationList, NotificationListAdmin, NotificationDetail, NotificationRelationship
 from app.api.email_notifications import EmailNotificationList, EmailNotificationListAdmin, EmailNotificationDetail, \
     EmailNotificationRelationshipOptional, EmailNotificationRelationshipRequired
@@ -85,7 +87,7 @@ api.route(UserDetail, 'user_detail', '/users/<int:id>', '/notifications/<int:not
           '/access-codes/<int:access_code_id>/marketer', '/email-notifications/<int:email_notification_id>/user',
           '/discount-codes/<int:discount_code_id>/marketer', '/sessions/<int:session_id>/creator',
           '/attendees/<int:attendee_id>/user', '/feedbacks/<int:feedback_id>/user',
-          '/alternate-emails/<int:user_email_id>/user')
+          '/alternate-emails/<int:user_email_id>/user', '/favourite-events/<int:user_favourite_event_id>/user')
 api.route(UserRelationship, 'user_notification', '/users/<int:id>/relationships/notifications')
 api.route(UserRelationship, 'user_feedback', '/users/<int:id>/relationships/feedbacks')
 api.route(UserRelationship, 'user_event_invoices', '/users/<int:id>/relationships/event-invoices')
@@ -103,6 +105,7 @@ api.route(UserRelationship, 'user_attendees', '/users/<int:id>/relationships/att
 api.route(UserRelationship, 'user_events', '/users/<int:id>/relationships/events')
 api.route(UserRelationship, 'user_orders', '/users/<int:id>/relationships/orders')
 api.route(UserRelationship, 'user_emails', '/users/<int:id>/relationships/alternate-emails')
+api.route(UserRelationship, 'user_user_favourite_events', '/users/<int:id>/relationships/favourite-events')
 api.route(UserRelationship, 'user_marketer_events', '/users/<int:id>/relationships/marketer-events')
 api.route(UserRelationship, 'user_sales_admin_events',
           '/users/<int:id>/relationships/sales-admin-events')
@@ -223,7 +226,8 @@ api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>
           '/access-codes/<int:access_code_id>/event', '/email-notifications/<int:email_notification_id>/event',
           '/attendees/<int:attendee_id>/event', '/custom-forms/<int:custom_form_id>/event',
           '/orders/<order_identifier>/event', '/faqs/<int:faq_id>/event', '/faq-types/<int:faq_type_id>/event',
-          '/feedbacks/<int:feedback_id>/event', '/stripe-authorizations/<int:stripe_authorization_id>/event')
+          '/feedbacks/<int:feedback_id>/event', '/stripe-authorizations/<int:stripe_authorization_id>/event',
+          '/user-favourite-events/<int:user_favourite_event_id>/event')
 api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/tickets',
           '/events/<identifier>/relationships/tickets')
 api.route(EventRelationship, 'event_ticket_tag', '/events/<int:id>/relationships/ticket-tags',
@@ -298,6 +302,17 @@ api.route(MicrolocationRelationshipOptional, 'microlocation_session',
           '/microlocations/<int:id>/relationships/sessions')
 api.route(MicrolocationRelationshipRequired, 'microlocation_event',
           '/microlocations/<int:id>/relationships/event')
+
+# user favourite events
+api.route(UserFavouriteEventListPost, 'user_favourite_event_list_post', '/user-favourite-events')
+api.route(UserFavouriteEventList, 'user_favourite_events_list', '/user-favourite-events',
+          '/users/<int:user_id>/user-favourite-events')
+api.route(UserFavouriteEventDetail, 'user_favourite_event_detail',
+          '/user-favourite-events/<int:id>')
+api.route(UserFavouriteEventRelationship, 'user_favourite_event_user',
+          '/user-favourite-events/<int:id>/relationships/user')
+api.route(UserFavouriteEventRelationship, 'user_favourite_event_event',
+          '/user-favourite-events/<int:id>/relationships/event')
 
 # sessions
 api.route(SessionListPost, 'session_list_post', '/sessions')

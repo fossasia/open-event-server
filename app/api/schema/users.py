@@ -197,6 +197,14 @@ class UserSchema(UserSchemaPublic):
         schema='EventSchema',
         many=True,
         type_='event')
+    favourite_events = Relationship(
+        self_view='v1.user_user_favourite_events',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.user_favourite_events_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='UserFavouriteEventSchema',
+        many=True,
+        type_='user-favourite-event')
     orders = Relationship(
         attribute='orders',
         self_view='v1.user_orders',
