@@ -2030,6 +2030,24 @@ def notification_get_detail(transaction):
         db.session.commit()
 
 
+@hooks.before("Notifications > Notification Detail with Actions > Notification Detail with Actions")
+def notification_get_detail_with_actions(transaction):
+    """
+    GET /notifications/1?include=actions
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        notification_action = NotificationActionFactory()
+        db.session.add(notification_action)
+        db.session.commit()
+
+        notification = NotificationFactory()
+        notification.actions = [notification_action]
+        db.session.add(notification)
+        db.session.commit()
+
+
 @hooks.before("Notifications > Notification Detail > Update Notification")
 def notification_patch(transaction):
     """

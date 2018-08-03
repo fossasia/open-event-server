@@ -120,6 +120,8 @@ api.route(NotificationList, 'notification_list', '/users/<int:user_id>/notificat
 api.route(NotificationDetail, 'notification_detail', '/notifications/<int:id>')
 api.route(NotificationRelationship, 'notification_user',
           '/notifications/<int:id>/relationships/user')
+api.route(NotificationRelationship, 'notification_actions',
+          '/notifications/<int:id>/relationships/actions')
 
 # email_notifications
 api.route(EmailNotificationListAdmin, 'email_notification_list_admin', '/email-notifications')
