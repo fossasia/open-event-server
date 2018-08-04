@@ -15,7 +15,7 @@ class EventsRolePermissionSchema(Schema):
         """
         Meta class for Notification API schema
         """
-        type_ = 'event-role-permissions'
+        type_ = 'event-role-permission'
         self_view = 'v1.events_role_detail'
         self_view_kwargs = {'id': '<id>'}
         self_view_many = 'v1.events_role_list'
