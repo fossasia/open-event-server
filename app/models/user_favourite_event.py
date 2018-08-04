@@ -1,7 +1,8 @@
 from app.models import db
+from app.models.base import SoftDeletionModel
 
 
-class UserFavouriteEvent(db.Model):
+class UserFavouriteEvent(SoftDeletionModel):
     __tablename__ = 'user_favourite_events'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -9,8 +10,9 @@ class UserFavouriteEvent(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     event = db.relationship("Event")
 
-    def __init__(self, user=None, event=None, user_id=None, event_id=None):
+    def __init__(self, user=None, deleted_at=None, event=None, user_id=None, event_id=None):
         self.user = user
         self.event = event
         self.user_id = user_id
         self.event_id = event_id
+        self.deleted_at = deleted_at

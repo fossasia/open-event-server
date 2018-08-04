@@ -1,12 +1,13 @@
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Schema, Relationship
+from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
 from utils.common import use_defaults
+from app.api.schema.base import SoftDeletionSchema
 
 
 @use_defaults()
-class UserFavouriteEventSchema(Schema):
+class UserFavouriteEventSchema(SoftDeletionSchema):
     """
     Api schema for User Favourite Event Model
     """
@@ -35,3 +36,4 @@ class UserFavouriteEventSchema(Schema):
                         related_view_kwargs={'user_favourite_event_id': '<id>'},
                         schema='UserSchema',
                         type_='user')
+    deleted_at = fields.DateTime(dump_only=True)
