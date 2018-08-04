@@ -51,7 +51,7 @@ def get_event_imported_actions(event_id, event_url):
     :return: actions
     """
     view_event_action = NotificationAction(
-        subject='event-import',
+        subject='event',  # subject is still 'event' since the action will be to view the imported event.
         link=event_url,
         subject_id=event_id,
         action_type='view'
@@ -85,7 +85,7 @@ def get_monthly_payment_follow_up_notification_actions(event_id, payment_url):
     :return: actions
     """
     view_invoice_action = NotificationAction(
-        subject='event',
+        subject='invoice',
         link=payment_url,
         subject_id=event_id,
         action_type='view'
@@ -118,7 +118,7 @@ def get_ticket_purchased_attendee_notification_actions(pdf_url):
     :return: actions
     """
     view_ticket_action = NotificationAction(
-        subject='order',
+        subject='tickets-pdf',
         link=pdf_url,
         action_type='view'
     )
