@@ -14,7 +14,7 @@ class NotificationActionSchema(SoftDeletionSchema):
         """
         Meta class for Notification Action API schema
         """
-        type_ = 'notification_action'
+        type_ = 'notification-action'
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
@@ -44,7 +44,10 @@ class NotificationSchema(SoftDeletionSchema):
     received_at = fields.DateTime(dump_only=True)
     accept = fields.Str(allow_none=True, dump_only=True)
     is_read = fields.Boolean()
-    actions = fields.List(cls_or_instance=fields.Nested(NotificationActionSchema), allow_none=True, dump_only=True)
+    actions = Relationship(attribute='actions',
+                           schema='NotificationActionSchema',
+                           many=True,
+                           type_='notification-action')
     user = Relationship(attribute='user',
                         self_view='v1.notification_user',
                         self_view_kwargs={'id': '<id>'},
