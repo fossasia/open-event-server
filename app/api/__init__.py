@@ -7,7 +7,8 @@ from app.api.user_emails import UserEmailListAdmin, UserEmailListPost, UserEmail
     UserEmailRelationship
 from app.api.user_favourite_events import UserFavouriteEventListPost, UserFavouriteEventList, \
     UserFavouriteEventDetail, UserFavouriteEventRelationship
-from app.api.notifications import NotificationList, NotificationListAdmin, NotificationDetail, NotificationRelationship
+from app.api.notifications import NotificationList, NotificationListAdmin, NotificationDetail,\
+    NotificationRelationship, NotificationActionDetail, NotificationActionRelationship, NotificationActionList
 from app.api.email_notifications import EmailNotificationList, EmailNotificationListAdmin, EmailNotificationDetail, \
     EmailNotificationRelationshipOptional, EmailNotificationRelationshipRequired
 from app.api.tickets import TicketList, TicketListPost, TicketDetail, TicketRelationshipRequired, \
@@ -120,11 +121,19 @@ api.route(UserEmailRelationship, 'user_emails_user', '/user-emails/<int:id>/rela
 # notifications
 api.route(NotificationListAdmin, 'notification_list_admin', '/notifications')
 api.route(NotificationList, 'notification_list', '/users/<int:user_id>/notifications')
-api.route(NotificationDetail, 'notification_detail', '/notifications/<int:id>')
+api.route(NotificationDetail, 'notification_detail', '/notifications/<int:id>',
+          '/notification-actions/<int:notification_action_id>/notification')
 api.route(NotificationRelationship, 'notification_user',
           '/notifications/<int:id>/relationships/user')
 api.route(NotificationRelationship, 'notification_actions',
           '/notifications/<int:id>/relationships/actions')
+
+# notification actions
+api.route(NotificationActionList, 'notification_actions_list',
+          '/notifications/<int:notification_id>/notification-actions')
+api.route(NotificationActionDetail, 'notification_action_detail', '/notification-actions/<int:id>')
+api.route(NotificationActionRelationship, 'notification_actions_notification',
+          '/notification-actions/<int:id>/relationships/notification')
 
 # email_notifications
 api.route(EmailNotificationListAdmin, 'email_notification_list_admin', '/email-notifications')
