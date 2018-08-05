@@ -139,14 +139,14 @@ class PayPalPaymentsManager(object):
         # Use Sandbox by default.
         settings = get_settings()
         paypal_mode = 'sandbox'
-        paypal_client = settings['paypal_sandbox_client']
-        paypal_secret = settings['paypal_sandbox_secret']
+        paypal_client = settings.get('paypal_sandbox_client', None)
+        paypal_secret = settings.get('paypal_sandbox_secret', None)
 
         # Switch to production if paypal_mode is production.
         if settings['paypal_mode'] == Environment.PRODUCTION:
             paypal_mode = 'live'
-            paypal_client = settings['paypal_client']
-            paypal_secret = settings['paypal_secret']
+            paypal_client = settings.get('paypal_client', None)
+            paypal_secret = settings.get('paypal_secret', None)
 
         if not paypal_client or not paypal_secret:
             raise ConflictException({'pointer': ''}, "Payments through Paypal hasn't been configured on the platform")
