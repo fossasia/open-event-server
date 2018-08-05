@@ -38,7 +38,7 @@ def set_expiry_for_order(order, override=False):
     """
     if order and not order.paid_via and (override or (order.status == 'pending' and (
                 order.created_at +
-                timedelta(minutes=ticketing.TicketingManager.get_order_expiry())) < datetime.now(timezone.utc))):
+                timedelta(minutes=order.event.order_expiry_time)) < datetime.now(timezone.utc))):
             order.status = 'expired'
             delete_related_attendees_for_order(order)
             save_to_db(order)
