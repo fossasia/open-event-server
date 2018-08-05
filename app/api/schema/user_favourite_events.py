@@ -36,4 +36,3 @@ class UserFavouriteEventSchema(SoftDeletionSchema):
                         related_view_kwargs={'user_favourite_event_id': '<id>'},
                         schema='UserSchema',
                         type_='user')
-    deleted_at = fields.DateTime(dump_only=True)
