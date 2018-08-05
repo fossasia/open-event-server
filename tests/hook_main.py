@@ -2033,7 +2033,7 @@ def notification_get_detail(transaction):
 @hooks.before("Notifications > Notification Detail with Actions > Notification Detail with Actions")
 def notification_get_detail_with_actions(transaction):
     """
-    GET /notifications/1?include=actions
+    GET /notifications/1?include=notification_actions
     :param transaction:
     :return:
     """
