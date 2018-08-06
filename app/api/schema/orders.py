@@ -9,6 +9,15 @@ from app.api.schema.base import SoftDeletionSchema
 from utils.common import use_defaults
 
 
+class OnSiteTicketSchema(SoftDeletionSchema):
+    class Meta:
+        type_ = 'on-site-ticket'
+        inflect = dasherize
+
+    id = fields.Str(load_only=True, required=True)
+    quantity = fields.Str(load_only=True, required=True)
+
+
 @use_defaults()
 class OrderSchema(SoftDeletionSchema):
     class Meta:
@@ -47,8 +56,10 @@ class OrderSchema(SoftDeletionSchema):
     completed_at = fields.DateTime(dump_only=True)
     created_at = fields.DateTime(dump_only=True)
     transaction_id = fields.Str(dump_only=True)
-    payment_mode = fields.Str(default="free",
-                              validate=validate.OneOf(choices=["free", "stripe", "paypal"]), allow_none=True)
+    payment_mode = fields.Str(
+                            default="free",
+                            validate=validate.OneOf(choices=["free", "stripe", "paypal", "bank", "cheque", "onsite"]),
+                            allow_none=True)
     paid_via = fields.Str(dump_only=True)
     brand = fields.Str(dump_only=True)
     exp_month = fields.Str(dump_only=True)
@@ -60,6 +71,9 @@ class OrderSchema(SoftDeletionSchema):
     cancel_note = fields.Str(allow_none=True)
     order_notes = fields.Str(allow_none=True)
     tickets_pdf_url = fields.Url(dump_only=True)
+
+    # only used in the case of an on site attendee.
+    on_site_tickets = fields.List(cls_or_instance=fields.Nested(OnSiteTicketSchema), load_only=True, allow_none=True)
 
     attendees = Relationship(attribute='ticket_holders',
                              self_view='v1.order_attendee',

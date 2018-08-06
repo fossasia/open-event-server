@@ -3,6 +3,7 @@ import base64
 from flask import Blueprint, request, jsonify, abort, make_response
 from flask_jwt import current_identity as current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from sqlalchemy.orm.exc import NoResultFound
 
 from app import get_settings
 from app.api.bootstrap import api
@@ -181,7 +182,12 @@ class UserDetail(ResourceDetail):
             data['icon_image_url'] = uploaded_images['icon_image_url']
 
         if data.get('email') and data['email'] != user.email:
-            view_kwargs['email_changed'] = user.email
+            try:
+                db.session.query(User).filter_by(email=data['email']).one()
+            except NoResultFound:
+                view_kwargs['email_changed'] = user.email
+            else:
+                raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")
 
         if has_access('is_super_admin') and data.get('is_admin') != user.is_admin:
             user.is_admin = not user.is_admin
@@ -208,7 +214,7 @@ class UserDetail(ResourceDetail):
                          DiscountCode, EmailNotification, Speaker, User],
                   fetch_key_url="notification_id, feedback_id, users_events_role_id, session_id, \
                   event_invoice_id, access_code_id, discount_code_id, email_notification_id, speaker_id, id",
-                                     leave_if=lambda a: a.get('attendee_id')), )
+                  leave_if=lambda a: a.get('attendee_id')), )
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User,

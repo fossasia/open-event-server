@@ -29,9 +29,32 @@ MONTHLY_PAYMENT_NOTIF = 'Monthly Payment Notification'
 MONTHLY_PAYMENT_FOLLOWUP_NOTIF = 'Monthly Payment Follow Up Notification'
 
 
+class NotificationAction(db.Model):
+    """
+        Model for storing user notification actions.
+    """
+    __tablename__ = 'notification_actions'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    action_type = db.Column(db.String)
+    subject = db.Column(db.String)
+    subject_id = db.Column(db.Integer)  # Contains the ID of the related subject, eg. session_id in case of new session.
+    link = db.Column(db.String)  # Contains the link if required to take action. Null in other cases.
+
+    notification_id = db.Column(db.Integer, db.ForeignKey('notifications.id', ondelete='CASCADE'))
+    notification = db.relationship('Notification', backref='actions', foreign_keys=[notification_id])
+
+    def __init__(self, action_type=None, subject=None, subject_id=None, link=None):
+        self.action_type = action_type
+        self.subject = subject
+        self.subject_id = subject_id
+        self.link = link
+
+
 class Notification(SoftDeletionModel):
     """
-    Model for storing user notifications.
+        Model for storing user notifications.
     """
     __tablename__ = 'notifications'
 
@@ -42,15 +65,13 @@ class Notification(SoftDeletionModel):
 
     title = db.Column(db.String)
     message = db.Column(db.Text)
-    action = db.Column(db.String)
     received_at = db.Column(db.DateTime(timezone=True))
     is_read = db.Column(db.Boolean)
 
-    def __init__(self, user_id=None, title=None, message=None, action=None, is_read=False, deleted_at=None):
+    def __init__(self, user_id=None, title=None, message=None, is_read=False, deleted_at=None):
         self.user_id = user_id
         self.title = title
         self.message = message
-        self.action = action
         self.received_at = datetime.now(pytz.utc)
         self.is_read = is_read
         self.deleted_at = deleted_at

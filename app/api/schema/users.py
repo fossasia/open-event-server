@@ -51,12 +51,10 @@ class UserSchema(UserSchemaPublic):
     google_plus_url = fields.Url(allow_none=True)
     password = fields.Str(required=True, load_only=True)
     is_super_admin = fields.Boolean(dump_only=True)
-    is_admin = fields.Boolean(dump_only=True)
+    is_admin = fields.Boolean()
     facebook_id = fields.Integer(dump_only=True)
-
-    is_sales_admin = fields.Boolean(dump_only=True)
-    is_marketer = fields.Boolean(dump_only=True)
-
+    is_sales_admin = fields.Boolean()
+    is_marketer = fields.Boolean()
     is_user_organizer = fields.Boolean(dump_only=True)
     is_user_coorganizer = fields.Boolean(dump_only=True)
     is_user_track_organizer = fields.Boolean(dump_only=True)
@@ -199,6 +197,14 @@ class UserSchema(UserSchemaPublic):
         schema='EventSchema',
         many=True,
         type_='event')
+    favourite_events = Relationship(
+        self_view='v1.user_user_favourite_events',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.user_favourite_events_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='UserFavouriteEventSchema',
+        many=True,
+        type_='user-favourite-event')
     orders = Relationship(
         attribute='orders',
         self_view='v1.user_orders',

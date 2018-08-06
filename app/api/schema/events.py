@@ -107,7 +107,10 @@ class EventSchemaPublic(SoftDeletionSchema):
     ical_url = fields.Url(dump_only=True)
     xcal_url = fields.Url(dump_only=True)
     average_rating = fields.Float(dump_only=True)
-    order_expiry_time = fields.Integer(allow_none=True, default=10)
+    order_expiry_time = fields.Integer(allow_none=True, default=10, validate=lambda n: 1 <= n <= 60)
+    refund_policy = fields.String(dump_only=True,
+                                  default='All sales are final. No refunds shall be issued in any case.')
+    is_stripe_linked = fields.Boolean(dump_only=True, allow_none=True, default=False)
 
     tickets = Relationship(attribute='tickets',
                            self_view='v1.event_ticket',
@@ -240,6 +243,13 @@ class EventSchemaPublic(SoftDeletionSchema):
                                related_view_kwargs={'event_id': '<id>'},
                                schema='EventTopicSchema',
                                type_='event-topic')
+    event_orga = Relationship(attribute='events_orga',
+                              self_view='v1.events_orga',
+                              self_view_kwargs={'id': '<id>'},
+                              related_view='v1.event_orga_detail',
+                              related_view_kwargs={'event_id': '<id>'},
+                              schema='EventOrgaSchema',
+                              type='event-orga')
     event_sub_topic = Relationship(attribute='event_sub_topic',
                                    self_view='v1.event_event_sub_topic',
                                    self_view_kwargs={'id': '<id>'},

@@ -39,13 +39,13 @@ class AdminStatisticsUserSchema(Schema):
         return get_count(User.query.filter_by(is_super_admin=True))
 
     def admin_count(self, obj):
-        return get_count(User.query.filter_by(is_admin=True))
+        return get_count(User.query.filter_by(is_admin=True, is_super_admin=False))
 
     def verified_count(self, obj):
-        return get_count(User.query.filter_by(is_verified=True))
+        return get_count(User.query.filter_by(is_verified=True, is_super_admin=False, is_admin=False))
 
     def unverified_count(self, obj):
-        return get_count(User.query.filter_by(is_verified=False))
+        return get_count(User.query.filter_by(is_verified=False, is_super_admin=False, is_admin=False))
 
     def get_all_user_roles(self, role_name):
         role = Role.query.filter_by(name=role_name).first()

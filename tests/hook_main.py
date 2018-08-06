@@ -15,6 +15,7 @@ from populate_db import populate_without_print
 
 # imports from factories
 from app.factories.user import UserFactory
+from app.factories.notification_action import NotificationActionFactory
 from app.factories.notification import NotificationFactory
 from app.factories.event import EventFactoryBasic
 from app.factories.social_link import SocialLinkFactory
@@ -208,7 +209,12 @@ def user_notification(transaction):
     :return:
     """
     with stash['app'].app_context():
+        notification_action = NotificationActionFactory()
+        db.session.add(notification_action)
+        db.session.commit()
+
         notification = NotificationFactory()
+        notification.actions = [notification_action]
         db.session.add(notification)
         db.session.commit()
 
@@ -1978,7 +1984,12 @@ def notification_get_list(transaction):
     :return:
     """
     with stash['app'].app_context():
+        notification_action = NotificationActionFactory()
+        db.session.add(notification_action)
+        db.session.commit()
+
         notification = NotificationFactory()
+        notification.actions = [notification_action]
         db.session.add(notification)
         db.session.commit()
 
@@ -1991,7 +2002,12 @@ def notification_get_admin_list(transaction):
     :return:
     """
     with stash['app'].app_context():
+        notification_action = NotificationActionFactory()
+        db.session.add(notification_action)
+        db.session.commit()
+
         notification = NotificationFactory()
+        notification.actions = [notification_action]
         db.session.add(notification)
         db.session.commit()
 
@@ -2004,7 +2020,30 @@ def notification_get_detail(transaction):
     :return:
     """
     with stash['app'].app_context():
+        notification_action = NotificationActionFactory()
+        db.session.add(notification_action)
+        db.session.commit()
+
         notification = NotificationFactory()
+        notification.actions = [notification_action]
+        db.session.add(notification)
+        db.session.commit()
+
+
+@hooks.before("Notifications > Notification Detail with Actions > Notification Detail with Actions")
+def notification_get_detail_with_actions(transaction):
+    """
+    GET /notifications/1?include=notification_actions
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        notification_action = NotificationActionFactory()
+        db.session.add(notification_action)
+        db.session.commit()
+
+        notification = NotificationFactory()
+        notification.actions = [notification_action]
         db.session.add(notification)
         db.session.commit()
 
@@ -2017,7 +2056,12 @@ def notification_patch(transaction):
     :return:
     """
     with stash['app'].app_context():
+        notification_action = NotificationActionFactory()
+        db.session.add(notification_action)
+        db.session.commit()
+
         notification = NotificationFactory()
+        notification.actions = [notification_action]
         db.session.add(notification)
         db.session.commit()
 
@@ -2030,7 +2074,12 @@ def notification_delete(transaction):
     :return:
     """
     with stash['app'].app_context():
+        notification_action = NotificationActionFactory()
+        db.session.add(notification_action)
+        db.session.commit()
+
         notification = NotificationFactory()
+        notification.actions = [notification_action]
         db.session.add(notification)
         db.session.commit()
 
@@ -3858,6 +3907,16 @@ def orders_get_collection(transaction):
 def create_order(transaction):
     """
     GET /orders
+    :param transaction:
+    :return:
+    """
+    transaction['skip'] = True
+
+
+@hooks.before("Orders > Create Order with on site Attendees > Create Order with on site Attendees")
+def create_order_with_on_site_attendee(transaction):
+    """
+    GET /orders?onsite=true
     :param transaction:
     :return:
     """

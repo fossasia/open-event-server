@@ -2,7 +2,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query, get_count
+from app.api.helpers.db import safe_query, get_count, save_to_db
 from app.api.helpers.exceptions import ForbiddenException, ConflictException, UnprocessableEntity
 from app.api.helpers.payment import StripePaymentsManager
 from app.api.helpers.permission_manager import has_access
@@ -56,13 +56,26 @@ class StripeAuthorizationListPost(ResourceList):
             raise ConflictException({'pointer': '/data/relationships/event'},
                                     "Stripe Authorization already exists for this event")
 
+    def after_create_object(self, stripe_authorization, data, view_kwargs):
+        """
+        after create object method for StripeAuthorizationListPost Class
+        :param stripe_authorization: Stripe authorization created from mashmallow_jsonapi
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
+        event = db.session.query(Event).filter_by(id=int(data['event'])).one()
+        event.is_stripe_linked = True
+        save_to_db(event)
+
     schema = StripeAuthorizationSchema
     decorators = (jwt_required, )
     methods = ['POST']
     data_layer = {'session': db.session,
                   'model': StripeAuthorization,
                   'methods': {
-                      'before_create_object': before_create_object
+                      'before_create_object': before_create_object,
+                      'after_create_object': after_create_object
                   }}
 
 
@@ -85,13 +98,23 @@ class StripeAuthorizationDetail(ResourceDetail):
                 safe_query(self, StripeAuthorization, 'event_id', view_kwargs['event_id'], 'event_id')
             view_kwargs['id'] = stripe_authorization.id
 
+    def after_delete_object(self, stripe_authorization, view_kwargs):
+        """Make work after delete object
+        :param stripe_authorization: stripe authorization.
+        :param dict view_kwargs: kwargs from the resource view
+        """
+        event = stripe_authorization.event
+        event.is_stripe_linked = False
+        save_to_db(event)
+
     decorators = (api.has_permission('is_coorganizer', fetch="event_id",
                                      fetch_as="event_id", model=StripeAuthorization),)
     schema = StripeAuthorizationSchema
     data_layer = {'session': db.session,
                   'model': StripeAuthorization,
                   'methods': {
-                      'before_get_object': before_get_object
+                      'before_get_object': before_get_object,
+                      'after_delete_object': after_delete_object
                   }}
 
 

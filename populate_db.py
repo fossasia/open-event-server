@@ -74,6 +74,8 @@ def create_settings():
         stripe_secret_key = env('STRIPE_SECRET_KEY', default=None)
         stripe_publishable_key = env('STRIPE_PUBLISHABLE_KEY', default=None)
         stripe_client_id = env('STRIPE_CLIENT_ID', default=None)
+        paypal_sandbox_client = env('PAYPAL_SANDBOX_CLIENT', default=None)
+        paypal_sandbox_secret = env('PAYPAL_SANDBOX_SECRET', default=None)
         fb_client_id = env('FACEBOOK_CLIENT_ID', default=None)
         fb_client_secret = env('FACEBOOK_CLIENT_SECRET', default=None)
         google_client_id = env('GOOGLE_CLIENT_ID', default=None)
@@ -87,6 +89,8 @@ def create_settings():
         setting.stripe_client_id = stripe_client_id
         setting.stripe_publishable_key = stripe_publishable_key
         setting.stripe_secret_key = stripe_secret_key
+        setting.paypal_sandbox_client = paypal_sandbox_client
+        setting.paypal_sandbox_secret = paypal_sandbox_secret
         setting.fb_client_id = fb_client_id
         setting.fb_client_secret = fb_client_secret
         setting.google_client_id = google_client_id

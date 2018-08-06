@@ -2,26 +2,25 @@ import base64
 import random
 import string
 
+import requests
 from flask import request, jsonify, make_response, Blueprint
 from flask_jwt import current_identity as current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
-import requests
 
 from app import get_settings
 from app.api.helpers.db import save_to_db, get_count
+from app.api.helpers.errors import UnprocessableEntityError, NotFoundError, BadRequestError
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_with_action, \
     send_email_confirmation
 from app.api.helpers.notification import send_notification_with_action
-
+from app.api.helpers.third_party_auth import GoogleOAuth, FbOAuth, TwitterOAuth, InstagramOAuth
 from app.api.helpers.utilities import get_serializer, str_generator
+from app.models import db
 from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE, \
     USER_REGISTER_WITH_PASSWORD
 from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
-from app.models import db
-from app.api.helpers.errors import UnprocessableEntityError, NotFoundError, BadRequestError
-from app.api.helpers.third_party_auth import GoogleOAuth, FbOAuth, TwitterOAuth, InstagramOAuth
 
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
 

@@ -17,10 +17,10 @@ def create_custom_forms_for_attendees(event):
     form_type = 'text'
 
     first_name_form = CustomForms(form=form, is_required=is_required, is_included=is_included, is_fixed=is_fixed,
-                                  event_id=event_id, type=form_type, field_identifier='firstName')
+                                  event_id=event_id, type=form_type, field_identifier='firstname')
 
     last_name_form = CustomForms(form=form, is_required=is_required, is_included=is_included, is_fixed=is_fixed,
-                                 event_id=event_id, type=form_type, field_identifier='lastName')
+                                 event_id=event_id, type=form_type, field_identifier='lastname')
 
     email_form = CustomForms(form=form, is_required=is_required, is_included=is_included, is_fixed=is_fixed,
                              event_id=event_id, type='email', field_identifier='email')

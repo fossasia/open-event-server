@@ -47,6 +47,7 @@ from app.models.ticket import Ticket
 from app.models.ticket import TicketTag
 from app.models.ticket_holder import TicketHolder
 from app.models.track import Track
+from app.models.user_favourite_event import UserFavouriteEvent
 from app.models.user import User, ATTENDEE, ORGANIZER, COORGANIZER
 from app.models.users_events_role import UsersEventsRoles
 from app.models.stripe_authorization import StripeAuthorization
@@ -181,6 +182,14 @@ def get_id(view_kwargs):
         sponsor = safe_query(db, Sponsor, 'id', view_kwargs['sponsor_id'], 'sponsor_id')
         if sponsor.event_id is not None:
             view_kwargs['id'] = sponsor.event_id
+        else:
+            view_kwargs['id'] = None
+
+    if view_kwargs.get('user_favourite_event_id') is not None:
+        user_favourite_event = safe_query(db, UserFavouriteEvent, 'id',
+                                          view_kwargs['user_favourite_event_id'], 'user_favourite_event_id')
+        if user_favourite_event.event_id is not None:
+            view_kwargs['id'] = user_favourite_event.event_id
         else:
             view_kwargs['id'] = None
 
@@ -419,12 +428,18 @@ class EventDetail(ResourceDetail):
 
     def before_patch(self, args, kwargs, data=None):
         """
-        before patch method to verify if the event location is provided before publishing the event
+        before patch method to verify if the event location is provided before publishing the event and checks that
+        the user is verified
         :param args:
         :param kwargs:
         :param data:
         :return:
         """
+        is_verified = current_identity.is_verified
+        if data.get('state', None) == 'published' and not is_verified:
+            raise ForbiddenException({'source': ''},
+                                     "Only verified accounts can publish events")
+
         if data.get('state', None) == 'published' and not data.get('location_name', None):
             raise ConflictException({'pointer': '/data/attributes/location-name'},
                                     "Location is required to publish the event")
@@ -465,7 +480,8 @@ class EventDetail(ResourceDetail):
                   'model': Event,
                   'methods': {
                       'before_update_object': before_update_object,
-                      'after_update_object': after_update_object
+                      'after_update_object': after_update_object,
+                      'before_patch': before_patch
                   }}
 
 

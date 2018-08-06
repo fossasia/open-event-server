@@ -16,7 +16,6 @@ from app.models.email_notification import EmailNotification
 from app.models.feedback import Feedback
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.user import ATTENDEE, ORGANIZER
-from app.views.redis_store import redis_store
 from app.models.event_topic import EventTopic
 from app.models.search import sync
 
@@ -77,6 +76,8 @@ class Event(SoftDeletionModel):
     event_topic_id = db.Column(db.Integer, db.ForeignKey('event_topics.id', ondelete='CASCADE'))
     event_sub_topic_id = db.Column(db.Integer, db.ForeignKey(
         'event_sub_topics.id', ondelete='CASCADE'))
+    events_orga_id = db.Column(db.Integer, db.ForeignKey(
+        'events_orga.id', ondelete='CASCADE'))
     ticket_url = db.Column(db.String)
     db.UniqueConstraint('track.name')
     code_of_conduct = db.Column(db.String)
@@ -99,7 +100,9 @@ class Event(SoftDeletionModel):
     ical_url = db.Column(db.String)
     xcal_url = db.Column(db.String)
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
-    order_expiry_time = db.Column(db.Integer)
+    refund_policy = db.Column(db.String, default='All sales are final. No refunds shall be issued in any case.')
+    order_expiry_time = db.Column(db.Integer, default=10)
+    is_stripe_linked = db.Column(db.Boolean, default=False)
     discount_code_id = db.Column(db.Integer, db.ForeignKey(
         'discount_codes.id', ondelete='CASCADE'))
     discount_code = db.relationship('DiscountCode', backref='events', foreign_keys=[discount_code_id])
@@ -107,6 +110,8 @@ class Event(SoftDeletionModel):
     event_topic = db.relationship('EventTopic', backref='event', foreign_keys=[event_topic_id])
     event_sub_topic = db.relationship(
         'EventSubTopic', backref='event', foreign_keys=[event_sub_topic_id])
+    events_orga = db.relationship(
+        'EventOrgaModel', backref='event', foreign_keys=[events_orga_id])
     organizers = db.relationship('User',
                                  viewonly=True,
                                  secondary='join(UsersEventsRoles, Role,'
@@ -205,7 +210,9 @@ class Event(SoftDeletionModel):
                  is_sponsors_enabled=None,
                  stripe_authorization=None,
                  tax=None,
-                 order_expiry_time=None):
+                 order_expiry_time=None,
+                 refund_policy='All sales are final. No refunds shall be issued in any case.',
+                 is_stripe_linked=False):
 
         self.name = name
         self.logo_url = logo_url
@@ -263,6 +270,8 @@ class Event(SoftDeletionModel):
         self.stripe_authorization = stripe_authorization
         self.tax = tax
         self.order_expiry_time = order_expiry_time
+        self.refund_policy = refund_policy
+        self.is_stripe_linked = is_stripe_linked
 
     def __repr__(self):
         return '<Event %r>' % self.name

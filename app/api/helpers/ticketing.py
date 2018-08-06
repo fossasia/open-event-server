@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask_login import current_user
+from flask_jwt import current_identity as current_user
 
 from app.api.helpers.db import save_to_db, get_count
 from app.api.helpers.exceptions import ConflictException
@@ -30,8 +30,8 @@ class TicketingManager(object):
             ticket_holder = TicketHolder.query.filter_by(id=holder).one()
             if ticket_holder.ticket.id in discount_code.tickets.split(","):
                 qty += 1
-        if (qty+old_holders) <= discount_code.tickets_number and \
-           discount_code.min_quantity <= qty <= discount_code.max_quantity:
+        if (qty + old_holders) <= discount_code.tickets_number and \
+            discount_code.min_quantity <= qty <= discount_code.max_quantity:
             return True
 
         return False
@@ -104,8 +104,7 @@ class TicketingManager(object):
         # charge.paid is true if the charge succeeded, or was successfully authorized for later capture.
         if charge.paid:
             # update the order in the db.
-            order.paid_via = 'stripe'
-            order.payment_mode = charge.source.object
+            order.paid_via = charge.source.object
             order.brand = charge.source.brand
             order.exp_month = charge.source.exp_month
             order.exp_year = charge.source.exp_year
@@ -124,7 +123,8 @@ class TicketingManager(object):
 
             order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
             for organizer in order.event.organizers:
-                send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name)
+                send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
+                                                     order.id)
 
             return True, 'Charge successful'
         else:
@@ -172,7 +172,8 @@ class TicketingManager(object):
 
             order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
             for organizer in order.event.organizers:
-                send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name)
+                send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
+                                                     order.id)
 
             return True, 'Charge successful'
         else:
