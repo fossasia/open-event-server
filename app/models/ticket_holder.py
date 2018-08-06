@@ -41,6 +41,7 @@ class TicketHolder(SoftDeletionModel):
     ticket = db.relationship('Ticket', backref='ticket_holders')
     is_checked_in = db.Column(db.Boolean, default=False)
     is_checked_out = db.Column(db.Boolean, default=False)
+    device_name_checkin = db.Column(db.String)
     checkin_times = db.Column(db.String)
     checkout_times = db.Column(db.String)
     attendee_notes = db.Column(db.String)
@@ -77,6 +78,7 @@ class TicketHolder(SoftDeletionModel):
                  checkin_times=None,
                  checkout_times=None,
                  is_checked_out=False,
+                 device_name_checkin=None,
                  attendee_notes=None,
                  order_id=None,
                  pdf_url=None,
@@ -111,6 +113,7 @@ class TicketHolder(SoftDeletionModel):
         self.checkin_times = checkin_times
         self.checkout_times = checkout_times
         self.is_checked_out = is_checked_out
+        self.device_name_checkin = device_name_checkin
         self.attendee_notes = attendee_notes
         self.pdf_url = pdf_url
         self.event_id = event_id
