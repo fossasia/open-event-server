@@ -241,7 +241,7 @@ scheduler.start()
 
 @app.errorhandler(500)
 def internal_server_error(error):
-    if current_app.config['PROPOGATE_ERROR'] is True:
+    if current_app.config['DEVELOPMENT'] or current_app.config['PROPOGATE_ERROR']:
         exc = JsonApiException({'pointer': ''}, str(error))
     else:
         exc = JsonApiException({'pointer': ''}, 'Unknown error')
