@@ -35,6 +35,7 @@ from app.api.role_invites import RoleInviteListPost, RoleInviteList, RoleInviteD
 from app.api.event_image_sizes import EventImageSizeDetail
 from app.api.speaker_image_sizes import SpeakerImageSizeDetail
 from app.api.roles import RoleList, RoleDetail
+from app.api.custom_system_roles import CustomSystemRoleList, CustomSystemRoleDetail
 from app.api.session_types import SessionTypeList, SessionTypeListPost, SessionTypeDetail, \
     SessionTypeRelationshipRequired, SessionTypeRelationshipOptional
 from app.api.event_copyright import EventCopyrightListPost, EventCopyrightDetail, EventCopyrightRelationshipRequired
@@ -178,6 +179,10 @@ api.route(EventsRolePermissionRelationship, 'event_role_service',
 # roles
 api.route(RoleList, 'role_list', '/roles')
 api.route(RoleDetail, 'role_detail', '/roles/<int:id>', '/role-invites/<int:role_invite_id>/role')
+
+# custom system roles
+api.route(CustomSystemRoleList, 'custom_system_role_list', '/custom-system-roles')
+api.route(CustomSystemRoleDetail, 'custom_system_role_detail', '/custom-system-roles/<int:id>')
 
 # role_invites
 api.route(RoleInviteListPost, 'role_invite_list_post', '/role-invites')
