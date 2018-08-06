@@ -45,6 +45,8 @@ from app.api.pages import PageList, PageDetail
 from app.api.user_permission import UserPermissionList, UserPermissionDetail
 from app.api.events_role_permission import EventsRolePermissionList, EventsRolePermissionDetail, \
     EventsRolePermissionRelationship
+from app.api.panel_permissions import PanelPermissionList, PanelPermissionDetail, \
+    PanelPermissionRelationship
 from app.api.message_settings import MessageSettingsList, MessageSettingsDetail
 from app.api.tax import TaxList, TaxDetail, TaxRelationship
 from app.api.settings import SettingDetail
@@ -187,13 +189,20 @@ api.route(EventsRolePermissionRelationship, 'event_role_role', '/event-role-perm
 api.route(EventsRolePermissionRelationship, 'event_role_service',
           '/event-role-permissions/<int:id>/relationships/service')
 
+# panel-permissions
+api.route(PanelPermissionList, 'panel_permission_list', '/panel-permissions')
+api.route(PanelPermissionDetail, 'panel_permission_detail', '/panel-permissions/<int:id>')
+api.route(PanelPermissionRelationship, 'panel_permission_role', '/panel-permissions/<int:id>/relationships/role')
+
+
 # roles
 api.route(RoleList, 'role_list', '/roles')
 api.route(RoleDetail, 'role_detail', '/roles/<int:id>', '/role-invites/<int:role_invite_id>/role')
 
 # custom system roles
 api.route(CustomSystemRoleList, 'custom_system_role_list', '/custom-system-roles')
-api.route(CustomSystemRoleDetail, 'custom_system_role_detail', '/custom-system-roles/<int:id>')
+api.route(CustomSystemRoleDetail, 'custom_system_role_detail', '/custom-system-roles/<int:id>',
+          '/panel-permissions/<int:role_id>/custom-system-role')
 
 # role_invites
 api.route(RoleInviteListPost, 'role_invite_list_post', '/role-invites')
