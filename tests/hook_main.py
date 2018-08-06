@@ -54,6 +54,7 @@ from app.factories.stripe_authorization import StripeAuthorizationFactory
 from app.factories.mail import MailFactory
 from app.factories.order import OrderFactory
 from app.factories.faq_type import FaqTypeFactory
+from app.factories.user_email import UserEmailFactory
 from app.factories.feedback import FeedbackFactory
 from app.factories.service import ServiceFactory
 from app.factories.message_setting import MessageSettingsFactory
@@ -2163,6 +2164,88 @@ def email_notification_delete(transaction):
         email_notification = EmailNotificationFactory()
         db.session.add(email_notification)
         db.session.commit()
+
+
+# ------------------------- User Emails -------------------------
+@hooks.before("User Emails > User Email Admin Collection > List All User Emails")
+def user_email_get_admin_list(transaction):
+    """
+    GET /admin/user-emails
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_email = UserEmailFactory()
+        db.session.add(user_email)
+        db.session.commit()
+
+
+@hooks.before("User Emails > User Email Collection > List All User Emails")
+def user_email_get_list(transaction):
+    """
+    GET /users/2/alternate-emails
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_email = UserEmailFactory()
+        db.session.add(user_email)
+        db.session.commit()
+
+
+@hooks.before("User Emails > User Email Collection Post > Create User Email")
+def user_email_post(transaction):
+    """
+    POST /user-emails
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_email = UserEmailFactory()
+        # user = UserFactory()
+        # db.session.add(user)
+        db.session.add(user_email)
+        db.session.commit()
+
+
+@hooks.before("User Emails > User Email Detail > User Email Detail")
+def user_email_get_detail(transaction):
+    """
+    GET /user-emails/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_email = UserEmailFactory()
+        db.session.add(user_email)
+        db.session.commit()
+
+
+@hooks.before("User Emails > User Email Detail > Update User Email")
+def user_email_patch(transaction):
+    """
+    PATCH /user-emails/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_email = UserEmailFactory()
+        db.session.add(user_email)
+        db.session.commit()
+
+
+@hooks.before("User Emails > User Email Detail > Delete User Email")
+def user_email_delete(transaction):
+    """
+    DELETE /user-emails/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_email = UserEmailFactory()
+        db.session.add(user_email)
+        db.session.commit()
+
 
 
 # ------------------------- Image Size -------------------------
