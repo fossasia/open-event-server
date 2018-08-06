@@ -39,7 +39,7 @@ class NotificationAction(db.Model):
 
     action_type = db.Column(db.String)
     subject = db.Column(db.String)
-    subject_id = db.Column(db.Integer)  # Contains the ID of the related subject, eg. session_id in case of new session.
+    subject_id = db.Column(db.String)  # Contains the ID of the related subject, eg. session_id in case of new session.
     link = db.Column(db.String)  # Contains the link if required to take action. Null in other cases.
 
     notification_id = db.Column(db.Integer, db.ForeignKey('notifications.id', ondelete='CASCADE'))
