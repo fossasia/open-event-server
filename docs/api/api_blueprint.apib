@@ -23932,58 +23932,6 @@ The sales object contains properties placed, completed and pending properties wh
         }
     }
 
-## Sales by Marketer Details [/v1/admin/sales/by-marketer]
-
-
-### Show Sales by Marketer [GET]
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-
-        {
-            "data": [{
-            "type": "admin-sales-by-marketer",
-            "attributes": {
-                "fullname": null,
-                "email": null,
-                "sales": {
-                    "placed": {
-                        "sales_total": 0,
-                        "ticket_count": 0
-                    },
-                    "completed": {
-                        "sales_total": 0,
-                        "ticket_count": 0
-                    },
-                    "pending": {
-                        "sales_total": 0,
-                        "ticket_count": 0
-                    }
-                }
-            },
-            "id": "1",
-            "links": {
-                "self": "/v1/admin/sales/by-marketer"
-            }
-        }],
-        "links": {
-            "self": "/v1/admin/sales/by-marketer"
-        },
-        "meta": {
-            "count": 1
-        },
-        "jsonapi": {
-            "version": "1.0"
-        }
-    }
 
 ## Sales discounted Details [/v1/admin/sales/discounted]
 
