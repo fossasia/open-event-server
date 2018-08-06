@@ -13,5 +13,4 @@ class NotificationActionFactory(factory.alchemy.SQLAlchemyModelFactory):
     subject = 'event',
     link = common.url_,
     subject_id = 1,
-    notification_id = 1
     action_type = 'view'
