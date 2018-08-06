@@ -39,8 +39,10 @@ class SessionSchema(SoftDeletionSchema):
             if 'event' not in data:
                 data['event'] = session.event_id
 
-        if data['starts_at'] >= data['ends_at']:
-            raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at")
+        if data['starts_at'] and data['ends_at']:
+            if data['starts_at'] >= data['ends_at']:
+                raise UnprocessableEntity(
+                    {'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at")
 
         if 'state' in data:
             if data['state'] is not 'draft' or not 'pending':
@@ -62,8 +64,8 @@ class SessionSchema(SoftDeletionSchema):
     short_abstract = fields.Str(allow_none=True)
     long_abstract = fields.Str(allow_none=True)
     comments = fields.Str(allow_none=True)
-    starts_at = fields.DateTime(required=True)
-    ends_at = fields.DateTime(required=True)
+    starts_at = fields.DateTime(allow_none=True)
+    ends_at = fields.DateTime(allow_none=True)
     language = fields.Str(allow_none=True)
     slides_url = fields.Url(allow_none=True)
     video_url = fields.Url(allow_none=True)
