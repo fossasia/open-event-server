@@ -243,6 +243,13 @@ class EventSchemaPublic(SoftDeletionSchema):
                                related_view_kwargs={'event_id': '<id>'},
                                schema='EventTopicSchema',
                                type_='event-topic')
+    event_orga = Relationship(attribute='events_orga',
+                              self_view='v1.events_orga',
+                              self_view_kwargs={'id': '<id>'},
+                              related_view='v1.event_orga_detail',
+                              related_view_kwargs={'event_id': '<id>'},
+                              schema='EventOrgaSchema',
+                              type='event-orga')
     event_sub_topic = Relationship(attribute='event_sub_topic',
                                    self_view='v1.event_event_sub_topic',
                                    self_view_kwargs={'id': '<id>'},
