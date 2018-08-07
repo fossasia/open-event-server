@@ -60,7 +60,7 @@ class UserList(ResourceList):
         """
         s = get_serializer()
         hash = str(base64.b64encode(str(s.dumps([user.email, str_generator()])).encode()), 'utf-8')
-        link = make_frontend_url('/email/verify'.format(id=user.id), {'token': hash})
+        link = make_frontend_url('/verify'.format(id=user.id), {'token': hash})
         send_email_with_action(user, USER_REGISTER_WITH_PASSWORD, app_name=get_settings()['app_name'],
                                email=user.email)
         send_email_confirmation(user.email, link)
