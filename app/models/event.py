@@ -43,6 +43,7 @@ class Event(SoftDeletionModel):
     starts_at = db.Column(db.DateTime(timezone=True), nullable=False)
     ends_at = db.Column(db.DateTime(timezone=True), nullable=False)
     timezone = db.Column(db.String, nullable=False, default="UTC")
+    is_event_online = db.Column(db.Boolean)
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     location_name = db.Column(db.String)
@@ -163,6 +164,7 @@ class Event(SoftDeletionModel):
                  starts_at=None,
                  ends_at=None,
                  timezone='UTC',
+                 is_event_online=False,
                  latitude=None,
                  longitude=None,
                  location_name=None,
@@ -219,6 +221,7 @@ class Event(SoftDeletionModel):
         self.starts_at = starts_at
         self.ends_at = ends_at
         self.timezone = timezone
+        self.is_event_online = is_event_online
         self.latitude = latitude
         self.longitude = longitude
         self.location_name = location_name
