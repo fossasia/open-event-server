@@ -4,12 +4,12 @@ from flask import Blueprint, request, jsonify, abort, make_response
 from flask_jwt import current_identity as current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from sqlalchemy.orm.exc import NoResultFound
+import urllib.error
 
 from app import get_settings
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query, get_count
-from app.api.helpers.exceptions import ConflictException
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.exceptions import ConflictException, UnprocessableEntity, ForbiddenException
 from app.api.helpers.files import create_save_image_sizes, make_frontend_url
 from app.api.helpers.mail import send_email_confirmation, send_email_change_user_email, send_email_with_action
 from app.api.helpers.permission_manager import has_access
@@ -66,7 +66,12 @@ class UserList(ResourceList):
         send_email_confirmation(user.email, link)
 
         if data.get('original_image_url'):
-            uploaded_images = create_save_image_sizes(data['original_image_url'], 'user', user.id)
+            try:
+                uploaded_images = create_save_image_sizes(data['original_image_url'], 'speaker-image', user.id)
+            except (urllib.error.HTTPError, urllib.error.URLError):
+                raise UnprocessableEntity(
+                    {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
+                )
             uploaded_images['small_image_url'] = uploaded_images['thumbnail_image_url']
             del uploaded_images['large_image_url']
             self.session.query(User).filter_by(id=user.id).update(uploaded_images)
@@ -175,7 +180,12 @@ class UserDetail(ResourceDetail):
 
     def before_update_object(self, user, data, view_kwargs):
         if data.get('original_image_url') and data['original_image_url'] != user.original_image_url:
-            uploaded_images = create_save_image_sizes(data['original_image_url'], 'user', user.id)
+            try:
+                uploaded_images = create_save_image_sizes(data['original_image_url'], 'speaker-image', user.id)
+            except (urllib.error.HTTPError, urllib.error.URLError):
+                raise UnprocessableEntity(
+                    {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
+                )
             data['original_image_url'] = uploaded_images['original_image_url']
             data['small_image_url'] = uploaded_images['thumbnail_image_url']
             data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
