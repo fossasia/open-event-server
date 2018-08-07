@@ -22678,6 +22678,28 @@ to get the status of the export task.
 
 ### Start a Task to Export Speakers of an Event as CSV [GET]
 
+++ Request
++
++    + Headers
++
++            Authorization: JWT <Auth Key>
++
+++ Response 200 (application/json)
++
++        {
++            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
++        }
++
++## Start Speakers Export as PDF [/v1/events/{event_identifier}/export/speakers/pdf]
+++ Parameters
++    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
++Start a celery task to export the list of speakers of the event with that event_id as a PDF file to get it ready for downloading. Returns the task url
++to get the status of the export task.
++
++
++### Start a Task to Export Spekers of an Event as PDF [GET]
++
+
 + Request
 
     + Headers

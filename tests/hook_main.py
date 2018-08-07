@@ -3897,8 +3897,8 @@ def event_speakers_export_csv_get(transaction):
 
 
 @hooks.before(
-    "Event Export > Start Sessions Export as PDF > Start a Task to Export Sessions of an Event as PDF")
-def event_sessions_export_pdf_get(transaction):
+    "Event Export > Start Speakers Export as PDF > Start a Task to Export Speakers of an Event as PDF")
+def event_speakers_export_pdf_get(transaction):
     """
     :param transaction:
     :return:

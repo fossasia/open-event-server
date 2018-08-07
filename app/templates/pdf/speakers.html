@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{{ event.name }} - {{ ("Speakers List") }}</title>
+	<style type="text/css">
+		{% include 'bootstrap/bootstrap_pdf.css' %}
+		table th {
+			text-align: left;
+		}
+
+		table td {
+			text-align: left;
+			border-spacing: 1em;
+		}
+
+		table {
+			margin-top: 20px;
+			border-collapse: separate;
+		}
+
+		.total-row {
+			margin-top: 25px;
+		}
+
+		.speaker-total {
+			margin-right: 50px;
+		}
+
+		tr.padded td{
+		padding-top : 40px;
+		}
+	</style>
+</head>
+<body id="body">
+<h3 style="text-align:center;">{{ event.name }} - {{ ("Speakers List") }}</h3>
+<br>
+<table class="table with-datatable" id="speakers-table" width="100%">
+	<thead>
+	<tr>
+		<th>
+			{{ ("Speaker Name") }}
+		</th>
+		<th>
+			{{ ("Speaker Email") }}
+		</th>
+		<th>
+			{{ ("Speaker Sessions") }}
+		</th>
+		<th>
+			{{ ("Speaker Mobile") }}
+		</th>
+		<th>
+			{{ ("Speaker Bio") }}
+		</th>
+		<th>
+			{{ ("Speaker Organisation") }}
+		</th>
+		<th>
+			{{ ("Speaker Position") }}
+		</th>
+	</tr>
+	</thead>
+	<tbody>
+		{%for speaker in speakers %}
+			<tr class="padded" style="text-align:center; margin-top: 5px">
+				<td>  
+					{% if speaker.name %}
+						{{speaker.name}}
+					{% else %}
+						{{"-"}}
+					{% endif %}
+				</td>
+				<td>
+					{% if speaker.email %}
+						{{speaker.email}}
+					{% else %}
+						{{"-"}}
+					{% endif %}
+				</td>
+				<td>
+					{% if speaker.sessions %}
+						{% for session in speaker.sessions %}
+							{% if not session.deleted_at %}
+								{{ session.state }}<br>
+					{% else %}
+						{{"-"}}
+				</td>
+				<td>
+					{% if speaker.moblie %}
+						{{speaker.moblie}}
+					{% else %}
+						{{"-"}}
+				</td>
+				<td>
+					{% if speaker.short.biography %}
+						{{speaker.short.biography}}
+					{% else %}
+						{{"-"}}
+				</td>
+				<td>
+					{% if speaker.position %}
+						{{speaker.position}}
+					{% else %}
+						{{"-"}}
+				</td>
+			</tr>
+		{% endif %}
+	{% endfor %}
+	</tbody>
+</table>
+</body>
+</html>
