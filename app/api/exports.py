@@ -272,3 +272,23 @@ def export_sessions_pdf(event_identifier):
     return jsonify(
         task_url=url_for('tasks.celery_task', task_id=task.id)
     )
+
+
+@export_routes.route('/events/<string:event_identifier>/export/speakers/pdf', methods=['GET'])
+@jwt_required()
+def export_speakers_pdf(event_identifier):
+    if not event_identifier.isdigit():
+        event = db.session.query(Event).filter_by(identifier=event_identifier).first()
+        event_id = str(event.id)
+    else:
+        event_id = event_identifier
+
+    from .helpers.tasks import export_speakers_pdf_task
+
+    task = export_speakers_pdf_task.delay(event_id)
+
+    create_export_job(task.id, event_id)
+
+    return jsonify(
+        task_url=url_for('tasks.celery_task', task_id=task.id)
+    )
