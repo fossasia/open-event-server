@@ -148,7 +148,7 @@ class EventList(ResourceList):
 
         if data.get('original_image_url'):
             try:
-                uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
+                uploaded_images = create_save_image_sizes(data['original_image_url'], 'event-image', event.id)
             except (urllib.error.HTTPError, urllib.error.URLError):
                 raise UnprocessableEntity(
                     {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
@@ -445,7 +445,7 @@ class EventDetail(ResourceDetail):
         """
         if data.get('original_image_url') and data['original_image_url'] != event.original_image_url:
             try:
-                uploaded_images = create_save_image_sizes(data['original_image_url'], 'event', event.id)
+                uploaded_images = create_save_image_sizes(data['original_image_url'], 'event-image', event.id)
             except (urllib.error.HTTPError, urllib.error.URLError):
                 raise UnprocessableEntity(
                     {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
