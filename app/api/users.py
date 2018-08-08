@@ -44,7 +44,7 @@ class UserList(ResourceList):
         :param view_kwargs:
         :return:
         """
-        if db.session.query(User.id).filter_by(email=data['email'], deleted_at=None).scalar() is not None:
+        if db.session.query(User.id).filter_by(email=data['email']).scalar() is not None:
             raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")
 
     def after_create_object(self, user, data, view_kwargs):
