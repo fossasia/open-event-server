@@ -1,6 +1,8 @@
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validates_schema, validate
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
+from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.exceptions import UnprocessableEntity, ForbiddenException
 from app.api.helpers.permission_manager import has_access
@@ -28,7 +30,10 @@ class SessionSchema(SoftDeletionSchema):
     @validates_schema(pass_original=True)
     def validate_date(self, data, original_data):
         if 'id' in original_data['data']:
-            session = Session.query.filter_by(id=original_data['data']['id']).one()
+            try:
+                session = Session.query.filter_by(id=original_data['data']['id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': '{id}'}, "Session: not found")
 
             if 'starts_at' not in data:
                 data['starts_at'] = session.starts_at
