@@ -1412,6 +1412,120 @@ Get the details of the user.
             }
         }
 
+## Get User Details for a Favourite Event[/v1/favourite-events/{user_favourite_event_id}/user]
++ Parameters
+    + user_favourite_event_id: 1 (integer) - ID of the favourite event
+
+
+### Get User Details for a Favourite Event [GET]
+Get the details of the user.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "email-notifications": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/email-notifications",
+                            "related": "/v1/users/1/email-notifications"
+                        }
+                    },
+                    "alternate-emails": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/alternate-emails",
+                            "related": "/v1/users/1/alternate-emails"
+                        }
+                    },
+                    "notifications": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/notifications",
+                            "related": "/v1/users/1/notifications"
+                        }
+                    },
+                    "favourite-events": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/favourite-events",
+                            "related": "/v1/users/1/user-favourite-events"
+                        }
+                    }
+                    "orders": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/orders",
+                            "related": "/v1/users/1/orders"
+                        }
+                    },
+                    "discount-codes": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/discount-codes",
+                            "related": "/v1/users/1/discount-codes"
+                        }
+                    },
+                    "access-codes": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/access-codes",
+                            "related": "/v1/users/1/access-codes"
+                        }
+                    },
+                    "speakers": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/speakers",
+                            "related": "/v1/users/1/speakers"
+                        }
+                    },
+                    "sessions": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/sessions",
+                            "related": "/v1/users/1/sessions"
+                        }
+                    }
+                },
+                "attributes": {
+                    "is-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
+                    "thumbnail-image-url": null,
+                    "last-name": null,
+                    "icon-image-url": null,
+                    "instagram-url": null,
+                    "is-super-admin": true,
+                    "original-image-url": null,
+                    "created-at": "2017-07-21T15:06:20.741290+00:00",
+                    "last-accessed-at": null,
+                    "avatar-url": null,
+                    "email": "enigmaeth@gmail.com",
+                    "contact": null,
+                    "google-plus-url": null,
+                    "twitter-url": null,
+                    "facebook-url": null,
+                    "is-verified": true,
+                    "first-name": null,
+                    "deleted-at": null,
+                    "small-image-url": null,
+                    "details": null,
+                    "facebook-id": "123456"
+                },
+                "type": "user",
+                "id": "1",
+                "links": {
+                    "self": "/v1/users/1"
+                }
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/users/1"
+            }
+        }
+
 ## Check if the email is available [/v1/users/checkEmail]
 Check if the email passed is available or not. True is returned if the email is available, false otherwise.
 
@@ -10042,6 +10156,269 @@ Get a list of events.
             "self": "/v1/events/1"
           }
         }
+
+## Get Event for a Favourite Event[/v1/user-favourite-events/{user_favourite_event_id}/event]
++ Parameters
+    + user_favourite_event_id: 1 (integer) - ID of the favourite event
+
+
+### Event Details for a Favourite Event [GET]
+Get the details of the event.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+    {
+        "registrars": {
+            "links": {
+                "self": "/v1/events/1/relationships/registrars",
+                "related": "/v1/users"
+            }
+        },
+        "created_at": "2018-06-11T05:30:28.033019+00:00",
+        "schedule_published_on": null,
+        "id": "25",
+        "is_sponsors_enabled": true,
+        "feedbacks": {
+            "links": {
+                "self": "/v1/events/1/relationships/feedbacks",
+                "related": "/v1/events/1/feedbacks"
+            }
+        },
+        "attendees": {
+            "links": {
+                "self": "/v1/events/1/relationships/attendees",
+                "related": "/v1/events/1/attendees"
+            }
+        },
+        "large_image_url": null,
+        "stripe_authorization": {
+            "links": {
+                "self": "/v1/stripe-authorizations/25/relationships/event",
+                "related": "/v1/events/1/stripe-authorization"
+            }
+        },
+        "sessions": {
+            "links": {
+                "self": "/v1/events/1/relationships/sessions",
+                "related": "/v1/events/1/sessions"
+            }
+        },
+        "organizer_name": null,
+        "bank_details": "Account Number: 3242432023",
+        "external_event_url": null,
+        "is_tax_enabled": false,
+        "payment_currency": "USD",
+        "searchable_location_name": null,
+        "can_pay_by_cheque": true,
+        "has_organizer_info": false,
+        "onsite_details": null,
+        "social_links": {
+            "links": {
+                "self": "/v1/events/1/relationships/social-links",
+                "related": "/v1/events/1/social-links"
+            }
+        },
+        "speakers": {
+            "links": {
+                "self": "/v1/events/1/relationships/speakers",
+                "related": "/v1/events/1/speakers"
+            }
+        },
+        "name": "Test Event",
+        "average_rating": null,
+        "paypal_email": null,
+        "role_invites": {
+            "links": {
+                "self": "/v1/events/1/relationships/role-invites",
+                "related": "/v1/events/1/role-invites"
+            }
+        },
+        "state": "draft",
+        "original_image_url": null,
+        "icon_image_url": null,
+        "sponsors": {
+            "links": {
+                "self": "/v1/events/1/relationships/sponsors",
+                "related": "/v1/events/1/sponsors"
+            }
+        },
+        "is_map_shown": true,
+        "thumbnail_image_url": null,
+        "ticket_url": null,
+        "custom_forms": {
+            "links": {
+                "self": "/v1/events/1/relationships/custom-forms",
+                "related": "/v1/events/1/custom-forms"
+            }
+        },
+        "orders": {
+            "links": {
+                "self": "/v1/events/1/relationships/orders",
+                "related": "/v1/events/1/orders"
+            }
+        },
+        "payment_country": "United States",
+        "latitude": 0,
+        "organizer_description": null,
+        "code_of_conduct": null,
+        "can_pay_by_stripe": false,
+        "speakers_call": {
+            "links": {
+                "self": "/v1/events/1/relationships/speakers-call",
+                "related": "/v1/events/1/speakers-call"
+            }
+        },
+        "event_copyright": {
+            "links": {
+                "self": "/v1/events/1/relationships/event-copyright",
+                "related": "/v1/events/1/event-copyright"
+            }
+        },
+        "starts_at": "2018-07-10T18:30:00+00:00",
+        "event_topic": {
+            "links": {
+                "self": "/v1/events/1/relationships/event-topic",
+                "related": "/v1/events/1/event-topic"
+            }
+        },
+        "moderators": {
+            "links": {
+                "self": "/v1/events/1/relationships/moderators",
+                "related": "/v1/users"
+            }
+        },
+        "is_event_online": null,
+        "ends_at": "2018-07-11T11:30:18.970000+00:00",
+        "deleted_at": null,
+        "is_ticketing_enabled": true,
+        "tickets": {
+            "links": {
+                "self": "/v1/events/1/relationships/tickets",
+                "related": "/v1/events/1/tickets"
+            }
+        },
+        "event_type": {
+            "links": {
+                "self": "/v1/events/1/relationships/event-type",
+                "related": "/v1/events/1/event-type"
+            }
+        },
+        "can_pay_onsite": false,
+        "is_sessions_speakers_enabled": true,
+        "is_stripe_linked": null,
+        "microlocations": {
+            "links": {
+                "self": "/v1/events/1/relationships/microlocations",
+                "related": "/v1/events/1/microlocations"
+            }
+        },
+        "session_types": {
+            "links": {
+                "self": "/v1/events/1/relationships/session-types",
+                "related": "/v1/events/1/session-types"
+            }
+        },
+        "identifier": "854ea082",
+        "longitude": 0,
+        "can_pay_by_paypal": false,
+        "can_pay_by_bank": true,
+        "timezone": "Asia/Calcutta",
+        "logo_url": "http://localhost:5000/static/media/temp/images/649990b2-a6e0-4eee-88d5-c35270189d89/R29mMThONV/6230805d-4c79-4e2d-985a-5dc7599100ad.jpeg",
+        "ticket_tags": {
+            "links": {
+                "self": "/v1/events/1/relationships/ticket-tags",
+                "related": "/v1/events/1/ticket-tags"
+            }
+        },
+        "access_codes": {
+            "links": {
+                "self": "/v1/events/1/relationships/access-codes",
+                "related": "/v1/events/1/access-codes"
+            }
+        },
+        "faq_types": {
+            "links": {
+                "self": "/v1/events/1/relationships/faq-types",
+                "related": "/v1/events/1/faq-types"
+            }
+        },
+        "organizers": {
+            "links": {
+                "self": "/v1/events/1/relationships/organizers",
+                "related": "/v1/users"
+            }
+        },
+        "event_invoices": {
+            "links": {
+                "self": "/v1/events/1/relationships/event-invoices",
+                "related": "/v1/events/1/event-invoices"
+            }
+        },
+        "description": "This is a test event",
+        "event_sub_topic": {
+            "links": {
+                "self": "/v1/events/1/relationships/event-sub-topic",
+                "related": "/v1/events/1/event-sub-topic"
+            }
+        },
+        "coorganizers": {
+            "links": {
+                "self": "/v1/events/1/relationships/coorganizers",
+                "related": "/v1/users"
+            }
+        },
+        "track_organizers": {
+            "links": {
+                "self": "/v1/events/1/relationships/track-organizers",
+                "related": "/v1/users"
+            }
+        },
+        "tax": {
+            "links": {
+                "self": "/v1/events/1/relationships/tax",
+                "related": "/v1/events/1/tax"
+            }
+        },
+        "discount_codes": {
+            "links": {
+                "self": "/v1/events/1/relationships/discount-codes",
+                "related": "/v1/events/1/discount-codes"
+            }
+        },
+        "order_expiry_time": 10,
+        "faqs": {
+            "links": {
+                "self": "/v1/events/1/relationships/faqs",
+                "related": "/v1/events/1/faqs"
+            }
+        },
+        "refund_policy": "All sales are final. No refunds shall be issued in any case.",
+        "tracks": {
+            "links": {
+                "self": "/v1/events/1/relationships/tracks",
+                "related": "/v1/events/1/tracks"
+            }
+        },
+        "privacy": "public",
+        "cheque_details": "Account Number: 3242432023",
+        "location_name": "Thane, Maharashtra",
+        "event_orga": {
+            "links": {
+                "self": "/v1/events/1/relationships/event-orga",
+                "related": "/v1/events/1/event-orga"
+            }
+        },
+        "jsonapi": {
+            "version": "1.0"
+        }
+    }
 
 # Group Copyright
 Data related to event copyright information.
@@ -24565,3 +24942,186 @@ Sends the token to verify the account associated with the provided email id via 
         {
           "message": "Verification email resent"
         }
+
+# Group Favourite Events
+
+This Group's APIs are used for adding a particular event to the favourite list of the user.
+
+## Favourite Events Collection [/v1/user-favourite-events]
+
+### Get Favourites List [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+    {
+        "data": [
+            {
+                "type": "user-favourite-event",
+                "id": "1",
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/user-favourite-events/1/relationships/event",
+                            "related": "/v1/user-favourite-events/1/event"
+                        }
+                    },
+                    "user": {
+                        "links": {
+                            "self": "/v1/user-favourite-events/1/relationships/user",
+                            "related": "/v1/favourite-events/1/user"
+                        }
+                    }
+                },
+                "attributes": {
+                    "deleted-at": null
+                },
+                "links": {
+                    "self": "/v1/user-favourite-events/1"
+                }
+            }
+        ],
+        "links": {
+            "self": "/v1/user-favourite-events"
+        },
+        "meta": {
+            "count": 1
+        },
+        "jsonapi": {
+            "version": "1.0"
+        }
+    }
+
+### Add an Event to the List [POST]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+            Content-Type: application/vnd.api+json
+
+    + Body
+
+        {
+            "data": {
+            "type": "user-favourite-event",
+            "relationships": {
+              "event": {
+                "data": {
+                  "id": "1",
+                  "type": "event"
+                    }
+                }
+            }
+          }
+        }
+
++ Response 201 (application/vnd.api+json)
+
+    {
+        "data": {
+            "type": "user-favourite-event",
+            "relationships": {
+                "user": {
+                    "links": {
+                        "self": "/v1/user-favourite-events/1/relationships/user",
+                        "related": "/v1/favourite-events/1/user"
+                    }
+                },
+                "event": {
+                    "links": {
+                        "self": "/v1/user-favourite-events/1/relationships/event",
+                        "related": "/v1/user-favourite-events/1/event"
+                    }
+                }
+            },
+            "attributes": {
+                "deleted-at": null
+            },
+            "id": "1",
+            "links": {
+                "self": "/v1/user-favourite-events/1"
+            }
+        },
+        "links": {
+            "self": "/v1/user-favourite-events/1"
+        },
+        "jsonapi": {
+            "version": "1.0"
+        }
+    }
+
+## Favourite Events Detail [/v1/user-favourite-events/1]
+
+### Get Details [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+    {
+        "data": [
+            {
+                "type": "user-favourite-event",
+                "id": "1",
+                "relationships": {
+                    "event": {
+                        "links": {
+                            "self": "/v1/user-favourite-events/1/relationships/event",
+                            "related": "/v1/user-favourite-events/1/event"
+                        }
+                    },
+                    "user": {
+                        "links": {
+                            "self": "/v1/user-favourite-events/1/relationships/user",
+                            "related": "/v1/favourite-events/1/user"
+                        }
+                    }
+                },
+                "attributes": {
+                    "deleted-at": null
+                },
+                "links": {
+                    "self": "/v1/user-favourite-events/1"
+                }
+            }
+        ],
+        "links": {
+            "self": "/v1/user-favourite-events"
+        },
+        "meta": {
+            "count": 1
+        },
+        "jsonapi": {
+            "version": "1.0"
+        }
+    }
+
+### Delete Favourite Event From The List [DELETE]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+    {
+        "meta": {
+            "message": "Object successfully deleted"
+        },
+        "jsonapi": {
+            "version": "1.0"
+        }
+    }

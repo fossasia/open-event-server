@@ -1,6 +1,7 @@
 import factory
 
 import app.factories.common as common
+from app.factories.user_favourite_events import UserFavouriteEventFactory
 from app.models.user import db, User
 
 
@@ -26,3 +27,4 @@ class UserFactory(factory.alchemy.SQLAlchemyModelFactory):
     thumbnail_image_url = common.imageUrl_
     small_image_url = common.imageUrl_
     icon_image_url = common.imageUrl_
+    favourite_events = factory.RelatedFactory(UserFavouriteEventFactory)

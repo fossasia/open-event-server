@@ -58,7 +58,7 @@ from app.factories.user_email import UserEmailFactory
 from app.factories.feedback import FeedbackFactory
 from app.factories.service import ServiceFactory
 from app.factories.message_setting import MessageSettingsFactory
-
+from app.factories.user_favourite_events import UserFavouriteEventFactory
 
 
 
@@ -282,6 +282,19 @@ def user_speaker(transaction):
     with stash['app'].app_context():
         speaker = SpeakerFactory()
         db.session.add(speaker)
+        db.session.commit()
+
+
+@hooks.before("Users > Get User Details for a Favourite Event > Get User Details for a Favourite Event")
+def user_favourite_evets(transaction):
+    """
+    GET /favourite-events/1/user
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_fav_event = UserFavouriteEventFactory()
+        db.session.add(user_fav_event)
         db.session.commit()
 
 
@@ -713,6 +726,18 @@ def event_stripe_authorization(transaction):
         db.session.add(stripe_authorization)
         db.session.commit()
 
+
+@hooks.before("Events > Get Event for a Favourite Event > Event Details for a Favourite Event")
+def event_favourite_event(transaction):
+    """
+    GET /user-favourite-events/1/event
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_fav_event = UserFavouriteEventFactory()
+        db.session.add(user_fav_event)
+        db.session.commit()
 
 # ------------------------- Feedback -------------------------
 @hooks.before("Feedback > Feedback Collection > Create Feedback")
@@ -4157,3 +4182,51 @@ def reset_password_patch(transaction):
         user.reset_password = 'token'
         db.session.add(user)
         db.session.commit()
+
+
+# ------------------------- Favourite Events -------------------------
+
+@hooks.before("Favourite Events > Favourite Events Collection > Get Favourites List")
+def favourite_events_list_get(transaction):
+    """
+    GET /user-favourite-events
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_fav_event = UserFavouriteEventFactory()
+        db.session.add(user_fav_event)
+        db.session.commit()
+
+
+@hooks.before("Favourite Events > Favourite Events Collection > Add an Event to the List")
+def favourite_events_list_post(transaction):
+    transaction['skip'] = True
+
+
+@hooks.before("Favourite Events > Favourite Events Detail > Get Details")
+def favourite_event_details_get(transaction):
+    """
+    GET /user-favourite-events/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_fav_event = UserFavouriteEventFactory()
+        db.session.add(user_fav_event)
+        db.session.commit()
+
+
+@hooks.before("Favourite Events > Favourite Events Detail > Delete Favourite Event From The List")
+def favourite_event_delete(transaction):
+    """
+    GET /user-favourite-events
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_fav_event = UserFavouriteEventFactory()
+        db.session.add(user_fav_event)
+        db.session.commit()
+
+# ------------------------- Event Statistics -------------------------
