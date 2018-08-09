@@ -65,10 +65,16 @@ class ServerError(ErrorResponse):
 
 
 class UnprocessableEntityError(ErrorResponse):
+    """
+    Default class for 422 Error
+    """
     status = 422
     title = 'Unprocessable Entity'
 
 
 class BadRequestError(ErrorResponse):
+    """
+    Default class for 400 Error
+    """
     status = 400
     title = 'Bad Request'
