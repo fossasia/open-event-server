@@ -94,8 +94,8 @@ def create_modules():
     get_or_create(Module, donation_include=False)
 
 
-
-event_topic = ['Health & Wellness', 'Home & Lifestyle',
+def create_event_topics():
+    event_topic = ['Health & Wellness', 'Home & Lifestyle',
                    'Charity & Causes', 'Other', 'Religion & Spirituality',
                    'Community & Culture', 'Government & Politics',
                    'Government & Politics', 'Auto, Boat & Air',
@@ -105,10 +105,9 @@ event_topic = ['Health & Wellness', 'Home & Lifestyle',
                    'Film, Media & Entertainment', 'Family & Education',
                    'Science & Technology', 'Performing & Visual Arts',
                    'Food & Drink', 'Family & Education']
-
-def create_event_topics():
     for topic in event_topic:
         get_or_create(EventTopic, name=topic)
+
 
 def create_event_sub_topics():
     event_sub_topic = {
@@ -130,11 +129,11 @@ def create_event_sub_topics():
      "Auto, Boat & Air": ["Auto", "Air"],
      "Religion & Spirituality": ["Mysticism and Occult"],
      "Government & Politics": ["Non-partisan"]
-    };
+    }
+    eventopics=db.session.query(EventTopic).all()
     for keysub_topic in event_sub_topic:
         for subtopic in event_sub_topic[keysub_topic]:
-            get_or_create(EventSubTopic, name=subtopic, event_topic_id=event_topic.index(keysub_topic))
-
+            get_or_create(EventSubTopic, name=subtopic, event_topic_id=next(x for x in eventopics if x.name==keysub_topic).id)
 
 
 def create_event_types():
@@ -164,7 +163,6 @@ def create_permissions():
     mod = Role.query.get(4)
     attend = Role.query.get(5)
     regist = Role.query.get(6)
-
     track = Service.query.get(1)
     session = Service.query.get(2)
     speaker = Service.query.get(3)
