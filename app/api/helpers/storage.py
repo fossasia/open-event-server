@@ -14,6 +14,7 @@ from werkzeug.utils import secure_filename
 
 from app.settings import get_settings
 
+
 SCHEMES = {80: 'http', 443: 'https'}
 
 #################
@@ -172,6 +173,7 @@ def upload_local(uploaded_file, key, **kwargs):
     if not os.path.isdir(dir_path):
         os.makedirs(dir_path)
     uploaded_file.save(file_path)
+
     file_relative_path = '/' + file_relative_path
     if get_settings()['static_domain']:
         return get_settings()['static_domain'] + \
@@ -180,10 +182,16 @@ def upload_local(uploaded_file, key, **kwargs):
     return create_url(request.url, file_relative_path)
 
 
-def create_url(request_url, file_relative_path):
+def create_url(request_url, file_relative_path, is_test=False):
     """Generates the URL of an uploaded file."""
     url = urlparse(request_url)
-
+    if not is_test:
+        if app.config['SERVER_URL']:
+            url = urlparse(app.config['SERVER_URL'])
+        else:
+            pass
+    else:
+        pass
     # No need to specify scheme-corresponding port
     port = url.port
     if port and url.scheme == SCHEMES.get(url.port, None):

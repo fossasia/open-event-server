@@ -50,7 +50,7 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     ERROR_404_HELP = False
     CSRF_ENABLED = True
-    SERVER_NAME = env('SERVER_NAME', default=None)
+    SERVER_URL = env('SERVER_URL', default=None)
     CORS_HEADERS = 'Content-Type'
     SQLALCHEMY_DATABASE_URI = env('DATABASE_URL', default=None)
     SERVE_STATIC = env.bool('SERVE_STATIC', default=False)
@@ -131,5 +131,6 @@ class TestingConfig(Config):
     SQLALCHEMY_RECORD_QUERIES = True
     DEBUG_TB_ENABLED = False
     BROKER_BACKEND = 'memory'
+    SERVER_URL = env('TEST_SERVER_URL', default=None)
     SQLALCHEMY_DATABASE_URI = env('TEST_DATABASE_URL', default=None)
     PROPOGATE_ERROR = True
