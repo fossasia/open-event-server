@@ -15,6 +15,14 @@ from app.models.notification import Notification, NEW_SESSION, SESSION_ACCEPT_RE
 
 
 def send_notification(user, title, message, actions=None):
+    """
+    Helper function to send notifications.
+    :param user:
+    :param title:
+    :param message:
+    :param actions:
+    :return:
+    """
     if not current_app.config['TESTING']:
         notification = Notification(user_id=user.id,
                                     title=title,
@@ -28,6 +36,14 @@ def send_notification(user, title, message, actions=None):
 
 
 def send_notif_new_session_organizer(user, event_name, link, session_id):
+    """
+    Send notification to the event organizer about a new session.
+    :param user:
+    :param event_name:
+    :param link:
+    :param session_id:
+    :return:
+    """
     message_settings = MessageSettings.query.filter_by(action=NEW_SESSION).first()
     if not message_settings or message_settings.notification_status == 1:
         actions = get_new_session_notification_actions(session_id, link)
@@ -39,6 +55,15 @@ def send_notif_new_session_organizer(user, event_name, link, session_id):
 
 
 def send_notif_session_accept_reject(user, session_name, acceptance, link, session_id):
+    """
+    Send notification to the session creator about a session being accepted or rejected.
+    :param user:
+    :param session_name:
+    :param acceptance:
+    :param link:
+    :param session_id:
+    :return:
+    """
     message_settings = MessageSettings.query.filter_by(action=SESSION_ACCEPT_REJECT).first()
     if not message_settings or message_settings.notification_status == 1:
         actions = get_session_accept_reject_notification_actions(session_id, link)
@@ -94,6 +119,17 @@ def send_notif_after_export(user, event_name, download_url=None, error_text=None
 
 
 def send_notif_monthly_fee_payment(user, event_name, previous_month, amount, app_name, link, event_id):
+    """
+    Send notification about monthly fee payments.
+    :param user:
+    :param event_name:
+    :param previous_month:
+    :param amount:
+    :param app_name:
+    :param link:
+    :param event_id:
+    :return:
+    """
     message_settings = MessageSettings.query.filter_by(action=SESSION_ACCEPT_REJECT).first()
     if not message_settings or message_settings.notification_status == 1:
         actions = get_monthly_payment_notification_actions(event_id, link)
@@ -111,6 +147,17 @@ def send_notif_monthly_fee_payment(user, event_name, previous_month, amount, app
 
 
 def send_followup_notif_monthly_fee_payment(user, event_name, previous_month, amount, app_name, link, event_id):
+    """
+    Send follow up notifications for monthly fee payment.
+    :param user:
+    :param event_name:
+    :param previous_month:
+    :param amount:
+    :param app_name:
+    :param link:
+    :param event_id:
+    :return:
+    """
     message_settings = MessageSettings.query.filter_by(action=SESSION_ACCEPT_REJECT).first()
     if not message_settings or message_settings.notification_status == 1:
         actions = get_monthly_payment_follow_up_notification_actions(event_id, link)
@@ -128,6 +175,15 @@ def send_followup_notif_monthly_fee_payment(user, event_name, previous_month, am
 
 
 def send_notif_event_role(user, role_name, event_name, link, event_id):
+    """
+    Send notification to a user about an event role invite.
+    :param user:
+    :param role_name:
+    :param event_name:
+    :param link:
+    :param event_id:
+    :return:
+    """
     message_settings = MessageSettings.query.filter_by(action=EVENT_ROLE).first()
     if not message_settings or message_settings.notification_status == 1:
         actions = get_event_role_notification_actions(event_id, link)
@@ -146,6 +202,12 @@ def send_notif_event_role(user, role_name, event_name, link, event_id):
 
 
 def send_notif_after_event(user, event_name):
+    """
+    Send notification to a user after the conclusion of an event.
+    :param user:
+    :param event_name:
+    :return:
+    """
     message_settings = MessageSettings.query.filter_by(action=AFTER_EVENT).first()
     if not message_settings or message_settings.notification_status == 1:
         notif = NOTIFS[AFTER_EVENT]
@@ -174,6 +236,12 @@ def send_notif_ticket_purchase_organizer(user, invoice_id, order_url, event_name
 
 
 def send_notif_to_attendees(order, purchaser_id):
+    """
+    Send notification to attendees of an order.
+    :param order:
+    :param purchaser_id:
+    :return:
+    """
     for holder in order.ticket_holders:
         if holder.user:
             # send notification if the ticket holder is a registered user.
