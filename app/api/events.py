@@ -120,10 +120,19 @@ class EventList(ResourceList):
         if data.get('state', None) == 'published' and not is_verified:
             raise ForbiddenException({'source': ''},
                                      "Only verified accounts can publish events")
+
         if not data.get('is_event_online') and data.get('state', None) == 'published' \
                 and not data.get('location_name', None):
             raise ConflictException({'pointer': '/data/attributes/location-name'},
                                     "Location is required to publish the event")
+
+        if data.get('location_name', None) and data.get('is_event_online'):
+            raise ConflictException({'pointer': '/data/attributes/location-name'},
+                                    "Online Event does not have any locaton")
+
+        if data.get('searchable_location_name') and data.get('is_event_online'):
+            raise ConflictException({'pointer': '/data/attributes/searchable-location-name'},
+                                    "Online Event does not have any locaton")
 
     def after_create_object(self, event, data, view_kwargs):
         """
@@ -431,6 +440,19 @@ class EventDetail(ResourceDetail):
         if data.get('state', None) == 'published' and not is_verified:
             raise ForbiddenException({'source': ''},
                                      "Only verified accounts can publish events")
+
+        if data.get('state', None) == 'published' and not data.get('location_name', None) and \
+                not data.get('is_event_online'):
+            raise ConflictException({'pointer': '/data/attributes/location-name'},
+                                    "Location is required to publish the event")
+
+        if data.get('location_name') and data.get('is_event_online'):
+            raise ConflictException({'pointer': '/data/attributes/location-name'},
+                                    "Online Event does not have any locaton")
+
+        if data.get('searchable_location_name') and data.get('is_event_online'):
+            raise ConflictException({'pointer': '/data/attributes/searchable-location-name'},
+                                    "Online Event does not have any locaton")
 
     def before_update_object(self, event, data, view_kwargs):
         """
