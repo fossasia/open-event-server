@@ -30,6 +30,9 @@ from app.models.module import Module
 # EventTopic
 from app.models.event_topic import EventTopic
 
+# EventSubTopic
+from app.models.event_sub_topic import EventSubTopic
+
 # EventType
 from app.models.event_type import EventType
 
@@ -91,8 +94,8 @@ def create_modules():
     get_or_create(Module, donation_include=False)
 
 
-def create_event_topics():
-    event_topic = ['Health & Wellness', 'Home & Lifestyle',
+
+event_topic = ['Health & Wellness', 'Home & Lifestyle',
                    'Charity & Causes', 'Other', 'Religion & Spirituality',
                    'Community & Culture', 'Government & Politics',
                    'Government & Politics', 'Auto, Boat & Air',
@@ -102,8 +105,36 @@ def create_event_topics():
                    'Film, Media & Entertainment', 'Family & Education',
                    'Science & Technology', 'Performing & Visual Arts',
                    'Food & Drink', 'Family & Education']
+
+def create_event_topics():
     for topic in event_topic:
         get_or_create(EventTopic, name=topic)
+
+def create_event_sub_topics():
+    event_sub_topic = {
+     "Film, Media & Entertainment": ["Comedy", "Gaming", "Anime"],
+     "Community & Culture": ["City/Town", "Other", "LGBT"],
+     "Home & Lifestyle": ["Dating", "Home & Garden"],
+     "Sports & Fitness": ["Volleyball", "Other"],
+     "Health & Wellness": ["Yoga", "Medical"],
+     "Food & Drink": ["Other", "Food", "Beer"],
+     "Other": ["Avatar", "Logo"],
+     "Science & Technology": ["Robotics", "Other", "High Tech", "Science", "Social Media", "Medicine", "Mobile", "Biotech"],
+     "Music": ["Cultural", "Pop", "Top 40", "EDM / Electronic", "R&B", "Other", "Classical"],
+     "Performing & Visual Arts": ["Craft", "Comedy", "Fine Art", "Orchestra"],
+     "Family & Education": ["Education", "Baby", "Reunion"],
+     "Business & Professional": ["Career", "Startups &amp; Small Business", "Educators", "Design", "Finance"],
+     "Charity & Causes": ["Education", "Other", "Environment"],
+     "Hobbies & Special Interest": ["Other", "Anime/Comics"],
+     "Seasonal & Holiday": ["Easter", "Other"],
+     "Auto, Boat & Air": ["Auto", "Air"],
+     "Religion & Spirituality": ["Mysticism and Occult"],
+     "Government & Politics": ["Non-partisan"]
+    };
+    for keysub_topic in event_sub_topic:
+        for subtopic in event_sub_topic[keysub_topic]:
+            get_or_create(EventSubTopic, name=subtopic, event_topic_id=event_topic.index(keysub_topic))
+
 
 
 def create_event_types():
@@ -257,6 +288,8 @@ def populate():
     create_speaker_image_sizes()
     print('Creating Event Topics...')
     create_event_topics()
+    print('Creating Event SubTopics...')
+    create_event_sub_topics()
     print('Creating Event Types...')
     create_event_types()
     print('Creating Event Locations...')
@@ -280,6 +313,7 @@ def populate_without_print():
     create_event_image_sizes()
     create_speaker_image_sizes()
     create_event_topics()
+    create_event_sub_topics()
     create_event_types()
     create_event_locations()
     create_admin_message_settings()
