@@ -1,24 +1,30 @@
 from app.api.bootstrap import api
+from app.api.event_orga import EventOrgaDetail
 from app.api.stripe_authorization import StripeAuthorizationDetail, StripeAuthorizationRelationship, \
     StripeAuthorizationListPost
 from app.api.ticket_fees import TicketFeeList, TicketFeeDetail
 from app.api.users import UserList, UserDetail, UserRelationship
-from app.api.notifications import NotificationList, NotificationListAdmin, NotificationDetail, NotificationRelationship
-from app.api.email_notifications import EmailNotificationList, EmailNotificationListAdmin, EmailNotificationDetail,\
+from app.api.user_emails import UserEmailListAdmin, UserEmailListPost, UserEmailList, UserEmailDetail, \
+    UserEmailRelationship
+from app.api.user_favourite_events import UserFavouriteEventListPost, UserFavouriteEventList, \
+    UserFavouriteEventDetail, UserFavouriteEventRelationship
+from app.api.notifications import NotificationList, NotificationListAdmin, NotificationDetail,\
+    NotificationRelationship, NotificationActionDetail, NotificationActionRelationship, NotificationActionList
+from app.api.email_notifications import EmailNotificationList, EmailNotificationListAdmin, EmailNotificationDetail, \
     EmailNotificationRelationshipOptional, EmailNotificationRelationshipRequired
-from app.api.tickets import TicketList, TicketListPost, TicketDetail, TicketRelationshipRequired,\
+from app.api.tickets import TicketList, TicketListPost, TicketDetail, TicketRelationshipRequired, \
     TicketRelationshipOptional
 from app.api.events import EventList, EventDetail, EventRelationship, EventCopyResource
 from app.api.event_types import EventTypeList, EventTypeDetail, EventTypeRelationship
 from app.api.event_locations import EventLocationList
 from app.api.event_topics import EventTopicList, EventTopicDetail, EventTopicRelationship
-from app.api.event_sub_topics import EventSubTopicList, EventSubTopicListPost, EventSubTopicDetail,\
+from app.api.event_sub_topics import EventSubTopicList, EventSubTopicListPost, EventSubTopicDetail, \
     EventSubTopicRelationshipRequired, EventSubTopicRelationshipOptional
 from app.api.microlocations import MicrolocationList, MicrolocationListPost, MicrolocationDetail, \
     MicrolocationRelationshipRequired, MicrolocationRelationshipOptional
 from app.api.sessions import SessionList, SessionListPost, SessionDetail, SessionRelationshipRequired, \
     SessionRelationshipOptional
-from app.api.speakers import SpeakerList, SpeakerListPost, SpeakerDetail, SpeakerRelationshipRequired,\
+from app.api.speakers import SpeakerList, SpeakerListPost, SpeakerDetail, SpeakerRelationshipRequired, \
     SpeakerRelationshipOptional
 from app.api.service import ServiceList, ServiceDetail
 from app.api.social_links import SocialLinkList, SocialLinkListPost, SocialLinkDetail, SocialLinkRelationship
@@ -31,13 +37,16 @@ from app.api.role_invites import RoleInviteListPost, RoleInviteList, RoleInviteD
 from app.api.event_image_sizes import EventImageSizeDetail
 from app.api.speaker_image_sizes import SpeakerImageSizeDetail
 from app.api.roles import RoleList, RoleDetail
-from app.api.session_types import SessionTypeList, SessionTypeListPost, SessionTypeDetail,\
+from app.api.custom_system_roles import CustomSystemRoleList, CustomSystemRoleDetail
+from app.api.session_types import SessionTypeList, SessionTypeListPost, SessionTypeDetail, \
     SessionTypeRelationshipRequired, SessionTypeRelationshipOptional
 from app.api.event_copyright import EventCopyrightListPost, EventCopyrightDetail, EventCopyrightRelationshipRequired
 from app.api.pages import PageList, PageDetail
 from app.api.user_permission import UserPermissionList, UserPermissionDetail
 from app.api.events_role_permission import EventsRolePermissionList, EventsRolePermissionDetail, \
     EventsRolePermissionRelationship
+from app.api.panel_permissions import PanelPermissionList, PanelPermissionDetail, \
+    PanelPermissionRelationship
 from app.api.message_settings import MessageSettingsList, MessageSettingsDetail
 from app.api.tax import TaxList, TaxDetail, TaxRelationship
 from app.api.settings import SettingDetail
@@ -51,7 +60,8 @@ from app.api.access_codes import AccessCodeList, AccessCodeListPost, AccessCodeD
     AccessCodeRelationshipOptional
 from app.api.custom_forms import CustomFormList, CustomFormListPost, CustomFormDetail, CustomFormRelationshipRequired
 from app.api.faqs import FaqListPost, FaqList, FaqDetail, FaqRelationshipRequired, FaqRelationshipOptional
-from app.api.feedbacks import FeedbackListPost, FeedbackList, FeedbackDetail, FeedbackRelationshipRequired
+from app.api.feedbacks import FeedbackListPost, FeedbackList, FeedbackDetail, \
+    FeedbackRelationship
 from app.api.modules import ModuleDetail
 from app.api.custom_placeholders import CustomPlaceholderList, CustomPlaceholderDetail, CustomPlaceholderRelationship
 from app.api.activities import ActivityList, ActivityDetail
@@ -73,6 +83,7 @@ from app.api.admin_sales.marketer import AdminSalesByMarketerList
 from app.api.admin_sales.discounted import AdminSalesDiscountedList
 from app.api.admin_sales.fees import AdminSalesFeesList
 from app.api.admin_sales.invoices import AdminSalesInvoicesList
+from app.api.full_text_search.events import EventSearchResultList
 
 # users
 api.route(UserList, 'user_list', '/users')
@@ -80,7 +91,8 @@ api.route(UserDetail, 'user_detail', '/users/<int:id>', '/notifications/<int:not
           '/event-invoices/<int:event_invoice_id>/user', '/speakers/<int:speaker_id>/user',
           '/access-codes/<int:access_code_id>/marketer', '/email-notifications/<int:email_notification_id>/user',
           '/discount-codes/<int:discount_code_id>/marketer', '/sessions/<int:session_id>/creator',
-          '/attendees/<int:attendee_id>/user', '/feedbacks/<int:feedback_id>/user')
+          '/attendees/<int:attendee_id>/user', '/feedbacks/<int:feedback_id>/user',
+          '/alternate-emails/<int:user_email_id>/user', '/favourite-events/<int:user_favourite_event_id>/user')
 api.route(UserRelationship, 'user_notification', '/users/<int:id>/relationships/notifications')
 api.route(UserRelationship, 'user_feedback', '/users/<int:id>/relationships/feedbacks')
 api.route(UserRelationship, 'user_event_invoices', '/users/<int:id>/relationships/event-invoices')
@@ -97,14 +109,35 @@ api.route(UserRelationship, 'user_moderator_event', '/users/<int:id>/relationshi
 api.route(UserRelationship, 'user_attendees', '/users/<int:id>/relationships/attendees')
 api.route(UserRelationship, 'user_events', '/users/<int:id>/relationships/events')
 api.route(UserRelationship, 'user_orders', '/users/<int:id>/relationships/orders')
+api.route(UserRelationship, 'user_emails', '/users/<int:id>/relationships/alternate-emails')
+api.route(UserRelationship, 'user_user_favourite_events', '/users/<int:id>/relationships/favourite-events')
+api.route(UserRelationship, 'user_marketer_events', '/users/<int:id>/relationships/marketer-events')
+api.route(UserRelationship, 'user_sales_admin_events',
+          '/users/<int:id>/relationships/sales-admin-events')
 
+# users_emails
+api.route(UserEmailListAdmin, 'user_email_list_admin', '/admin/user-emails')
+api.route(UserEmailListPost, 'user_email_post', '/user-emails')
+api.route(UserEmailList, 'user_emails_list', '/users/<int:user_id>/alternate-emails')
+api.route(UserEmailDetail, 'user_emails_detail', '/user-emails/<int:id>', )
+api.route(UserEmailRelationship, 'user_emails_user', '/user-emails/<int:id>/relationships/user')
 
 # notifications
 api.route(NotificationListAdmin, 'notification_list_admin', '/notifications')
 api.route(NotificationList, 'notification_list', '/users/<int:user_id>/notifications')
-api.route(NotificationDetail, 'notification_detail', '/notifications/<int:id>')
+api.route(NotificationDetail, 'notification_detail', '/notifications/<int:id>',
+          '/notification-actions/<int:notification_action_id>/notification')
 api.route(NotificationRelationship, 'notification_user',
           '/notifications/<int:id>/relationships/user')
+api.route(NotificationRelationship, 'notification_actions',
+          '/notifications/<int:id>/relationships/actions')
+
+# notification actions
+api.route(NotificationActionList, 'notification_actions_list',
+          '/notifications/<int:notification_id>/notification-actions')
+api.route(NotificationActionDetail, 'notification_action_detail', '/notification-actions/<int:id>')
+api.route(NotificationActionRelationship, 'notification_actions_notification',
+          '/notification-actions/<int:id>/relationships/notification')
 
 # email_notifications
 api.route(EmailNotificationListAdmin, 'email_notification_list_admin', '/email-notifications')
@@ -137,7 +170,6 @@ api.route(ModuleDetail, 'module_detail', '/modules/<id>', '/modules')
 api.route(PageList, 'page_list', '/pages')
 api.route(PageDetail, 'page_detail', '/pages/<int:id>')
 
-
 # Mails API
 api.route(MailList, 'mail_list', '/mails')
 api.route(MailDetail, 'mail_detail', '/mails/<int:id>')
@@ -157,9 +189,20 @@ api.route(EventsRolePermissionRelationship, 'event_role_role', '/event-role-perm
 api.route(EventsRolePermissionRelationship, 'event_role_service',
           '/event-role-permissions/<int:id>/relationships/service')
 
+# panel-permissions
+api.route(PanelPermissionList, 'panel_permission_list', '/panel-permissions')
+api.route(PanelPermissionDetail, 'panel_permission_detail', '/panel-permissions/<int:id>')
+api.route(PanelPermissionRelationship, 'panel_permission_role', '/panel-permissions/<int:id>/relationships/role')
+
+
 # roles
 api.route(RoleList, 'role_list', '/roles')
 api.route(RoleDetail, 'role_detail', '/roles/<int:id>', '/role-invites/<int:role_invite_id>/role')
+
+# custom system roles
+api.route(CustomSystemRoleList, 'custom_system_role_list', '/custom-system-roles')
+api.route(CustomSystemRoleDetail, 'custom_system_role_detail', '/custom-system-roles/<int:id>',
+          '/panel-permissions/<int:role_id>/custom-system-role')
 
 # role_invites
 api.route(RoleInviteListPost, 'role_invite_list_post', '/role-invites')
@@ -207,7 +250,8 @@ api.route(EventDetail, 'event_detail', '/events/<int:id>', '/events/<identifier>
           '/access-codes/<int:access_code_id>/event', '/email-notifications/<int:email_notification_id>/event',
           '/attendees/<int:attendee_id>/event', '/custom-forms/<int:custom_form_id>/event',
           '/orders/<order_identifier>/event', '/faqs/<int:faq_id>/event', '/faq-types/<int:faq_type_id>/event',
-          '/feedbacks/<int:feedback_id>/event', '/stripe-authorizations/<int:stripe_authorization_id>/event')
+          '/feedbacks/<int:feedback_id>/event', '/stripe-authorizations/<int:stripe_authorization_id>/event',
+          '/user-favourite-events/<int:user_favourite_event_id>/event')
 api.route(EventRelationship, 'event_ticket', '/events/<int:id>/relationships/tickets',
           '/events/<identifier>/relationships/tickets')
 api.route(EventRelationship, 'event_ticket_tag', '/events/<int:id>/relationships/ticket-tags',
@@ -238,6 +282,8 @@ api.route(EventRelationship, 'event_event_type', '/events/<int:id>/relationships
           '/events/<identifier>/relationships/event-type')
 api.route(EventRelationship, 'event_event_topic', '/events/<int:id>/relationships/event-topic',
           '/events/<identifier>/relationships/event-topic')
+api.route(EventRelationship, 'events_orga', '/events/<int:id>/relationships/event-orga',
+          '/events/<identifier>/relationships/event-orga')
 api.route(EventRelationship, 'event_event_sub_topic', '/events/<int:id>/relationships/event-sub-topic',
           '/events/<identifier>/relationships/event-sub-topic')
 api.route(EventRelationship, 'event_role_invite', '/events/<int:id>/relationships/role-invites',
@@ -272,7 +318,6 @@ api.route(EventRelationship, 'event_moderators', '/events/<int:id>/relationships
 api.route(EventRelationship, 'event_registrars', '/events/<int:id>/relationships/registrars',
           '/events/<identifier>/relationships/registrars')
 
-
 # microlocations
 api.route(MicrolocationListPost, 'microlocation_list_post', '/microlocations')
 api.route(MicrolocationList, 'microlocation_list', '/events/<int:event_id>/microlocations',
@@ -284,13 +329,24 @@ api.route(MicrolocationRelationshipOptional, 'microlocation_session',
 api.route(MicrolocationRelationshipRequired, 'microlocation_event',
           '/microlocations/<int:id>/relationships/event')
 
+# user favourite events
+api.route(UserFavouriteEventListPost, 'user_favourite_event_list_post', '/user-favourite-events')
+api.route(UserFavouriteEventList, 'user_favourite_events_list', '/user-favourite-events',
+          '/users/<int:user_id>/user-favourite-events')
+api.route(UserFavouriteEventDetail, 'user_favourite_event_detail',
+          '/user-favourite-events/<int:id>')
+api.route(UserFavouriteEventRelationship, 'user_favourite_event_user',
+          '/user-favourite-events/<int:id>/relationships/user')
+api.route(UserFavouriteEventRelationship, 'user_favourite_event_event',
+          '/user-favourite-events/<int:id>/relationships/event')
+
 # sessions
 api.route(SessionListPost, 'session_list_post', '/sessions')
 api.route(SessionList, 'session_list', '/events/<int:event_id>/sessions',
           '/events/<event_identifier>/sessions', '/users/<int:user_id>/sessions',
           '/tracks/<int:track_id>/sessions', '/session-types/<int:session_type_id>/sessions',
           '/microlocations/<int:microlocation_id>/sessions', '/speakers/<int:speaker_id>/sessions')
-api.route(SessionDetail, 'session_detail', '/sessions/<int:id>')
+api.route(SessionDetail, 'session_detail', '/sessions/<int:id>', '/feedbacks/<int:feedback_id>/event')
 api.route(SessionRelationshipOptional, 'session_microlocation',
           '/sessions/<int:id>/relationships/microlocation')
 api.route(SessionRelationshipOptional, 'session_track', '/sessions/<int:id>/relationships/track')
@@ -302,6 +358,7 @@ api.route(SessionRelationshipRequired, 'session_user',
           '/sessions/<int:id>/relationships/creator')
 api.route(SessionRelationshipOptional, 'session_speaker',
           '/sessions/<int:id>/relationships/speakers')
+api.route(SessionRelationshipOptional, 'session_feedbacks', '/sessions/<int:id>/relationships/feedbacks')
 
 # social_links
 api.route(SocialLinkListPost, 'social_link_list_post', '/social-links')
@@ -443,6 +500,10 @@ api.route(EventTopicRelationship, 'event_topic_event',
 api.route(EventTopicRelationship, 'event_topic_event_sub_topic',
           '/event-topics/<int:id>/relationships/event-sub-topics')
 
+# event orga
+api.route(EventOrgaDetail, 'event_orga_detail', '/events/<event_identifier>/event-orga',
+          '/events/<int:event_id>/event-orga')
+
 # event sub topics
 api.route(EventSubTopicListPost, 'event_sub_topic_list_post', '/event-sub-topics')
 api.route(EventSubTopicList, 'event_sub_topic_list',
@@ -498,15 +559,17 @@ api.route(FaqRelationshipOptional, 'faq_faq_type', '/faqs/<int:id>/relationships
 # Feedback
 api.route(FeedbackListPost, 'feedback_list_post', '/feedbacks')
 api.route(FeedbackList, 'feedback_list', '/events/<int:event_id>/feedbacks', '/events/<event_identifier>/feedbacks',
-          '/users/<int:user_id>/feedbacks')
+          '/users/<int:user_id>/feedbacks', '/sessions/<int:session_id>/feedbacks')
 api.route(FeedbackDetail, 'feedback_detail', '/feedbacks/<int:id>')
-api.route(FeedbackRelationshipRequired, 'feedback_event', '/feedbacks/<int:id>/relationships/event')
-api.route(FeedbackRelationshipRequired, 'feedback_user',
+api.route(FeedbackRelationship, 'feedback_event', '/feedbacks/<int:id>/relationships/event')
+api.route(FeedbackRelationship, 'feedback_user',
           '/feedbacks/<int:id>/relationships/user')
+api.route(FeedbackRelationship, 'feedback_session',
+          '/feedbacks/<int:id>/relationships/session')
 
 # Stripe Authorization API
 api.route(StripeAuthorizationListPost, 'stripe_authorization_list_post', '/stripe-authorizations')
-api.route(StripeAuthorizationDetail, 'stripe_authorization_detail',  '/stripe-authorizations/<int:id>',
+api.route(StripeAuthorizationDetail, 'stripe_authorization_detail', '/stripe-authorizations/<int:id>',
           '/events/<int:event_id>/stripe-authorization', '/events/<event_identifier>/stripe-authorization')
 api.route(StripeAuthorizationRelationship, 'stripe_authorization_event',
           '/stripe-authorizations/<int:id>/relationships/event')
@@ -527,7 +590,6 @@ api.route(OrderRelationship, 'order_event', '/orders/<order_identifier>/relation
 api.route(OrderRelationship, 'order_marketer', '/orders/<order_identifier>/relationships/marketer')
 api.route(OrderRelationship, 'order_discount', '/orders/<order_identifier>/relationships/discount-code')
 
-
 # Event Statistics API
 api.route(EventStatisticsGeneralDetail, 'event_statistics_general_detail', '/events/<int:id>/general-statistics',
           '/events/<identifier>/general-statistics')
@@ -544,7 +606,6 @@ api.route(AdminStatisticsUserDetail, 'admin_statistics_user_detail', '/admin/sta
 api.route(AdminStatisticsMailDetail, 'admin_statistics_mail_detail', '/admin/statistics/mails')
 
 # Admin Sales
-
 api.route(AdminSalesByEventsList, 'admin_sales_by_events', '/admin/sales/by-events')
 api.route(AdminSalesByOrganizersList, 'admin_sales_by_organizers', '/admin/sales/by-organizers')
 api.route(AdminSalesByLocationList, 'admin_sales_by_location', '/admin/sales/by-location')
@@ -552,3 +613,6 @@ api.route(AdminSalesByMarketerList, 'admin_sales_by_marketer', '/admin/sales/by-
 api.route(AdminSalesDiscountedList, 'admin_sales_discounted', '/admin/sales/discounted')
 api.route(AdminSalesInvoicesList, 'admin_sales_invoices', '/admin/sales/invoices')
 api.route(AdminSalesFeesList, 'admin_sales_fees', '/admin/sales/fees')
+
+# Full text search w/ Elastic Search
+api.route(EventSearchResultList, 'event_search_results', '/search/events')

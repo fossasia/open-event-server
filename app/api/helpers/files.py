@@ -139,27 +139,49 @@ def create_save_image_sizes(image_file, image_sizes_type, unique_identifier=None
     large_basewidth = image_sizes.full_width if image_sizes.full_width else 1300
     large_height_size = image_sizes.full_height if image_sizes.full_width else 500
 
-    thumbnail_aspect = image_sizes.thumbnail_aspect
-    thumbnail_basewidth = image_sizes.thumbnail_width
-    thumbnail_height_size = image_sizes.thumbnail_height
+    if image_sizes_type == 'speaker-image':
+        thumbnail_aspect = image_sizes.thumbnail_aspect if image_sizes.thumbnail_aspect else True
+        thumbnail_basewidth = thumbnail_height_size = image_sizes.thumbnail_size_width_height
+    else:
+        thumbnail_aspect = image_sizes.thumbnail_aspect
+        thumbnail_basewidth = image_sizes.thumbnail_width
+        thumbnail_height_size = image_sizes.thumbnail_height
 
-    icon_aspect = image_sizes.icon_aspect
-    icon_basewidth = image_sizes.icon_width
-    icon_height_size = image_sizes.icon_height
+    if image_sizes_type == 'speaker-image':
+        icon_aspect = image_sizes.icon_aspect if image_sizes.icon_aspect else True
+        icon_basewidth = icon_height_size = image_sizes.icon_size_width_height
+    else:
+        icon_aspect = image_sizes.icon_aspect
+        icon_basewidth = image_sizes.icon_width
+        icon_height_size = image_sizes.icon_height
 
-    original_upload_path = UPLOAD_PATHS[image_sizes_type]['original'].format(
-        identifier=unique_identifier
-    )
-
-    large_upload_path = UPLOAD_PATHS[image_sizes_type]['large'].format(
-        identifier=unique_identifier
-    )
-    thumbnail_upload_path = UPLOAD_PATHS[image_sizes_type]['thumbnail'].format(
-        identifier=unique_identifier
-    )
-    icon_upload_path = UPLOAD_PATHS[image_sizes_type]['icon'].format(
-        identifier=unique_identifier
-    )
+    if image_sizes_type == 'event-image':
+        original_upload_path = UPLOAD_PATHS['event']['original'].format(
+            identifier=unique_identifier)
+        large_upload_path = UPLOAD_PATHS['event']['large'].format(
+            identifier=unique_identifier)
+        thumbnail_upload_path = UPLOAD_PATHS['event']['thumbnail'].format(
+            identifier=unique_identifier)
+        icon_upload_path = UPLOAD_PATHS['event']['icon'].format(
+            identifier=unique_identifier)
+    elif image_sizes_type == 'speaker-image':
+        original_upload_path = UPLOAD_PATHS['user']['original'].format(
+            identifier=unique_identifier)
+        large_upload_path = UPLOAD_PATHS['user']['large'].format(
+            identifier=unique_identifier)
+        thumbnail_upload_path = UPLOAD_PATHS['user']['thumbnail'].format(
+            identifier=unique_identifier)
+        icon_upload_path = UPLOAD_PATHS['user']['icon'].format(
+            identifier=unique_identifier)
+    else:
+        original_upload_path = UPLOAD_PATHS[image_sizes_type]['original'].format(
+            identifier=unique_identifier)
+        large_upload_path = UPLOAD_PATHS[image_sizes_type]['large'].format(
+            identifier=unique_identifier)
+        thumbnail_upload_path = UPLOAD_PATHS[image_sizes_type]['thumbnail'].format(
+            identifier=unique_identifier)
+        icon_upload_path = UPLOAD_PATHS[image_sizes_type]['icon'].format(
+            identifier=unique_identifier)
 
     new_images = {
         'original_image_url': create_save_resized_image(image_file, 0, 0, 0, original_upload_path, resize=False),

@@ -23,9 +23,10 @@ class ChargesLayer(BaseDataLayer):
         else:
             # when identifier is passed
             order = Order.query.filter_by(identifier=view_kwargs['order_identifier']).first()
+
         if not order:
-            raise ObjectNotFound({'parameter': 'id'},
-                                 "Order with id: {} not found".format(view_kwargs['id']))
+            raise ObjectNotFound({'parameter': 'order_identifier'},
+                                 "Order with identifier: {} not found".format(view_kwargs['order_identifier']))
         elif order.status == 'cancelled' or order.status == 'expired' or order.status == 'completed':
             raise ConflictException({'parameter': 'id'},
                                     "You cannot charge payments on a cancelled, expired or completed order")
@@ -33,19 +34,29 @@ class ChargesLayer(BaseDataLayer):
             raise ConflictException({'parameter': 'id'},
                                     "You cannot charge payments on a free order")
 
+        data['id'] = order.id
+
         # charge through stripe
         if order.payment_mode == 'stripe':
             if not data.get('stripe'):
                 raise UnprocessableEntity({'source': ''}, "stripe token is missing")
+            if not order.event.can_pay_by_stripe:
+                raise ConflictException({'': ''}, "This event doesn't accept payments by Stripe")
+
             success, response = TicketingManager.charge_stripe_order_payment(order, data['stripe'])
-            if not success:
-                raise UnprocessableEntity({'source': 'stripe_token_id'}, response)
+            data['status'] = success
+            data['message'] = response
 
         # charge through paypal
         elif order.payment_mode == 'paypal':
-            if not data.get('paypal'):
-                raise UnprocessableEntity({'source': ''}, "paypal token is missing")
-            success, response = TicketingManager.charge_paypal_order_payment(order, data['paypal'])
-            if not success:
-                raise UnprocessableEntity({'source': 'paypal'}, response)
-        return order
+            if (not data.get('paypal_payer_id')) or (not data.get('paypal_payment_id')):
+                raise UnprocessableEntity({'source': ''}, "paypal_payer_id or paypal_payment_id or both missing")
+            if not order.event.can_pay_by_paypal:
+                raise ConflictException({'': ''}, "This event doesn't accept payments by Paypal")
+
+            success, response = TicketingManager.charge_paypal_order_payment(order, data['paypal_payer_id'],
+                                                                             data['paypal_payment_id'])
+            data['status'] = success
+            data['message'] = response
+
+        return data

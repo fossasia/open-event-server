@@ -1,17 +1,15 @@
 import json
 
+import paypalrestsdk
 import requests
 import stripe
-from flask import current_app
 from forex_python.converter import CurrencyRates
 
 from app.api.helpers.cache import cache
-from app.api.helpers.db import safe_query
+from app.api.helpers.exceptions import ForbiddenException, ConflictException
 from app.api.helpers.utilities import represents_int
-from app.models import db
-from app.models.event import Event
 from app.models.stripe_authorization import StripeAuthorization
-from app.settings import get_settings
+from app.settings import get_settings, Environment
 
 
 @cache.memoize(5)
@@ -24,6 +22,10 @@ def forex(from_currency, to_currency, amount):
 
 
 class StripePaymentsManager(object):
+    """
+    Class to manage payments through Stripe.
+    """
+
     @staticmethod
     def get_credentials(event=None):
         """
@@ -47,7 +49,7 @@ class StripePaymentsManager(object):
             if represents_int(event):
                 authorization = StripeAuthorization.query.filter_by(event_id=event).first()
             else:
-                authorization = event.stripe
+                authorization = event.stripe_authorization
             if authorization:
                 return {
                     'SECRET_KEY': authorization.stripe_secret_key,
@@ -66,7 +68,7 @@ class StripePaymentsManager(object):
         credentials = StripePaymentsManager.get_credentials()
 
         if not credentials:
-            raise Exception('Stripe credentials of the Event organizer not found')
+            raise ForbiddenException({'pointer': ''}, "Stripe payment isn't configured properly for the Platform")
 
         data = {
             'client_secret': credentials['SECRET_KEY'],
@@ -79,11 +81,19 @@ class StripePaymentsManager(object):
 
     @staticmethod
     def capture_payment(order_invoice, currency=None, credentials=None):
+        """
+        Capture payments through stripe.
+        :param order_invoice: Order to be charged for
+        :param currency: Currency of the order amount.
+        :param credentials: Stripe credentials.
+        :return: charge/None depending on success/failure.
+        """
         if not credentials:
             credentials = StripePaymentsManager.get_credentials(order_invoice.event)
 
         if not credentials:
-            raise Exception('Stripe is incorrectly configured')
+            raise ConflictException({'pointer': ''},
+                                    'Stripe credentials not found for the event.')
         stripe.api_key = credentials['SECRET_KEY']
 
         if not currency:
@@ -111,124 +121,89 @@ class StripePaymentsManager(object):
                 description=order_invoice.event.name
             )
             return charge
-        except:
-            return None
+        except Exception as e:
+            raise ConflictException({'pointer': ''}, str(e))
 
 
 class PayPalPaymentsManager(object):
-    api_version = 93
+    """
+    Class to manage payment through Paypal REST API.
+    """
 
     @staticmethod
-    def get_credentials(event=None, override_mode=False, is_testing=False):
+    def configure_paypal():
         """
-        Get Paypal credentials from settings module.
-        :param event: Associated event.
-        :param override_mode:
-        :param is_testing:
-        :return:
+        Configure the paypal sdk
+        :return: Credentials
         """
-        if event and represents_int(event):
-            event = safe_query(db, Event, 'id', event, 'event_id')
+        # Use Sandbox by default.
         settings = get_settings()
-        if not override_mode:
-            if settings['paypal_mode'] and settings['paypal_mode'] != "":
-                if settings['paypal_mode'] == 'live':
-                    is_testing = False
-                else:
-                    is_testing = True
-            else:
-                return None
+        paypal_mode = 'sandbox'
+        paypal_client = settings.get('paypal_sandbox_client', None)
+        paypal_secret = settings.get('paypal_sandbox_secret', None)
 
-        if is_testing:
-            credentials = {
-                'USER': settings['paypal_sandbox_username'],
-                'PWD': settings['paypal_sandbox_password'],
-                'SIGNATURE': settings['paypal_sandbox_signature'],
-                'SERVER': 'https://api-3t.sandbox.paypal.com/nvp',
-                'CHECKOUT_URL': 'https://www.sandbox.paypal.com/cgi-bin/webscr',
-                'EMAIL': '' if not event or not event.paypal_email or event.paypal_email == "" else event.paypal_email
-            }
-        else:
-            credentials = {
-                'USER': settings['paypal_live_username'],
-                'PWD': settings['paypal_live_password'],
-                'SIGNATURE': settings['paypal_live_signature'],
-                'SERVER': 'https://api-3t.paypal.com/nvp',
-                'CHECKOUT_URL': 'https://www.paypal.com/cgi-bin/webscr',
-                'EMAIL': '' if not event or not event.paypal_email or event.paypal_email == "" else event.paypal_email
-            }
-        if credentials['USER'] and credentials['PWD'] and credentials['SIGNATURE'] and credentials['USER'] != "" and \
-                credentials['PWD'] != "" and credentials['SIGNATURE'] != "":
-            return credentials
-        else:
-            return None
+        # Switch to production if paypal_mode is production.
+        if settings['paypal_mode'] == Environment.PRODUCTION:
+            paypal_mode = 'live'
+            paypal_client = settings.get('paypal_client', None)
+            paypal_secret = settings.get('paypal_secret', None)
+
+        if not paypal_client or not paypal_secret:
+            raise ConflictException({'pointer': ''}, "Payments through Paypal hasn't been configured on the platform")
+
+        paypalrestsdk.configure({
+            "mode": paypal_mode,
+            "client_id": paypal_client,
+            "client_secret": paypal_secret})
 
     @staticmethod
-    def get_approved_payment_details(order, credentials=None):
+    def create_payment(order, return_url, cancel_url):
         """
-        Use the paypal token to get the approved payment details from Paypal
-        :param order: Order to charge for
-        :param credentials: the paypal credentials
-        :return: payer_id and other details returned by Paypal.
+        Create payment for an order
+        :param order: Order to create payment for.
+        :param return_url: return url for the payment.
+        :param cancel_url: cancel_url for the payment.
+        :return: request_id or the error message along with an indicator.
         """
+        if (not order.event.paypal_email) or order.event.paypal_email == '':
+            raise ConflictException({'pointer': ''}, "Payments through Paypal hasn't been configured for the event")
 
-        if not credentials:
-            credentials = PayPalPaymentsManager.get_credentials(order.event)
+        PayPalPaymentsManager.configure_paypal()
 
-        if not credentials:
-            raise Exception('PayPal credentials have not been set correctly')
+        payment = paypalrestsdk.Payment({
+            "intent": "sale",
+            "payer": {"payment_method": "paypal"},
+            "redirect_urls": {
+                "return_url": return_url,
+                "cancel_url": cancel_url},
+            "transactions": [{
+                "amount": {
+                    "total": int(order.amount),
+                    "currency": order.event.payment_currency
+                },
+                "payee": {
+                    "email": order.event.paypal_email
+                }
+            }]
+        })
 
-        data = {
-            'USER': credentials['USER'],
-            'PWD': credentials['PWD'],
-            'SIGNATURE': credentials['SIGNATURE'],
-            'SUBJECT': credentials['EMAIL'],
-            'METHOD': 'GetExpressCheckoutDetails',
-            'VERSION': PayPalPaymentsManager.api_version,
-            'TOKEN': order.paypal_token
-        }
-
-        if current_app.config['TESTING']:
-            return data
-
-        response = requests.post(credentials['SERVER'], data=data)
-        return json.loads(response.text)
+        if payment.create():
+            return True, payment.id
+        else:
+            return False, payment.error
 
     @staticmethod
-    def capture_payment(order, payer_id, currency=None, credentials=None):
+    def execute_payment(paypal_payer_id, paypal_payment_id):
         """
-        capture order payment using payer_id and token.
-        :param order: Order to charge for.
-        :param payer_id: The payer_id obtained from Paypal using the get_approved_payment_details method.
-        :param currency: currency
-        :param credentials: the paypal credentials.
-        :return:
+        Execute payemnt and charge the user.
+        :param paypal_payment_id: payment_id
+        :param paypal_payer_id: payer_id
+        :return: Result of the transaction.
         """
-        if not credentials:
-            credentials = PayPalPaymentsManager.get_credentials(order.event)
 
-        if not credentials:
-            raise Exception('PayPal credentials have not be set correctly')
+        payment = paypalrestsdk.Payment.find(paypal_payment_id)
 
-        if not currency:
-            currency = order.event.payment_currency
-
-        if not currency or currency == "":
-            currency = "USD"
-
-        data = {
-            'USER': credentials['USER'],
-            'PWD': credentials['PWD'],
-            'SIGNATURE': credentials['SIGNATURE'],
-            'SUBJECT': credentials['EMAIL'],
-            'METHOD': 'DoExpressCheckoutPayment',
-            'VERSION': PayPalPaymentsManager.api_version,
-            'TOKEN': order.paypal_token,
-            'PAYERID': payer_id,
-            'PAYMENTREQUEST_0_PAYMENTACTION': 'SALE',
-            'PAYMENTREQUEST_0_AMT': order.amount,
-            'PAYMENTREQUEST_0_CURRENCYCODE': currency,
-        }
-
-        response = requests.post(credentials['SERVER'], data=data)
-        return json.loads(response.text)
+        if payment.execute({"payer_id": paypal_payer_id}):
+            return True, 'Successfully Executed'
+        else:
+            return False, payment.error

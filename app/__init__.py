@@ -15,6 +15,7 @@ from flask_rest_jsonapi.errors import jsonapi_errors
 from flask_rest_jsonapi.exceptions import JsonApiException
 from healthcheck import HealthCheck, EnvironmentDump
 from apscheduler.schedulers.background import BackgroundScheduler
+from elasticsearch_dsl.connections import connections
 from pytz import utc
 
 import sqlalchemy as sa
@@ -33,7 +34,7 @@ from app.models.event import Event
 from app.models.role_invite import RoleInvite
 from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations, check_migrations
 from app.views.sentry import sentry
-from app.views.elastic_search import es
+from app.views.elastic_search import client
 from app.views.elastic_cron_helpers import sync_events_elasticsearch, cron_rebuild_events_elasticsearch
 from app.views.redis_store import redis_store
 from app.views.celery_ import celery
@@ -114,15 +115,17 @@ def create_app():
 
     # development api
     with app.app_context():
+        from app.api.admin_statistics_api.events import event_statistics
+        from app.api.auth import auth_routes
+        from app.api.attendees import attendee_misc_routes
         from app.api.bootstrap import api_v1
-        from app.api.uploads import upload_routes
+        from app.api.celery_tasks import celery_routes
+        from app.api.event_copy import event_copy
         from app.api.exports import export_routes
         from app.api.imports import import_routes
-        from app.api.celery_tasks import celery_routes
-        from app.api.auth import auth_routes
-        from app.api.admin_statistics_api.events import event_statistics
-        from app.api.event_copy import event_copy
+        from app.api.uploads import upload_routes
         from app.api.users import user_misc_routes
+        from app.api.orders import order_misc_routes
 
         app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)
@@ -133,6 +136,8 @@ def create_app():
         app.register_blueprint(auth_routes)
         app.register_blueprint(event_statistics)
         app.register_blueprint(user_misc_routes)
+        app.register_blueprint(attendee_misc_routes)
+        app.register_blueprint(order_misc_routes)
 
     sa.orm.configure_mappers()
 
@@ -150,7 +155,8 @@ def create_app():
 
     # elasticsearch
     if app.config['ENABLE_ELASTICSEARCH']:
-        es.init_app(app)
+        client.init_app(app)
+        connections.add_connection('default', client.elasticsearch)
         with app.app_context():
             try:
                 cron_rebuild_events_elasticsearch.delay()

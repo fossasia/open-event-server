@@ -121,7 +121,7 @@ class TestFilesHelperValidation(OpenEventTestCase):
     def test_create_save_image_sizes(self):
         with app.test_request_context():
             image_url_test = 'https://cdn.pixabay.com/photo/2014/09/08/17/08/hot-air-balloons-439331_960_720.jpg'
-            image_sizes_type = "event"
+            image_sizes_type = "event-image"
             width_large = 1300
             width_thumbnail = 500
             width_icon = 75

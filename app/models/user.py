@@ -12,7 +12,7 @@ from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from app.api.helpers.db import get_count
 from app.models import db
 from app.models.base import SoftDeletionModel
-from app.models.custom_system_role import UserSystemRole
+from app.models.custom_system_role import UserSystemRole, CustomSysRole
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.notification import Notification
 from app.models.panel_permission import PanelPermission
@@ -27,6 +27,9 @@ from app.models.users_events_role import UsersEventsRoles as UER
 # System-wide
 ADMIN = 'admin'
 SUPERADMIN = 'super_admin'
+
+MARKETER = 'Marketer'
+SALES_ADMIN = 'Sales Admin'
 
 SYS_ROLES_LIST = [
     ADMIN,
@@ -49,6 +52,8 @@ class User(SoftDeletionModel):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     _email = db.Column(db.String(120), unique=True, nullable=False)
     _password = db.Column(db.String(128), nullable=False)
+    facebook_id = db.Column(db.BigInteger, unique=True, nullable=True, name='facebook_id')
+    facebook_login_hash = db.Column(db.String, nullable=True)
     reset_password = db.Column(db.String(128))
     salt = db.Column(db.String(128))
     avatar_url = db.Column(db.String)
@@ -67,14 +72,32 @@ class User(SoftDeletionModel):
     icon_image_url = db.Column(db.String)
     is_super_admin = db.Column(db.Boolean, default=False)
     is_admin = db.Column(db.Boolean, default=False)
+    is_sales_admin = db.Column(db.Boolean, default=False)
+    is_marketer = db.Column(db.Boolean, default=False)
     is_verified = db.Column(db.Boolean, default=False)
     last_accessed_at = db.Column(db.DateTime(timezone=True))
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(pytz.utc))
     speaker = db.relationship('Speaker', backref="user")
+    favourite_events = db.relationship('UserFavouriteEvent', backref="user")
     session = db.relationship('Session', backref="user")
     feedback = db.relationship('Feedback', backref="user")
     access_codes = db.relationship('AccessCode', backref="user")
     discount_codes = db.relationship('DiscountCode', backref="user")
+    marketer_events = db.relationship(
+                          'Event',
+                          viewonly=True,
+                          secondary='join(UserSystemRole, CustomSysRole,'
+                                    ' and_(CustomSysRole.id == UserSystemRole.role_id, CustomSysRole.name == "Marketer"))',
+                          primaryjoin='UserSystemRole.user_id == User.id',
+                          secondaryjoin='Event.id == UserSystemRole.event_id'
+    )
+    sales_admin_events = db.relationship(
+                         'Event',
+                         viewonly=True,
+                         secondary='join(UserSystemRole, CustomSysRole,'
+                                   ' and_(CustomSysRole.id == UserSystemRole.role_id, CustomSysRole.name == "Sales Admin"))',
+                         primaryjoin='UserSystemRole.user_id == User.id',
+                         secondaryjoin='Event.id == UserSystemRole.event_id')
 
     @hybrid_property
     def password(self):

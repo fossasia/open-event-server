@@ -46,8 +46,11 @@ class AttendeeSchemaPublic(SoftDeletionSchema):
 
     ticket_id = fields.Str(allow_none=True)
     is_checked_in = fields.Boolean()
+    device_name_checkin = fields.Str(allow_none=True)
     checkin_times = fields.Str(allow_none=True)
+    checkout_times = fields.Str(allow_none=True, dump_only=True)
     attendee_notes = fields.Str(allow_none=True)
+    is_checked_out = fields.Boolean()
     pdf_url = fields.Url(dump_only=True)
     event = Relationship(attribute='event',
                          self_view='v1.attendee_event',

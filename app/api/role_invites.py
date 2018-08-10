@@ -61,7 +61,7 @@ class RoleInviteListPost(ResourceList):
 
         send_email_role_invite(role_invite.email, role_invite.role_name, event.name, link)
         if user:
-            send_notif_event_role(user, role_invite.role_name, event.name, link)
+            send_notif_event_role(user, role_invite.role_name, event.name, link, event.id)
 
     view_kwargs = True
     methods = ['POST']

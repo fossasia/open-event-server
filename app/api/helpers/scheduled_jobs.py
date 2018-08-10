@@ -1,21 +1,22 @@
-from app.models.event import Event
-from app.models.order import Order
-from app.models.event_invoice import EventInvoice
-from app.models.ticket import Ticket
-from app.models.ticket_fee import get_fee
-from app.api.helpers.query import get_upcoming_events, get_user_event_roles_by_role_name
+import datetime
+
+import pytz
+from dateutil.relativedelta import relativedelta
+
+from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.mail import send_email_after_event, send_email_for_monthly_fee_payment, \
     send_followup_email_for_monthly_fee_payment
 from app.api.helpers.notification import send_notif_monthly_fee_payment, send_followup_notif_monthly_fee_payment, \
     send_notif_after_event
-from app.api.helpers.db import safe_query, save_to_db
+from app.api.helpers.query import get_upcoming_events, get_user_event_roles_by_role_name
 from app.api.helpers.utilities import monthdelta
-from app.settings import get_settings
 from app.models import db
-
-import datetime
-import pytz
-from dateutil.relativedelta import relativedelta
+from app.models.event import Event
+from app.models.event_invoice import EventInvoice
+from app.models.order import Order
+from app.models.ticket import Ticket
+from app.models.ticket_fee import get_fee
+from app.settings import get_settings
 
 
 def send_after_event_mail():
@@ -99,7 +100,8 @@ def send_event_fee_notification():
                                                prev_month,
                                                new_invoice.amount,
                                                app_name,
-                                               link)
+                                               link,
+                                               new_invoice.event_id)
 
 
 def send_event_fee_notification_followup():
@@ -125,4 +127,5 @@ def send_event_fee_notification_followup():
                                                         prev_month,
                                                         incomplete_invoice.amount,
                                                         app_name,
-                                                        link)
+                                                        link,
+                                                        incomplete_invoice.event.id)
