@@ -31,6 +31,9 @@ from app.models.module import Module
 # EventTopic
 from app.models.event_topic import EventTopic
 
+# EventSubTopic
+from app.models.event_sub_topic import EventSubTopic
+
 # EventType
 from app.models.event_type import EventType
 
@@ -141,6 +144,33 @@ def create_event_topics():
         get_or_create(EventTopic, name=topic)
 
 
+def create_event_sub_topics():
+    event_sub_topic = {
+     "Film, Media & Entertainment": ["Comedy", "Gaming", "Anime"],
+     "Community & Culture": ["City/Town", "Other", "LGBT"],
+     "Home & Lifestyle": ["Dating", "Home & Garden"],
+     "Sports & Fitness": ["Volleyball", "Other"],
+     "Health & Wellness": ["Yoga", "Medical"],
+     "Food & Drink": ["Other", "Food", "Beer"],
+     "Other": ["Avatar", "Logo"],
+     "Science & Technology": ["Robotics", "Other", "High Tech", "Science", "Social Media", "Medicine", "Mobile", "Biotech"],
+     "Music": ["Cultural", "Pop", "Top 40", "EDM / Electronic", "R&B", "Other", "Classical"],
+     "Performing & Visual Arts": ["Craft", "Comedy", "Fine Art", "Orchestra"],
+     "Family & Education": ["Education", "Baby", "Reunion"],
+     "Business & Professional": ["Career", "Startups &amp; Small Business", "Educators", "Design", "Finance"],
+     "Charity & Causes": ["Education", "Other", "Environment"],
+     "Hobbies & Special Interest": ["Other", "Anime/Comics"],
+     "Seasonal & Holiday": ["Easter", "Other"],
+     "Auto, Boat & Air": ["Auto", "Air"],
+     "Religion & Spirituality": ["Mysticism and Occult"],
+     "Government & Politics": ["Non-partisan"]
+    }
+    eventopics=db.session.query(EventTopic).all()
+    for keysub_topic in event_sub_topic:
+        for subtopic in event_sub_topic[keysub_topic]:
+            get_or_create(EventSubTopic, name=subtopic, event_topic_id=next(x for x in eventopics if x.name==keysub_topic).id)
+
+
 def create_event_types():
     event_type = ['Camp, Treat & Retreat', 'Dinner or Gala',
                   'Other', 'Concert or Performance', 'Conference',
@@ -168,7 +198,6 @@ def create_permissions():
     mod = Role.query.get(4)
     attend = Role.query.get(5)
     regist = Role.query.get(6)
-
     track = Service.query.get(1)
     session = Service.query.get(2)
     speaker = Service.query.get(3)
@@ -292,6 +321,8 @@ def populate():
     create_speaker_image_sizes()
     print('Creating Event Topics...')
     create_event_topics()
+    print('Creating Event SubTopics...')
+    create_event_sub_topics()
     print('Creating Event Types...')
     create_event_types()
     print('Creating Event Locations...')
@@ -315,6 +346,7 @@ def populate_without_print():
     create_event_image_sizes()
     create_speaker_image_sizes()
     create_event_topics()
+    create_event_sub_topics()
     create_event_types()
     create_event_locations()
     create_admin_message_settings()
