@@ -23,6 +23,7 @@ from app.api.helpers.export_helpers import create_export_job
 # models
 from app.models import db
 from app.models.access_code import AccessCode
+from app.models.module import Module
 from app.models.custom_form import CustomForms
 from app.models.discount_code import DiscountCode
 from app.models.email_notification import EmailNotification
@@ -118,6 +119,18 @@ class EventList(ResourceList):
         :return:
         """
         is_verified = User.query.filter_by(id=kwargs['user_id']).first().is_verified
+        modules = Module.query.first()
+        if data.get('is_ticketing_enabled', False) and not modules.ticket_include:
+            raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
+                                     "Ticketing is not enabled in the system")
+        if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
+                data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
+            if not modules.payment_include:
+                raise ForbiddenException({'source': ''},
+                                         "Payment is not enabled in the system")
+        if data.get('is_donation_enabled', False) and not modules.donation_include:
+            raise ForbiddenException({'source': '/data/attributes/is-donation-enabled'},
+                                     "Donation is not enabled in the system")
         if data.get('state', None) == 'published' and not is_verified:
             raise ForbiddenException({'source': ''},
                                      "Only verified accounts can publish events")
@@ -446,6 +459,18 @@ class EventDetail(ResourceDetail):
         :return:
         """
         is_verified = current_identity.is_verified
+        modules = Module.query.first()
+        if data.get('is_ticketing_enabled', False) and not modules.ticket_include:
+            raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
+                                     "Ticketing is not enabled in the system")
+        if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
+                data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
+            if not modules.payment_include:
+                raise ForbiddenException({'source': ''},
+                                         "Payment is not enabled in the system")
+        if data.get('is_donation_enabled', False) and not modules.donation_include:
+            raise ForbiddenException({'source': '/data/attributes/is-donation-enabled'},
+                                     "Donation is not enabled in the system")
         if data.get('state', None) == 'published' and not is_verified:
             raise ForbiddenException({'source': ''},
                                      "Only verified accounts can publish events")
