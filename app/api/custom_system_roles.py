@@ -1,4 +1,5 @@
-from flask_rest_jsonapi import ResourceDetail, ResourceList
+from flask_rest_jsonapi import ResourceDetail, ResourceList, \
+    ResourceRelationship
 
 from app.api.bootstrap import api
 from app.api.schema.custom_system_roles import CustomSystemRoleSchema
@@ -12,10 +13,25 @@ class CustomSystemRoleList(ResourceList):
     """
     List and create Custom System Role
     """
+
+    def query(self, view_kwargs):
+        """
+        query method for Panel Permission List
+        :param view_kwargs:
+        :return:
+        """
+        query_ = self.session.query(CustomSysRole)
+        if view_kwargs.get('panel_id'):
+            panel = safe_query(self, PanelPermission, 'id', view_kwargs['panel_id'], 'panel_id')
+            query_ = CustomSysRole.query.filter(CustomSysRole.panels.any(id=panel.id))
+
+        return query_
+
     decorators = (api.has_permission('is_admin', methods="POST"),)
     schema = CustomSystemRoleSchema
     data_layer = {'session': db.session,
-                  'model': CustomSysRole}
+                  'model': CustomSysRole,
+                  'methods': {'query': query}}
 
 
 class CustomSystemRoleDetail(ResourceDetail):
@@ -35,6 +51,16 @@ class CustomSystemRoleDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
+    decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
+    schema = CustomSystemRoleSchema
+    data_layer = {'session': db.session,
+                  'model': CustomSysRole}
+
+
+class CustomSystemRoleRelationship(ResourceRelationship):
+    """
+    Custom System Role Relationship
+    """
     decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)
     schema = CustomSystemRoleSchema
     data_layer = {'session': db.session,
