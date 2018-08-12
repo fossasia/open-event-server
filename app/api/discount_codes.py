@@ -320,7 +320,7 @@ class DiscountCodeDetail(ResourceDetail):
             raise UnprocessableEntity({'source': ''}, "Please verify your permission")
 
     decorators = (jwt_required,)
-    schema = DiscountCodeSchemaPublic
+    schema = DiscountCodeSchemaTicket
     data_layer = {'session': db.session,
                   'model': DiscountCode,
                   'methods': {
