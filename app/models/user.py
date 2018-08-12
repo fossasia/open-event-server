@@ -349,7 +349,7 @@ class User(SoftDeletionModel):
         custom_role = UserSystemRole.query.filter_by(user=self).first()
         if not custom_role:
             return False
-        perm = PanelPermission.query.filter_by(role_id=custom_role.role_id, can_access=True).first()
+        perm = PanelPermission.query.filter(PanelPermission.roles.any(id=custom_role.role_id)).first()
         if not perm:
             return False
         return perm.panel_name
