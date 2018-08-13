@@ -211,7 +211,7 @@ class DiscountCodeDetail(ResourceDetail):
             else:
                 raise ObjectNotFound({'parameter': '{code}'}, "DiscountCode: not found")
 
-            self.schema = DiscountCodeSchemaPublic
+            self.schema = DiscountCodeSchemaTicket
             return
 
         if kwargs.get('id'):
