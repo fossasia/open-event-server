@@ -43,6 +43,15 @@ from app.models.event_location import EventLocation
 # User Permissions
 from app.models.user_permission import UserPermission
 SALES = 'sales'
+ADMIN = 'admin'
+EVENTS = 'events'
+SESSIONS = 'sessions'
+USERS = 'users'
+PERMISSIONS = 'permissions'
+MESSAGES = 'messages'
+REPORTS = 'reports'
+SETTINGS = 'settings'
+CONTENT = 'content'
 
 
 def create_roles():
@@ -248,13 +257,20 @@ def create_custom_sys_roles():
     db.session.add(role)
 
 
+def create_panels():
+    panels = [SALES, ADMIN, EVENTS, SESSIONS, USERS, PERMISSIONS, MESSAGES,
+              REPORTS, SETTINGS, CONTENT]
+    for panel in panels:
+        perm, _ = get_or_create(PanelPermission, panel_name=panel)
+        db.session.add(perm)
+
+
 def create_panel_permissions():
-    sales_admin = CustomSysRole.query.filter_by(name='Sales Admin').first()
-    perm, _ = get_or_create(PanelPermission, panel_name=SALES, role=sales_admin)
-    db.session.add(perm)
-    marketer = CustomSysRole.query.filter_by(name='Marketer').first()
-    perm, _ = get_or_create(PanelPermission, panel_name=SALES, role=marketer)
-    db.session.add(perm)
+    sales_panel, _ = get_or_create(PanelPermission, panel_name=SALES)
+    sales_admin, _ = get_or_create(CustomSysRole, name='Sales Admin')
+    marketer, _ = get_or_create(CustomSysRole, name='Marketer')
+    sales_panel.roles.append(sales_admin)
+    sales_panel.roles.append(marketer)
 
 
 def create_user_permissions():
@@ -307,6 +323,8 @@ def populate():
     create_permissions()
     print('Creating custom system roles...')
     create_custom_sys_roles()
+    print('Creating panels...')
+    create_panels()
     print('Creating admin panel permissions...')
     create_panel_permissions()
     print('Creating user permissions...')
@@ -339,6 +357,7 @@ def populate_without_print():
     create_services()
     create_permissions()
     create_custom_sys_roles()
+    create_panels()
     create_panel_permissions()
     create_user_permissions()
     create_settings()
