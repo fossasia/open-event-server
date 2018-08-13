@@ -181,11 +181,11 @@ api.route(EventsRolePermissionRelationship, 'event_role_service',
 
 # panel-permissions
 api.route(PanelPermissionList, 'panel_permission_list', '/panel-permissions',
-          '/custom-system-roles/<int:custom_system_role_id>/panels')
+          '/custom-system-roles/<int:custom_system_role_id>/panel-permissions')
 api.route(PanelPermissionDetail, 'panel_permission_detail', '/panel-permissions/<int:id>',
-          '/custom-system-roles/<int:custom_system_role_id>/panel-permission')
+          '/custom-system-roles/<int:custom_system_role_id>/panel-permissions')
 api.route(PanelPermissionRelationship, 'panel_permissions_custom_system_roles',
-          '/panel-permissions/<int:id>/relationships/roles')
+          '/panel-permissions/<int:id>/relationships/custom-system-roles')
 
 
 # roles
@@ -194,11 +194,11 @@ api.route(RoleDetail, 'role_detail', '/roles/<int:id>', '/role-invites/<int:role
 
 # custom system roles
 api.route(CustomSystemRoleList, 'custom_system_role_list', '/custom-system-roles',
-          '/panel-permissions/<int:panel_id>/roles')
+          '/panel-permissions/<int:panel_id>/custom-system-roles')
 api.route(CustomSystemRoleDetail, 'custom_system_role_detail', '/custom-system-roles/<int:id>',
-          '/panel-permissions/<int:role_id>/custom-system-role')
+          '/panel-permissions/<int:role_id>/custom-system-roles')
 api.route(CustomSystemRoleRelationship, 'custom_system_roles_panel_permissions',
-          '/custom-system-roles/<int:id>/relationships/panels')
+          '/custom-system-roles/<int:id>/relationships/panel-permissions')
 
 # role_invites
 api.route(RoleInviteListPost, 'role_invite_list_post', '/role-invites')

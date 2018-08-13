@@ -15,7 +15,7 @@ class CustomSysRole(db.Model):
 
     def can_access(self, panel_name):
         panel = PanelPermission.query.filter_by(panel_name=panel_name).first()
-        for role in panel.roles:
+        for role in panel.custom_system_roles:
             if role.id == self.id:
                 return panel.can_access
         return False
