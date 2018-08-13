@@ -117,8 +117,12 @@ class EventList(ResourceList):
         :param data:
         :return:
         """
-        is_verified = User.query.filter_by(id=kwargs['user_id']).first().is_verified
-        if data.get('state', None) == 'published' and not is_verified:
+        user = User.query.filter_by(id=kwargs['user_id']).first()
+        if not user.can_create_event():
+            raise ForbiddenException({'source': ''},
+                                     "Only verified accounts can create events")
+
+        if data.get('state', None) == 'published' and not user.can_publish_event():
             raise ForbiddenException({'source': ''},
                                      "Only verified accounts can publish events")
 
@@ -445,8 +449,7 @@ class EventDetail(ResourceDetail):
         :param data:
         :return:
         """
-        is_verified = current_identity.is_verified
-        if data.get('state', None) == 'published' and not is_verified:
+        if data.get('state', None) == 'published' and not current_identity.can_publish_event():
             raise ForbiddenException({'source': ''},
                                      "Only verified accounts can publish events")
 
