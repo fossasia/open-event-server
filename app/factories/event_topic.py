@@ -11,3 +11,4 @@ class EventTopicFactory(factory.alchemy.SQLAlchemyModelFactory):
 
     name = common.string_
     slug = common.slug_
+    system_image_url = common.imageUrl_
