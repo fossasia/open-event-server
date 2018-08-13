@@ -14,16 +14,6 @@ class PanelPermissionList(ResourceList):
     """
     List Panel Permission
     """
-    @classmethod
-    def before_post(self, args, kwargs, data):
-        """
-        before post method to check for required relationships and permissions
-        :param args:
-        :param kwargs:
-        :param data:
-        :return:
-        """
-        require_relationship(['role'], data)
 
     def query(self, view_kwargs):
         """
@@ -35,7 +25,7 @@ class PanelPermissionList(ResourceList):
         if view_kwargs.get('custom_system_role_id'):
             role = safe_query(self, CustomSysRole, 'id', view_kwargs['custom_system_role_id'],
                               'custom_system_role_id')
-            query_ = PanelPermission.query.filter(PanelPermission.roles.any(id=role.id))
+            query_ = PanelPermission.query.filter(PanelPermission.custom_system_roles.any(id=role.id))
 
         return query_
 
