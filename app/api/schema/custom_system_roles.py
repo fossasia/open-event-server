@@ -19,7 +19,7 @@ class CustomSystemRoleSchema(Schema):
 
     id = fields.Str(dump_only=True)
     name = fields.Str(required=True)
-    panels = Relationship(attribute='panels',
+    panel_permissions = Relationship(attribute='panel_permissions',
                           self_view='v1.custom_system_roles_panel_permissions',
                           self_view_kwargs={'id': '<id>'},
                           related_view='v1.panel_permission_list',
