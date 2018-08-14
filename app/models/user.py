@@ -149,7 +149,10 @@ class User(SoftDeletionModel):
         if not perm:
             return self.is_verified
 
-        return perm.unverified_user
+        if self.is_verified is False:
+            return perm.unverified_user
+
+        return True
 
     def can_create_event(self):
         """

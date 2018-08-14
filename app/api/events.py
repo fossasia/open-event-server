@@ -118,7 +118,7 @@ class EventList(ResourceList):
         :param data:
         :return:
         """
-        is_verified = User.query.filter_by(id=kwargs['user_id']).first().is_verified
+        user = User.query.filter_by(id=kwargs['user_id']).first()
         modules = Module.query.first()
         if data.get('is_ticketing_enabled', False) and not modules.ticket_include:
             raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
@@ -131,7 +131,11 @@ class EventList(ResourceList):
         if data.get('is_donation_enabled', False) and not modules.donation_include:
             raise ForbiddenException({'source': '/data/attributes/is-donation-enabled'},
                                      "Donation is not enabled in the system")
-        if data.get('state', None) == 'published' and not is_verified:
+        if not user.can_create_event():
+            raise ForbiddenException({'source': ''},
+                                     "Only verified accounts can create events")
+
+        if data.get('state', None) == 'published' and not user.can_publish_event():
             raise ForbiddenException({'source': ''},
                                      "Only verified accounts can publish events")
 
@@ -458,7 +462,6 @@ class EventDetail(ResourceDetail):
         :param data:
         :return:
         """
-        is_verified = current_identity.is_verified
         modules = Module.query.first()
         if data.get('is_ticketing_enabled', False) and not modules.ticket_include:
             raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
@@ -471,7 +474,8 @@ class EventDetail(ResourceDetail):
         if data.get('is_donation_enabled', False) and not modules.donation_include:
             raise ForbiddenException({'source': '/data/attributes/is-donation-enabled'},
                                      "Donation is not enabled in the system")
-        if data.get('state', None) == 'published' and not is_verified:
+
+        if data.get('state', None) == 'published' and not current_identity.can_publish_event():
             raise ForbiddenException({'source': ''},
                                      "Only verified accounts can publish events")
 
