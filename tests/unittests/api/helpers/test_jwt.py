@@ -16,6 +16,8 @@ class TestJWTHelperValidation(OpenEventTestCase):
         self.app = Setup.create_app()
 
     def test_jwt_authenticate(self):
+        """Method to test jwt authentication"""
+
         with app.test_request_context():
             user = UserFactory()
             db.session.add(user)
@@ -30,6 +32,8 @@ class TestJWTHelperValidation(OpenEventTestCase):
             self.assertIsNone(wrong_credential_user)
 
     def test_get_identity(self):
+        """Method to test identity of authenticated user"""
+
         with app.test_request_context():
             user = UserFactory()
             db.session.add(user)

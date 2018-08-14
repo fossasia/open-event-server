@@ -10,6 +10,8 @@ class TestExceptionsHelperValidation(OpenEventTestCase):
         self.app = Setup.create_app()
 
     def test_exceptions(self):
+        """Method to test all exceptions."""
+
         # Unprocessable Entity Exception
         with self.assertRaises(UnprocessableEntity):
             raise UnprocessableEntity({'pointer': '/data/attributes/min-quantity'},
