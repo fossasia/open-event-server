@@ -83,7 +83,8 @@ class Event(SoftDeletionModel):
     db.UniqueConstraint('track.name')
     code_of_conduct = db.Column(db.String)
     schedule_published_on = db.Column(db.DateTime(timezone=True))
-    is_ticketing_enabled = db.Column(db.Boolean, default=True)
+    is_ticketing_enabled = db.Column(db.Boolean, default=False)
+    is_donation_enabled = db.Column(db.Boolean, default=False)
     payment_country = db.Column(db.String)
     payment_currency = db.Column(db.String)
     paypal_email = db.Column(db.String)
@@ -185,6 +186,7 @@ class Event(SoftDeletionModel):
                  code_of_conduct=None,
                  schedule_published_on=None,
                  is_sessions_speakers_enabled=False,
+                 is_donation_enabled=False,
                  is_map_shown=False,
                  has_organizer_info=False,
                  searchable_location_name=None,
@@ -258,6 +260,7 @@ class Event(SoftDeletionModel):
         self.can_pay_by_cheque = can_pay_by_cheque
         self.can_pay_by_bank = can_pay_by_bank
         self.can_pay_onsite = can_pay_onsite
+        self.is_donation_enabled = is_donation_enabled
         self.identifier = get_new_event_identifier()
         self.cheque_details = cheque_details
         self.bank_details = bank_details
@@ -373,6 +376,7 @@ class Event(SoftDeletionModel):
     @property
     def revenue(self):
         return self.calc_revenue()
+
 
 @event.listens_for(Event, 'after_update')
 @event.listens_for(Event, 'after_insert')
