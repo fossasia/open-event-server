@@ -14,6 +14,7 @@ class TestEventUtilities(OpenEventTestCase):
         self.app = Setup.create_app()
 
     def test_should_create_attendee_forms(self):
+        """Method to test custom forms for attendees of an event."""
         with app.test_request_context():
             event = EventFactoryBasic()
             save_to_db(event)
