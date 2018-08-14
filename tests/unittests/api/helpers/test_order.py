@@ -16,6 +16,8 @@ class TestOrderUtilities(OpenEventTestCase):
         self.app = Setup.create_app()
 
     def test_should_expire_outdated_order(self):
+        """Method to test expiration of outdated orders"""
+
         with app.test_request_context():
             obj = OrderFactory()
             event = EventFactoryBasic()
@@ -26,6 +28,8 @@ class TestOrderUtilities(OpenEventTestCase):
             self.assertEqual(obj.status, 'expired')
 
     def test_should_not_expire_valid_orders(self):
+        """Method to test to not mark valid orders as expired"""
+
         with app.test_request_context():
             obj = OrderFactory()
             event = EventFactoryBasic()
@@ -34,6 +38,8 @@ class TestOrderUtilities(OpenEventTestCase):
             self.assertEqual(obj.status, 'pending')
 
     def test_should_delete_related_attendees(self):
+        """Method to test to delete related attendees of an event"""
+
         with app.test_request_context():
             attendee = AttendeeFactory()
             db.session.add(attendee)
