@@ -269,8 +269,8 @@ def create_panel_permissions():
     sales_panel, _ = get_or_create(PanelPermission, panel_name=SALES)
     sales_admin, _ = get_or_create(CustomSysRole, name='Sales Admin')
     marketer, _ = get_or_create(CustomSysRole, name='Marketer')
-    sales_panel.roles.append(sales_admin)
-    sales_panel.roles.append(marketer)
+    sales_panel.custom_system_roles.append(sales_admin)
+    sales_panel.custom_system_roles.append(marketer)
 
 
 def create_user_permissions():

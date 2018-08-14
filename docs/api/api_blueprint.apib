@@ -1818,6 +1818,7 @@ Event Topics for Events. Can only be edited and entered by admins.
 |:----------|-------------|------|----------|
 | `name`  | Name of the event topic | string | - |
 | `slug` | Slug of the event topic | string | - |
+| `system-image-url` | Url of system image of event topic | string | - |
 
 
 ## Event Topics Collection [/v1/event-topics{?page%5bsize%5d,page%5bnumber%5d,sort}]
@@ -1861,7 +1862,8 @@ Get a list of Event Topics.
               },
               "attributes": {
                 "name": "Travel & Outdoor",
-                "slug": "travel-outdoor"
+                "slug": "travel-outdoor",
+                "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
               },
               "type": "event-topic",
               "id": "1",
@@ -1893,7 +1895,8 @@ Create a new event topic with name.
             {
               "data": {
                 "attributes": {
-                  "name": "Travel & Outdoor"
+                  "name": "Travel & Outdoor",
+                  "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
                 },
                 "type": "event-topic"
               }
@@ -1919,7 +1922,8 @@ Create a new event topic with name.
               },
               "attributes": {
                 "name": "Travel & Outdoor",
-                "slug": "travel-outdoor"
+                "slug": "travel-outdoor",
+                "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
               },
               "type": "event-topic",
               "id": "1",
@@ -1970,7 +1974,8 @@ Get a single event topic.
             },
             "attributes": {
               "name": "Travel & Outdoor",
-              "slug": "travel-outdoor"
+              "slug": "travel-outdoor",
+              "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
             },
             "type": "event-topic",
             "id": "1",
@@ -2005,7 +2010,8 @@ Authorized user must be admin.
             {
               "data": {
                 "attributes": {
-                  "name": "Travel & Outdoor"
+                  "name": "Travel & Outdoor",
+                  "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
                 },
                 "type": "event-topic",
                 "id": "1"
@@ -2032,7 +2038,8 @@ Authorized user must be admin.
             },
             "attributes": {
               "name": "Travel & Outdoor",
-              "slug": "travel-outdoor"
+              "slug": "travel-outdoor",
+              "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
             },
             "type": "event-type",
             "id": "1",
@@ -2106,7 +2113,8 @@ Delete a single event topic.
                 },
                 "attributes": {
                     "slug": "travel-outdoor",
-                    "name": "Travel & Outdoor"
+                    "name": "Travel & Outdoor",
+                    "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
                 },
                 "type": "event-topic",
                 "id": "1",
@@ -2158,7 +2166,8 @@ Delete a single event topic.
                 },
                 "attributes": {
                     "slug": "travel-outdoor",
-                    "name": "Travel & Outdoor"
+                    "name": "Travel & Outdoor",
+                    "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
                 },
                 "type": "event-topic",
                 "id": "1",
@@ -3767,7 +3776,7 @@ All other fields are optional. Add attributes you want to modify.
                     "organizer-description": "example1",
                     "is-sessions-speakers-enabled": "false",
                     "privacy": "private",
-                    "state": "published",
+                    "state": "draft",
                     "average-rating": null,
                     "ticket-url": "http://example1.com",
                     "code-of-conduct": "example1",

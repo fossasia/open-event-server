@@ -10,11 +10,23 @@ class MessageSettingsList(ResourceList):
     """
     List Events Role Permission
     """
+    def query(self, view_kwargs):
+        """
+        query method for Message Setting List
+        :param view_kwargs:
+        :return:
+        """
+        query_ = db.session.query(MessageSettings).order_by(MessageSettings.id)
+        return query_
+
     decorators = (api.has_permission('is_admin', methods="GET"),)
     methods = ['GET']
     schema = MessageSettingSchema
     data_layer = {'session': db.session,
-                  'model': MessageSettings}
+                  'model': MessageSettings,
+                  'methods': {
+                      'query': query
+                  }}
 
 
 class MessageSettingsDetail(ResourceDetail):
