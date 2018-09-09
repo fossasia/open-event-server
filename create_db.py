@@ -20,8 +20,17 @@ def _validate_email(email):
 def _validate_password(password):
     if len(password) < 4:
         print('\nPassword should have minimum 4 characters')
-        sys.exit(1)
+        password = getpass.getpass("\nEnter your password again      :")
+        _validate_password(password)
 
+
+def _validate_repassword(password, repassword):
+    if password != repassword:
+        print('\nPassword did not match')
+        password = getpass.getpass("\nEnter your password again      :")
+        _validate_password(password)
+        repassword = getpass.getpass("Enter your password again to confirm : ")
+        _validate_repassword(password, repassword)
 
 def create_default_user(email, password):
     print("Your login is 'super_admin'.")
@@ -30,7 +39,9 @@ def create_default_user(email, password):
     _validate_email(email)
     if not password:
         password = getpass.getpass("Enter password for super_admin : ")
-    _validate_password(password)
+        _validate_password(password)
+    repassword = getpass.getpass("Enter your password again to confirm : ")
+    _validate_repassword(password, repassword)
     create_super_admin(email, password)
 
 
