@@ -18,19 +18,17 @@ def _validate_email(email):
 
 
 def _validate_password(password):
-    if len(password) < 4:
+    while len(password) < 4:
         print('\nPassword should have minimum 4 characters')
         password = getpass.getpass("\nEnter your password again      :")
-        _validate_password(password)
 
 
 def _validate_repassword(password, repassword):
-    if password != repassword:
+    while password != repassword:
         print('\nPassword did not match')
         password = getpass.getpass("\nEnter your password again      :")
         _validate_password(password)
         repassword = getpass.getpass("Enter your password again to confirm : ")
-        _validate_repassword(password, repassword)
 
 def create_default_user(email, password):
     print("Your login is 'super_admin'.")
