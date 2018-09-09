@@ -22,9 +22,9 @@ def create_default_user(email, password):
     if not email:
         email = input("Enter email for super_admin    : ")
     _validate_email(email)
-    ask = True
     if not password:
-        while ask:
+        ask_password = True
+        while ask_password:
             password = getpass.getpass("Enter password for super_admin : ")
             if len(password) < 4:
                 print('\nPassword should have minimum 4 characters')
@@ -33,7 +33,7 @@ def create_default_user(email, password):
             if password != repassword:
                 print('\nPassword did not match')
                 continue
-            ask = False
+            ask_password = False
     create_super_admin(email, password)
 
 
