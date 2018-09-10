@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ speakers[0].event.name }} - {{ ("Speakers List") }}</title>
+    <style type="text/css">
+        {% include 'bootstrap/bootstrap_pdf.css' %}
+        table th {
+            text-align: left;
+        }
+
+        table td {
+            text-align: center;
+            border-spacing: 1em;
+        }
+
+        table {
+            margin-top: 20px;
+            border-collapse: separate;
+            border-bottom: black 5px;
+        }
+
+        tr.padded td {
+            padding-top: 40px;
+        }
+    </style>
+</head>
+<body>
+<h3 style="text-align:center;">{{ speakers[0].event.name }} - {{ ("Speakers List") }}</h3>
+<br>
+<table class="table with-datatable" id="speakers-table" width="100%">
+    <thead>
+    <tr>
+        <th>
+            {{ ("Name") }}
+        </th>
+        <th>
+            {{ ("Email") }}
+        </th>
+        <th>
+            {{ ("Sessions") }}
+        </th>
+        <th>
+            {{ ("Mobile") }}
+        </th>
+        <th>
+            {{ ("Short Biography") }}
+        </th>
+        <th>
+            {{ ("Organisation") }}
+        </th>
+        <th>
+            {{ ("Position") }}
+        </th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for speaker in speakers %}
+        <tr class="padded" style="text-align:center; margin-top: 5px">
+            <td>
+                {% if speaker.name %}
+                    {{ speaker.name }}
+                {% else %}
+                    {{ "-" }}
+                {% endif %}
+            </td>
+            <td>
+                {% if speaker.email %}
+                    {{ speaker.email }}
+                {% else %}
+                    {{ "-" }}
+                {% endif %}
+            </td>
+            <td>
+                {% if speaker.sessions %}
+                    {% for session in speaker.sessions %}
+                        {{ session.name }}<br>
+                    {% endfor %}
+                {% else %}
+                    {{ "-" }}
+                {% endif %}
+            </td>
+            <td>
+                {% if speaker.mobile %}
+                    {{ speaker.mobile }}
+                {% else %}
+                    {{ "-" }}
+                {% endif %}
+            </td>
+            <td>
+                {% if speaker.short_biography %}
+                    {{ speaker.short_biography }}
+                {% else %}
+                    {{ "-" }}
+                {% endif %}
+            </td>
+            <td>
+                {% if speaker.organisation %}
+                    {{ speaker.organisation }}
+                {% else %}
+                    {{ "-" }}
+                {% endif %}
+            </td>
+             <td>
+                {% if speaker.position %}
+                    {{ speaker.position }}
+                {% else %}
+                    {{ "-" }}
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</body>
+</html>

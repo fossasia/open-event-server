@@ -4,7 +4,6 @@
 
 [![GitHub release](https://img.shields.io/badge/release-1.0.0--alpha.10-blue.svg?style=flat-square)](https://github.com/fossasia/open-event-server/releases/latest)
 [![Travis branch](https://api.travis-ci.org/fossasia/open-event-server.svg?branch=master&style=flat-square)](https://travis-ci.org/fossasia/open-event-server)
-[![Gemnasium](https://gemnasium.com/fossasia/open-event-server.svg?style=flat-square)](https://gemnasium.com/github.com/fossasia/open-event-server)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1ac554483fac462797ffa5a8b9adf2fa?style=flat-square)](https://www.codacy.com/app/fossasia/open-event-orga-server)
 [![Codecov branch](https://codecov.io/gh/fossasia/open-event-server/branch/master/graph/badge.svg?style=flat-square)](https://codecov.io/gh/fossasia/open-event-orga-server)
 [![Gitter](https://img.shields.io/badge/chat-on%20gitter-ff006f.svg?style=flat-square)](https://gitter.im/fossasia/open-event-server)

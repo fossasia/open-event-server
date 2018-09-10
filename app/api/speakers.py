@@ -21,7 +21,7 @@ class SpeakerListPost(ResourceList):
     List and create speakers
     """
 
-    def before_post(self, args, kwargs, data):
+    def before_post(self, args, kwargs, data=None):
         """
         method to add user_id to view_kwargs before post
         :param args:
@@ -32,10 +32,10 @@ class SpeakerListPost(ResourceList):
         require_relationship(['event', 'user'], data)
 
         if not has_access('is_coorganizer', event_id=data['event']):
-                event = safe_query(self, Event, 'id', data['event'], 'event_id')
-                if event.state == "draft":
-                    raise ObjectNotFound({'parameter': 'event_id'},
-                                         "Event: {} not found".format(data['event_id']))
+            event = db.session.query(Event).filter_by(id=data['event']).one()
+            if event.state == "draft":
+                raise ObjectNotFound({'parameter': 'event_id'},
+                                     "Event: {} not found".format(data['event_id']))
 
         if get_count(db.session.query(Event).filter_by(id=int(data['event']), is_sessions_speakers_enabled=False)) > 0:
             raise ForbiddenException({'pointer': ''}, "Speakers are disabled for this Event")

@@ -46,13 +46,16 @@ class OrderStatisticsEventSchema(Schema):
             Order.event_id == obj_id, Order.status == 'expired').scalar()
         placed = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
             Order.event_id == obj_id, Order.status == 'placed').scalar()
+        completed = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
+            Order.event_id == obj_id, Order.status == 'completed').scalar()
         result = {
             'total': total or 0,
             'draft': draft or 0,
             'cancelled': cancelled or 0,
             'pending': pending or 0,
             'expired': expired or 0,
-            'placed': placed or 0
+            'placed': placed or 0,
+            'completed': completed or 0
         }
         return result
 
@@ -64,13 +67,15 @@ class OrderStatisticsEventSchema(Schema):
         pending = get_count(db.session.query(Order).filter(Order.event_id == obj_id, Order.status == 'pending'))
         expired = get_count(db.session.query(Order).filter(Order.event_id == obj_id, Order.status == 'expired'))
         placed = get_count(db.session.query(Order).filter(Order.event_id == obj_id, Order.status == 'placed'))
+        completed = get_count(db.session.query(Order).filter(Order.event_id == obj_id, Order.status == 'completed'))
         result = {
             'total': total or 0,
             'draft': draft or 0,
             'cancelled': cancelled or 0,
             'pending': pending or 0,
             'expired': expired or 0,
-            'placed': placed or 0
+            'placed': placed or 0,
+            'completed': completed or 0
         }
         return result
 
@@ -87,13 +92,16 @@ class OrderStatisticsEventSchema(Schema):
                                                                                Order.status == 'expired').scalar()
         placed = db.session.query(func.sum(Order.amount.label('sum'))).filter(Order.event_id == obj_id,
                                                                               Order.status == 'placed').scalar()
+        completed = db.session.query(func.sum(Order.amount.label('sum'))).filter(Order.event_id == obj_id,
+                                                                                 Order.status == 'completed').scalar()
         result = {
             'total': total or 0,
             'draft': draft or 0,
             'cancelled': cancelled or 0,
             'pending': pending or 0,
             'expired': expired or 0,
-            'placed': placed or 0
+            'placed': placed or 0,
+            'completed': completed or 0
         }
         return result
 

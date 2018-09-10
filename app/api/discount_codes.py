@@ -211,7 +211,7 @@ class DiscountCodeDetail(ResourceDetail):
             else:
                 raise ObjectNotFound({'parameter': '{code}'}, "DiscountCode: not found")
 
-            self.schema = DiscountCodeSchemaPublic
+            self.schema = DiscountCodeSchemaTicket
             return
 
         if kwargs.get('id'):
@@ -320,7 +320,7 @@ class DiscountCodeDetail(ResourceDetail):
             raise UnprocessableEntity({'source': ''}, "Please verify your permission")
 
     decorators = (jwt_required,)
-    schema = DiscountCodeSchemaPublic
+    schema = DiscountCodeSchemaTicket
     data_layer = {'session': db.session,
                   'model': DiscountCode,
                   'methods': {
