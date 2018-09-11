@@ -73,7 +73,7 @@ psql -d postgres
 
 * When inside psql, create a user for open-event and then using the user create the database.
 
-For ease development, you should create Postgres user with the same username as your OS account. If your OS login account is _john_, for example, you should create _john_ user in Postgres. By this, you can skip entering password when using database.
+For ease of development, you should create Postgres user with the same username as your OS account. If your OS login account is _john_, for example, you should create _john_ user in Postgres. By this, you can skip entering password when using database.
 
 ```sql
 CREATE USER john WITH PASSWORD 'start';
