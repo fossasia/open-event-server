@@ -74,7 +74,7 @@ def initialize_db(credentials):
             try:
                 db.create_all()
                 stamp()
-            except:
+            except Exception:
                 populate_data = False
                 print("[LOG] Could not create tables. Either database does not exist or tables already created")
             if populate_data:
