@@ -1,7 +1,6 @@
 import argparse
 import getpass
 import re
-import sys
 
 from flask_migrate import stamp
 
@@ -11,17 +10,16 @@ from populate_db import populate
 from tests.unittests.auth_helper import create_super_admin
 
 
-def _validate_email(email):
-    if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-        print('\nInvalid email address')
-        sys.exit(1)
-
-
 def create_default_user(email, password):
     print("Your login is 'super_admin'.")
     if not email:
-        email = input("Enter email for super_admin    : ")
-    _validate_email(email)
+        ask_email = True
+        while ask_email:
+            email = input("Enter email for super_admin    : ")
+            if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+                print('\nInvalid email address\n')
+                continue
+            ask_email = False
     if not password:
         ask_password = True
         while ask_password:
