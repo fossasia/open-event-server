@@ -13,7 +13,7 @@
 
 It offers features for events with several tracks and venues. Event managers can create invitation forms for speakers and build schedules in a *drag and drop* interface. The event information is stored in a **database**. The system provides **API endpoints** to **fetch** the data, and to **modify** and **update** it. Organizers can import and export event data in a standard compressed file format that includes the event data in **JSON and binary** media files like **images and audio**.
 
-The **Open Event Server** exposes a well documented [JSON:API Spec](http://jsonapi.org/) Compliant `REST API` that can be used by external services *(like the Open Event App generators and the frontend)* to access & manipulate the data.
+The **Open Event Server** exposes a well documented [JSON: API Spec](http://jsonapi.org/) Compliant `REST API` that can be used by external services *(like the Open Event App generators and the frontend)* to access & manipulate the data as per their choice.
 
 **API Documentation:**
 - Every installation of the project includes **API docs**, (e.g. here on the test install [https://open-event-api.herokuapp.com](https://open-event-api.herokuapp.com)).
@@ -24,7 +24,7 @@ The **Open Event Server** exposes a well documented [JSON:API Spec](http://jsona
 * Please join our **[mailing list](https://groups.google.com/forum/#!forum/open-event)** to discuss questions regarding the project.
 > https://groups.google.com/forum/#!forum/open-event
 
-* Our chat channel is on **[Gitter](https://gitter.im/fossasia/open-event-server)**
+* Our chat channel on **[Gitter](https://gitter.im/fossasia/open-event-server)**
 > [gitter.im/fossasia/open-event-server](https://gitter.im/fossasia/open-event-server)
 
 ## Demo Version
@@ -47,11 +47,9 @@ The Open Event Server can be easily deployed on a variety of platforms. Detailed
 1. [Deployment with Docker](/docs/installation/docker.md)
 1. [Deployment on Heroku](/docs/installation/heroku.md)
 
-
-One-click Heroku and Docker deployments are also available:
+One-click Heroku and Docker deployments are also given below:
 
 [![Deploy to Docker Cloud](https://files.cloud.docker.com/images/deploy-to-dockercloud.svg)](https://cloud.docker.com/stack/deploy/?repo=https://github.com/fossasia/open-event-server)  [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-
 
 ## Technology Stack
 
@@ -229,7 +227,7 @@ robot -v SERVER:localhost:5000 -v SUPERUSER_USERNAME:test@opev.net -v SUPERUSER_
 
 ## Logging
 
-Certain information is being logged and stored in the database for future reference, resolving conflicts in case of hacks and for maintaining an overview of the system. Read more about [logging here](/docs/general/logs.md).
+Certain information is logged and stored in the database for future reference, resolving conflicts in case of hacks and for maintaining an overview of the system. Read more about logging [here](/docs/general/logs.md).
 
 ## Internationalization (i18n)
 
@@ -239,8 +237,7 @@ Open Event is being translated using Weblate, a web tool designed to ease transl
 
 If you would like to contribute to translation of Open Event, you need to [register on this server](https://hosted.weblate.org/accounts/register/).
 
-Once you have activated your account just proceed to the [translation section](https://hosted.weblate.org/projects/open-event/).
-
+Once you have activated your account, just proceed to the [translation section](https://hosted.weblate.org/projects/open-event/).
 
 ## Contributions, Bug Reports, Feature Requests
 
@@ -277,6 +274,8 @@ The tentative release policy for now is, (since there is a lot of activity and a
 * Before you join development, please set up the system on your local machine and go through the application completely. Press on any link/button you can find and see where it leads to. Explore. (Don't worry ... Nothing will happen to the app or to you due to the exploring :wink: Only thing that will happen is, you'll be more familiar with what is where and might even get some cool ideas on how to improve various aspects of the app.)
 * Test the application on your machine and explore the admin area. The test deployment on Heroku will not give you access to the admin section, where you can switch on/off modules, e.g. ticketing and add keys for services, e.g. storage on S3.
 * If you would like to work on an issue, drop in a comment at the issue. If it is already assigned to someone, but there is no sign of any work being done, please free to drop in a comment so that the issue can be assigned to you if the previous assignee has dropped it entirely.
+
+For more instructions head to the [Wiki](https://github.com/fossasia/open-event-server/wiki).
 
 ## License
 
