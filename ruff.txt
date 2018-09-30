@@ -1,3 +1,0 @@
-http://www.django-rest-framework.org/api-guide/generic-views/
-
-http://www.django-rest-framework.org/tutorial/quickstart/
