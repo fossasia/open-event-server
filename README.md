@@ -24,7 +24,7 @@ The **Open Event Server** exposes a well documented [JSON: API Spec](http://json
 * Please join our **[mailing list](https://groups.google.com/forum/#!forum/open-event)** to discuss questions regarding the project.
 > https://groups.google.com/forum/#!forum/open-event
 
-* Our chat channel on **[Gitter](https://gitter.im/fossasia/open-event-server)**
+* Our chat channel is on **[Gitter](https://gitter.im/fossasia/open-event-server)**
 > [gitter.im/fossasia/open-event-server](https://gitter.im/fossasia/open-event-server)
 
 ## Demo Version
@@ -275,7 +275,7 @@ The tentative release policy for now is, (since there is a lot of activity and a
 * Test the application on your machine and explore the admin area. The test deployment on Heroku will not give you access to the admin section, where you can switch on/off modules, e.g. ticketing and add keys for services, e.g. storage on S3.
 * If you would like to work on an issue, drop in a comment at the issue. If it is already assigned to someone, but there is no sign of any work being done, please free to drop in a comment so that the issue can be assigned to you if the previous assignee has dropped it entirely.
 
-For more instructions head to the [Wiki](https://github.com/fossasia/open-event-server/wiki).
+For more instructions head over to the [Wiki](https://github.com/fossasia/open-event-server/wiki).
 
 ## License
 
