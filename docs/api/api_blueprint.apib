@@ -16977,40 +16977,40 @@ Get a list of user emails.
 
 + Response 200 (application/vnd.api+json)
 
-    {
-    "data": [
         {
-            "type": "user-email",
-            "id": "1",
-            "relationships": {
-                "user": {
-                    "links": {
-                        "self": "/v1/user-emails/1/relationships/user",
-                        "related": "/v1/alternate-emails/1/user"
+        "data": [
+            {
+                "type": "user-email",
+                "id": "1",
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/user-emails/1/relationships/user",
+                            "related": "/v1/alternate-emails/1/user"
+                        }
                     }
+                },
+                "attributes": {
+                    "user-id": 1,
+                    "deleted-at": null,
+                    "email-address": "example@example.com",
+                    "type": "work"
+                },
+                "links": {
+                    "self": "/v1/user-emails/1"
                 }
-            },
-            "attributes": {
-                "user-id": 1,
-                "deleted-at": null,
-                "email-address": "example@example.com",
-                "type": "work"
-            },
-            "links": {
-                "self": "/v1/user-emails/1"
             }
+        ],
+        "links": {
+            "self": "/v1/users/1/alternate-emails"
+        },
+        "meta": {
+            "count": 1
+        },
+        "jsonapi": {
+            "version": "1.0"
         }
-    ],
-    "links": {
-        "self": "/v1/users/1/alternate-emails"
-    },
-    "meta": {
-        "count": 1
-    },
-    "jsonapi": {
-        "version": "1.0"
-    }
-    }
+        }
 
 
 ## User Email Detail [/v1/user-emails/{user_email_id}]
@@ -17030,35 +17030,35 @@ Get a single user email.
 
 + Response 200 (application/vnd.api+json)
 
-    {
-    "data": {
-        "type": "user-email",
-        "id": "1",
-        "relationships": {
-            "user": {
-                "links": {
-                    "self": "/v1/user-emails/1/relationships/user",
-                    "related": "/v1/alternate-emails/1/user"
+        {
+        "data": {
+            "type": "user-email",
+            "id": "1",
+            "relationships": {
+                "user": {
+                    "links": {
+                        "self": "/v1/user-emails/1/relationships/user",
+                        "related": "/v1/alternate-emails/1/user"
+                    }
                 }
+            },
+            "attributes": {
+                "user-id": 1,
+                "deleted-at": null,
+                "email-address": "example@example.com",
+                "type": "work"
+            },
+            "links": {
+                "self": "/v1/user-emails/1"
             }
-        },
-        "attributes": {
-            "user-id": 1,
-            "deleted-at": null,
-            "email-address": "example@example.com",
-            "type": "work"
         },
         "links": {
             "self": "/v1/user-emails/1"
+        },
+        "jsonapi": {
+            "version": "1.0"
         }
-    },
-    "links": {
-        "self": "/v1/user-emails/1"
-    },
-    "jsonapi": {
-        "version": "1.0"
-    }
-    }
+        }
 
 ### Update User Email [PATCH]
 Update a single user email with `id`.
@@ -17074,7 +17074,7 @@ Update a single user email with `id`.
     + Body
 
             {
-              "data": {
+                "data": {
                 "attributes": {
                   "email-address": "hello@example.com",
                   "type": "office"
@@ -17094,35 +17094,35 @@ Update a single user email with `id`.
 
 + Response 200 (application/vnd.api+json)
 
-    {
-    "data": {
-        "type": "user-email",
-        "id": "1",
-        "relationships": {
-            "user": {
-                "links": {
-                    "self": "/v1/user-emails/1/relationships/user",
-                    "related": "/v1/alternate-emails/1/user"
+        {
+        "data": {
+            "type": "user-email",
+            "id": "1",
+            "relationships": {
+                "user": {
+                    "links": {
+                        "self": "/v1/user-emails/1/relationships/user",
+                        "related": "/v1/alternate-emails/1/user"
+                    }
                 }
+            },
+            "attributes": {
+                "user-id": 1,
+                "deleted-at": null,
+                "email-address": "hello@example.com",
+                "type": "office"
+            },
+            "links": {
+                "self": "/v1/user-emails/1"
             }
-        },
-        "attributes": {
-            "user-id": 1,
-            "deleted-at": null,
-            "email-address": "hello@example.com",
-            "type": "office"
         },
         "links": {
             "self": "/v1/user-emails/1"
+        },
+        "jsonapi": {
+            "version": "1.0"
         }
-    },
-    "links": {
-        "self": "/v1/user-emails/1"
-    },
-    "jsonapi": {
-        "version": "1.0"
-    }
-    }
+        }
 
 ### Delete User Email [DELETE]
 Delete a single user email.
@@ -24061,11 +24061,11 @@ Create paypal payment
 
 + Response 200 (application/vnd.api+json)
 
-   {
-        "status": "true",
-        "payment_id": "example",
-        "error": null
-   }
+        {
+            "status": "true",
+            "payment_id": "example",
+            "error": null
+        }
 
 
 # Group Admin Sales
@@ -24137,17 +24137,17 @@ The sales object contains properties placed, completed and pending properties wh
             "links": {
                 "self": "/v1/admin/sales/by-events"
             }
-        }],
-        "links": {
-            "self": "/v1/admin/sales/by-events"
-        },
-        "meta": {
-            "count": 1
-        },
-        "jsonapi": {
-            "version": "1.0"
+            }],
+            "links": {
+                "self": "/v1/admin/sales/by-events"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
         }
-    }
 
 ## Sales by Organizers Details [/v1/admin/sales/by-organizers{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -24301,17 +24301,17 @@ The sales object contains properties placed, completed and pending properties wh
             "links": {
                 "self": "/v1/admin/sales/by-marketer"
             }
-        }],
-        "links": {
-            "self": "/v1/admin/sales/by-marketer"
-        },
-        "meta": {
-            "count": 1
-        },
-        "jsonapi": {
-            "version": "1.0"
+            }],
+            "links": {
+                "self": "/v1/admin/sales/by-marketer"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
         }
-    }
 
 
 ## Sales discounted Details [/v1/admin/sales/discounted]
