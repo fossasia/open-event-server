@@ -1,37 +1,42 @@
 language: python
+
 sudo: required
-group: edge
+
 services:
   - docker
+
 addons:
   apt:
     packages:
       - python3-dev
       - libssl-dev
       - libffi-dev
+
 python:
   - '3.6'
+
 cache: pip
+
 before-install:
   - npm -g install npm@latest
+
 install:
   - npm install -g dredd@4.0.0
   - pip3 install -r requirements/tests.txt
+
 env:
-  - >-
-    APP_CONFIG="config.TestingConfig" PATH=$PATH:${HOME}/google-cloud-sdk/bin
-    CLOUDSDK_CORE_DISABLE_PROMPTS=1
+  - APP_CONFIG="config.TestingConfig" PATH=$PATH:${HOME}/google-cloud-sdk/bin
+  
 before_script:
   - psql -c 'create database test;' -U postgres
   - export DATABASE_URL=postgresql://postgres@localhost:5432/test
   - export TEST_DATABASE_URL=postgresql://postgres@localhost:5432/test
   - bash scripts/test_multiple_heads.sh
   - dredd
+  
 script:
   - nosetests tests/unittests -v --with-coverage
+
 after_success:
   - 'bash <(curl -s https://codecov.io/bash)'
   - bash scripts/push_api_docs.sh
-  #- bash kubernetes/travis/deploy.sh
-  #- bash kubernetes/travis/deploy-staging.sh
-  #- bash kubernetes/travis/deploy-nextgen.sh
