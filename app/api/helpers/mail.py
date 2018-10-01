@@ -66,8 +66,7 @@ def send_email(to, action, subject, html):
                     "Content-Type": "application/json"
                 }
                 from .tasks import send_email_task
-                # TODO use of send_email_task.delay() to make it asynchronous
-                send_email_task(payload, headers)
+                send_email_task.delay(payload, headers)
 
         # record_mail(to, action, subject, html)
         mail = Mail(
