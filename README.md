@@ -13,7 +13,7 @@
 
 It offers features for events with several tracks and venues. Event managers can create invitation forms for speakers and build schedules in a *drag and drop* interface. The event information is stored in a **database**. The system provides **API endpoints** to **fetch** the data, and to **modify** and **update** it. Organizers can import and export event data in a standard compressed file format that includes the event data in **JSON and binary** media files like **images and audio**.
 
-The **Open Event Server** exposes a well documented [JSON: API Spec](http://jsonapi.org/) Compliant `REST API` that can be used by external services *(like the Open Event App generators and the frontend)* to access & manipulate the data as per their choice.
+The **Open Event Server** exposes a well documented [JSON: API Spec](http://jsonapi.org/) Compliant `REST API` that can be used by external services *(like the Open Event App generators and the frontend)* to access & manipulate the data.
 
 **API Documentation:**
 - Every installation of the project includes **API docs**, (e.g. here on the test install [https://open-event-api.herokuapp.com](https://open-event-api.herokuapp.com)).
@@ -47,7 +47,7 @@ The Open Event Server can be easily deployed on a variety of platforms. Detailed
 1. [Deployment with Docker](/docs/installation/docker.md)
 1. [Deployment on Heroku](/docs/installation/heroku.md)
 
-One-click Heroku and Docker deployments are also given below:
+One-click Heroku and Docker deployments are also available:
 
 [![Deploy to Docker Cloud](https://files.cloud.docker.com/images/deploy-to-dockercloud.svg)](https://cloud.docker.com/stack/deploy/?repo=https://github.com/fossasia/open-event-server)  [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
