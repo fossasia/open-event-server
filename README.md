@@ -19,7 +19,7 @@ The **Open Event Server** exposes a well documented [JSON:API Spec](http://jsona
 - Every installation of the project includes **API docs**, (e.g. here on the test install [https://open-event-api.herokuapp.com](https://open-event-api.herokuapp.com)).
 -  A hosted version of the **API docs** is available in the `gh-pages` branch of the repository at [http://dev.eventyay.com/api/v1](http://dev.eventyay.com/api/v1)
 
-## Communication
+### Communication
 
 * Please join our **[mailing list](https://groups.google.com/forum/#!forum/open-event)** to discuss questions regarding the project.
 > https://groups.google.com/forum/#!forum/open-event
@@ -27,13 +27,13 @@ The **Open Event Server** exposes a well documented [JSON:API Spec](http://jsona
 * Our chat channel is on **[Gitter](https://gitter.im/fossasia/open-event-server)**
 > [gitter.im/fossasia/open-event-server](https://gitter.im/fossasia/open-event-server)
 
-## Demo Version
+### Demo Version
 
 A demo version is automatically deployed from our repositories:
 * Deployment from the `master` branch - **[open-event-api.herokuapp.com](https://open-event-api.herokuapp.com/)**
 * Deployment from the `development` branch - **[open-event-api-dev.herokuapp.com](https://open-event-api-dev.herokuapp.com/)**
 
-## Installation
+### Installation
 
 The Open Event Server can be easily deployed on a variety of platforms. Detailed platform specific installation instructions have been provided below.
 
@@ -53,7 +53,7 @@ One-click Heroku and Docker deployments are also available:
 [![Deploy to Docker Cloud](https://files.cloud.docker.com/images/deploy-to-dockercloud.svg)](https://cloud.docker.com/stack/deploy/?repo=https://github.com/fossasia/open-event-server)  [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 
-## Technology Stack
+### Technology Stack
 
 Please get familiar with the components of the project in order to be able to contribute.
 
