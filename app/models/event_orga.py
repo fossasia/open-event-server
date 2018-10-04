@@ -13,9 +13,13 @@ class EventOrgaModel(SoftDeletionModel):
     payment_currency = db.Column(db.String, nullable=False)
 
     def __init__(self,
-                 name=None):
+                 name=None,
+                 starts_at=None
+                 payment_currency=None):
 
         self.name = name
+        self.starts_at = datetime.utcnow()
+        self.payment_currency = payment_currency
 
     def __repr__(self):
         return '<EventOrgaModel %r>' % self.name
