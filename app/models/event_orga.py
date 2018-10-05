@@ -16,7 +16,6 @@ class EventOrgaModel(SoftDeletionModel):
 
     def __init__(self,
                  name=None,
-                 starts_at=None,
                  payment_currency=None):
 
         self.name = name
