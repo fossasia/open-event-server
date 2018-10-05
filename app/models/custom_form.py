@@ -68,7 +68,7 @@ attendee_form_str = json.dumps(ATTENDEE_FORM, separators=(',', ':'))
 class CustomForms(SoftDeletionModel):
     """custom form model class"""
     __tablename__ = 'custom_forms'
-    __table_args__ = (UniqueConstraint('event_id', 'field_identifier', 'form', name='custom_form_identifier'), )
+    __table_args__ = (db.UniqueConstraint('event_id', 'field_identifier', 'form', name='custom_form_identifier'), )
     id = db.Column(db.Integer, primary_key=True)
     field_identifier = db.Column(db.String, nullable=False)
     form = db.Column(db.String, nullable=False)
