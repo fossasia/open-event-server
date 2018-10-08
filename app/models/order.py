@@ -109,10 +109,10 @@ class Order(SoftDeletionModel):
         self.order_notes = order_notes
 
     def __repr__(self):
-        return '<Order %r>' % self.id
+        return '<Order %r>' % self.identifier
 
     def __str__(self):
-        return str(self.identifier)
+        return self.__repr__()
 
     def get_invoice_number(self):
         return 'O' + str(int(time.mktime(self.created_at.timetuple()))) + '-' + str(self.id)
