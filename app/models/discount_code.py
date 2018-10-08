@@ -68,7 +68,7 @@ class DiscountCode(SoftDeletionModel):
         return 'discount_code'
 
     def __repr__(self):
-        return '<DiscountCode %r>' % self.id
+        return '<DiscountCode %r>' % self.code
 
     def __str__(self):
         return self.__repr__()
