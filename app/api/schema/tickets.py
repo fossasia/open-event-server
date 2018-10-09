@@ -39,17 +39,17 @@ class TicketSchemaPublic(SoftDeletionSchema):
         if 'max_order' in data and 'min_order' in data:
             if data['max_order'] < data['min_order']:
                 raise UnprocessableEntity({'pointer': '/data/attributes/max-order'},
-                                          "max-order should be greater than min-order")
+                                          "max-order should be greater than or equal to min-order")
 
         if 'quantity' in data and 'min_order' in data:
             if data['quantity'] < data['min_order']:
                 raise UnprocessableEntity({'pointer': '/data/attributes/quantity'},
-                                          "quantity should be greater than min-order")
+                                          "quantity should be greater than or equal to min-order")
 
         if 'quantity' in data and 'max_order' in data:
             if data['quantity'] < data['max_order']:
                 raise UnprocessableEntity({'pointer': '/data/attributes/quantity'},
-                                          "quantity should be lesser than max-order")
+                                          "quantity should be greater than or equal to max-order")
 
     @validates_schema(pass_original=True)
     def validate_discount_code(self, data, original_data):

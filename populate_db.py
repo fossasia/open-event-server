@@ -1,6 +1,7 @@
 from app import current_app
 from app.models import db
 from app.api.helpers.db import get_or_create  # , save_to_db
+from envparse import env
 
 # Admin message settings
 from app.api.helpers.system_mails import MAILS
@@ -30,6 +31,9 @@ from app.models.module import Module
 # EventTopic
 from app.models.event_topic import EventTopic
 
+# EventSubTopic
+from app.models.event_sub_topic import EventSubTopic
+
 # EventType
 from app.models.event_type import EventType
 
@@ -39,6 +43,15 @@ from app.models.event_location import EventLocation
 # User Permissions
 from app.models.user_permission import UserPermission
 SALES = 'sales'
+ADMIN = 'admin'
+EVENTS = 'events'
+SESSIONS = 'sessions'
+USERS = 'users'
+PERMISSIONS = 'permissions'
+MESSAGES = 'messages'
+REPORTS = 'reports'
+SETTINGS = 'settings'
+CONTENT = 'content'
 
 
 def create_roles():
@@ -66,6 +79,40 @@ def create_services():
 
 def create_settings():
     get_or_create(Setting, app_name='Open Event')
+
+    if current_app.config['DEVELOPMENT']:
+        # get the stripe keys from the env file and save it in the settings.
+        env.read_envfile()
+        stripe_secret_key = env('STRIPE_SECRET_KEY', default=None)
+        stripe_publishable_key = env('STRIPE_PUBLISHABLE_KEY', default=None)
+        stripe_client_id = env('STRIPE_CLIENT_ID', default=None)
+        paypal_sandbox_client = env('PAYPAL_SANDBOX_CLIENT', default=None)
+        paypal_sandbox_secret = env('PAYPAL_SANDBOX_SECRET', default=None)
+        fb_client_id = env('FACEBOOK_CLIENT_ID', default=None)
+        fb_client_secret = env('FACEBOOK_CLIENT_SECRET', default=None)
+        google_client_id = env('GOOGLE_CLIENT_ID', default=None)
+        google_client_secret = env('GOOGLE_CLIENT_SECRET', default=None)
+        tw_consumer_key = env('TWITTER_CONSUMER_KEY', default=None)
+        tw_consumer_secret = env('TWITTER_CONSUMER_SECRET', default=None)
+        in_client_id = env('INSTAGRAM_CLIENT_ID', default=None)
+        in_client_secret = env('INSTAGRAM_CLIENT_SECRET', default=None)
+
+        setting, _ = get_or_create(Setting, app_name='Open Event')
+        setting.stripe_client_id = stripe_client_id
+        setting.stripe_publishable_key = stripe_publishable_key
+        setting.stripe_secret_key = stripe_secret_key
+        setting.paypal_sandbox_client = paypal_sandbox_client
+        setting.paypal_sandbox_secret = paypal_sandbox_secret
+        setting.fb_client_id = fb_client_id
+        setting.fb_client_secret = fb_client_secret
+        setting.google_client_id = google_client_id
+        setting.google_client_secret = google_client_secret
+        setting.tw_consumer_key = tw_consumer_key
+        setting.tw_consumer_secret = tw_consumer_secret
+        setting.in_client_id = in_client_id
+        setting.in_client_secret = in_client_secret
+        db.session.add(setting)
+        db.session.commit()
 
 
 def create_event_image_sizes():
@@ -106,6 +153,33 @@ def create_event_topics():
         get_or_create(EventTopic, name=topic)
 
 
+def create_event_sub_topics():
+    event_sub_topic = {
+     "Film, Media & Entertainment": ["Comedy", "Gaming", "Anime"],
+     "Community & Culture": ["City/Town", "Other", "LGBT"],
+     "Home & Lifestyle": ["Dating", "Home & Garden"],
+     "Sports & Fitness": ["Volleyball", "Other"],
+     "Health & Wellness": ["Yoga", "Medical"],
+     "Food & Drink": ["Other", "Food", "Beer"],
+     "Other": ["Avatar", "Logo"],
+     "Science & Technology": ["Robotics", "Other", "High Tech", "Science", "Social Media", "Medicine", "Mobile", "Biotech"],
+     "Music": ["Cultural", "Pop", "Top 40", "EDM / Electronic", "R&B", "Other", "Classical"],
+     "Performing & Visual Arts": ["Craft", "Comedy", "Fine Art", "Orchestra"],
+     "Family & Education": ["Education", "Baby", "Reunion"],
+     "Business & Professional": ["Career", "Startups &amp; Small Business", "Educators", "Design", "Finance"],
+     "Charity & Causes": ["Education", "Other", "Environment"],
+     "Hobbies & Special Interest": ["Other", "Anime/Comics"],
+     "Seasonal & Holiday": ["Easter", "Other"],
+     "Auto, Boat & Air": ["Auto", "Air"],
+     "Religion & Spirituality": ["Mysticism and Occult"],
+     "Government & Politics": ["Non-partisan"]
+    }
+    eventopics=db.session.query(EventTopic).all()
+    for keysub_topic in event_sub_topic:
+        for subtopic in event_sub_topic[keysub_topic]:
+            get_or_create(EventSubTopic, name=subtopic, event_topic_id=next(x for x in eventopics if x.name==keysub_topic).id)
+
+
 def create_event_types():
     event_type = ['Camp, Treat & Retreat', 'Dinner or Gala',
                   'Other', 'Concert or Performance', 'Conference',
@@ -133,7 +207,6 @@ def create_permissions():
     mod = Role.query.get(4)
     attend = Role.query.get(5)
     regist = Role.query.get(6)
-
     track = Service.query.get(1)
     session = Service.query.get(2)
     speaker = Service.query.get(3)
@@ -184,13 +257,20 @@ def create_custom_sys_roles():
     db.session.add(role)
 
 
+def create_panels():
+    panels = [SALES, ADMIN, EVENTS, SESSIONS, USERS, PERMISSIONS, MESSAGES,
+              REPORTS, SETTINGS, CONTENT]
+    for panel in panels:
+        perm, _ = get_or_create(PanelPermission, panel_name=panel)
+        db.session.add(perm)
+
+
 def create_panel_permissions():
-    sales_admin = CustomSysRole.query.filter_by(name='Sales Admin').first()
-    perm, _ = get_or_create(PanelPermission, panel_name=SALES, role=sales_admin)
-    db.session.add(perm)
-    marketer = CustomSysRole.query.filter_by(name='Marketer').first()
-    perm, _ = get_or_create(PanelPermission, panel_name=SALES, role=marketer)
-    db.session.add(perm)
+    sales_panel, _ = get_or_create(PanelPermission, panel_name=SALES)
+    sales_admin, _ = get_or_create(CustomSysRole, name='Sales Admin')
+    marketer, _ = get_or_create(CustomSysRole, name='Marketer')
+    sales_panel.custom_system_roles.append(sales_admin)
+    sales_panel.custom_system_roles.append(marketer)
 
 
 def create_user_permissions():
@@ -243,6 +323,8 @@ def populate():
     create_permissions()
     print('Creating custom system roles...')
     create_custom_sys_roles()
+    print('Creating panels...')
+    create_panels()
     print('Creating admin panel permissions...')
     create_panel_permissions()
     print('Creating user permissions...')
@@ -257,6 +339,8 @@ def populate():
     create_speaker_image_sizes()
     print('Creating Event Topics...')
     create_event_topics()
+    print('Creating Event SubTopics...')
+    create_event_sub_topics()
     print('Creating Event Types...')
     create_event_types()
     print('Creating Event Locations...')
@@ -273,6 +357,7 @@ def populate_without_print():
     create_services()
     create_permissions()
     create_custom_sys_roles()
+    create_panels()
     create_panel_permissions()
     create_user_permissions()
     create_settings()
@@ -280,6 +365,7 @@ def populate_without_print():
     create_event_image_sizes()
     create_speaker_image_sizes()
     create_event_topics()
+    create_event_sub_topics()
     create_event_types()
     create_event_locations()
     create_admin_message_settings()

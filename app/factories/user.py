@@ -26,4 +26,3 @@ class UserFactory(factory.alchemy.SQLAlchemyModelFactory):
     thumbnail_image_url = common.imageUrl_
     small_image_url = common.imageUrl_
     icon_image_url = common.imageUrl_
-    has_accepted_cookie_policy = False

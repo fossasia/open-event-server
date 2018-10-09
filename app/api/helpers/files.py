@@ -139,27 +139,49 @@ def create_save_image_sizes(image_file, image_sizes_type, unique_identifier=None
     large_basewidth = image_sizes.full_width if image_sizes.full_width else 1300
     large_height_size = image_sizes.full_height if image_sizes.full_width else 500
 
-    thumbnail_aspect = image_sizes.thumbnail_aspect
-    thumbnail_basewidth = image_sizes.thumbnail_width
-    thumbnail_height_size = image_sizes.thumbnail_height
+    if image_sizes_type == 'speaker-image':
+        thumbnail_aspect = image_sizes.thumbnail_aspect if image_sizes.thumbnail_aspect else True
+        thumbnail_basewidth = thumbnail_height_size = image_sizes.thumbnail_size_width_height
+    else:
+        thumbnail_aspect = image_sizes.thumbnail_aspect
+        thumbnail_basewidth = image_sizes.thumbnail_width
+        thumbnail_height_size = image_sizes.thumbnail_height
 
-    icon_aspect = image_sizes.icon_aspect
-    icon_basewidth = image_sizes.icon_width
-    icon_height_size = image_sizes.icon_height
+    if image_sizes_type == 'speaker-image':
+        icon_aspect = image_sizes.icon_aspect if image_sizes.icon_aspect else True
+        icon_basewidth = icon_height_size = image_sizes.icon_size_width_height
+    else:
+        icon_aspect = image_sizes.icon_aspect
+        icon_basewidth = image_sizes.icon_width
+        icon_height_size = image_sizes.icon_height
 
-    original_upload_path = UPLOAD_PATHS[image_sizes_type]['original'].format(
-        identifier=unique_identifier
-    )
-
-    large_upload_path = UPLOAD_PATHS[image_sizes_type]['large'].format(
-        identifier=unique_identifier
-    )
-    thumbnail_upload_path = UPLOAD_PATHS[image_sizes_type]['thumbnail'].format(
-        identifier=unique_identifier
-    )
-    icon_upload_path = UPLOAD_PATHS[image_sizes_type]['icon'].format(
-        identifier=unique_identifier
-    )
+    if image_sizes_type == 'event-image':
+        original_upload_path = UPLOAD_PATHS['event']['original'].format(
+            identifier=unique_identifier)
+        large_upload_path = UPLOAD_PATHS['event']['large'].format(
+            identifier=unique_identifier)
+        thumbnail_upload_path = UPLOAD_PATHS['event']['thumbnail'].format(
+            identifier=unique_identifier)
+        icon_upload_path = UPLOAD_PATHS['event']['icon'].format(
+            identifier=unique_identifier)
+    elif image_sizes_type == 'speaker-image':
+        original_upload_path = UPLOAD_PATHS['user']['original'].format(
+            identifier=unique_identifier)
+        large_upload_path = UPLOAD_PATHS['user']['large'].format(
+            identifier=unique_identifier)
+        thumbnail_upload_path = UPLOAD_PATHS['user']['thumbnail'].format(
+            identifier=unique_identifier)
+        icon_upload_path = UPLOAD_PATHS['user']['icon'].format(
+            identifier=unique_identifier)
+    else:
+        original_upload_path = UPLOAD_PATHS[image_sizes_type]['original'].format(
+            identifier=unique_identifier)
+        large_upload_path = UPLOAD_PATHS[image_sizes_type]['large'].format(
+            identifier=unique_identifier)
+        thumbnail_upload_path = UPLOAD_PATHS[image_sizes_type]['thumbnail'].format(
+            identifier=unique_identifier)
+        icon_upload_path = UPLOAD_PATHS[image_sizes_type]['icon'].format(
+            identifier=unique_identifier)
 
     new_images = {
         'original_image_url': create_save_resized_image(image_file, 0, 0, 0, original_upload_path, resize=False),
@@ -172,6 +194,56 @@ def create_save_image_sizes(image_file, image_sizes_type, unique_identifier=None
     }
 
     return new_images
+
+
+def create_system_image(image_file=None, upload_path=None, unique_identifier=None,
+                        ext='jpg'):
+    """
+    Create System Images for Event Topics
+    :param upload_path:
+    :param ext:
+    :param remove_after_upload:
+    :param image_file:
+    :return:
+    """
+    # Get an unique identifier from uuid if not provided
+    filename = '{filename}.{ext}'.format(filename=get_file_name(), ext=ext)
+    if image_file:
+        with urllib.request.urlopen(image_file) as img_data:
+            image_file = io.BytesIO(img_data.read())
+    else:
+        file_relative_path = 'static/default_system_image.png'
+        image_file = app.config['BASE_DIR'] + '/' + file_relative_path
+    try:
+        im = Image.open(image_file)
+    except IOError:
+        raise IOError("Corrupt/Invalid Image")
+
+    # Convert to jpeg for lower file size.
+    if im.format is not 'JPEG':
+        img = im.convert('RGB')
+    else:
+        img = im
+
+    temp_file_relative_path = 'static/media/temp/' + generate_hash(str(image_file)) + get_file_name() + '.jpg'
+    temp_file_path = app.config['BASE_DIR'] + '/' + temp_file_relative_path
+    dir_path = temp_file_path.rsplit('/', 1)[0]
+
+    # create dirs if not present
+    if not os.path.isdir(dir_path):
+        os.makedirs(dir_path)
+
+    img.save(temp_file_path)
+    upfile = UploadedFile(file_path=temp_file_path, filename=filename)
+
+    if not upload_path:
+        upload_path = UPLOAD_PATHS['event_topic']['system_image'].format(event_topic_id=unique_identifier)
+
+    uploaded_url = upload(upfile, upload_path)
+    os.remove(temp_file_path)
+
+    image = {'system_image_url': uploaded_url}
+    return image
 
 
 def make_frontend_url(path, parameters=None):

@@ -22,7 +22,7 @@ def get_updatable_fields():
     :return: The list of fields which can be modified by the order user using the pre payment form.
     """
     return ['country', 'address', 'city', 'state', 'zipcode', 'status', 'paid_via', 'order_notes', 'deleted_at', 'user',
-            'payment_mode']
+            'payment_mode', 'event', 'discount_code_id', 'discount_code', 'ticket_holders', 'user', 'tickets_pdf_url']
 
 
 class OrderTicket(SoftDeletionModel):
@@ -61,6 +61,7 @@ class Order(SoftDeletionModel):
     status = db.Column(db.String)
     cancel_note = db.Column(db.String, nullable=True)
     order_notes = db.Column(db.String)
+    tickets_pdf_url = db.Column(db.String)
 
     discount_code_id = db.Column(
         db.Integer, db.ForeignKey('discount_codes.id', ondelete='SET NULL'), nullable=True, default=None)
@@ -88,7 +89,8 @@ class Order(SoftDeletionModel):
                  status='pending',
                  payment_mode=None,
                  deleted_at=None,
-                 order_notes=None):
+                 order_notes=None,
+                 tickets_pdf_url=None):
         self.identifier = get_new_order_identifier()
         self.quantity = quantity
         self.amount = amount
@@ -107,6 +109,7 @@ class Order(SoftDeletionModel):
         self.payment_mode = payment_mode
         self.deleted_at = deleted_at
         self.order_notes = order_notes
+        self.tickets_pdf_url = tickets_pdf_url
 
     def __repr__(self):
         return '<Order %r>' % self.identifier

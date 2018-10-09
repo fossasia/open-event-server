@@ -73,9 +73,9 @@ class MicrolocationDetail(ResourceDetail):
         :return:
         """
         if view_kwargs.get('session_id') is not None:
-            sessions = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
-            if sessions.event_id is not None:
-                view_kwargs['id'] = sessions.event_id
+            session = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
+            if session.microlocation_id is not None:
+                view_kwargs['id'] = session.microlocation_id
             else:
                 view_kwargs['id'] = None
 
