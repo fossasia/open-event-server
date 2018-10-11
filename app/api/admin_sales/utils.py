@@ -16,6 +16,8 @@ def status_summary(orders, status):
 
 
 def summary(orders):
-    "Returns sales as dictionary for all status codes"
+    """
+    Returns sales as dictionary for all status codes
+    """
     status_codes = ['placed', 'completed', 'pending']
     return {s: status_summary(orders, s) for s in status_codes}

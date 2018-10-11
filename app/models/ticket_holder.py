@@ -40,7 +40,10 @@ class TicketHolder(SoftDeletionModel):
     order = db.relationship('Order', backref='ticket_holders')
     ticket = db.relationship('Ticket', backref='ticket_holders')
     is_checked_in = db.Column(db.Boolean, default=False)
+    is_checked_out = db.Column(db.Boolean, default=False)
+    device_name_checkin = db.Column(db.String)
     checkin_times = db.Column(db.String)
+    checkout_times = db.Column(db.String)
     attendee_notes = db.Column(db.String)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     user = db.relationship('User', foreign_keys=[email], primaryjoin='User.email == TicketHolder.email', viewonly=True,
@@ -73,6 +76,9 @@ class TicketHolder(SoftDeletionModel):
                  ticket_id=None,
                  is_checked_in=False,
                  checkin_times=None,
+                 checkout_times=None,
+                 is_checked_out=False,
+                 device_name_checkin=None,
                  attendee_notes=None,
                  order_id=None,
                  pdf_url=None,
@@ -105,6 +111,9 @@ class TicketHolder(SoftDeletionModel):
         self.order_id = order_id
         self.is_checked_in = is_checked_in
         self.checkin_times = checkin_times
+        self.checkout_times = checkout_times
+        self.is_checked_out = is_checked_out
+        self.device_name_checkin = device_name_checkin
         self.attendee_notes = attendee_notes
         self.pdf_url = pdf_url
         self.event_id = event_id

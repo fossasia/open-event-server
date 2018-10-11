@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Blueprint, request, jsonify, abort, make_response
 from flask_jwt import current_identity, jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
@@ -24,6 +26,7 @@ from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 
 attendee_misc_routes = Blueprint('attendee_misc', __name__, url_prefix='/v1')
+
 
 class AttendeeListPost(ResourceList):
     """
@@ -59,6 +62,27 @@ class AttendeeListPost(ResourceList):
                 {'pointer': '/data/attributes/ticket_id'},
                 "Ticket already sold out"
             )
+
+        if 'device_name_checkin' in data and data['device_name_checkin'] is not None:
+            if 'is_checked_in' not in data or not data['is_checked_in']:
+                raise UnprocessableEntity(
+                    {'pointer': '/data/attributes/device_name_checkin'},
+                    "Attendee needs to be checked in first"
+                )
+            elif 'checkin_times' not in data or data['checkin_times'] is None:
+                raise UnprocessableEntity(
+                    {'pointer': '/data/attributes/device_name_checkin'},
+                    "Check in Times missing"
+                )
+            elif len(data['checkin_times'].split(",")) != len(data['device_name_checkin'].split(",")):
+                raise UnprocessableEntity(
+                    {'pointer': '/data/attributes/device_name_checkin'},
+                    "Check in Times missing for the corresponding device name"
+                )
+
+        if 'checkin_times' in data:
+            if 'device_name_checkin' not in data or data['device_name_checkin'] is None:
+                data['device_name_checkin'] = '-'
 
     decorators = (jwt_required,)
     methods = ['POST']
@@ -146,13 +170,48 @@ class AttendeeDetail(ResourceDetail):
         if not has_access('is_registrar', event_id=obj.event_id):
             raise ForbiddenException({'source': 'User'}, 'You are not authorized to access this.')
 
+        if 'device_name_checkin' in data:
+            if 'checkin_times' not in data or data['checkin_times'] is None:
+                raise UnprocessableEntity(
+                    {'pointer': '/data/attributes/device_name_checkin'},
+                    "Check in Times missing"
+                )
+
         if 'is_checked_in' in data and data['is_checked_in']:
-            if 'checkin_times' not in data:
+            if 'checkin_times' not in data or data['checkin_times'] is None:
                 raise UnprocessableEntity({'pointer': '/data/attributes/checkin_times'},
                                           "Check in time missing while trying to check in attendee")
             else:
                 if obj.checkin_times and data['checkin_times'] not in obj.checkin_times.split(","):
                     data['checkin_times'] = '{},{}'.format(obj.checkin_times, data['checkin_times'])
+                elif obj.checkin_times and data['checkin_times'] in obj.checkin_times.split(","):
+                    raise UnprocessableEntity(
+                        {'pointer': '/data/attributes/checkin_times'},
+                        "Check in time already present"
+                    )
+
+                if 'device_name_checkin' in data and data['device_name_checkin'] is not None:
+                    if obj.device_name_checkin is not None:
+                        data['device_name_checkin'] = '{},{}'.format(obj.device_name_checkin,
+                                                                     data['device_name_checkin'])
+
+                    if len(data['checkin_times'].split(",")) != len(data['device_name_checkin'].split(",")):
+                        raise UnprocessableEntity(
+                            {'pointer': '/data/attributes/device_name_checkin'},
+                            "Check in Time missing for the corresponding device name"
+                        )
+                else:
+                    if obj.device_name_checkin is not None:
+                        data['device_name_checkin'] = '{},{}'.format(obj.device_name_checkin, '-')
+                    else:
+                        data['device_name_checkin'] = '-'
+
+        if 'is_checked_out' in data and data['is_checked_out']:
+            attendee = safe_query(db, TicketHolder, 'id', kwargs['id'], 'attendee_id')
+            if not attendee.is_checked_out:
+                checkout_times = obj.checkout_times.split(',') if obj.checkout_times else []
+                checkout_times.append(str(datetime.utcnow()))
+                data['checkout_times'] = ','.join(checkout_times)
 
         if 'attendee_notes' in data:
             if obj.attendee_notes and data['attendee_notes'] not in obj.attendee_notes.split(","):
@@ -193,16 +252,20 @@ class AttendeeRelationshipOptional(ResourceRelationship):
 @attendee_misc_routes.route('/attendees/send-receipt', methods=['POST'])
 @jwt_required
 def send_receipt():
-    order_id = request.json.get('order-id')
-    if order_id:
+    """
+    Send receipts to attendees related to the provided order.
+    :return:
+    """
+    order_identifier = request.json.get('order-identifier')
+    if order_identifier:
         try:
-            order = db.session.query(Order).filter_by(id=int(order_id)).one()
+            order = db.session.query(Order).filter_by(identifier=order_identifier).one()
         except NoResultFound:
-            raise ObjectNotFound({'parameter': '{id}'}, "Order not found")
+            raise ObjectNotFound({'parameter': '{identifier}'}, "Order not found")
 
-        if order.user_id != current_identity.id:
+        if (order.user_id != current_identity.id) and (not has_access('is_registrar', event_id=order.event_id)):
             abort(
-                make_response(jsonify(error="You cannot send reciept for an order not created by you"), 403)
+                make_response(jsonify(error="You need to be the event organizer or order buyer to send receipts."), 403)
             )
         elif order.status != 'completed':
             abort(
@@ -213,5 +276,5 @@ def send_receipt():
             return jsonify(message="receipt sent to attendees")
     else:
         abort(
-            make_response(jsonify(error="Order id missing"), 422)
+            make_response(jsonify(error="Order identifier missing"), 422)
         )

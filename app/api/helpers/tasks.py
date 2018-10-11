@@ -386,3 +386,37 @@ def export_speakers_csv_task(self, event_id):
         result = {'__error': True, 'result': str(e)}
 
     return result
+
+
+@celery.task(base=RequestContextTask, name='export.sessions.pdf', bind=True)
+def export_sessions_pdf_task(self, event_id):
+    sessions = db.session.query(Session).filter_by(event_id=event_id)
+    try:
+        sessions_pdf_url = create_save_pdf(
+            render_template('pdf/sessions_pdf.html', sessions=sessions),
+            UPLOAD_PATHS['exports-temp']['pdf'].format(event_id=event_id, identifier=''))
+        result = {
+            'download_url': sessions_pdf_url
+        }
+    except Exception as e:
+        print(traceback.format_exc())
+        result = {'__error': True, 'result': str(e)}
+
+    return result
+
+
+@celery.task(base=RequestContextTask, name='export.speakers.pdf', bind=True)
+def export_speakers_pdf_task(self, event_id):
+    speakers = db.session.query(Speaker).filter_by(event_id=event_id)
+    try:
+        speakers_pdf_url = create_save_pdf(
+            render_template('pdf/speakers_pdf.html', speakers=speakers),
+            UPLOAD_PATHS['exports-temp']['pdf'].format(event_id=event_id, identifier=''))
+        result = {
+            'download_url': speakers_pdf_url
+        }
+    except Exception as e:
+        print(traceback.format_exc())
+        result = {'__error': True, 'result': str(e)}
+
+    return result

@@ -1,6 +1,8 @@
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validates_schema, validate
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
+from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.exceptions import UnprocessableEntity, ForbiddenException
 from app.api.helpers.permission_manager import has_access
@@ -28,7 +30,10 @@ class SessionSchema(SoftDeletionSchema):
     @validates_schema(pass_original=True)
     def validate_date(self, data, original_data):
         if 'id' in original_data['data']:
-            session = Session.query.filter_by(id=original_data['data']['id']).one()
+            try:
+                session = Session.query.filter_by(id=original_data['data']['id']).one()
+            except NoResultFound:
+                raise ObjectNotFound({'parameter': '{id}'}, "Session: not found")
 
             if 'starts_at' not in data:
                 data['starts_at'] = session.starts_at
@@ -39,8 +44,10 @@ class SessionSchema(SoftDeletionSchema):
             if 'event' not in data:
                 data['event'] = session.event_id
 
-        if data['starts_at'] >= data['ends_at']:
-            raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at")
+        if data['starts_at'] and data['ends_at']:
+            if data['starts_at'] >= data['ends_at']:
+                raise UnprocessableEntity(
+                    {'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at")
 
         if 'state' in data:
             if data['state'] is not 'draft' or not 'pending':
@@ -62,8 +69,8 @@ class SessionSchema(SoftDeletionSchema):
     short_abstract = fields.Str(allow_none=True)
     long_abstract = fields.Str(allow_none=True)
     comments = fields.Str(allow_none=True)
-    starts_at = fields.DateTime(required=True)
-    ends_at = fields.DateTime(required=True)
+    starts_at = fields.DateTime(allow_none=True)
+    ends_at = fields.DateTime(allow_none=True)
     language = fields.Str(allow_none=True)
     slides_url = fields.Url(allow_none=True)
     video_url = fields.Url(allow_none=True)
@@ -77,6 +84,7 @@ class SessionSchema(SoftDeletionSchema):
     is_mail_sent = fields.Boolean()
     last_modified_at = fields.DateTime(dump_only=True)
     send_email = fields.Boolean(load_only=True, allow_none=True)
+    average_rating = fields.Float(dump_only=True)
     microlocation = Relationship(attribute='microlocation',
                                  self_view='v1.session_microlocation',
                                  self_view_kwargs={'id': '<id>'},
@@ -105,15 +113,22 @@ class SessionSchema(SoftDeletionSchema):
                          related_view_kwargs={'session_id': '<id>'},
                          schema='EventSchemaPublic',
                          type_='event')
-    speakers = Relationship(
-        attribute='speakers',
-        many=True,
-        self_view='v1.session_speaker',
-        self_view_kwargs={'id': '<id>'},
-        related_view='v1.speaker_list',
-        related_view_kwargs={'session_id': '<id>'},
-        schema='SpeakerSchema',
-        type_='speaker')
+    feedbacks = Relationship(attribute='feedbacks',
+                             self_view='v1.session_feedbacks',
+                             self_view_kwargs={'id': '<id>'},
+                             related_view='v1.feedback_list',
+                             related_view_kwargs={'session_id': '<id>'},
+                             schema='FeedbackSchema',
+                             many=True,
+                             type_='feedback')
+    speakers = Relationship(attribute='speakers',
+                            many=True,
+                            self_view='v1.session_speaker',
+                            self_view_kwargs={'id': '<id>'},
+                            related_view='v1.speaker_list',
+                            related_view_kwargs={'session_id': '<id>'},
+                            schema='SpeakerSchema',
+                            type_='speaker')
     creator = Relationship(attribute='user',
                            self_view='v1.session_user',
                            self_view_kwargs={'id': '<id>'},

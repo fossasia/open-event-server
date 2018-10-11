@@ -1,26 +1,28 @@
 from datetime import datetime
 
-from flask import render_template
+from flask import Blueprint, jsonify, request
 from flask_jwt import current_identity as current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy.orm.exc import NoResultFound
 
+from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
+from app.api.helpers.errors import BadRequestError
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
-from app.api.helpers.files import create_save_pdf
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.mail import send_order_cancel_email
 from app.api.helpers.notification import send_notif_to_attendees, send_notif_ticket_purchase_organizer, \
     send_notif_ticket_cancel
-from app.api.helpers.order import delete_related_attendees_for_order, set_expiry_for_order
+from app.api.helpers.order import delete_related_attendees_for_order, set_expiry_for_order, \
+    create_pdf_tickets_for_holder, create_onsite_attendees_for_order
+from app.api.helpers.payment import PayPalPaymentsManager
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
-from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.helpers.ticketing import TicketingManager
 from app.api.helpers.utilities import dasherize, require_relationship
 from app.api.schema.orders import OrderSchema
@@ -29,6 +31,8 @@ from app.models.discount_code import DiscountCode, TICKET
 from app.models.order import Order, OrderTicket, get_updatable_fields
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
+
+order_misc_routes = Blueprint('order_misc', __name__, url_prefix='/v1')
 
 
 class OrdersListPost(ResourceList):
@@ -44,7 +48,19 @@ class OrdersListPost(ResourceList):
         :param data:
         :return:
         """
-        require_relationship(['event', 'ticket_holders'], data)
+        require_relationship(['event'], data)
+
+        if not current_user.is_verified:
+            raise ForbiddenException({'source': ''},
+                                     "Only verified accounts can place orders")
+
+        # Create on site attendees.
+        if request.args.get('onsite', False):
+            create_onsite_attendees_for_order(data)
+        elif data.get('on_site_tickets'):
+            del data['on_site_tickets']
+        require_relationship(['ticket_holders'], data)
+
         # Ensuring that default status is always pending, unless the user is event co-organizer
         if not has_access('is_coorganizer', event_id=data['event']):
             data['status'] = 'pending'
@@ -103,25 +119,22 @@ class OrdersListPost(ResourceList):
         """
         order_tickets = {}
         for holder in order.ticket_holders:
-            if holder.id != current_user.id:
-                pdf = create_save_pdf(render_template('pdf/ticket_attendee.html', order=order, holder=holder),
-                                      UPLOAD_PATHS['pdf']['ticket_attendee'],
-                                      dir_path='/static/uploads/pdf/tickets/')
-            else:
-                pdf = create_save_pdf(render_template('pdf/ticket_purchaser.html', order=order),
-                                      UPLOAD_PATHS['pdf']['ticket_attendee'],
-                                      dir_path='/static/uploads/pdf/tickets/')
-            holder.pdf_url = pdf
             save_to_db(holder)
             if not order_tickets.get(holder.ticket_id):
                 order_tickets[holder.ticket_id] = 1
             else:
                 order_tickets[holder.ticket_id] += 1
+
+        order.user = current_user
+
+        # create pdf tickets.
+        create_pdf_tickets_for_holder(order)
+
         for ticket in order_tickets:
             od = OrderTicket(order_id=order.id, ticket_id=ticket, quantity=order_tickets[ticket])
             save_to_db(od)
+
         order.quantity = order.tickets_count
-        order.user = current_user
         save_to_db(order)
         if not has_access('is_coorganizer', event_id=data['event']):
             TicketingManager.calculate_update_amount(order)
@@ -133,7 +146,8 @@ class OrdersListPost(ResourceList):
 
             order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
             for organizer in order.event.organizers:
-                send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name)
+                send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
+                                                     order.identifier)
 
         data['user_id'] = current_user.id
 
@@ -204,7 +218,7 @@ class OrderDetail(ResourceDetail):
         """
         if view_kwargs.get('attendee_id'):
             attendee = safe_query(self, TicketHolder, 'id', view_kwargs['attendee_id'], 'attendee_id')
-            view_kwargs['order_identifier'] = attendee.order.identifier
+            view_kwargs['id'] = attendee.order.id
         if view_kwargs.get('order_identifier'):
             order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
             view_kwargs['id'] = order.id
@@ -270,7 +284,7 @@ class OrderDetail(ResourceDetail):
                         raise ForbiddenException({'pointer': 'data/{}'.format(element)},
                                                  "You cannot update {} of an order".format(element))
 
-        if 'order_notes' in data:
+        if has_access('is_organizer', event_id=order.event_id) and 'order_notes' in data:
             if order.order_notes and data['order_notes'] not in order.order_notes.split(","):
                 data['order_notes'] = '{},{}'.format(order.order_notes, data['order_notes'])
 
@@ -281,6 +295,9 @@ class OrderDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        # create pdf tickets.
+        create_pdf_tickets_for_holder(order)
+
         if order.status == 'cancelled':
             send_order_cancel_email(order)
             send_notif_ticket_cancel(order)
@@ -300,7 +317,9 @@ class OrderDetail(ResourceDetail):
         elif order.amount and order.amount > 0 and (order.status == 'completed' or order.status == 'placed'):
             raise ConflictException({'source': ''}, 'You cannot delete a placed/completed paid order.')
 
-    decorators = (jwt_required,)
+    # This is to ensure that the permissions manager runs and hence changes the kwarg from order identifier to id.
+    decorators = (jwt_required, api.has_permission(
+        'auth_required', methods="PATCH,DELETE", fetch="user_id", model=Order),)
 
     schema = OrderSchema
     data_layer = {'session': db.session,
@@ -317,6 +336,22 @@ class OrderRelationship(ResourceRelationship):
     """
     Order relationship
     """
+
+    def before_get(self, args, kwargs):
+        """
+        before get method to get the resource id for fetching details
+        :param view_kwargs:
+        :return:
+        """
+        if kwargs.get('order_identifier'):
+            order = safe_query(db, Order, 'identifier', kwargs['order_identifier'], 'order_identifier')
+            kwargs['id'] = order.id
+        elif kwargs.get('id'):
+            order = safe_query(db, Order, 'id', kwargs['id'], 'id')
+
+        if not has_access('is_coorganizer', event_id=order.event_id, user_id=order.user_id):
+            return ForbiddenException({'source': ''}, 'You can only access your orders or your event\'s orders')
+
     decorators = (jwt_required,)
     schema = OrderSchema
     data_layer = {'session': db.session,
@@ -338,8 +373,11 @@ class ChargeSchema(Schema):
         self_view_kwargs = {'order_identifier': '<id>'}
 
     id = fields.Str(dump_only=True)
-    stripe = fields.Str(allow_none=True)
-    paypal = fields.Str(allow_none=True)
+    stripe = fields.Str(load_only=True, allow_none=True)
+    paypal_payer_id = fields.Str(load_only=True, allow_none=True)
+    paypal_payment_id = fields.Str(load_only=True, allow_none=True)
+    status = fields.Boolean(dump_only=True)
+    message = fields.Str(dump_only=True)
 
 
 class ChargeList(ResourceList):
@@ -356,3 +394,25 @@ class ChargeList(ResourceList):
     }
 
     decorators = (jwt_required,)
+
+
+@order_misc_routes.route('/orders/<string:order_identifier>/create-paypal-payment', methods=['POST'])
+@jwt_required
+def create_paypal_payment(order_identifier):
+    """
+    Create a paypal payment.
+    :return: The payment id of the created payment.
+    """
+    try:
+        return_url = request.json['data']['attributes']['return-url']
+        cancel_url = request.json['data']['attributes']['cancel-url']
+    except TypeError:
+        return BadRequestError({'source': ''}, 'Bad Request Error').respond()
+
+    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+    status, response = PayPalPaymentsManager.create_payment(order, return_url, cancel_url)
+
+    if status:
+        return jsonify(status=True, payment_id=response)
+    else:
+        return jsonify(status=False, error=response)

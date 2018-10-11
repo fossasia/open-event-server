@@ -51,7 +51,10 @@ class UserSchema(UserSchemaPublic):
     google_plus_url = fields.Url(allow_none=True)
     password = fields.Str(required=True, load_only=True)
     is_super_admin = fields.Boolean(dump_only=True)
-    is_admin = fields.Boolean(dump_only=True)
+    is_admin = fields.Boolean()
+    facebook_id = fields.Integer(dump_only=True)
+    is_sales_admin = fields.Boolean()
+    is_marketer = fields.Boolean()
     is_user_organizer = fields.Boolean(dump_only=True)
     is_user_coorganizer = fields.Boolean(dump_only=True)
     is_user_track_organizer = fields.Boolean(dump_only=True)
@@ -59,7 +62,6 @@ class UserSchema(UserSchemaPublic):
     is_user_registrar = fields.Boolean(dump_only=True)
     is_user_attendee = fields.Boolean(dump_only=True)
     is_verified = fields.Boolean(dump_only=True)
-    has_accepted_cookie_policy = fields.Boolean(default=False)
     last_accessed_at = fields.DateTime(dump_only=True)
     created_at = fields.DateTime(dump_only=True)
     deleted_at = fields.DateTime(dump_only=True)
@@ -195,6 +197,14 @@ class UserSchema(UserSchemaPublic):
         schema='EventSchema',
         many=True,
         type_='event')
+    favourite_events = Relationship(
+        self_view='v1.user_user_favourite_events',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.user_favourite_events_list',
+        related_view_kwargs={'user_id': '<id>'},
+        schema='UserFavouriteEventSchema',
+        many=True,
+        type_='user-favourite-event')
     orders = Relationship(
         attribute='orders',
         self_view='v1.user_orders',
@@ -204,3 +214,19 @@ class UserSchema(UserSchemaPublic):
         schema='OrderSchema',
         many=True,
         type_='order')
+    marketer_events = Relationship(
+        attribute='marketer_events',
+        self_view='v1.user_marketer_events',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_list',
+        schema='EventSchema',
+        type_='event',
+        many=True)
+    sales_admin_events = Relationship(
+        attribute='sales_admin_events',
+        self_view='v1.user_sales_admin_events',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_list',
+        schema='EventSchema',
+        type_='event',
+        many=True)

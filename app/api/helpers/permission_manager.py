@@ -7,6 +7,7 @@ from app.api.helpers.errors import ForbiddenError, NotFoundError
 from app.api.helpers.permissions import jwt_required
 from app.models.session import Session
 from app.models.event import Event
+from app.models.order import Order
 from app.api.helpers.jwt import get_identity
 
 
@@ -348,6 +349,14 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
         if not check(view_kwargs):
             return ForbiddenError({'source': ''}, 'Access forbidden').respond()
 
+    # For Orders API
+    if 'order_identifier' in view_kwargs:
+        try:
+            order = Order.query.filter_by(identifier=view_kwargs['order_identifier']).one()
+        except NoResultFound:
+            return NotFoundError({'parameter': 'order_identifier'}, 'Order not found').respond()
+        view_kwargs['id'] = order.id
+
     # If event_identifier in route instead of event_id
     if 'event_identifier' in view_kwargs:
         try:
@@ -426,7 +435,6 @@ def permission_manager(view, view_args, view_kwargs, *args, **kwargs):
                 kwargs[kwargs['fetch']] = fetched
         else:
             return NotFoundError({'source': ''}, 'Object not found.').respond()
-
     if args[0] in permissions:
         return permissions[args[0]](view, view_args, view_kwargs, *args, **kwargs)
     else:
