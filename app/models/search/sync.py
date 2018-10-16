@@ -33,7 +33,7 @@ def sync_event_from_database(db_event):
 
 
 def rebuild_indices(client=client):
-    "Rebuilds all search indices, deletes all data"
+    """Rebuilds all search indices, deletes all data"""
     redis_store.delete(REDIS_EVENT_INDEX)
     redis_store.delete(REDIS_EVENT_DELETE)
 
