@@ -251,11 +251,11 @@ def is_email_available():
     if email:
         if get_count(db.session.query(User).filter_by(email=email)):
             return jsonify(
-                result="False"
+                result="True"
             )
         else:
             return jsonify(
-                result="True"
+                result="False"
             )
     else:
         abort(
