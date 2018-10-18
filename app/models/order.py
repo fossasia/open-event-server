@@ -22,7 +22,7 @@ def get_updatable_fields():
     :return: The list of fields which can be modified by the order user using the pre payment form.
     """
     return ['country', 'address', 'city', 'state', 'zipcode', 'status', 'paid_via', 'order_notes', 'deleted_at', 'user',
-            'payment_mode', 'event', 'ticket_holders', 'user', 'tickets_pdf_url']
+            'payment_mode', 'event', 'discount_code_id', 'discount_code', 'ticket_holders', 'user', 'tickets_pdf_url']
 
 
 class OrderTicket(SoftDeletionModel):

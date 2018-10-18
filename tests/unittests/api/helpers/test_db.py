@@ -17,6 +17,8 @@ class TestDBHelperValidation(OpenEventTestCase):
         self.app = Setup.create_app()
 
     def test_save_to_db(self):
+        """Method to test the function save_to_db"""
+
         with app.test_request_context():
             obj = EventFactoryBasic()
             save_to_db(obj)
@@ -24,6 +26,8 @@ class TestDBHelperValidation(OpenEventTestCase):
             self.assertEqual(obj.name, event.name)
 
     def test_safe_query(self):
+        """Method to test the function safe_query"""
+
         with app.test_request_context():
             event = EventFactoryBasic()
             db.session.add(event)
@@ -32,10 +36,14 @@ class TestDBHelperValidation(OpenEventTestCase):
             self.assertEqual(obj.name, event.name)
 
     def test_safe_query_exception(self):
+        """Method to test the exception in function safe_query"""
+
         with app.test_request_context():
             self.assertRaises(ObjectNotFound, lambda: safe_query(db, Event, 'id', 1, 'event_id'))
 
     def test_get_or_create(self):
+        """Method to test the function get_or_create"""
+
         with app.test_request_context():
             event = EventFactoryBasic()
             save_to_db(event)
@@ -48,6 +56,8 @@ class TestDBHelperValidation(OpenEventTestCase):
             self.assertTrue(is_created)
 
     def test_get_count(self):
+        """Method to test the number of queries concerning a Model"""
+
         with app.test_request_context():
             attendee = AttendeeFactory()
             save_to_db(attendee)

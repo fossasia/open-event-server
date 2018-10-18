@@ -12,6 +12,8 @@ class TestUtilitiesHelperValidation(OpenEventTestCase):
         self.app = Setup.create_app()
 
     def test_dasherize(self):
+        """Method to test whether an attribute dasherizes or not"""
+
         with app.test_request_context():
             field = "starts_at"
             dasherized_field = "starts-at"
@@ -19,6 +21,8 @@ class TestUtilitiesHelperValidation(OpenEventTestCase):
             self.assertEqual(result, dasherized_field)
 
     def test_require_relationship(self):
+        """Method to test relationship in request data"""
+
         with self.assertRaises(UnprocessableEntity):
             data = ['event']
             require_relationship(['sponsor', 'event'], data)

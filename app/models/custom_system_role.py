@@ -14,12 +14,11 @@ class CustomSysRole(db.Model):
         self.name = name
 
     def can_access(self, panel_name):
-        perm = PanelPermission.query.filter_by(role=self,
-                                               panel_name=panel_name).first()
-        if perm:
-            return perm.can_access
-        else:
-            return False
+        panel = PanelPermission.query.filter_by(panel_name=panel_name).first()
+        for role in panel.custom_system_roles:
+            if role.id == self.id:
+                return panel.can_access
+        return False
 
     def __repr__(self):
         return '<CustomSysRole %r>' % self.name

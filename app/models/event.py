@@ -10,6 +10,7 @@ from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_count
 from app.models import db
+from app.models.order import Order
 from app.models.ticket_fee import get_fee
 from app.models.base import SoftDeletionModel
 from app.models.email_notification import EmailNotification
@@ -18,7 +19,8 @@ from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.user import ATTENDEE, ORGANIZER
 from app.models.event_topic import EventTopic
 from app.models.search import sync
-
+from app.models.ticket import Ticket
+from app.models.ticket_holder import TicketHolder
 
 def get_new_event_identifier(length=8):
     identifier = str(binascii.b2a_hex(os.urandom(int(length / 2))), 'utf-8')
@@ -83,7 +85,8 @@ class Event(SoftDeletionModel):
     db.UniqueConstraint('track.name')
     code_of_conduct = db.Column(db.String)
     schedule_published_on = db.Column(db.DateTime(timezone=True))
-    is_ticketing_enabled = db.Column(db.Boolean, default=True)
+    is_ticketing_enabled = db.Column(db.Boolean, default=False)
+    is_donation_enabled = db.Column(db.Boolean, default=False)
     payment_country = db.Column(db.String)
     payment_currency = db.Column(db.String)
     paypal_email = db.Column(db.String)
@@ -186,6 +189,7 @@ class Event(SoftDeletionModel):
                  code_of_conduct=None,
                  schedule_published_on=None,
                  is_sessions_speakers_enabled=False,
+                 is_donation_enabled=False,
                  is_map_shown=False,
                  has_organizer_info=False,
                  searchable_location_name=None,
@@ -259,6 +263,7 @@ class Event(SoftDeletionModel):
         self.can_pay_by_cheque = can_pay_by_cheque
         self.can_pay_by_bank = can_pay_by_bank
         self.can_pay_onsite = can_pay_onsite
+        self.is_donation_enabled = is_donation_enabled
         self.identifier = get_new_event_identifier()
         self.cheque_details = cheque_details
         self.bank_details = bank_details
@@ -343,6 +348,37 @@ class Event(SoftDeletionModel):
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+    def calc_tickets_sold_count(self):
+        """Calculate total number of tickets sold for the event"""
+        return db.session.query(Order.event_id).filter_by(event_id=self.id, status='completed').join(TicketHolder)\
+            .count()
+
+    def calc_total_tickets_count(self):
+        """Calculate total available tickets for all types of tickets"""
+        total_available = db.session.query(func.sum(Ticket.quantity)).filter_by(event_id=self.id).scalar()
+        if total_available is None:
+            total_available = 0
+        return total_available
+
+    def calc_revenue(self):
+        """Returns total revenues of all completed orders for the given event"""
+        revenue = db.session.query(func.sum(Order.amount)).filter_by(event_id=self.id, status='completed').scalar()
+        if revenue is None:
+            revenue = 0
+        return revenue
+
+    @property
+    def tickets_available(self):
+        return self.calc_total_tickets_count()
+
+    @property
+    def tickets_sold(self):
+        return self.calc_tickets_sold_count()
+
+    @property
+    def revenue(self):
+        return self.calc_revenue()
 
 
 @event.listens_for(Event, 'after_update')

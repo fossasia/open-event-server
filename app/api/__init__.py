@@ -37,7 +37,7 @@ from app.api.role_invites import RoleInviteListPost, RoleInviteList, RoleInviteD
 from app.api.event_image_sizes import EventImageSizeDetail
 from app.api.speaker_image_sizes import SpeakerImageSizeDetail
 from app.api.roles import RoleList, RoleDetail
-from app.api.custom_system_roles import CustomSystemRoleList, CustomSystemRoleDetail
+from app.api.custom_system_roles import CustomSystemRoleList, CustomSystemRoleDetail, CustomSystemRoleRelationship
 from app.api.session_types import SessionTypeList, SessionTypeListPost, SessionTypeDetail, \
     SessionTypeRelationshipRequired, SessionTypeRelationshipOptional
 from app.api.event_copyright import EventCopyrightListPost, EventCopyrightDetail, EventCopyrightRelationshipRequired
@@ -185,14 +185,18 @@ api.route(ServiceDetail, 'service_detail', '/services/<int:id>')
 # event-role-permissions
 api.route(EventsRolePermissionList, 'events_role_list', '/event-role-permissions')
 api.route(EventsRolePermissionDetail, 'events_role_detail', '/event-role-permissions/<int:id>')
-api.route(EventsRolePermissionRelationship, 'event_role_role', '/event-role-permissions/<int:id>/relationships/role')
+api.route(EventsRolePermissionRelationship, 'event_role_role',
+          '/event-role-permissions/<int:id>/relationships/role')
 api.route(EventsRolePermissionRelationship, 'event_role_service',
           '/event-role-permissions/<int:id>/relationships/service')
 
 # panel-permissions
-api.route(PanelPermissionList, 'panel_permission_list', '/panel-permissions')
-api.route(PanelPermissionDetail, 'panel_permission_detail', '/panel-permissions/<int:id>')
-api.route(PanelPermissionRelationship, 'panel_permission_role', '/panel-permissions/<int:id>/relationships/role')
+api.route(PanelPermissionList, 'panel_permission_list', '/panel-permissions',
+          '/custom-system-roles/<int:custom_system_role_id>/panel-permissions')
+api.route(PanelPermissionDetail, 'panel_permission_detail', '/panel-permissions/<int:id>',
+          '/custom-system-roles/<int:custom_system_role_id>/panel-permissions')
+api.route(PanelPermissionRelationship, 'panel_permissions_custom_system_roles',
+          '/panel-permissions/<int:id>/relationships/custom-system-roles')
 
 
 # roles
@@ -200,9 +204,12 @@ api.route(RoleList, 'role_list', '/roles')
 api.route(RoleDetail, 'role_detail', '/roles/<int:id>', '/role-invites/<int:role_invite_id>/role')
 
 # custom system roles
-api.route(CustomSystemRoleList, 'custom_system_role_list', '/custom-system-roles')
+api.route(CustomSystemRoleList, 'custom_system_role_list', '/custom-system-roles',
+          '/panel-permissions/<int:panel_id>/custom-system-roles')
 api.route(CustomSystemRoleDetail, 'custom_system_role_detail', '/custom-system-roles/<int:id>',
-          '/panel-permissions/<int:role_id>/custom-system-role')
+          '/panel-permissions/<int:role_id>/custom-system-roles')
+api.route(CustomSystemRoleRelationship, 'custom_system_roles_panel_permissions',
+          '/custom-system-roles/<int:id>/relationships/panel-permissions')
 
 # role_invites
 api.route(RoleInviteListPost, 'role_invite_list_post', '/role-invites')

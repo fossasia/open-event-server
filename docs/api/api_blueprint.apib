@@ -1932,6 +1932,7 @@ Event Topics for Events. Can only be edited and entered by admins.
 |:----------|-------------|------|----------|
 | `name`  | Name of the event topic | string | - |
 | `slug` | Slug of the event topic | string | - |
+| `system-image-url` | Url of system image of event topic | string | - |
 
 
 ## Event Topics Collection [/v1/event-topics{?page%5bsize%5d,page%5bnumber%5d,sort}]
@@ -1975,7 +1976,8 @@ Get a list of Event Topics.
               },
               "attributes": {
                 "name": "Travel & Outdoor",
-                "slug": "travel-outdoor"
+                "slug": "travel-outdoor",
+                "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
               },
               "type": "event-topic",
               "id": "1",
@@ -2007,7 +2009,8 @@ Create a new event topic with name.
             {
               "data": {
                 "attributes": {
-                  "name": "Travel & Outdoor"
+                  "name": "Travel & Outdoor",
+                  "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
                 },
                 "type": "event-topic"
               }
@@ -2033,7 +2036,8 @@ Create a new event topic with name.
               },
               "attributes": {
                 "name": "Travel & Outdoor",
-                "slug": "travel-outdoor"
+                "slug": "travel-outdoor",
+                "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
               },
               "type": "event-topic",
               "id": "1",
@@ -2084,7 +2088,8 @@ Get a single event topic.
             },
             "attributes": {
               "name": "Travel & Outdoor",
-              "slug": "travel-outdoor"
+              "slug": "travel-outdoor",
+              "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
             },
             "type": "event-topic",
             "id": "1",
@@ -2119,7 +2124,8 @@ Authorized user must be admin.
             {
               "data": {
                 "attributes": {
-                  "name": "Travel & Outdoor"
+                  "name": "Travel & Outdoor",
+                  "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
                 },
                 "type": "event-topic",
                 "id": "1"
@@ -2146,7 +2152,8 @@ Authorized user must be admin.
             },
             "attributes": {
               "name": "Travel & Outdoor",
-              "slug": "travel-outdoor"
+              "slug": "travel-outdoor",
+              "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
             },
             "type": "event-type",
             "id": "1",
@@ -2220,7 +2227,8 @@ Delete a single event topic.
                 },
                 "attributes": {
                     "slug": "travel-outdoor",
-                    "name": "Travel & Outdoor"
+                    "name": "Travel & Outdoor",
+                    "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
                 },
                 "type": "event-topic",
                 "id": "1",
@@ -2272,7 +2280,8 @@ Delete a single event topic.
                 },
                 "attributes": {
                     "slug": "travel-outdoor",
-                    "name": "Travel & Outdoor"
+                    "name": "Travel & Outdoor",
+                    "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
                 },
                 "type": "event-topic",
                 "id": "1",
@@ -3338,15 +3347,15 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "average-rating": null,
                     "ticket-url": "http://example.com",
                     "code-of-conduct": "example",
-                    "is-ticketing-enabled": "true",
+                    "is-ticketing-enabled": "false",
                     "payment-country": "US",
                     "payment-currency": "USD",
                     "paypal-email": "example@example.com",
                     "is-tax-enabled": "true",
-                    "can-pay-by-paypal": "true",
-                    "can-pay-by-stripe": "true",
-                    "can-pay-by-cheque": "true",
-                    "can-pay-by-bank": "true",
+                    "can-pay-by-paypal": "false",
+                    "can-pay-by-stripe": "false",
+                    "can-pay-by-cheque": "false",
+                    "can-pay-by-bank": "false",
                     "can-pay-onsite": "true",
                     "cheque-details": "example",
                     "bank-details": "example",
@@ -3539,14 +3548,14 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "original-image-url": "http://example.com/example.png",
                     "onsite-details": "example",
                     "organizer-name": "example",
-                    "can-pay-by-stripe": true,
+                    "can-pay-by-stripe": false,
                     "large-image-url": null,
                     "timezone": "UTC",
                     "can-pay-onsite": true,
                     "deleted-at": null,
                     "is-event-online": false,
                     "ticket-url": "http://example.com",
-                    "can-pay-by-paypal": true,
+                    "can-pay-by-paypal": false,
                     "location-name": "example",
                     "is-sponsors-enabled": false,
                     "has-organizer-info": false,
@@ -3558,8 +3567,8 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "example",
-                    "is-ticketing-enabled": true,
-                    "can-pay-by-cheque": true,
+                    "is-ticketing-enabled": false,
+                    "can-pay-by-cheque": false,
                     "description": "example",
                     "pentabarf-url": null,
                     "xcal-url": null,
@@ -3569,7 +3578,7 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "icon-image-url": null,
                     "ical-url": null,
                     "name": "example",
-                    "can-pay-by-bank": true,
+                    "can-pay-by-bank": false,
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "created-at": "2017-06-26T15:22:37.205399+00:00",
                     "longitude": 1.23456789,
@@ -3881,7 +3890,7 @@ All other fields are optional. Add attributes you want to modify.
                     "organizer-description": "example1",
                     "is-sessions-speakers-enabled": "false",
                     "privacy": "private",
-                    "state": "published",
+                    "state": "draft",
                     "average-rating": null,
                     "ticket-url": "http://example1.com",
                     "code-of-conduct": "example1",
@@ -17345,40 +17354,40 @@ Get a list of user emails.
 
 + Response 200 (application/vnd.api+json)
 
-    {
-    "data": [
         {
-            "type": "user-email",
-            "id": "1",
-            "relationships": {
-                "user": {
-                    "links": {
-                        "self": "/v1/user-emails/1/relationships/user",
-                        "related": "/v1/alternate-emails/1/user"
+        "data": [
+            {
+                "type": "user-email",
+                "id": "1",
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/user-emails/1/relationships/user",
+                            "related": "/v1/alternate-emails/1/user"
+                        }
                     }
+                },
+                "attributes": {
+                    "user-id": 1,
+                    "deleted-at": null,
+                    "email-address": "example@example.com",
+                    "type": "work"
+                },
+                "links": {
+                    "self": "/v1/user-emails/1"
                 }
-            },
-            "attributes": {
-                "user-id": 1,
-                "deleted-at": null,
-                "email-address": "example@example.com",
-                "type": "work"
-            },
-            "links": {
-                "self": "/v1/user-emails/1"
             }
+        ],
+        "links": {
+            "self": "/v1/users/1/alternate-emails"
+        },
+        "meta": {
+            "count": 1
+        },
+        "jsonapi": {
+            "version": "1.0"
         }
-    ],
-    "links": {
-        "self": "/v1/users/1/alternate-emails"
-    },
-    "meta": {
-        "count": 1
-    },
-    "jsonapi": {
-        "version": "1.0"
-    }
-    }
+        }
 
 
 ## User Email Detail [/v1/user-emails/{user_email_id}]
@@ -17398,35 +17407,35 @@ Get a single user email.
 
 + Response 200 (application/vnd.api+json)
 
-    {
-    "data": {
-        "type": "user-email",
-        "id": "1",
-        "relationships": {
-            "user": {
-                "links": {
-                    "self": "/v1/user-emails/1/relationships/user",
-                    "related": "/v1/alternate-emails/1/user"
+        {
+        "data": {
+            "type": "user-email",
+            "id": "1",
+            "relationships": {
+                "user": {
+                    "links": {
+                        "self": "/v1/user-emails/1/relationships/user",
+                        "related": "/v1/alternate-emails/1/user"
+                    }
                 }
+            },
+            "attributes": {
+                "user-id": 1,
+                "deleted-at": null,
+                "email-address": "example@example.com",
+                "type": "work"
+            },
+            "links": {
+                "self": "/v1/user-emails/1"
             }
-        },
-        "attributes": {
-            "user-id": 1,
-            "deleted-at": null,
-            "email-address": "example@example.com",
-            "type": "work"
         },
         "links": {
             "self": "/v1/user-emails/1"
+        },
+        "jsonapi": {
+            "version": "1.0"
         }
-    },
-    "links": {
-        "self": "/v1/user-emails/1"
-    },
-    "jsonapi": {
-        "version": "1.0"
-    }
-    }
+        }
 
 ### Update User Email [PATCH]
 Update a single user email with `id`.
@@ -17442,7 +17451,7 @@ Update a single user email with `id`.
     + Body
 
             {
-              "data": {
+                "data": {
                 "attributes": {
                   "email-address": "hello@example.com",
                   "type": "office"
@@ -17462,35 +17471,35 @@ Update a single user email with `id`.
 
 + Response 200 (application/vnd.api+json)
 
-    {
-    "data": {
-        "type": "user-email",
-        "id": "1",
-        "relationships": {
-            "user": {
-                "links": {
-                    "self": "/v1/user-emails/1/relationships/user",
-                    "related": "/v1/alternate-emails/1/user"
+        {
+        "data": {
+            "type": "user-email",
+            "id": "1",
+            "relationships": {
+                "user": {
+                    "links": {
+                        "self": "/v1/user-emails/1/relationships/user",
+                        "related": "/v1/alternate-emails/1/user"
+                    }
                 }
+            },
+            "attributes": {
+                "user-id": 1,
+                "deleted-at": null,
+                "email-address": "hello@example.com",
+                "type": "office"
+            },
+            "links": {
+                "self": "/v1/user-emails/1"
             }
-        },
-        "attributes": {
-            "user-id": 1,
-            "deleted-at": null,
-            "email-address": "hello@example.com",
-            "type": "office"
         },
         "links": {
             "self": "/v1/user-emails/1"
+        },
+        "jsonapi": {
+            "version": "1.0"
         }
-    },
-    "links": {
-        "self": "/v1/user-emails/1"
-    },
-    "jsonapi": {
-        "version": "1.0"
-    }
-    }
+        }
 
 ### Delete User Email [DELETE]
 Delete a single user email.
@@ -24429,11 +24438,11 @@ Create paypal payment
 
 + Response 200 (application/vnd.api+json)
 
-   {
-        "status": "true",
-        "payment_id": "example",
-        "error": null
-   }
+        {
+            "status": "true",
+            "payment_id": "example",
+            "error": null
+        }
 
 
 # Group Admin Sales
@@ -24505,17 +24514,17 @@ The sales object contains properties placed, completed and pending properties wh
             "links": {
                 "self": "/v1/admin/sales/by-events"
             }
-        }],
-        "links": {
-            "self": "/v1/admin/sales/by-events"
-        },
-        "meta": {
-            "count": 1
-        },
-        "jsonapi": {
-            "version": "1.0"
+            }],
+            "links": {
+                "self": "/v1/admin/sales/by-events"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
         }
-    }
 
 ## Sales by Organizers Details [/v1/admin/sales/by-organizers{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -24669,17 +24678,17 @@ The sales object contains properties placed, completed and pending properties wh
             "links": {
                 "self": "/v1/admin/sales/by-marketer"
             }
-        }],
-        "links": {
-            "self": "/v1/admin/sales/by-marketer"
-        },
-        "meta": {
-            "count": 1
-        },
-        "jsonapi": {
-            "version": "1.0"
+            }],
+            "links": {
+                "self": "/v1/admin/sales/by-marketer"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
         }
-    }
 
 
 ## Sales discounted Details [/v1/admin/sales/discounted]

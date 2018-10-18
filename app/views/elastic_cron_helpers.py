@@ -14,7 +14,7 @@ from app.views.postgres import get_session_from_config
 
 @celery.task(name='rebuild.events.elasticsearch')
 def cron_rebuild_events_elasticsearch():
-    "Re-inserts all eligible events into elasticsearch, deletes existing events"
+    """Re-inserts all eligible events into elasticsearch, deletes existing events"""
     elastic = connect_from_config()
     session = get_session_from_config()
     rebuild_indices(client=elastic)
@@ -24,6 +24,6 @@ def cron_rebuild_events_elasticsearch():
 
 
 def sync_events_elasticsearch():
-    "Sync all newly created, updated or deleted events"
+    """Sync all newly created, updated or deleted events"""
     elastic = connect_from_config()
     elastic.sync()

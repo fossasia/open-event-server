@@ -24,6 +24,8 @@ class TestFilesHelperValidation(OpenEventTestCase):
         return im.size
 
     def test_uploaded_image_local(self):
+        """Method to test uploading image locally"""
+
         with app.test_request_context():
             file_content = "data:image/gif;base64,\
                             R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/\
@@ -38,6 +40,7 @@ class TestFilesHelperValidation(OpenEventTestCase):
             self.assertTrue(os.path.exists(file_path))
 
     def test_upload_single_file(self):
+        """Method to test uploading of single file"""
 
         class FileObj(BytesIO):
 
@@ -69,6 +72,8 @@ class TestFilesHelperValidation(OpenEventTestCase):
             self.assertTrue(os.path.exists(file_path))
 
     def test_upload_multiple_file(self):
+        """Method to test uploading of multiple files"""
+
         class FileObj(BytesIO):
 
             def close(self):
@@ -104,6 +109,8 @@ class TestFilesHelperValidation(OpenEventTestCase):
                 self.assertTrue(os.path.exists(file_path))
 
     def test_create_save_resized_image(self):
+        """Method to test create resized images"""
+
         with app.test_request_context():
             image_url_test = 'https://cdn.pixabay.com/photo/2014/09/08/17/08/hot-air-balloons-439331_960_720.jpg'
             width = 500
@@ -119,6 +126,8 @@ class TestFilesHelperValidation(OpenEventTestCase):
             self.assertEqual(resized_height, height)
 
     def test_create_save_image_sizes(self):
+        """Method to test create image sizes"""
+
         with app.test_request_context():
             image_url_test = 'https://cdn.pixabay.com/photo/2014/09/08/17/08/hot-air-balloons-439331_960_720.jpg'
             image_sizes_type = "event-image"

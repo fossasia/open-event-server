@@ -12,6 +12,8 @@ class TestErrorsHelperValidation(OpenEventTestCase):
         self.app = Setup.create_app()
 
     def test_errors(self):
+        """Method to test the status code of all errors."""
+
         with app.test_request_context():
             # Forbidden Error
             forbidden_error = ForbiddenError({'source': ''}, 'Super admin access is required')

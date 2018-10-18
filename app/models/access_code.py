@@ -57,7 +57,7 @@ class AccessCode(SoftDeletionModel):
         return 'access_code'
 
     def __repr__(self):
-        return '<AccessCode %r>' % self.id
+        return '<AccessCode %r>' % self.code
 
     def __str__(self):
         return self.__repr__()
