@@ -8,6 +8,7 @@
 [![Codecov branch](https://codecov.io/gh/fossasia/open-event-server/branch/master/graph/badge.svg?style=flat-square)](https://codecov.io/gh/fossasia/open-event-orga-server)
 [![Gitter](https://img.shields.io/badge/chat-on%20gitter-ff006f.svg?style=flat-square)](https://gitter.im/fossasia/open-event-server)
 [![Open Source Helpers](https://www.codetriage.com/fossasia/open-event-orga-server/badges/users.svg)](https://www.codetriage.com/fossasia/open-event-orga-server)
+[![Reviewed by Hound](https://img.shields.io/badge/Reviewed_by-Hound-8E64B0.svg)](https://houndci.com)
 
 > **The Open Event Server enables organizers to manage events from concerts to conferences and meet-ups.**
 
