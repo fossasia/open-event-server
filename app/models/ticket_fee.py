@@ -6,7 +6,7 @@ DEFAULT_FEE = 0.0
 
 
 class TicketFees(db.Model):
-    "Persists service and maximum fees for a currency in a country"
+    """Persists service and maximum fees for a currency in a country"""
     __tablename__ = 'ticket_fees'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -33,7 +33,7 @@ class TicketFees(db.Model):
 
 
 def get_fee(country, currency):
-    "Returns the fee for a given country and currency string"
+    """Returns the fee for a given country and currency string"""
     fee = db.session.query(TicketFees) \
                     .filter(TicketFees.country == country) \
                     .filter(TicketFees.currency == currency) \
