@@ -140,6 +140,8 @@ class UserDetail(ResourceDetail):
                                            'users_events_role_id')
             if users_events_role.user_id is not None:
                 view_kwargs['id'] = users_events_role.user_id
+            else:
+                view_kwargs['id'] = None
 
         if view_kwargs.get('speaker_id') is not None:
             speaker = safe_query(self, Speaker, 'id', view_kwargs['speaker_id'], 'speaker_id')
