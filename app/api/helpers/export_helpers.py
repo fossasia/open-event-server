@@ -185,11 +185,11 @@ def export_event_json(event_id, settings):
     # make directory
     exports_dir = app.config['BASE_DIR'] + '/static/uploads/exports/'
     if not os.path.isdir(exports_dir):
-        os.mkdir(exports_dir)
+        os.makedirs(exports_dir)
     dir_path = exports_dir + 'event%d' % int(event_id)
     if os.path.isdir(dir_path):
         shutil.rmtree(dir_path, ignore_errors=True)
-    os.mkdir(dir_path)
+    os.makedirs(dir_path)
     # save to directory
     for e in EXPORTS:
         if e[0] == 'event':
