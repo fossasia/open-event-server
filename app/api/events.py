@@ -172,16 +172,16 @@ class EventList(ResourceList):
 
         if event.state == 'published' and event.schedule_published_on:
             start_export_tasks(event)
-
-        if data.get('original_image_url'):
-            try:
-                uploaded_images = create_save_image_sizes(data['original_image_url'], 'event-image', event.id)
-            except (urllib.error.HTTPError, urllib.error.URLError):
-                raise UnprocessableEntity(
-                    {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
-                )
-            self.session.query(Event).filter_by(id=event.id).update(uploaded_images)
-            self.session.commit()
+        # TODO: Create an asynchronous celery task for this
+        # if data.get('original_image_url'):
+        #     try:
+        #         uploaded_images = create_save_image_sizes(data['original_image_url'], 'event-image', event.id)
+        #     except (urllib.error.HTTPError, urllib.error.URLError):
+        #         raise UnprocessableEntity(
+        #             {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
+        #         )
+        #     self.session.query(Event).filter_by(id=event.id).update(uploaded_images)
+        #     self.session.commit()
 
     # This permission decorator ensures, you are logged in to create an event
     # and have filter ?withRole to get events associated with logged in user
@@ -491,17 +491,18 @@ class EventDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        if data.get('original_image_url') and data['original_image_url'] != event.original_image_url:
-            try:
-                uploaded_images = create_save_image_sizes(data['original_image_url'], 'event-image', event.id)
-            except (urllib.error.HTTPError, urllib.error.URLError):
-                raise UnprocessableEntity(
-                    {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
-                )
-            data['original_image_url'] = uploaded_images['original_image_url']
-            data['large_image_url'] = uploaded_images['large_image_url']
-            data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
-            data['icon_image_url'] = uploaded_images['icon_image_url']
+        # TODO: Create an asynchronous celery task for this
+        # if data.get('original_image_url') and data['original_image_url'] != event.original_image_url:
+        #     try:
+        #         uploaded_images = create_save_image_sizes(data['original_image_url'], 'event-image', event.id)
+        #     except (urllib.error.HTTPError, urllib.error.URLError):
+        #         raise UnprocessableEntity(
+        #             {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
+        #         )
+        #     data['original_image_url'] = uploaded_images['original_image_url']
+        #     data['large_image_url'] = uploaded_images['large_image_url']
+        #     data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
+        #     data['icon_image_url'] = uploaded_images['icon_image_url']
 
         if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
             event.deleted_at = data.get('deleted_at')
