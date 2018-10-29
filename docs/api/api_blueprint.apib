@@ -77,6 +77,12 @@ Get a list of Users.
                                 "related": "/v1/users/3/events"
                             }
                         },
+                        "alternate-emails": {
+                            "links": {
+                                "self": "/v1/users/1/relationships/alternate-emails",
+                                "related": "/v1/users/1/alternate-emails"
+                            }
+                        },
                         "attendees": {
                             "links": {
                                 "self": "/v1/users/3/relationships/attendees",
@@ -137,6 +143,18 @@ Get a list of Users.
                                 "related": "/v1/events"
                             }
                         },
+                        "marketer-events": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/marketer-events",
+                                "related": "/v1/events"
+                            }
+                        },
+                        "sales-admin-events": {
+                            "links": {
+                                "self": "/v1/users/2/relationships/sales-admin-events",
+                                "related": "/v1/events"
+                            }
+                        },
                         "access-codes": {
                             "links": {
                                 "self": "/v1/users/2/relationships/access-codes",
@@ -161,6 +179,8 @@ Get a list of Users.
                         "last-name": "Doe",
                         "instagram-url": "http://instagram.com/instagram",
                         "is-super-admin": false,
+                        "is-sales-admin": false,
+                        "is-marketer": false,
                         "thumbnail-image-url": "http://example.com/example.png",
                         "created-at": "2017-06-21T20:33:33.186358+00:00",
                         "last-accessed-at": null,
@@ -175,7 +195,8 @@ Get a list of Users.
                         "first-name": "John",
                         "avatar-url": "http://example.com/example.png",
                         "twitter-url": "http://twitter.com/twitter",
-                        "google-plus-url": "http://plus.google.com/plus.google"
+                        "google-plus-url": "http://plus.google.com/plus.google",
+                        "facebook-id": "12345678"
                     },
                     "type": "user",
                     "id": "2",
@@ -235,6 +256,12 @@ Create a new user using an email, password and an optional name.
                             "related": "/v1/users/3/events"
                         }
                     },
+                    "alternate-emails": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/alternate-emails",
+                            "related": "/v1/users/3/alternate-emails"
+                        }
+                    },
                     "attendees": {
                         "links": {
                             "self": "/v1/users/3/relationships/attendees",
@@ -283,6 +310,18 @@ Create a new user using an email, password and an optional name.
                             "related": "/v1/events"
                         }
                     },
+                    "marketer-events": {
+                         "links": {
+                            "self": "/v1/users/2/relationships/marketer-events",
+                            "related": "/v1/events"
+                        }
+                     },
+                     "sales-admin-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/sales-admin-events",
+                            "related": "/v1/events"
+                        }
+                     },
                     "notifications": {
                         "links": {
                             "self": "/v1/users/2/relationships/notifications",
@@ -319,6 +358,8 @@ Create a new user using an email, password and an optional name.
                     "last-name": "Doe",
                     "instagram-url": "http://instagram.com/instagram",
                     "is-super-admin": false,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "thumbnail-image-url": "http://example.com/example.png",
                     "created-at": "2017-06-21T20:33:33.186358+00:00",
                     "last-accessed-at": null,
@@ -333,7 +374,8 @@ Create a new user using an email, password and an optional name.
                     "first-name": "John",
                     "avatar-url": "http://example.com/example.png",
                     "twitter-url": "http://twitter.com/twitter",
-                    "google-plus-url": "http://plus.google.com/plus.google"
+                    "google-plus-url": "http://plus.google.com/plus.google",
+                    "facebook-id": null
                 },
                 "type": "user",
                 "id": "2",
@@ -369,6 +411,12 @@ Get a single user.
                             "related": "/v1/users/3/events"
                         }
                     },
+                    "alternate-emails": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/alternate-emails",
+                            "related": "/v1/users/3/alternate-emails"
+                        }
+                    },
                     "attendees": {
                         "links": {
                             "self": "/v1/users/3/relationships/attendees",
@@ -405,6 +453,18 @@ Get a single user.
                             "related": "/v1/events"
                         }
                     },
+                    "marketer-events": {
+                         "links": {
+                            "self": "/v1/users/2/relationships/marketer-events",
+                            "related": "/v1/events"
+                        }
+                     },
+                     "sales-admin-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/sales-admin-events",
+                            "related": "/v1/events"
+                        }
+                     },
                     "speakers": {
                         "links": {
                             "self": "/v1/users/2/relationships/speakers",
@@ -453,6 +513,8 @@ Get a single user.
                     "last-name": "Doe",
                     "instagram-url": "http://instagram.com/instagram",
                     "is-super-admin": false,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "thumbnail-image-url": "http://example.com/example.png",
                     "created-at": "2017-06-21T20:33:33.186358+00:00",
                     "last-accessed-at": null,
@@ -467,7 +529,8 @@ Get a single user.
                     "first-name": "John",
                     "avatar-url": "http://example.com/example.png",
                     "twitter-url": "http://twitter.com/twitter",
-                    "google-plus-url": "http://plus.google.com/plus.google"
+                    "google-plus-url": "http://plus.google.com/plus.google",
+                    "facebook-id": "123456"
                 },
                 "type": "user",
                 "id": "2",
@@ -526,6 +589,12 @@ Authorized user should be same as user in request body or must be admin.
                             "related": "/v1/users/3/events"
                         }
                     },
+                    "alternate-emails": {
+                        "links": {
+                            "self": "/v1/users/3/relationships/alternate-emails",
+                            "related": "/v1/users/3/alternate-emails"
+                        }
+                    },
                     "attendees": {
                         "links": {
                             "self": "/v1/users/3/relationships/attendees",
@@ -574,6 +643,18 @@ Authorized user should be same as user in request body or must be admin.
                             "related": "/v1/events"
                         }
                     },
+                    "marketer-events": {
+                         "links": {
+                            "self": "/v1/users/2/relationships/marketer-events",
+                            "related": "/v1/events"
+                        }
+                     },
+                     "sales-admin-events": {
+                        "links": {
+                            "self": "/v1/users/2/relationships/sales-admin-events",
+                            "related": "/v1/events"
+                        }
+                     },
                     "notifications": {
                         "links": {
                             "self": "/v1/users/2/relationships/notifications",
@@ -610,6 +691,8 @@ Authorized user should be same as user in request body or must be admin.
                     "last-name": "Doe",
                     "instagram-url": "http://instagram.com/instagram",
                     "is-super-admin": false,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "thumbnail-image-url": "http://example.com/example.png",
                     "created-at": "2017-06-21T20:33:33.186358+00:00",
                     "last-accessed-at": null,
@@ -624,7 +707,8 @@ Authorized user should be same as user in request body or must be admin.
                     "first-name": "John",
                     "avatar-url": "http://example.com/example.png",
                     "twitter-url": "http://twitter.com/twitter",
-                    "google-plus-url": "http://plus.google.com/plus.google"
+                    "google-plus-url": "http://plus.google.com/plus.google",
+                    "facebook-id": "123456"
                 },
                 "type": "user",
                 "id": "2",
@@ -686,6 +770,12 @@ Get the details of the user.
                             "related": "/v1/users/1/email-notifications"
                         }
                     },
+                    "alternate-emails": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/alternate-emails",
+                            "related": "/v1/users/1/alternate-emails"
+                        }
+                    },
                     "notifications": {
                         "links": {
                             "self": "/v1/users/1/relationships/notifications",
@@ -730,6 +820,8 @@ Get the details of the user.
                     "icon-image-url": null,
                     "instagram-url": null,
                     "is-super-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "original-image-url": null,
                     "created-at": "2017-07-21T15:06:20.741290+00:00",
                     "last-accessed-at": null,
@@ -743,7 +835,8 @@ Get the details of the user.
                     "first-name": null,
                     "deleted-at": null,
                     "small-image-url": null,
-                    "details": null
+                    "details": null,
+                    "facebook-id": "123456"
                 },
                 "type": "user",
                 "id": "1",
@@ -789,6 +882,12 @@ Get the details of the user.
                             "related": "/v1/users/1/email-notifications"
                         }
                     },
+                    "alternate-emails": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/alternate-emails",
+                            "related": "/v1/users/1/alternate-emails"
+                        }
+                    },
                     "notifications": {
                         "links": {
                             "self": "/v1/users/1/relationships/notifications",
@@ -833,6 +932,8 @@ Get the details of the user.
                     "icon-image-url": null,
                     "instagram-url": null,
                     "is-super-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "original-image-url": null,
                     "created-at": "2017-07-21T15:06:20.741290+00:00",
                     "last-accessed-at": null,
@@ -846,7 +947,8 @@ Get the details of the user.
                     "first-name": null,
                     "deleted-at": null,
                     "small-image-url": null,
-                    "details": null
+                    "details": null,
+                    "facebook-id": "123456"
                 },
                 "type": "user",
                 "id": "1",
@@ -892,6 +994,12 @@ Get the details of the user.
                             "related": "/v1/users/1/email-notifications"
                         }
                     },
+                    "alternate-emails": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/alternate-emails",
+                            "related": "/v1/users/1/alternate-emails"
+                        }
+                    },
                     "notifications": {
                         "links": {
                             "self": "/v1/users/1/relationships/notifications",
@@ -931,6 +1039,8 @@ Get the details of the user.
                 },
                 "attributes": {
                     "is-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "thumbnail-image-url": null,
                     "last-name": null,
                     "icon-image-url": null,
@@ -949,7 +1059,8 @@ Get the details of the user.
                     "first-name": null,
                     "deleted-at": null,
                     "small-image-url": null,
-                    "details": null
+                    "details": null,
+                    "facebook-id": "123456"
                 },
                 "type": "user",
                 "id": "1",
@@ -995,6 +1106,12 @@ Get the details of the user.
                             "related": "/v1/users/1/email-notifications"
                         }
                     },
+                    "alternate-emails": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/alternate-emails",
+                            "related": "/v1/users/1/alternate-emails"
+                        }
+                    },
                     "notifications": {
                         "links": {
                             "self": "/v1/users/1/relationships/notifications",
@@ -1039,6 +1156,8 @@ Get the details of the user.
                     "icon-image-url": null,
                     "instagram-url": null,
                     "is-super-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "original-image-url": null,
                     "created-at": "2017-07-21T15:06:20.741290+00:00",
                     "last-accessed-at": null,
@@ -1052,7 +1171,8 @@ Get the details of the user.
                     "first-name": null,
                     "deleted-at": null,
                     "small-image-url": null,
-                    "details": null
+                    "details": null,
+                    "facebook-id": "123456"
                 },
                 "type": "user",
                 "id": "1",
@@ -1098,6 +1218,12 @@ Get the details of the user.
                             "related": "/v1/users/1/email-notifications"
                         }
                     },
+                    "alternate-emails": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/alternate-emails",
+                            "related": "/v1/users/1/alternate-emails"
+                        }
+                    },
                     "notifications": {
                         "links": {
                             "self": "/v1/users/1/relationships/notifications",
@@ -1137,6 +1263,8 @@ Get the details of the user.
                 },
                 "attributes": {
                     "is-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "thumbnail-image-url": null,
                     "last-name": null,
                     "icon-image-url": null,
@@ -1155,7 +1283,8 @@ Get the details of the user.
                     "first-name": null,
                     "deleted-at": null,
                     "small-image-url": null,
-                    "details": null
+                    "details": null,
+                    "facebook-id": "123456"
                 },
                 "type": "user",
                 "id": "1",
@@ -1201,6 +1330,12 @@ Get the details of the user.
                             "related": "/v1/users/1/email-notifications"
                         }
                     },
+                    "alternate-emails": {
+                        "links": {
+                            "self": "/v1/users/1/relationships/alternate-emails",
+                            "related": "/v1/users/1/alternate-emails"
+                        }
+                    },
                     "notifications": {
                         "links": {
                             "self": "/v1/users/1/relationships/notifications",
@@ -1240,6 +1375,8 @@ Get the details of the user.
                 },
                 "attributes": {
                     "is-admin": true,
+                    "is-sales-admin": false,
+                    "is-marketer": false,
                     "thumbnail-image-url": null,
                     "last-name": null,
                     "icon-image-url": null,
@@ -1258,7 +1395,8 @@ Get the details of the user.
                     "first-name": null,
                     "deleted-at": null,
                     "small-image-url": null,
-                    "details": null
+                    "details": null,
+                    "facebook-id": "123456"
                 },
                 "type": "user",
                 "id": "1",
@@ -1285,6 +1423,7 @@ Check if the email passed is available or not. True is returned if the email is 
     + Headers
 
             Accept: application/json
+            Content-Type: application/json
 
     + Body
 
@@ -1680,6 +1819,7 @@ Event Topics for Events. Can only be edited and entered by admins.
 |:----------|-------------|------|----------|
 | `name`  | Name of the event topic | string | - |
 | `slug` | Slug of the event topic | string | - |
+| `system-image-url` | Url of system image of event topic | string | - |
 
 
 ## Event Topics Collection [/v1/event-topics{?page%5bsize%5d,page%5bnumber%5d,sort}]
@@ -1723,7 +1863,8 @@ Get a list of Event Topics.
               },
               "attributes": {
                 "name": "Travel & Outdoor",
-                "slug": "travel-outdoor"
+                "slug": "travel-outdoor",
+                "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
               },
               "type": "event-topic",
               "id": "1",
@@ -1755,7 +1896,8 @@ Create a new event topic with name.
             {
               "data": {
                 "attributes": {
-                  "name": "Travel & Outdoor"
+                  "name": "Travel & Outdoor",
+                  "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
                 },
                 "type": "event-topic"
               }
@@ -1781,7 +1923,8 @@ Create a new event topic with name.
               },
               "attributes": {
                 "name": "Travel & Outdoor",
-                "slug": "travel-outdoor"
+                "slug": "travel-outdoor",
+                "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
               },
               "type": "event-topic",
               "id": "1",
@@ -1832,7 +1975,8 @@ Get a single event topic.
             },
             "attributes": {
               "name": "Travel & Outdoor",
-              "slug": "travel-outdoor"
+              "slug": "travel-outdoor",
+              "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
             },
             "type": "event-topic",
             "id": "1",
@@ -1867,7 +2011,8 @@ Authorized user must be admin.
             {
               "data": {
                 "attributes": {
-                  "name": "Travel & Outdoor"
+                  "name": "Travel & Outdoor",
+                  "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
                 },
                 "type": "event-topic",
                 "id": "1"
@@ -1894,7 +2039,8 @@ Authorized user must be admin.
             },
             "attributes": {
               "name": "Travel & Outdoor",
-              "slug": "travel-outdoor"
+              "slug": "travel-outdoor",
+              "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
             },
             "type": "event-type",
             "id": "1",
@@ -1968,7 +2114,8 @@ Delete a single event topic.
                 },
                 "attributes": {
                     "slug": "travel-outdoor",
-                    "name": "Travel & Outdoor"
+                    "name": "Travel & Outdoor",
+                    "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
                 },
                 "type": "event-topic",
                 "id": "1",
@@ -2020,7 +2167,8 @@ Delete a single event topic.
                 },
                 "attributes": {
                     "slug": "travel-outdoor",
-                    "name": "Travel & Outdoor"
+                    "name": "Travel & Outdoor",
+                    "system-image-url": "https://www.w3schools.com/html/pic_mountain.jpg"
                 },
                 "type": "event-topic",
                 "id": "1",
@@ -2794,6 +2942,9 @@ These endpoints help you to create the basic event structure. To add other parts
 | `external-event-url`  | - | string | - |
 | `has-organizer-info`  | - | boolean(default: `false`) | - |
 | `average-rating`  | Average rating of event | float | - |
+| `order-expiry-time`  | Expiry time for orders in minutes | Integer(default: 10) | - |
+| `refund-policy` | Refund policy | string | - |
+| `is-stripe-linked` | Shows if the event has a linked stripe account. | boolean(default: `false`) | - |
 
 ## Events Collection [/v1/events{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -2999,6 +3150,7 @@ Get a list of events.
                         "can-pay-by-paypal": true,
                         "location-name": "example",
                         "is-sponsors-enabled": false,
+                        "is-event-online": false,
                         "has-organizer-info": false,
                         "is-sessions-speakers-enabled": true,
                         "privacy": "public",
@@ -3025,7 +3177,10 @@ Get a list of events.
                         "longitude": 1.23456789,
                         "bank-details": "example",
                         "cheque-details": "example",
-                        "identifier": "b8324ae2"
+                        "identifier": "b8324ae2",
+                        "order-expiry-time": "10",
+                        "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                        "is-stripe-linked": "false"
                     },
                     "type": "event",
                     "id": "1",
@@ -3075,24 +3230,26 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "is-sessions-speakers-enabled": "true",
                     "privacy": "public",
                     "state": "draft",
+                    "is-event-online": false,
                     "average-rating": null,
                     "ticket-url": "http://example.com",
                     "code-of-conduct": "example",
-                    "is-ticketing-enabled": "true",
+                    "is-ticketing-enabled": "false",
                     "payment-country": "US",
                     "payment-currency": "USD",
                     "paypal-email": "example@example.com",
                     "is-tax-enabled": "true",
-                    "can-pay-by-paypal": "true",
-                    "can-pay-by-stripe": "true",
-                    "can-pay-by-cheque": "true",
-                    "can-pay-by-bank": "true",
+                    "can-pay-by-paypal": "false",
+                    "can-pay-by-stripe": "false",
+                    "can-pay-by-cheque": "false",
+                    "can-pay-by-bank": "false",
                     "can-pay-onsite": "true",
                     "cheque-details": "example",
                     "bank-details": "example",
                     "onsite-details": "example",
                     "is-sponsors-enabled": "false",
-                    "has-organizer-info": "false"
+                    "has-organizer-info": "false",
+                    "order-expiry-time": "10"
                 },
                 "type": "event"
               }
@@ -3278,13 +3435,14 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "original-image-url": "http://example.com/example.png",
                     "onsite-details": "example",
                     "organizer-name": "example",
-                    "can-pay-by-stripe": true,
+                    "can-pay-by-stripe": false,
                     "large-image-url": null,
                     "timezone": "UTC",
                     "can-pay-onsite": true,
                     "deleted-at": null,
+                    "is-event-online": false,
                     "ticket-url": "http://example.com",
-                    "can-pay-by-paypal": true,
+                    "can-pay-by-paypal": false,
                     "location-name": "example",
                     "is-sponsors-enabled": false,
                     "has-organizer-info": false,
@@ -3296,8 +3454,8 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "example",
-                    "is-ticketing-enabled": true,
-                    "can-pay-by-cheque": true,
+                    "is-ticketing-enabled": false,
+                    "can-pay-by-cheque": false,
                     "description": "example",
                     "pentabarf-url": null,
                     "xcal-url": null,
@@ -3307,13 +3465,16 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "icon-image-url": null,
                     "ical-url": null,
                     "name": "example",
-                    "can-pay-by-bank": true,
+                    "can-pay-by-bank": false,
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "created-at": "2017-06-26T15:22:37.205399+00:00",
                     "longitude": 1.23456789,
                     "bank-details": "example",
                     "cheque-details": "example",
-                    "identifier": "b8324ae2"
+                    "identifier": "b8324ae2",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -3536,6 +3697,7 @@ Get a single event.
                     "has-organizer-info": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
+                    "is-event-online": false,
                     "code-of-conduct": "example",
                     "state": "draft",
                     "average-rating": null,
@@ -3559,7 +3721,10 @@ Get a single event.
                     "longitude": 1.23456789,
                     "bank-details": "example",
                     "cheque-details": "example",
-                    "identifier": "b8324ae2"
+                    "identifier": "b8324ae2",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -3612,7 +3777,7 @@ All other fields are optional. Add attributes you want to modify.
                     "organizer-description": "example1",
                     "is-sessions-speakers-enabled": "false",
                     "privacy": "private",
-                    "state": "published",
+                    "state": "draft",
                     "average-rating": null,
                     "ticket-url": "http://example1.com",
                     "code-of-conduct": "example1",
@@ -3630,7 +3795,9 @@ All other fields are optional. Add attributes you want to modify.
                     "bank-details": "example1",
                     "onsite-details": "example1",
                     "is-sponsors-enabled": "false",
-                    "has-organizer-info": "false"
+                    "has-organizer-info": "false",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "id": "1",
                 "type": "event"
@@ -3831,6 +3998,7 @@ All other fields are optional. Add attributes you want to modify.
                     "code-of-conduct": "example1",
                     "state": "published",
                     "average-rating": null,
+                    "is-event-online": false,
                     "latitude": 12.23456789,
                     "starts-at": "2016-12-14T18:29:59.123456+00:00",
                     "searchable-location-name": "example1",
@@ -3851,7 +4019,10 @@ All other fields are optional. Add attributes you want to modify.
                     "longitude": 12.23456789,
                     "bank-details": "example1",
                     "cheque-details": "example1",
-                    "identifier": "b8324ae2"
+                    "identifier": "b8324ae2",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -4088,6 +4259,7 @@ Get a list of events.
                         "privacy": "public",
                         "has-organizer-info": false,
                         "state": "draft",
+                        "is-event-online": false,
                         "average-rating": null,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
@@ -4110,7 +4282,10 @@ Get a list of events.
                         "cheque-details": "example",
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
-                        "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                        "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                        "order-expiry-time": "10",
+                        "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                        "is-stripe-linked": "false"
                     },
                     "type": "event",
                     "id": "1",
@@ -4312,6 +4487,7 @@ Get a list of events.
                         "timezone": "UTC",
                         "can-pay-onsite": true,
                         "deleted-at": null,
+                        "is-event-online": false,
                         "ticket-url": "http://example.com",
                         "can-pay-by-paypal": true,
                         "location-name": "example",
@@ -4342,7 +4518,10 @@ Get a list of events.
                         "cheque-details": "example",
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
-                        "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                        "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                        "order-expiry-time": "10",
+                        "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                        "is-stripe-linked": "false"
                     },
                     "type": "event",
                     "id": "1",
@@ -4537,6 +4716,7 @@ Get a list of events.
                         "timezone": "UTC",
                         "can-pay-onsite": true,
                         "deleted-at": null,
+                        "is-event-online": false,
                         "ticket-url": "http://example.com",
                         "can-pay-by-paypal": true,
                         "location-name": "example",
@@ -4567,7 +4747,10 @@ Get a list of events.
                         "cheque-details": "example",
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
-                        "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                        "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                        "order-expiry-time": "10",
+                        "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                        "is-stripe-linked": "false"
                     },
                     "type": "event",
                     "id": "1",
@@ -4777,6 +4960,7 @@ Get a list of events.
                         "privacy": "public",
                         "has-organizer-info": false,
                         "state": "draft",
+                        "is-event-online": false,
                         "average-rating": null,
                         "latitude": 1.23456789,
                         "starts-at": "2016-12-13T23:59:59.123456+00:00",
@@ -4799,7 +4983,10 @@ Get a list of events.
                         "cheque-details": "example",
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
-                        "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                        "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                        "order-expiry-time": "10",
+                        "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                        "is-stripe-linked": "false"
                     },
                     "type": "event",
                     "id": "1",
@@ -5017,6 +5204,7 @@ Get a list of events.
                         "is-tax-enabled": true,
                         "ical-url": null,
                         "name": "example",
+                        "is-event-online": false,
                         "icon-image-url": null,
                         "thumbnail-image-url": null,
                         "created-at": "2017-07-23T12:01:55.414735+00:00",
@@ -5025,7 +5213,10 @@ Get a list of events.
                         "cheque-details": "example",
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
-                        "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                        "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                        "order-expiry-time": "10",
+                        "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                        "is-stripe-linked": "false"
                     },
                     "type": "event",
                     "id": "1",
@@ -5226,6 +5417,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "is-event-online": false,
                     "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
@@ -5248,7 +5440,10 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -5449,6 +5644,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "is-event-online": false,
                     "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
@@ -5471,7 +5667,10 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -5665,6 +5864,7 @@ Get a list of events.
                     "can-pay-onsite": true,
                     "deleted-at": null,
                     "ticket-url": "http://example.com",
+                    "is-event-online": false,
                     "can-pay-by-paypal": true,
                     "location-name": "example",
                     "is-sponsors-enabled": false,
@@ -5694,7 +5894,10 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -5895,6 +6098,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "is-event-online": false,
                     "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
@@ -5917,7 +6121,10 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -6116,6 +6323,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
+                    "is-event-online": false,
                     "has-organizer-info": false,
                     "state": "draft",
                     "average-rating": null,
@@ -6140,7 +6348,10 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -6342,6 +6553,7 @@ Get a list of events.
                     "has-organizer-info": false,
                     "state": "draft",
                     "average-rating": null,
+                    "is-event-online": false,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -6363,7 +6575,10 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -6572,6 +6787,7 @@ Get a list of events.
                     "can-pay-by-cheque": true,
                     "description": "example",
                     "pentabarf-url": null,
+                    "is-event-online": false,
                     "xcal-url": null,
                     "logo-url": "http://example.com/example.png",
                     "can-pay-by-bank": true,
@@ -6586,7 +6802,10 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -6778,6 +6997,7 @@ Get a list of events.
                     "large-image-url": null,
                     "timezone": "UTC",
                     "can-pay-onsite": true,
+                    "is-event-online": false,
                     "deleted-at": null,
                     "ticket-url": "http://example.com",
                     "can-pay-by-paypal": true,
@@ -6809,7 +7029,10 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -6996,6 +7219,7 @@ Get a list of events.
                     "is-map-shown": true,
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
+                    "is-event-online": false,
                     "organizer-name": "example",
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
@@ -7032,7 +7256,10 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -7226,6 +7453,7 @@ Get a list of events.
                     "can-pay-onsite": true,
                     "deleted-at": null,
                     "ticket-url": "http://example.com",
+                    "is-event-online": false,
                     "can-pay-by-paypal": true,
                     "location-name": "example",
                     "is-sponsors-enabled": false,
@@ -7255,7 +7483,10 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -7459,6 +7690,7 @@ Get a list of events.
                     "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
+                    "is-event-online": false,
                     "searchable-location-name": "Draft",
                     "is-ticketing-enabled": true,
                     "can-pay-by-cheque": true,
@@ -7478,7 +7710,10 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -7677,6 +7912,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
+                    "is-event-online": false,
                     "has-organizer-info": false,
                     "state": "draft",
                     "average-rating": null,
@@ -7701,7 +7937,10 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -7915,6 +8154,7 @@ Get a list of events.
                     "can-pay-by-bank": true,
                     "is-tax-enabled": true,
                     "ical-url": null,
+                    "is-event-online": false,
                     "name": "example",
                     "icon-image-url": null,
                     "thumbnail-image-url": null,
@@ -7924,7 +8164,10 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -8134,6 +8377,7 @@ Get a list of events.
                     "description": "example",
                     "pentabarf-url": null,
                     "xcal-url": null,
+                    "is-event-online": false,
                     "logo-url": "http://example.com/example.png",
                     "can-pay-by-bank": true,
                     "is-tax-enabled": true,
@@ -8147,7 +8391,10 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -8349,6 +8596,7 @@ Get a list of events.
                     "has-organizer-info": false,
                     "state": "draft",
                     "average-rating": null,
+                    "is-event-online": false,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -8370,7 +8618,10 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -8585,6 +8836,7 @@ Get a list of events.
                     "is-tax-enabled": true,
                     "ical-url": null,
                     "name": "example",
+                    "is-event-online": false,
                     "icon-image-url": null,
                     "thumbnail-image-url": null,
                     "created-at": "2017-07-23T12:01:55.414735+00:00",
@@ -8593,7 +8845,10 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -8794,6 +9049,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "is-event-online": false,
                     "average-rating": null,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
@@ -8816,7 +9072,10 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -9015,6 +9274,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
+                    "is-event-online": false,
                     "has-organizer-info": false,
                     "state": "draft",
                     "average-rating": null,
@@ -9039,7 +9299,10 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -9255,6 +9518,7 @@ Get a list of events.
                     "ical-url": null,
                     "name": "example",
                     "icon-image-url": null,
+                    "is-event-online": false,
                     "thumbnail-image-url": null,
                     "created-at": "2017-07-23T12:01:55.414735+00:00",
                     "longitude": 1.23456789,
@@ -9262,7 +9526,10 @@ Get a list of events.
                     "cheque-details": "example",
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
-                    "ends-at": "2016-12-14T23:59:59.123456+00:00"
+                    "ends-at": "2016-12-14T23:59:59.123456+00:00",
+                    "order-expiry-time": "10",
+                    "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+                    "is-stripe-linked": "false"
                 },
                 "type": "event",
                 "id": "1",
@@ -9488,6 +9755,7 @@ Get a list of events.
               "is-sponsors-enabled": false,
               "is-sessions-speakers-enabled": false,
               "privacy": "public",
+              "is-event-online": false,
               "has-organizer-info": false,
               "state": "draft",
               "average-rating": null,
@@ -9512,7 +9780,10 @@ Get a list of events.
               "cheque-details": null,
               "external-event-url": null,
               "identifier": "4f27fefe",
-              "ends-at": "2022-05-30T04:00:10+00:00"
+              "ends-at": "2022-05-30T04:00:10+00:00",
+              "order-expiry-time": "10",
+              "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+              "is-stripe-linked": "false"
             },
             "type": "event",
             "id": "1",
@@ -9739,6 +10010,7 @@ Get a list of events.
               "is-sessions-speakers-enabled": false,
               "privacy": "public",
               "has-organizer-info": false,
+              "is-event-online": false,
               "state": "Draft",
               "average-rating": null,
               "latitude": null,
@@ -9762,7 +10034,10 @@ Get a list of events.
               "cheque-details": null,
               "external-event-url": null,
               "identifier": "4f27fefe",
-              "ends-at": "2022-05-30T04:00:10+00:00"
+              "ends-at": "2022-05-30T04:00:10+00:00",
+              "order-expiry-time": "10",
+              "refund-policy": "All sales are final. No refunds shall be issued in any case.",
+              "is-stripe-linked": "true"
             },
             "type": "event",
             "id": "1",
@@ -10902,8 +11177,8 @@ Data related to all the sessions in the event.
 | `short-abstract` | Short Abstract of the Session | string | - |
 | `long-abstract` | Long Abstract of the Session | string | - |
 | `comments` | Comments of the Session | string | - |
-| `starts-at` | Start date of the Session | ISO 8601 (tz-aware) | **yes** |
-| `ends-at` | End date of the Session | ISO 8601 (tz-aware) | **yes** |
+| `starts-at` | Start date of the Session | ISO 8601 (tz-aware) | - |
+| `ends-at` | End date of the Session | ISO 8601 (tz-aware) | - |
 | `language` | Language of the Session | string | - |
 | `slides-url` | Slide Url of the Session | string | - |
 | `videos-url` | Video Url of the Session | string | - |
@@ -10916,6 +11191,7 @@ Data related to all the sessions in the event.
 | `is-mail-sent` | Yes/No for Session accept/reject email | boolean (default: `false`) | - |
 | `last-modified-at` | Date the session was modified | ISO 8601 (tz-aware) | - |
 | `send-email` | Yes/No for sending Session accept/reject email | boolean | - |
+| `average-rating`  | Average rating of session | float | - |
 
 
 ## Sessions Collection [/v1/sessions{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
@@ -11019,6 +11295,7 @@ Create a new session using an event_id and track_id **(Minimum Co-Organizer Acce
               "subtitle": null,
               "level": 1,
               "short-abstract": null,
+              "average-rating": 4.25,
               "long-abstract": null,
               "comments": null,
               "starts-at": "2017-06-01T10:00:00.500127+00:00",
@@ -11106,6 +11383,7 @@ Get a single session. **(Public)**
               "subtitle": null,
               "level": 1,
               "short-abstract": null,
+              "average-rating": 4.25,
               "long-abstract": null,
               "comments": null,
               "starts-at": "2017-06-01T10:00:00.500127+00:00",
@@ -11209,6 +11487,7 @@ Update a single session by `id`. **(Minimum Co-Organizer Access)**
               "subtitle": null,
               "level": 1,
               "short-abstract": null,
+              "average-rating": 4.25,
               "long-abstract": null,
               "comments": null,
               "starts-at": "2017-06-01T10:00:00.500127+00:00",
@@ -11326,6 +11605,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "ends-at": "2017-06-01T11:00:00.500127+00:00",
                         "language": "English",
                         "short-abstract": "Short Abstract",
+                        "average-rating": 4.25,
                         "slides-url": "http://example.com/example",
                         "title": "Micropython Session",
                         "created-at": "2017-07-25T02:22:35.010307+00:00",
@@ -11422,6 +11702,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "ends-at": "2017-06-01T11:00:00.500127+00:00",
                         "language": "English",
                         "short-abstract": "Short Abstract",
+                        "average-rating": 4.25,
                         "slides-url": "http://example.com/example",
                         "title": "Micropython Session",
                         "created-at": "2017-07-25T02:22:35.010307+00:00",
@@ -11518,6 +11799,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "ends-at": "2017-06-01T11:00:00.500127+00:00",
                         "language": "English",
                         "short-abstract": "Short Abstract",
+                        "average-rating": 4.25,
                         "slides-url": "http://example.com/example",
                         "title": "Micropython Session",
                         "created-at": "2017-07-25T02:22:35.010307+00:00",
@@ -11614,6 +11896,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "ends-at": "2017-06-01T11:00:00.500127+00:00",
                         "language": "English",
                         "short-abstract": "Short Abstract",
+                        "average-rating": 4.25,
                         "slides-url": "http://example.com/example",
                         "title": "Micropython Session",
                         "created-at": "2017-07-25T02:22:35.010307+00:00",
@@ -11710,6 +11993,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "ends-at": "2017-06-01T11:00:00.500127+00:00",
                         "language": "English",
                         "short-abstract": "Short Abstract",
+                        "average-rating": 4.25,
                         "slides-url": "http://example.com/example",
                         "title": "Micropython Session",
                         "created-at": "2017-07-25T02:22:35.010307+00:00",
@@ -12706,7 +12990,8 @@ Create a new social link using event_id.
                 },
                 "attributes": {
                   "name": "Facebook Url",
-                  "link": "http://facebook.com/facebook"
+                  "link": "http://facebook.com/facebook",
+                  "identifier": "example"
                 },
                 "type": "social-link"
               }
@@ -12727,7 +13012,8 @@ Create a new social link using event_id.
             "attributes": {
               "link": "http://facebook.com/facebook",
               "deleted-at": null,
-              "name": "Facebook Url"
+              "name": "Facebook Url",
+              "identifier": "example"
             },
             "type": "social-link",
             "id": "1",
@@ -12782,7 +13068,8 @@ Get a list of Social Links.
               "attributes": {
                 "link": "http://facebook.com/facebook",
                 "deleted-at": null,
-                "name": "Facebook Url"
+                "name": "Facebook Url",
+                "identifier": "example"
               },
               "type": "social-link",
               "id": "1",
@@ -12828,7 +13115,8 @@ Get a list of Social Links.
             "attributes": {
               "link": "http://facebook.com/facebook",
               "deleted-at": null,
-              "name": "Facebook Url"
+              "name": "Facebook Url",
+              "identifier": "example"
             },
             "type": "social-link",
             "id": "1",
@@ -12862,7 +13150,8 @@ Update a single social link by `id`.
               "data": {
                 "attributes": {
                   "name": "Facebook Page Url",
-                  "link": "http://facebook.com/facebook"
+                  "link": "http://facebook.com/facebook",
+                  "identifier": "example"
                 },
                 "type": "social-link",
                 "id": "1"
@@ -12884,7 +13173,8 @@ Update a single social link by `id`.
             "attributes": {
               "link": "http://facebook.com/facebook",
               "deleted-at": null,
-              "name": "Facebook Page Url"
+              "name": "Facebook Page Url",
+              "identifier": "example"
             },
             "type": "social-link",
             "id": "1",
@@ -14975,8 +15265,35 @@ Related to ticket holders(attendees) of an event (free, paid, donation) to the e
 | `country` | Country of the Attendee | string | - |
 | `is-checked-in` | If the attendee is checked in | boolean | - |
 | `checkin-times` | Comma separated checkin times | string | - |
+| `is-checked-out` | If the attendee has checked out | boolean | - |
 | `attendee-notes` | Comma separated attendee notes | string | - |
 | `pdf-url` | pdf url of the Attendee | url | - |
+
+## Send order receipts [v1/attendees/send-receipt]
+
+### Send email receipts to attendees [POST]
+Send order receipts to attendees via email (requires organizer access).
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "order-identifier": "xyz789"
+            }
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "message": "receipt sent to attendees"
+        }
 
 ## Attendees Collection [/v1/attendees{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -15055,17 +15372,37 @@ Create a new attendee.
               }
             },
             "attributes": {
-              "city": null,
-              "firstname": "Open Event User",
-              "lastname": null,
-              "is-checked-in": false,
-              "attendee-notes": "example",
-              "state": null,
-              "address": null,
-              "pdf-url": "http://example.com",
-              "country": null,
-              "deleted-at": null,
-              "email": null
+                "facebook": null,
+                "address": "address",
+                "ticket-id": "31",
+                "is-checked-out": null,
+                "checkout-times": null,
+                "job-title": null,
+                "deleted-at": null,
+                "work-address": null,
+                "checkin-times": null,
+                "state": "example",
+                "country": "IN",
+                "lastname": "UnDoe",
+                "city": "example",
+                "phone": null,
+                "company": null,
+                "is-checked-in": false,
+                "gender": null,
+                "shipping-address": null,
+                "blog": null,
+                "firstname": "John",
+                "website": null,
+                "billing-address": null,
+                "pdf-url": null,
+                "tax-business-info": null,
+                "home-address": null,
+                "work-phone": null,
+                "birth-date": null,
+                "github": null,
+                "twitter": null,
+                "email": "johndoe@example.com",
+                "attendee-notes": null
             },
             "type": "attendee",
             "id": "1",
@@ -15131,34 +15468,37 @@ Get a list of attendees of an order.
                 }
               },
               "attributes": {
-                "birth-date": null,
-                "twitter": null,
-                "shipping-address": null,
-                "city": null,
-                "tax-business-info": null,
-                "billing-address": null,
-                "blog": null,
-                "is-checked-in": false,
-                "state": null,
-                "email": null,
-                "home-address": null,
-                "website": null,
-                "firstname": "Open Event User",
-                "lastname": null,
-                "company": null,
-                "phone": null,
                 "facebook": null,
-                "address": null,
+                "address": "address",
+                "ticket-id": "31",
+                "is-checked-out": null,
+                "checkout-times": null,
                 "job-title": null,
-                "github": null,
-                "gender": null,
-                "ticket-id": "1",
-                "country": null,
                 "deleted-at": null,
-                "attendee-notes": null,
-                "pdf-url": "http://ipiyush.com",
                 "work-address": null,
-                "work-phone": null
+                "checkin-times": null,
+                "state": "example",
+                "country": "IN",
+                "lastname": "UnDoe",
+                "city": "example",
+                "phone": null,
+                "company": null,
+                "is-checked-in": false,
+                "gender": null,
+                "shipping-address": null,
+                "blog": null,
+                "firstname": "John",
+                "website": null,
+                "billing-address": null,
+                "pdf-url": null,
+                "tax-business-info": null,
+                "home-address": null,
+                "work-phone": null,
+                "birth-date": null,
+                "github": null,
+                "twitter": null,
+                "email": "johndoe@example.com",
+                "attendee-notes": null
               },
               "type": "attendee",
               "id": "1",
@@ -15209,35 +15549,37 @@ Get a single attendee.
                     }
                 },
                 "attributes": {
-                    "checkin-times": null,
-                    "attendee-notes": null,
-                    "github": null,
-                    "email": "johndoe@example.com",
-                    "home-address": null,
-                    "billing-address": null,
-                    "is-checked-in": false,
-                    "gender": null,
-                    "pdf-url": null,
-                    "lastname": "Doe",
-                    "shipping-address": null,
-                    "job-title": null,
-                    "website": null,
                     "facebook": null,
-                    "twitter": null,
-                    "tax-business-info": null,
-                    "state": "example",
-                    "work-phone": null,
-                    "city": "example",
-                    "birth-date": null,
-                    "country": "IN",
                     "address": "address",
-                    "blog": null,
+                    "ticket-id": "31",
+                    "is-checked-out": null,
+                    "checkout-times": null,
+                    "job-title": null,
                     "deleted-at": null,
                     "work-address": null,
+                    "checkin-times": null,
+                    "state": "example",
+                    "country": "IN",
+                    "lastname": "UnDoe",
+                    "city": "example",
                     "phone": null,
-                    "ticket-id": "1",
+                    "company": null,
+                    "is-checked-in": false,
+                    "gender": null,
+                    "shipping-address": null,
+                    "blog": null,
                     "firstname": "John",
-                    "company": null
+                    "website": null,
+                    "billing-address": null,
+                    "pdf-url": null,
+                    "tax-business-info": null,
+                    "home-address": null,
+                    "work-phone": null,
+                    "birth-date": null,
+                    "github": null,
+                    "twitter": null,
+                    "email": "johndoe@example.com",
+                    "attendee-notes": null
                 },
                 "type": "attendee",
                 "id": "1",
@@ -15300,17 +15642,37 @@ Update a single attendee by `id`.
                     }
                 },
                 "attributes": {
-                    "city": "example",
-                    "firstname": "John",
-                    "lastname": "Doe",
-                    "is-checked-in": true,
-                    "attendee-notes": "example",
-                    "state": "example",
+                    "facebook": null,
                     "address": "address",
-                    "pdf-url": "http://example.com",
-                    "country": "IN",
+                    "ticket-id": "31",
+                    "is-checked-out": null,
+                    "checkout-times": null,
+                    "job-title": null,
                     "deleted-at": null,
-                    "email": "johndoe@example.com"
+                    "work-address": null,
+                    "checkin-times": null,
+                    "state": "example",
+                    "country": "IN",
+                    "lastname": "UnDoe",
+                    "city": "example",
+                    "phone": null,
+                    "company": null,
+                    "is-checked-in": false,
+                    "gender": null,
+                    "shipping-address": null,
+                    "blog": null,
+                    "firstname": "John",
+                    "website": null,
+                    "billing-address": null,
+                    "pdf-url": null,
+                    "tax-business-info": null,
+                    "home-address": null,
+                    "work-phone": null,
+                    "birth-date": null,
+                    "github": null,
+                    "twitter": null,
+                    "email": "johndoe@example.com",
+                    "attendee-notes": null
                 },
                 "type": "attendee",
                 "id": "1",
@@ -15919,9 +16281,8 @@ Notifications related to the various users about invites, ticket purchase, sessi
 |:----------|-------------|------|----------|
 | `title`  | Title of the notification | string | - |
 | `message` | Message/content of the notification | string | - |
-| `accept` | Accept/Reject notification | string | - |
 | `is-read` | Yes/No for read notification | boolean (default: `false`) | - |
-| `recieved-at` | Notification recieved time | ISO 8601 (tz-aware) | - |
+| `received-at` | Notification recieved time | ISO 8601 (tz-aware) | - |
 
 ## Notifications Collection [/v1/users/{user_id}/notifications{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -15963,8 +16324,7 @@ Get a list of Notifications.
                         "received-at": "2017-06-23T04:40:37.239724+00:00",
                         "is-read": false,
                         "title": "example",
-                        "deleted-at": null,
-                        "action": "example"
+                        "deleted-at": null
                     },
                     "type": "notification",
                     "id": "1",
@@ -16020,9 +16380,7 @@ Get a list of Notifications.
                         "message": "example",
                         "received-at": "2017-06-23T04:40:37.239724+00:00",
                         "is-read": false,
-                        "title": "example",
-                        "deleted-at": null,
-                        "action": "example"
+                        "title": "example"
                     },
                     "type": "notification",
                     "id": "1",
@@ -16042,7 +16400,7 @@ Get a list of Notifications.
 
 ## Notification Detail [/v1/notifications/{notification_id}]
 + Parameters
-    + notification_id: 1 (integer) - ID of the notifcaiton in the form of an integer
+    + notification_id: 1 (integer) - ID of the notification in the form of an integer
 
 ### Notification Detail [GET]
 Get a single notification.
@@ -16107,7 +16465,6 @@ Update a single notification with `id`.
                 "attributes": {
                   "title": "example1",
                   "message": "example1",
-                  "action": "example1",
                   "is-read": "true"
                 },
                 "type": "notification",
@@ -16168,6 +16525,67 @@ Delete a single notification.
           "jsonapi": {
             "version": "1.0"
           }
+        }
+
+
+## Notification Detail with Actions [/v1/notifications/{notification_id}?include=notification_actions]
++ Parameters
+    + notification_id: 1 (integer) - ID of the notification in the form of an integer
+
+### Notification Detail with Actions [GET]
+Get a single notification and it's associated actions.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": {
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/notifications/1/relationships/user",
+                            "related": "/v1/notifications/1/user"
+                        }
+                    }
+                },
+                "attributes": {
+                    "message": "example",
+                    "received-at": "2017-06-23T04:40:37.239724+00:00",
+                    "is-read": false,
+                    "deleted-at": null,
+                    "title": "example"
+                },
+                "type": "notification",
+                "id": "1",
+                "links": {
+                    "self": "/v1/notifications/1"
+                }
+            },
+            "included": [
+                {
+                    "type": "notification-action",
+                    "attributes": {
+                        "action-type": "view",
+                        "subject-id": "1",
+                        "subject": "event",
+                        "notification-id":"1"
+                    },
+                    "id": "1"
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/notifications/1"
+            }
         }
 
 # Group Email Notifications
@@ -16470,6 +16888,265 @@ Delete a single email notification.
             "version": "1.0"
           }
         }
+
+
+# Group User Emails
+
+To add Alternate User Emails.
+
+| Parameter | Description | Type | Required |
+|:----------|-------------|------|----------|
+| `email-address`  | Email Address of User | string | yes |
+| `type` | Type of usage of User Email like personal, work etc | string | yes |
+
+
+## User Email Admin Collection [/v1/admin/user-emails{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `type`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List All User Emails [GET]
+Get a list of User Emails.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "user": {
+                            "links": {
+                                "self": "/v1/user-emails/1/relationships/user",
+                                "related": "/v1/alternate-emails/1/user"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "user-id": 1,
+                        "deleted-at": null,
+                        "email-address": "example@example.com",
+                        "type": "work"
+                    },
+                    "type": "user-email",
+                    "id": "1",
+                    "links": {
+                        "self": "/v1/user-emails/1"
+                    }
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/admin/user-emails"
+            }
+        }
+
+
+
+## User Email Collection [/v1/users/{user_id}/alternate-emails{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + user_id: 1 (integer) - ID of the specific user in integer
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `type`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List All User Emails [GET]
+Get a list of user emails.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+        "data": [
+            {
+                "type": "user-email",
+                "id": "1",
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/user-emails/1/relationships/user",
+                            "related": "/v1/alternate-emails/1/user"
+                        }
+                    }
+                },
+                "attributes": {
+                    "user-id": 1,
+                    "deleted-at": null,
+                    "email-address": "example@example.com",
+                    "type": "work"
+                },
+                "links": {
+                    "self": "/v1/user-emails/1"
+                }
+            }
+        ],
+        "links": {
+            "self": "/v1/users/1/alternate-emails"
+        },
+        "meta": {
+            "count": 1
+        },
+        "jsonapi": {
+            "version": "1.0"
+        }
+        }
+
+
+## User Email Detail [/v1/user-emails/{user_email_id}]
++ Parameters
+    + user_email_id: 1 (integer) - ID of the user_email in the form of an integer
+
+### User Email Detail [GET]
+Get a single user email.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+        "data": {
+            "type": "user-email",
+            "id": "1",
+            "relationships": {
+                "user": {
+                    "links": {
+                        "self": "/v1/user-emails/1/relationships/user",
+                        "related": "/v1/alternate-emails/1/user"
+                    }
+                }
+            },
+            "attributes": {
+                "user-id": 1,
+                "deleted-at": null,
+                "email-address": "example@example.com",
+                "type": "work"
+            },
+            "links": {
+                "self": "/v1/user-emails/1"
+            }
+        },
+        "links": {
+            "self": "/v1/user-emails/1"
+        },
+        "jsonapi": {
+            "version": "1.0"
+        }
+        }
+
+### Update User Email [PATCH]
+Update a single user email with `id`.
+
++ `id` (integer) - ID of the record to update **(required)**
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                "attributes": {
+                  "email-address": "hello@example.com",
+                  "type": "office"
+                },
+                "relationships": {
+                  "user": {
+                    "data": {
+                      "type": "user",
+                      "id": "1"
+                    }
+                  }
+                },
+                "type": "user-email",
+                "id": "1"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+        "data": {
+            "type": "user-email",
+            "id": "1",
+            "relationships": {
+                "user": {
+                    "links": {
+                        "self": "/v1/user-emails/1/relationships/user",
+                        "related": "/v1/alternate-emails/1/user"
+                    }
+                }
+            },
+            "attributes": {
+                "user-id": 1,
+                "deleted-at": null,
+                "email-address": "hello@example.com",
+                "type": "office"
+            },
+            "links": {
+                "self": "/v1/user-emails/1"
+            }
+        },
+        "links": {
+            "self": "/v1/user-emails/1"
+        },
+        "jsonapi": {
+            "version": "1.0"
+        }
+        }
+
+### Delete User Email [DELETE]
+Delete a single user email.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
 
 # Group Discount Codes
 Discount Codes related to the events.
@@ -19088,8 +19765,12 @@ Get a list of Message Settings.
                         "notification-status": true,
                         "user-control-status": true,
                         "action": "After Event",
-                        "email-message": "{'sent_at': '1 day after the event', 'recipient': 'Organizer, Speaker', 'message': 'Hi {email},<br/>Thank You for participating in our event. We hope you enjoyed it. Please check the list of more upcoming eventsHere are the upcoming events: {upcoming_events} .Get ready!! ', 'subject': 'Event {event_name} is over'}",
-                        "notification-message": "{'sent_at': '1 day after the event', 'recipient': 'Organizer, Speaker', 'message': 'Hi {email},<br/>Thank You for participating in our event. We hope you enjoyed it. Please check the list of more upcoming eventsHere are the upcoming events: {upcoming_events} .Get ready!! ', 'subject': 'Event {event_name} is over'}"
+                        "recipient": "Organizer, Speaker",
+                        "email-subject": "Event {event_name} is over",
+                        "email-message": "Hi {email},<br/>Thank You for participating in our event. We hope you enjoyed it. Please check the list of more upcoming eventsHere are the upcoming events: {upcoming_events} .Get ready!! ",
+                        "notification-title": "Event {event_name} completed",
+                        "notification-message": "The event <strong>{event_name}</strong> has been completed.<br><br>",
+                        "sent-at": "2018-07-15T10:59:43.063672+00:00"
                     },
                     "type": "message-settings",
                     "id": "1",
@@ -19131,8 +19812,12 @@ Get a single message setting.
                 "notification-status": true,
                 "user-control-status": true,
                 "action": "After Event",
-                "email-message": "{'sent_at': '1 day after the event', 'recipient': 'Organizer, Speaker', 'message': 'Hi {email},<br/>Thank You for participating in our event. We hope you enjoyed it. Please check the list of more upcoming eventsHere are the upcoming events: {upcoming_events} .Get ready!! ', 'subject': 'Event {event_name} is over'}",
-                "notification-message": "{'sent_at': '1 day after the event', 'recipient': 'Organizer, Speaker', 'message': 'Hi {email},<br/>Thank You for participating in our event. We hope you enjoyed it. Please check the list of more upcoming eventsHere are the upcoming events: {upcoming_events} .Get ready!! ', 'subject': 'Event {event_name} is over'}"
+                "recipient": "Organizer, Speaker",
+                "email-subject": "Event {event_name} is over",
+                "notification-title": "Event {event_name} completed",
+                "email-message": "Hi {email},<br/>Thank You for participating in our event. We hope you enjoyed it. Please check the list of more upcoming eventsHere are the upcoming events: {upcoming_events} .Get ready!! ",
+                "notification-message": "The event <strong>{event_name}</strong> has been completed.<br><br>",
+                "sent-at": "2018-07-15T10:59:43.063672+00:00"
             },
             "type": "message-setting",
             "id": "1",
@@ -19184,8 +19869,12 @@ Update a single message setting by `id` (only admin).
                         "notification-status": true,
                         "user-control-status": true,
                         "action": "After Event",
-                        "email-message": "{'sent_at': '1 day after the event', 'recipient': 'Organizer, Speaker', 'message': 'Hi {email},<br/>Thank You for participating in our event. We hope you enjoyed it. Please check the list of more upcoming eventsHere are the upcoming events: {upcoming_events} .Get ready!! ', 'subject': 'Event {event_name} is over'}",
-                        "notification-message": "{'sent_at': '1 day after the event', 'recipient': 'Organizer, Speaker', 'message': 'Hi {email},<br/>Thank You for participating in our event. We hope you enjoyed it. Please check the list of more upcoming eventsHere are the upcoming events: {upcoming_events} .Get ready!! ', 'subject': 'Event {event_name} is over'}"
+                        "recipient": "Organizer, Speaker",
+                        "email-subject": "Event {event_name} is over",
+                        "email-message": "Hi {email},<br/>Thank You for participating in our event. We hope you enjoyed it. Please check the list of more upcoming eventsHere are the upcoming events: {upcoming_events} .Get ready!! ",
+                        "notification-message": "The event <strong>{event_name}</strong> has been completed.<br><br>",
+                        "notification-title": "Event {event_name} completed",
+                        "sent-at": "2018-07-15T10:59:43.063672+00:00"
                     },
                     "type": "message-setting",
                     "id": "1",
@@ -21073,6 +21762,8 @@ To update or get any attribute of this data layer, you will need admin access. H
 | `app-name`  | Name of the application (Eg. Event Yay!, Open Event) | string | - |
 | `tagline` | Tagline (Eg. Event Management and Ticketing, Home)  | string | - |
 | `secret` | App Secret  | string | **yes** |
+| `is-paypal-activated` | Whether paypal payment is configured or not | boolean | - |
+| `is-stripe-activated` | Whether stripe payment is configured or not | boolean | - |
 
 **STORAGE**
 | Parameter | Description | Type | Admin Only |
@@ -21131,12 +21822,10 @@ To update or get any attribute of this data layer, you will need admin access. H
 | Parameter | Description | Type | Admin Only |
 |:----------|-------------|------|------------|
 | `paypal-mode`  | Paypal mode | string | **yes** |
-| `paypal-sandbox-username`  | Paypal sandbox username | string | **yes** |
-| `paypal-sandbox-password`  | Paypal sandbox password | string | **yes** |
-| `paypal-sandbox-signature`  | Paypal sandbox signature | string | **yes** |
-| `paypal-live-username`  | Paypal live username | string | **yes** |
-| `paypal-live-password`  | Paypal live password | string | **yes** |
-| `paypal-live-signature`  | Paypal live signature | string | **yes** |
+| `paypal-sandbox-client`  | Paypal sandbox client | string | **yes** |
+| `paypal-sandbox-secret`  | Paypal sandbox secret | string | **yes** |
+| `paypal-client`  | Paypal client | string | **yes** |
+| `paypal-secret`  | Paypal secret | string | **yes** |
 
 **EMAIL**
 (Email service)
@@ -21186,6 +21875,12 @@ To update or get any attribute of this data layer, you will need admin access. H
 |:----------|-------------|------|------------|
 | `frontend-url`  | Url of Open Event Frontend | string (url with scheme) | - |
 
+ **Cookie Policy**
+| Parameter | Description | Type | Admin Only |
+|:----------|-------------|------|------------|
+| `cookie-policy`  | Warning to be displayed on the frontend | string | - |
+| `cookie-policy-link`  | Link to the full cookie policy | string | - |
+
 ## Settings Details [/v1/settings{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -21231,13 +21926,11 @@ To update or get any attribute of this data layer, you will need admin access. H
               "stripe-client-id": "example1234",
               "stripe-secret-key": "example1234",
               "stripe-publishable-key": "example1234",
-              "paypal-mode": "example",
-              "paypal-sandbox-username": "example",
-              "paypal-sandbox-password": "example",
-              "paypal-sandbox-signature": "example1234",
-              "paypal-live-username": "example",
-              "paypal-live-password": "example",
-              "paypal-live-signature": "example1234",
+              "paypal-mode": "development",
+              "paypal-sandbox-secret": "example1234",
+              "paypal-sandbox-client": "example1234",
+              "paypal-secret": "example1234",
+              "paypal-client": "example1234",
               "email-service": "example",
               "email-from": "example@example.com",
               "email-from-name": "example",
@@ -21257,7 +21950,11 @@ To update or get any attribute of this data layer, you will need admin access. H
               "android-app-url": "http://example.com",
               "web-app-url": "http://example.com",
               "static-domain": "http://example.com",
-              "frontend-url": "http://example.com"
+              "frontend-url": "http://example.com",
+              "cookie-policy": "example",
+              "cookie-policy-link": "http://example.com",
+              "is-paypal-activated": false,
+              "is-stripe-activated": false
             },
             "type": "setting",
             "id": "1",
@@ -21309,13 +22006,11 @@ To update or get any attribute of this data layer, you will need admin access. H
                   "stripe-client-id": "example1234",
                   "stripe-secret-key": "example1234",
                   "stripe-publishable-key": "example1234",
-                  "paypal-mode": "example",
-                  "paypal-sandbox-username": "example",
-                  "paypal-sandbox-password": "example",
-                  "paypal-sandbox-signature": "example1234",
-                  "paypal-live-username": "example",
-                  "paypal-live-password": "example",
-                  "paypal-live-signature": "example1234",
+                  "paypal-mode": "development",
+                  "paypal-sandbox-secret": "example1234",
+                  "paypal-sandbox-client": "example1234",
+                  "paypal-secret": "example1234",
+                  "paypal-client": "example1234",
                   "email-service": "example",
                   "email-from": "example@example.com",
                   "email-from-name": "example",
@@ -21335,7 +22030,9 @@ To update or get any attribute of this data layer, you will need admin access. H
                   "android-app-url": "http://example.com",
                   "web-app-url": "http://example.com",
                   "static-domain": "http://example.com",
-                  "frontend-url": "http://example.com"
+                  "frontend-url": "http://example.com",
+                  "cookie-policy": "example",
+                  "cookie-policy-link": "http://example.com"
                 },
                 "type": "setting",
                 "id": "1"
@@ -21371,13 +22068,11 @@ To update or get any attribute of this data layer, you will need admin access. H
               "stripe-client-id": "example1234",
               "stripe-secret-key": "example1234",
               "stripe-publishable-key": "example1234",
-              "paypal-mode": "example",
-              "paypal-sandbox-username": "example",
-              "paypal-sandbox-password": "example",
-              "paypal-sandbox-signature": "example1234",
-              "paypal-live-username": "example",
-              "paypal-live-password": "example",
-              "paypal-live-signature": "example1234",
+              "paypal-mode": "development",
+              "paypal-sandbox-secret": "example1234",
+              "paypal-sandbox-client": "example1234",
+              "paypal-secret": "example1234",
+              "paypal-client": "example1234",
               "email-service": "example",
               "email-from": "example@example.com",
               "email-from-name": "example",
@@ -21397,7 +22092,11 @@ To update or get any attribute of this data layer, you will need admin access. H
               "android-app-url": "http://example.com",
               "web-app-url": "http://example.com",
               "static-domain": "http://example.com",
-              "frontend-url": "http://example.com"
+              "frontend-url": "http://example.com",
+              "cookie-policy": "example",
+              "cookie-policy-link": "http://example.com",
+              "is-paypal-activated": false,
+              "is-stripe-activated": false
             },
             "type": "setting",
             "id": "1",
@@ -22032,6 +22731,48 @@ to get the status of the export task.
             "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
         }
 
+## Start Sessions Export as PDF [/v1/events/{event_identifier}/export/sessions/pdf]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+Start a celery task to export the list of sessions of the event with that event_id as a PDF file to get it ready for downloading. Returns the task url
+to get the status of the export task.
+
+
+### Start a Task to Export Sessions of an Event as PDF [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
+
+## Start Speakers Export as PDF [/v1/events/{event_identifier}/export/speakers/pdf]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+Start a celery task to export the list of speakers of the event with that event_id as a PDF file to get it ready for downloading. Returns the task url
+to get the status of the export task.
+
+
+### Start a Task to Export Speakers of an Event as PDF [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/json)
+
+        {
+            "task_url":"/v1/tasks/b7ca7088-876e-4c29-a0ee-b8029a64849a"
+        }
+
 # Group Event Import
 
 This group of APIs help you to start a task for importing zip containing JSON files into the server.
@@ -22451,7 +23192,8 @@ Get the task status and the final result of the task as response
                         "cancelled": 0,
                         "total": 0,
                         "expired": 0,
-                        "pending": 0
+                        "pending": 0,
+                        "completed": 0
                     },
                     "identifier": "09d9a4f1",
                     "orders": {
@@ -22460,7 +23202,8 @@ Get the task status and the final result of the task as response
                         "cancelled": 0,
                         "total": 0,
                         "expired": 0,
-                        "pending": 0
+                        "pending": 0,
+                        "completed": 0
                     },
                     "sales": {
                         "placed": 0,
@@ -22468,7 +23211,8 @@ Get the task status and the final result of the task as response
                         "cancelled": 0,
                         "total": 0,
                         "expired": 0,
-                        "pending": 0
+                        "pending": 0,
+                        "completed": 0
                     }
                 },
                 "type": "order-statistics-event",
@@ -22560,6 +23304,7 @@ Get the task status and the final result of the task as response
 | `status` | Status of the order(pending, completed, placed, cancelled, expired) | string (default=pending) | - |
 | `discount_code_id` | ID of the discount code | string | - |
 | `order-notes` | Notes associated with Order | string | - |
+| `pdf-url` | URL to download the tickets | string | - |
 
 ## Orders Collection [/v1/orders{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -22658,6 +23403,9 @@ Create a new Order
                 "lastname": null,
                 "ticket-id": "1",
                 "is-checked-in": false,
+                "checkin-times": null,
+                "is-checked-out": null,
+                "checkout-times": null,
                 "state": null,
                 "address": null,
                 "pdf-url": "http://example.com",
@@ -22735,7 +23483,8 @@ Create a new Order
               "country": "India",
               "completed-at": null,
               "created-at": "2018-07-08T01:05:09.904696+00:00",
-              "order-notes": "example"
+              "order-notes": "example",
+              "tickets-pdf-url": "https://example.com/media/attendees/tickets/pdf/order_identifier.pdf"
             },
             "type": "order",
             "id": "11",
@@ -22825,7 +23574,8 @@ Get a single Order detail.
               "country": "India",
               "completed-at": null,
               "created-at": "2018-07-08T01:05:09.904696+00:00",
-              "order-notes": "example"
+              "order-notes": "example",
+              "tickets-pdf-url": "https://example.com/media/attendees/tickets/pdf/order_identifier.pdf"
             },
             "type": "order",
             "id": "1",
@@ -22926,7 +23676,8 @@ Update a single custom form with `id`.
               "country": "India",
               "completed-at": null,
               "created-at": "2018-07-08T01:05:09.904696+00:00",
-              "order-notes": "sample,example"
+              "order-notes": "sample,example",
+              "tickets-pdf-url": "https://example.com/media/attendees/tickets/pdf/order_identifier.pdf"
             },
             "type": "order",
             "id": "1",
@@ -22964,6 +23715,141 @@ Delete a single Order.
           }
         }
 
+## Create Order with on site Attendees [/v1/orders?onsite=true]
+
+### Create Order with on site Attendees [POST]
+Create a new Order with on site attendees
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "payment-mode": "free",
+                  "country": "India",
+                  "status": "pending",
+                  "amount": null,
+                  "order-notes": "example",
+                  "on-site-tickets":  [
+                        {
+                            "data": {
+                                "attributes": {
+                                  "id": "1",
+                                  "quantity": "2"
+                                },
+                                "type": "on-site-ticket"
+                            }
+                        },
+                        {
+                            "data": {
+                                "attributes": {
+                                  "id": "2",
+                                  "quantity": "3"
+                                },
+                                "type": "on-site-ticket"
+                            }
+                        }
+                    ]
+                },
+                "type": "order",
+                "relationships": {
+                  "event": {
+                    "data": {
+                      "id": "1",
+                      "type": "event"
+                    }
+                  }
+                }
+              }
+            }
++ Response 201 (application/vnd.api+json)
+
+        {
+          "data": {
+            "relationships": {
+              "tickets": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/ticket",
+                  "related": "/v1/orders/11/tickets"
+                }
+              },
+              "attendees": {
+                "data": [
+                  {
+                    "type": "attendee",
+                    "id": "1"
+                  }
+                ],
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/attendee",
+                  "related": "/v1/orders/11/attendees"
+                }
+              },
+              "marketer": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/marketer"
+                }
+              },
+              "user": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/user"
+                }
+              },
+              "discount-code": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/discount-code"
+                }
+              },
+              "event": {
+                "links": {
+                  "self": "/v1/orders/617ed24c-9a07-4084-b076-ed73552db27e/relationships/event",
+                  "related": "/v1/events/1"
+                }
+              }
+            },
+            "attributes": {
+              "status": "pending",
+              "city": null,
+              "identifier": "617ed24c-9a07-4084-b076-ed73552db27e",
+              "paid-via": null,
+              "exp-year": null,
+              "transaction-id": null,
+              "discount-code-id": null,
+              "brand": null,
+              "zipcode": null,
+              "payment-mode": "free",
+              "last4": null,
+              "state": null,
+              "payment-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?token=EC-62113287PK247472B&cmd=_express-checkout",
+              "address": null,
+              "exp-month": null,
+              "amount": null,
+              "country": "India",
+              "completed-at": null,
+              "created-at": "2018-07-08T01:05:09.904696+00:00",
+              "order-notes": "example",
+              "tickets-pdf-url": "https://example.com/media/attendees/tickets/pdf/order_identifier.pdf"
+            },
+            "type": "order",
+            "id": "11",
+            "links": {
+              "self": "/v1/orders/1"
+            }
+          },
+          "jsonapi": {
+            "version": "1.0"
+          },
+          "links": {
+            "self": "/v1/orders/11"
+          }
+        }
+
 ## Charge [/v1/orders/{order_identifier}/charge]
 + Parameters
     + order_identifier: 1 (Integer) - Identifier of the order in the form of an integer.
@@ -22985,7 +23871,8 @@ Receive payments for an order
               "data": {
                 "attributes": {
                   "stripe": "stripe_token",
-                  "paypal": null
+                  "paypal_payer_id": null,
+                  "paypal_payment_id": null
                 },
                 "type": "charge"
               }
@@ -22997,6 +23884,10 @@ Receive payments for an order
             "data": {
                 "type": "charge",
                 "id": "1",
+                "attributes": {
+                    "message": "success/failure message",
+                    "status": true
+                },
                 "links": {
                     "self": "/v1/orders/1/charge"
                 }
@@ -23009,6 +23900,103 @@ Receive payments for an order
             }
         }
 
+## Orders under an Event [/v1/events/{event_identifier}/orders{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
++ Parameters
+    + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
+    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response.
+    + sort (optional, string, `payment-mode`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
+    + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
+
+### List all Orders under an Event [GET]
+
++ Request
+
+    + Headers
+
+            Content-Type: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "meta": {
+                "count": 1
+            },
+            "data": [
+                {
+                    "id": "4",
+                    "type": "order",
+                    "relationships": {
+                        "attendees": {
+                            "links": {
+                                "self": "/v1/orders/070abac6-44a7-423d-830f-f5f0ef4e83f2/relationships/attendee",
+                                "related": "/v1/orders/070abac6-44a7-423d-830f-f5f0ef4e83f2/attendees"
+                            }
+                        },
+                        "user": {
+                            "links": {
+                                "self": "/v1/orders/070abac6-44a7-423d-830f-f5f0ef4e83f2/relationships/user"
+                            }
+                        },
+                        "tickets": {
+                            "links": {
+                                "self": "/v1/orders/070abac6-44a7-423d-830f-f5f0ef4e83f2/relationships/ticket",
+                                "related": "/v1/orders/070abac6-44a7-423d-830f-f5f0ef4e83f2/tickets"
+                            }
+                        },
+                        "marketer": {
+                            "links": {
+                                "self": "/v1/orders/070abac6-44a7-423d-830f-f5f0ef4e83f2/relationships/marketer"
+                            }
+                        },
+                        "event": {
+                            "links": {
+                                "self": "/v1/orders/070abac6-44a7-423d-830f-f5f0ef4e83f2/relationships/event",
+                                "related": "/v1/events/3"
+                            }
+                        },
+                        "discount-code": {
+                            "links": {
+                                "self": "/v1/orders/070abac6-44a7-423d-830f-f5f0ef4e83f2/relationships/discount-code"
+                            }
+                        }
+                    },
+                    "links": {
+                        "self": "/v1/orders/070abac6-44a7-423d-830f-f5f0ef4e83f2"
+                    },
+                    "attributes": {
+                        "last4": null,
+                        "brand": null,
+                        "exp-year": null,
+                        "paid-via": null,
+                        "cancel-note": null,
+                        "state": null,
+                        "exp-month": null,
+                        "status": "pending",
+                        "completed-at": null,
+                        "payment-mode": "stripe",
+                        "transaction-id": null,
+                        "amount": 10,
+                        "address": null,
+                        "city": null,
+                        "country": "India",
+                        "identifier": "070abac6-44a7-423d-830f-f5f0ef4e83f2",
+                        "zipcode": null,
+                        "discount-code-id": null,
+                        "tickets-pdf-url": "https://example.com/media/attendees/tickets/pdf/order_identifier.pdf"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/orders"
+            }
+        }
 
 ## Orders under a User [/v1/users/{user_id}/orders{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -23042,6 +24030,42 @@ Get a list of all orders
           "links": {
             "self": "/v1/orders"
           }
+        }
+
+
+## Create Paypal payment [/orders/{order_identifier}/create-paypal-payment]
++ Parameters
+    + order_identifier: example (string) - Identifier of the order in the form of a String.
+
+### Create Paypal payment for an Order [POST]
+Create paypal payment
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+              "data": {
+                "attributes": {
+                  "return_url": "https://localhost:5000/return_url",
+                  "cancel_url": "https://localhost:5000/cancel_url"
+                },
+                "type": "paypal-payment"
+              }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "status": "true",
+            "payment_id": "example",
+            "error": null
         }
 
 
@@ -23114,17 +24138,17 @@ The sales object contains properties placed, completed and pending properties wh
             "links": {
                 "self": "/v1/admin/sales/by-events"
             }
-        }],
-        "links": {
-            "self": "/v1/admin/sales/by-events"
-        },
-        "meta": {
-            "count": 1
-        },
-        "jsonapi": {
-            "version": "1.0"
+            }],
+            "links": {
+                "self": "/v1/admin/sales/by-events"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
         }
-    }
 
 ## Sales by Organizers Details [/v1/admin/sales/by-organizers{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -23278,70 +24302,18 @@ The sales object contains properties placed, completed and pending properties wh
             "links": {
                 "self": "/v1/admin/sales/by-marketer"
             }
-        }],
-        "links": {
-            "self": "/v1/admin/sales/by-marketer"
-        },
-        "meta": {
-            "count": 1
-        },
-        "jsonapi": {
-            "version": "1.0"
-        }
-    }
-    
-## Sales by Marketer Details [/v1/admin/sales/by-marketer]
-
-
-### Show Sales by Marketer [GET]
-
-+ Request
-
-    + Headers
-
-            Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
-
-+ Response 200 (application/vnd.api+json)
-
-
-        {
-            "data": [{
-            "type": "admin-sales-by-marketer",
-            "attributes": {
-                "fullname": null,
-                "email": null,
-                "sales": {
-                    "placed": {
-                        "sales_total": 0,
-                        "ticket_count": 0
-                    },
-                    "completed": {
-                        "sales_total": 0,
-                        "ticket_count": 0
-                    },
-                    "pending": {
-                        "sales_total": 0,
-                        "ticket_count": 0
-                    }
-                }
-            },
-            "id": "1",
+            }],
             "links": {
                 "self": "/v1/admin/sales/by-marketer"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
             }
-        }],
-        "links": {
-            "self": "/v1/admin/sales/by-marketer"
-        },
-        "meta": {
-            "count": 1
-        },
-        "jsonapi": {
-            "version": "1.0"
         }
-    }    
+
 
 ## Sales discounted Details [/v1/admin/sales/discounted]
 
@@ -23458,7 +24430,7 @@ The sales object contains properties placed, completed and pending properties wh
                 "version": "1.0"
             }
         }
-        
+
 # Group Event Copy
 
 To create copy of an event
@@ -23602,4 +24574,766 @@ Sends the token to verify the account associated with the provided email id via 
 
         {
           "message": "Verification email resent"
+        }
+
+
+# Group Custom System Roles
+
+This Group's APIs are used to list, create, delete or update Custom System Roles.
+
+
+## Custom System Roles Collections [/v1/custom-system-roles]
+
+
+### List All Custom System Roles [GET]
+Get a list of all Custom System Roles.
+
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "meta": {
+                "count": 2
+            },
+            "links": {
+                "self": "/v1/custom-system-roles"
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "panel-permissions": {
+                            "links": {
+                                "self": "/v1/custom-system-roles/1/relationships/panel-permissions",
+                                "related": "/v1/custom-system-roles/1/panel-permissions"
+                            }
+                        }
+                    },
+                    "type": "custom-system-role",
+                    "links": {
+                        "self": "/v1/custom-system-roles/1"
+                    },
+                    "attributes": {
+                        "name": "Sales Admin"
+                    },
+                    "id": "1"
+                },
+                {
+                    "relationships": {
+                        "panel-permissions": {
+                            "links": {
+                                "self": "/v1/custom-system-roles/2/relationships/panel-permissions",
+                                "related": "/v1/custom-system-roles/2/panel-permissions"
+                            }
+                        }
+                    },
+                    "type": "custom-system-role",
+                    "links": {
+                        "self": "/v1/custom-system-roles/2"
+                    },
+                    "attributes": {
+                        "name": "Marketer"
+                    },
+                    "id": "2"
+                }
+            ]
+        }
+
+### Create Custom System Role [POST]
+Create a new custom system role using a name.
+
++ Request
+
+    + Headers
+
+            Content-Type: application/vnd.api+json
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "attributes": {
+                        "name": "Accountant"
+                    },
+                    "type": "custom-system-role"
+                }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/custom-system-roles/3"
+            },
+            "data": {
+                "relationships": {
+                    "panel-permissions": {
+                        "links": {
+                            "self": "/v1/custom-system-roles/3/relationships/panel-permissions",
+                            "related": "/v1/custom-system-roles/3/panel-permissions"
+                        }
+                    }
+                },
+                "type": "custom-system-role",
+                "links": {
+                    "self": "/v1/custom-system-roles/3"
+                },
+                "attributes": {
+                    "name": "Accountant"
+                },
+                "id": "3"
+            }
+        }
+
+## Custom System Roles Details [/v1/custom-system-roles/{custom_system_role_id}]
++ Parameters
+    + custom_system_role_id: 2 (integer) - ID of the custom system role in the form of an integer.
+
+### Get Details [GET]
+Get a single custom system role.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/custom-system-roles/2"
+            },
+            "data": {
+                "relationships": {
+                    "panel-permissions": {
+                        "links": {
+                            "self": "/v1/custom-system-roles/2/relationships/panel-permissions",
+                            "related": "/v1/custom-system-roles/2/panel-permissions"
+                        }
+                    }
+                },
+                "type": "custom-system-role",
+                "links": {
+                    "self": "/v1/custom-system-roles/2"
+                },
+                "attributes": {
+                    "name": "Marketer"
+                },
+                "id": "2"
+            }
+        }
+
+### Update Custom System Role [PATCH]
++ `id` (integer) - ID of the record to update **(required)**
+
+Update a single custom system role.
+
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "attributes": {
+                        "name": "Manager"
+                    },
+                    "type": "custom-system-role",
+                    "id": "2"
+                }
+            }
++ Response 200 (application/vnd.api+json)
+
+        {
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/custom-system-roles/2"
+            },
+            "data": {
+                "relationships": {
+                    "panel-permissions": {
+                        "links": {
+                            "self": "/v1/custom-system-roles/2/relationships/panel-permissions",
+                            "related": "/v1/custom-system-roles/2/panel-permissions"
+                        }
+                    }
+                },
+                "type": "custom-system-role",
+                "links": {
+                    "self": "/v1/custom-system-roles/2"
+                },
+                "attributes": {
+                    "name": "Manager"
+                },
+                "id": "2"
+            }
+        }
+
+### Delete Custom Systen Role [DELETE]
+Delete a single custom system.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
+
+## Get Custom System Role Details for a Panel Permission [/v1/panel-permissions/{panel_permission_id}/custom-system-roles]
++ Parameters
+    + panel_permission_id: 1 (integer) - ID of the panel permission in the form of an integer.
+
+
+### Get Custom System Role Details for a Panel Permission [GET]
+Get the details of the custom system roles for a panel permission.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "meta": {
+                "count": 2
+            },
+            "links": {
+                "self": "/v1/custom-system-roles"
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "panel-permissions": {
+                            "links": {
+                                "self": "/v1/custom-system-roles/1/relationships/panel-permissions",
+                                "related": "/v1/custom-system-roles/1/panel-permissions"
+                            }
+                        }
+                    },
+                    "type": "custom-system-role",
+                    "links": {
+                        "self": "/v1/custom-system-roles/1"
+                    },
+                    "attributes": {
+                        "name": "Sales Admin"
+                    },
+                    "id": "1"
+                },
+                {
+                    "relationships": {
+                        "panel-permissions": {
+                            "links": {
+                                "self": "/v1/custom-system-roles/3/relationships/panel-permissions",
+                                "related": "/v1/custom-system-roles/3/panel-permissions"
+                            }
+                        }
+                    },
+                    "type": "custom-system-role",
+                    "links": {
+                        "self": "/v1/custom-system-roles/3"
+                    },
+                    "attributes": {
+                        "name": "Accountant"
+                    },
+                    "id": "3"
+                }
+            ]
+        }
+
+# Group Panel Permissions
+
+ This Group's APIs are used to list, create, delete or update Panel Permissions.
+
+## Panel Permissions Collections [/v1/panel-permissions]
+
+
+### List All Panel Permissions [GET]
+Get a list of all Panel Permissions.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 10
+            },
+            "links": {
+                "self": "/v1/panel-permissions"
+            },
+            "data": [
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/1"
+                    },
+                    "id": "1",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "sales"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/1/custom-system-roles",
+                                "self": "/v1/panel-permissions/1/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                },
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/2"
+                    },
+                    "id": "2",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "admin"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/2/custom-system-roles",
+                                "self": "/v1/panel-permissions/2/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                },
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/3"
+                    },
+                    "id": "3",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "events"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/3/custom-system-roles",
+                                "self": "/v1/panel-permissions/3/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                },
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/4"
+                    },
+                    "id": "4",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "sessions"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/4/custom-system-roles",
+                                "self": "/v1/panel-permissions/4/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                },
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/5"
+                    },
+                    "id": "5",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "users"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/5/custom-system-roles",
+                                "self": "/v1/panel-permissions/5/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                },
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/6"
+                    },
+                    "id": "6",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "permissions"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/6/custom-system-roles",
+                                "self": "/v1/panel-permissions/6/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                },
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/7"
+                    },
+                    "id": "7",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "messages"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/7/custom-system-roles",
+                                "self": "/v1/panel-permissions/7/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                },
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/8"
+                    },
+                    "id": "8",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "reports"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/8/custom-system-roles",
+                                "self": "/v1/panel-permissions/8/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                },
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/9"
+                    },
+                    "id": "9",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "settings"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/9/custom-system-roles",
+                                "self": "/v1/panel-permissions/9/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                },
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/10"
+                    },
+                    "id": "10",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "content"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/10/custom-system-roles",
+                                "self": "/v1/panel-permissions/10/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+### Create Panel Permission [POST]
+Create a new panel permission using a name.
+
++ Request
+
+    + Headers
+
+            Content-Type: application/vnd.api+json
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "marketing"
+                    },
+                    "type": "panel-permission"
+                }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "links": {
+                "self": "/v1/panel-permissions/11"
+            },
+            "data": {
+                "links": {
+                    "self": "/v1/panel-permissions/11"
+                },
+                "id": "11",
+                "attributes": {
+                    "can-access": true,
+                    "panel-name": "marketing"
+                },
+                "relationships": {
+                    "custom-system-roles": {
+                        "links": {
+                            "related": "/v1/panel-permissions/11/custom-system-roles",
+                            "self": "/v1/panel-permissions/11/relationships/custom-system-roles"
+                        }
+                    }
+                },
+                "type": "panel-permission"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+## Panel Permission Details [/v1/panel-permissions/{panel_permission_id}]
++ Parameters
+    + panel_permission_id: 10 (integer) - ID of the panel permission in the form of an integer.
+
+### Get Details [GET]
+Get a single panel permission.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "links": {
+                "self": "/v1/panel-permissions/10"
+            },
+            "data": {
+                "links": {
+                    "self": "/v1/panel-permissions/10"
+                },
+                "id": "10",
+                "attributes": {
+                    "can-access": true,
+                    "panel-name": "content"
+                },
+                "relationships": {
+                    "custom-system-roles": {
+                        "links": {
+                            "related": "/v1/panel-permissions/10/custom-system-roles",
+                            "self": "/v1/panel-permissions/10/relationships/custom-system-roles"
+                        }
+                    }
+                },
+                "type": "panel-permission"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+### Update Panel Permission [PATCH]
++ `id` (integer) - ID of the panel permission to update **(required)**
+
+ Update a single panel permission by setting the name and/or access type.
+
+
++ Request (application/vnd.api+json)
+
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "contents"
+                    },
+                "type": "panel-permission",
+                "id": "10"
+                }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "links": {
+                "self": "/v1/panel-permissions/10"
+            },
+            "data": {
+                "links": {
+                    "self": "/v1/panel-permissions/10"
+                },
+                "id": "10",
+                "attributes": {
+                    "can-access": true,
+                    "panel-name": "contents"
+                },
+                "relationships": {
+                    "custom-system-roles": {
+                        "links": {
+                            "related": "/v1/panel-permissions/10/custom-system-roles",
+                            "self": "/v1/panel-permissions/10/relationships/custom-system-roles"
+                        }
+                    }
+                },
+                "type": "panel-permission"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+### Delete Panel Permission [DELETE]
+Delete a single panel permission.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
+
+## Get Panel Permission Details for a Custom System Role [/v1/custom-system-roles/{custom_system_role_id}/panel-permissions]
++ Parameters
+    + custom_system_role_id: 1 (integer) - ID of the custom system role in the form of an integer.
+
+
+### Get Panel Permission Details for a Custom System Role [GET]
+Get the details of the panel permission.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "links": {
+                "self": "/v1/panel-permissions"
+            },
+            "data": [
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/1"
+                    },
+                    "id": "1",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "sales"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/1/custom-system-roles",
+                                "self": "/v1/panel-permissions/1/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            }
         }

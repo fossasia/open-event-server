@@ -57,7 +57,7 @@ if __name__ == '__main__':
     config_file = args.config
 
     with open(config_file, 'r') as ymlfile:
-        config = yaml.load(ymlfile)
+        config = yaml.safe_load(ymlfile)
 
 
     projects = [get_auto_updater(cwd, n, config[n]) for n in config]

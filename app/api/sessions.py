@@ -54,7 +54,7 @@ class SessionListPost(ResourceList):
             link = "{}/events/{}/sessions/{}"\
                 .format(frontend_url, session.event_id, session.id)
             send_email_new_session(organizer_email, event_name, link)
-            send_notif_new_session_organizer(organizer, event_name, link)
+            send_notif_new_session_organizer(organizer, event_name, link, session.id)
 
     decorators = (api.has_permission('create_event'),)
     schema = SessionSchema
@@ -132,7 +132,7 @@ class SessionDetail(ResourceDetail):
                 link = "{}/events/{}/sessions/{}" \
                     .format(frontend_url, session.event_id, session.id)
                 send_email_session_accept_reject(speaker.email, session, link)
-                send_notif_session_accept_reject(speaker, session.title, session.state, link)
+                send_notif_session_accept_reject(speaker, session.title, session.state, link, session.id)
 
             # Email for organizer
             if session.event.get_organizer():
@@ -144,7 +144,7 @@ class SessionDetail(ResourceDetail):
                 send_email_session_accept_reject(organizer_email, session,
                                                  link)
                 send_notif_session_accept_reject(organizer, session.title,
-                                                 session.state, link)
+                                                 session.state, link, session.id)
 
     decorators = (api.has_permission('is_speaker_for_session', methods="PATCH,DELETE"),)
     schema = SessionSchema

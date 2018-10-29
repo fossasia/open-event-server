@@ -3,12 +3,13 @@ import base64
 from flask import Blueprint, request, jsonify, abort, make_response
 from flask_jwt import current_identity as current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from sqlalchemy.orm.exc import NoResultFound
+import urllib.error
 
 from app import get_settings
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query, get_count
-from app.api.helpers.exceptions import ConflictException
-from app.api.helpers.exceptions import ForbiddenException
+from app.api.helpers.exceptions import ConflictException, UnprocessableEntity, ForbiddenException
 from app.api.helpers.files import create_save_image_sizes, make_frontend_url
 from app.api.helpers.mail import send_email_confirmation, send_email_change_user_email, send_email_with_action
 from app.api.helpers.permission_manager import has_access
@@ -43,7 +44,7 @@ class UserList(ResourceList):
         :param view_kwargs:
         :return:
         """
-        if db.session.query(User.id).filter_by(email=data['email'], deleted_at=None).scalar() is not None:
+        if db.session.query(User.id).filter_by(email=data['email']).scalar() is not None:
             raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")
 
     def after_create_object(self, user, data, view_kwargs):
@@ -59,13 +60,18 @@ class UserList(ResourceList):
         """
         s = get_serializer()
         hash = str(base64.b64encode(str(s.dumps([user.email, str_generator()])).encode()), 'utf-8')
-        link = make_frontend_url('/email/verify'.format(id=user.id), {'token': hash})
+        link = make_frontend_url('/verify'.format(id=user.id), {'token': hash})
         send_email_with_action(user, USER_REGISTER_WITH_PASSWORD, app_name=get_settings()['app_name'],
                                email=user.email)
         send_email_confirmation(user.email, link)
 
         if data.get('original_image_url'):
-            uploaded_images = create_save_image_sizes(data['original_image_url'], 'user', user.id)
+            try:
+                uploaded_images = create_save_image_sizes(data['original_image_url'], 'speaker-image', user.id)
+            except (urllib.error.HTTPError, urllib.error.URLError):
+                raise UnprocessableEntity(
+                    {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
+                )
             uploaded_images['small_image_url'] = uploaded_images['thumbnail_image_url']
             del uploaded_images['large_image_url']
             self.session.query(User).filter_by(id=user.id).update(uploaded_images)
@@ -105,7 +111,6 @@ class UserDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
         if view_kwargs.get('feedback_id') is not None:
-            print(view_kwargs['feedback_id'])
             feedback = safe_query(self, Feedback, 'id', view_kwargs['feedback_id'], 'feedback_id')
             if feedback.user_id is not None:
                 view_kwargs['id'] = feedback.user_id
@@ -135,6 +140,8 @@ class UserDetail(ResourceDetail):
                                            'users_events_role_id')
             if users_events_role.user_id is not None:
                 view_kwargs['id'] = users_events_role.user_id
+            else:
+                view_kwargs['id'] = None
 
         if view_kwargs.get('speaker_id') is not None:
             speaker = safe_query(self, Speaker, 'id', view_kwargs['speaker_id'], 'speaker_id')
@@ -174,14 +181,33 @@ class UserDetail(ResourceDetail):
 
     def before_update_object(self, user, data, view_kwargs):
         if data.get('original_image_url') and data['original_image_url'] != user.original_image_url:
-            uploaded_images = create_save_image_sizes(data['original_image_url'], 'user', user.id)
+            try:
+                uploaded_images = create_save_image_sizes(data['original_image_url'], 'speaker-image', user.id)
+            except (urllib.error.HTTPError, urllib.error.URLError):
+                raise UnprocessableEntity(
+                    {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
+                )
             data['original_image_url'] = uploaded_images['original_image_url']
             data['small_image_url'] = uploaded_images['thumbnail_image_url']
             data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
             data['icon_image_url'] = uploaded_images['icon_image_url']
 
         if data.get('email') and data['email'] != user.email:
-            view_kwargs['email_changed'] = user.email
+            try:
+                db.session.query(User).filter_by(email=data['email']).one()
+            except NoResultFound:
+                view_kwargs['email_changed'] = user.email
+            else:
+                raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")
+
+        if has_access('is_super_admin') and data.get('is_admin') != user.is_admin:
+            user.is_admin = not user.is_admin
+
+        if has_access('is_admin') and data.get('is_sales_admin') != user.is_sales_admin:
+            user.is_sales_admin = not user.is_sales_admin
+
+        if has_access('is_admin') and data.get('is_marketer') != user.is_marketer:
+            user.is_marketer = not user.is_marketer
 
     def after_update_object(self, user, data, view_kwargs):
         """
@@ -199,7 +225,7 @@ class UserDetail(ResourceDetail):
                          DiscountCode, EmailNotification, Speaker, User],
                   fetch_key_url="notification_id, feedback_id, users_events_role_id, session_id, \
                   event_invoice_id, access_code_id, discount_code_id, email_notification_id, speaker_id, id",
-                                     leave_if=lambda a: a.get('attendee_id')), )
+                  leave_if=lambda a: a.get('attendee_id')), )
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User,

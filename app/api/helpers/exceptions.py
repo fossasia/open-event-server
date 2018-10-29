@@ -2,11 +2,17 @@ from flask_rest_jsonapi.exceptions import JsonApiException
 
 
 class UnprocessableEntity(JsonApiException):
+    """
+    Default class for 422 Error
+    """
     title = "Unprocessable Entity"
     status = 422
 
 
 class ConflictException(JsonApiException):
+    """
+    Default class for 409 Error
+    """
     title = "Conflict"
     status = 409
 

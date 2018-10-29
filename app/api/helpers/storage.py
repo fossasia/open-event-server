@@ -75,6 +75,9 @@ UPLOAD_PATHS = {
         'large': 'custom-placeholders/{identifier}/large',
         'icon': 'custom-placeholders/{identifier}/icon'
     },
+    'event_topic': {
+        'system_image': 'event_topic/{event_topic_id}/system_image'
+    },
     'pdf': {
         'ticket_attendee': 'attendees/tickets/pdf/{identifier}'
     }

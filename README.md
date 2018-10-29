@@ -3,12 +3,12 @@
 ![Open Event Server](https://storage.googleapis.com/eventyay.com/assets/branding/server_branding.png)
 
 [![GitHub release](https://img.shields.io/badge/release-1.0.0--alpha.10-blue.svg?style=flat-square)](https://github.com/fossasia/open-event-server/releases/latest)
-[![Travis branch](https://api.travis-ci.org/fossasia/open-event-server.svg?branch=master&style=flat-square)](https://travis-ci.org/fossasia/open-event-server)
-[![Gemnasium](https://gemnasium.com/fossasia/open-event-server.svg?style=flat-square)](https://gemnasium.com/github.com/fossasia/open-event-server)
+[![Build Status](https://travis-ci.org/fossasia/open-event-server.svg?branch=development)](https://travis-ci.org/fossasia/open-event-server)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1ac554483fac462797ffa5a8b9adf2fa?style=flat-square)](https://www.codacy.com/app/fossasia/open-event-orga-server)
 [![Codecov branch](https://codecov.io/gh/fossasia/open-event-server/branch/master/graph/badge.svg?style=flat-square)](https://codecov.io/gh/fossasia/open-event-orga-server)
 [![Gitter](https://img.shields.io/badge/chat-on%20gitter-ff006f.svg?style=flat-square)](https://gitter.im/fossasia/open-event-server)
 [![Open Source Helpers](https://www.codetriage.com/fossasia/open-event-orga-server/badges/users.svg)](https://www.codetriage.com/fossasia/open-event-orga-server)
+[![Reviewed by Hound](https://img.shields.io/badge/Reviewed_by-Hound-8E64B0.svg)](https://houndci.com)
 
 > **The Open Event Server enables organizers to manage events from concerts to conferences and meet-ups.**
 
@@ -36,7 +36,7 @@ A demo version is automatically deployed from our repositories:
 
 ## Installation
 
-The Open Event Server can be easily deployed on a variety of platforms. Detailed platform specific installation instructions have been provided below.
+The Open Event Server can be easily deployed on a variety of platforms. Detailed platform-specific installation instructions have been provided below.
 
 1. [Generic Installation Instructions](/docs/installation/basic.md)
 1. [Local Installation](/docs/installation/local.md)
@@ -49,7 +49,7 @@ The Open Event Server can be easily deployed on a variety of platforms. Detailed
 1. [Deployment on Heroku](/docs/installation/heroku.md)
 
 
-One-click Heroku deployment is also available:
+One-click Heroku and Docker deployments are also available:
 
 [![Deploy to Docker Cloud](https://files.cloud.docker.com/images/deploy-to-dockercloud.svg)](https://cloud.docker.com/stack/deploy/?repo=https://github.com/fossasia/open-event-server)  [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
@@ -111,7 +111,7 @@ The server can send emails via SMTP or using the sendgrid API.
 
 If the application is deployed on Heroku, we use the heroku API to obtain the latest release and also to display the heroku.
 
-Required token can be obtained from [https://devcenter.heroku.com/articles/authentication](https://devcenter.heroku.com/articles/authentication).
+The required token can be obtained from [https://devcenter.heroku.com/articles/authentication](https://devcenter.heroku.com/articles/authentication).
 
 #### Payment Gateways
 
@@ -141,7 +141,7 @@ The event data and the sessions can be exported in various formats.
 
 ## Roles
 
-The system has two kind of role type.
+The system has two kinds of role type.
 
 1. System roles are related to the Open Event organization and operator of the application.
 2. Event Roles are related to the users of the system with their different permissions.
@@ -238,7 +238,7 @@ Certain information is being logged and stored in the database for future refere
 
 Open Event is being translated using Weblate, a web tool designed to ease translating for both developers and translators.
 
-If you would like to contribute to translation of Open Event, you need to [register on this server](https://hosted.weblate.org/accounts/register/).
+If you would like to contribute to the translation of Open Event, you need to [register on this server](https://hosted.weblate.org/accounts/register/).
 
 Once you have activated your account just proceed to the [translation section](https://hosted.weblate.org/projects/open-event/).
 
@@ -255,20 +255,20 @@ We have the following branches :
 	 PRs to must pass a build check and a unit-test check on Travis (https://open-event-api.herokuapp.com - Is running off the development branch. It is hosted on Heroku.)
 	 (https://api.eventyay.com - Is running off the `development` branch. Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
  * **master**
-   This contains shipped code. After significant features/bug-fixes are accumulated on development, we make a version update, and make a release. (https://eventyay.com - Is running off the master branch. (whichever is the latest release.) Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
+   This contains shipped code. After significant features/bug-fixes are accumulated on development, we make a version update and make a release. (https://eventyay.com - Is running off the master branch. (whichever is the latest release.) Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
  * **gh-pages**
-   This contains the documentation website on http://dev.eventyay.com. The site is build automatically on each commit in the development branch through a script and using travis. It includes the md files of the Readme and /docs folder. It also includes javadocs.
+   This contains the documentation website on http://dev.eventyay.com. The site is built automatically on each commit in the development branch through a script and using travis. It includes the md files of the Readme and /docs folder. It also includes javadocs.
 
 ## Release Policy
 
-The tentative release policy for now is, (since there is a lot of activity and a lot of bugs), an alpha release every monday and friday (since we see more activity on weekends). So, any bug-fixes will not be reflected at eventyay.com until a new release is made in the master branch.
+The tentative release policy, for now, is, (since there is a lot of activity and a lot of bugs), an alpha release every Monday and Friday (since we see more activity on weekends). So, any bug-fixes will not be reflected at eventyay.com until a new release is made in the master branch.
 
 ## Contributions Best Practices
 
 **Commits**
 * Write clear meaningful git commit messages (Do read http://chris.beams.io/posts/git-commit/)
 * Make sure your PR's description contains GitHub's special keyword references that automatically close the related issue when the PR is merged. (More info at https://github.com/blog/1506-closing-issues-via-pull-requests )
-* When you make very very minor changes to a PR of yours (like for example fixing a failing travis build or some small style corrections or minor changes requested by reviewers) make sure you squash your commits afterwards so that you don't have an absurd number of commits for a very small fix. (Learn how to squash at https://davidwalsh.name/squash-commits-git )
+* When you make very very minor changes to a PR of yours (like for example fixing a failing travis build or some small style corrections or minor changes requested by reviewers) make sure you squash your commits afterward so that you don't have an absurd number of commits for a very small fix. (Learn how to squash at https://davidwalsh.name/squash-commits-git )
 * When you're submitting a PR for a UI-related issue, it would be really awesome if you add a screenshot of your change or a link to a deployment where it can be tested out along with your PR. It makes it very easy for the reviewers and you'll also get reviews quicker.
 
 **Feature Requests and Bug Reports**

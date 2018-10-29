@@ -66,4 +66,8 @@ class MessageSettingSchema(Schema):
     notification_status = fields.Boolean(default=False)
     user_control_status = fields.Boolean(default=False)
     email_message = fields.Str(dump_only=True)
+    recipient = fields.Str(dump_only=True)
+    email_subject = fields.Str(dump_only=True)
+    notification_title = fields.Str(dump_only=True)
     notification_message = fields.Str(dump_only=True)
+    sent_at = fields.DateTime(dump_only=True)
