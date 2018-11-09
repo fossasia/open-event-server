@@ -33,7 +33,7 @@ def sync_event_from_database(db_event):
 
 
 def rebuild_indices(client=client):
-    "Rebuilds all search indices, deletes all data"
+    """Rebuilds all search indices, deletes all data"""
     redis_store.delete(REDIS_EVENT_INDEX)
     redis_store.delete(REDIS_EVENT_DELETE)
 
@@ -46,7 +46,7 @@ def rebuild_indices(client=client):
 
 
 def delete_event_from_index(event_id):
-    "Deletes an event from the Elasticsearch index"
+    """Deletes an event from the Elasticsearch index"""
     searchable = SearchableEvent()
     searchable.id = event_id
     searchable.delete()
@@ -63,7 +63,7 @@ def mark_event(purpose, event_id):
 
 
 def _events_marked(purpose):
-    "Retrieve all event ids from redis marked as `purpose`"
+    """Retrieve all event ids from redis marked as `purpose`"""
     marked_event_id = redis_store.spop(purpose)
     while marked_event_id:
         yield marked_event_id
@@ -71,7 +71,7 @@ def _events_marked(purpose):
 
 
 def sync():
-    "Syncs all events that have been marked"
+    """Syncs all events that have been marked"""
     logger.info('Syncing marked events')
 
     for event_id in list(_events_marked(REDIS_EVENT_INDEX)):

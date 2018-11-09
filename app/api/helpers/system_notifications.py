@@ -390,19 +390,19 @@ NOTIFS = {
     EVENT_ROLE: {
         'title': u'Invitation to be {role_name} at {event_name}',
         'message': u"You've been invited to be a <strong>{role_name}</strong>" +
-                   u"at <strong>{event_name}</strong>.",
+                   u" at <strong>{event_name}</strong>.",
         'recipient': 'User',
     },
     NEW_SESSION: {
         'title': u'New session proposal for {event_name}',
         'message': u"The event <strong>{event_name}</strong> has received" +
-                   u"a new session proposal.",
+                   u" a new session proposal.",
         'recipient': 'Organizer',
     },
     SESSION_SCHEDULE: {
         'title': u'Schedule for Session {session_name} has been changed',
         'message': u"The schedule for session <strong>{session_name}</strong>" +
-                   u"has been changed.",
+                   u" has been changed.",
         'recipient': 'Organizer, Speaker',
     },
     NEXT_EVENT: {
