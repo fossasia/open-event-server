@@ -41,6 +41,9 @@ sudo -H pip3 install -r requirements.txt
 ```
 hint: You may need to upgrade your pip version and install following packages if you encounter errors while installing the requirements.
 
+Note: For Mac OS Sierra users: if You get the error that 'openssl/aes.h' could not be found when running requirements.txt using pip.
+Try these steps as show here - [OSX openssl header error](https://tutorials.technology/solved_errors/1-OSX-openssl_opensslv_h-file-not-found.html)
+
 # Installation in Virtual Environment
 
 ```sh
