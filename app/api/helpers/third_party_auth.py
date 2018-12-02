@@ -77,7 +77,7 @@ class FbOAuth(object):
 
 
 class TwitterOAuth(object):
-    """Facebook Credentials"""
+    """Twitter Credentials"""
     TW_AUTH_URI = 'https://api.twitter.com/oauth/authorize'
     TW_REQUEST_TOKEN_URI = 'https://api.twitter.com/oauth/request_token'
     TW_ACCESS_TOKEN = "https://api.twitter.com/oauth/access_token"
@@ -126,6 +126,7 @@ class TwitterOAuth(object):
 
 
 class InstagramOAuth(object):
+    """Instagram Credentials"""
     INSTAGRAM_OAUTH_URI = "https://api.instagram.com/oauth/authorize/"
     INSTAGRAM_TOKEN_URI = "https://api.instagram.com/oauth/access_token"
     SCOPE = ['basic', 'public_content']
