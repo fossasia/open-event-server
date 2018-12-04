@@ -1423,6 +1423,7 @@ Check if the email passed is available or not. True is returned if the email is 
     + Headers
 
             Accept: application/json
+            Content-Type: application/json
 
     + Body
 
@@ -16977,40 +16978,40 @@ Get a list of user emails.
 
 + Response 200 (application/vnd.api+json)
 
-    {
-    "data": [
         {
-            "type": "user-email",
-            "id": "1",
-            "relationships": {
-                "user": {
-                    "links": {
-                        "self": "/v1/user-emails/1/relationships/user",
-                        "related": "/v1/alternate-emails/1/user"
+        "data": [
+            {
+                "type": "user-email",
+                "id": "1",
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/user-emails/1/relationships/user",
+                            "related": "/v1/alternate-emails/1/user"
+                        }
                     }
+                },
+                "attributes": {
+                    "user-id": 1,
+                    "deleted-at": null,
+                    "email-address": "example@example.com",
+                    "type": "work"
+                },
+                "links": {
+                    "self": "/v1/user-emails/1"
                 }
-            },
-            "attributes": {
-                "user-id": 1,
-                "deleted-at": null,
-                "email-address": "example@example.com",
-                "type": "work"
-            },
-            "links": {
-                "self": "/v1/user-emails/1"
             }
+        ],
+        "links": {
+            "self": "/v1/users/1/alternate-emails"
+        },
+        "meta": {
+            "count": 1
+        },
+        "jsonapi": {
+            "version": "1.0"
         }
-    ],
-    "links": {
-        "self": "/v1/users/1/alternate-emails"
-    },
-    "meta": {
-        "count": 1
-    },
-    "jsonapi": {
-        "version": "1.0"
-    }
-    }
+        }
 
 
 ## User Email Detail [/v1/user-emails/{user_email_id}]
@@ -17030,35 +17031,35 @@ Get a single user email.
 
 + Response 200 (application/vnd.api+json)
 
-    {
-    "data": {
-        "type": "user-email",
-        "id": "1",
-        "relationships": {
-            "user": {
-                "links": {
-                    "self": "/v1/user-emails/1/relationships/user",
-                    "related": "/v1/alternate-emails/1/user"
+        {
+        "data": {
+            "type": "user-email",
+            "id": "1",
+            "relationships": {
+                "user": {
+                    "links": {
+                        "self": "/v1/user-emails/1/relationships/user",
+                        "related": "/v1/alternate-emails/1/user"
+                    }
                 }
+            },
+            "attributes": {
+                "user-id": 1,
+                "deleted-at": null,
+                "email-address": "example@example.com",
+                "type": "work"
+            },
+            "links": {
+                "self": "/v1/user-emails/1"
             }
-        },
-        "attributes": {
-            "user-id": 1,
-            "deleted-at": null,
-            "email-address": "example@example.com",
-            "type": "work"
         },
         "links": {
             "self": "/v1/user-emails/1"
+        },
+        "jsonapi": {
+            "version": "1.0"
         }
-    },
-    "links": {
-        "self": "/v1/user-emails/1"
-    },
-    "jsonapi": {
-        "version": "1.0"
-    }
-    }
+        }
 
 ### Update User Email [PATCH]
 Update a single user email with `id`.
@@ -17074,7 +17075,7 @@ Update a single user email with `id`.
     + Body
 
             {
-              "data": {
+                "data": {
                 "attributes": {
                   "email-address": "hello@example.com",
                   "type": "office"
@@ -17094,35 +17095,35 @@ Update a single user email with `id`.
 
 + Response 200 (application/vnd.api+json)
 
-    {
-    "data": {
-        "type": "user-email",
-        "id": "1",
-        "relationships": {
-            "user": {
-                "links": {
-                    "self": "/v1/user-emails/1/relationships/user",
-                    "related": "/v1/alternate-emails/1/user"
+        {
+        "data": {
+            "type": "user-email",
+            "id": "1",
+            "relationships": {
+                "user": {
+                    "links": {
+                        "self": "/v1/user-emails/1/relationships/user",
+                        "related": "/v1/alternate-emails/1/user"
+                    }
                 }
+            },
+            "attributes": {
+                "user-id": 1,
+                "deleted-at": null,
+                "email-address": "hello@example.com",
+                "type": "office"
+            },
+            "links": {
+                "self": "/v1/user-emails/1"
             }
-        },
-        "attributes": {
-            "user-id": 1,
-            "deleted-at": null,
-            "email-address": "hello@example.com",
-            "type": "office"
         },
         "links": {
             "self": "/v1/user-emails/1"
+        },
+        "jsonapi": {
+            "version": "1.0"
         }
-    },
-    "links": {
-        "self": "/v1/user-emails/1"
-    },
-    "jsonapi": {
-        "version": "1.0"
-    }
-    }
+        }
 
 ### Delete User Email [DELETE]
 Delete a single user email.
@@ -24061,11 +24062,11 @@ Create paypal payment
 
 + Response 200 (application/vnd.api+json)
 
-   {
-        "status": "true",
-        "payment_id": "example",
-        "error": null
-   }
+        {
+            "status": "true",
+            "payment_id": "example",
+            "error": null
+        }
 
 
 # Group Admin Sales
@@ -24137,17 +24138,17 @@ The sales object contains properties placed, completed and pending properties wh
             "links": {
                 "self": "/v1/admin/sales/by-events"
             }
-        }],
-        "links": {
-            "self": "/v1/admin/sales/by-events"
-        },
-        "meta": {
-            "count": 1
-        },
-        "jsonapi": {
-            "version": "1.0"
+            }],
+            "links": {
+                "self": "/v1/admin/sales/by-events"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
         }
-    }
 
 ## Sales by Organizers Details [/v1/admin/sales/by-organizers{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -24301,17 +24302,17 @@ The sales object contains properties placed, completed and pending properties wh
             "links": {
                 "self": "/v1/admin/sales/by-marketer"
             }
-        }],
-        "links": {
-            "self": "/v1/admin/sales/by-marketer"
-        },
-        "meta": {
-            "count": 1
-        },
-        "jsonapi": {
-            "version": "1.0"
+            }],
+            "links": {
+                "self": "/v1/admin/sales/by-marketer"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
         }
-    }
 
 
 ## Sales discounted Details [/v1/admin/sales/discounted]
@@ -24573,4 +24574,766 @@ Sends the token to verify the account associated with the provided email id via 
 
         {
           "message": "Verification email resent"
+        }
+
+
+# Group Custom System Roles
+
+This Group's APIs are used to list, create, delete or update Custom System Roles.
+
+
+## Custom System Roles Collections [/v1/custom-system-roles]
+
+
+### List All Custom System Roles [GET]
+Get a list of all Custom System Roles.
+
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "meta": {
+                "count": 2
+            },
+            "links": {
+                "self": "/v1/custom-system-roles"
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "panel-permissions": {
+                            "links": {
+                                "self": "/v1/custom-system-roles/1/relationships/panel-permissions",
+                                "related": "/v1/custom-system-roles/1/panel-permissions"
+                            }
+                        }
+                    },
+                    "type": "custom-system-role",
+                    "links": {
+                        "self": "/v1/custom-system-roles/1"
+                    },
+                    "attributes": {
+                        "name": "Sales Admin"
+                    },
+                    "id": "1"
+                },
+                {
+                    "relationships": {
+                        "panel-permissions": {
+                            "links": {
+                                "self": "/v1/custom-system-roles/2/relationships/panel-permissions",
+                                "related": "/v1/custom-system-roles/2/panel-permissions"
+                            }
+                        }
+                    },
+                    "type": "custom-system-role",
+                    "links": {
+                        "self": "/v1/custom-system-roles/2"
+                    },
+                    "attributes": {
+                        "name": "Marketer"
+                    },
+                    "id": "2"
+                }
+            ]
+        }
+
+### Create Custom System Role [POST]
+Create a new custom system role using a name.
+
++ Request
+
+    + Headers
+
+            Content-Type: application/vnd.api+json
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "attributes": {
+                        "name": "Accountant"
+                    },
+                    "type": "custom-system-role"
+                }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/custom-system-roles/3"
+            },
+            "data": {
+                "relationships": {
+                    "panel-permissions": {
+                        "links": {
+                            "self": "/v1/custom-system-roles/3/relationships/panel-permissions",
+                            "related": "/v1/custom-system-roles/3/panel-permissions"
+                        }
+                    }
+                },
+                "type": "custom-system-role",
+                "links": {
+                    "self": "/v1/custom-system-roles/3"
+                },
+                "attributes": {
+                    "name": "Accountant"
+                },
+                "id": "3"
+            }
+        }
+
+## Custom System Roles Details [/v1/custom-system-roles/{custom_system_role_id}]
++ Parameters
+    + custom_system_role_id: 2 (integer) - ID of the custom system role in the form of an integer.
+
+### Get Details [GET]
+Get a single custom system role.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/custom-system-roles/2"
+            },
+            "data": {
+                "relationships": {
+                    "panel-permissions": {
+                        "links": {
+                            "self": "/v1/custom-system-roles/2/relationships/panel-permissions",
+                            "related": "/v1/custom-system-roles/2/panel-permissions"
+                        }
+                    }
+                },
+                "type": "custom-system-role",
+                "links": {
+                    "self": "/v1/custom-system-roles/2"
+                },
+                "attributes": {
+                    "name": "Marketer"
+                },
+                "id": "2"
+            }
+        }
+
+### Update Custom System Role [PATCH]
++ `id` (integer) - ID of the record to update **(required)**
+
+Update a single custom system role.
+
+
++ Request (application/vnd.api+json)
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "attributes": {
+                        "name": "Manager"
+                    },
+                    "type": "custom-system-role",
+                    "id": "2"
+                }
+            }
++ Response 200 (application/vnd.api+json)
+
+        {
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "links": {
+                "self": "/v1/custom-system-roles/2"
+            },
+            "data": {
+                "relationships": {
+                    "panel-permissions": {
+                        "links": {
+                            "self": "/v1/custom-system-roles/2/relationships/panel-permissions",
+                            "related": "/v1/custom-system-roles/2/panel-permissions"
+                        }
+                    }
+                },
+                "type": "custom-system-role",
+                "links": {
+                    "self": "/v1/custom-system-roles/2"
+                },
+                "attributes": {
+                    "name": "Manager"
+                },
+                "id": "2"
+            }
+        }
+
+### Delete Custom Systen Role [DELETE]
+Delete a single custom system.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
+
+## Get Custom System Role Details for a Panel Permission [/v1/panel-permissions/{panel_permission_id}/custom-system-roles]
++ Parameters
+    + panel_permission_id: 1 (integer) - ID of the panel permission in the form of an integer.
+
+
+### Get Custom System Role Details for a Panel Permission [GET]
+Get the details of the custom system roles for a panel permission.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+
+        {
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "meta": {
+                "count": 2
+            },
+            "links": {
+                "self": "/v1/custom-system-roles"
+            },
+            "data": [
+                {
+                    "relationships": {
+                        "panel-permissions": {
+                            "links": {
+                                "self": "/v1/custom-system-roles/1/relationships/panel-permissions",
+                                "related": "/v1/custom-system-roles/1/panel-permissions"
+                            }
+                        }
+                    },
+                    "type": "custom-system-role",
+                    "links": {
+                        "self": "/v1/custom-system-roles/1"
+                    },
+                    "attributes": {
+                        "name": "Sales Admin"
+                    },
+                    "id": "1"
+                },
+                {
+                    "relationships": {
+                        "panel-permissions": {
+                            "links": {
+                                "self": "/v1/custom-system-roles/3/relationships/panel-permissions",
+                                "related": "/v1/custom-system-roles/3/panel-permissions"
+                            }
+                        }
+                    },
+                    "type": "custom-system-role",
+                    "links": {
+                        "self": "/v1/custom-system-roles/3"
+                    },
+                    "attributes": {
+                        "name": "Accountant"
+                    },
+                    "id": "3"
+                }
+            ]
+        }
+
+# Group Panel Permissions
+
+ This Group's APIs are used to list, create, delete or update Panel Permissions.
+
+## Panel Permissions Collections [/v1/panel-permissions]
+
+
+### List All Panel Permissions [GET]
+Get a list of all Panel Permissions.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 10
+            },
+            "links": {
+                "self": "/v1/panel-permissions"
+            },
+            "data": [
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/1"
+                    },
+                    "id": "1",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "sales"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/1/custom-system-roles",
+                                "self": "/v1/panel-permissions/1/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                },
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/2"
+                    },
+                    "id": "2",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "admin"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/2/custom-system-roles",
+                                "self": "/v1/panel-permissions/2/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                },
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/3"
+                    },
+                    "id": "3",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "events"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/3/custom-system-roles",
+                                "self": "/v1/panel-permissions/3/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                },
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/4"
+                    },
+                    "id": "4",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "sessions"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/4/custom-system-roles",
+                                "self": "/v1/panel-permissions/4/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                },
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/5"
+                    },
+                    "id": "5",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "users"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/5/custom-system-roles",
+                                "self": "/v1/panel-permissions/5/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                },
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/6"
+                    },
+                    "id": "6",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "permissions"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/6/custom-system-roles",
+                                "self": "/v1/panel-permissions/6/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                },
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/7"
+                    },
+                    "id": "7",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "messages"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/7/custom-system-roles",
+                                "self": "/v1/panel-permissions/7/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                },
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/8"
+                    },
+                    "id": "8",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "reports"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/8/custom-system-roles",
+                                "self": "/v1/panel-permissions/8/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                },
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/9"
+                    },
+                    "id": "9",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "settings"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/9/custom-system-roles",
+                                "self": "/v1/panel-permissions/9/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                },
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/10"
+                    },
+                    "id": "10",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "content"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/10/custom-system-roles",
+                                "self": "/v1/panel-permissions/10/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+### Create Panel Permission [POST]
+Create a new panel permission using a name.
+
++ Request
+
+    + Headers
+
+            Content-Type: application/vnd.api+json
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "marketing"
+                    },
+                    "type": "panel-permission"
+                }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "links": {
+                "self": "/v1/panel-permissions/11"
+            },
+            "data": {
+                "links": {
+                    "self": "/v1/panel-permissions/11"
+                },
+                "id": "11",
+                "attributes": {
+                    "can-access": true,
+                    "panel-name": "marketing"
+                },
+                "relationships": {
+                    "custom-system-roles": {
+                        "links": {
+                            "related": "/v1/panel-permissions/11/custom-system-roles",
+                            "self": "/v1/panel-permissions/11/relationships/custom-system-roles"
+                        }
+                    }
+                },
+                "type": "panel-permission"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+## Panel Permission Details [/v1/panel-permissions/{panel_permission_id}]
++ Parameters
+    + panel_permission_id: 10 (integer) - ID of the panel permission in the form of an integer.
+
+### Get Details [GET]
+Get a single panel permission.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "links": {
+                "self": "/v1/panel-permissions/10"
+            },
+            "data": {
+                "links": {
+                    "self": "/v1/panel-permissions/10"
+                },
+                "id": "10",
+                "attributes": {
+                    "can-access": true,
+                    "panel-name": "content"
+                },
+                "relationships": {
+                    "custom-system-roles": {
+                        "links": {
+                            "related": "/v1/panel-permissions/10/custom-system-roles",
+                            "self": "/v1/panel-permissions/10/relationships/custom-system-roles"
+                        }
+                    }
+                },
+                "type": "panel-permission"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+### Update Panel Permission [PATCH]
++ `id` (integer) - ID of the panel permission to update **(required)**
+
+ Update a single panel permission by setting the name and/or access type.
+
+
++ Request (application/vnd.api+json)
+
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
+    + Body
+
+            {
+                "data": {
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "contents"
+                    },
+                "type": "panel-permission",
+                "id": "10"
+                }
+            }
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "links": {
+                "self": "/v1/panel-permissions/10"
+            },
+            "data": {
+                "links": {
+                    "self": "/v1/panel-permissions/10"
+                },
+                "id": "10",
+                "attributes": {
+                    "can-access": true,
+                    "panel-name": "contents"
+                },
+                "relationships": {
+                    "custom-system-roles": {
+                        "links": {
+                            "related": "/v1/panel-permissions/10/custom-system-roles",
+                            "self": "/v1/panel-permissions/10/relationships/custom-system-roles"
+                        }
+                    }
+                },
+                "type": "panel-permission"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+### Delete Panel Permission [DELETE]
+Delete a single panel permission.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+          "meta": {
+            "message": "Object successfully deleted"
+          },
+          "jsonapi": {
+            "version": "1.0"
+          }
+        }
+
+
+## Get Panel Permission Details for a Custom System Role [/v1/custom-system-roles/{custom_system_role_id}/panel-permissions]
++ Parameters
+    + custom_system_role_id: 1 (integer) - ID of the custom system role in the form of an integer.
+
+
+### Get Panel Permission Details for a Custom System Role [GET]
+Get the details of the panel permission.
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "count": 1
+            },
+            "links": {
+                "self": "/v1/panel-permissions"
+            },
+            "data": [
+                {
+                    "links": {
+                        "self": "/v1/panel-permissions/1"
+                    },
+                    "id": "1",
+                    "attributes": {
+                        "can-access": true,
+                        "panel-name": "sales"
+                    },
+                    "relationships": {
+                        "custom-system-roles": {
+                            "links": {
+                                "related": "/v1/panel-permissions/1/custom-system-roles",
+                                "self": "/v1/panel-permissions/1/relationships/custom-system-roles"
+                            }
+                        }
+                    },
+                    "type": "panel-permission"
+                }
+            ],
+            "jsonapi": {
+                "version": "1.0"
+            }
         }

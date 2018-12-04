@@ -27,12 +27,12 @@ class AdminSalesFeesSchema(Schema):
 
     @staticmethod
     def calc_ticket_count(obj):
-        "Count all tickets in all orders of this event"
+        """Count all tickets in all orders of this event"""
         return sum([o.amount for o in obj.orders])
 
     @staticmethod
     def calc_revenue(obj):
-        "Returns total revenues of all completed orders for the given event"
+        """Returns total revenues of all completed orders for the given event"""
         return sum(
             [o.get_revenue() for o in obj.orders if o.status == 'completed'])
 

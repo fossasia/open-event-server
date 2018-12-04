@@ -13,7 +13,9 @@ from app.views.elastic_search import client
 
 
 def to_dict(response):
-    "Converts elasticsearch responses to dicts for serialization"
+    """
+    Converts elasticsearch responses to dicts for serialization
+    """
     r = response.to_dict()
     r['meta'] = response.meta.to_dict()
 

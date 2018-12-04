@@ -59,6 +59,7 @@ class Config(object):
     ENABLE_ELASTICSEARCH = env.bool('ENABLE_ELASTICSEARCH', default=False)
     ELASTICSEARCH_HOST = env('ELASTICSEARCH_HOST', default='localhost:9200')
     REDIS_URL = env('REDIS_URL', default='redis://localhost:6379/0')
+    CELERY_BACKKEND = env('CELERY_BACKEND', default='redis')
 
     # API configs
     SOFT_DELETE = True
