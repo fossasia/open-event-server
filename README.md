@@ -1,6 +1,6 @@
 # Open Event Server
 
-![Open Event Server](https://storage.googleapis.com/eventyay.com/assets/branding/server_branding.png)
+![Open Event Server](/docs/images/open-event-server.png)
 
 [![GitHub release](https://img.shields.io/badge/release-1.0.0--alpha.10-blue.svg?style=flat-square)](https://github.com/fossasia/open-event-server/releases/latest)
 [![Build Status](https://travis-ci.org/fossasia/open-event-server.svg?branch=development)](https://travis-ci.org/fossasia/open-event-server)
