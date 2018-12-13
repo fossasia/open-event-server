@@ -112,7 +112,7 @@ class TestFilesHelperValidation(OpenEventTestCase):
         """Method to test create resized images"""
 
         with app.test_request_context():
-            image_url_test = 'https://cdn.pixabay.com/photo/2014/09/08/17/08/hot-air-balloons-439331_960_720.jpg'
+            image_url_test = 'https://cdn.pixabay.com/photo/2017/06/17/10/55/hot-air-balloon-2411851_1280.jpg'
             width = 500
             height = 200
             aspect_ratio = False
