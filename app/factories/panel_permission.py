@@ -10,5 +10,4 @@ class PanelPermissionFactory(factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session = db.session
 
     panel_name = common.string_
-    custom_system_role = common.string_
     can_access = True
