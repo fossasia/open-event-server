@@ -28,10 +28,10 @@ export SERVER_NAME=localhost;
 So keeping `docker-compose up` active in one terminal window, open another terminal window **in the same directory**. In there type the following command.
 
 ```bash
-docker-compose run postgres psql -h postgres -p 5432 -U postgres --password
+docker-compose run postgres psql -h postgres -p 5432 -U open_event_user --password open_event
 ```
 
-* Write 'test' as password and ENTER. When inside psql shell, write the following command -
+* Write 'opev_pass' as password and ENTER. When inside psql shell, write the following command -
 
 ```sql
 create database opev;
@@ -40,7 +40,7 @@ create database opev;
 
 * Then exit the shell by typing `\q` and ENTER.
 
-* Now the database is created, so let's create the tables. Open the application's shell by `docker-compose run web /bin/bash`. Then write the following commands.
+* Now the database is created, so let's create the tables. Open the application's shell by `docker-compose run web sh`. Then write the following commands.
 
 ```bash
 python3 create_db.py
