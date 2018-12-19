@@ -163,7 +163,10 @@ def user_post(transaction):
     :param transaction:
     :return:
     """
-    pass
+    with stash['app'].app_context():
+        user = UserFactory()
+        db.session.add(user)
+        db.session.commit()
 
 
 @hooks.before("Users > User Details > Get Details")
@@ -319,7 +322,10 @@ def event_post(transaction):
     :param transaction:
     :return:
     """
-    pass
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
 
 @hooks.before("Events > Event Details > Event Details")
@@ -1707,7 +1713,10 @@ def ticket_fees_post(transaction):
     :param transaction:
     :return:
     """
-    pass
+    with stash['app'].app_context():
+        ticket_fees = TicketFeesFactory()
+        db.session.add(ticket_fees)
+        db.session.commit()
 
 
 @hooks.before("Ticket Fees > Ticket Fee Details > Get Ticket Fees Details")
@@ -2325,7 +2334,10 @@ def role_post(transaction):
     :param transaction:
     :return:
     """
-    pass
+    with stash['app'].app_context():
+        role = RoleFactory()
+        db.session.add(role)
+        db.session.commit()
 
 
 @hooks.before("Roles > Role Details > Get Role Details")
@@ -2554,7 +2566,10 @@ def page_post(transaction):
     :param transaction:
     :return:
     """
-    pass
+    with stash['app'].app_context():
+        page = PageFactory()
+        db.session.add(page)
+        db.session.commit()
 
 
 @hooks.before("Pages > Page Details > Get Page Details")
@@ -3313,7 +3328,10 @@ def event_type_post(transaction):
     :param transaction:
     :return:
     """
-    pass
+    with stash['app'].app_context():
+        event_type = EventTypeFactory()
+        db.session.add(event_type)
+        db.session.commit()
 
 
 @hooks.before("Event Types > Event Type Details > Event Type Details")
@@ -3392,7 +3410,10 @@ def event_topic_post(transaction):
     :param transaction:
     :return:
     """
-    pass
+    with stash['app'].app_context():
+        event_topic = EventTopicFactory()
+        db.session.add(event_topic)
+        db.session.commit()
 
 
 @hooks.before("Event Topics > Event Topic Details > Event Topic Details")
@@ -3583,7 +3604,11 @@ def custom_placeholder_post(transaction):
     :param transaction:
     :return:
     """
-    pass
+    with stash['app'].app_context():
+        custom_placeholder = CustomPlaceholderFactory()
+        db.session.add(custom_placeholder)
+        db.session.commit()
+
 
 
 @hooks.before("Custom Placeholders > Custom Placeholder Details > Custom Placeholder Details")
@@ -3663,7 +3688,10 @@ def user_permission_post(transaction):
     :param transaction:
     :return:
     """
-    pass
+    with stash['app'].app_context():
+        user_permission = UserPermissionFactory()
+        db.session.add(user_permission)
+        db.session.commit()
 
 
 @hooks.before("User Permissions > User Permission Details > Get User Permission Details")
