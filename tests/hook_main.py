@@ -15,6 +15,7 @@ from populate_db import populate_without_print
 
 # imports from factories
 
+from app.factories.event_location import EventLocationFactory
 from app.factories.custom_system_role import CustomSysRoleFactory
 from app.factories.panel_permission import PanelPermissionFactory
 from app.factories.user import UserFactory
@@ -3297,7 +3298,7 @@ def file_upload_post(transaction):
     transaction['skip'] = True
 
 
-# ------------------------- Event Locationss -------------------------
+# ------------------------- Event Locations -------------------------
 @hooks.before("Event Locations > Event Locations Collection > List All Event Locations")
 def event_location_get_list(transaction):
     """
@@ -3305,6 +3306,10 @@ def event_location_get_list(transaction):
     :param transaction:
     :return:
     """
+    with stash['app'].app_context():
+        event_location = EventLocationFactory()
+        db.session.add(event_location)
+        db.session.commit()
 
 
 # ------------------------- Event Types -------------------------
