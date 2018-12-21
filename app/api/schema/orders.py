@@ -77,7 +77,7 @@ class OrderSchema(SoftDeletionSchema):
 
     attendees = Relationship(attribute='ticket_holders',
                              self_view='v1.order_attendee',
-                             self_view_kwargs={'order_identifier': '<identifier>'},
+                             self_view_kwargs={'order_identifier': '<id>'},
                              related_view='v1.attendee_list',
                              related_view_kwargs={'order_identifier': '<identifier>'},
                              schema='AttendeeSchemaPublic',

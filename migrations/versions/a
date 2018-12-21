@@ -1,0 +1,83 @@
+729e56139b8e11703c0d2b0d6f469fc8349cd49f
+ScK/EKQL44l/aMCPiqWkjz7xd25uwbC9yDSfDpPEsqk=
+https://35.237.7.148/
+
+975928592262f47ec1ffc8cb37cda9c336ec755e
+xW7DuQ29a9liSG7uWaqz8UTnmAZ52kbQ87yqOfCFgwc=
+https://35.227.76.3/
+
+
+f3b01fbf6435c85ee3b7a61c9344393bea164e89
+TErm6LbE4x08zmSdEHmrKzsWE6asL627uOyWiKHOAYk=
+https://35.237.98.111/
+
+
+980d7c4b2ecbb2118ae0349b53956cb2aa04fd66
+s3Pu7o30tus5Vocciagma4oeRvPRTG9rmFX91/KluoY=
+https://35.227.99.237/
+
+
+
+
+persistent_peers = "729e56139b8e11703c0d2b0d6f469fc8349cd49f@35.237.7.148:26656,975928592262f47ec1ffc8cb37cda9c336ec755e@35.227.76.3:26656,f3b01fbf6435c85ee3b7a61c9344393bea164e89@35.237.98.111:26656,980d7c4b2ecbb2118ae0349b53956cb2aa04fd66@35.227.99.237:26656"
+
+persistent_peers = "<Member 1 node id>@<Member 1 hostname>:26656,\
+<Member 2 node id>@<Member 2 hostname>:26656,\
+<Member N node id>@<Member N hostname>:26656,"
+
+    {
+      "genesis_time": "2018-11-18T18:19:18.100387222Z",
+      "chain_id": "test-chain-rSfdtw",
+      "consensus_params": {
+        "block_size_params": {
+          "max_bytes": "22020096",
+          "max_txs": "10000",
+          "max_gas": "-1"
+        },
+        "tx_size_params": {
+          "max_bytes": "10240",
+          "max_gas": "-1"
+        },
+        "block_gossip_params": {
+          "block_part_size_bytes": "65536"
+        },
+        "evidence_params": {
+          "max_age": "100000"
+        }
+      },
+      "validators": [
+        {
+          "pub_key": {
+            "type": "tendermint/PubKeyEd25519",
+            "value": "ScK/EKQL44l/aMCPiqWkjz7xd25uwbC9yDSfDpPEsqk="
+          },
+          "power": "10",
+          "name": ""
+        },
+        {
+          "pub_key": {
+            "type": "tendermint/PubKeyEd25519",
+            "value": "xW7DuQ29a9liSG7uWaqz8UTnmAZ52kbQ87yqOfCFgwc="
+          },
+          "power": "10",
+          "name": ""
+        },
+        {
+          "pub_key": {
+            "type": "tendermint/PubKeyEd25519",
+            "value": "TErm6LbE4x08zmSdEHmrKzsWE6asL627uOyWiKHOAYk="
+          },
+          "power": "10",
+          "name": ""
+        },
+        {
+          "pub_key": {
+            "type": "tendermint/PubKeyEd25519",
+            "value": "s3Pu7o30tus5Vocciagma4oeRvPRTG9rmFX91/KluoY="
+          },
+          "power": "10",
+          "name": ""
+        }
+      ],
+      "app_hash": ""
+    }
