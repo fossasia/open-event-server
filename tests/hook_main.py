@@ -1024,12 +1024,8 @@ def session_post(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
-        db.session.add(event)
-        db.session.commit()
-
-        track = TrackFactory()
-        db.session.add(track)
+        session = SessionFactory()
+        db.session.add(session)
         db.session.commit()
 
 
