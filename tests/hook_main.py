@@ -1142,8 +1142,8 @@ def session_type_post(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
-        db.session.add(event)
+        session_type = SessionTypeFactory()
+        db.session.add(session_type)
         db.session.commit()
 
 
