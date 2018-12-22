@@ -65,7 +65,7 @@ class SessionSchema(SoftDeletionSchema):
     id = fields.Str(dump_only=True)
     title = fields.Str(required=True)
     subtitle = fields.Str(allow_none=True)
-    level = fields.Int(allow_none=True)
+    level = fields.Str(allow_none=True)
     short_abstract = fields.Str(allow_none=True)
     long_abstract = fields.Str(allow_none=True)
     comments = fields.Str(allow_none=True)
