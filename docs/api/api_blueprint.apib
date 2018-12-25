@@ -11231,7 +11231,7 @@ Create a new session using an event_id and track_id **(Minimum Co-Organizer Acce
                 "attributes": {
                   "title": "Micropython Session",
                   "subtitle": "Title",
-                  "level": 1,
+                  "level": "1",
                   "short-abstract": "Short Abstract",
                   "long-abstract": "The Long Abstract",
                   "comments": "Comment",
@@ -11293,7 +11293,7 @@ Create a new session using an event_id and track_id **(Minimum Co-Organizer Acce
             "attributes": {
               "title": "Micropython Session",
               "subtitle": null,
-              "level": 1,
+              "level": "1",
               "short-abstract": null,
               "average-rating": 4.25,
               "long-abstract": null,
@@ -11381,7 +11381,7 @@ Get a single session. **(Public)**
             "attributes": {
               "title": "Micropython Session",
               "subtitle": null,
-              "level": 1,
+              "level": "1",
               "short-abstract": null,
               "average-rating": 4.25,
               "long-abstract": null,
@@ -11435,7 +11435,7 @@ Update a single session by `id`. **(Minimum Co-Organizer Access)**
               "data": {
                 "attributes": {
                   "title": "Micropython Session",
-                  "level": 1,
+                  "level": "1",
                   "starts-at": "2017-06-01T10:00:00.500127+00:00",
                   "ends-at": "2017-06-01T11:00:00.500127+00:00",
                   "created-at": "2017-05-01T01:24:47.500127+00:00",
@@ -11485,7 +11485,7 @@ Update a single session by `id`. **(Minimum Co-Organizer Access)**
             "attributes": {
               "title": "Micropython Session",
               "subtitle": null,
-              "level": 1,
+              "level": "1",
               "short-abstract": null,
               "average-rating": 4.25,
               "long-abstract": null,
@@ -11548,7 +11548,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List Sessions [GET]
+### List Sessions under an Event [GET]
 
 + Request
 
@@ -11615,7 +11615,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "submitted-at": "2017-05-01T01:24:47.500127+00:00",
                         "comments": "Comment",
                         "video-url": "http://example.com/example",
-                        "level": 1,
+                        "level": "1",
                         "deleted-at": null,
                         "starts-at": "2017-06-01T10:00:00.500127+00:00",
                         "is-mail-sent": false,
@@ -11645,7 +11645,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List Sessions [GET]
+### List Sessions under a Track [GET]
 
 + Request
 
@@ -11712,7 +11712,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "submitted-at": "2017-05-01T01:24:47.500127+00:00",
                         "comments": "Comment",
                         "video-url": "http://example.com/example",
-                        "level": 1,
+                        "level": "1",
                         "deleted-at": null,
                         "starts-at": "2017-06-01T10:00:00.500127+00:00",
                         "is-mail-sent": false,
@@ -11742,7 +11742,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List Sessions [GET]
+### List Sessions under a Session Type [GET]
 
 + Request
 
@@ -11809,7 +11809,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "submitted-at": "2017-05-01T01:24:47.500127+00:00",
                         "comments": "Comment",
                         "video-url": "http://example.com/example",
-                        "level": 1,
+                        "level": "1",
                         "deleted-at": null,
                         "starts-at": "2017-06-01T10:00:00.500127+00:00",
                         "is-mail-sent": false,
@@ -11839,7 +11839,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List Sessions [GET]
+### List Sessions under a Microlocation [GET]
 
 + Request
 
@@ -11906,7 +11906,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "submitted-at": "2017-05-01T01:24:47.500127+00:00",
                         "comments": "Comment",
                         "video-url": "http://example.com/example",
-                        "level": 1,
+                        "level": "1",
                         "deleted-at": null,
                         "starts-at": "2017-06-01T10:00:00.500127+00:00",
                         "is-mail-sent": false,
@@ -11936,7 +11936,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List Sessions [GET]
+### List Sessions under a Speaker [GET]
 
 + Request
 
@@ -12003,7 +12003,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "submitted-at": "2017-05-01T01:24:47.500127+00:00",
                         "comments": "Comment",
                         "video-url": "http://example.com/example",
-                        "level": 1,
+                        "level": "1",
                         "deleted-at": null,
                         "starts-at": "2017-06-01T10:00:00.500127+00:00",
                         "is-mail-sent": false,

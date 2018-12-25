@@ -1068,7 +1068,7 @@ def session_delete(transaction):
         db.session.commit()
 
 
-@hooks.before("Sessions > List Sessions under an Event > List Sessions")
+@hooks.before("Sessions > List Sessions under an Event > List Sessions under an Event")
 def event_session(transaction):
     """
     GET /events/1/sessions
@@ -1081,7 +1081,7 @@ def event_session(transaction):
         db.session.commit()
 
 
-@hooks.before("Sessions > List Sessions under a Track > List Sessions")
+@hooks.before("Sessions > List Sessions under a Track > List Sessions under a Track")
 def track_session(transaction):
     """
     GET /tracks/1/sessions
@@ -1094,7 +1094,7 @@ def track_session(transaction):
         db.session.commit()
 
 
-@hooks.before("Sessions > List Sessions under a Session Type > List Sessions")
+@hooks.before("Sessions > List Sessions under a Session Type > List Sessions under a Session Type")
 def session_type_session(transaction):
     """
     GET /session-types/1/sessions
@@ -1107,7 +1107,7 @@ def session_type_session(transaction):
         db.session.commit()
 
 
-@hooks.before("Sessions > List Sessions under a Microlocation > List Sessions")
+@hooks.before("Sessions > List Sessions under a Microlocation > List Sessions under a Microlocation")
 def microlocation_session(transaction):
     """
     GET /microlations/1/sessions
@@ -1120,7 +1120,7 @@ def microlocation_session(transaction):
         db.session.commit()
 
 
-@hooks.before("Sessions > List Sessions under a Speaker > List Sessions")
+@hooks.before("Sessions > List Sessions under a Speaker > List Sessions under a Speaker")
 def speaker_session(transaction):
     """
     GET /speakers/1/sessions
