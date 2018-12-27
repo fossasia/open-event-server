@@ -14,6 +14,7 @@ class OrderInvoice:
         self.user = {'email': 'test@gmail.com'}
         self.event = {'name': 'test_name'}
         self.user_id = '99999'
+        self.currency = 'USD'
         self.event_id = '99999'
         self.amount = 75
         self.stripe_token = 'pk_test_GzzeUfMBivRmjuVICl5rpAJZ'
@@ -62,7 +63,6 @@ class TestPaymentsTestCase(OpenEventTestCase):
             'secret_key': 'sk_test_zgizVSrtc7DyWDMFPCACErVa',
             'publishable_key': 'pk_test_GzzeUfMBivRmjuVICl5rpAJZ'
         }
-        currency = 'USD'
         stripe.api_key = credentials['publishable_key']
         captured_payment = stripe_payments.capture_payment(self.order_invoice, self.currency, credentials)
         charge_object_test = stripe.Charge()
