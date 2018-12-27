@@ -17,7 +17,9 @@ class OrderInvoice:
         self.amount = 75
         self.stripe_token = 'pk_test_GzzeUfMBivRmjuVICl5rpAJZ'
 
+
 order_invoice = OrderInvoice()
+
 
 class TestPaymentsTestCase(OpenEventTestCase):
     def setUp(self):
