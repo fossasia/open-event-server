@@ -1,12 +1,13 @@
-import unittest
-
 import stripe
+
 from tests.unittests.setup_database import Setup
 from tests.unittests.utils import OpenEventTestCase
-from app.api.helpers.payment import StripePaymentsManager, PayPalPaymentsManager
+from app.api.helpers.payment import StripePaymentsManager
 
 from app.models.stripe_authorization import StripeAuthorization
 
+order_invoice = OrderInvoice()
+stripe_payments = StripePaymentsManager()
 
 class OrderInvoice:
     def __init__(self):
@@ -17,12 +18,9 @@ class OrderInvoice:
         self.amount = 75
         self.stripe_token = 'pk_test_GzzeUfMBivRmjuVICl5rpAJZ'
 
-
 class TestPaymentsTestCase(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
-        order_invoice = OrderInvoice()
-        stripe_payments = StripePaymentsManager()
 
     def test_stripe_credentials(self):
         """
@@ -62,7 +60,7 @@ class TestPaymentsTestCase(OpenEventTestCase):
         }
         currency = 'USD'
         stripe.api_key = credentials['publishable_key']
-        captured_payment = stripe_payments.capture_payment(order_invoice, currency, credentials)
+        captured_payment = stripe_payments.capture_payment(self.order_invoice, self.currency, credentials)
         charge_object_test = stripe.Charge()
         assert isinstance(captured_payment) == isinstance(charge_object_test)
 
