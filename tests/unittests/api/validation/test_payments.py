@@ -8,6 +8,7 @@ from app.models.stripe_authorization import StripeAuthorization
 
 stripe_payments = StripePaymentsManager()
 
+
 class OrderInvoice:
     def __init__(self):
         self.user = {'email': 'test@gmail.com'}
