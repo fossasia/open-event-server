@@ -6,7 +6,6 @@ from app.api.helpers.payment import StripePaymentsManager
 
 from app.models.stripe_authorization import StripeAuthorization
 
-order_invoice = OrderInvoice()
 stripe_payments = StripePaymentsManager()
 
 class OrderInvoice:
@@ -17,6 +16,8 @@ class OrderInvoice:
         self.event_id = '99999'
         self.amount = 75
         self.stripe_token = 'pk_test_GzzeUfMBivRmjuVICl5rpAJZ'
+
+order_invoice = OrderInvoice()
 
 class TestPaymentsTestCase(OpenEventTestCase):
     def setUp(self):
