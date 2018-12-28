@@ -250,13 +250,13 @@ This is an Open Source project and we would be happy to see contributors who rep
 ## Branch Policy
 
 We have the following branches :
- * **development:**
+ * **development**
 	 All development goes on in this branch. If you're making a contribution, please make a pull request to _development_.
 	 All PRs must pass a build check and a unit-test check on Travis (https://open-event-api.herokuapp.com - Is running off the development branch. It is hosted on Heroku.)
 	 (https://api.eventyay.com - Is running off the `development` branch. Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
- * **master:**
-   This contains shipped code. After significant features/bug-fixes are accumulated on development, we make a version update and make a release. (https://eventyay.com - Is running off the master branch (whichever is the latest release). Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
- * **gh-pages:**
+ * **master**
+   This contains shipped code. After significant features/bug-fixes are accumulated on development, we make a version update and make a release. (https://eventyay.com - Is running off the master branch. (whichever is the latest release.) Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
+ * **gh-pages**
    This contains the documentation website on http://dev.eventyay.com. The site is built automatically on each commit in the development branch through a script and using travis. It includes the md files of the Readme and /docs folder. It also includes javadocs.
 
 ## Release Policy
@@ -275,9 +275,9 @@ The tentative release policy, for now (since there is a lot of activity and a lo
 * When you file a feature request or when you are submitting a bug report to the [issue tracker](https://github.com/fossasia/open-event-server/issues), make sure you add steps to reproduce it. Especially if that bug is some weird/rare one.
 
 **Join the development**
-* Before you join development, please set up the system on your local machine and go through the application completely. Press on any link/button you can find and see where it leads to and explore the project. (Don't worry ... Nothing will happen to the app or to you, due to the exploring :wink: Only thing that will happen is that you'll be more familiar with what is where and might even get some cool ideas on how to improve various aspects of the app.)
+* Before you join development, please set up the system on your local machine and go through the application completely. Press on any link/button you can find and see where it leads to. Explore. (Don't worry ... Nothing will happen to the app or to you due to the exploring :wink: Only thing that will happen is, you'll be more familiar with what is where and might even get some cool ideas on how to improve various aspects of the app.)
 * Test the application on your machine and explore the admin area. The test deployment on Heroku will not give you access to the admin section, where you can switch on/off modules, e.g. ticketing and add keys for services, e.g. storage on S3.
-* If you would like to work on an issue, drop in a comment at the issue. If it is already assigned to someone, but there is no sign of any work being done, please free to drop in a comment so that the issue can be assigned to you given that the previous assignee has dropped it entirely.
+* If you would like to work on an issue, drop in a comment at the issue. If it is already assigned to someone, but there is no sign of any work being done, please free to drop in a comment so that the issue can be assigned to you if the previous assignee has dropped it entirely.
 
 ## License
 
