@@ -29,7 +29,7 @@ class TestPaymentsTestCase(OpenEventTestCase):
 
     def test_stripe_credentials(self):
         """
-        Test stripe credentials without integer as parameter
+        Test stripe credentials
         :return:
         """
         credentials = {}
@@ -41,19 +41,6 @@ class TestPaymentsTestCase(OpenEventTestCase):
             }
         return self.assertEqual(stripe_payments.get_credentials(), data)
 
-    def test_stripe_credentials_event_integer(self):
-        """
-        Test stripe credentials with integer as parameter
-        :return:
-        """
-        event = 1
-        authorization = StripeAuthorization.query.filter_by(event_id=event).first()
-        data = {
-                    'SECRET_KEY': authorization.stripe_secret_key,
-                    'PUBLISHABLE_KEY': authorization.stripe_publishable_key
-            }
-        return self.assertEqual(stripe_payments.get_credentials(1), data)
-
     def test_capture_payment(self):
         """
         Testing payment capture
@@ -64,7 +51,7 @@ class TestPaymentsTestCase(OpenEventTestCase):
             'publishable_key': 'pk_test_GzzeUfMBivRmjuVICl5rpAJZ'
         }
         stripe.api_key = credentials['publishable_key']
-        captured_payment = stripe_payments.capture_payment(self.order_invoice, self.currency, credentials)
+        captured_payment = stripe_payments.capture_payment(order_invoice, self.currency, credentials)
         charge_object_test = stripe.Charge()
         assert isinstance(captured_payment) == isinstance(charge_object_test)
 
