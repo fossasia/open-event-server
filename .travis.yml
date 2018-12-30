@@ -35,7 +35,7 @@ before_script:
   - dredd
   
 script:
-  - nosetests tests/unittests -v --with-coverage
+  - nosetests tests/all -v --with-coverage
 
 after_success:
   - 'bash <(curl -s https://codecov.io/bash)'

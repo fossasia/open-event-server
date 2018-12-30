@@ -3,13 +3,13 @@ import unittest
 from app import current_app as app
 from app.factories.attendee import AttendeeFactory
 from app.models.ticket_holder import TicketHolder
-from tests.unittests.utils import OpenEventTestCase
+from tests.all.integration.utils import OpenEventTestCase
 from app.factories.event import EventFactoryBasic
 from app.api.helpers.db import save_to_db, safe_query, get_or_create, get_count
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from app.models import db
 from app.models.event import Event
-from tests.unittests.setup_database import Setup
+from tests.all.integration.setup_database import Setup
 
 
 class TestDBHelperValidation(OpenEventTestCase):

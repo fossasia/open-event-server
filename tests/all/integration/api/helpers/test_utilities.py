@@ -3,9 +3,9 @@ import string
 
 from app import current_app as app
 from app.api.helpers.exceptions import UnprocessableEntity
-from tests.unittests.utils import OpenEventTestCase
+from tests.all.integration.utils import OpenEventTestCase
 from app.api.helpers.utilities import dasherize, require_relationship, string_empty, str_generator
-from tests.unittests.setup_database import Setup
+from tests.all.integration.setup_database import Setup
 
 
 class TestUtilitiesHelperValidation(OpenEventTestCase):
