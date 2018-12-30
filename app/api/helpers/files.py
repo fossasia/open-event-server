@@ -251,11 +251,13 @@ def make_frontend_url(path, parameters=None):
     Create URL for frontend
     """
     settings = get_settings()
-    frontend_url = urllib.parse.urlparse(settings['frontend_url'] if settings['frontend_url'] else '')
+    frontend_url = urllib.parse.urlparse(settings.get('frontend_url') or '')
+
+    full_path = '/'.join(x.strip('/') for x in (frontend_url.path, str(path)) if x)
     return urllib.parse.urlunparse((
         frontend_url.scheme,
         frontend_url.netloc,
-        str(path),
+        full_path,
         '',
         str(urllib.parse.urlencode(parameters) if parameters else ''),
         ''

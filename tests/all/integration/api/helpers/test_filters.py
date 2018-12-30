@@ -2,8 +2,8 @@ import unittest
 
 from app import current_app as app
 from app.api.helpers.filters import json_to_rest_filter_list
-from tests.unittests.utils import OpenEventTestCase
-from tests.unittests.setup_database import Setup
+from tests.all.integration.utils import OpenEventTestCase
+from tests.all.integration.setup_database import Setup
 
 
 class TestFiltersHelperValidation(OpenEventTestCase):

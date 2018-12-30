@@ -7,8 +7,8 @@ from app.api.helpers.jwt import jwt_authenticate, get_identity
 from app.factories.event import EventFactoryBasic
 from app.factories.user import UserFactory
 from app.models import db
-from tests.unittests.setup_database import Setup
-from tests.unittests.utils import OpenEventTestCase
+from tests.all.integration.setup_database import Setup
+from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestJWTHelperValidation(OpenEventTestCase):
