@@ -7,6 +7,7 @@ from app.api.bootstrap import api
 from app.api.schema.settings import SettingSchemaAdmin, SettingSchemaNonAdmin, SettingSchemaPublic
 from app.models import db
 from app.models.setting import Setting
+from app.settings import refresh_settings
 
 
 class Environment:
@@ -43,3 +44,7 @@ class SettingDetail(ResourceDetail):
     schema = SettingSchemaAdmin
     data_layer = {'session': db.session,
                   'model': Setting}
+
+    def after_patch(self, result):
+        # Update settings cache after PATCH
+        refresh_settings()
