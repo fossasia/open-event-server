@@ -204,13 +204,13 @@ export APP_CONFIG=config.TestingConfig
 
 * Then go to the project directory and run the following command:
 ```
-python3 -m unittest discover tests/unittests/
+python3 -m unittest discover tests/all/
 ```
 * It will run each test one by one.
 
 * You can also use the following command to run tests using nosetests:
 ```
-nosetests tests/unittests/
+nosetests tests/all/
 ```
 
 #### Running robot framework tests

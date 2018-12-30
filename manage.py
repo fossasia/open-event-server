@@ -10,7 +10,7 @@ from populate_db import populate
 from flask_migrate import stamp
 from sqlalchemy.engine import reflection
 
-from tests.unittests.auth_helper import create_super_admin
+from tests.all.integration.auth_helper import create_super_admin
 
 
 @manager.command

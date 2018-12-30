@@ -1,9 +1,9 @@
 import unittest
 
-from tests.unittests.setup_database import Setup
+from tests.all.integration.setup_database import Setup
 
 from app.models.user import User
-from tests.unittests.auth_helper import create_super_admin
+from tests.all.integration.auth_helper import create_super_admin
 
 
 def get_or_create_super_admin():
