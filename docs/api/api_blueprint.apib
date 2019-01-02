@@ -19542,8 +19542,8 @@ To get or modify data of this data layer, you will need admin access. You can ge
 
 ## Event Role Permission Collection [/v1/event-role-permissions{?page%5bsize%5d,page%5bnumber%5d,filter}]
 + Parameters
-    + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
-    + page%5bnumber%5d (optional, integer, `2`) - Page number to fetched for the paginated response..
+    + page%5bsize%5d (optional, integer, `2`) - Maximum number of resources in a single paginated response.
+    + page%5bnumber%5d (optional, integer, `1`) - Page number to fetched for the paginated response..
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 ### List Event Role Permissions [GET]
@@ -19560,44 +19560,75 @@ Get a list of Event Role Permissions.
 + Response 200 (application/vnd.api+json)
 
         {
+            "links": {
+                "last": "/v1/event-role-permissions?page%5Bsize%5D=2&page%5Bnumber%5D=15",
+                "next": "/v1/event-role-permissions?page%5Bsize%5D=2&page%5Bnumber%5D=2",
+                "self": "/v1/event-role-permissions?page%5Bsize%5D=2&page%5Bnumber%5D=1",
+                "first": "/v1/event-role-permissions?page%5Bsize%5D=2"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
             "meta": {
-                "count": 1
+                "count": 30
             },
             "data": [
                 {
-                    "attributes": {
-                        "can-delete": true,
-                        "can-read": true,
-                        "can-create": true,
-                        "can-update": true
+                    "type": "event-role-permission",
+                    "links": {
+                        "self": "/v1/event-role-permissions/1"
                     },
+                    "id": "1",
                     "relationships": {
-                        "role": {
-                            "links": {
-                                "related": "/v1/roles/1",
-                                "self": "/v1/event-role-permissions/1/relationships/role"
-                            }
-                        },
                         "service": {
                             "links": {
                                 "related": "/v1/services/1",
                                 "self": "/v1/event-role-permissions/1/relationships/service"
                             }
+                        },
+                        "role": {
+                            "links": {
+                                "related": "/v1/roles/1",
+                                "self": "/v1/event-role-permissions/1/relationships/role"
+                            }
                         }
                     },
-                    "type": "event-role-permissions",
-                    "id": "1",
-                    "links": {
-                        "self": "/v1/event-role-permissions/1"
+                    "attributes": {
+                        "can-create": true,
+                        "can-update": true,
+                        "can-read": true,
+                        "can-delete": true
                     }
-                }
-            ],
-            "jsonapi": {
-                "version": "1.0"
-            },
-            "links": {
-                "self": "/v1/event-role-permissions"
-            }
+                },
+                {
+                    "type": "event-role-permission",
+                    "links": {
+                        "self": "/v1/event-role-permissions/2"
+                    },
+                    "id": "2",
+                    "relationships": {
+                        "service": {
+                            "links": {
+                                "related": "/v1/services/2",
+                                "self": "/v1/event-role-permissions/2/relationships/service"
+                            }
+                        },
+                        "role": {
+                            "links": {
+                                "related": "/v1/roles/1",
+                                "self": "/v1/event-role-permissions/2/relationships/role"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "can-create": true,
+                        "can-update": true,
+                        "can-read": true,
+                        "can-delete": true
+                    }
+                },
+
+            ]
         }
 
 
