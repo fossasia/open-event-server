@@ -4029,57 +4029,89 @@ def orders_get_collection(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        order = OrderFactory()
+        db.session.add(order)
+        db.session.commit()
 
 
 @hooks.before("Orders > Orders Collection > Create Order")
 def create_order(transaction):
     """
-    GET /orders
+    POST /orders
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
-
-
-@hooks.before("Orders > Create Order with on site Attendees > Create Order with on site Attendees")
-def create_order_with_on_site_attendee(transaction):
-    """
-    GET /orders?onsite=true
-    :param transaction:
-    :return:
-    """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        order = OrderFactory()
+        db.session.add(order)
+        db.session.commit()
 
 
 @hooks.before("Orders > Order Detail > Get Order Detail")
 def order_detail(transaction):
     """
-    GET /orders
+    GET /orders/1
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        order = OrderFactory()
+        db.session.add(order)
+        db.session.commit()
 
 
 @hooks.before("Orders > Order Detail > Update Order")
 def update_order(transaction):
     """
-    GET /orders
+    PATCH /orders/1
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        order = OrderFactory()
+        db.session.add(order)
+        db.session.commit()
 
 
 @hooks.before("Orders > Order Detail > Delete Order")
 def delete_order(transaction):
     """
-    GET /orders
+    DELETE /orders/1
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        order = OrderFactory()
+        db.session.add(order)
+        db.session.commit()
+
+
+@hooks.before("Orders > Create Order with on site Attendees > Create Order with on site Attendees")
+def create_order_with_on_site_attendee(transaction):
+    """
+    POST /orders?onsite=true
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        order = OrderFactory()
+        db.session.add(order)
+        db.session.commit()
+
+
+@hooks.before("Orders > Charge > Charge for an Order")
+def orders_charge(transaction):
+    """
+    POST /orders/1/charge
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        order = OrderFactory()
+        db.session.add(order)
+        db.session.commit()
+
 
 
 @hooks.before("Orders > Orders under an Event > List all Orders under an Event")
@@ -4089,17 +4121,11 @@ def event_order_get_list(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
 
-
-@hooks.before("Orders > Charge > Charge for an Order")
-def orders_charge(transaction):
-    """
-    GET /orders/1/charge
-    :param transaction:
-    :return:
-    """
-    transaction['skip'] = True
 
 
 @hooks.before("Orders > Orders under a User > List all Orders under a User")
@@ -4109,17 +4135,22 @@ def orders_get_collection_under_user(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
-
+    with stash['app'].app_context():
+        user = UserFactory()
+        db.session.add(user)
+        db.session.commit()
 
 @hooks.before("Orders > Create Paypal payment > Create Paypal payment for an Order")
 def create_paypal_payment(transaction):
     """
-    POST /v1/orders/{identifier}/create-paypal-payment
+    POST /orders/{identifier}/create-paypal-payment
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        order = OrderFactory()
+        db.session.add(order)
+        db.session.commit()
 
 
 @hooks.before("Event Copy > Create Event Copy > Create Copy")
