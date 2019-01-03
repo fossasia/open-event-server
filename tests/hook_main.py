@@ -62,6 +62,7 @@ from app.factories.user_email import UserEmailFactory
 from app.factories.feedback import FeedbackFactory
 from app.factories.service import ServiceFactory
 from app.factories.message_setting import MessageSettingsFactory
+from app.factories.user_favourite_events import UserFavouriteEventFactory
 
 
 
@@ -4352,4 +4353,57 @@ def panel_permissions_custom_system_role(transaction):
     with stash['app'].app_context():
         panel_permission = PanelPermissionFactory()
         db.session.add(panel_permission)
+        db.session.commit()
+
+# ------------------------- User Favourite Events -------------------------
+
+@hooks.before("Favourite Events > Favourite Events Collection > List All Favourite Events")
+def favourite_events_list_get(transaction):
+    """
+    GET /user-favourite-events
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_fav_event = UserFavouriteEventFactory()
+        db.session.add(user_fav_event)
+        db.session.commit()
+
+
+@hooks.before("Favourite Events > Favourite Events Collection > Create a Favourite Event")
+def favourite_events_list_post(transaction):
+    """
+    POST /user-favourite-events
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_fav_event = UserFavouriteEventFactory()
+        db.session.add(user_fav_event)
+        db.session.commit()
+
+
+@hooks.before("Favourite Events > Favourite Events Detail > Get Details")
+def favourite_event_details_get(transaction):
+    """
+    GET /user-favourite-events/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_fav_event = UserFavouriteEventFactory()
+        db.session.add(user_fav_event)
+        db.session.commit()
+
+
+@hooks.before("Favourite Events > Favourite Events Detail > Delete Favourite Event")
+def favourite_event_delete(transaction):
+    """
+    DELETE /user-favourite-events/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_fav_event = UserFavouriteEventFactory()
+        db.session.add(user_fav_event)
         db.session.commit()
