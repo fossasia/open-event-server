@@ -12511,7 +12511,7 @@ Create a Speaker profile
         }
 
 
-## Speaker [/v1/speakers/{speaker_id}]
+## Speaker Details [/v1/speakers/{speaker_id}]
 + Parameters
     + speaker_id: 1 (integer) - ID of the Speaker in the form of an integer
 
@@ -12695,7 +12695,7 @@ Delete a single speaker by id.
             }
         }
 
-## List Speakers for an Event [/v1/events/{event_identifier}/speakers{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## List Speakers under an Event [/v1/events/{event_identifier}/speakers{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -12704,7 +12704,7 @@ Delete a single speaker by id.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 
-### List Speakers [GET]
+### List Speakers under an Event [GET]
 
 + Request
 
@@ -12790,7 +12790,7 @@ Delete a single speaker by id.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 
-### List Speakers [GET]
+### List Speakers under a Session [GET]
 
 + Request
 
@@ -12874,7 +12874,7 @@ Delete a single speaker by id.
     + sort (optional, string, `speaking-experience`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List Speakers [GET]
+### List Speakers Profiles for a User [GET]
 
 + Request
 
