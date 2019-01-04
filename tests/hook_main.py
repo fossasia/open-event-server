@@ -1213,7 +1213,7 @@ def session_session_type(transaction):
         db.session.commit()
 
 
-# ------------------------- Speaker -------------------------
+# ------------------------- Speakers -------------------------
 @hooks.before("Speakers > Speakers Collection > Create Speaker")
 def speaker_post(transaction):
     """
@@ -1222,14 +1222,14 @@ def speaker_post(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
-        db.session.add(event)
         session = SessionFactory()
         db.session.add(session)
+        speaker = SpeakerFactory()
+        db.session.add(speaker)
         db.session.commit()
 
 
-@hooks.before("Speakers > Speaker > Speaker Details")
+@hooks.before("Speakers > Speaker Details > Speaker Details")
 def speaker_get_detail(transaction):
     """
     GET /speakers/1
@@ -1242,7 +1242,7 @@ def speaker_get_detail(transaction):
         db.session.commit()
 
 
-@hooks.before("Speakers > Speaker > Update Speaker")
+@hooks.before("Speakers > Speaker Details > Update Speaker")
 def speaker_patch(transaction):
     """
     PATCH /speakers/1
@@ -1255,7 +1255,7 @@ def speaker_patch(transaction):
         db.session.commit()
 
 
-@hooks.before("Speakers > Speaker > Delete Speaker")
+@hooks.before("Speakers > Speaker Details > Delete Speaker")
 def speaker_delete(transaction):
     """
     DELETE /speakers/1
@@ -1268,7 +1268,7 @@ def speaker_delete(transaction):
         db.session.commit()
 
 
-@hooks.before("Speakers > List Speakers for an Event > List Speakers")
+@hooks.before("Speakers > List Speakers under an Event > List Speakers under an Event")
 def event_speakers(transaction):
     """
     GET /events/1/speakers
@@ -1281,7 +1281,7 @@ def event_speakers(transaction):
         db.session.commit()
 
 
-@hooks.before("Speakers > List Speakers under a Session > List Speakers")
+@hooks.before("Speakers > List Speakers under a Session > List Speakers under a Session")
 def sessions_speakers(transaction):
     """
     GET /sessions/1/speakers
@@ -1294,7 +1294,7 @@ def sessions_speakers(transaction):
         db.session.commit()
 
 
-@hooks.before("Speakers > List Speaker Profiles for a User > List Speakers")
+@hooks.before("Speakers > List Speaker Profiles for a User > List Speaker Profiles for a User")
 def user_speakers(transaction):
     """
     GET /users/1/speakers
