@@ -38,15 +38,15 @@ A demo version is automatically deployed from our repositories:
 
 The Open Event Server can be easily deployed on a variety of platforms. Detailed platform-specific installation instructions have been provided below.
 
-1. [Generic Installation Instructions](/docs/installation/basic.md)
-1. [Local Installation](/docs/installation/local.md)
-1. [Vagrant Installation](/docs/installation/vagrant.md)
-1. [Deployment on Google Compute Engine](/docs/installation/google.md)
-1. [Deployment on Google Container Engine (Kubernetes)](/docs/installation/gce-kubernetes.md)
-1. [Deployment on AWS EC2](/docs/installation/aws.md)
-1. [Deployment on Digital Ocean](/docs/installation/digital-ocean.md)
-1. [Deployment with Docker](/docs/installation/docker.md)
-1. [Deployment on Heroku](/docs/installation/heroku.md)
+>1. [Generic Installation Instructions](/docs/installation/basic.md)
+>1. [Local Installation](/docs/installation/local.md)
+>1. [Vagrant Installation](/docs/installation/vagrant.md)
+>1. [Deployment on Google Compute Engine](/docs/installation/google.md)
+>1. [Deployment on Google Container Engine (Kubernetes)](/docs/installation/gce-kubernetes.md)
+>1. [Deployment on AWS EC2](/docs/installation/aws.md)
+>1. [Deployment on Digital Ocean](/docs/installation/digital-ocean.md)
+>1. [Deployment with Docker](/docs/installation/docker.md)
+>1. [Deployment on Heroku](/docs/installation/heroku.md)
 
 
 One-click Heroku and Docker deployments are also available:
