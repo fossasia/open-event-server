@@ -21,7 +21,7 @@ x-defaults: &defaults
     - redis:redis
     - elastic:elastic
   volumes:
-    - ./data/web:/open_event/static
+    - ./static:/data/app/static
 
 services:
 

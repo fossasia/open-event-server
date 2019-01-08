@@ -1,8 +1,8 @@
 import unittest
 
-from tests.unittests.utils import OpenEventTestCase
+from tests.all.integration.utils import OpenEventTestCase
 from app.api.helpers.exceptions import UnprocessableEntity, ConflictException, ForbiddenException, MethodNotAllowed
-from tests.unittests.setup_database import Setup
+from tests.all.integration.setup_database import Setup
 
 
 class TestExceptionsHelperValidation(OpenEventTestCase):

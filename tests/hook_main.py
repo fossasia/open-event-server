@@ -62,6 +62,7 @@ from app.factories.user_email import UserEmailFactory
 from app.factories.feedback import FeedbackFactory
 from app.factories.service import ServiceFactory
 from app.factories.message_setting import MessageSettingsFactory
+from app.factories.user_favourite_events import UserFavouriteEventFactory
 
 
 
@@ -1068,7 +1069,7 @@ def session_delete(transaction):
         db.session.commit()
 
 
-@hooks.before("Sessions > List Sessions under an Event > List Sessions")
+@hooks.before("Sessions > List Sessions under an Event > List Sessions under an Event")
 def event_session(transaction):
     """
     GET /events/1/sessions
@@ -1081,7 +1082,7 @@ def event_session(transaction):
         db.session.commit()
 
 
-@hooks.before("Sessions > List Sessions under a Track > List Sessions")
+@hooks.before("Sessions > List Sessions under a Track > List Sessions under a Track")
 def track_session(transaction):
     """
     GET /tracks/1/sessions
@@ -1094,7 +1095,7 @@ def track_session(transaction):
         db.session.commit()
 
 
-@hooks.before("Sessions > List Sessions under a Session Type > List Sessions")
+@hooks.before("Sessions > List Sessions under a Session Type > List Sessions under a Session Type")
 def session_type_session(transaction):
     """
     GET /session-types/1/sessions
@@ -1107,7 +1108,7 @@ def session_type_session(transaction):
         db.session.commit()
 
 
-@hooks.before("Sessions > List Sessions under a Microlocation > List Sessions")
+@hooks.before("Sessions > List Sessions under a Microlocation > List Sessions under a Microlocation")
 def microlocation_session(transaction):
     """
     GET /microlations/1/sessions
@@ -1120,7 +1121,7 @@ def microlocation_session(transaction):
         db.session.commit()
 
 
-@hooks.before("Sessions > List Sessions under a Speaker > List Sessions")
+@hooks.before("Sessions > List Sessions under a Speaker > List Sessions under a Speaker")
 def speaker_session(transaction):
     """
     GET /speakers/1/sessions
@@ -1212,7 +1213,7 @@ def session_session_type(transaction):
         db.session.commit()
 
 
-# ------------------------- Speaker -------------------------
+# ------------------------- Speakers -------------------------
 @hooks.before("Speakers > Speakers Collection > Create Speaker")
 def speaker_post(transaction):
     """
@@ -1226,7 +1227,7 @@ def speaker_post(transaction):
         db.session.commit()
 
 
-@hooks.before("Speakers > Speaker > Speaker Details")
+@hooks.before("Speakers > Speaker Details > Speaker Details")
 def speaker_get_detail(transaction):
     """
     GET /speakers/1
@@ -1239,7 +1240,7 @@ def speaker_get_detail(transaction):
         db.session.commit()
 
 
-@hooks.before("Speakers > Speaker > Update Speaker")
+@hooks.before("Speakers > Speaker Details > Update Speaker")
 def speaker_patch(transaction):
     """
     PATCH /speakers/1
@@ -1252,7 +1253,7 @@ def speaker_patch(transaction):
         db.session.commit()
 
 
-@hooks.before("Speakers > Speaker > Delete Speaker")
+@hooks.before("Speakers > Speaker Details > Delete Speaker")
 def speaker_delete(transaction):
     """
     DELETE /speakers/1
@@ -1265,7 +1266,7 @@ def speaker_delete(transaction):
         db.session.commit()
 
 
-@hooks.before("Speakers > List Speakers for an Event > List Speakers")
+@hooks.before("Speakers > List Speakers under an Event > List Speakers under an Event")
 def event_speakers(transaction):
     """
     GET /events/1/speakers
@@ -1278,7 +1279,7 @@ def event_speakers(transaction):
         db.session.commit()
 
 
-@hooks.before("Speakers > List Speakers under a Session > List Speakers")
+@hooks.before("Speakers > List Speakers under a Session > List Speakers under a Session")
 def sessions_speakers(transaction):
     """
     GET /sessions/1/speakers
@@ -1291,7 +1292,7 @@ def sessions_speakers(transaction):
         db.session.commit()
 
 
-@hooks.before("Speakers > List Speaker Profiles for a User > List Speakers")
+@hooks.before("Speakers > List Speaker Profiles for a User > List Speaker Profiles for a User")
 def user_speakers(transaction):
     """
     GET /users/1/speakers
@@ -4333,4 +4334,57 @@ def panel_permissions_custom_system_role(transaction):
     with stash['app'].app_context():
         panel_permission = PanelPermissionFactory()
         db.session.add(panel_permission)
+        db.session.commit()
+
+# ------------------------- User Favourite Events -------------------------
+
+@hooks.before("Favourite Events > Favourite Events Collection > List All Favourite Events")
+def favourite_events_list_get(transaction):
+    """
+    GET /user-favourite-events
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_fav_event = UserFavouriteEventFactory()
+        db.session.add(user_fav_event)
+        db.session.commit()
+
+
+@hooks.before("Favourite Events > Favourite Events Collection > Create a Favourite Event")
+def favourite_events_list_post(transaction):
+    """
+    POST /user-favourite-events
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_fav_event = UserFavouriteEventFactory()
+        db.session.add(user_fav_event)
+        db.session.commit()
+
+
+@hooks.before("Favourite Events > Favourite Events Detail > Get Details")
+def favourite_event_details_get(transaction):
+    """
+    GET /user-favourite-events/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_fav_event = UserFavouriteEventFactory()
+        db.session.add(user_fav_event)
+        db.session.commit()
+
+
+@hooks.before("Favourite Events > Favourite Events Detail > Delete Favourite Event")
+def favourite_event_delete(transaction):
+    """
+    DELETE /user-favourite-events/1
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user_fav_event = UserFavouriteEventFactory()
+        db.session.add(user_fav_event)
         db.session.commit()

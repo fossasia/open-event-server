@@ -11231,7 +11231,7 @@ Create a new session using an event_id and track_id **(Minimum Co-Organizer Acce
                 "attributes": {
                   "title": "Micropython Session",
                   "subtitle": "Title",
-                  "level": 1,
+                  "level": "1",
                   "short-abstract": "Short Abstract",
                   "long-abstract": "The Long Abstract",
                   "comments": "Comment",
@@ -11293,7 +11293,7 @@ Create a new session using an event_id and track_id **(Minimum Co-Organizer Acce
             "attributes": {
               "title": "Micropython Session",
               "subtitle": null,
-              "level": 1,
+              "level": "1",
               "short-abstract": null,
               "average-rating": 4.25,
               "long-abstract": null,
@@ -11381,7 +11381,7 @@ Get a single session. **(Public)**
             "attributes": {
               "title": "Micropython Session",
               "subtitle": null,
-              "level": 1,
+              "level": "1",
               "short-abstract": null,
               "average-rating": 4.25,
               "long-abstract": null,
@@ -11435,7 +11435,7 @@ Update a single session by `id`. **(Minimum Co-Organizer Access)**
               "data": {
                 "attributes": {
                   "title": "Micropython Session",
-                  "level": 1,
+                  "level": "1",
                   "starts-at": "2017-06-01T10:00:00.500127+00:00",
                   "ends-at": "2017-06-01T11:00:00.500127+00:00",
                   "created-at": "2017-05-01T01:24:47.500127+00:00",
@@ -11485,7 +11485,7 @@ Update a single session by `id`. **(Minimum Co-Organizer Access)**
             "attributes": {
               "title": "Micropython Session",
               "subtitle": null,
-              "level": 1,
+              "level": "1",
               "short-abstract": null,
               "average-rating": 4.25,
               "long-abstract": null,
@@ -11548,7 +11548,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List Sessions [GET]
+### List Sessions under an Event [GET]
 
 + Request
 
@@ -11615,7 +11615,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "submitted-at": "2017-05-01T01:24:47.500127+00:00",
                         "comments": "Comment",
                         "video-url": "http://example.com/example",
-                        "level": 1,
+                        "level": "1",
                         "deleted-at": null,
                         "starts-at": "2017-06-01T10:00:00.500127+00:00",
                         "is-mail-sent": false,
@@ -11645,7 +11645,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List Sessions [GET]
+### List Sessions under a Track [GET]
 
 + Request
 
@@ -11712,7 +11712,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "submitted-at": "2017-05-01T01:24:47.500127+00:00",
                         "comments": "Comment",
                         "video-url": "http://example.com/example",
-                        "level": 1,
+                        "level": "1",
                         "deleted-at": null,
                         "starts-at": "2017-06-01T10:00:00.500127+00:00",
                         "is-mail-sent": false,
@@ -11742,7 +11742,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List Sessions [GET]
+### List Sessions under a Session Type [GET]
 
 + Request
 
@@ -11809,7 +11809,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "submitted-at": "2017-05-01T01:24:47.500127+00:00",
                         "comments": "Comment",
                         "video-url": "http://example.com/example",
-                        "level": 1,
+                        "level": "1",
                         "deleted-at": null,
                         "starts-at": "2017-06-01T10:00:00.500127+00:00",
                         "is-mail-sent": false,
@@ -11839,7 +11839,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List Sessions [GET]
+### List Sessions under a Microlocation [GET]
 
 + Request
 
@@ -11906,7 +11906,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "submitted-at": "2017-05-01T01:24:47.500127+00:00",
                         "comments": "Comment",
                         "video-url": "http://example.com/example",
-                        "level": 1,
+                        "level": "1",
                         "deleted-at": null,
                         "starts-at": "2017-06-01T10:00:00.500127+00:00",
                         "is-mail-sent": false,
@@ -11936,7 +11936,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
     + sort (optional, string, `created-at`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List Sessions [GET]
+### List Sessions under a Speaker [GET]
 
 + Request
 
@@ -12003,7 +12003,7 @@ Delete a single session. **(Minimum Co-Organizer Access)**
                         "submitted-at": "2017-05-01T01:24:47.500127+00:00",
                         "comments": "Comment",
                         "video-url": "http://example.com/example",
-                        "level": 1,
+                        "level": "1",
                         "deleted-at": null,
                         "starts-at": "2017-06-01T10:00:00.500127+00:00",
                         "is-mail-sent": false,
@@ -12511,7 +12511,7 @@ Create a Speaker profile
         }
 
 
-## Speaker [/v1/speakers/{speaker_id}]
+## Speaker Details [/v1/speakers/{speaker_id}]
 + Parameters
     + speaker_id: 1 (integer) - ID of the Speaker in the form of an integer
 
@@ -12695,7 +12695,7 @@ Delete a single speaker by id.
             }
         }
 
-## List Speakers for an Event [/v1/events/{event_identifier}/speakers{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## List Speakers under an Event [/v1/events/{event_identifier}/speakers{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -12704,7 +12704,7 @@ Delete a single speaker by id.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 
-### List Speakers [GET]
+### List Speakers under an Event [GET]
 
 + Request
 
@@ -12790,7 +12790,7 @@ Delete a single speaker by id.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 
-### List Speakers [GET]
+### List Speakers under a Session [GET]
 
 + Request
 
@@ -12874,7 +12874,7 @@ Delete a single speaker by id.
     + sort (optional, string, `speaking-experience`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List Speakers [GET]
+### List Speakers Profiles for a User [GET]
 
 + Request
 
@@ -25333,6 +25333,186 @@ Get the details of the panel permission.
                     "type": "panel-permission"
                 }
             ],
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+# Group Favourite Events
+
+This Group's APIs can be used for adding a particular event to the favourite list of the user.
+
+## Favourite Events Collection [/v1/user-favourite-events]
+
+### List All Favourite Events [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": [
+                {
+                    "type": "user-favourite-event",
+                    "id": "1",
+                    "relationships": {
+                        "event": {
+                            "links": {
+                                "self": "/v1/user-favourite-events/1/relationships/event",
+                                "related": "/v1/user-favourite-events/1/event"
+                            }
+                        },
+                        "user": {
+                            "links": {
+                                "self": "/v1/user-favourite-events/1/relationships/user",
+                                "related": "/v1/favourite-events/1/user"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "deleted-at": null
+                    },
+                    "links": {
+                        "self": "/v1/user-favourite-events/1"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/user-favourite-events"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+### Create a Favourite Event [POST]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+            Content-Type: application/vnd.api+json
+
+    + Body
+
+            {
+                "data": {
+                    "type": "user-favourite-event",
+                    "relationships": {
+                        "event": {
+                            "data": {
+                                "id": "1",
+                                "type": "event"
+                            }
+                        }
+                    }
+                }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "type": "user-favourite-event",
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/user-favourite-events/1/relationships/user",
+                            "related": "/v1/favourite-events/1/user"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/user-favourite-events/1/relationships/event",
+                            "related": "/v1/user-favourite-events/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "deleted-at": null
+                },
+                "id": "1",
+                "links": {
+                    "self": "/v1/user-favourite-events/1"
+                }
+            },
+            "links": {
+                "self": "/v1/user-favourite-events/1"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+## Favourite Events Detail [/v1/user-favourite-events/{user_favourite_event_id}]
++ Parameters
+    + user_favourite_event_id: 1 (integer) - ID of the Favourite Event
+
+### Get Details [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "links": {
+                "self": "/v1/user-favourite-events/1"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "data": {
+                "type": "user-favourite-event",
+                "links": {
+                    "self": "/v1/user-favourite-events/1"
+                },
+                "id": "1",
+                "attributes": {
+                    "deleted-at": null
+                },
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "related": "/v1/favourite-events/1/user",
+                            "self": "/v1/user-favourite-events/1/relationships/user"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "related": "/v1/user-favourite-events/1/event",
+                            "self": "/v1/user-favourite-events/1/relationships/event"
+                        }
+                    }
+                }
+            }
+        }
+
+### Delete Favourite Event [DELETE]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "message": "Object successfully deleted"
+            },
             "jsonapi": {
                 "version": "1.0"
             }

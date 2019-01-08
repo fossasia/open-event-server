@@ -7,7 +7,7 @@ from flask_migrate import stamp
 from app import current_app
 from app.models import db
 from populate_db import populate
-from tests.unittests.auth_helper import create_super_admin
+from tests.all.integration.auth_helper import create_super_admin
 
 
 def create_default_user(email, password):

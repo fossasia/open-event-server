@@ -1,9 +1,9 @@
 import unittest
 
-from tests.unittests.utils import OpenEventTestCase
+from tests.all.integration.utils import OpenEventTestCase
 from app.api.helpers.errors import ForbiddenError, NotFoundError, ServerError, \
     UnprocessableEntityError, BadRequestError
-from tests.unittests.setup_database import Setup
+from tests.all.integration.setup_database import Setup
 from app import current_app as app
 
 

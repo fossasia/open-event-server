@@ -7,8 +7,8 @@ from app.factories.attendee import AttendeeFactory
 from app.factories.event import EventFactoryBasic
 from app.factories.order import OrderFactory
 from app.models.order import Order
-from tests.unittests.setup_database import Setup
-from tests.unittests.utils import OpenEventTestCase
+from tests.all.integration.setup_database import Setup
+from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestOrderUtilities(OpenEventTestCase):

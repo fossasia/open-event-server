@@ -10,8 +10,8 @@ from flask import Request, request, jsonify
 from app import current_app as app
 from app.api.helpers.files import create_save_resized_image, create_save_image_sizes
 from app.api.helpers.files import uploaded_image, uploaded_file
-from tests.unittests.setup_database import Setup
-from tests.unittests.utils import OpenEventTestCase
+from tests.all.integration.setup_database import Setup
+from tests.all.integration.utils import OpenEventTestCase
 
 
 class TestFilesHelperValidation(OpenEventTestCase):

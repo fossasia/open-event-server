@@ -204,13 +204,13 @@ export APP_CONFIG=config.TestingConfig
 
 * Then go to the project directory and run the following command:
 ```
-python3 -m unittest discover tests/unittests/
+python3 -m unittest discover tests/all/
 ```
 * It will run each test one by one.
 
 * You can also use the following command to run tests using nosetests:
 ```
-nosetests tests/unittests/
+nosetests tests/all/
 ```
 
 #### Running robot framework tests
@@ -252,7 +252,7 @@ This is an Open Source project and we would be happy to see contributors who rep
 We have the following branches :
  * **development**
 	 All development goes on in this branch. If you're making a contribution, please make a pull request to _development_.
-	 PRs to must pass a build check and a unit-test check on Travis (https://open-event-api.herokuapp.com - Is running off the development branch. It is hosted on Heroku.)
+	 All PRs must pass a build check and a unit-test check on Travis (https://open-event-api.herokuapp.com - Is running off the development branch. It is hosted on Heroku.)
 	 (https://api.eventyay.com - Is running off the `development` branch. Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
  * **master**
    This contains shipped code. After significant features/bug-fixes are accumulated on development, we make a version update and make a release. (https://eventyay.com - Is running off the master branch. (whichever is the latest release.) Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
@@ -261,7 +261,7 @@ We have the following branches :
 
 ## Release Policy
 
-The tentative release policy, for now, is, (since there is a lot of activity and a lot of bugs), an alpha release every Monday and Friday (since we see more activity on weekends). So, any bug-fixes will not be reflected at eventyay.com until a new release is made in the master branch.
+The tentative release policy, for now (since there is a lot of activity and a lot of bugs), is an alpha release every Monday and Friday (since we see more activity on weekends). So, any bug-fixes will not be reflected at eventyay.com until a new release is made in the master branch.
 
 ## Contributions Best Practices
 
