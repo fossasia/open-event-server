@@ -1638,7 +1638,7 @@ def ticket_delete(transaction):
         db.session.commit()
 
 
-@hooks.before("Tickets > List Tickets under an Event > List Tickets")
+@hooks.before("Tickets > List Tickets under an Event > List Tickets under an Event")
 def ticket_event(transaction):
     """
     GET /events/1/tickets
@@ -1651,7 +1651,7 @@ def ticket_event(transaction):
         db.session.commit()
 
 
-@hooks.before("Tickets > List Tickets under a Ticket-tag > List Tickets")
+@hooks.before("Tickets > List Tickets under a Ticket-tag > List Tickets under a Ticket-tag")
 def tikcet_tag_ticket(transaction):
     """
     GET /tikcet-tags/1/tickets
@@ -1664,7 +1664,7 @@ def tikcet_tag_ticket(transaction):
         db.session.commit()
 
 
-@hooks.before("Tickets > List Tickets for an Access Code > List Tickets")
+@hooks.before("Tickets > List Tickets for an Access Code > List Tickets for an Access Code")
 def access_code_ticket(transaction):
     """
     GET /access-codes/1/tickets
@@ -1677,7 +1677,7 @@ def access_code_ticket(transaction):
         db.session.commit()
 
 
-@hooks.before("Tickets > List Tickets for a Discount Code > List Tickets")
+@hooks.before("Tickets > List Tickets for a Discount Code > List Tickets for a Discount Code")
 def discount_code_ticket(transaction):
     """
     GET /discount-codes/1/tickets
@@ -1689,6 +1689,19 @@ def discount_code_ticket(transaction):
         db.session.add(discount_code)
         db.session.commit()
 
+
+@hooks.before("Tickets > List Tickets for an Order > List Tickets for an Order")
+def get_tickets_from_order(transaction):
+    """
+    GET /v1/orders/{identifier}/tickets
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        order = OrderFactory()
+        order.identifier = "7201904e"
+        db.session.add(order)
+        db.session.commit()
 
 # ------------------------- Ticket Fees -------------------------
 @hooks.before("Ticket Fees > Ticket Fees Collection > List Ticket Fees")
@@ -1809,7 +1822,7 @@ def ticket_tag_delete(transaction):
         db.session.commit()
 
 
-@hooks.before("Ticket Tags > List Ticket Tags under an Event > List all Ticket Tags")
+@hooks.before("Ticket Tags > List Ticket Tags under an Event > List Ticket Tags under an Event")
 def ticket_tag_event(transaction):
     """
     GET /events/1/ticket-tags
@@ -1822,7 +1835,7 @@ def ticket_tag_event(transaction):
         db.session.commit()
 
 
-@hooks.before("Ticket Tags > List Ticket Tags for a Ticket > List all Ticket Tags")
+@hooks.before("Ticket Tags > List Ticket Tags for a Ticket > List Ticket Tags for a Ticket")
 def ticket_tag_ticket(transaction):
     """
     GET /tickets/1/ticket-tags
@@ -4140,20 +4153,6 @@ def create_event_copy(transaction):
 def get_event_from_order(transaction):
     """
     GET /v1/orders/{identifier}/event
-    :param transaction:
-    :return:
-    """
-    with stash['app'].app_context():
-        order = OrderFactory()
-        order.identifier = "7201904e"
-        db.session.add(order)
-        db.session.commit()
-
-
-@hooks.before("Tickets > List Tickets for an Order > List Tickets")
-def get_tickets_from_order(transaction):
-    """
-    GET /v1/orders/{identifier}/tickets
     :param transaction:
     :return:
     """
