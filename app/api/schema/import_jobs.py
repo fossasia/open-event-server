@@ -1,13 +1,9 @@
-from marshmallow.validate import Range
 from marshmallow_jsonapi import fields
-from marshmallow_jsonapi.flask import Relationship
 
 from app.api.helpers.utilities import dasherize
 from marshmallow_jsonapi.flask import Schema
-from utils.common import use_defaults
 
 
-@use_defaults()
 class ImportJobSchema(Schema):
     """
     Api schema for ImportJob Model

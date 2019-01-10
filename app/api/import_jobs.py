@@ -1,4 +1,4 @@
-from flask_rest_jsonapi import ResourceDetail, ResourceList
+from flask_rest_jsonapi import ResourceList
 
 from flask_jwt import current_identity as current_user
 from app.api.schema.import_jobs import ImportJobSchema
@@ -8,13 +8,14 @@ from app.models.import_job import ImportJob
 from app.models.user import User
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.permission_manager import has_access
+from app.api.helpers.exceptions import ForbiddenException
 
 
 class ImportJobList(ResourceList):
     """
     List ImportJob
     """
-    def query(self, view_kwargs):
+    def query(self):
         query_ = self.session.query(ImportJob)
         user_id = current_user.id
         user = safe_query(self, User, 'id', user_id, 'user_id')
