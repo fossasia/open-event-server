@@ -25337,3 +25337,62 @@ Get the details of the panel permission.
                 "version": "1.0"
             }
         }
+
+# Group Import Jobs
+
+This Group's APIs are used for getting info of import jobs
+
+## Import Jobs Collection [/v1/import-jobs{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+
+### List All Orders [GET]
+Get a list of all import jobs
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.api+json
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+    {
+        "data": [
+            {
+                "type": "import-job",
+                "attributes": {
+                    "result-status": "SUCCESS",
+                    "starts-at": "2019-01-08T17:24:01.971880+00:00",
+                    "task": "fcc49d97-aff8-4f77-a98b-cfcdbae9f5eb",
+                    "result": "5"
+                },
+                "id": "12",
+                "links": {
+                    "self": "/v1/import-jobs?id=12"
+                }
+            },
+            {
+                "type": "import-job",
+                "attributes": {
+                    "result-status": "FAIL",
+                    "starts-at": "2019-01-08T17:10:57.133569+00:00",
+                    "task": "99f150b8-705b-4452-bd6a-f53f68c21c4a",
+                    "result": "5"
+                },
+                "id": "11",
+                "links": {
+                    "self": "/v1/import-jobs?id=11"
+                }
+            }
+        ],
+        "links": {
+            "self": "/v1/import-jobs"
+        },
+        "meta": {
+            "count": 2
+        },
+        "jsonapi": {
+            "version": "1.0"
+        }
+    }

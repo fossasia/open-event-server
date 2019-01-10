@@ -184,6 +184,7 @@ class Event(SoftDeletionModel):
                  privacy=None,
                  event_topic_id=None,
                  event_sub_topic_id=None,
+                 events_orga_id=None,
                  ticket_url=None,
                  copyright=None,
                  code_of_conduct=None,
@@ -247,6 +248,7 @@ class Event(SoftDeletionModel):
         self.event_topic_id = event_topic_id
         self.copyright = copyright
         self.event_sub_topic_id = event_sub_topic_id
+        self.events_orga_id = events_orga_id
         self.ticket_url = ticket_url
         self.code_of_conduct = code_of_conduct
         self.schedule_published_on = schedule_published_on
