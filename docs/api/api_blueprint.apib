@@ -12511,7 +12511,7 @@ Create a Speaker profile
         }
 
 
-## Speaker [/v1/speakers/{speaker_id}]
+## Speaker Details [/v1/speakers/{speaker_id}]
 + Parameters
     + speaker_id: 1 (integer) - ID of the Speaker in the form of an integer
 
@@ -12695,7 +12695,7 @@ Delete a single speaker by id.
             }
         }
 
-## List Speakers for an Event [/v1/events/{event_identifier}/speakers{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
+## List Speakers under an Event [/v1/events/{event_identifier}/speakers{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
     + event_identifier: 1 (string) - identifier or event id of the event. (b8324ae2 is an example of identifier)
     + page%5bsize%5d (optional, integer, `10`) - Maximum number of resources in a single paginated response.
@@ -12704,7 +12704,7 @@ Delete a single speaker by id.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 
-### List Speakers [GET]
+### List Speakers under an Event [GET]
 
 + Request
 
@@ -12790,7 +12790,7 @@ Delete a single speaker by id.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 
-### List Speakers [GET]
+### List Speakers under a Session [GET]
 
 + Request
 
@@ -12874,7 +12874,7 @@ Delete a single speaker by id.
     + sort (optional, string, `speaking-experience`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List Speakers [GET]
+### List Speakers Profiles for a User [GET]
 
 + Request
 
@@ -14495,7 +14495,7 @@ Delete a single ticket.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 
-### List Tickets [GET]
+### List Tickets under an Event [GET]
 
 + Request
 
@@ -14583,7 +14583,7 @@ Delete a single ticket.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 
-### List Tickets [GET]
+### List Tickets under a Ticket-tag [GET]
 
 + Request
 
@@ -14671,7 +14671,7 @@ Delete a single ticket.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 
-### List Tickets [GET]
+### List Tickets for an Access Code [GET]
 
 + Request
 
@@ -14758,7 +14758,7 @@ Delete a single ticket.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
 
-### List Tickets [GET]
+### List Tickets for a Discount Code [GET]
 
 + Request
 
@@ -14843,7 +14843,7 @@ Delete a single ticket.
 + Parameters
     + order_identifier: 7201904e (string) - Indetifier of the order
 
-### List Tickets [GET]
+### List Tickets for an Order [GET]
 
 + Request
 
@@ -15141,7 +15141,7 @@ Delete a single ticket tag.
     + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List all Ticket Tags [GET]
+### List Ticket Tags under an Event [GET]
 
 + Request (application/vnd.api+json)
 
@@ -15200,7 +15200,7 @@ Delete a single ticket tag.
     + sort (optional, string, `name`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### List all Ticket Tags [GET]
+### List Ticket Tags for a Ticket [GET]
 
 + Request (application/vnd.api+json)
 
@@ -25337,6 +25337,188 @@ Get the details of the panel permission.
                 "version": "1.0"
             }
         }
+
+
+# Group Favourite Events
+
+This Group's APIs can be used for adding a particular event to the favourite list of the user.
+
+## Favourite Events Collection [/v1/user-favourite-events]
+
+### List All Favourite Events [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "data": [
+                {
+                    "type": "user-favourite-event",
+                    "id": "1",
+                    "relationships": {
+                        "event": {
+                            "links": {
+                                "self": "/v1/user-favourite-events/1/relationships/event",
+                                "related": "/v1/user-favourite-events/1/event"
+                            }
+                        },
+                        "user": {
+                            "links": {
+                                "self": "/v1/user-favourite-events/1/relationships/user",
+                                "related": "/v1/favourite-events/1/user"
+                            }
+                        }
+                    },
+                    "attributes": {
+                        "deleted-at": null
+                    },
+                    "links": {
+                        "self": "/v1/user-favourite-events/1"
+                    }
+                }
+            ],
+            "links": {
+                "self": "/v1/user-favourite-events"
+            },
+            "meta": {
+                "count": 1
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+### Create a Favourite Event [POST]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+            Content-Type: application/vnd.api+json
+
+    + Body
+
+            {
+                "data": {
+                    "type": "user-favourite-event",
+                    "relationships": {
+                        "event": {
+                            "data": {
+                                "id": "1",
+                                "type": "event"
+                            }
+                        }
+                    }
+                }
+            }
+
++ Response 201 (application/vnd.api+json)
+
+        {
+            "data": {
+                "type": "user-favourite-event",
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "self": "/v1/user-favourite-events/1/relationships/user",
+                            "related": "/v1/favourite-events/1/user"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/user-favourite-events/1/relationships/event",
+                            "related": "/v1/user-favourite-events/1/event"
+                        }
+                    }
+                },
+                "attributes": {
+                    "deleted-at": null
+                },
+                "id": "1",
+                "links": {
+                    "self": "/v1/user-favourite-events/1"
+                }
+            },
+            "links": {
+                "self": "/v1/user-favourite-events/1"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
+## Favourite Events Detail [/v1/user-favourite-events/{user_favourite_event_id}]
++ Parameters
+    + user_favourite_event_id: 1 (integer) - ID of the Favourite Event
+
+### Get Details [GET]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "links": {
+                "self": "/v1/user-favourite-events/1"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            },
+            "data": {
+                "type": "user-favourite-event",
+                "links": {
+                    "self": "/v1/user-favourite-events/1"
+                },
+                "id": "1",
+                "attributes": {
+                    "deleted-at": null
+                },
+                "relationships": {
+                    "user": {
+                        "links": {
+                            "related": "/v1/favourite-events/1/user",
+                            "self": "/v1/user-favourite-events/1/relationships/user"
+                        }
+                    },
+                    "event": {
+                        "links": {
+                            "related": "/v1/user-favourite-events/1/event",
+                            "self": "/v1/user-favourite-events/1/relationships/event"
+                        }
+                    }
+                }
+            }
+        }
+
+### Delete Favourite Event [DELETE]
+
++ Request
+
+    + Headers
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/vnd.api+json)
+
+        {
+            "meta": {
+                "message": "Object successfully deleted"
+            },
+            "jsonapi": {
+                "version": "1.0"
+            }
+        }
+
 
 # Group Import Jobs
 
