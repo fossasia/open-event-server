@@ -14,7 +14,7 @@ brew install postgresql
 ### For debian-based linux users
 ```sh
 sudo apt-get update
-sudo apt-get install postgresql postgresql-contrib
+sudo apt-get install postgresql postgresql-contrib libssl-dev
 ```
 
 ## Steps
