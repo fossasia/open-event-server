@@ -1,4 +1,5 @@
 from celery.signals import after_task_publish
+from logging.config import dictConfig
 import logging
 import os.path
 from envparse import env
@@ -93,8 +94,26 @@ def create_app():
     app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
     app.config['FILE_SYSTEM_STORAGE_FILE_VIEW'] = 'static'
 
-    app.logger.addHandler(logging.StreamHandler(sys.stdout))
-    app.logger.setLevel(logging.ERROR)
+    dictConfig({
+        'version': 1,
+        'handlers': {
+            'console': {
+                'level': 'WARN',
+                'class': 'logging.StreamHandler',
+                'stream': 'ext://sys.stdout'
+            }
+        },
+        'loggers': {
+            'root': {
+                'handlers': ['console'],
+                'level': 'WARN'
+            },
+            'default': {
+                'handlers': ['console'],
+                'level': 'INFO'
+            }
+        }
+    })
 
     # set up jwt
     app.config['JWT_AUTH_USERNAME_KEY'] = 'email'
