@@ -12,6 +12,8 @@ class TestAuthentication(OpenEventTestCase):
         self.app = Setup.create_app()
 
     def test_load_user(self):
+        """Method to test the registered user details"""
+
         with app.test_request_context():
             auth_manager = AuthManager()
             auth_manager.init_login(app)
