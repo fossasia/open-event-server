@@ -391,7 +391,6 @@ class DiscountCodeRelationshipOptional(ResourceRelationship):
             raise UnprocessableEntity({'source': ''},
                                       "Please verify your permission")
 
-    decorators = (jwt_required,)
     schema = DiscountCodeSchemaEvent
     data_layer = {'session': db.session,
                   'model': DiscountCode}

@@ -129,7 +129,7 @@ class AccessCodeDetail(ResourceDetail):
                 raise UnprocessableEntity({'source': ''},
                                           "Please verify your permission")
 
-    decorators = (jwt_required, api.has_permission('is_coorganizer', fetch='event_id',
+    decorators = (api.has_permission('is_coorganizer', fetch='event_id',
                   fetch_as="event_id", model=AccessCode, methods="PATCH"),
                   api.has_permission('is_coorganizer_but_not_admin', fetch='event_id',
                   fetch_as="event_id", model=AccessCode, methods="DELETE"),)
