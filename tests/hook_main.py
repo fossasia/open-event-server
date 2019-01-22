@@ -4387,3 +4387,83 @@ def favourite_event_delete(transaction):
         user_fav_event = UserFavouriteEventFactory()
         db.session.add(user_fav_event)
         db.session.commit()
+
+
+# ------------------------- Admin Statistics -------------------------
+
+@hooks.before("Admin Statistics > Event Statistics Details > Show Event Statistics")
+def event_statistics_get(transaction):
+    """
+    GET /admin/statistics/events
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
+
+@hooks.before("Admin Statistics > Event Types Statistics Details > Show Event Types Statistics")
+def event_type_statistics_get(transaction):
+    """
+    GET /admin/statistics/event-types
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_type = EventTypeFactory()
+        db.session.add(event_type)
+        db.session.commit()
+
+
+@hooks.before("Admin Statistics > Event Topics Statistics Details > Show Event Topics Statistics")
+def event_topic_statistics_get(transaction):
+    """
+    GET /admin/statistics/event-topics
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        event_topic = EventTopicFactory()
+        db.session.add(event_topic)
+        db.session.commit()
+
+
+@hooks.before("Admin Statistics > User Statistics Details > Show User Statistics")
+def user_statistics_get(transaction):
+    """
+    GET /admin/statistics/users
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        user = UserFactory()
+        db.session.add(user)
+        db.session.commit()
+
+
+@hooks.before("Admin Statistics > Session Statistics Details > Show Session Statistics")
+def session_statistics_get(transaction):
+    """
+    GET /admin/statistics/sessions
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        session = SessionFactory()
+        db.session.add(session)
+        db.session.commit()
+
+
+@hooks.before("Admin Statistics > Mail Statistics Details > Show Mail Statistics")
+def mail_statistics_get(transaction):
+    """
+    GET /admin/statistics/mails
+    :param transaction:
+    :return:
+    """
+    with stash['app'].app_context():
+        mail = MailFactory()
+        db.session.add(mail)
+        db.session.commit()
