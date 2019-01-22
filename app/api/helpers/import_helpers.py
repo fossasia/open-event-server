@@ -355,10 +355,8 @@ def import_event_json(task_handle, zip_path):
         new_event = Event(**data)
         db.session.add(new_event)
         db.session.commit()
-        write_file(
-            path + '/social_links',
-            json.dumps(data.get('social_links', []))
-        )  # save social_links
+        with open(path + '/social_links', 'w') as file:
+            file.write(str(json.dumps(data.get('social_links', []))))
         _upload_media_queue(srv, new_event)
     except Exception as e:
         raise make_error('event', er=e)
