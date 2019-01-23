@@ -613,7 +613,7 @@ def event_sessions(transaction):
     :return:
     """
     with stash['app'].app_context():
-        session = SessionFactory()
+        session = SessionFactory(event_id=1)
         db.session.add(session)
         db.session.commit()
 
@@ -1011,7 +1011,7 @@ def session_microlocation_get_detail(transaction):
     :return:
     """
     with stash['app'].app_context():
-        session = SessionFactory()
+        session = SessionFactory(microlocation_id=1)
         db.session.add(session)
         db.session.commit()
 
@@ -1208,7 +1208,7 @@ def session_session_type(transaction):
     :return:
     """
     with stash['app'].app_context():
-        session = SessionFactory()
+        session = SessionFactory(session_type_id=1)
         db.session.add(session)
         db.session.commit()
 
@@ -1977,7 +1977,7 @@ def session_track_get_detail(transaction):
     :return:
     """
     with stash['app'].app_context():
-        session = SessionFactory()
+        session = SessionFactory(track_id=1)
         db.session.add(session)
         db.session.commit()
 

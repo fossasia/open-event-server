@@ -200,6 +200,11 @@ def create_event_locations():
         get_or_create(EventLocation, name=loc_)
 
 
+def create_sessions():
+    sessions, _ = get_or_create(Session, title='Micropython Session')
+    db.session.add(sessions)
+
+
 def create_permissions():
     orgr = Role.query.get(1)
     coorgr = Role.query.get(2)
@@ -345,6 +350,8 @@ def populate():
     create_event_types()
     print('Creating Event Locations...')
     create_event_locations()
+    print('Creating Sessions...')
+    create_sessions()
     print('Creating admin message settings...')
     create_admin_message_settings()
 
@@ -368,6 +375,7 @@ def populate_without_print():
     create_event_sub_topics()
     create_event_types()
     create_event_locations()
+    create_sessions()
     create_admin_message_settings()
 
     db.session.commit()
