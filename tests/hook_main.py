@@ -3658,7 +3658,7 @@ def event_sub_topic_custom_placeholder_get_detail(transaction):
         event_sub_topic = EventSubTopicFactory()
         db.session.add(event_sub_topic)
 
-        custom_placeholder = CustomPlaceholderFactory(event_sub_topic_id=1)
+        custom_placeholder = CustomPlaceholderFactory()
         db.session.add(custom_placeholder)
         db.session.commit()
 
