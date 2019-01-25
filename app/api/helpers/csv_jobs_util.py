@@ -52,7 +52,6 @@ def export_sessions_csv(sessions):
                'Level', 'Status', 'Session Type', 'Talk Length']
     rows = [headers]
     for session in sessions:
-        print(session)
         if not session.deleted_at:
             column = [session.title + ' (' + session.state + ')' if session.title else '']
             if session.speakers:
