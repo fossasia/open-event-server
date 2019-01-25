@@ -44,6 +44,9 @@ from app.models.event_type import EventType
 # EventLocation
 from app.models.event_location import EventLocation
 
+# Custom Placeholder
+from app.models.custom_placeholder import CustomPlaceholder
+
 # User Permissions
 from app.models.user_permission import UserPermission
 SALES = 'sales'
@@ -182,7 +185,7 @@ def create_event_sub_topics():
      "Religion & Spirituality": ["Mysticism and Occult"],
      "Government & Politics": ["Non-partisan"]
     }
-    eventopics=db.session.query(EventTopic).all()
+    eventopics = db.session.query(EventTopic).all()
     for keysub_topic in event_sub_topic:
         for subtopic in event_sub_topic[keysub_topic]:
             get_or_create(EventSubTopic, name=subtopic, event_topic_id=next(x for x in eventopics if x.name==keysub_topic).id)
@@ -357,6 +360,15 @@ def create_admin_message_settings():
             )
 
 
+def create_custom_placeholders():
+    custom_placeholder, _ = get_or_create(
+        CustomPlaceholder, name='Hills',
+        original_image_url='https://www.w3schools.com/html/pic_mountain.jpg',
+        event_sub_topic_id=1
+    )
+    db.session.add(custom_placeholder)
+
+
 def populate():
     """
     Create defined Roles, Services and Permissions.
@@ -403,6 +415,8 @@ def populate():
     create_session_types()
     print('Creating admin message settings...')
     create_admin_message_settings()
+    print('Creating custom placeholders...')
+    create_custom_placeholders()
 
 
 def populate_without_print():
@@ -430,6 +444,7 @@ def populate_without_print():
     create_microlocations()
     create_session_types()
     create_admin_message_settings()
+    create_custom_placeholders()
 
     db.session.commit()
 
