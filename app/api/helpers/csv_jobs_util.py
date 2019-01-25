@@ -1,5 +1,4 @@
 from app.models.helpers.versioning import strip_tags
-from flask import Response, stream_with_context
 
 
 def export_orders_csv(orders):
@@ -48,11 +47,9 @@ def export_attendees_csv(attendees):
 
 def export_sessions_csv(sessions):
     headers = ['Session Title', 'Session Speakers',
-               'Session Track', 'Session Abstract', 'Created At', 'Email Sent',
-               'Level', 'Status', 'Session Type', 'Talk Length']
+               'Session Track', 'Session Abstract', 'Created At', 'Email Sent']
     rows = [headers]
     for session in sessions:
-        print(session)
         if not session.deleted_at:
             column = [session.title + ' (' + session.state + ')' if session.title else '']
             if session.speakers:
@@ -67,14 +64,9 @@ def export_sessions_csv(sessions):
             column.append(strip_tags(session.short_abstract) if session.short_abstract else '')
             column.append(session.created_at if session.created_at else '')
             column.append('Yes' if session.is_mail_sent else 'No')
-            column.append(session.level)
-            column.append(session.state)
-            column.append(session.type)
-            column.append(len(session.long_abstract))
             rows.append(column)
-    # export data as csv
-    return Response(stream_with_context(rows), mimetype='text/csv',
-    headers={'Content-disposition': 'attachment;filename:sessions_info.csv'})
+
+    return rows
 
 
 def export_speakers_csv(speakers):
