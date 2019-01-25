@@ -14,6 +14,7 @@ from app.models.permission import Permission
 
 from app.models.track import Track
 from app.models.session import Session
+from app.models.session_type import SessionType
 from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
 from app.models.microlocation import Microlocation
@@ -27,6 +28,9 @@ from app.models.custom_system_role import CustomSysRole
 from app.models.setting import Setting
 from app.models.image_size import ImageSizes
 from app.models.module import Module
+
+# Event
+from app.models.event import Event
 
 # EventTopic
 from app.models.event_topic import EventTopic
@@ -52,6 +56,10 @@ MESSAGES = 'messages'
 REPORTS = 'reports'
 SETTINGS = 'settings'
 CONTENT = 'content'
+
+# Factories
+from app.factories.event import EventFactoryBasic
+from app.factories.track import TrackFactory
 
 
 def create_roles():
@@ -198,6 +206,39 @@ def create_event_locations():
     event_location = ['India', 'Singapore', 'Berlin', 'New York', 'Hong Kong']
     for loc_ in event_location:
         get_or_create(EventLocation, name=loc_)
+
+
+def create_events():
+    events, _ = get_or_create(
+        Event,
+        name="Python Seminar",
+        starts_at=EventFactoryBasic.starts_at,
+        ends_at=EventFactoryBasic.ends_at,
+        timezone=EventFactoryBasic.timezone
+    )
+    db.session.add(events)
+
+
+def create_microlocations():
+    microlocations, _ = get_or_create(
+        Microlocation,
+        name="Default Microlocation"
+    )
+    db.session.add(microlocations)
+
+
+def create_tracks():
+    tracks, _ = get_or_create(
+        Track,
+        name="Main Track",
+        color=TrackFactory.color
+    )
+    db.session.add(tracks)
+
+
+def create_session_types():
+    session_types, _ = get_or_create(SessionType, name="Workshop")
+    db.session.add(session_types)
 
 
 def create_sessions():
@@ -350,8 +391,16 @@ def populate():
     create_event_types()
     print('Creating Event Locations...')
     create_event_locations()
+    print('Creating Events...')
+    create_events()
+    print('Creating Tracks')
+    create_tracks()
     print('Creating Sessions...')
     create_sessions()
+    print('Creating Microlocations...')
+    create_microlocations()
+    print('Creating Session Types...')
+    create_session_types()
     print('Creating admin message settings...')
     create_admin_message_settings()
 
@@ -375,7 +424,11 @@ def populate_without_print():
     create_event_sub_topics()
     create_event_types()
     create_event_locations()
+    create_events()
+    create_tracks()
     create_sessions()
+    create_microlocations()
+    create_session_types()
     create_admin_message_settings()
 
     db.session.commit()
