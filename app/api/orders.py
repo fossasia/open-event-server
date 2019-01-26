@@ -136,8 +136,8 @@ class OrdersListPost(ResourceList):
 
         order.quantity = order.tickets_count
         save_to_db(order)
-        if not has_access('is_coorganizer', event_id=data['event']):
-            TicketingManager.calculate_update_amount(order)
+#         if not has_access('is_coorganizer', event_id=data['event']):
+#             TicketingManager.calculate_update_amount(order)
 
         # send e-mail and notifications if the order status is completed
         if order.status == 'completed':
