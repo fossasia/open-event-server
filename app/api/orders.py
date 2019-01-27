@@ -50,10 +50,6 @@ class OrdersListPost(ResourceList):
         """
         require_relationship(['event'], data)
 
-        if not current_user.is_verified:
-            raise ForbiddenException({'source': ''},
-                                     "Only verified accounts can place orders")
-
         # Create on site attendees.
         if request.args.get('onsite', False):
             create_onsite_attendees_for_order(data)
