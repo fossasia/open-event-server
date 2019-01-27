@@ -87,6 +87,7 @@ class Event(SoftDeletionModel):
     schedule_published_on = db.Column(db.DateTime(timezone=True))
     is_ticketing_enabled = db.Column(db.Boolean, default=False)
     is_donation_enabled = db.Column(db.Boolean, default=False)
+    is_featured = db.Column(db.Boolean, default=False)
     payment_country = db.Column(db.String)
     payment_currency = db.Column(db.String)
     paypal_email = db.Column(db.String)
@@ -218,7 +219,8 @@ class Event(SoftDeletionModel):
                  tax=None,
                  order_expiry_time=None,
                  refund_policy='All sales are final. No refunds shall be issued in any case.',
-                 is_stripe_linked=False):
+                 is_stripe_linked=False,
+                 is_featured=False):
 
         self.name = name
         self.logo_url = logo_url
@@ -280,6 +282,7 @@ class Event(SoftDeletionModel):
         self.order_expiry_time = order_expiry_time
         self.refund_policy = refund_policy
         self.is_stripe_linked = is_stripe_linked
+        self.is_featured = is_featured
 
     def __repr__(self):
         return '<Event %r>' % self.name
