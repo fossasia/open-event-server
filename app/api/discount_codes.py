@@ -222,10 +222,12 @@ class DiscountCodeDetail(ResourceDetail):
                 raise ObjectNotFound(
                     {'parameter': '{id}'}, "DiscountCode: not found")
 
-            if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=discount.event_id):
+#             if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=discount.event_id):
+            if discount.used_for == 'ticket':
                 self.schema = DiscountCodeSchemaTicket
 
-            elif discount.used_for == 'event' and has_access('is_admin'):
+#             elif discount.used_for == 'event' and has_access('is_admin'):
+            elif discount.used_for == 'event':
                 self.schema = DiscountCodeSchemaEvent
             else:
                 raise UnprocessableEntity({'source': ''},
@@ -267,10 +269,12 @@ class DiscountCodeDetail(ResourceDetail):
                 self.schema = DiscountCodeSchemaPublic
                 return
 
-            if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=discount.event_id):
+#             if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=discount.event_id):
+            if discount.used_for == 'ticket':
                 self.schema = DiscountCodeSchemaTicket
 
-            elif discount.used_for == 'event' and has_access('is_admin'):
+#             elif discount.used_for == 'event' and has_access('is_admin'):
+            elif discount.used_for == 'event':
                 self.schema = DiscountCodeSchemaEvent
             else:
                 raise UnprocessableEntity({'source': ''},
@@ -319,7 +323,7 @@ class DiscountCodeDetail(ResourceDetail):
         else:
             raise UnprocessableEntity({'source': ''}, "Please verify your permission")
 
-    decorators = (jwt_required,)
+#     decorators = (jwt_required,)
     schema = DiscountCodeSchemaTicket
     data_layer = {'session': db.session,
                   'model': DiscountCode,
