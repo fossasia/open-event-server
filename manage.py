@@ -79,16 +79,18 @@ def initialize_db(credentials):
                 print("[LOG] Could not create tables. Either database does not exist or tables already created")
             if populate_data:
                 credentials = credentials.split(":")
-                create_super_admin(credentials[0], credentials[1])
+                admin_email = os.environ.get('SUPER_ADMIN_EMAIL', credentials[0])
+                admin_password = os.environ.get('SUPER_ADMIN_PASSWORD', credentials[1])
+                create_super_admin(admin_email, admin_password)
                 populate()
         else:
             print("[LOG] Tables already exist. Skipping data population & creation.")
 
 
 @manager.command
-def prepare_kubernetes_db():
+def prepare_kubernetes_db(credentials='open_event_test_user@fossasia.org:fossasia'):
     with app.app_context():
-        initialize_db('open_event_test_user@fossasia.org:fossasia')
+        initialize_db(credentials)
 
 
 if __name__ == "__main__":
