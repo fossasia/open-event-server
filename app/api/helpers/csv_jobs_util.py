@@ -71,9 +71,8 @@ def export_sessions_csv(sessions):
             column.append(session.type)
             column.append(len(session.long_abstract))
             rows.append(column)
-    # export data as csv
-    return Response(stream_with_context(rows), mimetype='text/csv',
-    headers={'Content-disposition': 'attachment;filename:sessions_info.csv'})
+
+    return rows
 
 
 def export_speakers_csv(speakers):
