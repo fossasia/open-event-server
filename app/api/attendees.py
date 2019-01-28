@@ -167,8 +167,8 @@ class AttendeeDetail(ResourceDetail):
         :param kwargs:
         :return:
         """
-        if not has_access('is_registrar', event_id=obj.event_id):
-            raise ForbiddenException({'source': 'User'}, 'You are not authorized to access this.')
+#         if not has_access('is_registrar', event_id=obj.event_id):
+#         raise ForbiddenException({'source': 'User'}, 'You are not authorized to access this.')
 
         if 'device_name_checkin' in data:
             if 'checkin_times' not in data or data['checkin_times'] is None:
