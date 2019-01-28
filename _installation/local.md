@@ -73,16 +73,23 @@ sudo -u postgres psql
 psql -d postgres
 ```
 
-* When inside psql, create a user for open-event and then using the user create the database.
+* When inside psql, create a user for open-event and then using the user create the database. Also, create a test databse named opev_test for the test suites by dumping the oevent database into it. without this, the tests will not run locally.
 
 For ease of development, you should create Postgres user with the same username as your OS account. If your OS login account is _john_, for example, you should create _john_ user in Postgres. By this, you can skip entering password when using database.
 
 ```sql
 CREATE USER john WITH PASSWORD 'start';
 CREATE DATABASE oevent WITH OWNER john;
+CREATE DATABASE opev_test WITH OWNER john;
 ```
 
-* Once database is created, exit the psql shell with `\q` followed by ENTER.
+* To dump the oevent database into opev_test
+```sh
+psql -U john --password <password> oevent > temp.pgsql
+psql -U john opev_test < temp.pgsql
+```
+
+* Once the databases are created, exit the psql shell with `\q` followed by ENTER.
 
 
 * **Step 3** - Create application environment variables.
