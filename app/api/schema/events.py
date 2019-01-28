@@ -81,6 +81,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     icon_image_url = fields.Url(dump_only=True)
     organizer_name = fields.Str(allow_none=True)
     is_map_shown = fields.Bool(default=False)
+    is_featured = fields.Bool(default=False)
     has_organizer_info = fields.Bool(default=False)
     organizer_description = fields.Str(allow_none=True)
     is_sessions_speakers_enabled = fields.Bool(default=False)
