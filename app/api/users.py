@@ -22,7 +22,7 @@ from app.models.discount_code import DiscountCode
 from app.models.email_notification import EmailNotification
 from app.models.event_invoice import EventInvoice
 from app.models.feedback import Feedback
-from app.models.mail import USER_REGISTER_WITH_PASSWORD
+from app.models.mail import USER_REGISTER_WITH_PASSWORD, PASSWORD_RESET_AND_VERIFY
 from app.models.notification import Notification
 from app.models.session import Session
 from app.models.speaker import Speaker
@@ -37,6 +37,7 @@ class UserList(ResourceList):
     """
     List and create Users
     """
+
     def before_create_object(self, data, view_kwargs):
         """
         method to check if there is an existing user with same email which is received in data to create a new user
@@ -58,12 +59,18 @@ class UserList(ResourceList):
         :param view_kwargs:
         :return:
         """
-        s = get_serializer()
-        hash = str(base64.b64encode(str(s.dumps([user.email, str_generator()])).encode()), 'utf-8')
-        link = make_frontend_url('/verify'.format(id=user.id), {'token': hash})
-        send_email_with_action(user, USER_REGISTER_WITH_PASSWORD, app_name=get_settings()['app_name'],
-                               email=user.email)
-        send_email_confirmation(user.email, link)
+
+        if user.was_registered_with_order:
+            link = make_frontend_url('/reset-password', {'token': user.reset_password})
+            send_email_with_action(user, PASSWORD_RESET_AND_VERIFY, app_name=get_settings()['app_name'],
+                                   email=user.email, link=link)
+        else:
+            s = get_serializer()
+            hash = str(base64.b64encode(str(s.dumps([user.email, str_generator()])).encode()), 'utf-8')
+            link = make_frontend_url('/verify'.format(id=user.id), {'token': hash})
+            send_email_with_action(user, USER_REGISTER_WITH_PASSWORD, app_name=get_settings()['app_name'],
+                                   email=user.email)
+            send_email_confirmation(user.email, link)
 
         if data.get('original_image_url'):
             try:
@@ -90,6 +97,7 @@ class UserDetail(ResourceDetail):
     """
     User detail by id
     """
+
     def before_get(self, args, kwargs):
 
         if current_user.is_admin or current_user.is_super_admin or current_user:
@@ -221,11 +229,11 @@ class UserDetail(ResourceDetail):
             send_email_change_user_email(user, view_kwargs.get('email_changed'))
 
     decorators = (api.has_permission('is_user_itself', fetch="user_id,id", fetch_as="user_id",
-                  model=[Notification, Feedback, UsersEventsRoles, Session, EventInvoice, AccessCode,
-                         DiscountCode, EmailNotification, Speaker, User],
-                  fetch_key_url="notification_id, feedback_id, users_events_role_id, session_id, \
+                                     model=[Notification, Feedback, UsersEventsRoles, Session, EventInvoice, AccessCode,
+                                            DiscountCode, EmailNotification, Speaker, User],
+                                     fetch_key_url="notification_id, feedback_id, users_events_role_id, session_id, \
                   event_invoice_id, access_code_id, discount_code_id, email_notification_id, speaker_id, id",
-                  leave_if=lambda a: a.get('attendee_id')), )
+                                     leave_if=lambda a: a.get('attendee_id')),)
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User,
@@ -240,7 +248,7 @@ class UserRelationship(ResourceRelationship):
     """
     User Relationship
     """
-    decorators = (is_user_itself, )
+    decorators = (is_user_itself,)
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User}
