@@ -18,6 +18,8 @@ from app.models.feedback import Feedback
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.user import ATTENDEE, ORGANIZER
 from app.models.event_topic import EventTopic
+from app.models.session import Session
+from app.models.speaker import Speaker
 from app.models.search import sync
 from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
@@ -379,6 +381,15 @@ class Event(SoftDeletionModel):
     @property
     def revenue(self):
         return self.calc_revenue()
+
+    @property
+    def has_sessions(self):
+        return Session.query.filter_by(event_id=self.id).count() > 0
+
+    @property
+    def has_speakers(self):
+        return Speaker.query.filter_by(event_id=self.id).count() > 0
+
 
 
 @event.listens_for(Event, 'after_update')
