@@ -68,7 +68,7 @@ def export_sessions_csv(sessions):
             column.append(session.level)
             column.append(session.state)
             column.append(session.type)
-            column.append(len(session.long_abstract))
+            column.append(len(session.short_abstract))
             rows.append(column)
 
     return rows
