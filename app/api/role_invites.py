@@ -56,8 +56,8 @@ class RoleInviteListPost(ResourceList):
 
         event = Event.query.filter_by(id=role_invite.event_id).first()
         frontend_url = get_settings()['frontend_url']
-        link = "{}/events/{}/role-invites/{}" \
-            .format(frontend_url, event.id, role_invite.hash)
+        link = "{}/events/role-invite?id={}" \
+            .format(frontend_url, role_invite.id)
 
         send_email_role_invite(role_invite.email, role_invite.role_name, event.name, link)
         if user:
@@ -118,7 +118,7 @@ class RoleInviteDetail(ResourceDetail):
                 raise UnprocessableEntity({'source': ''}, "Only users can edit their own status")
         if not user and not has_access('is_organizer', event_id=role_invite.event_id):
             raise UnprocessableEntity({'source': ''}, "User not registered")
-        if not has_access('is_organizer', event_id=role_invite.event_id) and (len(list(data.keys())) > 1 or
+        if not has_access('is_organizer', event_id=role_invite.event_id) and (len(list(data.keys())) > 2 or
                                                                               'status' not in data):
             raise UnprocessableEntity({'source': ''}, "You can only change your status")
 
