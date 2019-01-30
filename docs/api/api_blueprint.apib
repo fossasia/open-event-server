@@ -2945,6 +2945,7 @@ These endpoints help you to create the basic event structure. To add other parts
 | `order-expiry-time`  | Expiry time for orders in minutes | Integer(default: 10) | - |
 | `refund-policy` | Refund policy | string | - |
 | `is-stripe-linked` | Shows if the event has a linked stripe account. | boolean(default: `false`) | - |
+| `is-featured` | Should the event be shown in featured events | boolean(default: `false`) | - |
 
 ## Events Collection [/v1/events{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 + Parameters
@@ -3145,6 +3146,7 @@ Get a list of events.
                         "large-image-url": null,
                         "timezone": "UTC",
                         "can-pay-onsite": true,
+                        "is-featured": false,
                         "deleted-at": null,
                         "ticket-url": "http://example.com",
                         "can-pay-by-paypal": true,
