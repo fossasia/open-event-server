@@ -112,8 +112,8 @@ class AttendeeList(ResourceList):
 
         if view_kwargs.get('ticket_id'):
             ticket = safe_query(self, Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
-            if not has_access('is_registrar', event_id=ticket.event_id):
-                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            # if not has_access('is_registrar', event_id=ticket.event_id):
+            #     raise ForbiddenException({'source': ''}, 'Access Forbidden')
             query_ = query_.join(Ticket).filter(Ticket.id == ticket.id)
 
         if view_kwargs.get('user_id'):
