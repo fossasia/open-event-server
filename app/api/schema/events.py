@@ -82,6 +82,8 @@ class EventSchemaPublic(SoftDeletionSchema):
     organizer_name = fields.Str(allow_none=True)
     is_map_shown = fields.Bool(default=False)
     has_organizer_info = fields.Bool(default=False)
+    has_sessions = fields.Bool(default=0, dump_only=True)
+    has_speakers = fields.Bool(default=0, dump_only=True)
     organizer_description = fields.Str(allow_none=True)
     is_sessions_speakers_enabled = fields.Bool(default=False)
     privacy = fields.Str(default="public")
