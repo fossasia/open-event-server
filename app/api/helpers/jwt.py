@@ -17,7 +17,8 @@ def jwt_authenticate(email, password):
     user = User.query.filter_by(email=email, deleted_at=None).first()
     if user is None:
         return None
-    auth_ok = user.facebook_login_hash == password or user.is_correct_password(password)
+    auth_ok = user.facebook_login_hash == password or user.google_login_hash == password or \
+        user.is_correct_password(password)
     if auth_ok:
         return user
     else:

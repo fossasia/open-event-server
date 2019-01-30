@@ -27,6 +27,9 @@ class SettingSchemaPublic(Schema):
     # Tagline for the application. (Eg. Event Management and Ticketing, Home)
     tagline = fields.Str(allow_none=True)
 
+    # Google
+    google_client_id = fields.Str(allow_none=True)
+
     # Google Analytics
     analytics_key = fields.Str(allow_none=True)
 

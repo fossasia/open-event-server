@@ -3,7 +3,8 @@ import random
 import string
 
 import requests
-from flask import request, jsonify, make_response, Blueprint
+from flask import request, jsonify, make_response, redirect, url_for, Blueprint
+from flask_dance.contrib.google import make_google_blueprint, google
 from flask_jwt import current_identity as current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -24,6 +25,11 @@ from app.models.user import User
 
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
 
+# Google
+google_blueprint = make_google_blueprint(
+    client_id=GoogleOAuth.get_client_id(),
+    client_secret=GoogleOAuth.get_client_secret(),
+)
 
 @auth_routes.route('/oauth/<provider>', methods=['GET'])
 def redirect_uri(provider):
@@ -83,9 +89,9 @@ def get_token(provider):
     response = requests.post(provider_class.get_token_uri(), params=payload)
     return make_response(jsonify(token=response.json()), 200)
 
-
+@auth_routes.route('/oauth/login/<provider>', methods=['GET'])
 @auth_routes.route('/oauth/login/<provider>/<auth_code>/', methods=['GET'])
-def login_user(provider, auth_code):
+def login_user(provider, auth_code=None):
     if provider == 'facebook':
         provider_class = FbOAuth()
         payload = {
@@ -134,6 +140,24 @@ def login_user(provider, auth_code):
             'client_id': provider_class.get_client_id(),
             'client_secret': provider_class.get_client_secret()
         }
+
+        if not payload['client_id'] and payload['client_secret']:
+            raise NotImplementedError({'source': ''}, 'Google login not configured.')
+        if not google.authorized:
+            return redirect(url_for("google.login"))
+        user_details = google.get('/oauth2/v2/userinfo').json()
+        try:
+            user = db.session.query(User).filter_by(google_id=user_details['id']).one()
+        except NoResultFound:
+            user = User()
+            user.google_id = user_details['id']
+            user.google_login_hash = random.getrandbits(128)
+            user.password = ''.join(
+                random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(8))
+            user.email = user_details['email']
+            save_to_db(user)
+        return make_response(jsonify(user_id=user.id, email=user.email, google_login_hash=user.google_login_hash), 200)
+
     elif provider == 'twitter':
         provider_class = TwitterOAuth()
         payload = {
