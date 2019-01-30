@@ -250,6 +250,13 @@ class EventSchemaPublic(SoftDeletionSchema):
                                related_view_kwargs={'event_id': '<id>'},
                                schema='EventTopicSchema',
                                type_='event-topic')
+    event_orga = Relationship(attribute='events_orga',
+                              self_view='v1.events_orga',
+                              self_view_kwargs={'id': '<id>'},
+                              related_view='v1.event_orga_detail',
+                              related_view_kwargs={'event_id': '<id>'},
+                              schema='EventOrgaSchema',
+                              type='event-orga')
     event_sub_topic = Relationship(attribute='event_sub_topic',
                                    self_view='v1.event_event_sub_topic',
                                    self_view_kwargs={'id': '<id>'},
@@ -279,14 +286,6 @@ class EventSchemaPublic(SoftDeletionSchema):
                                 schema='UserSchemaPublic',
                                 type_='user',
                                 many=True)
-    event_chat_messages = Relationship(attribute='event_chat_messages',
-                                       self_view='v1.event_event_chat_message',
-                                       self_view_kwargs={'id': '<id>'},
-                                       related_view='v1.event_chat_message_list',
-                                       related_view_kwargs={'event_id': '<id>'},
-                                       schema='EventChatMessageSchema',
-                                       type_='event-chat-message',
-                                       many=True)
 
 
 class EventSchema(EventSchemaPublic):

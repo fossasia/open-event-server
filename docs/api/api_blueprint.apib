@@ -16528,7 +16528,7 @@ Delete a single notification.
         }
 
 
-## Notification Detail with Actions [/v1/notifications/{notification_id}?include=actions]
+## Notification Detail with Actions [/v1/notifications/{notification_id}?include=notification_actions]
 + Parameters
     + notification_id: 1 (integer) - ID of the notification in the form of an integer
 
@@ -16574,7 +16574,8 @@ Get a single notification and it's associated actions.
                     "attributes": {
                         "action-type": "view",
                         "subject-id": "1",
-                        "subject": "event"
+                        "subject": "event",
+                        "notification-id":"1"
                     },
                     "id": "1"
                 }

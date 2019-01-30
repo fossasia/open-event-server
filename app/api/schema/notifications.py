@@ -15,12 +15,28 @@ class NotificationActionSchema(SoftDeletionSchema):
         Meta class for Notification Action API schema
         """
         type_ = 'notification-action'
+<<<<<<< HEAD
+=======
+        self_view = 'v1.notification_action_detail'
+        self_view_kwargs = {'id': '<id>'}
+>>>>>>> 3cc22020b48e5322c893b949bd91cf70d14d2081
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
     action_type = fields.Str(allow_none=True, dump_only=True)
     subject = fields.Str(allow_none=True, dump_only=True)
     subject_id = fields.Str(allow_none=True, dump_only=True)
+<<<<<<< HEAD
+=======
+    notification_id = fields.Str(allow_none=True, dump_only=True)
+    notification = Relationship(attribute='notification',
+                                self_view='v1.notification_actions_notification',
+                                self_view_kwargs={'id': '<id>'},
+                                related_view='v1.notification_detail',
+                                related_view_kwargs={'notification_action_id': '<id>'},
+                                schema='NotificationSchema',
+                                type_='notification-action')
+>>>>>>> 3cc22020b48e5322c893b949bd91cf70d14d2081
 
 
 class NotificationSchema(SoftDeletionSchema):
@@ -35,7 +51,6 @@ class NotificationSchema(SoftDeletionSchema):
         type_ = 'notification'
         self_view = 'v1.notification_detail'
         self_view_kwargs = {'id': '<id>'}
-        self_view_many = 'v1.microlocation_list_post'
         inflect = dasherize
 
     id = fields.Str(dump_only=True)
@@ -44,10 +59,21 @@ class NotificationSchema(SoftDeletionSchema):
     received_at = fields.DateTime(dump_only=True)
     accept = fields.Str(allow_none=True, dump_only=True)
     is_read = fields.Boolean()
+<<<<<<< HEAD
     actions = Relationship(attribute='actions',
                            schema='NotificationActionSchema',
                            many=True,
                            type_='notification-action')
+=======
+    notification_actions = Relationship(attribute='actions',
+                                        schema='NotificationActionSchema',
+                                        self_view='v1.notification_actions',
+                                        self_view_kwargs={'id': '<id>'},
+                                        related_view='v1.notification_actions_list',
+                                        related_view_kwargs={'notification_id': '<id>'},
+                                        many=True,
+                                        type_='notification-action')
+>>>>>>> 3cc22020b48e5322c893b949bd91cf70d14d2081
     user = Relationship(attribute='user',
                         self_view='v1.notification_user',
                         self_view_kwargs={'id': '<id>'},

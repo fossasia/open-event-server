@@ -1,80 +1,70 @@
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from marshmallow_jsonapi import fields
+from marshmallow_jsonapi.flask import Relationship
 
-from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
-from app.api.schema.notifications import NotificationSchema
-from app.models import db
-from app.models.notification import Notification
-from app.models.user import User
+from app.api.helpers.utilities import dasherize
+from app.api.schema.base import SoftDeletionSchema
 
 
-class NotificationListAdmin(ResourceList):
+class NotificationActionSchema(SoftDeletionSchema):
     """
-    List all the Notification
-    """
-    decorators = (api.has_permission('is_admin'),)
-    methods = ['GET']
-    schema = NotificationSchema
-    data_layer = {'session': db.session,
-                  'model': Notification}
-
-
-class NotificationList(ResourceList):
-    """
-    List all the Notification
+    API Schema for NotificationAction Model
     """
 
-    def query(self, view_kwargs):
+    class Meta:
         """
-        query method for Notifications list
-        :param view_kwargs:
-        :return:
+        Meta class for Notification Action API schema
         """
-        query_ = self.session.query(Notification)
-        if view_kwargs.get('user_id'):
-            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
-            query_ = query_.join(User).filter(User.id == user.id)
-        return query_
+        type_ = 'notification-action'
+        self_view = 'v1.notification_action_detail'
+        self_view_kwargs = {'id': '<id>'}
+        inflect = dasherize
 
-    def before_create_object(self, data, view_kwargs):
+    id = fields.Str(dump_only=True)
+    action_type = fields.Str(allow_none=True, dump_only=True)
+    subject = fields.Str(allow_none=True, dump_only=True)
+    subject_id = fields.Str(allow_none=True, dump_only=True)
+    notification_id = fields.Str(allow_none=True, dump_only=True)
+    notification = Relationship(attribute='notification',
+                                self_view='v1.notification_actions_notification',
+                                self_view_kwargs={'id': '<id>'},
+                                related_view='v1.notification_detail',
+                                related_view_kwargs={'notification_action_id': '<id>'},
+                                schema='NotificationSchema',
+                                type_='notification-action')
+
+
+class NotificationSchema(SoftDeletionSchema):
+    """
+    API Schema for Notification Model
+    """
+
+    class Meta:
         """
-        method to create object before post
-        :param data:
-        :param view_kwargs:
-        :return:
+        Meta class for Notification API schema
         """
-        if view_kwargs.get('user_id') is not None:
-            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
-            data['user_id'] = user.id
+        type_ = 'notification'
+        self_view = 'v1.notification_detail'
+        self_view_kwargs = {'id': '<id>'}
+        inflect = dasherize
 
-    view_kwargs = True
-    decorators = (api.has_permission('is_user_itself', fetch="user_id", model=Notification),)
-    methods = ['GET']
-    schema = NotificationSchema
-    data_layer = {'session': db.session,
-                  'model': Notification,
-                  'methods': {
-                      'query': query,
-                      'before_create_object': before_create_object
-                  }}
-
-
-class NotificationDetail(ResourceDetail):
-    """
-    Notification detail by ID
-    """
-    decorators = (api.has_permission('is_user_itself', fetch="user_id", model=Notification),)
-    schema = NotificationSchema
-    data_layer = {'session': db.session,
-                  'model': Notification}
-
-
-class NotificationRelationship(ResourceRelationship):
-    """
-    Notification Relationship
-    """
-    decorators = (api.has_permission('is_user_itself', fetch="user_id", model=Notification),)
-    schema = NotificationSchema
-    methods = ['GET', 'PATCH']
-    data_layer = {'session': db.session,
-                  'model': Notification}
+    id = fields.Str(dump_only=True)
+    title = fields.Str(allow_none=True, dump_only=True)
+    message = fields.Str(allow_none=True, dump_only=True)
+    received_at = fields.DateTime(dump_only=True)
+    accept = fields.Str(allow_none=True, dump_only=True)
+    is_read = fields.Boolean()
+    notification_actions = Relationship(attribute='actions',
+                                        schema='NotificationActionSchema',
+                                        self_view='v1.notification_actions',
+                                        self_view_kwargs={'id': '<id>'},
+                                        related_view='v1.notification_actions_list',
+                                        related_view_kwargs={'notification_id': '<id>'},
+                                        many=True,
+                                        type_='notification-action')
+    user = Relationship(attribute='user',
+                        self_view='v1.notification_user',
+                        self_view_kwargs={'id': '<id>'},
+                        related_view='v1.user_detail',
+                        related_view_kwargs={'notification_id': '<id>'},
+                        schema='UserSchema',
+                        type_='user')
