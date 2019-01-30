@@ -48,6 +48,7 @@ class Event(SoftDeletionModel):
     ends_at = db.Column(db.DateTime(timezone=True), nullable=False)
     timezone = db.Column(db.String, nullable=False, default="UTC")
     is_event_online = db.Column(db.Boolean, default=False)
+    is_featured = db.Column(db.Boolean, default=False)
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     location_name = db.Column(db.String)
@@ -215,6 +216,7 @@ class Event(SoftDeletionModel):
                  discount_code_id=None,
                  onsite_details=None,
                  is_tax_enabled=None,
+                 is_featured=False,
                  is_sponsors_enabled=None,
                  stripe_authorization=None,
                  tax=None,
@@ -282,6 +284,7 @@ class Event(SoftDeletionModel):
         self.order_expiry_time = order_expiry_time
         self.refund_policy = refund_policy
         self.is_stripe_linked = is_stripe_linked
+        self.is_featured = is_featured
 
     def __repr__(self):
         return '<Event %r>' % self.name
