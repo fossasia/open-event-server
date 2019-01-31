@@ -16,7 +16,7 @@ down_revision = 'e3caa0f2a16c'
 
 
 def upgrade():
-    op.add_column(u'events',sa.Column('is_featured', sa.Boolean(), nullable=True))
+    op.add_column(u'events',sa.Column('is_featured', sa.Boolean(), nullable=False))
 
 
 def downgrade():
