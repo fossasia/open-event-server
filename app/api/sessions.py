@@ -87,7 +87,8 @@ class SessionList(ResourceList):
             query_ = query_.join(Microlocation).filter(Microlocation.id == microlocation.id)
         if view_kwargs.get('user_id') is not None:
             user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
-            query_ = query_.join(User).filter(User.id == user.id)
+            query_ = query_.join(User)\
+                .join(Speaker).filter((User.id == user.id or Session.speakers.any(Speaker.user_id == user.id)))
         query_ = event_query(self, query_, view_kwargs)
         if view_kwargs.get('speaker_id'):
             speaker = safe_query(self, Speaker, 'id', view_kwargs['speaker_id'], 'speaker_id')
