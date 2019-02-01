@@ -51,8 +51,8 @@
             <span style="font-size: 15px;">{{ order.event.location_name }}</span><br><br>
 
             <span class="label">Date and Time</span><br>
-            <span  style="font-size: 15px;">From: {{ order.event.starts_at.time().strftime("%H:%M") }} on {{ order.event.starts_at.date() }}</span><br>
-            <span style="font-size: 15px;">To: {{ order.event.ends_at.time().strftime("%H:%M") }} on {{ order.event.ends_at.date() }}</span>
+            <span  style="font-size: 15px;">From: {{ order.event.starts_at.strftime("%H:%M %Z") }} on {{ order.event.starts_at.date() }}</span><br>
+            <span style="font-size: 15px;">To: {{ order.event.ends_at.strftime("%H:%M %Z") }} on {{ order.event.ends_at.date() }}</span>
             <br><br>
 
             <span class="label">Type</span><br>
