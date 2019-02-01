@@ -118,6 +118,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     refund_policy = fields.String(dump_only=True,
                                   default='All sales are final. No refunds shall be issued in any case.')
     is_stripe_linked = fields.Boolean(dump_only=True, allow_none=True, default=False)
+    is_featured = fields.Bool(default=False)
 
     tickets = Relationship(attribute='tickets',
                            self_view='v1.event_ticket',
