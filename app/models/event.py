@@ -52,6 +52,7 @@ class Event(SoftDeletionModel):
     longitude = db.Column(db.Float)
     location_name = db.Column(db.String)
     searchable_location_name = db.Column(db.String)
+    is_featured = db.Column(db.Boolean, default=False)
     description = db.Column(db.Text)
     original_image_url = db.Column(db.String)
     thumbnail_image_url = db.Column(db.String)
@@ -194,6 +195,7 @@ class Event(SoftDeletionModel):
                  is_donation_enabled=False,
                  is_map_shown=False,
                  has_organizer_info=False,
+                 is_featured=False,
                  searchable_location_name=None,
                  is_ticketing_enabled=None,
                  deleted_at=None,
@@ -258,6 +260,7 @@ class Event(SoftDeletionModel):
         self.deleted_at = deleted_at
         self.payment_country = payment_country
         self.payment_currency = payment_currency
+        self.is_featured = is_featured
         self.paypal_email = paypal_email
         self.speakers_call = speakers_call
         self.can_pay_by_paypal = can_pay_by_paypal
