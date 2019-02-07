@@ -315,8 +315,7 @@ class OrderDetail(ResourceDetail):
 
     # This is to ensure that the permissions manager runs and hence changes the kwarg from order identifier to id.
     decorators = (jwt_required, api.has_permission(
-        'auth_required', methods="PATCH,DELETE", fetch="user_id", model=Order),)
-
+        'auth_required', methods="PATCH,DELETE", model=Order),)
     schema = OrderSchema
     data_layer = {'session': db.session,
                   'model': Order,
