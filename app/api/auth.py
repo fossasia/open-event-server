@@ -3,18 +3,20 @@ import random
 import string
 
 import requests
-from flask import request, jsonify, make_response, Blueprint
+from flask import request, jsonify, make_response, Blueprint, redirect, url_for
+from flask_dance.contrib.github import make_github_blueprint, github
 from flask_jwt import current_identity as current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
-from app import get_settings
+from app import get_settings, app
 from app.api.helpers.db import save_to_db, get_count
 from app.api.helpers.errors import UnprocessableEntityError, NotFoundError, BadRequestError
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_with_action, \
     send_email_confirmation
 from app.api.helpers.notification import send_notification_with_action
-from app.api.helpers.third_party_auth import GoogleOAuth, FbOAuth, TwitterOAuth, InstagramOAuth
+from app.api.helpers.third_party_auth import GoogleOAuth, FbOAuth, TwitterOAuth, InstagramOAuth, \
+    GithubOAuth
 from app.api.helpers.utilities import get_serializer, str_generator
 from app.models import db
 from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE, \
@@ -35,6 +37,8 @@ def redirect_uri(provider):
         provider_class = TwitterOAuth()
     elif provider == 'instagram':
         provider_class = InstagramOAuth()
+    elif provider == 'github':
+        provider_class = GithubOAuth()
     else:
         return make_response(jsonify(
             message="No support for {}".format(provider)), 404)
@@ -73,6 +77,12 @@ def get_token(provider):
         }
     elif provider == 'instagram':
         provider_class = InstagramOAuth()
+        payload = {
+            'client_id': provider_class.get_client_id(),
+            'client_secret': provider_class.get_client_secret()
+        }
+    elif provider == 'github':
+        provider_class = GithubOAuth()
         payload = {
             'client_id': provider_class.get_client_id(),
             'client_secret': provider_class.get_client_secret()
@@ -144,6 +154,42 @@ def login_user(provider, auth_code):
             'client_id': provider_class.get_client_id(),
             'client_secret': provider_class.get_client_secret()
         }
+    elif provider == 'github':
+        provider_class = GithubOAuth()
+        payload = {
+            'client_id': provider_class.get_client_id,
+            'client_secret': provider_class.get_client_secret()
+        }
+
+        if not payload['client_id'] or not payload['client_secret']:
+            return make_response(jsonify(message='Application\'s client ID or Secret key not found '), 403)
+
+        github_blueprint = make_github_blueprint(api_key=payload['client_id'], api_secret=payload['client_secret'])
+        app.register_blueprint(github_blueprint, url_prefix='/github_login')
+
+        if not github.authorized:
+            return redirect(url_for('github.login'))
+        account_info = github.get('/user')
+        if account_info.ok:
+            account_info_json = account_info.json
+
+        user = User()
+        name_info = account_info_json['name']
+        if name_info is not None:
+            name_info_tokenised = name_info.strip().split()
+            user.first_name = name_info[0]
+            if len(name_info_tokenised) > 1:
+                user.last_name = name_info[-1]
+        user.github_id = account_info_json['id']
+        user.github_login_hash = random.getrandbits(128)
+        user.password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(8))
+        if account_info_json['email']:
+            user.email = account_info_json['email']
+        save_to_db(user)
+        return make_response(jsonify(user_id=user.id, github_login_hash=user.github_login_hash,
+                             github_id=user.github_id), 200)
+
+
     else:
         return make_response(jsonify(
             message="No support for {}".format(provider)), 200)

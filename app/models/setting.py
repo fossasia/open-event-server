@@ -63,6 +63,9 @@ class Setting(db.Model):
     # Instagram
     in_client_id = db.Column(db.String)
     in_client_secret = db.Column(db.String)
+    # Github
+    github_client_id = db.Column(db.String)
+    github_client_secret = db.Column(db.String)
 
     #
     # Payment Gateway
@@ -143,6 +146,7 @@ class Setting(db.Model):
                  stripe_secret_key=None, stripe_publishable_key=None,
                  in_client_id=None, in_client_secret=None,
                  tw_consumer_secret=None, sendgrid_key=None,
+                 github_client_id=None, github_client_secret=None,
                  secret=None, storage_place=None,
                  app_name=None,
                  static_domain=None,
@@ -188,6 +192,8 @@ class Setting(db.Model):
         self.tw_consumer_secret = tw_consumer_secret
         self.in_client_id = in_client_id
         self.in_client_secret = in_client_secret
+        self.github_client_id = github_client_id
+        self.github_client_secret = github_client_secret
         self.sendgrid_key = sendgrid_key
         self.analytics_key = analytics_key
         self.app_name = app_name

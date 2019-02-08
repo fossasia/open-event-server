@@ -34,6 +34,7 @@ qrcode>=5.3,<6
 python-magic>=0.4.12,<1
 python-geoip>=1.2,<2
 marrow.mailer>=4.0.2,<5
+Flask-Dance
 flask-cors>=3.0.2,<3.1
 python-pentabarf-xml==0.19  # leave versions untouched.
 python-geoip-geolite2

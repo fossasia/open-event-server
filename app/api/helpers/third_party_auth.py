@@ -152,3 +152,32 @@ class InstagramOAuth(object):
     @classmethod
     def get_token_uri(cls):
         return cls.INSTAGRAM_TOKEN_URI
+
+
+class GithubOAuth(object):
+    """Github Credentials"""
+    GITHUB_OAUTH_URI = "https://github.com/login/oauth/authorize"
+    GITHUB_ACCESS_TOKEN_URI = "https://github.com/login/oauth/access_token"
+    SCOPE = ['user']
+
+    @classmethod
+    def get_client_id(cls):
+        return get_settings()['git_client_id']
+
+    @classmethod
+    def get_client_secret(cls):
+        return get_settings()['git_client_secret']
+
+    @classmethod
+    def get_redirect_uri(cls):
+        url = urllib.parse.urlparse(request.url)
+        git_redirect_uri = url.scheme + '://' + url.netloc + '/gitCallback'
+        return git_redirect_uri
+
+    @classmethod
+    def get_auth_uri(cls):
+        return cls.GITHUB_OAUTH_URI
+
+    @classmethod
+    def get_token_uri(cls):
+        return cls.GITHUB_ACCESS_TOKEN_URI
