@@ -94,6 +94,8 @@ def login_user(provider, auth_code):
             'client_secret': provider_class.get_client_secret(),
             'code': auth_code
         }
+        if not payload['client_id'] or payload['client_secret']:
+            return make_response(jsonify(message="Facebook Login hasn't been configured"), 501)
         access_token = requests.get('https://graph.facebook.com/v3.0/oauth/access_token', params=payload).json()
         payload_details = {
             'input_token': access_token['access_token'],
