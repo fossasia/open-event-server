@@ -8,14 +8,11 @@ from sqlalchemy import or_
 from sqlalchemy.orm.exc import NoResultFound
 import pytz
 from datetime import datetime
-import urllib.error
-
 from app.api.bootstrap import api
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
 from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.events import create_custom_forms_for_attendees
-from app.api.helpers.exceptions import ForbiddenException, ConflictException, UnprocessableEntity
-from app.api.helpers.files import create_save_image_sizes
+from app.api.helpers.exceptions import ForbiddenException, ConflictException
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
 from app.api.schema.events import EventSchemaPublic, EventSchema
@@ -173,16 +170,9 @@ class EventList(ResourceList):
 
         if event.state == 'published' and event.schedule_published_on:
             start_export_tasks(event)
-        # TODO: Create an asynchronous celery task for this
-        # if data.get('original_image_url'):
-        #     try:
-        #         uploaded_images = create_save_image_sizes(data['original_image_url'], 'event-image', event.id)
-        #     except (urllib.error.HTTPError, urllib.error.URLError):
-        #         raise UnprocessableEntity(
-        #             {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
-        #         )
-        #     self.session.query(Event).filter_by(id=event.id).update(uploaded_images)
-        #     self.session.commit()
+
+        if data.get('original_image_url'):
+            start_image_resizing_tasks(event, data['original_image_url'])
 
     # This permission decorator ensures, you are logged in to create an event
     # and have filter ?withRole to get events associated with logged in user
@@ -500,18 +490,6 @@ class EventDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        # TODO: Create an asynchronous celery task for this
-        # if data.get('original_image_url') and data['original_image_url'] != event.original_image_url:
-        #     try:
-        #         uploaded_images = create_save_image_sizes(data['original_image_url'], 'event-image', event.id)
-        #     except (urllib.error.HTTPError, urllib.error.URLError):
-        #         raise UnprocessableEntity(
-        #             {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
-        #         )
-        #     data['original_image_url'] = uploaded_images['original_image_url']
-        #     data['large_image_url'] = uploaded_images['large_image_url']
-        #     data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
-        #     data['icon_image_url'] = uploaded_images['icon_image_url']
 
         if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
             event.deleted_at = data.get('deleted_at')
@@ -521,6 +499,8 @@ class EventDetail(ResourceDetail):
             if data.get('state', None) == 'published' and not data.get('location_name', None):
                 raise ConflictException({'pointer': '/data/attributes/location-name'},
                                         "Location is required to publish the event")
+        if data.get('original_image_url') and data['original_image_url'] != event.original_image_url:
+            start_image_resizing_tasks(event, data['original_image_url'])
 
     def after_update_object(self, event, data, view_kwargs):
         if event.state == 'published' and event.schedule_published_on:
@@ -603,6 +583,12 @@ def start_export_tasks(event):
     from .helpers.tasks import export_pentabarf_task
     task_pentabarf = export_pentabarf_task.delay(event_id, temp=False)
     create_export_job(task_pentabarf.id, event_id)
+
+
+def start_image_resizing_tasks(event, original_image_url):
+    event_id = str(event.id)
+    from .helpers.tasks import resize_event_images_task
+    resize_event_images_task.delay(event_id, original_image_url)
 
 
 def clear_export_urls(event):
