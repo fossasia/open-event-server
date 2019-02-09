@@ -162,16 +162,16 @@ class GithubOAuth(object):
 
     @classmethod
     def get_client_id(cls):
-        return get_settings()['git_client_id']
+        return get_settings()['github_client_id']
 
     @classmethod
     def get_client_secret(cls):
-        return get_settings()['git_client_secret']
+        return get_settings()['github_client_secret']
 
     @classmethod
     def get_redirect_uri(cls):
         url = urllib.parse.urlparse(request.url)
-        git_redirect_uri = url.scheme + '://' + url.netloc + '/gitCallback'
+        git_redirect_uri = url.scheme + '://' + url.netloc + '/githubCallback'
         return git_redirect_uri
 
     @classmethod
