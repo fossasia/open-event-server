@@ -208,7 +208,7 @@ class UserDetail(ResourceDetail):
             else:
                 raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")
 
-        if has_access('is_super_admin') and data.get('is_admin') != user.is_admin:
+        if has_access('is_super_admin') and data.get('is_admin') and data.get('is_admin') != user.is_admin:
             user.is_admin = not user.is_admin
 
         if has_access('is_admin') and data.get('is_sales_admin') != user.is_sales_admin:
