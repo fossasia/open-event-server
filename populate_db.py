@@ -45,6 +45,13 @@ from app.models.custom_placeholder import CustomPlaceholder
 
 # User Permissions
 from app.models.user_permission import UserPermission
+
+# Event
+from app.models.event import Event
+
+# python datetime
+from datetime import datetime, timedelta
+
 SALES = 'sales'
 ADMIN = 'admin'
 EVENTS = 'events'
@@ -316,12 +323,31 @@ def create_admin_message_settings():
 
 def create_custom_placeholders():
     custom_placeholder, _ = get_or_create(
-        CustomPlaceholder, name='Hills',
+        CustomPlaceholder, name='abc',
         original_image_url='https://www.w3schools.com/html/pic_mountain.jpg',
         event_sub_topic_id=1
     )
     db.session.add(custom_placeholder)
 
+
+def create_event():
+    name = "Test Event"
+    starts_at = datetime.now()
+    ends_at = datetime.now() + timedelta(1*365/12)
+    latitude = 1.290270
+    longitude = 103.851959
+    location_name = 'Singapore'
+    description = 'This is a test event.'
+    organizer_name = 'Test name'
+    organizer_description = 'Test description'
+    state = 'Draft'
+    event_type_id = 1
+    event_sub_topic_id = 1
+    get_or_create(Event, name=name, starts_at=starts_at, ends_at=ends_at,
+                  latitude=latitude, longitude=longitude, location_name=location_name,
+                  description=description, organizer_name=organizer_name, organizer_description=organizer_description,
+                  state=state, event_type_id=event_type_id, event_sub_topic_id=event_sub_topic_id
+                  )
 
 def populate():
     """
@@ -361,7 +387,8 @@ def populate():
     create_admin_message_settings()
     print('Creating custom placeholders...')
     create_custom_placeholders()
-
+    print('Creating an event...')
+    create_event()
 
 def populate_without_print():
     """
@@ -384,6 +411,7 @@ def populate_without_print():
     create_event_locations()
     create_admin_message_settings()
     create_custom_placeholders()
+    create_event()
 
     db.session.commit()
 
