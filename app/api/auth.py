@@ -151,13 +151,16 @@ def login_user(provider, auth_code):
         account_info = twitter.get('account/settings.json')
         if account_info.ok:
             account_info_json = account_info.json()
-        user = User()
+        users = db.session.query(User).all()
+        for user in users:
+            if account_info_json['screen_name'] == user.twitter_id:
+                return make_response(jsonify(twitter_login_hash=user.twitter_login_hash, twitter_id=user.twitter_id), 200)
         user.twitter_id = account_info_json['screen_name']
         user.twitter_login_hash = random.getrandbits(128)
         user.password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(8))
         save_to_db(user)
-        return make_response(jsonify(twitter_login_hash=user.twitter_login_hash, twitter_id=user.twitter_id), 200)
-
+        return make_response(jsonify(twitter_login_hash=user.twitter_login_hash, twitter_id=user.twitter_id),
+                             200)
     elif provider == 'instagram':
         provider_class = InstagramOAuth()
         payload = {
