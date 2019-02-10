@@ -71,17 +71,17 @@ class UserList(ResourceList):
             send_email_with_action(user, USER_REGISTER_WITH_PASSWORD, app_name=get_settings()['app_name'],
                                    email=user.email)
             send_email_confirmation(user.email, link)
-
-        if data.get('original_image_url'):
-            try:
-                uploaded_images = create_save_image_sizes(data['original_image_url'], 'speaker-image', user.id)
-            except (urllib.error.HTTPError, urllib.error.URLError):
-                raise UnprocessableEntity(
-                    {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
-                )
-            uploaded_images['small_image_url'] = uploaded_images['thumbnail_image_url']
-            del uploaded_images['large_image_url']
-            self.session.query(User).filter_by(id=user.id).update(uploaded_images)
+        # TODO Handle in a celery task
+        # if data.get('original_image_url'):
+        #     try:
+        #         uploaded_images = create_save_image_sizes(data['original_image_url'], 'speaker-image', user.id)
+        #     except (urllib.error.HTTPError, urllib.error.URLError):
+        #         raise UnprocessableEntity(
+        #             {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
+        #         )
+        #     uploaded_images['small_image_url'] = uploaded_images['thumbnail_image_url']
+        #     del uploaded_images['large_image_url']
+        #     self.session.query(User).filter_by(id=user.id).update(uploaded_images)
 
     decorators = (api.has_permission('is_admin', methods="GET"),)
     schema = UserSchema
@@ -188,17 +188,18 @@ class UserDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
     def before_update_object(self, user, data, view_kwargs):
-        if data.get('original_image_url') and data['original_image_url'] != user.original_image_url:
-            try:
-                uploaded_images = create_save_image_sizes(data['original_image_url'], 'speaker-image', user.id)
-            except (urllib.error.HTTPError, urllib.error.URLError):
-                raise UnprocessableEntity(
-                    {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
-                )
-            data['original_image_url'] = uploaded_images['original_image_url']
-            data['small_image_url'] = uploaded_images['thumbnail_image_url']
-            data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
-            data['icon_image_url'] = uploaded_images['icon_image_url']
+        # TODO: Make a celery task for this
+        # if data.get('avatar_url') and data['original_image_url'] != user.original_image_url:
+        #     try:
+        #         uploaded_images = create_save_image_sizes(data['original_image_url'], 'speaker-image', user.id)
+        #     except (urllib.error.HTTPError, urllib.error.URLError):
+        #         raise UnprocessableEntity(
+        #             {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
+        #         )
+        #     data['original_image_url'] = uploaded_images['original_image_url']
+        #     data['small_image_url'] = uploaded_images['thumbnail_image_url']
+        #     data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
+        #     data['icon_image_url'] = uploaded_images['icon_image_url']
 
         if data.get('email') and data['email'] != user.email:
             try:
