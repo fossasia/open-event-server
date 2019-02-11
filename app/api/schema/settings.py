@@ -143,7 +143,7 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     # Instagram
     in_client_id = fields.Str(allow_none=True)
     in_client_secret = fields.Str(allow_none=True)
-    #Github
+    # Github
     github_client_id = fields.Str(allow_none=True)
     github_client_secret = fields.Str(allow_none=True)
 
