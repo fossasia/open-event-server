@@ -21,8 +21,9 @@ def get_updatable_fields():
     """
     :return: The list of fields which can be modified by the order user using the pre payment form.
     """
-    return ['country', 'address', 'city', 'state', 'zipcode', 'status', 'paid_via', 'order_notes', 'deleted_at', 'user',
-            'payment_mode', 'event', 'discount_code_id', 'discount_code', 'ticket_holders', 'user', 'tickets_pdf_url']
+    return ['country', 'address', 'city', 'state', 'zipcode', 'company', 'tax_business_info', 'status', 'paid_via',
+            'order_notes', 'deleted_at', 'user', 'payment_mode', 'event', 'discount_code_id', 'discount_code',
+            'ticket_holders', 'user', 'tickets_pdf_url']
 
 
 class OrderTicket(SoftDeletionModel):
@@ -43,6 +44,8 @@ class Order(SoftDeletionModel):
     state = db.Column(db.String)
     country = db.Column(db.String)
     zipcode = db.Column(db.String)
+    company = db.Column(db.String)
+    tax_business_info = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='SET NULL'))
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='SET NULL'))
     marketer_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='SET NULL'))
@@ -81,6 +84,8 @@ class Order(SoftDeletionModel):
                  state=None,
                  country=None,
                  zipcode=None,
+                 company=None,
+                 tax_business_info=None,
                  transaction_id=None,
                  paid_via=None,
                  user_id=None,
@@ -99,6 +104,8 @@ class Order(SoftDeletionModel):
         self.state = state
         self.country = country
         self.zipcode = zipcode
+        self.company = company
+        self.tax_business_info = tax_business_info
         self.user_id = user_id
         self.event_id = event_id
         self.transaction_id = transaction_id
@@ -147,6 +154,8 @@ class Order(SoftDeletionModel):
             'state': self.state,
             'zipcode': self.zipcode,
             'country': self.country,
+            'company': self.company,
+            'taxBusinessInfo': self.tax_business_info,
             'transaction_id': self.transaction_id,
             'paid_via': self.paid_via,
             'payment_mode': self.payment_mode,

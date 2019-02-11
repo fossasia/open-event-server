@@ -53,6 +53,8 @@ class OrderSchema(SoftDeletionSchema):
     state = fields.Str(db.String, allow_none=True)
     country = fields.Str(allow_none=True)
     zipcode = fields.Str(allow_none=True)
+    company = fields.Str(allow_none=True)
+    tax_business_info = fields.Str(allow_none=True)
     completed_at = fields.DateTime(dump_only=True)
     created_at = fields.DateTime(dump_only=True)
     transaction_id = fields.Str(dump_only=True)

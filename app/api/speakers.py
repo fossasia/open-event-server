@@ -51,11 +51,25 @@ class SpeakerListPost(ResourceList):
                     raise ObjectNotFound({'parameter': 'session_id'},
                                          "Session: {} not found".format(session_id))
 
+    def after_create_object(self, speaker, data, view_kwargs):
+        """
+        after create method to save resized images for speaker
+        :param speaker:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
+
+        if data.get('photo_url'):
+            start_image_resizing_tasks(speaker, data['photo_url'])
+
     schema = SpeakerSchema
     methods = ['POST', ]
     data_layer = {'session': db.session,
-                  'model': Speaker
-                  }
+                  'model': Speaker,
+                  'methods': {
+                      'after_create_object': after_create_object
+                  }}
 
 
 class SpeakerList(ResourceList):
@@ -100,11 +114,27 @@ class SpeakerDetail(ResourceDetail):
     """
     Speakers Detail by id
     """
+
+    def before_update_object(self, speaker, data, view_kwargs):
+        """
+        method to save image urls before updating speaker object
+        :param speaker:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
+
+        if data.get('photo_url') and data['photo_url'] != speaker.photo_url:
+            start_image_resizing_tasks(speaker, data['photo_url'])
+
     decorators = (api.has_permission('is_coorganizer_or_user_itself', methods="PATCH,DELETE", fetch="event_id",
                                      fetch_as="event_id", model=Speaker),)
     schema = SpeakerSchema
     data_layer = {'session': db.session,
-                  'model': Speaker}
+                  'model': Speaker,
+                  'methods': {
+                      'before_update_object': before_update_object
+                  }}
 
 
 class SpeakerRelationshipRequired(ResourceRelationship):
@@ -128,3 +158,9 @@ class SpeakerRelationshipOptional(ResourceRelationship):
     schema = SpeakerSchema
     data_layer = {'session': db.session,
                   'model': Speaker}
+
+
+def start_image_resizing_tasks(speaker, photo_url):
+    speaker_id = str(speaker.id)
+    from .helpers.tasks import resize_speaker_images_task
+    resize_speaker_images_task.delay(speaker_id, photo_url)
