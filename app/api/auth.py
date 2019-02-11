@@ -3,7 +3,8 @@ import random
 import string
 
 import requests
-from flask import request, jsonify, make_response, Blueprint
+from flask import request, jsonify, make_response, Blueprint, redirect, url_for
+from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
 from flask_jwt import current_identity as current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -14,6 +15,7 @@ from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_with_action, \
     send_email_confirmation
 from app.api.helpers.notification import send_notification_with_action
+from app.models.setting import Setting
 from app.api.helpers.third_party_auth import GoogleOAuth, FbOAuth, TwitterOAuth, InstagramOAuth
 from app.api.helpers.utilities import get_serializer, str_generator
 from app.models import db
@@ -21,8 +23,11 @@ from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE, \
     USER_REGISTER_WITH_PASSWORD, PASSWORD_RESET_AND_VERIFY
 from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
+from sqlalchemy import desc
 
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
+twitter_blueprint = make_twitter_blueprint(api_key=Setting.query.order_by(desc(Setting.id)).first().tw_consumer_key,
+                                           api_secret=Setting.query.order_by(desc(Setting.id)).first().tw_consumer_secret)
 
 
 @auth_routes.route('/oauth/<provider>', methods=['GET'])
@@ -71,6 +76,7 @@ def get_token(provider):
             'client_id': provider_class.get_client_id(),
             'client_secret': provider_class.get_client_secret()
         }
+
     elif provider == 'instagram':
         provider_class = InstagramOAuth()
         payload = {
@@ -140,6 +146,23 @@ def login_user(provider, auth_code):
             'client_id': provider_class.get_client_id(),
             'client_secret': provider_class.get_client_secret()
         }
+        if not payload['client_id'] and payload['client_secret']:
+            raise NotImplementedError({'source': ''}, 'Twitter Login not configured')
+        if not twitter.authorized:
+            return redirect(url_for('twitter.login'))
+        account_info = twitter.get('account/settings.json')
+        if account_info.ok:
+            account_info_json = account_info.json()
+        users = db.session.query(User).all()
+        for user in users:
+            if account_info_json['screen_name'] == user.twitter_id:
+                return make_response(jsonify(twitter_login_hash=user.twitter_login_hash, twitter_id=user.twitter_id), 200)
+        user.twitter_id = account_info_json['screen_name']
+        user.twitter_login_hash = random.getrandbits(128)
+        user.password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(8))
+        save_to_db(user)
+        return make_response(jsonify(twitter_login_hash=user.twitter_login_hash, twitter_id=user.twitter_id),
+                             200)
     elif provider == 'instagram':
         provider_class = InstagramOAuth()
         payload = {
@@ -151,7 +174,6 @@ def login_user(provider, auth_code):
             message="No support for {}".format(provider)), 200)
     response = requests.post(provider_class.get_token_uri(), params=payload)
     return make_response(jsonify(token=response.json()), 200)
-
 
 @auth_routes.route('/verify-email', methods=['POST'])
 def verify_email():
