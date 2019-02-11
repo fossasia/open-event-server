@@ -55,6 +55,7 @@ class UserSchema(UserSchemaPublic):
     is_super_admin = fields.Boolean(dump_only=True)
     is_admin = fields.Boolean()
     facebook_id = fields.Integer(dump_only=True)
+    github_id = fields.Integer(dump_only=True)
     is_sales_admin = fields.Boolean()
     is_marketer = fields.Boolean()
     is_user_organizer = fields.Boolean(dump_only=True)
