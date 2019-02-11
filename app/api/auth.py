@@ -25,6 +25,8 @@ from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
 
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
+github_blueprint = make_github_blueprint(client_id=GithubOAuth.get_client_id(), client_secret=GithubOAuth.get_client_secret())
+app.register_blueprint(github_blueprint, url_prefix='/github_login')
 
 
 @auth_routes.route('/oauth/<provider>', methods=['GET'])
@@ -160,36 +162,28 @@ def login_user(provider, auth_code):
             'client_id': provider_class.get_client_id,
             'client_secret': provider_class.get_client_secret()
         }
-
         if not payload['client_id'] or not payload['client_secret']:
-            return make_response(jsonify(message='Application\'s client ID or Secret key not found '), 403)
-
-        github_blueprint = make_github_blueprint(api_key=payload['client_id'], api_secret=payload['client_secret'])
-        app.register_blueprint(github_blueprint, url_prefix='/github_login')
-
+            raise NotImplementedError({'source': ''}, 'Github Login not Configured')
         if not github.authorized:
             return redirect(url_for('github.login'))
         account_info = github.get('/user')
         if account_info.ok:
-            account_info_json = account_info.json
-
-        user = User()
-        name_info = account_info_json['name']
-        if name_info is not None:
-            name_info_tokenised = name_info.strip().split()
-            user.first_name = name_info[0]
-            if len(name_info_tokenised) > 1:
-                user.last_name = name_info[-1]
+            account_info_json = account_info.json()
+            
+        users = db.session.query(User).all()
+        
+        for user in users:
+            if account_info_json['id'] == user.github_id:
+                return make_response(jsonify(github_login_hash=user.github_login_hash,
+                                     github_id=user.github_id), 200)
         user.github_id = account_info_json['id']
         user.github_login_hash = random.getrandbits(128)
         user.password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(8))
         if account_info_json['email']:
             user.email = account_info_json['email']
         save_to_db(user)
-        return make_response(jsonify(user_id=user.id, github_login_hash=user.github_login_hash,
+        return make_response(jsonify(github_login_hash=user.github_login_hash,
                              github_id=user.github_id), 200)
-
-
     else:
         return make_response(jsonify(
             message="No support for {}".format(provider)), 200)
