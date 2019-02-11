@@ -25,7 +25,8 @@ from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
 
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
-github_blueprint = make_github_blueprint(client_id=GithubOAuth.get_client_id(), client_secret=GithubOAuth.get_client_secret())
+github_blueprint = make_github_blueprint(client_id=GithubOAuth.get_client_id(),
+                                         client_secret=GithubOAuth.get_client_secret())
 app.register_blueprint(github_blueprint, url_prefix='/github_login')
 
 
@@ -169,9 +170,9 @@ def login_user(provider, auth_code):
         account_info = github.get('/user')
         if account_info.ok:
             account_info_json = account_info.json()
-            
+
         users = db.session.query(User).all()
-        
+
         for user in users:
             if account_info_json['id'] == user.github_id:
                 return make_response(jsonify(github_login_hash=user.github_login_hash,
