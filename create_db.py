@@ -24,8 +24,8 @@ def create_default_user(email, password):
         ask_password = True
         while ask_password:
             password = getpass.getpass("Enter password for super_admin : ")
-            if len(password) < 4:
-                print('\nPassword should have minimum 4 characters')
+            if len(password) < 6:
+                print('\nPassword should have minimum 6 characters')
                 continue
             repassword = getpass.getpass("Enter your password again to confirm : ")
             if password != repassword:
