@@ -251,7 +251,9 @@ def change_password():
         return NotFoundError({'source': ''}, 'User Not Found').respond()
     else:
         if user.is_correct_password(old_password):
-
+            if len(new_password) < 8:
+                return BadRequestError({'source': ''},
+                                       'Password should have minimum 8 characters').respond()
             user.password = new_password
             save_to_db(user)
             send_email_with_action(user, PASSWORD_CHANGE,
