@@ -41,10 +41,14 @@ class UserList(ResourceList):
     def before_create_object(self, data, view_kwargs):
         """
         method to check if there is an existing user with same email which is received in data to create a new user
+        and if the password is at least 8 characters long
         :param data:
         :param view_kwargs:
         :return:
         """
+        if len(data['password']) < 8:
+            raise UnprocessableEntity({'source': '/data/attributes/password'},
+                                       'Password should be at least 8 characters long')
         if db.session.query(User.id).filter_by(email=data['email']).scalar() is not None:
             raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")
 
