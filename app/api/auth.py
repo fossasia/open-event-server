@@ -8,14 +8,13 @@ from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
 from flask_jwt import current_identity as current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
-from app import get_settings
+from app import get_settings, app
 from app.api.helpers.db import save_to_db, get_count
 from app.api.helpers.errors import UnprocessableEntityError, NotFoundError, BadRequestError
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_with_action, \
     send_email_confirmation
 from app.api.helpers.notification import send_notification_with_action
-from app.models.setting import Setting
 from app.api.helpers.third_party_auth import GoogleOAuth, FbOAuth, TwitterOAuth, InstagramOAuth
 from app.api.helpers.utilities import get_serializer, str_generator
 from app.models import db
@@ -23,12 +22,11 @@ from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE, \
     USER_REGISTER_WITH_PASSWORD, PASSWORD_RESET_AND_VERIFY
 from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
-from sqlalchemy import desc
 
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
-twitter_blueprint = make_twitter_blueprint(api_key=Setting.query.order_by(desc(Setting.id)).first().tw_consumer_key,
-                                           api_secret=Setting.query.order_by(desc(Setting.id)).first().tw_consumer_secret)
-
+# setup Flask-TwitterOAuth       
+twitter_blueprint = make_twitter_blueprint(api_key=TwitterOAuth.get_client_id(),
+                                            api_secret=TwitterOAuth.get_client_secret())
 
 @auth_routes.route('/oauth/<provider>', methods=['GET'])
 def redirect_uri(provider):
@@ -174,6 +172,7 @@ def login_user(provider, auth_code):
             message="No support for {}".format(provider)), 200)
     response = requests.post(provider_class.get_token_uri(), params=payload)
     return make_response(jsonify(token=response.json()), 200)
+
 
 @auth_routes.route('/verify-email', methods=['POST'])
 def verify_email():

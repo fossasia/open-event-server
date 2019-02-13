@@ -39,6 +39,8 @@ from app.views.elastic_cron_helpers import sync_events_elasticsearch, cron_rebui
 from app.views.redis_store import redis_store
 from app.views.celery_ import celery
 from app.templates.flask_ext.jinja.filters import init_filters
+from app.api.helpers.third_party_auth import TwitterOAuth
+from flask_dance.contrib.twitter import make_twitter_blueprint
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -127,7 +129,7 @@ def create_app():
         from app.api.users import user_misc_routes
         from app.api.orders import order_misc_routes
         from app.api.role_invites import role_invites_misc_routes
-        from app.api.auth import twitter_blueprint
+        from app.api.auth import twitter_blueprint 
 
         app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)
@@ -141,7 +143,8 @@ def create_app():
         app.register_blueprint(attendee_misc_routes)
         app.register_blueprint(order_misc_routes)
         app.register_blueprint(role_invites_misc_routes)
-        app.register_blueprint(twitter_blueprint, url_prefix='/twitter_login')
+        app.register_blueprint(twitter_blueprint, url_prefix='/twitter_login')        
+
 
     sa.orm.configure_mappers()
 
@@ -149,7 +152,6 @@ def create_app():
         app.add_url_rule('/static/<path:filename>',
                          endpoint='static',
                          view_func=app.send_static_file)
-
     # sentry
     if not app_created and 'SENTRY_DSN' in app.config:
         sentry.init_app(app, dsn=app.config['SENTRY_DSN'])
@@ -168,6 +170,7 @@ def create_app():
                 pass
 
     app_created = True
+
     return app, _manager, db, _jwt
 
 
