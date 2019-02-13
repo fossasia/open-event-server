@@ -4,7 +4,7 @@ import string
 
 import requests
 from flask import request, jsonify, make_response, Blueprint, redirect, url_for
-from flask_dance.contrib.github import make_github_blueprint, github
+from flask_dance.contrib.github import github
 from flask_jwt import current_identity as current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -25,10 +25,6 @@ from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
 
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
-github_blueprint = make_github_blueprint(client_id=GithubOAuth.get_client_id(),
-                                         client_secret=GithubOAuth.get_client_secret())
-app.register_blueprint(github_blueprint, url_prefix='/github_login')
-
 
 @auth_routes.route('/oauth/<provider>', methods=['GET'])
 def redirect_uri(provider):

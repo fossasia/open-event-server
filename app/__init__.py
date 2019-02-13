@@ -127,7 +127,12 @@ def create_app():
         from app.api.users import user_misc_routes
         from app.api.orders import order_misc_routes
         from app.api.role_invites import role_invites_misc_routes
+        from app.api.helpers.third_party_auth import GithubOAuth
+        from flask_dance.contrib.github import make_github_blueprint
 
+        github_blueprint = make_github_blueprint(client_id=GithubOAuth.get_client_id(),
+                                         client_secret=GithubOAuth.get_client_secret())
+        
         app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)
         app.register_blueprint(upload_routes)
@@ -140,6 +145,7 @@ def create_app():
         app.register_blueprint(attendee_misc_routes)
         app.register_blueprint(order_misc_routes)
         app.register_blueprint(role_invites_misc_routes)
+        app.register_blueprint(github_blueprint, url_prefix='/github_login')
 
     sa.orm.configure_mappers()
 
