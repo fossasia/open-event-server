@@ -7,12 +7,10 @@
             size: a4 portrait;
             background-image: url('{{ base_dir }}/static/data/ticket-trans-notext.png');
             margin: 0;
-
             @frame col1_frame {             /* Content frame 1 */
                 left: 80pt;  top: 30pt;
                 height: 250pt; width: 300pt;
             }
-
             @frame qrcode {
                 left: 455pt;  top: 50pt;
                 width: 100pt; height: 120pt;
@@ -22,21 +20,16 @@
                 width: 100pt; height: 30pt;
                 -pdf-frame-content: number_content;
             }
-
-
              @frame col2_frame {
                 left: 440pt; top: 170pt;
             }
         }
-
         #qrcode {
             -pdf-frame-break: true;
         }
-
         .label {
             color: #858585;
         }
-
     </style>
 </head>
 <body>
@@ -50,7 +43,7 @@
             <span style="font-size: 15px;"> {{order.event.location_name }}</span><br><br>
 
             <span class="label">Date and Time</span><br>
-            <span  style="font-size: 15px;">{{ order.event.starts_at }} to {{ order.event.ends_at }}</span>
+            <span  style="font-size: 15px;">{{ order.event.starts_at.strftime('%H:%M %Z') }} to {{ order.event.ends_at.strftime('%H:%M %Z') }}</span>
             <br><br>
 
             <span class="label">Type</span><br>

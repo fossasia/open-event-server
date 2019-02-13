@@ -55,7 +55,6 @@ def create_pdf_tickets_for_holder(order):
                               UPLOAD_PATHS['pdf']['ticket_attendee'],
                               dir_path='/static/uploads/pdf/tickets/')
         order.tickets_pdf_url = pdf
-
         for holder in order.ticket_holders:
             if (not holder.user) or holder.user.id != order.user_id:
                 # holder is not the order buyer.
