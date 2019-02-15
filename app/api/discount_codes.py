@@ -3,7 +3,7 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import ConflictException, ForbiddenException, UnprocessableEntity
+from app.api.helpers.exceptions import ConflictException, ForbiddenException, UnprocessableEntity, MethodNotAllowed
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required, current_identity
 from app.api.helpers.utilities import require_relationship
@@ -14,6 +14,9 @@ from app.models.event import Event
 from app.models.event_invoice import EventInvoice
 from app.models.ticket import Ticket
 from app.models.user import User
+
+import pytz
+from datetime import datetime, timezone
 
 class DiscountCodeListPost(ResourceList):
     """
@@ -208,6 +211,13 @@ class DiscountCodeDetail(ResourceDetail):
             discount = db.session.query(DiscountCode).filter_by(code=kwargs.get('code'), deleted_at=None).first()
             if discount:
                 kwargs['id'] = discount.id
+                discount_tz = discount.valid_from.tzinfo
+                current_time = datetime.now().replace(tzinfo=discount_tz)
+                print(current_time)
+                if not discount.is_active:
+                    raise MethodNotAllowed({'parameter' : '{code}'}, "Discount Code is not active")
+                elif current_time < discount.valid_from or current_time > discount.valid_till:
+                    raise MethodNotAllowed({'parameter' : '{code}'}, "Discount Code is not active in current time frame")
             else:
                 raise ObjectNotFound({'parameter': '{code}'}, "DiscountCode: not found")
 
