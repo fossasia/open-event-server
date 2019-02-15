@@ -15,8 +15,7 @@ from app.models.event_invoice import EventInvoice
 from app.models.ticket import Ticket
 from app.models.user import User
 
-import pytz
-from datetime import datetime, timezone
+from datetime import datetime
 
 class DiscountCodeListPost(ResourceList):
     """
@@ -215,9 +214,10 @@ class DiscountCodeDetail(ResourceDetail):
                 current_time = datetime.now().replace(tzinfo=discount_tz)
                 print(current_time)
                 if not discount.is_active:
-                    raise MethodNotAllowed({'parameter' : '{code}'}, "Discount Code is not active")
+                    raise MethodNotAllowed({'parameter': '{code}'}, "Discount Code is not active")
                 elif current_time < discount.valid_from or current_time > discount.valid_till:
-                    raise MethodNotAllowed({'parameter' : '{code}'}, "Discount Code is not active in current time frame")
+                    raise MethodNotAllowed({'parameter': '{code}'},
+                                           "Discount Code is not active in current time frame")
             else:
                 raise ObjectNotFound({'parameter': '{code}'}, "DiscountCode: not found")
 
