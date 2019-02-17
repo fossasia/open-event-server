@@ -3,11 +3,12 @@ import random
 import string
 
 import requests
-from flask import request, jsonify, make_response, Blueprint
+from flask import request, jsonify, make_response, Blueprint, redirect, url_for
+from flask_dance.consumer import OAuth2ConsumerBlueprint
 from flask_jwt import current_identity as current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
-from app import get_settings
+from app import get_settings, app
 from app.api.helpers.db import save_to_db, get_count
 from app.api.helpers.errors import UnprocessableEntityError, NotFoundError, BadRequestError
 from app.api.helpers.files import make_frontend_url
@@ -23,6 +24,18 @@ from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
 
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
+# setup Flask-InstagramOAuth
+api_key = 'c2f8ad68c6e143729b348d31da75ec03'
+api_secret = '4c57a042473f4ecd870a3b3db18ab1ce'
+instagram_blueprint = OAuth2ConsumerBlueprint(
+    "instagram", __name__,
+    client_id=api_key,
+    client_secret=api_secret,
+    base_url="https://api.instagram.com",
+    token_url="https://api.instagram.com/oauth/authorize",
+    authorization_url="https://api.instagram.com/oauth/access_token",
+)
+app.register_blueprint(instagram_blueprint, url_prefix='/instagram_login')
 
 
 @auth_routes.route('/oauth/<provider>', methods=['GET'])
@@ -44,9 +57,14 @@ def redirect_uri(provider):
         return make_response(jsonify(
             message="{} client id is not configured on the server".format(provider)), 404)
 
-    url = provider_class.get_auth_uri() + '?client_id=' + \
-          client_id + '&redirect_uri=' + \
-          provider_class.get_redirect_uri()
+    if provider == 'instagram':
+        url = provider_class.get_auth_uri() + '?client_id=' + \
+              client_id + '&redirect_uri=http://localhost:5000&' + \
+              'response_type=code'
+    else:
+        url = provider_class.get_auth_uri() + '?client_id=' + \
+              client_id + '&redirect_uri=' + \
+              provider_class.get_redirect_uri()
     return make_response(jsonify(url=url), 200)
 
 
@@ -146,6 +164,23 @@ def login_user(provider, auth_code):
             'client_id': provider_class.get_client_id(),
             'client_secret': provider_class.get_client_secret()
         }
+        if not payload['client_id'] and payload['client_secret']:
+            raise NotImplementedError({'source': ''}, 'Instagram Login not configured')
+        if not instagram_blueprint.authorized:
+            return redirect(url_for('instagram_blueprint.login'))
+        account_info = instagram_blueprint.session.get('users/self.json')
+        if account_info.ok:
+            account_info_json = account_info.json()
+        users = db.session.query(User).all()
+        for user in users:
+            if account_info_json['username'] == user.instagram_id:
+                return make_response(jsonify(instagram_login_hash=user.instagram_login_hash, twitter_id=user.instagram_id), 200)
+        user.instagram_id = account_info_json['username']
+        user.instagram_login_hash = random.getrandbits(128)
+        user.password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(8))
+        save_to_db(user)
+        return make_response(jsonify(twitter_login_hash=user.twitter_login_hash, twitter_id=user.twitter_id),
+                             200)
     else:
         return make_response(jsonify(
             message="No support for {}".format(provider)), 200)
