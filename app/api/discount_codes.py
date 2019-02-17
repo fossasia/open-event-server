@@ -212,7 +212,6 @@ class DiscountCodeDetail(ResourceDetail):
                 kwargs['id'] = discount.id
                 discount_tz = discount.valid_from.tzinfo
                 current_time = datetime.now().replace(tzinfo=discount_tz)
-                print(current_time)
                 if not discount.is_active:
                     raise MethodNotAllowed({'parameter': '{code}'}, "Discount Code is not active")
                 elif current_time < discount.valid_from or current_time > discount.valid_till:
