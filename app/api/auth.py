@@ -1,15 +1,17 @@
 import base64
 import random
 import string
+from functools import wraps
 
 import requests
-from flask import request, jsonify, make_response, Blueprint
+from flask_login import current_user as current_identity
+from flask import request, jsonify, make_response, Blueprint, send_from_directory
 from flask_jwt import current_identity as current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
 from app import get_settings
 from app.api.helpers.db import save_to_db, get_count
-from app.api.helpers.errors import UnprocessableEntityError, NotFoundError, BadRequestError
+from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError, NotFoundError, BadRequestError
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_with_action, \
     send_email_confirmation
@@ -17,11 +19,13 @@ from app.api.helpers.notification import send_notification_with_action
 from app.api.helpers.third_party_auth import GoogleOAuth, FbOAuth, TwitterOAuth, InstagramOAuth
 from app.api.helpers.utilities import get_serializer, str_generator
 from app.models import db
+from app.models.order import Order
 from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE, \
     USER_REGISTER_WITH_PASSWORD, PASSWORD_RESET_AND_VERIFY
 from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
 
+ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/static/media/attendees/tickets/pdf')
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
 
 
@@ -269,3 +273,20 @@ def change_password():
         "name": user.fullname if user.fullname else None,
         "password-changed": True
     })
+
+
+def authorized_access_ticket(ticket_function):
+    @wraps(ticket_function)
+    def wrapper(*args, **kwargs):
+        if not current_identity.is_anonymous and current_user.id == Order.query.filter_by(identifier=kwargs['identifier']).first().user.id:
+            return ticket_function(*args, **kwargs)
+        else:
+            return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()            
+    return wrapper
+
+
+@ticket_blueprint.route('/<string:identifier>/<string:identifier_hash>/<string:filename>')
+@authorized_access_ticket
+def ticket_attendee_authorized(identifier, identifier_hash, filename):
+    return send_from_directory('/static/media/attendees/tickets/pdf/{}/{}'.format(identifier,
+                               identifier_hash), filename)

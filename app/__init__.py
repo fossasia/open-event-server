@@ -3,7 +3,7 @@ import logging
 import os.path
 from envparse import env
 import sys
-from flask import Flask, json, make_response, send_from_directory
+from flask import Flask, json, make_response
 from app.settings import get_settings, get_setts
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
@@ -17,7 +17,6 @@ from healthcheck import HealthCheck, EnvironmentDump
 from apscheduler.schedulers.background import BackgroundScheduler
 from elasticsearch_dsl.connections import connections
 from pytz import utc
-from functools import wraps
 
 import sqlalchemy as sa
 
@@ -40,7 +39,7 @@ from app.views.elastic_cron_helpers import sync_events_elasticsearch, cron_rebui
 from app.views.redis_store import redis_store
 from app.views.celery_ import celery
 from app.templates.flask_ext.jinja.filters import init_filters
-from app.api.helpers.errors import ForbiddenError
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -128,6 +127,7 @@ def create_app():
         from app.api.users import user_misc_routes
         from app.api.orders import order_misc_routes
         from app.api.role_invites import role_invites_misc_routes
+        from app.api.auth import ticket_blueprint
 
         app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)
@@ -141,6 +141,7 @@ def create_app():
         app.register_blueprint(attendee_misc_routes)
         app.register_blueprint(order_misc_routes)
         app.register_blueprint(role_invites_misc_routes)
+        app.register_blueprint(ticket_blueprint)
 
     sa.orm.configure_mappers()
 
@@ -250,23 +251,6 @@ def internal_server_error(error):
         exc = JsonApiException({'pointer': ''}, 'Unknown error')
     return make_response(json.dumps(jsonapi_errors([exc.to_dict()])), exc.status,
                          {'Content-Type': 'application/vnd.api+json'})
-
-
-def authorized_access_ticket(ticket_function):
-    @wraps(ticket_function)
-    def wrapper(*args, **kwargs):
-        if current_user.is_anonymous:
-            print(current_user)
-            return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
-        else:
-            return ticket_function(*args, **kwargs)
-    return wrapper
-
-
-@app.route('/static/media/attendees/tickets/pdf/<string:identifier>/<string:identifier_hash>/<string:filename>', methods=['POST','GET'])
-@authorized_access_ticket
-def ticket_attendee_authorized(identifier, identifier_hash, filename):
-        return send_from_directory('/static/media/attendees/tickets/pdf/{}/{}/{}'.format(identifier, identifier_hash, filename))
 
 
 if __name__ == '__main__':
