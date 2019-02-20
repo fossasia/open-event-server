@@ -31,6 +31,7 @@ class AdminSalesByOrganizersSchema(Schema):
     id = fields.String()
     first_name = fields.String()
     last_name = fields.String()
+    email = fields.String()
     starts_at = fields.DateTime()
     ends_at = fields.DateTime()
     sales = fields.Method('calc_sales')
