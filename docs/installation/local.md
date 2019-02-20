@@ -83,12 +83,6 @@ CREATE DATABASE oevent WITH OWNER john;
 CREATE DATABASE opev_test WITH OWNER john;
 ```
 
-* To dump the oevent database into opev_test
-```sh
-psql -U john --password <password> oevent > temp.pgsql
-psql -U john opev_test < temp.pgsql
-```
-
 * Once the databases are created, exit the psql shell with `\q` followed by ENTER.
 
 
