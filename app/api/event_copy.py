@@ -40,7 +40,7 @@ def create_event_copy(identifier):
     custom_forms = CustomForms.query.filter_by(event_id=event.id).all()
     discount_codes = DiscountCode.query.filter_by(event_id=event.id).all()
     speaker_calls = SpeakersCall.query.filter_by(event_id=event.id).all()
-    user_event_roles = UsersEventsRoles.query.filter_by(event_id=event_id).all()
+    user_event_roles = UsersEventsRoles.query.filter_by(event_id=event.id).all()
 
     db.session.expunge(event)  # expunge the object from session
     make_transient(event)
