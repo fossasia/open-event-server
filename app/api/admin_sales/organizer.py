@@ -19,7 +19,7 @@ class AdminSalesByOrganizersSchema(Schema):
     Sales summarized by organizer
 
     Provides
-        organizer (first name and last name),
+        organizer (first name, last name and email),
         count of tickets and total sales for orders grouped by status
     """
 
