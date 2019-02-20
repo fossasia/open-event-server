@@ -14,6 +14,7 @@ from app.models.speakers_call import SpeakersCall
 from app.models.sponsor import Sponsor
 from app.models.ticket import Ticket
 from app.models.track import Track
+from app.models.users_events_role import UsersEventsRoles
 
 event_copy = Blueprint('event_copy', __name__, url_prefix='/v1/events')
 
@@ -39,6 +40,7 @@ def create_event_copy(identifier):
     custom_forms = CustomForms.query.filter_by(event_id=event.id).all()
     discount_codes = DiscountCode.query.filter_by(event_id=event.id).all()
     speaker_calls = SpeakersCall.query.filter_by(event_id=event.id).all()
+    user_event_roles = UsersEventsRoles.query.filter_by(event_id=event_id).all()
 
     db.session.expunge(event)  # expunge the object from session
     make_transient(event)
@@ -121,6 +123,15 @@ def create_event_copy(identifier):
         form.event_id = event.id
         delattr(form, 'id')
         db.session.add(form)
+        db.session.commit()
+
+    for user_role in user_event_roles:
+        user_role_id = user_role.id
+        db.session.expunge(user_role)
+        make_transient(user_role)
+        user_role.event_id = event.id
+        delattr(user_role, 'id')
+        db.session.add(user_role)
         db.session.commit()
 
     return jsonify({
