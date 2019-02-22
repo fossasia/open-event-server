@@ -78,7 +78,6 @@ class User(SoftDeletionModel):
     was_registered_with_order = db.Column(db.Boolean, default=False)
     last_accessed_at = db.Column(db.DateTime(timezone=True))
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(pytz.utc))
-    deleted_at = db.Column(db.DateTime(timezone=True), default=None)
     speaker = db.relationship('Speaker', backref="user")
     favourite_events = db.relationship('UserFavouriteEvent', backref="user")
     session = db.relationship('Session', backref="user")
