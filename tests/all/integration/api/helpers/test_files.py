@@ -64,7 +64,7 @@ class TestFilesHelperValidation(OpenEventTestCase):
         with app.test_request_context():
             client = app.test_client()
             resp = client.post('/test_upload', data={'file': (BytesIO(b'1,2,3,4'), 'test_file.csv')})
-            data = json.loads(resp.data)
+            data = resp.get_json()
             file_path = data['path']
             filename = data['name']
             actual_file_path = app.config.get('BASE_DIR') + '/static/uploads/' + filename
@@ -100,7 +100,7 @@ class TestFilesHelperValidation(OpenEventTestCase):
             resp = client.post('/test_upload_multi',
                                data={'files[]': [(BytesIO(b'1,2,3,4'), 'test_file.csv'),
                                                  (BytesIO(b'10,20,30,40'), 'test_file2.csv')]})
-            datas = json.loads(resp.data)['files']
+            datas = resp.get_json()['files']
             for data in datas:
                 file_path = data['path']
                 filename = data['name']
