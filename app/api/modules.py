@@ -29,7 +29,7 @@ class ModuleDetail(ResourceDetail):
         :param data:
         :return:
         """
-        if data.get('donation_include'):
+        if not data.get('donation_include'):
             raise ConflictException({'pointer': '/data/attributes/donation-include'},
                                     "No donation support in the system")
 
