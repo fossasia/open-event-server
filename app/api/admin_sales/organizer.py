@@ -19,7 +19,7 @@ class AdminSalesByOrganizersSchema(Schema):
     Sales summarized by organizer
 
     Provides
-        organizer (first name and last name),
+        organizer (first name, last name and email),
         count of tickets and total sales for orders grouped by status
     """
 
@@ -31,6 +31,7 @@ class AdminSalesByOrganizersSchema(Schema):
     id = fields.String()
     first_name = fields.String()
     last_name = fields.String()
+    email = fields.String()
     starts_at = fields.DateTime()
     ends_at = fields.DateTime()
     sales = fields.Method('calc_sales')
