@@ -88,11 +88,11 @@ class CustomForms(SoftDeletionModel):
                  is_fixed=None,
                  deleted_at=None):
         self.event_id = event_id
-        self.field_identifier = field_identifier,
-        self.form = form,
-        self.type = type,
-        self.is_required = is_required,
-        self.is_included = is_included,
+        self.field_identifier = field_identifier
+        self.form = form
+        self.type = type
+        self.is_required = is_required
+        self.is_included = is_included
         self.is_fixed = is_fixed
         self.deleted_at = deleted_at
 

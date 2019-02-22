@@ -32,8 +32,8 @@ sudo -u postgres psql
 * When inside psql, create a user for open-event and then using the user create the database.
 
 ```sql
-CREATE USER john WITH PASSWORD 'start';
-CREATE DATABASE oevent WITH OWNER john;
+CREATE USER open_event_user WITH PASSWORD 'opev_pass';
+CREATE DATABASE oevent WITH OWNER open_event_user;
 ```
 
 * Once database is created, exit the psql shell with `\q` followed by ENTER.
