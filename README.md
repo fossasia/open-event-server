@@ -91,7 +91,7 @@ Required keys can be obtained from [https://www.instagram.com/developer/authenti
 
 Google maps is used to get information about location (info about country, city, latitude and longitude).
 
-Required keys can be obtained from [https://maps.googleapis.com/maps/api](https://maps.googleapis.com/maps/api).
+Required keys can be obtained from [https://developers.google.com/maps/documentation/javascript/get-api-key](https://developers.google.com/maps/documentation/javascript/get-api-key).
 
 #### Media Storage - Local/Amazon S3/Google Cloud
 
