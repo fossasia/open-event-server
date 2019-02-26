@@ -10,6 +10,7 @@ from app.api.data_layers.NoModelLayer import NoModelLayer
 from app.models.event import Event
 from app.models.users_events_role import UsersEventsRoles
 from app.models.role import Role
+from app.models.ticket_holder import TicketHolder
 from app.api.helpers.db import get_count
 
 class AdminStatisticsUserSchema(Schema):
@@ -62,7 +63,8 @@ class AdminStatisticsUserSchema(Schema):
         return self.get_all_user_roles('track_organizer').count()
 
     def attendee_count(self, obj):
-        return self.get_all_user_roles('attendee').count()
+        unique_attendee_query = db.session.query(TicketHolder.email).distinct()
+        return unique_attendee_query.count()
 
 
 class AdminStatisticsUserDetail(ResourceDetail):
