@@ -1,12 +1,10 @@
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
-from sqlalchemy import func
 
 from app.api.helpers.utilities import dasherize
 from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
-from app.models import db
 
 
 class EventStatisticsGeneralSchema(Schema):
