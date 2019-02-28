@@ -3,7 +3,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query, get_count
+from app.api.helpers.db import safe_query, get_count, save_to_db
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
@@ -13,6 +13,7 @@ from app.models import db
 from app.models.event import Event
 from app.models.session import Session
 from app.models.speaker import Speaker
+from app.models.session_speaker_link import SessionsSpeakersLink
 from app.models.user import User
 
 
@@ -59,6 +60,18 @@ class SpeakerListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
+
+        if SessionsSpeakersLink.query.filter_by(speaker_id=speaker.id).count() == 0:
+            print('linking after the model has been created')
+            all_sessions = Session.query.all()
+            for session in all_sessions:
+                print(session, session.speakers)
+                if speaker in session.speakers:
+                    ss_link = SessionsSpeakersLink(session_state=session.state,
+                                                session_id=session.id,
+                                                event_id=session.event.id,
+                                                speaker_id=speaker.id)
+                    save_to_db(ss_link, "Session Speaker Link Saved")
 
         if data.get('photo_url'):
             start_image_resizing_tasks(speaker, data['photo_url'])
