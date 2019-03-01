@@ -49,16 +49,16 @@ class EventStatisticsGeneralSchema(Schema):
         return Session.query.filter_by(event_id=obj.id, state='accepted').count()
 
     def speakers_accepted_count(self, obj):
-        return SessionsSpeakersLink.query.filter_by(session_state='accepted').count()
+        return SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='accepted').count()
 
     def speakers_confirmed_count(self, obj):
-        return SessionsSpeakersLink.query.filter_by(session_state='confirmed').count()
+        return SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='confirmed').count()
 
     def speakers_pending_count(self, obj):
-        return SessionsSpeakersLink.query.filter_by(session_state='pending').count()
+        return SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='pending').count()
 
     def speakers_rejected_count(self, obj):
-        return SessionsSpeakersLink.query.filter_by(session_state='rejected').count()
+        return SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='rejected').count()
 
     def sessions_confirmed_count(self, obj):
         return Session.query.filter_by(event_id=obj.id, state='confirmed').count()
