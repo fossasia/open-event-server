@@ -1,10 +1,13 @@
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
+from sqlalchemy import func
 
 from app.api.helpers.utilities import dasherize
 from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
+from app.models.session_speaker_link import SessionsSpeakersLink
+from app.models import db
 
 
 class EventStatisticsGeneralSchema(Schema):
@@ -46,32 +49,16 @@ class EventStatisticsGeneralSchema(Schema):
         return Session.query.filter_by(event_id=obj.id, state='accepted').count()
 
     def speakers_accepted_count(self, obj):
-        current_query = Session.query.filter_by(event_id=obj.id, state='accepted')
-        all_speakers = []
-        for sessions in current_query:
-            all_speakers += [speaker for speaker in sessions.speakers]
-        return len(set(all_speakers))
+        return SessionsSpeakersLink.query.filter_by(session_state='accepted').count()
 
     def speakers_confirmed_count(self, obj):
-        current_query = Session.query.filter_by(event_id=obj.id, state='confirmed')
-        all_speakers = []
-        for sessions in current_query:
-            all_speakers += [speaker for speaker in sessions.speakers]
-        return len(set(all_speakers))
+        return SessionsSpeakersLink.query.filter_by(session_state='confirmed').count()
 
     def speakers_pending_count(self, obj):
-        current_query = Session.query.filter_by(event_id=obj.id, state='pending')
-        all_speakers = []
-        for sessions in current_query:
-            all_speakers += [speaker for speaker in sessions.speakers]
-        return len(set(all_speakers))
+        return SessionsSpeakersLink.query.filter_by(session_state='pending').count()
 
     def speakers_rejected_count(self, obj):
-        current_query = Session.query.filter_by(event_id=obj.id, state='rejected')
-        all_speakers = []
-        for sessions in current_query:
-            all_speakers += [speaker for speaker in sessions.speakers]
-        return len(set(all_speakers))
+        return SessionsSpeakersLink.query.filter_by(session_state='rejected').count()
 
     def sessions_confirmed_count(self, obj):
         return Session.query.filter_by(event_id=obj.id, state='confirmed').count()
