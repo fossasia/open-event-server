@@ -167,16 +167,12 @@ class SessionDetail(ResourceDetail):
                 is_patch_request = True
 
             if is_patch_request:
-                print('\nTESTING UPDATES\n')
                 for sess in entry_count:
-                    print('Updating ', sess, ' to ', session.state)
                     sess.session_state = session.state
                 db.session.commit()
             else:
-                print('\nNORMAL PATCH PROCEDURE\n')
                 current_session = Session.query.filter_by(id=session.id).first()
                 for speaker in current_session.speakers:
-                    print('Adding ',speaker, ' link ')
                     ss_link = SessionsSpeakersLink(session_state=current_session.state,
                                                    session_id=session.id,
                                                    event_id=session.event.id,

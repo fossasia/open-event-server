@@ -134,7 +134,6 @@ class SpeakerDetail(ResourceDetail):
         # and added to an existing session
         speaker_id = result['data']['id']
         speaker = Speaker.query.filter_by(id=speaker_id).first()
-        print(speaker)
         if SessionsSpeakersLink.query.filter_by(speaker_id=speaker_id).count() == 0:
             all_sessions = Session.query.filter_by(deleted_at=None)
             for session in all_sessions:
