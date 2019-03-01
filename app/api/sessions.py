@@ -2,7 +2,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 
 from app.api.bootstrap import api
 from app.api.events import Event
-from app.api.helpers.db import safe_query, get_count
+from app.api.helpers.db import safe_query, get_count, save_to_db
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.mail import send_email_new_session, send_email_session_accept_reject
 from app.api.helpers.notification import send_notif_new_session_organizer, send_notif_session_accept_reject
@@ -17,6 +17,7 @@ from app.models.session_type import SessionType
 from app.models.speaker import Speaker
 from app.models.track import Track
 from app.models.user import User
+from app.models.session_speaker_link import SessionsSpeakersLink
 from app.settings import get_settings
 
 
@@ -56,6 +57,15 @@ class SessionListPost(ResourceList):
                 .format(frontend_url, event.identifier, session.id)
             send_email_new_session(organizer_email, event_name, link)
             send_notif_new_session_organizer(organizer, event_name, link, session.id)
+
+        if session.speakers != []:
+            for speaker in session.speakers:
+                ss_link = SessionsSpeakersLink(session_state=session.state,
+                                               session_id=session.id,
+                                               event_id=session.event.id,
+                                               speaker_id=speaker.id)
+                print(ss_link)
+                save_to_db(ss_link, "Session Speaker Link Saved")
 
     decorators = (api.has_permission('create_event'),)
     schema = SessionSchema
@@ -149,6 +159,25 @@ class SessionDetail(ResourceDetail):
                                                  link)
                 send_notif_session_accept_reject(organizer, session.title,
                                                  session.state, link, session.id)
+        if 'state' in data:
+            entry_count = SessionsSpeakersLink.query.filter_by(session_id=session.id)
+            if entry_count.count() == 0:
+                is_patch_request = False
+            else:
+                is_patch_request = True
+
+            if is_patch_request:
+                for sess in entry_count:
+                    sess.session_state = session.state
+                db.session.commit()
+            else:
+                current_session = Session.query.filter_by(id=session.id).first()
+                for speaker in current_session.speakers:
+                    ss_link = SessionsSpeakersLink(session_state=current_session.state,
+                                                   session_id=session.id,
+                                                   event_id=session.event.id,
+                                                   speaker_id=speaker.id)
+                    save_to_db(ss_link, "Session Speaker Link Saved")
 
     decorators = (api.has_permission('is_speaker_for_session', methods="PATCH,DELETE"),)
     schema = SessionSchema
