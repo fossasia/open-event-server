@@ -124,6 +124,7 @@ class SpeakerDetail(ResourceDetail):
         """
         if data.get('photo_url') and data['photo_url'] != speaker.photo_url:
             start_image_resizing_tasks(speaker, data['photo_url'])
+
     def after_patch(self, result):
         """
         method to create session speaker link

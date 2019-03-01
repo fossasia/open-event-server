@@ -179,7 +179,6 @@ class SessionDetail(ResourceDetail):
                                                    speaker_id=speaker.id)
                     save_to_db(ss_link, "Session Speaker Link Saved")
 
-
     decorators = (api.has_permission('is_speaker_for_session', methods="PATCH,DELETE"),)
     schema = SessionSchema
     data_layer = {'session': db.session,
