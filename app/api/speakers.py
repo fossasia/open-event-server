@@ -51,7 +51,6 @@ class SpeakerListPost(ResourceList):
                 if not has_access('is_session_self_submitted', session_id=session_id):
                     raise ObjectNotFound({'parameter': 'session_id'},
                                          "Session: {} not found".format(session_id))
-
     def after_create_object(self, speaker, data, view_kwargs):
         """
         after create method to save resized images for speaker
@@ -60,18 +59,6 @@ class SpeakerListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
-
-        if SessionsSpeakersLink.query.filter_by(speaker_id=speaker.id).count() == 0:
-            print('linking after the model has been created')
-            all_sessions = Session.query.all()
-            for session in all_sessions:
-                print(session, session.speakers)
-                if speaker in session.speakers:
-                    ss_link = SessionsSpeakersLink(session_state=session.state,
-                                                session_id=session.id,
-                                                event_id=session.event.id,
-                                                speaker_id=speaker.id)
-                    save_to_db(ss_link, "Session Speaker Link Saved")
 
         if data.get('photo_url'):
             start_image_resizing_tasks(speaker, data['photo_url'])
@@ -127,7 +114,6 @@ class SpeakerDetail(ResourceDetail):
     """
     Speakers Detail by id
     """
-
     def before_update_object(self, speaker, data, view_kwargs):
         """
         method to save image urls before updating speaker object
@@ -136,7 +122,6 @@ class SpeakerDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-
         if data.get('photo_url') and data['photo_url'] != speaker.photo_url:
             start_image_resizing_tasks(speaker, data['photo_url'])
 
@@ -149,7 +134,26 @@ class SpeakerDetail(ResourceDetail):
                       'before_update_object': before_update_object
                   }}
 
-
+    def after_patch(self, result):
+        """
+        method to create session speaker link
+        :param result:
+        """
+        # This method is executed when a new speaker is created
+        # and added to an existing session
+        speaker_id = result['data']['id']
+        speaker = Speaker.query.filter_by(id=speaker_id).first()
+        print(speaker)
+        if SessionsSpeakersLink.query.filter_by(speaker_id=speaker_id).count() == 0:
+            all_sessions = Session.query.filter_by(deleted_at=None)
+            for session in all_sessions:
+                if speaker in session.speakers:
+                    ss_link = SessionsSpeakersLink(session_state=session.state,
+                                                session_id=session.id,
+                                                event_id=session.event.id,
+                                                speaker_id=speaker.id)
+                    print(ss_link)
+                    save_to_db(ss_link, "Session Speaker Link Saved")
 class SpeakerRelationshipRequired(ResourceRelationship):
     """
     Speaker Relationship class for required entities
