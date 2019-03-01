@@ -5,6 +5,7 @@ from app.api.helpers.utilities import dasherize
 from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
+from app.models.session_speaker_link import SessionsSpeakersLink
 
 
 class EventStatisticsGeneralSchema(Schema):
@@ -29,6 +30,10 @@ class EventStatisticsGeneralSchema(Schema):
     sessions_pending = fields.Method("sessions_pending_count")
     sessions_rejected = fields.Method("sessions_rejected_count")
     speakers = fields.Method("speakers_count")
+    speakers_accepted = fields.Method("speakers_accepted_count")
+    speakers_confirmed = fields.Method("speakers_confirmed_count")
+    speakers_pending = fields.Method("speakers_pending_count")
+    speakers_rejected = fields.Method("speakers_rejected_count")
     sessions = fields.Method("sessions_count")
     sponsors = fields.Method("sponsors_count")
 
@@ -40,6 +45,18 @@ class EventStatisticsGeneralSchema(Schema):
 
     def sessions_accepted_count(self, obj):
         return Session.query.filter_by(event_id=obj.id, state='accepted').count()
+
+    def speakers_accepted_count(self, obj):
+        return SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='accepted').count()
+
+    def speakers_confirmed_count(self, obj):
+        return SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='confirmed').count()
+
+    def speakers_pending_count(self, obj):
+        return SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='pending').count()
+
+    def speakers_rejected_count(self, obj):
+        return SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='rejected').count()
 
     def sessions_confirmed_count(self, obj):
         return Session.query.filter_by(event_id=obj.id, state='confirmed').count()
