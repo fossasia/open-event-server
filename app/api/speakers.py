@@ -134,7 +134,6 @@ class SpeakerDetail(ResourceDetail):
                       'before_update_object': before_update_object
                   }}
 
-
     def after_patch(self, result):
         """
         method to create session speaker link
