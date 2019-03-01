@@ -61,12 +61,12 @@ class SessionListPost(ResourceList):
         if session.speakers != []:
             for speaker in session.speakers:
                 ss_link = SessionsSpeakersLink(session_state=session.state,
-                                            session_id=session.id,
-                                            event_id=session.event.id,
-                                            speaker_id=speaker.id)
+                                               session_id=session.id,
+                                               event_id=session.event.id,
+                                               speaker_id=speaker.id)
                 print(ss_link)
                 save_to_db(ss_link, "Session Speaker Link Saved")
-    
+
     decorators = (api.has_permission('create_event'),)
     schema = SessionSchema
     data_layer = {'session': db.session,
@@ -178,9 +178,9 @@ class SessionDetail(ResourceDetail):
                 for speaker in current_session.speakers:
                     print('Adding ',speaker, ' link ')
                     ss_link = SessionsSpeakersLink(session_state=current_session.state,
-                                            session_id=session.id,
-                                            event_id=session.event.id,
-                                            speaker_id=speaker.id)
+                                                   session_id=session.id,
+                                                   event_id=session.event.id,
+                                                   speaker_id=speaker.id)
                     save_to_db(ss_link, "Session Speaker Link Saved")
                 
 

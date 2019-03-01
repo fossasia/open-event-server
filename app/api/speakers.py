@@ -134,6 +134,7 @@ class SpeakerDetail(ResourceDetail):
                       'before_update_object': before_update_object
                   }}
 
+
     def after_patch(self, result):
         """
         method to create session speaker link
@@ -149,11 +150,12 @@ class SpeakerDetail(ResourceDetail):
             for session in all_sessions:
                 if speaker in session.speakers:
                     ss_link = SessionsSpeakersLink(session_state=session.state,
-                                                session_id=session.id,
-                                                event_id=session.event.id,
-                                                speaker_id=speaker.id)
-                    print(ss_link)
+                                                   session_id=session.id,
+                                                   event_id=session.event.id,
+                                                   speaker_id=speaker.id)
                     save_to_db(ss_link, "Session Speaker Link Saved")
+
+
 class SpeakerRelationshipRequired(ResourceRelationship):
     """
     Speaker Relationship class for required entities
