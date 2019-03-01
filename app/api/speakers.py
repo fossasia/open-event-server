@@ -125,15 +125,6 @@ class SpeakerDetail(ResourceDetail):
         if data.get('photo_url') and data['photo_url'] != speaker.photo_url:
             start_image_resizing_tasks(speaker, data['photo_url'])
 
-    decorators = (api.has_permission('is_coorganizer_or_user_itself', methods="PATCH,DELETE", fetch="event_id",
-                                     fetch_as="event_id", model=Speaker),)
-    schema = SpeakerSchema
-    data_layer = {'session': db.session,
-                  'model': Speaker,
-                  'methods': {
-                      'before_update_object': before_update_object
-                  }}
-
     def after_patch(self, result):
         """
         method to create session speaker link
@@ -153,6 +144,15 @@ class SpeakerDetail(ResourceDetail):
                                                    event_id=session.event.id,
                                                    speaker_id=speaker.id)
                     save_to_db(ss_link, "Session Speaker Link Saved")
+
+    decorators = (api.has_permission('is_coorganizer_or_user_itself', methods="PATCH,DELETE", fetch="event_id",
+                                     fetch_as="event_id", model=Speaker),)
+    schema = SpeakerSchema
+    data_layer = {'session': db.session,
+                  'model': Speaker,
+                  'methods': {
+                      'before_update_object': before_update_object
+                  }}
 
 
 class SpeakerRelationshipRequired(ResourceRelationship):
