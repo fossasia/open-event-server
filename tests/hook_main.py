@@ -1709,6 +1709,7 @@ def ticket_fees_post(transaction):
     """
     with stash['app'].app_context():
         ticket_fees = TicketFeesFactory()
+        ticket_fees.country = 'US'
         db.session.add(ticket_fees)
         db.session.commit()
 
