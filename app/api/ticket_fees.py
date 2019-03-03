@@ -20,17 +20,20 @@ class TicketFeeList(ResourceList):
         :param data:
         :return:
         """
-        if data['country'] and data['currency']:
-            try:
-                TicketFees.query.filter_by(country=data['country'], currency=data['currency']).one()
-            except NoResultFound:
-                pass
+        if 'country' in data and 'currency' in data:
+            if data['country'] and data['currency']:
+                try:
+                    TicketFees.query.filter_by(country=data['country'], currency=data['currency']).one()
+                except NoResultFound:
+                    pass
+                else:
+                    raise ConflictException(
+                        {'pointer': ''},
+                        "({}-{}) Combination already exists".format(data['currency'], data['country']))
             else:
-                raise ConflictException(
-                    {'pointer': ''},
-                    "({}-{}) Combination already exists".format(data['currency'], data['country']))
+                raise UnprocessableEntity({'source': ''}, "Country or Currency cannot be NULL")
         else:
-            raise UnprocessableEntity({'source': ''}, "Country or Currency is missing")
+            raise UnprocessableEntity({'source': ''}, "Country or Currency Attribute is missing")
 
     decorators = (api.has_permission('is_admin'),)
     schema = TicketFeesSchema
