@@ -35,7 +35,6 @@ instagram_blueprint = OAuth2ConsumerBlueprint(
     token_url="https://api.instagram.com/oauth/authorize",
     authorization_url="https://api.instagram.com/oauth/access_token",
 )
-app.register_blueprint(instagram_blueprint, url_prefix='/instagram_login')
 
 
 @auth_routes.route('/oauth/<provider>', methods=['GET'])
