@@ -25,8 +25,8 @@ from app.models.user import User
 
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
 # setup Flask-InstagramOAuth
-api_key = InstagramOAuth.get_client_id()
-api_secret = InstagramOAuth.get_client_secret()
+api_key = 'SomeInstaKey'
+api_secret = 'super secret key'
 instagram_blueprint = OAuth2ConsumerBlueprint(
     "instagram", __name__,
     client_id=api_key,
