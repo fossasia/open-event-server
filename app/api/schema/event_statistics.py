@@ -30,10 +30,6 @@ class EventStatisticsGeneralSchema(Schema):
     sessions_pending = fields.Method("sessions_pending_count")
     sessions_rejected = fields.Method("sessions_rejected_count")
     speakers = fields.Method("speakers_count")
-    speakers_accepted = fields.Method("speakers_accepted_count")
-    speakers_confirmed = fields.Method("speakers_confirmed_count")
-    speakers_pending = fields.Method("speakers_pending_count")
-    speakers_rejected = fields.Method("speakers_rejected_count")
     sessions = fields.Method("sessions_count")
     sponsors = fields.Method("sponsors_count")
 
@@ -45,9 +41,6 @@ class EventStatisticsGeneralSchema(Schema):
 
     def sessions_accepted_count(self, obj):
         return Session.query.filter_by(event_id=obj.id, state='accepted').count()
-
-    def speakers_accepted_count(self, obj):
-        return SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='accepted').count()
 
     def speakers_confirmed_count(self, obj):
         return SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='confirmed').count()
@@ -68,7 +61,19 @@ class EventStatisticsGeneralSchema(Schema):
         return Session.query.filter_by(event_id=obj.id, state='rejected').count()
 
     def speakers_count(self, obj):
-        return Speaker.query.filter_by(event_id=obj.id).count()
+        accepted = SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='accepted').count()
+        confirmed = SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='confirmed').count()
+        pending = SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='pending').count()
+        rejected = SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='rejected').count()
+        total = Speaker.query.filter_by(event_id=obj.id).count()
+        serial_data = {
+                       'accepted' : accepted,
+                       'confirmed' : confirmed,
+                       'pending' : pending,
+                       'rejected' : rejected,
+                       'total' : total 
+                       }
+        return serial_data
 
     def sessions_count(self, obj):
         return Session.query.filter_by(event_id=obj.id).count()
