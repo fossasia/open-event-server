@@ -67,11 +67,11 @@ class EventStatisticsGeneralSchema(Schema):
         rejected = SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='rejected').count()
         total = Speaker.query.filter_by(event_id=obj.id).count()
         serial_data = {
-                       'accepted' : accepted,
-                       'confirmed' : confirmed,
-                       'pending' : pending,
-                       'rejected' : rejected,
-                       'total' : total 
+                       'accepted': accepted,
+                       'confirmed': confirmed,
+                       'pending': pending,
+                       'rejected': rejected,
+                       'total': total 
                        }
         return serial_data
 
