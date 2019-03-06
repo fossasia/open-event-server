@@ -71,7 +71,7 @@ class EventStatisticsGeneralSchema(Schema):
                        'confirmed': confirmed,
                        'pending': pending,
                        'rejected': rejected,
-                       'total': total 
+                       'total': total
                        }
         return serial_data
 
