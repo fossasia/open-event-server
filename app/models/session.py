@@ -39,6 +39,7 @@ class Session(SoftDeletionModel):
 
     feedbacks = db.relationship('Feedback', backref="session")
     slides_url = db.Column(db.String)
+    image_url = db.Column(db.String)
     video_url = db.Column(db.String)
     audio_url = db.Column(db.String)
     signup_url = db.Column(db.String)
@@ -69,6 +70,7 @@ class Session(SoftDeletionModel):
                  creator_id=None,
                  state="pending",
                  slides_url=None,
+                 image_url=None,
                  video_url=None,
                  audio_url=None,
                  signup_url=None,
@@ -100,6 +102,7 @@ class Session(SoftDeletionModel):
         self.creator_id = creator_id
         self.state = state
         self.slides_url = slides_url
+        self.image_url = image_url
         self.video_url = video_url
         self.audio_url = audio_url
         self.signup_url = signup_url
