@@ -58,14 +58,12 @@ class SessionListPost(ResourceList):
             send_email_new_session(organizer_email, event_name, link)
             send_notif_new_session_organizer(organizer, event_name, link, session.id)
 
-        if session.speakers != []:
-            for speaker in session.speakers:
-                ss_link = SessionsSpeakersLink(session_state=session.state,
-                                               session_id=session.id,
-                                               event_id=session.event.id,
-                                               speaker_id=speaker.id)
-                print(ss_link)
-                save_to_db(ss_link, "Session Speaker Link Saved")
+        for speaker in session.speakers:
+            session_speaker_link = SessionsSpeakersLink(session_state=session.state,
+                                                        session_id=session.id,
+                                                        event_id=session.event.id,
+                                                        speaker_id=speaker.id)
+            save_to_db(session_speaker_link, "Session Speaker Link Saved")
 
     decorators = (api.has_permission('create_event'),)
     schema = SessionSchema
@@ -167,17 +165,17 @@ class SessionDetail(ResourceDetail):
                 is_patch_request = True
 
             if is_patch_request:
-                for sess in entry_count:
-                    sess.session_state = session.state
+                for focus_session in entry_count:
+                    focus_session.session_state = session.state
                 db.session.commit()
             else:
                 current_session = Session.query.filter_by(id=session.id).first()
                 for speaker in current_session.speakers:
-                    ss_link = SessionsSpeakersLink(session_state=current_session.state,
-                                                   session_id=session.id,
-                                                   event_id=session.event.id,
-                                                   speaker_id=speaker.id)
-                    save_to_db(ss_link, "Session Speaker Link Saved")
+                    session_speaker_link = SessionsSpeakersLink(session_state=session.state,
+                                                                session_id=session.id,
+                                                                event_id=session.event.id,
+                                                                speaker_id=speaker.id)
+            save_to_db(session_speaker_link, "Session Speaker Link Saved")
 
     decorators = (api.has_permission('is_speaker_for_session', methods="PATCH,DELETE"),)
     schema = SessionSchema

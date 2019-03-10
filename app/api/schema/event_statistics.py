@@ -42,15 +42,6 @@ class EventStatisticsGeneralSchema(Schema):
     def sessions_accepted_count(self, obj):
         return Session.query.filter_by(event_id=obj.id, state='accepted').count()
 
-    def speakers_confirmed_count(self, obj):
-        return SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='confirmed').count()
-
-    def speakers_pending_count(self, obj):
-        return SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='pending').count()
-
-    def speakers_rejected_count(self, obj):
-        return SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='rejected').count()
-
     def sessions_confirmed_count(self, obj):
         return Session.query.filter_by(event_id=obj.id, state='confirmed').count()
 
@@ -60,11 +51,14 @@ class EventStatisticsGeneralSchema(Schema):
     def sessions_rejected_count(self, obj):
         return Session.query.filter_by(event_id=obj.id, state='rejected').count()
 
+    def speakers_count_type(self, obj, state='pending'):
+        return SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state=state).count()
+
     def speakers_count(self, obj):
-        accepted = SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='accepted').count()
-        confirmed = SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='confirmed').count()
-        pending = SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='pending').count()
-        rejected = SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state='rejected').count()
+        accepted = self.speakers_count_type(obj=obj, state='accepted')
+        confirmed = self.speakers_count_type(obj=obj, state='confirmed')
+        pending = self.speakers_count_type(obj=obj, state='pending')
+        rejected = self.speakers_count_type(obj=obj, state='rejected')
         total = Speaker.query.filter_by(event_id=obj.id).count()
         serial_data = {
                        'accepted': accepted,

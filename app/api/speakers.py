@@ -51,6 +51,7 @@ class SpeakerListPost(ResourceList):
                 if not has_access('is_session_self_submitted', session_id=session_id):
                     raise ObjectNotFound({'parameter': 'session_id'},
                                          "Session: {} not found".format(session_id))
+
     def after_create_object(self, speaker, data, view_kwargs):
         """
         after create method to save resized images for speaker
@@ -138,11 +139,11 @@ class SpeakerDetail(ResourceDetail):
             all_sessions = Session.query.filter_by(deleted_at=None)
             for session in all_sessions:
                 if speaker in session.speakers:
-                    ss_link = SessionsSpeakersLink(session_state=session.state,
-                                                   session_id=session.id,
-                                                   event_id=session.event.id,
-                                                   speaker_id=speaker.id)
-                    save_to_db(ss_link, "Session Speaker Link Saved")
+                    session_speaker_link = SessionsSpeakersLink(session_state=session.state,
+                                                                session_id=session.id,
+                                                                event_id=session.event.id,
+                                                                speaker_id=speaker.id)
+                    save_to_db(session_speaker_link, "Session Speaker Link Saved")
 
     decorators = (api.has_permission('is_coorganizer_or_user_itself', methods="PATCH,DELETE", fetch="event_id",
                                      fetch_as="event_id", model=Speaker),)
