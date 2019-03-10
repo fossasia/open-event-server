@@ -112,7 +112,7 @@ class TestFilesHelperValidation(OpenEventTestCase):
         """Method to test create resized images"""
 
         with app.test_request_context():
-            image_url_test = 'https://cdn.pixabay.com/photo/2017/06/17/10/55/hot-air-balloon-2411851_1280.jpg'
+            image_url_test = 'https://www.gstatic.com/webp/gallery/1.jpg'
             width = 500
             height = 200
             aspect_ratio = False
@@ -129,7 +129,7 @@ class TestFilesHelperValidation(OpenEventTestCase):
         """Method to test create image sizes"""
 
         with app.test_request_context():
-            image_url_test = 'https://cdn.pixabay.com/photo/2017/06/17/10/55/hot-air-balloon-2411851_1280.jpg'
+            image_url_test = 'https://www.gstatic.com/webp/gallery/1.jpg'
             image_sizes_type = "event-image"
             width_large = 1300
             width_thumbnail = 500
