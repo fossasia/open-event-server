@@ -55,6 +55,7 @@ class Order(SoftDeletionModel):
     transaction_id = db.Column(db.String)
     paid_via = db.Column(db.String)
     payment_mode = db.Column(db.String)
+    is_billing_enabled = db.Column(db.Boolean)
     brand = db.Column(db.String)
     exp_month = db.Column(db.Integer)
     exp_year = db.Column(db.Integer)
@@ -88,6 +89,7 @@ class Order(SoftDeletionModel):
                  tax_business_info=None,
                  transaction_id=None,
                  paid_via=None,
+                 is_billing_enabled=False,
                  user_id=None,
                  discount_code_id=None,
                  event_id=None,
@@ -110,6 +112,7 @@ class Order(SoftDeletionModel):
         self.event_id = event_id
         self.transaction_id = transaction_id
         self.paid_via = paid_via
+        self.is_billing_enabled = is_billing_enabled
         self.created_at = datetime.datetime.now(datetime.timezone.utc)
         self.discount_code_id = discount_code_id
         self.status = status
@@ -158,6 +161,7 @@ class Order(SoftDeletionModel):
             'taxBusinessInfo': self.tax_business_info,
             'transaction_id': self.transaction_id,
             'paid_via': self.paid_via,
+            'isBillingEnabled': self.is_billing_enabled,
             'payment_mode': self.payment_mode,
             'brand': self.brand,
             'exp_month': self.exp_month,
