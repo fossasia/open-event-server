@@ -12,7 +12,7 @@ from app.api.helpers.files import create_save_resized_image, create_save_image_s
 from app.api.helpers.files import uploaded_image, uploaded_file
 from tests.all.integration.setup_database import Setup
 from tests.all.integration.utils import OpenEventTestCase
-
+from app.api.helpers.utilities import image_link
 
 class TestFilesHelperValidation(OpenEventTestCase):
     def setUp(self):
@@ -112,7 +112,7 @@ class TestFilesHelperValidation(OpenEventTestCase):
         """Method to test create resized images"""
 
         with app.test_request_context():
-            image_url_test = 'https://cdn.pixabay.com/photo/2017/06/17/10/55/hot-air-balloon-2411851_1280.jpg'
+            image_url_test = image_link
             width = 500
             height = 200
             aspect_ratio = False
@@ -129,7 +129,7 @@ class TestFilesHelperValidation(OpenEventTestCase):
         """Method to test create image sizes"""
 
         with app.test_request_context():
-            image_url_test = 'https://cdn.pixabay.com/photo/2017/06/17/10/55/hot-air-balloon-2411851_1280.jpg'
+            image_url_test =  image_link
             image_sizes_type = "event-image"
             width_large = 1300
             width_thumbnail = 500
