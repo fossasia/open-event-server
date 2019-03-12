@@ -51,8 +51,9 @@ class SessionListPost(ResourceList):
             organizer = session.event.get_organizer()
             organizer_email = organizer.email
             frontend_url = get_settings()['frontend_url']
+            event = session.event
             link = "{}/events/{}/sessions/{}"\
-                .format(frontend_url, session.event_id, session.id)
+                .format(frontend_url, event.identifier, session.id)
             send_email_new_session(organizer_email, event_name, link)
             send_notif_new_session_organizer(organizer, event_name, link, session.id)
 
@@ -87,7 +88,8 @@ class SessionList(ResourceList):
             query_ = query_.join(Microlocation).filter(Microlocation.id == microlocation.id)
         if view_kwargs.get('user_id') is not None:
             user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
-            query_ = query_.join(User).filter(User.id == user.id)
+            query_ = query_.join(User)\
+                .join(Speaker).filter((User.id == user.id or Session.speakers.any(Speaker.user_id == user.id)))
         query_ = event_query(self, query_, view_kwargs)
         if view_kwargs.get('speaker_id'):
             speaker = safe_query(self, Speaker, 'id', view_kwargs['speaker_id'], 'speaker_id')
@@ -125,12 +127,14 @@ class SessionDetail(ResourceDetail):
 
         if 'state' in data and data.get('send_email', None) and (session.state == 'accepted' or
                                                                  session.state == 'rejected'):
+
+            event = session.event
             # Email for speaker
             speakers = session.speakers
             for speaker in speakers:
                 frontend_url = get_settings()['frontend_url']
                 link = "{}/events/{}/sessions/{}" \
-                    .format(frontend_url, session.event_id, session.id)
+                    .format(frontend_url, event.identifier, session.id)
                 send_email_session_accept_reject(speaker.email, session, link)
                 send_notif_session_accept_reject(speaker, session.title, session.state, link, session.id)
 
@@ -140,7 +144,7 @@ class SessionDetail(ResourceDetail):
                 organizer_email = organizer.email
                 frontend_url = get_settings()['frontend_url']
                 link = "{}/events/{}/sessions/{}" \
-                    .format(frontend_url, session.event_id, session.id)
+                    .format(frontend_url, event.identifier, session.id)
                 send_email_session_accept_reject(organizer_email, session,
                                                  link)
                 send_notif_session_accept_reject(organizer, session.title,

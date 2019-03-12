@@ -64,7 +64,7 @@ class TestFilesHelperValidation(OpenEventTestCase):
         with app.test_request_context():
             client = app.test_client()
             resp = client.post('/test_upload', data={'file': (BytesIO(b'1,2,3,4'), 'test_file.csv')})
-            data = json.loads(resp.data)
+            data = resp.get_json()
             file_path = data['path']
             filename = data['name']
             actual_file_path = app.config.get('BASE_DIR') + '/static/uploads/' + filename
@@ -100,7 +100,7 @@ class TestFilesHelperValidation(OpenEventTestCase):
             resp = client.post('/test_upload_multi',
                                data={'files[]': [(BytesIO(b'1,2,3,4'), 'test_file.csv'),
                                                  (BytesIO(b'10,20,30,40'), 'test_file2.csv')]})
-            datas = json.loads(resp.data)['files']
+            datas = resp.get_json()['files']
             for data in datas:
                 file_path = data['path']
                 filename = data['name']
@@ -112,7 +112,7 @@ class TestFilesHelperValidation(OpenEventTestCase):
         """Method to test create resized images"""
 
         with app.test_request_context():
-            image_url_test = 'https://cdn.pixabay.com/photo/2017/06/17/10/55/hot-air-balloon-2411851_1280.jpg'
+            image_url_test = 'https://www.gstatic.com/webp/gallery/1.jpg'
             width = 500
             height = 200
             aspect_ratio = False
@@ -129,7 +129,7 @@ class TestFilesHelperValidation(OpenEventTestCase):
         """Method to test create image sizes"""
 
         with app.test_request_context():
-            image_url_test = 'https://cdn.pixabay.com/photo/2017/06/17/10/55/hot-air-balloon-2411851_1280.jpg'
+            image_url_test = 'https://www.gstatic.com/webp/gallery/1.jpg'
             image_sizes_type = "event-image"
             width_large = 1300
             width_thumbnail = 500

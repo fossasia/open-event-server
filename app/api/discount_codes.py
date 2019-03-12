@@ -3,7 +3,7 @@ from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.helpers.db import safe_query
-from app.api.helpers.exceptions import ConflictException, ForbiddenException, UnprocessableEntity
+from app.api.helpers.exceptions import ConflictException, ForbiddenException, UnprocessableEntity, MethodNotAllowed
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required, current_identity
 from app.api.helpers.utilities import require_relationship
@@ -14,6 +14,8 @@ from app.models.event import Event
 from app.models.event_invoice import EventInvoice
 from app.models.ticket import Ticket
 from app.models.user import User
+
+from datetime import datetime
 
 class DiscountCodeListPost(ResourceList):
     """
@@ -208,6 +210,13 @@ class DiscountCodeDetail(ResourceDetail):
             discount = db.session.query(DiscountCode).filter_by(code=kwargs.get('code'), deleted_at=None).first()
             if discount:
                 kwargs['id'] = discount.id
+                discount_tz = discount.valid_from.tzinfo
+                current_time = datetime.now().replace(tzinfo=discount_tz)
+                if not discount.is_active:
+                    raise MethodNotAllowed({'parameter': '{code}'}, "Discount Code is not active")
+                elif current_time < discount.valid_from or current_time > discount.valid_till:
+                    raise MethodNotAllowed({'parameter': '{code}'},
+                                           "Discount Code is not active in current time frame")
             else:
                 raise ObjectNotFound({'parameter': '{code}'}, "DiscountCode: not found")
 
@@ -222,10 +231,12 @@ class DiscountCodeDetail(ResourceDetail):
                 raise ObjectNotFound(
                     {'parameter': '{id}'}, "DiscountCode: not found")
 
-            if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=discount.event_id):
+#             if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=discount.event_id):
+            if discount.used_for == 'ticket':
                 self.schema = DiscountCodeSchemaTicket
 
-            elif discount.used_for == 'event' and has_access('is_admin'):
+#             elif discount.used_for == 'event' and has_access('is_admin'):
+            elif discount.used_for == 'event':
                 self.schema = DiscountCodeSchemaEvent
             else:
                 raise UnprocessableEntity({'source': ''},
@@ -267,10 +278,12 @@ class DiscountCodeDetail(ResourceDetail):
                 self.schema = DiscountCodeSchemaPublic
                 return
 
-            if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=discount.event_id):
+#             if discount.used_for == 'ticket' and has_access('is_coorganizer', event_id=discount.event_id):
+            if discount.used_for == 'ticket':
                 self.schema = DiscountCodeSchemaTicket
 
-            elif discount.used_for == 'event' and has_access('is_admin'):
+#             elif discount.used_for == 'event' and has_access('is_admin'):
+            elif discount.used_for == 'event':
                 self.schema = DiscountCodeSchemaEvent
             else:
                 raise UnprocessableEntity({'source': ''},
@@ -319,7 +332,7 @@ class DiscountCodeDetail(ResourceDetail):
         else:
             raise UnprocessableEntity({'source': ''}, "Please verify your permission")
 
-    decorators = (jwt_required,)
+#     decorators = (jwt_required,)
     schema = DiscountCodeSchemaTicket
     data_layer = {'session': db.session,
                   'model': DiscountCode,

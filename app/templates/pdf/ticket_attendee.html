@@ -50,7 +50,7 @@
             <span style="font-size: 15px;"> {{order.event.location_name }}</span><br><br>
 
             <span class="label">Date and Time</span><br>
-            <span  style="font-size: 15px;">{{ order.event.starts_at }} to {{ order.event.ends_at }}</span>
+            <span  style="font-size: 15px;">{{ order.event.starts_at.strftime('%H:%M %Z') }} to {{ order.event.ends_at.strftime('%H:%M %Z') }}</span>
             <br><br>
 
             <span class="label">Type</span><br>

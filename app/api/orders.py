@@ -50,10 +50,6 @@ class OrdersListPost(ResourceList):
         """
         require_relationship(['event'], data)
 
-        if not current_user.is_verified:
-            raise ForbiddenException({'source': ''},
-                                     "Only verified accounts can place orders")
-
         # Create on site attendees.
         if request.args.get('onsite', False):
             create_onsite_attendees_for_order(data)
@@ -136,8 +132,8 @@ class OrdersListPost(ResourceList):
 
         order.quantity = order.tickets_count
         save_to_db(order)
-        if not has_access('is_coorganizer', event_id=data['event']):
-            TicketingManager.calculate_update_amount(order)
+#         if not has_access('is_coorganizer', event_id=data['event']):
+#             TicketingManager.calculate_update_amount(order)
 
         # send e-mail and notifications if the order status is completed
         if order.status == 'completed':
@@ -319,8 +315,7 @@ class OrderDetail(ResourceDetail):
 
     # This is to ensure that the permissions manager runs and hence changes the kwarg from order identifier to id.
     decorators = (jwt_required, api.has_permission(
-        'auth_required', methods="PATCH,DELETE", fetch="user_id", model=Order),)
-
+        'auth_required', methods="PATCH,DELETE", model=Order),)
     schema = OrderSchema
     data_layer = {'session': db.session,
                   'model': Order,

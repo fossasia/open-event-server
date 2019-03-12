@@ -18,7 +18,7 @@ from app.api.helpers.third_party_auth import GoogleOAuth, FbOAuth, TwitterOAuth,
 from app.api.helpers.utilities import get_serializer, str_generator
 from app.models import db
 from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE, \
-    USER_REGISTER_WITH_PASSWORD
+    USER_REGISTER_WITH_PASSWORD, PASSWORD_RESET_AND_VERIFY
 from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
 
@@ -94,6 +94,8 @@ def login_user(provider, auth_code):
             'client_secret': provider_class.get_client_secret(),
             'code': auth_code
         }
+        if not payload['client_id'] or payload['client_secret']:
+            raise NotImplementedError({'source': ''}, 'Facebook Login Not Configured')
         access_token = requests.get('https://graph.facebook.com/v3.0/oauth/access_token', params=payload).json()
         payload_details = {
             'input_token': access_token['access_token'],
@@ -207,7 +209,10 @@ def reset_password_post():
         return NotFoundError({'source': ''}, 'User not found').respond()
     else:
         link = make_frontend_url('/reset-password', {'token': user.reset_password})
-        send_email_with_action(user, PASSWORD_RESET, app_name=get_settings()['app_name'], link=link)
+        if user.was_registered_with_order:
+            send_email_with_action(user, PASSWORD_RESET_AND_VERIFY, app_name=get_settings()['app_name'], link=link)
+        else:
+            send_email_with_action(user, PASSWORD_RESET, app_name=get_settings()['app_name'], link=link)
 
     return make_response(jsonify(message="Email Sent"), 200)
 
@@ -223,6 +228,8 @@ def reset_password_patch():
         return NotFoundError({'source': ''}, 'User Not Found').respond()
     else:
         user.password = password
+        if user.was_registered_with_order:
+            user.is_verified = True
         save_to_db(user)
 
     return jsonify({
@@ -244,7 +251,9 @@ def change_password():
         return NotFoundError({'source': ''}, 'User Not Found').respond()
     else:
         if user.is_correct_password(old_password):
-
+            if len(new_password) < 8:
+                return BadRequestError({'source': ''},
+                                       'Password should have minimum 8 characters').respond()
             user.password = new_password
             save_to_db(user)
             send_email_with_action(user, PASSWORD_CHANGE,
