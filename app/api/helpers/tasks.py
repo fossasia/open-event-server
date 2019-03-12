@@ -97,6 +97,21 @@ def resize_event_images_task(self, event_id, original_image_url):
         logging.exception('Error encountered while generating resized images for event with id: {}'.format(event_id))
 
 
+@celery.task(base=RequestContextTask, name='resize.user.images', bind=True)
+def resize_user_images_task(self, user_id, original_image_url):
+    user = safe_query(db, User, 'id', user_id, 'user_id')
+    try:
+        logging.info('User image resizing tasks started {}'.format(original_image_url))
+        uploaded_images = create_save_image_sizes(original_image_url, 'user-image', user.id)
+        user.avatar_url = uploaded_images['avatar_url']
+        user.thumbnail_image_url = uploaded_images['thumbnail_image_url']
+        user.icon_image_url = uploaded_images['icon_image_url']
+        save_to_db(user)
+        logging.info('Resized images saved successfully for user with id: {}'.format(user_id))
+    except (urllib.error.HTTPError, urllib.error.URLError):
+        logging.exception('Error encountered while generating resized images for user with id: {}'.format(user_id))
+
+
 @celery.task(base=RequestContextTask, name='resize.speaker.images', bind=True)
 def resize_speaker_images_task(self, speaker_id, photo_url):
     speaker = safe_query(db, Speaker, 'id', speaker_id, 'speaker_id')

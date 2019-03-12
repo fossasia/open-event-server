@@ -87,6 +87,9 @@ class UserList(ResourceList):
         #     del uploaded_images['large_image_url']
         #     self.session.query(User).filter_by(id=user.id).update(uploaded_images)
 
+        if data.get('original_image_url'):
+            start_image_resizing_tasks(user, data['original_image_url'])
+
     decorators = (api.has_permission('is_admin', methods="GET"),)
     schema = UserSchema
     data_layer = {'session': db.session,
@@ -222,6 +225,9 @@ class UserDetail(ResourceDetail):
         if has_access('is_admin') and data.get('is_marketer') != user.is_marketer:
             user.is_marketer = not user.is_marketer
 
+        if data.get('avatar_url') and data['original_image_url'] != user.original_image_url:
+            start_image_resizing_tasks(user, data['original_image_url'])
+
     def after_update_object(self, user, data, view_kwargs):
         """
         method to mail user about email change
@@ -275,3 +281,9 @@ def is_email_available():
         abort(
             make_response(jsonify(error="Email field missing"), 422)
         )
+
+
+def start_image_resizing_tasks(user, original_image_url):
+    user_id = str(user.id)
+    from .helpers.tasks import resize_user_images_task
+    resize_user_images_task.delay(user_id, original_image_url)
