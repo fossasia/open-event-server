@@ -25,8 +25,8 @@ class TestEventValidation(OpenEventTestCase):
             'data': {}
         }
         data = {
-            'starts_at': datetime(2003, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
-            'ends_at': datetime(2003, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC'))
+            'starts_at': datetime(2099, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
+            'ends_at': datetime(2099, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC'))
         }
         EventSchema.validate_date(schema, data, original_data)
 
@@ -40,8 +40,8 @@ class TestEventValidation(OpenEventTestCase):
             'data': {}
         }
         data = {
-            'starts_at': datetime(2003, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
-            'ends_at': datetime(2003, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC'))
+            'starts_at': datetime(2099, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
+            'ends_at': datetime(2099, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC'))
         }
         with self.assertRaises(UnprocessableEntity):
             EventSchema.validate_date(schema, data, original_data)
