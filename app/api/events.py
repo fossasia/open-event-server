@@ -118,8 +118,12 @@ class EventList(ResourceList):
         user = User.query.filter_by(id=kwargs['user_id']).first()
         modules = Module.query.first()
         if data.get('is_ticketing_enabled', False) and not modules.ticket_include:
-            raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
-                                     "Ticketing is not enabled in the system")
+            if user.is_verified:
+                raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
+                                         "Please enter the location of the event")
+            else:
+                raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
+                                         "Please verify your Email")
         if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
                 data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
             if not modules.payment_include:
@@ -452,10 +456,15 @@ class EventDetail(ResourceDetail):
         :param data:
         :return:
         """
+        user = User.query.filter_by(id=kwargs['user_id']).first()
         modules = Module.query.first()
         if data.get('is_ticketing_enabled', False) and not modules.ticket_include:
-            raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
-                                     "Ticketing is not enabled in the system")
+            if user.is_verified:
+                raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
+                                         "Please enter the location of the event")
+            else:
+                raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
+                                         "Please verify your Email")
         if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
                 data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
             if not modules.payment_include:
