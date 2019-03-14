@@ -45,7 +45,7 @@ class EventSchemaPublic(SoftDeletionSchema):
             raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'},
                                       "ends-at should be after starts-at")
 
-        if data['starts_at'].isoformat() <= datetime.now().isoformat():
+        if datetime.timestamp(data['starts_at']) <= datetime.timestamp(datetime.now()):
             raise UnprocessableEntity({'pointer': '/data/attributes/starts-at'},
                                       "starts-at should be after current date-time")
 
