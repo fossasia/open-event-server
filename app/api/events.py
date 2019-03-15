@@ -52,16 +52,15 @@ from app.models.stripe_authorization import StripeAuthorization
 
 
 def check_ticketing(user, modules, data=None):
-    if data.get('is_ticketing_enabled', False):
-        if user.is_verified:
-            raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
-                                     "Please enter the location of the event")
-        elif not modules.ticket_include:
-            raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
-                                     "Ticket modules not included.")
-        else:
-            raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
-                                     "Please verify your Email")
+    if user.is_verified:
+        raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
+                                 "Please enter the location of the event")
+    elif not modules.ticket_include:
+        raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
+                                 "Ticket modules not included.")
+    else:
+        raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
+                                 "Please verify your Email")
 
 
 class EventList(ResourceList):
@@ -130,7 +129,8 @@ class EventList(ResourceList):
         """
         user = User.query.filter_by(id=kwargs['user_id']).first()
         modules = Module.query.first()
-        check_ticketing(user, modules, data=None)
+        if data.get('is_ticketing_enabled', False):
+            check_ticketing(user, modules, data=None)
         if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
                 data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
             if not modules.payment_include:
@@ -465,7 +465,8 @@ class EventDetail(ResourceDetail):
         """
         user = User.query.filter_by(id=kwargs['user_id']).first()
         modules = Module.query.first()
-        check_ticketing(user, modules, data=None)
+        if data.get('is_ticketing_enabled', False):
+            check_ticketing(user, modules, data=None)
         if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
                 data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
             if not modules.payment_include:
