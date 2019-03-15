@@ -190,7 +190,7 @@ def export_ical_task(self, event_id, temp=True):
 
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.warning('Error in ical download')
+        logging.error('Error in ical download')
 
     return result
 
@@ -225,7 +225,7 @@ def export_xcal_task(self, event_id, temp=True):
 
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.warning('Error in xcal download')
+        logging.error('Error in xcal download')
 
     return result
 
@@ -260,7 +260,7 @@ def export_pentabarf_task(self, event_id, temp=True):
 
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.warning('Error in pentabarf download')
+        logging.error('Error in pentabarf download')
 
     return result
 
@@ -290,7 +290,7 @@ def export_order_csv_task(self, event_id):
         }
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.warning('Error in exporting as CSV')
+        logging.error('Error in exporting as CSV')
 
     return result
 
@@ -310,7 +310,7 @@ def export_order_pdf_task(self, event_id):
         }
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.warning('Error in exporting order as pdf')
+        logging.error('Error in exporting order as pdf')
 
     return result
 
@@ -339,7 +339,7 @@ def export_attendees_csv_task(self, event_id):
         }
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.warning('Error in exporting attendees list as CSV')
+        logging.error('Error in exporting attendees list as CSV')
 
 
     return result
@@ -357,7 +357,7 @@ def export_attendees_pdf_task(self, event_id):
         }
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.warning('Error in exporting attendees list as PDF')
+        logging.error('Error in exporting attendees list as PDF')
 
 
 
@@ -388,7 +388,7 @@ def export_sessions_csv_task(self, event_id):
         }
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.warning('Error in exporting sessions as CSV')
+        logging.error('Error in exporting sessions as CSV')
 
     return result
 
@@ -417,7 +417,7 @@ def export_speakers_csv_task(self, event_id):
         }
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.warning('Error in exporting speakers list as CSV')
+        logging.error('Error in exporting speakers list as CSV')
 
     return result
 
@@ -434,7 +434,7 @@ def export_sessions_pdf_task(self, event_id):
         }
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.warning('Error in exporting sessions as PDF')
+        logging.error('Error in exporting sessions as PDF')
 
     return result
 
@@ -451,6 +451,6 @@ def export_speakers_pdf_task(self, event_id):
         }
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-        logging.warning('Error in exporting speakers as PDF')
+        logging.error('Error in exporting speakers as PDF')
 
     return result
