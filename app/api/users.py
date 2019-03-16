@@ -216,11 +216,13 @@ class UserDetail(ResourceDetail):
         if has_access('is_super_admin') and data.get('is_admin') and data.get('is_admin') != user.is_admin:
             user.is_admin = not user.is_admin
 
-        if has_access('is_admin') and data.get('is_sales_admin') != user.is_sales_admin and ('is_sales_admin' in data):
-            user.is_sales_admin = not user.is_sales_admin
+        if 'is_sales_admin' in data:
+            if has_access('is_admin') and data.get('is_sales_admin') != user.is_sales_admin:
+                user.is_sales_admin = not user.is_sales_admin
 
-        if has_access('is_admin') and data.get('is_marketer') != user.is_marketer and ('is_marketer' in data):
-            user.is_marketer = not user.is_marketer
+        if 'is_marketer' in data:
+            if has_access('is_admin') and data.get('is_marketer') != user.is_marketer:
+                user.is_marketer = not user.is_marketer
 
     def after_update_object(self, user, data, view_kwargs):
         """
