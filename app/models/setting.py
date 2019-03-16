@@ -126,7 +126,7 @@ class Setting(db.Model):
                                       "event preferences and provide you with a customized experience. "
                                       "By closing this banner or by continuing to use the site, you agree. "
                                       "For more information please review our cookie policy.")
-    cookie_policy_link = db.Column(db.String, default="http://next.cookie-policy.eventyay.com")
+    cookie_policy_link = db.Column(db.String, default="https://eventyay.com/cookie-policy/")
 
     def __init__(self,
                  app_environment=Environment.PRODUCTION,
