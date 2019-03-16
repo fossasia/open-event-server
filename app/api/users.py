@@ -195,6 +195,9 @@ class UserDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
     def before_update_object(self, user, data, view_kwargs):
+        print('this is data !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', data)
+        print(view_kwargs)
+        print(user)
         # TODO: Make a celery task for this
         # if data.get('avatar_url') and data['original_image_url'] != user.original_image_url:
         #     try:
@@ -225,8 +228,8 @@ class UserDetail(ResourceDetail):
         if has_access('is_admin') and data.get('is_marketer') != user.is_marketer:
             user.is_marketer = not user.is_marketer
 
-        if data.get('avatar_url') and data['original_image_url'] != user.original_image_url:
-            start_image_resizing_tasks(user, data['original_image_url'])
+        if data.get('avatar_url'):
+            start_image_resizing_tasks(user, data['avatar_url'])
 
     def after_update_object(self, user, data, view_kwargs):
         """
