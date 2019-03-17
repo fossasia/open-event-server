@@ -60,7 +60,7 @@ class FbOAuth(object):
     @classmethod
     def get_redirect_uri(cls):
         url = urllib.parse.urlparse(request.url)
-        fb_redirect_uri = url.scheme + '://' + url.netloc + '/fCallback'
+        fb_redirect_uri = 'http://localhost:4200/oauth/callback?provider=facebook'
         return fb_redirect_uri
 
     @classmethod

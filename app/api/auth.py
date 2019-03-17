@@ -90,11 +90,11 @@ def login_user(provider, auth_code):
         provider_class = FbOAuth()
         payload = {
             'client_id': provider_class.get_client_id(),
-            'redirect_uri': request.args.get('redirect_uri'),
+            'redirect_uri': provider_class.get_redirect_uri(),
             'client_secret': provider_class.get_client_secret(),
             'code': auth_code
         }
-        if not payload['client_id'] or payload['client_secret']:
+        if not payload['client_id'] or not payload['client_secret']:
             raise NotImplementedError({'source': ''}, 'Facebook Login Not Configured')
         access_token = requests.get('https://graph.facebook.com/v3.0/oauth/access_token', params=payload).json()
         payload_details = {
