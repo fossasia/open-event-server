@@ -454,3 +454,11 @@ def export_speakers_pdf_task(self, event_id):
         logging.error('Error in exporting speakers as PDF')
 
     return result
+
+
+@celery.task(base=RequestContextTask, name='delete.translations', bind=True)
+def delete_translations(self, zip_file_path):
+    try:
+        os.remove(zip_file_path)
+    except:
+        logging.error('Error while deleting translations zip file')
