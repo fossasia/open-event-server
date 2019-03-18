@@ -1,10 +1,11 @@
 import unittest
 import string
+import datetime
 
 from app import current_app as app
 from app.api.helpers.exceptions import UnprocessableEntity
 from tests.all.integration.utils import OpenEventTestCase
-from app.api.helpers.utilities import dasherize, require_relationship, string_empty, str_generator
+from app.api.helpers.utilities import dasherize, require_relationship, string_empty, str_generator, monthdelta, represents_int
 from tests.all.integration.setup_database import Setup
 
 
@@ -39,6 +40,21 @@ class TestUtilitiesHelperValidation(OpenEventTestCase):
             self.assertFalse(string_empty(str))
             self.assertFalse(string_empty(int))
             self.assertFalse(string_empty(None))
+
+    def test_monthdelta(self):
+        """Method to test difference in months result"""
+
+        with app.test_request_context():
+            test_date = datetime.datetime(2000, 6, 18)
+            test_future_date = monthdelta(test_date, 3)
+            self.assertEqual(test_future_date, datetime.datetime(2000, 9, 18))
+
+    def test_represents_int(self):
+        """Method to test representation of int"""
+
+        with app.test_request_context():
+            self.assertTrue(represents_int(4))
+            self.assertFalse(represents_int('test'))
 
     def test_str_generator(self):
         """Method to test str_generator."""
