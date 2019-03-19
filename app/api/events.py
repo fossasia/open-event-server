@@ -52,15 +52,15 @@ from app.models.stripe_authorization import StripeAuthorization
 
 
 def check_ticketing(user, modules):
-    if user.is_verified:
+    if not user.is_verified:
         raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
-                                 "Please enter the location of the event")
+                                 "Please verify your Email")
     elif not modules.ticket_include:
         raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
                                  "Ticket modules not included.")
     else:
         raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
-                                 "Please verify your Email")
+                                 "Please enter the location of the event")
 
 
 class EventList(ResourceList):
