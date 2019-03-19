@@ -195,9 +195,6 @@ class UserDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
     def before_update_object(self, user, data, view_kwargs):
-        print('this is data !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', data)
-        print(view_kwargs)
-        print(user)
         # TODO: Make a celery task for this
         # if data.get('avatar_url') and data['original_image_url'] != user.original_image_url:
         #     try:
