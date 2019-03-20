@@ -1,5 +1,6 @@
 import factory
 import datetime
+from app.api.helpers.utilities import static_page, image_link
 # use camelCase for naming variables
 
 string_ = 'example'
