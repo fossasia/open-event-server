@@ -6,8 +6,8 @@ from app.api.helpers.utilities import static_page, image_link
 string_ = 'example'
 email_ = factory.Sequence(lambda n: 'user{0}@example.com'.format(n))
 integer_ = 25
-url_ = 'http://example.com'
-imageUrl_ = 'https://www.w3schools.com/html/pic_mountain.jpg'
+url_ = static_page
+imageUrl_ = image_link
 date_ = datetime.datetime(2016, 12, 13)
 dateFuture_ = datetime.datetime(2099, 12, 13)
 dateEndFuture_ = datetime.datetime(2099, 12, 14)
