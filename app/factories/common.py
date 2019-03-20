@@ -1,13 +1,15 @@
 import factory
-
+from app.api.helpers.utilities import static_page, image_link
 # use camelCase for naming variables
 
 string_ = 'example'
 email_ = factory.Sequence(lambda n: 'user{0}@example.com'.format(n))
 integer_ = 25
-url_ = 'http://example.com'
-imageUrl_ = 'https://www.w3schools.com/html/pic_mountain.jpg'
+url_ = static_page
+imageUrl_ = image_link
 date_ = '2016-12-13T23:59:59.123456+00:00'
+dateFuture_ = '2099-12-13T23:59:59.123456+00:00'
+dateEndFuture_ = '2099-12-14T23:59:59.123456+00:00'
 dateEnd_ = '2020-12-14T23:59:59.123456+00:00'
 country_ = 'US'
 currency_ = 'USD'
