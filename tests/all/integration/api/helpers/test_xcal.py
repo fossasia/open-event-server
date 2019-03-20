@@ -10,7 +10,7 @@ from app.factories.event import EventFactoryBasic
 from app.api.helpers.db import save_to_db
 
 
-class TestLogging(OpenEventTestCase):
+class TestXCalExport(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
 
