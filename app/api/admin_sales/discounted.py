@@ -49,6 +49,7 @@ class AdminSalesDiscountedSchema(Schema):
     code = fields.String()
     email = fields.String()
     event_name = fields.String()
+    payment_currency = fields.String()
     sales = fields.Method('calc_sales')
 
     @staticmethod
