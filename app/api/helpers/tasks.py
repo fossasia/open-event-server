@@ -129,9 +129,8 @@ def export_event_task(self, email, event_id, settings):
         send_export_mail(email=email, event_name=event.name, download_url=download_url)
         send_notif_after_export(user=user, event_name=event.name, download_url=download_url)
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
-        logging.info('Error in exporting.. sending email')
+        logging.warning('Error in exporting.. sending email')
         send_export_mail(email=email, event_name=event.name, error_text=str(e))
         send_notif_after_export(user=user, event_name=event.name, error_text=str(e))
 
@@ -152,8 +151,8 @@ def import_event_task(self, email, file, source_type, creator_id):
         send_notif_after_import(user=user, event_name=result[
             'event_name'], event_url=result['url'])
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.warning('Error in importing the event')
         update_import_job(task_id, str(e), e.status if hasattr(e, 'status') else 'FAILURE')
         send_import_mail(email=email, error_text=str(e))
         send_notif_after_import(user=user, error_text=str(e))
@@ -190,8 +189,8 @@ def export_ical_task(self, event_id, temp=True):
             save_to_db(event)
 
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in ical download')
 
     return result
 
@@ -225,8 +224,8 @@ def export_xcal_task(self, event_id, temp=True):
             save_to_db(event)
 
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in xcal download')
 
     return result
 
@@ -260,8 +259,8 @@ def export_pentabarf_task(self, event_id, temp=True):
             save_to_db(event)
 
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in pentabarf download')
 
     return result
 
@@ -290,8 +289,8 @@ def export_order_csv_task(self, event_id):
             'download_url': order_csv_url
         }
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in exporting as CSV')
 
     return result
 
@@ -310,8 +309,8 @@ def export_order_pdf_task(self, event_id):
             'download_url': order_pdf_url
         }
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in exporting order as pdf')
 
     return result
 
@@ -339,8 +338,9 @@ def export_attendees_csv_task(self, event_id):
             'download_url': attendees_csv_url
         }
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in exporting attendees list as CSV')
+
 
     return result
 
@@ -356,8 +356,10 @@ def export_attendees_pdf_task(self, event_id):
             'download_url': attendees_pdf_url
         }
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in exporting attendees list as PDF')
+
+
 
     return result
 
@@ -385,8 +387,8 @@ def export_sessions_csv_task(self, event_id):
             'download_url': sessions_csv_url
         }
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in exporting sessions as CSV')
 
     return result
 
@@ -414,8 +416,8 @@ def export_speakers_csv_task(self, event_id):
             'download_url': speakers_csv_url
         }
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in exporting speakers list as CSV')
 
     return result
 
@@ -431,8 +433,8 @@ def export_sessions_pdf_task(self, event_id):
             'download_url': sessions_pdf_url
         }
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in exporting sessions as PDF')
 
     return result
 
@@ -448,7 +450,7 @@ def export_speakers_pdf_task(self, event_id):
             'download_url': speakers_pdf_url
         }
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in exporting speakers as PDF')
 
     return result

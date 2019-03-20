@@ -23,7 +23,7 @@ def get_updatable_fields():
     """
     return ['country', 'address', 'city', 'state', 'zipcode', 'company', 'tax_business_info', 'status', 'paid_via',
             'order_notes', 'deleted_at', 'user', 'payment_mode', 'event', 'discount_code_id', 'discount_code',
-            'ticket_holders', 'user', 'tickets_pdf_url']
+            'ticket_holders', 'user', 'tickets_pdf_url', 'is_billing_enabled']
 
 
 class OrderTicket(SoftDeletionModel):
