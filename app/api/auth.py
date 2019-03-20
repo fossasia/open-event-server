@@ -84,15 +84,15 @@ def get_token(provider):
     return make_response(jsonify(token=response.json()), 200)
 
 
-@auth_routes.route('/oauth/login/<provider>/<auth_code>/', methods=['GET'])
-def login_user(provider, auth_code):
+@auth_routes.route('/oauth/login/<provider>', methods=['POST'])
+def login_user(provider):
     if provider == 'facebook':
         provider_class = FbOAuth()
         payload = {
             'client_id': provider_class.get_client_id(),
             'redirect_uri': provider_class.get_redirect_uri(),
             'client_secret': provider_class.get_client_secret(),
-            'code': auth_code
+            'code': request.args.get('code')
         }
         if not payload['client_id'] or not payload['client_secret']:
             raise NotImplementedError({'source': ''}, 'Facebook Login Not Configured')
