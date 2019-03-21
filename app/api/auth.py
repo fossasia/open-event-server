@@ -113,7 +113,7 @@ def login_user(provider):
                 user.facebook_login_hash = random.getrandbits(128)
                 save_to_db(user)
             return make_response(
-                jsonify(user_id=user.id, email=user.email, facebook_login_hash=user.facebook_login_hash), 200)
+                jsonify(user_id=user.id, email=user.email, oauth_hash=user.facebook_login_hash), 200)
 
         user = User()
         user.first_name = user_details['first_name']
@@ -125,7 +125,7 @@ def login_user(provider):
             user.email = user_details['email']
 
         save_to_db(user)
-        return make_response(jsonify(user_id=user.id, email=user.email, facebook_login_hash=user.facebook_login_hash),
+        return make_response(jsonify(user_id=user.id, email=user.email, oauth_hash=user.facebook_login_hash),
                              200)
 
     elif provider == 'google':
