@@ -62,8 +62,7 @@ class FbOAuth(object):
     def get_redirect_uri(cls):
         url = make_frontend_url(
             '/oauth/callback?provider=facebook')
-        fb_redirect_uri = url
-        return fb_redirect_uri
+        return url
 
     @classmethod
     def get_auth_uri(cls):
