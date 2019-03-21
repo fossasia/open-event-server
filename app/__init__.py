@@ -94,7 +94,7 @@ def create_app():
     app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
     app.config['FILE_SYSTEM_STORAGE_FILE_VIEW'] = 'static'
 
-    app.logger
+    app.logger = logging.getLogger(__name__)
 
     dictConfig({
         'version': 1,
