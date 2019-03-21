@@ -94,23 +94,25 @@ def create_app():
     app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
     app.config['FILE_SYSTEM_STORAGE_FILE_VIEW'] = 'static'
 
+    app.logger
+
     dictConfig({
         'version': 1,
         'handlers': {
             'console': {
-                'level': 'WARN',
+                'level': logging.WARN,
                 'class': 'logging.StreamHandler',
                 'stream': 'ext://sys.stdout'
             }
         },
         'loggers': {
-            'root': {
+            '': {
                 'handlers': ['console'],
-                'level': 'WARN'
+                'level': logging.WARN
             },
             'default': {
                 'handlers': ['console'],
-                'level': 'INFO'
+                'level': logging.INFO
             }
         }
     })
@@ -242,7 +244,7 @@ def update_sent_state(sender=None, body=None, **kwargs):
 # register celery tasks. removing them will cause the tasks to not function. so don't remove them
 # it is important to register them after celery is defined to resolve circular imports
 
-from .api.helpers import tasks
+from app.api.helpers import tasks
 
 # import helpers.tasks
 
