@@ -226,7 +226,7 @@ class UserDetail(ResourceDetail):
             user.is_marketer = not user.is_marketer
 
         if data.get('avatar_url'):
-            start_image_resizing_tasks(user, data['avatar_url'])
+            start_avatar_image_resizing_tasks(user, data['avatar_url'])
 
     def after_update_object(self, user, data, view_kwargs):
         """
@@ -287,3 +287,9 @@ def start_image_resizing_tasks(user, original_image_url):
     user_id = str(user.id)
     from .helpers.tasks import resize_user_images_task
     resize_user_images_task.delay(user_id, original_image_url)
+
+
+def start_avatar_image_resizing_tasks(user, avatar_image_url):
+    user_id = str(user.id)
+    from .helpers.tasks import resize_user_avatar_images_task
+    resize_user_avatar_images_task.delay(user_id, avatar_image_url)
