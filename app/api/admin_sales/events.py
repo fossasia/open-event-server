@@ -30,6 +30,7 @@ class AdminSalesByEventsSchema(Schema):
     name = fields.String()
     starts_at = fields.DateTime()
     ends_at = fields.DateTime()
+    payment_currency = fields.String()
     sales = fields.Method('calc_sales')
 
     @staticmethod

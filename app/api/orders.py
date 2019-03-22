@@ -275,7 +275,11 @@ class OrderDetail(ResourceDetail):
                                          "You cannot update a non-pending order")
             else:
                 for element in data:
-                    if data[element] and data[element]\
+                    if element == 'is_billing_enabled' and order.status == 'completed' and data[element]\
+                            and data[element] != getattr(order, element, None):
+                        raise ForbiddenException({'pointer': 'data/{}'.format(element)},
+                                                 "You cannot update {} of a completed order".format(element))
+                    elif data[element] and data[element]\
                             != getattr(order, element, None) and element not in get_updatable_fields():
                         raise ForbiddenException({'pointer': 'data/{}'.format(element)},
                                                  "You cannot update {} of an order".format(element))
