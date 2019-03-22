@@ -219,10 +219,10 @@ class UserDetail(ResourceDetail):
         if has_access('is_super_admin') and data.get('is_admin') and data.get('is_admin') != user.is_admin:
             user.is_admin = not user.is_admin
 
-        if has_access('is_admin') and data.get('is_sales_admin') != user.is_sales_admin:
+        if has_access('is_admin') and ('is_sales_admin' in data) and data.get('is_sales_admin') != user.is_sales_admin:
             user.is_sales_admin = not user.is_sales_admin
 
-        if has_access('is_admin') and data.get('is_marketer') != user.is_marketer:
+        if has_access('is_admin') and ('us_marketer' in data) and data.get('is_marketer') != user.is_marketer:
             user.is_marketer = not user.is_marketer
 
         if data.get('avatar_url'):
