@@ -4026,7 +4026,7 @@ def orders_get_collection(transaction):
     """
     with stash['app'].app_context():
         order = OrderFactory()
-        db.session.add(user)
+        db.session.add(order)
         db.session.commit()
 
 
