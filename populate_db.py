@@ -169,7 +169,7 @@ def create_event_sub_topics():
      "Music": ["Cultural", "Pop", "Top 40", "EDM / Electronic", "R&B", "Other", "Classical"],
      "Performing & Visual Arts": ["Craft", "Comedy", "Fine Art", "Orchestra"],
      "Family & Education": ["Education", "Baby", "Reunion"],
-     "Business & Professional": ["Career", "Startups &amp; Small Business", "Educators", "Design", "Finance"],
+     "Business & Professional": ["Career", "Startups & Small Business", "Educators", "Design", "Finance"],
      "Charity & Causes": ["Education", "Other", "Environment"],
      "Hobbies & Special Interest": ["Other", "Anime/Comics"],
      "Seasonal & Holiday": ["Easter", "Other"],
