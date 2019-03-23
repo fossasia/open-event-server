@@ -10,7 +10,7 @@ def status_summary(orders, status):
     dictionary
     """
     return {
-        'sales_total': sum([o.amount for o in orders if o.status == status]),
+        'sales_total': sum([o.amount for o in orders if o.status == status and o.amount is not None]),
         'ticket_count': sum([o.tickets_count for o in orders if o.status == status])
     }
 
