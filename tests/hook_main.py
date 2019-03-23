@@ -4024,7 +4024,10 @@ def orders_get_collection(transaction):
     :param transaction:
     :return:
     """
-    transaction['skip'] = True
+    with stash['app'].app_context():
+        order = OrderFactory()
+        db.session.add(user)
+        db.session.commit()
 
 
 @hooks.before("Orders > Orders Collection > Create Order")
