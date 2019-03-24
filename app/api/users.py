@@ -87,8 +87,8 @@ class UserList(ResourceList):
         #     del uploaded_images['large_image_url']
         #     self.session.query(User).filter_by(id=user.id).update(uploaded_images)
 
-        if data.get('original_image_url'):
-            start_image_resizing_tasks(user, data['original_image_url'])
+        if data.get('avatar_url'):
+            start_avatar_image_resizing_tasks(user, data['avatar_url'])
 
     decorators = (api.has_permission('is_admin', methods="GET"),)
     schema = UserSchema
@@ -281,12 +281,6 @@ def is_email_available():
         abort(
             make_response(jsonify(error="Email field missing"), 422)
         )
-
-
-def start_image_resizing_tasks(user, original_image_url):
-    user_id = str(user.id)
-    from .helpers.tasks import resize_user_images_task
-    resize_user_images_task.delay(user_id, original_image_url)
 
 
 def start_avatar_image_resizing_tasks(user, avatar_image_url):
