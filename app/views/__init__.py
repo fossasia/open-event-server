@@ -3,7 +3,6 @@ import requests
 from flask import url_for, redirect, Blueprint, request, make_response
 from flask_admin import Admin, AdminIndexView, expose, helpers as admin_helpers
 from flask_admin.contrib.sqla import ModelView
-from flask_scrypt import generate_password_hash
 from wtforms import form, fields, validators
 
 from app.models import db
@@ -34,7 +33,7 @@ class LoginForm(form.Form):
         if user is None:
             raise validators.ValidationError('User does not exist.')
 
-        if user.password != generate_password_hash(self.password.data, user.salt):
+        if not user.is_correct_password(self.password.data):
             raise validators.ValidationError('Credentials incorrect.')
 
         if not user.is_admin and not user.is_super_admin:

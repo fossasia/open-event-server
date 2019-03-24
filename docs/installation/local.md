@@ -107,15 +107,9 @@ psql -d postgres
 For ease of development, you should create Postgres user with the same username as your OS account. If your OS login account is _john_, for example, you should create _john_ user in Postgres. By this, you can skip entering password when using database.
 
 ```sql
-CREATE USER john WITH PASSWORD 'start';
-CREATE DATABASE oevent WITH OWNER john;
-CREATE DATABASE opev_test WITH OWNER john;
-```
-
-* To dump the oevent database into opev_test
-```sh
-psql -U john --password <password> oevent > temp.pgsql
-psql -U john opev_test < temp.pgsql
+CREATE USER open_event_user WITH PASSWORD 'opev_pass';
+CREATE DATABASE oevent WITH OWNER open_event_user;
+CREATE DATABASE opev_test WITH OWNER open_event_user;
 ```
 
 * Once the databases are created, exit the psql shell with `\q` followed by ENTER.

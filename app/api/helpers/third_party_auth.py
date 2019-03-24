@@ -4,6 +4,7 @@ import oauth2
 from flask import request
 
 from app.settings import get_settings
+from app.api.helpers.files import make_frontend_url
 
 
 class GoogleOAuth(object):
@@ -59,9 +60,9 @@ class FbOAuth(object):
 
     @classmethod
     def get_redirect_uri(cls):
-        url = urllib.parse.urlparse(request.url)
-        fb_redirect_uri = url.scheme + '://' + url.netloc + '/fCallback'
-        return fb_redirect_uri
+        url = make_frontend_url(
+            '/oauth/callback?provider=facebook')
+        return url
 
     @classmethod
     def get_auth_uri(cls):

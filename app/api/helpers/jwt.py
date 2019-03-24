@@ -14,14 +14,10 @@ def jwt_authenticate(email, password):
     :param password:
     :return:
     """
-    user = User.query.filter_by(email=email).first()
+    user = User.query.filter_by(email=email, deleted_at=None).first()
     if user is None:
         return None
-    auth_ok = user.facebook_login_hash == password or check_password_hash(
-        password.encode('utf-8'),
-        user.password.encode('utf-8'),
-        user.salt
-    )
+    auth_ok = user.facebook_login_hash == password or user.is_correct_password(password)
     if auth_ok:
         return user
     else:

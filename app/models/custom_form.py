@@ -45,11 +45,11 @@ ATTENDEE_FORM = {
     "country": {"include": 1, "require": 0},
     "job_title": {"include": 1, "require": 0},
     "phone": {"include": 1, "require": 0},
-    "tax_business_info": {"include": 0, "require": 0},
+    "tax_business_info": {"include": 1, "require": 0},
     "billing_address": {"include": 0, "require": 0},
     "home_address": {"include": 0, "require": 0},
     "shipping_address": {"include": 0, "require": 0},
-    "company": {"include": 0, "require": 0},
+    "company": {"include": 1, "require": 0},
     "work_address": {"include": 0, "require": 0},
     "work_phone": {"include": 0, "require": 0},
     "website": {"include": 1, "require": 0},
@@ -88,11 +88,11 @@ class CustomForms(SoftDeletionModel):
                  is_fixed=None,
                  deleted_at=None):
         self.event_id = event_id
-        self.field_identifier = field_identifier,
-        self.form = form,
-        self.type = type,
-        self.is_required = is_required,
-        self.is_included = is_included,
+        self.field_identifier = field_identifier
+        self.form = form
+        self.type = type
+        self.is_required = is_required
+        self.is_included = is_included
         self.is_fixed = is_fixed
         self.deleted_at = deleted_at
 

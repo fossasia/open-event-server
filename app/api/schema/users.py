@@ -30,6 +30,8 @@ class UserSchemaPublic(SoftDeletionSchema):
     thumbnail_image_url = fields.Url(dump_only=True, allow_none=True)
     small_image_url = fields.Url(dump_only=True, allow_none=True)
     icon_image_url = fields.Url(dump_only=True, allow_none=True)
+    was_registered_with_order = fields.Boolean()
+
 
 
 class UserSchema(UserSchemaPublic):

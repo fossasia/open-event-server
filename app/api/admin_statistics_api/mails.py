@@ -31,24 +31,20 @@ class AdminStatisticsMailSchema(Schema):
     thirty_days = fields.Method("mail_last_30_days")
 
     def mail_last_1_day(self, obj):
-        all_mails = get_count(Mail.query.filter_by(time=datetime.now(pytz.utc)))
-        mails_till_last_1_day = get_count(Mail.query.filter(Mail.time <= datetime.now(pytz.utc) - timedelta(days=1)))
-        return all_mails - mails_till_last_1_day
+        mails_till_last_1_day = Mail.query.filter(Mail.time >= datetime.now(pytz.utc) - timedelta(days=1)).count()
+        return mails_till_last_1_day
 
     def mail_last_3_days(self, obj):
-        all_mails = get_count(Mail.query.filter_by(time=datetime.now(pytz.utc)))
-        mails_till_last_3_day = get_count(Mail.query.filter(Mail.time <= datetime.now(pytz.utc) - timedelta(days=3)))
-        return all_mails - mails_till_last_3_day
+        mails_till_last_3_day = Mail.query.filter(Mail.time >= datetime.now(pytz.utc) - timedelta(days=3)).count()
+        return mails_till_last_3_day
 
     def mail_last_7_days(self, obj):
-        all_mails = get_count(Mail.query.filter_by(time=datetime.now(pytz.utc)))
-        mails_till_last_7_day = get_count(Mail.query.filter(Mail.time <= datetime.now(pytz.utc) - timedelta(days=7)))
-        return all_mails - mails_till_last_7_day
+        mails_till_last_7_day = Mail.query.filter(Mail.time >= datetime.now(pytz.utc) - timedelta(days=7)).count()
+        return mails_till_last_7_day
 
     def mail_last_30_days(self, obj):
-        all_mails = get_count(Mail.query.filter_by(time=datetime.now(pytz.utc)))
-        mails_till_last_30_day = get_count(Mail.query.filter(Mail.time <= datetime.now(pytz.utc) - timedelta(days=30)))
-        return all_mails - mails_till_last_30_day
+        mails_till_last_30_day = Mail.query.filter(Mail.time >= datetime.now(pytz.utc) - timedelta(days=30)).count()
+        return mails_till_last_30_day
 
 
 class AdminStatisticsMailDetail(ResourceDetail):
