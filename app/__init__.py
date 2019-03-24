@@ -244,7 +244,7 @@ def update_sent_state(sender=None, body=None, **kwargs):
 # register celery tasks. removing them will cause the tasks to not function. so don't remove them
 # it is important to register them after celery is defined to resolve circular imports
 
-from app.api.helpers import tasks
+from .api.helpers import tasks
 
 # import helpers.tasks
 
