@@ -1,4 +1,5 @@
 import pytz
+from datetime import datetime
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validates_schema, validate
 from marshmallow_jsonapi import fields
@@ -43,6 +44,10 @@ class EventSchemaPublic(SoftDeletionSchema):
         if data['starts_at'] >= data['ends_at']:
             raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'},
                                       "ends-at should be after starts-at")
+
+        if datetime.timestamp(data['starts_at']) <= datetime.timestamp(datetime.now()):
+            raise UnprocessableEntity({'pointer': '/data/attributes/starts-at'},
+                                      "starts-at should be after current date-time")
 
     @validates_schema(pass_original=True)
     def validate_timezone(self, data, original_data):

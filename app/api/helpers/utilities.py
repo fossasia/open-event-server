@@ -112,6 +112,8 @@ def update_state(task_handle, state, result=None):
             state=state, meta=result
         )
 
+static_page = 'https://eventyay.com/'
+image_link = 'https://www.gstatic.com/webp/gallery/1.jpg'
 
 # store task results in case of testing
 # state and info

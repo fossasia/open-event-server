@@ -84,17 +84,17 @@ def get_token(provider):
     return make_response(jsonify(token=response.json()), 200)
 
 
-@auth_routes.route('/oauth/login/<provider>/<auth_code>/', methods=['GET'])
-def login_user(provider, auth_code):
+@auth_routes.route('/oauth/login/<provider>', methods=['POST'])
+def login_user(provider):
     if provider == 'facebook':
         provider_class = FbOAuth()
         payload = {
             'client_id': provider_class.get_client_id(),
-            'redirect_uri': request.args.get('redirect_uri'),
+            'redirect_uri': provider_class.get_redirect_uri(),
             'client_secret': provider_class.get_client_secret(),
-            'code': auth_code
+            'code': request.args.get('code')
         }
-        if not payload['client_id'] or payload['client_secret']:
+        if not payload['client_id'] or not payload['client_secret']:
             raise NotImplementedError({'source': ''}, 'Facebook Login Not Configured')
         access_token = requests.get('https://graph.facebook.com/v3.0/oauth/access_token', params=payload).json()
         payload_details = {
@@ -113,7 +113,7 @@ def login_user(provider, auth_code):
                 user.facebook_login_hash = random.getrandbits(128)
                 save_to_db(user)
             return make_response(
-                jsonify(user_id=user.id, email=user.email, facebook_login_hash=user.facebook_login_hash), 200)
+                jsonify(user_id=user.id, email=user.email, oauth_hash=user.facebook_login_hash), 200)
 
         user = User()
         user.first_name = user_details['first_name']
@@ -125,7 +125,7 @@ def login_user(provider, auth_code):
             user.email = user_details['email']
 
         save_to_db(user)
-        return make_response(jsonify(user_id=user.id, email=user.email, facebook_login_hash=user.facebook_login_hash),
+        return make_response(jsonify(user_id=user.id, email=user.email, oauth_hash=user.facebook_login_hash),
                              200)
 
     elif provider == 'google':
