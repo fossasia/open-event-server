@@ -45,14 +45,11 @@ hint: You may need to upgrade your pip version and install following packages if
 
 # Installation in Virtual Environment
 
-```sh
-virtualenv -p python3 venv
-source venv/bin/activate
-pip3 install -r requirements.txt
-```
+You can use either **pip** or **pipenv** to install Open Event Server in a virtual environment.
+
+Firstly, open a terminal and enter
 
 ```sh
-
 # For linux users
 sudo apt-get install python3-dev
 sudo apt-get install libpq-dev
@@ -62,6 +59,38 @@ sudo apt-get install libffi6 libffi-dev
 brew install python@3
 brew install libmagic
 ```
+
+## Using pip and virtualenv
+
+Open a terminal and enter the following commands to setup a virtual environment
+
+```sh
+virtualenv -p python3 venv
+. venv/bin/activate
+```
+
+Now to install the dependencies using pip, type
+
+```sh
+pip3 install -r requirements.txt
+```
+
+## Using pipenv
+
+Using pipenv, you will not need to set up virtualenv. It will do it automatically for you
+
+To setup a virtual environment and install the dependices, enter in a terminal
+
+```sh
+pipenv install
+```
+
+Now to activate the virtual environemnt, type
+
+```sh
+pipenv shell
+```
+
 
 * **Step 2** - Create the database. For that we first open the psql shell. Go the directory where your postgres file is stored.
 
