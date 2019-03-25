@@ -61,7 +61,7 @@ def send_email_task(payload, headers):
         )
         logging.info('Email sent successfully')
     except Exception:
-        logging.error('Error occured while sending the email')
+        logging.exception('Error occured while sending the email')
 
 
 @celery.task(name='send.email.post.smtp')
