@@ -52,7 +52,7 @@ def send_email_task(payload, headers):
     data["subject"] = payload["subject"]
     data["content"] = [{"type": "text/html", "value": payload["html"]}]
     logging.info('Sending an email regarding {} on behalf of {}'.format(data["subject"], data["from"]))
-    try : 
+    try:
         requests.post(
             "https://api.sendgrid.com/v3/mail/send",
             data=json.dumps(data),
@@ -60,7 +60,7 @@ def send_email_task(payload, headers):
             verify=False  # doesn't work with verification in celery context
         )
         logging.info('Email sent successfully')
-    except Exception as e:
+    except Exception:
         logging.error('Error occured while sending the email')
 
 
@@ -84,6 +84,7 @@ def send_mail_via_smtp_task(config, payload):
     message.plain = strip_tags(payload['html'])
     message.rich = payload['html']
     mailer.send(message)
+    logging.info('Message sent via SMTP')
     mailer.stop()
 
 
