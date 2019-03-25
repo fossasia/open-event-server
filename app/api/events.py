@@ -464,8 +464,7 @@ class EventDetail(ResourceDetail):
         """
         user = User.query.filter_by(id=kwargs['user_id']).first()
         modules = Module.query.first()
-        if data.get('is_ticketing_enabled', False):
-            check_ticketing(user, modules)
+        check_ticketing(user, modules)
         if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
                 data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
             if not modules.payment_include:
