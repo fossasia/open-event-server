@@ -87,8 +87,8 @@ class UserList(ResourceList):
         #     del uploaded_images['large_image_url']
         #     self.session.query(User).filter_by(id=user.id).update(uploaded_images)
 
-        if data.get('original_image_url'):
-            start_image_resizing_tasks(user, data['original_image_url'])
+        if data.get('avatar_url'):
+            start_image_resizing_tasks(user, data['avatar_url'])
 
     decorators = (api.has_permission('is_admin', methods="GET"),)
     schema = UserSchema
