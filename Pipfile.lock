@@ -505,7 +505,7 @@
                 "sha256:5f7a9ab5d5f5583fe4e071fde98a472b04fd0df868ead83012f1a3e0e54d7cdf",
                 "sha256:cf7e35ddfe8b18f8de3058fffc621921c79bb07455ad3084bfbf64caca766711"
             ],
-            "version": ">=2.13.1"
+            "version": "==2.13.1"
         },
         "marshmallow-jsonapi": {
             "hashes": [
