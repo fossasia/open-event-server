@@ -58,9 +58,6 @@ def check_ticketing(user, modules):
     elif not modules.ticket_include:
         raise ForbiddenException({'source': '/data/attributes/ticket-include'},
                                  "Ticket modules not included.")
-    else:
-        raise ForbiddenException({'source': '/data/attributes/location-name'},
-                                 "Please enter the location of the event")
 
 
 class EventList(ResourceList):
