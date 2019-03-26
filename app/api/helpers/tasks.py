@@ -101,7 +101,7 @@ def resize_event_images_task(self, event_id, original_image_url):
 def resize_user_images_task(self, user_id, original_image_url):
     user = safe_query(db, User, 'id', user_id, 'user_id')
     try:
-        logging.info('User image resizing tasks started {}'.format(avatar_image_url))
+        logging.info('User image resizing tasks started {}'.format(original_image_url))
         uploaded_images = create_save_image_sizes(original_image_url, 'speaker-image', user.id)
         user.avatar_url = uploaded_images['original_image_url']
         user.small_image_url = uploaded_images['thumbnail_image_url']
