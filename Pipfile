@@ -61,6 +61,7 @@ factory_boy = "*"
 Flask-Redis = "*"
 SQLAlchemy = "==1.1.15"
 Flask-Elasticsearch = "*"
+marshmallow = ">=2.15.1"
 
 [dev-packages]
 nose = "*"
