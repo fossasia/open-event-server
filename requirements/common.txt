@@ -56,3 +56,4 @@ Flask-Elasticsearch
 paypalrestsdk
 eventlet
 pyyaml~=4.2b1
+marshmallow>=2.15.1
