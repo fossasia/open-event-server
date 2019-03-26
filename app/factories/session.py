@@ -23,8 +23,8 @@ class SessionFactory(factory.alchemy.SQLAlchemyModelFactory):
     short_abstract = common.string_
     long_abstract = (common.string_ + common.string_)
     comments = common.string_
-    starts_at = common.date_
-    ends_at = common.dateEnd_
+    starts_at = common.dateFuture_
+    ends_at = common.dateEndFuture_
     language = "English"
     slides_url = common.url_
     video_url = common.url_

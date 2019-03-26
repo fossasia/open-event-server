@@ -1,4 +1,5 @@
 import pytz
+from datetime import datetime
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validates_schema, validate
 from marshmallow_jsonapi import fields
@@ -44,6 +45,10 @@ class EventSchemaPublic(SoftDeletionSchema):
             raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'},
                                       "ends-at should be after starts-at")
 
+        if datetime.timestamp(data['starts_at']) <= datetime.timestamp(datetime.now()):
+            raise UnprocessableEntity({'pointer': '/data/attributes/starts-at'},
+                                      "starts-at should be after current date-time")
+
     @validates_schema(pass_original=True)
     def validate_timezone(self, data, original_data):
         if 'id' in original_data['data']:
@@ -82,6 +87,8 @@ class EventSchemaPublic(SoftDeletionSchema):
     organizer_name = fields.Str(allow_none=True)
     is_map_shown = fields.Bool(default=False)
     has_organizer_info = fields.Bool(default=False)
+    has_sessions = fields.Bool(default=0, dump_only=True)
+    has_speakers = fields.Bool(default=0, dump_only=True)
     organizer_description = fields.Str(allow_none=True)
     is_sessions_speakers_enabled = fields.Bool(default=False)
     privacy = fields.Str(default="public")

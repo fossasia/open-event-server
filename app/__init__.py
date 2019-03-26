@@ -1,4 +1,5 @@
 from celery.signals import after_task_publish
+from logging.config import dictConfig
 import logging
 import os.path
 from envparse import env
@@ -93,8 +94,28 @@ def create_app():
     app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
     app.config['FILE_SYSTEM_STORAGE_FILE_VIEW'] = 'static'
 
-    app.logger.addHandler(logging.StreamHandler(sys.stdout))
-    app.logger.setLevel(logging.ERROR)
+    app.logger = logging.getLogger(__name__)
+
+    dictConfig({
+        'version': 1,
+        'handlers': {
+            'console': {
+                'level': logging.WARN,
+                'class': 'logging.StreamHandler',
+                'stream': 'ext://sys.stdout'
+            }
+        },
+        'loggers': {
+            '': {
+                'handlers': ['console'],
+                'level': logging.WARN
+            },
+            'default': {
+                'handlers': ['console'],
+                'level': logging.INFO
+            }
+        }
+    })
 
     # set up jwt
     app.config['JWT_AUTH_USERNAME_KEY'] = 'email'
@@ -126,6 +147,7 @@ def create_app():
         from app.api.uploads import upload_routes
         from app.api.users import user_misc_routes
         from app.api.orders import order_misc_routes
+        from app.api.role_invites import role_invites_misc_routes
 
         app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)
@@ -138,6 +160,7 @@ def create_app():
         app.register_blueprint(user_misc_routes)
         app.register_blueprint(attendee_misc_routes)
         app.register_blueprint(order_misc_routes)
+        app.register_blueprint(role_invites_misc_routes)
 
     sa.orm.configure_mappers()
 

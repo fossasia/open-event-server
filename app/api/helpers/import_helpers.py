@@ -19,6 +19,8 @@ from app.api.helpers.utilities import update_state, write_file, is_downloadable
 from app.models import db
 from app.models.custom_form import CustomForms
 from app.models.event import Event
+from app.models.users_events_role import UsersEventsRoles
+from app.models.role import Role
 from app.models.import_job import ImportJob
 from app.models.microlocation import Microlocation
 from app.models.session import Session
@@ -27,6 +29,7 @@ from app.models.social_link import SocialLink
 from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
 from app.models.track import Track
+from app.models.user import User, ORGANIZER
 
 IMPORT_SERIES = [
     ('social_links', SocialLink),
@@ -329,7 +332,7 @@ def create_service_from_json(task_handle, data, srv, event_id, service_ids=None)
     return ids
 
 
-def import_event_json(task_handle, zip_path):
+def import_event_json(task_handle, zip_path, creator_id):
     """
     Imports and creates event from json zip
     """
@@ -355,10 +358,12 @@ def import_event_json(task_handle, zip_path):
         new_event = Event(**data)
         db.session.add(new_event)
         db.session.commit()
-        write_file(
-            path + '/social_links',
-            json.dumps(data.get('social_links', []))
-        )  # save social_links
+        role = Role.query.filter_by(name=ORGANIZER).first()
+        user = User.query.filter_by(id=creator_id).first()
+        uer = UsersEventsRoles(user_id=user.id, event_id=new_event.id, role_id=role.id)
+        save_to_db(uer, 'Event Saved')
+        with open(path + '/social_links', 'w') as file:
+            file.write(str(json.dumps(data.get('social_links', []))))
         _upload_media_queue(srv, new_event)
     except Exception as e:
         raise make_error('event', er=e)

@@ -14,7 +14,7 @@ class ImportJobSchema(Schema):
         Meta class for ImportJob Api Schema
         """
         type_ = 'import-job'
-        self_view = 'v1.image_job_detail'
+        self_view = 'v1.import_job_detail'
         self_view_kwargs = {'id': '<id>'}
         inflect = dasherize
 
