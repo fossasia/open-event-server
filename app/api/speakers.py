@@ -3,7 +3,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query, get_count
+from app.api.helpers.db import safe_query, get_count, save_to_db
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
@@ -13,6 +13,7 @@ from app.models import db
 from app.models.event import Event
 from app.models.session import Session
 from app.models.speaker import Speaker
+from app.models.session_speaker_link import SessionsSpeakersLink
 from app.models.user import User
 
 
@@ -114,7 +115,6 @@ class SpeakerDetail(ResourceDetail):
     """
     Speakers Detail by id
     """
-
     def before_update_object(self, speaker, data, view_kwargs):
         """
         method to save image urls before updating speaker object
@@ -123,9 +123,27 @@ class SpeakerDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-
         if data.get('photo_url') and data['photo_url'] != speaker.photo_url:
             start_image_resizing_tasks(speaker, data['photo_url'])
+
+    def after_patch(self, result):
+        """
+        method to create session speaker link
+        :param result:
+        """
+        # This method is executed when a new speaker is created
+        # and added to an existing session
+        speaker_id = result['data']['id']
+        speaker = Speaker.query.filter_by(id=speaker_id).first()
+        if SessionsSpeakersLink.query.filter_by(speaker_id=speaker_id).count() == 0:
+            all_sessions = Session.query.filter_by(deleted_at=None)
+            for session in all_sessions:
+                if speaker in session.speakers:
+                    session_speaker_link = SessionsSpeakersLink(session_state=session.state,
+                                                                session_id=session.id,
+                                                                event_id=session.event.id,
+                                                                speaker_id=speaker.id)
+                    save_to_db(session_speaker_link, "Session Speaker Link Saved")
 
     decorators = (api.has_permission('is_coorganizer_or_user_itself', methods="PATCH,DELETE", fetch="event_id",
                                      fetch_as="event_id", model=Speaker),)
