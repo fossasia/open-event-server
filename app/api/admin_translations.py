@@ -13,11 +13,12 @@ def download_translations():
     """Admin Translations Downloads"""
     uuid_literal = uuid.uuid4()
     zip_file = "translations{}".format(uuid_literal)
+    zip_file_ext = zip_file+'.zip'
     shutil.make_archive(zip_file, "zip", translations_dir)
-    shutil.move(zip_file+'.zip', temp_dir)
-    path_to_zip = os.path.join(temp_dir, zip_file)
+    shutil.move(zip_file_ext, temp_dir)
+    path_to_zip = os.path.join(temp_dir, zip_file_ext)
     from .helpers.tasks import delete_translations
     delete_translations.apply_async(path_to_zip, countdown=600)
-    return send_file(path_to_zip+'.zip',  mimetype='application/zip',
+    return send_file(path_to_zip,  mimetype='application/zip',
                      as_attachment=True,
                      attachment_filename='translations.zip')

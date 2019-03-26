@@ -461,4 +461,4 @@ def delete_translations(self, zip_file_path):
     try:
         os.remove(zip_file_path)
     except:
-        logging.error('Error while deleting translations zip file')
+        logging.exception('Error while deleting translations zip file')
