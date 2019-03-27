@@ -53,10 +53,10 @@ from app.models.stripe_authorization import StripeAuthorization
 
 def check_ticketing(user, modules, data=None):
     if not user.is_verified:
-        raise ForbiddenException({'source': '/data/attributes/is-verified'},
+        raise ForbiddenException({'source': ''},
                                  "Please verify your Email")
-    else:
-        if data.get('is_ticketing_enabled', False) and not modules.ticket_include:
+    elif user.is_verified:
+        if data.get('is_ticketing_enabled', True) and not modules.ticket_include:
             raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
                                      "Ticketing is not enabled in the system")
 
@@ -129,7 +129,7 @@ class EventList(ResourceList):
         modules = Module.query.first()
         check_ticketing(user, modules, data)
         if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
-            data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
+                data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
             if not modules.payment_include:
                 raise ForbiddenException({'source': ''},
                                          "Payment is not enabled in the system")
@@ -145,7 +145,7 @@ class EventList(ResourceList):
                                      "Only verified accounts can publish events")
 
         if not data.get('is_event_online') and data.get('state', None) == 'published' \
-            and not data.get('location_name', None):
+                and not data.get('location_name', None):
             raise ConflictException({'pointer': '/data/attributes/location-name'},
                                     "Location is required to publish the event")
 
@@ -464,7 +464,7 @@ class EventDetail(ResourceDetail):
         modules = Module.query.first()
         check_ticketing(user, modules, data)
         if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
-            data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
+                data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
             if not modules.payment_include:
                 raise ForbiddenException({'source': ''},
                                          "Payment is not enabled in the system")
@@ -477,7 +477,7 @@ class EventDetail(ResourceDetail):
                                      "Only verified accounts can publish events")
 
         if data.get('state', None) == 'published' and not data.get('location_name', None) and \
-            not data.get('is_event_online'):
+                not data.get('is_event_online'):
             raise ConflictException({'pointer': '/data/attributes/location-name'},
                                     "Location is required to publish the event")
 
@@ -502,7 +502,7 @@ class EventDetail(ResourceDetail):
             event.deleted_at = data.get('deleted_at')
 
         if 'is_event_online' not in data and event.is_event_online \
-            or 'is_event_online' in data and not data['is_event_online']:
+                or 'is_event_online' in data and not data['is_event_online']:
             if data.get('state', None) == 'published' and not data.get('location_name', None):
                 raise ConflictException({'pointer': '/data/attributes/location-name'},
                                         "Location is required to publish the event")
