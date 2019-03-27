@@ -14,7 +14,7 @@ def create_user(email, password, is_verified=True):
 
 
 def create_super_admin(email, password):
-    user = create_user(email, password, is_verified=True)
+    user = create_user(email, password)
     user.is_super_admin = True
     user.is_admin = True
     save_to_db(user, "User updated")
