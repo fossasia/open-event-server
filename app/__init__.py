@@ -100,7 +100,7 @@ def create_app():
         'version': 1,
         'handlers': {
             'console': {
-                'level': logging.WARN,
+                'level': logging.INFO,
                 'class': 'logging.StreamHandler',
                 'stream': 'ext://sys.stdout'
             }
@@ -108,7 +108,7 @@ def create_app():
         'loggers': {
             '': {
                 'handlers': ['console'],
-                'level': logging.WARN
+                'level': logging.INFO
             },
             'default': {
                 'handlers': ['console'],
