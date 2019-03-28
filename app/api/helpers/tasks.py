@@ -51,12 +51,17 @@ def send_email_task(payload, headers):
     data["from"] = {"email": payload["from"]}
     data["subject"] = payload["subject"]
     data["content"] = [{"type": "text/html", "value": payload["html"]}]
-    requests.post(
-        "https://api.sendgrid.com/v3/mail/send",
-        data=json.dumps(data),
-        headers=headers,
-        verify=False  # doesn't work with verification in celery context
-    )
+    logging.info('Sending an email regarding {} on behalf of {}'.format(data["subject"], data["from"]))
+    try:
+        requests.post(
+            "https://api.sendgrid.com/v3/mail/send",
+            data=json.dumps(data),
+            headers=headers,
+            verify=False  # doesn't work with verification in celery context
+        )
+        logging.info('Email sent successfully')
+    except Exception:
+        logging.exception('Error occured while sending the email')
 
 
 @celery.task(name='send.email.post.smtp')
@@ -79,6 +84,7 @@ def send_mail_via_smtp_task(config, payload):
     message.plain = strip_tags(payload['html'])
     message.rich = payload['html']
     mailer.send(message)
+    logging.info('Message sent via SMTP')
     mailer.stop()
 
 
@@ -95,6 +101,23 @@ def resize_event_images_task(self, event_id, original_image_url):
         logging.info('Resized images saved successfully for event with id: {}'.format(event_id))
     except (urllib.error.HTTPError, urllib.error.URLError):
         logging.exception('Error encountered while generating resized images for event with id: {}'.format(event_id))
+
+
+@celery.task(base=RequestContextTask, name='resize.user.images', bind=True)
+def resize_user_images_task(self, user_id, original_image_url):
+    user = safe_query(db, User, 'id', user_id, 'user_id')
+    try:
+        logging.info('User image resizing tasks started {}'.format(original_image_url))
+        uploaded_images = create_save_image_sizes(original_image_url, 'speaker-image', user.id)
+        user.original_image_url = uploaded_images['original_image_url']
+        user.avatar_url = uploaded_images['original_image_url']
+        user.small_image_url = uploaded_images['thumbnail_image_url']
+        user.thumbnail_image_url = uploaded_images['thumbnail_image_url']
+        user.icon_image_url = uploaded_images['icon_image_url']
+        save_to_db(user)
+        logging.info('Resized images saved successfully for user with id: {}'.format(user_id))
+    except (urllib.error.HTTPError, urllib.error.URLError):
+        logging.exception('Error encountered while generating resized images for user with id: {}'.format(user_id))
 
 
 @celery.task(base=RequestContextTask, name='resize.speaker.images', bind=True)
