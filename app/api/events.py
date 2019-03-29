@@ -51,7 +51,7 @@ from app.models.users_events_role import UsersEventsRoles
 from app.models.stripe_authorization import StripeAuthorization
 
 
-def check_ticketing(user, modules, data=None):
+def check_create_event(user, modules, data):
     if not user.is_verified:
         raise ForbiddenException({'source': ''},
                                  "Please verify your Email")
@@ -126,7 +126,7 @@ class EventList(ResourceList):
         """
         user = User.query.filter_by(id=kwargs['user_id']).first()
         modules = Module.query.first()
-        check_ticketing(user, modules, data)
+        check_create_event(user, modules, data)
         if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
                 data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
             if not modules.payment_include:
@@ -461,7 +461,7 @@ class EventDetail(ResourceDetail):
         """
         user = User.query.filter_by(id=current_identity.id).one()
         modules = Module.query.first()
-        check_ticketing(user, modules, data)
+        check_create_event(user, modules, data)
         if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
                 data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
             if not modules.payment_include:
