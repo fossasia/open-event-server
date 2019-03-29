@@ -51,12 +51,17 @@ def send_email_task(payload, headers):
     data["from"] = {"email": payload["from"]}
     data["subject"] = payload["subject"]
     data["content"] = [{"type": "text/html", "value": payload["html"]}]
-    requests.post(
-        "https://api.sendgrid.com/v3/mail/send",
-        data=json.dumps(data),
-        headers=headers,
-        verify=False  # doesn't work with verification in celery context
-    )
+    logging.info('Sending an email regarding {} on behalf of {}'.format(data["subject"], data["from"]))
+    try:
+        requests.post(
+            "https://api.sendgrid.com/v3/mail/send",
+            data=json.dumps(data),
+            headers=headers,
+            verify=False  # doesn't work with verification in celery context
+        )
+        logging.info('Email sent successfully')
+    except Exception:
+        logging.exception('Error occured while sending the email')
 
 
 @celery.task(name='send.email.post.smtp')
@@ -79,6 +84,7 @@ def send_mail_via_smtp_task(config, payload):
     message.plain = strip_tags(payload['html'])
     message.rich = payload['html']
     mailer.send(message)
+    logging.info('Message sent via SMTP')
     mailer.stop()
 
 
@@ -95,6 +101,23 @@ def resize_event_images_task(self, event_id, original_image_url):
         logging.info('Resized images saved successfully for event with id: {}'.format(event_id))
     except (urllib.error.HTTPError, urllib.error.URLError):
         logging.exception('Error encountered while generating resized images for event with id: {}'.format(event_id))
+
+
+@celery.task(base=RequestContextTask, name='resize.user.images', bind=True)
+def resize_user_images_task(self, user_id, original_image_url):
+    user = safe_query(db, User, 'id', user_id, 'user_id')
+    try:
+        logging.info('User image resizing tasks started {}'.format(original_image_url))
+        uploaded_images = create_save_image_sizes(original_image_url, 'speaker-image', user.id)
+        user.original_image_url = uploaded_images['original_image_url']
+        user.avatar_url = uploaded_images['original_image_url']
+        user.small_image_url = uploaded_images['thumbnail_image_url']
+        user.thumbnail_image_url = uploaded_images['thumbnail_image_url']
+        user.icon_image_url = uploaded_images['icon_image_url']
+        save_to_db(user)
+        logging.info('Resized images saved successfully for user with id: {}'.format(user_id))
+    except (urllib.error.HTTPError, urllib.error.URLError):
+        logging.exception('Error encountered while generating resized images for user with id: {}'.format(user_id))
 
 
 @celery.task(base=RequestContextTask, name='resize.speaker.images', bind=True)
@@ -129,9 +152,8 @@ def export_event_task(self, email, event_id, settings):
         send_export_mail(email=email, event_name=event.name, download_url=download_url)
         send_notif_after_export(user=user, event_name=event.name, download_url=download_url)
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
-        logging.info('Error in exporting.. sending email')
+        logging.warning('Error in exporting.. sending email')
         send_export_mail(email=email, event_name=event.name, error_text=str(e))
         send_notif_after_export(user=user, event_name=event.name, error_text=str(e))
 
@@ -152,8 +174,8 @@ def import_event_task(self, email, file, source_type, creator_id):
         send_notif_after_import(user=user, event_name=result[
             'event_name'], event_url=result['url'])
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.warning('Error in importing the event')
         update_import_job(task_id, str(e), e.status if hasattr(e, 'status') else 'FAILURE')
         send_import_mail(email=email, error_text=str(e))
         send_notif_after_import(user=user, error_text=str(e))
@@ -190,8 +212,8 @@ def export_ical_task(self, event_id, temp=True):
             save_to_db(event)
 
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in ical download')
 
     return result
 
@@ -225,8 +247,8 @@ def export_xcal_task(self, event_id, temp=True):
             save_to_db(event)
 
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in xcal download')
 
     return result
 
@@ -260,8 +282,8 @@ def export_pentabarf_task(self, event_id, temp=True):
             save_to_db(event)
 
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in pentabarf download')
 
     return result
 
@@ -290,8 +312,8 @@ def export_order_csv_task(self, event_id):
             'download_url': order_csv_url
         }
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in exporting as CSV')
 
     return result
 
@@ -310,8 +332,8 @@ def export_order_pdf_task(self, event_id):
             'download_url': order_pdf_url
         }
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in exporting order as pdf')
 
     return result
 
@@ -339,8 +361,9 @@ def export_attendees_csv_task(self, event_id):
             'download_url': attendees_csv_url
         }
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in exporting attendees list as CSV')
+
 
     return result
 
@@ -356,8 +379,10 @@ def export_attendees_pdf_task(self, event_id):
             'download_url': attendees_pdf_url
         }
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in exporting attendees list as PDF')
+
+
 
     return result
 
@@ -385,8 +410,8 @@ def export_sessions_csv_task(self, event_id):
             'download_url': sessions_csv_url
         }
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in exporting sessions as CSV')
 
     return result
 
@@ -414,8 +439,8 @@ def export_speakers_csv_task(self, event_id):
             'download_url': speakers_csv_url
         }
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in exporting speakers list as CSV')
 
     return result
 
@@ -431,8 +456,8 @@ def export_sessions_pdf_task(self, event_id):
             'download_url': sessions_pdf_url
         }
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in exporting sessions as PDF')
 
     return result
 
@@ -448,7 +473,15 @@ def export_speakers_pdf_task(self, event_id):
             'download_url': speakers_pdf_url
         }
     except Exception as e:
-        print(traceback.format_exc())
         result = {'__error': True, 'result': str(e)}
+        logging.error('Error in exporting speakers as PDF')
 
     return result
+
+
+@celery.task(base=RequestContextTask, name='delete.translations', bind=True)
+def delete_translations(self, zip_file_path):
+    try:
+        os.remove(zip_file_path)
+    except:
+        logging.exception('Error while deleting translations zip file')

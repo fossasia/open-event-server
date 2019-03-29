@@ -6,7 +6,6 @@ from app.models import db
 from app.models.module import Module
 from app.api.helpers.exceptions import ConflictException
 
-
 class ModuleDetail(ResourceDetail):
     """
     module detail by id
@@ -29,9 +28,6 @@ class ModuleDetail(ResourceDetail):
         :param data:
         :return:
         """
-        if data.get('donation_include'):
-            raise ConflictException({'pointer': '/data/attributes/donation-include'},
-                                    "No donation support in the system")
 
     decorators = (api.has_permission('is_admin', methods='PATCH', id='1'),)
     methods = ['GET', 'PATCH']
