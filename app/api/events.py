@@ -459,7 +459,7 @@ class EventDetail(ResourceDetail):
         :param data:
         :return:
         """
-        user = User.query.filter_by(id=kwargs['user_id']).first()
+        user = User.query.filter_by(id=current_identity.id).one()
         modules = Module.query.first()
         check_ticketing(user, modules, data)
         if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
