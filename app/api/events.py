@@ -51,7 +51,7 @@ from app.models.users_events_role import UsersEventsRoles
 from app.models.stripe_authorization import StripeAuthorization
 
 
-def check_create_event(user, modules, data):
+def validate_event(user, modules, data):
     if not user.is_verified:
         raise ForbiddenException({'source': ''},
                                  "Please verify your Email")
@@ -126,7 +126,7 @@ class EventList(ResourceList):
         """
         user = User.query.filter_by(id=kwargs['user_id']).first()
         modules = Module.query.first()
-        check_create_event(user, modules, data)
+        validate_event(user, modules, data)
         if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
                 data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
             if not modules.payment_include:
@@ -135,9 +135,6 @@ class EventList(ResourceList):
         if data.get('is_donation_enabled', False) and not modules.donation_include:
             raise ForbiddenException({'source': '/data/attributes/is-donation-enabled'},
                                      "Donation is not enabled in the system")
-        if not user.can_create_event():
-            raise ForbiddenException({'source': ''},
-                                     "Only verified accounts can create events")
 
         if data.get('state', None) == 'published' and not user.can_publish_event():
             raise ForbiddenException({'source': ''},
@@ -461,7 +458,7 @@ class EventDetail(ResourceDetail):
         """
         user = User.query.filter_by(id=current_identity.id).one()
         modules = Module.query.first()
-        check_create_event(user, modules, data)
+        validate_event(user, modules, data)
         if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
                 data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
             if not modules.payment_include:
