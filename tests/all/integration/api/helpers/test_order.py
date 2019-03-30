@@ -7,6 +7,7 @@ from app.factories.attendee import AttendeeFactory
 from app.factories.event import EventFactoryBasic
 from app.factories.order import OrderFactory
 from app.models.order import Order
+from app.api.helpers.db import save_to_db
 from tests.all.integration.setup_database import Setup
 from tests.all.integration.utils import OpenEventTestCase
 
@@ -42,13 +43,11 @@ class TestOrderUtilities(OpenEventTestCase):
 
         with app.test_request_context():
             attendee = AttendeeFactory()
-            db.session.add(attendee)
-            db.session.commit()
+            save_to_db(attendee)
 
             obj = OrderFactory()
             obj.ticket_holders = [attendee, ]
-            db.session.add(obj)
-            db.session.commit()
+            save_to_db(obj)
 
             delete_related_attendees_for_order(obj)
             order = db.session.query(Order).filter(Order.id == obj.id).first()
