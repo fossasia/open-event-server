@@ -18,12 +18,9 @@ down_revision = '6e5c574cbfb8'
 
 
 def upgrade():
-    op.execute("delete from users where lower(_email) <> _email;",
-               execution_options=None)
-    op.execute("create unique index users_lower_email on users (lower(_email));",
+    op.execute(" UPDATE users SET deleted_at = current_timestamp FROM (SELECT lower(_email) FROM users GROUP BY lower(_email) HAVING COUNT(*) > 1) as email where lower(_email) != _email;",
                execution_options=None)
 
 
 def downgrade():
-    op.execute("drop index users_lower_email;",
-               execution_options=None)
+    pass
