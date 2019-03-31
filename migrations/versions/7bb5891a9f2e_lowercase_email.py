@@ -18,9 +18,20 @@ down_revision = '6e5c574cbfb8'
 
 
 def upgrade():
-    op.execute(" UPDATE users SET deleted_at = current_timestamp FROM (SELECT lower(_email) FROM users GROUP BY lower(_email) HAVING COUNT(*) > 1) as email where lower(_email) != _email;",
+    op.execute("UPDATE users SET deleted_at = current_timestamp FROM (SELECT lower(_email) FROM users GROUP BY lower(_email) HAVING COUNT(*) > 1) as email where lower(_email) != _email;",
+               execution_options=None)
+    op.execute("UPDATE users SET _email = concat(_email, '_') FROM (SELECT lower(_email) FROM users GROUP BY lower(_email) HAVING COUNT(*) > 1) as email where lower(_email) != _email;",
+               execution_options=None)
+    op.execute("update users set _email = lower(_email);",
+               execution_options=None)
+    op.execute("alter table users add check ( lower(_email) = _email );",
                execution_options=None)
 
 
 def downgrade():
-    pass
+    op.execute("UPDATE users SET deleted_at = null FROM (SELECT lower(_email) FROM users GROUP BY lower(_email) HAVING COUNT(*) > 1) as email where lower(_email) != _email;",
+               execution_options=None)
+    op.execute("UPDATE users SET _email = replace(_email, right(_email, 1), '') FROM (SELECT lower(_email) FROM users GROUP BY lower(_email) HAVING COUNT(*) > 1) as email where lower(_email) != _email;",
+               execution_options=None)
+    op.execute("alter table users add check ( lower(_email) = _email );",
+               execution_options=None)
