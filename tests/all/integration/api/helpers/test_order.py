@@ -2,6 +2,7 @@ import unittest
 from datetime import timedelta, datetime, timezone
 
 from app import current_app as app, db
+from app.api.helpers.db import save_to_db
 from app.api.helpers.order import set_expiry_for_order, delete_related_attendees_for_order
 from app.factories.attendee import AttendeeFactory
 from app.factories.event import EventFactoryBasic

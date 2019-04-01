@@ -117,6 +117,7 @@ def create_event_copy(identifier):
         save_to_db(form)
 
     for user_role in user_event_roles:
+        user_role_id = user_role.id
         db.session.expunge(user_role)
         make_transient(user_role)
         user_role.event_id = event.id
