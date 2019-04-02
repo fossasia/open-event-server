@@ -127,6 +127,7 @@ def create_app():
         from app.api.users import user_misc_routes
         from app.api.orders import order_misc_routes
         from app.api.role_invites import role_invites_misc_routes
+        from app.api.admin_translations import admin_blueprint
 
         app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)
@@ -140,6 +141,7 @@ def create_app():
         app.register_blueprint(attendee_misc_routes)
         app.register_blueprint(order_misc_routes)
         app.register_blueprint(role_invites_misc_routes)
+        app.register_blueprint(admin_blueprint)
 
     sa.orm.configure_mappers()
 

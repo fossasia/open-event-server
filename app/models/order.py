@@ -38,7 +38,7 @@ class Order(SoftDeletionModel):
 
     id = db.Column(db.Integer, primary_key=True)
     identifier = db.Column(db.String, unique=True)
-    amount = db.Column(db.Float)
+    amount = db.Column(db.Float, nullable=False, default=0)
     address = db.Column(db.String)
     city = db.Column(db.String)
     state = db.Column(db.String)
