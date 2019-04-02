@@ -1,6 +1,6 @@
 from app import current_app
 from app.models import db
-from app.api.helpers.db import get_or_create  # , save_to_db
+from app.api.helpers.db import get_or_create, save_to_db  # , save_to_db
 from envparse import env
 
 # Admin message settings
@@ -114,8 +114,7 @@ def create_settings():
         setting.tw_consumer_secret = tw_consumer_secret
         setting.in_client_id = in_client_id
         setting.in_client_secret = in_client_secret
-        db.session.add(setting)
-        db.session.commit()
+        save_to_db(setting)
 
 
 def create_event_image_sizes():
@@ -169,7 +168,7 @@ def create_event_sub_topics():
      "Music": ["Cultural", "Pop", "Top 40", "EDM / Electronic", "R&B", "Other", "Classical"],
      "Performing & Visual Arts": ["Craft", "Comedy", "Fine Art", "Orchestra"],
      "Family & Education": ["Education", "Baby", "Reunion"],
-     "Business & Professional": ["Career", "Startups &amp; Small Business", "Educators", "Design", "Finance"],
+     "Business & Professional": ["Career", "Startups & Small Business", "Educators", "Design", "Finance"],
      "Charity & Causes": ["Education", "Other", "Environment"],
      "Hobbies & Special Interest": ["Other", "Anime/Comics"],
      "Seasonal & Holiday": ["Easter", "Other"],

@@ -1,0 +1,10 @@
+DATABASE_URL=postgresql://sai:start@127.0.0.1:5432/oevent
+INTEGRATE_SOCKETIO=false
+TEST_DATABASE_URL=postgresql://sai:start@127.0.0.1:5432/opev_test
+APP_CONFIG=config.DevelopmentConfig
+ENABLE_ELASTICSEARCH=true
+ELASTICSEARCH_HOST=localhost:9200
+
+POSTGRES_USER=
+POSTGRES_PASSWORD=start
+POSTGRES_DB=open_event
