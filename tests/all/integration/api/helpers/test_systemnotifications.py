@@ -18,6 +18,15 @@ class TestSystemNotificationHelperValidation(OpenEventTestCase):
             response = get_event_exported_actions(request_url)
             self.assertIsInstance(response, list)
 
+    def test_get_event_imported_actions(self):
+        """Method to test the actions associated with a notification about an event being successfully exported."""
+
+        with app.test_request_context():
+            request_url = 'https://localhost/e/345525'
+            request_event_id = 1
+            response = get_event_imported_actions(request_event_id, request_url)
+            self.assertIsInstance(response, list)
+
 
 if __name__ == '__main__':
     unittest.main()
