@@ -18,7 +18,7 @@ down_revision = '6e5c574cbfb8'
 
 
 def upgrade():
-    op.execute("UPDATE users SET deleted_at = current_timestamp, _email = concat(_email, '_') FROM (SELECT lower(_email) FROM users GROUP BY lower(_email) HAVING COUNT(*) > 1) as email where lower(_email) != _email;",
+    op.execute("UPDATE users SET deleted_at = current_timestamp, _email = concat(_email, '_') where _email not in (SELECT DISTINCT ON (upper(_email)) _email FROM users);",
                execution_options=None)
     op.execute("create extension citext;",
                execution_options=None)
