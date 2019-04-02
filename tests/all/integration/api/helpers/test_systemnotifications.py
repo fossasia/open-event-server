@@ -12,7 +12,8 @@ from app.api.helpers.system_notifications import (
     get_ticket_purchased_organizer_notification_actions,
     get_event_published_notification_actions,
     get_event_role_notification_actions,
-    get_new_session_notification_actions
+    get_new_session_notification_actions,
+    get_session_schedule_notification_actions
     )
 from tests.all.integration.setup_database import Setup
 
@@ -108,6 +109,15 @@ class TestSystemNotificationHelperValidation(OpenEventTestCase):
             request_url = 'https://localhost/e/session/345525'
             request_session_id = 1
             response = get_new_session_notification_actions(request_session_id, request_url)
+            self.assertIsInstance(response, list)
+
+    def test_get_session_schedule_notification_actions(self):
+        """Method to test the actions associated with a notification of change in schedule of a session."""
+
+        with app.test_request_context():
+            request_url = 'https://localhost/e/session/345525'
+            request_session_id = 1
+            response = get_session_schedule_notification_actions(request_session_id, request_url)
             self.assertIsInstance(response, list)
 
 
