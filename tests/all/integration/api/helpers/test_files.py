@@ -9,7 +9,7 @@ from flask import Request, request, jsonify
 
 from app import current_app as app
 from app.api.helpers.files import create_save_resized_image, create_save_image_sizes
-from app.api.helpers.files import uploaded_image, uploaded_file
+from app.api.helpers.files import uploaded_image, uploaded_file, make_frontend_url
 from tests.all.integration.setup_database import Setup
 from tests.all.integration.utils import OpenEventTestCase
 from app.api.helpers.utilities import image_link
@@ -158,6 +158,19 @@ class TestFilesHelperValidation(OpenEventTestCase):
             self.assertEqual(resized_width_large, width_large)
             self.assertEqual(resized_width_thumbnail, width_thumbnail)
             self.assertEqual(resized_width_icon, width_icon)
+
+    def test_make_frontend_url(self):
+        """Method to test the make_frontend_url function."""
+
+        with app.test_request_context():
+            request_path = '/sample/path'
+            request_parameters = {'token': 'sometoken'}
+            expected_response_params = 'http://eventyay.com/sample/path?token=sometoken'
+            expected_response_noparams = 'http://eventyay.com/sample/path'
+            response_params = make_frontend_url(request_path, parameters=request_parameters)
+            response_noparams = make_frontend_url(request_path)
+            self.assertEqual(expected_response_params, response_params)
+            self.assertEqual(expected_response_noparams, response_noparams)
 
 
 if __name__ == '__main__':
