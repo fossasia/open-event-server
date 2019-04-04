@@ -361,6 +361,8 @@ def populate():
     print('Creating custom placeholders...')
     create_custom_placeholders()
 
+    db.session.commit()
+
 
 def populate_without_print():
     """
