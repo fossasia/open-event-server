@@ -109,18 +109,24 @@ class AttendeeList(ResourceList):
                                                                                          user_id=order.user_id):
                 raise ForbiddenException({'source': ''}, 'Access Forbidden')
             query_ = query_.join(Order).filter(Order.id == order.id)
+        else:
+            raise UnprocessableEntity({'source': ''}, 'Order ID not found')
 
         if view_kwargs.get('ticket_id'):
             ticket = safe_query(self, Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
             # if not has_access('is_registrar', event_id=ticket.event_id):
             #     raise ForbiddenException({'source': ''}, 'Access Forbidden')
             query_ = query_.join(Ticket).filter(Ticket.id == ticket.id)
+        else:
+            raise UnprocessableEntity({'source': ''}, 'Ticket ID not found')
 
         if view_kwargs.get('user_id'):
             user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
             if not has_access('is_user_itself', user_id=user.id):
                 raise ForbiddenException({'source': ''}, 'Access Forbidden')
             query_ = query_.join(User, User.email == TicketHolder.email).filter(User.id == user.id)
+        else:
+            raise UnprocessableEntity({'source': ''}, 'User ID not found')
 
         query_ = event_query(self, query_, view_kwargs, permission='is_registrar')
         return query_

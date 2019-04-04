@@ -153,11 +153,7 @@ def export_event_task(self, email, event_id, settings):
         send_notif_after_export(user=user, event_name=event.name, download_url=download_url)
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-<<<<<<< HEAD
-        logging.error('Error in exporting.. sending email')
-=======
         logging.warning('Error in exporting.. sending email')
->>>>>>> 3136d9051c3150769887a264a495d6f0a7e367ee
         send_export_mail(email=email, event_name=event.name, error_text=str(e))
         send_notif_after_export(user=user, event_name=event.name, error_text=str(e))
 
@@ -179,11 +175,7 @@ def import_event_task(self, email, file, source_type, creator_id):
             'event_name'], event_url=result['url'])
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-<<<<<<< HEAD
-        logging.error('Error in importing the event')
-=======
         logging.warning('Error in importing the event')
->>>>>>> 3136d9051c3150769887a264a495d6f0a7e367ee
         update_import_job(task_id, str(e), e.status if hasattr(e, 'status') else 'FAILURE')
         send_import_mail(email=email, error_text=str(e))
         send_notif_after_import(user=user, error_text=str(e))
@@ -341,11 +333,7 @@ def export_order_pdf_task(self, event_id):
         }
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
-<<<<<<< HEAD
-        logging.error('Error in exporting as pdf')
-=======
         logging.error('Error in exporting order as pdf')
->>>>>>> 3136d9051c3150769887a264a495d6f0a7e367ee
 
     return result
 
