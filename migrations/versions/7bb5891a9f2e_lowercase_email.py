@@ -29,5 +29,7 @@ def upgrade():
 def downgrade():
     op.execute("alter table users alter column _email type text;",
                execution_options=None)
+    op.execute("UPDATE users SET deleted_at = null, _email = left(_email, length(_email)-1) where right(_email, 1) = '_';",
+               execution_options=None)
     op.execute("drop extension citext;",
                execution_options=None)
