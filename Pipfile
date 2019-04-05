@@ -8,7 +8,7 @@ pycparser = "==2.14"
 flask-script = "<2.1,>=2.0.5"
 requests-oauthlib = ">=0.7.0,<1"
 icalendar = "<4,>=3.11"
-requests = {version = ">=2.12.4,<3", extras = ["security"]}
+requests = {version = ">=2.20.0,<3", extras = ["security"]}
 "psycopg2-binary" = "*"
 itsdangerous = "<0.30,>=0.24"
 humanize = ">=0.5.1,<0.6"

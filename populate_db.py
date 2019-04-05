@@ -1,6 +1,6 @@
 from app import current_app
 from app.models import db
-from app.api.helpers.db import get_or_create  # , save_to_db
+from app.api.helpers.db import get_or_create, save_to_db  # , save_to_db
 from envparse import env
 
 # Admin message settings
@@ -114,8 +114,7 @@ def create_settings():
         setting.tw_consumer_secret = tw_consumer_secret
         setting.in_client_id = in_client_id
         setting.in_client_secret = in_client_secret
-        db.session.add(setting)
-        db.session.commit()
+        save_to_db(setting)
 
 
 def create_event_image_sizes():
@@ -361,6 +360,8 @@ def populate():
     create_admin_message_settings()
     print('Creating custom placeholders...')
     create_custom_placeholders()
+
+    db.session.commit()
 
 
 def populate_without_print():

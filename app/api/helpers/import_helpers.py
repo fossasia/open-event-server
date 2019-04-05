@@ -320,8 +320,7 @@ def create_service_from_json(task_handle, data, srv, event_id, service_ids=None)
         obj['event_id'] = event_id
         # create object
         new_obj = srv[1](**obj)
-        db.session.add(new_obj)
-        db.session.commit()
+        save_to_db(new_obj)
         ids[old_id] = new_obj.id
         # add uploads to queue
         _upload_media_queue(srv, new_obj)
@@ -353,8 +352,7 @@ def import_event_json(task_handle, zip_path):
         srv = ('event', Event)
         data = _delete_fields(srv, data)
         new_event = Event(**data)
-        db.session.add(new_event)
-        db.session.commit()
+        save_to_db(new_event)
         write_file(
             path + '/social_links',
             json.dumps(data.get('social_links', []))
