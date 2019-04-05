@@ -8,6 +8,7 @@ from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.schema.events import EventSchema
 from app.factories.event import EventFactoryBasic
 from app.models import db
+from app.api.helpers.db import save_to_db
 from tests.all.integration.setup_database import Setup
 
 
@@ -54,8 +55,7 @@ class TestEventValidation(OpenEventTestCase):
         with app.test_request_context():
             schema = EventSchema()
             obj = EventFactoryBasic()
-            db.session.add(obj)
-            db.session.commit()
+            save_to_db(obj)
 
             original_data = {
                 'data': {

@@ -30,8 +30,7 @@ class TestDBHelperValidation(OpenEventTestCase):
 
         with app.test_request_context():
             event = EventFactoryBasic()
-            db.session.add(event)
-            db.session.commit()
+            save_to_db(event)
             obj = safe_query(db, Event, 'id', event.id, 'event_id')
             self.assertEqual(obj.name, event.name)
 
