@@ -49,7 +49,7 @@ class UserList(ResourceList):
         if len(data['password']) < 8:
             raise UnprocessableEntity({'source': '/data/attributes/password'},
                                        'Password should be at least 8 characters long')
-        if db.session.query(User.id).filter_by(email=data['email']).scalar() is not None:
+        if db.session.query(User.id).filter_by(email=data['email'].strip()).scalar() is not None:
             raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")
 
     def after_create_object(self, user, data, view_kwargs):
@@ -207,13 +207,16 @@ class UserDetail(ResourceDetail):
         #     data['small_image_url'] = uploaded_images['thumbnail_image_url']
         #     data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
         #     data['icon_image_url'] = uploaded_images['icon_image_url']
+        users_email = data.get('email', None)
+        if users_email is not None:
+            users_email = users_email.strip()
 
         if has_access('is_admin') and data.get('deleted_at') != user.deleted_at:
             user.deleted_at = data.get('deleted_at')
 
-        if data.get('email') and data['email'] != user.email:
+        if users_email is not None and users_email != user.email:
             try:
-                db.session.query(User).filter_by(email=data['email']).one()
+                db.session.query(User).filter_by(email=users_email).one()
             except NoResultFound:
                 view_kwargs['email_changed'] = user.email
             else:
