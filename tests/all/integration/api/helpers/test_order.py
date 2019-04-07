@@ -8,6 +8,7 @@ from app.factories.attendee import AttendeeFactory
 from app.factories.event import EventFactoryBasic
 from app.factories.order import OrderFactory
 from app.models.order import Order
+from app.api.helpers.db import save_to_db
 from tests.all.integration.setup_database import Setup
 from tests.all.integration.utils import OpenEventTestCase
 

@@ -3,7 +3,7 @@ from datetime import date
 from flask_rest_jsonapi.data_layers.base import BaseDataLayer
 from sqlalchemy.orm import make_transient
 
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.files import create_save_resized_image
 from app.models.custom_form import CustomForms
 from app.models.discount_code import DiscountCode
@@ -45,8 +45,7 @@ class EventCopyLayer(BaseDataLayer):
         make_transient(event)
         delattr(event, 'id')
         event.identifier = get_new_event_identifier()
-        db.session.add(event)
-        db.session.commit()
+        save_to_db(event)
 
         # Removes access_codes, order_tickets, ticket_tags for the new tickets created.
         for ticket in tickets:
@@ -55,8 +54,7 @@ class EventCopyLayer(BaseDataLayer):
             make_transient(ticket)
             ticket.event_id = event.id
             delattr(ticket, 'id')
-            db.session.add(ticket)
-            db.session.commit()
+            save_to_db(ticket)
 
         for link in social_links:
             link_id = link.id
@@ -64,8 +62,7 @@ class EventCopyLayer(BaseDataLayer):
             make_transient(link)
             link.event_id = event.id
             delattr(link, 'id')
-            db.session.add(link)
-            db.session.commit()
+            save_to_db(link)
 
         for sponsor in sponsors:
             sponsor_id = sponsor.id
@@ -75,8 +72,7 @@ class EventCopyLayer(BaseDataLayer):
             logo_url = create_save_resized_image(image_file=sponsor.logo_url, resize=False)
             delattr(sponsor, 'id')
             sponsor.logo_url = logo_url
-            db.session.add(sponsor)
-            db.session.commit()
+            save_to_db(sponsor)
 
         for location in microlocations:
             location_id = location.id
@@ -84,8 +80,7 @@ class EventCopyLayer(BaseDataLayer):
             make_transient(location)
             location.event_id = event.id
             delattr(location, 'id')
-            db.session.add(location)
-            db.session.commit()
+            save_to_db(location)
 
         # No sessions are copied for new tracks
         for track in tracks:
@@ -94,8 +89,7 @@ class EventCopyLayer(BaseDataLayer):
             make_transient(track)
             track.event_id = event.id
             delattr(track, 'id')
-            db.session.add(track)
-            db.session.commit()
+            save_to_db(track)
 
         for call in speaker_calls:
             call_id = call.id
@@ -103,8 +97,7 @@ class EventCopyLayer(BaseDataLayer):
             make_transient(call)
             call.event_id = event.id
             delattr(call, 'id')
-            db.session.add(call)
-            db.session.commit()
+            save_to_db(call)
 
         for code in discount_codes:
             code_id = code.id
@@ -112,8 +105,7 @@ class EventCopyLayer(BaseDataLayer):
             make_transient(code)
             code.event_id = event.id
             delattr(code, 'id')
-            db.session.add(code)
-            db.session.commit()
+            save_to_db(code)
 
         for form in custom_forms:
             form_id = form.id
@@ -121,7 +113,6 @@ class EventCopyLayer(BaseDataLayer):
             make_transient(form)
             form.event_id = event.id
             delattr(form, 'id')
-            db.session.add(form)
-            db.session.commit()
+            save_to_db(form)
 
         return event
