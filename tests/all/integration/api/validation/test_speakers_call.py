@@ -8,6 +8,7 @@ from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.schema.speakers_calls import SpeakersCallSchema
 from app.factories.speakers_call import SpeakersCallFactory
 from app.models import db
+from app.api.helpers.db import save_to_db
 from tests.all.integration.setup_database import Setup
 
 
@@ -54,8 +55,7 @@ class TestSpeakersCallValidation(OpenEventTestCase):
         with app.test_request_context():
             schema = SpeakersCallSchema()
             obj = SpeakersCallFactory()
-            db.session.add(obj)
-            db.session.commit()
+            save_to_db(obj)
 
             original_data = {
                 'data': {

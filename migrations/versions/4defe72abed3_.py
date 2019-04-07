@@ -25,7 +25,7 @@ def upgrade():
     op.execute("""UPDATE events SET state = 'draft' WHERE state != 'published'""")
     op.execute("""UPDATE sessions SET state = LOWER(state)""")
     op.execute("""UPDATE sessions SET state = 'draft' WHERE state not in
-    ('accepted', 'pending', 'approved', 'rejected')""")
+    ('accepted', 'pending', 'confirmed', 'rejected')""")
     # ### end Alembic commands ###
 
 
