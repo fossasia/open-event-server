@@ -32,3 +32,11 @@ class TestStorageHelperValidation(TestCase):
         self.assertEqual(
             expected_file_url, create_url(request_url, '/some/path/image.png')
             )
+
+    def test_create_url(self):
+        """Method to test a generated url of uploaded file"""
+        request_url = "https://localhost:4200"
+        expected_file_url = 'https://localhost:4200/some/path/image.png'
+        self.assertEqual(
+            expected_file_url, create_url(request_url, '/some/path/image.png')
+            )

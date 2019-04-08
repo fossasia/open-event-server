@@ -12,6 +12,7 @@ from app.api.helpers.db import get_count
 from app.models import db
 from app.models.order import Order
 from app.models.ticket_fee import get_fee
+from app.models.ticket_fee import get_maximum_fee
 from app.models.base import SoftDeletionModel
 from app.models.email_notification import EmailNotification
 from app.models.feedback import Feedback
@@ -312,6 +313,13 @@ class Event(SoftDeletionModel):
         Returns the fee as a percentage from 0 to 100 for this event
         """
         return get_fee(self.payment_country, self.payment_currency)
+
+    @property
+    def maximum_fee(self):
+        """
+        Returns the maximum fee for this event
+        """
+        return get_maximum_fee(self.payment_country, self.payment_currency)
 
     def notification_settings(self, user_id):
         try:
