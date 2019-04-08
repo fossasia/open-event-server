@@ -4,7 +4,7 @@ import uuid
 import tempfile
 import os
 
-admin_blueprint = Blueprint('admin_blueprint', __name__, url_prefix='/admin/content/translations/all')
+admin_blueprint = Blueprint('admin_blueprint', __name__, url_prefix='/v1/admin/content/translations/all')
 temp_dir = tempfile.gettempdir()
 translations_dir = 'app/translations'
 
