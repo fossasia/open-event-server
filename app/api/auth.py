@@ -261,7 +261,7 @@ def change_password():
             send_notification_with_action(user, PASSWORD_CHANGE_NOTIF,
                                           app_name=get_settings()['app_name'])
         else:
-            return BadRequestError({'source': ''}, 'Wrong Password').respond()
+            return BadRequestError({'source': ''}, 'Wrong Password. Please enter correct current password.').respond()
 
     return jsonify({
         "id": user.id,
