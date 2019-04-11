@@ -208,8 +208,8 @@ class UserDetail(ResourceDetail):
         #     data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
         #     data['icon_image_url'] = uploaded_images['icon_image_url']
 
-        if has_access('is_admin') and data.get('deleted_at') and data['deleted_at'] != user.deleted_at:
-            user.deleted_at = data['deleted_at']
+        if has_access('is_admin') and data.get('deleted_at') != user.deleted_at:
+            user.deleted_at = data.get('deleted_at')
 
         if data.get('email') and data['email'] != user.email:
             try:
