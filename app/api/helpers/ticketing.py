@@ -24,11 +24,11 @@ class TicketingManager(object):
     @staticmethod
     def match_discount_quantity(discount_code, ticket_holders=None):
         qty = 0
-        old_holders = get_count(TicketHolder.query.filter(TicketHolder.ticket_id.in_(discount_code.tickets.split(","))))
+        old_holders = get_count(TicketHolder.query.filter(TicketHolder.ticket_id.in_(discount_code.ticket_ids)))
 
         for holder in ticket_holders:
             ticket_holder = TicketHolder.query.filter_by(id=holder).one()
-            if ticket_holder.ticket.id in discount_code.tickets.split(","):
+            if ticket_holder.ticket.id in discount_code.ticket_ids:
                 qty += 1
         if (qty + old_holders) <= discount_code.tickets_number and \
             discount_code.min_quantity <= qty <= discount_code.max_quantity:

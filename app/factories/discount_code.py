@@ -34,7 +34,7 @@ class DiscountCodeTicketFactory(factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session = db.session
 
     marketer = factory.RelatedFactory(UserFactory)
-    tickets = factory.RelatedFactory(TicketFactory)
+    ticket_ids = [1, 2, 3]
     code = common.string_
     discount_url = common.url_
     value = common.float_
