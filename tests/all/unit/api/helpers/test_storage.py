@@ -1,7 +1,8 @@
 """Test file for storage functions."""
 from unittest import TestCase
+from unittest.mock import patch
 
-from app.api.helpers.storage import create_url
+from app.api.helpers.storage import create_url, generate_hash
 
 
 class TestStorageHelperValidation(TestCase):
@@ -40,3 +41,25 @@ class TestStorageHelperValidation(TestCase):
         self.assertEqual(
             expected_file_url, create_url(request_url, '/some/path/image.png')
             )
+
+    def test_generate_hash(self):
+        """Test generation of hash for a key."""
+
+        def patch_settings(settings):
+            settings.return_value = {
+                'secret': 'secret_key'
+            }
+
+        with patch('app.api.helpers.storage.get_settings') as get_settings:
+            patch_settings(get_settings)
+            test_input = 'case1'
+            exepected_output = 'WUFCV0xHVk'
+            actual_output = generate_hash(test_input)
+            self.assertEqual(exepected_output, actual_output)
+            self.assertEqual(len(actual_output), 10)
+
+            test_input = '/static/uploads/pdf/temp/'
+            exepected_output = 'MzRueVhjY0'
+            actual_output = generate_hash(test_input)
+            self.assertEqual(exepected_output, actual_output)
+            self.assertEqual(len(actual_output), 10)
