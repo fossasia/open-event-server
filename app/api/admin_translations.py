@@ -18,7 +18,7 @@ def download_translations():
     shutil.move(zip_file_ext, temp_dir)
     path_to_zip = os.path.join(temp_dir, zip_file_ext)
     from .helpers.tasks import delete_translations
-    delete_translations.apply_async(path_to_zip, countdown=600)
+    delete_translations.apply_async(kwargs={'zip_file_path': path_to_zip}, countdown=600)
     return send_file(path_to_zip,  mimetype='application/zip',
                      as_attachment=True,
                      attachment_filename='translations.zip')
