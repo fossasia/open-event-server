@@ -38,7 +38,7 @@ class Order(SoftDeletionModel):
 
     id = db.Column(db.Integer, primary_key=True)
     identifier = db.Column(db.String, unique=True)
-    amount = db.Column(db.Float)
+    amount = db.Column(db.Float, nullable=False, default=0)
     address = db.Column(db.String)
     city = db.Column(db.String)
     state = db.Column(db.String)
@@ -140,10 +140,13 @@ class Order(SoftDeletionModel):
 
     @property
     def is_free(self):
-        return self.paid_via == 'free'
+        return self.payment_mode == 'free'
 
     def get_revenue(self):
-        return self.amount - (self.amount * (self.event.fee / 100.0))
+        if self.amount:
+            return self.amount - min(self.amount * (self.event.fee / 100.0), self.event.maximum_fee)
+        else:
+            return 0.0
 
     @property
     def serialize(self):
