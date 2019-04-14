@@ -1,11 +1,12 @@
 """Test file for storage functions."""
-from unittest import TestCase
+import unittest
 from unittest.mock import patch
 
-from app.api.helpers.storage import create_url, generate_hash
+from app.api.helpers.storage import create_url, generate_hash, upload_local
+from flask import Flask
 
 
-class TestStorageHelperValidation(TestCase):
+class TestStorageHelperValidation(unittest.TestCase):
     """Test class for testing storage helper functions."""
 
     def test_arbitrary_url(self):
@@ -63,3 +64,22 @@ class TestStorageHelperValidation(TestCase):
             actual_output = generate_hash(test_input)
             self.assertEqual(exepected_output, actual_output)
             self.assertEqual(len(actual_output), 10)
+
+    """Test local file upload."""
+    @patch('app.api.helpers.storage.upload_local')
+    @patch('app.api.helpers.storage.generate_hash', return_value='hash')
+    @patch('app.api.helpers.storage.get_settings', return_value={'static_domain': 'https://next.eventyay.com'})
+    @patch('app.api.helpers.storage.UploadedFile')
+    def test_upload_local(self, uploadedfile_object, settings, generated_hash, uploadlocal):
+        expected_response = 'https://next.eventyay.com/media/upload_key/hash/test.pdf'
+        uploadedfile_object.filename = 'test.pdf'
+
+        app = Flask(__name__)
+        with app.app_context():
+            app.config['BASE_DIR'] = 'testdir'
+            actual_response = upload_local(uploadedfile_object, 'upload_key')
+            self.assertEqual(expected_response, actual_response)
+
+
+if __name__ == '__main__':
+    unittest.main()
