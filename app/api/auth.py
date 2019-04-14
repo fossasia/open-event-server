@@ -278,19 +278,22 @@ def change_password():
 def authorized_access_ticket(ticket_function):
     @wraps(ticket_function)
     def wrapper(*args, **kwargs):
-        try:
-            user_id = Order.query.filter_by(user=current_user).first().user.id
-        except Exception as e:
-            return NotFoundError({'source': ''}, 'This ticket is not associated with any order').respond()
-        if current_user.id == user_id:
-            return ticket_function(*args, **kwargs)
+        if current_user:
+            try:
+                ticket_url = '{}/{}/{}'.format(kwargs['identifier'], kwargs['identifier_hash'], kwargs['filename'])
+                user_id = Order.query.filter(Order.tickets_pdf_url.endswith(ticket_url)).first().user.id
+            except Exception as e:
+                return NotFoundError({'source': ''}, 'This ticket is not associated with any order').respond()
+            if current_user.id == user_id:
+                return ticket_function(*args, **kwargs)
+            else:
+                return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
         else:
-            return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
+            return ForbiddenError({'source': ''}, 'Authentication Required to access ticket').respond()
     return wrapper
 
 
 @ticket_blueprint.route('/<string:identifier>/<string:identifier_hash>/<string:filename>')
-@jwt_required()
 @authorized_access_ticket
 def ticket_attendee_authorized(identifier, identifier_hash, filename):
     return send_from_directory('../static/media/attendees/tickets/pdf/{}/{}'.format(identifier,
