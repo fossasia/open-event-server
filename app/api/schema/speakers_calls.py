@@ -35,6 +35,14 @@ class SpeakersCallSchema(SoftDeletionSchema):
         if data['starts_at'] >= data['ends_at']:
             raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at")
 
+        if data['starts_at'] > speakers_calls.event.ends_at:
+            raise UnprocessableEntity({'pointer': '/data/attributes/starts-at'},
+                                      "speakers-call starts-at should be before event ends-at")
+
+        if data['ends_at'] > speakers_calls.event.ends_at:
+            raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'},
+                                      "speakers-call ends-at should be before event ends-at")
+
     id = fields.Str(dump_only=True)
     announcement = fields.Str(required=True)
     starts_at = fields.DateTime(required=True)

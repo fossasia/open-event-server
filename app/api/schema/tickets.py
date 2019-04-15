@@ -34,6 +34,14 @@ class TicketSchemaPublic(SoftDeletionSchema):
             raise UnprocessableEntity({'pointer': '/data/attributes/sales-ends-at'},
                                       "sales-ends-at should be after sales-starts-at")
 
+        if data['sales_starts_at'] > ticket.event.ends_at:
+            raise UnprocessableEntity({'pointer': '/data/attributes/sales-starts-at'},
+                                      "ticket sales-starts-at should be before event ends-at")
+
+        if data['sales_ends_at'] > ticket.event.ends_at:
+            raise UnprocessableEntity({'pointer': '/data/attributes/sales-ends-at'},
+                                      "ticket sales-ends-at should be before event ends-at")
+
     @validates_schema
     def validate_quantity(self, data):
         if 'max_order' in data and 'min_order' in data:
