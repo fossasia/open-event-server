@@ -9,6 +9,7 @@ import requests
 from flask import current_app as app
 from flask import request, url_for
 from flask_jwt import current_identity
+from flask_login import current_user
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.storage import upload, UPLOAD_PATHS, UploadedFile
@@ -240,7 +241,7 @@ def create_export_job(task_id, event_id):
     if export_job:
 
         export_job.task = task_url
-        export_job.user_email = current_identity.email
+        export_job.user_email = current_user.email
         export_job.event = Event.query.get(event_id)
         export_job.starts_at = datetime.now(pytz.utc)
     else:
