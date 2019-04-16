@@ -21,7 +21,7 @@ environment_ = 'production'
 secret_ = 'ABCDefghIJKLmnop'
 fee_ = '1.23'
 slug_ = factory.Sequence(lambda n: 'example_slug{0}'.format(n))
-
+hash_ = '149889783495332276669212664484219865405'
 
 def socialUrl_(name):
     return 'https://{}.com/{}'.format(name, name)
