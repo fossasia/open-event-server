@@ -29,7 +29,7 @@ class TicketSchemaPublic(SoftDeletionSchema):
 
             if 'sales_ends_at' not in data:
                 data['sales_ends_at'] = ticket.sales_ends_at
-   
+
             if 'event_ends_at' not in data:
                 data['event_ends_at'] = ticket.event.ends_at
 
