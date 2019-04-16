@@ -241,12 +241,15 @@ def create_export_job(task_id, event_id):
     if export_job:
 
         export_job.task = task_url
-        export_job.user_email = current_user.email
+        if current_identity:
+            export_job.user_email = current_identity.email
+        else:
+            export_job.user_email = current_user.email
         export_job.event = Event.query.get(event_id)
         export_job.starts_at = datetime.now(pytz.utc)
     else:
         export_job = ExportJob(
-            task=task_url, user_email=current_identity.email,
+            task=task_url, user_email=(current_identity.email if current_identity else current_user.email),
             event=Event.query.get(event_id)
         )
     save_to_db(export_job, 'ExportJob saved')
