@@ -29,7 +29,7 @@ class TicketSchemaPublic(SoftDeletionSchema):
 
             if 'sales_ends_at' not in data:
                 data['sales_ends_at'] = ticket.sales_ends_at
-         
+   
             if 'event_ends_at' not in data:
                 data['event_ends_at'] = ticket.event.ends_at
 
@@ -37,11 +37,11 @@ class TicketSchemaPublic(SoftDeletionSchema):
             raise UnprocessableEntity({'pointer': '/data/attributes/sales-ends-at'},
                                       "sales-ends-at should be after sales-starts-at")
 
-        if data['sales_starts_at'] > data['event_ends_at']:
+        if 'event_ends_at' in data and data['sales_starts_at'] > data['event_ends_at']:
             raise UnprocessableEntity({'pointer': '/data/attributes/sales-starts-at'},
                                       "ticket sales-starts-at should be before event ends-at")
 
-        if data['sales_ends_at'] > data['event_ends_at']:
+        if 'event_ends_at' in data and data['sales_ends_at'] > data['event_ends_at']:
             raise UnprocessableEntity({'pointer': '/data/attributes/sales-ends-at'},
                                       "ticket sales-ends-at should be before event ends-at")
 

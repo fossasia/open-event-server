@@ -28,7 +28,7 @@ class TestTicketValidation(OpenEventTestCase):
         data = {
             'sales_starts_at': datetime(2003, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
             'sales_ends_at': datetime(2003, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
-            'event_ends_at': datetime(2003, 8, 10, 12, 30, 45).replace(tzinfo=timezone('UTC'))
+            'event_ends_at': datetime(2003, 9, 10, 12, 30, 45).replace(tzinfo=timezone('UTC'))
         }
         TicketSchema.validate_date(schema, data, original_data)
 
