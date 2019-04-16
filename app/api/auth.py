@@ -1,10 +1,10 @@
+import os
 import base64
 import random
 import string
-from functools import wraps
 
 import requests
-from flask import request, jsonify, make_response, Blueprint, send_from_directory
+from flask import request, jsonify, make_response, Blueprint, send_file, redirect
 from flask_jwt import current_identity as current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -274,27 +274,18 @@ def change_password():
         "password-changed": True
     })
 
-
-def authorized_access_ticket(ticket_function):
-    @wraps(ticket_function)
-    def wrapper(*args, **kwargs):
-        if current_user:
-            try:
-                ticket_url = '{}/{}/{}'.format(kwargs['identifier'], kwargs['identifier_hash'], kwargs['filename'])
-                user_id = Order.query.filter(Order.tickets_pdf_url.endswith(ticket_url)).first().user.id
-            except Exception as e:
-                return NotFoundError({'source': ''}, 'This ticket is not associated with any order').respond()
-            if current_user.id == user_id:
-                return ticket_function(*args, **kwargs)
-            else:
-                return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
+@ticket_blueprint.route('/<string:order_identifier>/<string:filename>')
+@jwt_required()
+def ticket_attendee_authorized(order_identifier):
+    if current_user:
+        try:
+            order = Order.query.filter_by(identifier=order_identifier).first()
+            user_id = order.user.id
+        except Exception as e:
+            return NotFoundError({'source': ''}, 'This ticket is not associated with any order').respond()
+        if current_user.id == user_id:
+            return redirect(order.tickets_pdf_url)
         else:
-            return ForbiddenError({'source': ''}, 'Authentication Required to access ticket').respond()
-    return wrapper
-
-
-@ticket_blueprint.route('/<string:identifier>/<string:identifier_hash>/<string:filename>')
-@authorized_access_ticket
-def ticket_attendee_authorized(identifier, identifier_hash, filename):
-    return send_from_directory('../static/media/attendees/tickets/pdf/{}/{}'.format(identifier,
-                               identifier_hash), filename)
+            return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
+    else:
+        return ForbiddenError({'source': ''}, 'Authentication Required to access ticket').respond()

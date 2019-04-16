@@ -160,7 +160,7 @@ def upload_local(uploaded_file, key, **kwargs):
     Uploads file locally. Base dir - static/media/
     """
     filename = secure_filename(uploaded_file.filename)
-    file_relative_path = 'static/media/' + key + '/' + generate_hash(key) + '/' + filename
+    file_relative_path = 'static/media/' + key + '/' + filename
     file_path = app.config['BASE_DIR'] + '/' + file_relative_path
     dir_path = file_path.rsplit('/', 1)[0]
     # delete current
