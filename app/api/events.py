@@ -426,7 +426,13 @@ class EventDetail(ResourceDetail):
         :param kwargs:
         :return:
         """
+        if 'id' in kwargs:
+            # condition to check if id is actually numerical identifier
+            if len(str(kwargs['id'])) >= 5:
+                new_kwarg = {'identifier': str(kwargs['id'])}
+                kwargs = new_kwarg
         kwargs = get_id(kwargs)
+
         if 'Authorization' in request.headers and has_access('is_coorganizer', event_id=kwargs['id']):
             self.schema = EventSchema
         else:
@@ -438,11 +444,6 @@ class EventDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        if 'id' in kwargs:
-            # condition to check if id is actually numerical identifier
-            if len(str(kwargs['id'])) >= 5:
-                new_kwarg = {'identifier': str(kwargs['id'])}
-                kwargs = new_kwarg
         kwargs = get_id(kwargs)
 
         if view_kwargs.get('order_identifier') is not None:
