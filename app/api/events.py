@@ -444,7 +444,7 @@ class EventDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        kwargs = get_id(kwargs)
+        get_id(view_kwargs)
 
         if view_kwargs.get('order_identifier') is not None:
             order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
