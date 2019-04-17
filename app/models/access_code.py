@@ -19,6 +19,8 @@ class AccessCode(SoftDeletionModel):
     max_quantity = db.Column(db.Integer)  # For event level access this holds the months for which it is valid
     valid_from = db.Column(db.DateTime(timezone=True), nullable=True)
     valid_till = db.Column(db.DateTime(timezone=True), nullable=True)
+    ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id', ondelete='CASCADE'))
+    ticket = db.relationship('Ticket', backref='access_code', foreign_keys=[ticket_id])
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     event = db.relationship('Event', backref='access_codes', foreign_keys=[event_id])
     created_at = db.Column(db.DateTime(timezone=True))
