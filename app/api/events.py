@@ -438,7 +438,12 @@ class EventDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        get_id(view_kwargs)
+        if 'id' in kwargs:
+            # condition to check if id is actually numerical identifier
+            if len(str(kwargs['id'])) >= 5:
+                new_kwarg = {'identifier': str(kwargs['id'])}
+                kwargs = new_kwarg
+        kwargs = get_id(kwargs)
 
         if view_kwargs.get('order_identifier') is not None:
             order = safe_query(self, Order, 'identifier', view_kwargs['order_identifier'], 'order_identifier')
