@@ -4,9 +4,10 @@ import random
 import string
 
 import requests
-from flask import request, jsonify, make_response, Blueprint, send_file, redirect
+from flask import request, jsonify, make_response, Blueprint, send_file, url_for, redirect
 from flask_jwt import current_identity as current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
+from app.api.helpers.order import create_pdf_tickets_for_holder
 
 from app import get_settings
 from app.api.helpers.db import save_to_db, get_count
@@ -23,9 +24,10 @@ from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE, \
     USER_REGISTER_WITH_PASSWORD, PASSWORD_RESET_AND_VERIFY
 from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
+from app.api.helpers.storage import UPLOAD_PATHS
 
 
-ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/static/media/attendees/tickets/pdf')
+ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/')
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
 
 
@@ -274,17 +276,26 @@ def change_password():
         "password-changed": True
     })
 
-@ticket_blueprint.route('/<string:order_identifier>/<string:filename>')
+
+@ticket_blueprint.route('/tickets/<string:order_identifier>')
 @jwt_required()
 def ticket_attendee_authorized(order_identifier):
     if current_user:
         try:
             order = Order.query.filter_by(identifier=order_identifier).first()
             user_id = order.user.id
-        except Exception as e:
+        except NoResultFound:
             return NotFoundError({'source': ''}, 'This ticket is not associated with any order').respond()
         if current_user.id == user_id:
-            return redirect(order.tickets_pdf_url)
+            file_path = os.path.join('/generated/tickets/{}'.format(UPLOAD_PATHS['pdf']['ticket_attendee']
+                                         .format(identifier=order_identifier)), order_identifier + '.pdf')
+            try:
+                response = make_response(send_file(file_path))
+                response.headers['Content-Disposition'] = 'attachment; filename=ticket-%s.zip' % order_identifier
+                return response
+            except FileNotFoundError:
+                create_pdf_tickets_for_holder(order)
+                return redirect(url_for('ticket_blueprint.ticket_attendee_authorized', order_identifier=order_identifier))
         else:
             return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
     else:

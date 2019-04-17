@@ -257,7 +257,7 @@ def make_frontend_url(path, parameters=None):
     ))
 
 
-def create_save_pdf(pdf_data, key, dir_path='/static/uploads/pdf/temp/', identifier=get_file_name()):
+def create_save_pdf(pdf_data, key, dir_path='/static/uploads/pdf/temp/', identifier=get_file_name(), upload_dir='static/media'):
     """
     Create and Saves PDFs from html
     :param pdf_data:
@@ -277,7 +277,7 @@ def create_save_pdf(pdf_data, key, dir_path='/static/uploads/pdf/temp/', identif
 
     uploaded_file = UploadedFile(dest, filename)
     upload_path = key.format(identifier=identifier)
-    new_file = upload(uploaded_file, upload_path)
+    new_file = upload(uploaded_file, upload_path, upload_dir=upload_dir)
     # Removing old file created
     os.remove(dest)
 
