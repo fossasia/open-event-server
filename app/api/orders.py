@@ -87,6 +87,8 @@ class OrdersListPost(ResourceList):
             raise ConflictException({'pointer': '/data/attributes/amount'},
                                     "Amount cannot be null for a paid order")
 
+        if not data.get('amount'):
+            data['amount'] = 0
         # Apply discount only if the user is not event admin
         if data.get('discount') and not has_access('is_coorganizer', event_id=data['event']):
             discount_code = safe_query_without_soft_deleted_entries(self, DiscountCode, 'id', data['discount'],
