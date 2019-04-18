@@ -3,12 +3,14 @@ import shutil
 import uuid
 import tempfile
 import os
+from app.api.helpers.permissions import is_admin
 
 admin_blueprint = Blueprint('admin_blueprint', __name__, url_prefix='/v1/admin/content/translations/all')
 temp_dir = tempfile.gettempdir()
 translations_dir = 'app/translations'
 
 @admin_blueprint.route('/', methods=['GET'])
+@is_admin
 def download_translations():
     """Admin Translations Downloads"""
     uuid_literal = uuid.uuid4()
