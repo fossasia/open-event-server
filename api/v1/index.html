@@ -20392,6 +20392,24 @@ Get the task status and the final result of the task as response</p>
 <td>-</td>
 </tr>
 <tr>
+<td style="text-align:left"><code>company</code></td>
+<td>Company for Billing Info</td>
+<td>string</td>
+<td>-</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>tax-business-info</code></td>
+<td>Tax Business details for Billing Info</td>
+<td>string</td>
+<td>-</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>is-billing-enabled</code></td>
+<td>Yes/No to signify if Billing Info is enabled or not</td>
+<td>boolean (default: <code>false</code>)</td>
+<td>-</td>
+</tr>
+<tr>
 <td style="text-align:left"><code>payment-mode</code></td>
 <td>Mode of payment (free,stripe,paypal)</td>
 <td>string</td>
@@ -20558,6 +20576,9 @@ Get the task status and the final result of the task as response</p>
       "<span class="hljs-attribute">discount-code-id</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">brand</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">zipcode</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">company</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">tax-business-info</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">is-billing-enabled</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">payment-mode</span>": <span class="hljs-value"><span class="hljs-string">"paypal"</span></span>,
       "<span class="hljs-attribute">last4</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">state</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
@@ -20632,6 +20653,9 @@ Get the task status and the final result of the task as response</p>
       "<span class="hljs-attribute">discount-code-id</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">brand</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">zipcode</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">company</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">tax-business-info</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">is-billing-enabled</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">payment-mode</span>": <span class="hljs-value"><span class="hljs-string">"paypal"</span></span>,
       "<span class="hljs-attribute">payment-url</span>": <span class="hljs-value"><span class="hljs-string">"https://www.sandbox.paypal.com/cgi-bin/webscr?token=EC-62113287PK247472B&amp;cmd=_express-checkout"</span></span>,
       "<span class="hljs-attribute">last4</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
@@ -20718,6 +20742,9 @@ Get the task status and the final result of the task as response</p>
       "<span class="hljs-attribute">discount-code-id</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">brand</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">zipcode</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">company</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">tax-business-info</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">is-billing-enabled</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">payment-mode</span>": <span class="hljs-value"><span class="hljs-string">"paypal"</span></span>,
       "<span class="hljs-attribute">payment-url</span>": <span class="hljs-value"><span class="hljs-string">"https://www.sandbox.paypal.com/cgi-bin/webscr?token=EC-62113287PK247472B&amp;cmd=_express-checkout"</span></span>,
       "<span class="hljs-attribute">last4</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
@@ -20845,6 +20872,9 @@ Get the task status and the final result of the task as response</p>
       "<span class="hljs-attribute">discount-code-id</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">brand</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">zipcode</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">company</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">tax-business-info</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">is-billing-enabled</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">payment-mode</span>": <span class="hljs-value"><span class="hljs-string">"free"</span></span>,
       "<span class="hljs-attribute">last4</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">state</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
@@ -20967,6 +20997,9 @@ Get the task status and the final result of the task as response</p>
         "<span class="hljs-attribute">country</span>": <span class="hljs-value"><span class="hljs-string">"India"</span></span>,
         "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"070abac6-44a7-423d-830f-f5f0ef4e83f2"</span></span>,
         "<span class="hljs-attribute">zipcode</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+        "<span class="hljs-attribute">company</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+        "<span class="hljs-attribute">tax-business-info</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+        "<span class="hljs-attribute">is-billing-enabled</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
         "<span class="hljs-attribute">discount-code-id</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
         "<span class="hljs-attribute">tickets-pdf-url</span>": <span class="hljs-value"><span class="hljs-string">"https://example.com/media/attendees/tickets/pdf/order_identifier.pdf"</span>
       </span>}
@@ -22008,7 +22041,7 @@ Creates the copy. Requires Co-Organizer access</p>
   "<span class="hljs-attribute">jsonapi</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"1.0"</span>
   </span>}
-</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 17 Apr 2019</p><script>/* eslint-env browser */
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 18 Apr 2019</p><script>/* eslint-env browser */
 /* eslint quotes: [2, "single"] */
 'use strict';
 
