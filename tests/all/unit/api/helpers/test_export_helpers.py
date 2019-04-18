@@ -1,7 +1,8 @@
 import unittest
 
 from collections import OrderedDict
-from app.api.helpers.export_helpers import sorted_dict, make_filename
+from app.api.helpers.export_helpers import sorted_dict, make_filename, handle_unserializable_data
+from datetime import datetime
 
 
 class TestExportHelperValidation(unittest.TestCase):
@@ -85,6 +86,20 @@ class TestExportHelperValidation(unittest.TestCase):
         response_with_semicolon = 'DatawithSemicolon.Png'
         actual_response = make_filename(data_with_semicolon)
         self.assertEqual(response_with_semicolon, actual_response)
+
+    def test_handle_unserializable_data(self):
+        """
+        Method to test Handling of objects which cannot be serialized by json.dumps()
+        """
+        query_correct = datetime(2006, 11, 21, 16, 30, 12, 841100)
+        expected_response = '2006-11-21 16:30:12.841100'
+        actual_response = handle_unserializable_data(query_correct)
+        self.assertEqual(expected_response, actual_response)
+
+        query_incorrect = ['sample', 'data', 'incorrect']
+        expected_response = None
+        actual_response = handle_unserializable_data(query_incorrect)
+        self.assertEqual(expected_response, actual_response)
 
 
 if __name__ == '__main__':
