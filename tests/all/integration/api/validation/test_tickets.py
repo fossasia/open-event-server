@@ -27,7 +27,8 @@ class TestTicketValidation(OpenEventTestCase):
         }
         data = {
             'sales_starts_at': datetime(2003, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
-            'sales_ends_at': datetime(2003, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC'))
+            'sales_ends_at': datetime(2003, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
+            'event_ends_at': datetime(2003, 9, 10, 12, 30, 45).replace(tzinfo=timezone('UTC'))
         }
         TicketSchema.validate_date(schema, data, original_data)
 
@@ -42,7 +43,42 @@ class TestTicketValidation(OpenEventTestCase):
         }
         data = {
             'sales_starts_at': datetime(2003, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
-            'sales_ends_at': datetime(2003, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC'))
+            'sales_ends_at': datetime(2003, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
+            'event_ends_at': datetime(2003, 8, 10, 12, 30, 45).replace(tzinfo=timezone('UTC'))
+        }
+        with self.assertRaises(UnprocessableEntity):
+            TicketSchema.validate_date(schema, data, original_data)
+
+    def test_date_start_gt_event_end(self):
+        """
+        Tickets Validate Date - Tests if exception is raised when sales_starts_at is after event ends_at
+        :return:
+        """
+        schema = TicketSchema()
+        original_data = {
+            'data': {}
+        }
+        data = {
+            'sales_starts_at': datetime(2003, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
+            'sales_ends_at': datetime(2003, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
+            'event_ends_at': datetime(2003, 8, 2, 12, 30, 45).replace(tzinfo=timezone('UTC'))
+        }
+        with self.assertRaises(UnprocessableEntity):
+            TicketSchema.validate_date(schema, data, original_data)
+
+    def test_date_end_gt_event_end(self):
+        """
+        Tickets Validate Date - Tests if exception is raised when sales_ends_at is after event ends_at
+        :return:
+        """
+        schema = TicketSchema()
+        original_data = {
+            'data': {}
+        }
+        data = {
+            'sales_starts_at': datetime(2003, 8, 1, 12, 30, 45).replace(tzinfo=timezone('UTC')),
+            'sales_ends_at': datetime(2003, 8, 10, 12, 30, 45).replace(tzinfo=timezone('UTC')),
+            'event_ends_at': datetime(2003, 8, 2, 12, 30, 45).replace(tzinfo=timezone('UTC'))
         }
         with self.assertRaises(UnprocessableEntity):
             TicketSchema.validate_date(schema, data, original_data)
