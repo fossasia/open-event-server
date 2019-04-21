@@ -257,7 +257,7 @@ def make_frontend_url(path, parameters=None):
     ))
 
 
-def create_save_pdf(pdf_data, key, dir_path='/static/uploads/pdf/temp/', identifier=get_file_name(), upload_dir='static/media'):
+def create_save_pdf(pdf_data, key, dir_path='/static/uploads/pdf/temp/', identifier=get_file_name(), upload_dir='static/media/'):
     """
     Create and Saves PDFs from html
     :param pdf_data:

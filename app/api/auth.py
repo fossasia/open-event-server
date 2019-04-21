@@ -8,6 +8,7 @@ from flask import request, jsonify, make_response, Blueprint, send_file, url_for
 from flask_jwt import current_identity as current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
 from app.api.helpers.order import create_pdf_tickets_for_holder
+from app.api.helpers.storage import generate_hash
 
 from app import get_settings
 from app.api.helpers.db import save_to_db, get_count
@@ -290,8 +291,8 @@ def ticket_attendee_authorized(order_identifier):
         except NoResultFound:
             return NotFoundError({'source': ''}, 'This ticket is not associated with any order').respond()
         if current_user.id == user_id:
-            file_path = os.path.join('/generated/tickets/{}'.format(UPLOAD_PATHS['pdf']['ticket_attendee']
-                                         .format(identifier=order_identifier)), order_identifier + '.pdf')
+            key = UPLOAD_PATHS['pdf']['ticket_attendee'].format(identifier=order_identifier)
+            file_path = '../generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
             try:
                 response = make_response(send_file(file_path))
                 response.headers['Content-Disposition'] = 'attachment; filename=ticket-%s.zip' % order_identifier
