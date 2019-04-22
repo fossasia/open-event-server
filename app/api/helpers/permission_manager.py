@@ -170,6 +170,9 @@ def is_speaker_itself_or_admin(view, view_args, view_kwargs, *args, **kwargs):
     """
     user = current_identity
 
+    if user.is_admin or user.is_super_admin:
+        return view(*view_args, **view_kwargs)
+
     if user.is_organizer(kwargs['event_id']) or user.is_coorganizer(kwargs['event_id']):
         return view(*view_args, **view_kwargs)
 
