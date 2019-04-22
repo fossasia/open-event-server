@@ -130,7 +130,7 @@ class UploadedMemory(object):
 # MAIN
 #########
 
-def upload(uploaded_file, key, upload_dir='static/media', **kwargs):
+def upload(uploaded_file, key, upload_dir='static/media/', **kwargs):
     """
     Upload handler
     """
@@ -155,7 +155,7 @@ def upload(uploaded_file, key, upload_dir='static/media', **kwargs):
         return upload_local(uploaded_file, key, upload_dir, **kwargs)
 
 
-def upload_local(uploaded_file, key, upload_dir='static/media', **kwargs):
+def upload_local(uploaded_file, key, upload_dir='static/media/', **kwargs):
     """
     Uploads file locally. Base dir - static/media/
     """
