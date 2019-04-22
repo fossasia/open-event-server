@@ -97,6 +97,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     code_of_conduct = fields.Str(allow_none=True)
     schedule_published_on = fields.DateTime(allow_none=True)
     is_ticketing_enabled = fields.Bool(default=False)
+    is_featured = fields.Bool(default=False)
     payment_country = fields.Str(allow_none=True)
     payment_currency = fields.Str(allow_none=True)
     tickets_available = fields.Float(dump_only=True)
