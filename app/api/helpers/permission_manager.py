@@ -163,18 +163,12 @@ def is_speaker_for_session(view, view_args, view_kwargs, *args, **kwargs):
 
 
 @jwt_required
-def is_speaker_via_cfs(view, view_args, view_kwargs, *args, **kwargs):
+def is_speaker_itself_or_admin(view, view_args, view_kwargs, *args, **kwargs):
     """
     Allows admin and super admin access to any resource irrespective of id.
     Otherwise the user can only access his/her resource.
     """
     user = current_identity
-
-    if user.is_admin or user.is_super_admin or ('user_id' in kwargs and user.id == kwargs['user_id']):
-        return view(*view_args, **view_kwargs)
-
-    if user.is_staff:
-        return view(*view_args, **view_kwargs)
 
     if user.is_organizer(kwargs['event_id']) or user.is_coorganizer(kwargs['event_id']):
         return view(*view_args, **view_kwargs)
@@ -331,7 +325,7 @@ permissions = {
     'is_coorganizer_endpoint_related_to_event': is_coorganizer_endpoint_related_to_event,
     'is_registrar_or_user_itself': is_registrar_or_user_itself,
     'is_coorganizer_but_not_admin': is_coorganizer_but_not_admin,
-    'is_speaker_via_cfs': is_speaker_via_cfs
+    'is_speaker_itself_or_admin': is_speaker_itself_or_admin
 }
 
 
