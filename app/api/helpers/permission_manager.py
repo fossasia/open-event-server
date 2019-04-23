@@ -154,9 +154,13 @@ def is_speaker_for_session(view, view_args, view_kwargs, *args, **kwargs):
         return view(*view_args, **view_kwargs)
 
     if session.speakers:
+        # If the session is being edited
         for speaker in session.speakers:
             if speaker.user_id == user.id:
                 return view(*view_args, **view_kwargs)
+    else:
+        # If the session is being created
+        return view(*view_args, **view_kwargs)
 
     return ForbiddenError({'source': ''}, 'Access denied.').respond()
 
