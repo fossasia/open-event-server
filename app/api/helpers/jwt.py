@@ -14,7 +14,7 @@ def jwt_authenticate(email, password):
     :param password:
     :return:
     """
-    user = User.query.filter_by(email=email, deleted_at=None).first()
+    user = User.query.filter_by(email=email.strip(), deleted_at=None).first()
     if user is None:
         return None
     auth_ok = user.facebook_login_hash == password or user.is_correct_password(password)

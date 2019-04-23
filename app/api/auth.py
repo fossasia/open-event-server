@@ -1,15 +1,18 @@
+import os
 import base64
 import random
 import string
 
 import requests
-from flask import request, jsonify, make_response, Blueprint
+from flask import request, jsonify, make_response, Blueprint, send_file, url_for, redirect
 from flask_jwt import current_identity as current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
+from app.api.helpers.order import create_pdf_tickets_for_holder
+from app.api.helpers.storage import generate_hash
 
 from app import get_settings
 from app.api.helpers.db import save_to_db, get_count
-from app.api.helpers.errors import UnprocessableEntityError, NotFoundError, BadRequestError
+from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError, NotFoundError, BadRequestError
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_with_action, \
     send_email_confirmation
@@ -17,11 +20,15 @@ from app.api.helpers.notification import send_notification_with_action
 from app.api.helpers.third_party_auth import GoogleOAuth, FbOAuth, TwitterOAuth, InstagramOAuth
 from app.api.helpers.utilities import get_serializer, str_generator
 from app.models import db
+from app.models.order import Order
 from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE, \
     USER_REGISTER_WITH_PASSWORD, PASSWORD_RESET_AND_VERIFY
 from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
+from app.api.helpers.storage import UPLOAD_PATHS
 
+
+ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/')
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
 
 
@@ -251,6 +258,9 @@ def change_password():
         return NotFoundError({'source': ''}, 'User Not Found').respond()
     else:
         if user.is_correct_password(old_password):
+            if user.is_correct_password(new_password):
+                return BadRequestError({'source': ''},
+                                       'Old and New passwords must be different').respond()
             if len(new_password) < 8:
                 return BadRequestError({'source': ''},
                                        'Password should have minimum 8 characters').respond()
@@ -261,7 +271,7 @@ def change_password():
             send_notification_with_action(user, PASSWORD_CHANGE_NOTIF,
                                           app_name=get_settings()['app_name'])
         else:
-            return BadRequestError({'source': ''}, 'Wrong Password').respond()
+            return BadRequestError({'source': ''}, 'Wrong Password. Please enter correct current password.').respond()
 
     return jsonify({
         "id": user.id,
@@ -269,3 +279,28 @@ def change_password():
         "name": user.fullname if user.fullname else None,
         "password-changed": True
     })
+
+
+@ticket_blueprint.route('/tickets/<string:order_identifier>')
+@jwt_required()
+def ticket_attendee_authorized(order_identifier):
+    if current_user:
+        try:
+            order = Order.query.filter_by(identifier=order_identifier).first()
+            user_id = order.user.id
+        except NoResultFound:
+            return NotFoundError({'source': ''}, 'This ticket is not associated with any order').respond()
+        if current_user.id == user_id:
+            key = UPLOAD_PATHS['pdf']['ticket_attendee'].format(identifier=order_identifier)
+            file_path = '../generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+            try:
+                response = make_response(send_file(file_path))
+                response.headers['Content-Disposition'] = 'attachment; filename=ticket-%s.zip' % order_identifier
+                return response
+            except FileNotFoundError:
+                create_pdf_tickets_for_holder(order)
+                return redirect(url_for('ticket_blueprint.ticket_attendee_authorized', order_identifier=order_identifier))
+        else:
+            return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
+    else:
+        return ForbiddenError({'source': ''}, 'Authentication Required to access ticket').respond()

@@ -49,7 +49,7 @@ class TestDiscountCodeValidation(OpenEventTestCase):
 
     def test_quantity_max_gt_tickets_number(self):
         """
-        Discount Code Validate Quantity - Tests if exception is raised when min_quantity greater than max
+        Discount Code Validate Quantity - Tests if exception is raised when max_quantity greater than ticket_number
         :return:
         """
         schema = DiscountCodeSchemaTicket()
