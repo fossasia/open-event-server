@@ -32,9 +32,11 @@ class TestTicketing(OpenEventTestCase):
             save_to_db(test_ticket)
             discount_test_code = DiscountCodeTicketFactory()
             save_to_db(discount_test_code)
+            discount_test_code.ticket_ids = [test_ticket.id]
             attendee_1 = AttendeeFactory()
+            attendee_1.ticket = test_ticket
             save_to_db(attendee_1)
-            ticket_holders = [4]
+            ticket_holders = [attendee_1.id]
             self.assertEqual(ticketing_manager.match_discount_quantity(discount_test_code, ticket_holders), True)
 
 
