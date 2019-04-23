@@ -20769,8 +20769,6 @@ Get a single FAQ.
 
             Accept: application/vnd.api+json
 
-            Authorization: JWT <Auth Key>
-
 + Response 200 (application/vnd.api+json)
 
         {
@@ -21393,8 +21391,6 @@ Get a single feedback.
     + Headers
 
             Accept: application/vnd.api+json
-
-            Authorization: JWT <Auth Key>
 
 + Response 200 (application/vnd.api+json)
 
@@ -23370,6 +23366,9 @@ Get the task status and the final result of the task as response
 | `state` | If the custom form is included | boolean | - |
 | `country` | Country of the purchaser | boolean | - |
 | `zipcode` | Zipcode of the address | string | - |
+| `company` | Company for Billing Info | string | - |
+| `tax-business-info` | Tax Business details for Billing Info | string | - |
+| `is-billing-enabled` | Yes/No to signify if Billing Info is enabled or not | boolean (default: `false`) | - |
 | `payment-mode` | Mode of payment (free,stripe,paypal) | string | - |
 | `status` | Status of the order(pending, completed, placed, cancelled, expired) | string (default=pending) | - |
 | `discount_code_id` | ID of the discount code | string | - |
@@ -23543,6 +23542,9 @@ Create a new Order
               "discount-code-id": null,
               "brand": null,
               "zipcode": null,
+              "company": null,
+              "tax-business-info": null,
+              "is-billing-enabled": false,
               "payment-mode": "paypal",
               "last4": null,
               "state": null,
@@ -23634,6 +23636,9 @@ Get a single Order detail.
               "discount-code-id": null,
               "brand": null,
               "zipcode": null,
+              "company": null,
+              "tax-business-info": null,
+              "is-billing-enabled": false,
               "payment-mode": "paypal",
               "payment-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?token=EC-62113287PK247472B&cmd=_express-checkout",
               "last4": null,
@@ -23736,6 +23741,9 @@ Update a single custom form with `id`.
               "discount-code-id": null,
               "brand": null,
               "zipcode": null,
+              "company": null,
+              "tax-business-info": null,
+              "is-billing-enabled": false,
               "payment-mode": "paypal",
               "payment-url": "https://www.sandbox.paypal.com/cgi-bin/webscr?token=EC-62113287PK247472B&cmd=_express-checkout",
               "last4": null,
@@ -23893,6 +23901,9 @@ Create a new Order with on site attendees
               "discount-code-id": null,
               "brand": null,
               "zipcode": null,
+              "company": null,
+              "tax-business-info": null,
+              "is-billing-enabled": false,
               "payment-mode": "free",
               "last4": null,
               "state": null,
@@ -24058,6 +24069,9 @@ Receive payments for an order
                         "country": "India",
                         "identifier": "070abac6-44a7-423d-830f-f5f0ef4e83f2",
                         "zipcode": null,
+                        "company": null,
+                        "tax-business-info": null,
+                        "is-billing-enabled": false,
                         "discount-code-id": null,
                         "tickets-pdf-url": "https://example.com/media/attendees/tickets/pdf/order_identifier.pdf"
                     }

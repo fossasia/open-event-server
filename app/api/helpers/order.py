@@ -53,7 +53,7 @@ def create_pdf_tickets_for_holder(order):
     if order.status == 'completed':
         pdf = create_save_pdf(render_template('pdf/ticket_purchaser.html', order=order),
                               UPLOAD_PATHS['pdf']['ticket_attendee'],
-                              dir_path='/static/uploads/pdf/tickets/')
+                              dir_path='/static/uploads/pdf/tickets/', identifier=order.identifier, upload_dir='generated/tickets/')
         order.tickets_pdf_url = pdf
 
         for holder in order.ticket_holders:
@@ -61,13 +61,12 @@ def create_pdf_tickets_for_holder(order):
                 # holder is not the order buyer.
                 pdf = create_save_pdf(render_template('pdf/ticket_attendee.html', order=order, holder=holder),
                                       UPLOAD_PATHS['pdf']['ticket_attendee'],
-                                      dir_path='/static/uploads/pdf/tickets/')
+                                      dir_path='/static/uploads/pdf/tickets/', identifier=order.identifier, upload_dir='generated/tickets/')
             else:
                 # holder is the order buyer.
                 pdf = order.tickets_pdf_url
             holder.pdf_url = pdf
             save_to_db(holder)
-
         save_to_db(order)
 
 
