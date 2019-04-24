@@ -28,7 +28,7 @@ from app.models.user import User
 from app.api.helpers.storage import UPLOAD_PATHS
 
 
-ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/')
+ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/v1')
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
 
 
