@@ -42,7 +42,7 @@ pytz
 diff-match-patch
 blinker
 envparse
--e git+https://github.com/fossasia/flask-rest-jsonapi.git@shubhamp-master#egg=flask-rest-jsonapi
+-e git+https://github.com/miLibris/flask-rest-jsonapi.git@master#egg=flask-rest-jsonapi
 wtforms
 flask-admin
 google-compute-engine
