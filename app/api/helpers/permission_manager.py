@@ -158,6 +158,9 @@ def is_speaker_for_session(view, view_args, view_kwargs, *args, **kwargs):
             if speaker.user_id == user.id:
                 return view(*view_args, **view_kwargs)
 
+    if session.creator_id == user.id:
+        return view(*view_args, **view_kwargs)
+
     return ForbiddenError({'source': ''}, 'Access denied.').respond()
 
 
