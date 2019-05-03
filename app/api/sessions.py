@@ -175,7 +175,7 @@ class SessionDetail(ResourceDetail):
                                                                 session_id=session.id,
                                                                 event_id=session.event.id,
                                                                 speaker_id=speaker.id)
-                save_to_db(session_speaker_link, "Session Speaker Link Saved")
+                    save_to_db(session_speaker_link, "Session Speaker Link Saved")
 
     decorators = (api.has_permission('is_speaker_for_session', methods="PATCH,DELETE"),)
     schema = SessionSchema
