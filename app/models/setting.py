@@ -237,10 +237,10 @@ class Setting(db.Model):
         self.paypal_sandbox_client = paypal_sandbox_client
         self.paypal_sandbox_secret = paypal_sandbox_secret
 
-        #Omise Credentials
+        # Omise Credentials
         self.omise_mode = omise_mode
         self.omise_test_public = omise_test_public
-        self,omise_test_secret = omise_test_secret
+        self.omise_test_secret = omise_test_secret
         self.omise_live_public = omise_live_public
         self.omise_live_secret = omise_live_secret
 
