@@ -1,5 +1,5 @@
 from datetime import datetime
-
+import omise
 from flask import Blueprint, jsonify, request
 from flask_jwt import current_identity as current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
@@ -417,3 +417,64 @@ def create_paypal_payment(order_identifier):
         return jsonify(status=True, payment_id=response)
     else:
         return jsonify(status=False, error=response)
+
+# Just Testing OMISE Payment Mechanism
+@order_misc_routes.route('/orders/<string:order_identifier>/omise-checkout', methods=['POST'])
+def omise_checkout(order_identifier):
+    # TEST STUBS
+
+    print('you have reached omise transactions\n')
+    print(request.form)
+    token = request.form.get('omiseToken')
+    source = request.form.get('omiseSource')
+
+    print('\n', token, source)
+
+    omise.api_secret = 'skey_test_xxxxxxxxxxxx'
+    order_id = order_identifier
+    myorder = Order.query.filter_by(identifier=order_identifier).first()
+    print(myorder.amount)
+
+    try:
+        # For CARD payments
+        if token != '' and source == '':
+            charge = omise.Charge.create(
+                amount=int(myorder.amount) * 100, # Use only integers
+                currency='THB', # Use supported currencies
+                token=token,
+                metadata={
+                    "app": "Open Event",
+                    "order_id": str(order_id)
+                }
+            )
+            if charge.failure_code is not None:
+                print('Yup, some error {}'.format(charge.failure_message))
+            else:
+                flash("Card successfully charged!  Order ID: {}".format(order_id))
+        # For NON CARD transfers
+        elif token == '' and source != '':
+            charge = omise.Charge.create(
+                amount=int(myorder.amount) * 100,
+                currency='THB',
+                source=source,
+                metadata={
+                    "app": "Open Event",
+                    "order_id": str(order_id)
+                },
+                return_uri='http://127.0.0.1:4200/orders/'+order_id+'/view'
+            )
+            # ---- not working right now, needs to check authentication and then capture ---
+            to_capture = omise.Charge.retrieve(str(charge.id))
+            print(to_capture)
+            to_capture.capture()
+            # --- x ----
+            if charge.failure_code is not None:
+                print('Yup, some error {}'.format(charge.failure_message))    
+            else:
+                flash("Card successfully charged!  Order ID: {}".format(order_id))
+    except omise.errors.BaseError as e:
+        print("An error occurred.  Please contact support. {}".format(e))
+    except Exception as e:
+        print("An error occurred.  Please contact support.")
+    # Simple return stub. needs to be improved for redirection in frontend.
+    return('Here have this {}, {}, {}'.format(token, order_id, source))
