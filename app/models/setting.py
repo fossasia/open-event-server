@@ -80,6 +80,13 @@ class Setting(db.Model):
     paypal_sandbox_client = db.Column(db.String)
     paypal_sandbox_secret = db.Column(db.String)
 
+    # Omise credentials
+    omise_mode = db.Column(db.String)
+    omise_live_public = db.Column(db.String)
+    omise_live_secret = db.Column(db.String)
+    omise_test_public = db.Column(db.String)
+    omise_test_secret = db.Column(db.String)
+
     #
     # EMAIL
     #
@@ -169,7 +176,12 @@ class Setting(db.Model):
                  android_app_url=None,
                  web_app_url=None,
                  cookie_policy=None,
-                 cookie_policy_link=None):
+                 cookie_policy_link=None,
+                 omise_mode=None,
+                 omise_test_public=None,
+                 omise_test_secret=None,
+                 omise_live_public=None,
+                 omise_live_secret=None):
         self.app_environment = app_environment
         self.aws_key = aws_key
         self.aws_secret = aws_secret
@@ -225,6 +237,13 @@ class Setting(db.Model):
         self.paypal_sandbox_client = paypal_sandbox_client
         self.paypal_sandbox_secret = paypal_sandbox_secret
 
+        # Omise Credentials
+        self.omise_mode = omise_mode
+        self.omise_test_public = omise_test_public
+        self.omise_test_secret = omise_test_secret
+        self.omise_live_public = omise_live_public
+        self.omise_live_secret = omise_live_secret
+
     @hybrid_property
     def is_paypal_activated(self):
         if self.paypal_mode == 'sandbox' and self.paypal_sandbox_client and self.paypal_sandbox_secret:
@@ -243,3 +262,12 @@ class Setting(db.Model):
 
     def __str__(self):
         return self.__repr__()
+
+    @hybrid_property
+    def is_omise_activated(self):
+        if self.omise_mode == 'test' and self.omise_test_public and self.omise_test_secret:
+            return True
+        elif self.omise_live_public and self.omise_live_secret:
+            return True
+        else:
+            return False
