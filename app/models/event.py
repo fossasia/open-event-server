@@ -100,6 +100,7 @@ class Event(SoftDeletionModel):
     can_pay_by_cheque = db.Column(db.Boolean, default=False)
     can_pay_by_bank = db.Column(db.Boolean, default=False)
     can_pay_onsite = db.Column(db.Boolean, default=False)
+    can_pay_by_omise = db.Column(db.Boolean, default=False)
     cheque_details = db.Column(db.String)
     bank_details = db.Column(db.String)
     onsite_details = db.Column(db.String)
@@ -206,6 +207,7 @@ class Event(SoftDeletionModel):
                  can_pay_by_paypal=None,
                  can_pay_by_stripe=None,
                  can_pay_by_cheque=None,
+                 can_pay_by_omise=None,
                  identifier=None,
                  can_pay_by_bank=None,
                  is_featured=False,
@@ -268,6 +270,7 @@ class Event(SoftDeletionModel):
         self.can_pay_by_cheque = can_pay_by_cheque
         self.can_pay_by_bank = can_pay_by_bank
         self.can_pay_onsite = can_pay_onsite
+        self.can_pay_by_omise = can_pay_by_omise
         self.is_donation_enabled = is_donation_enabled
         self.is_featured = is_featured
         self.identifier = get_new_event_identifier()
