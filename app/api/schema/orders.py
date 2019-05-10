@@ -47,7 +47,7 @@ class OrderSchema(SoftDeletionSchema):
 
     id = fields.Str(dump_only=True)
     identifier = fields.Str(dump_only=True)
-    amount = fields.Float(validate=lambda n: n >= 0, allow_none=False)
+    amount = fields.Float(validate=lambda n: n >= 0, allow_none=False, default=0)
     address = fields.Str(allow_none=True)
     city = fields.Str(allow_none=True)
     state = fields.Str(db.String, allow_none=True)
