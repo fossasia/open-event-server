@@ -121,7 +121,7 @@ def resize_user_images_task(self, user_id, original_image_url):
         logging.exception('Error encountered while generating resized images for user with id: {}'.format(user_id))
 
 
-@celery.task(base=RequestContextTask, name='sponsor.logo.urls', bind=True)
+@celery.task(base=RequestContextTask, name='sponsor.logo.urls', bind=True, is_active=True)
 def sponsor_logos_url_task(self, event_id):
     sponsors = Sponsor.query.filter_by(event_id=event_id).all()
     for sponsor in sponsors:
