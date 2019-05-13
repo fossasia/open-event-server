@@ -153,7 +153,7 @@ python3 manage.py db stamp head
 # For Ubuntu, Debian and alike
 sudo apt-get install redis-server
 # For Fedora, RedHat, CentOS
-sudo dnf install redis-server
+sudo dnf install redis
 
 # For macOS
 brew install redis
