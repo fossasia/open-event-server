@@ -12,6 +12,7 @@ from app.api.helpers.payment import StripePaymentsManager, PayPalPaymentsManager
 from app.models import db
 from app.models.ticket_fee import TicketFees
 from app.models.ticket_holder import TicketHolder
+from app.models.order import Order
 
 
 class TicketingManager(object):
@@ -24,14 +25,14 @@ class TicketingManager(object):
     @staticmethod
     def match_discount_quantity(discount_code, ticket_holders=None):
         qty = 0
-        old_holders = get_count(TicketHolder.query.filter(TicketHolder.ticket_id.in_(discount_code.tickets.split(","))))
-
+        old_holders = 0
+        old_orders = Order.query.filter_by(discount_code=discount_code)
+        for order in old_orders:
+            old_holders += order.tickets_count
         for holder in ticket_holders:
-            ticket_holder = TicketHolder.query.filter_by(id=holder).one()
-            if ticket_holder.ticket.id in discount_code.tickets.split(","):
-                qty += 1
-        if (qty + old_holders) <= discount_code.tickets_number and \
-            discount_code.min_quantity <= qty <= discount_code.max_quantity:
+            qty += 1
+        if discount_code.min_quantity <= (qty + old_holders) <= discount_code.max_quantity:
+            print(qty + old_holders)
             return True
 
         return False
