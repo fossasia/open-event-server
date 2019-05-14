@@ -363,7 +363,7 @@ def import_event_json(task_handle, zip_path, creator_id):
         write_file(
             path + '/social_links',
             json.dumps(data.get('social_links', [])).encode('utf-8')
-        ) # save social_links
+        )  # save social_links
         _upload_media_queue(srv, new_event)
     except Exception as e:
         raise make_error('event', er=e)
