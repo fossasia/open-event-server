@@ -360,6 +360,10 @@ def import_event_json(task_handle, zip_path, creator_id):
         user = User.query.filter_by(id=creator_id).first()
         uer = UsersEventsRoles(user_id=user.id, event_id=new_event.id, role_id=role.id)
         save_to_db(uer, 'Event Saved')
+        write_file(
+            path + '/social_links',
+            json.dumps(data.get('social_links', [])).encode('utf-8')
+        ) # save social_links
         with open(path + '/social_links', 'w') as file:
             file.write(str(json.dumps(data.get('social_links', []))))
         _upload_media_queue(srv, new_event)
