@@ -307,6 +307,15 @@ class OrderDetail(ResourceDetail):
             # delete the attendees so that the tickets are unlocked.
             delete_related_attendees_for_order(order)
 
+        elif order.status == 'completed':
+            send_email_to_attendees(order, current_user.id)
+            send_notif_to_attendees(order, current_user.id)
+
+            order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
+            for organizer in order.event.organizers:
+                send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
+                                                     order.identifier)
+
     def before_delete_object(self, order, view_kwargs):
         """
         method to check for proper permissions for deleting
