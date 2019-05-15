@@ -79,7 +79,8 @@ UPLOAD_PATHS = {
         'system_image': 'event_topic/{event_topic_id}/system_image'
     },
     'pdf': {
-        'ticket_attendee': 'attendees/tickets/pdf/{identifier}'
+        'ticket_attendee': 'attendees/tickets/pdf/{identifier}',
+        'order': 'orders/invoices/pdf/{identifier}'
     }
 }
 
