@@ -304,3 +304,24 @@ def ticket_attendee_authorized(order_identifier):
             return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
     else:
         return ForbiddenError({'source': ''}, 'Authentication Required to access ticket').respond()
+
+
+@ticket_blueprint.route('/orders/invoices/<string:order_identifier>')
+@jwt_required()
+def order_invoices(order_identifier):
+    if current_user:
+        try:
+            order = Order.query.filter_by(identifier=order_identifier).first()
+            user_id = order.user.id
+        except NoResultFound:
+            return NotFoundError({'source': ''}, 'Order Invoice not found').respond()
+        if current_user.id == user_id:
+            key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
+            file_path = '../generated/invoices/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+            response = make_response(send_file(file_path))
+            response.headers['Content-Disposition'] = 'attachment; filename=invoice-%s.zip' % order_identifier
+            return response
+        else:
+            return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
+    else:
+        return ForbiddenError({'source': ''}, 'Authentication Required to access Invoice').respond()
