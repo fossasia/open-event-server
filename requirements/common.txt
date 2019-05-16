@@ -51,7 +51,7 @@ raven[flask]
 healthcheck
 elasticsearch-dsl
 flask-redis
-SQLAlchemy==1.1.15 # 1.2.0 doesn't work, check if any future versions work
+SQLAlchemy>=1.3.0<2.0.0 # 1.2.0 doesn't work, check if any future versions work
 Flask-Elasticsearch
 paypalrestsdk
 eventlet
