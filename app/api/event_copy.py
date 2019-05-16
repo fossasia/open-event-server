@@ -19,6 +19,10 @@ from app.models.users_events_role import UsersEventsRoles
 event_copy = Blueprint('event_copy', __name__, url_prefix='/v1/events')
 
 
+def start_sponsor_logo_generation_task(event_id):
+    from .helpers.tasks import sponsor_logos_url_task
+    sponsor_logos_url_task.delay(event_id=event_id)
+
 @event_copy.route('/<identifier>/copy', methods=['POST'])
 def create_event_copy(identifier):
     id = 'identifier'
@@ -70,10 +74,10 @@ def create_event_copy(identifier):
         db.session.expunge(sponsor)  # expunge the object from session
         make_transient(sponsor)
         sponsor.event_id = event.id
-        logo_url = create_save_resized_image(image_file=sponsor.logo_url, resize=False)
         delattr(sponsor, 'id')
-        sponsor.logo_url = logo_url
         save_to_db(sponsor)
+
+    start_sponsor_logo_generation_task(event.id)
 
     for location in microlocations:
         location_id = location.id

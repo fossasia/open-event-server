@@ -19,7 +19,7 @@ This is done to resolve circular imports
 import logging
 import traceback
 
-from app.api.helpers.files import create_save_image_sizes
+from app.api.helpers.files import create_save_image_sizes, create_save_resized_image
 from app.api.helpers.request_context_task import RequestContextTask
 from app.api.helpers.mail import send_export_mail, send_import_mail
 from app.api.helpers.notification import send_notif_after_import, send_notif_after_export
@@ -31,6 +31,7 @@ from app.api.exports import event_export_task_base
 from app.api.imports import import_event_task_base
 from app.models.event import Event
 from app.models.order import Order
+from app.models.sponsor import Sponsor
 from app.models.discount_code import DiscountCode
 from app.models.ticket_holder import TicketHolder
 from app.api.helpers.ICalExporter import ICalExporter
@@ -118,6 +119,20 @@ def resize_user_images_task(self, user_id, original_image_url):
         logging.info('Resized images saved successfully for user with id: {}'.format(user_id))
     except (urllib.error.HTTPError, urllib.error.URLError):
         logging.exception('Error encountered while generating resized images for user with id: {}'.format(user_id))
+
+
+@celery.task(base=RequestContextTask, name='sponsor.logo.urls', bind=True)
+def sponsor_logos_url_task(self, event_id):
+    sponsors = Sponsor.query.filter_by(event_id=event_id, deleted_at=None).all()
+    for sponsor in sponsors:
+        try:
+            logging.info('Sponsor logo url generation task started {}'.format(sponsor.logo_url))
+            new_logo_url = create_save_resized_image(image_file=sponsor.logo_url, resize=False)
+            sponsor.logo_url = new_logo_url
+            save_to_db(sponsor)
+            logging.info('Sponsor logo url successfully generated')
+        except(urllib.error.HTTPError, urllib.error.URLError):
+            logging.exception('Error encountered while logo generation')
 
 
 @celery.task(base=RequestContextTask, name='resize.speaker.images', bind=True)
