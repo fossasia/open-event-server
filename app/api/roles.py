@@ -12,7 +12,6 @@ from app.api.helpers.errors import NotFoundError, ServerError
 from sqlalchemy.orm.exc import NoResultFound
 from flask import Blueprint, request, jsonify
 from app.models.users_events_role import UsersEventsRoles as UER
-from app.models.role import Role
 from app.api.helpers.db import save_to_db
 
 role_misc_routes = Blueprint('role_misc', __name__, url_prefix='/v1')
@@ -93,8 +92,8 @@ def change_organiser():
     # Delete the User Event Role
     try:
         role_entry_organiser_to_delete = UER.query.filter_by(user_id=current_organiser_id,
-                                                            event_id=event_id,
-                                                            role_id=1).one()
+                                                             event_id=event_id,
+                                                             role_id=1).one()
         db.session.delete(role_entry_organiser_to_delete)
 
     except NoResultFound:
