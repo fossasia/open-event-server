@@ -470,8 +470,7 @@ class EventDetail(ResourceDetail):
         """
         if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
             if len(event.orders) != 0:
-                raise ForbiddenException({'source': ''},
-                                     "Event associated with orders cannot be deleted")
+                raise ForbiddenException({'source': ''}, "Event associated with orders cannot be deleted")
             else:
                 event.deleted_at = data.get('deleted_at')
 
