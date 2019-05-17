@@ -139,6 +139,8 @@ class OrdersListPost(ResourceList):
 
         # send e-mail and notifications if the order status is completed
         if order.status == 'completed':
+            if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
+                order.completed_at = datetime.utcnow()
             send_email_to_attendees(order, current_user.id)
             send_notif_to_attendees(order, current_user.id)
 
@@ -308,6 +310,8 @@ class OrderDetail(ResourceDetail):
             delete_related_attendees_for_order(order)
 
         elif order.status == 'completed':
+            if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
+                order.completed_at = datetime.utcnow()
             send_email_to_attendees(order, current_user.id)
             send_notif_to_attendees(order, current_user.id)
 
