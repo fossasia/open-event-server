@@ -84,9 +84,9 @@ class RoleDetail(ResourceDetail):
 
 @role_misc_routes.route('/change-organiser', methods=['POST'])
 def change_organiser():
-    current_organiser_id = request.json.get('current_org_id', None)
-    new_organiser_id = request.json.get('new_org_id', None)
-    event_id = request.json.get('event_id', None)
+    current_organiser_id = request.json['data']['current_org_id']
+    new_organiser_id = request.json['data']['new_org_id']
+    event_id = request.json['data']['event_id']
 
     # Check if the user is actually an organiser of the event
     # Delete the User Event Role
