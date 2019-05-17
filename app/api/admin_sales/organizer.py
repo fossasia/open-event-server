@@ -2,6 +2,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from flask_rest_jsonapi import ResourceList
 
+from app.api.helpers.utilities import dasherize
 from app.api.bootstrap import api
 from app.models import db
 from app.models.event import Event
@@ -18,17 +19,19 @@ class AdminSalesByOrganizersSchema(Schema):
     Sales summarized by organizer
 
     Provides
-        organizer (first name and last name),
+        organizer (first name, last name and email),
         count of tickets and total sales for orders grouped by status
     """
 
     class Meta:
         type_ = 'admin-sales-by-organizers'
         self_view = 'v1.admin_sales_by_organizers'
+        inflect = dasherize
 
     id = fields.String()
     first_name = fields.String()
     last_name = fields.String()
+    email = fields.String()
     starts_at = fields.DateTime()
     ends_at = fields.DateTime()
     sales = fields.Method('calc_sales')

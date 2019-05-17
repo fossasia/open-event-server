@@ -12,6 +12,7 @@ from app.api.helpers.query import get_upcoming_events, get_user_event_roles_by_r
 from app.api.helpers.utilities import monthdelta
 from app.models import db
 from app.models.event import Event
+from app.models.session import Session
 from app.models.event_invoice import EventInvoice
 from app.models.order import Order
 from app.models.ticket import Ticket
@@ -44,6 +45,16 @@ def send_after_event_mail():
                 for organizer in organizers:
                     send_email_after_event(organizer.user.email, event.name, upcoming_event_links)
                     send_notif_after_event(organizer.user.email, event.name)
+
+
+def change_session_state_on_event_completion():
+    from app import current_app as app
+    with app.app_context():
+        sessions_to_be_changed = Session.query.join(Event).filter(Session.state == 'pending')\
+                                 .filter(Event.ends_at < datetime.datetime.now())
+        for session in sessions_to_be_changed:
+            session.state = 'rejected'
+            save_to_db(session, 'Changed {} session state to rejected'.format(session.title))
 
 
 def send_event_fee_notification():
@@ -129,3 +140,12 @@ def send_event_fee_notification_followup():
                                                         app_name,
                                                         link,
                                                         incomplete_invoice.event.id)
+
+
+def expire_pending_tickets_after_one_day():
+    from app import current_app as app
+    with app.app_context():
+        db.session.query(Order).filter(Order.status == 'pending',
+                                       (datetime.datetime.today() - Order.created_at).days > 1).\
+                                       update({'status': 'expired'})
+        db.session.commit()

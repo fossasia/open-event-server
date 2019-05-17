@@ -61,7 +61,6 @@ class FeedbackList(ResourceList):
         return query_
 
     view_kwargs = True
-    decorators = (jwt_required,)
     methods = ['GET', ]
     schema = FeedbackSchema
     data_layer = {'session': db.session,

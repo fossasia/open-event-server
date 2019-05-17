@@ -1,7 +1,7 @@
 version: '3.5'
 
 x-environment-vars: &environment-vars
-  DATABASE_URL: postgresql://open_event_user:opev_pass@postgres:5432/open_event
+  DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
   ELASTICSEARCH_HOST: elastic:9200
   REDIS_URL: redis://redis:6379/0
   ADMIN_EMAIL: "@{ADMIN_EMAIL}"
@@ -32,9 +32,9 @@ services:
     volumes:
       - pg:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: open_event_user
-      POSTGRES_PASSWORD: opev_pass
-      POSTGRES_DB: open_event
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
 
   redis:
     image: redis:3-alpine

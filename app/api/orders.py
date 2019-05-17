@@ -50,10 +50,6 @@ class OrdersListPost(ResourceList):
         """
         require_relationship(['event'], data)
 
-        if not current_user.is_verified:
-            raise ForbiddenException({'source': ''},
-                                     "Only verified accounts can place orders")
-
         # Create on site attendees.
         if request.args.get('onsite', False):
             create_onsite_attendees_for_order(data)
@@ -91,6 +87,8 @@ class OrdersListPost(ResourceList):
             raise ConflictException({'pointer': '/data/attributes/amount'},
                                     "Amount cannot be null for a paid order")
 
+        if not data.get('amount'):
+            data['amount'] = 0
         # Apply discount only if the user is not event admin
         if data.get('discount') and not has_access('is_coorganizer', event_id=data['event']):
             discount_code = safe_query_without_soft_deleted_entries(self, DiscountCode, 'id', data['discount'],
@@ -136,8 +134,8 @@ class OrdersListPost(ResourceList):
 
         order.quantity = order.tickets_count
         save_to_db(order)
-        if not has_access('is_coorganizer', event_id=data['event']):
-            TicketingManager.calculate_update_amount(order)
+#         if not has_access('is_coorganizer', event_id=data['event']):
+#             TicketingManager.calculate_update_amount(order)
 
         # send e-mail and notifications if the order status is completed
         if order.status == 'completed':
@@ -279,7 +277,11 @@ class OrderDetail(ResourceDetail):
                                          "You cannot update a non-pending order")
             else:
                 for element in data:
-                    if data[element] and data[element]\
+                    if element == 'is_billing_enabled' and order.status == 'completed' and data[element]\
+                            and data[element] != getattr(order, element, None):
+                        raise ForbiddenException({'pointer': 'data/{}'.format(element)},
+                                                 "You cannot update {} of a completed order".format(element))
+                    elif data[element] and data[element]\
                             != getattr(order, element, None) and element not in get_updatable_fields():
                         raise ForbiddenException({'pointer': 'data/{}'.format(element)},
                                                  "You cannot update {} of an order".format(element))
@@ -305,6 +307,15 @@ class OrderDetail(ResourceDetail):
             # delete the attendees so that the tickets are unlocked.
             delete_related_attendees_for_order(order)
 
+        elif order.status == 'completed':
+            send_email_to_attendees(order, current_user.id)
+            send_notif_to_attendees(order, current_user.id)
+
+            order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
+            for organizer in order.event.organizers:
+                send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
+                                                     order.identifier)
+
     def before_delete_object(self, order, view_kwargs):
         """
         method to check for proper permissions for deleting
@@ -319,8 +330,7 @@ class OrderDetail(ResourceDetail):
 
     # This is to ensure that the permissions manager runs and hence changes the kwarg from order identifier to id.
     decorators = (jwt_required, api.has_permission(
-        'auth_required', methods="PATCH,DELETE", fetch="user_id", model=Order),)
-
+        'auth_required', methods="PATCH,DELETE", model=Order),)
     schema = OrderSchema
     data_layer = {'session': db.session,
                   'model': Order,

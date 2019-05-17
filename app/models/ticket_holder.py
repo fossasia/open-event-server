@@ -161,4 +161,6 @@ class TicketHolder(SoftDeletionModel):
                 'city': self.city,
                 'address': self.address,
                 'state': self.state,
-                'country': self.country}
+                'country': self.country,
+                'company': self.company,
+                'taxBusinessInfo': self.tax_business_info}

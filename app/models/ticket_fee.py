@@ -43,3 +43,16 @@ def get_fee(country, currency):
         return fee.service_fee
 
     return DEFAULT_FEE
+
+
+def get_maximum_fee(country, currency):
+    """Returns the fee for a given country and currency string"""
+    fee = db.session.query(TicketFees) \
+                    .filter(TicketFees.country == country) \
+                    .filter(TicketFees.currency == currency) \
+                    .order_by(desc(TicketFees.id)).first()
+
+    if fee:
+        return fee.maximum_fee
+
+    return DEFAULT_FEE

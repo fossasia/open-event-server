@@ -1,34 +1,32 @@
-"""Test file for storage functions."""
-from unittest import TestCase
+import unittest
+from unittest.mock import patch
 
-from app.api.helpers.storage import create_url
+from app import current_app as app
+from tests.all.integration.utils import OpenEventTestCase
+from tests.all.integration.setup_database import Setup
+from app.api.helpers.storage import upload_local
 
 
-class TestStorageHelperValidation(TestCase):
-    """Test class for testing storage helper functions."""
+class TestStorage(OpenEventTestCase):
+    """Contains test for Storage Helpers"""
 
-    def test_arbitrary_url(self):
-        """Method to test a url with arbitrary port."""
+    def Setup(self):
+        self.app = Setup.create_app()
 
-        request_url = 'https://localhost:5000'
-        expected_file_url = 'https://localhost:5000/some/path/image.png'
+    """Test local file upload."""
+    @patch('app.api.helpers.storage.upload_local')
+    @patch('app.api.helpers.storage.generate_hash', return_value='hash')
+    @patch('app.api.helpers.storage.get_settings', return_value={'static_domain': 'https://next.eventyay.com'})
+    @patch('app.api.helpers.storage.UploadedFile')
+    def test_upload_local(self, uploadedfile_object, settings, generated_hash, uploadlocal):
+        expected_response = 'https://next.eventyay.com/media/upload_key/hash/test.pdf'
+        uploadedfile_object.filename = 'test.pdf'
 
-        self.assertEqual(
-            expected_file_url, create_url(request_url, '/some/path/image.png')
-            )
+        with app.test_request_context():
+            app.config['BASE_DIR'] = 'testdir'
+            actual_response = upload_local(uploadedfile_object, 'upload_key')
+            self.assertEqual(expected_response, actual_response)
 
-    def test_http_url(self):
-        """Method to test a url with port 80."""
-        request_url = 'http://localhost:80'
-        expected_file_url = 'http://localhost/some/path/image.png'
-        self.assertEqual(
-            expected_file_url, create_url(request_url, '/some/path/image.png')
-            )
 
-    def test_https_url(self):
-        """Method to test a url with port 443."""
-        request_url = 'https://localhost:443'
-        expected_file_url = 'https://localhost/some/path/image.png'
-        self.assertEqual(
-            expected_file_url, create_url(request_url, '/some/path/image.png')
-            )
+if __name__ == '__main__':
+    unittest.main()

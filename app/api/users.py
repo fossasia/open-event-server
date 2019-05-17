@@ -22,7 +22,7 @@ from app.models.discount_code import DiscountCode
 from app.models.email_notification import EmailNotification
 from app.models.event_invoice import EventInvoice
 from app.models.feedback import Feedback
-from app.models.mail import USER_REGISTER_WITH_PASSWORD
+from app.models.mail import USER_REGISTER_WITH_PASSWORD, PASSWORD_RESET_AND_VERIFY
 from app.models.notification import Notification
 from app.models.session import Session
 from app.models.speaker import Speaker
@@ -37,14 +37,19 @@ class UserList(ResourceList):
     """
     List and create Users
     """
+
     def before_create_object(self, data, view_kwargs):
         """
         method to check if there is an existing user with same email which is received in data to create a new user
+        and if the password is at least 8 characters long
         :param data:
         :param view_kwargs:
         :return:
         """
-        if db.session.query(User.id).filter_by(email=data['email']).scalar() is not None:
+        if len(data['password']) < 8:
+            raise UnprocessableEntity({'source': '/data/attributes/password'},
+                                       'Password should be at least 8 characters long')
+        if db.session.query(User.id).filter_by(email=data['email'].strip()).scalar() is not None:
             raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")
 
     def after_create_object(self, user, data, view_kwargs):
@@ -58,23 +63,32 @@ class UserList(ResourceList):
         :param view_kwargs:
         :return:
         """
-        s = get_serializer()
-        hash = str(base64.b64encode(str(s.dumps([user.email, str_generator()])).encode()), 'utf-8')
-        link = make_frontend_url('/verify'.format(id=user.id), {'token': hash})
-        send_email_with_action(user, USER_REGISTER_WITH_PASSWORD, app_name=get_settings()['app_name'],
-                               email=user.email)
-        send_email_confirmation(user.email, link)
 
-        if data.get('original_image_url'):
-            try:
-                uploaded_images = create_save_image_sizes(data['original_image_url'], 'speaker-image', user.id)
-            except (urllib.error.HTTPError, urllib.error.URLError):
-                raise UnprocessableEntity(
-                    {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
-                )
-            uploaded_images['small_image_url'] = uploaded_images['thumbnail_image_url']
-            del uploaded_images['large_image_url']
-            self.session.query(User).filter_by(id=user.id).update(uploaded_images)
+        if user.was_registered_with_order:
+            link = make_frontend_url('/reset-password', {'token': user.reset_password})
+            send_email_with_action(user, PASSWORD_RESET_AND_VERIFY, app_name=get_settings()['app_name'],
+                                   email=user.email, link=link)
+        else:
+            s = get_serializer()
+            hash = str(base64.b64encode(str(s.dumps([user.email, str_generator()])).encode()), 'utf-8')
+            link = make_frontend_url('/verify'.format(id=user.id), {'token': hash})
+            send_email_with_action(user, USER_REGISTER_WITH_PASSWORD, app_name=get_settings()['app_name'],
+                                   email=user.email)
+            send_email_confirmation(user.email, link)
+        # TODO Handle in a celery task
+        # if data.get('original_image_url'):
+        #     try:
+        #         uploaded_images = create_save_image_sizes(data['original_image_url'], 'speaker-image', user.id)
+        #     except (urllib.error.HTTPError, urllib.error.URLError):
+        #         raise UnprocessableEntity(
+        #             {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
+        #         )
+        #     uploaded_images['small_image_url'] = uploaded_images['thumbnail_image_url']
+        #     del uploaded_images['large_image_url']
+        #     self.session.query(User).filter_by(id=user.id).update(uploaded_images)
+
+        if data.get('avatar_url'):
+            start_image_resizing_tasks(user, data['avatar_url'])
 
     decorators = (api.has_permission('is_admin', methods="GET"),)
     schema = UserSchema
@@ -90,6 +104,7 @@ class UserDetail(ResourceDetail):
     """
     User detail by id
     """
+
     def before_get(self, args, kwargs):
 
         if current_user.is_admin or current_user.is_super_admin or current_user:
@@ -180,34 +195,44 @@ class UserDetail(ResourceDetail):
                 view_kwargs['id'] = None
 
     def before_update_object(self, user, data, view_kwargs):
-        if data.get('original_image_url') and data['original_image_url'] != user.original_image_url:
-            try:
-                uploaded_images = create_save_image_sizes(data['original_image_url'], 'speaker-image', user.id)
-            except (urllib.error.HTTPError, urllib.error.URLError):
-                raise UnprocessableEntity(
-                    {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
-                )
-            data['original_image_url'] = uploaded_images['original_image_url']
-            data['small_image_url'] = uploaded_images['thumbnail_image_url']
-            data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
-            data['icon_image_url'] = uploaded_images['icon_image_url']
+        # TODO: Make a celery task for this
+        # if data.get('avatar_url') and data['original_image_url'] != user.original_image_url:
+        #     try:
+        #         uploaded_images = create_save_image_sizes(data['original_image_url'], 'speaker-image', user.id)
+        #     except (urllib.error.HTTPError, urllib.error.URLError):
+        #         raise UnprocessableEntity(
+        #             {'source': 'attributes/original-image-url'}, 'Invalid Image URL'
+        #         )
+        #     data['original_image_url'] = uploaded_images['original_image_url']
+        #     data['small_image_url'] = uploaded_images['thumbnail_image_url']
+        #     data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
+        #     data['icon_image_url'] = uploaded_images['icon_image_url']
+        users_email = data.get('email', None)
+        if users_email is not None:
+            users_email = users_email.strip()
 
-        if data.get('email') and data['email'] != user.email:
+        if has_access('is_admin') and data.get('deleted_at') != user.deleted_at:
+            user.deleted_at = data.get('deleted_at')
+
+        if users_email is not None and users_email != user.email:
             try:
-                db.session.query(User).filter_by(email=data['email']).one()
+                db.session.query(User).filter_by(email=users_email).one()
             except NoResultFound:
                 view_kwargs['email_changed'] = user.email
             else:
                 raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")
 
-        if has_access('is_super_admin') and data.get('is_admin') != user.is_admin:
+        if has_access('is_super_admin') and data.get('is_admin') and data.get('is_admin') != user.is_admin:
             user.is_admin = not user.is_admin
 
-        if has_access('is_admin') and data.get('is_sales_admin') != user.is_sales_admin:
+        if has_access('is_admin') and ('is_sales_admin' in data) and data.get('is_sales_admin') != user.is_sales_admin:
             user.is_sales_admin = not user.is_sales_admin
 
-        if has_access('is_admin') and data.get('is_marketer') != user.is_marketer:
+        if has_access('is_admin') and ('us_marketer' in data) and data.get('is_marketer') != user.is_marketer:
             user.is_marketer = not user.is_marketer
+
+        if data.get('avatar_url'):
+            start_image_resizing_tasks(user, data['avatar_url'])
 
     def after_update_object(self, user, data, view_kwargs):
         """
@@ -221,11 +246,11 @@ class UserDetail(ResourceDetail):
             send_email_change_user_email(user, view_kwargs.get('email_changed'))
 
     decorators = (api.has_permission('is_user_itself', fetch="user_id,id", fetch_as="user_id",
-                  model=[Notification, Feedback, UsersEventsRoles, Session, EventInvoice, AccessCode,
-                         DiscountCode, EmailNotification, Speaker, User],
-                  fetch_key_url="notification_id, feedback_id, users_events_role_id, session_id, \
+                                     model=[Notification, Feedback, UsersEventsRoles, Session, EventInvoice, AccessCode,
+                                            DiscountCode, EmailNotification, Speaker, User],
+                                     fetch_key_url="notification_id, feedback_id, users_events_role_id, session_id, \
                   event_invoice_id, access_code_id, discount_code_id, email_notification_id, speaker_id, id",
-                  leave_if=lambda a: a.get('attendee_id')), )
+                                     leave_if=lambda a: a.get('attendee_id')),)
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User,
@@ -240,7 +265,7 @@ class UserRelationship(ResourceRelationship):
     """
     User Relationship
     """
-    decorators = (is_user_itself, )
+    decorators = (is_user_itself,)
     schema = UserSchema
     data_layer = {'session': db.session,
                   'model': User}
@@ -262,3 +287,9 @@ def is_email_available():
         abort(
             make_response(jsonify(error="Email field missing"), 422)
         )
+
+
+def start_image_resizing_tasks(user, original_image_url):
+    user_id = str(user.id)
+    from .helpers.tasks import resize_user_images_task
+    resize_user_images_task.delay(user_id, original_image_url)

@@ -22,13 +22,14 @@ class AdminSalesFeesSchema(Schema):
     name = fields.String()
     payment_currency = fields.String()
     fee_percentage = fields.Float(attribute='fee')
+    maximum_fee = fields.Float(attribute='maximum_fee')
     revenue = fields.Method('calc_revenue')
     ticket_count = fields.Method('calc_ticket_count')
 
     @staticmethod
     def calc_ticket_count(obj):
         """Count all tickets in all orders of this event"""
-        return sum([o.amount for o in obj.orders])
+        return sum([o.tickets_count for o in obj.orders if o.status == 'completed'])
 
     @staticmethod
     def calc_revenue(obj):

@@ -27,6 +27,9 @@ class SettingDetail(ResourceDetail):
     """
 
     def before_get(self, args, kwargs):
+        refresh = request.args.get('refresh')
+        if refresh == 'true':
+            refresh_settings()
         kwargs['id'] = 1
 
         if 'Authorization' in request.headers:

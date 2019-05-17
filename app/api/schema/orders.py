@@ -47,12 +47,14 @@ class OrderSchema(SoftDeletionSchema):
 
     id = fields.Str(dump_only=True)
     identifier = fields.Str(dump_only=True)
-    amount = fields.Float(validate=lambda n: n > 0, allow_none=True)
+    amount = fields.Float(validate=lambda n: n >= 0, allow_none=False, default=0)
     address = fields.Str(allow_none=True)
     city = fields.Str(allow_none=True)
     state = fields.Str(db.String, allow_none=True)
     country = fields.Str(allow_none=True)
     zipcode = fields.Str(allow_none=True)
+    company = fields.Str(allow_none=True)
+    tax_business_info = fields.Str(allow_none=True)
     completed_at = fields.DateTime(dump_only=True)
     created_at = fields.DateTime(dump_only=True)
     transaction_id = fields.Str(dump_only=True)
@@ -61,6 +63,7 @@ class OrderSchema(SoftDeletionSchema):
                             validate=validate.OneOf(choices=["free", "stripe", "paypal", "bank", "cheque", "onsite"]),
                             allow_none=True)
     paid_via = fields.Str(dump_only=True)
+    is_billing_enabled = fields.Boolean(default=False)
     brand = fields.Str(dump_only=True)
     exp_month = fields.Str(dump_only=True)
     exp_year = fields.Str(dump_only=True)

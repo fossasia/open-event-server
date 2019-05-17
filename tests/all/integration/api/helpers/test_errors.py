@@ -1,9 +1,12 @@
 import unittest
+import json
 
 from tests.all.integration.utils import OpenEventTestCase
-from app.api.helpers.errors import ForbiddenError, NotFoundError, ServerError, \
+from app.api.helpers.errors import ErrorResponse, ForbiddenError, NotFoundError, ServerError, \
     UnprocessableEntityError, BadRequestError
 from tests.all.integration.setup_database import Setup
+from flask_rest_jsonapi.errors import jsonapi_errors
+from flask import make_response
 from app import current_app as app
 
 
@@ -11,8 +14,18 @@ class TestErrorsHelperValidation(OpenEventTestCase):
     def setUp(self):
         self.app = Setup.create_app()
 
+    def test_error_response_base_respond(self):
+        """Method to test base error response methods"""
+
+        with app.test_request_context():
+            base_error_response = ErrorResponse(source="test source", detail="test detail")
+            json_object = json.dumps(jsonapi_errors([base_error_response.to_dict()]))
+            self.assertNotEqual(base_error_response.respond(), make_response(json_object, 200,
+                                {'Content-Type': 'application/vnd.api+json'}))
+
+
     def test_errors(self):
-        """Method to test the status code of all errors."""
+        """Method to test the status code of all errors"""
 
         with app.test_request_context():
             # Forbidden Error

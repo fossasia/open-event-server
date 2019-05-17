@@ -6,6 +6,7 @@ from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.schema.discount_codes import DiscountCodeSchemaTicket
 from app.factories.discount_code import DiscountCodeFactory
 from app.models import db
+from app.api.helpers.db import save_to_db
 from tests.all.integration.setup_database import Setup
 
 
@@ -48,7 +49,7 @@ class TestDiscountCodeValidation(OpenEventTestCase):
 
     def test_quantity_max_gt_tickets_number(self):
         """
-        Discount Code Validate Quantity - Tests if exception is raised when min_quantity greater than max
+        Discount Code Validate Quantity - Tests if exception is raised when max_quantity greater than ticket_number
         :return:
         """
         schema = DiscountCodeSchemaTicket()
@@ -71,8 +72,7 @@ class TestDiscountCodeValidation(OpenEventTestCase):
         with app.test_request_context():
             schema = DiscountCodeSchemaTicket()
             obj = DiscountCodeFactory()
-            db.session.add(obj)
-            db.session.commit()
+            save_to_db(obj)
 
             original_data = {
                 'data': {

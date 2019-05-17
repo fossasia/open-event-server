@@ -7,6 +7,7 @@ from app.api.helpers.jwt import jwt_authenticate, get_identity
 from app.factories.event import EventFactoryBasic
 from app.factories.user import UserFactory
 from app.models import db
+from app.api.helpers.db import save_to_db
 from tests.all.integration.setup_database import Setup
 from tests.all.integration.utils import OpenEventTestCase
 
@@ -20,8 +21,7 @@ class TestJWTHelperValidation(OpenEventTestCase):
 
         with app.test_request_context():
             user = UserFactory()
-            db.session.add(user)
-            db.session.commit()
+            save_to_db(user)
 
             # Valid Authentication
             authenticated_user = jwt_authenticate(user.email, 'password')
@@ -36,13 +36,11 @@ class TestJWTHelperValidation(OpenEventTestCase):
 
         with app.test_request_context():
             user = UserFactory()
-            db.session.add(user)
-            db.session.commit()
+            save_to_db(user)
 
             event = EventFactoryBasic()
             event.user_id = user.id
-            db.session.add(event)
-            db.session.commit()
+            save_to_db(event)
 
             # Authenticate User
             self.auth = {'Authorization': "JWT " + str(_default_jwt_encode_handler(user), 'utf-8')}
