@@ -10,7 +10,7 @@ requests-oauthlib = ">=0.7.0,<1"
 icalendar = "<4,>=3.11"
 requests = {version = ">=2.20.0,<3", extras = ["security"]}
 "psycopg2-binary" = "*"
-itsdangerous = "<0.30,>=0.24"
+itsdangerous = ">=0.24,<1.2"
 humanize = ">=0.5.1,<0.6"
 celery = "<4,>=3.1.23"
 redis = ">=2.10.5,<3"
