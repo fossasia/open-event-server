@@ -468,9 +468,11 @@ class EventDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-
         if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
-            event.deleted_at = data.get('deleted_at')
+            if len(event.orders) != 0:
+                raise ForbiddenException({'source': ''}, "Event associated with orders cannot be deleted")
+            else:
+                event.deleted_at = data.get('deleted_at')
 
         if 'is_event_online' not in data and event.is_event_online \
                 or 'is_event_online' in data and not data['is_event_online']:
