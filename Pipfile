@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 pycparser = "==2.14"
 flask-script = "<2.1,>=2.0.5"
-requests-oauthlib = ">=0.7.0,<1"
+requests-oauthlib = ">=0.7.0,<2"
 icalendar = "<4,>=3.11"
 requests = {version = ">=2.20.0,<3", extras = ["security"]}
 "psycopg2-binary" = "*"
