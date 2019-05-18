@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d3697ea294f6b7b58600691cc350dcad7be80563e627846c51072deb7773f868"
+            "sha256": "678f75d5715892b215aa92be6010ac606f6659487025588c30b72dfe6417ccd0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -187,6 +187,13 @@
             ],
             "index": "pypi",
             "version": "==20181111"
+        },
+        "distro": {
+            "hashes": [
+                "sha256:362dde65d846d23baee4b5c058c8586f219b5a54be1cf5fc6ff55c4578392f57",
+                "sha256:eedf82a470ebe7d010f1872c17237c79ab04097948800029994fa458e52fb4b4"
+            ],
+            "version": "==1.4.0"
         },
         "dnspython": {
             "hashes": [
@@ -419,11 +426,11 @@
         },
         "icalendar": {
             "hashes": [
-                "sha256:511156bafb4c67dd8bfb056744823fcff3105bb3ec641d9d5bb803f590e671c3",
-                "sha256:ad401c93b64d8e98f1e98b4e6c96c0023a05f5984d3bfc23ce9448986edbca54"
+                "sha256:07c2447a1d44cbb27c90b8c6a5c98e890cc1853c6223e2a52195cddec26c6356",
+                "sha256:83f7248b7485ddd29c7d69b706b21c441e34855d9c1d888939fd24aefdd9d19b"
             ],
             "index": "pypi",
-            "version": "==3.12"
+            "version": "==4.0.3"
         },
         "idna": {
             "hashes": [
