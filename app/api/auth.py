@@ -281,6 +281,11 @@ def change_password():
     })
 
 
+def return_tickets(file_path, order_identifier):
+    response = make_response(send_file(file_path))
+    response.headers['Content-Disposition'] = 'attachment; filename=ticket-%s.pdf' % order_identifier
+    return response
+
 @ticket_blueprint.route('/tickets/<string:order_identifier>')
 @jwt_required()
 def ticket_attendee_authorized(order_identifier):
@@ -294,12 +299,10 @@ def ticket_attendee_authorized(order_identifier):
             key = UPLOAD_PATHS['pdf']['ticket_attendee'].format(identifier=order_identifier)
             file_path = '../generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
             try:
-                response = make_response(send_file(file_path))
-                response.headers['Content-Disposition'] = 'attachment; filename=ticket-%s.zip' % order_identifier
-                return response
+                return return_tickets(file_path, order_identifier)
             except FileNotFoundError:
                 create_pdf_tickets_for_holder(order)
-                return redirect(url_for('ticket_blueprint.ticket_attendee_authorized', order_identifier=order_identifier))
+                return return_tickets(file_path, order_identifier)
         else:
             return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
     else:
