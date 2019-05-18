@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "446a65c217a03952a30a26390881ffbd5ff4c8451f5e8bffa6d29a82d9ba9f29"
+            "sha256": "d71589d8816cf1e4ba88cce5178a4ccb4833c7a79f535288544a812a9d4391c2"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -336,10 +336,11 @@
         },
         "flask-sqlalchemy": {
             "hashes": [
-                "sha256:c5244de44cc85d2267115624d83faef3f9e8f088756788694f305a5d5ad137c5"
+                "sha256:0c9609b0d72871c540a7945ea559c8fdf5455192d2db67219509aed680a3d45a",
+                "sha256:8631bbea987bc3eb0f72b1f691d47bd37ceb795e73b59ab48586d76d75a7c605"
             ],
             "index": "pypi",
-            "version": "==2.1"
+            "version": "==2.4.0"
         },
         "forex-python": {
             "hashes": [
