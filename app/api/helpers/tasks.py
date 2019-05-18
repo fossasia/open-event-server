@@ -6,6 +6,11 @@ import uuid
 
 from flask import current_app, render_template
 from marrow.mailer import Mailer, Message
+from app import get_settings
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import (
+    Mail, Attachment, FileContent, FileName,
+    FileType, Disposition)
 
 from app import make_celery
 from app.api.helpers.utilities import strip_tags
@@ -41,25 +46,33 @@ from app.api.helpers.storage import UploadedFile, upload, UPLOAD_PATHS
 from app.api.helpers.db import save_to_db
 from app.api.helpers.files import create_save_pdf
 import urllib.error
+import base64
 
 celery = make_celery()
 
 
 @celery.task(name='send.email.post')
 def send_email_task(payload, headers):
-    data = {"personalizations": [{"to": []}]}
-    data["personalizations"][0]["to"].append({"email": payload["to"]})
-    data["from"] = {"email": payload["from"]}
-    data["subject"] = payload["subject"]
-    data["content"] = [{"type": "text/html", "value": payload["html"]}]
-    logging.info('Sending an email regarding {} on behalf of {}'.format(data["subject"], data["from"]))
+    message = Mail(from_email=payload['from'],
+                   to_emails=payload['to'],
+                   subject=payload['subject'],
+                   html_content=payload["html"])
+    if payload['attachments'] is not None:
+        for attachment in payload['attachments']:
+            with open(attachment, 'rb') as f:
+                file_data = f.read()
+                f.close()
+            encoded = base64.b64encode(file_data).decode()
+            attachment = Attachment()
+            attachment.file_content = FileContent(encoded)
+            attachment.file_type = FileType('application/pdf')
+            attachment.file_name = FileName(payload['to'])
+            attachment.disposition = Disposition('attachment')
+            message.add_attachment(attachment)
+    sendgrid_client = SendGridAPIClient(get_settings()['sendgrid_key'])
+    logging.info('Sending an email regarding {} on behalf of {}'.format(payload["subject"], payload["from"]))
     try:
-        requests.post(
-            "https://api.sendgrid.com/v3/mail/send",
-            data=json.dumps(data),
-            headers=headers,
-            verify=False  # doesn't work with verification in celery context
-        )
+        sendgrid_client.send(message)
         logging.info('Email sent successfully')
     except Exception:
         logging.exception('Error occured while sending the email')
@@ -84,6 +97,7 @@ def send_mail_via_smtp_task(config, payload):
     message.subject = payload['subject']
     message.plain = strip_tags(payload['html'])
     message.rich = payload['html']
+    message.attach(name=payload['attachments'])
     mailer.send(message)
     logging.info('Message sent via SMTP')
     mailer.stop()
