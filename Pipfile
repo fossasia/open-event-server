@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pycparser = "==2.14"
+pycparser = "==2.19"
 flask-script = "<2.1,>=2.0.5"
 requests-oauthlib = ">=0.7.0,<2"
 icalendar = ">=3.11,<5"
