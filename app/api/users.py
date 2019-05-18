@@ -214,6 +214,14 @@ class UserDetail(ResourceDetail):
         if has_access('is_admin') and data.get('deleted_at') != user.deleted_at:
             user.deleted_at = data.get('deleted_at')
 
+        if has_access('is_user_itself', user_id=user.id) and data.get('deleted_at') != user.deleted_at:
+            if len(user.events) != 0:
+                raise ForbiddenException({'source': ''}, "Users associated with events cannot be deleted")
+            elif len(user.orders) != 0:
+                raise ForbiddenException({'source': ''}, "Users associated with orders cannot be deleted")
+            else:
+                user.deleted_at = data.get('deleted_at')
+
         if users_email is not None and users_email != user.email:
             try:
                 db.session.query(User).filter_by(email=users_email).one()
