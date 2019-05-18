@@ -17,6 +17,7 @@ celery>=3.1.23,<4
 redis>=2.10.5,<3
 apscheduler>=3.3.0,<4
 pillow
+sendgrid>=6.0.5
 amqp<2.0,>=1.4.9
 gunicorn>=19.6.0,<20
 boto>=2.45.0,<3

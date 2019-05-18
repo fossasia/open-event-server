@@ -10,6 +10,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
+from app.api.helpers.storage import generate_hash, UPLOAD_PATHS
 from app.api.helpers.errors import BadRequestError
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
 from app.api.helpers.files import make_frontend_url
@@ -139,10 +140,22 @@ class OrdersListPost(ResourceList):
 
         # send e-mail and notifications if the order status is completed
         if order.status == 'completed':
+            # fetch tickets attachment
+            order_identifier = order.identifier
+
+            key = UPLOAD_PATHS['pdf']['ticket_attendee'].format(identifier=order_identifier)
+            ticket_path = 'generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+
+            key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
+            invoice_path = 'generated/invoices/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+
+            # send email and notifications.
+            send_email_to_attendees(order=order, purchaser_id=current_user.id, attachments=[ticket_path, invoice_path])
+
+            send_notif_to_attendees(order, current_user.id)
+
             if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
                 order.completed_at = datetime.utcnow()
-            send_email_to_attendees(order, current_user.id)
-            send_notif_to_attendees(order, current_user.id)
 
             order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
             for organizer in order.event.organizers:
@@ -310,10 +323,23 @@ class OrderDetail(ResourceDetail):
             delete_related_attendees_for_order(order)
 
         elif order.status == 'completed':
+
+            # Send email to attendees with invoices and tickets attached
+            order_identifier = order.identifier
+
+            key = UPLOAD_PATHS['pdf']['ticket_attendee'].format(identifier=order_identifier)
+            ticket_path = 'generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+
+            key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
+            invoice_path = 'generated/invoices/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+
+            # send email and notifications.
+            send_email_to_attendees(order=order, purchaser_id=current_user.id, attachments=[ticket_path, invoice_path])
+
+            send_notif_to_attendees(order, current_user.id)
+
             if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
                 order.completed_at = datetime.utcnow()
-            send_email_to_attendees(order, current_user.id)
-            send_notif_to_attendees(order, current_user.id)
 
             order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
             for organizer in order.event.organizers:
