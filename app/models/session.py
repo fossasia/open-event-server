@@ -53,6 +53,7 @@ class Session(SoftDeletionModel):
     is_mail_sent = db.Column(db.Boolean, default=False)
     last_modified_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow)
     send_email = db.Column(db.Boolean, nullable=True)
+    is_locked = db.Column(db.Boolean, default=False, nullable=False)
 
     def __init__(self,
                  title=None,
@@ -81,7 +82,8 @@ class Session(SoftDeletionModel):
                  deleted_at=None,
                  submitted_at=None,
                  last_modified_at=None,
-                 send_email=None):
+                 send_email=None,
+                 is_locked=False):
 
         if speakers is None:
             speakers = []
@@ -113,6 +115,7 @@ class Session(SoftDeletionModel):
         self.submission_modifier = submission_modifier
         self.last_modified_at = datetime.datetime.now(pytz.utc)
         self.send_email = send_email
+        self.is_locked = is_locked
 
     @staticmethod
     def get_service_name():
