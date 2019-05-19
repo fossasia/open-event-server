@@ -68,7 +68,10 @@ class OrderSchema(SoftDeletionSchema):
     exp_month = fields.Str(dump_only=True)
     exp_year = fields.Str(dump_only=True)
     last4 = fields.Str(dump_only=True)
-    status = fields.Str(validate=validate.OneOf(choices=["pending", "cancelled", "completed", "placed", "expired"]))
+    status = fields.Str(
+        validate=validate.OneOf(
+            choices=["initializing", "pending", "cancelled", "completed", "placed", "expired"]
+        ))
     discount_code_id = fields.Str(allow_none=True)
     payment_url = fields.Str(dump_only=True)
     cancel_note = fields.Str(allow_none=True)
