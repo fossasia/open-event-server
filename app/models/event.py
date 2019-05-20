@@ -91,6 +91,7 @@ class Event(SoftDeletionModel):
     schedule_published_on = db.Column(db.DateTime(timezone=True))
     is_ticketing_enabled = db.Column(db.Boolean, default=False)
     is_donation_enabled = db.Column(db.Boolean, default=False)
+    is_ticket_form_enabled = db.Column(db.Boolean, default=True, nullable=False)
     payment_country = db.Column(db.String)
     payment_currency = db.Column(db.String)
     paypal_email = db.Column(db.String)
@@ -195,6 +196,7 @@ class Event(SoftDeletionModel):
                  code_of_conduct=None,
                  schedule_published_on=None,
                  is_sessions_speakers_enabled=False,
+                 is_ticket_form_enabled=True,
                  is_donation_enabled=False,
                  is_map_shown=False,
                  has_organizer_info=False,
@@ -275,6 +277,7 @@ class Event(SoftDeletionModel):
         self.can_pay_by_omise = can_pay_by_omise
         self.is_donation_enabled = is_donation_enabled
         self.is_featured = is_featured
+        self.is_ticket_form_enabled = is_ticket_form_enabled
         self.identifier = get_new_event_identifier()
         self.cheque_details = cheque_details
         self.bank_details = bank_details
