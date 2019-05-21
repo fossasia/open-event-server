@@ -2,11 +2,13 @@ import unittest
 from datetime import timedelta, datetime, timezone
 
 from app import current_app as app, db
+from app.api.helpers.db import save_to_db
 from app.api.helpers.order import set_expiry_for_order, delete_related_attendees_for_order
 from app.factories.attendee import AttendeeFactory
 from app.factories.event import EventFactoryBasic
 from app.factories.order import OrderFactory
 from app.models.order import Order
+from app.api.helpers.db import save_to_db
 from tests.all.integration.setup_database import Setup
 from tests.all.integration.utils import OpenEventTestCase
 
@@ -35,20 +37,18 @@ class TestOrderUtilities(OpenEventTestCase):
             event = EventFactoryBasic()
             obj.event = event
             set_expiry_for_order(obj)
-            self.assertEqual(obj.status, 'pending')
+            self.assertEqual(obj.status, 'initializing')
 
     def test_should_delete_related_attendees(self):
         """Method to test to delete related attendees of an event"""
 
         with app.test_request_context():
             attendee = AttendeeFactory()
-            db.session.add(attendee)
-            db.session.commit()
+            save_to_db(attendee)
 
             obj = OrderFactory()
             obj.ticket_holders = [attendee, ]
-            db.session.add(obj)
-            db.session.commit()
+            save_to_db(obj)
 
             delete_related_attendees_for_order(obj)
             order = db.session.query(Order).filter(Order.id == obj.id).first()

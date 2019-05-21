@@ -10,6 +10,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
+from app.api.helpers.storage import generate_hash, UPLOAD_PATHS
 from app.api.helpers.errors import BadRequestError
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
 from app.api.helpers.files import make_frontend_url
@@ -87,6 +88,8 @@ class OrdersListPost(ResourceList):
             raise ConflictException({'pointer': '/data/attributes/amount'},
                                     "Amount cannot be null for a paid order")
 
+        if not data.get('amount'):
+            data['amount'] = 0
         # Apply discount only if the user is not event admin
         if data.get('discount') and not has_access('is_coorganizer', event_id=data['event']):
             discount_code = safe_query_without_soft_deleted_entries(self, DiscountCode, 'id', data['discount'],
@@ -136,9 +139,23 @@ class OrdersListPost(ResourceList):
 #             TicketingManager.calculate_update_amount(order)
 
         # send e-mail and notifications if the order status is completed
-        if order.status == 'completed':
-            send_email_to_attendees(order, current_user.id)
+        if order.status == 'completed' or order.status == 'placed':
+            # fetch tickets attachment
+            order_identifier = order.identifier
+
+            key = UPLOAD_PATHS['pdf']['ticket_attendee'].format(identifier=order_identifier)
+            ticket_path = 'generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+
+            key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
+            invoice_path = 'generated/invoices/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+
+            # send email and notifications.
+            send_email_to_attendees(order=order, purchaser_id=current_user.id, attachments=[ticket_path, invoice_path])
+
             send_notif_to_attendees(order, current_user.id)
+
+            if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
+                order.completed_at = datetime.utcnow()
 
             order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
             for organizer in order.event.organizers:
@@ -275,7 +292,11 @@ class OrderDetail(ResourceDetail):
                                          "You cannot update a non-pending order")
             else:
                 for element in data:
-                    if data[element] and data[element]\
+                    if element == 'is_billing_enabled' and order.status == 'completed' and data[element]\
+                            and data[element] != getattr(order, element, None):
+                        raise ForbiddenException({'pointer': 'data/{}'.format(element)},
+                                                 "You cannot update {} of a completed order".format(element))
+                    elif data[element] and data[element]\
                             != getattr(order, element, None) and element not in get_updatable_fields():
                         raise ForbiddenException({'pointer': 'data/{}'.format(element)},
                                                  "You cannot update {} of an order".format(element))
@@ -300,6 +321,30 @@ class OrderDetail(ResourceDetail):
 
             # delete the attendees so that the tickets are unlocked.
             delete_related_attendees_for_order(order)
+
+        elif order.status == 'completed' or order.status == 'placed':
+
+            # Send email to attendees with invoices and tickets attached
+            order_identifier = order.identifier
+
+            key = UPLOAD_PATHS['pdf']['ticket_attendee'].format(identifier=order_identifier)
+            ticket_path = 'generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+
+            key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
+            invoice_path = 'generated/invoices/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+
+            # send email and notifications.
+            send_email_to_attendees(order=order, purchaser_id=current_user.id, attachments=[ticket_path, invoice_path])
+
+            send_notif_to_attendees(order, current_user.id)
+
+            if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
+                order.completed_at = datetime.utcnow()
+
+            order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
+            for organizer in order.event.organizers:
+                send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
+                                                     order.identifier)
 
     def before_delete_object(self, order, view_kwargs):
         """

@@ -145,7 +145,7 @@ MAILS = {
         'message': (
             u"Hi, this is a confirmation mail of your tickets for the event {event_name}"
             u"<br/>Your order has been processed successfully." +
-            u"<br/> <a href='{pdf_url}'>Click here</a> to view/download your invoice."
+            u"<br/> You can find your Tickets and Order Invoice attached to this mail."
             u"<br><br><em>Looking forward to seeing you at the event."
             u"<br/>Login to manage your orders at https://eventyay.com </em>"
         )

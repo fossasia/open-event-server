@@ -413,7 +413,7 @@ NOTIFS = {
     SESSION_ACCEPT_REJECT: {
         'title': u'Session {session_name} has been {acceptance}',
         'message': u"The session <strong>{session_name}</strong> has been" +
-                   u"<strong>{acceptance}</strong> by the Organizer.",
+                   u" <strong>{acceptance}</strong> by the Organizer.",
         'recipient': 'Speaker',
     },
     INVITE_PAPERS: {

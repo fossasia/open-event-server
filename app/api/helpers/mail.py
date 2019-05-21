@@ -15,7 +15,7 @@ from app.models.mail import Mail, USER_CONFIRM, NEW_SESSION, USER_CHANGE_EMAIL, 
 from app.models.user import User
 
 
-def send_email(to, action, subject, html):
+def send_email(to, action, subject, html, attachments=None):
     """
     Sends email and records it in DB
     """
@@ -30,7 +30,8 @@ def send_email(to, action, subject, html):
             'to': to,
             'from': email_from,
             'subject': subject,
-            'html': html
+            'html': html,
+            'attachments': attachments
         }
 
         if not current_app.config['TESTING']:
@@ -278,7 +279,8 @@ def send_email_change_user_email(user, email):
     send_email_with_action(email, USER_CHANGE_EMAIL, email=email, new_email=user.email)
 
 
-def send_email_to_attendees(order, purchaser_id):
+def send_email_to_attendees(order, purchaser_id, attachments=None):
+
     for holder in order.ticket_holders:
         if holder.user and holder.user.id == purchaser_id:
             # Ticket holder is the purchaser
@@ -292,7 +294,8 @@ def send_email_to_attendees(order, purchaser_id):
                 html=MAILS[TICKET_PURCHASED]['message'].format(
                     pdf_url=holder.pdf_url,
                     event_name=order.event.name
-                )
+                ),
+                attachments=attachments
             )
         else:
             # The Ticket holder is not the purchaser
@@ -306,7 +309,8 @@ def send_email_to_attendees(order, purchaser_id):
                 html=MAILS[TICKET_PURCHASED_ATTENDEE]['message'].format(
                     pdf_url=holder.pdf_url,
                     event_name=order.event.name
-                )
+                ),
+                attachments=attachments
             )
 
 

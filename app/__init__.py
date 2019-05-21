@@ -29,7 +29,7 @@ from werkzeug.contrib.profiler import ProfilerMiddleware
 from app.views import BlueprintsManager
 from app.api.helpers.auth import AuthManager
 from app.api.helpers.scheduled_jobs import send_after_event_mail, send_event_fee_notification, \
-    send_event_fee_notification_followup
+    send_event_fee_notification_followup, change_session_state_on_event_completion, expire_pending_tickets_after_one_day
 from app.models.event import Event
 from app.models.role_invite import RoleInvite
 from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations, check_migrations
@@ -127,6 +127,8 @@ def create_app():
         from app.api.users import user_misc_routes
         from app.api.orders import order_misc_routes
         from app.api.role_invites import role_invites_misc_routes
+        from app.api.auth import ticket_blueprint
+        from app.api.admin_translations import admin_blueprint
 
         app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)
@@ -140,6 +142,8 @@ def create_app():
         app.register_blueprint(attendee_misc_routes)
         app.register_blueprint(order_misc_routes)
         app.register_blueprint(role_invites_misc_routes)
+        app.register_blueprint(ticket_blueprint)
+        app.register_blueprint(admin_blueprint)
 
     sa.orm.configure_mappers()
 
@@ -238,6 +242,8 @@ if app.config['ENABLE_ELASTICSEARCH']:
 scheduler.add_job(send_after_event_mail, 'cron', hour=5, minute=30)
 scheduler.add_job(send_event_fee_notification, 'cron', day=1)
 scheduler.add_job(send_event_fee_notification_followup, 'cron', day=15)
+scheduler.add_job(change_session_state_on_event_completion, 'cron', hour=5, minute=30)
+scheduler.add_job(expire_pending_tickets_after_one_day, 'cron', hour=5)
 scheduler.start()
 
 

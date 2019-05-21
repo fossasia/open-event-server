@@ -49,7 +49,7 @@ class UserList(ResourceList):
         if len(data['password']) < 8:
             raise UnprocessableEntity({'source': '/data/attributes/password'},
                                        'Password should be at least 8 characters long')
-        if db.session.query(User.id).filter_by(email=data['email']).scalar() is not None:
+        if db.session.query(User.id).filter_by(email=data['email'].strip()).scalar() is not None:
             raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")
 
     def after_create_object(self, user, data, view_kwargs):
@@ -86,6 +86,9 @@ class UserList(ResourceList):
         #     uploaded_images['small_image_url'] = uploaded_images['thumbnail_image_url']
         #     del uploaded_images['large_image_url']
         #     self.session.query(User).filter_by(id=user.id).update(uploaded_images)
+
+        if data.get('avatar_url'):
+            start_image_resizing_tasks(user, data['avatar_url'])
 
     decorators = (api.has_permission('is_admin', methods="GET"),)
     schema = UserSchema
@@ -204,10 +207,24 @@ class UserDetail(ResourceDetail):
         #     data['small_image_url'] = uploaded_images['thumbnail_image_url']
         #     data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
         #     data['icon_image_url'] = uploaded_images['icon_image_url']
+        users_email = data.get('email', None)
+        if users_email is not None:
+            users_email = users_email.strip()
 
-        if data.get('email') and data['email'] != user.email:
+        if has_access('is_admin') and data.get('deleted_at') != user.deleted_at:
+            user.deleted_at = data.get('deleted_at')
+
+        if has_access('is_user_itself', user_id=user.id) and data.get('deleted_at') != user.deleted_at:
+            if len(user.events) != 0:
+                raise ForbiddenException({'source': ''}, "Users associated with events cannot be deleted")
+            elif len(user.orders) != 0:
+                raise ForbiddenException({'source': ''}, "Users associated with orders cannot be deleted")
+            else:
+                user.deleted_at = data.get('deleted_at')
+
+        if users_email is not None and users_email != user.email:
             try:
-                db.session.query(User).filter_by(email=data['email']).one()
+                db.session.query(User).filter_by(email=users_email).one()
             except NoResultFound:
                 view_kwargs['email_changed'] = user.email
             else:
@@ -216,11 +233,14 @@ class UserDetail(ResourceDetail):
         if has_access('is_super_admin') and data.get('is_admin') and data.get('is_admin') != user.is_admin:
             user.is_admin = not user.is_admin
 
-        if has_access('is_admin') and data.get('is_sales_admin') != user.is_sales_admin:
+        if has_access('is_admin') and ('is_sales_admin' in data) and data.get('is_sales_admin') != user.is_sales_admin:
             user.is_sales_admin = not user.is_sales_admin
 
-        if has_access('is_admin') and data.get('is_marketer') != user.is_marketer:
+        if has_access('is_admin') and ('us_marketer' in data) and data.get('is_marketer') != user.is_marketer:
             user.is_marketer = not user.is_marketer
+
+        if data.get('avatar_url'):
+            start_image_resizing_tasks(user, data['avatar_url'])
 
     def after_update_object(self, user, data, view_kwargs):
         """
@@ -275,3 +295,9 @@ def is_email_available():
         abort(
             make_response(jsonify(error="Email field missing"), 422)
         )
+
+
+def start_image_resizing_tasks(user, original_image_url):
+    user_id = str(user.id)
+    from .helpers.tasks import resize_user_images_task
+    resize_user_images_task.delay(user_id, original_image_url)

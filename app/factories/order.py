@@ -13,4 +13,4 @@ class OrderFactory(factory.alchemy.SQLAlchemyModelFactory):
     event = factory.RelatedFactory(EventFactoryBasic)
     event_id = 1
     payment_mode = 'free'
-    status = 'pending'
+    status = 'initializing'

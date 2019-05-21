@@ -8,6 +8,7 @@ from app.api.helpers.permissions import jwt_required
 from app.models.session import Session
 from app.models.event import Event
 from app.models.order import Order
+from app.models.speaker import Speaker
 from app.api.helpers.jwt import get_identity
 
 
@@ -158,7 +159,32 @@ def is_speaker_for_session(view, view_args, view_kwargs, *args, **kwargs):
             if speaker.user_id == user.id:
                 return view(*view_args, **view_kwargs)
 
+    if session.creator_id == user.id:
+        return view(*view_args, **view_kwargs)
+
     return ForbiddenError({'source': ''}, 'Access denied.').respond()
+
+
+@jwt_required
+def is_speaker_itself_or_admin(view, view_args, view_kwargs, *args, **kwargs):
+    """
+    Allows admin and super admin access to any resource irrespective of id.
+    Otherwise the user can only access his/her resource.
+    """
+    user = current_identity
+
+    if user.is_admin or user.is_super_admin:
+        return view(*view_args, **view_kwargs)
+
+    if user.is_organizer(kwargs['event_id']) or user.is_coorganizer(kwargs['event_id']):
+        return view(*view_args, **view_kwargs)
+
+    if ('model' in kwargs) and (kwargs['model'] == Speaker):
+        query_user = Speaker.query.filter_by(email=user._email).first()
+        if query_user:
+            return view(*view_args, **view_kwargs)
+
+    return ForbiddenError({'source': ''}, 'Detail ownership is required, access denied.').respond()
 
 
 @jwt_required
@@ -304,7 +330,8 @@ permissions = {
     'is_user_itself': is_user_itself,
     'is_coorganizer_endpoint_related_to_event': is_coorganizer_endpoint_related_to_event,
     'is_registrar_or_user_itself': is_registrar_or_user_itself,
-    'is_coorganizer_but_not_admin': is_coorganizer_but_not_admin
+    'is_coorganizer_but_not_admin': is_coorganizer_but_not_admin,
+    'is_speaker_itself_or_admin': is_speaker_itself_or_admin
 }
 
 

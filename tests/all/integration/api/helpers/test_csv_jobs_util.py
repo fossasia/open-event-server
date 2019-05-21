@@ -25,7 +25,7 @@ class TestExportCSV(OpenEventTestCase):
             test_order = OrderFactory()
             test_order.amount = 2
             field_data = export_orders_csv([test_order])
-            self.assertEqual(field_data[1][2], 'pending')
+            self.assertEqual(field_data[1][2], 'initializing')
             self.assertEqual(field_data[1][4], '2')
 
     def test_export_attendees_csv(self):

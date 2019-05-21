@@ -5,6 +5,7 @@ from app.api.helpers.utilities import dasherize
 from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
+from app.models.session_speaker_link import SessionsSpeakersLink
 
 
 class EventStatisticsGeneralSchema(Schema):
@@ -33,28 +34,43 @@ class EventStatisticsGeneralSchema(Schema):
     sponsors = fields.Method("sponsors_count")
 
     def sessions_draft_count(self, obj):
-        return Session.query.filter_by(event_id=obj.id, state='draft').count()
+        return Session.query.filter_by(event_id=obj.id, state='draft', deleted_at=None).count()
 
     def sessions_submitted_count(self, obj):
-        return Session.query.filter_by(event_id=obj.id, state='submitted').count()
+        return Session.query.filter_by(event_id=obj.id, deleted_at=None).count()
 
     def sessions_accepted_count(self, obj):
-        return Session.query.filter_by(event_id=obj.id, state='accepted').count()
+        return Session.query.filter_by(event_id=obj.id, state='accepted', deleted_at=None).count()
 
     def sessions_confirmed_count(self, obj):
-        return Session.query.filter_by(event_id=obj.id, state='confirmed').count()
+        return Session.query.filter_by(event_id=obj.id, state='confirmed', deleted_at=None).count()
 
     def sessions_pending_count(self, obj):
-        return Session.query.filter_by(event_id=obj.id, state='pending').count()
+        return Session.query.filter_by(event_id=obj.id, state='pending', deleted_at=None).count()
 
     def sessions_rejected_count(self, obj):
-        return Session.query.filter_by(event_id=obj.id, state='rejected').count()
+        return Session.query.filter_by(event_id=obj.id, state='rejected', deleted_at=None).count()
+
+    def speakers_count_type(self, obj, state='pending'):
+        return SessionsSpeakersLink.query.filter_by(event_id=obj.id, session_state=state, deleted_at=None).count()
 
     def speakers_count(self, obj):
-        return Speaker.query.filter_by(event_id=obj.id).count()
+        accepted = self.speakers_count_type(obj=obj, state='accepted')
+        confirmed = self.speakers_count_type(obj=obj, state='confirmed')
+        pending = self.speakers_count_type(obj=obj, state='pending')
+        rejected = self.speakers_count_type(obj=obj, state='rejected')
+        total = Speaker.query.filter_by(event_id=obj.id, deleted_at=None).count()
+        serial_data = {
+                       'accepted': accepted,
+                       'confirmed': confirmed,
+                       'pending': pending,
+                       'rejected': rejected,
+                       'total': total
+                       }
+        return serial_data
 
     def sessions_count(self, obj):
-        return Session.query.filter_by(event_id=obj.id).count()
+        return Session.query.filter_by(event_id=obj.id, deleted_at=None).count()
 
     def sponsors_count(self, obj):
-        return Sponsor.query.filter_by(event_id=obj.id).count()
+        return Sponsor.query.filter_by(event_id=obj.id, deleted_at=None).count()

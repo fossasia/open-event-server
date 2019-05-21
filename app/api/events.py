@@ -51,6 +51,40 @@ from app.models.users_events_role import UsersEventsRoles
 from app.models.stripe_authorization import StripeAuthorization
 
 
+def validate_event(user, modules, data):
+    if not user.can_create_event():
+        raise ForbiddenException({'source': ''},
+                                 "Please verify your Email")
+    elif data.get('is_ticketing_enabled', True) and not modules.ticket_include:
+            raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
+                                     "Ticketing is not enabled in the system")
+    if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
+        data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
+        if not modules.payment_include:
+            raise ForbiddenException({'source': ''},
+                                     "Payment is not enabled in the system")
+    if data.get('is_donation_enabled', False) and not modules.donation_include:
+        raise ForbiddenException({'source': '/data/attributes/is-donation-enabled'},
+                                 "Donation is not enabled in the system")
+
+    if data.get('state', None) == 'published' and not user.can_publish_event():
+        raise ForbiddenException({'source': ''},
+                                 "Only verified accounts can publish events")
+
+    if not data.get('is_event_online') and data.get('state', None) == 'published' \
+        and not data.get('location_name', None):
+        raise ConflictException({'pointer': '/data/attributes/location-name'},
+                                "Location is required to publish the event")
+
+    if data.get('location_name', None) and data.get('is_event_online'):
+        raise ConflictException({'pointer': '/data/attributes/location-name'},
+                                "Online Event does not have any locaton")
+
+    if data.get('searchable_location_name') and data.get('is_event_online'):
+        raise ConflictException({'pointer': '/data/attributes/searchable-location-name'},
+                                "Online Event does not have any locaton")
+
+
 class EventList(ResourceList):
     def before_get(self, args, kwargs):
         """
@@ -117,37 +151,7 @@ class EventList(ResourceList):
         """
         user = User.query.filter_by(id=kwargs['user_id']).first()
         modules = Module.query.first()
-        if data.get('is_ticketing_enabled', False) and not modules.ticket_include:
-            raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
-                                     "Ticketing is not enabled in the system")
-        if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
-                data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
-            if not modules.payment_include:
-                raise ForbiddenException({'source': ''},
-                                         "Payment is not enabled in the system")
-        if data.get('is_donation_enabled', False) and not modules.donation_include:
-            raise ForbiddenException({'source': '/data/attributes/is-donation-enabled'},
-                                     "Donation is not enabled in the system")
-        if not user.can_create_event():
-            raise ForbiddenException({'source': ''},
-                                     "Only verified accounts can create events")
-
-        if data.get('state', None) == 'published' and not user.can_publish_event():
-            raise ForbiddenException({'source': ''},
-                                     "Only verified accounts can publish events")
-
-        if not data.get('is_event_online') and data.get('state', None) == 'published' \
-                and not data.get('location_name', None):
-            raise ConflictException({'pointer': '/data/attributes/location-name'},
-                                    "Location is required to publish the event")
-
-        if data.get('location_name', None) and data.get('is_event_online'):
-            raise ConflictException({'pointer': '/data/attributes/location-name'},
-                                    "Online Event does not have any locaton")
-
-        if data.get('searchable_location_name') and data.get('is_event_online'):
-            raise ConflictException({'pointer': '/data/attributes/searchable-location-name'},
-                                    "Online Event does not have any locaton")
+        validate_event(user, modules, data)
 
     def after_create_object(self, event, data, view_kwargs):
         """
@@ -452,35 +456,9 @@ class EventDetail(ResourceDetail):
         :param data:
         :return:
         """
+        user = User.query.filter_by(id=current_identity.id).one()
         modules = Module.query.first()
-        if data.get('is_ticketing_enabled', False) and not modules.ticket_include:
-            raise ForbiddenException({'source': '/data/attributes/is-ticketing-enabled'},
-                                     "Ticketing is not enabled in the system")
-        if data.get('can_pay_by_paypal', False) or data.get('can_pay_by_cheque', False) or \
-                data.get('can_pay_by_bank', False) or data.get('can_pay_by_stripe', False):
-            if not modules.payment_include:
-                raise ForbiddenException({'source': ''},
-                                         "Payment is not enabled in the system")
-        if data.get('is_donation_enabled', False) and not modules.donation_include:
-            raise ForbiddenException({'source': '/data/attributes/is-donation-enabled'},
-                                     "Donation is not enabled in the system")
-
-        if data.get('state', None) == 'published' and not current_identity.can_publish_event():
-            raise ForbiddenException({'source': ''},
-                                     "Only verified accounts can publish events")
-
-        if data.get('state', None) == 'published' and not data.get('location_name', None) and \
-                not data.get('is_event_online'):
-            raise ConflictException({'pointer': '/data/attributes/location-name'},
-                                    "Location is required to publish the event")
-
-        if data.get('location_name') and data.get('is_event_online'):
-            raise ConflictException({'pointer': '/data/attributes/location-name'},
-                                    "Online Event does not have any locaton")
-
-        if data.get('searchable_location_name') and data.get('is_event_online'):
-            raise ConflictException({'pointer': '/data/attributes/searchable-location-name'},
-                                    "Online Event does not have any locaton")
+        validate_event(user, modules, data)
 
     def before_update_object(self, event, data, view_kwargs):
         """
@@ -490,9 +468,11 @@ class EventDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-
         if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
-            event.deleted_at = data.get('deleted_at')
+            if len(event.orders) != 0:
+                raise ForbiddenException({'source': ''}, "Event associated with orders cannot be deleted")
+            else:
+                event.deleted_at = data.get('deleted_at')
 
         if 'is_event_online' not in data and event.is_event_online \
                 or 'is_event_online' in data and not data['is_event_online']:

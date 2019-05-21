@@ -36,7 +36,10 @@ class SpeakersCallList(ResourceList):
         :return:
         """
         try:
-            self.session.query(SpeakersCall).filter_by(event_id=data['event'], deleted_at=None).one()
+            speakers_call = self.session.query(SpeakersCall).filter_by(event_id=data['event'], deleted_at=None).one()
+            event = speakers_call.event
+            if speakers_call.starts_at > event.starts_at or speakers_call.ends_at > event.starts_at:
+                raise ForbiddenException({'source': ''}, "Speakers call date can\'t be after the event start date")
         except NoResultFound:
             pass
         else:
@@ -67,9 +70,13 @@ class SpeakersCallDetail(ResourceDetail):
         if kwargs.get('event_id'):
             try:
                 speakers_call = SpeakersCall.query.filter_by(event_id=kwargs['event_id']).one()
+                event = speakers_call.event
+                if speakers_call.starts_at > event.starts_at or speakers_call.ends_at > event.starts_at:
+                    raise ForbiddenException({'source': ''}, "Speakers call date can\'t be after the event start date")
             except NoResultFound:
                 raise ObjectNotFound({'source': ''}, "Object: not found")
             kwargs['id'] = speakers_call.id
+
 
     def before_get_object(self, view_kwargs):
         """

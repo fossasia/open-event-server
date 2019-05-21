@@ -84,6 +84,7 @@ from app.api.admin_sales.discounted import AdminSalesDiscountedList
 from app.api.admin_sales.fees import AdminSalesFeesList
 from app.api.admin_sales.invoices import AdminSalesInvoicesList
 from app.api.full_text_search.events import EventSearchResultList
+from app.api.import_jobs import ImportJobList, ImportJobDetail
 
 # users
 api.route(UserList, 'user_list', '/users')
@@ -623,3 +624,7 @@ api.route(AdminSalesFeesList, 'admin_sales_fees', '/admin/sales/fees')
 
 # Full text search w/ Elastic Search
 api.route(EventSearchResultList, 'event_search_results', '/search/events')
+
+# Import Jobs
+api.route(ImportJobList, 'import_job_list', '/import-jobs')
+api.route(ImportJobDetail, 'import_job_detail', '/import-jobs/<int:id>')

@@ -136,20 +136,24 @@ class PayPalPaymentsManager(object):
         Configure the paypal sdk
         :return: Credentials
         """
-        # Use Sandbox by default.
         settings = get_settings()
-        paypal_mode = 'sandbox'
-        paypal_client = settings.get('paypal_sandbox_client', None)
-        paypal_secret = settings.get('paypal_sandbox_secret', None)
+        # Use Sandbox by default.
+        paypal_mode = settings.get('paypal_mode',
+                                   'live' if (settings['app_environment'] == Environment.PRODUCTION) else 'sandbox')
+        paypal_key = None
+        if paypal_mode == 'sandbox':
+            paypal_key = 'paypal_sandbox'
+        elif paypal_mode == 'live':
+            paypal_key = 'paypal'
 
-        # Switch to production if paypal_mode is production.
-        if settings['paypal_mode'] == Environment.PRODUCTION:
-            paypal_mode = 'live'
-            paypal_client = settings.get('paypal_client', None)
-            paypal_secret = settings.get('paypal_secret', None)
+        if not paypal_key:
+            raise ConflictException({'pointer': ''}, "Paypal Mode must be 'live' or 'sandbox'")
+
+        paypal_client = settings.get('{}_client'.format(paypal_key), None)
+        paypal_secret = settings.get('{}_secret'.format(paypal_key), None)
 
         if not paypal_client or not paypal_secret:
-            raise ConflictException({'pointer': ''}, "Payments through Paypal hasn't been configured on the platform")
+            raise ConflictException({'pointer': ''}, "Payments through Paypal have not been configured on the platform")
 
         paypalrestsdk.configure({
             "mode": paypal_mode,

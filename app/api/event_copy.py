@@ -1,7 +1,7 @@
 from flask import jsonify, Blueprint, abort, make_response
 from sqlalchemy.orm import make_transient
 
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.files import create_save_resized_image
 from app.api.helpers.permission_manager import has_access
 from app.models.custom_form import CustomForms
@@ -18,6 +18,10 @@ from app.models.users_events_role import UsersEventsRoles
 
 event_copy = Blueprint('event_copy', __name__, url_prefix='/v1/events')
 
+
+def start_sponsor_logo_generation_task(event_id):
+    from .helpers.tasks import sponsor_logos_url_task
+    sponsor_logos_url_task.delay(event_id=event_id)
 
 @event_copy.route('/<identifier>/copy', methods=['POST'])
 def create_event_copy(identifier):
@@ -46,8 +50,7 @@ def create_event_copy(identifier):
     make_transient(event)
     delattr(event, 'id')
     event.identifier = get_new_event_identifier()
-    db.session.add(event)
-    db.session.commit()
+    save_to_db(event)
 
     # Removes access_codes, order_tickets, ticket_tags for the new tickets created.
     for ticket in tickets:
@@ -56,8 +59,7 @@ def create_event_copy(identifier):
         make_transient(ticket)
         ticket.event_id = event.id
         delattr(ticket, 'id')
-        db.session.add(ticket)
-        db.session.commit()
+        save_to_db(ticket)
 
     for link in social_links:
         link_id = link.id
@@ -65,19 +67,17 @@ def create_event_copy(identifier):
         make_transient(link)
         link.event_id = event.id
         delattr(link, 'id')
-        db.session.add(link)
-        db.session.commit()
+        save_to_db(link)
 
     for sponsor in sponsors:
         sponsor_id = sponsor.id
         db.session.expunge(sponsor)  # expunge the object from session
         make_transient(sponsor)
         sponsor.event_id = event.id
-        logo_url = create_save_resized_image(image_file=sponsor.logo_url, resize=False)
         delattr(sponsor, 'id')
-        sponsor.logo_url = logo_url
-        db.session.add(sponsor)
-        db.session.commit()
+        save_to_db(sponsor)
+
+    start_sponsor_logo_generation_task(event.id)
 
     for location in microlocations:
         location_id = location.id
@@ -85,8 +85,7 @@ def create_event_copy(identifier):
         make_transient(location)
         location.event_id = event.id
         delattr(location, 'id')
-        db.session.add(location)
-        db.session.commit()
+        save_to_db(location)
 
     # No sessions are copied for new tracks
     for track in tracks:
@@ -95,8 +94,7 @@ def create_event_copy(identifier):
         make_transient(track)
         track.event_id = event.id
         delattr(track, 'id')
-        db.session.add(track)
-        db.session.commit()
+        save_to_db(track)
 
     for call in speaker_calls:
         call_id = call.id
@@ -104,8 +102,7 @@ def create_event_copy(identifier):
         make_transient(call)
         call.event_id = event.id
         delattr(call, 'id')
-        db.session.add(call)
-        db.session.commit()
+        save_to_db(call)
 
     for code in discount_codes:
         code_id = code.id
@@ -113,8 +110,7 @@ def create_event_copy(identifier):
         make_transient(code)
         code.event_id = event.id
         delattr(code, 'id')
-        db.session.add(code)
-        db.session.commit()
+        save_to_db(code)
 
     for form in custom_forms:
         form_id = form.id
@@ -122,16 +118,15 @@ def create_event_copy(identifier):
         make_transient(form)
         form.event_id = event.id
         delattr(form, 'id')
-        db.session.add(form)
-        db.session.commit()
+        save_to_db(form)
 
     for user_role in user_event_roles:
+        user_role_id = user_role.id
         db.session.expunge(user_role)
         make_transient(user_role)
         user_role.event_id = event.id
         delattr(user_role, 'id')
-        db.session.add(user_role)
-        db.session.commit()
+        save_to_db(user_role)
 
     return jsonify({
         'id': event.id,
