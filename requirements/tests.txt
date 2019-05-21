@@ -1,4 +1,4 @@
 -r dev.txt
 
 coverage>=4.2,<5
-dredd_hooks==0.1.0
+dredd_hooks==0.2.0
