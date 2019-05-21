@@ -4,6 +4,7 @@ import os.path
 from envparse import env
 import sys
 from flask import Flask, json, make_response
+from flask_celeryext import FlaskCeleryExt
 from app.settings import get_settings, get_setts
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
@@ -187,20 +188,8 @@ def track_user():
 def make_celery(app=None):
     app = app or create_app()[0]
     celery.conf.update(app.config)
-    task_base = celery.Task
-
-    class ContextTask(task_base):
-        abstract = True
-
-        def __call__(self, *args, **kwargs):
-            if current_app.config['TESTING']:
-                with app.test_request_context():
-                    return task_base.__call__(self, *args, **kwargs)
-            with app.app_context():
-                return task_base.__call__(self, *args, **kwargs)
-
-    celery.Task = ContextTask
-    return celery
+    ext = FlaskCeleryExt(app)
+    return ext.celery
 
 
 # Health-check
@@ -215,13 +204,13 @@ health.add_check(health_check_migrations)
 
 # http://stackoverflow.com/questions/9824172/find-out-whether-celery-task-exists
 @after_task_publish.connect
-def update_sent_state(sender=None, body=None, **kwargs):
+def update_sent_state(sender=None, headers=None, **kwargs):
     # the task may not exist if sent using `send_task` which
     # sends tasks by name, so fall back to the default result backend
     # if that is the case.
     task = celery.tasks.get(sender)
     backend = task.backend if task else celery.backend
-    backend.store_result(body['id'], None, 'WAITING')
+    backend.store_result(headers['id'], None, 'WAITING')
 
 
 # register celery tasks. removing them will cause the tasks to not function. so don't remove them
