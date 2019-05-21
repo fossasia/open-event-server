@@ -146,6 +146,6 @@ def expire_pending_tickets_after_one_day():
     from app import current_app as app
     with app.app_context():
         db.session.query(Order).filter(Order.status == 'pending',
-                                       (datetime.datetime.today() - Order.created_at).days > 1).\
+                                       (datetime.datetime.today() - Order.created_at).days > 3).\
                                        update({'status': 'expired'})
         db.session.commit()

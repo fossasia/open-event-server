@@ -139,7 +139,7 @@ class OrdersListPost(ResourceList):
 #             TicketingManager.calculate_update_amount(order)
 
         # send e-mail and notifications if the order status is completed
-        if order.status == 'completed':
+        if order.status == 'completed' or order.status == 'placed':
             # fetch tickets attachment
             order_identifier = order.identifier
 
@@ -322,7 +322,7 @@ class OrderDetail(ResourceDetail):
             # delete the attendees so that the tickets are unlocked.
             delete_related_attendees_for_order(order)
 
-        elif order.status == 'completed':
+        elif order.status == 'completed' or order.status == 'placed':
 
             # Send email to attendees with invoices and tickets attached
             order_identifier = order.identifier
