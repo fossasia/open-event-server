@@ -68,7 +68,7 @@ class TestTicketValidation(OpenEventTestCase):
 
     # def test_date_end_gt_event_end(self):
     #     """
-    #     Tickets Validate Date - Tests if exception is raised when sales_ends_at is after event ends_at
+    #     Tickets Validate Date-Tests if exception is raised when sales_ends_at is after event ends_at
     #     :return:
     #     """
     #     schema = TicketSchema()

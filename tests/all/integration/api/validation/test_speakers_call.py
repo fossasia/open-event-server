@@ -51,7 +51,7 @@ class TestSpeakersCallValidation(OpenEventTestCase):
 
     # def test_date_start_gt_event_end(self):
     #     """
-    #     Speakers Call Validate Date - Tests if exception is raised when speakers_call starts_at is after event starts_at
+    #     Speakers Call Validate Date-Tests if exception is raised when speakers_call starts_at is after event starts_at
     #     :return:
     #     """
     #     schema = SpeakersCallSchema()
@@ -68,7 +68,7 @@ class TestSpeakersCallValidation(OpenEventTestCase):
 
     # def test_date_end_gt_event_end(self):
     #     """
-    #     Speakers Call Validate Date - Tests if exception is raised when speakers_call ends_at is after event starts_at
+    #     Speakers Call Validate Date-Tests if exception is raised when speakers_call ends_at is after event starts_at
     #     :return:
     #     """
     #     schema = SpeakersCallSchema()
