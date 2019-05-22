@@ -2,6 +2,7 @@ import datetime
 
 import pytz
 from sqlalchemy import event, func
+from sqlalchemy.sql import func as sql_func
 
 from app.models import db
 from app.models.base import SoftDeletionModel
@@ -46,7 +47,7 @@ class Session(SoftDeletionModel):
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
     creator_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     state = db.Column(db.String, default="pending")
-    created_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow)
+    created_at = db.Column(db.DateTime(timezone=True), default=sql_func.now())
     submitted_at = db.Column(db.DateTime(timezone=True))
     submission_modifier = db.Column(db.String)
     is_mail_sent = db.Column(db.Boolean, default=False)
