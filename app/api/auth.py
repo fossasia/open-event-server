@@ -4,6 +4,8 @@ import random
 import string
 
 import requests
+from healthcheck import EnvironmentDump
+from functools import wraps
 from flask import request, jsonify, make_response, Blueprint, send_file, url_for, redirect
 from flask_jwt import current_identity as current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
@@ -28,6 +30,7 @@ from app.models.user import User
 from app.api.helpers.storage import UPLOAD_PATHS
 
 
+authorised_blueprint = Blueprint('authorised_blueprint', __name__, url_prefix='/')
 ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/v1')
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
 
@@ -328,3 +331,36 @@ def order_invoices(order_identifier):
             return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
     else:
         return ForbiddenError({'source': ''}, 'Authentication Required to access Invoice').respond()
+
+
+# Access for Environment details & Basic Auth Support
+def check_auth_admin(username, password):
+    """
+    This function is called to check for proper authentication & admin rights
+    """
+    if username and password:
+        user = User.query.filter_by(_email=username).first()
+        if user:
+            if user.is_correct_password(password):
+                if user.is_admin:
+                    return True
+    return False
+
+
+def requires_basic_auth(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth = request.authorization
+        if not auth or not check_auth_admin(auth.username, auth.password):
+            return make_response('Could not verify your access level for that URL.\n'
+                                 'You have to login with proper credentials', 401,
+                                 {'WWW-Authenticate': 'Basic realm="Login Required"'})
+        return f(*args, **kwargs)
+    return decorated
+
+
+@authorised_blueprint.route('/environment')
+@requires_basic_auth
+def environment_details():
+    envdump = EnvironmentDump(include_config=False)
+    return envdump.dump_environment()

@@ -2,6 +2,7 @@ from celery.signals import after_task_publish
 import logging
 import os.path
 from envparse import env
+
 import sys
 from flask import Flask, json, make_response
 from flask_celeryext import FlaskCeleryExt
@@ -14,7 +15,7 @@ from datetime import timedelta
 from flask_cors import CORS
 from flask_rest_jsonapi.errors import jsonapi_errors
 from flask_rest_jsonapi.exceptions import JsonApiException
-from healthcheck import HealthCheck, EnvironmentDump
+from healthcheck import HealthCheck
 from apscheduler.schedulers.background import BackgroundScheduler
 from elasticsearch_dsl.connections import connections
 from pytz import utc
@@ -47,7 +48,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 static_dir = os.path.dirname(os.path.dirname(__file__)) + "/static"
 template_dir = os.path.dirname(__file__) + "/templates"
 app = Flask(__name__, static_folder=static_dir, template_folder=template_dir)
-
 env.read_envfile()
 
 
@@ -128,7 +128,7 @@ def create_app():
         from app.api.users import user_misc_routes
         from app.api.orders import order_misc_routes
         from app.api.role_invites import role_invites_misc_routes
-        from app.api.auth import ticket_blueprint
+        from app.api.auth import ticket_blueprint, authorised_blueprint
         from app.api.admin_translations import admin_blueprint
 
         app.register_blueprint(api_v1)
@@ -144,6 +144,7 @@ def create_app():
         app.register_blueprint(order_misc_routes)
         app.register_blueprint(role_invites_misc_routes)
         app.register_blueprint(ticket_blueprint)
+        app.register_blueprint(authorised_blueprint)
         app.register_blueprint(admin_blueprint)
 
     sa.orm.configure_mappers()
@@ -194,7 +195,6 @@ def make_celery(app=None):
 
 # Health-check
 health = HealthCheck(current_app, "/health-check")
-envdump = EnvironmentDump(current_app, "/environment", include_config=False)
 health.add_check(health_check_celery)
 health.add_check(health_check_db)
 with current_app.app_context():
