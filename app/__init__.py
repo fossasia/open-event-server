@@ -31,7 +31,8 @@ from werkzeug.contrib.profiler import ProfilerMiddleware
 from app.views import BlueprintsManager
 from app.api.helpers.auth import AuthManager
 from app.api.helpers.scheduled_jobs import send_after_event_mail, send_event_fee_notification, \
-    send_event_fee_notification_followup, change_session_state_on_event_completion, expire_pending_tickets_after_three_days
+    send_event_fee_notification_followup, change_session_state_on_event_completion, \
+    expire_pending_tickets_after_three_days
 from app.models.event import Event
 from app.models.role_invite import RoleInvite
 from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations, check_migrations

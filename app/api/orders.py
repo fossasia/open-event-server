@@ -287,12 +287,10 @@ class OrderDetail(ResourceDetail):
                                                      "You cannot update the status of a cancelled order")
 
         elif current_user.id == order.user_id:
-            print(order.status)
-            if order.status != 'initializing':
+            if order.status != 'initializing' and order.status != 'pending':
                 raise ForbiddenException({'pointer': ''},
-                                         "You cannot update a non-initialized order")
+                                         "You cannot update a non-initialized or non-pending order")
             else:
-                print('Hey----------------')
                 for element in data:
                     if element == 'is_billing_enabled' and order.status == 'completed' and data[element]\
                             and data[element] != getattr(order, element, None):
