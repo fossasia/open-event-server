@@ -58,9 +58,9 @@ class OrdersListPost(ResourceList):
             del data['on_site_tickets']
         require_relationship(['ticket_holders'], data)
 
-        # Ensuring that default status is always pending, unless the user is event co-organizer
+        # Ensuring that default status is always initializing, unless the user is event co-organizer
         if not has_access('is_coorganizer', event_id=data['event']):
-            data['status'] = 'pending'
+            data['status'] = 'initializing'
 
     def before_create_object(self, data, view_kwargs):
         """
@@ -201,7 +201,7 @@ class OrdersList(ResourceList):
             # orders under an event
             query_ = event_query(self, query_, view_kwargs)
 
-        # expire the pending orders if the time limit is over.
+        # expire the initializing orders if the time limit is over.
         orders = query_.all()
         for order in orders:
             set_expiry_for_order(order)
@@ -241,7 +241,7 @@ class OrderDetail(ResourceDetail):
         if not has_access('is_coorganizer_or_user_itself', event_id=order.event_id, user_id=order.user_id):
             return ForbiddenException({'source': ''}, 'You can only access your orders or your event\'s orders')
 
-        # expire the pending order if time limit is over.
+        # expire the initializing order if time limit is over.
         set_expiry_for_order(order)
 
     def before_update_object(self, order, data, view_kwargs):
@@ -251,7 +251,7 @@ class OrderDetail(ResourceDetail):
         2. event organizer
             a. own orders: he/she can update selected fields.
             b. other's orders: can only update the status that too when the order mode is free. No refund system.
-        3. order user can update selected fields of his/her order when the status is pending.
+        3. order user can update selected fields of his/her order when the status is initializing.
         The selected fields mentioned above can be taken from get_updatable_fields method from order model.
         :param order:
         :param data:
@@ -287,10 +287,12 @@ class OrderDetail(ResourceDetail):
                                                      "You cannot update the status of a cancelled order")
 
         elif current_user.id == order.user_id:
-            if order.status != 'pending':
+            print(order.status)
+            if order.status != 'initializing':
                 raise ForbiddenException({'pointer': ''},
-                                         "You cannot update a non-pending order")
+                                         "You cannot update a non-initialized order")
             else:
+                print('Hey----------------')
                 for element in data:
                     if element == 'is_billing_enabled' and order.status == 'completed' and data[element]\
                             and data[element] != getattr(order, element, None):
