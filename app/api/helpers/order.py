@@ -50,7 +50,7 @@ def create_pdf_tickets_for_holder(order):
     Create tickets and invoices for the holders of an order.
     :param order: The order for which to create tickets for.
     """
-    if order.status == 'completed':
+    if order.status == 'completed' or order.status == 'placed':
         pdf = create_save_pdf(render_template('pdf/ticket_purchaser.html', order=order),
                               UPLOAD_PATHS['pdf']['ticket_attendee'],
                               dir_path='/static/uploads/pdf/tickets/', identifier=order.identifier, upload_dir='generated/tickets/')
