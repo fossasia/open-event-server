@@ -1,126 +1,229 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title> {{ ("Order Invoice") }}</title>
-    <style type="text/css">
+    <meta charset="utf-8">
+    <title>{{ order.identifier }}</title>
+    <style>
         {% include 'bootstrap/bootstrap_pdf.css' %}
-        table th {
-            text-align: left;
+    .invoice-box {
+        max-width: 800px;
+        margin: auto;
+        padding: 30px;
+        border: 1px solid #eee;
+        box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+        font-size: 16px;
+        line-height: 24px;
+        font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+        color: #555;
+    }
+    
+    .invoice-box table {
+        width: 100%;
+        line-height: inherit;
+        text-align: left;
+    }
+    
+    .invoice-box table td {
+        padding: 5px;
+        vertical-align: top;
+    }
+    
+    .invoice-box table tr td:nth-child(2) {
+        text-align: right;
+    }
+    
+    .invoice-box table tr.top table td {
+        padding-bottom: 20px;
+    }
+    
+    .invoice-box table tr.top table td.title {
+        font-size: 45px;
+        line-height: 45px;
+        color: #333;
+    }
+    
+    .invoice-box table tr.information table td {
+        padding-bottom: 40px;
+    }
+    
+    .invoice-box table tr.heading td {
+        background: #eee;
+        border-bottom: 1px solid #ddd;
+        font-weight: bold;
+    }
+    
+    .invoice-box table tr.details td {
+        padding-bottom: 20px;
+    }
+    
+    .invoice-box table tr.item td{
+        border-bottom: 1px solid #eee;
+    }
+    
+    .invoice-box table tr.item.last td {
+        border-bottom: none;
+    }
+    
+    .invoice-box table tr.total td:nth-child(2) {
+        border-top: 2px solid #eee;
+        font-weight: bold;
+    }
+    
+    @media only screen and (max-width: 600px) {
+        .invoice-box table tr.top table td {
+            width: 100%;
+            display: block;
+            text-align: center;
         }
-
-        table td {
-            text-align: left;
-            border-spacing: 1em;
+        
+        .invoice-box table tr.information table td {
+            width: 100%;
+            display: block;
+            text-align: center;
         }
-
-        table {
-            margin-top: 20px;
-            border-collapse: separate;
-        }
-
-        .total-row {
-            margin-top: 25px;
-        }
-
-        .order-total {
-            margin-right: 50px;
-        }
-
-        tr.padded td{
-        padding-top : 40px;
-        }
+    }
     </style>
 </head>
-<body id="body">
-<h3 style="text-align:center;">{{ ("Order Invoice") }}</h3>
-    <br>
-    <table class="table with-datatable" id="orders-table" width="100%">
-        <thead>
-        <tr>
-            <th>
-                {{ ("Order") }}
-            </th>
-            <th>
-                {{ ("Order Details") }}
-            </th>
-            <th>
-                {{ ("Billing Info") }}
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        {% if order.status != "deleted" %}
-            <tr class="padded">
-                <td><br>
-                        Order Number    :<br>
-                        Order By        :<br>
-                        Order Status    :<br>
-                        Quantity        :<br>
-                        Total Amount    :<br>
-                        Payment Mode    :<br>
-                        Discount Code   :<br>
-                </td>
-                <td><br>
-                        <strong>{{ order.get_invoice_number() }}</strong><br>
-                        {% if order.user and order.user.first_name and order.user.last_name %}
-                            {{ order.user.fullname }}
-                        {% elif order.user %}
-                            {{ order.user.email }}
-                        {% else %}
-                            {{ ('Information unavailable') }}
-                        {% endif %}<br>
-                        {% if order.status == 'completed' %}
-                            {{ order.status | capitalize }}
-                        {% elif order.status == 'pending' or order.status == 'initialized' %}
-                            {{ ("Pending") }}
-                        {% elif order.status == 'placed' %}
-                            {{ order.status | capitalize }}
-                        {% elif order.status == 'cancelled' %}
-                            {{ order.status | capitalize }}
-                        {% else %}
-                            {{ order.status | capitalize }}
-                        {% endif %}<br>
-                        {{ order.tickets_count }}<br>
-                        {{ event.payment_currency | currency_symbol }}{{ order.amount | money }}<br>
-                        {% if order.status == 'completed' %}
-                            {{ order.paid_via | capitalize }}
-                        {% else %}
-                            {{ ('Payment pending') }}
-                        {% endif %}<br>
-                        {% if order.discount_code %}
-                            {{ order.discount_code.code }}<br>
-                        {% else %}
-                            {{ ('NA') }}
-                        {% endif %}<br>
-                </td>
-                {% if order.is_billing_enabled %}
-                <td style="text-align:center;"><br>
-                    <strong>
-                    Company :<br>
-                    Tax Info  :<br>
-                    Address  :<br>
-                    City  :<br>
-                    State/Province  :<br>
-                    Zip Code:  <br>
-                    Country:  <br>
-                    </strong>
-                </td>
-                <td><br>
-                        <strong>
-                        {{ order.company }}<br>
-                        {{ order.tax_business_info }}<br>
-                        {{ order.address }}<br>
-                        {{ order.city }}<br>
-                        {{ order.state }}<br>
-                        {{ order.zipcode }}<br>
-                        {{ order.country }}<br>
-                        </strong>
-                </td>
+
+<body>
+    <h3 style="text-align:center;">{{ ("Order Invoice") }}</h3>
+        <table class="table with-datatable" id="orders-table" width="100%">
+                <thead>
+                <tr>
+                    <th>
+                    {{ ("Order") }}
+                    </th>
+                    <th>
+                    {{ ("Order Details") }}
+                    </th>
+                    {% if order.is_billing_enabled %} 
+                    <th>
+                    {{ ("Billing Info") }}
+                    </th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% if order.status != "deleted" %}
+                    <tr class="padded">
+                        <td><br>
+                                Order Number    :<br>
+                                Order By        :<br>
+                                Order Status    :<br>
+                                Quantity        :<br>
+                                Total Amount    :<br>
+                                Payment Mode    :<br>
+                                Discount Code   :<br>
+                        </td>
+
+                        <hr>
+
+                        <td><br>
+                                <strong>{{ order.get_invoice_number() }}</strong><br>
+                                {% if order.user and order.user.first_name and order.user.last_name %}
+                                    {{ order.user.fullname }}
+                                {% elif order.user %}
+                                    {{ order.user.email }}
+                                {% else %}
+                                    {{ ('Information unavailable') }}
+                                {% endif %}<br>
+                                {% if order.status == 'completed' %}
+                                    {{ order.status | capitalize }}
+                                {% elif order.status == 'pending' or order.status == 'initialized' %}
+                                    {{ ("Pending") }}
+                                {% elif order.status == 'placed' %}
+                                    {{ order.status | capitalize }}
+                                {% elif order.status == 'cancelled' %}
+                                    {{ order.status | capitalize }}
+                                {% else %}
+                                    {{ order.status | capitalize }}
+                                {% endif %}<br>
+                                {{ order.tickets_count }}<br>
+                                {{ event.payment_currency | currency_symbol }}{{ order.amount | money }}<br>
+                                {% if order.status == 'completed' %}
+                                    {{ order.paid_via | capitalize }}
+                                {% else %}
+                                    {{ ('Payment pending') }}
+                                {% endif %}<br>
+                                {% if order.discount_code %}
+                                    {{ order.discount_code.code }}<br>
+                                {% else %}
+                                    {{ ('NA') }}
+                                {% endif %}<br>
+                        </td>
+                        {% if order.is_billing_enabled %}
+                        <td style="text-align:center;"><br>
+                            <strong>
+                            Company :<br>
+                            Tax Info  :<br>
+                            Address  :<br>
+                            City  :<br>
+                            State/Province  :<br>
+                            Zip Code:  <br>
+                            Country:  <br>
+                            </strong>
+                        </td>
+                        <td><br>
+                                <strong>
+                                {{ order.company }}<br>
+                                {{ order.tax_business_info }}<br>
+                                {{ order.address }}<br>
+                                {{ order.city }}<br>
+                                {{ order.state }}<br>
+                                {{ order.zipcode }}<br>
+                                {{ order.country }}<br>
+                                </strong>
+                        </td>
+                        {% endif %}
+                    </tr>
                 {% endif %}
-            </tr>
-        {% endif %}
-        </tbody>
-    </table>
+                </tbody>
+            
+            </table><br> 
+
+            <hr noshade>
+
+            <table class="table">
+                    <thead class="black white-text">
+                      <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Sub-Total(net)</th>
+                        <th scope="col">VAT</th>
+                        <th scope="col">Tax Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for ticket in tickets %}
+                      <tr>
+                        <td style="text-align:center">{{ ticket.name }}</td>
+                        <td style="text-align:center">{{ event.payment_currency | currency_symbol }}{{ ticket.price }}</td>
+                        <td style="text-align:center">{{ order_tickets_info.quantity }}</td>
+                        <td style="text-align:center">{{ event.payment_currency | currency_symbol }}{{ order_tickets_info.quantity*ticket.price }}</td>
+                        {% if tax %}
+                        <td style="text-align:center">{{ tax.rate }}%</td>
+                        {% else %}
+                        <td style="text-align:center">{{ ("0%") }}</td>
+                        {% endif %}
+                        {% if tax %}
+                        <td style="text-align:center">{{ event.payment_currency | currency_symbol }}{{ tax.rate*ticket.price/100 }}</td>
+                        {% else %}
+                        <td style="text-align:center">{{ event.payment_currency | currency_symbol }}0</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <th scope="row"></th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><b>Grand Total</b></td>
+                        <td> {{ event.payment_currency | currency_symbol }}{{ order.amount | money }}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+        </table>
+    </div>
 </body>
 </html>
