@@ -113,6 +113,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     can_pay_by_bank = fields.Bool(default=False)
     can_pay_onsite = fields.Bool(default=False)
     can_pay_by_omise = fields.Bool(default=False)
+    can_pay_by_alipay = fields.Bool(default=False)
     cheque_details = fields.Str(allow_none=True)
     bank_details = fields.Str(allow_none=True)
     onsite_details = fields.Str(allow_none=True)

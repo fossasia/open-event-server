@@ -10,6 +10,9 @@ from app.api.helpers.exceptions import ForbiddenException, ConflictException
 from app.api.helpers.utilities import represents_int
 from app.models.stripe_authorization import StripeAuthorization
 from app.settings import get_settings, Environment
+from app.api.helpers.db import safe_query
+from app.models import db
+from app.models.order import Order
 
 
 @cache.memoize(5)
@@ -211,3 +214,32 @@ class PayPalPaymentsManager(object):
             return True, 'Successfully Executed'
         else:
             return False, payment.error
+
+
+class AliPayPaymentsManager(object):
+    """
+    Class to manage AliPay Payments
+    """
+
+    @staticmethod
+    def create_source(amount, currency, redirect_return_uri):
+        stripe.api_key = get_settings()['alipay_publishable_key']
+        response = stripe.Source.create(type='alipay',
+                                        currency=currency,
+                                        amount=amount,
+                                        redirect={
+                                            'return_url': redirect_return_uri
+                                        }
+                                        )
+        return response
+
+    @staticmethod
+    def charge_source(order_identifier):
+        order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+        stripe.api_key = get_settings()['alipay_secret_key']
+        charge = stripe.Charge.create(
+                 amount=int(order.amount),
+                 currency=order.event.payment_currency,
+                 source=order.order_notes,
+                 )
+        return charge
