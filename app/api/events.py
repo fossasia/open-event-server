@@ -49,7 +49,7 @@ from app.models.user_favourite_event import UserFavouriteEvent
 from app.models.user import User, ATTENDEE, ORGANIZER, COORGANIZER
 from app.models.users_events_role import UsersEventsRoles
 from app.models.stripe_authorization import StripeAuthorization
-
+from sentry_sdk import capture_exception
 
 def validate_event(user, modules, data):
     if not user.can_create_event():
