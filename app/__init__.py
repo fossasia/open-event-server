@@ -36,12 +36,13 @@ from app.api.helpers.scheduled_jobs import send_after_event_mail, send_event_fee
 from app.models.event import Event
 from app.models.role_invite import RoleInvite
 from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations, check_migrations
-from app.views.sentry import sentry
 from app.views.elastic_search import client
 from app.views.elastic_cron_helpers import sync_events_elasticsearch, cron_rebuild_events_elasticsearch
 from app.views.redis_store import redis_store
 from app.views.celery_ import celery
 from app.templates.flask_ext.jinja.filters import init_filters
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -157,7 +158,7 @@ def create_app():
 
     # sentry
     if not app_created and 'SENTRY_DSN' in app.config:
-        sentry.init_app(app, dsn=app.config['SENTRY_DSN'])
+        sentry_sdk.init(app.config['SENTRY_DSN'], integrations=[FlaskIntegration()])
 
     # redis
     redis_store.init_app(app)
