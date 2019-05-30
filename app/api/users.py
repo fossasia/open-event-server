@@ -1,4 +1,5 @@
 import base64
+import logging
 
 from flask import Blueprint, request, jsonify, abort, make_response
 from flask_jwt import current_identity as current_user
@@ -47,9 +48,11 @@ class UserList(ResourceList):
         :return:
         """
         if len(data['password']) < 8:
+            logging.error('Password should be at least 8 characters long')
             raise UnprocessableEntity({'source': '/data/attributes/password'},
                                        'Password should be at least 8 characters long')
         if db.session.query(User.id).filter_by(email=data['email'].strip()).scalar() is not None:
+            logging.error('Email already exists')
             raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")
 
     def after_create_object(self, user, data, view_kwargs):
@@ -216,8 +219,10 @@ class UserDetail(ResourceDetail):
 
         if has_access('is_user_itself', user_id=user.id) and data.get('deleted_at') != user.deleted_at:
             if len(user.events) != 0:
+                logging.error("Users associated with events cannot be deleted")
                 raise ForbiddenException({'source': ''}, "Users associated with events cannot be deleted")
             elif len(user.orders) != 0:
+                logging.error('Users associated with orders cannot be deleted')
                 raise ForbiddenException({'source': ''}, "Users associated with orders cannot be deleted")
             else:
                 user.deleted_at = data.get('deleted_at')
@@ -228,6 +233,7 @@ class UserDetail(ResourceDetail):
             except NoResultFound:
                 view_kwargs['email_changed'] = user.email
             else:
+                logging.error("Email already exists")
                 raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")
 
         if has_access('is_super_admin') and data.get('is_admin') and data.get('is_admin') != user.is_admin:
@@ -292,6 +298,7 @@ def is_email_available():
                 result="True"
             )
     else:
+        logging.error("Email field missing")
         abort(
             make_response(jsonify(error="Email field missing"), 422)
         )
