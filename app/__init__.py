@@ -27,7 +27,7 @@ from app.settings import get_settings
 from app.models import db
 from app.api.helpers.jwt import jwt_authenticate, jwt_identity
 from app.api.helpers.cache import cache
-from werkzeug.contrib.profiler import ProfilerMiddleware
+from werkzeug.middleware.profiler import ProfilerMiddleware
 from app.views import BlueprintsManager
 from app.api.helpers.auth import AuthManager
 from app.api.helpers.scheduled_jobs import send_after_event_mail, send_event_fee_notification, \
