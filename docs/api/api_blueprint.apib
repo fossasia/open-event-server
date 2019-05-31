@@ -3003,6 +3003,7 @@ These endpoints help you to create the basic event structure. To add other parts
 | `can-pay-by-paypal`  | - | boolean (default: `false`) | - |
 | `can-pay-by-stripe`  | - | boolean (default: `false`) | - |
 | `can-pay-by-cheque`  | - | boolean (default: `false`) | - |
+| `can-pay-by-omise`  | - | boolean (default: `false`) | - |
 | `can-pay-onsite`  | - | boolean (default: `false`) | - |
 | `cheque-details`  | - | string | - |
 | `bank-details`  | - | string | - |
@@ -3232,6 +3233,7 @@ Get a list of events.
                         "searchable-location-name": "example",
                         "is-ticketing-enabled": true,
                         "can-pay-by-cheque": true,
+                        "can-pay-by-omise": false,
                         "description": "example",
                         "pentabarf-url": null,
                         "xcal-url": null,
@@ -3313,6 +3315,7 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "can-pay-by-stripe": "false",
                     "can-pay-by-cheque": "false",
                     "can-pay-by-bank": "false",
+                    "can-pay-by-omise": "false",
                     "can-pay-onsite": "true",
                     "cheque-details": "example",
                     "bank-details": "example",
@@ -3506,6 +3509,7 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "onsite-details": "example",
                     "organizer-name": "example",
                     "can-pay-by-stripe": false,
+                    "can-pay-by-omise": false,
                     "large-image-url": null,
                     "timezone": "UTC",
                     "can-pay-onsite": true,
@@ -3786,6 +3790,7 @@ Get a single event.
                     "ical-url": null,
                     "name": "example",
                     "can-pay-by-bank": true,
+                    "can-pay-by-omise": false,
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "created-at": "2017-06-26T15:22:37.205399+00:00",
                     "longitude": 1.23456789,
@@ -3860,6 +3865,7 @@ All other fields are optional. Add attributes you want to modify.
                     "can-pay-by-stripe": "false",
                     "can-pay-by-cheque": "false",
                     "can-pay-by-bank": "false",
+                    "can-pay-by-omise": "false",
                     "can-pay-onsite": "false",
                     "cheque-details": "example1",
                     "bank-details": "example1",
@@ -4063,6 +4069,7 @@ All other fields are optional. Add attributes you want to modify.
                     "location-name": "example1",
                     "is-sponsors-enabled": false,
                     "has-organizer-info": false,
+                    "can-pay-by-omise": false,
                     "is-sessions-speakers-enabled": false,
                     "privacy": "private",
                     "code-of-conduct": "example1",
@@ -4341,6 +4348,7 @@ Get a list of events.
                         "xcal-url": null,
                         "logo-url": "http://example.com/example.png",
                         "can-pay-by-bank": true,
+                        "can-pay-by-omise": false,
                         "is-tax-enabled": true,
                         "ical-url": null,
                         "name": "example",
@@ -4563,6 +4571,7 @@ Get a list of events.
                         "location-name": "example",
                         "is-sponsors-enabled": false,
                         "is-sessions-speakers-enabled": true,
+                        "can-pay-by-omise": false,
                         "privacy": "public",
                         "has-organizer-info": false,
                         "state": "draft",
@@ -4806,6 +4815,7 @@ Get a list of events.
                         "xcal-url": null,
                         "logo-url": "http://example.com/example.png",
                         "can-pay-by-bank": true,
+                        "can-pay-by-omise": false,
                         "is-tax-enabled": true,
                         "ical-url": null,
                         "name": "example",
@@ -5021,6 +5031,7 @@ Get a list of events.
                         "large-image-url": null,
                         "timezone": "UTC",
                         "can-pay-onsite": true,
+                        "can-pay-by-omise": false,
                         "deleted-at": null,
                         "ticket-url": "http://example.com",
                         "can-pay-by-paypal": true,
@@ -5259,6 +5270,7 @@ Get a list of events.
                         "is-sessions-speakers-enabled": true,
                         "privacy": "public",
                         "has-organizer-info": false,
+                        "can-pay-by-omise": false,
                         "state": "draft",
                         "average-rating": null,
                         "latitude": 1.23456789,
@@ -5487,6 +5499,7 @@ Get a list of events.
                     "privacy": "public",
                     "has-organizer-info": false,
                     "state": "draft",
+                    "can-pay-by-omise": false,
                     "is-event-online": false,
                     "average-rating": null,
                     "latitude": 1.23456789,
@@ -5721,6 +5734,7 @@ Get a list of events.
                     "searchable-location-name": "Draft",
                     "is-ticketing-enabled": true,
                     "can-pay-by-cheque": true,
+                    "can-pay-by-omise": false,
                     "description": "example",
                     "pentabarf-url": null,
                     "xcal-url": null,
@@ -5936,6 +5950,7 @@ Get a list of events.
                     "ticket-url": "http://example.com",
                     "is-event-online": false,
                     "can-pay-by-paypal": true,
+                    "can-pay-by-omise": false,
                     "location-name": "example",
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
@@ -6193,6 +6208,7 @@ Get a list of events.
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
                     "order-expiry-time": "10",
+                    "can-pay-by-omise": false,
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -6373,6 +6389,7 @@ Get a list of events.
                 },
                 "attributes": {
                     "payment-country": "US",
+                    "can-pay-by-omise": false,
                     "paypal-email": "example@example.com",
                     "code-of-conduct": "example",
                     "schedule-published-on": null,
@@ -6602,6 +6619,7 @@ Get a list of events.
                     "payment-country": "US",
                     "paypal-email": "example@example.com",
                     "code-of-conduct": "example",
+                    "can-pay-by-omise": false,
                     "schedule-published-on": null,
                     "payment-currency": "USD",
                     "organizer-description": "example",
@@ -6829,6 +6847,7 @@ Get a list of events.
                     "payment-country": "US",
                     "paypal-email": "example@example.com",
                     "code-of-conduct": "example",
+                    "can-pay-by-omise": false,
                     "schedule-published-on": null,
                     "payment-currency": "USD",
                     "organizer-description": "example",
@@ -7057,6 +7076,7 @@ Get a list of events.
                     "paypal-email": "example@example.com",
                     "code-of-conduct": "example",
                     "schedule-published-on": null,
+                    "can-pay-by-omise": false,
                     "payment-currency": "USD",
                     "organizer-description": "example",
                     "is-map-shown": true,
@@ -7290,6 +7310,7 @@ Get a list of events.
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
                     "is-event-online": false,
+                    "can-pay-by-omise": false,
                     "organizer-name": "example",
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
@@ -7517,6 +7538,7 @@ Get a list of events.
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
                     "organizer-name": "example",
+                    "can-pay-by-omise": false,
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
                     "timezone": "UTC",
@@ -7746,6 +7768,7 @@ Get a list of events.
                     "organizer-name": "example",
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
+                    "can-pay-by-omise": false,
                     "timezone": "UTC",
                     "can-pay-onsite": true,
                     "deleted-at": null,
@@ -7973,6 +7996,7 @@ Get a list of events.
                     "organizer-name": "example",
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
+                    "can-pay-by-omise": false,
                     "timezone": "UTC",
                     "can-pay-onsite": true,
                     "deleted-at": null,
@@ -8198,6 +8222,7 @@ Get a list of events.
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
                     "organizer-name": "example",
+                    "can-pay-by-omise": false,
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
                     "timezone": "UTC",
@@ -8429,6 +8454,7 @@ Get a list of events.
                     "large-image-url": null,
                     "timezone": "UTC",
                     "can-pay-onsite": true,
+                    "can-pay-by-omise": false,
                     "deleted-at": null,
                     "ticket-url": "http://example.com",
                     "can-pay-by-paypal": true,
@@ -8652,6 +8678,7 @@ Get a list of events.
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
                     "organizer-name": "example",
+                    "can-pay-by-omise": false,
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
                     "timezone": "UTC",
@@ -8890,6 +8917,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
+                    "can-pay-by-omise": false,
                     "has-organizer-info": false,
                     "state": "draft",
                     "average-rating": null,
@@ -9109,6 +9137,7 @@ Get a list of events.
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
                     "timezone": "UTC",
+                    "can-pay-by-omise": false,
                     "can-pay-onsite": true,
                     "deleted-at": null,
                     "ticket-url": "http://example.com",
@@ -9348,6 +9377,7 @@ Get a list of events.
                     "has-organizer-info": false,
                     "state": "draft",
                     "average-rating": null,
+                    "can-pay-by-omise": false,
                     "latitude": 1.23456789,
                     "starts-at": "2016-12-13T23:59:59.123456+00:00",
                     "searchable-location-name": "Draft",
@@ -9582,6 +9612,7 @@ Get a list of events.
                     "description": "example",
                     "pentabarf-url": null,
                     "xcal-url": null,
+                    "can-pay-by-omise": false,
                     "logo-url": "http://example.com/example.png",
                     "can-pay-by-bank": true,
                     "is-tax-enabled": true,
@@ -9829,6 +9860,7 @@ Get a list of events.
               "has-organizer-info": false,
               "state": "draft",
               "average-rating": null,
+              "can-pay-by-omise": false,
               "latitude": null,
               "starts-at": "2002-05-30T04:00:10+00:00",
               "searchable-location-name": null,
@@ -10087,6 +10119,7 @@ Get a list of events.
               "starts-at": "2002-05-30T04:00:10+00:00",
               "searchable-location-name": null,
               "is-ticketing-enabled": true,
+              "can-pay-by-omise": false,
               "can-pay-by-cheque": false,
               "description": "",
               "pentabarf-url": null,
@@ -21830,6 +21863,8 @@ To update or get any attribute of this data layer, you will need admin access. H
 | `secret` | App Secret  | string | **yes** |
 | `is-paypal-activated` | Whether paypal payment is configured or not | boolean | - |
 | `is-stripe-activated` | Whether stripe payment is configured or not | boolean | - |
+| `is-omise-activated` | Whether omise payment is configured or not | boolean | - |
+
 
 **STORAGE**
 | Parameter | Description | Type | Admin Only |
@@ -21892,6 +21927,15 @@ To update or get any attribute of this data layer, you will need admin access. H
 | `paypal-sandbox-secret`  | Paypal sandbox secret | string | **yes** |
 | `paypal-client`  | Paypal client | string | **yes** |
 | `paypal-secret`  | Paypal secret | string | **yes** |
+
+(Omise Credentials)
+| Parameter | Description | Type | Admin Only |
+|:----------|-------------|------|------------|
+| `omise-mode`  | Omise mode | string | **yes** |
+| `omise-test-public`  | Omise Test Public Key | string | **yes** |
+| `omise-test-secret`  | Omise Test Secret Key | string | **yes** |
+| `omise-live-public`  | Omise Live Public Key | string | **yes** |
+| `omise-live-secret`  | Omise Live Secret Key | string | **yes** |
 
 **EMAIL**
 (Email service)
@@ -21997,6 +22041,11 @@ To update or get any attribute of this data layer, you will need admin access. H
               "paypal-sandbox-client": "example1234",
               "paypal-secret": "example1234",
               "paypal-client": "example1234",
+              "omise-mode": "development",
+              "omise-test-public": "example1234",
+              "omise-test-secret": "example1234",
+              "omise-live-public": "example1234",
+              "omise-live-secret": "example1234",
               "email-service": "example",
               "email-from": "example@example.com",
               "email-from-name": "example",
@@ -22077,6 +22126,11 @@ To update or get any attribute of this data layer, you will need admin access. H
                   "paypal-sandbox-client": "example1234",
                   "paypal-secret": "example1234",
                   "paypal-client": "example1234",
+                  "omise-mode": "development",
+                  "omise-test-public": "example1234",
+                  "omise-test-secret": "example1234",
+                  "omise-live-public": "example1234",
+                  "omise-live-secret": "example1234",
                   "email-service": "example",
                   "email-from": "example@example.com",
                   "email-from-name": "example",
@@ -22139,6 +22193,11 @@ To update or get any attribute of this data layer, you will need admin access. H
               "paypal-sandbox-client": "example1234",
               "paypal-secret": "example1234",
               "paypal-client": "example1234",
+              "omise-mode": "development",
+              "omise-test-public": "example1234",
+              "omise-test-secret": "example1234",
+              "omise-live-public": "example1234",
+              "omise-live-secret": "example1234",
               "email-service": "example",
               "email-from": "example@example.com",
               "email-from-name": "example",
