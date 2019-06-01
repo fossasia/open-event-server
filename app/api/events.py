@@ -1,10 +1,10 @@
-from flask import request, current_app
+from flask import Blueprint, jsonify, request, current_app
 from flask_jwt import current_identity, _jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
-from sqlalchemy import or_
+from sqlalchemy import or_, func, desc
 from sqlalchemy.orm.exc import NoResultFound
 import pytz
 from datetime import datetime
@@ -49,6 +49,10 @@ from app.models.user_favourite_event import UserFavouriteEvent
 from app.models.user import User, ATTENDEE, ORGANIZER, COORGANIZER
 from app.models.users_events_role import UsersEventsRoles
 from app.models.stripe_authorization import StripeAuthorization
+
+
+event_location_routes = Blueprint('most_used_locations', __name__, url_prefix='/v1')
+
 
 def validate_event(user, modules, data):
     if not user.can_create_event():
@@ -575,3 +579,12 @@ def clear_export_urls(event):
     event.xcal_url = None
     event.pentabarf_url = None
     save_to_db(event)
+
+
+@event_location_routes.route('/most-used-locations', methods=['GET'])
+def most_used_location():
+    locations = db.session.query(Event.location_name).group_by(Event.location_name).order_by(desc(func.count(Event.location_name)))
+    print(locations)
+    return jsonify({
+        "status": "Successful"
+    })
