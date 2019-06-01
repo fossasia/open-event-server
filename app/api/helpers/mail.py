@@ -1,4 +1,5 @@
 import base64
+import logging
 from datetime import datetime
 
 from flask import current_app
@@ -16,10 +17,28 @@ from app.models.mail import Mail, USER_CONFIRM, NEW_SESSION, USER_CHANGE_EMAIL, 
 from app.models.user import User
 
 
+def check_smtp_config(smtp_encryption):
+    """
+    Checks config of SMTP
+    """
+    config = {
+                'host': get_settings()['smtp_host'],
+                'username': get_settings()['smtp_username'],
+                'password': get_settings()['smtp_password'],
+                'encryption': smtp_encryption,
+                'port': get_settings()['smtp_port'],
+    }
+    for field in config:
+        if field is None:
+            return False
+    return True
+
+
 def send_email(to, action, subject, html, attachments=None):
     """
     Sends email and records it in DB
     """
+    from .tasks import send_email_task_sendgrid, send_email_task_smtp
     if not string_empty(to):
         email_service = get_settings()['email_service']
         email_from_name = get_settings()['email_from_name']
@@ -36,40 +55,41 @@ def send_email(to, action, subject, html, attachments=None):
         }
 
         if not current_app.config['TESTING']:
-            if email_service == 'smtp':
-                smtp_encryption = get_settings()['smtp_encryption']
-                if smtp_encryption == 'tls':
-                    smtp_encryption = 'required'
-                elif smtp_encryption == 'ssl':
-                    smtp_encryption = 'ssl'
-                elif smtp_encryption == 'tls_optional':
-                    smtp_encryption = 'optional'
-                else:
-                    smtp_encryption = 'none'
-
-                config = {
-                    'host': get_settings()['smtp_host'],
-                    'username': get_settings()['smtp_username'],
-                    'password': get_settings()['smtp_password'],
-                    'encryption': smtp_encryption,
-                    'port': get_settings()['smtp_port'],
-                }
-
-                from .tasks import send_mail_via_smtp_task
-                send_mail_via_smtp_task.delay(config, payload)
+            smtp_encryption = get_settings()['smtp_encryption']
+            if smtp_encryption == 'tls':
+                smtp_encryption = 'required'
+            elif smtp_encryption == 'ssl':
+                smtp_encryption = 'ssl'
+            elif smtp_encryption == 'tls_optional':
+                smtp_encryption = 'optional'
             else:
-                payload['fromname'] = email_from_name
-                key = get_settings()['sendgrid_key']
-                if not key:
-                    print('Sendgrid key not defined')
-                    return
-                headers = {
-                    "Authorization": ("Bearer " + key),
-                    "Content-Type": "application/json"
-                }
-                from .tasks import send_email_task
-                send_email_task.delay(payload, headers)
+                smtp_encryption = 'none'
 
+            smtp_config = {
+                'host': get_settings()['smtp_host'],
+                'username': get_settings()['smtp_username'],
+                'password': get_settings()['smtp_password'],
+                'encryption': smtp_encryption,
+                'port': get_settings()['smtp_port'],
+            }
+            smtp_status = check_smtp_config(smtp_encryption)
+            if smtp_status:
+                if email_service == 'smtp':
+                    send_email_task_smtp.delay(payload=payload, headers=None, smtp_config=smtp_config)
+                else:
+                    key = get_settings().get('sendgrid_key')
+                    if key:
+                        headers = {
+                            "Authorization": ("Bearer " + key),
+                            "Content-Type": "application/json"
+                        }
+                        payload['fromname'] = email_from_name
+                        send_email_task_sendgrid.delay(payload=payload, headers=headers, smtp_config=smtp_config)
+                    else:
+                        logging.exception('SMTP & sendgrid have not been configured properly')
+
+            else:
+                logging.exception('SMTP is not configured properly. Cannot send email.')
         # record_mail(to, action, subject, html)
         mail = Mail(
             recipient=to, action=action, subject=subject,
