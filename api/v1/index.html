@@ -2576,6 +2576,12 @@
 <td>-</td>
 </tr>
 <tr>
+<td style="text-align:left"><code>can-pay-by-omise</code></td>
+<td>-</td>
+<td>boolean (default: <code>false</code>)</td>
+<td>-</td>
+</tr>
+<tr>
 <td style="text-align:left"><code>can-pay-onsite</code></td>
 <td>-</td>
 <td>boolean (default: <code>false</code>)</td>
@@ -2846,6 +2852,7 @@
         "<span class="hljs-attribute">searchable-location-name</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
         "<span class="hljs-attribute">is-ticketing-enabled</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
         "<span class="hljs-attribute">can-pay-by-cheque</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+        "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
         "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
         "<span class="hljs-attribute">pentabarf-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
         "<span class="hljs-attribute">xcal-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
@@ -2914,6 +2921,7 @@
       "<span class="hljs-attribute">can-pay-by-stripe</span>": <span class="hljs-value"><span class="hljs-string">"false"</span></span>,
       "<span class="hljs-attribute">can-pay-by-cheque</span>": <span class="hljs-value"><span class="hljs-string">"false"</span></span>,
       "<span class="hljs-attribute">can-pay-by-bank</span>": <span class="hljs-value"><span class="hljs-string">"false"</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-string">"false"</span></span>,
       "<span class="hljs-attribute">can-pay-onsite</span>": <span class="hljs-value"><span class="hljs-string">"true"</span></span>,
       "<span class="hljs-attribute">cheque-details</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">bank-details</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
@@ -3102,6 +3110,7 @@
       "<span class="hljs-attribute">onsite-details</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">organizer-name</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">can-pay-by-stripe</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">large-image-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">timezone</span>": <span class="hljs-value"><span class="hljs-string">"UTC"</span></span>,
       "<span class="hljs-attribute">can-pay-onsite</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
@@ -3364,6 +3373,7 @@
       "<span class="hljs-attribute">ical-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">can-pay-by-bank</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
       "<span class="hljs-attribute">created-at</span>": <span class="hljs-value"><span class="hljs-string">"2017-06-26T15:22:37.205399+00:00"</span></span>,
       "<span class="hljs-attribute">longitude</span>": <span class="hljs-value"><span class="hljs-number">1.23456789</span></span>,
@@ -3425,6 +3435,7 @@
       "<span class="hljs-attribute">can-pay-by-stripe</span>": <span class="hljs-value"><span class="hljs-string">"false"</span></span>,
       "<span class="hljs-attribute">can-pay-by-cheque</span>": <span class="hljs-value"><span class="hljs-string">"false"</span></span>,
       "<span class="hljs-attribute">can-pay-by-bank</span>": <span class="hljs-value"><span class="hljs-string">"false"</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-string">"false"</span></span>,
       "<span class="hljs-attribute">can-pay-onsite</span>": <span class="hljs-value"><span class="hljs-string">"false"</span></span>,
       "<span class="hljs-attribute">cheque-details</span>": <span class="hljs-value"><span class="hljs-string">"example1"</span></span>,
       "<span class="hljs-attribute">bank-details</span>": <span class="hljs-value"><span class="hljs-string">"example1"</span></span>,
@@ -3624,6 +3635,7 @@
       "<span class="hljs-attribute">location-name</span>": <span class="hljs-value"><span class="hljs-string">"example1"</span></span>,
       "<span class="hljs-attribute">is-sponsors-enabled</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">has-organizer-info</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">is-sessions-speakers-enabled</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">privacy</span>": <span class="hljs-value"><span class="hljs-string">"private"</span></span>,
       "<span class="hljs-attribute">code-of-conduct</span>": <span class="hljs-value"><span class="hljs-string">"example1"</span></span>,
@@ -3866,6 +3878,7 @@
         "<span class="hljs-attribute">xcal-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
         "<span class="hljs-attribute">logo-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example.png"</span></span>,
         "<span class="hljs-attribute">can-pay-by-bank</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+        "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
         "<span class="hljs-attribute">is-tax-enabled</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
         "<span class="hljs-attribute">ical-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
         "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
@@ -4065,6 +4078,7 @@
         "<span class="hljs-attribute">location-name</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
         "<span class="hljs-attribute">is-sponsors-enabled</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
         "<span class="hljs-attribute">is-sessions-speakers-enabled</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+        "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
         "<span class="hljs-attribute">privacy</span>": <span class="hljs-value"><span class="hljs-string">"public"</span></span>,
         "<span class="hljs-attribute">has-organizer-info</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
         "<span class="hljs-attribute">state</span>": <span class="hljs-value"><span class="hljs-string">"draft"</span></span>,
@@ -4286,6 +4300,7 @@
         "<span class="hljs-attribute">xcal-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
         "<span class="hljs-attribute">logo-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example.png"</span></span>,
         "<span class="hljs-attribute">can-pay-by-bank</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+        "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
         "<span class="hljs-attribute">is-tax-enabled</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
         "<span class="hljs-attribute">ical-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
         "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
@@ -4478,6 +4493,7 @@
         "<span class="hljs-attribute">large-image-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
         "<span class="hljs-attribute">timezone</span>": <span class="hljs-value"><span class="hljs-string">"UTC"</span></span>,
         "<span class="hljs-attribute">can-pay-onsite</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+        "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
         "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
         "<span class="hljs-attribute">ticket-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
         "<span class="hljs-attribute">can-pay-by-paypal</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
@@ -4693,6 +4709,7 @@
         "<span class="hljs-attribute">is-sessions-speakers-enabled</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
         "<span class="hljs-attribute">privacy</span>": <span class="hljs-value"><span class="hljs-string">"public"</span></span>,
         "<span class="hljs-attribute">has-organizer-info</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+        "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
         "<span class="hljs-attribute">state</span>": <span class="hljs-value"><span class="hljs-string">"draft"</span></span>,
         "<span class="hljs-attribute">average-rating</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
         "<span class="hljs-attribute">latitude</span>": <span class="hljs-value"><span class="hljs-number">1.23456789</span></span>,
@@ -4902,6 +4919,7 @@
       "<span class="hljs-attribute">privacy</span>": <span class="hljs-value"><span class="hljs-string">"public"</span></span>,
       "<span class="hljs-attribute">has-organizer-info</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">state</span>": <span class="hljs-value"><span class="hljs-string">"draft"</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">is-event-online</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">average-rating</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">latitude</span>": <span class="hljs-value"><span class="hljs-number">1.23456789</span></span>,
@@ -5116,6 +5134,7 @@
       "<span class="hljs-attribute">searchable-location-name</span>": <span class="hljs-value"><span class="hljs-string">"Draft"</span></span>,
       "<span class="hljs-attribute">is-ticketing-enabled</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
       "<span class="hljs-attribute">can-pay-by-cheque</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">pentabarf-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">xcal-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
@@ -5311,6 +5330,7 @@
       "<span class="hljs-attribute">ticket-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
       "<span class="hljs-attribute">is-event-online</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">can-pay-by-paypal</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">location-name</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">is-sponsors-enabled</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">is-sessions-speakers-enabled</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
@@ -5548,6 +5568,7 @@
       "<span class="hljs-attribute">identifier</span>": <span class="hljs-value"><span class="hljs-string">"f4fbf878"</span></span>,
       "<span class="hljs-attribute">ends-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-14T23:59:59.123456+00:00"</span></span>,
       "<span class="hljs-attribute">order-expiry-time</span>": <span class="hljs-value"><span class="hljs-string">"10"</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">refund-policy</span>": <span class="hljs-value"><span class="hljs-string">"All sales are final. No refunds shall be issued in any case."</span></span>,
       "<span class="hljs-attribute">is-stripe-linked</span>": <span class="hljs-value"><span class="hljs-string">"false"</span>
     </span>}</span>,
@@ -5708,6 +5729,7 @@
     </span>}</span>,
     "<span class="hljs-attribute">attributes</span>": <span class="hljs-value">{
       "<span class="hljs-attribute">payment-country</span>": <span class="hljs-value"><span class="hljs-string">"US"</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">paypal-email</span>": <span class="hljs-value"><span class="hljs-string">"example@example.com"</span></span>,
       "<span class="hljs-attribute">code-of-conduct</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">schedule-published-on</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
@@ -5917,6 +5939,7 @@
       "<span class="hljs-attribute">payment-country</span>": <span class="hljs-value"><span class="hljs-string">"US"</span></span>,
       "<span class="hljs-attribute">paypal-email</span>": <span class="hljs-value"><span class="hljs-string">"example@example.com"</span></span>,
       "<span class="hljs-attribute">code-of-conduct</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">schedule-published-on</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">payment-currency</span>": <span class="hljs-value"><span class="hljs-string">"USD"</span></span>,
       "<span class="hljs-attribute">organizer-description</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
@@ -6124,6 +6147,7 @@
       "<span class="hljs-attribute">payment-country</span>": <span class="hljs-value"><span class="hljs-string">"US"</span></span>,
       "<span class="hljs-attribute">paypal-email</span>": <span class="hljs-value"><span class="hljs-string">"example@example.com"</span></span>,
       "<span class="hljs-attribute">code-of-conduct</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">schedule-published-on</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">payment-currency</span>": <span class="hljs-value"><span class="hljs-string">"USD"</span></span>,
       "<span class="hljs-attribute">organizer-description</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
@@ -6332,6 +6356,7 @@
       "<span class="hljs-attribute">paypal-email</span>": <span class="hljs-value"><span class="hljs-string">"example@example.com"</span></span>,
       "<span class="hljs-attribute">code-of-conduct</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">schedule-published-on</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">payment-currency</span>": <span class="hljs-value"><span class="hljs-string">"USD"</span></span>,
       "<span class="hljs-attribute">organizer-description</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">is-map-shown</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
@@ -6545,6 +6570,7 @@
       "<span class="hljs-attribute">original-image-url</span>": <span class="hljs-value"><span class="hljs-string">"https://www.w3schools.com/html/pic_mountain.jpg"</span></span>,
       "<span class="hljs-attribute">onsite-details</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">is-event-online</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">organizer-name</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">can-pay-by-stripe</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
       "<span class="hljs-attribute">large-image-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
@@ -6752,6 +6778,7 @@
       "<span class="hljs-attribute">original-image-url</span>": <span class="hljs-value"><span class="hljs-string">"https://www.w3schools.com/html/pic_mountain.jpg"</span></span>,
       "<span class="hljs-attribute">onsite-details</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">organizer-name</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">can-pay-by-stripe</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
       "<span class="hljs-attribute">large-image-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">timezone</span>": <span class="hljs-value"><span class="hljs-string">"UTC"</span></span>,
@@ -6961,6 +6988,7 @@
       "<span class="hljs-attribute">organizer-name</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">can-pay-by-stripe</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
       "<span class="hljs-attribute">large-image-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">timezone</span>": <span class="hljs-value"><span class="hljs-string">"UTC"</span></span>,
       "<span class="hljs-attribute">can-pay-onsite</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
       "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
@@ -7168,6 +7196,7 @@
       "<span class="hljs-attribute">organizer-name</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">can-pay-by-stripe</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
       "<span class="hljs-attribute">large-image-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">timezone</span>": <span class="hljs-value"><span class="hljs-string">"UTC"</span></span>,
       "<span class="hljs-attribute">can-pay-onsite</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
       "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
@@ -7373,6 +7402,7 @@
       "<span class="hljs-attribute">original-image-url</span>": <span class="hljs-value"><span class="hljs-string">"https://www.w3schools.com/html/pic_mountain.jpg"</span></span>,
       "<span class="hljs-attribute">onsite-details</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">organizer-name</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">can-pay-by-stripe</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
       "<span class="hljs-attribute">large-image-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">timezone</span>": <span class="hljs-value"><span class="hljs-string">"UTC"</span></span>,
@@ -7584,6 +7614,7 @@
       "<span class="hljs-attribute">large-image-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">timezone</span>": <span class="hljs-value"><span class="hljs-string">"UTC"</span></span>,
       "<span class="hljs-attribute">can-pay-onsite</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">ticket-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
       "<span class="hljs-attribute">can-pay-by-paypal</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
@@ -7787,6 +7818,7 @@
       "<span class="hljs-attribute">original-image-url</span>": <span class="hljs-value"><span class="hljs-string">"https://www.w3schools.com/html/pic_mountain.jpg"</span></span>,
       "<span class="hljs-attribute">onsite-details</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">organizer-name</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">can-pay-by-stripe</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
       "<span class="hljs-attribute">large-image-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">timezone</span>": <span class="hljs-value"><span class="hljs-string">"UTC"</span></span>,
@@ -8005,6 +8037,7 @@
       "<span class="hljs-attribute">is-sponsors-enabled</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">is-sessions-speakers-enabled</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
       "<span class="hljs-attribute">privacy</span>": <span class="hljs-value"><span class="hljs-string">"public"</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">has-organizer-info</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">state</span>": <span class="hljs-value"><span class="hljs-string">"draft"</span></span>,
       "<span class="hljs-attribute">average-rating</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
@@ -8204,6 +8237,7 @@
       "<span class="hljs-attribute">can-pay-by-stripe</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
       "<span class="hljs-attribute">large-image-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">timezone</span>": <span class="hljs-value"><span class="hljs-string">"UTC"</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">can-pay-onsite</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
       "<span class="hljs-attribute">deleted-at</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">ticket-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com"</span></span>,
@@ -8423,6 +8457,7 @@
       "<span class="hljs-attribute">has-organizer-info</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">state</span>": <span class="hljs-value"><span class="hljs-string">"draft"</span></span>,
       "<span class="hljs-attribute">average-rating</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">latitude</span>": <span class="hljs-value"><span class="hljs-number">1.23456789</span></span>,
       "<span class="hljs-attribute">starts-at</span>": <span class="hljs-value"><span class="hljs-string">"2016-12-13T23:59:59.123456+00:00"</span></span>,
       "<span class="hljs-attribute">searchable-location-name</span>": <span class="hljs-value"><span class="hljs-string">"Draft"</span></span>,
@@ -8637,6 +8672,7 @@
       "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">pentabarf-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">xcal-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">logo-url</span>": <span class="hljs-value"><span class="hljs-string">"http://example.com/example.png"</span></span>,
       "<span class="hljs-attribute">can-pay-by-bank</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
       "<span class="hljs-attribute">is-tax-enabled</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
@@ -8867,6 +8903,7 @@
       "<span class="hljs-attribute">has-organizer-info</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">state</span>": <span class="hljs-value"><span class="hljs-string">"draft"</span></span>,
       "<span class="hljs-attribute">average-rating</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">latitude</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">starts-at</span>": <span class="hljs-value"><span class="hljs-string">"2002-05-30T04:00:10+00:00"</span></span>,
       "<span class="hljs-attribute">searchable-location-name</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
@@ -9108,6 +9145,7 @@
       "<span class="hljs-attribute">starts-at</span>": <span class="hljs-value"><span class="hljs-string">"2002-05-30T04:00:10+00:00"</span></span>,
       "<span class="hljs-attribute">searchable-location-name</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
       "<span class="hljs-attribute">is-ticketing-enabled</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+      "<span class="hljs-attribute">can-pay-by-omise</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">can-pay-by-cheque</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">""</span></span>,
       "<span class="hljs-attribute">pentabarf-url</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
@@ -18823,6 +18861,12 @@
 <td>boolean</td>
 <td>-</td>
 </tr>
+<tr>
+<td style="text-align:left"><code>is-omise-activated</code></td>
+<td>Whether omise payment is configured or not</td>
+<td>boolean</td>
+<td>-</td>
+</tr>
 </tbody>
 </table>
 <p><strong>STORAGE</strong></p>
@@ -19083,6 +19127,49 @@
 <tr>
 <td style="text-align:left"><code>paypal-secret</code></td>
 <td>Paypal secret</td>
+<td>string</td>
+<td><strong>yes</strong></td>
+</tr>
+</tbody>
+</table>
+<p>(Omise Credentials)</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Parameter</th>
+<th>Description</th>
+<th>Type</th>
+<th>Admin Only</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>omise-mode</code></td>
+<td>Omise mode</td>
+<td>string</td>
+<td><strong>yes</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>omise-test-public</code></td>
+<td>Omise Test Public Key</td>
+<td>string</td>
+<td><strong>yes</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>omise-test-secret</code></td>
+<td>Omise Test Secret Key</td>
+<td>string</td>
+<td><strong>yes</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>omise-live-public</code></td>
+<td>Omise Live Public Key</td>
+<td>string</td>
+<td><strong>yes</strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>omise-live-secret</code></td>
+<td>Omise Live Secret Key</td>
 <td>string</td>
 <td><strong>yes</strong></td>
 </tr>
@@ -19350,6 +19437,11 @@
       "<span class="hljs-attribute">paypal-sandbox-client</span>": <span class="hljs-value"><span class="hljs-string">"example1234"</span></span>,
       "<span class="hljs-attribute">paypal-secret</span>": <span class="hljs-value"><span class="hljs-string">"example1234"</span></span>,
       "<span class="hljs-attribute">paypal-client</span>": <span class="hljs-value"><span class="hljs-string">"example1234"</span></span>,
+      "<span class="hljs-attribute">omise-mode</span>": <span class="hljs-value"><span class="hljs-string">"development"</span></span>,
+      "<span class="hljs-attribute">omise-test-public</span>": <span class="hljs-value"><span class="hljs-string">"example1234"</span></span>,
+      "<span class="hljs-attribute">omise-test-secret</span>": <span class="hljs-value"><span class="hljs-string">"example1234"</span></span>,
+      "<span class="hljs-attribute">omise-live-public</span>": <span class="hljs-value"><span class="hljs-string">"example1234"</span></span>,
+      "<span class="hljs-attribute">omise-live-secret</span>": <span class="hljs-value"><span class="hljs-string">"example1234"</span></span>,
       "<span class="hljs-attribute">email-service</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">email-from</span>": <span class="hljs-value"><span class="hljs-string">"example@example.com"</span></span>,
       "<span class="hljs-attribute">email-from-name</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
@@ -19418,6 +19510,11 @@
       "<span class="hljs-attribute">paypal-sandbox-client</span>": <span class="hljs-value"><span class="hljs-string">"example1234"</span></span>,
       "<span class="hljs-attribute">paypal-secret</span>": <span class="hljs-value"><span class="hljs-string">"example1234"</span></span>,
       "<span class="hljs-attribute">paypal-client</span>": <span class="hljs-value"><span class="hljs-string">"example1234"</span></span>,
+      "<span class="hljs-attribute">omise-mode</span>": <span class="hljs-value"><span class="hljs-string">"development"</span></span>,
+      "<span class="hljs-attribute">omise-test-public</span>": <span class="hljs-value"><span class="hljs-string">"example1234"</span></span>,
+      "<span class="hljs-attribute">omise-test-secret</span>": <span class="hljs-value"><span class="hljs-string">"example1234"</span></span>,
+      "<span class="hljs-attribute">omise-live-public</span>": <span class="hljs-value"><span class="hljs-string">"example1234"</span></span>,
+      "<span class="hljs-attribute">omise-live-secret</span>": <span class="hljs-value"><span class="hljs-string">"example1234"</span></span>,
       "<span class="hljs-attribute">email-service</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">email-from</span>": <span class="hljs-value"><span class="hljs-string">"example@example.com"</span></span>,
       "<span class="hljs-attribute">email-from-name</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
@@ -19475,6 +19572,11 @@
       "<span class="hljs-attribute">paypal-sandbox-client</span>": <span class="hljs-value"><span class="hljs-string">"example1234"</span></span>,
       "<span class="hljs-attribute">paypal-secret</span>": <span class="hljs-value"><span class="hljs-string">"example1234"</span></span>,
       "<span class="hljs-attribute">paypal-client</span>": <span class="hljs-value"><span class="hljs-string">"example1234"</span></span>,
+      "<span class="hljs-attribute">omise-mode</span>": <span class="hljs-value"><span class="hljs-string">"development"</span></span>,
+      "<span class="hljs-attribute">omise-test-public</span>": <span class="hljs-value"><span class="hljs-string">"example1234"</span></span>,
+      "<span class="hljs-attribute">omise-test-secret</span>": <span class="hljs-value"><span class="hljs-string">"example1234"</span></span>,
+      "<span class="hljs-attribute">omise-live-public</span>": <span class="hljs-value"><span class="hljs-string">"example1234"</span></span>,
+      "<span class="hljs-attribute">omise-live-secret</span>": <span class="hljs-value"><span class="hljs-string">"example1234"</span></span>,
       "<span class="hljs-attribute">email-service</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
       "<span class="hljs-attribute">email-from</span>": <span class="hljs-value"><span class="hljs-string">"example@example.com"</span></span>,
       "<span class="hljs-attribute">email-from-name</span>": <span class="hljs-value"><span class="hljs-string">"example"</span></span>,
@@ -22151,7 +22253,7 @@ Creates the copy. Requires Co-Organizer access</p>
   "<span class="hljs-attribute">jsonapi</span>": <span class="hljs-value">{
     "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"1.0"</span>
   </span>}
-</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 31 May 2019</p><script>/* eslint-env browser */
+</span>}</code></pre><div style="height: 1px;"></div></div></div></div></div></section></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 01 Jun 2019</p><script>/* eslint-env browser */
 /* eslint quotes: [2, "single"] */
 'use strict';
 
