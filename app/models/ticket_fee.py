@@ -10,8 +10,8 @@ class TicketFees(db.Model):
     __tablename__ = 'ticket_fees'
 
     id = db.Column(db.Integer, primary_key=True)
-    currency = db.Column(db.String)
-    country = db.Column(db.String)
+    currency = db.Column(db.String, unique=True)
+    country = db.Column(db.String, unique=True)
     service_fee = db.Column(db.Float)
     maximum_fee = db.Column(db.Float)
 
