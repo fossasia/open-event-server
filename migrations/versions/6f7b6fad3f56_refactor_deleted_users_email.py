@@ -1,6 +1,6 @@
 """Refactor deleted users email
 Revision ID: 6f7b6fad3f56
-Revises: 6f7b6fad3f55
+Revises: 0e80c49a6e28
 Create Date: 2019-05-24 03:26:25
 """
 
@@ -8,7 +8,7 @@ from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = '6f7b6fad3f56'
-down_revision = '6f7b6fad3f55'
+down_revision = '0e80c49a6e28'
 
 
 def upgrade():
