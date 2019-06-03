@@ -583,5 +583,6 @@ def clear_export_urls(event):
 
 @event_location_routes.route('/most-used-locations', methods=['GET'])
 def most_used_location():
-    locations = db.session.query(Event.location_name).group_by(Event.location_name).order_by(desc(func.count(Event.location_name))).all()
+    locations = db.session.query(Event.location_name).group_by(Event.location_name). \
+        order_by(desc(func.count(Event.location_name))).all()
     return jsonify({"locations": locations})
