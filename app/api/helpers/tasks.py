@@ -5,6 +5,7 @@ import requests
 import uuid
 
 from flask import current_app, render_template
+from flask_celeryext import RequestContextTask
 from marrow.mailer import Mailer, Message
 from app import get_settings
 from sendgrid import SendGridAPIClient
@@ -25,7 +26,6 @@ import logging
 import traceback
 
 from app.api.helpers.files import create_save_image_sizes, create_save_resized_image
-from app.api.helpers.request_context_task import RequestContextTask
 from app.api.helpers.mail import send_export_mail, send_import_mail
 from app.api.helpers.notification import send_notif_after_import, send_notif_after_export
 from app.api.helpers.db import safe_query
