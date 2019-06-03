@@ -88,21 +88,6 @@
 <body>
     <h3 style="text-align:center;">{{ ("Order Invoice") }}</h3>
         <table class="table with-datatable" id="orders-table" width="100%">
-                <thead>
-                <tr>
-                    <th>
-                    {{ ("Order") }}
-                    </th>
-                    <th>
-                    {{ ("Order Details") }}
-                    </th>
-                    {% if order.is_billing_enabled %} 
-                    <th>
-                    {{ ("Billing Info") }}
-                    </th>
-                    {% endif %}
-                </tr>
-                </thead>
                 <tbody>
                 {% if order.status != "deleted" %}
                     <tr class="padded">

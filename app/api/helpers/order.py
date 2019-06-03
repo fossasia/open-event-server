@@ -73,7 +73,7 @@ def create_pdf_tickets_for_holder(order):
         # create order invoices pdf
         order_ticket_info = OrderTicket.query.filter_by(order_id=order.id).one()
         create_save_pdf(render_template('pdf/order_invoice.html', order=order, event=order.event,
-                                        tax=order.event.tax, tickets=order.tickets, order_tickets_info=order_ticket_info),
+                        tax=order.event.tax, tickets=order.tickets, order_tickets_info=order_ticket_info),
                         UPLOAD_PATHS['pdf']['order'], dir_path='/static/uploads/pdf/tickets/',
                         identifier=order.identifier, upload_dir='generated/invoices/')
         save_to_db(order)
