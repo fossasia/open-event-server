@@ -7,6 +7,7 @@ from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.mail import send_email_new_session, send_email_session_accept_reject
 from app.api.helpers.notification import send_notif_new_session_organizer, send_notif_session_accept_reject
 from app.api.helpers.permissions import current_identity
+from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.sessions import SessionSchema
@@ -130,6 +131,22 @@ class SessionDetail(ResourceDetail):
             event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'identifier')
             view_kwargs['event_id'] = event.id
 
+    def before_update_object(self, session, data, view_kwargs):
+        """
+        before update method to verify if session is locked before updating session object
+        :param event:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
+        if data.get('is_locked') != session.is_locked:
+            if not (has_access('is_admin') or has_access('is_organizer')):
+                raise ForbiddenException({'source': '/data/attributes/is-locked'},
+                                         "You don't have enough permissions to change this property")
+
+        if session.is_locked and data.get('is_locked') == session.is_locked:
+            raise ForbiddenException({'source': '/data/attributes/is-locked'}, "Locked sessions cannot be edited")
+
     def after_update_object(self, session, data, view_kwargs):
         """ Send email if session accepted or rejected """
 
@@ -181,8 +198,11 @@ class SessionDetail(ResourceDetail):
     schema = SessionSchema
     data_layer = {'session': db.session,
                   'model': Session,
-                  'methods': {'before_get_object': before_get_object,
-                              'after_update_object': after_update_object}}
+                  'methods': {
+                      'before_update_object': before_update_object,
+                      'before_get_object': before_get_object,
+                      'after_update_object': after_update_object
+                  }}
 
 
 class SessionRelationshipRequired(ResourceRelationship):

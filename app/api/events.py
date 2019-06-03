@@ -50,7 +50,6 @@ from app.models.user import User, ATTENDEE, ORGANIZER, COORGANIZER
 from app.models.users_events_role import UsersEventsRoles
 from app.models.stripe_authorization import StripeAuthorization
 
-
 def validate_event(user, modules, data):
     if not user.can_create_event():
         raise ForbiddenException({'source': ''},
