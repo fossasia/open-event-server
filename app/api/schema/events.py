@@ -106,6 +106,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     revenue = fields.Float(dump_only=True)
     paypal_email = fields.Str(allow_none=True)
     is_tax_enabled = fields.Bool(default=False)
+    is_ngo = fields.Bool(default=False, nullable=False)
     is_donation_enabled = fields.Bool(default=False)
     can_pay_by_paypal = fields.Bool(default=False)
     can_pay_by_stripe = fields.Bool(default=False)
