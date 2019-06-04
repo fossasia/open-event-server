@@ -12,9 +12,9 @@ from app.api.helpers.query import get_upcoming_events, get_user_event_roles_by_r
 from app.api.helpers.utilities import monthdelta
 from app.models import db
 from app.models.event import Event
-from app.models.session import Session
 from app.models.event_invoice import EventInvoice
 from app.models.order import Order
+from app.models.session import Session
 from app.models.ticket import Ticket
 from app.models.ticket_fee import get_fee
 from app.settings import get_settings
@@ -146,6 +146,6 @@ def expire_pending_tickets_after_three_days():
     from app import current_app as app
     with app.app_context():
         db.session.query(Order).filter(Order.status == 'pending',
-                                       (datetime.datetime.today() - Order.created_at).days > 3).\
+                                       (Order.created_at + datetime.timedelta(days=3)) > datetime.datetime.now()).\
                                        update({'status': 'expired'})
         db.session.commit()
