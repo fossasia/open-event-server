@@ -1,3 +1,6 @@
+from datetime import datetime
+
+import pytz
 from flask import Blueprint, jsonify, request, current_app
 from flask_jwt import current_identity, _jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
@@ -6,21 +9,19 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from sqlalchemy import or_, func, desc
 from sqlalchemy.orm.exc import NoResultFound
-import pytz
-from datetime import datetime
+
 from app.api.bootstrap import api
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
 from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.events import create_custom_forms_for_attendees
 from app.api.helpers.exceptions import ForbiddenException, ConflictException
+from app.api.helpers.export_helpers import create_export_job
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
 from app.api.schema.events import EventSchemaPublic, EventSchema
-from app.api.helpers.export_helpers import create_export_job
 # models
 from app.models import db
 from app.models.access_code import AccessCode
-from app.models.module import Module
 from app.models.custom_form import CustomForms
 from app.models.discount_code import DiscountCode
 from app.models.email_notification import EmailNotification
@@ -31,6 +32,7 @@ from app.models.faq import Faq
 from app.models.faq_type import FaqType
 from app.models.feedback import Feedback
 from app.models.microlocation import Microlocation
+from app.models.module import Module
 from app.models.order import Order
 from app.models.role import Role
 from app.models.role_invite import RoleInvite
@@ -40,16 +42,15 @@ from app.models.social_link import SocialLink
 from app.models.speaker import Speaker
 from app.models.speakers_call import SpeakersCall
 from app.models.sponsor import Sponsor
+from app.models.stripe_authorization import StripeAuthorization
 from app.models.tax import Tax
 from app.models.ticket import Ticket
 from app.models.ticket import TicketTag
 from app.models.ticket_holder import TicketHolder
 from app.models.track import Track
-from app.models.user_favourite_event import UserFavouriteEvent
 from app.models.user import User, ATTENDEE, ORGANIZER, COORGANIZER
+from app.models.user_favourite_event import UserFavouriteEvent
 from app.models.users_events_role import UsersEventsRoles
-from app.models.stripe_authorization import StripeAuthorization
-
 
 event_location_routes = Blueprint('most_used_locations', __name__, url_prefix='/v1')
 
@@ -585,4 +586,4 @@ def clear_export_urls(event):
 def most_used_location():
     locations = db.session.query(Event.location_name).group_by(Event.location_name). \
         order_by(desc(func.count(Event.location_name))).all()
-    return jsonify({"locations": locations})
+    return jsonify({"data": locations})
