@@ -67,6 +67,12 @@ class SettingFactory(factory.alchemy.SQLAlchemyModelFactory):
     paypal_secret = common.string_
     paypal_sandbox_client = common.string_
     paypal_sandbox_secret = common.string_
+    # Omise Credentials
+    omise_mode = 'development'
+    omise_test_public = common.string_
+    omise_test_secret = common.string_
+    omise_live_public = common.string_
+    omise_live_secret = common.string_
     #
     # EMAIL
     #

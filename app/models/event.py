@@ -91,6 +91,7 @@ class Event(SoftDeletionModel):
     schedule_published_on = db.Column(db.DateTime(timezone=True))
     is_ticketing_enabled = db.Column(db.Boolean, default=False)
     is_donation_enabled = db.Column(db.Boolean, default=False)
+    is_ticket_form_enabled = db.Column(db.Boolean, default=True, nullable=False)
     payment_country = db.Column(db.String)
     payment_currency = db.Column(db.String)
     paypal_email = db.Column(db.String)
@@ -101,6 +102,7 @@ class Event(SoftDeletionModel):
     can_pay_by_bank = db.Column(db.Boolean, default=False)
     can_pay_onsite = db.Column(db.Boolean, default=False)
     can_pay_by_omise = db.Column(db.Boolean, default=False)
+    can_pay_by_alipay = db.Column(db.Boolean, default=False)
     cheque_details = db.Column(db.String)
     bank_details = db.Column(db.String)
     onsite_details = db.Column(db.String)
@@ -195,6 +197,7 @@ class Event(SoftDeletionModel):
                  code_of_conduct=None,
                  schedule_published_on=None,
                  is_sessions_speakers_enabled=False,
+                 is_ticket_form_enabled=True,
                  is_donation_enabled=False,
                  is_map_shown=False,
                  has_organizer_info=False,
@@ -209,6 +212,7 @@ class Event(SoftDeletionModel):
                  can_pay_by_stripe=None,
                  can_pay_by_cheque=None,
                  can_pay_by_omise=None,
+                 can_pay_by_alipay=None,
                  identifier=None,
                  can_pay_by_bank=None,
                  is_featured=False,
@@ -273,8 +277,10 @@ class Event(SoftDeletionModel):
         self.can_pay_by_bank = can_pay_by_bank
         self.can_pay_onsite = can_pay_onsite
         self.can_pay_by_omise = can_pay_by_omise
+        self.can_pay_by_alipay = can_pay_by_alipay
         self.is_donation_enabled = is_donation_enabled
         self.is_featured = is_featured
+        self.is_ticket_form_enabled = is_ticket_form_enabled
         self.identifier = get_new_event_identifier()
         self.cheque_details = cheque_details
         self.bank_details = bank_details

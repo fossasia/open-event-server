@@ -1,6 +1,7 @@
 from datetime import datetime
 
-from flask import Blueprint, jsonify, request
+from flask import request, jsonify, Blueprint, url_for, redirect
+
 from flask_jwt import current_identity as current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
@@ -32,8 +33,11 @@ from app.models.discount_code import DiscountCode, TICKET
 from app.models.order import Order, OrderTicket, get_updatable_fields
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
+from app.api.helpers.payment import AliPayPaymentsManager
+
 
 order_misc_routes = Blueprint('order_misc', __name__, url_prefix='/v1')
+alipay_blueprint = Blueprint('alipay_blueprint', __name__, url_prefix='/v1/alipay')
 
 
 class OrdersListPost(ResourceList):
@@ -456,3 +460,42 @@ def create_paypal_payment(order_identifier):
         return jsonify(status=True, payment_id=response)
     else:
         return jsonify(status=False, error=response)
+
+
+@alipay_blueprint.route('/create_source/<string:order_identifier>', methods=['GET', 'POST'])
+def create_source(order_identifier):
+    """
+    Create a source object for alipay payments.
+    :param order_identifier:
+    :return: The alipay redirection link.
+    """
+    try:
+        order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+        source_object = AliPayPaymentsManager.create_source(amount=int(order.amount), currency='usd',
+                                                            redirect_return_uri=url_for('alipay_blueprint.alipay_return_uri',
+                                                            order_identifier=order.identifier, _external=True))
+        order.order_notes = source_object.id
+        save_to_db(order)
+        return jsonify(link=source_object.redirect['url'])
+    except TypeError:
+        return BadRequestError({'source': ''}, 'Source creation error').respond()
+
+
+@alipay_blueprint.route('/alipay_return_uri/<string:order_identifier>', methods=['GET', 'POST'])
+def alipay_return_uri(order_identifier):
+    """
+    Charge Object creation & Order finalization for Alipay payments.
+    :param order_identifier:
+    :return: JSON response of the payment status.
+    """
+    try:
+        charge_response = AliPayPaymentsManager.charge_source(order_identifier)
+        if charge_response.status == 'succeeded':
+            order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+            order.status = 'completed'
+            save_to_db(order)
+            return redirect(make_frontend_url('/orders/{}/view'.format(order_identifier)))
+        else:
+            return jsonify(status=False, error='Charge object failure')
+    except TypeError:
+        return jsonify(status=False, error='Source object status error')
