@@ -1,6 +1,7 @@
 from datetime import datetime
-
 from flask import request, jsonify, Blueprint, url_for, redirect
+import omise
+import logging
 
 from flask_jwt import current_identity as current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
@@ -33,7 +34,7 @@ from app.models.discount_code import DiscountCode, TICKET
 from app.models.order import Order, OrderTicket, get_updatable_fields
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
-from app.api.helpers.payment import AliPayPaymentsManager
+from app.api.helpers.payment import AliPayPaymentsManager, OmisePaymentsManager
 
 
 order_misc_routes = Blueprint('order_misc', __name__, url_prefix='/v1')
@@ -499,3 +500,32 @@ def alipay_return_uri(order_identifier):
             return jsonify(status=False, error='Charge object failure')
     except TypeError:
         return jsonify(status=False, error='Source object status error')
+
+
+@order_misc_routes.route('/orders/<string:order_identifier>/omise-checkout', methods=['POST', 'GET'])
+def omise_checkout(order_identifier):
+    """
+    Charging the user and returning payment response for Omise Gateway
+    :param order_identifier:
+    :return: JSON response of the payment status.
+    """
+    token = request.form.get('omiseToken')
+    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+    order.status = 'completed'
+    save_to_db(order)
+    try:
+        charge = OmisePaymentsManager.charge_payment(order_identifier, token)
+        print(charge.status)
+    except omise.errors.BaseError as e:
+        logging.error(f"""OmiseError: {repr(e)}.  See https://www.omise.co/api-errors""")
+        return jsonify(status=False, error="Omise Failure Message: {}".format(str(e)))
+    except Exception as e:
+        logging.error(repr(e))
+    if charge.failure_code is not None:
+        logging.warning("Omise Failure Message: {} ({})".format(charge.failure_message, charge.failure_code))
+        return jsonify(status=False, error="Omise Failure Message: {} ({})".
+                       format(charge.failure_message, charge.failure_code))
+    else:
+        logging.info(f"Successful charge: {charge.id}.  Order ID: {order_identifier}")
+
+        return redirect(make_frontend_url('orders/{}/view'.format(order_identifier)))
