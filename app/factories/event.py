@@ -29,7 +29,7 @@ class EventFactoryBasic(factory.alchemy.SQLAlchemyModelFactory):
     state = "draft"
     ticket_url = common.url_
     code_of_conduct = common.string_
-    is_ticketing_enabled = True
+    # is_ticketing_enabled = True
     payment_country = common.country_
     payment_currency = common.currency_
     paypal_email = common.email_

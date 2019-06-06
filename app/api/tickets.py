@@ -40,8 +40,8 @@ class TicketListPost(ResourceList):
                                                            deleted_at=None)) > 0:
             raise ConflictException({'pointer': '/data/attributes/name'}, "Ticket already exists")
 
-        if get_count(db.session.query(Event).filter_by(id=int(data['event']), is_ticketing_enabled=False)) > 0:
-            raise MethodNotAllowed({'parameter': 'event_id'}, "Ticketing is disabled for this Event")
+        # if get_count(db.session.query(Event).filter_by(id=int(data['event']), is_ticketing_enabled=False)) > 0:
+        #     raise MethodNotAllowed({'parameter': 'event_id'}, "Ticketing is disabled for this Event")
 
     schema = TicketSchema
     methods = ['POST', ]

@@ -89,7 +89,7 @@ class Event(SoftDeletionModel):
     db.UniqueConstraint('track.name')
     code_of_conduct = db.Column(db.String)
     schedule_published_on = db.Column(db.DateTime(timezone=True))
-    is_ticketing_enabled = db.Column(db.Boolean, default=False)
+    # is_ticketing_enabled = db.Column(db.Boolean, default=False)
     is_donation_enabled = db.Column(db.Boolean, default=False)
     is_ticket_form_enabled = db.Column(db.Boolean, default=True, nullable=False)
     payment_country = db.Column(db.String)
@@ -203,7 +203,7 @@ class Event(SoftDeletionModel):
                  is_map_shown=False,
                  has_organizer_info=False,
                  searchable_location_name=None,
-                 is_ticketing_enabled=None,
+                 #  is_ticketing_enabled=None,
                  deleted_at=None,
                  payment_country=None,
                  payment_currency=None,
@@ -267,7 +267,7 @@ class Event(SoftDeletionModel):
         self.schedule_published_on = schedule_published_on
         self.is_sessions_speakers_enabled = is_sessions_speakers_enabled
         self.searchable_location_name = searchable_location_name
-        self.is_ticketing_enabled = is_ticketing_enabled
+        # self.is_ticketing_enabled = is_ticketing_enabled
         self.deleted_at = deleted_at
         self.payment_country = payment_country
         self.payment_currency = payment_currency
