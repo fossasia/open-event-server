@@ -54,7 +54,7 @@ class SessionListPost(ResourceList):
             organizer_email = organizer.email
             frontend_url = get_settings()['frontend_url']
             event = session.event
-            link = "{}/events/{}/sessions/{}"\
+            link = "{}events/{}/sessions/{}"\
                 .format(frontend_url, event.identifier, session.id)
             send_email_new_session(organizer_email, event_name, link)
             send_notif_new_session_organizer(organizer, event_name, link, session.id)
