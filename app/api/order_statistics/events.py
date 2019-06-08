@@ -47,7 +47,7 @@ class OrderStatisticsEventSchema(Schema):
         placed = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
             Order.event_id == obj_id, Order.status == 'placed').scalar()
         completed = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
-            Order.event_id == obj_id, Order.status == 'completed' or Order.status == 'placed' ).scalar()
+            Order.event_id == obj_id, Order.status == 'completed' or Order.status == 'placed').scalar()
         result = {
             'total': total or 0,
             'draft': draft or 0,
