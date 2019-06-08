@@ -47,7 +47,7 @@ class OrderStatisticsEventSchema(Schema):
         placed = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
             Order.event_id == obj_id, Order.status == 'placed').scalar()
         completed = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
-            Order.event_id == obj_id, Order.status == 'completed').scalar()
+            Order.event_id == obj_id, Order.status == 'completed' or Order.status == 'placed' ).scalar()
         result = {
             'total': total or 0,
             'draft': draft or 0,
@@ -67,7 +67,7 @@ class OrderStatisticsEventSchema(Schema):
         pending = get_count(db.session.query(Order).filter(Order.event_id == obj_id, Order.status == 'pending'))
         expired = get_count(db.session.query(Order).filter(Order.event_id == obj_id, Order.status == 'expired'))
         placed = get_count(db.session.query(Order).filter(Order.event_id == obj_id, Order.status == 'placed'))
-        completed = get_count(db.session.query(Order).filter(Order.event_id == obj_id, Order.status == 'completed'))
+        completed = get_count(db.session.query(Order).filter(Order.event_id == obj_id, Order.status == 'completed' or Order.status == 'placed'))
         result = {
             'total': total or 0,
             'draft': draft or 0,
@@ -93,7 +93,7 @@ class OrderStatisticsEventSchema(Schema):
         placed = db.session.query(func.sum(Order.amount.label('sum'))).filter(Order.event_id == obj_id,
                                                                               Order.status == 'placed').scalar()
         completed = db.session.query(func.sum(Order.amount.label('sum'))).filter(Order.event_id == obj_id,
-                                                                                 Order.status == 'completed').scalar()
+                                                                                 Order.status == 'completed' or Order.status == 'placed').scalar()
         result = {
             'total': total or 0,
             'draft': draft or 0,

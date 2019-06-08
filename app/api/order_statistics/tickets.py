@@ -46,7 +46,7 @@ class OrderStatisticsTicketSchema(Schema):
         placed = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
             OrderTicket.ticket_id == obj_id, Order.status == 'placed').scalar()
         completed = db.session.query(func.sum(OrderTicket.quantity.label('sum'))).join(Order.order_tickets).filter(
-            OrderTicket.ticket_id == obj_id, Order.status == 'completed').scalar()
+            OrderTicket.ticket_id == obj_id, Order.status == 'completed' or Order.status == 'placed').scalar()
         result = {
             'total': total or 0,
             'draft': draft or 0,
@@ -72,7 +72,7 @@ class OrderStatisticsTicketSchema(Schema):
         placed = get_count(db.session.query(Order).join(Order.order_tickets).filter(OrderTicket.ticket_id == obj_id,
                                                                                     Order.status == 'placed'))
         completed = get_count(db.session.query(Order).join(Order.order_tickets).filter(OrderTicket.ticket_id == obj_id,
-                                                                                       Order.status == 'completed'))
+                                                                                       Order.status == 'completed' or Order.status == 'placed'))
         result = {
             'total': total or 0,
             'draft': draft or 0,
@@ -99,7 +99,7 @@ class OrderStatisticsTicketSchema(Schema):
         placed = db.session.query(func.sum(Order.amount.label('sum'))).join(Order.order_tickets).filter(
             OrderTicket.ticket_id == obj_id, Order.status == 'placed').scalar()
         completed = db.session.query(func.sum(Order.amount.label('sum'))).join(Order.order_tickets).filter(
-            OrderTicket.ticket_id == obj_id, Order.status == 'completed').scalar()
+            OrderTicket.ticket_id == obj_id, Order.status == 'completed' or Order.status == 'placed').scalar()
         result = {
             'total': total or 0,
             'draft': draft or 0,
