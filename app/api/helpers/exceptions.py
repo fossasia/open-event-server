@@ -31,3 +31,11 @@ class MethodNotAllowed(JsonApiException):
     """
     title = "Method Not Allowed"
     status = 405
+
+
+class BadRequest(JsonApiException):
+    """
+    Default class to throw HTTP 400 Exception
+    """
+    title = 'Bad Request'
+    status = 400

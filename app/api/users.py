@@ -9,7 +9,7 @@ import urllib.error
 from app import get_settings
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query, get_count
-from app.api.helpers.exceptions import ConflictException, UnprocessableEntity, ForbiddenException
+from app.api.helpers.exceptions import ConflictException, ForbiddenException, BadRequest
 from app.api.helpers.files import create_save_image_sizes, make_frontend_url
 from app.api.helpers.mail import send_email_confirmation, send_email_change_user_email, send_email_with_action
 from app.api.helpers.permission_manager import has_access
@@ -48,8 +48,8 @@ class UserList(ResourceList):
         :return:
         """
         if len(data['password']) < 8:
-            raise UnprocessableEntity({'source': '/data/attributes/password'},
-                                       'Password should be at least 8 characters long')
+            raise BadRequest({'source': '/data/attributes/password'},
+                             'Password should be at least 8 characters long')
         if db.session.query(User.id).filter_by(email=data['email'].strip()).scalar() is not None:
             raise ConflictException({'pointer': '/data/attributes/email'}, "Email already exists")
 

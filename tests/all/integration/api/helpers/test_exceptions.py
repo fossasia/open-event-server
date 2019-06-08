@@ -1,7 +1,8 @@
 import unittest
 
 from tests.all.integration.utils import OpenEventTestCase
-from app.api.helpers.exceptions import UnprocessableEntity, ConflictException, ForbiddenException, MethodNotAllowed
+from app.api.helpers.exceptions import UnprocessableEntity, ConflictException, ForbiddenException, MethodNotAllowed, \
+                                       BadRequest
 from tests.all.integration.setup_database import Setup
 
 
@@ -28,6 +29,10 @@ class TestExceptionsHelperValidation(OpenEventTestCase):
         # Method Not Allowed Exception
         with self.assertRaises(MethodNotAllowed):
             raise MethodNotAllowed({'source': ''}, "Method Not Allowed")
+
+        # Bad Request Exception
+        with self.assertRaises(BadRequest):
+            raise BadRequest({'source': ''}, "Bad Request")
 
 
 if __name__ == '__main__':
