@@ -168,7 +168,8 @@ def accept_invite():
     return jsonify({
         "email": user.email,
         "event": role_invite.event_id,
-        "name": user.fullname if user.fullname else None
+        "name": user.fullname if user.fullname else None,
+        "role": uer.role.name
     })
 
 
