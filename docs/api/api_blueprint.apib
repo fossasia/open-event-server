@@ -24175,6 +24175,22 @@ Get a list of all orders
           }
         }
 
+## Get Order Invoice for an event [/v1/orders/invoices/{order_identifier}]
++ Parameters
+    + order_identifier: example (string) - Identifier of the order
+
+### Get an order invoice for an event [GET]
+
++ Request
+
+    + Headers
+
+            Content-Disposition: attachment
+
+            Authorization: JWT <Auth Key>
+
++ Response 200 (application/pdf)
+
 
 ## Create Paypal payment [/orders/{order_identifier}/create-paypal-payment]
 + Parameters
