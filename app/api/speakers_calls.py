@@ -16,6 +16,15 @@ class SpeakersCallList(ResourceList):
     """
     create Speakers Call
     """
+    def query(self, view_kwargs):
+        """
+        query method for Speakers Call List
+        :param view_kwargs:
+        :return:
+        """
+        query_ = self.session.query(SpeakersCall).filter(SpeakersCall.privacy == 'public')
+        return query_
+
     def before_post(self, args, kwargs, data):
         """
         before post method to check for required relationship and proper permission

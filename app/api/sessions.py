@@ -86,7 +86,7 @@ class SessionList(ResourceList):
         :param view_kwargs:
         :return:
         """
-        query_ = self.session.query(Session)
+        query_ = self.session.query(Session).filter(Session.state == 'accepted')
         if view_kwargs.get('track_id') is not None:
             track = safe_query(self, Track, 'id', view_kwargs['track_id'], 'track_id')
             query_ = query_.join(Track).filter(Track.id == track.id)
