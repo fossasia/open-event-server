@@ -13,6 +13,7 @@ from app.api.helpers.order import create_pdf_tickets_for_holder
 from app.api.helpers.storage import generate_hash
 
 from app import get_settings
+from app import limiter
 from app.api.helpers.db import save_to_db, get_count
 from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError, NotFoundError, BadRequestError
 from app.api.helpers.files import make_frontend_url
@@ -28,7 +29,6 @@ from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE, \
 from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
 from app.api.helpers.storage import UPLOAD_PATHS
-
 
 authorised_blueprint = Blueprint('authorised_blueprint', __name__, url_prefix='/')
 ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/v1')
@@ -207,6 +207,9 @@ def resend_verification_email():
 
 
 @auth_routes.route('/reset-password', methods=['POST'])
+@limiter.limit(
+    '3/hour', key_func=lambda: request.json['data']['email'], error_message='Limit for this action exceeded'
+)
 def reset_password_post():
     try:
         email = request.json['data']['email']
