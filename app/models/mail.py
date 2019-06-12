@@ -31,6 +31,7 @@ MONTHLY_PAYMENT_EMAIL = 'Monthly Payment Email'
 MONTHLY_PAYMENT_FOLLOWUP_EMAIL = 'Monthly Payment Follow Up Email'
 EVENT_IMPORTED = 'Event Imported'
 EVENT_IMPORT_FAIL = 'Event Import Failed'
+TEST_MAIL = 'Test Mail'
 
 
 class Mail(db.Model):
