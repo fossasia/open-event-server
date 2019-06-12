@@ -84,6 +84,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     thumbnail_image_url = fields.Url(dump_only=True)
     large_image_url = fields.Url(dump_only=True)
     icon_image_url = fields.Url(dump_only=True)
+    show_remaining_tickets = fields.Bool(allow_none=False, default=False)
     organizer_name = fields.Str(allow_none=True)
     is_map_shown = fields.Bool(default=False)
     has_organizer_info = fields.Bool(default=False)

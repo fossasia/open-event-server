@@ -58,6 +58,7 @@ class Event(SoftDeletionModel):
     original_image_url = db.Column(db.String)
     thumbnail_image_url = db.Column(db.String)
     large_image_url = db.Column(db.String)
+    show_remaining_tickets = db.Column(db.Boolean, default=False, nullable=False)
     icon_image_url = db.Column(db.String)
     organizer_name = db.Column(db.String)
     is_map_shown = db.Column(db.Boolean)
@@ -198,6 +199,7 @@ class Event(SoftDeletionModel):
                  code_of_conduct=None,
                  schedule_published_on=None,
                  is_sessions_speakers_enabled=False,
+                 show_remaining_tickets=False,
                  is_ticket_form_enabled=True,
                  is_donation_enabled=False,
                  is_map_shown=False,
@@ -259,6 +261,7 @@ class Event(SoftDeletionModel):
         self.privacy = privacy
         self.event_type_id = event_type_id
         self.event_topic_id = event_topic_id
+        self.show_remaining_tickets = show_remaining_tickets
         self.copyright = copyright
         self.event_sub_topic_id = event_sub_topic_id
         self.events_orga_id = events_orga_id
