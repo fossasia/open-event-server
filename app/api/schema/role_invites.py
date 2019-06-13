@@ -57,7 +57,7 @@ class RoleInviteSchema(SoftDeletionSchema):
     email = fields.Str(required=True)
     hash = fields.Str(dump_only=True)
     created_at = fields.DateTime(dump_only=True, timezone=True)
-    role_name = fields.Str(validate=validate.OneOf(choices=["organizer", "coorganizer", "track_organizer",
+    role_name = fields.Str(validate=validate.OneOf(choices=["owner", "organizer", "coorganizer", "track_organizer",
                            "moderator", "attendee", "registrar"]))
     status = fields.Str(validate=validate.OneOf(choices=["pending", "accepted", "declined"]),
                         default="pending")

@@ -14,8 +14,8 @@ class SearchableEvent(DocType):
     name = Text()
     description = Text()
     location_name = Text()
-    organizer_name = Text()
-    organizer_description = Text()
+    owner_name = Text()
+    owner_description = Text()
     meta = Meta()
 
     def from_event(self, db_event):
@@ -26,8 +26,8 @@ class SearchableEvent(DocType):
         self.name = db_event.name
         self.description = db_event.description
         self.location_name = db_event.location_name
-        self.organizer_name = db_event.organizer_name
-        self.organizer_description = db_event.organizer_description
+        self.owner_name = db_event.owner_name
+        self.owner_description = db_event.owner_description
 
 def find_all(search_strings, client=client):
     search = Search().using(client)
