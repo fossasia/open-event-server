@@ -36,7 +36,7 @@ qrcode~=5.3
 python-magic~=0.4
 python-geoip~=1.2
 marrow.mailer~=4.0
-flask-cors~=3.0.7
+flask-cors~=3.0.8
 python-pentabarf-xml==0.19  # leave versions untouched.
 python-geoip-geolite2
 pycountry
