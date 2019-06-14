@@ -108,6 +108,7 @@ def create_app():
     # setup celery
     app.config['CELERY_BROKER_URL'] = app.config['REDIS_URL']
     app.config['CELERY_RESULT_BACKEND'] = app.config['CELERY_BROKER_URL']
+    app.config['CELERY_ACCEPT_CONTENT'] = ['json', 'application/text']
 
     CORS(app, resources={r"/*": {"origins": "*"}})
     AuthManager.init_login(app)
