@@ -134,6 +134,7 @@ def create_app():
         from app.api.auth import ticket_blueprint, authorised_blueprint
         from app.api.admin_translations import admin_blueprint
         from app.api.orders import alipay_blueprint
+        from app.api.settings import admin_misc_routes
 
         app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)
@@ -151,6 +152,7 @@ def create_app():
         app.register_blueprint(authorised_blueprint)
         app.register_blueprint(admin_blueprint)
         app.register_blueprint(alipay_blueprint)
+        app.register_blueprint(admin_misc_routes)
 
     sa.orm.configure_mappers()
 
