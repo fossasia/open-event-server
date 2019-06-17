@@ -37,7 +37,7 @@ class TestOrderUtilities(OpenEventTestCase):
             event = EventFactoryBasic()
             obj.event = event
             set_expiry_for_order(obj)
-            self.assertEqual(obj.status, 'pending')
+            self.assertEqual(obj.status, 'initializing')
 
     def test_should_delete_related_attendees(self):
         """Method to test to delete related attendees of an event"""

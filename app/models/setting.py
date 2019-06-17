@@ -73,12 +73,23 @@ class Setting(db.Model):
     stripe_secret_key = db.Column(db.String)
     stripe_publishable_key = db.Column(db.String)
 
+    # AliPay Keys - Stripe Sources
+    alipay_secret_key = db.Column(db.String)
+    alipay_publishable_key = db.Column(db.String)
+
     # Paypal credentials
     paypal_mode = db.Column(db.String)
     paypal_client = db.Column(db.String)
     paypal_secret = db.Column(db.String)
     paypal_sandbox_client = db.Column(db.String)
     paypal_sandbox_secret = db.Column(db.String)
+
+    # Omise credentials
+    omise_mode = db.Column(db.String)
+    omise_live_public = db.Column(db.String)
+    omise_live_secret = db.Column(db.String)
+    omise_test_public = db.Column(db.String)
+    omise_test_secret = db.Column(db.String)
 
     #
     # EMAIL
@@ -169,7 +180,14 @@ class Setting(db.Model):
                  android_app_url=None,
                  web_app_url=None,
                  cookie_policy=None,
-                 cookie_policy_link=None):
+                 cookie_policy_link=None,
+                 omise_mode=None,
+                 omise_test_public=None,
+                 omise_test_secret=None,
+                 omise_live_public=None,
+                 omise_live_secret=None,
+                 alipay_publishable_key=None,
+                 alipay_secret_key=None):
         self.app_environment = app_environment
         self.aws_key = aws_key
         self.aws_secret = aws_secret
@@ -225,6 +243,17 @@ class Setting(db.Model):
         self.paypal_sandbox_client = paypal_sandbox_client
         self.paypal_sandbox_secret = paypal_sandbox_secret
 
+        # Omise Credentials
+        self.omise_mode = omise_mode
+        self.omise_test_public = omise_test_public
+        self.omise_test_secret = omise_test_secret
+        self.omise_live_public = omise_live_public
+        self.omise_live_secret = omise_live_secret
+
+        # AliPay Credentails
+        self.alipay_publishable_key = alipay_publishable_key
+        self.alipay_secret_key = alipay_secret_key
+
     @hybrid_property
     def is_paypal_activated(self):
         if self.paypal_mode == 'sandbox' and self.paypal_sandbox_client and self.paypal_sandbox_secret:
@@ -243,3 +272,19 @@ class Setting(db.Model):
 
     def __str__(self):
         return self.__repr__()
+
+    @hybrid_property
+    def is_alipay_activated(self):
+        if self.alipay_publishable_key and self.alipay_secret_key:
+            return True
+        else:
+            return False
+
+    @hybrid_property
+    def is_omise_activated(self):
+        if self.omise_mode == 'test' and self.omise_test_public and self.omise_test_secret:
+            return True
+        elif self.omise_live_public and self.omise_live_secret:
+            return True
+        else:
+            return False

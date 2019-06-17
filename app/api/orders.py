@@ -1,6 +1,8 @@
 from datetime import datetime
+from flask import request, jsonify, Blueprint, url_for, redirect
+import omise
+import logging
 
-from flask import Blueprint, jsonify, request
 from flask_jwt import current_identity as current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
@@ -10,6 +12,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
+from app.api.helpers.storage import generate_hash, UPLOAD_PATHS
 from app.api.helpers.errors import BadRequestError
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
 from app.api.helpers.files import make_frontend_url
@@ -31,8 +34,11 @@ from app.models.discount_code import DiscountCode, TICKET
 from app.models.order import Order, OrderTicket, get_updatable_fields
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
+from app.api.helpers.payment import AliPayPaymentsManager, OmisePaymentsManager
+
 
 order_misc_routes = Blueprint('order_misc', __name__, url_prefix='/v1')
+alipay_blueprint = Blueprint('alipay_blueprint', __name__, url_prefix='/v1/alipay')
 
 
 class OrdersListPost(ResourceList):
@@ -57,9 +63,9 @@ class OrdersListPost(ResourceList):
             del data['on_site_tickets']
         require_relationship(['ticket_holders'], data)
 
-        # Ensuring that default status is always pending, unless the user is event co-organizer
+        # Ensuring that default status is always initializing, unless the user is event co-organizer
         if not has_access('is_coorganizer', event_id=data['event']):
-            data['status'] = 'pending'
+            data['status'] = 'initializing'
 
     def before_create_object(self, data, view_kwargs):
         """
@@ -138,9 +144,23 @@ class OrdersListPost(ResourceList):
 #             TicketingManager.calculate_update_amount(order)
 
         # send e-mail and notifications if the order status is completed
-        if order.status == 'completed':
-            send_email_to_attendees(order, current_user.id)
+        if order.status == 'completed' or order.status == 'placed':
+            # fetch tickets attachment
+            order_identifier = order.identifier
+
+            key = UPLOAD_PATHS['pdf']['ticket_attendee'].format(identifier=order_identifier)
+            ticket_path = 'generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+
+            key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
+            invoice_path = 'generated/invoices/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+
+            # send email and notifications.
+            send_email_to_attendees(order=order, purchaser_id=current_user.id, attachments=[ticket_path, invoice_path])
+
             send_notif_to_attendees(order, current_user.id)
+
+            if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
+                order.completed_at = datetime.utcnow()
 
             order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
             for organizer in order.event.organizers:
@@ -186,7 +206,7 @@ class OrdersList(ResourceList):
             # orders under an event
             query_ = event_query(self, query_, view_kwargs)
 
-        # expire the pending orders if the time limit is over.
+        # expire the initializing orders if the time limit is over.
         orders = query_.all()
         for order in orders:
             set_expiry_for_order(order)
@@ -226,7 +246,7 @@ class OrderDetail(ResourceDetail):
         if not has_access('is_coorganizer_or_user_itself', event_id=order.event_id, user_id=order.user_id):
             return ForbiddenException({'source': ''}, 'You can only access your orders or your event\'s orders')
 
-        # expire the pending order if time limit is over.
+        # expire the initializing order if time limit is over.
         set_expiry_for_order(order)
 
     def before_update_object(self, order, data, view_kwargs):
@@ -236,7 +256,7 @@ class OrderDetail(ResourceDetail):
         2. event organizer
             a. own orders: he/she can update selected fields.
             b. other's orders: can only update the status that too when the order mode is free. No refund system.
-        3. order user can update selected fields of his/her order when the status is pending.
+        3. order user can update selected fields of his/her order when the status is initializing.
         The selected fields mentioned above can be taken from get_updatable_fields method from order model.
         :param order:
         :param data:
@@ -272,9 +292,9 @@ class OrderDetail(ResourceDetail):
                                                      "You cannot update the status of a cancelled order")
 
         elif current_user.id == order.user_id:
-            if order.status != 'pending':
+            if order.status != 'initializing' and order.status != 'pending':
                 raise ForbiddenException({'pointer': ''},
-                                         "You cannot update a non-pending order")
+                                         "You cannot update a non-initialized or non-pending order")
             else:
                 for element in data:
                     if element == 'is_billing_enabled' and order.status == 'completed' and data[element]\
@@ -306,6 +326,30 @@ class OrderDetail(ResourceDetail):
 
             # delete the attendees so that the tickets are unlocked.
             delete_related_attendees_for_order(order)
+
+        elif order.status == 'completed' or order.status == 'placed':
+
+            # Send email to attendees with invoices and tickets attached
+            order_identifier = order.identifier
+
+            key = UPLOAD_PATHS['pdf']['ticket_attendee'].format(identifier=order_identifier)
+            ticket_path = 'generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+
+            key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
+            invoice_path = 'generated/invoices/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+
+            # send email and notifications.
+            send_email_to_attendees(order=order, purchaser_id=current_user.id, attachments=[ticket_path, invoice_path])
+
+            send_notif_to_attendees(order, current_user.id)
+
+            if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
+                order.completed_at = datetime.utcnow()
+
+            order_url = make_frontend_url(path='/orders/{identifier}'.format(identifier=order.identifier))
+            for organizer in order.event.organizers:
+                send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
+                                                     order.identifier)
 
     def before_delete_object(self, order, view_kwargs):
         """
@@ -417,3 +461,71 @@ def create_paypal_payment(order_identifier):
         return jsonify(status=True, payment_id=response)
     else:
         return jsonify(status=False, error=response)
+
+
+@alipay_blueprint.route('/create_source/<string:order_identifier>', methods=['GET', 'POST'])
+def create_source(order_identifier):
+    """
+    Create a source object for alipay payments.
+    :param order_identifier:
+    :return: The alipay redirection link.
+    """
+    try:
+        order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+        source_object = AliPayPaymentsManager.create_source(amount=int(order.amount), currency='usd',
+                                                            redirect_return_uri=url_for('alipay_blueprint.alipay_return_uri',
+                                                            order_identifier=order.identifier, _external=True))
+        order.order_notes = source_object.id
+        save_to_db(order)
+        return jsonify(link=source_object.redirect['url'])
+    except TypeError:
+        return BadRequestError({'source': ''}, 'Source creation error').respond()
+
+
+@alipay_blueprint.route('/alipay_return_uri/<string:order_identifier>', methods=['GET', 'POST'])
+def alipay_return_uri(order_identifier):
+    """
+    Charge Object creation & Order finalization for Alipay payments.
+    :param order_identifier:
+    :return: JSON response of the payment status.
+    """
+    try:
+        charge_response = AliPayPaymentsManager.charge_source(order_identifier)
+        if charge_response.status == 'succeeded':
+            order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+            order.status = 'completed'
+            save_to_db(order)
+            return redirect(make_frontend_url('/orders/{}/view'.format(order_identifier)))
+        else:
+            return jsonify(status=False, error='Charge object failure')
+    except TypeError:
+        return jsonify(status=False, error='Source object status error')
+
+
+@order_misc_routes.route('/orders/<string:order_identifier>/omise-checkout', methods=['POST', 'GET'])
+def omise_checkout(order_identifier):
+    """
+    Charging the user and returning payment response for Omise Gateway
+    :param order_identifier:
+    :return: JSON response of the payment status.
+    """
+    token = request.form.get('omiseToken')
+    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+    order.status = 'completed'
+    save_to_db(order)
+    try:
+        charge = OmisePaymentsManager.charge_payment(order_identifier, token)
+        print(charge.status)
+    except omise.errors.BaseError as e:
+        logging.error(f"""OmiseError: {repr(e)}.  See https://www.omise.co/api-errors""")
+        return jsonify(status=False, error="Omise Failure Message: {}".format(str(e)))
+    except Exception as e:
+        logging.error(repr(e))
+    if charge.failure_code is not None:
+        logging.warning("Omise Failure Message: {} ({})".format(charge.failure_message, charge.failure_code))
+        return jsonify(status=False, error="Omise Failure Message: {} ({})".
+                       format(charge.failure_message, charge.failure_code))
+    else:
+        logging.info(f"Successful charge: {charge.id}.  Order ID: {order_identifier}")
+
+        return redirect(make_frontend_url('orders/{}/view'.format(order_identifier)))

@@ -86,6 +86,7 @@ class SessionSchema(SoftDeletionSchema):
     deleted_at = fields.DateTime(dump_only=True)
     submitted_at = fields.DateTime(allow_none=True)
     is_mail_sent = fields.Boolean()
+    is_locked = fields.Boolean(default=False)
     last_modified_at = fields.DateTime(dump_only=True)
     send_email = fields.Boolean(load_only=True, allow_none=True)
     average_rating = fields.Float(dump_only=True)

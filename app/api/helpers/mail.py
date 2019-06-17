@@ -11,11 +11,12 @@ from app.api.helpers.system_mails import MAILS
 from app.api.helpers.utilities import string_empty, get_serializer, str_generator
 from app.models.mail import Mail, USER_CONFIRM, NEW_SESSION, USER_CHANGE_EMAIL, SESSION_ACCEPT_REJECT, EVENT_ROLE, \
     AFTER_EVENT, MONTHLY_PAYMENT_EMAIL, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_EXPORTED, EVENT_EXPORT_FAIL, \
-    EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ATTENDEE, TICKET_CANCELLED, TICKET_PURCHASED
+    EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ATTENDEE, TICKET_CANCELLED, TICKET_PURCHASED, USER_EVENT_ROLE, \
+    TEST_MAIL
 from app.models.user import User
 
 
-def send_email(to, action, subject, html):
+def send_email(to, action, subject, html, attachments=None):
     """
     Sends email and records it in DB
     """
@@ -30,7 +31,8 @@ def send_email(to, action, subject, html):
             'to': to,
             'from': email_from,
             'subject': subject,
-            'html': html
+            'html': html,
+            'attachments': attachments
         }
 
         if not current_app.config['TESTING']:
@@ -164,6 +166,24 @@ def send_email_role_invite(email, role_name, event_name, link):
     )
 
 
+def send_user_email_role_invite(email, role_name, event_name, link):
+    """email for role invite"""
+    send_email(
+        to=email,
+        action=USER_EVENT_ROLE,
+        subject=MAILS[USER_EVENT_ROLE]['subject'].format(
+            role=role_name,
+            event=event_name
+        ),
+        html=MAILS[USER_EVENT_ROLE]['message'].format(
+            email=email,
+            role=role_name,
+            event=event_name,
+            link=link
+        )
+    )
+
+
 def send_email_after_event(email, event_name, upcoming_events):
     """email for role invite"""
     send_email(
@@ -270,6 +290,14 @@ def send_import_mail(email, event_name=None, error_text=None, event_url=None):
         )
 
 
+def send_test_email(recipient):
+    send_email(to=recipient,
+               action=TEST_MAIL,
+               subject=MAILS[TEST_MAIL]['subject'],
+               html=MAILS[TEST_MAIL]['message']
+               )
+
+
 def send_email_change_user_email(user, email):
     serializer = get_serializer()
     hash_ = str(base64.b64encode(bytes(serializer.dumps([email, str_generator()]), 'utf-8')), 'utf-8')
@@ -278,7 +306,7 @@ def send_email_change_user_email(user, email):
     send_email_with_action(email, USER_CHANGE_EMAIL, email=email, new_email=user.email)
 
 
-def send_email_to_attendees(order, purchaser_id):
+def send_email_to_attendees(order, purchaser_id, attachments=None):
     for holder in order.ticket_holders:
         if holder.user and holder.user.id == purchaser_id:
             # Ticket holder is the purchaser
@@ -292,7 +320,8 @@ def send_email_to_attendees(order, purchaser_id):
                 html=MAILS[TICKET_PURCHASED]['message'].format(
                     pdf_url=holder.pdf_url,
                     event_name=order.event.name
-                )
+                ),
+                attachments=attachments
             )
         else:
             # The Ticket holder is not the purchaser
@@ -306,7 +335,8 @@ def send_email_to_attendees(order, purchaser_id):
                 html=MAILS[TICKET_PURCHASED_ATTENDEE]['message'].format(
                     pdf_url=holder.pdf_url,
                     event_name=order.event.name
-                )
+                ),
+                attachments=attachments
             )
 
 

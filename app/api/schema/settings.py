@@ -57,6 +57,8 @@ class SettingSchemaPublic(Schema):
     #
     is_paypal_activated = fields.Bool(dump_only=True)
     is_stripe_activated = fields.Bool(dump_only=True)
+    is_omise_activated = fields.Bool(dump_only=True)
+    is_alipay_activated = fields.Bool(dump_only=True)
 
 
 class SettingSchemaNonAdmin(SettingSchemaPublic):
@@ -157,6 +159,17 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     paypal_secret = fields.Str(allow_none=True)
     paypal_sandbox_client = fields.Str(allow_none=True)
     paypal_sandbox_secret = fields.Str(allow_none=True)
+
+    # Omise Credentials
+    omise_mode = fields.Str(allow_none=True)
+    omise_test_public = fields.Str(allow_none=True)
+    omise_test_secret = fields.Str(allow_none=True)
+    omise_live_public = fields.Str(allow_none=True)
+    omise_live_secret = fields.Str(allow_none=True)
+
+    #
+    alipay_publishable_key = fields.Str(allow_none=True)
+    alipay_secret_key = fields.Str(allow_none=True)
 
     #
     # EMAIL

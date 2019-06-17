@@ -50,7 +50,6 @@ from app.models.user import User, ATTENDEE, ORGANIZER, COORGANIZER
 from app.models.users_events_role import UsersEventsRoles
 from app.models.stripe_authorization import StripeAuthorization
 
-
 def validate_event(user, modules, data):
     if not user.can_create_event():
         raise ForbiddenException({'source': ''},
@@ -468,9 +467,11 @@ class EventDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-
         if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
-            event.deleted_at = data.get('deleted_at')
+            if len(event.orders) != 0:
+                raise ForbiddenException({'source': ''}, "Event associated with orders cannot be deleted")
+            else:
+                event.deleted_at = data.get('deleted_at')
 
         if 'is_event_online' not in data and event.is_event_online \
                 or 'is_event_online' in data and not data['is_event_online']:

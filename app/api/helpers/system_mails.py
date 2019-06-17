@@ -7,7 +7,7 @@ from app.models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
     SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH, AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, \
     TICKET_PURCHASED, EVENT_EXPORTED, EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_EMAIL, \
     MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER, TICKET_CANCELLED, \
-    TICKET_PURCHASED_ATTENDEE, PASSWORD_CHANGE, PASSWORD_RESET_AND_VERIFY
+    TICKET_PURCHASED_ATTENDEE, PASSWORD_CHANGE, PASSWORD_RESET_AND_VERIFY, USER_EVENT_ROLE, TEST_MAIL
 
 MAILS = {
     EVENT_PUBLISH: {
@@ -61,8 +61,8 @@ MAILS = {
         'message': (
             u"Hi {email},<br/>" +
             u"Thank You for participating in our event. We hope you enjoyed it. "
-            u"Please check the list of more upcoming events" +
-            u"Here are the upcoming events: {upcoming_events} .Get ready!! "
+            u"Please check the list of more upcoming events. <br />" +
+            u"Here are the upcoming events: {upcoming_events}. Get ready!! "
         ),
         'sent_at': '1 day after the event'
     },
@@ -139,13 +139,22 @@ MAILS = {
             u"To accept the role please sign up using the following link: <a href='{link}' target='_blank'>Link</a>."
         )
     },
+    USER_EVENT_ROLE: {
+        'recipient': 'User',
+        'subject': u'Invitation to be {role} at {event}',
+        'message': (
+            u"Hello {email},<br><br>" +
+            u"You've been invited to be a <strong>{role}</strong> at <strong>{event}</strong>.<br>" +
+            u"To accept the role please go to the following link: <a href='{link}' target='_blank'>Link</a>."
+        )
+    },
     TICKET_PURCHASED: {
         'recipient': 'User',
         'subject': u'Your order invoice and tickets for {event_name} ({invoice_id}) ',
         'message': (
             u"Hi, this is a confirmation mail of your tickets for the event {event_name}"
             u"<br/>Your order has been processed successfully." +
-            u"<br/> <a href='{pdf_url}'>Click here</a> to view/download your invoice."
+            u"<br/> You can find your Tickets and Order Invoice attached to this mail."
             u"<br><br><em>Looking forward to seeing you at the event."
             u"<br/>Login to manage your orders at https://eventyay.com </em>"
         )
@@ -244,6 +253,13 @@ MAILS = {
         'message': (
             u"The error was as follows - <br>" +
             u"<pre>{error_text}</pre>"
+        )
+    },
+    TEST_MAIL: {
+        'recipient': 'User',
+        'subject': u'Test Mail Subject',
+        'message': (
+            u"This is a  <strong> Test </strong> E-mail."
         )
     }
 }

@@ -14,6 +14,7 @@ from app.api.helpers.files import create_save_image_sizes, make_frontend_url
 from app.api.helpers.mail import send_email_confirmation, send_email_change_user_email, send_email_with_action
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import is_user_itself
+from app.api.helpers.user import modify_email_for_user_to_be_deleted, modify_email_for_user_to_be_restored
 from app.api.helpers.utilities import get_serializer, str_generator
 from app.api.schema.users import UserSchema, UserSchemaPublic
 from app.models import db
@@ -207,12 +208,26 @@ class UserDetail(ResourceDetail):
         #     data['small_image_url'] = uploaded_images['thumbnail_image_url']
         #     data['thumbnail_image_url'] = uploaded_images['thumbnail_image_url']
         #     data['icon_image_url'] = uploaded_images['icon_image_url']
+
+        if data.get('deleted_at') != user.deleted_at:
+            if has_access('is_user_itself', user_id=user.id) or has_access('is_admin'):
+                if data.get('deleted_at'):
+                    if len(user.events) != 0:
+                        raise ForbiddenException({'source': ''}, "Users associated with events cannot be deleted")
+                    elif len(user.orders) != 0:
+                        raise ForbiddenException({'source': ''}, "Users associated with orders cannot be deleted")
+                    else:
+                        modify_email_for_user_to_be_deleted(user)
+                else:
+                    modify_email_for_user_to_be_restored(user)
+                    data['email'] = user.email
+                user.deleted_at = data.get('deleted_at')
+            else:
+                raise ForbiddenException({'source': ''}, "You are not authorized to update this information.")
+
         users_email = data.get('email', None)
         if users_email is not None:
             users_email = users_email.strip()
-
-        if has_access('is_admin') and data.get('deleted_at') != user.deleted_at:
-            user.deleted_at = data.get('deleted_at')
 
         if users_email is not None and users_email != user.email:
             try:

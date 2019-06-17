@@ -1,5 +1,6 @@
-import pytz
 from datetime import datetime
+
+import pytz
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow import validates_schema, validate
 from marshmallow_jsonapi import fields
@@ -84,6 +85,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     thumbnail_image_url = fields.Url(dump_only=True)
     large_image_url = fields.Url(dump_only=True)
     icon_image_url = fields.Url(dump_only=True)
+    show_remaining_tickets = fields.Bool(allow_none=False, default=False)
     organizer_name = fields.Str(allow_none=True)
     is_map_shown = fields.Bool(default=False)
     has_organizer_info = fields.Bool(default=False)
@@ -98,6 +100,7 @@ class EventSchemaPublic(SoftDeletionSchema):
     schedule_published_on = fields.DateTime(allow_none=True)
     is_ticketing_enabled = fields.Bool(default=False)
     is_featured = fields.Bool(default=False)
+    is_ticket_form_enabled = fields.Bool(default=True)
     payment_country = fields.Str(allow_none=True)
     payment_currency = fields.Str(allow_none=True)
     tickets_available = fields.Float(dump_only=True)
@@ -111,6 +114,8 @@ class EventSchemaPublic(SoftDeletionSchema):
     can_pay_by_cheque = fields.Bool(default=False)
     can_pay_by_bank = fields.Bool(default=False)
     can_pay_onsite = fields.Bool(default=False)
+    can_pay_by_omise = fields.Bool(default=False)
+    can_pay_by_alipay = fields.Bool(default=False)
     cheque_details = fields.Str(allow_none=True)
     bank_details = fields.Str(allow_none=True)
     onsite_details = fields.Str(allow_none=True)

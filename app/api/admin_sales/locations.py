@@ -15,8 +15,8 @@ def sales_per_location_by_status(status):
         Event.location_name.label('location'),
         func.sum(Order.amount).label(status + '_sales'),
         func.sum(OrderTicket.quantity).label(status + '_tickets')) \
-                     .outerjoin(Order) \
-                     .outerjoin(OrderTicket) \
+                     .outerjoin(Order, Order.event_id == Event.id) \
+                     .outerjoin(OrderTicket, OrderTicket.order_id == Order.id) \
                      .filter(Event.id == Order.event_id) \
                      .filter(Order.status == status) \
                      .group_by(Event.location_name, Order.status) \
