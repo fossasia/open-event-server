@@ -25,6 +25,7 @@ from app.models.notification import (
     TICKET_PURCHASED_ATTENDEE,
     TICKET_CANCELLED,
     TICKET_CANCELLED_ORGANIZER,
+    ORDER_EXPIRED,
     NotificationAction)
 
 
@@ -421,4 +422,10 @@ NOTIFS = {
         'message': u"You have been invited to submit papers for <strong>{event_name}</strong>.",
         'recipient': 'Speaker',
     },
+    ORDER_EXPIRED: {
+        'title': u"Order ({invoice_id}) for {event_name} has expired",
+        'message': u"Your order {invoice_id} has expired. Visit the <a href='{event_url}'>{event_name}</a> order page" +
+                   u" to purchase available tickets. Looking forward to seeing you at the event",
+        'recipient': 'User',
+    }
 }

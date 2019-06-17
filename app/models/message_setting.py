@@ -30,6 +30,7 @@ EVENT_EXPORTED = 'Event Exported'
 EVENT_EXPORT_FAIL = 'Event Export Failed'
 EVENT_IMPORT_FAIL = 'Event Import Failed'
 MAIL_TO_EXPIRED_ORDERS = 'Mail Expired Orders'
+ORDER_EXPIRED = 'Order expired Notification'
 MONTHLY_PAYMENT_EMAIL = 'Monthly Payment Email'
 MONTHLY_PAYMENT_NOTIF = 'Monthly Payment Notification'
 MONTHLY_PAYMENT_FOLLOWUP_EMAIL = 'Monthly Payment Follow Up Email'
@@ -107,7 +108,7 @@ class MessageSettings(db.Model):
                       EVENT_EXPORTED, EVENT_IMPORT_FAIL, EVENT_IMPORTED,
                       MONTHLY_PAYMENT_NOTIF, MONTHLY_PAYMENT_FOLLOWUP_NOTIF,
                       TICKET_PURCHASED_ORGANIZER, TICKET_PURCHASED_ATTENDEE,
-                      TICKET_CANCELLED, TICKET_CANCELLED_ORGANIZER]:
+                      TICKET_CANCELLED, TICKET_CANCELLED_ORGANIZER, ORDER_EXPIRED]:
             message = NOTIFS[action]
         else:
             message = NOTIFS.__dict__[action]

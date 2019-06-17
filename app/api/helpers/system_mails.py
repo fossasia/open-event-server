@@ -209,11 +209,11 @@ MAILS = {
     },
     MAIL_TO_EXPIRED_ORDERS: {
         'recipient': 'User',
-        'subject': u'Tickets for {event_name} are still available ',
+        'subject': u'Your order for {event_name} has expired. Visit to order a ticket',
         'message': (
-            u"This is just a gentle reminder that the payment for your order {invoice_id} is still left." +
-            u"<br/> The tickets for this event are still available. <a href='{order_url}'>Click here</a> to "
-            u"purchase your ticket for this event."
+            u"Hello, thank you for your interest in {event_name}." +
+            u"<br/> Your order order has expired. Visit the <a href='{event_url}'>{event_name}</a> "
+            u"order page to purchase available tickets."
             u"<br><br><em>Looking forward to seeing you at the event.</em>"
         )
     },

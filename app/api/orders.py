@@ -17,9 +17,9 @@ from app.api.helpers.errors import BadRequestError
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees
-from app.api.helpers.mail import send_order_cancel_email
+from app.api.helpers.mail import send_order_expired_mail
 from app.api.helpers.notification import send_notif_to_attendees, send_notif_ticket_purchase_organizer, \
-    send_notif_ticket_cancel
+    send_notif_ticket_expire
 from app.api.helpers.order import delete_related_attendees_for_order, set_expiry_for_order, \
     create_pdf_tickets_for_holder, create_onsite_attendees_for_order
 from app.api.helpers.payment import PayPalPaymentsManager
@@ -321,11 +321,12 @@ class OrderDetail(ResourceDetail):
         create_pdf_tickets_for_holder(order)
 
         if order.status == 'cancelled':
-            send_order_cancel_email(order)
-            send_notif_ticket_cancel(order)
-
             # delete the attendees so that the tickets are unlocked.
             delete_related_attendees_for_order(order)
+
+        elif order.status == 'expired':
+            send_order_expired_mail(order)
+            send_notif_ticket_expire(order)
 
         elif order.status == 'completed' or order.status == 'placed':
 

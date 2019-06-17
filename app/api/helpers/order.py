@@ -7,6 +7,8 @@ from app.api.helpers import ticketing
 from app.api.helpers.db import save_to_db, safe_query_without_soft_deleted_entries, get_count
 from app.api.helpers.exceptions import UnprocessableEntity, ConflictException
 from app.api.helpers.files import create_save_pdf
+from app.api.helpers.mail import send_order_expired_mail
+from app.api.helpers.notification import send_notif_ticket_expire
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.models import db
 from app.models.ticket import Ticket
@@ -43,6 +45,9 @@ def set_expiry_for_order(order, override=False):
             order.status = 'expired'
             delete_related_attendees_for_order(order)
             save_to_db(order)
+
+            send_notif_ticket_expire(order)
+            send_order_expired_mail(order)
     return order
 
 
