@@ -1,4 +1,5 @@
 -r common.txt
-nose>=1.3.7,<2
-pylint>=1.6.4,<2
-pep8>=1.7.0,<2
+
+nose~=1.3
+pylint~=2.3
+pep8~=1.7

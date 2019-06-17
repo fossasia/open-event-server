@@ -2,11 +2,12 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 
 from app.api.bootstrap import api
 from app.api.events import Event
-from app.api.helpers.db import safe_query, get_count
+from app.api.helpers.db import safe_query, get_count, save_to_db
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.mail import send_email_new_session, send_email_session_accept_reject
 from app.api.helpers.notification import send_notif_new_session_organizer, send_notif_session_accept_reject
 from app.api.helpers.permissions import current_identity
+from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.sessions import SessionSchema
@@ -17,7 +18,9 @@ from app.models.session_type import SessionType
 from app.models.speaker import Speaker
 from app.models.track import Track
 from app.models.user import User
+from app.models.session_speaker_link import SessionsSpeakersLink
 from app.settings import get_settings
+from app.api.helpers.files import make_frontend_url
 
 
 class SessionListPost(ResourceList):
@@ -51,10 +54,18 @@ class SessionListPost(ResourceList):
             organizer = session.event.get_organizer()
             organizer_email = organizer.email
             frontend_url = get_settings()['frontend_url']
-            link = "{}/events/{}/sessions/{}"\
-                .format(frontend_url, session.event_id, session.id)
+            event = session.event
+            link = make_frontend_url("/events/{}/sessions/{}"
+                                     .format(event.identifier, session.id))
             send_email_new_session(organizer_email, event_name, link)
             send_notif_new_session_organizer(organizer, event_name, link, session.id)
+
+        for speaker in session.speakers:
+            session_speaker_link = SessionsSpeakersLink(session_state=session.state,
+                                                        session_id=session.id,
+                                                        event_id=session.event.id,
+                                                        speaker_id=speaker.id)
+            save_to_db(session_speaker_link, "Session Speaker Link Saved")
 
     decorators = (api.has_permission('create_event'),)
     schema = SessionSchema
@@ -87,7 +98,8 @@ class SessionList(ResourceList):
             query_ = query_.join(Microlocation).filter(Microlocation.id == microlocation.id)
         if view_kwargs.get('user_id') is not None:
             user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
-            query_ = query_.join(User).filter(User.id == user.id)
+            query_ = query_.join(User)\
+                .join(Speaker).filter((User.id == user.id or Session.speakers.any(Speaker.user_id == user.id)))
         query_ = event_query(self, query_, view_kwargs)
         if view_kwargs.get('speaker_id'):
             speaker = safe_query(self, Speaker, 'id', view_kwargs['speaker_id'], 'speaker_id')
@@ -120,17 +132,35 @@ class SessionDetail(ResourceDetail):
             event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'identifier')
             view_kwargs['event_id'] = event.id
 
+    def before_update_object(self, session, data, view_kwargs):
+        """
+        before update method to verify if session is locked before updating session object
+        :param event:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
+        if data.get('is_locked') != session.is_locked:
+            if not (has_access('is_admin') or has_access('is_organizer')):
+                raise ForbiddenException({'source': '/data/attributes/is-locked'},
+                                         "You don't have enough permissions to change this property")
+
+        if session.is_locked and data.get('is_locked') == session.is_locked:
+            raise ForbiddenException({'source': '/data/attributes/is-locked'}, "Locked sessions cannot be edited")
+
     def after_update_object(self, session, data, view_kwargs):
         """ Send email if session accepted or rejected """
 
         if 'state' in data and data.get('send_email', None) and (session.state == 'accepted' or
                                                                  session.state == 'rejected'):
+
+            event = session.event
             # Email for speaker
             speakers = session.speakers
             for speaker in speakers:
                 frontend_url = get_settings()['frontend_url']
                 link = "{}/events/{}/sessions/{}" \
-                    .format(frontend_url, session.event_id, session.id)
+                    .format(frontend_url, event.identifier, session.id)
                 send_email_session_accept_reject(speaker.email, session, link)
                 send_notif_session_accept_reject(speaker, session.title, session.state, link, session.id)
 
@@ -140,18 +170,40 @@ class SessionDetail(ResourceDetail):
                 organizer_email = organizer.email
                 frontend_url = get_settings()['frontend_url']
                 link = "{}/events/{}/sessions/{}" \
-                    .format(frontend_url, session.event_id, session.id)
+                    .format(frontend_url, event.identifier, session.id)
                 send_email_session_accept_reject(organizer_email, session,
                                                  link)
                 send_notif_session_accept_reject(organizer, session.title,
                                                  session.state, link, session.id)
+        if 'state' in data:
+            entry_count = SessionsSpeakersLink.query.filter_by(session_id=session.id)
+            if entry_count.count() == 0:
+                is_patch_request = False
+            else:
+                is_patch_request = True
+
+            if is_patch_request:
+                for focus_session in entry_count:
+                    focus_session.session_state = session.state
+                db.session.commit()
+            else:
+                current_session = Session.query.filter_by(id=session.id).first()
+                for speaker in current_session.speakers:
+                    session_speaker_link = SessionsSpeakersLink(session_state=session.state,
+                                                                session_id=session.id,
+                                                                event_id=session.event.id,
+                                                                speaker_id=speaker.id)
+                    save_to_db(session_speaker_link, "Session Speaker Link Saved")
 
     decorators = (api.has_permission('is_speaker_for_session', methods="PATCH,DELETE"),)
     schema = SessionSchema
     data_layer = {'session': db.session,
                   'model': Session,
-                  'methods': {'before_get_object': before_get_object,
-                              'after_update_object': after_update_object}}
+                  'methods': {
+                      'before_update_object': before_update_object,
+                      'before_get_object': before_get_object,
+                      'after_update_object': after_update_object
+                  }}
 
 
 class SessionRelationshipRequired(ResourceRelationship):

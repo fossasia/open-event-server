@@ -1,5 +1,5 @@
 from flask import current_app as app
-from flask import request
+from flask import jsonify, request, Blueprint, make_response
 from flask_jwt import current_identity as current_user, _jwt_required
 from flask_rest_jsonapi import ResourceDetail
 
@@ -8,6 +8,12 @@ from app.api.schema.settings import SettingSchemaAdmin, SettingSchemaNonAdmin, S
 from app.models import db
 from app.models.setting import Setting
 from app.settings import refresh_settings
+from app.api.helpers.mail import send_test_email
+from app.api.helpers.errors import UnprocessableEntityError
+from app.api.helpers.permissions import is_admin
+
+
+admin_misc_routes = Blueprint('admin_misc', __name__, url_prefix='/v1')
 
 
 class Environment:
@@ -27,6 +33,9 @@ class SettingDetail(ResourceDetail):
     """
 
     def before_get(self, args, kwargs):
+        refresh = request.args.get('refresh')
+        if refresh == 'true':
+            refresh_settings()
         kwargs['id'] = 1
 
         if 'Authorization' in request.headers:
@@ -48,3 +57,14 @@ class SettingDetail(ResourceDetail):
     def after_patch(self, result):
         # Update settings cache after PATCH
         refresh_settings()
+
+
+@admin_misc_routes.route('/test-mail', methods=['POST'])
+@is_admin
+def test_email_setup():
+    recipient = request.json.get('recipient')
+    if not recipient:
+        return UnprocessableEntityError({'source': 'recipient'},
+                                        'Required parameter recipient not found').respond()
+    send_test_email(recipient)
+    return make_response(jsonify(message='Test mail sent, please verify delivery'), 200)

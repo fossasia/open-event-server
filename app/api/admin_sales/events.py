@@ -2,6 +2,7 @@ from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
 from flask_rest_jsonapi import ResourceList
 
+from app.api.helpers.utilities import dasherize
 from app.api.bootstrap import api
 from app.models import db
 from app.models.event import Event
@@ -23,11 +24,13 @@ class AdminSalesByEventsSchema(Schema):
     class Meta:
         type_ = 'admin-sales-by-events'
         self_view = 'v1.admin_sales_by_events'
+        inflect = dasherize
 
     id = fields.String()
     name = fields.String()
     starts_at = fields.DateTime()
     ends_at = fields.DateTime()
+    payment_currency = fields.String()
     sales = fields.Method('calc_sales')
 
     @staticmethod

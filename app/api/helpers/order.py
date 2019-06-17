@@ -11,6 +11,7 @@ from app.api.helpers.storage import UPLOAD_PATHS
 from app.models import db
 from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
+from app.models.order import OrderTicket
 
 
 def delete_related_attendees_for_order(order):
@@ -30,13 +31,13 @@ def delete_related_attendees_for_order(order):
 
 def set_expiry_for_order(order, override=False):
     """
-    Expire the order after the time slot(10 minutes) if the order is pending.
+    Expire the order after the time slot(10 minutes) if the order is initializing.
     Also expires the order if we want to expire an order regardless of the state and time.
     :param order: Order to be expired.
     :param override: flag to force expiry.
     :return:
     """
-    if order and not order.paid_via and (override or (order.status == 'pending' and (
+    if order and not order.paid_via and (override or (order.status == 'initializing' and (
                 order.created_at +
                 timedelta(minutes=order.event.order_expiry_time)) < datetime.now(timezone.utc))):
             order.status = 'expired'
@@ -47,13 +48,14 @@ def set_expiry_for_order(order, override=False):
 
 def create_pdf_tickets_for_holder(order):
     """
-    Create tickets for the holders of an order.
+    Create tickets and invoices for the holders of an order.
     :param order: The order for which to create tickets for.
     """
-    if order.status == 'completed':
+    if order.status == 'completed' or order.status == 'placed':
         pdf = create_save_pdf(render_template('pdf/ticket_purchaser.html', order=order),
                               UPLOAD_PATHS['pdf']['ticket_attendee'],
-                              dir_path='/static/uploads/pdf/tickets/')
+                              dir_path='/static/uploads/pdf/tickets/', identifier=order.identifier, upload_dir='generated/tickets/')
+
         order.tickets_pdf_url = pdf
 
         for holder in order.ticket_holders:
@@ -61,13 +63,19 @@ def create_pdf_tickets_for_holder(order):
                 # holder is not the order buyer.
                 pdf = create_save_pdf(render_template('pdf/ticket_attendee.html', order=order, holder=holder),
                                       UPLOAD_PATHS['pdf']['ticket_attendee'],
-                                      dir_path='/static/uploads/pdf/tickets/')
+                                      dir_path='/static/uploads/pdf/tickets/', identifier=order.identifier, upload_dir='generated/tickets/')
             else:
                 # holder is the order buyer.
                 pdf = order.tickets_pdf_url
             holder.pdf_url = pdf
             save_to_db(holder)
 
+        # create order invoices pdf
+        order_ticket_info = OrderTicket.query.filter_by(order_id=order.id).one()
+        create_save_pdf(render_template('pdf/order_invoice.html', order=order, event=order.event,
+                        tax=order.event.tax, tickets=order.tickets, order_tickets_info=order_ticket_info),
+                        UPLOAD_PATHS['pdf']['order'], dir_path='/static/uploads/pdf/tickets/',
+                        identifier=order.identifier, upload_dir='generated/invoices/')
         save_to_db(order)
 
 

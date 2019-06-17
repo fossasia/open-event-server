@@ -11,8 +11,8 @@ class EventFactoryBasic(factory.alchemy.SQLAlchemyModelFactory):
 
     name = common.string_
     external_event_url = common.url_
-    starts_at = common.date_
-    ends_at = common.dateEnd_
+    starts_at = common.dateFuture_
+    ends_at = common.dateEndFuture_
     timezone = common.timezone_
     latitude = common.float_
     longitude = common.float_

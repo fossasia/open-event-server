@@ -1,15 +1,20 @@
+import os
 import base64
 import random
 import string
 
 import requests
-from flask import request, jsonify, make_response, Blueprint
+from healthcheck import EnvironmentDump
+from functools import wraps
+from flask import request, jsonify, make_response, Blueprint, send_file, url_for, redirect
 from flask_jwt import current_identity as current_user, jwt_required
 from sqlalchemy.orm.exc import NoResultFound
+from app.api.helpers.order import create_pdf_tickets_for_holder
+from app.api.helpers.storage import generate_hash
 
 from app import get_settings
 from app.api.helpers.db import save_to_db, get_count
-from app.api.helpers.errors import UnprocessableEntityError, NotFoundError, BadRequestError
+from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError, NotFoundError, BadRequestError
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_with_action, \
     send_email_confirmation
@@ -17,11 +22,16 @@ from app.api.helpers.notification import send_notification_with_action
 from app.api.helpers.third_party_auth import GoogleOAuth, FbOAuth, TwitterOAuth, InstagramOAuth
 from app.api.helpers.utilities import get_serializer, str_generator
 from app.models import db
+from app.models.order import Order
 from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE, \
-    USER_REGISTER_WITH_PASSWORD
+    USER_REGISTER_WITH_PASSWORD, PASSWORD_RESET_AND_VERIFY
 from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
+from app.api.helpers.storage import UPLOAD_PATHS
 
+
+authorised_blueprint = Blueprint('authorised_blueprint', __name__, url_prefix='/')
+ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/v1')
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
 
 
@@ -84,16 +94,18 @@ def get_token(provider):
     return make_response(jsonify(token=response.json()), 200)
 
 
-@auth_routes.route('/oauth/login/<provider>/<auth_code>/', methods=['GET'])
-def login_user(provider, auth_code):
+@auth_routes.route('/oauth/login/<provider>', methods=['POST'])
+def login_user(provider):
     if provider == 'facebook':
         provider_class = FbOAuth()
         payload = {
             'client_id': provider_class.get_client_id(),
-            'redirect_uri': request.args.get('redirect_uri'),
+            'redirect_uri': provider_class.get_redirect_uri(),
             'client_secret': provider_class.get_client_secret(),
-            'code': auth_code
+            'code': request.args.get('code')
         }
+        if not payload['client_id'] or not payload['client_secret']:
+            raise NotImplementedError({'source': ''}, 'Facebook Login Not Configured')
         access_token = requests.get('https://graph.facebook.com/v3.0/oauth/access_token', params=payload).json()
         payload_details = {
             'input_token': access_token['access_token'],
@@ -111,7 +123,7 @@ def login_user(provider, auth_code):
                 user.facebook_login_hash = random.getrandbits(128)
                 save_to_db(user)
             return make_response(
-                jsonify(user_id=user.id, email=user.email, facebook_login_hash=user.facebook_login_hash), 200)
+                jsonify(user_id=user.id, email=user.email, oauth_hash=user.facebook_login_hash), 200)
 
         user = User()
         user.first_name = user_details['first_name']
@@ -123,7 +135,7 @@ def login_user(provider, auth_code):
             user.email = user_details['email']
 
         save_to_db(user)
-        return make_response(jsonify(user_id=user.id, email=user.email, facebook_login_hash=user.facebook_login_hash),
+        return make_response(jsonify(user_id=user.id, email=user.email, oauth_hash=user.facebook_login_hash),
                              200)
 
     elif provider == 'google':
@@ -207,7 +219,10 @@ def reset_password_post():
         return NotFoundError({'source': ''}, 'User not found').respond()
     else:
         link = make_frontend_url('/reset-password', {'token': user.reset_password})
-        send_email_with_action(user, PASSWORD_RESET, app_name=get_settings()['app_name'], link=link)
+        if user.was_registered_with_order:
+            send_email_with_action(user, PASSWORD_RESET_AND_VERIFY, app_name=get_settings()['app_name'], link=link)
+        else:
+            send_email_with_action(user, PASSWORD_RESET, app_name=get_settings()['app_name'], link=link)
 
     return make_response(jsonify(message="Email Sent"), 200)
 
@@ -223,6 +238,8 @@ def reset_password_patch():
         return NotFoundError({'source': ''}, 'User Not Found').respond()
     else:
         user.password = password
+        if user.was_registered_with_order:
+            user.is_verified = True
         save_to_db(user)
 
     return jsonify({
@@ -244,7 +261,12 @@ def change_password():
         return NotFoundError({'source': ''}, 'User Not Found').respond()
     else:
         if user.is_correct_password(old_password):
-
+            if user.is_correct_password(new_password):
+                return BadRequestError({'source': ''},
+                                       'Old and New passwords must be different').respond()
+            if len(new_password) < 8:
+                return BadRequestError({'source': ''},
+                                       'Password should have minimum 8 characters').respond()
             user.password = new_password
             save_to_db(user)
             send_email_with_action(user, PASSWORD_CHANGE,
@@ -252,7 +274,7 @@ def change_password():
             send_notification_with_action(user, PASSWORD_CHANGE_NOTIF,
                                           app_name=get_settings()['app_name'])
         else:
-            return BadRequestError({'source': ''}, 'Wrong Password').respond()
+            return BadRequestError({'source': ''}, 'Wrong Password. Please enter correct current password.').respond()
 
     return jsonify({
         "id": user.id,
@@ -260,3 +282,87 @@ def change_password():
         "name": user.fullname if user.fullname else None,
         "password-changed": True
     })
+
+
+def return_tickets(file_path, order_identifier):
+    response = make_response(send_file(file_path))
+    response.headers['Content-Disposition'] = 'attachment; filename=ticket-%s.pdf' % order_identifier
+    return response
+
+
+@ticket_blueprint.route('/tickets/<string:order_identifier>')
+@jwt_required()
+def ticket_attendee_authorized(order_identifier):
+    if current_user:
+        try:
+            order = Order.query.filter_by(identifier=order_identifier).first()
+            user_id = order.user.id
+            event_id = order.event.id
+        except NoResultFound:
+            return NotFoundError({'source': ''}, 'This ticket is not associated with any order').respond()
+        if current_user.id == user_id or current_user.is_organizer(event_id):
+            key = UPLOAD_PATHS['pdf']['ticket_attendee'].format(identifier=order_identifier)
+            file_path = '../generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+            try:
+                return return_tickets(file_path, order_identifier)
+            except FileNotFoundError:
+                create_pdf_tickets_for_holder(order)
+                return return_tickets(file_path, order_identifier)
+        else:
+            return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
+    else:
+        return ForbiddenError({'source': ''}, 'Authentication Required to access ticket').respond()
+
+
+@ticket_blueprint.route('/orders/invoices/<string:order_identifier>')
+@jwt_required()
+def order_invoices(order_identifier):
+    if current_user:
+        try:
+            order = Order.query.filter_by(identifier=order_identifier).first()
+            user_id = order.user.id
+        except NoResultFound:
+            return NotFoundError({'source': ''}, 'Order Invoice not found').respond()
+        if current_user.id == user_id:
+            key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
+            file_path = '../generated/invoices/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+            response = make_response(send_file(file_path))
+            response.headers['Content-Disposition'] = 'attachment; filename=invoice-%s.zip' % order_identifier
+            return response
+        else:
+            return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
+    else:
+        return ForbiddenError({'source': ''}, 'Authentication Required to access Invoice').respond()
+
+
+# Access for Environment details & Basic Auth Support
+def check_auth_admin(username, password):
+    """
+    This function is called to check for proper authentication & admin rights
+    """
+    if username and password:
+        user = User.query.filter_by(_email=username).first()
+        if user:
+            if user.is_correct_password(password):
+                if user.is_admin:
+                    return True
+    return False
+
+
+def requires_basic_auth(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth = request.authorization
+        if not auth or not check_auth_admin(auth.username, auth.password):
+            return make_response('Could not verify your access level for that URL.\n'
+                                 'You have to login with proper credentials', 401,
+                                 {'WWW-Authenticate': 'Basic realm="Login Required"'})
+        return f(*args, **kwargs)
+    return decorated
+
+
+@authorised_blueprint.route('/environment')
+@requires_basic_auth
+def environment_details():
+    envdump = EnvironmentDump(include_config=False)
+    return envdump.dump_environment()

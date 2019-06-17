@@ -112,8 +112,8 @@ class AttendeeList(ResourceList):
 
         if view_kwargs.get('ticket_id'):
             ticket = safe_query(self, Ticket, 'id', view_kwargs['ticket_id'], 'ticket_id')
-            if not has_access('is_registrar', event_id=ticket.event_id):
-                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            # if not has_access('is_registrar', event_id=ticket.event_id):
+            #     raise ForbiddenException({'source': ''}, 'Access Forbidden')
             query_ = query_.join(Ticket).filter(Ticket.id == ticket.id)
 
         if view_kwargs.get('user_id'):
@@ -167,8 +167,23 @@ class AttendeeDetail(ResourceDetail):
         :param kwargs:
         :return:
         """
-        if not has_access('is_registrar', event_id=obj.event_id):
-            raise ForbiddenException({'source': 'User'}, 'You are not authorized to access this.')
+#         if not has_access('is_registrar', event_id=obj.event_id):
+#         raise ForbiddenException({'source': 'User'}, 'You are not authorized to access this.')
+
+        if 'ticket' in data:
+            user = safe_query(self, User, 'id', current_identity.id, 'user_id')
+            ticket = db.session.query(Ticket).filter_by(
+                id=int(data['ticket']), deleted_at=None
+                ).first()
+            if ticket is None:
+                raise UnprocessableEntity(
+                    {'pointer': '/data/relationships/ticket'}, "Invalid Ticket"
+                )
+            if not user.is_verified and ticket.price == 0:
+                raise UnprocessableEntity(
+                    {'pointer': '/data/relationships/ticket'},
+                    "Unverified user cannot buy free tickets"
+                )
 
         if 'device_name_checkin' in data:
             if 'checkin_times' not in data or data['checkin_times'] is None:

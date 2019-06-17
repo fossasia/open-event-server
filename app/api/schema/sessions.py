@@ -3,6 +3,7 @@ from marshmallow import validates_schema, validate
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Relationship
 from sqlalchemy.orm.exc import NoResultFound
+from datetime import datetime
 
 from app.api.helpers.exceptions import UnprocessableEntity, ForbiddenException
 from app.api.helpers.permission_manager import has_access
@@ -48,6 +49,9 @@ class SessionSchema(SoftDeletionSchema):
             if data['starts_at'] >= data['ends_at']:
                 raise UnprocessableEntity(
                     {'pointer': '/data/attributes/ends-at'}, "ends-at should be after starts-at")
+            if datetime.timestamp(data['starts_at']) <= datetime.timestamp(datetime.now()):
+                raise UnprocessableEntity(
+                    {'pointer': '/data/attributes/starts-at'}, "starts-at should be after current date-time")
 
         if 'state' in data:
             if data['state'] is not 'draft' or not 'pending':
@@ -82,6 +86,7 @@ class SessionSchema(SoftDeletionSchema):
     deleted_at = fields.DateTime(dump_only=True)
     submitted_at = fields.DateTime(allow_none=True)
     is_mail_sent = fields.Boolean()
+    is_locked = fields.Boolean(default=False)
     last_modified_at = fields.DateTime(dump_only=True)
     send_email = fields.Boolean(load_only=True, allow_none=True)
     average_rating = fields.Float(dump_only=True)

@@ -9,6 +9,7 @@ import requests
 from flask import current_app as app
 from flask import request, url_for
 from flask_jwt import current_identity
+from flask_login import current_user
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.storage import upload, UPLOAD_PATHS, UploadedFile
@@ -229,6 +230,13 @@ def export_event_json(event_id, settings):
     return storage_url
 
 
+def get_current_user():
+    if current_identity:
+        return current_identity
+    else:
+        return current_user
+
+
 # HELPERS
 
 def create_export_job(task_id, event_id):
@@ -237,15 +245,17 @@ def create_export_job(task_id, event_id):
     """
     export_job = ExportJob.query.filter_by(event_id=event_id).first()
     task_url = url_for('tasks.celery_task', task_id=task_id)
+    current_logged_user = get_current_user()
+
     if export_job:
 
         export_job.task = task_url
-        export_job.user_email = current_identity.email
+        export_job.user_email = current_logged_user.email
         export_job.event = Event.query.get(event_id)
         export_job.starts_at = datetime.now(pytz.utc)
     else:
         export_job = ExportJob(
-            task=task_url, user_email=current_identity.email,
+            task=task_url, user_email=current_logged_user.email,
             event=Event.query.get(event_id)
         )
     save_to_db(export_job, 'ExportJob saved')

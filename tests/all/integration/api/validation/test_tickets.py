@@ -8,6 +8,7 @@ from app.api.helpers.exceptions import UnprocessableEntity
 from app.api.schema.tickets import TicketSchema
 from app.factories.ticket import TicketFactory
 from app.models import db
+from app.api.helpers.db import save_to_db
 from tests.all.integration.setup_database import Setup
 
 
@@ -26,7 +27,8 @@ class TestTicketValidation(OpenEventTestCase):
         }
         data = {
             'sales_starts_at': datetime(2003, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
-            'sales_ends_at': datetime(2003, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC'))
+            'sales_ends_at': datetime(2003, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
+            'event_ends_at': datetime(2003, 9, 10, 12, 30, 45).replace(tzinfo=timezone('UTC'))
         }
         TicketSchema.validate_date(schema, data, original_data)
 
@@ -41,10 +43,45 @@ class TestTicketValidation(OpenEventTestCase):
         }
         data = {
             'sales_starts_at': datetime(2003, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
-            'sales_ends_at': datetime(2003, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC'))
+            'sales_ends_at': datetime(2003, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
+            'event_ends_at': datetime(2003, 8, 10, 12, 30, 45).replace(tzinfo=timezone('UTC'))
         }
         with self.assertRaises(UnprocessableEntity):
             TicketSchema.validate_date(schema, data, original_data)
+
+    # def test_date_start_gt_event_end(self):
+    #     """
+    #     Tickets Validate Date-Tests if exception is raised when sales_starts_at is after event ends_at
+    #     :return:
+    #     """
+    #     schema = TicketSchema()
+    #     original_data = {
+    #         'data': {}
+    #     }
+    #     data = {
+    #         'sales_starts_at': datetime(2003, 8, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
+    #         'sales_ends_at': datetime(2003, 9, 4, 12, 30, 45).replace(tzinfo=timezone('UTC')),
+    #         'event_ends_at': datetime(2003, 8, 2, 12, 30, 45).replace(tzinfo=timezone('UTC'))
+    #     }
+    #     with self.assertRaises(UnprocessableEntity):
+    #         TicketSchema.validate_date(schema, data, original_data)
+
+    # def test_date_end_gt_event_end(self):
+    #     """
+    #     Tickets Validate Date-Tests if exception is raised when sales_ends_at is after event ends_at
+    #     :return:
+    #     """
+    #     schema = TicketSchema()
+    #     original_data = {
+    #         'data': {}
+    #     }
+    #     data = {
+    #         'sales_starts_at': datetime(2003, 8, 1, 12, 30, 45).replace(tzinfo=timezone('UTC')),
+    #         'sales_ends_at': datetime(2003, 8, 10, 12, 30, 45).replace(tzinfo=timezone('UTC')),
+    #         'event_ends_at': datetime(2003, 8, 2, 12, 30, 45).replace(tzinfo=timezone('UTC'))
+    #     }
+    #     with self.assertRaises(UnprocessableEntity):
+    #         TicketSchema.validate_date(schema, data, original_data)
 
     def test_date_db_populate(self):
         """
@@ -54,8 +91,7 @@ class TestTicketValidation(OpenEventTestCase):
         with app.test_request_context():
             schema = TicketSchema()
             obj = TicketFactory()
-            db.session.add(obj)
-            db.session.commit()
+            save_to_db(obj)
 
             original_data = {
                 'data': {

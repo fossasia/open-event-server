@@ -7,6 +7,7 @@ from flask import url_for
 from flask_scrypt import generate_password_hash, generate_random_salt
 from sqlalchemy import event, desc
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.sql import func
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from app.api.helpers.db import get_count
@@ -75,8 +76,9 @@ class User(SoftDeletionModel):
     is_sales_admin = db.Column(db.Boolean, default=False)
     is_marketer = db.Column(db.Boolean, default=False)
     is_verified = db.Column(db.Boolean, default=False)
+    was_registered_with_order = db.Column(db.Boolean, default=False)
     last_accessed_at = db.Column(db.DateTime(timezone=True))
-    created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(pytz.utc))
+    created_at = db.Column(db.DateTime(timezone=True), default=func.now())
     speaker = db.relationship('Speaker', backref="user")
     favourite_events = db.relationship('UserFavouriteEvent', backref="user")
     session = db.relationship('Session', backref="user")
