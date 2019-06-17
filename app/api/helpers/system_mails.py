@@ -209,7 +209,7 @@ MAILS = {
     },
     MAIL_TO_EXPIRED_ORDERS: {
         'recipient': 'User',
-        'subject': u'Your order for {event_name} has expired. Visit to order a ticket',
+        'subject': u'Your order for {event_name} has expired. Visit the event to order a ticket',
         'message': (
             u"Hello, thank you for your interest in {event_name}." +
             u"<br/> Your order order has expired. Visit the <a href='{event_url}'>{event_name}</a> "
