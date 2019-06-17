@@ -57,7 +57,7 @@ class SettingSchemaPublic(Schema):
     #
     is_paypal_activated = fields.Bool(dump_only=True)
     is_stripe_activated = fields.Bool(dump_only=True)
-    is_omise_activate = fields.Bool(dump_only=True)
+    is_omise_activated = fields.Bool(dump_only=True)
     is_alipay_activated = fields.Bool(dump_only=True)
 
 

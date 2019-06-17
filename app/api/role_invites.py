@@ -1,10 +1,13 @@
+from flask import jsonify, request, Blueprint
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import save_to_db
+from app.api.helpers.errors import NotFoundError
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.exceptions import UnprocessableEntity
-from app.api.helpers.mail import send_email_role_invite
+from app.api.helpers.mail import send_email_role_invite, send_user_email_role_invite
 from app.api.helpers.notification import send_notif_event_role
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
@@ -17,10 +20,6 @@ from app.models.role_invite import RoleInvite
 from app.models.user import User
 from app.models.users_events_role import UsersEventsRoles
 from app.settings import get_settings
-from flask import jsonify, request, Blueprint
-from app.api.helpers.errors import NotFoundError
-from sqlalchemy.orm.exc import NoResultFound
-
 
 role_invites_misc_routes = Blueprint('role_invites_misc', __name__, url_prefix='/v1')
 
@@ -56,9 +55,11 @@ class RoleInviteListPost(ResourceList):
         link = "{}/e/{}/role-invites?token={}" \
             .format(frontend_url, event.identifier, role_invite.hash)
 
-        send_email_role_invite(role_invite.email, role_invite.role_name, event.name, link)
         if user:
+            send_user_email_role_invite(role_invite.email, role_invite.role_name, event.name, link)
             send_notif_event_role(user, role_invite.role_name, event.name, link, event.id)
+        else:
+            send_email_role_invite(role_invite.email, role_invite.role_name, event.name, link)
 
     view_kwargs = True
     methods = ['POST']
@@ -168,7 +169,8 @@ def accept_invite():
     return jsonify({
         "email": user.email,
         "event": role_invite.event_id,
-        "name": user.fullname if user.fullname else None
+        "name": user.fullname if user.fullname else None,
+        "role": uer.role.name
     })
 
 

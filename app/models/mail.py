@@ -14,6 +14,7 @@ PASSWORD_RESET = 'Reset Password'
 PASSWORD_RESET_AND_VERIFY = 'Reset Password and Account Verification'
 PASSWORD_CHANGE = 'Change Password'
 EVENT_ROLE = 'Event Role Invitation'
+USER_EVENT_ROLE = 'User Event Role Invitation'
 SESSION_ACCEPT_REJECT = 'Session Accept or Reject'
 SESSION_SCHEDULE = 'Session Schedule Change'
 EVENT_PUBLISH = 'Event Published'
@@ -30,6 +31,7 @@ MONTHLY_PAYMENT_EMAIL = 'Monthly Payment Email'
 MONTHLY_PAYMENT_FOLLOWUP_EMAIL = 'Monthly Payment Follow Up Email'
 EVENT_IMPORTED = 'Event Imported'
 EVENT_IMPORT_FAIL = 'Event Import Failed'
+TEST_MAIL = 'Test Mail'
 
 
 class Mail(db.Model):

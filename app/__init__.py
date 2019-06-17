@@ -108,6 +108,7 @@ def create_app():
     # setup celery
     app.config['CELERY_BROKER_URL'] = app.config['REDIS_URL']
     app.config['CELERY_RESULT_BACKEND'] = app.config['CELERY_BROKER_URL']
+    app.config['CELERY_ACCEPT_CONTENT'] = ['json', 'application/text']
 
     CORS(app, resources={r"/*": {"origins": "*"}})
     AuthManager.init_login(app)
@@ -133,6 +134,7 @@ def create_app():
         from app.api.auth import ticket_blueprint, authorised_blueprint
         from app.api.admin_translations import admin_blueprint
         from app.api.orders import alipay_blueprint
+        from app.api.settings import admin_misc_routes
 
         app.register_blueprint(api_v1)
         app.register_blueprint(event_copy)
@@ -150,6 +152,7 @@ def create_app():
         app.register_blueprint(authorised_blueprint)
         app.register_blueprint(admin_blueprint)
         app.register_blueprint(alipay_blueprint)
+        app.register_blueprint(admin_misc_routes)
 
     sa.orm.configure_mappers()
 

@@ -3,6 +3,7 @@ import json
 import paypalrestsdk
 import requests
 import stripe
+import omise
 from forex_python.converter import CurrencyRates
 
 from app.api.helpers.cache import cache
@@ -242,4 +243,30 @@ class AliPayPaymentsManager(object):
                  currency=order.event.payment_currency,
                  source=order.order_notes,
                  )
+        return charge
+
+
+class OmisePaymentsManager(object):
+    """
+    Class to manage Omise Payments
+    """
+
+    @staticmethod
+    def charge_payment(order_identifier, token):
+        if get_settings()['app_environment'] == Environment.PRODUCTION:
+            omise.api_secret = get_settings()['omise_test_secret']
+            omise.api_public = get_settings()['omise_test_public']
+        else:
+            omise.api_secret = get_settings()['omise_test_secret']
+            omise.api_public = get_settings()['omise_test_public']
+        order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+        charge = omise.Charge.create(
+                amount=int(round(order.amount)),
+                currency=order.event.payment_currency,
+                card=token,
+                metadata={
+                    "order_id": str(order_identifier),
+                    "status": True
+                },
+                )
         return charge

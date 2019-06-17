@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
@@ -15,7 +17,6 @@ from app.models.event_invoice import EventInvoice
 from app.models.ticket import Ticket
 from app.models.user import User
 
-from datetime import datetime
 
 class DiscountCodeListPost(ResourceList):
     """
@@ -48,7 +49,7 @@ class DiscountCodeListPost(ResourceList):
             require_relationship(['event'], data)
             if not has_access('is_coorganizer', event_id=data['event']):
                 raise ForbiddenException({'source': ''}, 'You are not authorized')
-        elif not data['used_for'] == 'event' and has_access('is_admin') and 'events' in data:
+        elif data['used_for'] == 'event' and not has_access('is_admin') and 'events' in data:
             raise UnprocessableEntity({'source': ''}, "Please verify your permission or check your relationship")
 
         data['user_id'] = current_identity.id

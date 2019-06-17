@@ -60,7 +60,8 @@ class OrderSchema(SoftDeletionSchema):
     transaction_id = fields.Str(dump_only=True)
     payment_mode = fields.Str(
                             default="free",
-                            validate=validate.OneOf(choices=["free", "stripe", "paypal", "bank", "cheque", "onsite"]),
+                            validate=validate.OneOf(choices=["free", "stripe", "paypal", "bank",
+                                                             "cheque", "onsite", "omise", "alipay"]),
                             allow_none=True)
     paid_via = fields.Str(dump_only=True)
     is_billing_enabled = fields.Boolean(default=False)

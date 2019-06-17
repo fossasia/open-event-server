@@ -1,4 +1,5 @@
 from sqlalchemy import desc
+from sqlalchemy.schema import UniqueConstraint
 
 from app.models import db
 
@@ -8,6 +9,7 @@ DEFAULT_FEE = 0.0
 class TicketFees(db.Model):
     """Persists service and maximum fees for a currency in a country"""
     __tablename__ = 'ticket_fees'
+    __table_args__ = (UniqueConstraint('currency', 'country', name='country_currency_uc'),)
 
     id = db.Column(db.Integer, primary_key=True)
     currency = db.Column(db.String)
