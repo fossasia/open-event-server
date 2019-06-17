@@ -1,5 +1,6 @@
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
+from app.api.helpers.permissions import current_identity
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
@@ -22,7 +23,9 @@ class SpeakersCallList(ResourceList):
         :param view_kwargs:
         :return:
         """
-        query_ = self.session.query(SpeakersCall).filter(SpeakersCall.privacy == 'public')
+        query_ = self.session.query(SpeakersCall)
+        if not has_access('is_organizer', user_id=current_identity.id):
+            query_ = query_.filter(SpeakersCall.privacy == 'public')
         return query_
 
     def before_post(self, args, kwargs, data):

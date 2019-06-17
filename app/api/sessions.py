@@ -86,7 +86,7 @@ class SessionList(ResourceList):
         :param view_kwargs:
         :return:
         """
-        query_ = self.session.query(Session).filter(Session.state == 'accepted')
+        query_ = self.session.query(Session)
         if view_kwargs.get('track_id') is not None:
             track = safe_query(self, Track, 'id', view_kwargs['track_id'], 'track_id')
             query_ = query_.join(Track).filter(Track.id == track.id)
@@ -105,6 +105,8 @@ class SessionList(ResourceList):
             speaker = safe_query(self, Speaker, 'id', view_kwargs['speaker_id'], 'speaker_id')
             # session-speaker :: many-to-many relationship
             query_ = Session.query.filter(Session.speakers.any(id=speaker.id))
+        if not has_access('is_organizer', user_id=current_identity.id):
+            query_ = query_.filter(Session.state == 'accepted')
 
         return query_
 
