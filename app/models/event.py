@@ -10,20 +10,21 @@ from sqlalchemy.sql import func
 
 from app.api.helpers.db import get_count
 from app.models import db
-from app.models.order import Order
-from app.models.ticket_fee import get_fee
-from app.models.ticket_fee import get_maximum_fee
 from app.models.base import SoftDeletionModel
 from app.models.email_notification import EmailNotification
+from app.models.event_topic import EventTopic
 from app.models.feedback import Feedback
 from app.models.helpers.versioning import clean_up_string, clean_html
-from app.models.user import ATTENDEE, ORGANIZER
-from app.models.event_topic import EventTopic
+from app.models.order import Order
+from app.models.search import sync
 from app.models.session import Session
 from app.models.speaker import Speaker
-from app.models.search import sync
 from app.models.ticket import Ticket
+from app.models.ticket_fee import get_fee
+from app.models.ticket_fee import get_maximum_fee
 from app.models.ticket_holder import TicketHolder
+from app.models.user import ATTENDEE, ORGANIZER
+
 
 def get_new_event_identifier(length=8):
     identifier = str(binascii.b2a_hex(os.urandom(int(length / 2))), 'utf-8')
@@ -96,7 +97,6 @@ class Event(SoftDeletionModel):
     payment_country = db.Column(db.String)
     payment_currency = db.Column(db.String)
     paypal_email = db.Column(db.String)
-    is_ngo = db.Column(db.Boolean, default=False)
     is_tax_enabled = db.Column(db.Boolean, default=False)
     can_pay_by_paypal = db.Column(db.Boolean, default=False)
     can_pay_by_stripe = db.Column(db.Boolean, default=False)
@@ -210,7 +210,6 @@ class Event(SoftDeletionModel):
                  payment_country=None,
                  payment_currency=None,
                  paypal_email=None,
-                 is_ngo=False,
                  speakers_call=None,
                  can_pay_by_paypal=None,
                  can_pay_by_stripe=None,
@@ -275,7 +274,6 @@ class Event(SoftDeletionModel):
         self.payment_country = payment_country
         self.payment_currency = payment_currency
         self.paypal_email = paypal_email
-        self.is_ngo = is_ngo
         self.speakers_call = speakers_call
         self.can_pay_by_paypal = can_pay_by_paypal
         self.can_pay_by_stripe = can_pay_by_stripe
