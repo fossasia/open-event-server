@@ -229,7 +229,7 @@ from .api.helpers import tasks
 
 
 scheduler = BackgroundScheduler(timezone=utc)
-# scheduler.add_job(send_mail_to_expired_orders, 'interval', hours=5)
+# scheduler.add_job(send_ORDER_EXPIRED_MAIL, 'interval', hours=5)
 # scheduler.add_job(empty_trash, 'cron', hour=5, minute=30)
 if app.config['ENABLE_ELASTICSEARCH']:
     scheduler.add_job(sync_events_elasticsearch, 'interval', minutes=60)

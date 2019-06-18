@@ -29,7 +29,7 @@ TICKET_RESEND_ORGANIZER = 'Ticket Resend'
 EVENT_EXPORTED = 'Event Exported'
 EVENT_EXPORT_FAIL = 'Event Export Failed'
 EVENT_IMPORT_FAIL = 'Event Import Failed'
-MAIL_TO_EXPIRED_ORDERS = 'Mail Expired Orders'
+ORDER_EXPIRED_MAIL = 'Mail Expired Orders'
 ORDER_EXPIRED = 'Order expired Notification'
 MONTHLY_PAYMENT_EMAIL = 'Monthly Payment Email'
 MONTHLY_PAYMENT_NOTIF = 'Monthly Payment Notification'
@@ -71,7 +71,7 @@ class MessageSettings(db.Model):
                       EVENT_PUBLISH, AFTER_EVENT, USER_CHANGE_EMAIL,
                       USER_REGISTER_WITH_PASSWORD, TICKET_PURCHASED,
                       EVENT_EXPORTED, EVENT_EXPORT_FAIL,
-                      MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_EMAIL,
+                      ORDER_EXPIRED_MAIL, MONTHLY_PAYMENT_EMAIL,
                       MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_IMPORTED,
                       EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER,
                       TICKET_CANCELLED, TICKET_PURCHASED_ATTENDEE,

@@ -40,7 +40,7 @@ class TestOrderUtilities(OpenEventTestCase):
             user = UserFactory()
             event = EventFactoryBasic()
             obj.event = event
-            obj.user = user 
+            obj.user = user
             set_expiry_for_order(obj)
             self.assertEqual(obj.status, 'initializing')
 

@@ -12,7 +12,7 @@ from app.api.helpers.utilities import string_empty, get_serializer, str_generato
 from app.models.mail import Mail, USER_CONFIRM, NEW_SESSION, USER_CHANGE_EMAIL, SESSION_ACCEPT_REJECT, EVENT_ROLE, \
     AFTER_EVENT, MONTHLY_PAYMENT_EMAIL, MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_EXPORTED, EVENT_EXPORT_FAIL, \
     EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ATTENDEE, TICKET_CANCELLED, TICKET_PURCHASED, USER_EVENT_ROLE, \
-    TEST_MAIL, MAIL_TO_EXPIRED_ORDERS
+    TEST_MAIL, ORDER_EXPIRED_MAIL
 from app.models.user import User
 
 
@@ -359,11 +359,11 @@ def send_order_cancel_email(order):
 def send_order_expired_mail(order):
     send_email(
         to=order.user.email,
-        action=MAIL_TO_EXPIRED_ORDERS,
-        subject=MAILS[MAIL_TO_EXPIRED_ORDERS]['subject'].format(
+        action=ORDER_EXPIRED_MAIL,
+        subject=MAILS[ORDER_EXPIRED_MAIL]['subject'].format(
             event_name=order.event.name
         ),
-        html=MAILS[MAIL_TO_EXPIRED_ORDERS]['message'].format(
+        html=MAILS[ORDER_EXPIRED_MAIL]['message'].format(
             event_name=order.event.name,
             event_url=make_frontend_url('/e/{identifier}'.format(identifier=order.event.identifier))
         )

@@ -25,7 +25,7 @@ TICKET_PURCHASED_ORGANIZER = 'Ticket(s) Purchased to Organizer'
 TICKET_CANCELLED = 'Ticket(s) cancelled'
 EVENT_EXPORTED = 'Event Exported'
 EVENT_EXPORT_FAIL = 'Event Export Failed'
-MAIL_TO_EXPIRED_ORDERS = 'Mail Expired Orders'
+ORDER_EXPIRED_MAIL = 'Mail Expired Orders'
 MONTHLY_PAYMENT_EMAIL = 'Monthly Payment Email'
 MONTHLY_PAYMENT_FOLLOWUP_EMAIL = 'Monthly Payment Follow Up Email'
 EVENT_IMPORTED = 'Event Imported'
@@ -56,7 +56,7 @@ class MessageSettingSchema(Schema):
                      SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH, AFTER_EVENT,
                      USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD,
                      TICKET_PURCHASED, EVENT_EXPORTED, EVENT_EXPORT_FAIL,
-                     MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_EMAIL,
+                     ORDER_EXPIRED_MAIL, MONTHLY_PAYMENT_EMAIL,
                      MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_IMPORTED,
                      EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER,
                      TICKET_CANCELLED, TICKET_PURCHASED_ATTENDEE,
