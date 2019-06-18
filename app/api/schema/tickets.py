@@ -78,6 +78,8 @@ class TicketSchemaPublic(SoftDeletionSchema):
     description = fields.Str(allow_none=True)
     type = fields.Str(required=True)
     price = fields.Float(validate=lambda n: n >= 0, allow_none=True)
+    min_price = fields.Float(validate=lambda n: n >= 0, allow_none=True)
+    max_price = fields.Float(validate=lambda n: n >= 0, allow_none=True)
     quantity = fields.Integer(validate=lambda n: n >= 0, allow_none=True)
     is_description_visible = fields.Boolean(default=False)
     position = fields.Integer(allow_none=True)

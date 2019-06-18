@@ -32,6 +32,8 @@ class Ticket(SoftDeletionModel):
     quantity = db.Column(db.Integer)
     position = db.Column(db.Integer)
     price = db.Column(db.Float)
+    min_price = db.Column(db.Float)
+    max_price = db.Column(db.Float)
     is_fee_absorbed = db.Column(db.Boolean)
     sales_starts_at = db.Column(db.DateTime(timezone=True), nullable=False)
     sales_ends_at = db.Column(db.DateTime(timezone=True), nullable=False)
@@ -67,6 +69,8 @@ class Ticket(SoftDeletionModel):
                  price=0,
                  min_order=1,
                  max_order=10,
+                 min_price=0,
+                 max_price=0,
                  is_fee_absorbed=False,
                  tags=[],
                  access_codes=[],
@@ -82,6 +86,8 @@ class Ticket(SoftDeletionModel):
         self.is_checkin_restricted = is_checkin_restricted
         self.auto_checkin_enabled = auto_checkin_enabled
         self.price = price
+        self.min_price = min_price
+        self.max_price = max_price
         self.sales_starts_at = sales_starts_at
         self.sales_ends_at = sales_ends_at
         self.is_hidden = is_hidden
