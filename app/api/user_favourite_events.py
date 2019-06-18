@@ -2,6 +2,7 @@ from flask import request, current_app as app
 from flask_jwt import current_identity as current_user, _jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
+from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
 from app.api.helpers.exceptions import ForbiddenException, ConflictException
 from app.api.helpers.permission_manager import has_access
@@ -81,6 +82,7 @@ class UserFavouriteEventDetail(ResourceDetail):
     """
 
     methods = ['GET', 'DELETE']
+    decorators = (api.has_permission('is_user_itself'),)
     schema = UserFavouriteEventSchema
     data_layer = {'session': db.session,
                   'model': UserFavouriteEvent,
