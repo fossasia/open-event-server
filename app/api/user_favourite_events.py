@@ -1,14 +1,14 @@
-from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask import request, current_app as app
 from flask_jwt import current_identity as current_user, _jwt_required
+from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
-from app.models.user import User
 from app.api.helpers.db import safe_query
-from app.api.helpers.permission_manager import has_access
 from app.api.helpers.exceptions import ForbiddenException, ConflictException
+from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.user_favourite_events import UserFavouriteEventSchema
 from app.models import db
+from app.models.user import User
 from app.models.user_favourite_event import UserFavouriteEvent
 
 
@@ -83,7 +83,8 @@ class UserFavouriteEventDetail(ResourceDetail):
     methods = ['GET', 'DELETE']
     schema = UserFavouriteEventSchema
     data_layer = {'session': db.session,
-                  'model': UserFavouriteEvent}
+                  'model': UserFavouriteEvent,
+                  'id_field': 'event_id'}
 
 
 class UserFavouriteEventRelationship(ResourceRelationship):
