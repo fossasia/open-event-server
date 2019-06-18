@@ -6,6 +6,7 @@ from app.api.helpers.db import save_to_db
 from app.api.helpers.order import set_expiry_for_order, delete_related_attendees_for_order
 from app.factories.attendee import AttendeeFactory
 from app.factories.event import EventFactoryBasic
+from app.factories.user import UserFactory
 from app.factories.order import OrderFactory
 from app.models.order import Order
 from app.api.helpers.db import save_to_db
@@ -22,8 +23,10 @@ class TestOrderUtilities(OpenEventTestCase):
 
         with app.test_request_context():
             obj = OrderFactory()
+            user = UserFactory()
             event = EventFactoryBasic()
             obj.event = event
+            obj.user = user
             obj.created_at = datetime.now(timezone.utc) - timedelta(
                 minutes=obj.event.order_expiry_time)
             set_expiry_for_order(obj)
@@ -34,8 +37,10 @@ class TestOrderUtilities(OpenEventTestCase):
 
         with app.test_request_context():
             obj = OrderFactory()
+            user = UserFactory()
             event = EventFactoryBasic()
             obj.event = event
+            obj.user = user 
             set_expiry_for_order(obj)
             self.assertEqual(obj.status, 'initializing')
 
