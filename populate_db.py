@@ -1,50 +1,45 @@
-from app import current_app
-from app.models import db
-from app.api.helpers.db import get_or_create, save_to_db  # , save_to_db
+# python datetime
+from datetime import datetime, timedelta
+
 from envparse import env
 
+from app import current_app
+from app.api.helpers.db import get_or_create, save_to_db  # , save_to_db
 # Admin message settings
 from app.api.helpers.system_mails import MAILS
+from app.models import db
+# Custom Placeholder
+from app.models.custom_placeholder import CustomPlaceholder
+from app.models.custom_system_role import CustomSysRole
+# Event
+from app.models.event import Event
+# EventLocation
+from app.models.event_location import EventLocation
+# EventSubTopic
+from app.models.event_sub_topic import EventSubTopic
+# EventTopic
+from app.models.event_topic import EventTopic
+# EventType
+from app.models.event_type import EventType
+from app.models.image_size import ImageSizes
 from app.models.message_setting import MessageSettings
-
+from app.models.microlocation import Microlocation
+from app.models.module import Module
+# Admin Panel Permissions
+from app.models.panel_permission import PanelPermission
+from app.models.permission import Permission
 # Event Role-Service Permissions
 from app.models.role import Role
 from app.models.service import Service
-from app.models.permission import Permission
-
-from app.models.track import Track
 from app.models.session import Session
+from app.models.setting import Setting
 from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
-from app.models.microlocation import Microlocation
-
+from app.models.track import Track
 from app.models.user import ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR, ATTENDEE, REGISTRAR
-
-# Admin Panel Permissions
-from app.models.panel_permission import PanelPermission
-from app.models.custom_system_role import CustomSysRole
-
-from app.models.setting import Setting
-from app.models.image_size import ImageSizes
-from app.models.module import Module
-
-# EventTopic
-from app.models.event_topic import EventTopic
-
-# EventSubTopic
-from app.models.event_sub_topic import EventSubTopic
-
-# EventType
-from app.models.event_type import EventType
-
-# EventLocation
-from app.models.event_location import EventLocation
-
-# Custom Placeholder
-from app.models.custom_placeholder import CustomPlaceholder
-
 # User Permissions
 from app.models.user_permission import UserPermission
+
 SALES = 'sales'
 ADMIN = 'admin'
 EVENTS = 'events'
@@ -322,6 +317,26 @@ def create_custom_placeholders():
     db.session.add(custom_placeholder)
 
 
+def create_event():
+    name = "Test Event"
+    starts_at = datetime.now()
+    ends_at = datetime.now() + timedelta(1*365/12)
+    latitude = 1.23456789
+    longitude = 1.23456789
+    location_name = 'example'
+    description = 'This is a test event.'
+    organizer_name = 'Test name'
+    organizer_description = 'Test description'
+    state = 'Draft'
+    event_type_id = 1
+    event_sub_topic_id = 1
+    get_or_create(Event, name=name, starts_at=starts_at, ends_at=ends_at, latitude=latitude,
+                  longitude=longitude, location_name=location_name, description=description,
+                  organizer_name=organizer_name, organizer_description=organizer_description,
+                  state=state, event_type_id=event_type_id, event_sub_topic_id=event_sub_topic_id
+                  )
+
+
 def populate():
     """
     Create defined Roles, Services and Permissions.
@@ -360,6 +375,8 @@ def populate():
     create_admin_message_settings()
     print('Creating custom placeholders...')
     create_custom_placeholders()
+    print('Creating event...')
+    create_event()
 
     db.session.commit()
 
@@ -385,6 +402,7 @@ def populate_without_print():
     create_event_locations()
     create_admin_message_settings()
     create_custom_placeholders()
+    create_event()
 
     db.session.commit()
 
