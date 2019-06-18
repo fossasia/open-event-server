@@ -130,6 +130,15 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     gs_bucket_name = fields.Str(allow_none=True)
 
     #
+    # CAPTCHA
+    #
+
+    # Google reCAPTCHA
+    is_google_recaptcha_enabled = fields.Bool(allow_none=False, default=False)
+    google_recaptcha_site = fields.Str(allow_none=True)
+    google_recaptcha_secret = fields.Str(allow_none=True)
+
+    #
     # Social Login
     #
 
