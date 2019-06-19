@@ -82,7 +82,7 @@ class UserFavouriteEventDetail(ResourceDetail):
     """
 
     methods = ['GET', 'DELETE']
-    decorators = (api.has_permission('is_user_itself'),)
+    decorators = (api.has_permission('is_user_itself', fetch="user_id", model=UserFavouriteEvent),)
     schema = UserFavouriteEventSchema
     data_layer = {'session': db.session,
                   'model': UserFavouriteEvent,
