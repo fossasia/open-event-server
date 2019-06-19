@@ -21351,26 +21351,26 @@ Create a new feedback with event_id.
 
             {
               "data": {
-                "type": "feedback",
                 "relationships": {
-                      "event": {
-                        "data": {
-                          "type": "event",
-                          "id": "1"
-                        }
-                      },
-                      "user": {
-                        "data": {
-                          "type": "user",
-                          "id": "1"
-                        }
-                      }
-                    },
-                "attributes": {
-                      "rating": "4",
-                      "comment": "Awesome event."
+                  "session": {
+                    "data": {
+                      "type": "session",
+                      "id": "1"
                     }
-                }
+                  },
+                  "user": {
+                    "data": {
+                      "type": "user",
+                      "id": "1"
+                    }
+                  }
+                },
+                "attributes": {
+                  "rating": 4,
+                  "comment": "Awesome session."
+                },
+                "type": "feedback"
+              }
             }
 
 
@@ -21379,9 +21379,9 @@ Create a new feedback with event_id.
         {
             "data": {
                 "relationships": {
-                    "event": {
+                    "session": {
                         "links": {
-                            "self": "/v1/feedbacks/1/relationships/event",
+                            "self": "/v1/feedbacks/1/relationships/session",
                             "related": "/v1/feedbacks/1/event"
                         }
                     },
@@ -21390,12 +21390,18 @@ Create a new feedback with event_id.
                             "self": "/v1/feedbacks/1/relationships/user",
                             "related": "/v1/feedbacks/1/user"
                         }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/feedbacks/1/relationships/event",
+                            "related": "/v1/feedbacks/1/event"
+                        }
                     }
                 },
                 "attributes": {
-                    "rating": "4",
+                    "rating": 4.0,
                     "deleted-at": null,
-                    "comment": "Awesome event"
+                    "comment": "Awesome session."
                 },
                 "type": "feedback",
                 "id": 1,
@@ -21480,7 +21486,7 @@ Update a single feedback with `id`.
                 "type": "feedback",
                 "attributes": {
                     "rating": "5",
-                    "comment": "Awesome event"
+                    "comment": "Awesome session"
                 },
                 "id": "1"
               }
