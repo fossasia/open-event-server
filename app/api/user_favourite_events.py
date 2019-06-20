@@ -82,10 +82,15 @@ class UserFavouriteEventDetail(ResourceDetail):
     User Favourite Events detail by id
     """
     def before_get_object(self, view_kwargs):
+        if 'Authorization' in request.headers:
+            _jwt_required(app.config['JWT_DEFAULT_REALM'])
+        else:
+            raise ForbiddenException({'source': ''}, 'Only Authorized Users can view an event')
+
         if view_kwargs.get('id') is not None:
             try:
                 user_favourite_event = UserFavouriteEvent.query.filter_by(
-                    event_id=view_kwargs['id']).first()
+                    user=current_user, event_id=view_kwargs['id']).first()
             except NoResultFound:
                 raise ObjectNotFound({'source': ''}, "Object: not found")
             else:
@@ -96,10 +101,15 @@ class UserFavouriteEventDetail(ResourceDetail):
                     view_kwargs['id'] = None
 
     def before_delete_object(self, view_kwargs):
+        if 'Authorization' in request.headers:
+            _jwt_required(app.config['JWT_DEFAULT_REALM'])
+        else:
+            raise ForbiddenException({'source': ''}, 'Only Authorized Users can delete an event')
+
         if view_kwargs.get('id') is not None:
             try:
                 user_favourite_event = UserFavouriteEvent.query.filter_by(
-                    event_id=view_kwargs['id']).first()
+                    user=current_user, event_id=view_kwargs['id']).first()
             except NoResultFound:
                 raise ObjectNotFound({'source': ''}, "Object: not found")
             else:
