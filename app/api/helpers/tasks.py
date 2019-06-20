@@ -18,6 +18,7 @@ from app.api.helpers.utilities import strip_tags
 from app.models.session import Session
 from app.models.speaker import Speaker
 
+
 """
 Define all API v2 celery tasks here
 This is done to resolve circular imports
@@ -51,45 +52,49 @@ import base64
 celery = make_celery()
 
 
-@celery.task(name='send.email.post')
-def send_email_task(payload, headers):
-    message = Mail(from_email=payload['from'],
-                   to_emails=payload['to'],
-                   subject=payload['subject'],
-                   html_content=payload["html"])
-    if payload['attachments'] is not None:
-        for attachment in payload['attachments']:
-            with open(attachment, 'rb') as f:
-                file_data = f.read()
-                f.close()
-            encoded = base64.b64encode(file_data).decode()
-            attachment = Attachment()
-            attachment.file_content = FileContent(encoded)
-            attachment.file_type = FileType('application/pdf')
-            attachment.file_name = FileName(payload['to'])
-            attachment.disposition = Disposition('attachment')
-            message.add_attachment(attachment)
-    sendgrid_client = SendGridAPIClient(get_settings()['sendgrid_key'])
-    logging.info('Sending an email regarding {} on behalf of {}'.format(payload["subject"], payload["from"]))
+@celery.task(name='send.email.post.sendgrid')
+def send_email_task_sendgrid(payload, headers, smtp_config):
     try:
+        message = Mail(from_email=payload['from'],
+                       to_emails=payload['to'],
+                       subject=payload['subject'],
+                       html_content=payload["html"])
+        if payload['attachments'] is not None:
+            for attachment in payload['attachments']:
+                with open(attachment, 'rb') as f:
+                    file_data = f.read()
+                    f.close()
+                encoded = base64.b64encode(file_data).decode()
+                attachment = Attachment()
+                attachment.file_content = FileContent(encoded)
+                attachment.file_type = FileType('application/pdf')
+                attachment.file_name = FileName(payload['to'])
+                attachment.disposition = Disposition('attachment')
+                message.add_attachment(attachment)
+        sendgrid_client = SendGridAPIClient(get_settings()['sendgrid_key'])
+        logging.info('Sending an email regarding {} on behalf of {}'.format(payload["subject"], payload["from"]))
         sendgrid_client.send(message)
         logging.info('Email sent successfully')
-    except Exception:
-        logging.exception('Error occured while sending the email')
+    except urllib.error.HTTPError as e:
+        if e.code == 429:
+            logging.warning("Sendgrid quota has exceeded")
+            send_email_task_smtp.delay(payload=payload, headers=None, smtp_config=smtp_config)
+        else:
+            logging.exception("The following error has occurred with sendgrid-{}".format(str(e)))
 
 
 @celery.task(name='send.email.post.smtp')
-def send_mail_via_smtp_task(config, payload):
+def send_email_task_smtp(payload, smtp_config, headers=None):
     mailer_config = {
-        'transport': {
-            'use': 'smtp',
-            'host': config['host'],
-            'username': config['username'],
-            'password': config['password'],
-            'tls': config['encryption'],
-            'port': config['port']
+            'transport': {
+                'use': 'smtp',
+                'host': smtp_config['host'],
+                'username': smtp_config['username'],
+                'password': smtp_config['password'],
+                'tls': smtp_config['encryption'],
+                'port': smtp_config['port']
+            }
         }
-    }
 
     mailer = Mailer(mailer_config)
     mailer.start()
@@ -97,11 +102,12 @@ def send_mail_via_smtp_task(config, payload):
     message.subject = payload['subject']
     message.plain = strip_tags(payload['html'])
     message.rich = payload['html']
-    message.attach(name=payload['attachments'])
+    if payload['attachments'] is not None:
+        for attachment in payload['attachments']:
+            message.attach(name=attachment)
     mailer.send(message)
     logging.info('Message sent via SMTP')
     mailer.stop()
-
 
 @celery.task(base=RequestContextTask, name='resize.event.images', bind=True)
 def resize_event_images_task(self, event_id, original_image_url):
