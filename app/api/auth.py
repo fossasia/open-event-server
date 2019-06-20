@@ -30,6 +30,7 @@ from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE, \
 from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.user import User
 from app.api.helpers.storage import UPLOAD_PATHS
+from app.api.helpers.auth import AuthManager
 
 authorised_blueprint = Blueprint('authorised_blueprint', __name__, url_prefix='/')
 ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/v1')
@@ -343,24 +344,11 @@ def order_invoices(order_identifier):
 
 
 # Access for Environment details & Basic Auth Support
-def check_auth_admin(username, password):
-    """
-    This function is called to check for proper authentication & admin rights
-    """
-    if username and password:
-        user = User.query.filter_by(_email=username).first()
-        if user:
-            if user.is_correct_password(password):
-                if user.is_admin:
-                    return True
-    return False
-
-
 def requires_basic_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         auth = request.authorization
-        if not auth or not check_auth_admin(auth.username, auth.password):
+        if not auth or not AuthManager.check_auth_admin(auth.username, auth.password):
             return make_response('Could not verify your access level for that URL.\n'
                                  'You have to login with proper credentials', 401,
                                  {'WWW-Authenticate': 'Basic realm="Login Required"'})

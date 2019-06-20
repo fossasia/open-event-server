@@ -31,3 +31,12 @@ class AuthManager:
     @staticmethod
     def is_accessible():
         return current_user.is_authenticated
+
+    @staticmethod
+    def check_auth_admin(username, password):
+        # This function is called to check for proper authentication & admin rights
+        if username and password:
+            user = User.query.filter_by(_email=username).first()
+            if user and user.is_correct_password(password) and user.is_admin:
+                return True
+        return False
