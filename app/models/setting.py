@@ -30,6 +30,8 @@ class Setting(db.Model):
     secret = db.Column(db.String)
     # Static domain
     static_domain = db.Column(db.String)
+    # Order Expiry Time
+    order_expiry_time = db.Column(db.Integer, default=15)
 
     #
     #  STORAGE
@@ -150,6 +152,7 @@ class Setting(db.Model):
 
     def __init__(self,
                  app_environment=Environment.PRODUCTION,
+                 order_expiry_time=None,
                  aws_key=None,
                  aws_secret=None,
                  aws_bucket_name=None,
@@ -199,6 +202,7 @@ class Setting(db.Model):
                  alipay_publishable_key=None,
                  alipay_secret_key=None):
         self.app_environment = app_environment
+        self.order_expiry_time = order_expiry_time
         self.aws_key = aws_key
         self.aws_secret = aws_secret
         self.aws_bucket_name = aws_bucket_name

@@ -29,7 +29,7 @@ def delete_related_attendees_for_order(order):
             db.session.rollback()
 
 
-def set_expiry_for_order(order, override=False):
+def set_expiry_for_order(order,setting, override=False):
     """
     Expire the order after the time slot(10 minutes) if the order is initializing.
     Also expires the order if we want to expire an order regardless of the state and time.
@@ -39,7 +39,7 @@ def set_expiry_for_order(order, override=False):
     """
     if order and not order.paid_via and (override or (order.status == 'initializing' and (
                 order.created_at +
-                timedelta(minutes=order.event.order_expiry_time)) < datetime.now(timezone.utc))):
+                timedelta(minutes=setting.order_expiry_time)) < datetime.now(timezone.utc))):
             order.status = 'expired'
             delete_related_attendees_for_order(order)
             save_to_db(order)

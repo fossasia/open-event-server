@@ -19,6 +19,8 @@ class SettingFactory(factory.alchemy.SQLAlchemyModelFactory):
     secret = common.secret_
     # Static domain
     static_domain = common.url_
+    # Order Expiry Time
+    order_expiry_time = 15
 
     #
     #  STORAGE

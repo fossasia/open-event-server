@@ -114,7 +114,6 @@ class Event(SoftDeletionModel):
     xcal_url = db.Column(db.String)
     is_sponsors_enabled = db.Column(db.Boolean, default=False)
     refund_policy = db.Column(db.String, default='All sales are final. No refunds shall be issued in any case.')
-    order_expiry_time = db.Column(db.Integer, default=10)
     is_stripe_linked = db.Column(db.Boolean, default=False)
     discount_code_id = db.Column(db.Integer, db.ForeignKey(
         'discount_codes.id', ondelete='CASCADE'))
@@ -231,7 +230,6 @@ class Event(SoftDeletionModel):
                  is_sponsors_enabled=None,
                  stripe_authorization=None,
                  tax=None,
-                 order_expiry_time=None,
                  refund_policy='All sales are final. No refunds shall be issued in any case.',
                  is_stripe_linked=False):
 
@@ -298,7 +296,6 @@ class Event(SoftDeletionModel):
         self.is_sponsors_enabled = is_sponsors_enabled
         self.stripe_authorization = stripe_authorization
         self.tax = tax
-        self.order_expiry_time = order_expiry_time
         self.refund_policy = refund_policy
         self.is_stripe_linked = is_stripe_linked
 

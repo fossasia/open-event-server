@@ -27,6 +27,9 @@ class SettingSchemaPublic(Schema):
     # Tagline for the application. (Eg. Event Management and Ticketing, Home)
     tagline = fields.Str(allow_none=True)
 
+    # Order Expiry Time
+    order_expiry_time = fields.Integer(allow_none=True, default=15, validate=lambda n: 1 <= n <= 60)
+
     # Google Analytics
     analytics_key = fields.Str(allow_none=True)
 

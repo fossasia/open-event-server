@@ -7,6 +7,7 @@ from app.api.helpers.order import set_expiry_for_order, delete_related_attendees
 from app.factories.attendee import AttendeeFactory
 from app.factories.event import EventFactoryBasic
 from app.factories.order import OrderFactory
+from app.factories.setting import SettingFactory
 from app.models.order import Order
 from app.api.helpers.db import save_to_db
 from tests.all.integration.setup_database import Setup
@@ -23,10 +24,11 @@ class TestOrderUtilities(OpenEventTestCase):
         with app.test_request_context():
             obj = OrderFactory()
             event = EventFactoryBasic()
+            setting = SettingFactory()
             obj.event = event
             obj.created_at = datetime.now(timezone.utc) - timedelta(
-                minutes=obj.event.order_expiry_time)
-            set_expiry_for_order(obj)
+                minutes=setting.order_expiry_time)
+            set_expiry_for_order(obj, setting)
             self.assertEqual(obj.status, 'expired')
 
     def test_should_not_expire_valid_orders(self):
@@ -35,8 +37,9 @@ class TestOrderUtilities(OpenEventTestCase):
         with app.test_request_context():
             obj = OrderFactory()
             event = EventFactoryBasic()
+            setting = SettingFactory()
             obj.event = event
-            set_expiry_for_order(obj)
+            set_expiry_for_order(obj, setting)
             self.assertEqual(obj.status, 'initializing')
 
     def test_should_delete_related_attendees(self):
