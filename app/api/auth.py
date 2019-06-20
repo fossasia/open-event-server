@@ -1,5 +1,6 @@
 import os
 import base64
+import logging
 import random
 import string
 
@@ -32,6 +33,7 @@ from app.models.user import User
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.helpers.auth import AuthManager
 
+logger = logging.getLogger(__name__)
 authorised_blueprint = Blueprint('authorised_blueprint', __name__, url_prefix='/')
 ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/v1')
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
@@ -224,7 +226,7 @@ def reset_password_post():
     try:
         user = User.query.filter_by(email=email).one()
     except NoResultFound:
-        return NotFoundError({'source': ''}, 'User not found').respond()
+        logger.info('Tried to reset password not existing email %s', email)
     else:
         link = make_frontend_url('/reset-password', {'token': user.reset_password})
         if user.was_registered_with_order:
@@ -232,7 +234,8 @@ def reset_password_post():
         else:
             send_email_with_action(user, PASSWORD_RESET, app_name=get_settings()['app_name'], link=link)
 
-    return make_response(jsonify(message="Email Sent"), 200)
+    return make_response(jsonify(message="If your email was registered with us, you'll get an \
+                         email with reset link shortly", email=email), 200)
 
 
 @auth_routes.route('/reset-password', methods=['PATCH'])
