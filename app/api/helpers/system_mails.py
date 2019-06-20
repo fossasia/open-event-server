@@ -7,7 +7,7 @@ from app.models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
     SESSION_SCHEDULE, NEXT_EVENT, EVENT_PUBLISH, AFTER_EVENT, USER_CHANGE_EMAIL, USER_REGISTER_WITH_PASSWORD, \
     TICKET_PURCHASED, EVENT_EXPORTED, EVENT_EXPORT_FAIL, MAIL_TO_EXPIRED_ORDERS, MONTHLY_PAYMENT_EMAIL, \
     MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER, TICKET_CANCELLED, \
-    TICKET_PURCHASED_ATTENDEE, PASSWORD_CHANGE, PASSWORD_RESET_AND_VERIFY, USER_EVENT_ROLE, TEST_MAIL
+    TICKET_PURCHASED_ATTENDEE, PASSWORD_CHANGE, PASSWORD_RESET_AND_VERIFY, USER_EVENT_ROLE, TEST_MAIL, PENDING_ORDER_EXPIRED
 
 MAILS = {
     EVENT_PUBLISH: {
@@ -260,6 +260,16 @@ MAILS = {
         'subject': u'Test Mail Subject',
         'message': (
             u"This is a  <strong> Test </strong> E-mail."
+        )
+    },
+    PENDING_ORDER_EXPIRED: {
+        'recipient': 'User',
+        'subject': u'Your order ({invoice_id}) for {event_name} has expired. Visit the event to order a ticket',
+        'message': (
+            u"Hello, thank you for your interest in {event_name}." +
+            u"<br/> Your order order has expired. Visit the <a href='{event_url}'>{event_name}</a> "
+            u"ticket page to purchase available tickets."
+            u"<br><br><em>Looking forward to seeing you at the event.</em>"
         )
     }
 }

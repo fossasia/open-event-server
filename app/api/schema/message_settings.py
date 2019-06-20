@@ -30,6 +30,7 @@ MONTHLY_PAYMENT_EMAIL = 'Monthly Payment Email'
 MONTHLY_PAYMENT_FOLLOWUP_EMAIL = 'Monthly Payment Follow Up Email'
 EVENT_IMPORTED = 'Event Imported'
 EVENT_IMPORT_FAIL = 'Event Import Failed'
+PENDING_ORDER_EXPIRED = 'Pending order has expired after 30 minutes'
 
 
 @use_defaults()
@@ -60,7 +61,7 @@ class MessageSettingSchema(Schema):
                      MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_IMPORTED,
                      EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER,
                      TICKET_CANCELLED, TICKET_PURCHASED_ATTENDEE,
-                     PASSWORD_CHANGE]
+                     PASSWORD_CHANGE, PENDING_ORDER_EXPIRED]
         ))
     mail_status = fields.Boolean(default=False)
     notification_status = fields.Boolean(default=False)

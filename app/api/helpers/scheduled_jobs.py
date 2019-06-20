@@ -10,6 +10,8 @@ from app.api.helpers.notification import send_notif_monthly_fee_payment, send_fo
     send_notif_after_event
 from app.api.helpers.query import get_upcoming_events, get_user_event_roles_by_role_name
 from app.api.helpers.utilities import monthdelta
+from app.api.helpers.notification import send_notif_order_expired_after_pending
+from app.api.helpers.mail import send_pending_order_expired_email
 from app.models import db
 from app.models.event import Event
 from app.models.event_invoice import EventInvoice
@@ -145,7 +147,13 @@ def send_event_fee_notification_followup():
 def expire_pending_tickets_after_three_days():
     from app import current_app as app
     with app.app_context():
+        orders_to_notify = db.session.query(Order).filter(Order.status == 'pending',
+                                                          (Order.created_at + datetime.timedelta(minutes=45)) <= datetime.datetime.now()).\
+                                                          all()
+        for order in orders_to_notify:
+            send_notif_order_expired_after_pending(order)
+            send_pending_order_expired_email(order)
         db.session.query(Order).filter(Order.status == 'pending',
-                                       (Order.created_at + datetime.timedelta(days=3)) <= datetime.datetime.now()).\
+                                       (Order.created_at + datetime.timedelta(minutes=45)) <= datetime.datetime.now()).\
                                        update({'status': 'expired'})
         db.session.commit()

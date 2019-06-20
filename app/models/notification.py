@@ -27,6 +27,7 @@ TICKET_CANCELLED = 'Ticket(s) cancelled'
 TICKET_CANCELLED_ORGANIZER = 'Ticket(s) cancelled organizer'
 MONTHLY_PAYMENT_NOTIF = 'Monthly Payment Notification'
 MONTHLY_PAYMENT_FOLLOWUP_NOTIF = 'Monthly Payment Follow Up Notification'
+PENDING_ORDER_EXPIRED_NOTIF = 'Pending order has expired after 30 minutes'
 
 
 class NotificationAction(db.Model):

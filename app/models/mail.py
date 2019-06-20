@@ -32,6 +32,7 @@ MONTHLY_PAYMENT_FOLLOWUP_EMAIL = 'Monthly Payment Follow Up Email'
 EVENT_IMPORTED = 'Event Imported'
 EVENT_IMPORT_FAIL = 'Event Import Failed'
 TEST_MAIL = 'Test Mail'
+PENDING_ORDER_EXPIRED = 'Pending order has expired after 30 minutes'
 
 
 class Mail(db.Model):

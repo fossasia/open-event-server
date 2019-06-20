@@ -1,6 +1,7 @@
 from flask import current_app
 
 from app.api.helpers.db import save_to_db
+from app.api.helpers.files import make_frontend_url
 from app.api.helpers.log import record_activity
 from app.api.helpers.system_notifications import NOTIFS, get_event_exported_actions, get_event_imported_actions, \
     get_monthly_payment_notification_actions, get_monthly_payment_follow_up_notification_actions, \
@@ -11,7 +12,8 @@ from app.models.message_setting import MessageSettings
 from app.models.notification import Notification, NEW_SESSION, SESSION_ACCEPT_REJECT, \
     EVENT_IMPORTED, EVENT_IMPORT_FAIL, EVENT_EXPORTED, EVENT_EXPORT_FAIL, MONTHLY_PAYMENT_NOTIF, \
     MONTHLY_PAYMENT_FOLLOWUP_NOTIF, EVENT_ROLE, AFTER_EVENT, TICKET_PURCHASED_ORGANIZER, \
-    TICKET_PURCHASED_ATTENDEE, TICKET_PURCHASED, TICKET_CANCELLED, TICKET_CANCELLED_ORGANIZER
+    TICKET_PURCHASED_ATTENDEE, TICKET_PURCHASED, TICKET_CANCELLED, TICKET_CANCELLED_ORGANIZER, \
+    PENDING_ORDER_EXPIRED_NOTIF
 
 
 def send_notification(user, title, message, actions=None):
@@ -293,6 +295,22 @@ def send_notif_ticket_cancel(order):
                 invoice_id=order.invoice_number
             )
         )
+
+
+def send_notif_order_expired_after_pending(order):
+    """Send notification with order invoice link after expiry"""
+    send_notification(
+        user=order.user,
+        title=NOTIFS[PENDING_ORDER_EXPIRED_NOTIF]['title'].format(
+            invoice_id=order.invoice_number,
+            event_name=order.event.name
+        ),
+        message=NOTIFS[PENDING_ORDER_EXPIRED_NOTIF]['message'].format(
+            invoice_id=order.invoice_number,
+            event_name=order.event.name,
+            event_url=make_frontend_url('/e/{identifier}'.format(identifier=order.event.identifier))
+        )
+    )
 
 
 def send_notification_with_action(user, action, **kwargs):

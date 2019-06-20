@@ -36,7 +36,8 @@ MONTHLY_PAYMENT_FOLLOWUP_EMAIL = 'Monthly Payment Follow Up Email'
 MONTHLY_PAYMENT_FOLLOWUP_NOTIF = 'Monthly Payment Follow Up Notification'
 EVENT_IMPORTED = 'Event Imported'
 TICKET_CANCELLED_ORGANIZER = 'Ticket(s) cancelled organizer'
-
+PENDING_ORDER_EXPIRED = 'Pending order has expired after 30 minutes'
+PENDING_ORDER_EXPIRED_NOTIF = 'Pending order expired after 30 minutes notification'
 
 class MessageSettings(db.Model):
     __tablename__ = 'message_settings'
@@ -74,7 +75,7 @@ class MessageSettings(db.Model):
                       MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_IMPORTED,
                       EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER,
                       TICKET_CANCELLED, TICKET_PURCHASED_ATTENDEE,
-                      PASSWORD_CHANGE]:
+                      PASSWORD_CHANGE, PENDING_ORDER_EXPIRED]:
             message = MAILS[action]
         else:
             message = MAILS.__dict__[action]
@@ -107,7 +108,8 @@ class MessageSettings(db.Model):
                       EVENT_EXPORTED, EVENT_IMPORT_FAIL, EVENT_IMPORTED,
                       MONTHLY_PAYMENT_NOTIF, MONTHLY_PAYMENT_FOLLOWUP_NOTIF,
                       TICKET_PURCHASED_ORGANIZER, TICKET_PURCHASED_ATTENDEE,
-                      TICKET_CANCELLED, TICKET_CANCELLED_ORGANIZER]:
+                      TICKET_CANCELLED, TICKET_CANCELLED_ORGANIZER,
+                      PENDING_ORDER_EXPIRED_NOTIF]:
             message = NOTIFS[action]
         else:
             message = NOTIFS.__dict__[action]
