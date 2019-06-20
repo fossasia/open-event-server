@@ -131,7 +131,7 @@ class TestingConfig(Config):
 
     ENV = 'testing'
     TESTING = True
-    CELERY_ALWAYS_EAGER = True
+    CELERY_TASK_ALWAYS_EAGER = True
     CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
     SQLALCHEMY_RECORD_QUERIES = True
     DEBUG_TB_ENABLED = False
