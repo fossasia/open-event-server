@@ -1,8 +1,9 @@
 from flask import request, current_app as app
 from flask_jwt import current_identity as current_user, _jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
+from flask_rest_jsonapi.exceptions import ObjectNotFound
+from sqlalchemy.orm.exc import NoResultFound
 
-from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
 from app.api.helpers.exceptions import ForbiddenException, ConflictException
 from app.api.helpers.permission_manager import has_access
@@ -80,13 +81,42 @@ class UserFavouriteEventDetail(ResourceDetail):
     """
     User Favourite Events detail by id
     """
+    def before_get_object(self, view_kwargs):
+        if view_kwargs.get('id') is not None:
+            try:
+                user_favourite_event = UserFavouriteEvent.query.filter_by(
+                    event_id=view_kwargs['id']).first()
+            except NoResultFound:
+                raise ObjectNotFound({'source': ''}, "Object: not found")
+            else:
+                if user_favourite_event:
+                    if user_favourite_event.event_id is not None:
+                        view_kwargs['id'] = user_favourite_event.id
+                else:
+                    view_kwargs['id'] = None
+
+    def before_delete_object(self, view_kwargs):
+        if view_kwargs.get('id') is not None:
+            try:
+                user_favourite_event = UserFavouriteEvent.query.filter_by(
+                    event_id=view_kwargs['id']).first()
+            except NoResultFound:
+                raise ObjectNotFound({'source': ''}, "Object: not found")
+            else:
+                if user_favourite_event:
+                    if user_favourite_event.event_id is not None:
+                        view_kwargs['id'] = user_favourite_event.id
+                else:
+                    view_kwargs['id'] = None
 
     methods = ['GET', 'DELETE']
-    decorators = (api.has_permission('is_user_itself', fetch="user_id", model=UserFavouriteEvent),)
     schema = UserFavouriteEventSchema
     data_layer = {'session': db.session,
                   'model': UserFavouriteEvent,
-                  'id_field': 'event_id'}
+                  'methods': {
+                      'before_delete_object': before_delete_object,
+                      'before_get_object': before_get_object,
+                  }}
 
 
 class UserFavouriteEventRelationship(ResourceRelationship):
