@@ -92,6 +92,7 @@ class ProductionConfig(Config):
     The configuration for a production environment
     """
 
+    ENV = 'production'
     MINIFY_PAGE = True
     PRODUCTION = True
     CACHING = True
@@ -113,6 +114,7 @@ class DevelopmentConfig(Config):
     The configuration for a development environment
     """
 
+    ENV = 'development'
     DEVELOPMENT = True
     DEBUG = True
     CACHING = True
@@ -126,8 +128,10 @@ class TestingConfig(Config):
     """
     The configuration for a test suit
     """
+
+    ENV = 'testing'
     TESTING = True
-    CELERY_ALWAYS_EAGER = True
+    CELERY_TASK_ALWAYS_EAGER = True
     CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
     SQLALCHEMY_RECORD_QUERIES = True
     DEBUG_TB_ENABLED = False

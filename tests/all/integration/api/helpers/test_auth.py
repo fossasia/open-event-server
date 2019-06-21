@@ -45,5 +45,22 @@ class TestAuthentication(OpenEventTestCase):
             logout_user()
             self.assertEqual(auth_manager.is_accessible(), False)
 
+    def test_check_auth_admin(self):
+        """Method to test proper authentication & admin rights for a user"""
+
+        with app.test_request_context():
+            auth_manager = auth.AuthManager()
+            auth_manager.init_login(app)
+            user = create_user(email='authtest@gmail.com', password='password')
+            user.is_admin = True
+            status = auth_manager.check_auth_admin('authtest@gmail.com', 'password')
+            self.assertEqual(True, status)
+
+            user = create_user(email='authtest2@gmail.com', password='password')
+            user.is_admin = False
+            status = auth_manager.check_auth_admin('authtest2@gmail.com', 'password')
+            self.assertEqual(False, status)
+
+
 if __name__ == '__main__':
     unittest.main()
