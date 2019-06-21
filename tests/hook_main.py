@@ -4358,8 +4358,8 @@ def favourite_events_list_post(transaction):
     :return:
     """
     with stash['app'].app_context():
-        user_fav_event = UserFavouriteEventFactory()
-        db.session.add(user_fav_event)
+        event = EventFactoryBasic()
+        db.session.add(event)
         db.session.commit()
 
 
@@ -4371,7 +4371,7 @@ def favourite_event_details_get(transaction):
     :return:
     """
     with stash['app'].app_context():
-        user_fav_event = UserFavouriteEventFactory(event_id=1)
+        user_fav_event = UserFavouriteEventFactory()
         db.session.add(user_fav_event)
         db.session.commit()
 
@@ -4384,7 +4384,7 @@ def favourite_event_delete(transaction):
     :return:
     """
     with stash['app'].app_context():
-        user_fav_event = UserFavouriteEventFactory(event_id=1)
+        user_fav_event = UserFavouriteEventFactory()
         db.session.add(user_fav_event)
         db.session.commit()
 
