@@ -20,7 +20,7 @@ class SettingFactory(factory.alchemy.SQLAlchemyModelFactory):
     # Static domain
     static_domain = common.url_
     # Order Expiry Time
-    order_expiry_time = 15 #min
+    order_expiry_time = 15  #min
 
     #
     #  STORAGE
