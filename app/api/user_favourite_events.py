@@ -1,5 +1,5 @@
 from flask import request, current_app as app
-from flask_jwt import current_identity as current_user, _jwt_required
+from flask_jwt import current_identity as current_user, _jwt_required, jwt_required
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
@@ -81,11 +81,8 @@ class UserFavouriteEventDetail(ResourceDetail):
     """
     User Favourite Events detail by id
     """
+    @jwt_required()
     def before_get_object(self, view_kwargs):
-        if 'Authorization' in request.headers:
-            _jwt_required(app.config['JWT_DEFAULT_REALM'])
-        else:
-            raise ForbiddenException({'source': ''}, 'Only Authorized Users can view an event')
 
         if view_kwargs.get('id') is not None:
             try:
@@ -99,11 +96,8 @@ class UserFavouriteEventDetail(ResourceDetail):
                 else:
                     view_kwargs['id'] = None
 
+    @jwt_required()
     def before_delete_object(self, view_kwargs):
-        if 'Authorization' in request.headers:
-            _jwt_required(app.config['JWT_DEFAULT_REALM'])
-        else:
-            raise ForbiddenException({'source': ''}, 'Only Authorized Users can delete an event')
 
         if view_kwargs.get('id') is not None:
             try:
