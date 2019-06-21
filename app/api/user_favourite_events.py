@@ -94,9 +94,8 @@ class UserFavouriteEventDetail(ResourceDetail):
             except NoResultFound:
                 raise ObjectNotFound({'source': ''}, "Object: not found")
             else:
-                if user_favourite_event:
-                    if user_favourite_event.event_id is not None:
-                        view_kwargs['id'] = user_favourite_event.id
+                if user_favourite_event is not None:
+                    view_kwargs['id'] = user_favourite_event.id
                 else:
                     view_kwargs['id'] = None
 
