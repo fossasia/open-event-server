@@ -304,12 +304,10 @@ def ticket_attendee_authorized(order_identifier):
     if current_user:
         try:
             order = Order.query.filter_by(identifier=order_identifier).first()
-            user_id = order.user.id
-            event_id = order.event.id
         except NoResultFound:
             return NotFoundError({'source': ''}, 'This ticket is not associated with any order').respond()
-        if current_user.id == user_id or current_user.is_organizer(event_id):
-            key = UPLOAD_PATHS['pdf']['ticket_attendee'].format(identifier=order_identifier)
+        if current_user.can_download_tickets(order):
+            key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
             file_path = '../generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
             try:
                 return return_tickets(file_path, order_identifier)
