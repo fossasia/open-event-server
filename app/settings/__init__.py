@@ -13,12 +13,13 @@ def get_settings(from_db=False):
     if not from_db and 'custom_settings' in current_app.config:
         return current_app.config['custom_settings']
     s = Setting.query.order_by(desc(Setting.id)).first()
+    app_environment = current_app.config.get('ENV', 'production')
     if s is None:
-        set_settings(secret='super secret key', app_name='Open Event')
+        set_settings(secret='super secret key', app_name='Open Event', app_environment=app_environment)
     else:
         current_app.config['custom_settings'] = make_dict(s)
         if not current_app.config['custom_settings'].get('secret'):
-            set_settings(secret='super secret key', app_name='Open Event')
+            set_settings(secret='super secret key', app_name='Open Event', app_environment=app_environment)
     return current_app.config['custom_settings']
 
 

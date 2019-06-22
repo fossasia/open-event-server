@@ -44,7 +44,7 @@ def send_after_event_mail():
                     send_notif_after_event(speaker.user, event.name)
                 for organizer in organizers:
                     send_email_after_event(organizer.user.email, event.name, upcoming_event_links)
-                    send_notif_after_event(organizer.user.email, event.name)
+                    send_notif_after_event(organizer.user, event.name)
 
 
 def change_session_state_on_event_completion():
@@ -142,10 +142,10 @@ def send_event_fee_notification_followup():
                                                         incomplete_invoice.event.id)
 
 
-def expire_pending_tickets_after_three_days():
+def expire_pending_tickets():
     from app import current_app as app
     with app.app_context():
         db.session.query(Order).filter(Order.status == 'pending',
-                                       (Order.created_at + datetime.timedelta(days=3)) <= datetime.datetime.now()).\
+                                       (Order.created_at + datetime.timedelta(minutes=30)) <= datetime.datetime.now()).\
                                        update({'status': 'expired'})
         db.session.commit()
