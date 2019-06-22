@@ -48,6 +48,15 @@ class Setting(db.Model):
     gs_bucket_name = db.Column(db.String)
 
     #
+    # CAPTCHA
+    #
+
+    # Google reCAPTCHA
+    is_google_recaptcha_enabled = db.Column(db.Boolean, default=False, nullable=False)
+    google_recaptcha_site = db.Column(db.String)
+    google_recaptcha_secret = db.Column(db.String)
+
+    #
     # Social Login
     #
 
@@ -148,6 +157,7 @@ class Setting(db.Model):
                  gs_key=None,
                  gs_secret=None,
                  gs_bucket_name=None,
+                 is_google_recaptcha_enabled=False, google_recaptcha_secret=None, google_recaptcha_site=None,
                  google_client_id=None, google_client_secret=None,
                  fb_client_id=None, fb_client_secret=None, tw_consumer_key=None,
                  stripe_client_id=None,
@@ -197,6 +207,10 @@ class Setting(db.Model):
         self.gs_key = gs_key
         self.gs_secret = gs_secret
         self.gs_bucket_name = gs_bucket_name
+
+        self.is_google_recaptcha_enabled = is_google_recaptcha_enabled
+        self.google_recaptcha_site = google_recaptcha_site
+        self.google_recaptcha_secret = google_recaptcha_secret
 
         self.google_client_id = google_client_id
         self.google_client_secret = google_client_secret
