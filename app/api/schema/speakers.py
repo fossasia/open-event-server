@@ -39,6 +39,7 @@ class SpeakerSchema(SoftDeletionSchema):
     linkedin = fields.Url(allow_none=True)
     organisation = fields.Str(allow_none=True)
     is_featured = fields.Boolean(default=False)
+    is_email_override = fields.Boolean(default=False, allow_none=False)
     position = fields.Str(allow_none=True)
     country = fields.Str(allow_none=True)
     city = fields.Str(allow_none=True)
