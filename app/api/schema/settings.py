@@ -28,7 +28,7 @@ class SettingSchemaPublic(Schema):
     tagline = fields.Str(allow_none=True)
 
     # Order Expiry Time
-    order_expiry_time = fields.Integer(allow_none=True, default=15, validate=lambda n: 1 <= n <= 60)
+    order_expiry_time = fields.Integer(allow_none=False, default=15, validate=lambda n: 1 <= n <= 60)
 
     # Google Analytics
     analytics_key = fields.Str(allow_none=True)

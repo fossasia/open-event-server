@@ -3,6 +3,7 @@ from datetime import timedelta, datetime, timezone
 
 from flask import render_template
 
+from app.settings import get_settings
 from app.api.helpers import ticketing
 from app.api.helpers.db import save_to_db, safe_query_without_soft_deleted_entries, get_count
 from app.api.helpers.exceptions import UnprocessableEntity, ConflictException
@@ -29,7 +30,7 @@ def delete_related_attendees_for_order(order):
             db.session.rollback()
 
 
-def set_expiry_for_order(order,setting, override=False):
+def set_expiry_for_order(order, override=False):
     """
     Expire the order after the time slot(10 minutes) if the order is initializing.
     Also expires the order if we want to expire an order regardless of the state and time.
@@ -37,9 +38,10 @@ def set_expiry_for_order(order,setting, override=False):
     :param override: flag to force expiry.
     :return:
     """
+    order_expiry_time = get_settings()['order_expiry_time']
     if order and not order.paid_via and (override or (order.status == 'initializing' and (
                 order.created_at +
-                timedelta(minutes=setting.order_expiry_time)) < datetime.now(timezone.utc))):
+                timedelta(minutes=order_expiry_time)) < datetime.now(timezone.utc))):
             order.status = 'expired'
             delete_related_attendees_for_order(order)
             save_to_db(order)

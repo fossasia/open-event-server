@@ -30,8 +30,8 @@ class Setting(db.Model):
     secret = db.Column(db.String)
     # Static domain
     static_domain = db.Column(db.String)
-    # Order Expiry Time
-    order_expiry_time = db.Column(db.Integer, default=15)
+    # Order Expiry Time in Minutes
+    order_expiry_time = db.Column(db.Integer, default=15, nullable=False)
 
     #
     #  STORAGE
