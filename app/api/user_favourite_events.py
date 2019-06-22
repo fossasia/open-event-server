@@ -89,26 +89,10 @@ class UserFavouriteEventDetail(ResourceDetail):
                 user_favourite_event = UserFavouriteEvent.query.filter_by(
                     user=current_user, event_id=view_kwargs['id']).first()
             except NoResultFound:
-                raise ObjectNotFound({'source': ''}, "Object: not found")
+                raise ObjectNotFound({'source': '/data/relationships/event'}, "Object: not found")
             else:
                 if user_favourite_event is not None:
                     view_kwargs['id'] = user_favourite_event.id
-                else:
-                    view_kwargs['id'] = None
-
-    @jwt_required()
-    def before_delete_object(self, view_kwargs):
-
-        if view_kwargs.get('id') is not None:
-            try:
-                user_favourite_event = UserFavouriteEvent.query.filter_by(
-                    user=current_user, event_id=view_kwargs['id']).first()
-            except NoResultFound:
-                raise ObjectNotFound({'source': ''}, "Object: not found")
-            else:
-                if user_favourite_event:
-                    if user_favourite_event.event_id is not None:
-                        view_kwargs['id'] = user_favourite_event.id
                 else:
                     view_kwargs['id'] = None
 
@@ -117,7 +101,6 @@ class UserFavouriteEventDetail(ResourceDetail):
     data_layer = {'session': db.session,
                   'model': UserFavouriteEvent,
                   'methods': {
-                      'before_delete_object': before_delete_object,
                       'before_get_object': before_get_object,
                   }}
 
