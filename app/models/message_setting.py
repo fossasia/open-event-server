@@ -46,14 +46,16 @@ class MessageSettings(db.Model):
     notification_status = db.Column(db.Boolean, default=False)
     user_control_status = db.Column(db.Boolean, default=False)
     sent_at = db.Column(db.DateTime(timezone=True))
+    threshold = db.Column(db.Integer)
 
     def __init__(self, action=None, mail_status=None,
-                 notification_status=None, user_control_status=None):
+                 notification_status=None, user_control_status=None, threshold=None):
         self.action = action
         self.mail_status = mail_status
         self.notification_status = notification_status
         self.user_control_status = user_control_status
         self.sent_at = datetime.now(pytz.utc)
+        self.threshold = threshold
 
     def __repr__(self):
         return '<Message Setting %r >' % self.action
@@ -132,4 +134,5 @@ class MessageSettings(db.Model):
                 'action': self.action,
                 'mail_status': self.mail_status,
                 'notification_status': self.notification_status,
-                'user_control_status': self.user_control_status}
+                'user_control_status': self.user_control_status,
+                'threshold': self.threshold}

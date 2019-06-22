@@ -71,3 +71,4 @@ class MessageSettingSchema(Schema):
     notification_title = fields.Str(dump_only=True)
     notification_message = fields.Str(dump_only=True)
     sent_at = fields.DateTime(dump_only=True)
+    threshold = fields.Integer(validate=lambda n: n > 0, allow_none=True)
