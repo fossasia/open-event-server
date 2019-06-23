@@ -196,3 +196,15 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     smtp_password = fields.Str(allow_none=True)
     smtp_port = fields.Integer(allow_none=True)
     smtp_encryption = fields.Str(allow_none=True)  # Can be tls, ssl, none
+
+    # Admin Invoice Details
+    admin_billing_contact_name = fields.Str(allow_none=True)
+    admin_billing_phone = fields.Str(allow_none=True)
+    admin_billing_email = fields.Email(allow_none=True)
+    admin_billing_country = fields.Str(allow_none=True)
+    admin_billing_tax_info = fields.Str(allow_none=True)
+    admin_company = fields.Str(allow_none=True)
+    admin_billing_address = fields.Str(allow_none=True)
+    admin_billing_city = fields.Str(allow_none=True)
+    admin_billing_company_zip = fields.Str(allow_none=True)
+    admin_billing_additional_info = fields.Str(allow_none=True)
