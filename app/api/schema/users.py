@@ -69,6 +69,15 @@ class UserSchema(UserSchemaPublic):
     deleted_at = fields.DateTime(dump_only=True)
     details = fields.Str(allow_none=True)
     contact = fields.Str(allow_none=True)
+    billing_contact_name = fields.Str(allow_none=True)
+    billing_phone = fields.Str(allow_none=True)
+    billing_country = fields.Str(allow_none=True)
+    billing_tax_info = fields.Str(allow_none=True)
+    company = fields.Str(allow_none=True)
+    billing_address = fields.Str(allow_none=True)
+    billing_city = fields.Str(allow_none=True)
+    billing_zip_code = fields.Str(allow_none=True)
+    billing_additional_info = fields.Str(allow_none=True)
     notifications = Relationship(
         attribute='notifications',
         self_view='v1.user_notification',
