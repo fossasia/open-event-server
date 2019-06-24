@@ -44,7 +44,7 @@ def send_after_event_mail():
                     send_notif_after_event(speaker.user, event.name)
                 for organizer in organizers:
                     send_email_after_event(organizer.user.email, event.name, upcoming_event_links)
-                    send_notif_after_event(organizer.user.email, event.name)
+                    send_notif_after_event(organizer.user, event.name)
 
 
 def change_session_state_on_event_completion():
