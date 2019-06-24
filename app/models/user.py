@@ -360,6 +360,12 @@ class User(SoftDeletionModel):
             return False
         return perm.panel_name
 
+    def can_download_tickets(self, order):
+        permissible_users = [holder.id for holder in order.ticket_holders] + [order.user.id]
+        if self.is_staff or self.is_organizer(order.event.id) or self.id in permissible_users:
+            return True
+        return False
+
     def can_access_panel(self, panel_name):
         """
         Check if user can access an Admin Panel
