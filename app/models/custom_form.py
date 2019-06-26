@@ -76,6 +76,8 @@ class CustomForms(SoftDeletionModel):
     is_required = db.Column(db.Boolean)
     is_included = db.Column(db.Boolean)
     is_fixed = db.Column(db.Boolean)
+    is_custom_question = db.Column(db.Boolean, default=False, nullable=False)
+    prompt = db.Column(db.String, nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
 
     def __init__(self,
@@ -85,12 +87,16 @@ class CustomForms(SoftDeletionModel):
                  type=None,
                  is_required=None,
                  is_included=None,
+                 is_custom_question=False,
+                 prompt=None,
                  is_fixed=None,
                  deleted_at=None):
         self.event_id = event_id
         self.field_identifier = field_identifier
         self.form = form
         self.type = type
+        self.is_custom_question = is_custom_question
+        self.prompt = prompt
         self.is_required = is_required
         self.is_included = is_included
         self.is_fixed = is_fixed
@@ -113,5 +119,7 @@ class CustomForms(SoftDeletionModel):
             'type': self.type,
             'is_required': self.is_required,
             'is_included': self.is_included,
-            'is_fixed': self.is_fixed
+            'is_fixed': self.is_fixed,
+            'is_custom_question': self.is_custom_question,
+            'prompt': self.prompt
         }

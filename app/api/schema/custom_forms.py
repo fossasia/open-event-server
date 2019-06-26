@@ -30,6 +30,8 @@ class CustomFormSchema(SoftDeletionSchema):
     is_required = fields.Boolean(default=False)
     is_included = fields.Boolean(default=False)
     is_fixed = fields.Boolean(default=False)
+    is_custom_question = fields.Boolean(default=False, allow_none=False)
+    prompt = fields.Str(required=False, allow_none=True)
     event = Relationship(attribute='event',
                          self_view='v1.custom_form_event',
                          self_view_kwargs={'id': '<id>'},
