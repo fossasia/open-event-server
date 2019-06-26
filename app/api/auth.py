@@ -295,9 +295,9 @@ def change_password():
     })
 
 
-def return_tickets(file_path, order_identifier):
+def return_file(file_name_prefix, file_path, order_identifier):
     response = make_response(send_file(file_path))
-    response.headers['Content-Disposition'] = 'attachment; filename=ticket-%s.pdf' % order_identifier
+    response.headers['Content-Disposition'] = 'attachment; filename=%s-%s.pdf' % (file_name_prefix, order_identifier)
     return response
 
 
@@ -313,10 +313,10 @@ def ticket_attendee_authorized(order_identifier):
             key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
             file_path = '../generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
             try:
-                return return_tickets(file_path, order_identifier)
+                return return_file('ticket', file_path, order_identifier)
             except FileNotFoundError:
                 create_pdf_tickets_for_holder(order)
-                return return_tickets(file_path, order_identifier)
+                return return_file('ticket', file_path, order_identifier)
         else:
             return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
     else:
@@ -329,15 +329,16 @@ def order_invoices(order_identifier):
     if current_user:
         try:
             order = Order.query.filter_by(identifier=order_identifier).first()
-            user_id = order.user.id
         except NoResultFound:
             return NotFoundError({'source': ''}, 'Order Invoice not found').respond()
-        if current_user.id == user_id:
+        if current_user.can_download_tickets(order):
             key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
             file_path = '../generated/invoices/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
-            response = make_response(send_file(file_path))
-            response.headers['Content-Disposition'] = 'attachment; filename=invoice-%s.zip' % order_identifier
-            return response
+            try:
+                return return_file('invoice', file_path, order_identifier)
+            except FileNotFoundError:
+                create_pdf_tickets_for_holder(order)
+                return return_file('invoice', file_path, order_identifier)
         else:
             return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
     else:
