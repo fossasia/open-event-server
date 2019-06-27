@@ -206,5 +206,5 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     admin_company = fields.Str(allow_none=True)
     admin_billing_address = fields.Str(allow_none=True)
     admin_billing_city = fields.Str(allow_none=True)
-    admin_billing_company_zip = fields.Str(allow_none=True)
+    admin_billing_zip = fields.Str(allow_none=True)
     admin_billing_additional_info = fields.Str(allow_none=True)

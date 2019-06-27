@@ -140,7 +140,7 @@ class Setting(db.Model):
     admin_company = db.Column(db.String)
     admin_billing_address = db.Column(db.String)
     admin_billing_city = db.Column(db.String)
-    admin_billing_company_zip = db.Column(db.String)
+    admin_billing_zip = db.Column(db.String)
     admin_billing_additional_info = db.Column(db.String)
     #
     # Generators
@@ -219,7 +219,7 @@ class Setting(db.Model):
                  admin_company=None,
                  admin_billing_address=None,
                  admin_billing_city=None,
-                 admin_billing_company_zip=None,
+                 admin_billing_zip=None,
                  admin_billing_additional_info=None):
         self.app_environment = app_environment
         self.aws_key = aws_key
@@ -299,7 +299,7 @@ class Setting(db.Model):
         self.admin_company = admin_company
         self.admin_billing_address = admin_billing_address
         self.admin_billing_city = admin_billing_city
-        self.admin_billing_company_zip = admin_billing_company_zip
+        self.admin_billing_zip = admin_billing_zip
         self.admin_billing_additional_info = admin_billing_additional_info
 
     @hybrid_property
