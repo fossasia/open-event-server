@@ -18,4 +18,6 @@ class CustomFormFactory(factory.alchemy.SQLAlchemyModelFactory):
     is_required = False
     is_included = False
     is_fixed = False
+    is_custom_question = False
+    prompt = common.string_
     event_id = 1

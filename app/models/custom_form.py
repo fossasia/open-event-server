@@ -77,7 +77,7 @@ class CustomForms(SoftDeletionModel):
     is_included = db.Column(db.Boolean)
     is_fixed = db.Column(db.Boolean)
     is_custom_question = db.Column(db.Boolean, default=False, nullable=False)
-    prompt = db.Column(db.String, nullable=False)
+    prompt = db.Column(db.String, nullable=True)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
 
     def __init__(self,
