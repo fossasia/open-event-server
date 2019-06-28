@@ -33,7 +33,7 @@ from app.views import BlueprintsManager
 from app.api.helpers.auth import AuthManager
 from app.api.helpers.scheduled_jobs import send_after_event_mail, send_event_fee_notification, \
     send_event_fee_notification_followup, change_session_state_on_event_completion, \
-    expire_pending_tickets
+    expire_pending_tickets, send_monthly_event_invoice
 from app.models.event import Event
 from app.models.role_invite import RoleInvite
 from app.views.healthcheck import health_check_celery, health_check_db, health_check_migrations, check_migrations
@@ -242,6 +242,7 @@ scheduler.add_job(send_event_fee_notification, 'cron', day=1)
 scheduler.add_job(send_event_fee_notification_followup, 'cron', day=15)
 scheduler.add_job(change_session_state_on_event_completion, 'cron', hour=5, minute=30)
 scheduler.add_job(expire_pending_tickets, 'cron', minute=45)
+scheduler.add_job(send_monthly_event_invoice, 'cron', day=1, month='1-12')
 scheduler.start()
 
 
