@@ -350,16 +350,19 @@ NOTIFS = {
         'recipient': 'User',
         'title': u'Your order for {event_name} has been cancelled ({invoice_id})',
         'message': (
-            u"Your order for {event_name} has been cancelled by the organizer" +
-            u"<br/>Please contact the organizer for more info" +
+            u"Your order for <a href='{event_url}'>{event_name}</a> has been cancelled by the organizer " +
+            u"<br/>You can visit your cancelled ticket here : <a href='{order_url}'>{invoice_id}</a> " +
+            u"<br/>Please contact the organizer for more info " +
             u"<br/>Message from the organizer: {cancel_note}."
         )
     },
     TICKET_CANCELLED_ORGANIZER: {
         'recipient': 'User',
-        'title': u'Order ({invoice_id}) has been cancelled',
+        'title': u'Order ({invoice_id}) of {event_name} has been cancelled',
         'message': (
-            u"Order ({invoice_id}) has been cancelled" +
+            u"Order ({invoice_id}) has been cancelled " +
+            u"Please visit the link to check the cancelled orders for this event:" +
+            u" <a href='{cancel_order_page}'>{event_name}</a> " +
             u"<br/>Cancel Note: {cancel_note}."
         )
     },
