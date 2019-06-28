@@ -14,6 +14,7 @@ from app.models import db
 from app.models.event import Event
 from app.models.event_invoice import EventInvoice
 from app.models.order import Order
+from app.models.speaker import Speaker
 from app.models.session import Session
 from app.models.ticket import Ticket
 from app.models.ticket_fee import get_fee
@@ -33,7 +34,7 @@ def send_after_event_mail():
         upcoming_event_links += "</ul>"
         for event in events:
             organizers = get_user_event_roles_by_role_name(event.id, 'organizer')
-            speakers = get_user_event_roles_by_role_name(event.id, 'speaker')
+            speakers = Speaker.query.filter_by(event_id=event.id, deleted_at=None).all()
             current_time = datetime.datetime.now(pytz.timezone(event.timezone))
             time_difference = current_time - event.ends_at
             time_difference_minutes = (time_difference.days * 24 * 60) + \
@@ -44,7 +45,7 @@ def send_after_event_mail():
                     send_notif_after_event(speaker.user, event.name)
                 for organizer in organizers:
                     send_email_after_event(organizer.user.email, event.name, upcoming_event_links)
-                    send_notif_after_event(organizer.user.email, event.name)
+                    send_notif_after_event(organizer.user, event.name)
 
 
 def change_session_state_on_event_completion():

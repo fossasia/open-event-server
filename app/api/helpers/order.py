@@ -55,7 +55,7 @@ def create_pdf_tickets_for_holder(order):
     """
     if order.status == 'completed' or order.status == 'placed':
         pdf = create_save_pdf(render_template('pdf/ticket_purchaser.html', order=order),
-                              UPLOAD_PATHS['pdf']['ticket_attendee'],
+                              UPLOAD_PATHS['pdf']['tickets_all'],
                               dir_path='/static/uploads/pdf/tickets/', identifier=order.identifier, upload_dir='generated/tickets/')
 
         order.tickets_pdf_url = pdf
