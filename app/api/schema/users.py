@@ -23,7 +23,7 @@ class UserSchemaPublic(SoftDeletionSchema):
 
     id = fields.Str(dump_only=True)
     email = fields.Email(required=True)
-    avatar_url = fields.Url(allow_none=True)
+    avatar_url = fields.Url(allow_none=True, skip_none=False)
     first_name = fields.Str(allow_none=True)
     last_name = fields.Str(allow_none=True)
     original_image_url = fields.Url(dump_only=True, allow_none=True)

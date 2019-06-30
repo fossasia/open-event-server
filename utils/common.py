@@ -13,7 +13,7 @@ def patch_defaults(schema, in_data):
     for name, field in schema.fields.items():
         dasherized_name = dasherize(name)
         attribute = in_data.get(dasherized_name)
-        if attribute is None and dasherized_name not in in_data:
+        if attribute is None and dasherized_name not in in_data and field.skip_none is False:
             in_data[dasherized_name] = field.default
     return in_data
 
