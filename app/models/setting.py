@@ -165,7 +165,6 @@ class Setting(db.Model):
 
     def __init__(self,
                  app_environment=Environment.PRODUCTION,
-                 order_expiry_time=None,
                  aws_key=None,
                  aws_secret=None,
                  aws_bucket_name=None,
@@ -223,9 +222,9 @@ class Setting(db.Model):
                  admin_billing_address=None,
                  admin_billing_city=None,
                  admin_billing_zip=None,
-                 admin_billing_additional_info=None):
+                 admin_billing_additional_info=None,
+                 order_expiry_time=None):
         self.app_environment = app_environment
-        self.order_expiry_time = order_expiry_time
         self.aws_key = aws_key
         self.aws_secret = aws_secret
         self.aws_bucket_name = aws_bucket_name
@@ -305,6 +304,9 @@ class Setting(db.Model):
         self.admin_billing_city = admin_billing_city
         self.admin_billing_zip = admin_billing_zip
         self.admin_billing_additional_info = admin_billing_additional_info
+
+        # Order Expiry Time in Minutes
+        self.order_expiry_time = order_expiry_time
 
     @hybrid_property
     def is_paypal_activated(self):
