@@ -3013,7 +3013,6 @@ These endpoints help you to create the basic event structure. To add other parts
 | `external-event-url`  | - | string | - |
 | `has-organizer-info`  | - | boolean(default: `false`) | - |
 | `average-rating`  | Average rating of event | float | - |
-| `order-expiry-time`  | Expiry time for orders in minutes | Integer(default: 10) | - |
 | `refund-policy` | Refund policy | string | - |
 | `is-stripe-linked` | Shows if the event has a linked stripe account. | boolean(default: `false`) | - |
 
@@ -3250,7 +3249,6 @@ Get a list of events.
                         "bank-details": "example",
                         "cheque-details": "example",
                         "identifier": "b8324ae2",
-                        "order-expiry-time": "10",
                         "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                         "is-stripe-linked": "false"
                     },
@@ -3321,8 +3319,7 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "bank-details": "example",
                     "onsite-details": "example",
                     "is-sponsors-enabled": "false",
-                    "has-organizer-info": "false",
-                    "order-expiry-time": "10"
+                    "has-organizer-info": "false"
                 },
                 "type": "event"
               }
@@ -3546,7 +3543,6 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "bank-details": "example",
                     "cheque-details": "example",
                     "identifier": "b8324ae2",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -3797,7 +3793,6 @@ Get a single event.
                     "bank-details": "example",
                     "cheque-details": "example",
                     "identifier": "b8324ae2",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -3872,7 +3867,7 @@ All other fields are optional. Add attributes you want to modify.
                     "onsite-details": "example1",
                     "is-sponsors-enabled": "false",
                     "has-organizer-info": "false",
-                    "order-expiry-time": "10",
+
                     "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "id": "1",
@@ -4097,7 +4092,6 @@ All other fields are optional. Add attributes you want to modify.
                     "bank-details": "example1",
                     "cheque-details": "example1",
                     "identifier": "b8324ae2",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -4361,7 +4355,6 @@ Get a list of events.
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
                         "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                        "order-expiry-time": "10",
                         "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                         "is-stripe-linked": "false"
                     },
@@ -4598,7 +4591,6 @@ Get a list of events.
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
                         "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                        "order-expiry-time": "10",
                         "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                         "is-stripe-linked": "false"
                     },
@@ -4828,7 +4820,6 @@ Get a list of events.
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
                         "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                        "order-expiry-time": "10",
                         "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                         "is-stripe-linked": "false"
                     },
@@ -5065,7 +5056,6 @@ Get a list of events.
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
                         "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                        "order-expiry-time": "10",
                         "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                         "is-stripe-linked": "false"
                     },
@@ -5296,7 +5286,6 @@ Get a list of events.
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
                         "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                        "order-expiry-time": "10",
                         "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                         "is-stripe-linked": "false"
                     },
@@ -5524,7 +5513,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -5752,7 +5740,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -5980,7 +5967,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -6207,7 +6193,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "can-pay-by-omise": false,
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
@@ -6436,7 +6421,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -6664,7 +6648,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -6892,7 +6875,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -7120,7 +7102,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -7348,7 +7329,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -7576,7 +7556,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -7804,7 +7783,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -8032,7 +8010,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -8260,7 +8237,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -8488,7 +8464,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -8716,7 +8691,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -8944,7 +8918,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -9172,7 +9145,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -9400,7 +9372,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -9628,7 +9599,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -9883,7 +9853,6 @@ Get a list of events.
               "external-event-url": null,
               "identifier": "4f27fefe",
               "ends-at": "2022-05-30T04:00:10+00:00",
-              "order-expiry-time": "10",
               "refund-policy": "All sales are final. No refunds shall be issued in any case.",
               "is-stripe-linked": "false"
             },
@@ -10138,7 +10107,6 @@ Get a list of events.
               "external-event-url": null,
               "identifier": "4f27fefe",
               "ends-at": "2022-05-30T04:00:10+00:00",
-              "order-expiry-time": "10",
               "refund-policy": "All sales are final. No refunds shall be issued in any case.",
               "is-stripe-linked": "true"
             },
@@ -21867,6 +21835,7 @@ To update or get any attribute of this data layer, you will need admin access. H
 | `app-name`  | Name of the application (Eg. Event Yay!, Open Event) | string | - |
 | `tagline` | Tagline (Eg. Event Management and Ticketing, Home)  | string | - |
 | `secret` | App Secret  | string | **yes** |
+| `order-expiry-time`  | Expiry time for orders in minutes | Integer(default: 15) | **yes** |
 | `is-paypal-activated` | Whether paypal payment is configured or not | boolean | - |
 | `is-stripe-activated` | Whether stripe payment is configured or not | boolean | - |
 | `is-omise-activated` | Whether omise payment is configured or not | boolean | - |
@@ -22023,6 +21992,7 @@ To update or get any attribute of this data layer, you will need admin access. H
               "app-name": "Event Yay!",
               "tagline": "Event Management and Ticketing",
               "secret": "example1234",
+              "order-expiry-time": "15",
               "storage-place": "s3",
               "aws-key": "example1234",
               "aws-secret": "example1234",
@@ -22175,6 +22145,7 @@ To update or get any attribute of this data layer, you will need admin access. H
               "app-name": "Event Yay!",
               "tagline": "Event Management and Ticketing",
               "secret": "example1234",
+              "order-expiry-time": "15",
               "storage-place": "s3",
               "aws-key": "example1234",
               "aws-secret": "example1234",
