@@ -37,7 +37,7 @@ class FeedbackSchema(SoftDeletionSchema):
                            self_view_kwargs={'id': '<id>'},
                            related_view='v1.session_detail',
                            related_view_kwargs={'feedback_id': '<id>'},
-                           schema='SessionsSchema',
+                           schema='SessionSchema',
                            type_='session')
     user = Relationship(attribute='user',
                         self_view='v1.feedback_user',

@@ -1,5 +1,6 @@
 import os
 import base64
+import logging
 import random
 import string
 
@@ -32,6 +33,7 @@ from app.models.user import User
 from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.helpers.auth import AuthManager
 
+logger = logging.getLogger(__name__)
 authorised_blueprint = Blueprint('authorised_blueprint', __name__, url_prefix='/')
 ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/v1')
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
@@ -224,7 +226,7 @@ def reset_password_post():
     try:
         user = User.query.filter_by(email=email).one()
     except NoResultFound:
-        return NotFoundError({'source': ''}, 'User not found').respond()
+        logger.info('Tried to reset password not existing email %s', email)
     else:
         link = make_frontend_url('/reset-password', {'token': user.reset_password})
         if user.was_registered_with_order:
@@ -232,7 +234,8 @@ def reset_password_post():
         else:
             send_email_with_action(user, PASSWORD_RESET, app_name=get_settings()['app_name'], link=link)
 
-    return make_response(jsonify(message="Email Sent"), 200)
+    return make_response(jsonify(message="If your email was registered with us, you'll get an \
+                         email with reset link shortly", email=email), 200)
 
 
 @auth_routes.route('/reset-password', methods=['PATCH'])
@@ -292,9 +295,9 @@ def change_password():
     })
 
 
-def return_tickets(file_path, order_identifier):
+def return_file(file_name_prefix, file_path, order_identifier):
     response = make_response(send_file(file_path))
-    response.headers['Content-Disposition'] = 'attachment; filename=ticket-%s.pdf' % order_identifier
+    response.headers['Content-Disposition'] = 'attachment; filename=%s-%s.pdf' % (file_name_prefix, order_identifier)
     return response
 
 
@@ -310,10 +313,10 @@ def ticket_attendee_authorized(order_identifier):
             key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
             file_path = '../generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
             try:
-                return return_tickets(file_path, order_identifier)
+                return return_file('ticket', file_path, order_identifier)
             except FileNotFoundError:
                 create_pdf_tickets_for_holder(order)
-                return return_tickets(file_path, order_identifier)
+                return return_file('ticket', file_path, order_identifier)
         else:
             return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
     else:
@@ -326,15 +329,16 @@ def order_invoices(order_identifier):
     if current_user:
         try:
             order = Order.query.filter_by(identifier=order_identifier).first()
-            user_id = order.user.id
         except NoResultFound:
             return NotFoundError({'source': ''}, 'Order Invoice not found').respond()
-        if current_user.id == user_id:
+        if current_user.can_download_tickets(order):
             key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
             file_path = '../generated/invoices/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
-            response = make_response(send_file(file_path))
-            response.headers['Content-Disposition'] = 'attachment; filename=invoice-%s.zip' % order_identifier
-            return response
+            try:
+                return return_file('invoice', file_path, order_identifier)
+            except FileNotFoundError:
+                create_pdf_tickets_for_holder(order)
+                return return_file('invoice', file_path, order_identifier)
         else:
             return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
     else:
