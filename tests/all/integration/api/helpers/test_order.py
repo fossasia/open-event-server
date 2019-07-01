@@ -1,6 +1,7 @@
 import unittest
 from datetime import timedelta, datetime, timezone
 
+from app.settings import get_settings
 from app import current_app as app, db
 from app.api.helpers.db import save_to_db
 from app.api.helpers.order import set_expiry_for_order, delete_related_attendees_for_order
@@ -22,10 +23,11 @@ class TestOrderUtilities(OpenEventTestCase):
 
         with app.test_request_context():
             obj = OrderFactory()
+            order_expiry_time = get_settings()['order_expiry_time']
             event = EventFactoryBasic()
             obj.event = event
             obj.created_at = datetime.now(timezone.utc) - timedelta(
-                minutes=obj.event.order_expiry_time)
+                minutes=order_expiry_time)
             set_expiry_for_order(obj)
             self.assertEqual(obj.status, 'expired')
 
