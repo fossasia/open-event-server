@@ -72,6 +72,7 @@ class UserSchema(UserSchemaPublic):
     contact = fields.Str(allow_none=True)
     billing_contact_name = fields.Str(allow_none=True)
     billing_phone = fields.Str(allow_none=True)
+    billing_state = fields.Str(allow_none=True)
     billing_country = fields.Str(allow_none=True)
     billing_tax_info = fields.Str(allow_none=True)
     company = fields.Str(allow_none=True)
