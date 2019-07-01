@@ -1,7 +1,7 @@
 """Changing field type of gender from `Text` to `Select`
 
 Revision ID: 43e8c59337af
-Revises: b08a4ffff5dd
+Revises: 2c7ff9781032
 Create Date: 2019-06-27 20:31:58.92665
 
 """
@@ -13,7 +13,7 @@ import sqlalchemy_utils
 
  # revision identifiers, used by Alembic.
 revision = '43e8c59337af'
-down_revision = 'b08a4ffff5dd'
+down_revision = '2c7ff9781032'
 
 
 def upgrade():
@@ -22,4 +22,4 @@ def upgrade():
 
 
 def downgrade():
-    op.execute("UPDATE custom_forms SET type = 'text' where field_identifier = 'gender';", execution_options=None)
+    op.execute("UPDATE custom_forms SET type = 'text' where field_identifier = 'gender' and form = 'attendee';", execution_options=None)
