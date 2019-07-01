@@ -141,7 +141,7 @@ class SessionDetail(ResourceDetail):
         :return:
         """
         if data.get('is_locked') != session.is_locked:
-            if not (has_access('is_admin') or has_access('is_organizer')):
+            if not (has_access('is_admin') or has_access('is_organizer', event_id=session.event_id)):
                 raise ForbiddenException({'source': '/data/attributes/is-locked'},
                                          "You don't have enough permissions to change this property")
 

@@ -30,6 +30,7 @@ class AdminStatisticsUserSchema(Schema):
     admin = fields.Method("admin_count")
     verified = fields.Method("verified_count")
     unverified = fields.Method("unverified_count")
+    owner = fields.Method("owner_count")
     organizer = fields.Method("organizer_count")
     coorganizer = fields.Method("coorganizer_count")
     attendee = fields.Method("attendee_count")
@@ -52,6 +53,9 @@ class AdminStatisticsUserSchema(Schema):
         newquery = User.query.join(UsersEventsRoles.user).join(UsersEventsRoles.role).filter(
             UsersEventsRoles.role == role).distinct()
         return newquery
+
+    def owner_count(self, obj):
+        return self.get_all_user_roles('owner').count()
 
     def organizer_count(self, obj):
         return self.get_all_user_roles('organizer').count()
