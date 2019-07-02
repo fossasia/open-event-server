@@ -46,7 +46,7 @@ from app.models.ticket import TicketTag
 from app.models.ticket_holder import TicketHolder
 from app.models.track import Track
 from app.models.user_favourite_event import UserFavouriteEvent
-from app.models.user import User, ATTENDEE, ORGANIZER, COORGANIZER
+from app.models.user import User, ATTENDEE, OWNER, ORGANIZER, COORGANIZER
 from app.models.users_events_role import UsersEventsRoles
 from app.models.stripe_authorization import StripeAuthorization
 
@@ -108,7 +108,7 @@ class EventList(ResourceList):
             _jwt_required(current_app.config['JWT_DEFAULT_REALM'])
             query2 = self.session.query(Event)
             query2 = query2.join(Event.roles).filter_by(user_id=current_identity.id).join(UsersEventsRoles.role). \
-                filter(or_(Role.name == COORGANIZER, Role.name == ORGANIZER))
+                filter(or_(Role.name == COORGANIZER, Role.name == ORGANIZER, Role.name == OWNER))
             query_ = query_.union(query2)
 
         if view_kwargs.get('user_id') and 'GET' in request.method:
@@ -154,19 +154,19 @@ class EventList(ResourceList):
 
     def after_create_object(self, event, data, view_kwargs):
         """
-        after create method to save roles for users and add the user as an accepted role(organizer)
+        after create method to save roles for users and add the user as an accepted role(owner and organizer)
         :param event:
         :param data:
         :param view_kwargs:
         :return:
         """
-        role = Role.query.filter_by(name=ORGANIZER).first()
         user = User.query.filter_by(id=view_kwargs['user_id']).first()
+        role = Role.query.filter_by(name=OWNER).first()
         uer = UsersEventsRoles(user, event, role)
         save_to_db(uer, 'Event Saved')
         role_invite = RoleInvite(user.email, role.title_name, event.id, role.id, datetime.now(pytz.utc),
                                  status='accepted')
-        save_to_db(role_invite, 'Organiser Role Invite Added')
+        save_to_db(role_invite, 'Owner Role Invite Added')
 
         # create custom forms for compulsory fields of attendee form.
         create_custom_forms_for_attendees(event)

@@ -38,6 +38,7 @@ SYS_ROLES_LIST = [
 ]
 
 # Event-specific
+OWNER = 'owner'
 ORGANIZER = 'organizer'
 COORGANIZER = 'coorganizer'
 TRACK_ORGANIZER = 'track_organizer'
@@ -211,6 +212,9 @@ class User(SoftDeletionModel):
         else:
             return True
 
+    def is_owner(self, event_id):
+        return self._is_role(OWNER, event_id)
+
     def is_organizer(self, event_id):
         # type: (object) -> object
         return self._is_role(ORGANIZER, event_id)
@@ -229,6 +233,14 @@ class User(SoftDeletionModel):
 
     def is_attendee(self, event_id):
         return self._is_role(ATTENDEE, event_id)
+
+    def has_event_access(self, event_id):
+        return self._is_role(OWNER, event_id) or self._is_role(ORGANIZER, event_id) or \
+            self._is_role(COORGANIZER, event_id)
+
+    @hybrid_property
+    def is_user_owner(self):
+        return self._is_role(OWNER)
 
     @hybrid_property
     def is_user_organizer(self):

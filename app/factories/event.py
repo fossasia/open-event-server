@@ -21,9 +21,9 @@ class EventFactoryBasic(factory.alchemy.SQLAlchemyModelFactory):
     searchable_location_name = common.string_
     description = common.string_
     original_image_url = common.imageUrl_
-    organizer_name = common.string_
+    owner_name = common.string_
     is_map_shown = True
-    organizer_description = common.string_
+    owner_description = common.string_
     is_sessions_speakers_enabled = True
     privacy = "public"
     state = "draft"
