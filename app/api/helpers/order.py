@@ -2,6 +2,7 @@ import logging
 from datetime import timedelta, datetime, timezone
 
 from flask import render_template
+from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
 from app.settings import get_settings
 from app.api.helpers import ticketing
@@ -73,7 +74,14 @@ def create_pdf_tickets_for_holder(order):
             save_to_db(holder)
 
         # create order invoices pdf
-        order_ticket_info = OrderTicket.query.filter_by(order_id=order.id).one()
+        order_ticket_info_object = OrderTicket.query.filter_by(order_id=order.id)
+        try:
+            order_ticket_info = order_ticket_info_object.one()
+        except MultipleResultsFound:
+            order_ticket_info = order_ticket_info_object.first()
+        except NoResultFound:
+            raise UnprocessableEntity({'pointer': ''}, 'Order Ticket Info missing.')
+
         create_save_pdf(render_template('pdf/order_invoice.html', order=order, event=order.event,
                         tax=order.event.tax, tickets=order.tickets, order_tickets_info=order_ticket_info),
                         UPLOAD_PATHS['pdf']['order'], dir_path='/static/uploads/pdf/tickets/',
