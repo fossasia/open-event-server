@@ -80,6 +80,18 @@ class User(SoftDeletionModel):
     was_registered_with_order = db.Column(db.Boolean, default=False)
     last_accessed_at = db.Column(db.DateTime(timezone=True))
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
+    # Event Invoice Details
+    billing_contact_name = db.Column(db.String)
+    billing_phone = db.Column(db.String)
+    billing_country = db.Column(db.String)
+    billing_tax_info = db.Column(db.String)
+    company = db.Column(db.String)
+    billing_address = db.Column(db.String)
+    billing_city = db.Column(db.String)
+    billing_zip_code = db.Column(db.String)
+    billing_additional_info = db.Column(db.String)
+
+    # relationships
     speaker = db.relationship('Speaker', backref="user")
     favourite_events = db.relationship('UserFavouriteEvent', backref="user")
     session = db.relationship('Session', backref="user")
