@@ -1,7 +1,7 @@
 """Changing field type of gender from `Text` to `Select`
 
 Revision ID: 43e8c59337af
-Revises: 2c7ff9781032
+Revises: b2aca7268345
 Create Date: 2019-06-27 20:31:58.92665
 
 """
@@ -13,7 +13,7 @@ import sqlalchemy_utils
 
  # revision identifiers, used by Alembic.
 revision = '43e8c59337af'
-down_revision = '2c7ff9781032'
+down_revision = 'b2aca7268345'
 
 
 def upgrade():
