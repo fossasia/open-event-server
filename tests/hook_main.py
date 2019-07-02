@@ -4358,8 +4358,8 @@ def favourite_events_list_post(transaction):
     :return:
     """
     with stash['app'].app_context():
-        user_fav_event = UserFavouriteEventFactory()
-        db.session.add(user_fav_event)
+        event = EventFactoryBasic()
+        db.session.add(event)
         db.session.commit()
 
 

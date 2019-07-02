@@ -57,6 +57,7 @@ class UserSchema(UserSchemaPublic):
     facebook_id = fields.Integer(dump_only=True)
     is_sales_admin = fields.Boolean()
     is_marketer = fields.Boolean()
+    is_user_owner = fields.Boolean(dump_only=True)
     is_user_organizer = fields.Boolean(dump_only=True)
     is_user_coorganizer = fields.Boolean(dump_only=True)
     is_user_track_organizer = fields.Boolean(dump_only=True)
@@ -69,6 +70,15 @@ class UserSchema(UserSchemaPublic):
     deleted_at = fields.DateTime(dump_only=True)
     details = fields.Str(allow_none=True)
     contact = fields.Str(allow_none=True)
+    billing_contact_name = fields.Str(allow_none=True)
+    billing_phone = fields.Str(allow_none=True)
+    billing_country = fields.Str(allow_none=True)
+    billing_tax_info = fields.Str(allow_none=True)
+    company = fields.Str(allow_none=True)
+    billing_address = fields.Str(allow_none=True)
+    billing_city = fields.Str(allow_none=True)
+    billing_zip_code = fields.Str(allow_none=True)
+    billing_additional_info = fields.Str(allow_none=True)
     notifications = Relationship(
         attribute='notifications',
         self_view='v1.user_notification',
@@ -148,6 +158,13 @@ class UserSchema(UserSchemaPublic):
         schema='SessionSchema',
         many=True,
         type_='session')
+    owner_events = Relationship(
+        self_view='v1.user_owner_event',
+        self_view_kwargs={'id': '<id>'},
+        related_view='v1.event_list',
+        schema='EventSchema',
+        many=True,
+        type_='event')
     organizer_events = Relationship(
         self_view='v1.user_organizer_event',
         self_view_kwargs={'id': '<id>'},

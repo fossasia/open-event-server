@@ -54,7 +54,8 @@ class RoleDetail(ResourceDetail):
         :return:
         """
         if data.get('name'):
-            if data['name'] in ['organizer', 'coorganizer', 'registrar', 'moderator', 'attendee', 'track_organizer']:
+            if data['name'] in ['owner', 'organizer', 'coorganizer', 'registrar', 'moderator', 'attendee',
+                                'track_organizer']:
                 raise UnprocessableEntity({'data': 'name'}, "The given name cannot be updated")
 
     def before_delete_object(self, obj, kwargs):
@@ -64,7 +65,7 @@ class RoleDetail(ResourceDetail):
         :param kwargs:
         :return:
         """
-        if obj.name in ['organizer', 'coorganizer', 'registrar', 'moderator', 'attendee', 'track_organizer']:
+        if obj.name in ['owner', 'organizer', 'coorganizer', 'registrar', 'moderator', 'attendee', 'track_organizer']:
             raise UnprocessableEntity({'data': 'name'}, "The resource with given name cannot be deleted")
 
     decorators = (api.has_permission('is_admin', methods="PATCH,DELETE"),)

@@ -1,5 +1,6 @@
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
+from sqlalchemy import or_
 from flask_rest_jsonapi import ResourceList
 
 from app.api.helpers.utilities import dasherize
@@ -53,7 +54,7 @@ class AdminSalesByOrganizersList(ResourceList):
 
     def query(self, _):
         query_ = self.session.query(User)
-        query_ = query_.join(UsersEventsRoles).filter(Role.name == 'organizer')
+        query_ = query_.join(UsersEventsRoles).filter(or_(Role.name == 'organizer', Role.name == 'owner'))
         query_ = query_.join(Event).outerjoin(Order).outerjoin(OrderTicket)
 
         return query_
