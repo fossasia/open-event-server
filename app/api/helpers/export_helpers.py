@@ -29,8 +29,8 @@ from app.models.track import Track
 FIELD_ORDER = {
     'event': [
         'id', 'name', 'latitude', 'longitude', 'location_name', 'starts_at', 'ends_at',
-        'timezone', 'description', 'original_image_url', 'logo_url', 'organizer_name',
-        'organizer_description', 'external_event_url', 'ticket_url', 'privacy', 'event_type_id',
+        'timezone', 'description', 'original_image_url', 'logo_url', 'owner_name',
+        'owner_description', 'external_event_url', 'ticket_url', 'privacy', 'event_type_id',
         'event_topic_id', 'event_sub_topic_id', 'code_of_conduct'
     ],
     'microlocations': ['id', 'name', 'floor'],

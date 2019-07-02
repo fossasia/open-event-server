@@ -104,6 +104,27 @@ def is_user_itself(f):
 
 
 @second_order_decorator(jwt_required)
+def is_owner(f):
+    """
+    Allows only Owner to access the event resources.
+    :param f:
+    :return:
+    """
+
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        user = current_identity
+
+        if user.is_staff:
+            return f(*args, **kwargs)
+        if 'event_id' in kwargs and user.is_owner(kwargs['event_id']):
+            return f(*args, **kwargs)
+        return ForbiddenError({'source': ''}, 'Owner access is required').respond()
+
+    return decorated_function
+
+
+@second_order_decorator(jwt_required)
 def is_organizer(f):
     """
     Allows only Organizer to access the event resources.
@@ -138,9 +159,7 @@ def is_coorganizer(f):
 
         if user.is_staff:
             return f(*args, **kwargs)
-        if 'event_id' in kwargs and (
-                user.is_coorganizer(kwargs['event_id']) or
-                user.is_organizer(kwargs['event_id'])):
+        if 'event_id' in kwargs and user.has_event_access(kwargs['event_id']):
             return f(*args, **kwargs)
         return ForbiddenError({'source': ''}, 'Co-organizer access is required.').respond()
 
@@ -163,8 +182,7 @@ def is_registrar(f):
             return f(*args, **kwargs)
         if 'event_id' in kwargs and (
                     user.is_registrar(kwargs['event_id']) or
-                    user.is_organizer(kwargs['event_id']) or
-                user.is_coorganizer(kwargs['event_id'])):
+                    user.has_event_access(kwargs['event_id'])):
             return f(*args, **kwargs)
         return ForbiddenError({'source': ''}, 'Registrar Access is Required.').respond()
 
@@ -187,8 +205,7 @@ def is_track_organizer(f):
             return f(*args, **kwargs)
         if 'event_id' in kwargs and (
                     user.is_track_organizer(kwargs['event_id']) or
-                    user.is_organizer(kwargs['event_id']) or
-                user.is_coorganizer(kwargs['event_id'])):
+                    user.has_event_access(kwargs['event_id'])):
             return f(*args, **kwargs)
         return ForbiddenError({'source': ''}, 'Track Organizer access is Required.').respond()
 
@@ -211,8 +228,7 @@ def is_moderator(f):
             return f(*args, **kwargs)
         if 'event_id' in kwargs and (
                     user.is_moderator(kwargs['event_id']) or
-                    user.is_organizer(kwargs['event_id']) or
-                user.is_coorganizer(kwargs['event_id'])):
+                    user.has_event_access(kwargs['event_id'])):
             return f(*args, **kwargs)
         return ForbiddenError({'source': ''}, 'Moderator Access is Required.').respond()
 

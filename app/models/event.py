@@ -17,13 +17,13 @@ from app.models.feedback import Feedback
 from app.models.helpers.versioning import clean_up_string, clean_html
 from app.models.order import Order
 from app.models.search import sync
+from app.models.user import ATTENDEE, ORGANIZER, OWNER
 from app.models.session import Session
 from app.models.speaker import Speaker
 from app.models.ticket import Ticket
 from app.models.ticket_fee import get_fee
 from app.models.ticket_fee import get_maximum_fee
 from app.models.ticket_holder import TicketHolder
-from app.models.user import ATTENDEE, ORGANIZER
 
 
 def get_new_event_identifier(length=8):
@@ -61,10 +61,10 @@ class Event(SoftDeletionModel):
     large_image_url = db.Column(db.String)
     show_remaining_tickets = db.Column(db.Boolean, default=False, nullable=False)
     icon_image_url = db.Column(db.String)
-    organizer_name = db.Column(db.String)
+    owner_name = db.Column(db.String)
     is_map_shown = db.Column(db.Boolean)
-    has_organizer_info = db.Column(db.Boolean)
-    organizer_description = db.Column(db.String)
+    has_owner_info = db.Column(db.Boolean)
+    owner_description = db.Column(db.String)
     is_sessions_speakers_enabled = db.Column(db.Boolean, default=False)
     track = db.relationship('Track', backref="event")
     microlocation = db.relationship('Microlocation', backref="event")
@@ -124,6 +124,14 @@ class Event(SoftDeletionModel):
         'EventSubTopic', backref='event', foreign_keys=[event_sub_topic_id])
     events_orga = db.relationship(
         'EventOrgaModel', backref='event', foreign_keys=[events_orga_id])
+    owner = db.relationship('User',
+                            viewonly=True,
+                            secondary='join(UsersEventsRoles, Role,'
+                                      ' and_(Role.id == UsersEventsRoles.role_id, Role.name == "owner"))',
+                            primaryjoin='UsersEventsRoles.event_id == Event.id',
+                            secondaryjoin='User.id == UsersEventsRoles.user_id',
+                            backref='owner_events',
+                            uselist=False)
     organizers = db.relationship('User',
                                  viewonly=True,
                                  secondary='join(UsersEventsRoles, Role,'
@@ -185,8 +193,8 @@ class Event(SoftDeletionModel):
                  thumbnail_image_url=None,
                  large_image_url=None,
                  icon_image_url=None,
-                 organizer_name=None,
-                 organizer_description=None,
+                 owner_name=None,
+                 owner_description=None,
                  state=None,
                  event_type_id=None,
                  privacy=None,
@@ -202,7 +210,7 @@ class Event(SoftDeletionModel):
                  is_ticket_form_enabled=True,
                  is_donation_enabled=False,
                  is_map_shown=False,
-                 has_organizer_info=False,
+                 has_owner_info=False,
                  searchable_location_name=None,
                  is_ticketing_enabled=None,
                  deleted_at=None,
@@ -250,11 +258,11 @@ class Event(SoftDeletionModel):
         self.thumbnail_image_url = thumbnail_image_url
         self.large_image_url = large_image_url
         self.icon_image_url = icon_image_url
-        self.organizer_name = organizer_name
-        self.organizer_description = clean_up_string(organizer_description)
+        self.owner_name = owner_name
+        self.owner_description = clean_up_string(owner_description)
         self.state = state
         self.is_map_shown = is_map_shown
-        self.has_organizer_info = has_organizer_info
+        self.has_owner_info = has_owner_info
         self.privacy = privacy
         self.event_type_id = event_type_id
         self.event_topic_id = event_topic_id
@@ -306,7 +314,7 @@ class Event(SoftDeletionModel):
         return self.__repr__()
 
     def __setattr__(self, name, value):
-        if name == 'organizer_description' or name == 'description' or name == 'code_of_conduct':
+        if name == 'owner_description' or name == 'description' or name == 'code_of_conduct':
             super(Event, self).__setattr__(name, clean_html(clean_up_string(value)))
         else:
             super(Event, self).__setattr__(name, value)
@@ -356,6 +364,13 @@ class Event(SoftDeletionModel):
         """returns organizer of an event"""
         for role in self.roles:
             if role.role.name == ORGANIZER:
+                return role.user
+        return None
+
+    def get_owner(self):
+        """returns owner of an event"""
+        for role in self.roles:
+            if role.role.name == OWNER:
                 return role.user
         return None
 

@@ -92,7 +92,7 @@ api.route(UserDetail, 'user_detail', '/users/<int:id>', '/notifications/<int:not
           '/event-invoices/<int:event_invoice_id>/user', '/speakers/<int:speaker_id>/user',
           '/access-codes/<int:access_code_id>/marketer', '/email-notifications/<int:email_notification_id>/user',
           '/discount-codes/<int:discount_code_id>/marketer', '/sessions/<int:session_id>/creator',
-          '/attendees/<int:attendee_id>/user', '/feedbacks/<int:feedback_id>/user',
+          '/attendees/<int:attendee_id>/user', '/feedbacks/<int:feedback_id>/user', '/events/<int:event_id>/owner',
           '/alternate-emails/<int:user_email_id>/user', '/favourite-events/<int:user_favourite_event_id>/user')
 api.route(UserRelationship, 'user_notification', '/users/<int:id>/relationships/notifications')
 api.route(UserRelationship, 'user_feedback', '/users/<int:id>/relationships/feedbacks')
@@ -102,6 +102,7 @@ api.route(UserRelationship, 'user_session', '/users/<int:id>/relationships/sessi
 api.route(UserRelationship, 'user_access_codes', '/users/<int:id>/relationships/access-codes')
 api.route(UserRelationship, 'user_discount_codes', '/users/<int:id>/relationships/discount-codes')
 api.route(UserRelationship, 'user_email_notifications', '/users/<int:id>/relationships/email-notifications')
+api.route(UserRelationship, 'user_owner_event', '/users/<int:id>/relationships/owner-events')
 api.route(UserRelationship, 'user_organizer_event', '/users/<int:id>/relationships/organizer-events')
 api.route(UserRelationship, 'user_coorganizer_event', '/users/<int:id>/relationships/coorganizer-events')
 api.route(UserRelationship, 'user_track_organizer_event', '/users/<int:id>/relationships/track-organizer-events')
@@ -315,6 +316,8 @@ api.route(EventRelationship, 'event_orders', '/events/<int:id>/relationships/ord
 api.route(EventRelationship, 'event_stripe_authorization', '/events/<int:id>/relationships/stripe-authorization',
           '/events/<identifier>/relationships/stripe-authorization')
 # Events -> roles:
+api.route(EventRelationship, 'event_owner', '/events/<int:id>/relationships/owner',
+          '/events/<identifier>/relationships/owner')
 api.route(EventRelationship, 'event_organizers', '/events/<int:id>/relationships/organizers',
           '/events/<identifier>/relationships/organizers')
 api.route(EventRelationship, 'event_coorganizers', '/events/<int:id>/relationships/coorganizers',
