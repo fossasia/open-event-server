@@ -734,8 +734,8 @@ def feedback_post(transaction):
     :return:
     """
     with stash['app'].app_context():
-        event = EventFactoryBasic()
-        db.session.add(event)
+        session = SessionFactory()
+        db.session.add(session)
         db.session.commit()
 
 

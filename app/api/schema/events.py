@@ -86,12 +86,12 @@ class EventSchemaPublic(SoftDeletionSchema):
     large_image_url = fields.Url(dump_only=True)
     icon_image_url = fields.Url(dump_only=True)
     show_remaining_tickets = fields.Bool(allow_none=False, default=False)
-    organizer_name = fields.Str(allow_none=True)
+    owner_name = fields.Str(allow_none=True)
     is_map_shown = fields.Bool(default=False)
-    has_organizer_info = fields.Bool(default=False)
+    has_owner_info = fields.Bool(default=False)
     has_sessions = fields.Bool(default=0, dump_only=True)
     has_speakers = fields.Bool(default=0, dump_only=True)
-    organizer_description = fields.Str(allow_none=True)
+    owner_description = fields.Str(allow_none=True)
     is_sessions_speakers_enabled = fields.Bool(default=False)
     privacy = fields.Str(default="public")
     state = fields.Str(validate=validate.OneOf(choices=["published", "draft"]), allow_none=True, default='draft')
@@ -125,7 +125,6 @@ class EventSchemaPublic(SoftDeletionSchema):
     ical_url = fields.Url(dump_only=True)
     xcal_url = fields.Url(dump_only=True)
     average_rating = fields.Float(dump_only=True)
-    order_expiry_time = fields.Integer(allow_none=True, default=10, validate=lambda n: 1 <= n <= 60)
     refund_policy = fields.String(dump_only=True,
                                   default='All sales are final. No refunds shall be issued in any case.')
     is_stripe_linked = fields.Boolean(dump_only=True, allow_none=True, default=False)
@@ -283,6 +282,13 @@ class EventSchemaPublic(SoftDeletionSchema):
                                 schema='CustomFormSchema',
                                 many=True,
                                 type_='custom-form')
+    owner = Relationship(attribute='owner',
+                         self_view='v1.event_owner',
+                         self_view_kwargs={'id': '<id>'},
+                         related_view='v1.user_detail',
+                         schema='UserSchemaPublic',
+                         related_view_kwargs={'event_id': '<id>'},
+                         type_='user')
     organizers = Relationship(attribute='organizers',
                               self_view='v1.event_organizers',
                               self_view_kwargs={'id': '<id>'},

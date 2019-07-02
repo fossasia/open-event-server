@@ -198,6 +198,7 @@ Get a list of Users.
                         "google-plus-url": "http://plus.google.com/plus.google",
                         "facebook-id": "12345678",
                         "was-registered-with-order": false,
+                        "is-user-owner": false,
                         "is-user-organizer": false,
                         "is-user-coorganizer": false,
                         "is-user-track-organizer": false,
@@ -384,6 +385,7 @@ Create a new user using an email, password and an optional name.
                     "google-plus-url": "http://plus.google.com/plus.google",
                     "facebook-id": null,
                     "was-registered-with-order": false,
+                    "is-user-owner": false,
                     "is-user-organizer": false,
                     "is-user-coorganizer": false,
                     "is-user-track-organizer": false,
@@ -546,6 +548,7 @@ Get a single user.
                     "google-plus-url": "http://plus.google.com/plus.google",
                     "facebook-id": "123456",
                     "was-registered-with-order": false,
+                    "is-user-owner": false,
                     "is-user-organizer": false,
                     "is-user-coorganizer": false,
                     "is-user-track-organizer": false,
@@ -731,6 +734,7 @@ Authorized user should be same as user in request body or must be admin.
                     "google-plus-url": "http://plus.google.com/plus.google",
                     "facebook-id": "123456",
                     "was-registered-with-order": false,
+                    "is-user-owner": false,
                     "is-user-organizer": false,
                     "is-user-coorganizer": false,
                     "is-user-track-organizer": false,
@@ -866,6 +870,7 @@ Get the details of the user.
                     "details": null,
                     "facebook-id": "123456",
                     "was-registered-with-order": false,
+                    "is-user-owner": false,
                     "is-user-organizer": false,
                     "is-user-coorganizer": false,
                     "is-user-track-organizer": false,
@@ -985,6 +990,7 @@ Get the details of the user.
                     "details": null,
                     "facebook-id": "123456",
                     "was-registered-with-order": false,
+                    "is-user-owner": false,
                     "is-user-organizer": false,
                     "is-user-coorganizer": false,
                     "is-user-track-organizer": false,
@@ -1104,6 +1110,7 @@ Get the details of the user.
                     "details": null,
                     "facebook-id": "123456",
                     "was-registered-with-order": false,
+                    "is-user-owner": false,
                     "is-user-organizer": false,
                     "is-user-coorganizer": false,
                     "is-user-track-organizer": false,
@@ -1223,6 +1230,7 @@ Get the details of the user.
                     "details": null,
                     "facebook-id": "123456",
                     "was-registered-with-order": false,
+                    "is-user-owner": false,
                     "is-user-organizer": false,
                     "is-user-coorganizer": false,
                     "is-user-track-organizer": false,
@@ -1342,6 +1350,7 @@ Get the details of the user.
                     "details": null,
                     "facebook-id": "123456",
                     "was-registered-with-order": false,
+                    "is-user-owner": false,
                     "is-user-organizer": false,
                     "is-user-coorganizer": false,
                     "is-user-track-organizer": false,
@@ -1461,6 +1470,7 @@ Get the details of the user.
                     "details": null,
                     "facebook-id": "123456",
                     "was-registered-with-order": false,
+                    "is-user-owner": false,
                     "is-user-organizer": false,
                     "is-user-coorganizer": false,
                     "is-user-track-organizer": false,
@@ -2977,8 +2987,8 @@ These endpoints help you to create the basic event structure. To add other parts
 | `longitude` | Longitude of the event location| float | - |
 | `description` | Description of the event| String | - |
 | `searchable-location-name` | Search friendly name of the event location | string | -  |
-| `organizer-name` | Name of the event organizer | string | - |
-| `organizer-description` | Additional details about the event organizer | string | - |
+| `owner-name` | Name of the event organizer | string | - |
+| `owner-description` | Additional details about the event organizer | string | - |
 | `description` | Event's description | string | - |
 | `is-map-shown`  | Should the map be shown on public page | boolean (default: `false`) | - |
 | `is-sessions-speakers-enabled` | Does the event have sessions & speakers | boolean (default: `false`) | - |
@@ -3011,9 +3021,8 @@ These endpoints help you to create the basic event structure. To add other parts
 | `is-sponsors-enabled`  | - | boolean (default: `false`) | - |
 | `identifier`  | - | string | - |
 | `external-event-url`  | - | string | - |
-| `has-organizer-info`  | - | boolean(default: `false`) | - |
+| `has-owner-info`  | - | boolean(default: `false`) | - |
 | `average-rating`  | Average rating of event | float | - |
-| `order-expiry-time`  | Expiry time for orders in minutes | Integer(default: 10) | - |
 | `refund-policy` | Refund policy | string | - |
 | `is-stripe-linked` | Shows if the event has a linked stripe account. | boolean(default: `false`) | - |
 
@@ -3054,6 +3063,12 @@ Get a list of events.
                             "links": {
                                 "self": "/v1/events/1/relationships/orders",
                                 "related": "/v1/orders"
+                            }
+                        },
+                        "owner": {
+                            "links": {
+                                "self": "/v1/events/1/relationships/owner",
+                                "related": "/v1/events/1/owner"
                             }
                         },
                         "organizers": {
@@ -3207,11 +3222,11 @@ Get a list of events.
                         "thumbnail-image-url": null,
                         "schedule-published-on": null,
                         "payment-currency": "USD",
-                        "organizer-description": "example",
+                        "owner-description": "example",
                         "is-map-shown": true,
                         "original-image-url": "http://example.com/example.png",
                         "onsite-details": "example",
-                        "organizer-name": "example",
+                        "owner-name": "example",
                         "can-pay-by-stripe": true,
                         "large-image-url": null,
                         "timezone": "UTC",
@@ -3222,7 +3237,7 @@ Get a list of events.
                         "location-name": "example",
                         "is-sponsors-enabled": false,
                         "is-event-online": false,
-                        "has-organizer-info": false,
+                        "has-owner-info": false,
                         "is-sessions-speakers-enabled": true,
                         "privacy": "public",
                         "code-of-conduct": "example",
@@ -3250,7 +3265,6 @@ Get a list of events.
                         "bank-details": "example",
                         "cheque-details": "example",
                         "identifier": "b8324ae2",
-                        "order-expiry-time": "10",
                         "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                         "is-stripe-linked": "false"
                     },
@@ -3296,9 +3310,9 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "searchable-location-name": "example",
                     "description": "example",
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "is-map-shown": "true",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-sessions-speakers-enabled": "true",
                     "privacy": "public",
                     "state": "draft",
@@ -3321,8 +3335,7 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "bank-details": "example",
                     "onsite-details": "example",
                     "is-sponsors-enabled": "false",
-                    "has-organizer-info": "false",
-                    "order-expiry-time": "10"
+                    "has-owner-info": "false"
                 },
                 "type": "event"
               }
@@ -3344,6 +3357,12 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                         "links": {
                             "self": "/v1/events/1/relationships/orders",
                             "related": "/v1/orders"
+                        }
+                    },
+                    "owner": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/owner",
+                            "related": "/v1/events/1/owner"
                         }
                     },
                     "organizers": {
@@ -3503,11 +3522,11 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "thumbnail-image-url": null,
                     "schedule-published-on": null,
                     "payment-currency": "USD",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-map-shown": true,
                     "original-image-url": "http://example.com/example.png",
                     "onsite-details": "example",
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "can-pay-by-stripe": false,
                     "can-pay-by-omise": false,
                     "large-image-url": null,
@@ -3519,7 +3538,7 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "can-pay-by-paypal": false,
                     "location-name": "example",
                     "is-sponsors-enabled": false,
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
                     "code-of-conduct": "example",
@@ -3546,7 +3565,6 @@ Create a new event using a `name`, `starts-at`, `ends-at`, `timezone` and an opt
                     "bank-details": "example",
                     "cheque-details": "example",
                     "identifier": "b8324ae2",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -3597,6 +3615,12 @@ Get a single event.
                             "related": "/v1/orders"
                         }
                     },
+                    "owner": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/owner",
+                            "related": "/v1/events/1/owner"
+                        }
+                    },
                     "organizers": {
                         "links": {
                             "self": "/v1/events/1/relationships/organizers",
@@ -3754,11 +3778,11 @@ Get a single event.
                     "thumbnail-image-url": null,
                     "schedule-published-on": null,
                     "payment-currency": "USD",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-map-shown": true,
                     "original-image-url": "http://example.com/example.png",
                     "onsite-details": "example",
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
                     "timezone": "UTC",
@@ -3768,7 +3792,7 @@ Get a single event.
                     "can-pay-by-paypal": true,
                     "location-name": "example",
                     "is-sponsors-enabled": false,
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
                     "is-event-online": false,
@@ -3797,7 +3821,6 @@ Get a single event.
                     "bank-details": "example",
                     "cheque-details": "example",
                     "identifier": "b8324ae2",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -3847,9 +3870,9 @@ All other fields are optional. Add attributes you want to modify.
                     "searchable-location-name": "example1",
                     "description": "example1",
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
-                    "organizer-name": "example1",
+                    "owner-name": "example1",
                     "is-map-shown": "false",
-                    "organizer-description": "example1",
+                    "owner-description": "example1",
                     "is-sessions-speakers-enabled": "false",
                     "privacy": "private",
                     "state": "draft",
@@ -3871,8 +3894,7 @@ All other fields are optional. Add attributes you want to modify.
                     "bank-details": "example1",
                     "onsite-details": "example1",
                     "is-sponsors-enabled": "false",
-                    "has-organizer-info": "false",
-                    "order-expiry-time": "10",
+                    "has-owner-info": "false",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case."
                 },
                 "id": "1",
@@ -3895,6 +3917,12 @@ All other fields are optional. Add attributes you want to modify.
                         "links": {
                             "self": "/v1/events/1/relationships/orders",
                             "related": "/v1/orders"
+                        }
+                    },
+                    "owner": {
+                        "links": {
+                            "self": "/v1/events/1/relationships/owner",
+                            "related": "/v1/events/1/owner"
                         }
                     },
                     "organizers": {
@@ -4054,11 +4082,11 @@ All other fields are optional. Add attributes you want to modify.
                     "thumbnail-image-url": null,
                     "schedule-published-on": null,
                     "payment-currency": "USD",
-                    "organizer-description": "example1",
+                    "owner-description": "example1",
                     "is-map-shown": false,
                     "original-image-url": "http://example1.com/example1.png",
                     "onsite-details": "example1",
-                    "organizer-name": "example1",
+                    "owner-name": "example1",
                     "can-pay-by-stripe": false,
                     "large-image-url": null,
                     "timezone": "Asia/Kolkata",
@@ -4068,7 +4096,7 @@ All other fields are optional. Add attributes you want to modify.
                     "can-pay-by-paypal": false,
                     "location-name": "example1",
                     "is-sponsors-enabled": false,
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "can-pay-by-omise": false,
                     "is-sessions-speakers-enabled": false,
                     "privacy": "private",
@@ -4097,7 +4125,6 @@ All other fields are optional. Add attributes you want to modify.
                     "bank-details": "example1",
                     "cheque-details": "example1",
                     "identifier": "b8324ae2",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -4318,11 +4345,11 @@ Get a list of events.
                         "code-of-conduct": "example",
                         "schedule-published-on": null,
                         "payment-currency": "USD",
-                        "organizer-description": "example",
+                        "owner-description": "example",
                         "is-map-shown": true,
                         "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                         "onsite-details": "example",
-                        "organizer-name": "example",
+                        "owner-name": "example",
                         "can-pay-by-stripe": true,
                         "large-image-url": null,
                         "timezone": "UTC",
@@ -4334,7 +4361,7 @@ Get a list of events.
                         "is-sponsors-enabled": false,
                         "is-sessions-speakers-enabled": true,
                         "privacy": "public",
-                        "has-organizer-info": false,
+                        "has-owner-info": false,
                         "state": "draft",
                         "is-event-online": false,
                         "average-rating": null,
@@ -4361,7 +4388,6 @@ Get a list of events.
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
                         "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                        "order-expiry-time": "10",
                         "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                         "is-stripe-linked": "false"
                     },
@@ -4555,11 +4581,11 @@ Get a list of events.
                         "code-of-conduct": "example",
                         "schedule-published-on": null,
                         "payment-currency": "USD",
-                        "organizer-description": "example",
+                        "owner-description": "example",
                         "is-map-shown": true,
                         "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                         "onsite-details": "example",
-                        "organizer-name": "example",
+                        "owner-name": "example",
                         "can-pay-by-stripe": true,
                         "large-image-url": null,
                         "timezone": "UTC",
@@ -4573,7 +4599,7 @@ Get a list of events.
                         "is-sessions-speakers-enabled": true,
                         "can-pay-by-omise": false,
                         "privacy": "public",
-                        "has-organizer-info": false,
+                        "has-owner-info": false,
                         "state": "draft",
                         "average-rating": null,
                         "latitude": 1.23456789,
@@ -4598,7 +4624,6 @@ Get a list of events.
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
                         "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                        "order-expiry-time": "10",
                         "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                         "is-stripe-linked": "false"
                     },
@@ -4785,11 +4810,11 @@ Get a list of events.
                         "code-of-conduct": "example",
                         "schedule-published-on": null,
                         "payment-currency": "USD",
-                        "organizer-description": "example",
+                        "owner-description": "example",
                         "is-map-shown": true,
                         "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                         "onsite-details": "example",
-                        "organizer-name": "example",
+                        "owner-name": "example",
                         "can-pay-by-stripe": true,
                         "large-image-url": null,
                         "timezone": "UTC",
@@ -4802,7 +4827,7 @@ Get a list of events.
                         "is-sponsors-enabled": false,
                         "is-sessions-speakers-enabled": true,
                         "privacy": "public",
-                        "has-organizer-info": false,
+                        "has-owner-info": false,
                         "state": "draft",
                         "average-rating": null,
                         "latitude": 1.23456789,
@@ -4828,7 +4853,6 @@ Get a list of events.
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
                         "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                        "order-expiry-time": "10",
                         "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                         "is-stripe-linked": "false"
                     },
@@ -5022,11 +5046,11 @@ Get a list of events.
                         "code-of-conduct": "example",
                         "schedule-published-on": null,
                         "payment-currency": "USD",
-                        "organizer-description": "example",
+                        "owner-description": "example",
                         "is-map-shown": true,
                         "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                         "onsite-details": "example",
-                        "organizer-name": "example",
+                        "owner-name": "example",
                         "can-pay-by-stripe": true,
                         "large-image-url": null,
                         "timezone": "UTC",
@@ -5039,7 +5063,7 @@ Get a list of events.
                         "is-sponsors-enabled": false,
                         "is-sessions-speakers-enabled": true,
                         "privacy": "public",
-                        "has-organizer-info": false,
+                        "has-owner-info": false,
                         "state": "draft",
                         "is-event-online": false,
                         "average-rating": null,
@@ -5065,7 +5089,6 @@ Get a list of events.
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
                         "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                        "order-expiry-time": "10",
                         "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                         "is-stripe-linked": "false"
                     },
@@ -5253,11 +5276,11 @@ Get a list of events.
                         "code-of-conduct": "example",
                         "schedule-published-on": null,
                         "payment-currency": "USD",
-                        "organizer-description": "example",
+                        "owner-description": "example",
                         "is-map-shown": true,
                         "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                         "onsite-details": "example",
-                        "organizer-name": "example",
+                        "owner-name": "example",
                         "can-pay-by-stripe": true,
                         "large-image-url": null,
                         "timezone": "UTC",
@@ -5269,7 +5292,7 @@ Get a list of events.
                         "is-sponsors-enabled": false,
                         "is-sessions-speakers-enabled": true,
                         "privacy": "public",
-                        "has-organizer-info": false,
+                        "has-owner-info": false,
                         "can-pay-by-omise": false,
                         "state": "draft",
                         "average-rating": null,
@@ -5296,7 +5319,6 @@ Get a list of events.
                         "external-event-url": "http://example.com",
                         "identifier": "f4fbf878",
                         "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                        "order-expiry-time": "10",
                         "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                         "is-stripe-linked": "false"
                     },
@@ -5481,11 +5503,11 @@ Get a list of events.
                     "code-of-conduct": "example",
                     "schedule-published-on": null,
                     "payment-currency": "USD",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-map-shown": true,
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
                     "timezone": "UTC",
@@ -5497,7 +5519,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "state": "draft",
                     "can-pay-by-omise": false,
                     "is-event-online": false,
@@ -5524,7 +5546,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -5709,11 +5730,11 @@ Get a list of events.
                     "code-of-conduct": "example",
                     "schedule-published-on": null,
                     "payment-currency": "USD",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-map-shown": true,
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
                     "timezone": "UTC",
@@ -5725,7 +5746,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "state": "draft",
                     "is-event-online": false,
                     "average-rating": null,
@@ -5752,7 +5773,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -5937,11 +5957,11 @@ Get a list of events.
                     "code-of-conduct": "example",
                     "schedule-published-on": null,
                     "payment-currency": "USD",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-map-shown": true,
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
                     "timezone": "UTC",
@@ -5955,7 +5975,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "state": "draft",
                     "average-rating": null,
                     "latitude": 1.23456789,
@@ -5980,7 +6000,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -6165,11 +6184,11 @@ Get a list of events.
                     "code-of-conduct": "example",
                     "schedule-published-on": null,
                     "payment-currency": "USD",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-map-shown": true,
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
                     "timezone": "UTC",
@@ -6181,7 +6200,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "state": "draft",
                     "is-event-online": false,
                     "average-rating": null,
@@ -6207,7 +6226,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "can-pay-by-omise": false,
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
@@ -6394,11 +6412,11 @@ Get a list of events.
                     "code-of-conduct": "example",
                     "schedule-published-on": null,
                     "payment-currency": "USD",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-map-shown": true,
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
                     "timezone": "UTC",
@@ -6411,7 +6429,7 @@ Get a list of events.
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
                     "is-event-online": false,
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "state": "draft",
                     "average-rating": null,
                     "latitude": 1.23456789,
@@ -6436,7 +6454,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -6622,11 +6639,11 @@ Get a list of events.
                     "can-pay-by-omise": false,
                     "schedule-published-on": null,
                     "payment-currency": "USD",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-map-shown": true,
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
                     "timezone": "UTC",
@@ -6638,7 +6655,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "state": "draft",
                     "average-rating": null,
                     "is-event-online": false,
@@ -6664,7 +6681,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -6850,11 +6866,11 @@ Get a list of events.
                     "can-pay-by-omise": false,
                     "schedule-published-on": null,
                     "payment-currency": "USD",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-map-shown": true,
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
                     "timezone": "UTC",
@@ -6866,7 +6882,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "state": "draft",
                     "average-rating": null,
                     "latitude": 1.23456789,
@@ -6892,7 +6908,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -7078,11 +7093,11 @@ Get a list of events.
                     "schedule-published-on": null,
                     "can-pay-by-omise": false,
                     "payment-currency": "USD",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-map-shown": true,
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
                     "timezone": "UTC",
@@ -7095,7 +7110,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "state": "draft",
                     "average-rating": null,
                     "latitude": 1.23456789,
@@ -7120,7 +7135,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -7305,13 +7319,13 @@ Get a list of events.
                     "code-of-conduct": "example",
                     "schedule-published-on": null,
                     "payment-currency": "USD",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-map-shown": true,
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
                     "is-event-online": false,
                     "can-pay-by-omise": false,
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
                     "timezone": "UTC",
@@ -7323,7 +7337,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "state": "draft",
                     "average-rating": null,
                     "latitude": 1.23456789,
@@ -7348,7 +7362,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -7533,11 +7546,11 @@ Get a list of events.
                     "code-of-conduct": "example",
                     "schedule-published-on": null,
                     "payment-currency": "USD",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-map-shown": true,
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "can-pay-by-omise": false,
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
@@ -7551,7 +7564,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "state": "draft",
                     "average-rating": null,
                     "latitude": 1.23456789,
@@ -7576,7 +7589,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -7761,11 +7773,11 @@ Get a list of events.
                     "code-of-conduct": "example",
                     "schedule-published-on": null,
                     "payment-currency": "USD",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-map-shown": true,
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
                     "can-pay-by-omise": false,
@@ -7778,7 +7790,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "state": "draft",
                     "average-rating": null,
                     "latitude": 1.23456789,
@@ -7804,7 +7816,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -7989,11 +8000,11 @@ Get a list of events.
                     "code-of-conduct": "example",
                     "schedule-published-on": null,
                     "payment-currency": "USD",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-map-shown": true,
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
                     "can-pay-by-omise": false,
@@ -8007,7 +8018,7 @@ Get a list of events.
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
                     "is-event-online": false,
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "state": "draft",
                     "average-rating": null,
                     "latitude": 1.23456789,
@@ -8032,7 +8043,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -8217,11 +8227,11 @@ Get a list of events.
                     "code-of-conduct": "example",
                     "schedule-published-on": null,
                     "payment-currency": "USD",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-map-shown": true,
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "can-pay-by-omise": false,
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
@@ -8234,7 +8244,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "state": "draft",
                     "average-rating": null,
                     "latitude": 1.23456789,
@@ -8260,7 +8270,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -8445,11 +8454,11 @@ Get a list of events.
                     "code-of-conduct": "example",
                     "schedule-published-on": null,
                     "payment-currency": "USD",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-map-shown": true,
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
                     "timezone": "UTC",
@@ -8462,7 +8471,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "state": "draft",
                     "average-rating": null,
                     "latitude": 1.23456789,
@@ -8488,7 +8497,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -8673,11 +8681,11 @@ Get a list of events.
                     "code-of-conduct": "example",
                     "schedule-published-on": null,
                     "payment-currency": "USD",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-map-shown": true,
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "can-pay-by-omise": false,
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
@@ -8690,7 +8698,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "state": "draft",
                     "average-rating": null,
                     "is-event-online": false,
@@ -8716,7 +8724,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -8901,11 +8908,11 @@ Get a list of events.
                     "code-of-conduct": "example",
                     "schedule-published-on": null,
                     "payment-currency": "USD",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-map-shown": true,
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
                     "timezone": "UTC",
@@ -8918,7 +8925,7 @@ Get a list of events.
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
                     "can-pay-by-omise": false,
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "state": "draft",
                     "average-rating": null,
                     "latitude": 1.23456789,
@@ -8944,7 +8951,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -9129,11 +9135,11 @@ Get a list of events.
                     "code-of-conduct": "example",
                     "schedule-published-on": null,
                     "payment-currency": "USD",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-map-shown": true,
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
                     "timezone": "UTC",
@@ -9146,7 +9152,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "state": "draft",
                     "is-event-online": false,
                     "average-rating": null,
@@ -9172,7 +9178,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -9357,11 +9362,11 @@ Get a list of events.
                     "code-of-conduct": "example",
                     "schedule-published-on": null,
                     "payment-currency": "USD",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-map-shown": true,
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
                     "timezone": "UTC",
@@ -9374,7 +9379,7 @@ Get a list of events.
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
                     "is-event-online": false,
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "state": "draft",
                     "average-rating": null,
                     "can-pay-by-omise": false,
@@ -9400,7 +9405,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -9585,11 +9589,11 @@ Get a list of events.
                     "code-of-conduct": "example",
                     "schedule-published-on": null,
                     "payment-currency": "USD",
-                    "organizer-description": "example",
+                    "owner-description": "example",
                     "is-map-shown": true,
                     "original-image-url": "https://www.w3schools.com/html/pic_mountain.jpg",
                     "onsite-details": "example",
-                    "organizer-name": "example",
+                    "owner-name": "example",
                     "can-pay-by-stripe": true,
                     "large-image-url": null,
                     "timezone": "UTC",
@@ -9601,7 +9605,7 @@ Get a list of events.
                     "is-sponsors-enabled": false,
                     "is-sessions-speakers-enabled": true,
                     "privacy": "public",
-                    "has-organizer-info": false,
+                    "has-owner-info": false,
                     "state": "draft",
                     "average-rating": null,
                     "latitude": 1.23456789,
@@ -9628,7 +9632,6 @@ Get a list of events.
                     "external-event-url": "http://example.com",
                     "identifier": "f4fbf878",
                     "ends-at": "2016-12-14T23:59:59.123456+00:00",
-                    "order-expiry-time": "10",
                     "refund-policy": "All sales are final. No refunds shall be issued in any case.",
                     "is-stripe-linked": "false"
                 },
@@ -9665,6 +9668,12 @@ Get a list of events.
         {
           "data": {
             "relationships": {
+              "owner": {
+                "links": {
+                  "self": "/v1/events/1/relationships/owner",
+                  "related": "/v1/events/1/owner"
+                }
+              },
               "organizers": {
                 "links": {
                   "self": "/v1/events/1/relationships/organizers",
@@ -9840,11 +9849,11 @@ Get a list of events.
               "code-of-conduct": "",
               "schedule-published-on": null,
               "payment-currency": null,
-              "organizer-description": "",
+              "owner-description": "",
               "is-map-shown": false,
               "original-image-url": "https://cdn.pixabay.com/photo/2013/11/23/16/25/birds-216412_1280.jpg",
               "onsite-details": null,
-              "organizer-name": null,
+              "owner-name": null,
               "longitude": null,
               "large-image-url": null,
               "timezone": "Asia/Kolkata",
@@ -9857,7 +9866,7 @@ Get a list of events.
               "is-sessions-speakers-enabled": false,
               "privacy": "public",
               "is-event-online": false,
-              "has-organizer-info": false,
+              "has-owner-info": false,
               "state": "draft",
               "average-rating": null,
               "can-pay-by-omise": false,
@@ -9883,7 +9892,6 @@ Get a list of events.
               "external-event-url": null,
               "identifier": "4f27fefe",
               "ends-at": "2022-05-30T04:00:10+00:00",
-              "order-expiry-time": "10",
               "refund-policy": "All sales are final. No refunds shall be issued in any case.",
               "is-stripe-linked": "false"
             },
@@ -9920,6 +9928,12 @@ Get a list of events.
         {
           "data": {
             "relationships": {
+              "owner": {
+                "links": {
+                  "self": "/v1/events/1/relationships/owner",
+                  "related": "/v1/events/1/owner"
+                }
+              },
               "organizers": {
                 "links": {
                   "self": "/v1/events/1/relationships/organizers",
@@ -10095,11 +10109,11 @@ Get a list of events.
               "code-of-conduct": "",
               "schedule-published-on": null,
               "payment-currency": null,
-              "organizer-description": "",
+              "owner-description": "",
               "is-map-shown": false,
               "original-image-url": "https://cdn.pixabay.com/photo/2013/11/23/16/25/birds-216412_1280.jpg",
               "onsite-details": null,
-              "organizer-name": null,
+              "owner-name": null,
               "longitude": null,
               "large-image-url": null,
               "timezone": "Asia/Kolkata",
@@ -10111,7 +10125,7 @@ Get a list of events.
               "is-sponsors-enabled": false,
               "is-sessions-speakers-enabled": false,
               "privacy": "public",
-              "has-organizer-info": false,
+              "has-owner-info": false,
               "is-event-online": false,
               "state": "Draft",
               "average-rating": null,
@@ -10138,7 +10152,6 @@ Get a list of events.
               "external-event-url": null,
               "identifier": "4f27fefe",
               "ends-at": "2022-05-30T04:00:10+00:00",
-              "order-expiry-time": "10",
               "refund-policy": "All sales are final. No refunds shall be issued in any case.",
               "is-stripe-linked": "true"
             },
@@ -21351,26 +21364,26 @@ Create a new feedback with event_id.
 
             {
               "data": {
-                "type": "feedback",
                 "relationships": {
-                      "event": {
-                        "data": {
-                          "type": "event",
-                          "id": "1"
-                        }
-                      },
-                      "user": {
-                        "data": {
-                          "type": "user",
-                          "id": "1"
-                        }
-                      }
-                    },
-                "attributes": {
-                      "rating": "4",
-                      "comment": "Awesome event."
+                  "session": {
+                    "data": {
+                      "type": "session",
+                      "id": "1"
                     }
-                }
+                  },
+                  "user": {
+                    "data": {
+                      "type": "user",
+                      "id": "1"
+                    }
+                  }
+                },
+                "attributes": {
+                  "rating": 4,
+                  "comment": "Awesome session."
+                },
+                "type": "feedback"
+              }
             }
 
 
@@ -21379,9 +21392,9 @@ Create a new feedback with event_id.
         {
             "data": {
                 "relationships": {
-                    "event": {
+                    "session": {
                         "links": {
-                            "self": "/v1/feedbacks/1/relationships/event",
+                            "self": "/v1/feedbacks/1/relationships/session",
                             "related": "/v1/feedbacks/1/event"
                         }
                     },
@@ -21390,12 +21403,18 @@ Create a new feedback with event_id.
                             "self": "/v1/feedbacks/1/relationships/user",
                             "related": "/v1/feedbacks/1/user"
                         }
+                    },
+                    "event": {
+                        "links": {
+                            "self": "/v1/feedbacks/1/relationships/event",
+                            "related": "/v1/feedbacks/1/event"
+                        }
                     }
                 },
                 "attributes": {
-                    "rating": "4",
+                    "rating": 4.0,
                     "deleted-at": null,
-                    "comment": "Awesome event"
+                    "comment": "Awesome session."
                 },
                 "type": "feedback",
                 "id": 1,
@@ -21480,7 +21499,7 @@ Update a single feedback with `id`.
                 "type": "feedback",
                 "attributes": {
                     "rating": "5",
-                    "comment": "Awesome event"
+                    "comment": "Awesome session"
                 },
                 "id": "1"
               }
@@ -21861,6 +21880,7 @@ To update or get any attribute of this data layer, you will need admin access. H
 | `app-name`  | Name of the application (Eg. Event Yay!, Open Event) | string | - |
 | `tagline` | Tagline (Eg. Event Management and Ticketing, Home)  | string | - |
 | `secret` | App Secret  | string | **yes** |
+| `order-expiry-time`  | Expiry time for orders in minutes | Integer(default: 15) | **yes** |
 | `is-paypal-activated` | Whether paypal payment is configured or not | boolean | - |
 | `is-stripe-activated` | Whether stripe payment is configured or not | boolean | - |
 | `is-omise-activated` | Whether omise payment is configured or not | boolean | - |
@@ -22017,6 +22037,7 @@ To update or get any attribute of this data layer, you will need admin access. H
               "app-name": "Event Yay!",
               "tagline": "Event Management and Ticketing",
               "secret": "example1234",
+              "order-expiry-time": "15",
               "storage-place": "s3",
               "aws-key": "example1234",
               "aws-secret": "example1234",
@@ -22169,6 +22190,7 @@ To update or get any attribute of this data layer, you will need admin access. H
               "app-name": "Event Yay!",
               "tagline": "Event Management and Ticketing",
               "secret": "example1234",
+              "order-expiry-time": "15",
               "storage-place": "s3",
               "aws-key": "example1234",
               "aws-secret": "example1234",

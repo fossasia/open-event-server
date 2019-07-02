@@ -30,6 +30,8 @@ class Setting(db.Model):
     secret = db.Column(db.String)
     # Static domain
     static_domain = db.Column(db.String)
+    # Order Expiry Time in Minutes
+    order_expiry_time = db.Column(db.Integer, default=15, nullable=False)
 
     #
     #  STORAGE
@@ -130,6 +132,19 @@ class Setting(db.Model):
     youtube_url = db.Column(db.String)
 
     #
+    # Admin Invoice Details
+    #
+    admin_billing_contact_name = db.Column(db.String)
+    admin_billing_phone = db.Column(db.String)
+    admin_billing_email = db.Column(db.String)
+    admin_billing_country = db.Column(db.String)
+    admin_billing_tax_info = db.Column(db.String)
+    admin_company = db.Column(db.String)
+    admin_billing_address = db.Column(db.String)
+    admin_billing_city = db.Column(db.String)
+    admin_billing_zip = db.Column(db.String)
+    admin_billing_additional_info = db.Column(db.String)
+    #
     # Generators
     #
     android_app_url = db.Column(db.String)
@@ -197,7 +212,18 @@ class Setting(db.Model):
                  omise_live_public=None,
                  omise_live_secret=None,
                  alipay_publishable_key=None,
-                 alipay_secret_key=None):
+                 alipay_secret_key=None,
+                 admin_billing_contact_name=None,
+                 admin_billing_phone=None,
+                 admin_billing_email=None,
+                 admin_billing_country=None,
+                 admin_billing_tax_info=None,
+                 admin_company=None,
+                 admin_billing_address=None,
+                 admin_billing_city=None,
+                 admin_billing_zip=None,
+                 admin_billing_additional_info=None,
+                 order_expiry_time=None):
         self.app_environment = app_environment
         self.aws_key = aws_key
         self.aws_secret = aws_secret
@@ -267,6 +293,20 @@ class Setting(db.Model):
         # AliPay Credentails
         self.alipay_publishable_key = alipay_publishable_key
         self.alipay_secret_key = alipay_secret_key
+
+        # Admin Invoice Details
+        self.admin_billing_contact_name = admin_billing_contact_name
+        self.admin_billing_phone = admin_billing_phone
+        self.admin_billing_country = admin_billing_country
+        self.admin_billing_tax_info = admin_billing_tax_info
+        self.admin_company = admin_company
+        self.admin_billing_address = admin_billing_address
+        self.admin_billing_city = admin_billing_city
+        self.admin_billing_zip = admin_billing_zip
+        self.admin_billing_additional_info = admin_billing_additional_info
+
+        # Order Expiry Time in Minutes
+        self.order_expiry_time = order_expiry_time
 
     @hybrid_property
     def is_paypal_activated(self):

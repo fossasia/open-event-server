@@ -11,7 +11,7 @@ from app.models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
 
 MAILS = {
     EVENT_PUBLISH: {
-        'recipient': 'Organizer, Speaker',
+        'recipient': 'Owner, Organizer, Speaker',
         'subject': u'{event_name} is Live',
         'message': (
             u"Hi {email}<br/>" +
@@ -38,7 +38,7 @@ MAILS = {
         )
     },
     SESSION_SCHEDULE: {
-        'recipient': 'Organizer, Speaker',
+        'recipient': 'Owner, Organizer, Speaker',
         'subject': u'Schedule for Session {session_name} has been changed',
         'message': (
             u"Hi {email},<br/>" +
@@ -47,7 +47,7 @@ MAILS = {
         )
     },
     NEXT_EVENT: {
-        'recipient': 'Organizer, Speaker',
+        'recipient': 'Owner, Organizer, Speaker',
         'subject': u'Event {event_name} is coming soon',
         'message': (
             u"Hi {email},<br/>" +
@@ -56,7 +56,7 @@ MAILS = {
         )
     },
     AFTER_EVENT: {
-        'recipient': 'Organizer, Speaker',
+        'recipient': 'Owner, Organizer, Speaker',
         'subject': u'Event {event_name} is over',
         'message': (
             u"Hi {email},<br/>" +
@@ -67,7 +67,7 @@ MAILS = {
         'sent_at': '1 day after the event'
     },
     NEW_SESSION: {
-        'recipient': 'Organizer',
+        'recipient': 'Owner, Organizer',
         'subject': u'New session proposal for {event_name}',
         'message': (
             u"Hi {email},<br/>" +
@@ -171,7 +171,7 @@ MAILS = {
     },
 
     TICKET_PURCHASED_ORGANIZER: {
-        'recipient': 'Organizer, Coorganizer',
+        'recipient': 'Owner, Organizer, Coorganizer',
         'subject': u'New ticket purchase for {event_name} by {buyer_email} ({invoice_id}) ',
         'message': (
             u"Hi, {buyer_email} just bought tickets for the event {event_name}"
@@ -218,7 +218,7 @@ MAILS = {
         )
     },
     MONTHLY_PAYMENT_EMAIL: {
-        'recipient': 'Organizer',
+        'recipient': 'Owner, Organizer',
         'subject': u'{date} - Monthly service fee invoice for {event_name}',
         'message': (
             u"The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}." +
@@ -229,7 +229,7 @@ MAILS = {
         'sent_at': '1st day of the month'
     },
     MONTHLY_PAYMENT_FOLLOWUP_EMAIL: {
-        'recipient': 'Organizer',
+        'recipient': 'Owner, Organizer',
         'subject': u'Past Due: {date} - Monthly service fee invoice for {event_name}',
         'message': (
             u"The total service fee for the ticket sales of {event_name} in the month of {date} is {amount}." +

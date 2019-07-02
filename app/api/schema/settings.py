@@ -27,6 +27,9 @@ class SettingSchemaPublic(Schema):
     # Tagline for the application. (Eg. Event Management and Ticketing, Home)
     tagline = fields.Str(allow_none=True)
 
+    # Order Expiry Time
+    order_expiry_time = fields.Integer(allow_none=False, default=15, validate=lambda n: 1 <= n <= 60)
+
     # Google Analytics
     analytics_key = fields.Str(allow_none=True)
 
@@ -196,3 +199,15 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     smtp_password = fields.Str(allow_none=True)
     smtp_port = fields.Integer(allow_none=True)
     smtp_encryption = fields.Str(allow_none=True)  # Can be tls, ssl, none
+
+    # Admin Invoice Details
+    admin_billing_contact_name = fields.Str(allow_none=True)
+    admin_billing_phone = fields.Str(allow_none=True)
+    admin_billing_email = fields.Email(allow_none=True)
+    admin_billing_country = fields.Str(allow_none=True)
+    admin_billing_tax_info = fields.Str(allow_none=True)
+    admin_company = fields.Str(allow_none=True)
+    admin_billing_address = fields.Str(allow_none=True)
+    admin_billing_city = fields.Str(allow_none=True)
+    admin_billing_zip = fields.Str(allow_none=True)
+    admin_billing_additional_info = fields.Str(allow_none=True)

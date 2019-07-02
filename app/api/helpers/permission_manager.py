@@ -40,16 +40,29 @@ def is_admin(view, view_args, view_kwargs, *args, **kwargs):
 
 
 @jwt_required
+def is_owner(view, view_args, view_kwargs, *args, **kwargs):
+    user = current_identity
+
+    if user.is_staff:
+        return view(*view_args, **view_kwargs)
+
+    if not user.is_owner(kwargs['event_id']):
+        return ForbiddenError({'source': ''}, 'Owner access is required').respond()
+
+    return view(*view_args, **view_kwargs)
+
+
+@jwt_required
 def is_organizer(view, view_args, view_kwargs, *args, **kwargs):
     user = current_identity
 
     if user.is_staff:
         return view(*view_args, **view_kwargs)
 
-    if not user.is_organizer(kwargs['event_id']):
-        return ForbiddenError({'source': ''}, 'Organizer access is required').respond()
+    if user.is_owner(kwargs['event_id']) or user.is_organizer(kwargs['event_id']):
+        return view(*view_args, **view_kwargs)
 
-    return view(*view_args, **view_kwargs)
+    return ForbiddenError({'source': ''}, 'Organizer access is required').respond()
 
 
 @jwt_required
@@ -59,7 +72,7 @@ def is_coorganizer(view, view_args, view_kwargs, *args, **kwargs):
     if user.is_staff:
         return view(*view_args, **view_kwargs)
 
-    if user.is_organizer(kwargs['event_id']) or user.is_coorganizer(kwargs['event_id']):
+    if user.has_event_access(kwargs['event_id']):
         return view(*view_args, **view_kwargs)
 
     return ForbiddenError({'source': ''}, 'Co-organizer access is required.').respond()
@@ -69,7 +82,7 @@ def is_coorganizer(view, view_args, view_kwargs, *args, **kwargs):
 def is_coorganizer_but_not_admin(view, view_args, view_kwargs, *args, **kwargs):
     user = current_identity
 
-    if user.is_organizer(kwargs['event_id']) or user.is_coorganizer(kwargs['event_id']):
+    if user.has_event_access(kwargs['event_id']):
         return view(*view_args, **view_kwargs)
 
     return ForbiddenError({'source': ''}, 'Co-organizer access is required.').respond()
@@ -94,7 +107,7 @@ def is_coorganizer_endpoint_related_to_event(view, view_args, view_kwargs, *args
         _jwt_required(app.config['JWT_DEFAULT_REALM'])
         return view(*view_args, **view_kwargs)
 
-    if user.is_organizer(kwargs['event_id']) or user.is_coorganizer(kwargs['event_id']):
+    if user.has_event_access(kwargs['event_id']):
         _jwt_required(app.config['JWT_DEFAULT_REALM'])
         return view(*view_args, **view_kwargs)
 
@@ -127,7 +140,7 @@ def is_coorganizer_or_user_itself(view, view_args, view_kwargs, *args, **kwargs)
     if user.is_staff:
         return view(*view_args, **view_kwargs)
 
-    if user.is_organizer(kwargs['event_id']) or user.is_coorganizer(kwargs['event_id']):
+    if user.has_event_access(kwargs['event_id']):
         return view(*view_args, **view_kwargs)
 
     return ForbiddenError({'source': ''}, 'Co-organizer access is required.').respond()
@@ -151,7 +164,7 @@ def is_speaker_for_session(view, view_args, view_kwargs, *args, **kwargs):
     except NoResultFound:
         return NotFoundError({'parameter': 'id'}, 'Session not found.').respond()
 
-    if user.is_organizer(session.event_id) or user.is_coorganizer(session.event_id):
+    if user.has_event_access(session.event_id):
         return view(*view_args, **view_kwargs)
 
     if session.speakers:
@@ -176,7 +189,7 @@ def is_speaker_itself_or_admin(view, view_args, view_kwargs, *args, **kwargs):
     if user.is_admin or user.is_super_admin:
         return view(*view_args, **view_kwargs)
 
-    if user.is_organizer(kwargs['event_id']) or user.is_coorganizer(kwargs['event_id']):
+    if user.has_event_access(kwargs['event_id']):
         return view(*view_args, **view_kwargs)
 
     if ('model' in kwargs) and (kwargs['model'] == Speaker):
@@ -205,7 +218,7 @@ def is_session_self_submitted(view, view_args, view_kwargs, *args, **kwargs):
     except NoResultFound:
         return NotFoundError({'parameter': 'session_id'}, 'Session not found.').respond()
 
-    if user.is_organizer(session.event_id) or user.is_coorganizer(session.event_id):
+    if user.has_event_access(session.event_id):
         return view(*view_args, **view_kwargs)
 
     if session.creator_id == user.id:
@@ -224,7 +237,7 @@ def is_registrar(view, view_args, view_kwargs, *args, **kwargs):
 
     if user.is_staff:
         return view(*view_args, **view_kwargs)
-    if user.is_registrar(event_id) or user.is_organizer(event_id) or user.is_coorganizer(event_id):
+    if user.is_registrar(event_id) or user.has_event_access(event_id):
         return view(*view_args, **view_kwargs)
     return ForbiddenError({'source': ''}, 'Registrar Access is Required.').respond()
 
@@ -243,7 +256,7 @@ def is_registrar_or_user_itself(view, view_args, view_kwargs, *args, **kwargs):
         return view(*view_args, **view_kwargs)
 
     event_id = kwargs['event_id']
-    if user.is_registrar(event_id) or user.is_organizer(event_id) or user.is_coorganizer(event_id):
+    if user.is_registrar(event_id) or user.has_event_access(event_id):
         return view(*view_args, **view_kwargs)
 
     return ForbiddenError({'source': ''}, 'Registrar access is required.').respond()
@@ -259,7 +272,7 @@ def is_track_organizer(view, view_args, view_kwargs, *args, **kwargs):
 
     if user.is_staff:
         return view(*view_args, **view_kwargs)
-    if user.is_track_organizer(event_id) or user.is_organizer(event_id) or user.is_coorganizer(event_id):
+    if user.is_track_organizer(event_id) or user.has_event_access(event_id):
         return view(*view_args, **view_kwargs)
     return ForbiddenError({'source': ''}, 'Track Organizer access is Required.').respond()
 
@@ -273,7 +286,7 @@ def is_moderator(view, view_args, view_kwargs, *args, **kwargs):
     event_id = kwargs['event_id']
     if user.is_staff:
         return view(*view_args, **view_kwargs)
-    if user.is_moderator(event_id) or user.is_organizer(event_id) or user.is_coorganizer(event_id):
+    if user.is_moderator(event_id) or user.has_event_access(event_id):
         return view_kwargs(*view_args, **view_kwargs)
     return ForbiddenError({'source': ''}, 'Moderator Access is Required.').respond()
 
@@ -315,6 +328,7 @@ def create_event(view, view_args, view_kwargs, *args, **kwargs):
 permissions = {
     'is_super_admin': is_super_admin,
     'is_admin': is_admin,
+    'is_owner': is_owner,
     'is_organizer': is_organizer,
     'is_coorganizer': is_coorganizer,
     'is_track_organizer': is_track_organizer,

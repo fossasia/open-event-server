@@ -125,6 +125,9 @@ class TicketingManager(object):
             for organizer in order.event.organizers:
                 send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
                                                      order.id)
+            if order.event.owner:
+                send_notif_ticket_purchase_organizer(order.event.owner, order.invoice_number, order_url,
+                                                     order.event.name, order.id)
 
             return True, 'Charge successful'
         else:
@@ -174,6 +177,9 @@ class TicketingManager(object):
             for organizer in order.event.organizers:
                 send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
                                                      order.id)
+            if order.event.owner:
+                send_notif_ticket_purchase_organizer(order.event.owner, order.invoice_number, order_url,
+                                                     order.event.name, order.id)
 
             return True, 'Charge successful'
         else:
