@@ -25,6 +25,7 @@ class AdminSalesFeesSchema(Schema):
     maximum_fee = fields.Float(attribute='maximum_fee')
     revenue = fields.Method('calc_revenue')
     ticket_count = fields.Method('calc_ticket_count')
+    event_date = fields.Method('get_eventdate')
 
     @staticmethod
     def calc_ticket_count(obj):
@@ -36,6 +37,10 @@ class AdminSalesFeesSchema(Schema):
         """Returns total revenues of all completed orders for the given event"""
         return sum(
             [o.get_revenue() for o in obj.orders if o.status == 'completed'])
+
+    @staticmethod
+    def get_eventdate(obj):
+        return obj.starts_at.isoformat()
 
 
 class AdminSalesFeesList(ResourceList):
