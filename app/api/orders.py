@@ -110,6 +110,9 @@ class OrdersListPost(ResourceList):
             data['is_billing_enabled'] = True
 
         free_ticket_quantity = 0
+        if data.get('status') != 'initializing':
+            raise ConflictException({'pointer': '/data/attributes/status'},
+                                    "status cannot be {} while creating an order".format(data.get('status')))
 
         for ticket_holder in data['ticket_holders']:
             # Ensuring that the attendee exists and doesn't have an associated order.
@@ -141,6 +144,7 @@ class OrdersListPost(ResourceList):
 
         if not data.get('amount'):
             data['amount'] = 0
+
         # Apply discount only if the user is not event admin
         if data.get('discount_code') and not has_access('is_coorganizer', event_id=data['event']):
             discount_code = safe_query_without_soft_deleted_entries(self, DiscountCode, 'id', data['discount_code'],
@@ -384,6 +388,25 @@ class OrderDetail(ResourceDetail):
                 not is_payment_valid(order, 'paypal'):
             raise UnprocessableEntity({'pointer': '/data/attributes/payment-mode'},
                                       "insufficient data to verify paypal payment")
+
+        status = data.get('status', None)
+        if status and order.deleted_at:
+            raise ConflictException({'pointer': '/data/attributes/status'},
+                                    "status of a deleted order cannot be updated")
+        if status and status not in ['cancelled', 'completed', 'expired', 'initializing', 'pending', 'placed']:
+            raise ConflictException({'pointer': '/data/attributes/status'},
+                                    "status {} is invalid".format(status))
+        elif status and status != 'cancelled':
+            if (order.status in ['completed', 'expired', 'cancelled'] and order.status != status) or \
+                    (order.status == 'placed' and status not in ['completed', 'placed']) or \
+                    (order.status == 'pending' and status not in ['completed', 'expired', 'pending']) or \
+                    (order.status == 'initializing' and status not in ['completed', 'expired', 'pending', 'placed']):
+                raise ConflictException({'pointer': '/data/attributes/status'},
+                                        "status of {} order cannot be changed to {}".format(order.status, status))
+        elif status and status == 'cancelled' and (order.status not in ['placed', 'pending'] or
+                                                   (order.status == 'completed' and order.paid_via != 'free')):
+            raise ConflictException({'pointer': '/data/attributes/status'},
+                                    "status of {} order cannot be changed to {}".format(order.status, status))
 
     def after_update_object(self, order, data, view_kwargs):
         """
