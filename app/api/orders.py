@@ -194,6 +194,8 @@ class OrdersList(ResourceList):
         :param kwargs:
         :return:
         """
+        if 'get_trashed=true' in str(request.query_string) and not has_access('is_admin'):
+            raise ForbiddenException({'source': ''}, "Admin Access is Required")
         if kwargs.get('event_id') and not has_access('is_coorganizer', event_id=kwargs['event_id']):
             raise ForbiddenException({'source': ''}, "Co-Organizer Access Required")
 
