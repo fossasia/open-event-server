@@ -17,11 +17,25 @@ down_revision = '43e8c59337af'
 
 
 def upgrade():
-    op.execute("INSERT INTO permissions(role_id, service_id, can_create, can_read, can_update, can_delete) VALUES((SELECT id FROM roles WHERE name='owner'), 1, true, true, true, true)")
-    op.execute("INSERT INTO permissions(role_id, service_id, can_create, can_read, can_update, can_delete) VALUES((SELECT id FROM roles WHERE name='owner'), 2, true, true, true, true)")
-    op.execute("INSERT INTO permissions(role_id, service_id, can_create, can_read, can_update, can_delete) VALUES((SELECT id FROM roles WHERE name='owner'), 3, true, true, true, true)")
-    op.execute("INSERT INTO permissions(role_id, service_id, can_create, can_read, can_update, can_delete) VALUES((SELECT id FROM roles WHERE name='owner'), 4, true, true, true, true)")
-    op.execute("INSERT INTO permissions(role_id, service_id, can_create, can_read, can_update, can_delete) VALUES((SELECT id FROM roles WHERE name='owner'), 5, true, true, true, true)")
+    op.execute("INSERT INTO permissions(role_id, service_id, can_create, can_read, can_update, can_delete) \
+                VALUES((SELECT id FROM roles WHERE name='owner'), (SELECT id from services where name='track'), \
+                true, true, true, true)", execution_options=None)
+
+    op.execute("INSERT INTO permissions(role_id, service_id, can_create, can_read, can_update, can_delete) \
+                VALUES((SELECT id FROM roles WHERE name='owner'), (SELECT id from services where name='session'), \
+                true, true, true, true)", execution_options=None)
+
+    op.execute("INSERT INTO permissions(role_id, service_id, can_create, can_read, can_update, can_delete) \
+                VALUES((SELECT id FROM roles WHERE name='owner'), (SELECT id from services where name='speaker'), \
+                true, true, true, true)", execution_options=None)
+
+    op.execute("INSERT INTO permissions(role_id, service_id, can_create, can_read, can_update, can_delete) \
+                VALUES((SELECT id FROM roles WHERE name='owner'), (SELECT id from services where name='sponsor'), \
+                true, true, true, true)", execution_options=None)
+
+    op.execute("INSERT INTO permissions(role_id, service_id, can_create, can_read, can_update, can_delete) \
+                VALUES((SELECT id FROM roles WHERE name='owner'), (SELECT id from services where name='microlocation'), \
+                true, true, true, true)", execution_options=None)
 
 
 
