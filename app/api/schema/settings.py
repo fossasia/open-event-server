@@ -200,10 +200,15 @@ class SettingSchemaAdmin(SettingSchemaNonAdmin):
     smtp_port = fields.Integer(allow_none=True)
     smtp_encryption = fields.Str(allow_none=True)  # Can be tls, ssl, none
 
+    # Event Invoices settings
+    invoice_sending_day = fields.Integer(allow_none=False, default=1)
+    invoice_sending_timezone = fields.Str(allow_none=False, default="UTC")
+
     # Admin Invoice Details
     admin_billing_contact_name = fields.Str(allow_none=True)
     admin_billing_phone = fields.Str(allow_none=True)
     admin_billing_email = fields.Email(allow_none=True)
+    admin_billing_state = fields.Str(allow_none=True)
     admin_billing_country = fields.Str(allow_none=True)
     admin_billing_tax_info = fields.Str(allow_none=True)
     admin_company = fields.Str(allow_none=True)

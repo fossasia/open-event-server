@@ -83,6 +83,7 @@ class User(SoftDeletionModel):
     # Event Invoice Details
     billing_contact_name = db.Column(db.String)
     billing_phone = db.Column(db.String)
+    billing_state = db.Column(db.String)
     billing_country = db.Column(db.String)
     billing_tax_info = db.Column(db.String)
     company = db.Column(db.String)
