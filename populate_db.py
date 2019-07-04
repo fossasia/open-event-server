@@ -210,16 +210,21 @@ def create_permissions():
     mod = Role.query.get(4)
     attend = Role.query.get(5)
     regist = Role.query.get(6)
+    ownr = Role.query.get(7)
     track = Service.query.get(1)
     session = Service.query.get(2)
     speaker = Service.query.get(3)
     sponsor = Service.query.get(4)
     microlocation = Service.query.get(5)
 
-    # For ORGANIZER
+    # For ORGANIZER and OWNER
     # All four permissions set to True
     services = [track, session, speaker, sponsor, microlocation]
     roles = [attend, regist]
+    for service in services:
+        perm, _ = get_or_create(Permission, role=ownr, service=service)
+        db.session.add(perm)
+
     for service in services:
         perm, _ = get_or_create(Permission, role=orgr, service=service)
         db.session.add(perm)
