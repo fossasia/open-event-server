@@ -6,6 +6,7 @@ from app.api.bootstrap import api
 from app.api.helpers.utilities import dasherize
 from app.models import db
 from app.models.event import Event
+from app.api.schema.users import UserSchemaPublic
 
 
 class AdminSalesFeesSchema(Schema):
@@ -26,6 +27,7 @@ class AdminSalesFeesSchema(Schema):
     revenue = fields.Method('calc_revenue')
     ticket_count = fields.Method('calc_ticket_count')
     event_date = fields.Method('get_event_date')
+    owner = fields.Nested(UserSchemaPublic)
 
     @staticmethod
     def calc_ticket_count(obj):
