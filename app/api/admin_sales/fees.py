@@ -27,7 +27,7 @@ class AdminSalesFeesSchema(Schema):
     revenue = fields.Method('calc_revenue')
     ticket_count = fields.Method('calc_ticket_count')
     event_date = fields.Method('get_event_date')
-    owner = fields.Nested(UserSchemaPublic)
+    organizers = fields.List(cls_or_instance=fields.Nested(UserSchemaPublic), load_only=True, allow_none=True)
 
     @staticmethod
     def calc_ticket_count(obj):
