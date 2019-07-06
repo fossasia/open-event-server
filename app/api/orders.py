@@ -33,6 +33,7 @@ from app.api.schema.orders import OrderSchema
 from app.models import db
 from app.models.discount_code import DiscountCode, TICKET
 from app.models.order import Order, OrderTicket, get_updatable_fields
+from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 
@@ -55,12 +56,6 @@ class OrdersListPost(ResourceList):
         """
         require_relationship(['event'], data)
 
-        if not current_user.is_verified and data['payment_mode'] == 'free':
-            raise UnprocessableEntity(
-                {'pointer': '/data/relationships/order'},
-                "Unverified user cannot place free orders"
-            )
-
         # Create on site attendees.
         if request.args.get('onsite', False):
             create_onsite_attendees_for_order(data)
@@ -79,6 +74,7 @@ class OrdersListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
+
         for ticket_holder in data['ticket_holders']:
             # Ensuring that the attendee exists and doesn't have an associated order.
             try:
@@ -90,6 +86,16 @@ class OrdersListPost(ResourceList):
             except NoResultFound:
                 raise ConflictException({'pointer': '/data/relationships/attendees'},
                                         "Attendee with id {} does not exists".format(str(ticket_holder)))
+
+        ticket = db.session.query(Ticket).filter_by(
+            id=int(ticket_holder_object.ticket_id), deleted_at=None
+        ).first()
+
+        if not current_user.is_verified and ticket.type == 'free':
+            raise UnprocessableEntity(
+                {'pointer': '/data/relationships/order'},
+                "Unverified user cannot place free orders"
+            )
 
         if data.get('cancel_note'):
             del data['cancel_note']
