@@ -14,6 +14,7 @@ from app.models import db
 from app.models.feedback import Feedback
 from app.models.event import Event
 from app.models.session import Session
+from app.models.user import User
 
 
 class FeedbackListPost(ResourceList):
@@ -72,7 +73,17 @@ class FeedbackList(ResourceList):
         :return:
         """
         query_ = self.session.query(Feedback)
-        query_ = event_query(self, query_, view_kwargs)
+        if view_kwargs.get('user_id'):
+            # feedbacks under an user
+            user = safe_query(self, User, 'id', view_kwargs['user_id'], 'user_id')
+            query_ = query_.join(User, User.id == Feedback.user_id).filter(User.id == user.id)
+        elif view_kwargs.get('session_id'):
+            # feedbacks under a session
+            session = safe_query(self, Session, 'id', view_kwargs['session_id'], 'session_id')
+            query_ = query_.join(Session, Session.id == Feedback.session_id).filter(Session.id == session.id)
+        else:
+            # feedbacks under an event
+            query_ = event_query(self, query_, view_kwargs)
         return query_
 
     view_kwargs = True
