@@ -1,5 +1,5 @@
 pycparser==2.14 # Only 2.14 works.
-Flask~=1.0.3
+Flask~=1.1.0
 Flask-Limiter~=1.0.1
 Flask-Script~=2.0.6
 Flask-SQLAlchemy~=2.1
@@ -19,7 +19,7 @@ humanize~=0.5.1
 celery~=4.3
 redis~=3.2
 apscheduler~=3.6.0
-pillow~=6.0.0
+pillow~=6.1.0
 amqp~=2.5
 gunicorn~=19.9
 boto~=2.49
