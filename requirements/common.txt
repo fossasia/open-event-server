@@ -1,5 +1,5 @@
 pycparser==2.14 # Only 2.14 works.
-Flask~=1.1.0
+Flask~=1.1.1
 Flask-Limiter~=1.0.1
 Flask-Script~=2.0.6
 Flask-SQLAlchemy~=2.1
