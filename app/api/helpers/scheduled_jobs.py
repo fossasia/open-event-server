@@ -2,6 +2,7 @@ import datetime
 
 import pytz
 from dateutil.relativedelta import relativedelta
+from flask import render_template
 
 from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.mail import send_email_after_event, send_email_for_monthly_fee_payment, \
@@ -10,6 +11,8 @@ from app.api.helpers.notification import send_notif_monthly_fee_payment, send_fo
     send_notif_after_event
 from app.api.helpers.query import get_upcoming_events, get_user_event_roles_by_role_name
 from app.api.helpers.utilities import monthdelta
+from app.api.helpers.files import create_save_pdf
+from app.api.helpers.storage import UPLOAD_PATHS
 from app.models import db
 from app.models.event import Event
 from app.models.event_invoice import EventInvoice
@@ -17,7 +20,8 @@ from app.models.order import Order
 from app.models.speaker import Speaker
 from app.models.session import Session
 from app.models.ticket import Ticket
-from app.models.ticket_fee import get_fee
+from app.models.ticket_fee import TicketFees, get_fee
+
 from app.settings import get_settings
 
 
@@ -154,3 +158,30 @@ def expire_pending_tickets():
                                        (Order.created_at + datetime.timedelta(minutes=30)) <= datetime.datetime.now()).\
                                        update({'status': 'expired'})
         db.session.commit()
+
+
+def send_monthly_event_invoice():
+    from app import current_app as app
+    with app.app_context():
+        events = Event.query.all()
+        for event in events:
+            # calculate net & gross revenues
+            currency = event.payment_currency
+            ticket_fee_object = db.session.query(TicketFees).filter_by(currency=currency).one()
+            ticket_fee_percentage = ticket_fee_object.service_fee
+            ticket_fee_maximum = ticket_fee_object.maximum_fee
+            orders = Order.query.filter_by(event=event).all()
+            gross_revenue = event.calc_monthly_revenue()
+            ticket_fees = event.tickets_sold * ticket_fee_percentage
+            if ticket_fees > ticket_fee_maximum:
+                ticket_fees = ticket_fee_maximum
+            net_revenue = gross_revenue - ticket_fees
+            # save invoice as pdf
+            pdf = create_save_pdf(render_template('pdf/event_invoice.html', orders=orders,
+                                  ticket_fee_object=ticket_fee_object, gross_revenue=gross_revenue,
+                                  net_revenue=net_revenue), UPLOAD_PATHS['pdf']['event_invoice'],
+                                  dir_path='/static/uploads/pdf/event_invoices/', identifier=event.identifier)
+            # save event_invoice info to DB
+
+            event_invoice = EventInvoice(amount=net_revenue, invoice_pdf_url=pdf, event_id=event.id)
+            save_to_db(event_invoice)

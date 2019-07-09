@@ -90,7 +90,7 @@ class UserSchema(UserSchemaPublic):
         many=True,
         type_='notification')
     feedbacks = Relationship(
-        attribute='feedbacks',
+        attribute='feedback',
         self_view='v1.user_feedback',
         self_view_kwargs={'id': '<id>'},
         related_view='v1.feedback_list',
