@@ -160,6 +160,19 @@ def expire_pending_tickets():
         db.session.commit()
 
 
+def event_invoices_mark_due():
+    from app import current_app as app
+    with app.app_context():
+        db.session.query(EventInvoice).\
+                    filter(EventInvoice.status == 'upcoming',
+                           EventInvoice.event.ends_at >= datetime.datetime.now(),
+                           (EventInvoice.created_at + datetime.timedelta(days=30) <=
+                            datetime.datetime.now())).\
+                    update({'status': 'due'})
+
+        db.session.commit()
+
+
 def send_monthly_event_invoice():
     from app import current_app as app
     with app.app_context():
