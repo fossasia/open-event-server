@@ -396,6 +396,7 @@ def resend_emails():
             return jsonify(status=True, message="Verification emails for order : {} has been sent succesfully".
                            format(order_identifier))
         else:
-            return jsonify(status=False, message="Only placed and complete orders are verified")
+            return UnprocessableEntityError({'source': 'data/order'},
+                                            "Only placed and completed orders have confirmation").respond()
     else:
-        raise ForbiddenError({'source': ''}, "Co-Organizer Access Required").respond()
+        return ForbiddenError({'source': ''}, "Co-Organizer Access Required").respond()
