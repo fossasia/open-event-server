@@ -5,6 +5,7 @@ from flask_jwt import current_identity as current_user
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
 from app.api.helpers.exceptions import UnprocessableEntity, ForbiddenException
+from app.api.helpers.feedback import delete_feedback
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
@@ -133,6 +134,12 @@ class FeedbackDetail(ResourceDetail):
             if session and not has_access('is_coorganizer', event_id=session.event_id):
                 raise ForbiddenException({'source': ''},
                                          "Event co-organizer access required")
+        if feedback and data.get('deleted_at'):
+            if has_access('is_user_itself', user_id=feedback.user_id):
+                delete_feedback(feedback)
+            else:
+                raise ForbiddenException({'source': ''},
+                                         "Feedback can be deleted only by user himself")
 
     decorators = (api.has_permission('is_user_itself', fetch='user_id',
                                      fetch_as="user_id", model=Feedback, methods="PATCH,DELETE"),)
