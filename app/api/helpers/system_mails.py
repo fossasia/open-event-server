@@ -112,7 +112,7 @@ MAILS = {
         'subject': u'{app_name}: Password Reset',
         'message': (
             u"Please use the following link to reset your password.<br> <a href='{link}' target='_blank'>{link}</a>" +
-            " Or copy this token to your Eventyay App: {token} "
+            " Or paste this token in your {app_name} App: {token} "
         )
     },
     PASSWORD_RESET_AND_VERIFY: {
