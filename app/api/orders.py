@@ -153,8 +153,10 @@ class OrdersListPost(ResourceList):
 
             key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
             invoice_path = 'generated/invoices/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+
             # send email and notifications.
             send_email_to_attendees(order=order, purchaser_id=current_user.id, attachments=[ticket_path, invoice_path])
+
             send_notif_to_attendees(order, current_user.id)
 
             if order.payment_mode in ['free', 'bank', 'cheque', 'onsite']:
@@ -533,30 +535,3 @@ def omise_checkout(order_identifier):
         logging.info(f"Successful charge: {charge.id}.  Order ID: {order_identifier}")
 
         return redirect(make_frontend_url('orders/{}/view'.format(order_identifier)))
-
-
-@order_misc_routes.route('/orders/<string:order_identifier>/resend-email', methods=['POST'])
-def resend_emails(order_identifier):
-    """
-    Sends confirmation email for pending and completed orders on organizer request
-    :param order_identifier:
-    :return: JSON response if the email was succesfully sent
-    """
-    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
-    if (has_access('is_coorganizer', event_id=order.event_id)):
-        if order.status == 'completed' or order.status == 'placed':
-            # fetch tickets attachment
-            order_identifier = order.identifier
-            key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
-            ticket_path = 'generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
-            key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
-            invoice_path = 'generated/invoices/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
-
-            # send email.
-            send_email_to_attendees(order=order, purchaser_id=current_user.id, attachments=[ticket_path, invoice_path])
-            return jsonify(status=True, message="Verification emails for order : {} has been sent succesfully".
-                           format(order_identifier))
-        else:
-            return jsonify(status=False, message="Only placed and complete orders are verified")
-    else:
-        raise ForbiddenException({'source': ''}, "Co-Organizer Access Required")
