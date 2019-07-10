@@ -7,7 +7,7 @@ export INTEGRATE_SOCKETIO=false
 chmod -R 0777 ./static
 celery worker -A app.celery --loglevel=info &
 if [ "$APP_CONFIG" = "config.DevelopmentConfig" ]; then
-    python manage.py runserver -h 0.0.0.0 -p ${PORT:-8000}
+    python manage.py runserver -h 0.0.0.0 -p ${PORT:-8000} --no-reload
 else
     gunicorn app:app -w 1
 fi
