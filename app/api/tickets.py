@@ -2,6 +2,7 @@ from flask import request, current_app
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from flask_jwt import current_identity as current_user, _jwt_required
+from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query
@@ -16,7 +17,7 @@ from app.models.order import Order
 from app.models.ticket import Ticket, TicketTag, ticket_tags_table
 from app.models.event import Event
 from app.models.ticket_holder import TicketHolder
-from app.api.helpers.exceptions import ConflictException, MethodNotAllowed
+from app.api.helpers.exceptions import ConflictException, MethodNotAllowed, UnprocessableEntity
 from app.api.helpers.db import get_count
 
 class TicketListPost(ResourceList):
@@ -43,10 +44,32 @@ class TicketListPost(ResourceList):
         if get_count(db.session.query(Event).filter_by(id=int(data['event']), is_ticketing_enabled=False)) > 0:
             raise MethodNotAllowed({'parameter': 'event_id'}, "Ticketing is disabled for this Event")
 
+    def before_create_object(self, data, view_kwargs):
+        """
+        before create method to check if paid ticket has a paymentMethod enabled
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
+        if data.get('type') == 'paid' and data.get('event'):
+            try:
+                event = db.session.query(Event).filter_by(id=data['event'], deleted_at=None).one()
+            except NoResultFound:
+                raise UnprocessableEntity({'event_id': data['event']}, "Event does not exist")
+            if not (event.can_pay_by_paypal or event.can_pay_by_stripe or event.can_pay_by_omise or
+                    event.can_pay_by_alipay or event.can_pay_by_cheque or event.can_pay_by_bank or
+                    event.can_pay_onsite):
+                raise UnprocessableEntity(
+                    {'event_id': data['event']}, "Event having paid ticket must have a payment method")
+
     schema = TicketSchema
     methods = ['POST', ]
     data_layer = {'session': db.session,
-                  'model': Ticket}
+                  'model': Ticket,
+                  'methods': {
+                      'before_create_object': before_create_object,
+                      'before_post': before_post
+                  }}
 
 
 class TicketList(ResourceList):
@@ -144,13 +167,33 @@ class TicketDetail(ResourceDetail):
             else:
                 view_kwargs['id'] = None
 
+    def before_update_object(self, ticket, data, view_kwargs):
+        """
+        method to check if paid ticket has payment method before updating ticket object
+        :param ticket:
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
+        if ticket.type == 'paid':
+            try:
+                event = db.session.query(Event).filter_by(id=ticket.event.id, deleted_at=None).one()
+            except NoResultFound:
+                raise UnprocessableEntity({'event_id': ticket.event.id}, "Event does not exist")
+            if not (event.can_pay_by_paypal or event.can_pay_by_stripe or event.can_pay_by_omise or
+                    event.can_pay_by_alipay or event.can_pay_by_cheque or event.can_pay_by_bank or
+                    event.can_pay_onsite):
+                raise UnprocessableEntity(
+                    {'event_id': ticket.event.id}, "Event having paid ticket must have a payment method")
+
     decorators = (api.has_permission('is_coorganizer', fetch='event_id',
                   fetch_as="event_id", model=Ticket, methods="PATCH,DELETE"),)
     schema = TicketSchema
     data_layer = {'session': db.session,
                   'model': Ticket,
                   'methods': {
-                      'before_get_object': before_get_object
+                      'before_get_object': before_get_object,
+                      'before_update_object': before_update_object
                   }}
 
 
