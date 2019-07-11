@@ -369,7 +369,7 @@ def environment_details():
 
 @ticket_blueprint.route('/orders/resend-email', methods=['POST'])
 @limiter.limit(
-    '5/minute', key_func=lambda: request.json['data']['order'], error_message='Limit for this action exceeded'
+    '5/minute', key_func=lambda: request.json['data']['user'], error_message='Limit for this action exceeded'
 )
 @limiter.limit(
     '60/minute', key_func=get_remote_address, error_message='Limit for this action exceeded'
