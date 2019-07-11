@@ -1,39 +1,39 @@
-import os
+import base64
 import base64
 import logging
 import random
 import string
+from functools import wraps
 
 import requests
-from healthcheck import EnvironmentDump
-from functools import wraps
-from flask import request, jsonify, make_response, Blueprint, send_file, url_for, redirect
+from flask import request, jsonify, make_response, Blueprint, send_file
 from flask_jwt import current_identity as current_user, jwt_required
 from flask_limiter.util import get_remote_address
+from healthcheck import EnvironmentDump
 from sqlalchemy.orm.exc import NoResultFound
-from app.api.helpers.order import create_pdf_tickets_for_holder
-from app.api.helpers.storage import generate_hash
 
 from app import get_settings
 from app import limiter
 from app.api.helpers.db import save_to_db, get_count, safe_query
+from app.api.helpers.auth import AuthManager
 from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError, NotFoundError, BadRequestError
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.mail import send_email_with_action, \
     send_email_confirmation
 from app.api.helpers.notification import send_notification_with_action
+from app.api.helpers.order import create_pdf_tickets_for_holder
+from app.api.helpers.storage import UPLOAD_PATHS
+from app.api.helpers.storage import generate_hash
 from app.api.helpers.third_party_auth import GoogleOAuth, FbOAuth, TwitterOAuth, InstagramOAuth
 from app.api.helpers.utilities import get_serializer, str_generator
 from app.api.helpers.permission_manager import has_access
 from app.models import db
-from app.models.order import Order
 from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE, \
-    USER_REGISTER_WITH_PASSWORD, PASSWORD_RESET_AND_VERIFY
+    PASSWORD_RESET_AND_VERIFY
 from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
+from app.models.order import Order
 from app.models.user import User
-from app.api.helpers.storage import UPLOAD_PATHS
-from app.api.helpers.auth import AuthManager
 
 logger = logging.getLogger(__name__)
 authorised_blueprint = Blueprint('authorised_blueprint', __name__, url_prefix='/')
@@ -234,7 +234,7 @@ def reset_password_post():
         if user.was_registered_with_order:
             send_email_with_action(user, PASSWORD_RESET_AND_VERIFY, app_name=get_settings()['app_name'], link=link)
         else:
-            send_email_with_action(user, PASSWORD_RESET, app_name=get_settings()['app_name'], link=link)
+            send_email_with_action(user, PASSWORD_RESET, app_name=get_settings()['app_name'], link=link, token=user.reset_password)
 
     return make_response(jsonify(message="If your email was registered with us, you'll get an \
                          email with reset link shortly", email=email), 200)
