@@ -357,10 +357,8 @@ class Event(SoftDeletionModel):
         return avg
 
     def is_payment_enabled(self):
-        if self.can_pay_by_paypal or self.can_pay_by_stripe or self.can_pay_by_omise or self.can_pay_by_alipay \
-                or self.can_pay_by_cheque or self.can_pay_by_bank or self.can_pay_onsite:
-            return True
-        return False
+        return self.can_pay_by_paypal or self.can_pay_by_stripe or self.can_pay_by_omise or self.can_pay_by_alipay \
+            or self.can_pay_by_cheque or self.can_pay_by_bank or self.can_pay_onsite
 
     @property
     def average_rating(self):
