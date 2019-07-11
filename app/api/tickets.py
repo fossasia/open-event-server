@@ -56,9 +56,7 @@ class TicketListPost(ResourceList):
                 event = db.session.query(Event).filter_by(id=data['event'], deleted_at=None).one()
             except NoResultFound:
                 raise UnprocessableEntity({'event_id': data['event']}, "Event does not exist")
-            if not (event.can_pay_by_paypal or event.can_pay_by_stripe or event.can_pay_by_omise or
-                    event.can_pay_by_alipay or event.can_pay_by_cheque or event.can_pay_by_bank or
-                    event.can_pay_onsite):
+            if not event.is_payment_enabled():
                 raise UnprocessableEntity(
                     {'event_id': data['event']}, "Event having paid ticket must have a payment method")
 
@@ -180,9 +178,7 @@ class TicketDetail(ResourceDetail):
                 event = db.session.query(Event).filter_by(id=ticket.event.id, deleted_at=None).one()
             except NoResultFound:
                 raise UnprocessableEntity({'event_id': ticket.event.id}, "Event does not exist")
-            if not (event.can_pay_by_paypal or event.can_pay_by_stripe or event.can_pay_by_omise or
-                    event.can_pay_by_alipay or event.can_pay_by_cheque or event.can_pay_by_bank or
-                    event.can_pay_onsite):
+            if not event.is_payment_enabled():
                 raise UnprocessableEntity(
                     {'event_id': ticket.event.id}, "Event having paid ticket must have a payment method")
 
