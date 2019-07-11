@@ -75,6 +75,8 @@ class OrdersListPost(ResourceList):
         :return:
         """
 
+        free_ticket_quantity = 0
+
         for ticket_holder in data['ticket_holders']:
             # Ensuring that the attendee exists and doesn't have an associated order.
             try:
@@ -87,11 +89,14 @@ class OrdersListPost(ResourceList):
                 raise ConflictException({'pointer': '/data/relationships/attendees'},
                                         "Attendee with id {} does not exists".format(str(ticket_holder)))
 
-        ticket = db.session.query(Ticket).filter_by(
-            id=int(ticket_holder_object.ticket_id), deleted_at=None
-        ).first()
+            ticket = db.session.query(Ticket).filter_by(
+                id=int(ticket_holder_object.ticket_id), deleted_at=None
+            ).first()
 
-        if not current_user.is_verified and ticket.type == 'free':
+            if not current_user.is_verified and ticket.type == 'free':
+                free_ticket_quantity += 1
+
+        if free_ticket_quantity == len(data['ticket_holders']):
             raise UnprocessableEntity(
                 {'pointer': '/data/relationships/order'},
                 "Unverified user cannot place free orders"
