@@ -387,7 +387,7 @@ class User(SoftDeletionModel):
 
     def can_download_tickets(self, order):
         permissible_users = [holder.id for holder in order.ticket_holders] + [order.user.id]
-        if self.is_staff or self.is_organizer(order.event.id) or self.id in permissible_users:
+        if self.is_staff or self.has_event_access(order.event.id) or self.id in permissible_users:
             return True
         return False
 
