@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from flask import Blueprint, request, jsonify, abort, make_response
-from flask_jwt import current_identity, jwt_required
+from flask_jwt import current_identity
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
@@ -174,7 +174,7 @@ class AttendeeDetail(ResourceDetail):
             user = safe_query(self, User, 'id', current_identity.id, 'user_id')
             ticket = db.session.query(Ticket).filter_by(
                 id=int(data['ticket']), deleted_at=None
-                ).first()
+            ).first()
             if ticket is None:
                 raise UnprocessableEntity(
                     {'pointer': '/data/relationships/ticket'}, "Invalid Ticket"
