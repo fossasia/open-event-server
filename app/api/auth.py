@@ -15,10 +15,11 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from app import get_settings
 from app import limiter
+from app.api.helpers.db import save_to_db, get_count, safe_query
 from app.api.helpers.auth import AuthManager
-from app.api.helpers.db import save_to_db, get_count
 from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError, NotFoundError, BadRequestError
 from app.api.helpers.files import make_frontend_url
+from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.mail import send_email_with_action, \
     send_email_confirmation
 from app.api.helpers.notification import send_notification_with_action
@@ -27,6 +28,7 @@ from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.helpers.storage import generate_hash
 from app.api.helpers.third_party_auth import GoogleOAuth, FbOAuth, TwitterOAuth, InstagramOAuth
 from app.api.helpers.utilities import get_serializer, str_generator
+from app.api.helpers.permission_manager import has_access
 from app.models import db
 from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE, \
     PASSWORD_RESET_AND_VERIFY
@@ -388,3 +390,38 @@ def requires_basic_auth(f):
 def environment_details():
     envdump = EnvironmentDump(include_config=False)
     return envdump.dump_environment()
+
+
+@ticket_blueprint.route('/orders/resend-email', methods=['POST'])
+@limiter.limit(
+    '5/minute', key_func=lambda: request.json['data']['user'], error_message='Limit for this action exceeded'
+)
+@limiter.limit(
+    '60/minute', key_func=get_remote_address, error_message='Limit for this action exceeded'
+)
+def resend_emails():
+    """
+    Sends confirmation email for pending and completed orders on organizer request
+    :param order_identifier:
+    :return: JSON response if the email was succesfully sent
+    """
+    order_identifier = request.json['data']['order']
+    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+    if (has_access('is_coorganizer', event_id=order.event_id)):
+        if order.status == 'completed' or order.status == 'placed':
+            # fetch tickets attachment
+            order_identifier = order.identifier
+            key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
+            ticket_path = 'generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+            key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
+            invoice_path = 'generated/invoices/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+
+            # send email.
+            send_email_to_attendees(order=order, purchaser_id=current_user.id, attachments=[ticket_path, invoice_path])
+            return jsonify(status=True, message="Verification emails for order : {} has been sent succesfully".
+                           format(order_identifier))
+        else:
+            return UnprocessableEntityError({'source': 'data/order'},
+                                            "Only placed and completed orders have confirmation").respond()
+    else:
+        return ForbiddenError({'source': ''}, "Co-Organizer Access Required").respond()
