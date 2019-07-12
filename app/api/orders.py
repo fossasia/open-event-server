@@ -334,15 +334,14 @@ class OrderDetail(ResourceDetail):
         # create pdf tickets.
         create_pdf_tickets_for_holder(order)
 
-        if order.status == 'cancelled':
+        if order.status == 'cancelled' and order.deleted_at is None:
             send_order_cancel_email(order)
             send_notif_ticket_cancel(order)
 
             # delete the attendees so that the tickets are unlocked.
             delete_related_attendees_for_order(order)
 
-        elif order.status == 'completed' or order.status == 'placed':
-
+        elif (order.status == 'completed' or order.status == 'placed') and order.deleted_at is None:
             # Send email to attendees with invoices and tickets attached
             order_identifier = order.identifier
 
