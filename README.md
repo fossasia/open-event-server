@@ -253,10 +253,10 @@ This is an Open Source project and we would be happy to see contributors who rep
 We have the following branches :
  * **development**
 	 All development goes on in this branch. If you're making a contribution, please make a pull request to _development_.
-	 All PRs must pass a build check and a unit-test check on Travis (https://open-event-api.herokuapp.com - Is running off the development branch. It is hosted on Heroku.)
-	 (https://api.eventyay.com - Is running off the `development` branch. Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
+	 All PRs must pass a build check and a unit-test check on Travis (https://open-event-api-dev.herokuapp.com - Is running off of the development branch. It is hosted on Heroku.)
+	 
  * **master**
-   This contains shipped code. After significant features/bug-fixes are accumulated on development, we make a version update and make a release. (https://eventyay.com - Is running off the master branch. (whichever is the latest release.) Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
+   This contains shipped code. After significant features/bug-fixes are accumulated on development, we make a version update and make a release. (https://api.eventyay.com - Is running off of the `master` branch. Hosted on Google Cloud Platform (Google Container Engine + Kubernetes).)
  * **gh-pages**
    This contains the documentation website on http://dev.eventyay.com. The site is built automatically on each commit in the development branch through a script and using travis. It includes the md files of the Readme and /docs folder. It also includes javadocs.
 

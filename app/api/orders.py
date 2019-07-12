@@ -298,7 +298,7 @@ class OrderDetail(ResourceDetail):
                 # Order created from the public pages.
                 for element in data:
                     if data[element] and data[element] != getattr(order, element, None):
-                        if element != 'status':
+                        if element != 'status' and element != 'deleted_at':
                             raise ForbiddenException({'pointer': 'data/{}'.format(element)},
                                                      "You cannot update {} of an order".format(element))
                         elif element == 'status' and order.amount and order.status == 'completed':
