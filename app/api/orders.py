@@ -33,7 +33,6 @@ from app.api.schema.orders import OrderSchema
 from app.models import db
 from app.models.discount_code import DiscountCode, TICKET
 from app.models.order import Order, OrderTicket, get_updatable_fields
-from app.models.ticket import Ticket
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
 
@@ -89,14 +88,10 @@ class OrdersListPost(ResourceList):
                 raise ConflictException({'pointer': '/data/relationships/attendees'},
                                         "Attendee with id {} does not exists".format(str(ticket_holder)))
 
-            ticket = db.session.query(Ticket).filter_by(
-                id=int(ticket_holder_object.ticket_id), deleted_at=None
-            ).first()
-
-            if not current_user.is_verified and ticket.type == 'free':
+            if ticket_holder_object.ticket.type == 'free':
                 free_ticket_quantity += 1
 
-        if free_ticket_quantity == len(data['ticket_holders']):
+        if not current_user.is_verified and free_ticket_quantity == len(data['ticket_holders']):
             raise UnprocessableEntity(
                 {'pointer': '/data/relationships/order'},
                 "Unverified user cannot place free orders"
