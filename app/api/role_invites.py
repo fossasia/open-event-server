@@ -135,6 +135,11 @@ class RoleInviteDetail(ResourceDetail):
         if not has_access('is_organizer', event_id=role_invite.event_id) and (len(list(data.keys())) > 1 or
                                                                               'status' not in data):
             raise UnprocessableEntity({'source': ''}, "You can only change your status")
+        if data.get('deleted_at'):
+            if role_invite.role_name == 'owner' and not has_access('is_owner', event_id=role_invite.event_id):
+                raise ForbiddenException({'source': ''}, 'Owner access is required.')
+            if role_invite.role_name != 'owner' and not has_access('is_organizer', event_id=role_invite.event_id):
+                raise ForbiddenException({'source': ''}, 'Organizer access is required.')
 
     decorators = (api.has_permission('is_organizer', methods="DELETE", fetch="event_id", fetch_as="event_id",
                                      model=RoleInvite),)
