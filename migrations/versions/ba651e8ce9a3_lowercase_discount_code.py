@@ -14,6 +14,7 @@ down_revision = '4bdb4809f519'
 
 
 def upgrade():
+    op.execute("create extension if not exists citext;", execution_options=None)
     op.execute("alter table discount_codes alter column code type citext;",
                execution_options=None)
     op.create_unique_constraint('uq_event_discount_code', 'discount_codes', ['event_id', 'code'])
