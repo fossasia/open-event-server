@@ -33,6 +33,7 @@ class EventInvoice(SoftDeletionModel):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='SET NULL'))
     event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='SET NULL'))
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.id', ondelete='SET NULL'))
 
     created_at = db.Column(db.DateTime(timezone=True))
     completed_at = db.Column(db.DateTime(timezone=True), nullable=True, default=None)
@@ -49,6 +50,9 @@ class EventInvoice(SoftDeletionModel):
     invoice_pdf_url = db.Column(db.String)
 
     event = db.relationship('Event', backref='invoices')
+
+    order = db.relationship('Order', backref='event_invoices', foreign_keys=[order_id])
+
     user = db.relationship('User', backref='invoices')
 
     discount_code_id = db.Column(db.Integer, db.ForeignKey('discount_codes.id', ondelete='SET NULL'),
