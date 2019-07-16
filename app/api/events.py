@@ -79,6 +79,10 @@ def validate_event(user, modules, data):
         raise ConflictException({'pointer': '/data/attributes/location-name'},
                                 "Online Event does not have any locaton")
 
+    if not data.get('name', None) and data.get('state', None) == 'published':
+        raise ConflictException({'pointer': '/data/attributes/location-name'},
+                                "Event Name is required to publish the event")
+
     if data.get('searchable_location_name') and data.get('is_event_online'):
         raise ConflictException({'pointer': '/data/attributes/searchable-location-name'},
                                 "Online Event does not have any locaton")
