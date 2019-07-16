@@ -66,6 +66,8 @@ class Order(SoftDeletionModel):
     cancel_note = db.Column(db.String, nullable=True)
     order_notes = db.Column(db.String)
     tickets_pdf_url = db.Column(db.String)
+    is_event_invoice = db.Column(db.Boolean)
+    invoice_pdf_url = db.Column(db.String)
 
     discount_code_id = db.Column(
         db.Integer, db.ForeignKey('discount_codes.id', ondelete='SET NULL'), nullable=True, default=None)
@@ -97,7 +99,9 @@ class Order(SoftDeletionModel):
                  payment_mode=None,
                  deleted_at=None,
                  order_notes=None,
-                 tickets_pdf_url=None):
+                 tickets_pdf_url=None,
+                 invoice_pdf_url=None,
+                 is_event_invoice=False):
         self.identifier = get_new_order_identifier()
         self.quantity = quantity
         self.amount = amount
@@ -120,6 +124,9 @@ class Order(SoftDeletionModel):
         self.deleted_at = deleted_at
         self.order_notes = order_notes
         self.tickets_pdf_url = tickets_pdf_url
+        self.is_event_invoice = is_event_invoice
+        self.invoice_pdf_url = invoice_pdf_url
+
 
     def __repr__(self):
         return '<Order %r>' % self.id
