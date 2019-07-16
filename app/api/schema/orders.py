@@ -78,8 +78,6 @@ class OrderSchema(SoftDeletionSchema):
     cancel_note = fields.Str(allow_none=True)
     order_notes = fields.Str(allow_none=True)
     tickets_pdf_url = fields.Url(dump_only=True)
-    is_event_invoice = fields.Bool(allow_none=False)
-    invoice_pdf_url = fields.Url(dump_only=True)
 
     # only used in the case of an on site attendee.
     on_site_tickets = fields.List(cls_or_instance=fields.Nested(OnSiteTicketSchema), load_only=True, allow_none=True)
