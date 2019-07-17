@@ -174,7 +174,10 @@ def login_user(provider):
 
 @auth_routes.route('/verify-email', methods=['POST'])
 def verify_email():
-    token = base64.b64decode(request.json['data']['token'])
+    try:
+        token = base64.b64decode(request.json['data']['token'])
+    except Exception:
+        return BadRequestError({'source': ''}, 'Invalid Token').respond()
     s = get_serializer()
 
     try:
