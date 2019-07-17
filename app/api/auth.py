@@ -176,7 +176,7 @@ def login_user(provider):
 def verify_email():
     try:
         token = base64.b64decode(request.json['data']['token'])
-    except Exception:
+    except base64.binascii.Error:
         return BadRequestError({'source': ''}, 'Invalid Token').respond()
     s = get_serializer()
 
