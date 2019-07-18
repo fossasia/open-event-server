@@ -75,7 +75,7 @@ def validate_event(user, modules, data):
         ticket_available = event.tickets_available
         if (ticket_available == 0):
             raise ConflictException({'pointer': 'data/attributes/tickets'},
-                                     "Please add some tickets to publish event")
+                                    "Please add some tickets to publish event")
 
     if not data.get('is_event_online') and data.get('state', None) == 'published' \
         and not data.get('location_name', None):
