@@ -73,6 +73,7 @@ class Order(SoftDeletionModel):
 
     event = db.relationship('Event', backref='orders')
     user = db.relationship('User', backref='orders', foreign_keys=[user_id])
+    invoices = db.relationship("EventInvoice", backref='invoice_order')
     marketer = db.relationship('User', backref='marketed_orders', foreign_keys=[marketer_id])
     tickets = db.relationship("Ticket", secondary='orders_tickets', backref='order')
     order_tickets = db.relationship("OrderTicket", backref='order')
