@@ -70,6 +70,14 @@ def validate_event(user, modules, data):
         raise ForbiddenException({'source': ''},
                                  "Only verified accounts can publish events")
 
+    
+    if data.get('state', None) == 'published':
+        event = Event.query.filter_by(name=data.get('name', None)).first()
+        ticket_available = event.tickets_available
+        if (ticket_available == 0):
+            raise ForbiddenException({'source': ''},
+                                     "Please add some tickets to publish event")
+        
     if not data.get('is_event_online') and data.get('state', None) == 'published' \
         and not data.get('location_name', None):
         raise ConflictException({'pointer': '/data/attributes/location-name'},
