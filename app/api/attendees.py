@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from flask import Blueprint, request, jsonify, abort, make_response
-from flask_jwt import current_identity
+from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
@@ -146,7 +146,7 @@ class AttendeeDetail(ResourceDetail):
         :return:
         """
         attendee = safe_query(self, TicketHolder, 'id', view_kwargs['id'], 'attendee_id')
-        if not has_access('is_registrar_or_user_itself', user_id=current_identity.id, event_id=attendee.event_id):
+        if not has_access('is_registrar_or_user_itself', user_id=current_user.id, event_id=attendee.event_id):
             raise ForbiddenException({'source': 'User'}, 'You are not authorized to access this.')
 
     def before_delete_object(self, obj, kwargs):
@@ -171,7 +171,7 @@ class AttendeeDetail(ResourceDetail):
 #         raise ForbiddenException({'source': 'User'}, 'You are not authorized to access this.')
 
         if 'ticket' in data:
-            user = safe_query(self, User, 'id', current_identity.id, 'user_id')
+            user = safe_query(self, User, 'id', current_user.id, 'user_id')
             ticket = db.session.query(Ticket).filter_by(
                 id=int(data['ticket']), deleted_at=None
             ).first()
@@ -278,7 +278,7 @@ def send_receipt():
         except NoResultFound:
             raise ObjectNotFound({'parameter': '{identifier}'}, "Order not found")
 
-        if (order.user_id != current_identity.id) and (not has_access('is_registrar', event_id=order.event_id)):
+        if (order.user_id != current_user.id) and (not has_access('is_registrar', event_id=order.event_id)):
             abort(
                 make_response(jsonify(error="You need to be the event organizer or order buyer to send receipts."), 403)
             )
@@ -287,7 +287,7 @@ def send_receipt():
                 make_response(jsonify(error="Cannot send receipt for an incomplete order"), 409)
             )
         else:
-            send_email_to_attendees(order, current_identity.id)
+            send_email_to_attendees(order, current_user.id)
             return jsonify(message="receipt sent to attendees")
     else:
         abort(

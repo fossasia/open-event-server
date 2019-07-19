@@ -1,5 +1,5 @@
 from flask import request, current_app
-from flask_jwt import current_identity, _jwt_required
+from flask_jwt_extended import verify_jwt_in_request, current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow_jsonapi import fields
@@ -105,9 +105,9 @@ class EventList(ResourceList):
         """
         query_ = self.session.query(Event).filter_by(state='published')
         if 'Authorization' in request.headers:
-            _jwt_required(current_app.config['JWT_DEFAULT_REALM'])
+            verify_jwt_in_request()
             query2 = self.session.query(Event)
-            query2 = query2.join(Event.roles).filter_by(user_id=current_identity.id).join(UsersEventsRoles.role). \
+            query2 = query2.join(Event.roles).filter_by(user_id=current_user.id).join(UsersEventsRoles.role). \
                 filter(or_(Role.name == COORGANIZER, Role.name == ORGANIZER, Role.name == OWNER))
             query_ = query_.union(query2)
 
@@ -455,7 +455,7 @@ class EventDetail(ResourceDetail):
         :param data:
         :return:
         """
-        user = User.query.filter_by(id=current_identity.id).one()
+        user = User.query.filter_by(id=current_user.id).one()
         modules = Module.query.first()
         validate_event(user, modules, data)
 

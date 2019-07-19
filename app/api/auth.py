@@ -7,7 +7,7 @@ from functools import wraps
 
 import requests
 from flask import request, jsonify, make_response, Blueprint, send_file
-from flask_jwt import current_identity as current_user, jwt_required
+from flask_jwt_extended import jwt_required, current_user
 from flask_limiter.util import get_remote_address
 from healthcheck import EnvironmentDump
 from flask_rest_jsonapi.exceptions import ObjectNotFound
@@ -266,7 +266,7 @@ def reset_password_patch():
 
 
 @auth_routes.route('/change-password', methods=['POST'])
-@jwt_required()
+@jwt_required
 def change_password():
     old_password = request.json['data']['old-password']
     new_password = request.json['data']['new-password']
@@ -307,7 +307,7 @@ def return_file(file_name_prefix, file_path, identifier):
 
 
 @ticket_blueprint.route('/tickets/<string:order_identifier>')
-@jwt_required()
+@jwt_required
 def ticket_attendee_authorized(order_identifier):
     if current_user:
         try:
@@ -329,7 +329,7 @@ def ticket_attendee_authorized(order_identifier):
 
 
 @ticket_blueprint.route('/orders/invoices/<string:order_identifier>')
-@jwt_required()
+@jwt_required
 def order_invoices(order_identifier):
     if current_user:
         try:
@@ -351,7 +351,7 @@ def order_invoices(order_identifier):
 
 
 @ticket_blueprint.route('/events/invoices/<string:invoice_identifier>')
-@jwt_required()
+@jwt_required
 def event_invoices(invoice_identifier):
     if not current_user:
         return ForbiddenError({'source': ''}, 'Authentication Required to access Invoice').respond()

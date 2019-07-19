@@ -33,6 +33,10 @@ def jwt_identity(payload):
     return User.query.get(payload['identity'])
 
 
+def jwt_user_loader(identity):
+    return User.query.get(identity)
+
+
 def get_identity():
     """
     To be used only if identity for expired tokens is required, otherwise use current_identity from flask_jwt

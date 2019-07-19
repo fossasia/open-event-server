@@ -8,7 +8,7 @@ import zipfile
 import requests
 from flask import current_app as app
 from flask import request
-from flask_jwt import current_identity
+from flask_jwt_extended import current_user
 from werkzeug import secure_filename
 
 from app.api.helpers.db import save_to_db
@@ -149,7 +149,7 @@ def _delete_fields(srv, data):
 def create_import_job(task):
     """create import record in db"""
     ij = ImportJob(task=task,
-                   user=current_identity)
+                   user=current_user)
     save_to_db(ij, 'Import job saved')
 
 
