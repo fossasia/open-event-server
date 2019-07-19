@@ -221,13 +221,7 @@ def export_event_json(event_id, settings):
     shutil.make_archive(dir_path, 'zip', dir_path)
     dir_path = dir_path + ".zip"
 
-    storage_path = UPLOAD_PATHS['exports']['zip'].format(
-        event_id=event_id
-    )
-    uploaded_file = UploadedFile(dir_path, dir_path.rsplit('/', 1)[1])
-    storage_url = upload(uploaded_file, storage_path)
-
-    return storage_url
+    return dir_path
 
 
 def get_current_user():
