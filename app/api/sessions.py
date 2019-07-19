@@ -161,8 +161,9 @@ class SessionDetail(ResourceDetail):
                 frontend_url = get_settings()['frontend_url']
                 link = "{}/events/{}/sessions/{}" \
                     .format(frontend_url, event.identifier, session.id)
-                send_email_session_accept_reject(speaker.email, session, link)
-                send_notif_session_accept_reject(speaker, session.title, session.state, link, session.id)
+                if not speaker.is_email_overridden:
+                    send_email_session_accept_reject(speaker.email, session, link)
+                    send_notif_session_accept_reject(speaker, session.title, session.state, link, session.id)
 
             # Email for owner
             if session.event.get_owner():
