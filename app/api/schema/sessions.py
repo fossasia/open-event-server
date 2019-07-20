@@ -54,7 +54,7 @@ class SessionSchema(SoftDeletionSchema):
                     {'pointer': '/data/attributes/starts-at'}, "starts-at should be after current date-time")
 
         if 'state' in data:
-            if data['state'] is not 'draft' or not 'pending':
+            if data['state'] not in ('draft', 'pending'):
                 if not has_access('is_coorganizer', event_id=data['event']):
                     return ForbiddenException({'source': ''}, 'Co-organizer access is required.')
 
