@@ -184,7 +184,7 @@ def export_event_json(event_id, settings):
     Exports the event as a zip on the server and return its path
     """
     # make directory
-    exports_dir = app.config['BASE_DIR'] + '/static/uploads/exports/'
+    exports_dir = app.config['BASE_DIR'] + 'static/uploads/exports/'
     if not os.path.isdir(exports_dir):
         os.makedirs(exports_dir)
     dir_path = exports_dir + 'event%d' % int(event_id)
@@ -221,7 +221,16 @@ def export_event_json(event_id, settings):
     shutil.make_archive(dir_path, 'zip', dir_path)
     dir_path = dir_path + ".zip"
 
-    return dir_path
+    storage_path = UPLOAD_PATHS['exports']['zip'].format(
+        event_id=event_id
+    )
+    uploaded_file = UploadedFile(dir_path, dir_path.rsplit('/', 1)[1])
+    storage_url = upload(uploaded_file, storage_path)
+    # to extract the raw path
+    if 'http://localhost/' in storage_url:
+        storage_url = storage_url[16:]
+    return storage_url
+
 
 
 def get_current_user():

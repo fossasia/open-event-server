@@ -178,8 +178,10 @@ def export_event_task(self, email, event_id, settings):
         logging.info('Exporting started')
         path = event_export_task_base(event_id, settings)
         # task_id = self.request.id.__str__()  # str(async result)
+        localhost_host_without_port = 'http://localhost'
+        if path.find(localhost_host_without_port):
+            path.replace(localhost_host_without_port, '')
         download_url = path
-
         result = {
             'download_url': download_url
         }

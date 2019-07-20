@@ -374,6 +374,22 @@ def order_invoices(order_identifier):
         return ForbiddenError({'source': ''}, 'Authentication Required to access Invoice').respond()
 
 
+@ticket_blueprint.route('static/media/exports/<event_id>/zip/<event_hash>/<filename>')
+@jwt_required
+def event_export(event_id, event_hash, filename):
+    if not current_user:
+        return ForbiddenError({'source': ''}, 'Authentication Required to export events').respond()
+    if not current_user.is_organizer(event_id) and not current_user.is_staff:
+        return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
+    file_path = '../static/media/exports/{}/zip/{}/{}'.format(event_id, event_hash, filename)
+    try:
+        return make_response(send_file(file_path,  mimetype='application/zip',
+                             as_attachment=True,
+                             attachment_filename='event{}.zip'.format(event_hash)))
+    except FileNotFoundError:
+        raise ObjectNotFound({'source': ''}, "The event export has failed")
+
+
 @ticket_blueprint.route('/events/invoices/<string:invoice_identifier>')
 @jwt_required
 def event_invoices(invoice_identifier):
