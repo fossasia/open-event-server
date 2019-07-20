@@ -7,7 +7,7 @@ from functools import wraps
 
 import requests
 from flask import request, jsonify, make_response, Blueprint, send_file
-from flask_jwt_extended import jwt_required, current_user
+from flask_jwt_extended import jwt_required, current_user, create_access_token
 from flask_limiter.util import get_remote_address
 from healthcheck import EnvironmentDump
 from flask_rest_jsonapi.exceptions import ObjectNotFound
@@ -17,6 +17,7 @@ from app import get_settings
 from app import limiter
 from app.api.helpers.db import save_to_db, get_count, safe_query
 from app.api.helpers.auth import AuthManager
+from app.api.helpers.jwt import jwt_authenticate
 from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError, NotFoundError, BadRequestError
 from app.api.helpers.files import make_frontend_url
 from app.api.helpers.mail import send_email_to_attendees
@@ -42,6 +43,26 @@ logger = logging.getLogger(__name__)
 authorised_blueprint = Blueprint('authorised_blueprint', __name__, url_prefix='/')
 ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/v1')
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
+
+
+@authorised_blueprint.route('/auth/session', methods=['POST'])
+@auth_routes.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    username = data.get('email', data.get('username'))
+    password = data.get('password')
+    criterion = [username, password]
+
+    if not all(criterion):
+        return jsonify({ 'description': 'username or password missing' }), 400
+
+    identity = jwt_authenticate(username, password)
+
+    if identity:
+        access_token = create_access_token(identity.id, fresh=True)
+        return jsonify(access_token=access_token)
+    else:
+        return jsonify(error='Invalid Credentials'), 401
 
 
 @auth_routes.route('/oauth/<provider>', methods=['GET'])

@@ -1,7 +1,10 @@
 import base64
 import json
 
-from flask_jwt import _default_request_handler
+from flask import _app_ctx_stack as ctx_stack
+from flask_jwt_extended.view_decorators import _decode_jwt_from_request, _load_user
+from flask_jwt_extended.config import config
+from flask_jwt_extended.exceptions import UserLoadError
 from flask_scrypt import check_password_hash
 
 from app.models.user import User
@@ -30,11 +33,11 @@ def jwt_identity(payload):
     :param payload:
     :return:
     """
-    return User.query.get(payload['identity'])
+    return jwt_user_loader(payload['identity'])
 
 
 def jwt_user_loader(identity):
-    return User.query.get(identity)
+    return User.query.filter_by(id=identity, deleted_at=None).first()
 
 
 def get_identity():
@@ -42,13 +45,15 @@ def get_identity():
     To be used only if identity for expired tokens is required, otherwise use current_identity from flask_jwt
     :return:
     """
-    token_second_segment = _default_request_handler().split('.')[1]
-    missing_padding = len(token_second_segment) % 4
-
-    # ensures the string is correctly padded to be a multiple of 4
-    if missing_padding != 0:
-        token_second_segment += '=' * (4 - missing_padding)
-
-    payload = json.loads(str(base64.b64decode(token_second_segment), 'utf-8'))
-    user = jwt_identity(payload)
-    return user
+    token = None
+    try:
+        token = _decode_jwt_from_request('access')
+    except:
+        token = getattr(ctx_stack.top, 'expired_jwt', None)
+    
+    if token:
+        try:
+            _load_user(token[config.identity_claim_key])
+            return getattr(ctx_stack.top, 'jwt_user', None)
+        except UserLoadError:
+            pass

@@ -10,7 +10,6 @@ from app.settings import get_settings, get_setts
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 from flask_login import current_user
-from flask_jwt import JWT
 from flask_jwt_extended import JWTManager
 from flask_limiter import Limiter
 from datetime import timedelta
@@ -103,11 +102,8 @@ def create_app():
     app.logger.setLevel(logging.ERROR)
 
     # set up jwt
-    app.config['JWT_AUTH_USERNAME_KEY'] = 'email'
-    app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=24 * 60 * 60)
-    app.config['JWT_AUTH_URL_RULE'] = '/auth/session'
-    _jwt = JWT(app, jwt_authenticate, jwt_identity)
     app.config['JWT_HEADER_TYPE'] = 'JWT'
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=1)
     _jwt = JWTManager(app)
     _jwt.user_loader_callback_loader(jwt_user_loader)
 
