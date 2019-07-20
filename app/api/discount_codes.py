@@ -208,7 +208,9 @@ class DiscountCodeDetail(ResourceDetail):
         if kwargs.get('code'):
             # filter on deleted_at is required to catch the id of a
             # discount code which has not been deleted.
-            discount = db.session.query(DiscountCode).filter_by(code=kwargs.get('code'), deleted_at=None).first()
+            discount = db.session.query(DiscountCode).filter_by(code=kwargs.get('code'),
+                                                                event_id=kwargs.get('discount_event_id'),
+                                                                deleted_at=None).first()
             if discount:
                 kwargs['id'] = discount.id
                 discount_tz = discount.valid_from.tzinfo

@@ -111,8 +111,9 @@ class AccessCodeDetail(ResourceDetail):
         :return:
         """
         # Any registered user can fetch access code details using the code.
-        if kwargs.get('code'):
-            access = db.session.query(AccessCode).filter_by(code=kwargs.get('code')).first()
+        if kwargs.get('code') and kwargs.get('access_event_id'):
+            access = db.session.query(AccessCode).filter_by(code=kwargs.get('code'),
+                                                            event_id=kwargs.get('access_event_id')).first()
             if access:
                 kwargs['id'] = access.id
             else:
