@@ -26,7 +26,7 @@ import sqlalchemy as sa
 import stripe
 from app.settings import get_settings
 from app.models import db
-from app.api.helpers.jwt import jwt_authenticate, jwt_identity, jwt_user_loader
+from app.api.helpers.jwt import jwt_user_loader
 from app.api.helpers.cache import cache
 from werkzeug.middleware.profiler import ProfilerMiddleware
 from app.views import BlueprintsManager

@@ -26,7 +26,7 @@ class TestPermissionManager(OpenEventTestCase):
             save_to_db(event)
 
             # Authenticate User
-            self.auth = {'Authorization': "JWT " + str(create_access_token(user.id, fresh=True), 'utf-8')}
+            self.auth = {'Authorization': "JWT " + create_access_token(user.id, fresh=True)}
 
     def test_has_access(self):
         """Method to test whether user has access to different roles"""

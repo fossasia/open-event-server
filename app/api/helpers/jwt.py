@@ -27,15 +27,6 @@ def jwt_authenticate(email, password):
         return None
 
 
-def jwt_identity(payload):
-    """
-    Jwt helper function
-    :param payload:
-    :return:
-    """
-    return jwt_user_loader(payload['identity'])
-
-
 def jwt_user_loader(identity):
     return User.query.filter_by(id=identity, deleted_at=None).first()
 
@@ -50,7 +41,7 @@ def get_identity():
         token = _decode_jwt_from_request('access')
     except:
         token = getattr(ctx_stack.top, 'expired_jwt', None)
-    
+
     if token:
         try:
             _load_user(token[config.identity_claim_key])
