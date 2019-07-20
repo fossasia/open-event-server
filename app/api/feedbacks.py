@@ -1,6 +1,6 @@
+from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
-from flask_jwt import current_identity as current_user
 
 from app.api.bootstrap import api
 from app.api.helpers.db import safe_query

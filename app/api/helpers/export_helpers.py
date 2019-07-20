@@ -8,8 +8,8 @@ import pytz
 import requests
 from flask import current_app as app
 from flask import request, url_for
-from flask_jwt import current_identity
-from flask_login import current_user
+from flask_jwt_extended import current_user
+from flask_login import current_user as current_logged_user
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.storage import upload, UPLOAD_PATHS, UploadedFile
@@ -231,10 +231,10 @@ def export_event_json(event_id, settings):
 
 
 def get_current_user():
-    if current_identity:
-        return current_identity
-    else:
+    if current_user:
         return current_user
+    else:
+        return current_logged_user
 
 
 # HELPERS

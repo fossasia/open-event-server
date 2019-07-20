@@ -4,7 +4,7 @@ from app.api.schema.import_jobs import ImportJobSchema
 from app.models import db
 from app.models.import_job import ImportJob
 from app.api.helpers.permissions import jwt_required
-from flask_jwt import current_identity
+from flask_jwt_extended import current_user
 
 
 class ImportJobList(ResourceList):
@@ -13,7 +13,7 @@ class ImportJobList(ResourceList):
     """
     def query(self, kwargs):
         query_ = self.session.query(ImportJob)
-        query_ = query_.filter_by(user_id=current_identity.id)
+        query_ = query_.filter_by(user_id=current_user.id)
         return query_
 
     decorators = (jwt_required,)
