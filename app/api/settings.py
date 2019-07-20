@@ -1,6 +1,6 @@
 from flask import current_app as app
 from flask import jsonify, request, Blueprint, make_response
-from flask_jwt import current_identity as current_user, _jwt_required
+from flask_jwt_extended import verify_jwt_in_request, current_user
 from flask_rest_jsonapi import ResourceDetail
 
 from app.api.bootstrap import api
@@ -39,7 +39,7 @@ class SettingDetail(ResourceDetail):
         kwargs['id'] = 1
 
         if 'Authorization' in request.headers:
-            _jwt_required(app.config['JWT_DEFAULT_REALM'])
+            verify_jwt_in_request()
 
             if current_user.is_admin or current_user.is_super_admin:
                 self.schema = SettingSchemaAdmin

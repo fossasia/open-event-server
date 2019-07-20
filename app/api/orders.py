@@ -3,7 +3,7 @@ from datetime import datetime
 
 import omise
 from flask import request, jsonify, Blueprint, url_for, redirect
-from flask_jwt import current_identity as current_user
+from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema

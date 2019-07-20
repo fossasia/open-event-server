@@ -1,7 +1,5 @@
 from datetime import datetime
 
-from flask_jwt import current_identity as current_user
-
 from app.api.helpers.db import save_to_db, get_count
 from app.api.helpers.exceptions import ConflictException
 from app.api.helpers.files import make_frontend_url
