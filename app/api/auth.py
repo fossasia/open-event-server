@@ -54,7 +54,7 @@ def login():
     criterion = [username, password]
 
     if not all(criterion):
-        return jsonify({ 'description': 'username or password missing' }), 400
+        return jsonify(error='username or password missing'), 400
 
     identity = jwt_authenticate(username, password)
 

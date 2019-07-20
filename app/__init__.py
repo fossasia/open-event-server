@@ -104,6 +104,7 @@ def create_app():
     # set up jwt
     app.config['JWT_HEADER_TYPE'] = 'JWT'
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=1)
+    app.config['JWT_ERROR_MESSAGE_KEY'] = 'error'
     _jwt = JWTManager(app)
     _jwt.user_loader_callback_loader(jwt_user_loader)
 
