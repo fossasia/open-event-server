@@ -29,18 +29,6 @@ class TestUtilitiesHelperValidation(OpenEventTestCase):
             data = ['event']
             require_relationship(['sponsor', 'event'], data)
 
-    def test_string_empty(self):
-        """Method to test whether an empty string is correctly identified."""
-
-        with app.test_request_context():
-            self.assertTrue(string_empty(''))
-            self.assertTrue(string_empty(' '))
-            self.assertFalse(string_empty('some value'))
-            self.assertFalse(string_empty('  some   value '))
-            self.assertFalse(string_empty(str))
-            self.assertFalse(string_empty(int))
-            self.assertFalse(string_empty(None))
-
     def test_monthdelta(self):
         """Method to test difference in months result"""
 
