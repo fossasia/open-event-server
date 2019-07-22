@@ -20,7 +20,7 @@ before-install:
 
 install:
   - npm install -g dredd@4.0.0
-  - pip3 install -r requirements/tests.txt
+  - pip3 install mypy -r requirements/tests.txt
 
 env:
   - APP_CONFIG="config.TestingConfig" PATH=$PATH:${HOME}/google-cloud-sdk/bin
@@ -31,6 +31,7 @@ before_script:
   - export TEST_DATABASE_URL=postgresql://postgres@localhost:5432/test
   - bash scripts/test_multiple_heads.sh
   - dredd
+  - mypy --ignore-missing-imports .
   
 script:
   - nosetests tests/all -v --with-coverage
