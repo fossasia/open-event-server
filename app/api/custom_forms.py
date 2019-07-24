@@ -2,7 +2,7 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationshi
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 
 from app.api.bootstrap import api
-from app.api.helpers.db import safe_query
+from app.api.helpers.db import safe_query, get_or_create
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
@@ -31,6 +31,27 @@ class CustomFormListPost(ResourceList):
             raise ObjectNotFound({'parameter': 'event_id'},
                                  "Event: {} not found".format(data['event_id']))
 
+        firstname = db.session.query(CustomForms).filter_by(field_identifier='firstname', form='attendee',
+                                                            event_id=data['event']).one()
+        lastname = db.session.query(CustomForms).filter_by(field_identifier='lastname', form='attendee',
+                                                           event_id=data['event']).one()
+        email = db.session.query(CustomForms).filter_by(field_identifier='email', form='attendee',
+                                                        event_id=data['event']).one()
+        if data['form'] == 'attendee':
+            if not firstname:
+                firstname, _ = get_or_create(CustomForms, field_identifier='firstname', form='attendee', type='text',
+                                             is_required=True, is_included=True, is_fixed=True, event_id=data['event'])
+                db.session.add(firstname)
+            if not lastname:
+                lastname, _ = get_or_create(CustomForms, field_identifier='lastname', form='attendee', type='text',
+                                            is_required=True, is_included=True, is_fixed=True, event_id=data['event'])
+                db.session.add(lastname)
+            if not email:
+                email, _ = get_or_create(CustomForms, field_identifier='email', form='attendee', type='email',
+                                         is_required=True, is_included=True, is_fixed=True, event_id=data['event'])
+                db.session.add(email)
+            db.session.commit()
+
     schema = CustomFormSchema
     methods = ['POST', ]
     data_layer = {'session': db.session,
@@ -42,6 +63,7 @@ class CustomFormList(ResourceList):
     """
     Create and List Custom Forms
     """
+
     def query(self, view_kwargs):
         """
         query method for different view_kwargs
@@ -53,7 +75,7 @@ class CustomFormList(ResourceList):
         return query_
 
     view_kwargs = True
-    decorators = (jwt_required, )
+    decorators = (jwt_required,)
     methods = ['GET', ]
     schema = CustomFormSchema
     data_layer = {'session': db.session,
@@ -85,7 +107,7 @@ class CustomFormDetail(ResourceDetail):
             view_kwargs['id'] = custom_form.id
 
     decorators = (api.has_permission('is_coorganizer', fetch='event_id',
-                  fetch_as="event_id", model=CustomForms, methods="PATCH,DELETE"), )
+                                     fetch_as="event_id", model=CustomForms, methods="PATCH,DELETE"),)
     schema = CustomFormSchema
     data_layer = {'session': db.session,
                   'model': CustomForms}
