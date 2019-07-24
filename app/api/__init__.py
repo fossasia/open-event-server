@@ -315,6 +315,7 @@ api.route(EventRelationship, 'event_orders', '/events/<int:id>/relationships/ord
           '/events/<identifier>/relationships/orders')
 api.route(EventRelationship, 'event_stripe_authorization', '/events/<int:id>/relationships/stripe-authorization',
           '/events/<identifier>/relationships/stripe-authorization')
+
 # Events -> roles:
 api.route(EventRelationship, 'event_owner', '/events/<int:id>/relationships/owner',
           '/events/<identifier>/relationships/owner')

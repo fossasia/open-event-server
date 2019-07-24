@@ -15,6 +15,28 @@ from app.models.event import Event
 from utils.common import use_defaults
 
 
+class EventDataSchema(SoftDeletionSchema):
+    """
+    API Schema for EventData Model
+    """
+
+    class Meta:
+        """
+        Meta class for Notification Action API schema
+        """
+        type_ = 'event-info'
+        self_view = 'v1.event_data_detail'
+        self_view_kwargs = {'id': '<id>'}
+        inflect = dasherize
+
+    id = fields.Integer(dump_only=True)
+    has_speakers = fields.Boolean(allow_none=True, dump_only=True)
+    has_sessions = fields.Boolean(allow_none=True, dump_only=True)
+    has_tickets = fields.Boolean(allow_none=True, dump_only=True)
+
+    event_id = fields.Integer(allow_none=True, dump_only=True)
+
+
 @use_defaults()
 class EventSchemaPublic(SoftDeletionSchema):
     class Meta:

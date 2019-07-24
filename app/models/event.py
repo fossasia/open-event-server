@@ -35,6 +35,16 @@ def get_new_event_identifier(length=8):
         return get_new_event_identifier(length)
 
 
+class EventData(db.Model):
+    __tablename__ = 'event_data'
+    id = db.Column(db.Integer, primary_key=True)
+
+    has_speakers = db.Column(db.Boolean, default=False, nullable=False)
+    has_sessions = db.Column(db.Boolean, default=False, nullable=False)
+    has_tickets = db.Column(db.Boolean, default=True, nullable=False)
+
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id', ondelete='CASCADE'))
+
 class Event(SoftDeletionModel):
     """Event object table"""
     __tablename__ = 'events'
