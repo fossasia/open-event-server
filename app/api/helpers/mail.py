@@ -335,11 +335,13 @@ def send_email_to_attendees(order, purchaser_id, attachments=None):
                 action=TICKET_PURCHASED,
                 subject=MAILS[TICKET_PURCHASED]['subject'].format(
                     event_name=order.event.name,
-                    invoice_id=order.invoice_number
+                    invoice_id=order.invoice_number,
+                    frontend_url=get_settings()['frontend_url']
                 ),
                 html=MAILS[TICKET_PURCHASED]['message'].format(
                     pdf_url=holder.pdf_url,
-                    event_name=order.event.name
+                    event_name=order.event.name,
+                    frontend_url=get_settings()['frontend_url']
                 ),
                 attachments=attachments
             )
@@ -366,11 +368,13 @@ def send_order_cancel_email(order):
         action=TICKET_CANCELLED,
         subject=MAILS[TICKET_CANCELLED]['subject'].format(
             event_name=order.event.name,
-            invoice_id=order.invoice_number
+            invoice_id=order.invoice_number,
+            frontend_url=get_settings()['frontend_url']
         ),
         html=MAILS[TICKET_CANCELLED]['message'].format(
             event_name=order.event.name,
             order_url=make_frontend_url('/orders/{identifier}'.format(identifier=order.identifier)),
-            cancel_note=order.cancel_note
+            cancel_note=order.cancel_note,
+            frontend_url=get_settings()['frontend_url']
         )
     )
