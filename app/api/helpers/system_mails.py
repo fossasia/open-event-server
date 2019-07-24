@@ -9,6 +9,8 @@ from app.models.mail import INVITE_PAPERS, NEW_SESSION, USER_CONFIRM, \
     MONTHLY_PAYMENT_FOLLOWUP_EMAIL, EVENT_IMPORTED, EVENT_IMPORT_FAIL, TICKET_PURCHASED_ORGANIZER, TICKET_CANCELLED, \
     TICKET_PURCHASED_ATTENDEE, PASSWORD_CHANGE, PASSWORD_RESET_AND_VERIFY, USER_EVENT_ROLE, TEST_MAIL
 
+
+
 MAILS = {
     EVENT_PUBLISH: {
         'recipient': 'Owner, Organizer, Speaker',
@@ -157,7 +159,7 @@ MAILS = {
             u"<br/>Your order has been processed successfully." +
             u"<br/> You can find your Tickets and Order Invoice attached to this mail."
             u"<br><br><em>Looking forward to seeing you at the event."
-            u"<br/>Login to manage your orders at https://eventyay.com </em>"
+            u"<br/>Login to manage your orders at {frontend_url} </em>"
         )
     },
     TICKET_PURCHASED_ATTENDEE: {
@@ -178,7 +180,7 @@ MAILS = {
             u"Hi, {buyer_email} just bought tickets for the event {event_name}"
             u"<br/>The order has been processed successfully." +
             u"<br/> <a href='{order_url}'>Click here</a> to view/download the invoice."
-            u"<br/>Login to manage the orders at https://eventyay.com </em>"
+            u"<br/>Login to manage the orders at {frontend_url} </em>"
         )
     },
     TICKET_CANCELLED: {
@@ -189,7 +191,7 @@ MAILS = {
             u"<br/>Please contact the organizer for more info" +
             u"<br/>Message from the organizer: {cancel_note}"
             u"<br/> <a href='{order_url}'>Click here</a> to view/download the invoice."
-            u"<br/>Login to manage the orders at https://eventyay.com </em>"
+            u"<br/>Login to manage the orders at {frontend_url} </em>"
         )
     },
     EVENT_EXPORTED: {
