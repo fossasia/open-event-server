@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask import make_response, request, jsonify, abort
-from flask_jwt import jwt_required
+from flask_jwt_extended import jwt_required
 from app.api.helpers.files import uploaded_image, uploaded_file
 from app.api.helpers.storage import UPLOAD_PATHS, upload_local, upload
 import uuid
@@ -9,7 +9,7 @@ upload_routes = Blueprint('upload', __name__, url_prefix='/v1/upload')
 
 
 @upload_routes.route('/image', methods=['POST'])
-@jwt_required()
+@jwt_required
 def upload_image():
     image = request.json['data']
     extension = '.{}'.format(image.split(";")[0].split("/")[1])
@@ -29,7 +29,7 @@ def upload_image():
 
 
 @upload_routes.route('/files', methods=['POST'])
-@jwt_required()
+@jwt_required
 def upload_file():
     force_local = request.args.get('force_local', 'false')
     if 'file' in request.files:

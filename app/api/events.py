@@ -1,5 +1,5 @@
 from flask import request, current_app
-from flask_jwt import current_identity, _jwt_required
+from flask_jwt_extended import verify_jwt_in_request, current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow_jsonapi import fields
@@ -12,7 +12,7 @@ from app.api.bootstrap import api
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
 from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.events import create_custom_forms_for_attendees
-from app.api.helpers.exceptions import ForbiddenException, ConflictException
+from app.api.helpers.exceptions import ForbiddenException, ConflictException, UnprocessableEntity
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
 from app.api.schema.events import EventSchemaPublic, EventSchema
@@ -95,6 +95,26 @@ def validate_event(user, modules, data):
                                 "Online Event does not have any locaton")
 
 
+def validate_date(event, data):
+    if event:
+        if 'starts_at' not in data:
+            data['starts_at'] = event.starts_at
+
+        if 'ends_at' not in data:
+            data['ends_at'] = event.ends_at
+
+    if not data.get('starts_at') or not data.get('ends_at'):
+        raise UnprocessableEntity({'pointer': '/data/attributes/date'},
+                                  "enter required fields starts-at/ends-at")
+
+    if data['starts_at'] >= data['ends_at']:
+        raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'},
+                                  "ends-at should be after starts-at")
+
+    if datetime.timestamp(data['starts_at']) <= datetime.timestamp(datetime.now()):
+        raise UnprocessableEntity({'pointer': '/data/attributes/starts-at'},
+                                  "starts-at should be after current date-time")
+
 class EventList(ResourceList):
     def before_get(self, args, kwargs):
         """
@@ -116,9 +136,9 @@ class EventList(ResourceList):
         """
         query_ = self.session.query(Event).filter_by(state='published')
         if 'Authorization' in request.headers:
-            _jwt_required(current_app.config['JWT_DEFAULT_REALM'])
+            verify_jwt_in_request()
             query2 = self.session.query(Event)
-            query2 = query2.join(Event.roles).filter_by(user_id=current_identity.id).join(UsersEventsRoles.role). \
+            query2 = query2.join(Event.roles).filter_by(user_id=current_user.id).join(UsersEventsRoles.role). \
                 filter(or_(Role.name == COORGANIZER, Role.name == ORGANIZER, Role.name == OWNER))
             query_ = query_.union(query2)
 
@@ -162,6 +182,7 @@ class EventList(ResourceList):
         user = User.query.filter_by(id=kwargs['user_id']).first()
         modules = Module.query.first()
         validate_event(user, modules, data)
+        validate_date(None, data)
 
     def after_create_object(self, event, data, view_kwargs):
         """
@@ -466,7 +487,7 @@ class EventDetail(ResourceDetail):
         :param data:
         :return:
         """
-        user = User.query.filter_by(id=current_identity.id).one()
+        user = User.query.filter_by(id=current_user.id).one()
         modules = Module.query.first()
         validate_event(user, modules, data)
 
@@ -478,6 +499,9 @@ class EventDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        if data.get('starts_at') != event.starts_at or data.get('ends_at') != event.ends_at:
+            validate_date(event, data)
+
         if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
             if len(event.orders) != 0:
                 raise ForbiddenException({'source': ''}, "Event associated with orders cannot be deleted")
