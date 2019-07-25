@@ -31,25 +31,13 @@ class CustomFormListPost(ResourceList):
             raise ObjectNotFound({'parameter': 'event_id'},
                                  "Event: {} not found".format(data['event_id']))
 
-        firstname = db.session.query(CustomForms).filter_by(field_identifier='firstname', form='attendee',
-                                                            event_id=data['event']).one()
-        lastname = db.session.query(CustomForms).filter_by(field_identifier='lastname', form='attendee',
-                                                           event_id=data['event']).one()
-        email = db.session.query(CustomForms).filter_by(field_identifier='email', form='attendee',
-                                                        event_id=data['event']).one()
         if data['form'] == 'attendee':
-            if not firstname:
-                firstname, _ = get_or_create(CustomForms, field_identifier='firstname', form='attendee', type='text',
-                                             is_required=True, is_included=True, is_fixed=True, event_id=data['event'])
-                db.session.add(firstname)
-            if not lastname:
-                lastname, _ = get_or_create(CustomForms, field_identifier='lastname', form='attendee', type='text',
-                                            is_required=True, is_included=True, is_fixed=True, event_id=data['event'])
-                db.session.add(lastname)
-            if not email:
-                email, _ = get_or_create(CustomForms, field_identifier='email', form='attendee', type='email',
-                                         is_required=True, is_included=True, is_fixed=True, event_id=data['event'])
-                db.session.add(email)
+            get_or_create(CustomForms, field_identifier='firstname', form='attendee', type='text', is_required=True,
+                          is_included=True, is_fixed=True, event_id=data['event'])
+            get_or_create(CustomForms, field_identifier='lastname', form='attendee', type='text', is_required=True,
+                          is_included=True, is_fixed=True, event_id=data['event'])
+            get_or_create(CustomForms, field_identifier='email', form='attendee', type='email', is_required=True,
+                          is_included=True, is_fixed=True, event_id=data['event'])
             db.session.commit()
 
     schema = CustomFormSchema
