@@ -180,7 +180,7 @@ def upload_local(uploaded_file, key, upload_dir='static/media/', **kwargs):
         return get_settings()['static_domain'] + \
                file_relative_path.replace('/static', '')
 
-    return create_url(request.url, file_relative_path)
+    return file_relative_path
 
 
 def create_url(request_url, file_relative_path):

@@ -227,8 +227,6 @@ def export_event_json(event_id, settings):
     uploaded_file = UploadedFile(dir_path, dir_path.rsplit('/', 1)[1])
     storage_url = upload(uploaded_file, storage_path)
     # to extract the raw path
-    if 'http://localhost/' in storage_url:
-        storage_url = storage_url[16:]
     return storage_url
 
 
