@@ -12,7 +12,7 @@ from app.api.bootstrap import api
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
 from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.events import create_custom_forms_for_attendees
-from app.api.helpers.exceptions import ForbiddenException, ConflictException
+from app.api.helpers.exceptions import ForbiddenException, ConflictException, UnprocessableEntity
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
 from app.api.schema.events import EventSchemaPublic, EventSchema
@@ -88,6 +88,26 @@ def validate_event(user, modules, data):
                                 "Online Event does not have any locaton")
 
 
+def validate_date(event, data):
+    if event:
+        if 'starts_at' not in data:
+            data['starts_at'] = event.starts_at
+
+        if 'ends_at' not in data:
+            data['ends_at'] = event.ends_at
+
+    if not data.get('starts_at') or not data.get('ends_at'):
+        raise UnprocessableEntity({'pointer': '/data/attributes/date'},
+                                  "enter required fields starts-at/ends-at")
+
+    if data['starts_at'] >= data['ends_at']:
+        raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'},
+                                  "ends-at should be after starts-at")
+
+    if datetime.timestamp(data['starts_at']) <= datetime.timestamp(datetime.now()):
+        raise UnprocessableEntity({'pointer': '/data/attributes/starts-at'},
+                                  "starts-at should be after current date-time")
+
 class EventList(ResourceList):
     def before_get(self, args, kwargs):
         """
@@ -155,6 +175,7 @@ class EventList(ResourceList):
         user = User.query.filter_by(id=kwargs['user_id']).first()
         modules = Module.query.first()
         validate_event(user, modules, data)
+        validate_date(None, data)
 
     def after_create_object(self, event, data, view_kwargs):
         """
@@ -471,6 +492,9 @@ class EventDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        if data.get('starts_at') != event.starts_at or data.get('ends_at') != event.ends_at:
+            validate_date(event, data)
+
         if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
             if len(event.orders) != 0:
                 raise ForbiddenException({'source': ''}, "Event associated with orders cannot be deleted")

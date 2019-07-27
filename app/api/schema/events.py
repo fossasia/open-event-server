@@ -25,32 +25,6 @@ class EventSchemaPublic(SoftDeletionSchema):
         inflect = dasherize
 
     @validates_schema(pass_original=True)
-    def validate_date(self, data, original_data):
-        if 'id' in original_data['data']:
-            try:
-                event = Event.query.filter_by(id=original_data['data']['id']).one()
-            except NoResultFound:
-                raise ObjectNotFound({'source': 'data/id'}, "Event id not found")
-
-            if 'starts_at' not in data:
-                data['starts_at'] = event.starts_at
-
-            if 'ends_at' not in data:
-                data['ends_at'] = event.ends_at
-
-        if 'starts_at' not in data or 'ends_at' not in data:
-            raise UnprocessableEntity({'pointer': '/data/attributes/date'},
-                                      "enter required fields starts-at/ends-at")
-
-        if data['starts_at'] >= data['ends_at']:
-            raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'},
-                                      "ends-at should be after starts-at")
-
-        if datetime.timestamp(data['starts_at']) <= datetime.timestamp(datetime.now()):
-            raise UnprocessableEntity({'pointer': '/data/attributes/starts-at'},
-                                      "starts-at should be after current date-time")
-
-    @validates_schema(pass_original=True)
     def validate_timezone(self, data, original_data):
         if 'id' in original_data['data']:
             try:

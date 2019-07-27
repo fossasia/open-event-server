@@ -17815,7 +17815,7 @@ Delete a single discount code (Check permission to delete).
           }
         }
 
-## Get Discount Code Detail using the code [/v1/event/{event_id}/discount-code/{code}]
+## Get Discount Code Detail using the code [/v1/events/{event_id}/discount-codes/{code}]
 + Parameters
     + code: DC101 (string) - code associated with a discount code. (DC101 is an example of code)
     + event_id: 1 (integer) - ID of the Event in the form of an integer
@@ -18429,7 +18429,7 @@ Delete a single Access code.
           }
         }
 
-## Access Code Detail using the Code [/v1/event/{event_id}/access-code/{code}]
+## Access Code Detail using the Code [/v1/events/{event_id}/access-codes/{code}]
 + Parameters
     + code: AC101 (string) - code of the access-code.
     + event_id: 1 (integer) - ID of the Event in the form of an integer.
@@ -21882,7 +21882,7 @@ To update or get any attribute of this data layer, you will need admin access. H
 | `app-name`  | Name of the application (Eg. Event Yay!, Open Event) | string | - |
 | `tagline` | Tagline (Eg. Event Management and Ticketing, Home)  | string | - |
 | `secret` | App Secret  | string | **yes** |
-| `order-expiry-time`  | Expiry time for orders in minutes | Integer(default: 15) | **yes** |
+| `order-expiry-time`  | Expiry time for orders in minutes | Integer(default: 15) | - |
 | `is-paypal-activated` | Whether paypal payment is configured or not | boolean | - |
 | `is-stripe-activated` | Whether stripe payment is configured or not | boolean | - |
 | `is-omise-activated` | Whether omise payment is configured or not | boolean | - |
