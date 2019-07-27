@@ -15,6 +15,7 @@ from app.models.sponsor import Sponsor
 from app.models.ticket import Ticket
 from app.models.track import Track
 from app.models.users_events_role import UsersEventsRoles
+from app.models.tax import Tax
 
 event_copy = Blueprint('event_copy', __name__, url_prefix='/v1/events')
 
@@ -36,21 +37,30 @@ def create_event_copy(identifier):
         return abort(
             make_response(jsonify(error="Access Forbidden"), 403)
         )
-    tickets = Ticket.query.filter_by(event_id=event.id).all()
-    social_links = SocialLink.query.filter_by(event_id=event.id).all()
-    sponsors = Sponsor.query.filter_by(event_id=event.id).all()
-    microlocations = Microlocation.query.filter_by(event_id=event.id).all()
-    tracks = Track.query.filter_by(event_id=event.id).all()
-    custom_forms = CustomForms.query.filter_by(event_id=event.id).all()
-    discount_codes = DiscountCode.query.filter_by(event_id=event.id).all()
-    speaker_calls = SpeakersCall.query.filter_by(event_id=event.id).all()
-    user_event_roles = UsersEventsRoles.query.filter_by(event_id=event.id).all()
+    tickets = Ticket.query.filter_by(event_id=event.id, deleted_at=None).all()
+    social_links = SocialLink.query.filter_by(event_id=event.id, deleted_at=None).all()
+    sponsors = Sponsor.query.filter_by(event_id=event.id, deleted_at=None).all()
+    microlocations = Microlocation.query.filter_by(event_id=event.id, deleted_at=None).all()
+    tracks = Track.query.filter_by(event_id=event.id, deleted_at=None).all()
+    custom_forms = CustomForms.query.filter_by(event_id=event.id, deleted_at=None).all()
+    discount_codes = DiscountCode.query.filter_by(event_id=event.id, deleted_at=None).all()
+    speaker_calls = SpeakersCall.query.filter_by(event_id=event.id, deleted_at=None).all()
+    user_event_roles = UsersEventsRoles.query.filter_by(event_id=event.id, deleted_at=None).all()
+    taxes = Tax.query.filter_by(event_id=event.id, deleted_at=None).all()
 
     db.session.expunge(event)  # expunge the object from session
     make_transient(event)
     delattr(event, 'id')
     event.identifier = get_new_event_identifier()
     save_to_db(event)
+
+    # Ensure tax information is copied
+    for tax in taxes:
+        db.session.expunge(tax)
+        make_transient(tax)
+        tax.event_id = event.id
+        delattr(tax, 'id')
+        save_to_db(tax)
 
     # Removes access_codes, order_tickets, ticket_tags for the new tickets created.
     for ticket in tickets:
