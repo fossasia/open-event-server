@@ -25,7 +25,7 @@ def start_sponsor_logo_generation_task(event_id):
     sponsor_logos_url_task.delay(event_id=event_id)
 
 
-def expunge_object(object, event):
+def copy_to_event(object, event):
     db.session.expunge(object)  # expunge the object
     make_transient(object)
     object.event_id = event.id
@@ -64,38 +64,38 @@ def create_event_copy(identifier):
 
     # Ensure tax information is copied
     for tax in taxes:
-        expunge_object(tax, event)
+        copy_to_event(tax, event)
 
     # Removes access_codes, order_tickets, ticket_tags for the new tickets created.
     for ticket in tickets:
-        expunge_object(ticket, event)
+        copy_to_event(ticket, event)
 
     for link in social_links:
-        expunge_object(link, event)
+        copy_to_event(link, event)
 
     for sponsor in sponsors:
-        expunge_object(sponsor, event)
+        copy_to_event(sponsor, event)
 
     start_sponsor_logo_generation_task(event.id)
 
     for location in microlocations:
-        expunge_object(location, event)
+        copy_to_event(location, event)
 
     # No sessions are copied for new tracks
     for track in tracks:
-        expunge_object(track, event)
+        copy_to_event(track, event)
 
     for call in speaker_calls:
-        expunge_object(call, event)
+        copy_to_event(call, event)
 
     for code in discount_codes:
-        expunge_object(code, event)
+        copy_to_event(code, event)
 
     for form in custom_forms:
-        expunge_object(form, event)
+        copy_to_event(form, event)
 
     for user_role in user_event_roles:
-        expunge_object(user_role, event)
+        copy_to_event(user_role, event)
 
     return jsonify({
         'id': event.id,
