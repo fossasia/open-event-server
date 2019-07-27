@@ -24,6 +24,14 @@ def start_sponsor_logo_generation_task(event_id):
     from .helpers.tasks import sponsor_logos_url_task
     sponsor_logos_url_task.delay(event_id=event_id)
 
+
+def expunge_object(object, event):
+    db.session.expunge(object)  # expunge the object
+    make_transient(object)
+    object.event_id = event.id
+    delattr(object, 'id')
+    save_to_db(object)
+
 @event_copy.route('/<identifier>/copy', methods=['POST'])
 def create_event_copy(identifier):
     id = 'identifier'
@@ -56,87 +64,38 @@ def create_event_copy(identifier):
 
     # Ensure tax information is copied
     for tax in taxes:
-        db.session.expunge(tax)
-        make_transient(tax)
-        tax.event_id = event.id
-        delattr(tax, 'id')
-        save_to_db(tax)
+        expunge_object(tax, event)
 
     # Removes access_codes, order_tickets, ticket_tags for the new tickets created.
     for ticket in tickets:
-        ticket_id = ticket.id
-        db.session.expunge(ticket)  # expunge the object from session
-        make_transient(ticket)
-        ticket.event_id = event.id
-        delattr(ticket, 'id')
-        save_to_db(ticket)
+        expunge_object(ticket, event)
 
     for link in social_links:
-        link_id = link.id
-        db.session.expunge(link)  # expunge the object from session
-        make_transient(link)
-        link.event_id = event.id
-        delattr(link, 'id')
-        save_to_db(link)
+        expunge_object(link, event)
 
     for sponsor in sponsors:
-        sponsor_id = sponsor.id
-        db.session.expunge(sponsor)  # expunge the object from session
-        make_transient(sponsor)
-        sponsor.event_id = event.id
-        delattr(sponsor, 'id')
-        save_to_db(sponsor)
+        expunge_object(sponsor, event)
 
     start_sponsor_logo_generation_task(event.id)
 
     for location in microlocations:
-        location_id = location.id
-        db.session.expunge(location)  # expunge the object from session
-        make_transient(location)
-        location.event_id = event.id
-        delattr(location, 'id')
-        save_to_db(location)
+        expunge_object(location, event)
 
     # No sessions are copied for new tracks
     for track in tracks:
-        track_id = track.id
-        db.session.expunge(track)  # expunge the object from session
-        make_transient(track)
-        track.event_id = event.id
-        delattr(track, 'id')
-        save_to_db(track)
+        expunge_object(track, event)
 
     for call in speaker_calls:
-        call_id = call.id
-        db.session.expunge(call)  # expunge the object from session
-        make_transient(call)
-        call.event_id = event.id
-        delattr(call, 'id')
-        save_to_db(call)
+        expunge_object(call, event)
 
     for code in discount_codes:
-        code_id = code.id
-        db.session.expunge(code)  # expunge the object from session
-        make_transient(code)
-        code.event_id = event.id
-        delattr(code, 'id')
-        save_to_db(code)
+        expunge_object(code, event)
 
     for form in custom_forms:
-        form_id = form.id
-        db.session.expunge(form)  # expunge the object from session
-        make_transient(form)
-        form.event_id = event.id
-        delattr(form, 'id')
-        save_to_db(form)
+        expunge_object(form, event)
 
     for user_role in user_event_roles:
-        user_role_id = user_role.id
-        db.session.expunge(user_role)
-        make_transient(user_role)
-        user_role.event_id = event.id
-        delattr(user_role, 'id')
-        save_to_db(user_role)
+        expunge_object(user_role, event)
 
     return jsonify({
         'id': event.id,
