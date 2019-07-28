@@ -474,7 +474,7 @@ api.route(DiscountCodeList, 'discount_code_list', '/events/<int:event_id>/discou
           '/tickets/<int:ticket_id>/discount-codes')
 api.route(DiscountCodeDetail, 'discount_code_detail', '/discount-codes/<int:id>',
           '/events/<int:event_id>/discount-code', '/event-invoices/<int:event_invoice_id>/discount-code',
-          '/event/<int:discount_event_id>/discount-code/<code>')
+          '/events/<int:discount_event_id>/discount-codes/<code>')
 api.route(DiscountCodeRelationshipRequired, 'discount_code_event',
           '/discount-codes/<int:id>/relationships/event')
 api.route(DiscountCodeRelationshipOptional, 'discount_code_events',
@@ -542,7 +542,7 @@ api.route(AccessCodeList, 'access_code_list', '/events/<int:event_id>/access-cod
           '/events/<event_identifier>/access-codes', '/users/<int:user_id>/access-codes',
           '/tickets/<int:ticket_id>/access-codes')
 api.route(AccessCodeDetail, 'access_code_detail', '/access-codes/<int:id>',
-          '/event/<int:access_event_id>/access-code/<code>')
+          '/events/<int:access_event_id>/access-codes/<code>')
 api.route(AccessCodeRelationshipRequired, 'access_code_event',
           '/access-codes/<int:id>/relationships/event')
 api.route(AccessCodeRelationshipOptional, 'access_code_user',

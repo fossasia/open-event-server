@@ -2804,7 +2804,7 @@ def discount_delete(transaction):
 @hooks.before("Discount Codes > Get Discount Code Detail using the code > Get Discount Code Detail")
 def discount_code_get_detail_using_code(transaction):
     """
-    GET event/1/discount-codes/DC101
+    GET events/1/discount-codes/DC101
     :param transaction:
     :return:
     """
@@ -2941,7 +2941,7 @@ def access_code_delete(transaction):
 @hooks.before("Access Codes > Access Code Detail using the Code > Access Code Detail")
 def access_code_get_detail_using_code(transaction):
     """
-    GET event/1/access-code/AC101
+    GET events/1/access-codes/AC101
     :param transaction:
     :return:
     """
