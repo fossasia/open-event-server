@@ -198,6 +198,12 @@ class DiscountCodeDetail(ResourceDetail):
                 'event_identifier')
             kwargs['event_id'] = event.id
 
+        if kwargs.get('discount_event_identifier'):
+            event = safe_query(
+                db, Event, 'identifier', kwargs['discount_event_identifier'],
+                'event_identifier')
+            kwargs['discount_event_id'] = event.id
+
         if kwargs.get('event_id') and has_access('is_admin'):
             event = safe_query(db, Event, 'id', kwargs['event_id'], 'event_id')
             if event.discount_code_id:
