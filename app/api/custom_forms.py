@@ -84,6 +84,18 @@ class CustomFormDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        custom_form = db.session.query(CustomForms).filter_by(id=view_kwargs.get('id')).one()
+        if custom_form:
+            if custom_form.form == 'attendee':
+                event_id = custom_form.event_id
+                get_or_create(CustomForms, field_identifier='firstname', form='attendee', type='text', is_required=True,
+                              is_included=True, is_fixed=True, event_id=event_id)
+                get_or_create(CustomForms, field_identifier='lastname', form='attendee', type='text', is_required=True,
+                              is_included=True, is_fixed=True, event_id=event_id)
+                get_or_create(CustomForms, field_identifier='email', form='attendee', type='email', is_required=True,
+                              is_included=True, is_fixed=True, event_id=event_id)
+                db.session.commit()
+
         event = None
         if view_kwargs.get('event_id'):
             event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
@@ -98,7 +110,10 @@ class CustomFormDetail(ResourceDetail):
                                      fetch_as="event_id", model=CustomForms, methods="PATCH,DELETE"),)
     schema = CustomFormSchema
     data_layer = {'session': db.session,
-                  'model': CustomForms}
+                  'model': CustomForms,
+                  'methods': {
+                      'before_get_object': before_get_object
+                  }}
 
 
 class CustomFormRelationshipRequired(ResourceRelationship):
