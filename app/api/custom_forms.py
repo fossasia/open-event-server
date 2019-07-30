@@ -68,21 +68,7 @@ class CustomFormDetail(ResourceDetail):
     CustomForm Resource
     """
 
-    def before_get_object(self, view_kwargs):
-        """
-        before get method
-        :param view_kwargs:
-        :return:
-        """
-        event = None
-        if view_kwargs.get('event_id'):
-            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
-        elif view_kwargs.get('event_identifier'):
-            event = safe_query(self, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
 
-        if event:
-            custom_form = safe_query(self, CustomForms, 'event_id', event.id, 'event_id')
-            view_kwargs['id'] = custom_form.id
 
     decorators = (api.has_permission('is_coorganizer', fetch='event_id',
                   fetch_as="event_id", model=CustomForms, methods="PATCH,DELETE"), )
