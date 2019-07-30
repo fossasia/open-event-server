@@ -46,8 +46,9 @@ def send_after_event_mail():
                 (time_difference.seconds / 60)
             if current_time > event.ends_at and time_difference_minutes < 1440:
                 for speaker in speakers:
-                    send_email_after_event(speaker.user.email, event.name, upcoming_event_links)
-                    send_notif_after_event(speaker.user, event.name)
+                    if not speaker.is_email_overridden:
+                        send_email_after_event(speaker.user.email, event.name, upcoming_event_links)
+                        send_notif_after_event(speaker.user, event.name)
                 for organizer in organizers:
                     send_email_after_event(organizer.user.email, event.name, upcoming_event_links)
                     send_notif_after_event(organizer.user, event.name)

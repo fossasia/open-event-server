@@ -1,7 +1,7 @@
 import base64
 
 from flask import Blueprint, request, jsonify, abort, make_response
-from flask_jwt import current_identity as current_user
+from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from sqlalchemy.orm.exc import NoResultFound
 import urllib.error

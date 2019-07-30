@@ -116,6 +116,14 @@ class OrderSchema(SoftDeletionSchema):
                          schema='EventSchemaPublic',
                          type_="event")
 
+    event_invoice = Relationship(attribute='invoice',
+                                 self_view='v1.order_invoice',
+                                 self_view_kwargs={'order_identifier': '<identifier>'},
+                                 related_view='v1.event_invoice_detail',
+                                 related_view_kwargs={'id': '<id>'},
+                                 schema='EventInvoiceSchema',
+                                 type_="event_invoice")
+
     marketer = Relationship(attribute='marketer',
                             self_view='v1.order_marketer',
                             self_view_kwargs={'order_identifier': '<identifier>'},

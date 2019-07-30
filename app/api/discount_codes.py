@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
@@ -7,7 +8,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from app.api.helpers.db import safe_query
 from app.api.helpers.exceptions import ConflictException, ForbiddenException, UnprocessableEntity, MethodNotAllowed
 from app.api.helpers.permission_manager import has_access
-from app.api.helpers.permissions import jwt_required, current_identity
+from app.api.helpers.permissions import jwt_required
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.discount_codes import DiscountCodeSchemaEvent, DiscountCodeSchemaPublic, DiscountCodeSchemaTicket
 from app.models import db
@@ -52,7 +53,7 @@ class DiscountCodeListPost(ResourceList):
         elif data['used_for'] == 'event' and not has_access('is_admin') and 'events' in data:
             raise UnprocessableEntity({'source': ''}, "Please verify your permission or check your relationship")
 
-        data['user_id'] = current_identity.id
+        data['user_id'] = current_user.id
 
     def before_create_object(self, data, view_kwargs):
         if data['used_for'] == 'event':
@@ -197,6 +198,12 @@ class DiscountCodeDetail(ResourceDetail):
                 'event_identifier')
             kwargs['event_id'] = event.id
 
+        if kwargs.get('discount_event_identifier'):
+            event = safe_query(
+                db, Event, 'identifier', kwargs['discount_event_identifier'],
+                'event_identifier')
+            kwargs['discount_event_id'] = event.id
+
         if kwargs.get('event_id') and has_access('is_admin'):
             event = safe_query(db, Event, 'id', kwargs['event_id'], 'event_id')
             if event.discount_code_id:
@@ -208,7 +215,9 @@ class DiscountCodeDetail(ResourceDetail):
         if kwargs.get('code'):
             # filter on deleted_at is required to catch the id of a
             # discount code which has not been deleted.
-            discount = db.session.query(DiscountCode).filter_by(code=kwargs.get('code'), deleted_at=None).first()
+            discount = db.session.query(DiscountCode).filter_by(code=kwargs.get('code'),
+                                                                event_id=kwargs.get('discount_event_id'),
+                                                                deleted_at=None).first()
             if discount:
                 kwargs['id'] = discount.id
                 discount_tz = discount.valid_from.tzinfo

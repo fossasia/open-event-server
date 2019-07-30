@@ -1,6 +1,6 @@
 import unittest
 
-from flask_jwt import _default_jwt_encode_handler
+from flask_jwt_extended import create_access_token
 
 from app import current_app as app
 from app.api.helpers.jwt import jwt_authenticate, get_identity
@@ -43,7 +43,7 @@ class TestJWTHelperValidation(OpenEventTestCase):
             save_to_db(event)
 
             # Authenticate User
-            self.auth = {'Authorization': "JWT " + str(_default_jwt_encode_handler(user), 'utf-8')}
+            self.auth = {'Authorization': "JWT " + create_access_token(user.id, fresh=True)}
 
         with app.test_request_context(headers=self.auth):
             self.assertEquals(get_identity().id, user.id)

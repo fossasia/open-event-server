@@ -7,17 +7,20 @@ from functools import wraps
 
 import requests
 from flask import request, jsonify, make_response, Blueprint, send_file
-from flask_jwt import current_identity as current_user, jwt_required
+from flask_jwt_extended import jwt_required, current_user, create_access_token
 from flask_limiter.util import get_remote_address
 from healthcheck import EnvironmentDump
+from flask_rest_jsonapi.exceptions import ObjectNotFound
 from sqlalchemy.orm.exc import NoResultFound
 
 from app import get_settings
 from app import limiter
+from app.api.helpers.db import save_to_db, get_count, safe_query
 from app.api.helpers.auth import AuthManager
-from app.api.helpers.db import save_to_db, get_count
+from app.api.helpers.jwt import jwt_authenticate
 from app.api.helpers.errors import ForbiddenError, UnprocessableEntityError, NotFoundError, BadRequestError
 from app.api.helpers.files import make_frontend_url
+from app.api.helpers.mail import send_email_to_attendees
 from app.api.helpers.mail import send_email_with_action, \
     send_email_confirmation
 from app.api.helpers.notification import send_notification_with_action
@@ -26,17 +29,40 @@ from app.api.helpers.storage import UPLOAD_PATHS
 from app.api.helpers.storage import generate_hash
 from app.api.helpers.third_party_auth import GoogleOAuth, FbOAuth, TwitterOAuth, InstagramOAuth
 from app.api.helpers.utilities import get_serializer, str_generator
+from app.api.helpers.permission_manager import has_access
 from app.models import db
 from app.models.mail import PASSWORD_RESET, PASSWORD_CHANGE, \
     PASSWORD_RESET_AND_VERIFY
 from app.models.notification import PASSWORD_CHANGE as PASSWORD_CHANGE_NOTIF
 from app.models.order import Order
 from app.models.user import User
+from app.models.event_invoice import EventInvoice
+
 
 logger = logging.getLogger(__name__)
 authorised_blueprint = Blueprint('authorised_blueprint', __name__, url_prefix='/')
 ticket_blueprint = Blueprint('ticket_blueprint', __name__, url_prefix='/v1')
 auth_routes = Blueprint('auth', __name__, url_prefix='/v1/auth')
+
+
+@authorised_blueprint.route('/auth/session', methods=['POST'])
+@auth_routes.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    username = data.get('email', data.get('username'))
+    password = data.get('password')
+    criterion = [username, password]
+
+    if not all(criterion):
+        return jsonify(error='username or password missing'), 400
+
+    identity = jwt_authenticate(username, password)
+
+    if identity:
+        access_token = create_access_token(identity.id, fresh=True)
+        return jsonify(access_token=access_token)
+    else:
+        return jsonify(error='Invalid Credentials'), 401
 
 
 @auth_routes.route('/oauth/<provider>', methods=['GET'])
@@ -169,7 +195,10 @@ def login_user(provider):
 
 @auth_routes.route('/verify-email', methods=['POST'])
 def verify_email():
-    token = base64.b64decode(request.json['data']['token'])
+    try:
+        token = base64.b64decode(request.json['data']['token'])
+    except base64.binascii.Error:
+        return BadRequestError({'source': ''}, 'Invalid Token').respond()
     s = get_serializer()
 
     try:
@@ -249,7 +278,7 @@ def reset_password_patch():
         return NotFoundError({'source': ''}, 'User Not Found').respond()
     else:
         user.password = password
-        if user.was_registered_with_order:
+        if not user.is_verified:
             user.is_verified = True
         save_to_db(user)
 
@@ -261,7 +290,7 @@ def reset_password_patch():
 
 
 @auth_routes.route('/change-password', methods=['POST'])
-@jwt_required()
+@jwt_required
 def change_password():
     old_password = request.json['data']['old-password']
     new_password = request.json['data']['new-password']
@@ -295,14 +324,14 @@ def change_password():
     })
 
 
-def return_file(file_name_prefix, file_path, order_identifier):
+def return_file(file_name_prefix, file_path, identifier):
     response = make_response(send_file(file_path))
-    response.headers['Content-Disposition'] = 'attachment; filename=%s-%s.pdf' % (file_name_prefix, order_identifier)
+    response.headers['Content-Disposition'] = 'attachment; filename=%s-%s.pdf' % (file_name_prefix, identifier)
     return response
 
 
 @ticket_blueprint.route('/tickets/<string:order_identifier>')
-@jwt_required()
+@jwt_required
 def ticket_attendee_authorized(order_identifier):
     if current_user:
         try:
@@ -324,7 +353,7 @@ def ticket_attendee_authorized(order_identifier):
 
 
 @ticket_blueprint.route('/orders/invoices/<string:order_identifier>')
-@jwt_required()
+@jwt_required
 def order_invoices(order_identifier):
     if current_user:
         try:
@@ -345,6 +374,28 @@ def order_invoices(order_identifier):
         return ForbiddenError({'source': ''}, 'Authentication Required to access Invoice').respond()
 
 
+@ticket_blueprint.route('/events/invoices/<string:invoice_identifier>')
+@jwt_required
+def event_invoices(invoice_identifier):
+    if not current_user:
+        return ForbiddenError({'source': ''}, 'Authentication Required to access Invoice').respond()
+    try:
+        event_invoice = EventInvoice.query.filter_by(identifier=invoice_identifier).first()
+        event_id = event_invoice.event_id
+    except NoResultFound:
+        return NotFoundError({'source': ''}, 'Event Invoice not found').respond()
+    if not current_user.is_organizer(event_id) and not current_user.is_staff:
+        return ForbiddenError({'source': ''}, 'Unauthorized Access').respond()
+    key = UPLOAD_PATHS['pdf']['event_invoices'].format(identifier=invoice_identifier)
+    file_path = '../generated/invoices/{}/{}/'.format(key, generate_hash(key)) + invoice_identifier + '.pdf'
+    try:
+        return return_file('event-invoice', file_path, invoice_identifier)
+    except FileNotFoundError:
+        raise ObjectNotFound({'source': ''},
+                             "The Event Invoice isn't available at the moment. \
+                             Invoices are usually issued on the 1st of every month")
+
+
 # Access for Environment details & Basic Auth Support
 def requires_basic_auth(f):
     @wraps(f)
@@ -363,3 +414,38 @@ def requires_basic_auth(f):
 def environment_details():
     envdump = EnvironmentDump(include_config=False)
     return envdump.dump_environment()
+
+
+@ticket_blueprint.route('/orders/resend-email', methods=['POST'])
+@limiter.limit(
+    '5/minute', key_func=lambda: request.json['data']['user'], error_message='Limit for this action exceeded'
+)
+@limiter.limit(
+    '60/minute', key_func=get_remote_address, error_message='Limit for this action exceeded'
+)
+def resend_emails():
+    """
+    Sends confirmation email for pending and completed orders on organizer request
+    :param order_identifier:
+    :return: JSON response if the email was succesfully sent
+    """
+    order_identifier = request.json['data']['order']
+    order = safe_query(db, Order, 'identifier', order_identifier, 'identifier')
+    if (has_access('is_coorganizer', event_id=order.event_id)):
+        if order.status == 'completed' or order.status == 'placed':
+            # fetch tickets attachment
+            order_identifier = order.identifier
+            key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
+            ticket_path = 'generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+            key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
+            invoice_path = 'generated/invoices/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
+
+            # send email.
+            send_email_to_attendees(order=order, purchaser_id=current_user.id, attachments=[ticket_path, invoice_path])
+            return jsonify(status=True, message="Verification emails for order : {} has been sent succesfully".
+                           format(order_identifier))
+        else:
+            return UnprocessableEntityError({'source': 'data/order'},
+                                            "Only placed and completed orders have confirmation").respond()
+    else:
+        return ForbiddenError({'source': ''}, "Co-Organizer Access Required").respond()

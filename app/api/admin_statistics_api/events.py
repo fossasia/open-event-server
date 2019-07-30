@@ -1,6 +1,6 @@
 from flask_rest_jsonapi import ResourceDetail
 from flask import jsonify, Blueprint
-from flask_jwt import jwt_required
+from flask_jwt_extended import jwt_required
 from sqlalchemy.sql import text
 
 from app.api.bootstrap import api
@@ -12,7 +12,7 @@ event_statistics = Blueprint('event_statistics', __name__, url_prefix='/v1/admin
 
 
 @event_statistics.route('/event-topics', methods=['GET'])
-@jwt_required()
+@jwt_required
 def event_topic_count():
     result_set = db.engine.execute(text(
         "SELECT event_topics.name AS name, event_topics.id AS id, " +
@@ -25,7 +25,7 @@ def event_topic_count():
 
 
 @event_statistics.route('/event-types', methods=['GET'])
-@jwt_required()
+@jwt_required
 def event_types_count():
     result_set = db.engine.execute(text(
         "SELECT event_types.name AS name, event_types.id AS id, " +

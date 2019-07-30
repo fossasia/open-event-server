@@ -2804,7 +2804,7 @@ def discount_delete(transaction):
 @hooks.before("Discount Codes > Get Discount Code Detail using the code > Get Discount Code Detail")
 def discount_code_get_detail_using_code(transaction):
     """
-    GET /discount-codes/DC101
+    GET events/1/discount-codes/DC101
     :param transaction:
     :return:
     """
@@ -2815,6 +2815,7 @@ def discount_code_get_detail_using_code(transaction):
 
         discount_code = DiscountCodeFactory(event_id=1)
         discount_code.code = 'DC101'
+        discount_code.event_id = 1
         db.session.add(discount_code)
         db.session.commit()
 
@@ -2940,11 +2941,15 @@ def access_code_delete(transaction):
 @hooks.before("Access Codes > Access Code Detail using the Code > Access Code Detail")
 def access_code_get_detail_using_code(transaction):
     """
-    GET /access-codes/AC101
+    GET events/1/access-codes/AC101
     :param transaction:
     :return:
     """
     with stash['app'].app_context():
+        event = EventFactoryBasic()
+        db.session.add(event)
+        db.session.commit()
+
         access_code = AccessCodeFactory()
         access_code.code = 'AC101'
         db.session.add(access_code)

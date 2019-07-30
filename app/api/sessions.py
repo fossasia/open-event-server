@@ -1,3 +1,4 @@
+from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
@@ -6,7 +7,6 @@ from app.api.helpers.db import safe_query, get_count, save_to_db
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.mail import send_email_new_session, send_email_session_accept_reject
 from app.api.helpers.notification import send_notif_new_session_organizer, send_notif_session_accept_reject
-from app.api.helpers.permissions import current_identity
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
@@ -36,7 +36,7 @@ class SessionListPost(ResourceList):
         :return:
         """
         require_relationship(['event', 'track'], data)
-        data['creator_id'] = current_identity.id
+        data['creator_id'] = current_user.id
         if get_count(db.session.query(Event).filter_by(id=int(data['event']), is_sessions_speakers_enabled=False)) > 0:
             raise ForbiddenException({'pointer': ''}, "Sessions are disabled for this Event")
 
@@ -161,8 +161,9 @@ class SessionDetail(ResourceDetail):
                 frontend_url = get_settings()['frontend_url']
                 link = "{}/events/{}/sessions/{}" \
                     .format(frontend_url, event.identifier, session.id)
-                send_email_session_accept_reject(speaker.email, session, link)
-                send_notif_session_accept_reject(speaker, session.title, session.state, link, session.id)
+                if not speaker.is_email_overridden:
+                    send_email_session_accept_reject(speaker.email, session, link)
+                    send_notif_session_accept_reject(speaker, session.title, session.state, link, session.id)
 
             # Email for owner
             if session.event.get_owner():

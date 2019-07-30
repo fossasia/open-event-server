@@ -1,7 +1,7 @@
 from flask import request, current_app
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
-from flask_jwt import current_identity as current_user, _jwt_required
+from flask_jwt_extended import current_user, verify_jwt_in_request
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
@@ -92,7 +92,7 @@ class TicketList(ResourceList):
         """
 
         if 'Authorization' in request.headers:
-            _jwt_required(current_app.config['JWT_DEFAULT_REALM'])
+            verify_jwt_in_request()
             if current_user.is_super_admin or current_user.is_admin:
                 query_ = self.session.query(Ticket)
             elif view_kwargs.get('event_id') and has_access('is_organizer', event_id=view_kwargs['event_id']):
