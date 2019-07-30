@@ -544,7 +544,7 @@ api.route(AccessCodeList, 'access_code_list', '/events/<int:event_id>/access-cod
           '/tickets/<int:ticket_id>/access-codes')
 api.route(AccessCodeDetail, 'access_code_detail', '/access-codes/<int:id>',
           '/events/<int:access_event_id>/access-codes/<code>',
-          '/events/<int:access_event_identifier>/access-codes/<code>',)
+          '/events/<access_event_identifier>/access-codes/<code>',)
 api.route(AccessCodeRelationshipRequired, 'access_code_event',
           '/access-codes/<int:id>/relationships/event')
 api.route(AccessCodeRelationshipOptional, 'access_code_user',
