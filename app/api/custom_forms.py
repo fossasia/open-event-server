@@ -41,7 +41,7 @@ class CustomFormListPost(ResourceList):
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ObjectNotFound({'parameter': 'event_id'},
                                  "Event: {} not found".format(data['event_id']))
-        required_fields(data['form'], data['event'])
+        get_or_create_required_fields(data['form'], data['event'])
 
     schema = CustomFormSchema
     methods = ['POST', ]
@@ -89,7 +89,7 @@ class CustomFormDetail(ResourceDetail):
         """
         custom_form = db.session.query(CustomForms).filter_by(id=view_kwargs.get('id')).one()
         if custom_form:
-            required_fields(custom_form.form, custom_form.event_id)
+            get_or_create_required_fields(custom_form.form, custom_form.event_id)
 
         event = None
         if view_kwargs.get('event_id'):
