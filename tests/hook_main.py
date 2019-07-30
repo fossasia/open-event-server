@@ -2736,7 +2736,7 @@ def ticket_discount_code_post(transaction):
 @hooks.before("Discount Codes > Ticket Discount Code Collection > List All Ticket Discount Codes")
 def ticket_discount_code_get_list(transaction):
     """
-    GET /events/1/discount-codes
+    GET /events/1/ticket-discount-codes
     :param transaction:
     :return:
     """
