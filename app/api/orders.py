@@ -54,6 +54,14 @@ def check_event_user_ticket_holders(order, data, element):
                                      "You cannot update {} of an order".format(element))
 
 
+def is_payment_valid(order, mode):
+    if mode == 'stripe':
+        return (order.paid_via == 'stripe') and order.brand and order.transaction_id \
+            and order.exp_year and order.last4 and order.exp_month
+    elif mode == 'paypal':
+        return (order.paid_via == 'paypal') and order.transaction_id
+
+
 class OrdersListPost(ResourceList):
     """
     OrderListPost class for OrderSchema
@@ -347,6 +355,18 @@ class OrderDetail(ResourceDetail):
         if has_access('is_organizer', event_id=order.event_id) and 'order_notes' in data:
             if order.order_notes and data['order_notes'] not in order.order_notes.split(","):
                 data['order_notes'] = '{},{}'.format(order.order_notes, data['order_notes'])
+
+        if data.get('payment_mode') == 'free' and data.get('amount') > 0:
+            raise UnprocessableEntity({'pointer': '/data/attributes/payment-mode'},
+                                      "payment-mode cannot be free for order with amount > 0")
+        elif data.get('status') == 'completed' and data.get('payment_mode') == 'stripe' and \
+                not is_payment_valid(order, 'stripe'):
+            raise UnprocessableEntity({'pointer': '/data/attributes/payment-mode'},
+                                      "insufficient data to verify stripe payment")
+        elif data.get('status') == 'completed' and data.get('payment_mode') == 'paypal' and \
+                not is_payment_valid(order, 'paypal'):
+            raise UnprocessableEntity({'pointer': '/data/attributes/payment-mode'},
+                                      "insufficient data to verify paypal payment")
 
     def after_update_object(self, order, data, view_kwargs):
         """
