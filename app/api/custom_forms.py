@@ -13,6 +13,17 @@ from app.models.custom_form import CustomForms
 from app.models.event import Event
 
 
+def required_fields(form, event_id):
+    if form == 'attendee':
+        get_or_create(CustomForms, field_identifier='firstname', form=form, type='text', is_required=True,
+                      is_included=True, is_fixed=True, event_id=event_id)
+        get_or_create(CustomForms, field_identifier='lastname', form=form, type='text', is_required=True,
+                      is_included=True, is_fixed=True, event_id=event_id)
+        get_or_create(CustomForms, field_identifier='email', form=form, type='email', is_required=True,
+                      is_included=True, is_fixed=True, event_id=event_id)
+        db.session.commit()
+
+
 class CustomFormListPost(ResourceList):
     """
     Create and List Custom Forms
@@ -30,15 +41,7 @@ class CustomFormListPost(ResourceList):
         if not has_access('is_coorganizer', event_id=data['event']):
             raise ObjectNotFound({'parameter': 'event_id'},
                                  "Event: {} not found".format(data['event_id']))
-
-        if data['form'] == 'attendee':
-            get_or_create(CustomForms, field_identifier='firstname', form='attendee', type='text', is_required=True,
-                          is_included=True, is_fixed=True, event_id=data['event'])
-            get_or_create(CustomForms, field_identifier='lastname', form='attendee', type='text', is_required=True,
-                          is_included=True, is_fixed=True, event_id=data['event'])
-            get_or_create(CustomForms, field_identifier='email', form='attendee', type='email', is_required=True,
-                          is_included=True, is_fixed=True, event_id=data['event'])
-            db.session.commit()
+        required_fields(data['form'], data['event'])
 
     schema = CustomFormSchema
     methods = ['POST', ]
@@ -86,15 +89,7 @@ class CustomFormDetail(ResourceDetail):
         """
         custom_form = db.session.query(CustomForms).filter_by(id=view_kwargs.get('id')).one()
         if custom_form:
-            if custom_form.form == 'attendee':
-                event_id = custom_form.event_id
-                get_or_create(CustomForms, field_identifier='firstname', form='attendee', type='text', is_required=True,
-                              is_included=True, is_fixed=True, event_id=event_id)
-                get_or_create(CustomForms, field_identifier='lastname', form='attendee', type='text', is_required=True,
-                              is_included=True, is_fixed=True, event_id=event_id)
-                get_or_create(CustomForms, field_identifier='email', form='attendee', type='email', is_required=True,
-                              is_included=True, is_fixed=True, event_id=event_id)
-                db.session.commit()
+            required_fields(custom_form.form, custom_form.event_id)
 
         event = None
         if view_kwargs.get('event_id'):
