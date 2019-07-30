@@ -278,7 +278,7 @@ def reset_password_patch():
         return NotFoundError({'source': ''}, 'User Not Found').respond()
     else:
         user.password = password
-        if user.was_registered_with_order:
+        if not user.is_verified:
             user.is_verified = True
         save_to_db(user)
 
