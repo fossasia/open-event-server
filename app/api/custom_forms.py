@@ -13,7 +13,7 @@ from app.models.custom_form import CustomForms
 from app.models.event import Event
 
 
-def required_fields(form, event_id):
+def get_or_create_required_fields(form, event_id):
     if form == 'attendee':
         get_or_create(CustomForms, field_identifier='firstname', form=form, type='text', is_required=True,
                       is_included=True, is_fixed=True, event_id=event_id)
