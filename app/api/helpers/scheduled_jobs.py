@@ -180,19 +180,28 @@ def send_monthly_event_invoice():
         events = Event.query.all()
         for event in events:
             # calculate net & gross revenues
+            user = event.owner
+            admin_info = get_settings()
             currency = event.payment_currency
             ticket_fee_object = db.session.query(TicketFees).filter_by(currency=currency).one()
             ticket_fee_percentage = ticket_fee_object.service_fee
             ticket_fee_maximum = ticket_fee_object.maximum_fee
             orders = Order.query.filter_by(event=event).all()
             gross_revenue = event.calc_monthly_revenue()
-            ticket_fees = event.tickets_sold * ticket_fee_percentage
-            if ticket_fees > ticket_fee_maximum:
-                ticket_fees = ticket_fee_maximum
+            ticket_fees = gross_revenue * (ticket_fee_percentage / 100)
+            if ticket_fees > ticket_fee_maximum * event.tickets_sold:
+                ticket_fees = ticket_fee_maximum * event.tickets_sold
             net_revenue = gross_revenue - ticket_fees
+            payment_details = {
+                'tickets_sold': event.tickets_sold,
+                'gross_revenue': gross_revenue,
+                'net_revenue': net_revenue,
+                'amount_payable': ticket_fees
+            }
             # save invoice as pdf
-            pdf = create_save_pdf(render_template('pdf/event_invoice.html', orders=orders,
-                                  ticket_fee_object=ticket_fee_object, gross_revenue=gross_revenue,
+            pdf = create_save_pdf(render_template('pdf/event_invoice.html', orders=orders, user=user,
+                                  admin_info=admin_info, currency=currency, event=event,
+                                  ticket_fee_object=ticket_fee_object, payment_details=payment_details,
                                   net_revenue=net_revenue), UPLOAD_PATHS['pdf']['event_invoice'],
                                   dir_path='/static/uploads/pdf/event_invoices/', identifier=event.identifier)
             # save event_invoice info to DB
