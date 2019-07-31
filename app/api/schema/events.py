@@ -278,6 +278,13 @@ class EventSchemaPublic(SoftDeletionSchema):
                                 schema='UserSchemaPublic',
                                 type_='user',
                                 many=True)
+    stripe_authorization = Relationship(attribute='stripe_authorization',
+                                        self_view='v1.stripe_authorization_event',
+                                        self_view_kwargs={'id': '<id>'},
+                                        related_view='v1.stripe_authorization_detail',
+                                        related_view_kwargs={'event_id': '<id>'},
+                                        schema='StripeAuthorizationSchema',
+                                        type_='stripe-authorization')
 
 
 class EventSchema(EventSchemaPublic):
@@ -355,10 +362,3 @@ class EventSchema(EventSchemaPublic):
                              schema='AttendeeSchema',
                              many=True,
                              type_='attendee')
-    stripe_authorization = Relationship(attribute='stripe_authorization',
-                                        self_view='v1.stripe_authorization_event',
-                                        self_view_kwargs={'id': '<id>'},
-                                        related_view='v1.stripe_authorization_detail',
-                                        related_view_kwargs={'event_id': '<id>'},
-                                        schema='StripeAuthorizationSchema',
-                                        type_='stripe-authorization')
