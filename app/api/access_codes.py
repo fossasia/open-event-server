@@ -115,7 +115,7 @@ class AccessCodeDetail(ResourceDetail):
 
         if kwargs.get('access_event_identifier'):
             event = safe_query(
-                db, Event, 'identifier', kwargs['discount_event_identifier'],
+                db, Event, 'identifier', kwargs['access_event_identifier'],
                 'event_identifier')
             kwargs['access_event_id'] = event.id
         if kwargs.get('code') and kwargs.get('access_event_id'):
