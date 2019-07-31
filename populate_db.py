@@ -18,7 +18,7 @@ from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
 from app.models.microlocation import Microlocation
 
-from app.models.user import ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR, ATTENDEE, REGISTRAR
+from app.models.user import OWNER, ORGANIZER, COORGANIZER, TRACK_ORGANIZER, MODERATOR, ATTENDEE, REGISTRAR
 
 # Admin Panel Permissions
 from app.models.panel_permission import PanelPermission
@@ -64,6 +64,7 @@ def create_roles():
     get_or_create(Role, name=MODERATOR, title_name='Moderator')
     get_or_create(Role, name=ATTENDEE, title_name='Attendee')
     get_or_create(Role, name=REGISTRAR, title_name='Registrar')
+    get_or_create(Role, name=OWNER, title_name='Owner')
 
 
 def create_services():
@@ -209,16 +210,21 @@ def create_permissions():
     mod = Role.query.get(4)
     attend = Role.query.get(5)
     regist = Role.query.get(6)
+    ownr = Role.query.get(7)
     track = Service.query.get(1)
     session = Service.query.get(2)
     speaker = Service.query.get(3)
     sponsor = Service.query.get(4)
     microlocation = Service.query.get(5)
 
-    # For ORGANIZER
+    # For ORGANIZER and OWNER
     # All four permissions set to True
     services = [track, session, speaker, sponsor, microlocation]
     roles = [attend, regist]
+    for service in services:
+        perm, _ = get_or_create(Permission, role=ownr, service=service)
+        db.session.add(perm)
+
     for service in services:
         perm, _ = get_or_create(Permission, role=orgr, service=service)
         db.session.add(perm)

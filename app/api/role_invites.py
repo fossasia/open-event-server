@@ -11,6 +11,7 @@ from app.api.helpers.mail import send_email_role_invite, send_user_email_role_in
 from app.api.helpers.notification import send_notif_event_role
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
+from app.api.helpers.role_invite import delete_previous_uer
 from app.api.helpers.utilities import require_relationship
 from app.api.schema.role_invites import RoleInviteSchema
 from app.models import db
@@ -41,6 +42,16 @@ class RoleInviteListPost(ResourceList):
         if not has_access('is_organizer', event_id=data['event']):
             raise ForbiddenException({'source': ''}, 'Organizer access is required.')
 
+    def before_create_object(self, data, view_kwargs):
+        """
+        before create object method for RoleInviteListPost Class
+        :param data:
+        :param view_kwargs:
+        :return:
+        """
+        if data['role_name'] == 'owner' and not has_access('is_owner', event_id=data['event']):
+            raise ForbiddenException({'source': ''}, 'Owner access is required.')
+
     def after_create_object(self, role_invite, data, view_kwargs):
         """
         after create object method for role invite links
@@ -67,6 +78,7 @@ class RoleInviteListPost(ResourceList):
     data_layer = {'session': db.session,
                   'model': RoleInvite,
                   'methods': {
+                      'before_create_object': before_create_object,
                       'after_create_object': after_create_object
                   }}
 
@@ -112,13 +124,22 @@ class RoleInviteDetail(ResourceDetail):
         """
         user = User.query.filter_by(email=role_invite.email).first()
         if user:
-            if not has_access('is_user_itself', user_id=user.id):
-                raise UnprocessableEntity({'source': ''}, "Only users can edit their own status")
+            if not has_access('is_organizer', event_id=role_invite.event_id) and not has_access('is_user_itself',
+                                                                                                user_id=user.id):
+                raise UnprocessableEntity({'source': ''},
+                                          "Status can be updated only by event organizer or user hiself")
+        if 'role_name' in data and data['role_name'] == 'owner' and not has_access('is_owner', event_id=data['event']):
+            raise ForbiddenException({'source': ''}, 'Owner access is required.')
         if not user and not has_access('is_organizer', event_id=role_invite.event_id):
             raise UnprocessableEntity({'source': ''}, "User not registered")
         if not has_access('is_organizer', event_id=role_invite.event_id) and (len(list(data.keys())) > 1 or
                                                                               'status' not in data):
             raise UnprocessableEntity({'source': ''}, "You can only change your status")
+        if data.get('deleted_at'):
+            if role_invite.role_name == 'owner' and not has_access('is_owner', event_id=role_invite.event_id):
+                raise ForbiddenException({'source': ''}, 'Owner access is required.')
+            if role_invite.role_name != 'owner' and not has_access('is_organizer', event_id=role_invite.event_id):
+                raise ForbiddenException({'source': ''}, 'Organizer access is required.')
 
     decorators = (api.has_permission('is_organizer', methods="DELETE", fetch="event_id", fetch_as="event_id",
                                      model=RoleInvite),)
@@ -157,7 +178,12 @@ def accept_invite():
         event = Event.query.filter_by(id=role_invite.event_id).first()
         uer = UsersEventsRoles.query.filter_by(user=user).filter_by(
             event=event).filter_by(role=role).first()
+
         if not uer:
+            if role_invite.role_name == 'owner':
+                past_owner = UsersEventsRoles.query.filter_by(event=event, role=role).first()
+                if past_owner:
+                    delete_previous_uer(past_owner)
             role_invite.status = "accepted"
             save_to_db(role_invite, 'Role Invite Accepted')
             uer = UsersEventsRoles(user, event, role)

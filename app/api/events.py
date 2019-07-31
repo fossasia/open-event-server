@@ -1,5 +1,5 @@
 from flask import request, current_app
-from flask_jwt import current_identity, _jwt_required
+from flask_jwt_extended import verify_jwt_in_request, current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from marshmallow_jsonapi import fields
@@ -12,7 +12,7 @@ from app.api.bootstrap import api
 from app.api.data_layers.EventCopyLayer import EventCopyLayer
 from app.api.helpers.db import save_to_db, safe_query
 from app.api.helpers.events import create_custom_forms_for_attendees
-from app.api.helpers.exceptions import ForbiddenException, ConflictException
+from app.api.helpers.exceptions import ForbiddenException, ConflictException, UnprocessableEntity
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.utilities import dasherize
 from app.api.schema.events import EventSchemaPublic, EventSchema
@@ -46,9 +46,11 @@ from app.models.ticket import TicketTag
 from app.models.ticket_holder import TicketHolder
 from app.models.track import Track
 from app.models.user_favourite_event import UserFavouriteEvent
-from app.models.user import User, ATTENDEE, ORGANIZER, COORGANIZER
+from app.models.user import User, ATTENDEE, OWNER, ORGANIZER, COORGANIZER, TRACK_ORGANIZER, REGISTRAR, MODERATOR, \
+    SALES_ADMIN, MARKETER
 from app.models.users_events_role import UsersEventsRoles
 from app.models.stripe_authorization import StripeAuthorization
+
 
 def validate_event(user, modules, data):
     if not user.can_create_event():
@@ -79,10 +81,34 @@ def validate_event(user, modules, data):
         raise ConflictException({'pointer': '/data/attributes/location-name'},
                                 "Online Event does not have any locaton")
 
+    if not data.get('name', None) and data.get('state', None) == 'published':
+        raise ConflictException({'pointer': '/data/attributes/location-name'},
+                                "Event Name is required to publish the event")
+
     if data.get('searchable_location_name') and data.get('is_event_online'):
         raise ConflictException({'pointer': '/data/attributes/searchable-location-name'},
                                 "Online Event does not have any locaton")
 
+
+def validate_date(event, data):
+    if event:
+        if 'starts_at' not in data:
+            data['starts_at'] = event.starts_at
+
+        if 'ends_at' not in data:
+            data['ends_at'] = event.ends_at
+
+    if not data.get('starts_at') or not data.get('ends_at'):
+        raise UnprocessableEntity({'pointer': '/data/attributes/date'},
+                                  "enter required fields starts-at/ends-at")
+
+    if data['starts_at'] >= data['ends_at']:
+        raise UnprocessableEntity({'pointer': '/data/attributes/ends-at'},
+                                  "ends-at should be after starts-at")
+
+    if datetime.timestamp(data['starts_at']) <= datetime.timestamp(datetime.now()):
+        raise UnprocessableEntity({'pointer': '/data/attributes/starts-at'},
+                                  "starts-at should be after current date-time")
 
 class EventList(ResourceList):
     def before_get(self, args, kwargs):
@@ -105,10 +131,10 @@ class EventList(ResourceList):
         """
         query_ = self.session.query(Event).filter_by(state='published')
         if 'Authorization' in request.headers:
-            _jwt_required(current_app.config['JWT_DEFAULT_REALM'])
+            verify_jwt_in_request()
             query2 = self.session.query(Event)
-            query2 = query2.join(Event.roles).filter_by(user_id=current_identity.id).join(UsersEventsRoles.role). \
-                filter(or_(Role.name == COORGANIZER, Role.name == ORGANIZER))
+            query2 = query2.join(Event.roles).filter_by(user_id=current_user.id).join(UsersEventsRoles.role). \
+                filter(or_(Role.name == COORGANIZER, Role.name == ORGANIZER, Role.name == OWNER))
             query_ = query_.union(query2)
 
         if view_kwargs.get('user_id') and 'GET' in request.method:
@@ -117,6 +143,62 @@ class EventList(ResourceList):
             user = safe_query(db, User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
                 filter(Role.name != ATTENDEE)
+
+        if view_kwargs.get('user_owner_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_owner_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_owner_id'], 'user_owner_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == OWNER)
+
+        if view_kwargs.get('user_organizer_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_organizer_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_organizer_id'], 'user_organizer_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == ORGANIZER)
+
+        if view_kwargs.get('user_coorganizer_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_coorganizer_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_coorganizer_id'], 'user_coorganizer_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == COORGANIZER)
+
+        if view_kwargs.get('user_track_organizer_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_track_organizer_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_track_organizer_id'], 'user_organizer_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == TRACK_ORGANIZER)
+
+        if view_kwargs.get('user_registrar_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_registrar_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_registrar_id'], 'user_registrar_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == REGISTRAR)
+
+        if view_kwargs.get('user_moderator_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_moderator_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_moderator_id'], 'user_moderator_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == MODERATOR)
+
+        if view_kwargs.get('user_marketer_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_marketer_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_marketer_id'], 'user_marketer_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == MARKETER)
+
+        if view_kwargs.get('user_sales_admin_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_sales_admin_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_sales_admin_id'], 'user_sales_admin_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == SALES_ADMIN)
 
         if view_kwargs.get('event_type_id') and 'GET' in request.method:
             query_ = self.session.query(Event).filter(
@@ -151,22 +233,23 @@ class EventList(ResourceList):
         user = User.query.filter_by(id=kwargs['user_id']).first()
         modules = Module.query.first()
         validate_event(user, modules, data)
+        validate_date(None, data)
 
     def after_create_object(self, event, data, view_kwargs):
         """
-        after create method to save roles for users and add the user as an accepted role(organizer)
+        after create method to save roles for users and add the user as an accepted role(owner and organizer)
         :param event:
         :param data:
         :param view_kwargs:
         :return:
         """
-        role = Role.query.filter_by(name=ORGANIZER).first()
         user = User.query.filter_by(id=view_kwargs['user_id']).first()
+        role = Role.query.filter_by(name=OWNER).first()
         uer = UsersEventsRoles(user, event, role)
         save_to_db(uer, 'Event Saved')
         role_invite = RoleInvite(user.email, role.title_name, event.id, role.id, datetime.now(pytz.utc),
                                  status='accepted')
-        save_to_db(role_invite, 'Organiser Role Invite Added')
+        save_to_db(role_invite, 'Owner Role Invite Added')
 
         # create custom forms for compulsory fields of attendee form.
         create_custom_forms_for_attendees(event)
@@ -455,7 +538,7 @@ class EventDetail(ResourceDetail):
         :param data:
         :return:
         """
-        user = User.query.filter_by(id=current_identity.id).one()
+        user = User.query.filter_by(id=current_user.id).one()
         modules = Module.query.first()
         validate_event(user, modules, data)
 
@@ -467,6 +550,9 @@ class EventDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
+        if data.get('starts_at') != event.starts_at or data.get('ends_at') != event.ends_at:
+            validate_date(event, data)
+
         if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
             if len(event.orders) != 0:
                 raise ForbiddenException({'source': ''}, "Event associated with orders cannot be deleted")
@@ -494,6 +580,7 @@ class EventDetail(ResourceDetail):
                   'model': Event,
                   'methods': {
                       'before_update_object': before_update_object,
+                      'before_get_object': before_get_object,
                       'after_update_object': after_update_object,
                       'before_patch': before_patch
                   }}

@@ -1,0 +1,76 @@
+version: '3.5'
+
+x-environment-vars: &environment-vars
+  DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+  ELASTICSEARCH_HOST: elastic:9200
+  REDIS_URL: redis://redis:6379/0
+  ADMIN_EMAIL: "@{ADMIN_EMAIL}"
+  ADMIN_PASSWORD: "@{ADMIN_PASSWORD}"
+
+x-defaults: &defaults
+  build: .
+  restart: unless-stopped
+  environment:
+    <<: *environment-vars
+  depends_on:
+    - postgres
+    - redis
+    - elastic
+  links:
+    - postgres:postgres
+    - redis:redis
+    - elastic:elastic
+  volumes:
+    - ./static:/data/app/static
+
+services:
+
+  postgres:
+    image: postgres:10-alpine
+    container_name: opev-postgres
+    restart: unless-stopped
+    volumes:
+      - pg:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+
+  redis:
+    image: redis:3-alpine
+    container_name: opev-redis
+    restart: unless-stopped
+    command: redis-server
+    volumes:
+      - rd:/var/lib/redis/data
+
+  elastic:
+    image: elasticsearch:5.6.12-alpine
+    container_name: opev-elastic-search
+    restart: unless-stopped
+    environment:
+        - discovery.type=single-node
+    volumes:
+        - es:/usr/share/elasticsearch/data
+    ports:
+        - 9200:9200
+        - 9300:9300
+
+  web:
+    <<: *defaults
+    container_name: opev-web
+    ports:
+      - 8080:8080
+
+  celery:
+    <<: *defaults
+    container_name: opev-celery
+    environment:
+      <<: *environment-vars
+      DEPLOYMENT: celery
+      C_FORCE_ROOT: "true"
+
+volumes:
+    pg:
+    rd:
+    es:

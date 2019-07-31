@@ -124,7 +124,7 @@
                                     {{ order.status | capitalize }}
                                 {% endif %}<br>
                                 {{ order.tickets_count }}<br>
-                                {{ event.payment_currency | currency_symbol }}{{ order.amount | money }}<br>
+                                {{ event.payment_currency }}{{ order.amount | money }}<br>
                                 {% if order.status == 'completed' %}
                                     {{ order.paid_via | capitalize }}
                                 {% else %}
@@ -180,23 +180,23 @@
                       </tr>
                     </thead>
                     <tbody>
-                    {% for ticket in tickets %}
+                    {% for order_ticket in order_tickets %}
                       <tr>
-                        <td style="text-align:center">{{ ticket.name }}</td>
-                        <td style="text-align:center">{{ event.payment_currency | currency_symbol }}{{ ticket.price }}</td>
-                        <td style="text-align:center">{{ order_tickets_info.quantity }}</td>
-                        <td style="text-align:center">{{ event.payment_currency | currency_symbol }}{{ order_tickets_info.quantity*ticket.price }}</td>
+                        <td style="text-align:center">{{ order_ticket.ticket.name }}</td>
+                        <td style="text-align:center">{{ event.payment_currency }}{{ order_ticket.ticket.price }}</td>
+                        <td style="text-align:center">{{ order_ticket.quantity }}</td>
+                        <td style="text-align:center">{{ event.payment_currency }}{{ order_ticket.quantity*order_ticket.ticket.price }}</td>
                         {% if tax %}
                         <td style="text-align:center">{{ tax.rate }}%</td>
                         {% else %}
                         <td style="text-align:center">{{ ("0%") }}</td>
                         {% endif %}
                         {% if tax %}
-                        <td style="text-align:center">{{ event.payment_currency | currency_symbol }}{{ tax.rate*ticket.price/100 }}</td>
+                        <td style="text-align:center">{{ event.payment_currency }}{{ tax.rate*order_ticket.ticket.price/100 }}</td>
                         {% else %}
-                        <td style="text-align:center">{{ event.payment_currency | currency_symbol }}0</td>
+                        <td style="text-align:center">{{ event.payment_currency }}0</td>
                         {% endif %}
-                    </tr>
+                      </tr>
                     {% endfor %}
                     <tr>
                         <th scope="row"></th>
@@ -204,7 +204,7 @@
                         <td></td>
                         <td></td>
                         <td><b>Grand Total</b></td>
-                        <td> {{ event.payment_currency | currency_symbol }}{{ order.amount | money }}</td>
+                        <td> {{ event.payment_currency }}{{ order.amount | money }}</td>
                     </tr>
                     </tbody>
                   </table>

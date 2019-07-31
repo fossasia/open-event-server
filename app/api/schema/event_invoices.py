@@ -49,6 +49,13 @@ class EventInvoiceSchema(SoftDeletionSchema):
                         related_view_kwargs={'event_invoice_id': '<id>'},
                         schema='UserSchemaPublic',
                         type_='user')
+    order = Relationship(attribute='order',
+                         self_view='v1.event_invoice_order',
+                         self_view_kwargs={'id': '<id>'},
+                         related_view='v1.order_detail',
+                         related_view_kwargs={'id': '<id>'},
+                         schema='OrderSchema',
+                         type_='order')
     event = Relationship(attribute='event',
                          self_view='v1.event_invoice_event',
                          self_view_kwargs={'id': '<id>'},

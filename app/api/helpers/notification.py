@@ -301,6 +301,20 @@ def send_notif_ticket_cancel(order):
                                                     .format(identifier=order.event.identifier))
             )
         )
+    send_notification(
+        user=order.event.owner,
+        title=NOTIFS[TICKET_CANCELLED_ORGANIZER]['title'].format(
+            invoice_id=order.invoice_number,
+            event_name=order.event.name
+        ),
+        message=NOTIFS[TICKET_CANCELLED_ORGANIZER]['message'].format(
+            cancel_note=order.cancel_note,
+            invoice_id=order.invoice_number,
+            event_name=order.event.name,
+            cancel_order_page=make_frontend_url('/events/{identifier}/tickets/orders/cancelled'
+                                                .format(identifier=order.event.identifier))
+        )
+    )
 
 
 def send_notification_with_action(user, action, **kwargs):

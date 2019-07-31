@@ -19,6 +19,8 @@ class SettingFactory(factory.alchemy.SQLAlchemyModelFactory):
     secret = common.secret_
     # Static domain
     static_domain = common.url_
+    # Order Expiry Time
+    order_expiry_time = 15  #min
 
     #
     #  STORAGE
@@ -102,6 +104,10 @@ class SettingFactory(factory.alchemy.SQLAlchemyModelFactory):
     facebook_url = common.url_
     youtube_url = common.url_
 
+    # Event Invoices settings
+    invoice_sending_day = common.integer_
+    invoice_sending_timezone = common.timezone_
+
     #
     # Generators
     #
@@ -115,3 +121,16 @@ class SettingFactory(factory.alchemy.SQLAlchemyModelFactory):
     #
     cookie_policy = common.string_
     cookie_policy_link = common.url_
+
+    # Admin Invoice Details
+    admin_billing_contact_name = common.string_
+    admin_billing_phone = common.string_
+    admin_billing_email = common.email_
+    admin_billing_state = common.string_
+    admin_billing_country = common.string_
+    admin_billing_tax_info = common.string_
+    admin_company = common.string_
+    admin_billing_address = common.string_
+    admin_billing_city = common.string_
+    admin_billing_zip = common.string_
+    admin_billing_additional_info = common.string_

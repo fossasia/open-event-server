@@ -1,6 +1,6 @@
 from functools import wraps
 from flask import current_app as app
-from flask_jwt import _jwt_required, current_identity
+from flask_jwt_extended import verify_jwt_in_request, current_user
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.errors import ForbiddenError
@@ -39,9 +39,9 @@ def jwt_required(fn, realm=None):
     """
     @wraps(fn)
     def decorator(*args, **kwargs):
-        _jwt_required(realm or app.config['JWT_DEFAULT_REALM'])
-        current_identity.last_accessed_at = datetime.utcnow()
-        save_to_db(current_identity)
+        verify_jwt_in_request()
+        current_user.last_accessed_at = datetime.utcnow()
+        save_to_db(current_user)
         return fn(*args, **kwargs)
 
     return decorator
@@ -58,7 +58,7 @@ def is_super_admin(f):
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user = current_identity
+        user = current_user
         if not user.is_super_admin:
             return ForbiddenError({'source': ''}, 'Super admin access is required').respond()
         return f(*args, **kwargs)
@@ -76,7 +76,7 @@ def is_admin(f):
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user = current_identity
+        user = current_user
         if not user.is_admin and not user.is_super_admin:
             return ForbiddenError({'source': ''}, 'Admin access is required').respond()
         return f(*args, **kwargs)
@@ -95,10 +95,31 @@ def is_user_itself(f):
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user = current_identity
+        user = current_user
         if not user.is_admin and not user.is_super_admin and user.id != kwargs['id']:
             return ForbiddenError({'source': ''}, 'Access Forbidden').respond()
         return f(*args, **kwargs)
+
+    return decorated_function
+
+
+@second_order_decorator(jwt_required)
+def is_owner(f):
+    """
+    Allows only Owner to access the event resources.
+    :param f:
+    :return:
+    """
+
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        user = current_user
+
+        if user.is_staff:
+            return f(*args, **kwargs)
+        if 'event_id' in kwargs and user.is_owner(kwargs['event_id']):
+            return f(*args, **kwargs)
+        return ForbiddenError({'source': ''}, 'Owner access is required').respond()
 
     return decorated_function
 
@@ -113,7 +134,7 @@ def is_organizer(f):
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user = current_identity
+        user = current_user
 
         if user.is_staff:
             return f(*args, **kwargs)
@@ -134,13 +155,11 @@ def is_coorganizer(f):
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user = current_identity
+        user = current_user
 
         if user.is_staff:
             return f(*args, **kwargs)
-        if 'event_id' in kwargs and (
-                user.is_coorganizer(kwargs['event_id']) or
-                user.is_organizer(kwargs['event_id'])):
+        if 'event_id' in kwargs and user.has_event_access(kwargs['event_id']):
             return f(*args, **kwargs)
         return ForbiddenError({'source': ''}, 'Co-organizer access is required.').respond()
 
@@ -157,14 +176,13 @@ def is_registrar(f):
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user = current_identity
+        user = current_user
 
         if user.is_staff:
             return f(*args, **kwargs)
         if 'event_id' in kwargs and (
                     user.is_registrar(kwargs['event_id']) or
-                    user.is_organizer(kwargs['event_id']) or
-                user.is_coorganizer(kwargs['event_id'])):
+                    user.has_event_access(kwargs['event_id'])):
             return f(*args, **kwargs)
         return ForbiddenError({'source': ''}, 'Registrar Access is Required.').respond()
 
@@ -181,14 +199,13 @@ def is_track_organizer(f):
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user = current_identity
+        user = current_user
 
         if user.is_staff:
             return f(*args, **kwargs)
         if 'event_id' in kwargs and (
                     user.is_track_organizer(kwargs['event_id']) or
-                    user.is_organizer(kwargs['event_id']) or
-                user.is_coorganizer(kwargs['event_id'])):
+                    user.has_event_access(kwargs['event_id'])):
             return f(*args, **kwargs)
         return ForbiddenError({'source': ''}, 'Track Organizer access is Required.').respond()
 
@@ -205,14 +222,13 @@ def is_moderator(f):
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user = current_identity
+        user = current_user
 
         if user.is_staff:
             return f(*args, **kwargs)
         if 'event_id' in kwargs and (
                     user.is_moderator(kwargs['event_id']) or
-                    user.is_organizer(kwargs['event_id']) or
-                user.is_coorganizer(kwargs['event_id'])):
+                    user.has_event_access(kwargs['event_id'])):
             return f(*args, **kwargs)
         return ForbiddenError({'source': ''}, 'Moderator Access is Required.').respond()
 
@@ -231,7 +247,7 @@ def accessible_events(f):
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        user = current_identity
+        user = current_user
         if 'POST' in request.method:
             kwargs['user_id'] = user.id
         else:

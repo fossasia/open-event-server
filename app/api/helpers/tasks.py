@@ -17,7 +17,7 @@ from app import make_celery
 from app.api.helpers.utilities import strip_tags
 from app.models.session import Session
 from app.models.speaker import Speaker
-
+from app.api.helpers.mail import check_smtp_config
 
 """
 Define all API v2 celery tasks here
@@ -174,6 +174,7 @@ def resize_speaker_images_task(self, speaker_id, photo_url):
 def export_event_task(self, email, event_id, settings):
     event = safe_query(db, Event, 'id', event_id, 'event_id')
     user = db.session.query(User).filter_by(email=email).first()
+    smtp_encryption = get_settings()['smtp_encryption']
     try:
         logging.info('Exporting started')
         path = event_export_task_base(event_id, settings)
@@ -183,15 +184,21 @@ def export_event_task(self, email, event_id, settings):
         result = {
             'download_url': download_url
         }
+
         logging.info('Exporting done.. sending email')
-        send_export_mail(email=email, event_name=event.name, download_url=download_url)
+        if check_smtp_config(smtp_encryption):
+            send_export_mail(email=email, event_name=event.name, download_url=download_url)
+        else:
+            logging.warning('Error in sending export success email')
         send_notif_after_export(user=user, event_name=event.name, download_url=download_url)
     except Exception as e:
         result = {'__error': True, 'result': str(e)}
         logging.warning('Error in exporting.. sending email')
-        send_export_mail(email=email, event_name=event.name, error_text=str(e))
+        if check_smtp_config(smtp_encryption):
+            send_export_mail(email=email, event_name=event.name, error_text=str(e))
+        else:
+            logging.warning('Error in sending export error email')
         send_notif_after_export(user=user, event_name=event.name, error_text=str(e))
-
     return result
 
 

@@ -1,10 +1,10 @@
-from datetime import datetime
-from flask import request, jsonify, Blueprint, url_for, redirect
-import omise
 import logging
 import pytz
+from datetime import datetime
 
-from flask_jwt import current_identity as current_user
+import omise
+from flask import request, jsonify, Blueprint, url_for, redirect
+from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from marshmallow_jsonapi import fields
 from marshmallow_jsonapi.flask import Schema
@@ -13,7 +13,6 @@ from sqlalchemy.orm.exc import NoResultFound
 from app.api.bootstrap import api
 from app.api.data_layers.ChargesLayer import ChargesLayer
 from app.api.helpers.db import save_to_db, safe_query, safe_query_without_soft_deleted_entries
-from app.api.helpers.storage import generate_hash, UPLOAD_PATHS
 from app.api.helpers.errors import BadRequestError
 from app.api.helpers.exceptions import ForbiddenException, UnprocessableEntity, ConflictException
 from app.api.helpers.files import make_frontend_url
@@ -23,10 +22,12 @@ from app.api.helpers.notification import send_notif_to_attendees, send_notif_tic
     send_notif_ticket_cancel
 from app.api.helpers.order import delete_related_attendees_for_order, set_expiry_for_order, \
     create_pdf_tickets_for_holder, create_onsite_attendees_for_order
+from app.api.helpers.payment import AliPayPaymentsManager, OmisePaymentsManager
 from app.api.helpers.payment import PayPalPaymentsManager
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.query import event_query
+from app.api.helpers.storage import generate_hash, UPLOAD_PATHS
 from app.api.helpers.ticketing import TicketingManager
 from app.api.helpers.utilities import dasherize, require_relationship
 from app.api.schema.orders import OrderSchema
@@ -35,11 +36,23 @@ from app.models.discount_code import DiscountCode, TICKET
 from app.models.order import Order, OrderTicket, get_updatable_fields
 from app.models.ticket_holder import TicketHolder
 from app.models.user import User
-from app.api.helpers.payment import AliPayPaymentsManager, OmisePaymentsManager
-
 
 order_misc_routes = Blueprint('order_misc', __name__, url_prefix='/v1')
 alipay_blueprint = Blueprint('alipay_blueprint', __name__, url_prefix='/v1/alipay')
+
+
+def check_event_user_ticket_holders(order, data, element):
+    if element in ['event', 'user'] and data[element]\
+            != str(getattr(order, element, None).id):
+        raise ForbiddenException({'pointer': 'data/{}'.format(element)},
+                                 "You cannot update {} of an order".format(element))
+    elif element == 'ticket_holders':
+        ticket_holders = []
+        for ticket_holder in order.ticket_holders:
+            ticket_holders.append(str(ticket_holder.id))
+        if data[element] != ticket_holders and element not in get_updatable_fields():
+            raise ForbiddenException({'pointer': 'data/{}'.format(element)},
+                                     "You cannot update {} of an order".format(element))
 
 
 class OrdersListPost(ResourceList):
@@ -75,6 +88,9 @@ class OrdersListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
+
+        free_ticket_quantity = 0
+
         for ticket_holder in data['ticket_holders']:
             # Ensuring that the attendee exists and doesn't have an associated order.
             try:
@@ -86,6 +102,15 @@ class OrdersListPost(ResourceList):
             except NoResultFound:
                 raise ConflictException({'pointer': '/data/relationships/attendees'},
                                         "Attendee with id {} does not exists".format(str(ticket_holder)))
+
+            if ticket_holder_object.ticket.type == 'free':
+                free_ticket_quantity += 1
+
+        if not current_user.is_verified and free_ticket_quantity == len(data['ticket_holders']):
+            raise UnprocessableEntity(
+                {'pointer': '/data/relationships/order'},
+                "Unverified user cannot place free orders"
+            )
 
         if data.get('cancel_note'):
             del data['cancel_note']
@@ -148,7 +173,7 @@ class OrdersListPost(ResourceList):
             # fetch tickets attachment
             order_identifier = order.identifier
 
-            key = UPLOAD_PATHS['pdf']['ticket_attendee'].format(identifier=order_identifier)
+            key = UPLOAD_PATHS['pdf']['tickets_all'].format(identifier=order_identifier)
             ticket_path = 'generated/tickets/{}/{}/'.format(key, generate_hash(key)) + order_identifier + '.pdf'
 
             key = UPLOAD_PATHS['pdf']['order'].format(identifier=order_identifier)
@@ -166,6 +191,9 @@ class OrdersListPost(ResourceList):
             for organizer in order.event.organizers:
                 send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
                                                      order.identifier)
+            if order.event.owner:
+                send_notif_ticket_purchase_organizer(order.event.owner, order.invoice_number, order_url,
+                                                     order.event.name, order.identifier)
 
         data['user_id'] = current_user.id
 
@@ -270,26 +298,33 @@ class OrderDetail(ResourceDetail):
             if current_user.id == order.user_id:
                 # Order created from the tickets tab.
                 for element in data:
-                    if data[element] and data[element]\
-                            != getattr(order, element, None) and element not in get_updatable_fields():
-                        raise ForbiddenException({'pointer': 'data/{}'.format(element)},
-                                                 "You cannot update {} of an order".format(element))
+                    if data[element]:
+                        if element not in ['event', 'ticket_holders', 'user'] and data[element]\
+                                != getattr(order, element, None) and element not in get_updatable_fields():
+                            raise ForbiddenException({'pointer': 'data/{}'.format(element)},
+                                                     "You cannot update {} of an order".format(element))
+                        else:
+                            check_event_user_ticket_holders(order, data, element)
 
             else:
                 # Order created from the public pages.
                 for element in data:
-                    if data[element] and data[element] != getattr(order, element, None):
-                        if element != 'status':
-                            raise ForbiddenException({'pointer': 'data/{}'.format(element)},
-                                                     "You cannot update {} of an order".format(element))
-                        elif element == 'status' and order.amount and order.status == 'completed':
-                            # Since we don't have a refund system.
-                            raise ForbiddenException({'pointer': 'data/status'},
-                                                     "You cannot update the status of a completed paid order")
-                        elif element == 'status' and order.status == 'cancelled':
-                            # Since the tickets have been unlocked and we can't revert it.
-                            raise ForbiddenException({'pointer': 'data/status'},
-                                                     "You cannot update the status of a cancelled order")
+                    if data[element]:
+                        if element not in ['event', 'ticket_holders', 'user'] and data[element]\
+                                != getattr(order, element, None):
+                            if element != 'status' and element != 'deleted_at':
+                                raise ForbiddenException({'pointer': 'data/{}'.format(element)},
+                                                         "You cannot update {} of an order".format(element))
+                            elif element == 'status' and order.amount and order.status == 'completed':
+                                # Since we don't have a refund system.
+                                raise ForbiddenException({'pointer': 'data/status'},
+                                                         "You cannot update the status of a completed paid order")
+                            elif element == 'status' and order.status == 'cancelled':
+                                # Since the tickets have been unlocked and we can't revert it.
+                                raise ForbiddenException({'pointer': 'data/status'},
+                                                         "You cannot update the status of a cancelled order")
+                        else:
+                            check_event_user_ticket_holders(order, data, element)
 
         elif current_user.id == order.user_id:
             if order.status != 'initializing' and order.status != 'pending':
@@ -297,14 +332,17 @@ class OrderDetail(ResourceDetail):
                                          "You cannot update a non-initialized or non-pending order")
             else:
                 for element in data:
-                    if element == 'is_billing_enabled' and order.status == 'completed' and data[element]\
-                            and data[element] != getattr(order, element, None):
-                        raise ForbiddenException({'pointer': 'data/{}'.format(element)},
-                                                 "You cannot update {} of a completed order".format(element))
-                    elif data[element] and data[element]\
-                            != getattr(order, element, None) and element not in get_updatable_fields():
-                        raise ForbiddenException({'pointer': 'data/{}'.format(element)},
-                                                 "You cannot update {} of an order".format(element))
+                    if data[element]:
+                        if element == 'is_billing_enabled' and order.status == 'completed'\
+                                and data[element] != getattr(order, element, None):
+                            raise ForbiddenException({'pointer': 'data/{}'.format(element)},
+                                                     "You cannot update {} of a completed order".format(element))
+                        elif element not in ['event', 'ticket_holders', 'user'] and data[element]\
+                                != getattr(order, element, None) and element not in get_updatable_fields():
+                            raise ForbiddenException({'pointer': 'data/{}'.format(element)},
+                                                     "You cannot update {} of an order".format(element))
+                        else:
+                            check_event_user_ticket_holders(order, data, element)
 
         if has_access('is_organizer', event_id=order.event_id) and 'order_notes' in data:
             if order.order_notes and data['order_notes'] not in order.order_notes.split(","):
@@ -320,15 +358,14 @@ class OrderDetail(ResourceDetail):
         # create pdf tickets.
         create_pdf_tickets_for_holder(order)
 
-        if order.status == 'cancelled':
+        if order.status == 'cancelled' and order.deleted_at is None:
             send_order_cancel_email(order)
             send_notif_ticket_cancel(order)
 
             # delete the attendees so that the tickets are unlocked.
             delete_related_attendees_for_order(order)
 
-        elif order.status == 'completed' or order.status == 'placed':
-
+        elif (order.status == 'completed' or order.status == 'placed') and order.deleted_at is None:
             # Send email to attendees with invoices and tickets attached
             order_identifier = order.identifier
 
@@ -350,6 +387,9 @@ class OrderDetail(ResourceDetail):
             for organizer in order.event.organizers:
                 send_notif_ticket_purchase_organizer(organizer, order.invoice_number, order_url, order.event.name,
                                                      order.identifier)
+            if order.event.owner:
+                send_notif_ticket_purchase_organizer(order.event.owner, order.invoice_number, order_url,
+                                                     order.event.name, order.identifier)
 
     def before_delete_object(self, order, view_kwargs):
         """

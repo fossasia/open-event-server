@@ -1,7 +1,7 @@
 import base64
 
 from flask import Blueprint, request, jsonify, abort, make_response
-from flask_jwt import current_identity as current_user
+from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 from sqlalchemy.orm.exc import NoResultFound
 import urllib.error
@@ -22,6 +22,7 @@ from app.models.access_code import AccessCode
 from app.models.discount_code import DiscountCode
 from app.models.email_notification import EmailNotification
 from app.models.event_invoice import EventInvoice
+from app.models.event import Event
 from app.models.feedback import Feedback
 from app.models.mail import USER_REGISTER_WITH_PASSWORD, PASSWORD_RESET_AND_VERIFY
 from app.models.notification import Notification
@@ -177,6 +178,13 @@ class UserDetail(ResourceDetail):
             access_code = safe_query(self, AccessCode, 'id', view_kwargs['access_code_id'], 'access_code_id')
             if access_code.marketer_id is not None:
                 view_kwargs['id'] = access_code.marketer_id
+            else:
+                view_kwargs['id'] = None
+
+        if view_kwargs.get('event_id') is not None:
+            event = safe_query(self, Event, 'id', view_kwargs['event_id'], 'event_id')
+            if event.owner is not None:
+                view_kwargs['id'] = event.owner.id
             else:
                 view_kwargs['id'] = None
 

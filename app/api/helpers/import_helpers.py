@@ -8,7 +8,7 @@ import zipfile
 import requests
 from flask import current_app as app
 from flask import request
-from flask_jwt import current_identity
+from flask_jwt_extended import current_user
 from werkzeug import secure_filename
 
 from app.api.helpers.db import save_to_db
@@ -29,7 +29,7 @@ from app.models.social_link import SocialLink
 from app.models.speaker import Speaker
 from app.models.sponsor import Sponsor
 from app.models.track import Track
-from app.models.user import User, ORGANIZER
+from app.models.user import User, OWNER
 
 IMPORT_SERIES = [
     ('social_links', SocialLink),
@@ -149,7 +149,7 @@ def _delete_fields(srv, data):
 def create_import_job(task):
     """create import record in db"""
     ij = ImportJob(task=task,
-                   user=current_identity)
+                   user=current_user)
     save_to_db(ij, 'Import job saved')
 
 
@@ -356,7 +356,7 @@ def import_event_json(task_handle, zip_path, creator_id):
         data = _delete_fields(srv, data)
         new_event = Event(**data)
         save_to_db(new_event)
-        role = Role.query.filter_by(name=ORGANIZER).first()
+        role = Role.query.filter_by(name=OWNER).first()
         user = User.query.filter_by(id=creator_id).first()
         uer = UsersEventsRoles(user_id=user.id, event_id=new_event.id, role_id=role.id)
         save_to_db(uer, 'Event Saved')

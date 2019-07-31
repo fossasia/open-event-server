@@ -1,3 +1,4 @@
+from flask_jwt_extended import current_user
 from flask_rest_jsonapi import ResourceDetail, ResourceList, ResourceRelationship
 
 from app.api.bootstrap import api
@@ -6,7 +7,6 @@ from app.api.helpers.db import safe_query, get_count, save_to_db
 from app.api.helpers.exceptions import ForbiddenException
 from app.api.helpers.mail import send_email_new_session, send_email_session_accept_reject
 from app.api.helpers.notification import send_notif_new_session_organizer, send_notif_session_accept_reject
-from app.api.helpers.permissions import current_identity
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.query import event_query
 from app.api.helpers.utilities import require_relationship
@@ -36,7 +36,7 @@ class SessionListPost(ResourceList):
         :return:
         """
         require_relationship(['event', 'track'], data)
-        data['creator_id'] = current_identity.id
+        data['creator_id'] = current_user.id
         if get_count(db.session.query(Event).filter_by(id=int(data['event']), is_sessions_speakers_enabled=False)) > 0:
             raise ForbiddenException({'pointer': ''}, "Sessions are disabled for this Event")
 
@@ -49,16 +49,16 @@ class SessionListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
-        if session.event.get_organizer():
+        if session.event.get_owner():
             event_name = session.event.name
-            organizer = session.event.get_organizer()
-            organizer_email = organizer.email
+            owner = session.event.get_owner()
+            owner_email = owner.email
             frontend_url = get_settings()['frontend_url']
             event = session.event
             link = make_frontend_url("/events/{}/sessions/{}"
                                      .format(event.identifier, session.id))
-            send_email_new_session(organizer_email, event_name, link)
-            send_notif_new_session_organizer(organizer, event_name, link, session.id)
+            send_email_new_session(owner_email, event_name, link)
+            send_notif_new_session_organizer(owner, event_name, link, session.id)
 
         for speaker in session.speakers:
             session_speaker_link = SessionsSpeakersLink(session_state=session.state,
@@ -141,7 +141,7 @@ class SessionDetail(ResourceDetail):
         :return:
         """
         if data.get('is_locked') != session.is_locked:
-            if not (has_access('is_admin') or has_access('is_organizer')):
+            if not (has_access('is_admin') or has_access('is_organizer', event_id=session.event_id)):
                 raise ForbiddenException({'source': '/data/attributes/is-locked'},
                                          "You don't have enough permissions to change this property")
 
@@ -161,19 +161,20 @@ class SessionDetail(ResourceDetail):
                 frontend_url = get_settings()['frontend_url']
                 link = "{}/events/{}/sessions/{}" \
                     .format(frontend_url, event.identifier, session.id)
-                send_email_session_accept_reject(speaker.email, session, link)
-                send_notif_session_accept_reject(speaker, session.title, session.state, link, session.id)
+                if not speaker.is_email_overridden:
+                    send_email_session_accept_reject(speaker.email, session, link)
+                    send_notif_session_accept_reject(speaker, session.title, session.state, link, session.id)
 
-            # Email for organizer
-            if session.event.get_organizer():
-                organizer = session.event.get_organizer()
-                organizer_email = organizer.email
+            # Email for owner
+            if session.event.get_owner():
+                owner = session.event.get_owner()
+                owner_email = owner.email
                 frontend_url = get_settings()['frontend_url']
                 link = "{}/events/{}/sessions/{}" \
                     .format(frontend_url, event.identifier, session.id)
-                send_email_session_accept_reject(organizer_email, session,
+                send_email_session_accept_reject(owner_email, session,
                                                  link)
-                send_notif_session_accept_reject(organizer, session.title,
+                send_notif_session_accept_reject(owner, session.title,
                                                  session.state, link, session.id)
         if 'state' in data:
             entry_count = SessionsSpeakersLink.query.filter_by(session_id=session.id)

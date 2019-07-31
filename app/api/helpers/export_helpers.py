@@ -8,8 +8,8 @@ import pytz
 import requests
 from flask import current_app as app
 from flask import request, url_for
-from flask_jwt import current_identity
-from flask_login import current_user
+from flask_jwt_extended import current_user
+from flask_login import current_user as current_logged_user
 
 from app.api.helpers.db import save_to_db
 from app.api.helpers.storage import upload, UPLOAD_PATHS, UploadedFile
@@ -29,8 +29,8 @@ from app.models.track import Track
 FIELD_ORDER = {
     'event': [
         'id', 'name', 'latitude', 'longitude', 'location_name', 'starts_at', 'ends_at',
-        'timezone', 'description', 'original_image_url', 'logo_url', 'organizer_name',
-        'organizer_description', 'external_event_url', 'ticket_url', 'privacy', 'event_type_id',
+        'timezone', 'description', 'original_image_url', 'logo_url', 'owner_name',
+        'owner_description', 'external_event_url', 'ticket_url', 'privacy', 'event_type_id',
         'event_topic_id', 'event_sub_topic_id', 'code_of_conduct'
     ],
     'microlocations': ['id', 'name', 'floor'],
@@ -231,10 +231,10 @@ def export_event_json(event_id, settings):
 
 
 def get_current_user():
-    if current_identity:
-        return current_identity
-    else:
+    if current_user:
         return current_user
+    else:
+        return current_logged_user
 
 
 # HELPERS

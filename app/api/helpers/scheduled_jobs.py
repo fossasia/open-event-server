@@ -2,6 +2,7 @@ import datetime
 
 import pytz
 from dateutil.relativedelta import relativedelta
+from flask import render_template
 
 from app.api.helpers.db import safe_query, save_to_db
 from app.api.helpers.mail import send_email_after_event, send_email_for_monthly_fee_payment, \
@@ -10,6 +11,8 @@ from app.api.helpers.notification import send_notif_monthly_fee_payment, send_fo
     send_notif_after_event
 from app.api.helpers.query import get_upcoming_events, get_user_event_roles_by_role_name
 from app.api.helpers.utilities import monthdelta
+from app.api.helpers.files import create_save_pdf
+from app.api.helpers.storage import UPLOAD_PATHS
 from app.models import db
 from app.models.event import Event
 from app.models.event_invoice import EventInvoice
@@ -17,7 +20,8 @@ from app.models.order import Order
 from app.models.speaker import Speaker
 from app.models.session import Session
 from app.models.ticket import Ticket
-from app.models.ticket_fee import get_fee
+from app.models.ticket_fee import TicketFees, get_fee
+
 from app.settings import get_settings
 
 
@@ -35,17 +39,22 @@ def send_after_event_mail():
         for event in events:
             organizers = get_user_event_roles_by_role_name(event.id, 'organizer')
             speakers = Speaker.query.filter_by(event_id=event.id, deleted_at=None).all()
+            owner = get_user_event_roles_by_role_name(event.id, 'owner').first()
             current_time = datetime.datetime.now(pytz.timezone(event.timezone))
             time_difference = current_time - event.ends_at
             time_difference_minutes = (time_difference.days * 24 * 60) + \
                 (time_difference.seconds / 60)
             if current_time > event.ends_at and time_difference_minutes < 1440:
                 for speaker in speakers:
-                    send_email_after_event(speaker.user.email, event.name, upcoming_event_links)
-                    send_notif_after_event(speaker.user, event.name)
+                    if not speaker.is_email_overridden:
+                        send_email_after_event(speaker.user.email, event.name, upcoming_event_links)
+                        send_notif_after_event(speaker.user, event.name)
                 for organizer in organizers:
                     send_email_after_event(organizer.user.email, event.name, upcoming_event_links)
                     send_notif_after_event(organizer.user, event.name)
+                if owner:
+                    send_email_after_event(owner.user.email, event.name, upcoming_event_links)
+                    send_notif_after_event(owner.user, event.name)
 
 
 def change_session_state_on_event_completion():
@@ -84,9 +93,9 @@ def send_event_fee_notification():
                         fee_total += fee
 
             if fee_total > 0:
-                organizer = get_user_event_roles_by_role_name(event.id, 'organizer').first()
+                owner = get_user_event_roles_by_role_name(event.id, 'owner').first()
                 new_invoice = EventInvoice(
-                    amount=fee_total, event_id=event.id, user_id=organizer.user.id)
+                    amount=fee_total, event_id=event.id, user_id=owner.user.id)
 
                 if event.discount_code_id and event.discount_code:
                     r = relativedelta(datetime.utcnow(), event.created_at)
@@ -150,3 +159,43 @@ def expire_pending_tickets():
                                        (Order.created_at + datetime.timedelta(minutes=30)) <= datetime.datetime.now()).\
                                        update({'status': 'expired'})
         db.session.commit()
+
+
+def event_invoices_mark_due():
+    from app import current_app as app
+    with app.app_context():
+        db.session.query(EventInvoice).\
+                    filter(EventInvoice.status == 'upcoming',
+                           EventInvoice.event.ends_at >= datetime.datetime.now(),
+                           (EventInvoice.created_at + datetime.timedelta(days=30) <=
+                            datetime.datetime.now())).\
+                    update({'status': 'due'})
+
+        db.session.commit()
+
+
+def send_monthly_event_invoice():
+    from app import current_app as app
+    with app.app_context():
+        events = Event.query.all()
+        for event in events:
+            # calculate net & gross revenues
+            currency = event.payment_currency
+            ticket_fee_object = db.session.query(TicketFees).filter_by(currency=currency).one()
+            ticket_fee_percentage = ticket_fee_object.service_fee
+            ticket_fee_maximum = ticket_fee_object.maximum_fee
+            orders = Order.query.filter_by(event=event).all()
+            gross_revenue = event.calc_monthly_revenue()
+            ticket_fees = event.tickets_sold * ticket_fee_percentage
+            if ticket_fees > ticket_fee_maximum:
+                ticket_fees = ticket_fee_maximum
+            net_revenue = gross_revenue - ticket_fees
+            # save invoice as pdf
+            pdf = create_save_pdf(render_template('pdf/event_invoice.html', orders=orders,
+                                  ticket_fee_object=ticket_fee_object, gross_revenue=gross_revenue,
+                                  net_revenue=net_revenue), UPLOAD_PATHS['pdf']['event_invoice'],
+                                  dir_path='/static/uploads/pdf/event_invoices/', identifier=event.identifier)
+            # save event_invoice info to DB
+
+            event_invoice = EventInvoice(amount=net_revenue, invoice_pdf_url=pdf, event_id=event.id)
+            save_to_db(event_invoice)
