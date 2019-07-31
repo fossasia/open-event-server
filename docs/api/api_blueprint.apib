@@ -17483,7 +17483,7 @@ Create a new Discount Code for event. (Only Admin)
     + sort (optional, string, `code`) - Sort the resources according to the given attribute in ascending order. Append '-' to sort in descending order.
     + filter (optional, string, `[]`) - Filter according to the flask-rest-jsonapi filtering system. Please refer: http://flask-rest-jsonapi.readthedocs.io/en/latest/filtering.html for more.
 
-### Create Ticket Discount Code [POST]
+### Create Ticket Discount Code [POST /v1/discount-codes{?page%5bsize%5d,page%5bnumber%5d,sort,filter}]
 Create a new Discount Code for event. (Only by Co-organizers)
 
 + Request (application/vnd.api+json)
