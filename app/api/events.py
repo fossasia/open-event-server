@@ -580,6 +580,7 @@ class EventDetail(ResourceDetail):
                   'model': Event,
                   'methods': {
                       'before_update_object': before_update_object,
+                      'before_get_object': before_get_object,
                       'after_update_object': after_update_object,
                       'before_patch': before_patch
                   }}
