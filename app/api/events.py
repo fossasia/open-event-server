@@ -46,9 +46,11 @@ from app.models.ticket import TicketTag
 from app.models.ticket_holder import TicketHolder
 from app.models.track import Track
 from app.models.user_favourite_event import UserFavouriteEvent
-from app.models.user import User, ATTENDEE, OWNER, ORGANIZER, COORGANIZER
+from app.models.user import User, ATTENDEE, OWNER, ORGANIZER, COORGANIZER, TRACK_ORGANIZER, REGISTRAR, MODERATOR, \
+    SALES_ADMIN, MARKETER
 from app.models.users_events_role import UsersEventsRoles
 from app.models.stripe_authorization import StripeAuthorization
+
 
 def validate_event(user, modules, data):
     if not user.can_create_event():
@@ -141,6 +143,62 @@ class EventList(ResourceList):
             user = safe_query(db, User, 'id', view_kwargs['user_id'], 'user_id')
             query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
                 filter(Role.name != ATTENDEE)
+
+        if view_kwargs.get('user_owner_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_owner_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_owner_id'], 'user_owner_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == OWNER)
+
+        if view_kwargs.get('user_organizer_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_organizer_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_organizer_id'], 'user_organizer_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == ORGANIZER)
+
+        if view_kwargs.get('user_coorganizer_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_coorganizer_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_coorganizer_id'], 'user_coorganizer_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == COORGANIZER)
+
+        if view_kwargs.get('user_track_organizer_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_track_organizer_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_track_organizer_id'], 'user_organizer_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == TRACK_ORGANIZER)
+
+        if view_kwargs.get('user_registrar_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_registrar_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_registrar_id'], 'user_registrar_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == REGISTRAR)
+
+        if view_kwargs.get('user_moderator_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_moderator_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_moderator_id'], 'user_moderator_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == MODERATOR)
+
+        if view_kwargs.get('user_marketer_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_marketer_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_marketer_id'], 'user_marketer_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == MARKETER)
+
+        if view_kwargs.get('user_sales_admin_id') and 'GET' in request.method:
+            if not has_access('is_user_itself', user_id=int(view_kwargs['user_sales_admin_id'])):
+                raise ForbiddenException({'source': ''}, 'Access Forbidden')
+            user = safe_query(db, User, 'id', view_kwargs['user_sales_admin_id'], 'user_sales_admin_id')
+            query_ = query_.join(Event.roles).filter_by(user_id=user.id).join(UsersEventsRoles.role). \
+                filter(Role.name == SALES_ADMIN)
 
         if view_kwargs.get('event_type_id') and 'GET' in request.method:
             query_ = self.session.query(Event).filter(
