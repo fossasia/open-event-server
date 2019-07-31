@@ -88,7 +88,10 @@ class CustomFormDetail(ResourceDetail):
                   fetch_as="event_id", model=CustomForms, methods="PATCH,DELETE"), )
     schema = CustomFormSchema
     data_layer = {'session': db.session,
-                  'model': CustomForms}
+                  'model': CustomForms,
+                  'methods': {
+                      'before_get_object': before_get_object
+                  }}
 
 
 class CustomFormRelationshipRequired(ResourceRelationship):
