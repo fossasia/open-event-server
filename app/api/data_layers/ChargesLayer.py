@@ -27,9 +27,9 @@ class ChargesLayer(BaseDataLayer):
         if not order:
             raise ObjectNotFound({'parameter': 'order_identifier'},
                                  "Order with identifier: {} not found".format(view_kwargs['order_identifier']))
-        elif order.status == 'cancelled' or order.status == 'expired' or order.status == 'completed':
+        elif order.status == 'cancelled' or order.status == 'expired':
             raise ConflictException({'parameter': 'id'},
-                                    "You cannot charge payments on a cancelled, expired or completed order")
+                                    "You cannot charge payments on a cancelled or expired order")
         elif (not order.amount) or order.amount == 0:
             raise ConflictException({'parameter': 'id'},
                                     "You cannot charge payments on a free order")
