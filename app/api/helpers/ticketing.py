@@ -11,6 +11,7 @@ from app.models import db
 from app.models.ticket_fee import TicketFees
 from app.models.ticket_holder import TicketHolder
 from app.models.order import Order
+from flask_jwt_extended import current_user
 
 
 class TicketingManager(object):
