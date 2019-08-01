@@ -20,6 +20,13 @@ from app.models.ticket_holder import TicketHolder
 from app.api.helpers.exceptions import ConflictException, MethodNotAllowed, UnprocessableEntity
 from app.api.helpers.db import get_count
 
+
+def validate_ticket_price(data):
+    if data.get('type') != 'free' and int(data.get('price')) <= 0:
+        raise UnprocessableEntity(
+            {'price': data.get('price')}, "Price of a paid/donation ticket must be greater than zero")
+
+
 class TicketListPost(ResourceList):
     """
     Create and List Tickets
@@ -51,6 +58,8 @@ class TicketListPost(ResourceList):
         :param view_kwargs:
         :return:
         """
+        if not data.get('price') or not data.get('type'):
+            raise UnprocessableEntity({}, "Type/price of ticket is missing")
         if data.get('type') == 'paid' and data.get('event'):
             try:
                 event = db.session.query(Event).filter_by(id=data['event'], deleted_at=None).one()
@@ -59,6 +68,7 @@ class TicketListPost(ResourceList):
             if not event.is_payment_enabled():
                 raise UnprocessableEntity(
                     {'event_id': data['event']}, "Event having paid ticket must have a payment method")
+        validate_ticket_price(data)
 
     schema = TicketSchema
     methods = ['POST', ]
@@ -181,7 +191,8 @@ class TicketDetail(ResourceDetail):
             if not event.is_payment_enabled():
                 raise UnprocessableEntity(
                     {'event_id': ticket.event.id}, "Event having paid ticket must have a payment method")
-
+        if data.get('type') and data.get('price'):
+            validate_ticket_price(data)
     decorators = (api.has_permission('is_coorganizer', fetch='event_id',
                   fetch_as="event_id", model=Ticket, methods="PATCH,DELETE"),)
     schema = TicketSchema
