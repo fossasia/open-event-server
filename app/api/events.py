@@ -107,8 +107,13 @@ def validate_date(event, data):
                                   "ends-at should be after starts-at")
 
     if datetime.timestamp(data['starts_at']) <= datetime.timestamp(datetime.now()):
-        raise UnprocessableEntity({'pointer': '/data/attributes/starts-at'},
-                                  "starts-at should be after current date-time")
+        if event and event.deleted_at and not data.get('deleted_at'):
+            data['state'] = 'draft'
+        elif event and not event.deleted_at and data.get('deleted_at'):
+            pass
+        else:
+            raise UnprocessableEntity({'pointer': '/data/attributes/starts-at'},
+                                      "starts-at should be after current date-time")
 
 class EventList(ResourceList):
     def before_get(self, args, kwargs):
@@ -233,7 +238,8 @@ class EventList(ResourceList):
         user = User.query.filter_by(id=kwargs['user_id']).first()
         modules = Module.query.first()
         validate_event(user, modules, data)
-        validate_date(None, data)
+        if data['state'] != 'draft':
+            validate_date(None, data)
 
     def after_create_object(self, event, data, view_kwargs):
         """
@@ -550,7 +556,11 @@ class EventDetail(ResourceDetail):
         :param view_kwargs:
         :return:
         """
-        if data.get('starts_at') != event.starts_at or data.get('ends_at') != event.ends_at:
+        is_date_updated = (data.get('starts_at') != event.starts_at or data.get('ends_at') != event.ends_at)
+        is_draft_published = (event.state == "draft" and data.get('state') == "published")
+        is_event_restored = (event.deleted_at and not data.get('deleted_at'))
+
+        if is_date_updated or is_draft_published or is_event_restored:
             validate_date(event, data)
 
         if has_access('is_admin') and data.get('deleted_at') != event.deleted_at:
@@ -580,6 +590,7 @@ class EventDetail(ResourceDetail):
                   'model': Event,
                   'methods': {
                       'before_update_object': before_update_object,
+                      'before_get_object': before_get_object,
                       'after_update_object': after_update_object,
                       'before_patch': before_patch
                   }}
