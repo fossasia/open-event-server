@@ -59,6 +59,9 @@ class TicketListPost(ResourceList):
             if not event.is_payment_enabled():
                 raise UnprocessableEntity(
                     {'event_id': data['event']}, "Event having paid ticket must have a payment method")
+            if data['price'] <= 0:
+                raise UnprocessableEntity(
+                    {'price': data['price']}, "Price of a paid/donation ticket must be greater than zero")
 
     schema = TicketSchema
     methods = ['POST', ]
@@ -181,6 +184,9 @@ class TicketDetail(ResourceDetail):
             if not event.is_payment_enabled():
                 raise UnprocessableEntity(
                     {'event_id': ticket.event.id}, "Event having paid ticket must have a payment method")
+            if data['price'] <= 0:
+                raise UnprocessableEntity(
+                    {'price': data['price']}, "Price of a paid/donation ticket must be greater than zero")
 
     decorators = (api.has_permission('is_coorganizer', fetch='event_id',
                   fetch_as="event_id", model=Ticket, methods="PATCH,DELETE"),)
