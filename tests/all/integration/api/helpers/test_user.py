@@ -15,7 +15,7 @@ class TestUserUtilitiesHelper(OpenEventTestCase):
         self.app = Setup.create_app()
 
     def test_modify_email_for_user_to_be_deleted(self):
-        """Method to test modification of email for user to be deleted"""
+        """Method to test modification of user email to be deleted"""
 
         with app.test_request_context():
             user = create_user(email="test_user@gmail.com", password="testpass")

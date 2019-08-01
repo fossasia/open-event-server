@@ -1,3 +1,4 @@
+foss-venv/
 .vagrant/
 .DS_Store
 *.pyc
