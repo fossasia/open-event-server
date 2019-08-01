@@ -10,6 +10,7 @@ from app.api.helpers.payment import StripePaymentsManager, PayPalPaymentsManager
 from app.models import db
 from app.models.ticket_fee import TicketFees
 from app.models.ticket_holder import TicketHolder
+from flask_jwt_extended import current_user
 
 
 class TicketingManager(object):

@@ -5,7 +5,7 @@ from app.api.helpers.utilities import dasherize
 from app.api.schema.base import SoftDeletionSchema
 
 
-class StripeAuthorizationSchema(SoftDeletionSchema):
+class StripeAuthorizationSchemaPublic(SoftDeletionSchema):
     """
         Stripe Authorization Schema
     """
@@ -21,7 +21,6 @@ class StripeAuthorizationSchema(SoftDeletionSchema):
 
     id = fields.Str(dump_only=True)
     stripe_publishable_key = fields.Str(dump_only=True)
-    stripe_auth_code = fields.Str(load_only=True, required=True)
 
     event = Relationship(attribute='event',
                          self_view='v1.stripe_authorization_event',
@@ -30,3 +29,22 @@ class StripeAuthorizationSchema(SoftDeletionSchema):
                          related_view_kwargs={'stripe_authorization_id': '<id>'},
                          schema="EventSchema",
                          type_='event')
+
+
+class StripeAuthorizationSchema(StripeAuthorizationSchemaPublic):
+    """
+        Stripe Authorization Schema
+    """
+
+    class Meta:
+        """
+        Meta class for StripeAuthorization Api Schema
+        """
+        type_ = 'stripe-authorization'
+        self_view = 'v1.stripe_authorization_detail'
+        self_view_kwargs = {'id': '<id>'}
+        inflect = dasherize
+
+    stripe_auth_code = fields.Str(load_only=True, required=True)
+
+

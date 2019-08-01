@@ -98,6 +98,7 @@ class Event(SoftDeletionModel):
     payment_currency = db.Column(db.String)
     paypal_email = db.Column(db.String)
     is_tax_enabled = db.Column(db.Boolean, default=False)
+    is_billing_info_mandatory = db.Column(db.Boolean, default=False)
     can_pay_by_paypal = db.Column(db.Boolean, default=False)
     can_pay_by_stripe = db.Column(db.Boolean, default=False)
     can_pay_by_cheque = db.Column(db.Boolean, default=False)
@@ -235,6 +236,7 @@ class Event(SoftDeletionModel):
                  discount_code_id=None,
                  onsite_details=None,
                  is_tax_enabled=None,
+                 is_billing_info_mandatory=False,
                  is_sponsors_enabled=None,
                  stripe_authorization=None,
                  tax=None,
@@ -301,6 +303,7 @@ class Event(SoftDeletionModel):
         self.discount_code_id = discount_code_id
         self.created_at = datetime.now(pytz.utc)
         self.is_tax_enabled = is_tax_enabled
+        self.is_billing_info_mandatory = is_billing_info_mandatory
         self.is_sponsors_enabled = is_sponsors_enabled
         self.stripe_authorization = stripe_authorization
         self.tax = tax

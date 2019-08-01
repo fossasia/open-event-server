@@ -40,6 +40,20 @@ order_misc_routes = Blueprint('order_misc', __name__, url_prefix='/v1')
 alipay_blueprint = Blueprint('alipay_blueprint', __name__, url_prefix='/v1/alipay')
 
 
+def check_event_user_ticket_holders(order, data, element):
+    if element in ['event', 'user'] and data[element]\
+            != str(getattr(order, element, None).id):
+        raise ForbiddenException({'pointer': 'data/{}'.format(element)},
+                                 "You cannot update {} of an order".format(element))
+    elif element == 'ticket_holders':
+        ticket_holders = []
+        for ticket_holder in order.ticket_holders:
+            ticket_holders.append(str(ticket_holder.id))
+        if data[element] != ticket_holders and element not in get_updatable_fields():
+            raise ForbiddenException({'pointer': 'data/{}'.format(element)},
+                                     "You cannot update {} of an order".format(element))
+
+
 class OrdersListPost(ResourceList):
     """
     OrderListPost class for OrderSchema
@@ -284,26 +298,33 @@ class OrderDetail(ResourceDetail):
             if current_user.id == order.user_id:
                 # Order created from the tickets tab.
                 for element in data:
-                    if data[element] and data[element]\
-                            != getattr(order, element, None) and element not in get_updatable_fields():
-                        raise ForbiddenException({'pointer': 'data/{}'.format(element)},
-                                                 "You cannot update {} of an order".format(element))
+                    if data[element]:
+                        if element not in ['event', 'ticket_holders', 'user'] and data[element]\
+                                != getattr(order, element, None) and element not in get_updatable_fields():
+                            raise ForbiddenException({'pointer': 'data/{}'.format(element)},
+                                                     "You cannot update {} of an order".format(element))
+                        else:
+                            check_event_user_ticket_holders(order, data, element)
 
             else:
                 # Order created from the public pages.
                 for element in data:
-                    if data[element] and data[element] != getattr(order, element, None):
-                        if element != 'status' and element != 'deleted_at':
-                            raise ForbiddenException({'pointer': 'data/{}'.format(element)},
-                                                     "You cannot update {} of an order".format(element))
-                        elif element == 'status' and order.amount and order.status == 'completed':
-                            # Since we don't have a refund system.
-                            raise ForbiddenException({'pointer': 'data/status'},
-                                                     "You cannot update the status of a completed paid order")
-                        elif element == 'status' and order.status == 'cancelled':
-                            # Since the tickets have been unlocked and we can't revert it.
-                            raise ForbiddenException({'pointer': 'data/status'},
-                                                     "You cannot update the status of a cancelled order")
+                    if data[element]:
+                        if element not in ['event', 'ticket_holders', 'user'] and data[element]\
+                                != getattr(order, element, None):
+                            if element != 'status' and element != 'deleted_at':
+                                raise ForbiddenException({'pointer': 'data/{}'.format(element)},
+                                                         "You cannot update {} of an order".format(element))
+                            elif element == 'status' and order.amount and order.status == 'completed':
+                                # Since we don't have a refund system.
+                                raise ForbiddenException({'pointer': 'data/status'},
+                                                         "You cannot update the status of a completed paid order")
+                            elif element == 'status' and order.status == 'cancelled':
+                                # Since the tickets have been unlocked and we can't revert it.
+                                raise ForbiddenException({'pointer': 'data/status'},
+                                                         "You cannot update the status of a cancelled order")
+                        else:
+                            check_event_user_ticket_holders(order, data, element)
 
         elif current_user.id == order.user_id:
             if order.status != 'initializing' and order.status != 'pending':
@@ -311,14 +332,17 @@ class OrderDetail(ResourceDetail):
                                          "You cannot update a non-initialized or non-pending order")
             else:
                 for element in data:
-                    if element == 'is_billing_enabled' and order.status == 'completed' and data[element]\
-                            and data[element] != getattr(order, element, None):
-                        raise ForbiddenException({'pointer': 'data/{}'.format(element)},
-                                                 "You cannot update {} of a completed order".format(element))
-                    elif data[element] and data[element]\
-                            != getattr(order, element, None) and element not in get_updatable_fields():
-                        raise ForbiddenException({'pointer': 'data/{}'.format(element)},
-                                                 "You cannot update {} of an order".format(element))
+                    if data[element]:
+                        if element == 'is_billing_enabled' and order.status == 'completed'\
+                                and data[element] != getattr(order, element, None):
+                            raise ForbiddenException({'pointer': 'data/{}'.format(element)},
+                                                     "You cannot update {} of a completed order".format(element))
+                        elif element not in ['event', 'ticket_holders', 'user'] and data[element]\
+                                != getattr(order, element, None) and element not in get_updatable_fields():
+                            raise ForbiddenException({'pointer': 'data/{}'.format(element)},
+                                                     "You cannot update {} of an order".format(element))
+                        else:
+                            check_event_user_ticket_holders(order, data, element)
 
         if has_access('is_organizer', event_id=order.event_id) and 'order_notes' in data:
             if order.order_notes and data['order_notes'] not in order.order_notes.split(","):

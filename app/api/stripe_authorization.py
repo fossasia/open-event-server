@@ -2,13 +2,14 @@ from flask_rest_jsonapi import ResourceDetail, ResourceList
 from sqlalchemy.orm.exc import NoResultFound
 
 from app.api.bootstrap import api
+from flask import request
 from app.api.helpers.db import safe_query, get_count, save_to_db
 from app.api.helpers.exceptions import ForbiddenException, ConflictException, UnprocessableEntity
 from app.api.helpers.payment import StripePaymentsManager
 from app.api.helpers.permission_manager import has_access
 from app.api.helpers.permissions import jwt_required
 from app.api.helpers.utilities import require_relationship
-from app.api.schema.stripe_authorization import StripeAuthorizationSchema
+from app.api.schema.stripe_authorization import StripeAuthorizationSchema, StripeAuthorizationSchemaPublic
 from app.models import db
 from app.models.event import Event
 from app.models.stripe_authorization import StripeAuthorization
@@ -69,7 +70,8 @@ class StripeAuthorizationListPost(ResourceList):
         save_to_db(event)
 
     schema = StripeAuthorizationSchema
-    decorators = (jwt_required, )
+    decorators = (api.has_permission('is_coorganizer', fetch="event_id",
+                                     fetch_as="event_id", model=StripeAuthorization),)
     methods = ['POST']
     data_layer = {'session': db.session,
                   'model': StripeAuthorization,
@@ -83,6 +85,20 @@ class StripeAuthorizationDetail(ResourceDetail):
     """
     Stripe Authorization Detail Resource by ID
     """
+
+    def before_get(self, args, kwargs):
+        """
+        method for assigning schema based on access
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        kwargs = get_id(kwargs)
+        if 'Authorization' in request.headers and has_access('is_coorganizer', event_id=kwargs['id']):
+            self.schema = StripeAuthorizationSchema
+        else:
+            self.schema = StripeAuthorizationSchemaPublic
+
     def before_get_object(self, view_kwargs):
         """
         method to get id of stripe authorization related to an event
@@ -107,8 +123,7 @@ class StripeAuthorizationDetail(ResourceDetail):
         event.is_stripe_linked = False
         save_to_db(event)
 
-    decorators = (api.has_permission('is_coorganizer', fetch="event_id",
-                                     fetch_as="event_id", model=StripeAuthorization),)
+    decorators = (jwt_required,)
     schema = StripeAuthorizationSchema
     data_layer = {'session': db.session,
                   'model': StripeAuthorization,
@@ -123,8 +138,25 @@ class StripeAuthorizationRelationship(ResourceDetail):
     Stripe Authorization Relationship
     """
 
-    decorators = (api.has_permission('is_coorganizer', fetch="event_id",
-                                     fetch_as="event_id", model=StripeAuthorization),)
+    decorators = (jwt_required,)
     schema = StripeAuthorizationSchema
     data_layer = {'session': db.session,
                   'model': StripeAuthorization}
+
+
+def get_id(view_kwargs):
+    """
+    method to get the resource id for fetching details
+    :param view_kwargs:
+    :return:
+    """
+
+    if view_kwargs.get('event_identifier') is not None:
+        event = safe_query(db, Event, 'identifier', view_kwargs['event_identifier'], 'event_identifier')
+        if event.id is not None:
+            view_kwargs['event_id'] = event.id
+
+    if view_kwargs.get('event_id') is not None:
+        stripe_authorization = safe_query(db, StripeAuthorization, 'event_id', view_kwargs['event_id'], 'event_id')
+        view_kwargs['id'] = stripe_authorization.id
+    return view_kwargs

@@ -146,7 +146,10 @@ class FeedbackDetail(ResourceDetail):
     schema = FeedbackSchema
     data_layer = {'session': db.session,
                   'model': Feedback,
-                  'methods': {'before_update_object': before_update_object}}
+                  'methods': {
+                      'before_update_object': before_update_object,
+                      'before_get_object': before_get_object
+                  }}
 
 
 class FeedbackRelationship(ResourceRelationship):
