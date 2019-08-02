@@ -8,11 +8,11 @@ from functools import wraps
 import requests
 from flask import request, jsonify, make_response, Blueprint, send_file
 from flask_jwt_extended import (
-    jwt_required, jwt_refresh_token_required, 
+    jwt_required, jwt_refresh_token_required,
     fresh_jwt_required, unset_jwt_cookies,
-    current_user, create_access_token, 
+    current_user, create_access_token,
     create_refresh_token, set_refresh_cookies,
-    get_jwt_identity, get_csrf_token)
+    get_jwt_identity)
 from flask_limiter.util import get_remote_address
 from healthcheck import EnvironmentDump
 from flask_rest_jsonapi.exceptions import ObjectNotFound
@@ -60,9 +60,10 @@ def authenticate(allow_refresh_token=False, existing_identity=None):
         return jsonify(error='username or password missing'), 400
 
     identity = jwt_authenticate(username, password)
-    if not identity or (existing_identity and identity != existing_identity): # For fresh login, credentials should match existing user
+    if not identity or (existing_identity and identity != existing_identity): 
+        # For fresh login, credentials should match existing user
         return jsonify(error='Invalid Credentials'), 401
-    
+
     remember_me = data.get('remember-me')
     include_in_response = data.get('include-in-response')
     add_refresh_token = allow_refresh_token and remember_me
@@ -106,8 +107,9 @@ def refresh_token():
 
 @auth_routes.route('/logout', methods=['POST'])
 def logout():
-    unset_jwt_cookies(resp)
-    return jsonify({'success': True})
+    response = jsonify({'success': True})
+    unset_jwt_cookies(response)
+    return response
 
 
 @auth_routes.route('/blacklist', methods=['POST'])

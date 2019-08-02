@@ -1,5 +1,3 @@
-import datetime
-
 from sqlalchemy.sql import func as sql_func
 
 from app.models import db

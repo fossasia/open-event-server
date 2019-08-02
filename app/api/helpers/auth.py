@@ -52,7 +52,7 @@ def blacklist_token(user):
         blacklist_time.blacklist_time = datetime.datetime.now(pytz.utc)
     else:
         blacklist_time = UserTokenBlackListTime(user.id)
-    
+
     db.session.add(blacklist_time)
     db.session.commit()
 
